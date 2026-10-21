@@ -206,9 +206,19 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
         // A plain Win32 edit of several lines that UI Automation's proxy makes a document
         // (Windows 10 Notepad): its MSAA name is empty ("Text Editor" is the proxy's own) and
         // JAWS says neither its line nor "Contains text", on arrival and on Insert+Tab alike:
-        // " edit | | Type in text." [obs, 540/s12, 547/s1, s5, s6].
+        // " edit | | Type in text." [obs, 540/s12, 547/s1, s5, s6]. In a dialog box the name
+        // is the label the field has there, and said: "Enter a custom label for this item
+        // edit | Type in text." [obs, 688/s9].
         Role::Document if !focus.in_document && focus.plain_edit => {
-            lines.push(Line::new(vec![role(msg::role_edit_multiline().as_str())]));
+            let name = if focus.in_dialog_box {
+                name
+            } else {
+                String::new()
+            };
+            lines.push(Line::new(vec![
+                name_part(name),
+                role(msg::role_edit_multiline().as_str()),
+            ]));
             lines.push(Line::of(PartKind::Hint, msg::hint_type_in_text()));
         }
         // A native text document (Windows 11 Notepad's RichEdit, MSAA "editable text"): an
@@ -2030,6 +2040,20 @@ To activate press Enter."
         assert_eq!(
             norm(&say_focus(&notepad)),
             norm("Text editor  \u{1d} edit \u{1e} ")
+        );
+        // A plain Win32 edit made a document: nameless in a main window (the proxy's "Text
+        // Editor" [obs, 547/s1]), named by its label in a dialog box [obs, 688/s9].
+        let mut plain = event(Role::Document, "Text Editor");
+        plain.plain_edit = true;
+        assert_eq!(
+            norm(&focus_speech(&plain, None).render()),
+            norm(" \u{1d} edit \u{1e} \nType in text.")
+        );
+        plain.name = Some("Enter a custom label for this item".to_owned());
+        plain.in_dialog_box = true;
+        assert_eq!(
+            norm(&focus_speech(&plain, None).render()),
+            norm("Enter a custom label for this item  \u{1d} edit \u{1e} \nType in text.")
         );
         // A native edit of several lines: its caret's line, "Contains text" as it is reached,
         // and the edit's hint [obs, 316/s3].

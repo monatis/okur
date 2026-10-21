@@ -4033,18 +4033,31 @@ fn select_a_form_field_focuses_the_chosen_field() {
         "{focused:?}"
     );
 
-    // Escape: the dialog goes and JAWS names the page.
-    engine.handle_key_event(&f5);
-    let id = match ui.take().first() {
-        Some(ToUi::DialogShow { dialog }) => dialog.id,
-        other => {
-            panic_free_fail(&format!("no dialog shown: {other:?}"));
-            return;
-        }
+    // Escape: the dialog goes and JAWS reads the field the virtual cursor is on [obs,
+    // 688/s19], or, at the page's top, names the page [obs, 227/s11].
+    let escape = |engine: &mut ScreenReaderEngine| {
+        engine.handle_key_event(&f5);
+        let id = match ui.take().first() {
+            Some(ToUi::DialogShow { dialog }) => dialog.id,
+            other => {
+                panic_free_fail(&format!("no dialog shown: {other:?}"));
+                return None;
+            }
+        };
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogClosed { id }))
     };
-    let closed =
-        engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogClosed { id }));
-    assert_eq!(closed.as_deref(), Some("Web Menus \u{1d} document \u{1e} "));
+    let on_field = escape(&mut engine);
+    assert!(
+        on_field
+            .as_deref()
+            .is_some_and(|s| s.starts_with("Notes") && s.ends_with("the lazy dog")),
+        "{on_field:?}"
+    );
+    engine.cursor.move_to_start();
+    assert_eq!(
+        escape(&mut engine).as_deref(),
+        Some("Web Menus \u{1d} document \u{1e} ")
+    );
 }
 
 /// Space with the virtual cursor is JAWS's VirtualSpacebar: the control under the cursor takes

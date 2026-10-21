@@ -175,18 +175,18 @@ impl DialogMirror {
                     }
                 }
                 // The text typed into an edit combo, as its window reports each change
-                // ("b", "bo", … "board" in JAWS Find's Find what [obs, 506/s2-s6]).
-                (ControlKind::ComboEdit { text, .. }, Role::Edit | Role::ComboBox)
-                    if plain(&control.label) == name =>
-                {
-                    match focus.value.as_deref() {
-                        Some(value) if value != text => {
-                            value.clone_into(text);
-                            (true, Some(Value::Text(value.to_owned())))
-                        }
-                        _ => (true, None),
+                // ("b", "bo", … "board" in JAWS Find's Find what [obs, 506/s2-s6]), or into an
+                // edit (Custom Label's "lamp" [obs, 688/s10-s13]).
+                (
+                    ControlKind::ComboEdit { text, .. } | ControlKind::Edit { text },
+                    Role::Edit | Role::ComboBox | Role::Document,
+                ) if plain(&control.label) == name => match focus.value.as_deref() {
+                    Some(value) if value != text => {
+                        value.clone_into(text);
+                        (true, Some(Value::Text(value.to_owned())))
                     }
-                }
+                    _ => (true, None),
+                },
                 (ControlKind::Button { .. }, Role::Button)
                 | (ControlKind::CheckBox { .. }, Role::CheckBox) => {
                     (plain(&control.label) == name, None)
@@ -217,7 +217,7 @@ impl DialogMirror {
             return Vec::new();
         };
         match &mut control.kind {
-            ControlKind::ComboEdit { text, .. } if text != typed => {
+            ControlKind::ComboEdit { text, .. } | ControlKind::Edit { text } if text != typed => {
                 typed.clone_into(text);
                 vec![FromUi::DialogChanged {
                     id: dialog.id,

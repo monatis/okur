@@ -517,6 +517,13 @@ divergences! {
      and \"Bottom of file\" without the line, in every trial, though it reads the font there \
      (s15). Okur reads the text.",
     "the owner's rule on JAWS's accidents, 2026-10-18";
+
+    Difference::Step => ["688-web-custom-label/s15"],
+    "After a custom label is given, JAWS's virtual cursor is at the page's top: Say Line says \
+     the page's title, in every trial, as JAWS builds the page again with the label. The user \
+     labelled the field to go on working there. Okur builds the page again with the cursor \
+     still on the field, and Say Line reads it with its label (\"lamp Edit\").",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 }
 
 /// The divergence covering `step`, if any.

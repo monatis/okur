@@ -249,6 +249,16 @@ A step can be in more than one entry; all of its entries apply.
   sentence or paragraph to the end.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### JAWS's cursor goes to the page's top after a custom label
+
+- Steps: `688-web-custom-label/s15`.
+- Difference: the whole step.
+- Why: once a field is given a custom label, JAWS builds the page again with it and its
+  virtual cursor is at the page's top: Say Line says the page's title, in every trial. The
+  user labelled the field to go on working there. Okur keeps the cursor on the field, and
+  Say Line reads it with its label ("lamp Edit").
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-21.
+
 ### JAWS names the Page Setup preview's pictures after a label and the title
 
 - Steps: `544-desktop-notepad-page-setup/s13`, and the same at Intermediate and Advanced,

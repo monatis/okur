@@ -1601,15 +1601,28 @@ impl ScreenReaderEngine {
                 }
                 opened
             }
-            // Select a Form Field gives the page back named; the Links List quietly [obs,
-            // 227/s11, 223/s3].
+            // Select a Form Field gives the page back named, or, with the virtual cursor on a
+            // field, that field as E reads it ("lamp Edit blank"), else on a line of the page,
+            // that line; the Links List quietly [obs, 227/s11, 688/s19, 223/s3].
             Outcome::Closed => {
                 self.list_dialog = None;
                 self.app_mode = AppMode::VirtualBuffer;
                 self.returning_from_dialog();
-                let page = (kind == ListKind::FormFields)
-                    .then(|| self.page_on_return())
-                    .flatten()?;
+                if kind != ListKind::FormFields {
+                    return None;
+                }
+                let buffer = &self.cursor.buffer;
+                let offset = self.cursor.offset;
+                let page = if let Some(field) = buffer.find_form_control_node(offset) {
+                    crate::speech::SpeechFormatter::format_control_focus(field, |_| true)
+                } else if buffer
+                    .line_at_offset(offset)
+                    .is_none_or(|line| line.role == crate::aom::Role::Document)
+                {
+                    self.page_on_return()?
+                } else {
+                    self.line_here()
+                };
                 self.speech.speak(&page, true);
                 Some(page)
             }

@@ -822,7 +822,7 @@ impl ScreenReaderEngine {
     /// collapsed Northside" [obs, 507/s7, 248/s4, 249/s4]; Down onto it reads the line alone
     /// [obs, 201/s5, s17]. A radio button is said with its position [obs, 246/s4]; JAWS leaves
     /// it out right after its mouse click checked one, an accepted divergence (534/s10).
-    fn line_here(&self) -> String {
+    pub(super) fn line_here(&self) -> String {
         use crate::announcement::PartKind;
         // A focused tab adds its place among its list's tabs: "Advanced Tab 2 of 2" [obs,
         // 260/s4].

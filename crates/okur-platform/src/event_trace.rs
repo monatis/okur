@@ -950,12 +950,29 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         // And so is a text naming any control of the dialog: the Font dialog's "Script:", on
         // a row of its own above its combo box (JAWS: "Font dialog | Font: edit combo"
         // [obs, 541/s2]).
-        fn control_names<'a>(node: &'a UiaNode, names: &mut Vec<&'a str>) {
+        // But a text naming the focused field that takes no access key from it is the
+        // dialog's prompt, said before the field: "Custom Label dialog | Enter a custom label
+        // for this item | Enter a custom label for this item edit" [obs, 688/s9; 559/s1],
+        // where the Font dialog's "&Font:" gives its combo box Alt+F.
+        let focused = event.focus_chain.last();
+        let prompt = |node: &UiaNode| {
+            focused.is_some_and(|f| {
+                f.control_type != UIA_TEXT
+                    && f.access_key.as_deref().is_none_or(str::is_empty)
+                    && node.name == f.name
+                    && (node.runtime_id.is_none() || node.runtime_id == f.runtime_id)
+            })
+        };
+        fn control_names<'a>(
+            node: &'a UiaNode,
+            prompt: &dyn Fn(&UiaNode) -> bool,
+            names: &mut Vec<&'a str>,
+        ) {
             for child in &node.children {
-                if child.control_type != UIA_TEXT {
+                if child.control_type != UIA_TEXT && !prompt(child) {
                     names.extend(child.name.as_deref());
                 }
-                control_names(child, names);
+                control_names(child, prompt, names);
             }
         }
         let mut labels: Vec<&str> = event
@@ -968,10 +985,11 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
                     .iter()
                     .filter(|n| n.control_type != UIA_WINDOW),
             )
+            .filter(|n| !prompt(n))
             .filter_map(|s| s.name.as_deref())
             .collect();
         if let Some(tree) = &event.dialog_tree {
-            control_names(tree, &mut labels);
+            control_names(tree, &prompt, &mut labels);
         }
         let text: Vec<&str> = event
             .focus_siblings
@@ -4691,14 +4709,16 @@ mod tests {
 
     /// A text that names a control beside it is that control's label, not the dialog's text;
     /// the group box comes from the trace (JAWS on Okur's settings dialog, dev box,
-    /// 2026-10-17: "Okur Settings dialog | Speech Synthesizer: Combo box").
+    /// 2026-10-17: "Okur Settings dialog | Speech Synthesizer: Combo box"). Its labels give
+    /// their combo boxes access keys ("&Voice:").
     #[test]
     fn a_dialogs_labels_are_not_its_text() {
+        let synthesizer = UiaNode {
+            access_key: Some("Alt+s".to_owned()),
+            ..node(UIA_COMBOBOX, "Synthesizer:", true)
+        };
         let settings = TraceEvent {
-            focus_chain: vec![
-                dialog_node(UIA_WINDOW, "Okur Settings"),
-                node(UIA_COMBOBOX, "Synthesizer:", true),
-            ],
+            focus_chain: vec![dialog_node(UIA_WINDOW, "Okur Settings"), synthesizer],
             focus_siblings: vec![
                 node(TEXT, "Synthesizer:", false),
                 node(UIA_COMBOBOX, "Synthesizer:", true),
@@ -4734,6 +4754,49 @@ mod tests {
         };
         let focus = focus_event_from_trace(&regions);
         assert_eq!(focus.and_then(|f| f.dialog_text), Some(String::new()));
+    }
+
+    /// A text naming the focused field is the dialog's prompt when the field takes no access
+    /// key from it ("Custom Label dialog | Enter a custom label for this item | Enter a custom
+    /// label for this item edit" [obs, 688/s9]), and the field's label when it does ("Font
+    /// dialog | Font: edit combo" [obs, 541/s2]).
+    #[test]
+    fn a_prompt_naming_the_focused_field_is_the_dialogs_text() {
+        let prompt = "Enter a custom label for this item";
+        let field = UiaNode {
+            runtime_id: Some(vec![42, 7]),
+            ..node(UIA_DOCUMENT, prompt, true)
+        };
+        let tree = UiaNode {
+            children: vec![
+                node(UIA_TEXT, prompt, false),
+                field.clone(),
+                node(UIA_BUTTON, "OK", false),
+            ],
+            ..dialog_node(UIA_WINDOW, "Custom Label")
+        };
+        let label = TraceEvent {
+            focus_chain: vec![dialog_node(UIA_WINDOW, "Custom Label"), field.clone()],
+            dialog_text: vec![prompt.to_owned()],
+            dialog_tree: Some(tree.clone()),
+            ..focus_event(Vec::new())
+        };
+        assert_eq!(
+            focus_event_from_trace(&label).and_then(|f| f.dialog_text),
+            Some(prompt.to_owned())
+        );
+        let keyed = UiaNode {
+            access_key: Some("Alt+e".to_owned()),
+            ..field
+        };
+        let labelled = TraceEvent {
+            focus_chain: vec![dialog_node(UIA_WINDOW, "Custom Label"), keyed],
+            ..label
+        };
+        assert_eq!(
+            focus_event_from_trace(&labelled).and_then(|f| f.dialog_text),
+            Some(String::new())
+        );
     }
 
     /// A message box's text is beside its buttons; a property page's labels are the page's,
