@@ -1,0 +1,23 @@
+{
+  "id": "676-web-say-color-in-colored-fields",
+  "name": "Say Color (Insert+5) in page fields with colors of their own (navy on yellow, red on white) and in an empty one: E to the first, Insert+5 with the virtual cursor, Enter into forms mode, Insert+5, Tab, Insert+5, Tab to the empty field, Insert+5, Escape, Insert+5, Shift+E back to the red field under the virtual cursor, Insert+5",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/colored-fields.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "E" },
+    { "id": "s2", "type": "key", "command": "Insert+5" },
+    { "id": "s3", "type": "key", "command": "Enter" },
+    { "id": "s4", "type": "key", "command": "Insert+5" },
+    { "id": "s5", "type": "key", "command": "Tab" },
+    { "id": "s6", "type": "key", "command": "Insert+5" },
+    { "id": "s7", "type": "key", "command": "Tab" },
+    { "id": "s8", "type": "key", "command": "Insert+5" },
+    { "id": "s9", "type": "key", "command": "Escape" },
+    { "id": "s10", "type": "key", "command": "Insert+5" },
+    { "id": "s11", "type": "key", "command": "Shift+E" },
+    { "id": "s12", "type": "key", "command": "Insert+5" }
+  ]
+}
