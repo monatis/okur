@@ -34,7 +34,11 @@ Built (`9451c37`, `e3b10a0`). Against JAWS:
   link a piece of its own). The text layer joins pieces, so the cursor's place after Right and
   Left (680/681's Insert+Up) is what tells.
 - **A text field** (684-686): sentences across a WinForms text box's line.
-- **Line with Pauses** (679): what `LinePauses=1` changes in the speech.
+- **Line with Pauses** (679): JAWS gives each line to the synthesizer on its own (86 records
+  where 111 has 33); without pauses, its default, several lines run together in one
+  utterance. Okur gives each line on its own, which is "with pauses". The default needs
+  several lines in one utterance with a mark per line: SAPI's bookmarks, OneCore's SSML
+  marks. A speech-pipeline change of its own.
 - Then the README's line moves from "Not yet" to what works.
 
 ## 2. Visited links
@@ -65,9 +69,14 @@ read (the buffer's linearization, the lists), the two delete commands.
 
 ## 5. Flexible Web
 
-Research first: JAWS's documentation of Flexible Web (Insert+Space, X), its wizard, its rules
-per page, site or all sites. Recording changes old-pc's rules, so a scenario must remove what
-it adds.
+A temporary customization makes JAWS ask, on leaving the page, whether to save it as a
+rule; a trial reloads its page, so a scenario must undo what it customizes. Explore the
+wizard on old-pc by hand first (`okur keys` and `okur jaws-history`, research only), when no
+round is running.
+
+The research is in `jaws-dialogs-and-visual-features.md` (Flexible Web): the wizard's pages,
+hide or start reading at an element, rules for a page, a site or all sites, a sound when a
+rule applies. Recording must leave no rule on old-pc.
 
 ## 6. Say Window leftovers
 
