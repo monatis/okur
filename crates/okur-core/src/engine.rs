@@ -207,6 +207,8 @@ pub struct ScreenReaderEngine {
     active_cursor: cursors::ActiveCursor,
     /// The Okur cursor's line in the focused text field, once routed to the PC cursor.
     okur_place: Option<cursors::OkurPlace>,
+    /// Where the Okur cursor may go (Insert+R).
+    okur_restriction: cursors::Restriction,
     /// Forms mode was just turned on by one of JAWS's element lists giving a field the focus:
     /// the field's focus is followed by its line, as Say Line reads it [obs, 249/s3].
     forms_mode_by_list: bool,
@@ -383,6 +385,7 @@ impl ScreenReaderEngine {
             mouse: None,
             active_cursor: cursors::ActiveCursor::Pc,
             okur_place: None,
+            okur_restriction: cursors::Restriction::default(),
             forms_mode_by_list: false,
             page_said_for: None,
             pending_page: None,
@@ -698,6 +701,7 @@ impl ScreenReaderEngine {
                 | Command::PcCursor
                 | Command::RouteOkurToPc
                 | Command::RoutePcToOkur
+                | Command::RestrictOkurCursor
                 | Command::SayActiveCursor
                 | Command::LeftMouseClick
                 | Command::RightMouseClick),

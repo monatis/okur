@@ -13,6 +13,42 @@
 use super::ScreenReaderEngine;
 use crate::messages::msg;
 
+/// Where the Okur cursor may go, which Insert+R changes in turn [obs, 757].
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub enum Restriction {
+    /// The application's window, as the cursor starts.
+    #[default]
+    Application,
+    /// The real window around the focus.
+    Real,
+    /// The window the focus is in.
+    Current,
+    /// The focused control: Page Up goes to its first line [obs, 757/s14].
+    Focus,
+}
+
+impl Restriction {
+    /// The one after it.
+    fn next(self) -> Self {
+        match self {
+            Restriction::Application => Restriction::Real,
+            Restriction::Real => Restriction::Current,
+            Restriction::Current => Restriction::Focus,
+            Restriction::Focus => Restriction::Application,
+        }
+    }
+
+    fn message(self) -> String {
+        match self {
+            Restriction::Application => msg::cursor_restriction_application(),
+            Restriction::Real => msg::cursor_restriction_real(),
+            Restriction::Current => msg::cursor_restriction_current(),
+            Restriction::Focus => msg::cursor_restriction_focus(),
+        }
+        .to_string()
+    }
+}
+
 /// Where the Okur cursor is in what it reads.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum OkurPlace {
@@ -107,6 +143,14 @@ impl ScreenReaderEngine {
             msg::cursor_route_okur_to_pc(),
             msg::cursor_route_okur_to_pc_short(),
         );
+        self.say(said)
+    }
+
+    /// Insert+R: the next restriction, said: "Real window restriction" after the application
+    /// window's [obs, 757/s3, s7, s11].
+    pub(super) fn restrict_okur_cursor(&mut self) -> Option<String> {
+        self.okur_restriction = self.okur_restriction.next();
+        let said = self.okur_restriction.message();
         self.say(said)
     }
 
@@ -314,6 +358,13 @@ impl ScreenReaderEngine {
                 self.move_okur_word(event.key == Key::RightArrow);
             }
             (Key::Home | Key::End, true, _) => self.okur_line_end(event.key == Key::End),
+            // Restricted to the focused control, its first line [obs, 757/s14].
+            (Key::PageUp, true, _) if self.okur_restriction == Restriction::Focus => {
+                self.okur_place = Some(OkurPlace::Text {
+                    line: 0,
+                    column: None,
+                });
+            }
             (Key::PageUp, true, _) => self.okur_place = Some(OkurPlace::Top),
             // A page's bottom is its last line; an application's, below its text.
             (Key::PageDown, true, _) => {
@@ -530,7 +581,7 @@ impl ScreenReaderEngine {
             msg::cursor_position((x + 1).to_string(), (y + 1).to_string()).to_string()
         }));
         if self.active_cursor == ActiveCursor::Okur {
-            said.push(msg::cursor_restriction_application().to_string());
+            said.push(self.okur_restriction.message());
         }
         for (i, line) in said.iter().enumerate() {
             self.speech.speak(line, i == 0);

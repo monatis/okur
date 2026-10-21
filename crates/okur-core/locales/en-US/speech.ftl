@@ -38,6 +38,10 @@ cursor-okur-active = Okur Cursor active
 cursor-pc-active = PC Cursor active
 cursor-position = { $x }, { $y }
 cursor-restriction-application = Application window restriction
+# Insert+R in turn [obs, 757/s3, s7, s11].
+cursor-restriction-real = Real window restriction
+cursor-restriction-current = Current window restriction
+cursor-restriction-focus = Focus window restriction
 
 # Said for an empty line, or in place of an empty field's value.
 blank = blank

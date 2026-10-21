@@ -67,6 +67,7 @@ impl ScreenReaderEngine {
             Command::LeftMouseClick => return self.left_mouse_click(),
             Command::RightMouseClick => return self.right_mouse_click(),
             Command::RoutePcToOkur => return self.route_pc_to_okur(),
+            Command::RestrictOkurCursor => return self.restrict_okur_cursor(),
             Command::WindowList => return self.ask_window_list(),
             Command::SystemTrayList => return self.ask_tray_list(),
             Command::JumpToLine => return self.open_jump(),

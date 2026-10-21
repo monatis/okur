@@ -228,6 +228,8 @@ pub enum Command {
     PcCursor,
     RouteOkurToPc,
     SayActiveCursor,
+    /// Insert+R (RestrictCurrentCursor): the Okur cursor's restriction, the next one.
+    RestrictOkurCursor,
     /// Shift+Numpad5: the focused control's hot key.
     SayHotKey,
     /// Ctrl+Insert+1 to 0: a list view item's column (1 to 10), with its header.
@@ -555,6 +557,7 @@ impl Command {
             "PCCursor" => PcCursor,
             "RouteJAWSCursorToPc" => RouteOkurToPc,
             "SayActiveCursor" => SayActiveCursor,
+            "RestrictCurrentCursor" => RestrictOkurCursor,
             "RoutePCToVirtual" | "Ctrl+Insert+Delete" => RoutePcToVirtual,
             "SelectAFrame" | "Insert+F9" => SelectAFrame,
             "LeftMouseButton" | "NumpadSlash" => LeftMouseClick,
@@ -897,6 +900,8 @@ static BINDINGS: &[Binding] = &{
         bind(NumpadMinus, ALONE, OkurCursor),
         bind(NumpadPlus, ALONE, PcCursor),
         bind(NumpadPlus, OKUR, RoutePcToOkur),
+        // Default.JKM: JAWSKey+R=RestrictCurrentCursor.
+        bind(Alpha('R'), OKUR, RestrictOkurCursor),
         bind(
             Key::Delete,
             ANY.alt(Yes).ctrl(No).shift(No).insert(No),
