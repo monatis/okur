@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6173,
-  "total_steps": 6398,
+  "matched_steps": 6187,
+  "total_steps": 6414,
   "accepted_divergences": 168,
   "errors": [],
   "steps": {
@@ -6584,6 +6584,22 @@
     "777-web-skim-reading-speak-unit-and-attributes/s6": "match",
     "777-web-skim-reading-speak-unit-and-attributes/s7": "match",
     "777-web-skim-reading-speak-unit-and-attributes/s8": "match",
-    "777-web-skim-reading-speak-unit-and-attributes/s9": "match"
+    "777-web-skim-reading-speak-unit-and-attributes/s9": "match",
+    "783-desktop-notification-rule-saved/s1": "match",
+    "783-desktop-notification-rule-saved/s10": "match",
+    "783-desktop-notification-rule-saved/s11": "match",
+    "783-desktop-notification-rule-saved/s12": "match",
+    "783-desktop-notification-rule-saved/s13": "match",
+    "783-desktop-notification-rule-saved/s14": "match",
+    "783-desktop-notification-rule-saved/s15": "match",
+    "783-desktop-notification-rule-saved/s16": "match",
+    "783-desktop-notification-rule-saved/s2": "match",
+    "783-desktop-notification-rule-saved/s3": "match",
+    "783-desktop-notification-rule-saved/s4": "match",
+    "783-desktop-notification-rule-saved/s5": "match",
+    "783-desktop-notification-rule-saved/s6": "mismatch",
+    "783-desktop-notification-rule-saved/s7": "mismatch",
+    "783-desktop-notification-rule-saved/s8": "match",
+    "783-desktop-notification-rule-saved/s9": "match"
   }
 }

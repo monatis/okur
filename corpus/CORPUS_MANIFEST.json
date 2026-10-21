@@ -6220,13 +6220,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "783-desktop-notification-rule-saved",
+      "fixture": "desktop-notifications.ps1",
+      "evidence": {
+        "sha256": "c3705ae38dfe5c1737e6500cc36fca41df201598fb6ac3f544661b4cee77777a",
+        "capture_script_sha256": "043f2870b1499dacb80869fd8b86f5c8abac741d2a75c2c4ca9f04ab0f4e4e3a",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 1,
+        "successful_trials": 1,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 431,
-    "scenarios_with_evidence": 431,
-    "total_trials": 1325,
-    "successful_trials": 1324,
-    "deterministic_scenarios": 278
+    "scenarios": 432,
+    "scenarios_with_evidence": 432,
+    "total_trials": 1326,
+    "successful_trials": 1325,
+    "deterministic_scenarios": 279
   }
 }
