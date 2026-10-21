@@ -57,19 +57,19 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `b001875` (2026-10-21).
+Every figure is tool output, rerun for this README at commit `16a73a2` (2026-10-21).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **5718 of 5927** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **5575 of 5889** | `okur-lab parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **143** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **402, 1260** (all 1260 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1303 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **5889 of 6111** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **5743 of 6073** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **158** | `okur-lab parity` |
+| Recorded JAWS scenarios, trials | **409, 1267** (all 1267 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1307 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
-The 143 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
+The 158 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
 accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
 place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
 Okur says its help in its own words. Each one is listed, with the reason and who decided it,
@@ -167,8 +167,11 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   left to the voice, same page links, graphics shown or not, how a heading is said, and which
   parts of a control verbosity says (its type, its state, its position, its hints).
 - **Flexible Web** (Insert+Space, then X): JAWS's wizard, page for page, hides an element of a
-  page (a region, a heading, a list) found by its kind, its text, its id or its place, until
-  another page loads; Undo takes it back. Saving customizations as rules comes next.
+  page (a region, a heading, a list) found by its kind, its text, its id or its place; Undo
+  takes it back. Customizations are saved as named rules for the page, its site or every
+  site, and hold whenever such a page loads; leaving a page with unsaved ones asks first.
+  View or Change Where Rules are Applied turns each rule on or off for an area and deletes
+  rules. Starting the reading at an element, and renaming a rule, are not done yet.
 - **Verbosity levels:** Beginner, Intermediate and Advanced, as JAWS has them. Above
   Beginner Okur says the short messages JAWS says there ("Last row", "3 columns and 3 rows",
   "virtual PC"); at Advanced it leaves out what JAWS leaves out, such as a list's positions, a
