@@ -895,6 +895,8 @@ fn the_pseudo_locale_wraps_every_word_okur_says() {
             "MoveToNextHeading",
             "MoveToNextHeadingLevelOne",
             "MoveToNextLink",
+            "MoveToNextVisitedLink",
+            "MoveToNextUnvisitedLink",
             "MoveToNextList",
             "MoveToNextButton",
             "MoveToNextCheckbox",

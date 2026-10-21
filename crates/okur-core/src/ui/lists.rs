@@ -172,6 +172,8 @@ pub struct Entry {
     pub address: Option<String>,
     /// A link within the page.
     pub same_page: bool,
+    /// A link whose page was opened before, which the Links List's Display options filter by.
+    pub visited: bool,
     /// The element's buffer node.
     pub node_id: usize,
     /// Where the element is in the page's buffer.
@@ -193,6 +195,7 @@ impl Entry {
             level: None,
             address: link.href.clone(),
             same_page: link.is_same_page,
+            visited: link.visited,
             node_id: link.node_id,
             offset: link.offset,
             feature: None,
@@ -207,6 +210,7 @@ impl Entry {
             level: Some(heading.level),
             address: None,
             same_page: false,
+            visited: false,
             node_id: heading.node_id,
             offset: heading.offset,
             feature: None,
@@ -222,6 +226,7 @@ impl Entry {
             level: None,
             address: None,
             same_page: false,
+            visited: false,
             node_id: field.node_id,
             offset: field.offset,
             feature: None,
@@ -236,6 +241,7 @@ impl Entry {
             level: None,
             address: None,
             same_page: false,
+            visited: false,
             node_id: item.node_id,
             offset: item.offset,
             feature: None,
@@ -250,6 +256,7 @@ impl Entry {
             level: u32::try_from(item.level).ok(),
             address: None,
             same_page: false,
+            visited: false,
             node_id: item.node_id,
             offset: item.offset,
             feature: None,
@@ -265,6 +272,7 @@ impl Entry {
             level: None,
             address: None,
             same_page: false,
+            visited: false,
             node_id: 0,
             offset: 0,
             feature: Some(feature),
@@ -418,15 +426,14 @@ impl ListDialog {
         }
     }
 
-    /// The entries the options show, in their order. Okur does not know yet which links were
-    /// visited: none are.
+    /// The entries the options show, in their order.
     fn order(&self) -> Vec<usize> {
         let display = self.display;
         let kind = self.kind;
         let keep = |entry: &Entry| match (kind, display) {
             (_, 0) => true,
-            (ListKind::Links, 1) => false,
-            (ListKind::Links, _) => true,
+            (ListKind::Links, 1) => entry.visited,
+            (ListKind::Links, _) => !entry.visited,
             (ListKind::Headings, level) => entry.level == u32::try_from(level).ok(),
             // Select a Form Field has no Display options.
             (
@@ -688,6 +695,7 @@ mod tests {
             text: text.to_owned(),
             href: Some(format!("https://example.com/{offset}")),
             is_same_page: false,
+            visited: false,
             offset,
             current: None,
         }
@@ -815,9 +823,21 @@ mod tests {
         assert_eq!(dialog.texts(), vec!["Current Page Overview", "Settings"]);
     }
 
-    /// Okur knows no visited links yet: "Visited Links Only" shows none.
+    /// Display's Visited Links Only and Unvisited Links filter by the browser's visited state.
     #[test]
-    fn visited_links_only_is_empty_until_okur_knows_visits() {
+    fn display_filters_links_by_their_visited_state() {
+        let mut news = link("News", 1);
+        news.visited = true;
+        let mut dialog = ListDialog::links(2, &[news, link("Sports", 2), link("Culture", 3)]);
+        dialog.handle(&changed("display", Value::Selected(1)));
+        assert_eq!(dialog.texts(), vec!["News"]);
+        dialog.handle(&changed("display", Value::Selected(2)));
+        assert_eq!(dialog.texts(), vec!["Sports", "Culture"]);
+    }
+
+    /// With no visited link, "Visited Links Only" shows none, and nothing is activated.
+    #[test]
+    fn visited_links_only_is_empty_without_visits() {
         let mut dialog = ListDialog::links(2, &links());
         let outcome = dialog.handle(&changed("display", Value::Selected(1)));
         assert!(

@@ -399,6 +399,8 @@ fn element_name(element: Element) -> String {
         Element::Heading => msg::element_kind_heading(),
         Element::HeadingLevel(level) => return msg::element_kind_heading_level(level).render(),
         Element::Link => msg::element_kind_link(),
+        Element::VisitedLink => msg::element_kind_visited_link(),
+        Element::UnvisitedLink => msg::element_kind_unvisited_link(),
         Element::Table => msg::element_kind_table(),
         Element::Article => msg::element_kind_article(),
         Element::OnMouseOver => msg::element_kind_on_mouse_over(),
@@ -765,6 +767,8 @@ mod tests {
             Element::Division,
             Element::Separator,
             Element::MailLink,
+            Element::VisitedLink,
+            Element::UnvisitedLink,
         ];
         for element in elements {
             commands.push(MoveToNext(element));

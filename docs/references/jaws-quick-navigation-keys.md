@@ -54,8 +54,8 @@ the Say All command".
 | R | MoveToNextRegion | Region | built | |
 | S | MoveToNextSameElement | Same Type Element | built | 290, 558 |
 | T | MoveToNextTable | Table | built | |
-| U | MoveToNextUnvisitedLink | Unvisited Link | partial: every link counts as unvisited | |
-| V | MoveToNextVisitedLink | Visited Link | gap: needs the visited state (IA2's traversed) | |
+| U | MoveToNextUnvisitedLink | Unvisited Link | built on IA2's traversed state; its words wait for 682 | 682 (pending) |
+| V | MoveToNextVisitedLink | Visited Link | built on IA2's traversed state; its words wait for 682 | 682 (pending) |
 | W | MoveToNextWordFromList | Word from List | gap | 299 |
 | X | MoveToNextCheckbox | Check Box | built | |
 | Y | MoveToNextGlanceHighlight | Span (2013); Glance Highlight in the 2025 key map | gap | 292 |

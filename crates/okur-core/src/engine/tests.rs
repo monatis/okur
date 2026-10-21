@@ -913,6 +913,56 @@ fn say_color_names_the_text_and_background_colors() {
     );
 }
 
+/// V and Shift+V move by the links whose pages were opened before, U and Shift+U by the
+/// others (JAWS's MoveToNextVisitedLink and MoveToNextUnvisitedLink); a page without one says
+/// so.
+#[test]
+fn v_and_u_move_by_visited_and_unvisited_links() {
+    let link = |id: usize, name: &str, visited: bool| {
+        let mut node = AomNode::new(
+            id,
+            Role::Link {
+                href: Some(format!("page{id}.html")),
+            },
+        )
+        .with_name(name);
+        if visited {
+            node.attributes
+                .insert("visited".to_owned(), "true".to_owned());
+        }
+        AomNode::new(id + 10, Role::Paragraph).with_children(vec![node])
+    };
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Reading List")
+        .with_children(vec![
+            link(1, "This reading list", true),
+            link(2, "Spring catalog", false),
+            link(3, "City Library", true),
+            link(4, "Volunteer form", false),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.cursor.move_to_start();
+    let said = |engine: &mut ScreenReaderEngine, command: &str| {
+        engine.execute_command(command).unwrap_or_default()
+    };
+    assert!(said(&mut engine, "V").contains("This reading list"));
+    assert!(said(&mut engine, "V").contains("City Library"));
+    assert!(said(&mut engine, "+V").contains("This reading list"));
+    assert!(said(&mut engine, "U").contains("Spring catalog"));
+    assert!(said(&mut engine, "U").contains("Volunteer form"));
+    assert!(said(&mut engine, "+U").contains("Spring catalog"));
+    let unvisited = AomNode::new(0, Role::Document).with_children(vec![link(2, "Spring", false)]);
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&unvisited)),
+        Box::new(MockSpeechOutput::new()),
+    );
+    assert_eq!(
+        engine.execute_command("V").as_deref(),
+        Some(msg::quicknav_none_visited_links().as_str())
+    );
+}
+
 /// A page's focused field has its text's colors: "default on default" while it is empty,
 /// "black on white" once typed in, in forms mode and again under the virtual cursor after
 /// Escape [obs, 662/s2, s5, s7].

@@ -233,6 +233,12 @@ pub struct AomNode {
 impl Eq for AomNode {}
 
 impl AomNode {
+    /// Whether the node is a link whose page was opened before: the browser's visited state
+    /// (IA2's traversed), kept as the `visited` attribute.
+    pub fn is_visited(&self) -> bool {
+        self.attributes.get("visited").is_some_and(|v| v == "true")
+    }
+
     pub fn new(id: usize, role: Role) -> Self {
         Self {
             id,

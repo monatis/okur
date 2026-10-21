@@ -172,8 +172,12 @@ command-move-to-prior-long = { command-move-to-prior } It works where the virtua
 element-kind-heading = heading
 # 1 to 6.
 element-kind-heading-level = heading at level { $level }
-# U.
+# A link of any kind (MoveToNextLink, which has no key of its own).
 element-kind-link = link
+# U.
+element-kind-unvisited-link = unvisited link
+# V.
+element-kind-visited-link = visited link
 # T.
 element-kind-table = table
 # O.

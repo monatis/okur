@@ -27,6 +27,8 @@ pub struct LinkListItem {
     pub text: String,
     pub href: Option<String>,
     pub is_same_page: bool,
+    /// The link's page was opened before (the browser's visited state).
+    pub visited: bool,
     pub offset: usize,
     /// The link's current state (`aria-current`) as JAWS words it, "Current Page".
     pub current: Option<&'static str>,
@@ -1386,6 +1388,7 @@ impl VirtualBuffer {
                     text,
                     href,
                     is_same_page,
+                    visited: node.is_visited(),
                     offset,
                     current: node.current_phrase(),
                 });

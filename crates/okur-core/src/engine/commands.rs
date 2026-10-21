@@ -1110,6 +1110,8 @@ impl ScreenReaderEngine {
             (Element::Division, forward) => c.move_division(forward),
             (Element::Separator, forward) => c.move_separator(forward),
             (Element::MailLink, forward) => c.move_mail_link(forward),
+            (Element::VisitedLink, forward) => c.move_link_by_visit(true, forward),
+            (Element::UnvisitedLink, forward) => c.move_link_by_visit(false, forward),
             (Element::FormField, true) => c.move_next_form_control(),
             (Element::FormField, false) => c.move_prior_form_control(),
             (Element::Button, true) => c.move_next_button(),

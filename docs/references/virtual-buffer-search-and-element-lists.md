@@ -60,7 +60,8 @@ checked | 1 of 2 | ... | alt+T`).
 - Move To Link closes it and says the link and "To activate press Enter.", as JAWS does.
 - Activate Link (Enter) closes it, moves to the link and activates it, silently.
 - Escape closes it; the cursor stays. The page taking the focus back is not announced.
-- Okur does not know which links were visited yet: Visited Links Only shows none.
+- Visited Links Only and Unvisited Links filter by the browser's visited state (IA2's traversed).
+  Links known only through UI Automation have none, so all are unvisited.
 
 Without `okur-ui` (parity replay, headless), the speech-only list below remains, and so do
 the headings and form fields lists until they get their dialogs.

@@ -1719,6 +1719,30 @@ impl VirtualCursor {
         )
     }
 
+    /// Moves to the next or prior link whose page was opened before (V, Shift+V; `visited`),
+    /// or was not (U, Shift+U): the browser's visited state, IA2's traversed.
+    pub fn move_link_by_visit(&mut self, visited: bool, forward: bool) -> Option<String> {
+        let targets: Vec<usize> = self
+            .buffer
+            .links
+            .iter()
+            .copied()
+            .filter(|&offset| {
+                self.buffer
+                    .find_link_node(offset)
+                    .is_some_and(|node| node.is_visited() == visited)
+            })
+            .collect();
+        let none = if visited {
+            msg::quicknav_none_visited_links()
+        } else {
+            msg::quicknav_none_unvisited_links()
+        };
+        self.quick_nav(&targets, forward, none.as_str(), |c, o, _| {
+            c.line_speech_at(o)
+        })
+    }
+
     /// Activates an in-page fragment link at the cursor and jumps directly to its anchor target.
     pub fn activate_current_link(&mut self) -> Option<String> {
         let current_offset = self.offset;
