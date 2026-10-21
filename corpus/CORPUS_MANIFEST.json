@@ -5982,13 +5982,41 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "757-desktop-jaws-cursor-restriction",
+      "fixture": "desktop-notepad.ps1",
+      "evidence": {
+        "sha256": "2bac4ca751ffb76c3b7089cc1d596673406411359f0eb78782ecc43cc25b4097",
+        "capture_script_sha256": "17ee836a08322cbcb21889d6f575ae2e0f71ef4a280db48a1c0acb5f5b2b23f6",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "758-web-mouse-keys-on-a-link",
+      "fixture": "flexible-web.html",
+      "evidence": {
+        "sha256": "c8f460ededf0019d83b625b686d74f24a86655647caf6373445c4cc74761a939",
+        "capture_script_sha256": "17ee836a08322cbcb21889d6f575ae2e0f71ef4a280db48a1c0acb5f5b2b23f6",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 414,
-    "scenarios_with_evidence": 414,
-    "total_trials": 1282,
-    "successful_trials": 1282,
-    "deterministic_scenarios": 266
+    "scenarios": 416,
+    "scenarios_with_evidence": 416,
+    "total_trials": 1288,
+    "successful_trials": 1288,
+    "deterministic_scenarios": 268
   }
 }

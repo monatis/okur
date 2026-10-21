@@ -1,0 +1,93 @@
+{
+  "id": "757-desktop-jaws-cursor-restriction",
+  "name": "The JAWS cursor's restriction in Notepad: Insert+Numpad Minus, Numpad Minus; three times Insert+R, Alt+Delete, Page Up, Insert+Up; Numpad Plus",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "Insert+NumpadMinus",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "NumpadMinus",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "Insert+R",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "PageUp",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Insert+R",
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s8"
+    },
+    {
+      "type": "key",
+      "command": "PageUp",
+      "id": "s9"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s10"
+    },
+    {
+      "type": "key",
+      "command": "Insert+R",
+      "id": "s11"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s12"
+    },
+    {
+      "type": "key",
+      "command": "PageUp",
+      "id": "s13"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s14"
+    },
+    {
+      "type": "key",
+      "command": "NumpadPlus",
+      "id": "s15"
+    }
+  ]
+}

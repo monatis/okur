@@ -1,0 +1,51 @@
+{
+  "id": "758-web-mouse-keys-on-a-link",
+  "name": "The mouse keys on a page's link: Tab (the first link), Insert+Numpad Minus, Numpad Minus, Insert+Up, Numpad Slash (left click), Numpad Plus, Insert+Up",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/flexible-web.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "Tab",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "Insert+NumpadMinus",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "NumpadMinus",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "NumpadSlash",
+      "settle_max_ms": 15000,
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "NumpadPlus",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s7"
+    }
+  ]
+}
