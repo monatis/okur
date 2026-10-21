@@ -1006,6 +1006,13 @@ pub trait SpeechOutput: Send + Sync {
         let _ = muted;
     }
 
+    /// Speech On Demand between its commands: what is said from now on is kept in the speech
+    /// history but not given to the synthesizer, until it is spoken again [obs, 700/s1, s3:
+    /// Down and H silent, "banner" and the heading in the history].
+    fn set_unspoken(&mut self, unspoken: bool) {
+        let _ = unspoken;
+    }
+
     /// What was said lately, the oldest first: the Speech History viewer's lines.
     fn history(&self) -> Vec<String> {
         Vec::new()

@@ -137,6 +137,8 @@ pub struct SpeechThread {
     report_to: Arc<Mutex<Option<MarkReport>>>,
     /// Speech muted (Insert+Space, S): nothing is sent or logged.
     muted: bool,
+    /// Speech On Demand between its commands: kept, not spoken.
+    unspoken: bool,
     /// What was said lately, for the Speech History viewer.
     recent: std::collections::VecDeque<String>,
 }
@@ -221,6 +223,7 @@ impl SpeechThread {
             voices,
             report_to,
             muted: false,
+            unspoken: false,
             recent: std::collections::VecDeque::new(),
         }
     }
@@ -369,7 +372,7 @@ fn report(to: &Mutex<Option<MarkReport>>, mark: u64) {
 
 impl SpeechThread {
     fn send(&self, request: Request) {
-        if self.muted && request.speaks() {
+        if (self.muted || self.unspoken) && request.speaks() {
             return;
         }
         self.pending.fetch_add(1, Ordering::SeqCst);
@@ -416,10 +419,15 @@ impl SpeechOutput for SpeechThread {
     }
 
     fn set_muted(&mut self, muted: bool) {
-        if muted {
+        if muted && !self.muted {
             self.send(Request::Stop);
         }
         self.muted = muted;
+    }
+
+    /// Kept in the history and the speech log, not spoken: Speech On Demand.
+    fn set_unspoken(&mut self, unspoken: bool) {
+        self.unspoken = unspoken;
     }
 
     fn history(&self) -> Vec<String> {

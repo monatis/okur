@@ -336,6 +336,47 @@ pub enum Command {
 }
 
 impl Command {
+    /// Whether the command speaks with Speech On Demand on: the key map's [Speech On Demand]
+    /// list (Default.JKM: SayAll, SayLine, SayWord, SayCharacter, SaySentence, SayParagraph,
+    /// SayToCursor, SayFromCursor, SayCell, SayWindowPromptAndText, SayWindowTitle, the
+    /// window's top and bottom lines, SaySelectedText, the time, the rate keys,
+    /// ReadBoxInTabOrder, SayCurrentAccessKey, SayColor, KeyboardHelp), each with its press
+    /// twice [obs, 700/s2, s4, s6, s7, s10].
+    pub fn speaks_on_demand(&self) -> bool {
+        use Command::*;
+        matches!(
+            self,
+            SayAll
+                | SayLine
+                | SpellLine
+                | SayWord
+                | SpellWord
+                | SayCharacter
+                | SayCharacterPhonetic
+                | SaySentence
+                | SayParagraph
+                | SayToCursor
+                | SpellToCursor
+                | SayFromCursor
+                | SpellFromCursor
+                | SayCurrentCell
+                | SayCurrentFocus
+                | SayWindowTitle
+                | SayTopLineOfWindow
+                | SayBottomLineOfWindow
+                | SaySelectedText
+                | SpellSelectedText
+                | SaySystemTime
+                | SaySystemTimeWithSeconds
+                | RateFaster
+                | RateSlower
+                | SayWindow
+                | SayHotKey
+                | SayColor
+                | KeyboardHelp
+        )
+    }
+
     /// The command a name calls: a JAWS script name or the key notation of JAWS's key maps.
     pub fn from_name(name: &str) -> Option<Command> {
         use Command::*;

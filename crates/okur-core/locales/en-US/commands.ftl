@@ -105,6 +105,9 @@ speech-history-title = Speech History
 speech-history-copied = Copy speech history to clipboard
 # Shift+S in the layer, Speech On Demand, in full speech [obs, 566/s3, s10].
 speech-on-demand-unavailable = Not available in Full Speech mode
+# Insert+Space, S from less speech, and back to less speech on demand [obs, 700/s12, s15].
+speech-mode-full = Full Speech
+speech-mode-on-demand = Speech On Demand
 
 ## Say Default Button (Insert+E) and the settings in use (Insert+Q) [obs, 513]
 

@@ -726,6 +726,8 @@ struct RecordingSpeech {
     punctuation: std::sync::Arc<std::sync::Mutex<okur_core::settings::Punctuation>>,
     /// Speech muted (Insert+Space, S): nothing is kept, as JAWS keeps nothing [obs, 517/s7].
     muted: std::sync::Arc<std::sync::atomic::AtomicBool>,
+    /// Speech On Demand between its commands: kept in the history, not spoken [obs, 700].
+    unspoken: std::sync::Arc<std::sync::atomic::AtomicBool>,
 }
 
 fn append(log: &Log, text: String) {
@@ -743,6 +745,10 @@ fn drain(log: &Log) -> Vec<String> {
 impl RecordingSpeech {
     fn silent(&self) -> bool {
         self.muted.load(std::sync::atomic::Ordering::SeqCst)
+    }
+
+    fn unspoken(&self) -> bool {
+        self.unspoken.load(std::sync::atomic::Ordering::SeqCst)
     }
 
     fn is_empty(&self) -> bool {
@@ -763,6 +769,9 @@ impl RecordingSpeech {
             .map(|level| *level)
             .unwrap_or_default();
         append(&self.history, text.to_owned());
+        if self.unspoken() {
+            return;
+        }
         let spoken = if symbols {
             okur_core::pronounce::spoken_symbols(text)
         } else {
@@ -855,6 +864,11 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
 
     fn set_muted(&mut self, muted: bool) {
         self.muted.store(muted, std::sync::atomic::Ordering::SeqCst);
+    }
+
+    fn set_unspoken(&mut self, unspoken: bool) {
+        self.unspoken
+            .store(unspoken, std::sync::atomic::Ordering::SeqCst);
     }
 }
 
@@ -962,6 +976,18 @@ fn replay_settings(evidence: &Value) -> okur_core::settings::Settings {
             .get("SayAllMode")
             .and_then(Value::as_str)
             .map(okur_core::settings::SayAllUnit::from_jcf)
+            .unwrap_or_default();
+        // Full Speech or less speech, `SpeechMode`, and less speech's kind, `LessSpeechMode`
+        // (700 records Speech On Demand).
+        settings.speech_mode = options
+            .get("SpeechMode")
+            .and_then(Value::as_str)
+            .map(okur_core::settings::SpeechMode::from_jcf)
+            .unwrap_or_default();
+        settings.less_speech = options
+            .get("LessSpeechMode")
+            .and_then(Value::as_str)
+            .map(okur_core::settings::LessSpeech::from_jcf)
             .unwrap_or_default();
         // The user verbosity level, `Verbosity` in Options: 0 Beginner (JAWS's default), 1
         // Intermediate, 2 Advanced (548-555 record each).

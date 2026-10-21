@@ -5470,3 +5470,85 @@ fn the_okur_and_pc_cursors() {
         Some("PC Cursor active\n1045, 544")
     );
 }
+
+/// A synthesizer that keeps what it is given apart from what it speaks, as Speech On Demand
+/// tells it.
+#[derive(Clone, Default)]
+struct GatedSpeech {
+    history: std::sync::Arc<std::sync::Mutex<Vec<String>>>,
+    spoken: std::sync::Arc<std::sync::Mutex<Vec<String>>>,
+    unspoken: std::sync::Arc<std::sync::atomic::AtomicBool>,
+}
+
+impl SpeechOutput for GatedSpeech {
+    fn speak(&mut self, text: &str, _interrupt: bool) {
+        if let Ok(mut history) = self.history.lock() {
+            history.push(text.to_owned());
+        }
+        if !self.unspoken.load(std::sync::atomic::Ordering::SeqCst) {
+            if let Ok(mut spoken) = self.spoken.lock() {
+                spoken.push(text.to_owned());
+            }
+        }
+    }
+    fn stop(&mut self) {}
+    fn set_unspoken(&mut self, unspoken: bool) {
+        self.unspoken
+            .store(unspoken, std::sync::atomic::Ordering::SeqCst);
+    }
+}
+
+impl GatedSpeech {
+    fn take(log: &std::sync::Arc<std::sync::Mutex<Vec<String>>>) -> Vec<String> {
+        log.lock()
+            .map(|mut l| l.drain(..).collect())
+            .unwrap_or_default()
+    }
+}
+
+/// Speech On Demand: Down says nothing but is written to the history; Insert+Up speaks.
+/// Insert+Space, S goes to full speech, saying so, and back [obs, 700/s1, s2, s11-s16].
+#[test]
+fn speech_on_demand_speaks_only_its_commands() {
+    let page = AomNode::new(0, Role::Document).with_children(vec![
+        AomNode::new(1, Role::Paragraph).with_text("First line."),
+        AomNode::new(2, Role::Paragraph).with_text("Second line."),
+    ]);
+    let speech = GatedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(speech.clone()),
+    );
+    let mut settings = crate::settings::Settings::default();
+    settings.speech_mode = crate::settings::SpeechMode::Less;
+    engine.set_settings(settings);
+    engine.cursor.move_to_start();
+    let press = |engine: &mut ScreenReaderEngine, key: Key, modifiers: Modifiers| {
+        engine.handle_key_event(&KeyEvent::new(key, modifiers, true));
+        (
+            GatedSpeech::take(&speech.history).join("\n"),
+            GatedSpeech::take(&speech.spoken).join("\n"),
+        )
+    };
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    let (history, spoken) = press(&mut engine, Key::DownArrow, Modifiers::none());
+    assert!(history.contains("Second line."), "{history}");
+    assert_eq!(spoken, "");
+    let (_, spoken) = press(&mut engine, Key::UpArrow, insert);
+    assert!(spoken.contains("Second line."), "{spoken}");
+    // Insert+Space, S: full speech, said.
+    press(&mut engine, Key::Space, insert);
+    let (_, spoken) = press(&mut engine, Key::Alpha('S'), Modifiers::none());
+    assert_eq!(spoken, "Full Speech");
+    let (_, spoken) = press(&mut engine, Key::UpArrow, Modifiers::none());
+    assert!(spoken.contains("First line."), "{spoken}");
+    press(&mut engine, Key::Space, insert);
+    let (_, spoken) = press(&mut engine, Key::Alpha('S'), Modifiers::none());
+    assert_eq!(spoken, "Speech On Demand");
+    let (history, spoken) = press(&mut engine, Key::DownArrow, Modifiers::none());
+    assert!(history.contains("Second line."), "{history}");
+    assert_eq!(spoken, "");
+}

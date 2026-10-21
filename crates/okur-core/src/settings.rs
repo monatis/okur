@@ -123,6 +123,50 @@ impl SayAllUnit {
     }
 }
 
+/// How much is spoken: JAWS's Full Speech, or less speech (`SpeechMode` in `DEFAULT.JCF`'s
+/// Options: 0 full, its default; 1 less), the kind of less speech being [`LessSpeech`].
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SpeechMode {
+    #[default]
+    Full,
+    Less,
+}
+
+impl SpeechMode {
+    /// The mode a `DEFAULT.JCF` `SpeechMode` value sets; any other value is full speech.
+    pub fn from_jcf(value: &str) -> Self {
+        if value.trim() == "1" {
+            Self::Less
+        } else {
+            Self::Full
+        }
+    }
+}
+
+/// Less speech's kind (`LessSpeechMode`: 0 on demand, its default; 1 muted). On demand, only
+/// the reading commands of the key map's [Speech On Demand] list speak (Say Line, Say Word,
+/// Say Window Title, Say Color, ...); what the others say is still written to the speech
+/// history ("banner" for a silent Down [obs, 700/s1]).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum LessSpeech {
+    #[default]
+    OnDemand,
+    Muted,
+}
+
+impl LessSpeech {
+    /// The kind a `DEFAULT.JCF` `LessSpeechMode` value sets; any other value is on demand.
+    pub fn from_jcf(value: &str) -> Self {
+        if value.trim() == "1" {
+            Self::Muted
+        } else {
+            Self::OnDemand
+        }
+    }
+}
+
 /// What typing a character says (Basic Settings: Typing Echo).
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -492,6 +536,10 @@ pub struct Settings {
     pub typing_echo: TypingEcho,
     /// What Say All reads at a time: a line, a sentence or a paragraph.
     pub say_all_unit: SayAllUnit,
+    /// Full Speech or less speech, as Okur starts; Insert+Space, S changes it for the session.
+    pub speech_mode: SpeechMode,
+    /// Less speech on demand or muted.
+    pub less_speech: LessSpeech,
     pub viewer_display: ViewerDisplay,
     /// Forms mode turns on by itself when the focus lands on a field, as JAWS's Auto Forms
     /// Mode (`[FormsMode] AutoFormsMode`, on by default). Off, a field takes Enter first,
@@ -515,6 +563,8 @@ impl Default for Settings {
             live_region_append: LiveRegionAppend::default(),
             typing_echo: TypingEcho::default(),
             say_all_unit: SayAllUnit::default(),
+            speech_mode: SpeechMode::default(),
+            less_speech: LessSpeech::default(),
             viewer_display: ViewerDisplay::default(),
             auto_forms_mode: true,
             verbosity: Verbosity::default(),
@@ -572,6 +622,9 @@ impl Settings {
             live_region_append: LiveRegionAppend::WholeText,
             typing_echo: TypingEcho::None,
             say_all_unit: SayAllUnit::Line,
+            // Not in old-pc's user JCF: the shared one's, JAWS's defaults.
+            speech_mode: SpeechMode::Full,
+            less_speech: LessSpeech::OnDemand,
             viewer_display: ViewerDisplay::OnScreen,
             auto_forms_mode: false,
             verbosity,

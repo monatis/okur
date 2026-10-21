@@ -15,8 +15,22 @@ impl ScreenReaderEngine {
         self.execute(Command::from_name(name)?)
     }
 
-    /// Runs `command`, speaks what it reads, and returns it.
+    /// Runs `command`, speaks what it reads, and returns it. With Speech On Demand on, a
+    /// command of its list speaks (and the Say All it starts); the others are written to the
+    /// speech history alone [obs, 700].
     pub fn execute(&mut self, command: Command) -> Option<String> {
+        let lifted = self.on_demand() && command.speaks_on_demand();
+        if lifted {
+            self.speech.set_unspoken(false);
+        }
+        let said = self.execute_command_itself(command);
+        if lifted {
+            self.sync_speech_mode();
+        }
+        said
+    }
+
+    fn execute_command_itself(&mut self, command: Command) -> Option<String> {
         if let Some(said) = self.read_where_focused(&command) {
             return said;
         }

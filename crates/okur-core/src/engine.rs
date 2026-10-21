@@ -36,6 +36,7 @@ mod quit;
 mod reading;
 mod routing;
 mod say_all;
+mod speech_mode;
 mod state;
 #[cfg(test)]
 mod tests;
@@ -277,6 +278,11 @@ pub struct ScreenReaderEngine {
     list_entered_groups: Vec<String>,
     /// Speech turned off with Insert+Space, S.
     speech_muted: bool,
+    /// Full Speech or less speech for this session, as Insert+Space, S set it; else the
+    /// settings'.
+    speech_mode_session: Option<crate::settings::SpeechMode>,
+    /// Less speech's kind for this session, as Insert+Space, Shift+S set it.
+    less_speech_session: Option<crate::settings::LessSpeech>,
     /// User settings (JAWS defaults unless configured).
     pub settings: crate::settings::Settings,
     /// Caps Lock's state as toggled through the JAWS key, when the platform does not report it.
@@ -397,6 +403,8 @@ impl ScreenReaderEngine {
             radio_switched: None,
             list_entered_groups: Vec::new(),
             speech_muted: false,
+            speech_mode_session: None,
+            less_speech_session: None,
             settings: crate::settings::Settings::default(),
             caps_lock_on: false,
             viewer: None,
@@ -446,6 +454,7 @@ impl ScreenReaderEngine {
     /// Intercepts navigation keys, manages forms mode transitions, silences ongoing speech,
     /// and returns whether the key was consumed or should pass through to the OS.
     pub fn handle_key_event(&mut self, event: &KeyEvent) -> KeyAction {
+        self.sync_speech_mode();
         let offset = self.cursor.offset;
         let action = self.handle_key(event);
         if self.app_mode == AppMode::VirtualBuffer && self.cursor.offset != offset {
@@ -1016,6 +1025,7 @@ impl ScreenReaderEngine {
 
     /// Handles an incoming accessibility event from the OS event listener.
     pub fn handle_accessibility_event(&mut self, event: &AccessibilityEvent) -> Option<String> {
+        self.sync_speech_mode();
         if !matches!(
             event,
             AccessibilityEvent::LiveRegion(_)
@@ -1137,6 +1147,7 @@ impl ScreenReaderEngine {
         if voice_changed {
             self.configure_voice();
         }
+        self.sync_speech_mode();
     }
 
     /// The focus is in `application` (as the platform names it), on a page of `site`: its

@@ -41,16 +41,9 @@ impl ScreenReaderEngine {
             // Shift+H forgets the Speech History, silently [obs, 570/s6].
             Key::Alpha('H') if shift_only => self.speech.clear_history(),
             Key::Alpha('H') if ctrl_only => self.copy_speech_history(),
-            // Shift+S, Speech On Demand: JAWS's other speech mode, which Okur does not have;
-            // in full speech JAWS says it is not available [obs, 566/s3, s10].
-            Key::Alpha('S') if shift_only => {
-                self.speech
-                    .speak(msg::speech_on_demand_unavailable().as_str(), true);
-            }
-            Key::Alpha('S') if plain => {
-                self.speech_muted = !self.speech_muted;
-                self.speech.set_muted(self.speech_muted);
-            }
+            // Speech On Demand and muting (the speech_mode module).
+            Key::Alpha('S') if shift_only => self.speech_on_demand_toggle(),
+            Key::Alpha('S') if plain => self.mute_synthesizer(),
             Key::Alpha('T') if plain => self.start_table_layer(),
             _ => {}
         }
