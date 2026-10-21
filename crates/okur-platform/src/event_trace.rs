@@ -1181,6 +1181,15 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
                 .filter(|n| !n.trim().is_empty() && Some(n) != focused.name.as_ref())
                 .collect();
             focus.column_headers = event.column_headers.clone();
+            // A WPF list item with no name of its own is named after its data object's type
+            // ("NotificationViewer.Services.NotificationData"), which JAWS leaves out: it reads
+            // the item's texts [obs, 774/s3].
+            if focused.class_name.as_deref() == Some(WPF_LIST_ITEM)
+                && focus.name.as_deref().is_some_and(is_type_name)
+                && !focus.columns.is_empty()
+            {
+                focus.name = Some(focus.columns.remove(0));
+            }
         }
         // A combo box's position is its selected item's, among its list items. A closed WinUI
         // combo box holds only its selected item, which is its value, and no position:
@@ -1660,6 +1669,21 @@ fn notification_event(notification: &TraceNotification) -> okur_core::Accessibil
 /// shows its page again: " Brightness Change brightness for the built-in display | Show more
 /// settings" (the slider inside is left out; dev box, 2026-10-17). A text region says its
 /// name. A region whose live setting is off says nothing.
+/// The UIA class of a WPF list box's items.
+const WPF_LIST_ITEM: &str = "ListBoxItem";
+
+/// Whether `name` is a .NET type's full name, as WPF names an item by its data object's type
+/// when the item has no name of its own: identifiers that start with a capital, joined by dots
+/// ("NotificationViewer.Services.NotificationData").
+fn is_type_name(name: &str) -> bool {
+    let parts: Vec<&str> = name.split('.').collect();
+    parts.len() >= 2
+        && parts.iter().all(|part| {
+            part.chars().next().is_some_and(|c| c.is_ascii_uppercase())
+                && part.chars().all(|c| c.is_ascii_alphanumeric() || c == '_')
+        })
+}
+
 /// A toast's text and sender, in a window of the shell that opened: its view's name
 /// (AutomationId `NormalToastView`, on Windows 10), as JAWS says it, and its `SenderName`'s
 /// [obs, 770/s1].
@@ -4643,6 +4667,16 @@ mod tests {
         );
         status.live_setting = Some(0);
         assert!(uia_live_region_event(&status).is_none());
+    }
+
+    /// A WPF item named after its data object's type is read by its texts [obs, 774/s3].
+    #[test]
+    fn a_wpf_items_type_name_is_left_out() {
+        assert!(is_type_name("NotificationViewer.Services.NotificationData"));
+        assert!(!is_type_name("example.com"));
+        assert!(!is_type_name("Report.final"));
+        assert!(!is_type_name("Notes"));
+        assert!(!is_type_name("Mr. Smith"));
     }
 
     /// A toast, as the shell reports it opening: its view, then the window around it, once
