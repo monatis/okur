@@ -2883,8 +2883,8 @@
       "scenario_id": "524-desktop-save-as-dialog",
       "fixture": "desktop-file-dialogs.ps1",
       "evidence": {
-        "sha256": "8516ed6e209cebc8718f260c8e7f3242b9b774affba076b6f1065d0d7a17ecb8",
-        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "sha256": "ad49c2fba25ab7436b0b970bc156f55d945888badc9926864d082267b0dcc806",
+        "capture_script_sha256": "113d4cf66abe0ba8fff19de9a00a19378253f6a1fc031078bd277ccc0051b46f",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -3093,8 +3093,8 @@
       "scenario_id": "540-desktop-notepad-find-dialog",
       "fixture": "desktop-notepad.ps1",
       "evidence": {
-        "sha256": "1033a637a7ac3a27973e518d2a58f709572dcc2b6ce714882f8a80c81597334f",
-        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "sha256": "96a74b3911956d17abdad1f3309ce616e6162aca4d60008bc94aa0a67094fbff",
+        "capture_script_sha256": "113d4cf66abe0ba8fff19de9a00a19378253f6a1fc031078bd277ccc0051b46f",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -3149,13 +3149,13 @@
       "scenario_id": "544-desktop-notepad-page-setup",
       "fixture": "desktop-notepad.ps1",
       "evidence": {
-        "sha256": "2b43817c83e91ee7849d55ad6d17b83b929e15f8e14feab8af6a867eaa3dd37b",
-        "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "sha256": "550d43054509edc0eb69adf7c90ac6fd668ee06927b907ecde865dc3ae927859",
+        "capture_script_sha256": "113d4cf66abe0ba8fff19de9a00a19378253f6a1fc031078bd277ccc0051b46f",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
         "successful_trials": 3,
-        "deterministic": true,
+        "deterministic": false,
         "summary_consistent": true
       }
     },
@@ -4838,13 +4838,41 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "670-article-say-all-intermediate",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "a16044b34de6e6b44fedde87c1d9a72bb5a1ce3910d355b9e3f3d6042efe8657",
+        "capture_script_sha256": "113d4cf66abe0ba8fff19de9a00a19378253f6a1fc031078bd277ccc0051b46f",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "671-article-say-all-advanced",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "28f3565bb8ebb99bd2aec1cfdc73a62b7ab12c725e1856746ff1370297ca3622",
+        "capture_script_sha256": "113d4cf66abe0ba8fff19de9a00a19378253f6a1fc031078bd277ccc0051b46f",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 334,
-    "scenarios_with_evidence": 334,
-    "total_trials": 1056,
-    "successful_trials": 1056,
-    "deterministic_scenarios": 212
+    "scenarios": 336,
+    "scenarios_with_evidence": 336,
+    "total_trials": 1062,
+    "successful_trials": 1062,
+    "deterministic_scenarios": 213
   }
 }

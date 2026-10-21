@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- parity --write-baseline",
-  "matched_steps": 4805,
-  "total_steps": 4978,
+  "matched_steps": 4807,
+  "total_steps": 4980,
   "accepted_divergences": 105,
   "errors": [],
   "steps": {
@@ -5101,6 +5101,8 @@
     "669-desktop-edit-page-and-word-keys-advanced/s6": "match",
     "669-desktop-edit-page-and-word-keys-advanced/s7": "match",
     "669-desktop-edit-page-and-word-keys-advanced/s8": "mismatch",
-    "669-desktop-edit-page-and-word-keys-advanced/s9": "match"
+    "669-desktop-edit-page-and-word-keys-advanced/s9": "match",
+    "670-article-say-all-intermediate/s1": "match",
+    "671-article-say-all-advanced/s1": "match"
   }
 }
