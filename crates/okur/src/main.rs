@@ -174,6 +174,10 @@ enum Commands {
         /// Text the window's title contains
         title: String,
     },
+    /// Print the element UI Automation says has the keyboard focus, as one JSON line: its
+    /// name, control type, class, and whether it is in a document (a web page's). The harness
+    /// checks a web trial starts in its page (Windows)
+    Focus,
     /// Print JAWS's speech history (through FSAPI; the clipboard's text is put back)
     JawsHistory {
         /// Empty the history after reading it
@@ -1165,6 +1169,15 @@ async fn main() {
                     eprintln!("{e}");
                     std::process::exit(1);
                 }
+            }
+        }
+        Some(Commands::Focus) => {
+            #[cfg(windows)]
+            println!("{}", okur_platform::uia_snapshot::focused_element_json());
+            #[cfg(not(windows))]
+            {
+                eprintln!("the focus is only read on Windows");
+                std::process::exit(1);
             }
         }
         Some(Commands::JawsHistory { clear }) => {

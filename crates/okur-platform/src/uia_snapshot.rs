@@ -419,6 +419,27 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> okur_core::AomNode {
 #[cfg(windows)]
 pub use capture::capture_foreground_document;
 
+/// The element UIA reports as having keyboard focus, for the harness: one JSON line with its
+/// name, control type and class, and whether it is inside a document (a web page's).
+#[cfg(windows)]
+pub fn focused_element_json() -> String {
+    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+    const UIA_DOCUMENT: i32 = 50030;
+    // SAFETY: COM initialization; repeated initialization is tolerated.
+    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+    let chain = capture::automation()
+        .map(|uia| capture::focus_chain(&uia))
+        .unwrap_or_default();
+    let focus = chain.last();
+    serde_json::json!({
+        "name": focus.and_then(|n| n.name.clone()),
+        "control_type": focus.map(|n| n.control_type),
+        "class_name": focus.and_then(|n| n.class_name.clone()),
+        "in_document": chain.iter().any(|n| n.control_type == UIA_DOCUMENT),
+    })
+    .to_string()
+}
+
 /// The element UIA reports as having keyboard focus, as `"name" (control type N)`, for
 /// harness checks.
 #[cfg(windows)]
