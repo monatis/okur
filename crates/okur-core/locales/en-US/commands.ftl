@@ -114,6 +114,9 @@ less-speech-set-muted = Speech off set to speech mute
 less-speech-set-on-demand = speech off set to speech on demand
 # Insert+Space, Shift+N (RepeatLastNotification) before any notification was said [obs, 533/s3].
 notification-none = No notification
+# Insert+Space, Control+N (ToggleToastNotificationAnnouncement) [obs, 773/s2, s7].
+toast-announcements-off = Toast notification announcements disabled
+toast-announcements-on = Toast notification announcements enabled
 
 ## Say Default Button (Insert+E) and the settings in use (Insert+Q) [obs, 513]
 

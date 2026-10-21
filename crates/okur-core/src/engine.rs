@@ -290,8 +290,10 @@ pub struct ScreenReaderEngine {
     rate_change: i32,
     /// Insert+Space was pressed: the next key is the layer's.
     layer_open: bool,
-    /// The notifications Okur said, the latest last, for Insert+Space, Shift+N.
+    /// The notifications that came, the latest last, for Insert+Space, Shift+N.
     notifications: std::collections::VecDeque<String>,
+    /// Toasts are kept but not said (Insert+Space, Ctrl+N).
+    toasts_unsaid: bool,
     /// The table layer (Insert+Space, T): the arrows move by cell until Escape.
     table_layer: bool,
     /// The page element Numpad Slash clicked at the virtual cursor: its focus is said as
@@ -435,6 +437,7 @@ impl ScreenReaderEngine {
             rate_change: 0,
             layer_open: false,
             notifications: std::collections::VecDeque::new(),
+            toasts_unsaid: false,
             table_layer: false,
             clicked: None,
             radio_switched: None,

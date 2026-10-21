@@ -5947,7 +5947,8 @@ fn skim_reading_by_sentence_reads_list_items_with_their_mark() {
 }
 
 /// A toast is said as it shows, and Insert+Space, Shift+N says it again; before one, "No
-/// notification" [obs, 770/s1, s4, 533/s3].
+/// notification"; Insert+Space, Ctrl+N stops and starts saying them [obs, 770/s1, s4, 533/s3,
+/// 773].
 #[test]
 fn a_toast_is_said_and_repeated_on_request() {
     let (mut engine, speech) = engine_on_a_page();
@@ -5981,4 +5982,23 @@ fn a_toast_is_said_and_repeated_on_request() {
         Some(TOAST)
     );
     assert_eq!(layer_key(&mut engine, Key::Alpha('N'), shift), [TOAST]);
+    // Insert+Space, Ctrl+N: toasts kept, not said, until it is pressed again [obs, 773].
+    let ctrl = Modifiers {
+        ctrl: true,
+        ..Modifiers::none()
+    };
+    assert_eq!(
+        layer_key(&mut engine, Key::Alpha('N'), ctrl),
+        ["Toast notification announcements disabled"]
+    );
+    const LATER: &str = "New notification from Mail, Lunch, Noon at the cafe. 1 of 1";
+    assert_eq!(
+        engine.handle_accessibility_event(&AccessibilityEvent::Toast(LATER.to_owned())),
+        None
+    );
+    assert_eq!(layer_key(&mut engine, Key::Alpha('N'), shift), [LATER]);
+    assert_eq!(
+        layer_key(&mut engine, Key::Alpha('N'), ctrl),
+        ["Toast notification announcements enabled"]
+    );
 }
