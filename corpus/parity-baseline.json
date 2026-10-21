@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6113,
-  "total_steps": 6339,
+  "matched_steps": 6124,
+  "total_steps": 6357,
   "accepted_divergences": 160,
   "errors": [],
   "steps": {
@@ -6517,6 +6517,24 @@
     "774-desktop-notification-history-dialog/s6": "match",
     "774-desktop-notification-history-dialog/s7": "match",
     "774-desktop-notification-history-dialog/s8": "mismatch",
-    "774-desktop-notification-history-dialog/s9": "match"
+    "774-desktop-notification-history-dialog/s9": "match",
+    "775-desktop-notification-create-rule-dialog/s1": "match",
+    "775-desktop-notification-create-rule-dialog/s10": "mismatch",
+    "775-desktop-notification-create-rule-dialog/s11": "match",
+    "775-desktop-notification-create-rule-dialog/s12": "match",
+    "775-desktop-notification-create-rule-dialog/s13": "match",
+    "775-desktop-notification-create-rule-dialog/s14": "mismatch",
+    "775-desktop-notification-create-rule-dialog/s15": "mismatch",
+    "775-desktop-notification-create-rule-dialog/s16": "match",
+    "775-desktop-notification-create-rule-dialog/s17": "match",
+    "775-desktop-notification-create-rule-dialog/s18": "match",
+    "775-desktop-notification-create-rule-dialog/s2": "match",
+    "775-desktop-notification-create-rule-dialog/s3": "mismatch",
+    "775-desktop-notification-create-rule-dialog/s4": "match",
+    "775-desktop-notification-create-rule-dialog/s5": "match",
+    "775-desktop-notification-create-rule-dialog/s6": "mismatch",
+    "775-desktop-notification-create-rule-dialog/s7": "mismatch",
+    "775-desktop-notification-create-rule-dialog/s8": "match",
+    "775-desktop-notification-create-rule-dialog/s9": "mismatch"
   }
 }
