@@ -1,0 +1,84 @@
+{
+  "id": "707-web-speech-on-demand-toggle",
+  "name": "Insert+Space then Shift+S (SpeechOnDemandToggle) from Speech On Demand (DEFAULT.JCF Options SpeechMode=1, LessSpeechMode=0) on the news article: Insert+Up, Insert+Space, Shift+S, Insert+Up, Down, Insert+Space, Shift+S, Insert+Up, Down, Insert+Space, S, Down",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "quiet_confirmation": true,
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "SpeechMode": "1",
+        "LessSpeechMode": "0"
+      }
+    }
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Shift+S"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Shift+S"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "S"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Down"
+    }
+  ]
+}

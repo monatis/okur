@@ -1,0 +1,69 @@
+{
+  "id": "706-web-speech-layer-mute",
+  "name": "Insert+Space then S (MuteSynthesizer) with JAWS's default speech modes set (DEFAULT.JCF Options SpeechMode=0, LessSpeechMode=0) on the news article: Down, Insert+Space, S, Down, Insert+Up, Insert+Space, S, Down, Insert+Up. 517 heard nothing after S, and 700 heard \"Full Speech\" and \"Speech On Demand\"",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "quiet_confirmation": true,
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "SpeechMode": "0",
+        "LessSpeechMode": "0"
+      }
+    }
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "S"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "S"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}
