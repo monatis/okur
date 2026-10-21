@@ -589,11 +589,13 @@ if ($Reader -eq 'jaws') {
 # With less speech (DEFAULT.JCF SpeechMode=1: Speech On Demand, or speech muted) JAWS does not
 # speak its copy confirmation, which every step waited for in vain (700, round 138): a step's
 # speech is then read once the audio is silent.
-$script:QuietConfirmation = $false
+$script:QuietConfirmation = $scenario.quiet_confirmation -eq $true
 if ($Reader -eq 'jaws' -and $asks) {
     $options = $scenario.jaws_settings.'DEFAULT.JCF'.Options
     if ($options -and "$($options.SpeechMode)" -eq '1') { $script:QuietConfirmation = $true }
 }
+# A scenario that turns less speech on with a key (Insert+Space, S) says so itself:
+# "quiet_confirmation": true.
 
 $expectedTitle = $null
 if ($fixturePath -and (Test-Path $fixturePath)) {
