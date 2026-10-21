@@ -355,6 +355,9 @@ pub struct VoiceSettings {
     /// Which symbols in running text are spoken by name. JAWS keeps it in the voice profile
     /// too, per voice context (Voice Adjustment's Punctuation).
     pub punctuation: Punctuation,
+    /// A capital read alone or spelled is said at a raised pitch: JAWS's Caps Indicate
+    /// (`IndicateCaps` in `DEFAULT.JCF`'s Options, on by default) [obs, 408, 717].
+    pub indicate_caps: bool,
 }
 
 impl Default for VoiceSettings {
@@ -365,6 +368,7 @@ impl Default for VoiceSettings {
             rate: 0,
             volume: 100,
             punctuation: Punctuation::default(),
+            indicate_caps: true,
         }
     }
 }

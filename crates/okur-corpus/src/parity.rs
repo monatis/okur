@@ -726,6 +726,8 @@ struct RecordingSpeech {
     punctuation: std::sync::Arc<std::sync::Mutex<okur_core::settings::Punctuation>>,
     /// Less speech: kept in the history, not spoken [obs, 700, 707].
     unspoken: std::sync::Arc<std::sync::atomic::AtomicBool>,
+    /// Capitals at the voice's pitch: Caps Indicate off in the engine's voice settings.
+    plain_capitals: std::sync::Arc<std::sync::atomic::AtomicBool>,
 }
 
 fn append(log: &Log, text: String) {
@@ -780,13 +782,22 @@ impl RecordingSpeech {
     }
 }
 
+impl RecordingSpeech {
+    /// Whether capitals are said at a raised pitch.
+    fn indicate_caps(&self) -> bool {
+        !self
+            .plain_capitals
+            .load(std::sync::atomic::Ordering::SeqCst)
+    }
+}
+
 impl okur_core::speech::SpeechOutput for RecordingSpeech {
     /// JAWS's speech history has no typing echo, but its synthesizer speaks it.
     fn speak_echo(&mut self, text: &str) {
         if self.unspoken() {
             return;
         }
-        let pitch = okur_core::pronounce::character_pitch(text);
+        let pitch = okur_core::pronounce::character_pitch(text, self.indicate_caps());
         append(
             &self.spoken,
             okur_core::pronounce::pitched(&okur_core::pronounce::character(text), pitch),
@@ -805,6 +816,8 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
         if let Ok(mut level) = self.punctuation.lock() {
             *level = voice.punctuation;
         }
+        self.plain_capitals
+            .store(!voice.indicate_caps, std::sync::atomic::Ordering::SeqCst);
     }
 
     fn speak_character(&mut self, text: &str, _interrupt: bool) {
@@ -812,7 +825,7 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
         if self.unspoken() {
             return;
         }
-        let pitch = okur_core::pronounce::character_pitch(text);
+        let pitch = okur_core::pronounce::character_pitch(text, self.indicate_caps());
         append(
             &self.spoken,
             okur_core::pronounce::pitched(&okur_core::pronounce::character(text), pitch),
@@ -824,7 +837,7 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
         if self.unspoken() {
             return;
         }
-        for (part, pitch) in okur_core::pronounce::spelled_parts(text) {
+        for (part, pitch) in okur_core::pronounce::spelled_parts(text, self.indicate_caps()) {
             append(&self.spoken, okur_core::pronounce::pitched(&part, pitch));
         }
     }
@@ -834,7 +847,7 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
         if self.unspoken() {
             return;
         }
-        for (part, pitch) in okur_core::pronounce::spelled_parts(text) {
+        for (part, pitch) in okur_core::pronounce::spelled_parts(text, self.indicate_caps()) {
             append(&self.spoken, okur_core::pronounce::pitched(&part, pitch));
         }
     }
@@ -844,7 +857,7 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
         if self.unspoken() {
             return;
         }
-        let pitch = okur_core::pronounce::character_pitch(text);
+        let pitch = okur_core::pronounce::character_pitch(text, self.indicate_caps());
         append(
             &self.spoken,
             okur_core::pronounce::pitched(&okur_core::pronounce::phonetic(text), pitch),

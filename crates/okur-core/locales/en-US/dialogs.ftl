@@ -19,6 +19,8 @@ settings-rate = &Rate:
 settings-volume = V&olume:
 # JAWS's Voice Adjustment's Punctuation; the levels are punctuation-none to punctuation-all.
 settings-punctuation = &Punctuation:
+# JAWS's Caps Indicate: a capital read alone or spelled at a raised pitch.
+settings-indicate-caps = Caps &Indicate
 settings-group-keyboard = Keyboard
 settings-layout = Keyboard &Layout:
 settings-layout-desktop = Desktop

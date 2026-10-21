@@ -147,6 +147,8 @@ pub struct TtsManager {
     speech_log: Option<SpeechLog>,
     /// Which symbols the synthesizer is given by name (the voice settings' punctuation).
     punctuation: okur_core::settings::Punctuation,
+    /// Capitals read alone or spelled at a raised pitch (the voice settings' Caps Indicate).
+    pub(crate) indicate_caps: bool,
     /// The voice settings last applied, so that a change applies only what differs.
     applied: Option<okur_core::settings::VoiceSettings>,
 }
@@ -160,6 +162,7 @@ impl TtsManager {
             voice: None,
             speech_log: None,
             punctuation: okur_core::settings::Punctuation::default(),
+            indicate_caps: true,
             applied: None,
         })
     }
@@ -313,7 +316,7 @@ impl okur_core::speech::SpeechOutput for TtsManager {
     fn speak_echo(&mut self, text: &str) {
         let _ = self.engine.speak_pitched(
             &okur_core::pronounce::character(text),
-            okur_core::pronounce::character_pitch(text),
+            okur_core::pronounce::character_pitch(text, self.indicate_caps),
             true,
         );
     }
@@ -334,7 +337,7 @@ impl okur_core::speech::SpeechOutput for TtsManager {
         }
         let _ = self.engine.speak_pitched(
             &okur_core::pronounce::character(text),
-            okur_core::pronounce::character_pitch(text),
+            okur_core::pronounce::character_pitch(text, self.indicate_caps),
             interrupt,
         );
     }
@@ -349,7 +352,7 @@ impl okur_core::speech::SpeechOutput for TtsManager {
                 interrupt,
             );
         }
-        for (i, (part, pitch)) in okur_core::pronounce::spelled_parts(text)
+        for (i, (part, pitch)) in okur_core::pronounce::spelled_parts(text, self.indicate_caps)
             .into_iter()
             .enumerate()
         {
@@ -362,7 +365,7 @@ impl okur_core::speech::SpeechOutput for TtsManager {
         if let Some(log) = self.speech_log.as_mut() {
             log.record(SpeechLogKind::Speak, text, interrupt);
         }
-        for (i, (part, pitch)) in okur_core::pronounce::spelled_parts(text)
+        for (i, (part, pitch)) in okur_core::pronounce::spelled_parts(text, self.indicate_caps)
             .into_iter()
             .enumerate()
         {
@@ -377,7 +380,7 @@ impl okur_core::speech::SpeechOutput for TtsManager {
         }
         let _ = self.engine.speak_pitched(
             &okur_core::pronounce::phonetic(text),
-            okur_core::pronounce::character_pitch(text),
+            okur_core::pronounce::character_pitch(text, self.indicate_caps),
             interrupt,
         );
     }
@@ -402,6 +405,7 @@ impl okur_core::speech::SpeechOutput for TtsManager {
     /// enumerates its voices and can reload one (responsiveness review, 2026-10-19).
     fn configure(&mut self, voice: &okur_core::settings::VoiceSettings) {
         self.punctuation = voice.punctuation;
+        self.indicate_caps = voice.indicate_caps;
         let applied = self.applied.replace(voice.clone());
         if let Some(applied) =
             applied.filter(|a| a.synthesizer == voice.synthesizer && a.voice == voice.voice)

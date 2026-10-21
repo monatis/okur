@@ -292,6 +292,7 @@ fn carry_out(
         if request.interrupts() {
             *following = false;
         }
+        let indicate_caps = tts.indicate_caps;
         match request {
             Request::Marked(text, mark, interrupt) => {
                 let spoken = okur_core::pronounce::spoken(&text, tts.punctuation);
@@ -322,19 +323,19 @@ fn carry_out(
             Request::Character(text, interrupt) => {
                 let _ = tts.engine.speak_pitched(
                     &okur_core::pronounce::character(&text),
-                    okur_core::pronounce::character_pitch(&text),
+                    okur_core::pronounce::character_pitch(&text, indicate_caps),
                     interrupt,
                 );
             }
             Request::Phonetic(text, interrupt) => {
                 let _ = tts.engine.speak_pitched(
                     &okur_core::pronounce::phonetic(&text),
-                    okur_core::pronounce::character_pitch(&text),
+                    okur_core::pronounce::character_pitch(&text, indicate_caps),
                     interrupt,
                 );
             }
             Request::Spelled(text, interrupt) => {
-                let parts = okur_core::pronounce::spelled_parts(&text);
+                let parts = okur_core::pronounce::spelled_parts(&text, indicate_caps);
                 for (i, (part, pitch)) in parts.into_iter().enumerate() {
                     let first = interrupt && i == 0;
                     let _ = tts.engine.speak_pitched(&part, pitch, first);

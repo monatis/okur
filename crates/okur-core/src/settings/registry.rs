@@ -233,6 +233,18 @@ pub static SETTINGS: &[SettingSpec] = &[
         Some(msg::settings_punctuation),
         Kind::Choice(choices::<Punctuation>),
     ),
+    SettingSpec {
+        jaws: default_jcf("Options", "IndicateCaps", |v| Value::Bool(v.trim() != "0")),
+        ..spec(
+            "voice.indicate_caps",
+            Group::Speech,
+            Some(msg::settings_indicate_caps),
+            Kind::Check {
+                on: Literal::Bool(true),
+                off: Literal::Bool(false),
+            },
+        )
+    },
     // Full Speech or less speech, and less speech's kind (`SpeechMode`, `LessSpeechMode`;
     // 700 and 707 record them); Insert+Space, S and Shift+S change them for the session.
     SettingSpec {

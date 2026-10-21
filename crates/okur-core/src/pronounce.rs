@@ -66,14 +66,14 @@ pub fn spelled(text: &str) -> String {
 
 /// What the synthesizer is given for a spelled text, in parts with their pitch change: each
 /// capital alone, raised; the characters between capitals together, by name ("space")
-/// [obs, 406/s5, s7: "[pitch +4] A d a space [pitch +4] R [pitch +4] E ...].
-pub fn spelled_parts(text: &str) -> Vec<(String, i32)> {
+/// [obs, 406/s5, s7: "[pitch +4] A d a space [pitch +4] R [pitch +4] E ...]. Without Caps
+/// Indicate a capital is still a part of its own, at the voice's pitch [obs, 717/s3, s6].
+pub fn spelled_parts(text: &str, indicate_caps: bool) -> Vec<(String, i32)> {
     let mut parts = Vec::new();
     let mut run: Vec<String> = Vec::new();
     for c in text.chars() {
         let one = c.to_string();
-        let pitch = character_pitch(&one);
-        if pitch == 0 {
+        if character_pitch(&one, true) == 0 {
             run.push(character(&one));
             continue;
         }
@@ -81,7 +81,7 @@ pub fn spelled_parts(text: &str) -> Vec<(String, i32)> {
             parts.push((run.join(" "), 0));
             run.clear();
         }
-        parts.push((character(&one), pitch));
+        parts.push((character(&one), character_pitch(&one, indicate_caps)));
     }
     if !run.is_empty() {
         parts.push((run.join(" "), 0));
@@ -102,11 +102,13 @@ const PHONETIC: [&str; 26] = [
 /// pitch 4; 207].
 pub const CAPITAL_PITCH: i32 = 4;
 
-/// The pitch change of a character read alone: capitals are raised.
-pub fn character_pitch(text: &str) -> i32 {
+/// The pitch change of a character read alone: capitals are raised while capitals are
+/// indicated (Caps Indicate, `IndicateCaps`, on by default); off, a capital is said at the
+/// voice's pitch [obs, 717/s3].
+pub fn character_pitch(text: &str, indicate_caps: bool) -> i32 {
     let mut chars = text.chars();
     match (chars.next(), chars.next()) {
-        (Some(c), None) if c.is_uppercase() => CAPITAL_PITCH,
+        (Some(c), None) if indicate_caps && c.is_uppercase() => CAPITAL_PITCH,
         _ => 0,
     }
 }
@@ -551,7 +553,7 @@ mod tests {
     fn a_text_spelled_is_its_characters_capitals_raised() {
         // [obs, 406/s5, s7]
         assert_eq!(spelled("Ada READ"), "A d a space R E A D");
-        let parts = spelled_parts("Ada RE");
+        let parts = spelled_parts("Ada RE", true);
         assert_eq!(
             parts,
             [
@@ -561,6 +563,12 @@ mod tests {
                 ("E".to_owned(), CAPITAL_PITCH),
             ]
         );
+        // Without Caps Indicate, the same parts at the voice's pitch [obs, 717/s3, s6].
+        let plain: Vec<i32> = spelled_parts("Ada RE", false)
+            .into_iter()
+            .map(|(_, pitch)| pitch)
+            .collect();
+        assert_eq!(plain, [0, 0, 0, 0]);
     }
 
     #[test]
@@ -666,11 +674,12 @@ mod tests {
 
     #[test]
     fn capitals_read_alone_are_raised() {
-        assert_eq!(character_pitch("B"), CAPITAL_PITCH);
-        assert_eq!(character_pitch("\u{130}"), CAPITAL_PITCH);
-        assert_eq!(character_pitch("b"), 0);
-        assert_eq!(character_pitch("("), 0);
-        assert_eq!(character_pitch("Bo"), 0);
+        assert_eq!(character_pitch("B", true), CAPITAL_PITCH);
+        assert_eq!(character_pitch("\u{130}", true), CAPITAL_PITCH);
+        assert_eq!(character_pitch("b", true), 0);
+        assert_eq!(character_pitch("(", true), 0);
+        assert_eq!(character_pitch("Bo", true), 0);
+        assert_eq!(character_pitch("B", false), 0);
         assert_eq!(pitched("B", 4), "[pitch +4] B");
         assert_eq!(pitched("b", 0), "b");
     }
