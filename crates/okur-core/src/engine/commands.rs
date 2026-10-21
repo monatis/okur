@@ -31,6 +31,10 @@ impl ScreenReaderEngine {
     }
 
     fn execute_command_itself(&mut self, command: Command) -> Option<String> {
+        // The reading keys read where the Okur cursor is, with it active on a text.
+        if let Some(said) = self.okur_cursor_command(&command) {
+            return said;
+        }
         if let Some(said) = self.read_where_focused(&command) {
             return said;
         }
@@ -501,10 +505,6 @@ impl ScreenReaderEngine {
             {
                 Some(msg::blank().to_string())
             }
-            // The Okur cursor in a text field: its line; the word key says nothing there
-            // [obs, 690/s6, s10].
-            Command::SayLine if self.okur_line_active() => self.okur_cursor_line(),
-            Command::SayWord if self.okur_line_active() => None,
             Command::SayLine => Some(self.line_here()),
             Command::SayWord => Some(self.cursor.current_word()),
             Command::SayCharacter | Command::SayCharacterPhonetic => Some(self.character_here()),
@@ -914,16 +914,21 @@ impl ScreenReaderEngine {
         let layout_command = crate::command::layout_command_for(&self.settings.keyboard, event);
         let say_line = layout_command == Some(Command::SayLine)
             || crate::editing::EditKey::of(event).is_some();
-        // The Okur cursor in a text field reads its own line, and says nothing for the word
-        // [obs, 690/s6, s10].
-        if self.okur_line_active() {
-            if say_line {
-                if let Some(line) = self.okur_cursor_line() {
-                    let _ = self.say(line);
-                }
-                return;
-            }
-            if layout_command == Some(Command::SayWord) || event.key == Key::Numpad5 {
+        // The Okur cursor reads where it is [obs, 690/s6, s10; 752].
+        if self.okur_place_active() {
+            let command = if say_line {
+                Some(Command::SayLine)
+            } else if event.key == Key::Numpad5 && event.modifiers.is_empty() {
+                Some(Command::SayCharacter)
+            } else {
+                layout_command
+                    .clone()
+                    .or_else(|| crate::command::command_for(event))
+            };
+            if command
+                .and_then(|command| self.okur_cursor_command(&command))
+                .is_some()
+            {
                 return;
             }
         }

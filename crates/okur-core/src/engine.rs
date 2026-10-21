@@ -206,7 +206,7 @@ pub struct ScreenReaderEngine {
     /// The cursor the reading keys act on.
     active_cursor: cursors::ActiveCursor,
     /// The Okur cursor's line in the focused text field, once routed to the PC cursor.
-    okur_line: Option<usize>,
+    okur_place: Option<cursors::OkurPlace>,
     /// Forms mode was just turned on by one of JAWS's element lists giving a field the focus:
     /// the field's focus is followed by its line, as Say Line reads it [obs, 249/s3].
     forms_mode_by_list: bool,
@@ -382,7 +382,7 @@ impl ScreenReaderEngine {
             focus_bounds: None,
             mouse: None,
             active_cursor: cursors::ActiveCursor::Pc,
-            okur_line: None,
+            okur_place: None,
             forms_mode_by_list: false,
             page_said_for: None,
             pending_page: None,
@@ -709,21 +709,22 @@ impl ScreenReaderEngine {
                     return KeyAction::Consume;
                 }
             }
-            // With the JAWS cursor active the arrows move it, not the focus: they stay out of
-            // the application [obs, 516/s5]. In a text field Up and Down read the line they
-            // move to; Left and Right say nothing [obs, 690/s4-s9].
-            if self.active_cursor == ActiveCursor::Okur
-                && self.app_mode != AppMode::VirtualBuffer
-                && event.modifiers.is_empty()
-                && matches!(
-                    event.key,
-                    Key::UpArrow | Key::DownArrow | Key::LeftArrow | Key::RightArrow
-                )
-            {
-                if matches!(event.key, Key::UpArrow | Key::DownArrow) {
-                    let _ = self.move_okur_line(event.key == Key::DownArrow);
+            // With the JAWS cursor active the arrows move it, not the focus or the virtual
+            // cursor: they stay out of the application [obs, 516/s5], and read where it goes
+            // [obs, 690, 752, 753].
+            if self.active_cursor == ActiveCursor::Okur {
+                if self.okur_cursor_key(event).is_some() {
+                    return KeyAction::Consume;
                 }
-                return KeyAction::Consume;
+                if self.app_mode != AppMode::VirtualBuffer
+                    && event.modifiers.is_empty()
+                    && matches!(
+                        event.key,
+                        Key::UpArrow | Key::DownArrow | Key::LeftArrow | Key::RightArrow
+                    )
+                {
+                    return KeyAction::Consume;
+                }
             }
         }
         // The voice rate for now, in any application [obs, 512].

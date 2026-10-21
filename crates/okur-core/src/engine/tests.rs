@@ -979,8 +979,9 @@ fn v_and_u_move_by_visited_and_unvisited_links() {
 }
 
 /// The Okur cursor in a text field, routed to the caret, moves over the field's lines with Up
-/// and Down and reads them without their indentation; Insert+Up reads its line, Left and the
-/// word key say nothing, and Numpad Plus goes back to the caret's line [obs, 690].
+/// and Down and reads them without their indentation; Insert+Up reads its line; on a line it
+/// is before the first character, where Left says nothing and Right says the first, a space;
+/// Ctrl+Right says the next word [obs, 690, 752].
 #[test]
 fn the_okur_cursor_reads_a_text_fields_lines() {
     let speech = SharedSpeech::default();
@@ -1020,6 +1021,71 @@ fn the_okur_cursor_reads_a_text_fields_lines() {
         "println!(\"{total}\");"
     );
     assert_eq!(press(&mut engine, Key::LeftArrow, false), "");
+    assert_eq!(press(&mut engine, Key::RightArrow, false), "space");
+    let ctrl_right = |engine: &mut ScreenReaderEngine| {
+        let _ = speech.take();
+        let modifiers = Modifiers {
+            ctrl: true,
+            ..Modifiers::none()
+        };
+        engine.handle_key_event(&KeyEvent::new(Key::RightArrow, modifiers, true));
+        speech.take().join(
+            "
+",
+        )
+    };
+    assert_eq!(ctrl_right(&mut engine), r#"println!("{total}");"#);
+}
+
+/// The Okur cursor on a page, routed to the virtual cursor, reads the page's lines as its
+/// screen shows them, without their roles; Page Up goes to the page's first line; the virtual
+/// cursor stays where it was [obs, 753].
+#[test]
+fn the_okur_cursor_reads_a_pages_lines() {
+    let page = AomNode::new(0, Role::Document).with_children(vec![
+        AomNode::new(1, Role::Heading { level: 1 }).with_text("Riverside Gazette"),
+        AomNode::new(2, Role::Heading { level: 1 }).with_text("Weekend events"),
+        AomNode::new(3, Role::Paragraph).with_text("Three events open to everyone."),
+    ]);
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(speech.clone()),
+    );
+    let heading = engine.cursor.buffer.start_of(2).unwrap_or_default();
+    engine.cursor.move_to(heading);
+    let press = |engine: &mut ScreenReaderEngine, key: Key, modifiers: Modifiers| {
+        let _ = speech.take();
+        engine.handle_key_event(&KeyEvent::new(key, modifiers, true));
+        speech.take().join(
+            "
+",
+        )
+    };
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    let ctrl = Modifiers {
+        ctrl: true,
+        ..Modifiers::none()
+    };
+    press(&mut engine, Key::NumpadMinus, insert);
+    press(&mut engine, Key::NumpadMinus, Modifiers::none());
+    assert_eq!(press(&mut engine, Key::UpArrow, insert), "Weekend events");
+    assert_eq!(
+        press(&mut engine, Key::DownArrow, Modifiers::none()),
+        "Three events open to everyone."
+    );
+    assert_eq!(press(&mut engine, Key::RightArrow, Modifiers::none()), "T");
+    assert_eq!(press(&mut engine, Key::RightArrow, ctrl), "events");
+    assert_eq!(press(&mut engine, Key::PageUp, Modifiers::none()), "");
+    assert_eq!(
+        press(&mut engine, Key::UpArrow, insert),
+        "Riverside Gazette"
+    );
+    press(&mut engine, Key::NumpadPlus, Modifiers::none());
+    assert!(engine.cursor.current_line().contains("Weekend events"));
 }
 
 /// Ctrl+Insert+Tab on a page's field opens Custom Label; OK with "lamp" names the field "lamp"

@@ -185,7 +185,7 @@ impl ScreenReaderEngine {
         if focus.role != Role::MenuItem {
             self.remember_field_text();
             self.last_text = focus.text.clone();
-            self.okur_line = None;
+            self.okur_place = None;
             self.pending_edit = None;
             self.typed_word.clear();
         }
