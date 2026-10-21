@@ -290,11 +290,11 @@ impl ScreenReaderEngine {
                     .nth(row)
                     .map(|(_, _, offset)| offset);
                 self.close_list(state);
-                let Some(offset) = offset else {
-                    return (false, None);
-                };
-                self.cursor.move_to(offset);
-                (false, self.say(self.cursor.current_line()))
+                // The cursor moves there silently [obs, 704/s36].
+                if let Some(offset) = offset {
+                    self.cursor.move_to(offset);
+                }
+                (false, None)
             }
             // Remove closes the list, as OK does [obs, 704 round 141, trial 1: Alt+V after
             // it reached the page].

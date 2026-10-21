@@ -134,6 +134,10 @@ divergences! {
         "701-web-placemarker-add-dialog/s13",
         "703-web-placemarker-none/s2",
         "703-web-placemarker-none/s4",
+        "704-web-placemarker-two/s3",
+        "704-web-placemarker-two/s34",
+        "704-web-placemarker-two/s38",
+        "704-web-placemarker-two/s44",
     ],
     "Opening one of its list dialogs, JAWS's speech passes through its own windows before it \
      names the dialog: its main window (its version, a list's tutor message) and the browser's \
@@ -531,6 +535,22 @@ divergences! {
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
     Difference::Step => [
+        "704-web-placemarker-two/s6",
+        "704-web-placemarker-two/s7",
+        "704-web-placemarker-two/s8",
+        "704-web-placemarker-two/s9",
+        "704-web-placemarker-two/s10",
+        "704-web-placemarker-two/s14",
+        "704-web-placemarker-two/s15",
+        "704-web-placemarker-two/s16",
+        "704-web-placemarker-two/s17",
+        "704-web-placemarker-two/s18",
+        "704-web-placemarker-two/s20",
+    ],
+    "After the first PlaceMarker is added, JAWS reads the page again and its cursor is left at      the page's end, though Ctrl+Home was pressed: H then went \"wrapping to bottom\" to the      last heading and up from there, so its second PlaceMarker went on the line after the first      heading where the keys meant the third, in every trial; K, Shift+K and 8 then find it      there. Okur moves as the keys say, its second PlaceMarker after the third heading.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
+
+    Difference::Step => [
         "702-web-placemarker-saved/s8",
         "702-web-placemarker-saved/s9",
         "702-web-placemarker-saved/s10",
@@ -541,8 +561,9 @@ divergences! {
     Difference::Step => [
         "701-web-placemarker-add-dialog/s15",
         "703-web-placemarker-none/s6",
+        "704-web-placemarker-two/s37",
     ],
-    "After K opened the PlaceMarker List on a page without PlaceMarkers and Escape closed it,      the focus back in the page, Say Line said nothing, in every trial of both scenarios. The      virtual cursor is still on its line, which Okur reads.",
+    "After the PlaceMarker List closed (Escape after K opened it, MoveTo), the focus back in      the page, Say Line said nothing, in every trial of these scenarios. The virtual cursor is      on its line, which Okur reads.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 }
 

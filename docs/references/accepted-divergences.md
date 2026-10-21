@@ -89,8 +89,9 @@ A step can be in more than one entry; all of its entries apply.
   `506-web-jaws-find/s1` (its Find what field said before the dialog, in some trials); and
   the PlaceMarker List, `699-web-placemarker-list/s12`, `701-web-placemarker-add-dialog/s4`,
   `701-web-placemarker-add-dialog/s13`, `703-web-placemarker-none/s2` and
-  `703-web-placemarker-none/s4` (its list, its version or its main window said before the
-  dialog, in some trials).
+  `703-web-placemarker-none/s4`, `704-web-placemarker-two/s3`, `704-web-placemarker-two/s34`,
+  `704-web-placemarker-two/s38` and `704-web-placemarker-two/s44` (its list, its version or
+  its main window said before the dialog, in some trials).
 - In the recordings of 2026-10-19 (round 9, JAWS freshly started for the batch), JAWS no longer
   said its version or the list's tutor message before the Links List, the Heading List and
   Virtual HTML Features, and said nothing before some dialogs at all: those steps were taken
@@ -275,13 +276,27 @@ A step can be in more than one entry; all of its entries apply.
   the page's title and K and Insert+Up say the PlaceMarker's line.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-21.
 
-### JAWS's Say Line is silent after the PlaceMarker List that K opened
+### JAWS's Say Line is silent after the PlaceMarker List
 
-- Steps: `701-web-placemarker-add-dialog/s15`, `703-web-placemarker-none/s6`.
+- Steps: `701-web-placemarker-add-dialog/s15`, `703-web-placemarker-none/s6`,
+  `704-web-placemarker-two/s37`.
 - Difference: the whole step.
-- Why: on a page without PlaceMarkers, K opened the PlaceMarker List and Escape closed it,
-  the focus back in the page; Say Line then said nothing, in every trial of both scenarios.
-  The virtual cursor is still on its line, and Okur reads it.
+- Why: after the PlaceMarker List closed, the focus back in the page (Escape after K opened
+  it on a page without PlaceMarkers; MoveTo), Say Line said nothing, in every trial of these
+  scenarios. The virtual cursor is on its line, and Okur reads it.
+
+### JAWS's cursor is at the page's end after a PlaceMarker is added
+
+- Steps: `704-web-placemarker-two/s6`, `704-web-placemarker-two/s7`,
+  `704-web-placemarker-two/s8`, `704-web-placemarker-two/s9`, `704-web-placemarker-two/s10`,
+  `704-web-placemarker-two/s14`, `704-web-placemarker-two/s15`, `704-web-placemarker-two/s16`,
+  `704-web-placemarker-two/s17`, `704-web-placemarker-two/s18`, `704-web-placemarker-two/s20`.
+- Difference: the whole step.
+- Why: after the first PlaceMarker is added, JAWS reads the page again and its cursor is
+  left at the page's end, though Ctrl+Home was pressed: H went "wrapping to bottom" to the
+  last heading and up from there, so the second PlaceMarker went after the first heading
+  where the keys meant the third, in every trial, and K, Shift+K and 8 find it there. Okur
+  moves as the keys say.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-21.
 
 ### JAWS names the Page Setup preview's pictures after a label and the title
