@@ -48,6 +48,9 @@ function Start-LabChrome([string]$url) {
         '--no-first-run',
         '--no-default-browser-check',
         '--disable-search-engine-choice-screen',
+        # A Chrome stopped by force offers to restore its pages when it starts again; its
+        # "Restore pages?" bubble took the first trial's focus away from the page in round 132.
+        '--hide-crash-restore-bubble',
         $url
     )
     Start-Process -FilePath $LabChromeExe -ArgumentList $chromeArgs | Out-Null
