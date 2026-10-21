@@ -87,7 +87,7 @@ What this means for these settings:
   layers (Inf).
 
 So every scenario in this plan must be recorded with the recorder voice active, and compared
-with `okur parity --spoken`.
+with `okur-lab parity --spoken`.
 
 ## 1. Where JAWS keeps these settings
 
@@ -312,7 +312,7 @@ No other level has evidence.
 
 ### Recording proposal
 
-1. **Read JAWS's tables** (not a scenario; capture the screens with `okur snapshot` and save the
+1. **Read JAWS's tables** (not a scenario; capture the screens with `okur-lab snapshot` and save the
    output with the research):
    - The Customize Punctuation list in Settings Center, in the Default file: every symbol, its
      description and its level. Also the Advanced dialog's list.
@@ -1274,7 +1274,7 @@ no character-value message. Each needs a catalog entry, with JAWS's words as rec
    `autocomplete="off"` and check the first step of each trial.
 5. **JAWS's dialogs** (Settings Center, Voice Adjustment, the Customize Punctuation and Manage
    Key Labels lists) run elevated. Keys go through `elev.ps1`
-   ([`verification-loop.md`](verification-loop.md) §2). Check that `okur snapshot` can read
+   ([`verification-loop.md`](verification-loop.md) §2). Check that `okur-lab snapshot` can read
    their lists, or use JAWS's own reading of them (Insert+Up on each row) recorded as a
    scenario.
 6. **Contextual settings** (item 9, §9.5):
@@ -1364,8 +1364,8 @@ described in §9.5. It is served under two host names.
 9. **Verbosity levels:** Intermediate and Advanced on the dialog fixture.
 10. **Later:** spelling errors, Screen Echo, language detection, schemes and voice aliases.
 
-Each recording leaves old-pc's settings as they were. Each is followed by `okur corpus-manifest
---write` and `okur parity --spoken`, in commits without engine code
+Each recording leaves old-pc's settings as they were. Each is followed by `okur-lab corpus-manifest
+--write` and `okur-lab parity --spoken`, in commits without engine code
 ([`verification-loop.md`](verification-loop.md); AGENTS.md §3).
 
 ## Sources

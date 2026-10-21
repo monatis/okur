@@ -896,7 +896,6 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "okur-core",
- "okur-corpus",
  "okur-platform",
  "serde",
  "serde_json",
@@ -931,6 +930,21 @@ dependencies = [
  "serde_json",
  "sha2",
  "thiserror",
+ "tracing",
+]
+
+[[package]]
+name = "okur-lab"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "okur",
+ "okur-core",
+ "okur-corpus",
+ "okur-platform",
+ "serde",
+ "serde_json",
+ "tokio",
  "tracing",
 ]
 

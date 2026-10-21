@@ -1,7 +1,7 @@
 //! Generated corpus manifest.
 //!
 //! `corpus/CORPUS_MANIFEST.json` is derived entirely from the files on disk and must never
-//! be edited by hand. Regenerate it with `cargo run --bin okur -- corpus-manifest --write`;
+//! be edited by hand. Regenerate it with `cargo run --bin okur-lab -- corpus-manifest --write`;
 //! the `manifest_is_current` test fails whenever the committed copy is stale, so every
 //! statistic in it is verifiable rather than claimed.
 
@@ -214,7 +214,7 @@ pub fn generate(corpus_dir: &Path) -> Result<CorpusManifest, String> {
 
     Ok(CorpusManifest {
         notice:
-            "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- corpus-manifest --write",
+            "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- corpus-manifest --write",
         fixtures,
         scenarios,
         statistics: stats,
@@ -237,7 +237,7 @@ pub fn check(corpus_dir: &Path) -> Result<(), String> {
     } else {
         Err(format!(
             "{MANIFEST_FILE} is stale or hand-edited. Regenerate it with: \
-             cargo run --bin okur -- corpus-manifest --write"
+             cargo run --bin okur-lab -- corpus-manifest --write"
         ))
     }
 }

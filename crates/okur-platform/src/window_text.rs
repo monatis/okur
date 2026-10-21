@@ -405,7 +405,7 @@ mod reader {
 }
 
 /// The Virtual Viewer's lines for the window in front, or with `control`, its focused
-/// control: `okur window-text`, to compare with JAWS's viewer.
+/// control: `okur-lab window-text`, to compare with JAWS's viewer.
 #[cfg(windows)]
 pub fn foreground_lines(control: bool) -> Result<Vec<String>, crate::PlatformError> {
     use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};

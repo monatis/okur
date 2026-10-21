@@ -1,6 +1,6 @@
 //! IAccessible2 snapshots of browser documents.
 //!
-//! Captured alongside UIA snapshots (`okur snapshot --api ia2`) from the same fixture load,
+//! Captured alongside UIA snapshots (`okur-lab snapshot --api ia2`) from the same fixture load,
 //! with the same provenance block. IA2 adds what UIA lacks for web content: HTML tags and CSS
 //! display (`tag`, `display` attributes), visited state, hypertext with embedded objects, and
 //! the browser's rendered line ranges per text object.

@@ -12,7 +12,7 @@
 //! - [`Difference::Step`]: the whole step differs. It is not counted in parity, and a step
 //!   that comes to match JAWS fails the check, so a stale entry cannot linger.
 //!
-//! Every comparison of Okur with JAWS (`okur parity` on every layer, `okur live-parity`) goes
+//! Every comparison of Okur with JAWS (`okur-lab parity` on every layer, `okur-lab live-parity`) goes
 //! through [`compare`], which reads both sides as [`comparable`]: whitespace normalized, and
 //! JAWS's name for itself read as Okur's, a rule for the whole corpus rather than a divergence.
 

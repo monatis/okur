@@ -321,7 +321,7 @@ application.
 - **FSAPI**: a COM object (`FreedomSci.JAWSAPI`) with members to speak a string, stop speech,
   run a script, run a function, and enable or disable JAWS [J55]; it has shipped since JAWS 8.0
   update 2, and a successful run call only means the call was scheduled [J56] (excerpt). No
-  current official page was found. Okur's harness uses it (`okur jaws-history`,
+  current official page was found. Okur's harness uses it (`okur-lab jaws-history`,
   `skills/jaws-reference/`).
 - **Third-party tooling**: Doug Lee's BX explores window, MSAA and UIA trees and logs events;
   binary-only license [J7].
@@ -747,7 +747,7 @@ Each cell summarizes the section named in its row; sources are there.
 | **Speech drivers** | synthesizer drivers (not researched) | `SynthDriver`, in process; speech commands | Speech Dispatcher, Spiel | closed enum | driver registry, speech commands, out of process allowed (R15) |
 | **Braille** | structured mode, braille customization | display drivers, liblouis tables | liblouis, BRLTTY | none | drivers and tables later (R15) |
 | **Dialogs** | Windows dialogs from scripts (not researched) | wxPython | generated preferences; custom dialogs unmanaged | `okur-ui-model`, closed set | data-described dialogs (R16) |
-| **Debugging** | speak calls, Script Utility Mode, Speech History, third-party BX | Python console, log, Speech Viewer, scratchpad, reload | debug output | debug log, `okur latency`, traces, parity | developer interface, replay (R26, R27) |
+| **Debugging** | speak calls, Script Utility Mode, Speech History, third-party BX | Python console, log, Speech Viewer, scratchpad, reload | debug output | debug log, `okur-lab latency`, traces, parity | developer interface, replay (R26, R27) |
 | **Testing** | none documented | none for add-ons; NVDA's own system tests | not documented | parity replay, 198 core tests | recorded interactions with expected speech (R26) |
 | **Versions** | per JAWS version folder; recompile | API version, yearly breaks, overrides | none yet | n/a | SDK range in the manifest (R19) |
 | **Distribution** | installers, vendors, binary-only | Add-on Store, no code review, no signing | approval by hash, no store | n/a | reviewed registry, hashes (R20) |
@@ -917,7 +917,7 @@ What exists:
 - Accessibility events are handled on a tokio task under the same mutex
   (`main.rs:914-977`). Page buffers are built before the lock is taken, because the hook waits
   on it (`main.rs:923-936`).
-- `okur latency` reads per-key `waited_us` and `held_us` from a debug log
+- `okur-lab latency` reads per-key `waited_us` and `held_us` from a debug log
   (`crates/okur-corpus/src/latency.rs:1-13`). This is the tool the vision names for handler
   budgets.
 - Speech is stopped on every key (`engine.rs:272`) and spoken synchronously from the engine
@@ -1080,7 +1080,7 @@ Gaps:
 ### 7.9 Verification harness
 
 What exists:
-- `okur parity` drives the engine's real key and event entry points with recorded keys and
+- `okur-lab parity` drives the engine's real key and event entry points with recorded keys and
   traced events and compares normalized speech with JAWS's transcripts
   (`crates/okur-corpus/src/parity.rs:1-8`, `592-604`); results are ratcheted in
   `corpus/parity-baseline.json`. The last recorded figures: IA2 819/844 steps, UIA 720/844
@@ -1185,7 +1185,7 @@ be verified.
 - **R9. The hook decides from a table.** The keyboard hook decides consume or pass from the
   merged tables and a small state snapshot (mode, scope, open layers), in constant time, with
   no extension code and no cross-process call (vision principle 2). The command then runs off
-  the hook thread. *Verified by:* `okur latency` showing `held_us` on the hook independent of
+  the hook thread. *Verified by:* `okur-lab latency` showing `held_us` on the hook independent of
   extension handlers; a test that a sleeping handler never delays the key decision.
 - **R10. User key maps.** Users remap, unbind and add keys per scope, in a file and in a
   Keyboard Manager style dialog; conflicts are reported. JAWS's key notation is the file's
@@ -1216,7 +1216,7 @@ be verified.
   pause, language), index marks and completion callbacks. Braille display drivers and
   translation tables follow the same pattern. Drivers may live out of process (licenses,
   crashes; §9.4). *Verified by:* the no-speech driver and a recording driver in
-  `cargo test`; live latency with `okur speak --measure-latency`.
+  `cargo test`; live latency with `okur-lab speak --measure-latency`.
 
 ### 8.4 Dialogs and settings
 
@@ -1252,7 +1252,7 @@ be verified.
 
 ### 8.6 Reliability, performance, platforms
 
-- **R22. Budgets.** Every handler call has a deadline, measured and logged as `okur latency`
+- **R22. Budgets.** Every handler call has a deadline, measured and logged as `okur-lab latency`
   measures keys today. An interceptor that misses its deadline is treated as having passed;
   repeated misses disable the extension for the session and say so once. Proposed starting
   budgets, to be settled by the spike in §9.6: key decision 0 µs of extension time (tables
@@ -1418,7 +1418,7 @@ ordinals `other` only [R55].
    pipe.
 5. **Do not do B or F in process.** No isolation, no budgets, and NVDA's experience (§3.10,
    §3.12) shows the cost.
-6. **Settle it with a spike before phase 3** (§11 phase 3.1). Measure, with `okur latency`,
+6. **Settle it with a spike before phase 3** (§11 phase 3.1). Measure, with `okur-lab latency`,
    the same focus filter (read five properties, replace one part) as:
    - a Rust trait call (baseline);
    - a Wasm component with a Rust guest;
@@ -1539,7 +1539,7 @@ now, alongside feature work; phase 3 waits for the "stable on Windows and macOS"
 | 0.3 | **Message ids.** Every user-facing literal becomes a message id with English text in one catalog file; duplicates collapse ("Not in a table." ×35). No new language yet; the English catalog is JAWS's English. | all of §7.4 | A test fails on any user-facing literal outside the catalog (an allow-list for identifiers); a test fails on catalog entries nothing uses. |
 | 0.4 | **Decide keys before running them.** Split `handle_key` into a decision (consume or pass, from tables and a state snapshot) and an execution. Keep the order of "Who takes a key". | `engine.rs:232-480`, `455-477` | A unit test proves the decision never calls `execute`; replay unchanged. |
 | 0.5 | **Commands with ids.** Built-in commands keep the enum and gain stable string ids (JAWS script names); bindings gain scope fields (application, site, mode) though only the global scope is used. | `command.rs` | `Command::from_name` and the ids agree (a test over all variants). |
-| 0.6 | **Record languages and every application's settings in evidence.** Capture tooling already records `DEFAULT.JCF`, `Chrome.JCF` and voice profiles (`run-scenario.ps1:225-245`); add the Windows display language, JAWS's language folder, and the target application's JCF for every application, not only Chrome. | `skills/jaws-reference/scripts/run-scenario.ps1` | New evidence carries them; `okur corpus-manifest` shows them. |
+| 0.6 | **Record languages and every application's settings in evidence.** Capture tooling already records `DEFAULT.JCF`, `Chrome.JCF` and voice profiles (`run-scenario.ps1:225-245`); add the Windows display language, JAWS's language folder, and the target application's JCF for every application, not only Chrome. | `skills/jaws-reference/scripts/run-scenario.ps1` | New evidence carries them; `okur-lab corpus-manifest` shows them. |
 | 0.7 | **Unicode case folding** where text is matched (finding headings, links, fields). | `engine/commands.rs:155-173` | Tests with "İ"/"ı" and other non-ASCII letters. (A behavior change: its own commit.) |
 
 ### Phase 1: the internal SDK (before macOS is finished, so macOS is built on it)
@@ -1568,7 +1568,7 @@ now, alongside feature work; phase 3 waits for the "stable on Windows and macOS"
 
 | # | Work | Done when |
 |---|---|---|
-| 3.1 | **Runtime spike** (§9.6): the same focus filter in Rust, a Wasm component (Rust and JavaScript guests), and QuickJS; latency and memory measured with `okur latency`. | A decision recorded in this page, with the measurements. |
+| 3.1 | **Runtime spike** (§9.6): the same focus filter in Rust, a Wasm component (Rust and JavaScript guests), and QuickJS; latency and memory measured with `okur-lab latency`. | A decision recorded in this page, with the measurements. |
 | 3.2 | **The public contract** in the chosen interface language (WIT if Wasm), generated from or checked against the Rust contract. | One extension written outside the repository passes its replay tests. |
 | 3.3 | **Packaging**: manifest, permissions, install, enable, disable, update, safe mode, kill switch (R18-R23). | A broken test extension is disabled without silencing Okur, in a live check. |
 | 3.4 | **First external extension**: WhatsApp Web commands (the owner's request), proven by replay. | Its recorded interactions replay with the expected speech. |

@@ -363,7 +363,7 @@ mod windows_actions {
     ///
     /// An idle application acts on a key before a read made as the key is passed on can
     /// reach it, so such a read is no "before": with it, an arrow key often waited the whole
-    /// settle time for a change that had already happened (p90 280 ms, `okur latency`). The
+    /// settle time for a change that had already happened (p90 280 ms, `okur-lab latency`). The
     /// field as the engine last knew it (`known`) is the "before". After a short head start
     /// the field is read; unchanged, it is polled until it changes or the settle time passes
     /// (a key at a boundary changes nothing). Without a known state, a first read is the
@@ -396,7 +396,7 @@ mod windows_actions {
     /// and its caret, selection and length are polled every couple of milliseconds until
     /// they differ from what the engine knew; then its text is read once. Reading the whole
     /// field each time (a window's object, its focus, all its text: about 7 ms) every 15 ms
-    /// kept a web editor's arrow keys at 33–43 ms (vscode.dev, `okur latency`).
+    /// kept a web editor's arrow keys at 33–43 ms (vscode.dev, `okur-lab latency`).
     fn read_chromium_after_key(
         field: &xa11y_windows::ia2::ChromiumTextField,
         known: Option<TextContext>,
@@ -547,7 +547,7 @@ mod windows_actions {
     }
 }
 
-/// The focused text field's text context right now, for harness checks (`okur caret`).
+/// The focused text field's text context right now, for harness checks (`okur-lab caret`).
 #[cfg(windows)]
 pub fn read_text_now() -> Option<okur_core::TextContext> {
     use windows::Win32::System::Com::{
@@ -641,7 +641,7 @@ pub fn clipboard_text() -> Option<String> {
     }
 }
 
-/// The notification area's icons now, for harness checks (`okur tray`).
+/// The notification area's icons now, for harness checks (`okur-lab tray`).
 #[cfg(windows)]
 pub fn tray_icons_now() -> Vec<okur_core::event::TrayIcon> {
     use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
@@ -653,7 +653,7 @@ pub fn tray_icons_now() -> Vec<okur_core::event::TrayIcon> {
 }
 
 /// The taskbar's control tree, one element a line (indented by depth: control type, class,
-/// name, rectangle), for finding its notification area on a new Windows (`okur tray --dump`).
+/// name, rectangle), for finding its notification area on a new Windows (`okur-lab tray --dump`).
 #[cfg(windows)]
 pub fn taskbar_dump_now() -> Vec<String> {
     use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};

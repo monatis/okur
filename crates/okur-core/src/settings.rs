@@ -181,7 +181,7 @@ pub enum TypingEcho {
     Both,
     /// Nothing, Enter neither: `TypingEcho=0`, the reference machine's and the dev box's. On
     /// the dev box no sound followed four letters typed in the Run box, while Backspace spoke
-    /// (`okur wait-silence`, 2026-10-17) [obs, 403/s1-s6, s29-s34].
+    /// (`okur-lab wait-silence`, 2026-10-17) [obs, 403/s1-s6, s29-s34].
     None,
 }
 

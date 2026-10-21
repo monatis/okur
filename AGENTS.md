@@ -104,15 +104,15 @@ When developing or verifying screen reader behavior against canonical JAWS execu
 ### Harness Engineering Is the Core Work
 
 Building evidence collection and verification tooling is the real engineering in this project. Improve `skills/jaws-reference/` as you learn, and add utility scripts, binaries, and `okur` commands whenever they make evidence more trustworthy or debugging faster (capture, snapshots, focus/OS event tracing, debug logs). Harness tools today:
-- `okur snapshot` / `capture-snapshot.ps1`: raw Chrome UIA tree of a fixture on `old-pc`.
-- `run-scenario.ps1` (format 2): scan-coded keys, audio-silence settling (`okur wait-silence`), provenance.
+- `okur-lab snapshot` / `capture-snapshot.ps1`: raw Chrome UIA tree of a fixture on `old-pc`.
+- `run-scenario.ps1` (format 2): scan-coded keys, audio-silence settling (`okur-lab wait-silence`), provenance.
 - `lab-push.ps1` / `lab-pull.ps1`: hash-verified deployment of binaries, scripts, fixtures and scenarios to `old-pc` via Dropbox.
-- `okur parity`, `okur invariants`, `okur corpus-manifest`: generated, ratcheted verification results. `okur parity --only <id prefix>` replays chosen scenarios; with `RUST_LOG=okur_core=debug`, the engine's debug log for them.
-- `okur snapshot --api ia2`: IAccessible2 view of a Chromium document (attributes, states, hypertext, rendered line ranges).
-- `okur trace` / `run-scenario.ps1 -TraceDir`: per-trial accessibility event traces, replayed into the engine by `okur parity`.
-- `okur evidence <scenario-id> [--trace]`: readable view of recorded JAWS transcripts and trial variants; `--trace` lists the accessibility events traced during each step.
-- `okur keys --allow <process>` and `okur jaws-history`: quick live checks (skill Workflow H). Chords are sent only while an allowed application is in front, and JAWS's speech history is read through FSAPI with the clipboard put back. Research, never evidence. `okur front <title>` brings a test window forward first.
-- `okur latency <debug log>`: per-step timings of a live run, including key to speech audio per chord; `skills/jaws-reference/scripts/measure-edit-keys.sh` plays the everyday edit keys for it.
+- `okur-lab parity`, `okur-lab invariants`, `okur-lab corpus-manifest`: generated, ratcheted verification results. `okur-lab parity --only <id prefix>` replays chosen scenarios; with `RUST_LOG=okur_core=debug`, the engine's debug log for them.
+- `okur-lab snapshot --api ia2`: IAccessible2 view of a Chromium document (attributes, states, hypertext, rendered line ranges).
+- `okur-lab trace` / `run-scenario.ps1 -TraceDir`: per-trial accessibility event traces, replayed into the engine by `okur-lab parity`.
+- `okur-lab evidence <scenario-id> [--trace]`: readable view of recorded JAWS transcripts and trial variants; `--trace` lists the accessibility events traced during each step.
+- `okur-lab keys --allow <process>` and `okur-lab jaws-history`: quick live checks (skill Workflow H). Chords are sent only while an allowed application is in front, and JAWS's speech history is read through FSAPI with the clipboard put back. Research, never evidence. `okur-lab front <title>` brings a test window forward first.
+- `okur-lab latency <debug log>`: per-step timings of a live run, including key to speech audio per chord; `skills/jaws-reference/scripts/measure-edit-keys.sh` plays the everyday edit keys for it.
 - `skills/jaws-reference/scripts/parity-snapshot.sh <dir>`: the three parity outputs, to compare before and after a change with `diff -r`.
 
 ### Verification Integrity Rules (non-negotiable)
@@ -120,7 +120,7 @@ Building evidence collection and verification tooling is the real engineering in
 These exist because an audit (2026-10-14) found parity claims that no tool had ever computed.
 1. **Evidence is written only by capture tooling** run on `old-pc`. Never hand-write, edit, or "repair" an evidence file. Wrong evidence is deleted and re-recorded.
 2. **Evidence and engine code never land in the same commit** (enforced by the pre-commit gate).
-3. **Generated artifacts are never hand-edited**: `corpus/CORPUS_MANIFEST.json` (`okur corpus-manifest --write`) and, once it exists, the parity baseline. Tests fail when they are stale.
+3. **Generated artifacts are never hand-edited**: `corpus/CORPUS_MANIFEST.json` (`okur-lab corpus-manifest --write`) and, once it exists, the parity baseline. Tests fail when they are stale.
 4. **Claims quote tools**: any parity number or "verified" statement in a handoff must be pasted output of a repo command, named next to it. No unbacked adjectives ("100% parity", "fully verified").
 5. **Hermetic `cargo test`**: no live UI, speech, audio, or network. Live tests are `#[ignore = "live: ..."]` and run with `cargo test -- --ignored`.
 6. **Known gaps are tests**: when the correct JAWS behavior is known but unimplemented, add a test asserting the JAWS behavior marked `#[ignore = "known gap: ..."]`. Never write assertions that cannot fail.
@@ -159,7 +159,8 @@ These exist because an audit (2026-10-14) found parity claims that no tool had e
 - `crates/okur-core/`: AOM, virtual buffer, virtual cursor, reading commands, mode transitions.
 - `crates/okur-platform/`: Platform accessibility bindings (xa11y, UIA, AXUIElement).
 - `crates/okur-corpus/`: Test harness, normalizer, differential comparison engine.
-- `crates/okur/`: CLI daemon and regression test binary.
+- `crates/okur/`: the screen reader's programs: `okur` (`okur run`, `quit`, `doctor`, `voices`), and `okur-sr`, the installed reader.
+- `crates/okur-lab/`: the verification harness's programs, never installed for users: `okur-lab` (`parity`, `trace`, `snapshot`, `wait-silence`, `keys`, `jaws-history`, ...) and `okur-lab-keys`. What sends keys, reads the clipboard and traces every window stays out of `okur.exe`, which antivirus classifiers flagged while it held all of this.
 - `crates/okur-ui/`: draws Okur's own windows (the Virtual Viewer on screen, later its dialogs), natively per platform, in a process of its own; `crates/okur-ui-model/` is what Okur and it say to each other (see `docs/references/helper-ui-architecture.md`).
 - `crates/xa11y/`: our accessibility-API layer, vendored from xa11y 0.15.2 (MIT) and extended in-tree. See `crates/xa11y/VENDORED.md` for import changes, the hardening ratchet, and planned extensions.
 - `corpus/`: Reference speech corpus (manifest, fixtures, scenarios, evidence, quality report). `corpus/pending/` holds scenarios written but not yet recorded; the manifest and parity ignore it.
@@ -183,7 +184,7 @@ cargo clippy --workspace --all-targets --all-features -- -D warnings -D clippy::
 cargo test
 
 # Run CLI
-cargo run --bin okur -- --help
+cargo run --bin okur-lab -- --help
 ```
 
 CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs the same checks on every push to

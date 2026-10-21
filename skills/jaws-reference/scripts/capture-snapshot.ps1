@@ -12,12 +12,12 @@
 .EXAMPLE
     .\capture-snapshot.ps1 -Fixture C:\Users\ailabs\corpus\fixtures\doc-reading.html `
         -OutputPath C:\Users\ailabs\Dropbox\sr-harness\snapshots\doc-reading.chrome.uia.json `
-        -Okur C:\Users\ailabs\sr-harness\bin\okur.exe
+        -OkurLab C:\Users\ailabs\sr-harness\bin\okur-lab.exe
 #>
 param(
     [Parameter(Mandatory = $true)][string]$Fixture,
     [Parameter(Mandatory = $true)][string]$OutputPath,
-    [Parameter(Mandatory = $true)][string]$Okur,
+    [string]$OkurLab = (Join-Path $env:USERPROFILE "sr-harness\bin\okur-lab.exe"),
     [ValidateSet("uia", "ia2")][string]$Api = "uia",
     [int]$LoadWaitMs = 2500,
     [int]$SettleMs = 750
@@ -76,7 +76,7 @@ if ($chromeVersion) { $cliArgs += @('--process-version', $chromeVersion) }
 # node (round 135's custom-label capture), or the capture fails. It is captured again, after a
 # wait, up to five times.
 for ($attempt = 1; $attempt -le 5; $attempt++) {
-    & $Okur @cliArgs
+    & $OkurLab @cliArgs
     $captured = $LASTEXITCODE -eq 0
     $nodes = 0
     if ($captured) {

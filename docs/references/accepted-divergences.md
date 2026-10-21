@@ -27,9 +27,9 @@ An entry marks only what differs, so the rest of a step is still compared:
   speech before it is compared.
 - `Step`: the whole step differs. It is not counted.
 
-Every comparison with JAWS applies the table: `okur parity` on all three layers (speech history,
+Every comparison with JAWS applies the table: `okur-lab parity` on all three layers (speech history,
 spoken text, the UIA buffer), the parity baseline (whole steps are "accepted divergence") and
-`okur live-parity`. Their totals read, for example, "1143/1247 steps match exactly; 8 accepted
+`okur-lab live-parity`. Their totals read, for example, "1143/1247 steps match exactly; 8 accepted
 divergences not counted".
 
 One rule holds for the whole corpus and is not a divergence: JAWS's name for itself reads as

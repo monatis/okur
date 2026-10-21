@@ -1,0 +1,39 @@
+[package]
+name = "okur-lab"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+build = "build.rs"
+
+# The verification harness's programs, apart from the screen reader's: what sends keys to
+# other programs, reads JAWS's speech history through the clipboard, traces every window's
+# accessibility events and meters the sound card lives here, never in `okur.exe`, which users
+# run. Antivirus classifiers judge a program by what it can do, and flagged `okur.exe` while
+# it held all of this (old-pc's Defender, Trojan:Win32/Bearfoos.A!ml).
+
+# `okur-lab parity`, `trace`, `snapshot`, `wait-silence`, `keys`, `jaws-history`, ...: the
+# developer's and the lab's console program.
+[[bin]]
+name = "okur-lab"
+path = "src/main.rs"
+
+# The reference machine's key sender, with UI Access, for keys into JAWS's own dialogs: a
+# harness tool, never installed for users; Windows starts a UI Access program only signed and
+# under Program Files, so it has no tests of its own.
+[[bin]]
+name = "okur-lab-keys"
+path = "src/bin/okur-lab-keys.rs"
+test = false
+bench = false
+
+[dependencies]
+okur = { path = "../okur" }
+okur-core = { workspace = true }
+okur-platform = { workspace = true }
+okur-corpus = { workspace = true }
+clap = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

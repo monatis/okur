@@ -1,5 +1,5 @@
 //! Responsiveness from a live run's debug log (`okur run --debug-log`): how long keys and
-//! events took at each stage, as counts and percentiles (`okur latency`).
+//! events took at each stage, as counts and percentiles (`okur-lab latency`).
 //!
 //! The live screen reader logs one line per timed step:
 //! - `key` (`waited_us`, `held_us`): a key waiting for the engine, then handled by it, all on

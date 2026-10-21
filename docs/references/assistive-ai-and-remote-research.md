@@ -879,9 +879,9 @@ Change for a screen reader (proposal §9):
 - **WinRT from Rust**: `okur-platform` already uses the `windows` crate's WinRT namespaces for
   OneCore voices (`Media_SpeechSynthesis` in its `Cargo.toml`); Windows.Media.Ocr and
   Windows.Data.Pdf are further namespaces of the same crate (inferred).
-- **The lab**: OpenDesk to old-pc, `okur trace`, `okur parity`, `okur live-parity` (in
+- **The lab**: OpenDesk to old-pc, `okur-lab trace`, `okur-lab parity`, `okur-lab live-parity` (in
   progress, helper dialogs round 2 step 1), the speech recorder that logs every fragment JAWS
-  speaks, and `okur history` for a run's speech log.
+  speaks, and `okur-lab history` for a run's speech log.
 
 **Missing:** OCR, image description, camera and PDF rendering, a network client, credential
 storage, a remote session, sounds (SDK M5), braille (SDK M6), layers (SDK M3).

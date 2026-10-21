@@ -88,7 +88,7 @@ Okur reads the window through UI Automation when the key is pressed, on the acti
 thread, never in the keyboard hook. The viewer opens when the text arrives.
 - `okur-platform::window_text` reads the elements and where they are.
 - `okur-core::viewer_text` lays them out.
-- `okur window-text [--control]` prints the same lines for the window in front, for
+- `okur-lab window-text [--control]` prints the same lines for the window in front, for
   comparing with JAWS.
 
 The layout:
@@ -133,7 +133,7 @@ What stays as before:
 - In a page's virtual cursor, there is nothing to virtualize.
 - When nothing could be read, the viewer shows what the focus says, as on old-pc: the
   control's name and type, and a blank line.
-- Replay (`okur parity`) has no window text in its traces, so it uses that focus-based viewer.
+- Replay (`okur-lab parity`) has no window text in its traces, so it uses that focus-based viewer.
   Parity is unchanged.
 
 ## Where Okur differs from JAWS on purpose
@@ -221,11 +221,11 @@ skips page documents.
 ## Comparing with JAWS
 
 On the dev box, only with the user's permission (verification-loop §7):
-- `okur window-text` prints Okur's lines for the window in front.
+- `okur-lab window-text` prints Okur's lines for the window in front.
 - To capture JAWS's viewer, send `Insert+Alt+W`, `Ctrl+A`, `Ctrl+C`, `Escape` with
-  `okur keys --allow <process> --title <title>`, saving the clipboard before and restoring
+  `okur-lab keys --allow <process> --title <title>`, saving the clipboard before and restoring
   it after.
-- `okur jaws-history` shows what JAWS spoke.
+- `okur-lab jaws-history` shows what JAWS spoke.
 - With JAWS running, run Okur with `--okur-key scrolllock` and send `ScrollLock+Alt+W`, so
   that only Okur takes the command.
 

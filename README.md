@@ -61,12 +61,12 @@ Every figure is tool output, rerun for this README at commit `0596b74` (2026-10-
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **5106 of 5302** | `okur parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **4973 of 5264** | `okur parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **116** | `okur parity` |
+| Steps matching JAWS's speech history, word for word | **5106 of 5302** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **4973 of 5264** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **116** | `okur-lab parity` |
 | Recorded JAWS scenarios, trials | **364, 1146** (all 1146 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
 | Tests | **1281 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
-| Virtual buffer invariant violations | **0** | `okur invariants` |
+| Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
 The 116 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
@@ -199,7 +199,7 @@ There are no ready-made downloads yet: Okur is built from its source code.
 2. In a command prompt in this folder, build it:
 
    ```
-   cargo build --release --bin okur --bin okur-ui
+   cargo build --release --bin okur-lab --bin okur-ui
    ```
 
    `okur-ui` draws Okur's dialogs, such as the Links List and the settings. Okur starts it
@@ -271,11 +271,11 @@ installs it on the first build. The screen reader runs on Windows 10 and 11; the
 (`okur-core`) builds and tests on any platform.
 
 ```
-cargo build --release --bin okur --bin okur-ui
+cargo build --release --bin okur-lab --bin okur-ui
 cargo fmt --all --check
 cargo clippy --workspace --all-targets --all-features -- -D warnings -D clippy::indexing_slicing -D clippy::string_slice
 cargo test --workspace
-cargo run --bin okur -- parity
+cargo run --bin okur-lab -- parity
 ```
 
 `cargo test` is hermetic: no live UI, speech, audio or network. It includes the parity replay
@@ -306,7 +306,7 @@ as the worst possible bug.
 
 ### Performance
 
-Measured on the development machine with `okur latency` (from a live run's debug log),
+Measured on the development machine with `okur-lab latency` (from a live run's debug log),
 release build, Okur running next to JAWS:
 
 | What | Result |
@@ -334,11 +334,12 @@ from the [performance review](docs/backlog/performance-review-2026-10-20.md) of 
   settings files.
 - [`crates/okur-corpus`](crates/okur-corpus): parity replay, accepted divergences,
   invariants, the corpus manifest and the latency summary.
-- [`crates/okur`](crates/okur): the screen reader (`okur.exe`, and `okur-sr.exe`, the build
-  installed with UI Access) and the harness commands (`run`, `quit`, `doctor`, `parity`,
-  `live-parity`, `evidence`, `trace`, `snapshot`, `latency`, `keys`, `jaws-history`, and
-  more), with `okur-lab-keys.exe`, the lab machine's key sender with UI Access for JAWS's own
-  dialogs.
+- [`crates/okur`](crates/okur): the screen reader (`okur.exe`: `run`, `quit`, `doctor`,
+  `voices`; and `okur-sr.exe`, the build installed with UI Access).
+- [`crates/okur-lab`](crates/okur-lab): the verification harness, never installed for users
+  (`okur-lab.exe`: `parity`, `live-parity`, `evidence`, `trace`, `snapshot`, `latency`, `keys`,
+  `jaws-history`, and more), with `okur-lab-keys.exe`, the lab machine's key sender with UI
+  Access for JAWS's own dialogs.
 - [`crates/okur-setup`](crates/okur-setup): installs and uninstalls Okur (its start at
   sign-in, its Ease of Access registration) and the development signing script; not yet for
   users.
@@ -401,7 +402,7 @@ Web pages open in a signed-out Chrome profile of the lab's own, so no person's n
 window titles or recordings.
 
 Okur can also run live on the lab machine through the same scenarios, and
-`okur live-parity` compares what it said with JAWS, step by step. That measures what replay
+`okur-lab live-parity` compares what it said with JAWS, step by step. That measures what replay
 cannot, such as Okur's own dialogs.
 
 ### The loop
@@ -413,11 +414,11 @@ cannot, such as Okur's own dialogs.
    traces and provenance.
 3. **Implement** the behavior from scratch, with per-application behavior in named modules,
    as JAWS keeps it in application scripts.
-4. **Test:** replay every recorded scenario through the engine (`okur parity`) and compare
+4. **Test:** replay every recorded scenario through the engine (`okur-lab parity`) and compare
    each step with JAWS. Results are ratcheted. Where JAWS errs by accident, the step is
    written down as an accepted divergence instead of copied.
 5. **Prove it live:** run the screen reader against real applications with a debug log, and
-   measure its responsiveness (`okur latency`).
+   measure its responsiveness (`okur-lab latency`).
 
 ### Integrity rules
 

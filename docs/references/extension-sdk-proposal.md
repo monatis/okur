@@ -642,7 +642,7 @@ or is a navigation key (`engine.rs:455-477`). Deciding needs running. That has t
 - `handle_key` asks the table and the rule, then executes.
 - Extension commands are never executed inline: the engine posts them to the extension worker
   and returns. Their speech arrives as an event.
-- Proof: a unit test that the decision never calls `execute`; parity unchanged; `okur latency`
+- Proof: a unit test that the decision never calls `execute`; parity unchanged; `okur-lab latency`
   shows the same `held_us`.
 
 **Stage 2 (M3b, if measurements ask for it): the engine leaves the hook thread.**
@@ -651,10 +651,10 @@ or is a navigation key (`engine.rs:455-477`). Deciding needs running. That has t
 - The hook decides from the latest snapshot. If an earlier key is still being processed and
   might change the mode (Enter turning forms mode on), the hook waits for that key, bounded as
   today (150 ms), never for an extension.
-- Done when `okur latency` shows hook time independent of engine work, measured live.
+- Done when `okur-lab latency` shows hook time independent of engine work, measured live.
 
 Stage 1 is required for extensions. Stage 2 follows Microsoft's advice and is done when
-`okur latency` shows keys waiting on engine work.
+`okur-lab latency` shows keys waiting on engine work.
 
 ### 7.4 Physical keys, and the Turkish Q layout
 
@@ -789,7 +789,7 @@ outside the extension's folder.
 | A command | 250 ms to start speaking; stopped at 2 s | stopped; logged |
 | Loading an extension | 50 ms, on first activation, not at Okur's start | the extension stays off this session |
 
-These are starting values. The spike (M7) measures real handlers with `okur latency` and sets
+These are starting values. The spike (M7) measures real handlers with `okur-lab latency` and sets
 the final numbers with you.
 
 ### 9.5 Failure
@@ -878,7 +878,7 @@ output_types = ["whatsapp.message"]
 - It is platform-neutral: recorded on Windows, replayed on Linux CI.
 - It sits beside the platform trace that parity uses today
   (`crates/okur-platform/src/event_trace.rs`), and is written by the developer interface or
-  by `okur trace`.
+  by `okur-lab trace`.
 - Personal content (messages, names) never enters a test committed to a public registry; the
   developer interface offers to replace text with placeholders before saving.
 
@@ -887,12 +887,12 @@ output_types = ["whatsapp.message"]
 - Each test is a replay file and the speech expected, step by step, with the settings it ran
   with.
 - `okur ext test <folder>` replays every test hermetically, with the extension on, and prints
-  matched and mismatched steps, as `okur parity` does.
+  matched and mismatched steps, as `okur-lab parity` does.
 - The registry's CI runs them on every platform and on every SDK version the extension claims.
 
 ### 11.3 JAWS parity stays clean
 
-- `okur parity` runs with outside extensions off, always (vision principle 6).
+- `okur-lab parity` runs with outside extensions off, always (vision principle 6).
 - Okur's own nine modules are part of Okur and stay in parity.
 - A change to the contract or the runtime must leave `parity-snapshot.sh` output unchanged.
 
@@ -948,7 +948,7 @@ today; old-pc work follows [`verification-loop.md`](verification-loop.md).
   user overrides.
 - M3b, when measurements ask for it: the engine leaves the hook thread.
 - Absorbs: helper dialogs plan step 10 (layers) as a table feature.
-- Done when: a test proves the decision never executes; `okur latency` before and after shows
+- Done when: a test proves the decision never executes; `okur-lab latency` before and after shows
   hook time no worse; a user key file overrides a binding in a test.
 
 **M4. Replay and the developer interface.**
@@ -981,7 +981,7 @@ today; old-pc work follows [`verification-loop.md`](verification-loop.md).
 **M7. The runtime spike.**
 - The same focus filter as a Rust call, a Wasm component with a Rust guest, a Wasm component
   with a JavaScript guest, and QuickJS.
-- Measured with `okur latency` on the dev box and old-pc: p50 and p99 per call, load time,
+- Measured with `okur-lab latency` on the dev box and old-pc: p50 and p99 per call, load time,
   memory per extension, binary size.
 - Done when: the measurements and the decision are written into this page; proposed pass
   marks are p99 under 1 ms per filter call and under 50 ms to load.
@@ -1124,6 +1124,6 @@ Speech and Sounds Manager dialog only.
 - **Registry**: the repository of reviewed, signed extensions.
 - **Replay file**: a recorded session (keys and events) that a test plays back without the
   application.
-- **Parity**: comparing Okur's speech with JAWS's recorded speech (`okur parity`).
+- **Parity**: comparing Okur's speech with JAWS's recorded speech (`okur-lab parity`).
 - **Reference machine**: old-pc, where JAWS is recorded.
 - **JCF, VPF**: JAWS's user settings files: configuration and voice profiles.

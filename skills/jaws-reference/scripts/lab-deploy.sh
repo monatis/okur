@@ -5,6 +5,7 @@
 # verifies each file's SHA-256 and replaces the destination only once the whole file arrived:
 #   bin/okur.exe            <- --okur (default target/agent/release/okur.exe), if built
 #   bin/okur-ui.exe         <- okur-ui.exe beside it, if built (Okur's windows)
+#   bin/okur-lab.exe        <- okur-lab.exe beside it, if built (the harness's program)
 #   skill scripts           <- skills/jaws-reference/scripts/*.ps1
 #   corpus fixtures         <- corpus/fixtures/*.html, *.ps1
 #   corpus scenarios        <- corpus/scenarios/*.json
@@ -35,6 +36,9 @@ files() {
     local ui
     ui="$(dirname "$OKUR")/okur-ui.exe"
     [ -f "$ui" ] && printf '%s\t%s\n' "$ui" "$LAB/sr-harness/bin/okur-ui.exe"
+    local lab
+    lab="$(dirname "$OKUR")/okur-lab.exe"
+    [ -f "$lab" ] && printf '%s\t%s\n' "$lab" "$LAB/sr-harness/bin/okur-lab.exe"
     for f in skills/jaws-reference/scripts/*.ps1; do
         printf '%s\t%s\n' "$f" "$LAB/skills/jaws-reference/scripts/$(basename "$f")"
     done

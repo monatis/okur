@@ -43,13 +43,13 @@ Start the interactive screen reader daemon with:
 
 ```bash
 # Start daemon with default auto-detected TTS engine (SAPI 5 on Windows, NoSpeech fallback)
-cargo run --bin okur -- run
+cargo run --bin okur-lab -- run
 
 # Start daemon with specific TTS engine, speech rate, and volume
-cargo run --bin okur -- run --engine sapi5 --rate 2 --volume 90
+cargo run --bin okur-lab -- run --engine sapi5 --rate 2 --volume 90
 
 # Start daemon loaded with a specific test document fixture
-cargo run --bin okur -- run --fixture corpus/fixtures/boundaries-dynamic.html
+cargo run --bin okur-lab -- run --fixture corpus/fixtures/boundaries-dynamic.html
 ```
 
 Okur's settings are the ones its settings dialog saved (Insert+6 or Insert+V: "Okur

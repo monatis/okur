@@ -1,8 +1,7 @@
 //! Embeds each program's application manifest at link time (Windows, MSVC):
-//! - `okur.exe`, the developer's console program: `asInvoker`, no UI Access;
+//! - `okur.exe`, the screen reader's console program (`okur run`): `asInvoker`, no UI Access;
 //! - `okur-sr.exe`, the installed screen reader: `asInvoker` with `uiAccess="true"`;
 //! - `okur-sr-no-uiaccess.exe`: the same screen reader without UI Access;
-//! - `okur-lab-keys.exe`, the reference machine's key sender: `asInvoker` with `uiAccess="true"`.
 //!
 //! Each manifest is whole, its `trustInfo` included, so the linker is told to add no UAC
 //! fragment of its own (`/MANIFESTUAC:NO`) that could collide with it
@@ -12,11 +11,10 @@
 use std::path::PathBuf;
 
 /// Each program and its manifest file under `manifests/`.
-const MANIFESTS: [(&str, &str); 4] = [
+const MANIFESTS: [(&str, &str); 3] = [
     ("okur", "okur.manifest"),
     ("okur-sr", "okur-sr.manifest"),
     ("okur-sr-no-uiaccess", "okur-sr-no-uiaccess.manifest"),
-    ("okur-lab-keys", "okur-lab-keys.manifest"),
 ];
 
 fn main() {

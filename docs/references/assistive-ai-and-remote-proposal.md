@@ -394,7 +394,7 @@ evaluation measures them in English and Turkish on the dev box and a Mac.
 **Speed.** Encoding the picture is the slow part: a whole 1080p screenshot is about 2,000 image
 tokens for Qwen3.5 (research §9.5). Okur sends the control or the window the key chose, and caps
 image tokens (a setting, default to be measured). The time budget V3 must meet is set from the
-dev box's and a Mac's measurements, with `okur latency`.
+dev box's and a Mac's measurements, with `okur-lab latency`.
 
 ## 8. Cloud providers
 
@@ -695,7 +695,7 @@ tools; JAWS evidence comes only from old-pc's capture tooling.
   one reach the other's routing, and the other's speech is spoken by the first in its own
   language. The frame decoder is fuzzed.
 - **Live**: the dev box controls old-pc's Okur through a relay, with the owner's permission;
-  `okur latency` reports key to speech across the link.
+  `okur-lab latency` reports key to speech across the link.
 - **Against JAWS**: Tandem needs JAWS on both machines. With the owner's permission, the dev
   box's JAWS and old-pc's could record Tandem's messages once ("Tandem connection open" and
   the rest); they become Okur's English where the features match.
@@ -718,7 +718,7 @@ follow it and fit between the SDK's milestones.
 - Windows.Media.Ocr; W, C, S, Q and ?; JAWS's messages from old-pc; the Results Viewer with its
   source line; `ocr.language` in the registry.
 - Done when: `okur ocr-eval windows-ocr` passes its committed error rate; the old-pc scenarios'
-  messages match in `okur live-parity`; the owner uses it live.
+  messages match in `okur-lab live-parity`; the owner uses it live.
 
 **V2. Files, PDFs, Enter, Background OCR**
 - F, D, Enter, B; Windows.Data.Pdf; the in-place document with clicking.
@@ -730,7 +730,7 @@ follow it and fit between the SDK's milestones.
   and the local OCR engine; Picture Smart's C, W, S, F, B, Enter, Alt and Shift; the question
   dialog and the conversation in the Results Viewer.
 - Done when: on the dev box the default model passes its fact lists within a time budget
-  measured by `okur latency`; killing `okur-models` mid-request leaves Okur speaking.
+  measured by `okur-lab latency`; killing `okur-models` mid-request leaves Okur speaking.
 
 **V4. Cloud providers**
 - Sign in with ChatGPT; the OpenAI-compatible key client; consent pages; announcements;
@@ -747,7 +747,7 @@ resembles)
 - The shared transport (A13); `okur-remote`; `okur relay`; speech and key forwarding; consent;
   Insert+Alt+T and Insert+Alt+Tab; session codes and pairing.
 - Done when: the hermetic protocol and two-engine tests pass; live, the owner controls old-pc's
-  Okur from the dev box through a relay, and `okur latency` reports key to speech across it.
+  Okur from the dev box through a relay, and `okur-lab latency` reports key to speech across it.
 
 **R2. Remote, complete**
 - Braille (after SDK M6), clipboard, Ctrl+Alt+Delete, the curtain, view-only sessions, macOS

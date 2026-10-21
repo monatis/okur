@@ -71,15 +71,15 @@ reader script.
    - Class names stay inside the platform layer and inside application modules that need
      them.
 5. **Budgets.**
-   - Every handler has a time limit, measured with `okur latency`.
+   - Every handler has a time limit, measured with `okur-lab latency`.
    - A slow handler is skipped, never waited for.
    - One key chord turns every extension off.
    
    A screen reader that stops talking leaves its user with nothing.
 6. **Verification stays clean.**
    - Parity with JAWS is measured with extensions off.
-   - An extension is tested by replaying recorded interactions (`okur trace` and the
-     replay `okur parity` already uses), with the speech it should produce.
+   - An extension is tested by replaying recorded interactions (`okur-lab trace` and the
+     replay `okur-lab parity` already uses), with the speech it should produce.
 7. **Privacy.** A screen reader, its extensions and its debugging tools see everything on
    screen, including passwords and private messages.
    - The developer interface is off by default and local only.

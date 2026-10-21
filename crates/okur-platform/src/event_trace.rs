@@ -1,6 +1,6 @@
 //! Accessibility event traces.
 //!
-//! `okur trace` records the system-wide accessibility event stream while a JAWS trial runs
+//! `okur-lab trace` records the system-wide accessibility event stream while a JAWS trial runs
 //! on the reference machine: one JSON object per line, each event carrying the MSAA view of
 //! its object and, for focus and foreground changes, a UIA snapshot of the focused element
 //! and its ancestors. Steps in the evidence carry start/end timestamps, so a step's events
@@ -1972,7 +1972,7 @@ mod capture {
         /// Page changes not told since the last one, for the debug log.
         page_changes_dropped: usize,
         /// Tracing (not live): every page change is recorded as a `page_change` event, with
-        /// its object and nothing read (`okur trace --page-changes`).
+        /// its object and nothing read (`okur-lab trace --page-changes`).
         record_page_changes: bool,
         /// Where the mouse pointer was when last looked at.
         last_mouse: Option<[i32; 2]>,
@@ -3671,7 +3671,7 @@ mod capture {
             if clock.elapsed() > SLOW_EVENT {
                 tracing::debug!(event = name, %class, ?stages, "slow event read");
             }
-            // Every read's time, for `okur latency`.
+            // Every read's time, for `okur-lab latency`.
             tracing::debug!(
                 event = name,
                 us = clock.elapsed().as_micros(),

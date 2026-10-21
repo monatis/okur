@@ -607,7 +607,7 @@ pub fn run_with(corpus_dir: &Path, api: Api) -> ParityReport {
 }
 
 /// [`run_with`] for the scenarios whose ids start with one of `only` (every scenario when it
-/// is empty): `okur parity --only 228` replays one scenario, with the engine's debug log.
+/// is empty): `okur-lab parity --only 228` replays one scenario, with the engine's debug log.
 pub fn run_matching(corpus_dir: &Path, api: Api, only: &[String]) -> ParityReport {
     let mut report = ParityReport::default();
     let mut files: Vec<PathBuf> = fs::read_dir(corpus_dir.join("scenarios"))
@@ -655,7 +655,7 @@ struct Baseline<'a> {
 pub fn render_baseline(report: &ParityReport) -> Result<String, String> {
     let baseline = Baseline {
         notice:
-            "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- parity --write-baseline",
+            "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
         matched_steps: report.matched(),
         total_steps: report.compared(),
         accepted_divergences: report.accepted(),
@@ -702,8 +702,8 @@ pub fn check_baseline(corpus_dir: &Path, report: &ParityReport) -> Result<(), St
     }
     if committed_text.replace("\r\n", "\n") != render_baseline(report)? {
         return Err(format!(
-            "{BASELINE_FILE} is stale (parity changed). Review `cargo run --bin okur -- parity`, \
-             then regenerate with: cargo run --bin okur -- parity --write-baseline"
+            "{BASELINE_FILE} is stale (parity changed). Review `cargo run --bin okur-lab -- parity`, \
+             then regenerate with: cargo run --bin okur-lab -- parity --write-baseline"
         ));
     }
     Ok(())

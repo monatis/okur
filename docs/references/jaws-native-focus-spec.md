@@ -2,7 +2,7 @@
 
 Observed black-box behavior of JAWS 2025.2505.43.400 on Windows 10 (`old-pc`) in the WinForms
 fixture `corpus/fixtures/desktop-forms.ps1`. Each rule cites `scenario/step`. View a
-transcript with `cargo run --bin okur -- evidence <scenario-id>`. Implemented in
+transcript with `cargo run --bin okur-lab -- evidence <scenario-id>`. Implemented in
 `crates/okur-core/src/native_focus.rs`.
 
 Notation is the same as `jaws-virtual-buffer-spec.md`: `‹ ›` stand for JAWS's role markers
@@ -184,7 +184,7 @@ Keys in the viewer:
 
 ## 11. What is spoken: the speech history versus the synthesizer [obs, 307, 207]
 
-JAWS's speech history keeps text from *before* its symbol processing: `(`, or an empty entry for a space, tab or line break. The synthesizer is then given the processed text. The harness records it with the **SR Speech Recorder** SAPI voice (`crates/okur-speech-recorder`, `observation.spoken`). `okur parity` compares both layers ("JAWS spoken parity").
+JAWS's speech history keeps text from *before* its symbol processing: `(`, or an empty entry for a space, tab or line break. The synthesizer is then given the processed text. The harness records it with the **SR Speech Recorder** SAPI voice (`crates/okur-speech-recorder`, `observation.spoken`). `okur-lab parity` compares both layers ("JAWS spoken parity").
 
 **A character read on its own (Left/Right, Delete, the Virtual Viewer)** is always named, whatever the punctuation level. These are the exact strings JAWS sends a SAPI 5 voice (`okur-core::pronounce`):
 - **Whitespace:** `space` (also a no-break space), `tab`, `blank` (a line break).

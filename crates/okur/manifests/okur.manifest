@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<!-- okur.exe, the developer's console program: runs as its caller, without UI Access, from
-     any folder. It is aware of each monitor's DPI from its start, as the screen reader is: its
-     tracer reads where controls are in real pixels, as JAWS gives them (516/s8 at 125%). -->
+<!-- okur.exe, the screen reader's console program (`okur run`): runs as its caller, without UI
+     Access, from any folder. It is aware of each monitor's DPI from its start, so that the
+     places of controls it reads are real pixels, as JAWS gives them (516/s8 at 125%). -->
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
     <security>

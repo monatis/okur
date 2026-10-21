@@ -22,11 +22,11 @@ box: only `okur doctor` (read only) and the test suite ran here.
 
 - `cargo test --workspace`: every test binary `ok`, none failed. It includes okur-corpus's
   parity ratchet, so every step's outcome is the committed `corpus/parity-baseline.json`'s.
-- `okur parity`: "JAWS parity (Ia2): 2707/2904 steps match exactly; 74 accepted divergences not
+- `okur-lab parity`: "JAWS parity (Ia2): 2707/2904 steps match exactly; 74 accepted divergences not
   counted (0 scenarios could not run)"; "JAWS spoken parity: 2603/2852 steps match exactly".
-  Before the rebase, on `3704ef4`, `okur parity`'s whole output was the same byte for byte
+  Before the rebase, on `3704ef4`, `okur-lab parity`'s whole output was the same byte for byte
   before and after M0-M2 (2642/2859, spoken 2538/2807).
-- `okur invariants`: "Buffer invariants: 0 violation(s)". `okur corpus-manifest`: "Corpus
+- `okur-lab invariants`: "Buffer invariants: 0 violation(s)". `okur-lab corpus-manifest`: "Corpus
   manifest is current." `corpus/` was not touched.
 - `mt.exe -inputresource:<exe>;#1` on the debug build: `okur-sr.exe` has
   `level="asInvoker" uiAccess="true"`; `okur.exe`, `okur-sr-no-uiaccess.exe` and
@@ -104,7 +104,7 @@ present`. Not checked by the script: that no console window flashes (a listening
 | `confirm_exit`, on by default (JAWS's "Prompt to Confirm When Exiting JAWS"), with a check box in Okur's settings dialog; off, Insert+F4 exits at once | done | `settings.rs`, `ui/settings.rs` | `ui::settings` tests, `engine::quit::tests::without_confirmation_insert_f4_exits_at_once` |
 | The question as one of Okur's dialogs: its text static (new `ControlKind::Message`), OK the default, Cancel; Escape closes it and the focus returns quietly | done; **its words are placeholders** in `dialogs.ftl` (`quit-title`, `quit-question`, `quit-ok`, `quit-cancel`), commented to be replaced by 571's recording; JAWS's help gives no wording | `okur-core/src/ui/quit.rs`, `engine/quit.rs`, `okur-ui-model`, `okur-ui` (`template.rs`, `dialog.rs`), `okur-corpus`'s dialog mirror | `ui::quit::tests`, `engine::quit::tests`, `okur-ui`'s `a_message_is_static_text_above_the_buttons` |
 | The exit path: keyboard unhooked first, events stopped, Okur's last words waited for at most 1.5 s, `okur-ui`'s input closed, the screen-reader flag cleared, the mutex released, the process ended. The engine only asks (`set_exit`); headless, as in replay, Insert+F4 does nothing | done | `crates/okur/src/run.rs`, `engine/quit.rs` | `engine::quit::tests::insert_f4_asks_first_and_ok_exits`; the process's end is live only |
-| Scenario 571 imported, the J2 scenario ("Insert+F4, Enter") written and recorded, `okur parity --only 571` | not done | `corpus/` was not touched | needs old-pc |
+| Scenario 571 imported, the J2 scenario ("Insert+F4, Enter") written and recorded, `okur-lab parity --only 571` | not done | `corpus/` was not touched | needs old-pc |
 
 Notes: Okur's last words stay "Okur exiting." (now `okur-exiting` in `commands.ftl`) until J2
 records what JAWS says; whether JAWS says anything as its question closes is 571's step s3. With
@@ -155,7 +155,7 @@ cargo build --release -p okur -p okur-ui -p okur-setup
    console window flashes.
 3. **M2.** With `okur.exe run` in front of Notepad: Insert+F4 opens "Quit Okur"; Escape, then
    Insert+Tab reads Notepad. Insert+F4, Enter: "Okur exiting.", the process is gone, and
-   `okur keys`' modifier guard reports no held key. Then import 571 and write J2's scenario.
+   `okur-lab keys`' modifier guard reports no held key. Then import 571 and write J2's scenario.
 4. **M3 and E1 with the certificate** (needs the owner's yes, Q1). On the dev box:
    `crates\okur-setup\signing\dev-signing.ps1 -NewCertificate -WhatIf`, then without `-WhatIf`;
    then `-Sign -Thumbprint <THUMB> -BuildDir target\release`. Copy the `.cer` and the release
@@ -1293,9 +1293,9 @@ from a tool's output.
 - *Scope:* the J2 scenario and 571 imported; `ShutDown` bound to JAWSKey+F4; `confirm_exit`;
   the dialog spec; the exit sequence.
 - *Check:*
-  - `okur parity --only 571` passes, along with the exit scenario.
+  - `okur-lab parity --only 571` passes, along with the exit scenario.
   - On old-pc with the engineer's `okur run`: Insert+F4, Escape, Insert+Tab reads Notepad.
-  - Then Insert+F4, Enter: the process is gone, and `okur keys`' modifier guard reports no
+  - Then Insert+F4, Enter: the process is gone, and `okur-lab keys`' modifier guard reports no
     held key.
 
 **M3. Signed UIAccess install on old-pc.**
@@ -1352,7 +1352,7 @@ from a tool's output.
 **Harness work that pays for itself** (fits AGENTS.md §3):
 
 - `okur doctor`.
-- `okur keys --desktop <name>`, which sends keys into a desktop the engineer created.
+- `okur-lab keys --desktop <name>`, which sends keys into a desktop the engineer created.
 - A lab "test desktop" command. It creates a desktop, runs a fixture and a forced-secure-mode
   `okur-sr` on it as the user, switches to it, and **always switches back** after a timeout.
   This tests desktop-switch handling and secure-mode gating unattended. It is no substitute

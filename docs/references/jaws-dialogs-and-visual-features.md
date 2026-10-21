@@ -16,7 +16,7 @@ builds them).
   may rely on it.
 
 **How the dialogs were captured.** From the sample page, with the virtual cursor at the top:
-send the keys (`okur keys`), or ask JAWS to run the script by name when a layered key would not
+send the keys (`okur-lab keys`), or ask JAWS to run the script by name when a layered key would not
 take (FSAPI `RunScript`). Then save a picture of the window, JAWS's speech on opening, and what
 `ReadBoxInTabOrder` (Insert+B) reads; close it with JAWS's own Escape (FSAPI
 `TypeKey("Escape")`), since JAWS's windows refuse our keys. The pictures are in
@@ -39,7 +39,7 @@ take (FSAPI `RunScript`). Then save a picture of the window, JAWS's speech on op
 - **Owner and integrity.** The list dialogs belong to `jfw.exe` itself (the Links List: owner
   `jfw.exe`, extended style `0x10109`, so they are topmost). JAWS runs elevated, so its
   dialogs refuse input from normal-integrity processes and show only their title to a
-  normal-integrity UI Automation client (`okur window-text` on the open Links List returned
+  normal-integrity UI Automation client (`okur-lab window-text` on the open Links List returned
   "Links List" and nothing else). The Virtual Viewer is a separate process, `VIRTVIEW.EXE`.
 - **Content comes from the virtual buffer.** A list shows the page as JAWS's virtual cursor
   sees it, custom labels included, when the key is pressed.

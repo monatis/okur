@@ -1,6 +1,6 @@
 //! Windows accessibility events for the live screen reader.
 //!
-//! Events come from the WinEvent capture that `okur trace` records
+//! Events come from the WinEvent capture that `okur-lab trace` records
 //! ([`crate::event_trace::run_live`]). They are converted by the converter parity replay uses
 //! ([`EventConverter`]), so the live screen reader consumes
 //! the event stream the harness records, replays and verifies against JAWS.

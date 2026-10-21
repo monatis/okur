@@ -9,7 +9,7 @@ item is found in JAWS's documentation, recorded on old-pc, then built; JAWS's ac
 accepted divergences. old-pc always has a round queued behind the running one. Okur's own
 words never use JAWS's name (AGENTS.md §1.5).
 
-The workflow, every stretch: this plan, then implementation, then proof with `okur parity`,
+The workflow, every stretch: this plan, then implementation, then proof with `okur-lab parity`,
 then a dated handoff and the next plan, with AGENTS.md pointing at them. A stretch is a few
 hours or about thirty commits, not more. The README is updated as items are proven.
 
@@ -36,7 +36,7 @@ From 704 (round 141, trial 1, and version 2):
 - **Display PlaceMarkers For** URL, Domain, All filtering the list.
 - **MoveTo's speech and the cursor after it**, Change's renaming, Remove's silence, from 704
   version 2.
-- A live check on old-pc (`run-scenario.ps1 -Reader okur`, `okur live-parity`) of Okur's own
+- A live check on old-pc (`run-scenario.ps1 -Reader okur`, `okur-lab live-parity`) of Okur's own
   list window: the Table control, the default moving to MoveTo, the owned Add dialog.
 
 ## 2. Speech On Demand

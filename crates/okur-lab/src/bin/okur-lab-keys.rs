@@ -9,7 +9,7 @@
 //! okur-lab-keys --allow jfw[,chrome] [--title <text>] <step>...
 //! ```
 //!
-//! The steps and the checks are `okur keys`'s: each chord is sent only while one of the
+//! The steps and the checks are `okur-lab keys`'s: each chord is sent only while one of the
 //! allowed processes is in front.
 
 #[cfg(windows)]

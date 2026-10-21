@@ -730,7 +730,7 @@ pub fn is_dialog_message(msg: &MSG) -> bool {
 
 /// Brings `window` to the front. Windows lets only the foreground thread give the
 /// foreground away, so the input of the window in front is attached for the switch, as
-/// `okur front` does.
+/// `okur-lab front` does.
 fn bring_forward(window: HWND) {
     // SAFETY: plain window calls; the thread input is detached again below.
     unsafe {

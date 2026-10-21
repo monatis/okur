@@ -24,11 +24,11 @@ Commands below are written as `okur ...` for `target/audit/okur.exe ...`.
 ### The numbers
 
 ```
-$ okur parity --all
+$ okur-lab parity --all
 JAWS spoken parity: 465/647 steps match exactly (evidence recorded through the speech recorder voice)
 JAWS parity (Ia2): 1123/1220 steps match exactly (0 scenarios could not run)
 
-$ okur parity --all --api uia
+$ okur-lab parity --all --api uia
 JAWS spoken parity: 426/647 steps match exactly (evidence recorded through the speech recorder voice)
 JAWS parity (Uia): 1007/1220 steps match exactly (0 scenarios could not run)
 ```
@@ -126,14 +126,14 @@ The full list is in section 8.
 ## 1. How the numbers were taken
 
 Commands run, each writing to a scratch file:
-- `okur parity --all` (IA2, the ratchet's API), `okur parity --all --spoken`, and
-  `okur parity --all --api uia`.
-- `okur evidence <scenario> --trace` for every scenario with a DIFF (and `--trial N` for 204).
-- `okur lines` on the snapshots of `news-article`, `characters`, `web-chat`, `signup-form` and
+- `okur-lab parity --all` (IA2, the ratchet's API), `okur-lab parity --all --spoken`, and
+  `okur-lab parity --all --api uia`.
+- `okur-lab evidence <scenario> --trace` for every scenario with a DIFF (and `--trial N` for 204).
+- `okur-lab lines` on the snapshots of `news-article`, `characters`, `web-chat`, `signup-form` and
   `web-app-patterns`, through IA2 and UIA.
 - `git show` of earlier baselines, traces and the code at `4495382`.
 
-DIFF counts per scenario in the history layer (from `okur parity --all`, counted with `grep` and
+DIFF counts per scenario in the history layer (from `okur-lab parity --all`, counted with `grep` and
 `uniq -c`):
 
 ```
@@ -176,7 +176,7 @@ the role, its whole value (line 190) and the hint. Only a native document (line 
 Notepad) gets "Contains text". The focus event's value is the field's whole text.
 
 - Class: different handling. No decision about multi-line fields is recorded.
-- Verified: `okur parity --all` (316/s3); `okur evidence 316-desktop-show-desktop --trace`.
+- Verified: `okur-lab parity --all` (316/s3); `okur-lab evidence 316-desktop-show-desktop --trace`.
 - Inferred: that JAWS reads the caret's line, not always the first one. The caret was at the
   start in this recording.
 
@@ -225,7 +225,7 @@ Root causes:
    (`focus.rs:450-469`). That rule cites JAWS on the dev box with WhatsApp (2026-10-17). Old-pc's
    JAWS reads the virtual cursor's line instead.
 4. **The popup menu.** It is hidden when the snapshot is captured, so it is not in the buffer
-   (verified with `okur lines corpus/snapshots/web-chat.chrome.ia2.json`: no menu item lines).
+   (verified with `okur-lab lines corpus/snapshots/web-chat.chrome.ia2.json`: no menu item lines).
    Without Auto Forms Mode a page's menu keys stay the virtual cursor's (`focus.rs:104-109`), so
    Down reads the buffer from where the cursor was left. The item wording with a position comes
    from the dev box ("Cevapla 2 of 9", `engine/web_app_tests.rs:304-306`).
@@ -234,10 +234,10 @@ Root causes:
   old-pc contradicts. Part of it is a replay artifact: live Okur reads a changed part of the page
   again when a focus is not in its buffer (`crates/okur-platform/src/events/windows.rs:316-330`),
   which replay cannot do.
-- Verified: parity output; `okur evidence 219-web-chat-patterns --trace`; `okur lines` on the
+- Verified: parity output; `okur-lab evidence 219-web-chat-patterns --trace`; `okur-lab lines` on the
   snapshot; the fixture (labels set on focus, `corpus/fixtures/web-chat.html:76-81`).
 - Inferred: that live Okur leaves the cursor in the same wrong place before the re-read
-  arrives. A live run (`run-scenario.ps1 -Reader okur` on 219, then `okur live-parity`) measures
+  arrives. A live run (`run-scenario.ps1 -Reader okur` on 219, then `okur-lab live-parity`) measures
   it.
 
 Effect beyond the corpus: WhatsApp Web, Slack, Teams, Gmail and Discord all use focusable rows
@@ -313,8 +313,8 @@ arrival, and access keys are such lines (`native_focus.rs:95`, `116`).
   (no audio within 800 ms: `heard_audio` is false in the evidence). Okur says "Ada". In 312/s11
   JAWS read the field's line in the same situation. Unexplained.
 
-Verified: parity output; `okur evidence 323-desktop-property-sheet --trace` and
-`okur evidence 322-desktop-forms-viewer --trace`; the 322 evidence JSON for s6.
+Verified: parity output; `okur-lab evidence 323-desktop-property-sheet --trace` and
+`okur-lab evidence 322-desktop-forms-viewer --trace`; the 322 evidence JSON for s6.
 
 ### 2.4 Chrome's own controls (220, 5 steps)
 
@@ -354,7 +354,7 @@ Real gaps visible through it:
   owner.
 
 - Class: replay artifact, all 41 steps, with two unimplemented features inside.
-- Truthful measure: `run-scenario.ps1 -Reader okur`, then `okur live-parity`. The one result so
+- Truthful measure: `run-scenario.ps1 -Reader okur`, then `okur-lab live-parity`. The one result so
   far (222: 5 of 11 steps, then 10 of 11) is quoted in commit `00cc733`. The run file is not in
   the repository, so the number cannot be checked again.
 - Effect: the lists of links, headings and form fields are among JAWS's most used web
@@ -498,7 +498,7 @@ synthesizer, through the speech recorder voice. It exists for the scenarios reco
 recorder: 207-226 and 306-323 except 312, 647 steps in all.
 
 ```
-$ okur parity --all --spoken
+$ okur-lab parity --all --spoken
 JAWS spoken parity: 465/647 steps match exactly (evidence recorded through the speech recorder voice)
 ```
 
@@ -593,7 +593,7 @@ fails.
 The 116 steps that differ only through UIA (appendix C):
 - **Block quotes (74 steps: 101 s49-s71, 102 s21-s71).** Chrome's UIA gives a block quote as a
   group whose only distinct property is its localized type name ("blok alıntı" on old-pc), which
-  Okur must not key on. Verified with `okur lines` on both news-article snapshots: the IA2
+  Okur must not key on. Verified with `okur-lab lines` on both news-article snapshots: the IA2
   buffer's lines 49 and 51 ("block quote", "block quote end") are not in the UIA buffer. Every
   later Down and Up step is off by those lines.
 - **Preformatted text (19 steps: 207 s67-s86).** The UIA buffer has the pre block as one line,
@@ -648,7 +648,7 @@ with, and a way to settle a conflict. The proposal (item 9) suggests one.
   as that ledger until the tests exist.
 - `lib.rs:329-345` asserts Okur's speech for scenario 12, which JAWS's evidence contradicts. It
   will fail when Okur is made to speak as JAWS does, so it works against the fix.
-- Live comparisons are not kept. `okur live-parity` output is not evidence, but a committed run
+- Live comparisons are not kept. `okur-lab live-parity` output is not evidence, but a committed run
   log, beside the claim, would let a number like "10/11" be checked.
 - Scenarios recorded before the speech recorder (01-30, 101-114, 201-206, 301-305, 312) have no
   spoken layer, and the earliest use fixed waits; several of those checked have no trace (01,
@@ -706,7 +706,7 @@ takes, what proves it, and whether old-pc must record anything new.
    - What: say its line and "Contains text" instead of its whole text (2.1).
    - Where: `native_focus.rs:179-203`, using the line-break signal of `commands.rs:815-819`.
    - Effort: hours.
-   - Proof: 316/s3 matches; `okur parity` gains 1 step.
+   - Proof: 316/s3 matches; `okur-lab parity` gains 1 step.
    - Recording: optional, scenario 1 of section 7, to settle "caret's line or first line".
 
 2. **Web applications: a focus the buffer has no line for.**
@@ -715,7 +715,7 @@ takes, what proves it, and whether old-pc must record anything new.
    - Where: `focus.rs:372-378`, `415-416`, `436-469`; `page.rs:265-299`.
    - Effort: 1-2 days.
    - Proof: 219/s9 and s13 match in replay after the defect fix, s8, s11 and s17 after the rule
-     decision; a live run of 219 with `okur live-parity`; a live check on WhatsApp on the dev
+     decision; a live run of 219 with `okur-lab live-parity`; a live check on WhatsApp on the dev
      box, with the owner's permission.
    - Recording: 219 with Auto Forms Mode on.
 
@@ -724,7 +724,7 @@ takes, what proves it, and whether old-pc must record anything new.
      timestamps (3.3, 3.4).
    - Where: `skills/jaws-reference/scripts/run-scenario.ps1:576-584`.
    - Effort: hours, then one batch on old-pc.
-   - Proof: `okur parity --spoken`; up to 30 steps should match without any engine change.
+   - Proof: `okur-lab parity --spoken`; up to 30 steps should match without any engine change.
    - Recording: re-record 209, 211-220, 306, 311, 314, 315, 317, 319 and 322. Also give live
      runs the recorder voice (`okur run --engine sapi5` with the SR Speech Recorder voice), so
      Okur's own spoken layer can be measured live.
@@ -752,7 +752,7 @@ takes, what proves it, and whether old-pc must record anything new.
 
 6. **JAWS's own dialogs, measured live.**
    - What: finish the list family (the plan's step 3: the form field count, 8 against 10; Insert+F3,
-     which does not exist), run each live, and keep the `okur live-parity` output as a committed
+     which does not exist), run each live, and keep the `okur-lab live-parity` output as a committed
      run log. Report 222-226 apart from the replay headline, so the headline measures what replay
      can measure.
    - Where: `crates/okur-core/src/ui/`, `buffer.rs:1109`, `command.rs`;
@@ -772,10 +772,10 @@ takes, what proves it, and whether old-pc must record anything new.
 8. **The UIA first read.**
    - What: map `haspopup=menu` to a menu button; read preformatted text with its lines (UIA
      TextPattern); accept that block quotes cannot be seen through UIA. Measure how long users
-     stay on the UIA buffer with `okur latency` on real pages before doing more (section 4).
+     stay on the UIA buffer with `okur-lab latency` on real pages before doing more (section 4).
    - Where: `crates/okur-platform/src/uia_snapshot.rs:274-370`.
    - Effort: half a day for haspopup; about a day for preformatted text.
-   - Proof: `okur parity --api uia` (210: up to 2 steps; 207: up to 19).
+   - Proof: `okur-lab parity --api uia` (210: up to 2 steps; 207: up to 19).
    - Recording: none.
 
 9. **Dev-box rules: record where they come from.**
@@ -802,7 +802,7 @@ takes, what proves it, and whether old-pc must record anything new.
 12. **Accept, in writing, where Okur is better.**
     - What: the font in a WinForms field (313), the emoji in the viewer (312), the selection text
       (305/s13), the list view's control view (322/s15, s16). Write each decision in the code and
-      in a reviewed list of accepted differences that `okur parity` reports apart. The baseline
+      in a reviewed list of accepted differences that `okur-lab parity` reports apart. The baseline
       stays generated and is never edited.
     - Also update the stale comment at `commands.rs:668-672`.
     - Effort: half a day (the list and its report).

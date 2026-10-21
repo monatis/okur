@@ -159,7 +159,7 @@ pub fn init_logging(debug_log: Option<&str>) {
     tracing_subscriber::fmt::init();
 }
 
-/// Loads a page from a UIA snapshot (`okur snapshot` output) through the production
+/// Loads a page from a UIA snapshot (`okur-lab snapshot` output) through the production
 /// UIA-to-AOM mapping.
 pub fn load_aom_from_path(path: &Path) -> Result<AomNode, Box<dyn std::error::Error>> {
     let snapshot = okur_platform::uia_snapshot::UiaSnapshot::load(path)?;

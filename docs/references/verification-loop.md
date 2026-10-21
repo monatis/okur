@@ -33,7 +33,10 @@ in full. They decide what counts as evidence, and they win over anything below.
   - the fixtures' "SR … Fixture" window titles. These are in recorded JAWS speech and never
     change.
 
-  The binary is now `okur.exe` (`bin\okur.exe` in `sr-harness`), and the scripts call it.
+  The programs are `okur.exe`, the screen reader (`okur run` for live runs), and `okur-lab.exe`,
+  the harness (the tracer, `wait-silence`, `snapshot`, `focus`, ...), both in `bin\` of
+  `sr-harness`; the scripts call each for its own commands. They were one program until
+  2026-10-21, when Defender flagged it for holding both.
   An old `sr-cli.exe` left on old-pc is unused.
 
 ## 2. Reaching old-pc
@@ -49,7 +52,7 @@ opendesk exec --peer old-pc --timeout 20 "Get-Date -Format HH:mm:ss"
 - **`opendesk exec --peer old-pc "<powershell>"`** (CLI in `~/.cargo/bin`; the `opendesk` MCP
   tools work too) runs as `ailabs` in the interactive session, which FSAPI needs.
 - **Timeouts.** `--timeout` defaults to 30 s; a cut-off scenario run leaves its fixture app and
-  `okur trace` running. Use `--timeout 900` for one scenario. Run anything longer detached
+  `okur-lab trace` running. Use `--timeout 900` for one scenario. Run anything longer detached
   (`Start-Process` of `run-batch.ps1`) and poll its `batch.log`.
 - **Paths from Git Bash.** Use forward slashes (`C:/Users/ailabs/...`): backslashes before
   `$var` inside double quotes are mangled.
@@ -93,17 +96,17 @@ opendesk exec --peer old-pc --timeout 20 "Get-Date -Format HH:mm:ss"
 - **Before recording:**
   - close stray Notepad, Chrome and Explorer windows;
   - minimize the JAWS window if it is in front (it took the foreground in trial 1 of 207);
-  - clear stray `okur trace` processes.
+  - clear stray `okur-lab trace` processes.
 
 ## 4. The lifecycle of one feature
 
 ### 4.1 Discover
 Sources, in order of trust:
 1. **The user's reports.** Live usability gaps come first.
-2. **Recorded evidence:** `okur evidence <scenario> [--trace]`.
+2. **Recorded evidence:** `okur-lab evidence <scenario> [--trace]`.
 3. **JAWS's help and manual:** `JFW.chm` and the keystroke lists. Text copies were kept in a
    session scratchpad and are not in the repo; extract them again from old-pc's JAWS install.
-4. **JAWS's own behavior,** observed quickly with `okur keys` and `okur jaws-history` (§7).
+4. **JAWS's own behavior,** observed quickly with `okur-lab keys` and `okur-lab jaws-history` (§7).
 
 Write down what JAWS should say before writing code.
 
@@ -125,8 +128,8 @@ Write down what JAWS should say before writing code.
 2. **Stage pending scenarios.** Move them into `corpus/scenarios/` and their fixtures into
    `corpus/fixtures/` in the working tree. The deploy sends only those folders.
 3. **Deploy:** `bash skills/jaws-reference/scripts/lab-deploy.sh` (`--okur <exe>` for another
-   build, `--recorder`/`--recorder32` for a new recorder build). It installs `okur.exe`, the
-   skill's scripts, fixtures and scenarios straight into place with `opendesk push` (OpenDesk
+   build, `--recorder`/`--recorder32` for a new recorder build). It installs `okur.exe` and `okur-lab.exe`,
+   the skill's scripts, fixtures and scenarios straight into place with `opendesk push` (OpenDesk
    0.3, 2026-10-18), which checks each file's SHA-256 and replaces the destination only once the
    whole file arrived. Files already installed with the same hash are not sent; a second run
    prints "0 file(s) sent". Since it compares every file, it also keeps the skill copy in sync.
@@ -165,11 +168,11 @@ Write down what JAWS should say before writing code.
    `corpus/traces/` (snapshots into `corpus/snapshots/`).
 2. **Check the capture-script hash.** `provenance.capture_script_sha256` must match the local
    `run-scenario.ps1`.
-3. **Read it** with `okur evidence NNN --trace`, which lists each step's JAWS speech, its
+3. **Read it** with `okur-lab evidence NNN --trace`, which lists each step's JAWS speech, its
    variants, and the events traced meanwhile.
 4. **Regenerate the generated files, never edit them:**
-   - `okur corpus-manifest --write`;
-   - `okur parity --write-baseline` and `okur invariants --write-baseline` when the numbers
+   - `okur-lab corpus-manifest --write`;
+   - `okur-lab parity --write-baseline` and `okur-lab invariants --write-baseline` when the numbers
      change for a reason you state.
 5. **Commit separately.** Evidence, traces and snapshots go in a commit of their own (`corpus:
    scenario NNN ...`): the pre-commit gate rejects evidence and engine code together.
@@ -184,9 +187,9 @@ Write down what JAWS should say before writing code.
 - **Known gaps** become `#[ignore = "known gap: ..."]` tests that assert JAWS's behavior.
 
 ### 4.7 Prove
-1. `okur parity`. Its two lines are the spoken layer ("JAWS spoken parity: X/Y") and the
+1. `okur-lab parity`. Its two lines are the spoken layer ("JAWS spoken parity: X/Y") and the
    history layer ("JAWS parity (Ia2): X/Y"); `--spoken` lists spoken-layer differences.
-2. `okur parity --api uia` and `okur invariants`.
+2. `okur-lab parity --api uia` and `okur-lab invariants`.
 3. **Live** on old-pc, or on the dev box when allowed (§7):
    `okur run --engine no-speech --speech-log <f> --debug-log <f>`. The debug log has every
    key, event, edit read, and any "slow event read" with its stages.
@@ -210,15 +213,15 @@ Write down what JAWS should say before writing code.
 
 | Tool | What it does |
 |---|---|
-| `okur parity [--spoken] [--api uia] [--write-baseline]` | Replays every recorded scenario through the engine (traces, snapshots, settings, clock) and compares with JAWS on both layers |
-| `okur evidence <id> [--trial N] [--trace]` | Readable evidence: steps, JAWS speech, variants, traced events |
-| `okur invariants`, `okur corpus-manifest [--write]` | Buffer invariants; the corpus manifest |
-| `okur trace --out <f>` | Records accessibility events (format 7: focus chains, UIA focus and selection events, captions, dialog layouts, text and fonts) |
-| `okur snapshot --api ia2\|uia` | A page's accessibility tree |
+| `okur-lab parity [--spoken] [--api uia] [--write-baseline]` | Replays every recorded scenario through the engine (traces, snapshots, settings, clock) and compares with JAWS on both layers |
+| `okur-lab evidence <id> [--trial N] [--trace]` | Readable evidence: steps, JAWS speech, variants, traced events |
+| `okur-lab invariants`, `okur-lab corpus-manifest [--write]` | Buffer invariants; the corpus manifest |
+| `okur-lab trace --out <f>` | Records accessibility events (format 7: focus chains, UIA focus and selection events, captions, dialog layouts, text and fonts) |
+| `okur-lab snapshot --api ia2\|uia` | A page's accessibility tree |
 | `okur run [--engine onecore\|sapi5\|no-speech] [--keyboard-layout laptop] [--speech-log] [--debug-log]` | The live screen reader |
-| `okur keys --allow <processes> [--title <text>] <steps>` | Sends scan-coded chords ("Insert+Alt+W", "down:Alt", "wait:500"), each only while an allowed application (and, with `--title`, a window whose title contains the text) is in front |
-| `okur jaws-history [--clear]` | JAWS's speech history through FSAPI; the clipboard's text is put back |
-| `okur wait-silence`, `okur speak`, `okur voices` | Audio settling, speech checks |
+| `okur-lab keys --allow <processes> [--title <text>] <steps>` | Sends scan-coded chords ("Insert+Alt+W", "down:Alt", "wait:500"), each only while an allowed application (and, with `--title`, a window whose title contains the text) is in front |
+| `okur-lab jaws-history [--clear]` | JAWS's speech history through FSAPI; the clipboard's text is put back |
+| `okur-lab wait-silence`, `okur-lab speak`, `okur voices` | Audio settling, speech checks |
 | `run-scenario.ps1`, `run-batch.ps1` | Recording on old-pc (skill workflows D, G) |
 | `lab-deploy.sh`, `lab-fetch.sh` | Hash-verified deployment to old-pc and fetching from it, through `opendesk push`/`pull` |
 | `lab-push.ps1`, `lab-pull.ps1` | The same through Dropbox (fallback) |
@@ -238,7 +241,7 @@ Write down what JAWS should say before writing code.
   `observation.audio_without_text` set, and `spoken` shows what was said. Okur speaks them
   through `SpeechOutput::speak_character`, which keeps the same split. "blank" for an empty
   field's value on focus (F, E, Tab) is in the history.
-- **Variants.** Trials can differ (focus races, Chrome timing); `okur evidence` lists each
+- **Variants.** Trials can differ (focus races, Chrome timing); `okur-lab evidence` lists each
   variant. Parity accepts any recorded variant.
 - **Contamination.** A step whose history includes the copy confirmation or a Windows
   notification fails as contaminated; never trim it.
@@ -251,7 +254,7 @@ the morning. This is how it was done; it needs fresh permission each time.
 - **Never stop, restart or reconfigure the user's JAWS** unless they say so for that occasion
   (on 2026-10-15 they allowed exiting it). They depend on it.
 - **Keys:**
-  - send them only with `okur keys --allow <process>`, never into the Claude window or a
+  - send them only with `okur-lab keys --allow <process>`, never into the Claude window or a
     window of the user's. Add `--title <text>` when one process owns the user's windows and
     yours (Windows Terminal runs every terminal window in one process);
   - the dev box's keyboard layout is Turkish Q: keys are sent by position, so the `I` key types
@@ -262,7 +265,7 @@ the morning. This is how it was done; it needs fresh permission each time.
   - undo what you change (Win+Shift+M after Win+M; restore and save a test file you edited);
   - close every window you opened, checking its title first: Alt+F4 with the desktop in front
     opens the shutdown dialog.
-- **JAWS's speech:** read it with `okur jaws-history --clear`, which restores the clipboard.
+- **JAWS's speech:** read it with `okur-lab jaws-history --clear`, which restores the clipboard.
   Do not read the user's conversations, for example JAWS reading the Claude window.
 - **Ours:** run `okur run --engine no-speech ...` and stop it after each check: it reads
   whatever is in front.
@@ -283,7 +286,7 @@ the morning. This is how it was done; it needs fresh permission each time.
     `dwExtraInfo` (0x45789400 on the dev box), usually within 5 ms, but 230 ms for Ctrl+Home.
     Okur's hook skips these copies; older debug logs show every such key twice.
   - Test pages and web apps go in a Chrome with its own `--user-data-dir` in the scratchpad,
-    never in the user's Chrome. Bring a test window forward with `okur front <title>`. A
+    never in the user's Chrome. Bring a test window forward with `okur-lab front <title>`. A
     mouse click on a Chrome window not in front only activates it.
 
 ## 8. Pitfalls already paid for
@@ -306,7 +309,7 @@ the morning. This is how it was done; it needs fresh permission each time.
   2026-10-17). JAWS runs elevated: while its dialog is in front, Windows drops our key-ups
   and hides the key state from us. Shift stayed down for every application after
   Ctrl+Shift+Insert+Down opened Skim Reading: the next Escape opened Chrome's Task Manager,
-  Insert+F5 reloaded the page, and Ctrl+Right selected words. `okur keys` now sends a chord in
+  Insert+F5 reloaded the page, and Ctrl+Right selected words. `okur-lab keys` now sends a chord in
   one batch, releases keys left down before its first step, and says when a higher window
   hides the key state. If keys act strangely after a JAWS dialog, suspect this first.
 - **Okur beside JAWS: keys Okur passes on can still be JAWS's** (dev box, 2026-10-17). JAWS

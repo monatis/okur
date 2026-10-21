@@ -1,5 +1,5 @@
-//! Harness tools for live checks on a machine the user lets the agent drive (`okur keys`,
-//! `okur jaws-history`): key chords sent only while an allowed application is in front,
+//! Harness tools for live checks on a machine the user lets the agent drive (`okur-lab keys`,
+//! `okur-lab jaws-history`): key chords sent only while an allowed application is in front,
 //! so a key never lands in another window, and JAWS's speech history read through its
 //! FSAPI COM object with the user's clipboard put back afterwards.
 
@@ -461,7 +461,7 @@ mod windows_harness {
         if foreground_is_higher() {
             eprintln!(
                 "note: {:?} runs at a higher integrity level, so Windows hides the key state; \
-                 the next `okur keys` with a normal window in front releases any key left down",
+                 the next `okur-lab keys` with a normal window in front releases any key left down",
                 foreground_title()
             );
             return Ok(());

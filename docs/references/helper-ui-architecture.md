@@ -123,8 +123,8 @@ From what JAWS does, what Okur must be, and what was measured on 2026-10-17:
 
 - **Isolation.** A crash or a hang in window code cannot take speech with it.
 - **Integrity.** Okur will run with UIAccess; `okur-ui` runs as a normal process. The
-  privileged process keeps its surface small, and our harness (`okur snapshot`,
-  `okur window-text`) can read Okur's dialogs, as it cannot read JAWS's.
+  privileged process keeps its surface small, and our harness (`okur-lab snapshot`,
+  `okur-lab window-text`) can read Okur's dialogs, as it cannot read JAWS's.
 - **No reading of one's own process.** Okur reads its dialogs from outside, like any other
   application's. That avoids the special cases of a process reading itself: WinEvent hooks
   that skip their own process, and macOS's accessibility calls answered on the main thread.
@@ -156,7 +156,7 @@ its window is above other topmost windows, as JAWS's is.
 - **Activation.**
   - Windows: Okur allows `okur-ui` to take the foreground (`AllowSetForegroundWindow`) before
     asking it to show a dialog. That needs Okur to hold foreground rights itself, which
-    UIAccess gives. Until then, the thread-input method that `okur front` uses.
+    UIAccess gives. Until then, the thread-input method that `okur-lab front` uses.
   - macOS: a non-activating panel that becomes the key window, so the browser stays the
     active application.
 - **Settings.** A typed registry in okur-core: each setting's id, group, label, values,
@@ -178,7 +178,7 @@ its window is above other topmost windows, as JAWS's is.
    for its dialogs (old-pc scenarios). So dialog parity is measured hermetically, through the
    same reading code as any application.
 3. **Conformance**, live and `#[ignore]`d: render a description with the real renderer,
-   snapshot it with UI Automation (`okur snapshot`), and compare with the mock projection.
+   snapshot it with UI Automation (`okur-lab snapshot`), and compare with the mock projection.
    The two must agree, or the hermetic results mean nothing.
 4. **Overlay.** The rectangles are computed and tested in core; the drawing is checked live
    with screenshots.

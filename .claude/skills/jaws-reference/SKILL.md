@@ -35,7 +35,7 @@ opendesk exec --peer old-pc --timeout 120 "powershell -NoProfile -ExecutionPolic
 `opendesk exec` runs as `ailabs` in the interactive session, which FSAPI requires.
 
 `opendesk exec` stops waiting after `--timeout` seconds (default **30**). A scenario run is
-cut off mid-trial, which leaves its fixture app and `okur trace` running on `old-pc`. Pass
+cut off mid-trial, which leaves its fixture app and `okur-lab trace` running on `old-pc`. Pass
 `--timeout 900` for single runs. For anything longer, use an OpenDesk background job (MCP
 `opendesk_exec` with `background: true`, then `opendesk_job` with `poll` and `wait_ms`), which
 holds no connection while it runs.
@@ -58,7 +58,7 @@ CARGO_TARGET_DIR=target/agent cargo build --release --bin okur
 bash skills/jaws-reference/scripts/lab-deploy.sh            # --okur, --recorder, --recorder32
 ```
 
-It sends `bin/okur.exe`, the skill's scripts, `corpus/fixtures` and `corpus/scenarios`, skipping
+It sends `bin/okur.exe` and `bin/okur-lab.exe`, the skill's scripts, `corpus/fixtures` and `corpus/scenarios`, skipping
 files already installed with the same hash. The Dropbox pair (`lab-push.ps1`, then `lab-pull.ps1
 -PushId <id>` on old-pc) stays as a fallback; its `-PushId` is mandatory. After recording, check
 the evidence's `provenance.capture_script_sha256` against your local `run-scenario.ps1` before
@@ -82,5 +82,5 @@ copy one file, verified by SHA-256 (MCP: `opendesk_file`). `lab-fetch.sh <remote
 dir>` pulls a whole folder (evidence, traces, snapshots), skipping files already there. Copy
 what it fetched into `corpus/` unmodified.
 
-After copying evidence into `corpus/evidence/`, register it with `okur corpus-manifest --write`
+After copying evidence into `corpus/evidence/`, register it with `okur-lab corpus-manifest --write`
 (the pre-commit gate rejects unregistered scenarios or mismatched counts).

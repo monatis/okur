@@ -40,7 +40,7 @@ fn reader(file: &Value) -> Option<&str> {
 }
 
 /// Compares the first successful trial of Okur's live `run` with JAWS's `evidence` of the same
-/// scenario, step by step, as `okur parity` compares (whitespace normalized, any recorded
+/// scenario, step by step, as `okur-lab parity` compares (whitespace normalized, any recorded
 /// variant). A run without one is compared by its first trial: a step that did not settle (a
 /// long reading at Okur's slower rate) fails the trial but still says what Okur said.
 pub fn compare(run: &Value, evidence: &Value) -> Result<Vec<LiveStep>, String> {

@@ -5,7 +5,10 @@ param(
     [int]$Repetitions = 5,
     [string]$OutputPath,
     [string]$TargetProcess,
+    # The screen reader, for a live run of Okur (-Reader okur).
     [string]$Okur = (Join-Path $env:USERPROFILE "sr-harness\bin\okur.exe"),
+    # The harness's own program: the tracer, wait-silence, focus, reference-settings.
+    [string]$OkurLab = (Join-Path $env:USERPROFILE "sr-harness\bin\okur-lab.exe"),
     # When set, each trial records an accessibility event trace (okur trace) to
     # <TraceDir>\<scenario-id>-trial<N>.jsonl, aligned with steps by unix-ms timestamps.
     [string]$TraceDir,
@@ -323,7 +326,7 @@ if ($Reader -eq 'okur') {
     # made anew for every run.
     $okurSettings = Join-Path $env:TEMP 'okur-live-settings'
     Remove-Item -Recurse -Force $okurSettings -ErrorAction SilentlyContinue
-    & $Okur reference-settings $okurSettings | Out-Null
+    & $OkurLab reference-settings $okurSettings | Out-Null
     Invoke-JawsProcess -Stop
     $okurArgs = @(
         'run', '--settings', "`"$okurSettings`"", '--speech-log', "`"$OkurSpeechLog`"",
@@ -371,7 +374,7 @@ $CopyConfirmation = 'Copy speech history to clipboard'
 # Blocks until JAWS's audio output is silent (okur wait-silence on the default endpoint;
 # JAWS is the only audio source on the reference machine). Returns the parsed SilenceReport.
 function Wait-Silence([int]$OnsetMs = 800, [int]$QuietMs = 500, [int]$MaxMs = 4000) {
-    $out = & $Okur wait-silence --onset-ms $OnsetMs --quiet-ms $QuietMs --max-ms $MaxMs
+    $out = & $OkurLab wait-silence --onset-ms $OnsetMs --quiet-ms $QuietMs --max-ms $MaxMs
     if ($LASTEXITCODE -ne 0) { throw "okur wait-silence failed: $out" }
     return ($out | Select-Object -Last 1 | ConvertFrom-Json)
 }
@@ -630,6 +633,8 @@ $evidence = [ordered]@{
         jaws_settings = $jawsSettings
         reader = $Reader
         okur_sha256 = if ($Reader -eq 'okur') { Get-Sha256 $Okur } else { $null }
+        # The harness's program: the tracer, wait-silence and the page focus check.
+        okur_lab_sha256 = if (Test-Path -LiteralPath $OkurLab) { Get-Sha256 $OkurLab } else { $null }
         # The tracer runs elevated, so it sees JAWS's own windows whole.
         trace_elevated = $true
     }
@@ -797,7 +802,7 @@ function Restart-LabPage {
     Start-Sleep -Seconds 3
     Focus-Target 'chrome'
     for ($f = 0; $f -lt 4; $f++) {
-        if ((& $Okur focus | Select-Object -Last 1 | ConvertFrom-Json).in_document) { break }
+        if ((& $OkurLab focus | Select-Object -Last 1 | ConvertFrom-Json).in_document) { break }
         [void](Send-Chord "F6"); Start-Sleep -Milliseconds 500
     }
     [void](Wait-Silence -OnsetMs 1500 -QuietMs 700 -MaxMs 10000)
@@ -843,7 +848,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         # round 23). old-pc elevates without asking.
         $traceArgs = @('trace', '--out', $tracePath, '--stop-file', $traceStop)
         if ($TraceTimings) { $traceArgs += @('--debug-log', (Join-Path $TraceDir "$scenarioId-trial$t.log")) }
-        $traceProc = Start-Process -FilePath $Okur -ArgumentList $traceArgs -WindowStyle Hidden -PassThru -Verb RunAs
+        $traceProc = Start-Process -FilePath $OkurLab -ArgumentList $traceArgs -WindowStyle Hidden -PassThru -Verb RunAs
         Start-Sleep -Milliseconds 400
         $trialResult.trace_file = Split-Path -Leaf $tracePath
     }
@@ -871,7 +876,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         if ($targetProc -eq 'chrome') {
             $pageFocus = $null
             for ($f = 0; $f -lt 4; $f++) {
-                $pageFocus = (& $Okur focus | Select-Object -Last 1 | ConvertFrom-Json)
+                $pageFocus = (& $OkurLab focus | Select-Object -Last 1 | ConvertFrom-Json)
                 if ($pageFocus.in_document) { break }
                 Focus-Target $targetProc
                 [void](Send-Chord "F6"); Start-Sleep -Milliseconds 500

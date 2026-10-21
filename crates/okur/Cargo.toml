@@ -12,8 +12,9 @@ build = "build.rs"
 name = "okur"
 path = "src/lib.rs"
 
-# The developer's command line: `okur run`, `parity`, `snapshot`, `doctor`, ... A console
-# program without UI Access, which runs from `target\` and from the lab's folders.
+# The screen reader's command line: `okur run`, `quit`, `doctor`, `voices`. A console program
+# without UI Access, which runs from `target\` and from the lab's folders. The verification
+# harness's commands are `okur-lab`'s (crates/okur-lab), not this program's.
 [[bin]]
 name = "okur"
 path = "src/main.rs"
@@ -36,19 +37,9 @@ path = "src/bin/okur-sr-no-uiaccess.rs"
 test = false
 bench = false
 
-# The reference machine's key sender, with UI Access, for keys into JAWS's own dialogs: a
-# harness tool, never installed for users; like okur-sr, it starts only signed and under
-# Program Files.
-[[bin]]
-name = "okur-lab-keys"
-path = "src/bin/okur-lab-keys.rs"
-test = false
-bench = false
-
 [dependencies]
 okur-core = { workspace = true }
 okur-platform = { workspace = true }
-okur-corpus = { workspace = true }
 clap = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }

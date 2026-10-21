@@ -1289,7 +1289,7 @@ pub(crate) mod capture {
     /// …" [obs, 511/s4]). Windows 11 draws its taskbar in XAML: `TrayNotifyWnd` is empty, and
     /// the icons are the taskbar's buttons of the `SystemTray.` classes ("Show Hidden Icons",
     /// the icons shown, "Tray Input Indicator …", "Network …", "Volume …", "Power …", "Clock
-    /// …"; `okur tray --dump` on the dev box, 2026-10-20). The Show Desktop button, at the
+    /// …"; `okur-lab tray --dump` on the dev box, 2026-10-20). The Show Desktop button, at the
     /// end, is not an icon: JAWS's list of six leaves it out. A name of several lines is said
     /// as one (an application's tooltip of a name and a status line), without direction marks
     /// (the clock's date).
