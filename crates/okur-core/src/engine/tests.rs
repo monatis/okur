@@ -1192,6 +1192,65 @@ fn a_temporary_placemarker_is_set_and_found_with_k() {
     assert_eq!(key(&mut engine, 'K', shift), found);
 }
 
+/// A saved PlaceMarker of the page is found with K where its line is now, and K says its line
+/// [obs, 702/s11, s12]; another page's is not offered.
+#[test]
+fn k_finds_a_saved_placemarker_of_the_page() {
+    use crate::placemarkers::{PlaceMarker, PlaceMarkers};
+    let url = "file:///C:/corpus/fixtures/placemarkers.html";
+    let mut page = AomNode::new(0, Role::Document).with_children(vec![
+        AomNode::new(1, Role::Heading { level: 2 }).with_text("Food and drink"),
+        AomNode::new(2, Role::Paragraph).with_text("Water in a closed bottle is allowed."),
+        AomNode::new(3, Role::Paragraph).with_text("Phones stay silent."),
+    ]);
+    page.attributes.insert("url".to_owned(), url.to_owned());
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(speech.clone()),
+    );
+    let mut markers = PlaceMarkers::default();
+    // Saved where the line was on an earlier visit.
+    markers.add(
+        url,
+        PlaceMarker {
+            name: "Water in a closed bottle is allowed.".to_owned(),
+            offset: 3,
+            line: "Water in a closed bottle is allowed.".to_owned(),
+            domain: false,
+        },
+    );
+    markers.add(
+        "file:///C:/corpus/fixtures/other.html",
+        PlaceMarker {
+            name: "Elsewhere".to_owned(),
+            offset: 0,
+            line: "Phones stay silent.".to_owned(),
+            domain: false,
+        },
+    );
+    engine.set_placemarkers(markers, None);
+    engine.cursor.move_to_start();
+    let k = |engine: &mut ScreenReaderEngine, shift: bool| {
+        let _ = speech.take();
+        let modifiers = Modifiers {
+            shift,
+            ..Modifiers::none()
+        };
+        engine.handle_key_event(&KeyEvent::new(Key::Alpha('K'), modifiers, true));
+        speech.take().join("\n")
+    };
+    assert_eq!(
+        k(&mut engine, false),
+        "Water in a closed bottle is allowed."
+    );
+    assert_eq!(
+        k(&mut engine, false),
+        "Water in a closed bottle is allowed."
+    );
+    assert_eq!(k(&mut engine, true), "Water in a closed bottle is allowed.");
+}
+
 /// A page's field has its text's colors. With the virtual cursor: another field's as the page
 /// shows them ("navy on yellow"), "default on default" while it is empty, the focused field's
 /// as typed in; in forms mode the colors at the caret, an empty field's too [obs, 662/s2, s5,

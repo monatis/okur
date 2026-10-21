@@ -18,6 +18,7 @@ pub mod linearize;
 pub mod live_text;
 pub mod messages;
 pub mod native_focus;
+pub mod placemarkers;
 pub mod pronounce;
 pub mod retire;
 pub mod settings;

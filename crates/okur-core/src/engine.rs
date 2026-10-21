@@ -152,6 +152,9 @@ pub struct ScreenReaderEngine {
     last_key_escapes: bool,
     /// Each page's temporary PlaceMarker (Ctrl+Windows+K), by its address, for the session.
     temp_placemarkers: std::collections::HashMap<String, usize>,
+    /// The PlaceMarkers saved (Ctrl+Shift+K), and where they are kept.
+    placemarkers: crate::placemarkers::PlaceMarkers,
+    placemarker_store: Option<Box<dyn crate::placemarkers::PlaceMarkerStore>>,
     /// The custom labels (Insert+Ctrl+Tab), and where they are kept.
     custom_labels: crate::labels::CustomLabels,
     label_store: Option<Box<dyn crate::labels::LabelStore>>,
@@ -330,6 +333,8 @@ impl ScreenReaderEngine {
             last_key_tabs: false,
             last_key_escapes: false,
             temp_placemarkers: std::collections::HashMap::new(),
+            placemarkers: crate::placemarkers::PlaceMarkers::default(),
+            placemarker_store: None,
             custom_labels: crate::labels::CustomLabels::default(),
             label_store: None,
             label_dialog: None,

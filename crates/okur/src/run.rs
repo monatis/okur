@@ -543,6 +543,7 @@ pub async fn run(config: RunConfig) {
     // labels.
     if let Some(folder) = settings_folder {
         engine.set_custom_labels(folder.load_labels(), Some(Box::new(folder.clone())));
+        engine.set_placemarkers(folder.load_placemarkers(), Some(Box::new(folder.clone())));
         engine.set_settings_store(Box::new(folder));
     }
     // Say System Time (Insert+F12) in the user's locale formats.

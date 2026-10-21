@@ -149,40 +149,66 @@ impl SettingsStore for SettingsFolder {
 
 /// The custom labels' file: a table per site (or page), each element's label in it.
 const LABELS: &str = "labels.toml";
+/// The saved PlaceMarkers' file: a list per page address.
+const PLACEMARKERS: &str = "placemarkers.toml";
 
 impl SettingsFolder {
     /// The custom labels kept (Insert+Ctrl+Tab). A missing or unreadable file is none, the
     /// second logged.
     pub fn load_labels(&self) -> okur_core::labels::CustomLabels {
-        let path = self.folder.join(LABELS);
+        self.load_own(LABELS)
+    }
+
+    /// The PlaceMarkers saved (Ctrl+Shift+K), as [`Self::load_labels`].
+    pub fn load_placemarkers(&self) -> okur_core::placemarkers::PlaceMarkers {
+        self.load_own(PLACEMARKERS)
+    }
+
+    /// One of the files Okur writes itself; none when missing or unreadable (logged).
+    fn load_own<T: serde::de::DeserializeOwned + Default>(&self, name: &str) -> T {
+        let path = self.folder.join(name);
         let Ok(text) = std::fs::read_to_string(&path) else {
-            return okur_core::labels::CustomLabels::default();
+            return T::default();
         };
         toml::from_str(&text)
-            .map_err(|e| tracing::warn!(?path, error = %e, "labels file not read"))
+            .map_err(|e| tracing::warn!(?path, error = %e, "file not read"))
             .unwrap_or_default()
+    }
+
+    /// Writes one of Okur's own files whole, through a temporary one: they are Okur's to
+    /// write, `header` their comment.
+    fn save_own<T: serde::Serialize>(&self, name: &str, header: &str, value: &T) {
+        let write = || -> std::io::Result<()> {
+            let text = toml::to_string(value).map_err(std::io::Error::other)?;
+            std::fs::create_dir_all(&self.folder)?;
+            let path = self.folder.join(name);
+            let temporary = path.with_extension("toml.tmp");
+            std::fs::write(&temporary, format!("# {header}\n{text}"))?;
+            std::fs::rename(&temporary, path)
+        };
+        if let Err(e) = write() {
+            tracing::warn!(folder = ?self.folder, file = name, error = %e, "not saved");
+        }
     }
 }
 
 impl okur_core::labels::LabelStore for SettingsFolder {
-    /// The whole file, written through a temporary one: the labels are Okur's to write.
     fn save(&self, labels: &okur_core::labels::CustomLabels) {
-        let write = || -> std::io::Result<()> {
-            let text = toml::to_string(labels).map_err(std::io::Error::other)?;
-            std::fs::create_dir_all(&self.folder)?;
-            let path = self.folder.join(LABELS);
-            let temporary = path.with_extension("toml.tmp");
-            std::fs::write(
-                &temporary,
-                format!(
-                    "# Okur's custom labels (Insert+Ctrl+Tab), by site, then by element.\n{text}"
-                ),
-            )?;
-            std::fs::rename(&temporary, path)
-        };
-        if let Err(e) = write() {
-            tracing::warn!(folder = ?self.folder, error = %e, "labels not saved");
-        }
+        self.save_own(
+            LABELS,
+            "Okur's custom labels (Insert+Ctrl+Tab), by site, then by element.",
+            labels,
+        );
+    }
+}
+
+impl okur_core::placemarkers::PlaceMarkerStore for SettingsFolder {
+    fn save(&self, markers: &okur_core::placemarkers::PlaceMarkers) {
+        self.save_own(
+            PLACEMARKERS,
+            "Okur's saved PlaceMarkers (Ctrl+Shift+K), by page address.",
+            markers,
+        );
     }
 }
 
@@ -416,6 +442,29 @@ mod tests {
             .insert("id pickup-branch".into(), "lamp".into());
         LabelStore::save(&files, &labels);
         assert_eq!(files.load_labels(), labels);
+        let _ = std::fs::remove_dir_all(&root);
+    }
+
+    /// Saved PlaceMarkers are kept in placemarkers.toml and read back the same.
+    #[test]
+    fn placemarkers_survive_a_save() {
+        use okur_core::placemarkers::{PlaceMarker, PlaceMarkerStore, PlaceMarkers};
+        let root = folder("placemarkers");
+        let files = SettingsFolder::at(&root);
+        assert_eq!(files.load_placemarkers(), PlaceMarkers::default());
+        let mut markers = PlaceMarkers::default();
+        markers.add(
+            "file:///C:/corpus/fixtures/placemarkers.html",
+            PlaceMarker {
+                name: "Water in a closed bottle".into(),
+                offset: 120,
+                line: "Water in a closed bottle is allowed; meals are not.".into(),
+                domain: false,
+            },
+        );
+        PlaceMarkerStore::save(&files, &markers);
+        assert!(root.join("placemarkers.toml").exists());
+        assert_eq!(files.load_placemarkers(), markers);
         let _ = std::fs::remove_dir_all(&root);
     }
 
