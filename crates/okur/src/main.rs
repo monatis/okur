@@ -69,9 +69,14 @@ enum Commands {
         #[arg(long)]
         live_region_whole_text: bool,
 
-        /// Typing echo: characters (as JAWS's default) or none (JAWS's TypingEcho=0)
+        /// Typing echo: characters (as JAWS's default), words, both or none
         #[arg(long)]
         typing_echo: Option<String>,
+
+        /// Any setting, by its name in the settings file: --set typing_echo=words, --set
+        /// voice.punctuation=all (repeatable)
+        #[arg(long = "set", value_name = "ID=VALUE")]
+        set: Vec<String>,
 
         /// The settings folder to read and save instead of the user's own, so that a test run
         /// never changes the user's settings
@@ -124,6 +129,7 @@ async fn main() {
             okur_key,
             live_region_whole_text,
             typing_echo,
+            set,
             settings: settings_folder,
         }) => {
             // The live screen reader, as `okur-sr.exe` runs it, with this console.
@@ -137,6 +143,7 @@ async fn main() {
                     okur_key,
                     live_region_whole_text,
                     typing_echo,
+                    set,
                 },
                 fixture,
                 speech_log,

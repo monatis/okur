@@ -1,62 +1,18 @@
 //! The settings dialog (Insert+V, Insert+6): every setting Okur has, in one dialog, until
-//! there are enough for JAWS's Quick Settings and Settings Center. It keeps a draft of the
+//! there are enough for JAWS's Quick Settings and Settings Center. Its controls are the
+//! settings table's ([`crate::settings::registry`]), group by group. It keeps a draft of the
 //! settings as the user changes them; Apply and OK make the draft Okur's settings, Cancel
 //! drops what was not applied.
 
 use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
 
 use crate::messages::{msg, StaticMessage};
-use crate::settings::{
-    KeyboardLayout, KeyboardSettings, LiveRegionAppend, OkurKey, Punctuation, SayAllUnit, Settings,
-    Synthesizer, TypingEcho, VerbosityLevel, ViewerDisplay,
-};
+use crate::settings::registry::{self, Group, Kind, SettingSpec, SETTINGS};
+use crate::settings::Settings;
 use crate::settings_layers::Scope;
 
-/// A choice's label in the catalog.
-type Label = fn() -> StaticMessage;
-
-const SYNTHESIZERS: [(Synthesizer, Label); 4] = [
-    (Synthesizer::Auto, msg::settings_synthesizer_automatic),
-    (Synthesizer::OneCore, msg::settings_synthesizer_onecore),
-    (Synthesizer::Sapi5, msg::settings_synthesizer_sapi5),
-    (Synthesizer::NoSpeech, msg::settings_synthesizer_none),
-];
-const LAYOUTS: [(KeyboardLayout, Label); 2] = [
-    (KeyboardLayout::Desktop, msg::settings_layout_desktop),
-    (KeyboardLayout::Laptop, msg::settings_layout_laptop),
-];
-const OKUR_KEYS: [(OkurKey, Label); 3] = [
-    (OkurKey::Insert, msg::settings_okur_key_insert),
-    (OkurKey::CapsLock, msg::settings_okur_key_caps_lock),
-    (OkurKey::ScrollLock, msg::settings_okur_key_scroll_lock),
-];
-/// JAWS's punctuation levels, as Voice Adjustment lists them.
-const PUNCTUATIONS: [(Punctuation, Label); 4] = [
-    (Punctuation::None, msg::punctuation_none),
-    (Punctuation::Some, msg::punctuation_some),
-    (Punctuation::Most, msg::punctuation_most),
-    (Punctuation::All, msg::punctuation_all),
-];
-/// JAWS's names for its typing echo choices (Settings Center, User).
-const ECHOES: [(TypingEcho, Label); 2] = [
-    (TypingEcho::None, msg::settings_typing_echo_off),
-    (TypingEcho::Characters, msg::settings_typing_echo_characters),
-];
-/// JAWS's Say All Reads choices (Settings Center, Say All).
-const SAY_ALL_UNITS: [(SayAllUnit, Label); 3] = [
-    (SayAllUnit::Line, msg::settings_say_all_unit_line),
-    (SayAllUnit::Sentence, msg::settings_say_all_unit_sentence),
-    (SayAllUnit::Paragraph, msg::settings_say_all_unit_paragraph),
-];
-/// JAWS's user verbosity levels.
-const LEVELS: [(VerbosityLevel, Label); 3] = [
-    (VerbosityLevel::Beginner, msg::settings_verbosity_beginner),
-    (
-        VerbosityLevel::Intermediate,
-        msg::settings_verbosity_intermediate,
-    ),
-    (VerbosityLevel::Advanced, msg::settings_verbosity_advanced),
-];
+/// A setting's value, as the settings file writes it.
+type Json = serde_json::Value;
 
 /// What the engine does after the dialog handled an event.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -100,18 +56,6 @@ pub struct SettingsDialog {
     voices: Vec<String>,
 }
 
-fn position<T: PartialEq + Copy, const N: usize>(table: &[(T, Label); N], value: T) -> usize {
-    table.iter().position(|(v, _)| *v == value).unwrap_or(0)
-}
-
-fn names<T, const N: usize>(table: &[(T, Label); N]) -> Vec<String> {
-    table.iter().map(|(_, name)| name().to_string()).collect()
-}
-
-fn pick<T: Copy, const N: usize>(table: &[(T, Label); N], index: usize) -> Option<T> {
-    table.get(index).map(|(v, _)| *v)
-}
-
 fn control(id: &str, label: StaticMessage, kind: ControlKind) -> Control {
     Control {
         id: id.to_owned(),
@@ -119,6 +63,13 @@ fn control(id: &str, label: StaticMessage, kind: ControlKind) -> Control {
         kind,
         enabled: true,
     }
+}
+
+/// The settings the dialog shows: those with a label.
+fn shown_settings() -> impl Iterator<Item = (&'static SettingSpec, StaticMessage)> {
+    SETTINGS
+        .iter()
+        .filter_map(|spec| spec.label.map(|label| (spec, label())))
 }
 
 impl SettingsDialog {
@@ -147,6 +98,13 @@ impl SettingsDialog {
             .unwrap_or_default()
     }
 
+    /// Where the place shown keeps its settings.
+    fn scope(&self) -> Scope {
+        self.places
+            .get(self.place)
+            .map_or(Scope::Global, |p| p.scope.clone())
+    }
+
     /// Every control's value, as the dialog is to show it.
     fn values(&self) -> Vec<ToUi> {
         self.spec()
@@ -169,6 +127,18 @@ impl SettingsDialog {
             .collect()
     }
 
+    /// Which settings the place shown can keep: the others' controls are dimmed.
+    fn enabling(&self) -> Vec<ToUi> {
+        let scope = self.scope();
+        shown_settings()
+            .map(|(spec, _)| ToUi::DialogEnable {
+                id: self.id,
+                control: spec.id.to_owned(),
+                enabled: spec.scopes.allows(&scope),
+            })
+            .collect()
+    }
+
     /// The settings as the dialog shows them now.
     pub fn draft(&self) -> &Settings {
         &self.draft
@@ -180,140 +150,91 @@ impl SettingsDialog {
             .collect()
     }
 
-    /// The dialog's description, with the draft's values.
+    /// A setting's control, with the draft's value; none for a setting the dialog cannot show.
+    fn setting_control(
+        &self,
+        spec: &SettingSpec,
+        label: StaticMessage,
+        scope: &Scope,
+    ) -> Option<Control> {
+        let value = registry::get(&self.draft, spec.id).unwrap_or(Json::Null);
+        let kind = match spec.kind {
+            Kind::Choice(choices) => {
+                let choices = choices();
+                ControlKind::Choice {
+                    selected: choices.iter().position(|c| c.value == value).unwrap_or(0),
+                    options: choices.iter().map(|c| c.label.to_string()).collect(),
+                }
+            }
+            Kind::Check { on, .. } => ControlKind::CheckBox {
+                checked: value == on.value(),
+            },
+            Kind::Range { min, max } => ControlKind::Slider {
+                min,
+                max,
+                value: value
+                    .as_i64()
+                    .and_then(|n| i32::try_from(n).ok())
+                    .unwrap_or(min),
+            },
+            Kind::Voice => ControlKind::Choice {
+                options: self.voice_options(),
+                selected: value
+                    .as_str()
+                    .and_then(|name| self.voices.iter().position(|v| v == name))
+                    .map_or(0, |i| i + 1),
+            },
+            Kind::Structured => return None,
+        };
+        Some(Control {
+            id: spec.id.to_owned(),
+            label: label.to_string(),
+            kind,
+            enabled: spec.scopes.allows(scope),
+        })
+    }
+
+    /// The dialog's description, with the draft's values: the place, then each group's
+    /// settings, then the buttons.
     pub fn spec(&self) -> DialogSpec {
-        let s = &self.draft;
-        let voice = s
-            .voice
-            .voice
-            .as_ref()
-            .and_then(|name| self.voices.iter().position(|v| v == name))
-            .map_or(0, |i| i + 1);
-        let choice =
-            |options: Vec<String>, selected: usize| ControlKind::Choice { options, selected };
+        let scope = self.scope();
+        let mut controls = vec![control(
+            "scope",
+            msg::settings_scope(),
+            ControlKind::Choice {
+                options: self.places.iter().map(|p| p.name.clone()).collect(),
+                selected: self.place,
+            },
+        )];
+        for group in Group::ALL {
+            controls.push(control(group.id(), group.label(), ControlKind::Group));
+            controls.extend(
+                shown_settings()
+                    .filter(|(spec, _)| spec.group == group)
+                    .filter_map(|(spec, label)| self.setting_control(spec, label, &scope)),
+            );
+        }
+        controls.extend([
+            control(
+                "ok",
+                msg::settings_ok(),
+                ControlKind::Button { default: true },
+            ),
+            control(
+                "cancel",
+                msg::settings_cancel(),
+                ControlKind::Button { default: false },
+            ),
+            control(
+                "apply",
+                msg::settings_apply(),
+                ControlKind::Button { default: false },
+            ),
+        ]);
         DialogSpec {
             id: self.id,
             title: msg::settings_dialog_title().to_string(),
-            controls: vec![
-                control(
-                    "scope",
-                    msg::settings_scope(),
-                    choice(
-                        self.places.iter().map(|p| p.name.clone()).collect(),
-                        self.place,
-                    ),
-                ),
-                control("speech", msg::settings_group_speech(), ControlKind::Group),
-                control(
-                    "synthesizer",
-                    msg::settings_synthesizer(),
-                    choice(
-                        names(&SYNTHESIZERS),
-                        position(&SYNTHESIZERS, s.voice.synthesizer),
-                    ),
-                ),
-                control(
-                    "voice",
-                    msg::settings_voice(),
-                    choice(self.voice_options(), voice),
-                ),
-                control(
-                    "rate",
-                    msg::settings_rate(),
-                    ControlKind::Slider {
-                        min: -10,
-                        max: 10,
-                        value: s.voice.rate,
-                    },
-                ),
-                control(
-                    "volume",
-                    msg::settings_volume(),
-                    ControlKind::Slider {
-                        min: 0,
-                        max: 100,
-                        value: i32::from(s.voice.volume),
-                    },
-                ),
-                control(
-                    "punctuation",
-                    msg::settings_punctuation(),
-                    choice(
-                        names(&PUNCTUATIONS),
-                        position(&PUNCTUATIONS, s.voice.punctuation),
-                    ),
-                ),
-                control(
-                    "keyboard",
-                    msg::settings_group_keyboard(),
-                    ControlKind::Group,
-                ),
-                control(
-                    "layout",
-                    msg::settings_layout(),
-                    choice(names(&LAYOUTS), position(&LAYOUTS, s.keyboard.layout)),
-                ),
-                control(
-                    "okur_key",
-                    msg::settings_okur_key(),
-                    choice(names(&OKUR_KEYS), position(&OKUR_KEYS, s.keyboard.okur_key)),
-                ),
-                control("reading", msg::settings_group_reading(), ControlKind::Group),
-                control(
-                    "typing_echo",
-                    msg::settings_typing_echo(),
-                    choice(names(&ECHOES), position(&ECHOES, s.typing_echo)),
-                ),
-                control(
-                    "say_all_unit",
-                    msg::settings_say_all_unit(),
-                    choice(
-                        names(&SAY_ALL_UNITS),
-                        position(&SAY_ALL_UNITS, s.say_all_unit),
-                    ),
-                ),
-                control(
-                    "verbosity",
-                    msg::settings_verbosity(),
-                    choice(names(&LEVELS), position(&LEVELS, s.verbosity.level)),
-                ),
-                control(
-                    "live_region_whole_text",
-                    msg::settings_live_region_whole_text(),
-                    ControlKind::CheckBox {
-                        checked: s.live_region_append == LiveRegionAppend::WholeText,
-                    },
-                ),
-                control(
-                    "viewer_on_screen",
-                    msg::settings_viewer_on_screen(),
-                    ControlKind::CheckBox {
-                        checked: s.viewer_display == ViewerDisplay::OnScreen,
-                    },
-                ),
-                control(
-                    "confirm_exit",
-                    msg::settings_confirm_exit(),
-                    ControlKind::CheckBox {
-                        checked: s.confirm_exit,
-                    },
-                ),
-                control(
-                    "ok",
-                    msg::settings_ok(),
-                    ControlKind::Button { default: true },
-                ),
-                control(
-                    "cancel",
-                    msg::settings_cancel(),
-                    ControlKind::Button { default: false },
-                ),
-                control(
-                    "apply",
-                    msg::settings_apply(),
-                    ControlKind::Button { default: false },
-                ),
-            ],
+            controls,
         }
     }
 
@@ -326,10 +247,7 @@ impl SettingsDialog {
             FromUi::DialogPressed { id, control } if *id == self.id => match control.as_str() {
                 "ok" | "apply" => {
                     let before = self.shown();
-                    let scope = self
-                        .places
-                        .get(self.place)
-                        .map_or(Scope::Global, |p| p.scope.clone());
+                    let scope = self.scope();
                     // What was applied is what the place now holds.
                     if let Some(place) = self.places.get_mut(self.place) {
                         place.settings = self.draft.clone();
@@ -349,95 +267,67 @@ impl SettingsDialog {
     }
 
     fn change(&mut self, control: &str, value: Value) -> Outcome {
-        // Another place: its settings are shown.
+        // Another place: its settings are shown, and the controls it cannot keep dimmed.
         if let ("scope", Value::Selected(i)) = (control, &value) {
             if *i != self.place && *i < self.places.len() {
                 self.place = *i;
                 self.draft = self.shown();
-                return Outcome::Send(self.values());
+                let mut sent = self.values();
+                sent.extend(self.enabling());
+                return Outcome::Send(sent);
             }
             return Outcome::Nothing;
         }
-        let s = &mut self.draft;
-        match (control, value) {
-            ("synthesizer", Value::Selected(i)) => {
-                if let Some(synthesizer) = pick(&SYNTHESIZERS, i) {
-                    // Another synthesizer has other voices: its default until it is applied.
-                    if synthesizer != s.voice.synthesizer {
-                        s.voice.voice = None;
-                    }
-                    s.voice.synthesizer = synthesizer;
-                }
-            }
-            ("voice", Value::Selected(i)) => {
-                s.voice.voice = i.checked_sub(1).and_then(|v| self.voices.get(v)).cloned();
-            }
-            ("rate", Value::Number(n)) => s.voice.rate = n.clamp(-10, 10),
-            ("volume", Value::Number(n)) => {
-                s.voice.volume = u16::try_from(n.clamp(0, 100)).unwrap_or(100);
-            }
-            ("punctuation", Value::Selected(i)) => {
-                if let Some(level) = pick(&PUNCTUATIONS, i) {
-                    s.voice.punctuation = level;
-                }
-            }
-            ("layout", Value::Selected(i)) => {
-                if let Some(layout) = pick(&LAYOUTS, i) {
-                    if layout != s.keyboard.layout {
-                        // A layout comes with its own JAWS key, as in JAWS.
-                        s.keyboard = KeyboardSettings::for_layout(layout);
-                        return Outcome::Send(vec![ToUi::DialogSet {
-                            id: self.id,
-                            control: "okur_key".to_owned(),
-                            value: Value::Selected(position(&OKUR_KEYS, s.keyboard.okur_key)),
-                        }]);
-                    }
-                }
-            }
-            ("okur_key", Value::Selected(i)) => {
-                if let Some(key) = pick(&OKUR_KEYS, i) {
-                    s.keyboard.okur_key = key;
-                }
-            }
-            ("typing_echo", Value::Selected(i)) => {
-                if let Some(echo) = pick(&ECHOES, i) {
-                    s.typing_echo = echo;
-                }
-            }
-            ("say_all_unit", Value::Selected(i)) => {
-                if let Some(unit) = pick(&SAY_ALL_UNITS, i) {
-                    s.say_all_unit = unit;
-                }
-            }
-            ("verbosity", Value::Selected(i)) => {
-                if let Some(level) = pick(&LEVELS, i) {
-                    s.verbosity.level = level;
-                }
-            }
-            ("live_region_whole_text", Value::Checked(checked)) => {
-                s.live_region_append = if checked {
-                    LiveRegionAppend::WholeText
-                } else {
-                    LiveRegionAppend::Appended
-                };
-            }
-            ("viewer_on_screen", Value::Checked(checked)) => {
-                s.viewer_display = if checked {
-                    ViewerDisplay::OnScreen
-                } else {
-                    ViewerDisplay::SpeechOnly
-                };
-            }
-            ("confirm_exit", Value::Checked(checked)) => s.confirm_exit = checked,
-            _ => {}
+        let Some(spec) = registry::find(control)
+            .filter(|spec| spec.label.is_some() && spec.scopes.allows(&self.scope()))
+        else {
+            return Outcome::Nothing;
+        };
+        let Some(setting) = self.value_of(spec, value) else {
+            return Outcome::Nothing;
+        };
+        let shown = self.values();
+        registry::set(&mut self.draft, spec.id, setting);
+        // What changed with it is shown too: a layout's own Okur key.
+        let followed: Vec<ToUi> = self
+            .values()
+            .into_iter()
+            .filter(|v| !shown.contains(v))
+            .filter(|v| !matches!(v, ToUi::DialogSet { control: c, .. } if c == control))
+            .collect();
+        if followed.is_empty() {
+            Outcome::Nothing
+        } else {
+            Outcome::Send(followed)
         }
-        Outcome::Nothing
+    }
+
+    /// The setting's value a control's value stands for.
+    fn value_of(&self, spec: &SettingSpec, value: Value) -> Option<Json> {
+        match (spec.kind, value) {
+            (Kind::Choice(choices), Value::Selected(i)) => {
+                choices().into_iter().nth(i).map(|c| c.value)
+            }
+            (Kind::Check { on, off }, Value::Checked(checked)) => {
+                Some(if checked { on } else { off }.value())
+            }
+            (Kind::Range { min, max }, Value::Number(n)) => Some(Json::from(n.clamp(min, max))),
+            (Kind::Voice, Value::Selected(i)) => Some(
+                i.checked_sub(1)
+                    .and_then(|v| self.voices.get(v))
+                    .map_or(Json::Null, |name| Json::String(name.clone())),
+            ),
+            _ => None,
+        }
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::settings::{
+        KeyboardLayout, KeyboardSettings, OkurKey, SayAllUnit, TypingEcho, ViewerDisplay,
+    };
 
     /// The dialog's one place, all applications, with `settings`.
     fn everywhere(settings: &Settings) -> Vec<Place> {
@@ -478,7 +368,7 @@ mod tests {
                 .map(|c| c.kind.clone())
         };
         assert_eq!(
-            find("voice"),
+            find("voice.voice"),
             Some(ControlKind::Choice {
                 options: vec![
                     "Default".into(),
@@ -491,12 +381,17 @@ mod tests {
         assert_eq!(
             find("typing_echo"),
             Some(ControlKind::Choice {
-                options: vec!["Off".into(), "Characters".into()],
+                options: vec![
+                    "Off".into(),
+                    "Characters".into(),
+                    "Words".into(),
+                    "Characters and Words".into()
+                ],
                 selected: 0
             })
         );
         assert_eq!(
-            find("verbosity"),
+            find("verbosity.level"),
             Some(ControlKind::Choice {
                 options: vec!["Beginner".into(), "Intermediate".into(), "Advanced".into()],
                 selected: 0
@@ -510,7 +405,7 @@ mod tests {
             })
         );
         assert_eq!(
-            find("viewer_on_screen"),
+            find("viewer_display"),
             Some(ControlKind::CheckBox { checked: true })
         );
         // JAWS's default: Insert+F4 asks first.
@@ -536,7 +431,7 @@ mod tests {
     fn changes_are_drafted_until_applied_and_cancel_drops_them() {
         let mut dialog = SettingsDialog::new(4, everywhere(&Settings::default()), 0, Vec::new());
         assert_eq!(
-            dialog.handle(&changed("rate", Value::Number(3))),
+            dialog.handle(&changed("voice.rate", Value::Number(3))),
             Outcome::Nothing
         );
         assert_eq!(
@@ -544,11 +439,11 @@ mod tests {
             Outcome::Nothing
         );
         assert_eq!(
-            dialog.handle(&changed("viewer_on_screen", Value::Checked(false))),
+            dialog.handle(&changed("viewer_display", Value::Checked(false))),
             Outcome::Nothing
         );
         assert_eq!(
-            dialog.handle(&changed("punctuation", Value::Selected(3))),
+            dialog.handle(&changed("voice.punctuation", Value::Selected(3))),
             Outcome::Nothing
         );
         assert_eq!(
@@ -558,7 +453,7 @@ mod tests {
         // Another dialog's events change nothing.
         let other = FromUi::DialogChanged {
             id: 9,
-            control: "rate".into(),
+            control: "voice.rate".into(),
             value: Value::Number(-5),
         };
         assert_eq!(dialog.handle(&other), Outcome::Nothing);
@@ -639,8 +534,9 @@ mod tests {
         let shown = dialog.handle(&changed("scope", Value::Selected(0)));
         let punctuation = ToUi::DialogSet {
             id: 4,
-            control: "punctuation".into(),
-            value: Value::Selected(position(&PUNCTUATIONS, global.voice.punctuation)),
+            control: "voice.punctuation".into(),
+            // Most, JAWS's default.
+            value: Value::Selected(2),
         };
         assert!(
             matches!(&shown, Outcome::Send(set) if set.contains(&punctuation)),
@@ -658,14 +554,54 @@ mod tests {
         );
     }
 
+    /// An application's place cannot keep the keyboard layout or the Okur key, which JAWS
+    /// keeps for all applications only: their controls are dimmed there, and lit again for all
+    /// applications.
+    #[test]
+    fn an_application_cannot_keep_the_okur_key() {
+        let places = vec![
+            everywhere(&Settings::default()).remove(0),
+            Place {
+                scope: Scope::Application("notepad".into()),
+                name: "Notepad".into(),
+                settings: Settings::default(),
+            },
+        ];
+        let mut dialog = SettingsDialog::new(4, places, 1, Vec::new());
+        let enabled = |dialog: &SettingsDialog, id: &str| {
+            dialog
+                .spec()
+                .controls
+                .into_iter()
+                .find(|c| c.id == id)
+                .map(|c| c.enabled)
+        };
+        assert_eq!(enabled(&dialog, "keyboard.okur_key"), Some(false));
+        assert_eq!(enabled(&dialog, "keyboard.layout"), Some(false));
+        assert_eq!(enabled(&dialog, "typing_echo"), Some(true));
+        // A change sent anyway is not taken.
+        dialog.handle(&changed("keyboard.okur_key", Value::Selected(2)));
+        assert_eq!(dialog.draft().keyboard.okur_key, OkurKey::Insert);
+        let shown = dialog.handle(&changed("scope", Value::Selected(0)));
+        let lit = ToUi::DialogEnable {
+            id: 4,
+            control: "keyboard.okur_key".into(),
+            enabled: true,
+        };
+        assert!(
+            matches!(&shown, Outcome::Send(sent) if sent.contains(&lit)),
+            "{shown:?}"
+        );
+    }
+
     #[test]
     fn a_layout_brings_its_own_jaws_key() {
         let mut dialog = SettingsDialog::new(4, everywhere(&Settings::default()), 0, Vec::new());
         assert_eq!(
-            dialog.handle(&changed("layout", Value::Selected(1))),
+            dialog.handle(&changed("keyboard.layout", Value::Selected(1))),
             Outcome::Send(vec![ToUi::DialogSet {
                 id: 4,
-                control: "okur_key".into(),
+                control: "keyboard.okur_key".into(),
                 value: Value::Selected(1),
             }])
         );
@@ -674,7 +610,7 @@ mod tests {
             KeyboardSettings::for_layout(KeyboardLayout::Laptop)
         );
         // Choosing another key afterwards keeps the layout.
-        dialog.handle(&changed("okur_key", Value::Selected(2)));
+        dialog.handle(&changed("keyboard.okur_key", Value::Selected(2)));
         assert_eq!(dialog.draft().keyboard.okur_key, OkurKey::ScrollLock);
         assert_eq!(dialog.draft().keyboard.layout, KeyboardLayout::Laptop);
     }

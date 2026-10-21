@@ -70,8 +70,8 @@ files hold only what differs from the layer below, as JAWS's own settings files 
 A setting is looked up from the most specific layer down to Okur's default; Insert+Shift+2's
 punctuation level lasts until Okur exits. Okur rewrites only the values it changes, so your
 comments stay. The command-line options (`--engine`, `--voice`, `--rate`, `--volume`,
-`--keyboard-layout`, `--okur-key`, `--typing-echo`, `--live-region-whole-text`) change a
-setting for one run only; tests also pass `--settings <folder>`, so that pressing OK in a test
+`--keyboard-layout`, `--okur-key`, `--typing-echo`, `--live-region-whole-text`, and
+`--set <id>=<value>` for any setting the settings table declares) change a setting for one run only; tests also pass `--settings <folder>`, so that pressing OK in a test
 never changes the user's settings.
 
 To stop the daemon cleanly, press `Ctrl+C`.

@@ -80,6 +80,15 @@ messages, Prompt to Confirm When Exiting Okur.
 
 ## 3. Okur's settings today
 
+> **Since this map was written (2026-10-21),** §7.6's steps 1 and 2 are done: the table is
+> `crates/okur-core/src/settings/registry.rs` (`SETTINGS`, 18 settings). The settings dialog's
+> controls, the JAWS import that parity replay uses, `okur run --typing-echo` and the new
+> `okur run --set <id>=<value>` are made from it, so the dialog and the command line offer
+> typing echo's four values. The Okur key and the layout are kept for all applications only. A
+> test keeps the table and `Settings` in step. The rows below describe the code before the
+> table; the drift that §3.3 lists is gone except `auto_forms_mode` and the verbosity details,
+> which are declared but have no control yet.
+
 ### 3.1 The pieces
 
 | Piece | What it does | Where |
@@ -531,8 +540,10 @@ pub struct SettingSpec {
 ### 7.6 Order of work
 
 1. Introduce `SettingSpec` and the table for today's 16 leaves; generate the current dialog
-   from it (same controls, same words: parity of Okur's own dialog stays as it is).
-2. Generate the JAWS import and replace `replay_settings`.
+   from it (same controls, same words: parity of Okur's own dialog stays as it is). **Done
+   2026-10-21**, with typing echo's four values and `--set`.
+2. Generate the JAWS import and replace `replay_settings`. **Done 2026-10-21** (`DEFAULT.JCF`
+   only; application JCFs and voice profiles next): parity unchanged, 5192/5395.
 3. Add the tree, search and description: Settings Center. Quick Settings with lifetimes.
 4. Then each new setting is one enum (or bool), one table row, two catalog messages and the
    behavior itself.

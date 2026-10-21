@@ -9,6 +9,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::input::{Key, KeyEvent};
 
+pub mod registry;
+
 /// JAWS's keyboard layouts (Basic Settings: Keyboard Layout).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -38,6 +40,17 @@ pub struct KeyboardSettings {
     /// The JAWS key chosen for `layout`, in Okur's name: the Okur key (AGENTS.md §1.5), as
     /// the settings file and `okur run --okur-key` name it.
     pub okur_key: OkurKey,
+}
+
+impl KeyboardLayout {
+    /// The layout a `DEFAULT.JCF` `KeyboardType` value sets: "Laptop", else the desktop's.
+    pub fn from_jcf(value: &str) -> Self {
+        if value.trim().eq_ignore_ascii_case("Laptop") {
+            Self::Laptop
+        } else {
+            Self::Desktop
+        }
+    }
 }
 
 impl Default for KeyboardSettings {
@@ -336,6 +349,16 @@ pub enum VerbosityLevel {
 }
 
 impl VerbosityLevel {
+    /// The level a `DEFAULT.JCF` `Verbosity` value sets: 0 Beginner, 1 Intermediate, 2
+    /// Advanced; any other value is Beginner.
+    pub fn from_jcf(value: &str) -> Self {
+        match value.trim() {
+            "1" => Self::Intermediate,
+            "2" => Self::Advanced,
+            _ => Self::Beginner,
+        }
+    }
+
     /// The level's place in a per-level setting: Beginner first.
     pub fn index(self) -> usize {
         match self {

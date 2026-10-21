@@ -31,12 +31,15 @@ pub struct RunOptions {
     pub okur_key: Option<String>,
     pub live_region_whole_text: bool,
     pub typing_echo: Option<String>,
+    /// Settings by name, "id=value" ("typing_echo=words"), as the settings table names them.
+    pub set: Vec<String>,
 }
 
 impl RunOptions {
     /// Changes `settings` as the options ask; an error names an option's bad value.
     pub fn apply(self, settings: &mut okur_core::settings::Settings) -> Result<(), String> {
-        use okur_core::settings::{LiveRegionAppend, Synthesizer, TypingEcho};
+        use okur_core::settings::registry::set_named;
+        use okur_core::settings::{LiveRegionAppend, Synthesizer};
         if let Some(engine) = self.engine {
             settings.voice.synthesizer = match TtsEngineType::from_str(&engine)? {
                 TtsEngineType::Auto => Synthesizer::Auto,
@@ -66,15 +69,13 @@ impl RunOptions {
             settings.live_region_append = LiveRegionAppend::WholeText;
         }
         if let Some(echo) = self.typing_echo {
-            settings.typing_echo = match echo.to_ascii_lowercase().as_str() {
-                "characters" => TypingEcho::Characters,
-                "none" => TypingEcho::None,
-                other => {
-                    return Err(format!(
-                        "--typing-echo must be characters or none, not {other:?}"
-                    ))
-                }
-            };
+            set_named(settings, "typing_echo", &echo).map_err(|e| format!("--typing-echo: {e}"))?;
+        }
+        for named in self.set {
+            let (id, value) = named
+                .split_once('=')
+                .ok_or_else(|| format!("--set takes id=value, not {named:?}"))?;
+            set_named(settings, id.trim(), value).map_err(|e| format!("--set: {e}"))?;
         }
         Ok(())
     }
@@ -988,10 +989,36 @@ mod tests {
             settings.keyboard.layout,
             okur_core::settings::KeyboardLayout::Laptop
         );
-        let bad = RunOptions {
+        // Typing echo takes all four of its values, and --set any setting by name.
+        let options = RunOptions {
             typing_echo: Some("words".into()),
+            set: vec![
+                "voice.punctuation=all".into(),
+                "say_all_unit = sentence".into(),
+            ],
             ..RunOptions::default()
         };
-        assert!(bad.apply(&mut settings).is_err());
+        assert_eq!(options.apply(&mut settings), Ok(()));
+        assert_eq!(settings.typing_echo, okur_core::settings::TypingEcho::Words);
+        assert_eq!(
+            settings.voice.punctuation,
+            okur_core::settings::Punctuation::All
+        );
+        assert_eq!(
+            settings.say_all_unit,
+            okur_core::settings::SayAllUnit::Sentence
+        );
+        for bad in [
+            RunOptions {
+                typing_echo: Some("loud".into()),
+                ..RunOptions::default()
+            },
+            RunOptions {
+                set: vec!["typing_echo".into()],
+                ..RunOptions::default()
+            },
+        ] {
+            assert!(bad.apply(&mut settings).is_err());
+        }
     }
 }

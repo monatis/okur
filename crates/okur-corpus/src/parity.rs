@@ -925,77 +925,27 @@ fn replay_clock(evidence: &Value) -> Result<Option<(FixedClock, i32)>, String> {
     Ok(Some((clock, offset)))
 }
 
-/// The settings JAWS ran with: from the evidence's recorded `DEFAULT.JCF` options, else the
-/// reference machine's configuration (unchanged since before any evidence was recorded).
+/// The settings JAWS ran with: its recorded `DEFAULT.JCF` read through the settings table
+/// (`okur_core::settings::registry::import_jaws`), over the reference machine's configuration
+/// (unchanged since before any evidence was recorded), which is also what evidence without the
+/// file replays with.
 fn replay_settings(evidence: &Value) -> okur_core::settings::Settings {
-    use okur_core::settings::{
-        KeyboardLayout, KeyboardSettings, OutputType, Settings, TypingEcho, Verbosity,
+    use okur_core::settings::registry::{import_jaws, JawsFile};
+    use okur_core::settings::Settings;
+    let base = Settings::reference_machine();
+    let Some(default_jcf) = evidence
+        .pointer("/provenance/jaws_settings/DEFAULT.JCF")
+        .filter(|jcf| jcf.get("Options").is_some())
+    else {
+        return base;
     };
-    let mut settings = Settings::reference_machine();
-    let options = evidence.pointer("/provenance/jaws_settings/DEFAULT.JCF/Options");
-    if let Some(options) = options {
-        // JAWS writes only changed options: no KeyboardType means the desktop layout.
-        let layout = options.get("KeyboardType").and_then(Value::as_str);
-        let layout = if layout.is_some_and(|l| l.eq_ignore_ascii_case("Laptop")) {
-            KeyboardLayout::Laptop
-        } else {
-            KeyboardLayout::Desktop
-        };
-        settings.keyboard = KeyboardSettings::for_layout(layout);
-        settings.typing_echo = options
-            .get("TypingEcho")
-            .and_then(Value::as_str)
-            .map(TypingEcho::from_jcf)
-            .unwrap_or_default();
-        // A missing option is JAWS's default: on, for both.
-        let jcf = |section: &str, key: &str| {
-            evidence
-                .pointer(&format!(
-                    "/provenance/jaws_settings/DEFAULT.JCF/{section}/{key}"
-                ))
-                .and_then(Value::as_str)
-                .map(str::to_owned)
-        };
-        settings.auto_forms_mode = jcf("FormsMode", "AutoFormsMode").is_none_or(|v| v != "0");
-        // Say All Reads, `SayAllMode` in Options: 0 line (JAWS's default), 1 sentence, 2
-        // paragraph (677-681 record them).
-        settings.say_all_unit = options
-            .get("SayAllMode")
-            .and_then(Value::as_str)
-            .map(okur_core::settings::SayAllUnit::from_jcf)
-            .unwrap_or_default();
-        // Full Speech or less speech, `SpeechMode`, and less speech's kind, `LessSpeechMode`
-        // (700 records Speech On Demand).
-        settings.speech_mode = options
-            .get("SpeechMode")
-            .and_then(Value::as_str)
-            .map(okur_core::settings::SpeechMode::from_jcf)
-            .unwrap_or_default();
-        settings.less_speech = options
-            .get("LessSpeechMode")
-            .and_then(Value::as_str)
-            .map(okur_core::settings::LessSpeech::from_jcf)
-            .unwrap_or_default();
-        // The user verbosity level, `Verbosity` in Options: 0 Beginner (JAWS's default), 1
-        // Intermediate, 2 Advanced (548-555 record each).
-        settings.verbosity.level = match options.get("Verbosity").and_then(Value::as_str) {
-            Some("1") => okur_core::settings::VerbosityLevel::Intermediate,
-            Some("2") => okur_core::settings::VerbosityLevel::Advanced,
-            _ => okur_core::settings::VerbosityLevel::Beginner,
-        };
-        // The verbosity output types JAWS's JCF names: one mode per level and the type's
-        // name ("0|0|0|Access Key"). A type the file leaves out has JAWS's shipped modes.
-        for output in OutputType::ALL {
-            let Some(key) = output.jcf_key() else {
-                continue;
-            };
-            let modes = jcf("OutputModes", key)
-                .and_then(|v| Verbosity::modes_from_jcf(&v))
-                .unwrap_or(output.default_modes());
-            settings.verbosity.set_modes(output, modes);
-        }
-    }
-    settings
+    import_jaws(&base, &|file, section, key| match file {
+        JawsFile::DefaultJcf => default_jcf
+            .get(section)?
+            .get(key)?
+            .as_str()
+            .map(str::to_owned),
+    })
 }
 
 /// Presses and releases `chord` at `time_ms` (0: unknown) through the engine's live

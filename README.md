@@ -247,7 +247,8 @@ Options of `okur run` change a setting for that run only:
 | `--keyboard-layout desktop` or `laptop` | the keyboard layout, as JAWS's |
 | `--okur-key insert`, `capslock` or `scrolllock` | the Okur key, Okur's modifier (JAWS's JAWS key) |
 | `--live-region-whole-text` | read a growing live region whole each time, as JAWS does |
-| `--typing-echo none` | say nothing as you type (JAWS's Typing Echo set to None); `characters`, the default, says each character. Insert+2 goes through all four choices, as JAWS has them, while Okur runs |
+| `--typing-echo none`, `characters`, `words` or `both` | what typing says, as JAWS's Typing Echo: nothing, each character (the default), each word, or both. Insert+2 goes through the four while Okur runs |
+| `--set <setting>=<value>` | any setting, by its name in the settings file: `--set say_all_unit=sentence`, `--set voice.punctuation=all`; repeat it for more |
 | `--debug-log <file>` | record keys, events and timings, for reporting a problem |
 
 ### Reporting a problem

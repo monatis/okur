@@ -79,7 +79,16 @@ impl SettingsLayers {
         after: &Settings,
         application: Option<&str>,
     ) {
-        let delta = changes(after, before);
+        let mut delta = changes(after, before);
+        // A setting kept for all applications only (the Okur key) is not kept elsewhere.
+        for id in crate::settings::registry::refused(&delta, scope) {
+            tracing::warn!(
+                setting = id,
+                ?scope,
+                "not kept there: for all applications only"
+            );
+            remove(&mut delta, id);
+        }
         if delta.is_empty() {
             return;
         }
@@ -145,6 +154,23 @@ impl SettingsLayers {
             table = next;
         }
         table.insert((*last).to_owned(), value);
+    }
+}
+
+/// Removes the value at `path` ("keyboard.okur_key"), and the tables it leaves empty.
+fn remove(values: &mut Values, path: &str) {
+    match path.split_once('.') {
+        None => {
+            values.remove(path);
+        }
+        Some((name, rest)) => {
+            if let Some(Value::Object(inner)) = values.get_mut(name) {
+                remove(inner, rest);
+                if inner.is_empty() {
+                    values.remove(name);
+                }
+            }
+        }
     }
 }
 
@@ -317,6 +343,27 @@ mod tests {
         assert_eq!(
             SettingsLayers::with_global(&Settings::default()),
             SettingsLayers::default()
+        );
+    }
+
+    /// The Okur key is kept for all applications only: an application's change of it is not
+    /// kept, while the rest of the change is.
+    #[test]
+    fn an_application_does_not_keep_the_okur_key() {
+        let mut layers = SettingsLayers::default();
+        let before = layers.resolve(Some("notepad"), None);
+        let mut after = before.clone();
+        after.keyboard.okur_key = crate::settings::OkurKey::ScrollLock;
+        after.typing_echo = TypingEcho::None;
+        layers.change(&Scope::Application("notepad".into()), &before, &after, None);
+        assert_eq!(
+            layers.applications.get("notepad"),
+            Some(&values(json!({"typing_echo": "none"})))
+        );
+        layers.change(&Scope::Global, &before, &after, None);
+        assert_eq!(
+            layers.global,
+            values(json!({"keyboard": {"okur_key": "scroll_lock"}, "typing_echo": "none"}))
         );
     }
 

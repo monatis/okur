@@ -33,7 +33,8 @@ settings-group-reading = Reading
 settings-typing-echo = Typing &Echo:
 settings-typing-echo-off = Off
 settings-typing-echo-characters = Characters
-# JAWS's user verbosity levels (Settings Center): what is said, and how much.
+settings-typing-echo-words = Words
+settings-typing-echo-both = Characters and Words
 # Where the dialog's settings are kept, as JAWS's Settings Center's Application box chooses it: all
 # applications (JAWS's words), the application in front (its name), the site of its page.
 settings-scope = Settings &for:
@@ -45,10 +46,17 @@ settings-say-all-unit = Say All Rea&ds:
 settings-say-all-unit-line = Line
 settings-say-all-unit-sentence = Sentence
 settings-say-all-unit-paragraph = Paragraph
+# JAWS's user verbosity levels (Settings Center): what is said, and how much.
 settings-verbosity = Ver&bosity Level:
 settings-verbosity-beginner = Beginner
 settings-verbosity-intermediate = Intermediate
 settings-verbosity-advanced = Advanced
+# JAWS's Speech Mode: Full Speech or Less Speech, and Less Speech's kind, Speech On Demand or
+# Mute (Settings Center help).
+settings-speech-mode-full = Full Speech
+settings-speech-mode-less = Less Speech
+settings-less-speech-on-demand = Speech On Demand
+settings-less-speech-muted = Mute
 settings-live-region-whole-text = Read the &Whole Text of a Growing Live Region
 settings-viewer-on-screen = &Show Virtual Viewer on Screen
 # JAWS's "Prompt to Confirm When Exiting JAWS" (Options > Basics): Insert+F4 asks first.
