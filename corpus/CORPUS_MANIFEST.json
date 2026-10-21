@@ -6052,13 +6052,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "763-web-skim-reading-rule-types",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "d196d4d5b50750f6a5c5579d0fc5f5ce5927dab4012a5b683a32a611fd5292cf",
+        "capture_script_sha256": "17ee836a08322cbcb21889d6f575ae2e0f71ef4a280db48a1c0acb5f5b2b23f6",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 419,
-    "scenarios_with_evidence": 419,
-    "total_trials": 1297,
-    "successful_trials": 1297,
-    "deterministic_scenarios": 271
+    "scenarios": 420,
+    "scenarios_with_evidence": 420,
+    "total_trials": 1300,
+    "successful_trials": 1300,
+    "deterministic_scenarios": 272
   }
 }

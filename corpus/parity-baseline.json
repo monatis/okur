@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6014,
-  "total_steps": 6243,
+  "matched_steps": 6035,
+  "total_steps": 6267,
   "accepted_divergences": 158,
   "errors": [],
   "steps": {
@@ -6419,6 +6419,30 @@
     "760-web-skim-reading-dialog/s8": "match",
     "760-web-skim-reading-dialog/s9": "match",
     "761-web-skim-read/s1": "mismatch",
-    "761-web-skim-read/s2": "match"
+    "761-web-skim-read/s2": "match",
+    "763-web-skim-reading-rule-types/s1": "mismatch",
+    "763-web-skim-reading-rule-types/s10": "match",
+    "763-web-skim-reading-rule-types/s11": "match",
+    "763-web-skim-reading-rule-types/s12": "match",
+    "763-web-skim-reading-rule-types/s13": "match",
+    "763-web-skim-reading-rule-types/s14": "match",
+    "763-web-skim-reading-rule-types/s15": "match",
+    "763-web-skim-reading-rule-types/s16": "match",
+    "763-web-skim-reading-rule-types/s17": "match",
+    "763-web-skim-reading-rule-types/s18": "match",
+    "763-web-skim-reading-rule-types/s19": "match",
+    "763-web-skim-reading-rule-types/s2": "match",
+    "763-web-skim-reading-rule-types/s20": "match",
+    "763-web-skim-reading-rule-types/s21": "match",
+    "763-web-skim-reading-rule-types/s22": "match",
+    "763-web-skim-reading-rule-types/s23": "mismatch",
+    "763-web-skim-reading-rule-types/s24": "mismatch",
+    "763-web-skim-reading-rule-types/s3": "match",
+    "763-web-skim-reading-rule-types/s4": "match",
+    "763-web-skim-reading-rule-types/s5": "match",
+    "763-web-skim-reading-rule-types/s6": "match",
+    "763-web-skim-reading-rule-types/s7": "match",
+    "763-web-skim-reading-rule-types/s8": "match",
+    "763-web-skim-reading-rule-types/s9": "match"
   }
 }
