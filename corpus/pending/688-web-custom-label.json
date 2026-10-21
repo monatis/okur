@@ -1,0 +1,27 @@
+{
+  "id": "688-web-custom-label",
+  "name": "A custom label on the sign-up form's first field: Insert+F2's Custom Label Delete All first (no label left from a trial before), E to the field, Insert+Ctrl+Tab, type \"Your name\", Enter, Insert+Up, Ctrl+Home and E to it again, the form fields list (Insert+F5) and Escape, then Custom Label Delete All again and Insert+Up",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+F2" },
+    { "id": "s2", "type": "text", "command": "Custom Label Delete All" },
+    { "id": "s3", "type": "key", "command": "Enter" },
+    { "id": "s4", "type": "key", "command": "E" },
+    { "id": "s5", "type": "key", "command": "Insert+Ctrl+Tab" },
+    { "id": "s6", "type": "text", "command": "Your name" },
+    { "id": "s7", "type": "key", "command": "Enter" },
+    { "id": "s8", "type": "key", "command": "Insert+Up" },
+    { "id": "s9", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s10", "type": "key", "command": "E" },
+    { "id": "s11", "type": "key", "command": "Insert+F5" },
+    { "id": "s12", "type": "key", "command": "Escape" },
+    { "id": "s13", "type": "key", "command": "Insert+F2" },
+    { "id": "s14", "type": "text", "command": "Custom Label Delete All" },
+    { "id": "s15", "type": "key", "command": "Enter" },
+    { "id": "s16", "type": "key", "command": "Insert+Up" }
+  ]
+}
