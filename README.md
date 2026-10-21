@@ -57,19 +57,19 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `9c47259` (2026-10-21).
+Every figure is tool output, rerun for this README at commit `0596b74` (2026-10-21).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **4942 of 5132** | `okur parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **4817 of 5094** | `okur parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **110** | `okur parity` |
-| Recorded JAWS scenarios, trials | **353, 1113** (all 1113 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1261 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **5106 of 5302** | `okur parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **4973 of 5264** | `okur parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **116** | `okur parity` |
+| Recorded JAWS scenarios, trials | **364, 1146** (all 1146 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1281 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
-The 110 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
+The 116 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
 accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
 place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
 Okur says its help in its own words. Each one is listed, with the reason and who decided it,
@@ -90,7 +90,8 @@ in [accepted divergences](docs/references/accepted-divergences.md).
     check boxes, radio buttons, combo boxes, lists and list items, tables, graphics, regions,
     articles, divisions, separators, tabs and mail links; N past a run of links; the first
     and last heading or form field; V and U to the next visited and unvisited link; a
-    temporary PlaceMarker (Ctrl+Windows+K) to come back to with K; Shift+Comma and Shift+Period
+    temporary PlaceMarker (Ctrl+Windows+K) and saved ones to come back to with K and Shift+K,
+    and 7 to 0 for the first four; Shift+Comma and Shift+Period
     to the start and end of a list, table or region; Equals to where the page says reading goes
     next (aria-flowto); S and D to the next element of the same or of another type (and
     Ctrl+Insert with Up, Right and Left); Jump to Line (J, and Shift+J back);
@@ -98,6 +99,10 @@ in [accepted divergences](docs/references/accepted-divergences.md).
     HTML Features (Insert+F3), the element lists on Ctrl+Insert and a letter (buttons, edits,
     check boxes, radio buttons, combo boxes, graphics, lists, articles, paragraphs, block
     quotes, tables, divisions and tabs), and Document Regions (Insert+Ctrl+R);
+  - the PlaceMarker List (Ctrl+Shift+K): PlaceMarkers added with the line at the cursor as
+    their name, kept for the page (or every page of its site) from one visit to the next,
+    moved to, renamed and removed; custom labels (Insert+Ctrl+Tab): a name of your own for a
+    field, button, link or graphic, read in its place on the site's pages;
   - tables: Ctrl+Alt and the arrows, a whole row or column with Windows+Alt and the arrows,
     and the table layer (Insert+Space, then T);
   - selecting with Shift and the arrows, Ctrl+A or F8, and copying with Ctrl+C;
@@ -176,7 +181,7 @@ documentation describes and Okur lacks, most important first. Among them:
 - Speech On Demand (Shift+S in the speech layer only says it is not available, as JAWS does
   in full speech mode);
 - notifications (toasts) and the notification history;
-- saved PlaceMarkers and the PlaceMarker List, custom labels and Flexible Web;
+- Flexible Web;
 - the rest of what the verbosity levels change, as further recordings show it;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab

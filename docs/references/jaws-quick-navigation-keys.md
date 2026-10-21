@@ -33,7 +33,7 @@ the Say All command".
 | Key | JAWS command | Documented as | Okur | Scenario |
 |---|---|---|---|---|
 | 1–6 | MoveToNextHeadingLevelN | Heading at Level | built | 104, 275, 277 |
-| 7, 8, 9, 0 | SpeakPlaceMarkerN(1..4) (Shift: MoveToPlaceMarkerN) | PlaceMarker 1 to 4 | gap | helper dialogs plan |
+| 7, 8, 9, 0 | SpeakPlaceMarkerN(1..4) (Shift: MoveToPlaceMarkerN) | PlaceMarker 1 to 4 | built; "No place marker #2" | 702 |
 | A | MoveToNextRadioButton | Radio Button | built | |
 | B | MoveToNextButton | Button | built | |
 | C | MoveToNextCombo | Combo Box, List Box, or Tree View | built | |
@@ -44,7 +44,7 @@ the Say All command".
 | H | moveToNextHeading | Heading | built | |
 | I | MoveToNextListItem | Item in a List | built | |
 | J | JumpToLine (Shift: JumpReturnFromLine) | Jump to Line, Return to Previous Line | gap | 299 |
-| K | MoveToNextPlaceMarker | PlaceMarker | built for the temporary PlaceMarker; saved ones and the list not yet | 687 |
+| K | MoveToNextPlaceMarker | PlaceMarker | built, saved and temporary; without any, the list once it was opened since the page loaded | 687, 702, 703 |
 | L | MoveToNextList | List | built | |
 | M | MoveToNextFrame | Frame | bound | |
 | N | MoveToNextNonLinkText | Non-link Text | built | 289 |
@@ -95,7 +95,7 @@ the Say All command".
 | Ctrl+Insert+Y | SelectAGlanceHighlight | gap (backlog: which text counts) | |
 | Ctrl+Insert+Slash, Ctrl+Insert+SemiColon, Insert+Win+SemiColon | SelectAnOnClickElement, SelectAnOnMouseOverElement | gap | |
 | Ctrl+Insert+Backslash | SelectAMailToLink | gap | |
-| Ctrl+Shift+K, Ctrl+Win+K | SelectAPlaceMarker, DefineATempPlaceMarker | Ctrl+Win+K built (687); the list not yet | 687 |
+| Ctrl+Shift+K, Ctrl+Win+K | SelectAPlaceMarker, DefineATempPlaceMarker | built: the PlaceMarker List, Add, Change, Remove, Remove All; the temporary PlaceMarker | 687, 699, 701-703 |
 | Ctrl+Insert+Enter | OnMouseOver | gap | |
 | Shift+Insert+F1, Ctrl+Shift+Insert+F1 | DisplayBasicElementInfo / DisplayAdvancedElementInfo | gap | |
 | Ctrl+Insert+F7 | IndicateLinkSourceURL | built (the link's address) | 536 |
