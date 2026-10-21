@@ -449,12 +449,17 @@ impl SpeechFormatter {
                 }
                 Announcement::new(lines)
             }
-            Role::CheckBox => Announcement::from_text(&format!(
-                "{name}  \u{1d} {} \u{1e}   \u{1d}{}\u{1e}",
-                node.role_description()
-                    .unwrap_or(msg::role_check_box().as_str()),
-                checked(node.states.checked)
-            )),
+            // In parts, so that verbosity's Control Type and Item State can leave them out
+            // [obs, 737/s7, 738/s7].
+            Role::CheckBox => {
+                let role = node
+                    .role_description()
+                    .unwrap_or(msg::role_check_box().as_str());
+                let mut parts = name_and_role(name, role);
+                parts.push(Part::text(" "));
+                parts.push(Part::state(checked(node.states.checked)));
+                Announcement::new(vec![Line::new(parts)])
+            }
             // A toggle button (`aria-pressed`): "Sohbetler Toggle button Pressed", "👍 Toggle
             // button Not pressed" (WhatsApp, JAWS on the dev box, 2026-10-17).
             Role::Button if node.states.checked.is_some() => {
@@ -468,27 +473,23 @@ impl SpeechFormatter {
                 Announcement::new(vec![Line::new(parts)])
             }
             Role::Button => {
-                // A disclosure button speaks its state [obs, 29/s1].
-                let state = match node.states.expanded {
-                    Some(true) => format!(" \u{1d}{}\u{1e}", msg::state_expanded()),
-                    Some(false) => format!(" \u{1d}{}\u{1e}", msg::state_collapsed()),
-                    None => String::new(),
-                };
-                let current = node
-                    .current_phrase()
-                    .map(|c| format!(" \u{1d}{c}\u{1e}"))
-                    .unwrap_or_default();
-                let popup = node
-                    .attributes
-                    .get("haspopup")
-                    .map(|p| format!(" \u{1d}{}\u{1e} {p}", msg::state_has_popup()))
-                    .unwrap_or_default();
                 let role = node
                     .role_description()
                     .unwrap_or(msg::role_button().as_str());
-                Announcement::from_text(&format!(
-                    "{name}  \u{1d} {role} \u{1e}{state}{popup}{current}"
-                ))
+                let mut parts = name_and_role(name, role);
+                // A disclosure button speaks its state [obs, 29/s1].
+                match node.states.expanded {
+                    Some(true) => parts.push(Part::state(msg::state_expanded())),
+                    Some(false) => parts.push(Part::state(msg::state_collapsed())),
+                    None => {}
+                }
+                if let Some(popup) = node.attributes.get("haspopup") {
+                    parts.push(Part::state(msg::state_has_popup()));
+                    parts.push(Part::text(" "));
+                    parts.push(Part::new(PartKind::Value, popup));
+                }
+                parts.extend(node.current_phrase().map(Part::state));
+                Announcement::new(vec![Line::new(parts)])
             }
             // On focus a menu button says no state and no hint (JAWS on the dev box).
             Role::MenuButton => {
@@ -582,6 +583,19 @@ impl SpeechFormatter {
     /// before a plain link's role: "README ‹Current Page› ‹ Link ›".
     pub fn format_link_focus(name: &str, node: &AomNode) -> String {
         Self::link_focus(name, node).render_all()
+    }
+
+    /// A combo box taking the focus by Tab in a page: its name, role and value, without its
+    /// collapsed state (unlike the C quick key).
+    pub fn combo_box_tab_focus(name: &str, node: &AomNode) -> Announcement {
+        let mut lines = vec![Line::new(name_and_role(
+            name,
+            msg::role_combo_box_focus().as_str(),
+        ))];
+        if let Some(value) = node.value.as_deref() {
+            lines.push(Line::of(PartKind::Value, value));
+        }
+        Announcement::new(lines)
     }
 
     /// [`Self::format_link_focus`] as parts with their kinds.

@@ -1209,7 +1209,7 @@ impl VirtualCursor {
             .line_at_offset(self.offset)
             .filter(|l| l.node_id == node_id)?;
         let mut speech = self.format_line_announcement(line);
-        if let Some(hint) = SpeechFormatter::web_focus_hint(node) {
+        if let Some(hint) = self.focus_hint(node) {
             speech.push('\n');
             speech.push_str(hint);
         }
@@ -1248,12 +1248,8 @@ impl VirtualCursor {
             Role::ComboBox if attr("editable") == Some("true") => {
                 SpeechFormatter::format_edit_combo(name, node)
             }
-            Role::ComboBox => format!(
-                "{name}  \u{1d} {} \u{1e}  \n{}",
-                msg::role_combo_box_focus(),
-                node.value.as_deref().unwrap_or_default()
-            ),
-            Role::Link { .. } => SpeechFormatter::format_link_focus(name, node),
+            Role::ComboBox => self.with_verbosity(SpeechFormatter::combo_box_tab_focus(name, node)),
+            Role::Link { .. } => self.with_verbosity(SpeechFormatter::link_focus(name, node)),
             // A tab: its tab list as a group when focus enters it, then name, position and
             // selection [obs, 29/s2-s3].
             Role::Tab => {
@@ -1281,10 +1277,15 @@ impl VirtualCursor {
                 }
                 lines.join("\n")
             }
-            Role::Edit if attr("password") == Some("true") => format!(
-                "{}  \u{1d}\u{1e}",
-                self.control_focus_speech(self.offset, previous)
-            ),
+            // Its empty state mark goes with the other states [obs, 738/s3].
+            Role::Edit if attr("password") == Some("true") => {
+                let field = self.control_focus_speech(self.offset, previous);
+                if self.verbosity.is_on(crate::settings::OutputType::ItemState) {
+                    format!("{field}  \u{1d}\u{1e}")
+                } else {
+                    field
+                }
+            }
             // A grid's cell that takes the focus itself is said by its name, all of it, as
             // JAWS says WhatsApp's chats moving through its list (the chat's name, its last
             // message's date and the message; dev box, 2026-10-17).
@@ -1307,11 +1308,23 @@ impl VirtualCursor {
                 speech.push_str(&position);
             }
         }
-        if let Some(hint) = SpeechFormatter::web_focus_hint(node) {
+        if let Some(hint) = self.focus_hint(node) {
             speech.push('\n');
             speech.push_str(hint);
         }
         Some(speech)
+    }
+
+    /// The usage hint said after a focus, unless verbosity's Tutor leaves it out [obs, 736].
+    fn focus_hint(&self, node: &AomNode) -> Option<&'static str> {
+        SpeechFormatter::web_focus_hint(node)
+            .filter(|_| self.verbosity.is_on(crate::settings::OutputType::Hint))
+    }
+
+    /// An announcement's words, without what verbosity leaves out.
+    fn with_verbosity(&self, mut said: crate::announcement::Announcement) -> String {
+        said.retain(|kind| self.verbosity.says(kind));
+        said.render_all()
     }
 
     /// A focus in a table cell, as JAWS says it on Tab (dev box, 2026-10-16): the column

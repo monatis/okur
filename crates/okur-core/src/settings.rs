@@ -520,10 +520,19 @@ pub enum OutputType {
     /// which the settings file names in Okur's name (AGENTS.md §1.5).
     #[serde(rename = "okur_message")]
     OkurMessage,
+    /// A control's type: "Edit", "radio button", "Button", "same page link"; off, the control
+    /// is its name and value alone [obs, 737]. JAWS's "Control Type".
+    ControlType,
+    /// A control's states: "checked", "not checked", "Required" [obs, 738]. JAWS's "Item
+    /// State".
+    ItemState,
+    /// A control's place among its siblings: "1 of 3" [obs, 739]. JAWS's "Position
+    /// Information".
+    Position,
 }
 
 impl OutputType {
-    pub const ALL: [OutputType; 7] = [
+    pub const ALL: [OutputType; 10] = [
         OutputType::AccessKey,
         OutputType::Hint,
         OutputType::ListPosition,
@@ -531,26 +540,38 @@ impl OutputType {
         OutputType::ControlGroupName,
         OutputType::Select,
         OutputType::OkurMessage,
+        OutputType::ControlType,
+        OutputType::ItemState,
+        OutputType::Position,
     ];
 
     /// JAWS's key for the type in `DEFAULT.JCF` `[OutputModes]`, where it is known.
     pub fn jcf_key(self) -> Option<&'static str> {
         match self {
             Self::AccessKey => Some("ACCESS_KEY"),
-            Self::Hint | Self::Description => None,
+            // The hints are JAWS's tutor messages [obs, 736].
+            Self::Hint => Some("TUTOR"),
+            Self::Description => None,
             Self::ListPosition => Some("ANNOUNCE_POSITION_AND_COUNT"),
             Self::ControlGroupName => Some("CONTROL_GROUP_NAME"),
             Self::Select => Some("SELECT"),
             Self::OkurMessage => Some("JAWS_MESSAGE"),
+            Self::ControlType => Some("CONTROL_TYPE"),
+            Self::ItemState => Some("ITEM_STATE"),
+            Self::Position => Some("POSITION"),
         }
     }
 
     /// The type's modes, Beginner first, where the user's settings name none: JAWS's shipped
     /// `DEFAULT.JCF` (`ANNOUNCE_POSITION_AND_COUNT=1|2|0`, `CONTROL_GROUP_NAME=1|2|0`,
-    /// `SELECT=1|2|0`, `JAWS_MESSAGE=1|2|0`, `TUTOR=1|1|1`, `ACCESS_KEY=1|1|1`).
+    /// `SELECT=1|2|0`, `JAWS_MESSAGE=1|2|0`, `TUTOR=1|1|1`, `ACCESS_KEY=1|1|1`,
+    /// `CONTROL_TYPE=1|2|2`, `ITEM_STATE=1|2|2`, `POSITION=1|2|2`; a 2 is on, its short form
+    /// not modeled yet).
     pub fn default_modes(self) -> [OutputMode; 3] {
         match self {
-            Self::AccessKey | Self::Hint => [OutputMode::On; 3],
+            Self::AccessKey | Self::Hint | Self::ControlType | Self::ItemState | Self::Position => {
+                [OutputMode::On; 3]
+            }
             Self::ListPosition
             | Self::Description
             | Self::ControlGroupName
@@ -569,6 +590,9 @@ impl OutputType {
             PartKind::ListPosition => Some(Self::ListPosition),
             PartKind::Description => Some(Self::Description),
             PartKind::GroupName => Some(Self::ControlGroupName),
+            PartKind::Role => Some(Self::ControlType),
+            PartKind::State => Some(Self::ItemState),
+            PartKind::Position => Some(Self::Position),
             _ => None,
         }
     }

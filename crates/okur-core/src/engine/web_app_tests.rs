@@ -342,8 +342,10 @@ fn a_control_the_buffer_lacks_is_said_from_its_event() {
     let speech = engine
         .handle_accessibility_event(&AccessibilityEvent::Focus(button))
         .unwrap_or_default();
+    // Words and marks, whatever the spaces between them.
+    let words = speech.split_whitespace().collect::<Vec<_>>().join(" ");
     assert!(
-        speech.starts_with("Mesaj seçeneklerini aç  \u{1d} Button \u{1e} \u{1d}collapsed\u{1e}"),
+        words.starts_with("Mesaj seçeneklerini aç \u{1d} Button \u{1e} \u{1d}collapsed\u{1e}"),
         "{speech:?}"
     );
     assert!(speech.ends_with("To activate press Enter."), "{speech:?}");

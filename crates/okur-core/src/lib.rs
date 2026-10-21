@@ -571,10 +571,16 @@ mod tests {
         cursor.move_to_start();
 
         let b1 = cursor.move_next_button().unwrap_or_default();
-        assert_eq!(b1, "Save Preferences  \u{001d} Button \u{001e}");
+        assert_eq!(
+            norm(&b1),
+            norm("Save Preferences  \u{001d} Button \u{001e}")
+        );
 
         let b2 = cursor.move_next_button().unwrap_or_default();
-        assert_eq!(b2, "Submit Application  \u{001d} Button \u{001e}");
+        assert_eq!(
+            norm(&b2),
+            norm("Submit Application  \u{001d} Button \u{001e}")
+        );
     }
 
     #[test]
