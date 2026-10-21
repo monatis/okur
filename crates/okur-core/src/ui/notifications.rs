@@ -58,6 +58,9 @@ pub struct HistoryDialog {
     rows: Vec<String>,
     selected: usize,
     rules: bool,
+    /// Rules are kept: Manage Rules... is available (JAWS 2025 help: "not available until you
+    /// have created at least one rule"; after Create Rule... [obs, 783/s10]).
+    has_rules: bool,
 }
 
 fn control(id: &str, label: StaticMessage, kind: ControlKind) -> Control {
@@ -71,12 +74,13 @@ fn control(id: &str, label: StaticMessage, kind: ControlKind) -> Control {
 
 impl HistoryDialog {
     /// The history over `rows`, the latest first.
-    pub fn new(id: u32, rows: Vec<String>, rules: bool) -> Self {
+    pub fn new(id: u32, rows: Vec<String>, rules: bool, has_rules: bool) -> Self {
         Self {
             id,
             rows,
             selected: 0,
             rules,
+            has_rules,
         }
     }
 
@@ -104,6 +108,10 @@ impl HistoryDialog {
                     },
                 ),
                 button("create", msg::notification_history_create_rule()),
+                Control {
+                    enabled: self.has_rules,
+                    ..button("manage", msg::notification_history_manage())
+                },
                 button("clear", msg::notification_history_clear()),
                 button("cancel", msg::notification_history_close()),
             ],
@@ -211,6 +219,9 @@ const BRAILLE_ACTIONS: [fn() -> StaticMessage; 3] = [
 /// A notification rule: which notifications it matches and what is done with them.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Rule {
+    /// The name given in Name Your Rule [obs, 783/s7].
+    #[serde(default)]
+    pub name: String,
     pub kind: RuleType,
     pub text: String,
     /// Limited to the notifications of this sender.
@@ -290,6 +301,79 @@ pub enum RuleOutcome {
     Closed,
 }
 
+/// Name Your Rule, after Create Rule's OK [obs, 783/s7]: "Please enter a name for the rule.",
+/// and Rule Name holding the notification's text; OK keeps the rule under that name.
+#[derive(Debug, Clone)]
+pub struct NameRuleDialog {
+    pub id: u32,
+    rule: Rule,
+    name: String,
+}
+
+impl NameRuleDialog {
+    pub fn new(id: u32, rule: Rule, proposed: &str) -> Self {
+        Self {
+            id,
+            rule,
+            name: proposed.to_owned(),
+        }
+    }
+
+    pub fn spec(&self) -> DialogSpec {
+        DialogSpec {
+            id: self.id,
+            title: msg::notification_rule_name_title().to_string(),
+            controls: vec![
+                control(
+                    "prompt",
+                    msg::notification_rule_name_prompt(),
+                    ControlKind::Message {
+                        text: msg::notification_rule_name_prompt().to_string(),
+                    },
+                ),
+                control(
+                    "name",
+                    msg::notification_rule_name(),
+                    ControlKind::Edit {
+                        text: self.name.clone(),
+                    },
+                ),
+                control(
+                    "ok",
+                    msg::notification_rule_ok(),
+                    ControlKind::Button { default: true },
+                ),
+                control(
+                    "cancel",
+                    msg::notification_rule_cancel(),
+                    ControlKind::Button { default: false },
+                ),
+            ],
+        }
+    }
+
+    pub fn handle(&mut self, event: &FromUi) -> RuleOutcome {
+        match event {
+            FromUi::DialogChanged { id, control, value } if *id == self.id => {
+                if let ("name", Value::Text(text)) = (control.as_str(), value) {
+                    self.name = text.clone();
+                }
+                RuleOutcome::Nothing
+            }
+            FromUi::DialogPressed { id, control } if *id == self.id => match control.as_str() {
+                "ok" if !self.name.trim().is_empty() => RuleOutcome::Save(Rule {
+                    name: self.name.trim().to_owned(),
+                    ..self.rule.clone()
+                }),
+                "cancel" => RuleOutcome::Closed,
+                _ => RuleOutcome::Nothing,
+            },
+            FromUi::DialogClosed { id } if *id == self.id => RuleOutcome::Closed,
+            _ => RuleOutcome::Nothing,
+        }
+    }
+}
+
 /// Create Rule, over the Notification History, for one notification. Its controls are JAWS
 /// 2025's [obs, 775/s6-s13]: in "Received Notification", Rule Type (Contains), the
 /// notification's text in an edit with no name, "Limit to notifications from <sender>"
@@ -308,6 +392,7 @@ impl CreateRuleDialog {
         Self {
             id,
             rule: Rule {
+                name: String::new(),
                 kind: RuleType::Contains,
                 text: text.to_owned(),
                 sender: sender.map(str::to_owned),
@@ -500,6 +585,7 @@ mod tests {
         assert!(!rule.matches(TEXT, Some("Mail")));
         assert_eq!(rule.speech, SpeechAction::Mute);
         let pattern = Rule {
+            name: "Sender".to_owned(),
             kind: RuleType::MatchesPattern,
             text: "^New notification from Windows PowerShell, (.*?),".to_owned(),
             sender: None,
@@ -519,7 +605,7 @@ mod tests {
             sender: Some("Windows PowerShell".to_owned()),
             time: "11:07 PM".to_owned(),
         };
-        let mut dialog = HistoryDialog::new(4, vec![toast.row()], true);
+        let mut dialog = HistoryDialog::new(4, vec![toast.row()], true, false);
         let spec = dialog.spec();
         assert_eq!(spec.title, "Notification History");
         let labels: Vec<&str> = spec.controls.iter().map(|c| c.label.as_str()).collect();
@@ -529,6 +615,7 @@ mod tests {
                 "Recent Notifications",
                 "Enable Rules",
                 "Create Rule...",
+                "Manage Rules...",
                 "Clear History",
                 "Close"
             ]

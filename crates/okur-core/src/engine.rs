@@ -305,6 +305,9 @@ pub struct ScreenReaderEngine {
     notification_rule_store: Option<Box<dyn crate::ui::notifications::NotificationRuleStore>>,
     /// Create Rule while it is open.
     notification_rule_dialog: Option<crate::ui::notifications::CreateRuleDialog>,
+    /// Name Your Rule while it is open, and the notification the rule was made from.
+    notification_name_dialog: Option<crate::ui::notifications::NameRuleDialog>,
+    notification_rule_text: Option<String>,
     /// The last notification that came, for Insert+Space, Shift+N, even one the history
     /// leaves out.
     last_notification: Option<String>,
@@ -459,6 +462,8 @@ impl ScreenReaderEngine {
             notification_rules: crate::ui::notifications::NotificationRules::default(),
             notification_rule_store: None,
             notification_rule_dialog: None,
+            notification_name_dialog: None,
+            notification_rule_text: None,
             last_notification: None,
             toasts_unsaid: false,
             table_layer: false,

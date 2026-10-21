@@ -559,6 +559,7 @@ mod tests {
         let rules = NotificationRules {
             enabled: false,
             rules: vec![Rule {
+                name: "Mail".into(),
                 kind: RuleType::BeginsWith,
                 text: "New notification from Mail".into(),
                 sender: Some("Mail".into()),

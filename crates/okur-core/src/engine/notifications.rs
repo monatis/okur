@@ -5,7 +5,8 @@
 use super::ScreenReaderEngine;
 use crate::messages::msg;
 use crate::ui::notifications::{
-    CreateRuleDialog, HistoryDialog, Notification, Outcome, RuleOutcome, SpeechAction,
+    CreateRuleDialog, HistoryDialog, NameRuleDialog, Notification, Outcome, RuleOutcome,
+    SpeechAction,
 };
 use crate::ui::{FromUi, ToUi};
 
@@ -107,7 +108,12 @@ impl ScreenReaderEngine {
             .rev()
             .map(Notification::row)
             .collect();
-        let dialog = HistoryDialog::new(self.dialog_count, rows, self.notification_rules.enabled);
+        let dialog = HistoryDialog::new(
+            self.dialog_count,
+            rows,
+            self.notification_rules.enabled,
+            !self.notification_rules.rules.is_empty(),
+        );
         ui.send(ToUi::DialogShow {
             dialog: dialog.spec(),
         });
@@ -120,7 +126,8 @@ impl ScreenReaderEngine {
         id.is_some()
             && (self.notification_history.as_ref().map(|d| d.id) == id
                 || self.notification_details == id
-                || self.notification_rule_dialog.as_ref().map(|d| d.id) == id)
+                || self.notification_rule_dialog.as_ref().map(|d| d.id) == id
+                || self.notification_name_dialog.as_ref().map(|d| d.id) == id)
     }
 
     /// What the user did to the Notification History or a notification's details.
@@ -141,16 +148,56 @@ impl ScreenReaderEngine {
         {
             match dialog.handle(message) {
                 RuleOutcome::Nothing => {}
+                // OK asks the rule's name, the notification's text proposed [obs, 783/s7].
+                RuleOutcome::Save(rule) => {
+                    self.dialog_count += 1;
+                    let proposed = self
+                        .notification_rule_text
+                        .clone()
+                        .unwrap_or_else(|| rule.text.clone());
+                    let naming = NameRuleDialog::new(self.dialog_count, rule, &proposed);
+                    if let Some(ui) = &self.ui {
+                        ui.send(ToUi::DialogShow {
+                            dialog: naming.spec(),
+                        });
+                    }
+                    self.notification_name_dialog = Some(naming);
+                }
+                RuleOutcome::Closed => self.notification_rule_dialog = None,
+            }
+            return None;
+        }
+        if let Some(naming) = self
+            .notification_name_dialog
+            .as_mut()
+            .filter(|d| Some(d.id) == super::dialog_of(message))
+        {
+            match naming.handle(message) {
+                RuleOutcome::Nothing => {}
+                // The rule kept, both dialogs go: the history is in front again, Manage
+                // Rules... available [obs, 783/s9, s10].
                 RuleOutcome::Save(rule) => {
                     self.notification_rules.rules.push(rule);
                     self.save_notification_rules();
-                    if let (Some(dialog), Some(ui)) =
-                        (self.notification_rule_dialog.take(), &self.ui)
-                    {
-                        ui.send(ToUi::DialogClose { id: dialog.id });
+                    let naming = self.notification_name_dialog.take();
+                    let creating = self.notification_rule_dialog.take();
+                    if let Some(ui) = &self.ui {
+                        for id in [naming.map(|d| d.id), creating.map(|d| d.id)]
+                            .into_iter()
+                            .flatten()
+                        {
+                            ui.send(ToUi::DialogClose { id });
+                        }
+                        if let Some(history) = &self.notification_history {
+                            ui.send(ToUi::DialogEnable {
+                                id: history.id,
+                                control: "manage".to_owned(),
+                                enabled: true,
+                            });
+                        }
                     }
                 }
-                RuleOutcome::Closed => self.notification_rule_dialog = None,
+                RuleOutcome::Closed => self.notification_name_dialog = None,
             }
             return None;
         }
@@ -178,6 +225,7 @@ impl ScreenReaderEngine {
                     &chosen.text,
                     chosen.sender.as_deref(),
                 );
+                self.notification_rule_text = Some(chosen.text.clone());
                 self.ui.as_ref()?.send(ToUi::DialogShow {
                     dialog: dialog.spec(),
                 });

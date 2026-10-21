@@ -6240,7 +6240,35 @@ fn a_notification_rule_mutes_what_it_matches() {
         id: rule,
         control: "ok".into(),
     }));
-    assert_eq!(ui.take(), [ToUi::DialogClose { id: rule }]);
+    // Name Your Rule, the notification's text proposed [obs, 783/s7].
+    let naming = match ui.take().first() {
+        Some(ToUi::DialogShow { dialog }) if dialog.title == "Name Your Rule" => dialog.id,
+        other => {
+            panic_free_fail(&format!("no Name Your Rule: {other:?}"));
+            return;
+        }
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id: naming,
+        control: "name".into(),
+        value: Value::Text("Digest".into()),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: naming,
+        control: "ok".into(),
+    }));
+    assert_eq!(
+        ui.take(),
+        [
+            ToUi::DialogClose { id: naming },
+            ToUi::DialogClose { id: rule },
+            ToUi::DialogEnable {
+                id: history,
+                control: "manage".into(),
+                enabled: true
+            }
+        ]
+    );
     speech.take();
     assert_eq!(
         toast(

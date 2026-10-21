@@ -122,6 +122,7 @@ notification-history-title = Notification History
 notification-history-list = Recent Notifications
 notification-history-rules = Enable Rules
 notification-history-create-rule = Create Rule...
+notification-history-manage = Manage Rules...
 notification-history-clear = Clear History
 notification-history-close = Close
 # Enter on a notification in the history [obs, 774/s11].
@@ -150,6 +151,10 @@ notification-rule-braille-short = Show shortened flash message
 notification-rule-hidden = Don't Show in History
 notification-rule-ok = OK
 notification-rule-cancel = Cancel
+# After Create Rule's OK [obs, 783/s7].
+notification-rule-name-title = Name Your Rule
+notification-rule-name-prompt = Please enter a name for the rule.
+notification-rule-name = Rule Name:
 
 ## Say Default Button (Insert+E) and the settings in use (Insert+Q) [obs, 513]
 
