@@ -40,8 +40,15 @@ impl ScreenReaderEngine {
     /// What the user did to Skim Reading.
     pub(super) fn handle_skim_event(&mut self, message: &FromUi) -> Option<String> {
         let outcome = self.skim_dialog.as_mut()?.handle(message);
-        if outcome == Outcome::Nothing {
-            return None;
+        match outcome {
+            Outcome::Nothing => return None,
+            Outcome::Send(messages) => {
+                if let Some(ui) = &self.ui {
+                    messages.into_iter().for_each(|m| ui.send(m));
+                }
+                return None;
+            }
+            _ => {}
         }
         if let (Some(dialog), Some(ui)) = (self.skim_dialog.take(), &self.ui) {
             if !matches!(outcome, Outcome::Closed(_)) {
@@ -55,7 +62,7 @@ impl ScreenReaderEngine {
                 self.start_skim_read()
             }
             Outcome::Summary(options) => self.open_skim_summary(options.rule),
-            Outcome::Nothing | Outcome::Closed(_) => None,
+            Outcome::Nothing | Outcome::Send(_) | Outcome::Closed(_) => None,
         }
     }
 

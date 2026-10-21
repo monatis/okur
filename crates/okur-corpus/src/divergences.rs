@@ -147,6 +147,7 @@ divergences! {
         "763-web-skim-reading-rule-types/s1",
         "769-web-skim-read-by-sentence/s1",
         "771-web-skim-reading-rule-saved/s1",
+        "776-web-skim-reading-text-rules-controls/s1",
     ],
     "Opening one of its list dialogs, JAWS's speech passes through its own windows before it \
      names the dialog: its main window (its version, a list's tutor message) and the browser's \
@@ -631,8 +632,10 @@ divergences! {
     Difference::Step => [
         "763-web-skim-reading-rule-types/s23",
         "763-web-skim-reading-rule-types/s24",
+        "776-web-skim-reading-text-rules-controls/s19",
+        "776-web-skim-reading-text-rules-controls/s20",
     ],
-    "Escape in Skim Reading with the focus on Skim Reading Indication (after Shift+Tab and Up      Arrow there) closes the dialog and opens JAWS's summary in its Results Viewer, which      then says nothing to Say Line: in every trial of two recordings. Escape from the rule      type only closes the dialog (760/s14). Okur's Escape closes the dialog and gives the      page back, as Close does.",
+    "Closing Skim Reading with the focus on Skim Reading Indication, by Escape (763) or by      Close's Alt+C (776), closes the dialog and opens JAWS's summary in its Results Viewer,      which then says nothing to Say Line: in every trial of three recordings. Escape from      the rule type only closes the dialog (760/s14). Okur's Escape and Close close the      dialog and give the page back.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 }
 

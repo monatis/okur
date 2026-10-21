@@ -1,13 +1,15 @@
 //! Skim Reading (Ctrl+Shift+Insert+Down, JAWS's SkimReadDialog): how Ctrl+Insert+Down skims a
-//! page. Its controls are JAWS 2025's, as its dialog reports them [obs, 760, 763]: Use Rule
-//! Type, of four; the text rules' controls (Rules History, Text Search Pattern, Use regular
-//! expression, Speak Unit, Delete Rule, Delete All Rules) and the attribute and color rules'
-//! (Text Color, Background Color, Bold to Outline), unavailable with the first two rule types;
-//! Skim Reading Indication; and the buttons Start Skim Reading, Create Summary (the default),
-//! Close and Help. Tab goes from the rule type to Skim Reading Indication and through the
-//! buttons [obs, 760/s2-s7].
+//! page. Its controls are JAWS 2025's, as its dialog reports them [obs, 760, 763, 776]: Use
+//! Rule Type, of four; the text rules' controls (Rules History, Text Search Pattern, Speak
+//! Unit, Use regular expression, Delete Rule, Delete All Rules) and the attribute and color
+//! rules' (Text Color, Background Color, Bold to Outline); Skim Reading Indication; and the
+//! buttons Start Skim Reading, Create Summary (the default), Close and Help. The rules'
+//! controls are available by the rule type ([`available`]): with the first line or sentence,
+//! Tab goes from the rule type to Skim Reading Indication [obs, 760/s2-s7]; with text rules,
+//! through Rules History, Text Search Pattern, Speak Unit and Use regular expression first
+//! [obs, 776/s4-s8].
 
-use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, Value};
+use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
 
 use crate::messages::{msg, StaticMessage};
 
@@ -60,10 +62,48 @@ impl Default for SkimOptions {
     }
 }
 
+/// The rules' controls, in the dialog's order.
+const RULE_CONTROLS: [&str; 17] = [
+    "history",
+    "pattern",
+    "unit",
+    "regex",
+    "delete",
+    "delete_all",
+    "text_color",
+    "background",
+    "bold",
+    "italic",
+    "underline",
+    "strikeout",
+    "double_strikeout",
+    "superscript",
+    "subscript",
+    "shadow",
+    "outline",
+];
+
+/// Whether a rules' control is available with `rule` chosen: Rules History, Text Search
+/// Pattern, Speak Unit and Use regular expression with text rules [obs, 776/s4-s7]; Rules
+/// History, Speak Unit, the colors and the attributes with attribute and color rules (JAWS 2025
+/// help, Skim Reading Dialog: the attributes "are only available when the Attributes and Color
+/// Rules Apply for Reading radio button is selected", regular expressions only with text
+/// rules); Delete Rule and Delete All Rules once a rule is saved, which Okur does not yet.
+fn available(rule: SkimRule, control: &str) -> bool {
+    match control {
+        "history" | "unit" => matches!(rule, SkimRule::TextRules | SkimRule::Attributes),
+        "pattern" | "regex" => rule == SkimRule::TextRules,
+        "delete" | "delete_all" => false,
+        _ => rule == SkimRule::Attributes,
+    }
+}
+
 /// What the engine does after a message from the dialog.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Outcome {
     Nothing,
+    /// Send these to the dialog: the rules' controls made available or not.
+    Send(Vec<ToUi>),
     /// Start Skim Reading: the dialog closes and skim reading starts with these choices.
     Start(SkimOptions),
     /// Create Summary: the dialog closes and the summary shows.
@@ -94,7 +134,7 @@ impl SkimDialog {
         let button = |id: &str, label: StaticMessage, default: bool| {
             control(id, label, ControlKind::Button { default }, true)
         };
-        // The rules' controls, for the rule types Okur does not read by yet.
+        let rule = self.options.rule;
         let rule_choice = |id: &str, label: StaticMessage, option: StaticMessage| {
             control(
                 id,
@@ -103,11 +143,12 @@ impl SkimDialog {
                     options: vec![option.to_string()],
                     selected: 0,
                 },
-                false,
+                available(rule, id),
             )
         };
-        let unavailable =
-            |id: &str, label: StaticMessage, kind: ControlKind| control(id, label, kind, false);
+        let unavailable = |id: &str, label: StaticMessage, kind: ControlKind| {
+            control(id, label, kind, available(rule, id))
+        };
         let unchecked = || ControlKind::CheckBox { checked: false };
         let mut controls = vec![
             control(
@@ -133,8 +174,8 @@ impl SkimDialog {
                     text: String::new(),
                 },
             ),
-            unavailable("regex", msg::skim_regex(), unchecked()),
             rule_choice("unit", msg::skim_unit(), msg::skim_unit_lines()),
+            unavailable("regex", msg::skim_regex(), unchecked()),
             unavailable(
                 "delete",
                 msg::skim_delete(),
@@ -189,8 +230,21 @@ impl SkimDialog {
             FromUi::DialogChanged { id, control, value } if *id == self.id => {
                 match (control.as_str(), value) {
                     ("rule", Value::Selected(i)) => {
-                        if let Some(&rule) = SkimRule::ALL.get(*i) {
-                            self.options.rule = rule;
+                        let Some(&rule) = SkimRule::ALL.get(*i) else {
+                            return Outcome::Nothing;
+                        };
+                        let before = std::mem::replace(&mut self.options.rule, rule);
+                        let changes: Vec<ToUi> = RULE_CONTROLS
+                            .iter()
+                            .filter(|id| available(before, id) != available(rule, id))
+                            .map(|id| ToUi::DialogEnable {
+                                id: self.id,
+                                control: (*id).to_owned(),
+                                enabled: available(rule, id),
+                            })
+                            .collect();
+                        if !changes.is_empty() {
+                            return Outcome::Send(changes);
                         }
                     }
                     ("indication", Value::Checked(on)) => self.options.indication = *on,
@@ -241,6 +295,74 @@ mod tests {
             .controls
             .iter()
             .any(|c| c.id == "summary" && c.kind == ControlKind::Button { default: true }));
+    }
+
+    /// Text rules make their controls available, in JAWS's Tab order [obs, 776/s4-s8].
+    #[test]
+    fn text_rules_make_their_controls_available() {
+        let mut dialog = SkimDialog::new(1, SkimOptions::default());
+        let outcome = dialog.handle(&FromUi::DialogChanged {
+            id: 1,
+            control: "rule".to_owned(),
+            value: Value::Selected(2),
+        });
+        let enabled: Vec<(String, bool)> = match outcome {
+            Outcome::Send(messages) => messages
+                .into_iter()
+                .filter_map(|m| match m {
+                    ToUi::DialogEnable {
+                        control, enabled, ..
+                    } => Some((control, enabled)),
+                    _ => None,
+                })
+                .collect(),
+            other => no_messages(other),
+        };
+        let expected: Vec<(String, bool)> = ["history", "pattern", "unit", "regex"]
+            .iter()
+            .map(|id| ((*id).to_owned(), true))
+            .collect();
+        assert_eq!(enabled, expected);
+        let stops: Vec<&str> = {
+            let spec = dialog.spec();
+            spec.controls
+                .iter()
+                .filter(|c| c.enabled)
+                .map(|c| c.id.as_str())
+                .collect::<Vec<_>>()
+                .into_iter()
+                .map(|id| match id {
+                    "rule" => "rule",
+                    "history" => "history",
+                    "pattern" => "pattern",
+                    "unit" => "unit",
+                    "regex" => "regex",
+                    "indication" => "indication",
+                    _ => "button",
+                })
+                .collect()
+        };
+        assert_eq!(
+            stops,
+            [
+                "rule",
+                "history",
+                "pattern",
+                "unit",
+                "regex",
+                "indication",
+                "button",
+                "button",
+                "button",
+                "button"
+            ]
+        );
+    }
+
+    /// An outcome that is not messages: none to compare.
+    fn no_messages(outcome: Outcome) -> Vec<(String, bool)> {
+        assert_eq!(outcome, Outcome::Nothing, "expected messages");
+        Vec::new()
     }
 
     #[test]
