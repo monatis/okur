@@ -946,7 +946,13 @@ fn v_and_u_move_by_visited_and_unvisited_links() {
     let said = |engine: &mut ScreenReaderEngine, command: &str| {
         engine.execute_command(command).unwrap_or_default()
     };
-    assert!(said(&mut engine, "V").contains("This reading list"));
+    // A visited link's line says it visited, before its role [obs, 689/s5].
+    let first = said(&mut engine, "V");
+    assert!(first.contains("This reading list"), "{first}");
+    assert!(
+        first.contains(&format!("\u{1d}{}\u{1e}", msg::state_visited())),
+        "{first}"
+    );
     assert!(said(&mut engine, "V").contains("City Library"));
     assert!(said(&mut engine, "+V").contains("This reading list"));
     assert!(said(&mut engine, "U").contains("Spring catalog"));

@@ -587,6 +587,8 @@ impl SpeechFormatter {
             parts.extend(current);
             parts
         } else {
+            // A visited link taking the focus is not said visited: "City Library Expands Evening
+            // Hours ‹ Link ›" [obs, 689/s3]; its line says it (`linearize`).
             let mut parts = vec![Part::new(PartKind::Name, name)];
             parts.extend(current);
             parts.push(Part::text(" "));

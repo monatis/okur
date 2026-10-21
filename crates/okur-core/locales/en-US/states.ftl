@@ -20,6 +20,8 @@ state-required = Required
 # field's name and value as the focus lands on it [obs, 284].
 misspelled = Misspelled
 state-selected = selected
+# A link whose page was opened before, said before its role: "visited Link".
+state-visited = visited
 # A menu item that opens another menu.
 state-sub-menu = sub menu
 # An element that cannot be used now (disabled).

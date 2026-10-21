@@ -794,9 +794,16 @@ impl<'a> Builder<'a> {
             self.annotations
                 .push((node.id, "same_page", "true".to_owned()));
         }
-        // aria-current follows the role: "‹ Link › ‹Current Page› README".
+        // aria-current follows the role: "‹ Link › ‹Current Page› README"; a visited link's
+        // state comes before it: "• ‹visited› ‹ Link › City Library Expands Evening Hours"
+        // [obs, 689/s5].
         let current = node.current_phrase().map(state_marker).unwrap_or_default();
-        let speech = format!("{prefix}{}{current}{text}", role_marker(kind));
+        let visited = if node.is_visited() {
+            state_marker(msg::state_visited().as_str())
+        } else {
+            String::new()
+        };
+        let speech = format!("{prefix}{visited}{}{current}{text}", role_marker(kind));
         let line_text = squash(&format!("{prefix} {text}"));
         let line_start = self.emit(node.id, node.role.clone(), &line_text, speech);
         // A list item's bullet is not the link's: the link starts after it and its space,

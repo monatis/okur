@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- parity --write-baseline",
-  "matched_steps": 4936,
+  "matched_steps": 4938,
   "total_steps": 5132,
   "accepted_divergences": 110,
   "errors": [],
@@ -5242,8 +5242,8 @@
     "689-web-followed-link/s2": "match",
     "689-web-followed-link/s3": "match",
     "689-web-followed-link/s4": "match",
-    "689-web-followed-link/s5": "mismatch",
-    "689-web-followed-link/s6": "mismatch",
+    "689-web-followed-link/s5": "match",
+    "689-web-followed-link/s6": "match",
     "689-web-followed-link/s7": "match",
     "689-web-followed-link/s8": "match",
     "689-web-followed-link/s9": "match",
