@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6085,
-  "total_steps": 6300,
+  "matched_steps": 6089,
+  "total_steps": 6311,
   "accepted_divergences": 160,
   "errors": [],
   "steps": {
@@ -6478,6 +6478,17 @@
     "766-web-word-list-past-the-last/s6": "match",
     "766-web-word-list-past-the-last/s7": "match",
     "766-web-word-list-past-the-last/s8": "match",
-    "766-web-word-list-past-the-last/s9": "match"
+    "766-web-word-list-past-the-last/s9": "match",
+    "769-web-skim-read-by-sentence/s1": "mismatch",
+    "769-web-skim-read-by-sentence/s2": "match",
+    "769-web-skim-read-by-sentence/s3": "mismatch",
+    "769-web-skim-read-by-sentence/s4": "mismatch",
+    "769-web-skim-read-by-sentence/s5": "match",
+    "769-web-skim-read-by-sentence/s6": "match",
+    "769-web-skim-read-by-sentence/s7": "mismatch",
+    "771-web-skim-reading-rule-saved/s1": "mismatch",
+    "771-web-skim-reading-rule-saved/s2": "match",
+    "771-web-skim-reading-rule-saved/s3": "mismatch",
+    "771-web-skim-reading-rule-saved/s4": "mismatch"
   }
 }
