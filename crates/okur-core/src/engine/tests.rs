@@ -6002,3 +6002,77 @@ fn a_toast_is_said_and_repeated_on_request() {
         ["Toast notification announcements enabled"]
     );
 }
+
+/// Skim Reading's Create Summary: what skim reading would read, numbered, the page's title
+/// first, in the viewer "Skim Reading Results"; Enter on a piece moves the virtual cursor there (JAWS 2025 help, Skim
+/// Reading Dialog; [obs, 762/s2]). Close keeps no choice: Ctrl+Insert+Down reads by first line.
+#[test]
+fn create_summary_lists_what_skim_reading_reads() {
+    use crate::ui::{FromUi, ToUi, Value};
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Hours")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph)
+                .with_text("The library opens late. It closes at nine."),
+            AomNode::new(2, Role::Paragraph)
+                .with_text("Weekends stay the same. Sundays are short."),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let open = |engine: &mut ScreenReaderEngine| {
+        engine.execute_command("SkimReadDialog");
+        match ui.take().first() {
+            Some(ToUi::DialogShow { dialog }) => dialog.id,
+            _ => 0,
+        }
+    };
+    let id = open(&mut engine);
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "rule".into(),
+        value: Value::Selected(1),
+    }));
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "summary".into(),
+    }));
+    assert_eq!(said.as_deref(), Some("Skim Reading Results\n1. Hours"));
+    let shown = ui.take();
+    assert!(
+        shown
+            .iter()
+            .any(|m| matches!(m, ToUi::ViewerShow { title, lines, .. }
+            if title == "Skim Reading Results"
+                && lines.last().map(String::as_str) == Some("3. Weekends stay the same."))),
+        "{shown:?}"
+    );
+    speech.take();
+    for key in [Key::DownArrow, Key::DownArrow, Key::Enter] {
+        for down in [true, false] {
+            engine.handle_key_event(&KeyEvent::new(key, Modifiers::none(), down));
+        }
+    }
+    let spoken = speech.take().join(" ");
+    assert!(spoken.contains("Weekends stay the same."), "{spoken}");
+    assert!(engine
+        .execute_command("SayLine")
+        .is_some_and(|line| line.contains("Weekends")));
+    // The summary chose by sentence without keeping it; Close keeps nothing either.
+    let id = open(&mut engine);
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "rule".into(),
+        value: Value::Selected(1),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "cancel".into(),
+    }));
+    engine.execute_command("TopOfFile");
+    let skimmed = engine.execute_command("StartSkimRead").unwrap_or_default();
+    assert!(skimmed.contains("It closes at nine."), "{skimmed:?}");
+}

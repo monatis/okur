@@ -35,6 +35,9 @@ pub enum ViewerAction {
     Close,
     /// Enter on a link line (the help keys' viewers): close the viewer and run the command.
     Run(crate::command::Command),
+    /// Enter on a place's line (a skim reading summary): close the viewer and move the
+    /// virtual cursor to that offset of the page.
+    MoveTo(usize),
     /// Not a viewer key (e.g. another JAWS command): handle it as usual.
     Ignore,
 }
@@ -50,6 +53,10 @@ pub struct VirtualViewer {
     read: (usize, usize),
     /// The lines that are links, and the command Enter on each runs.
     links: Vec<(usize, crate::command::Command)>,
+    /// The lines that are places of the page, and the offset Enter on each moves to.
+    places: Vec<(usize, usize)>,
+    /// The window's title, when not the Virtual Viewer's: "Skim Reading Results".
+    title: Option<String>,
 }
 
 /// Word classes: a word is a run of one class.
@@ -90,6 +97,8 @@ impl VirtualViewer {
             all_selected: false,
             read: (0, 0),
             links: Vec::new(),
+            places: Vec::new(),
+            title: None,
         };
         viewer.read_line();
         viewer
@@ -110,6 +119,24 @@ impl VirtualViewer {
     pub fn with_links(mut self, links: Vec<(usize, crate::command::Command)>) -> Self {
         self.links = links;
         self
+    }
+
+    /// The same viewer, with `places`: lines that move the virtual cursor to a page's offset
+    /// when Enter is pressed on them (a skim reading summary's).
+    pub fn with_places(mut self, places: Vec<(usize, usize)>) -> Self {
+        self.places = places;
+        self
+    }
+
+    /// The same viewer, its window titled `title`.
+    pub fn with_title(mut self, title: String) -> Self {
+        self.title = Some(title);
+        self
+    }
+
+    /// The window's own title, if it has one.
+    pub fn title(&self) -> Option<&str> {
+        self.title.as_deref()
     }
 
     /// What JAWS reads when a message opens: its lines, skipping blank ones.
@@ -268,10 +295,16 @@ impl VirtualViewer {
         };
         match event.key {
             Key::Escape if plain => ViewerAction::Close,
-            Key::Enter if plain => match self.links.iter().find(|(line, _)| *line == self.line) {
-                Some((_, command)) => ViewerAction::Run(command.clone()),
-                None => ViewerAction::Speak(None),
-            },
+            Key::Enter if plain => {
+                if let Some(&(_, offset)) = self.places.iter().find(|(line, _)| *line == self.line)
+                {
+                    return ViewerAction::MoveTo(offset);
+                }
+                match self.links.iter().find(|(line, _)| *line == self.line) {
+                    Some((_, command)) => ViewerAction::Run(command.clone()),
+                    None => ViewerAction::Speak(None),
+                }
+            }
             Key::DownArrow | Key::UpArrow if plain => {
                 self.all_selected = false;
                 line(self.move_line(event.key == Key::DownArrow))

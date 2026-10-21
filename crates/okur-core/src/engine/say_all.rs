@@ -75,8 +75,38 @@ impl ScreenReaderEngine {
             return Some(said);
         }
         if self.skim_options.rule == crate::ui::skim::SkimRule::FirstSentence {
-            return self.start_skim_read_by_sentence();
+            let read = self.skim_sentences();
+            return self.begin_say_all(0, Source::PageUnits(read), true);
         }
+        let read = self.skim_lines();
+        self.begin_say_all(0, Source::PageSkim(read), true)
+    }
+
+    /// What skim reading reads from the virtual cursor, each piece with the page's offset it
+    /// starts at, without role marks: Create Summary's pieces (JAWS 2025 help, Skim Reading
+    /// Dialog: "all the text you would hear if you began skim reading from your present
+    /// location").
+    pub(super) fn skim_pieces(&self, rule: crate::ui::skim::SkimRule) -> Vec<(usize, String)> {
+        let pieces: Vec<(usize, String)> = match rule {
+            crate::ui::skim::SkimRule::FirstSentence => self.skim_sentences(),
+            _ => self
+                .skim_lines()
+                .into_iter()
+                .filter_map(|i| {
+                    let line = self.cursor.buffer.lines.get(i)?;
+                    Some((line.start_offset, self.cursor.line_text(i)?))
+                })
+                .collect(),
+        };
+        pieces
+            .into_iter()
+            .map(|(offset, text)| (offset, without_role_marks(&text)))
+            .filter(|(_, text)| !text.is_empty())
+            .collect()
+    }
+
+    /// The lines skim reading by first line reads, from the virtual cursor's.
+    fn skim_lines(&self) -> Vec<usize> {
         let from = self.cursor.current_line_index();
         let buffer = &self.cursor.buffer;
         let rows = buffer
@@ -108,7 +138,7 @@ impl ScreenReaderEngine {
                 read.push(line);
             }
         }
-        self.begin_say_all(0, Source::PageSkim(read), true)
+        read
     }
 
     /// Skim reading by sentence: from the virtual cursor's paragraph on, the sentence each
@@ -117,7 +147,7 @@ impl ScreenReaderEngine {
     /// [obs, 769/s3]. A sentence that several paragraphs start in is read once; JAWS reads it
     /// again for each ("list end Primary navigation region end banner end main region article",
     /// five times).
-    fn start_skim_read_by_sentence(&mut self) -> Option<String> {
+    fn skim_sentences(&self) -> Vec<(usize, String)> {
         let at = self.cursor.offset;
         let sentences = self
             .cursor
@@ -173,7 +203,7 @@ impl ScreenReaderEngine {
                 Some((start, text))
             })
             .collect();
-        self.begin_say_all(0, Source::PageUnits(units), true)
+        units
     }
 
     /// A page just loaded is read from its top, behind what was said of it (its title and
@@ -433,6 +463,22 @@ impl ScreenReaderEngine {
 }
 
 /// Every node of `page` in a table row, by that row's node.
+/// `text` without its role marks ("\u{1d} same page link \u{1e} Riverside Gazette": "Riverside
+/// Gazette"), its spaces single.
+fn without_role_marks(text: &str) -> String {
+    let mut plain = String::new();
+    let mut in_mark = false;
+    for c in text.chars() {
+        match c {
+            '\u{1d}' => in_mark = true,
+            '\u{1e}' => in_mark = false,
+            _ if !in_mark => plain.push(c),
+            _ => {}
+        }
+    }
+    plain.split_whitespace().collect::<Vec<_>>().join(" ")
+}
+
 fn table_rows(page: &crate::aom::AomNode) -> std::collections::HashMap<usize, usize> {
     use crate::aom::Role;
     let mut found = std::collections::HashMap::new();

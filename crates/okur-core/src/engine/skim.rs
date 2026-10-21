@@ -1,6 +1,8 @@
-//! Skim Reading in the engine (Ctrl+Shift+Insert+Down). The dialog opens over the page; its
-//! choices stay for Ctrl+Insert+Down while Okur runs. Escape and Close give the page back
-//! silently, as JAWS's dialog does [obs, 760/s14].
+//! Skim Reading in the engine (Ctrl+Shift+Insert+Down). The dialog opens over the page. Start
+//! Skim Reading keeps its choices for Ctrl+Insert+Down while Okur runs; Close leaves them
+//! "without saving the last changes made" (JAWS 2025 help, Skim Reading Dialog). Escape and
+//! Close give the page back silently, as JAWS's dialog does [obs, 760/s14]. Create Summary
+//! shows what skim reading would read, in the viewer, each piece numbered, Enter moving to it.
 
 use super::{AppMode, ScreenReaderEngine};
 use crate::ui::skim::{Outcome, SkimDialog, SkimRule};
@@ -38,13 +40,9 @@ impl ScreenReaderEngine {
     /// What the user did to Skim Reading.
     pub(super) fn handle_skim_event(&mut self, message: &FromUi) -> Option<String> {
         let outcome = self.skim_dialog.as_mut()?.handle(message);
-        let options = match outcome {
-            Outcome::Nothing => return None,
-            Outcome::Start(options) | Outcome::Summary(options) | Outcome::Closed(options) => {
-                options
-            }
-        };
-        self.skim_options = options;
+        if outcome == Outcome::Nothing {
+            return None;
+        }
         if let (Some(dialog), Some(ui)) = (self.skim_dialog.take(), &self.ui) {
             if !matches!(outcome, Outcome::Closed(_)) {
                 ui.send(ToUi::DialogClose { id: dialog.id });
@@ -52,9 +50,56 @@ impl ScreenReaderEngine {
         }
         self.returning_from_dialog();
         match outcome {
-            Outcome::Start(_) => self.start_skim_read(),
-            Outcome::Nothing | Outcome::Summary(_) | Outcome::Closed(_) => None,
+            Outcome::Start(options) => {
+                self.skim_options = options;
+                self.start_skim_read()
+            }
+            Outcome::Summary(options) => self.open_skim_summary(options.rule),
+            Outcome::Nothing | Outcome::Closed(_) => None,
         }
+    }
+
+    /// Create Summary: what skim reading by `rule` would read from the virtual cursor, in the
+    /// viewer "Skim Reading Results", each piece numbered: "1. City Library Expands Evening
+    /// Hours - Riverside Gazette" [obs, 762/s2]. Enter on a piece moves there (JAWS 2025 help,
+    /// Skim Reading Dialog).
+    fn open_skim_summary(&mut self, rule: SkimRule) -> Option<String> {
+        if matches!(rule, SkimRule::TextRules | SkimRule::Attributes) {
+            let said = crate::messages::msg::skim_rules_not_yet().to_string();
+            self.speech.speak(&said, true);
+            return Some(said);
+        }
+        let pieces = self.skim_pieces(rule);
+        if pieces.is_empty() {
+            return None;
+        }
+        let lines: Vec<String> = pieces
+            .iter()
+            .enumerate()
+            .map(|(i, (_, text))| format!("{}. {text}", i + 1))
+            .collect();
+        let places = pieces
+            .iter()
+            .enumerate()
+            .map(|(i, (offset, _))| (i, *offset))
+            .collect();
+        let title = crate::messages::msg::skim_results_title().to_string();
+        let first = lines.first().cloned().unwrap_or_default();
+        self.viewer = Some(
+            crate::viewer::VirtualViewer::new(lines)
+                .with_places(places)
+                .with_title(title.clone()),
+        );
+        self.show_viewer_window();
+        let said = format!("{title}\n{first}");
+        self.speech.speak(&said, true);
+        Some(said)
+    }
+
+    /// Enter on a summary's piece: the virtual cursor moves there and reads its line.
+    pub(super) fn move_to_summary_place(&mut self, offset: usize) {
+        let said = self.cursor.jump_to_element_offset(offset);
+        self.speech.speak(&said, true);
     }
 
     /// The rule Ctrl+Insert+Down reads by, when Okur cannot read by it: said so.

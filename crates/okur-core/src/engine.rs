@@ -808,6 +808,12 @@ impl ScreenReaderEngine {
                     let _ = self.execute(command);
                     return KeyAction::Consume;
                 }
+                ViewerAction::MoveTo(offset) => {
+                    self.viewer = None;
+                    self.close_viewer_window();
+                    self.move_to_summary_place(offset);
+                    return KeyAction::Consume;
+                }
                 ViewerAction::Ignore => {}
             }
         }
@@ -1827,7 +1833,9 @@ impl ScreenReaderEngine {
         }
         if let (Some(ui), Some(viewer)) = (&self.ui, &self.viewer) {
             ui.send(crate::ui::ToUi::ViewerShow {
-                title: msg::viewer_title().to_string(),
+                title: viewer
+                    .title()
+                    .map_or_else(|| msg::viewer_title().to_string(), str::to_owned),
                 lines: viewer.lines(),
                 mark: viewer.mark(),
             });
