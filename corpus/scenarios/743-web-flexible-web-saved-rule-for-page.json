@@ -1,0 +1,286 @@
+{
+  "id": "743-web-flexible-web-saved-rule-for-page",
+  "name": "A Flexible Web rule saved for the page, applied on reload and deleted: the advertisement hidden (R three times, Down, Insert+Space then X, Alt+N three times, Enter); Save temporary customizations as a rule (Insert+Space then X, Down Arrow three times, Alt+N), \"Okur lab rule\" typed, Tab twice, Down Arrow (To the current page), Tab twice, Enter (Finish); F5, Ctrl+Home, R four times; View or change where rules apply (Insert+Space then X, Down Arrow twice, Alt+V, Alt+N), Tab three times, Shift+Tab three times, Delete, Alt+Y, Tab, Escape; F5, Ctrl+Home, R four times (keys and text in the wizard typed by JAWS)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/flexible-web.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Space",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "settle_max_ms": 30000,
+      "id": "s6"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s7"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s8"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s9"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s10"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Space",
+      "id": "s11"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "settle_max_ms": 30000,
+      "id": "s12"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s13"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s14"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s15"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s16"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeString(\"Okur lab rule\")",
+      "settle_max_ms": 30000,
+      "id": "s17"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s18"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s19"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s20"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s21"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s22"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s23"
+    },
+    {
+      "type": "key",
+      "command": "F5",
+      "settle_max_ms": 30000,
+      "id": "s24"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Home",
+      "id": "s25"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s26"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s27"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s28"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s29"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Space",
+      "id": "s30"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "settle_max_ms": 30000,
+      "id": "s31"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s32"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s33"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+V\")",
+      "id": "s34"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s35"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s36"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s37"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s38"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s39"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s40"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s41"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Delete\")",
+      "settle_max_ms": 30000,
+      "id": "s42"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+Y\")",
+      "settle_max_ms": 30000,
+      "id": "s43"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s44"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")",
+      "settle_max_ms": 30000,
+      "id": "s45"
+    },
+    {
+      "type": "key",
+      "command": "F5",
+      "settle_max_ms": 30000,
+      "id": "s46"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Home",
+      "id": "s47"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s48"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s49"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s50"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s51"
+    }
+  ]
+}

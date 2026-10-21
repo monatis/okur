@@ -1,0 +1,139 @@
+{
+  "id": "746-web-flexible-web-rule-saved-from-question",
+  "name": "A Flexible Web rule saved from the question as the page loads: the advertisement hidden (R three times, Down, Insert+Space then X, Alt+N three times, Enter); F5, Enter (Yes), \"Okur question rule\" typed, Tab twice, Down Arrow (To the current page), Tab twice, Shift+Tab, Enter (Finish); Ctrl+Home, R twice (keys and text in the wizard typed by JAWS)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/flexible-web.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Space",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "settle_max_ms": 30000,
+      "id": "s6"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s7"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s8"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s9"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s10"
+    },
+    {
+      "type": "key",
+      "command": "F5",
+      "settle_max_ms": 30000,
+      "id": "s11"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s12"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeString(\"Okur question rule\")",
+      "settle_max_ms": 30000,
+      "id": "s13"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s14"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s15"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s16"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s17"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s18"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s19"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s20"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Home",
+      "id": "s21"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s22"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s23"
+    }
+  ]
+}
