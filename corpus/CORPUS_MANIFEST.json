@@ -6192,13 +6192,27 @@
         "deterministic": false,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "776-web-skim-reading-text-rules-controls",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "2264233da77f1e45495f134cb222300e8cbbfa0a9ae64e6ca9fb2d2cd391611b",
+        "capture_script_sha256": "043f2870b1499dacb80869fd8b86f5c8abac741d2a75c2c4ca9f04ab0f4e4e3a",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 1,
+        "successful_trials": 1,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 429,
-    "scenarios_with_evidence": 429,
-    "total_trials": 1323,
-    "successful_trials": 1322,
-    "deterministic_scenarios": 276
+    "scenarios": 430,
+    "scenarios_with_evidence": 430,
+    "total_trials": 1324,
+    "successful_trials": 1323,
+    "deterministic_scenarios": 277
   }
 }
