@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6084,
+  "matched_steps": 6085,
   "total_steps": 6302,
   "accepted_divergences": 158,
   "errors": [],
@@ -2557,7 +2557,7 @@
     "532-desktop-dialog-default-button-and-hot-key/s9": "accepted divergence",
     "533-desktop-toast-and-progress-bar/s1": "match",
     "533-desktop-toast-and-progress-bar/s2": "match",
-    "533-desktop-toast-and-progress-bar/s3": "mismatch",
+    "533-desktop-toast-and-progress-bar/s3": "match",
     "533-desktop-toast-and-progress-bar/s4": "match",
     "533-desktop-toast-and-progress-bar/s5": "mismatch",
     "533-desktop-toast-and-progress-bar/s6": "match",

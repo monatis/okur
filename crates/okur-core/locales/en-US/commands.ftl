@@ -112,6 +112,8 @@ speech-mode-on-demand = Speech On Demand
 # capitals [obs, 707/s3, s7].
 less-speech-set-muted = Speech off set to speech mute
 less-speech-set-on-demand = speech off set to speech on demand
+# Insert+Space, Shift+N (RepeatLastNotification) before any notification was said [obs, 533/s3].
+notification-none = No notification
 
 ## Say Default Button (Insert+E) and the settings in use (Insert+Q) [obs, 513]
 

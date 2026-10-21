@@ -1,6 +1,7 @@
 //! The Insert+Space layer: Insert+Space, released, then one key (JAWS 2025 help, Layered
 //! Keystrokes). H opens the Speech History, Shift+H clears it and Ctrl+H copies it; S turns
-//! speech off and on, and Shift+S (Speech On Demand) is not available in full speech. Escape,
+//! speech off and on, and Shift+S (Speech On Demand) is not available in full speech; Shift+N
+//! says the last notification again (RepeatLastNotification). Escape,
 //! Space, Tab and Enter leave the layer, as any other key does [obs, 517, 566, 570].
 
 use super::{AppMode, ScreenReaderEngine};
@@ -45,6 +46,7 @@ impl ScreenReaderEngine {
             Key::Alpha('S') if shift_only => self.speech_on_demand_toggle(),
             Key::Alpha('S') if plain => self.mute_synthesizer(),
             Key::Alpha('T') if plain => self.start_table_layer(),
+            Key::Alpha('N') if shift_only => self.repeat_last_notification(),
             // Flexible Web's wizard (DoFlexibleWebDialog) [obs, 705/s3].
             Key::Alpha('X') if plain => {
                 let _ = self.open_flexible_web();
@@ -52,6 +54,17 @@ impl ScreenReaderEngine {
             _ => {}
         }
         Some(KeyAction::Consume)
+    }
+
+    /// Insert+Space, Shift+N: the last notification Okur said, again; with none, JAWS's "No
+    /// notification" [obs, 533/s3].
+    fn repeat_last_notification(&mut self) {
+        let said = self
+            .notifications
+            .back()
+            .cloned()
+            .unwrap_or_else(|| msg::notification_none().to_string());
+        self.speech.speak(&said, true);
     }
 
     /// Insert+Space, T in a page's table: "Table layer", and the arrows move by cell until
