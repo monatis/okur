@@ -1582,7 +1582,10 @@ impl VirtualCursor {
 
     /// The virtual cursor's sentences, as offsets and what is said: a list item's mark alone,
     /// then each sentence of its line, the line's marks with the first ("•", then " same page
-    /// link Paragraphs" [obs, 291/s6-s9]). A line without a sentence is one.
+    /// link Paragraphs" [obs, 291/s6-s9]) and the marks after its text with the last ("at dusk
+    /// Graphic" [obs, 677/s1]). A link is a sentence of its own, without the punctuation that
+    /// follows it on its line: "same page link Maria Lopez" | ", published" [obs, 677/s1]. A
+    /// line without a sentence is one.
     fn sentence_units(&self) -> Vec<(usize, String)> {
         let mut units = Vec::new();
         for line in &self.buffer.lines {
@@ -1591,19 +1594,41 @@ impl VirtualCursor {
                 units.push((line.start_offset, mark.to_owned()));
             }
             let base = line.start_offset + line.text.len().saturating_sub(text.len());
-            let marks = speech.strip_suffix(text).unwrap_or_default();
-            let ranges = crate::editing::sentences(text);
+            let (before, after) = match speech.find(text).filter(|_| !text.is_empty()) {
+                Some(at) => (
+                    speech.get(..at).unwrap_or_default(),
+                    speech.get(at + text.len()..).unwrap_or_default(),
+                ),
+                None => ("", ""),
+            };
+            // A link's name, when its line goes on past it.
+            let link = matches!(line.role, Role::Link { .. })
+                .then(|| self.buffer.node(line.node_id))
+                .flatten()
+                .and_then(|node| node.name.as_deref())
+                .filter(|name| !name.is_empty() && text.len() > name.len())
+                .filter(|name| text.starts_with(*name))
+                .map(str::len);
+            let mut ranges = crate::editing::sentences(text);
+            if let Some(end) = link {
+                let rest = text.get(end..).unwrap_or_default();
+                ranges = std::iter::once((0, end))
+                    .chain(
+                        crate::editing::sentences(rest)
+                            .into_iter()
+                            .map(|(s, e)| (end + s, end + e)),
+                    )
+                    .collect();
+            }
             if ranges.is_empty() && mark.is_none() {
                 units.push((line.start_offset, line.speech.clone()));
             }
+            let last = ranges.len().saturating_sub(1);
             for (i, (start, end)) in ranges.into_iter().enumerate() {
                 let part = text.get(start..end).unwrap_or_default();
-                let said = if i == 0 {
-                    format!("{marks}{part}")
-                } else {
-                    part.to_owned()
-                };
-                units.push((base + start, said));
+                let lead = if i == 0 { before } else { "" };
+                let trail = if i == last { after } else { "" };
+                units.push((base + start, format!("{lead}{part}{trail}")));
             }
         }
         units
