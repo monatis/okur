@@ -951,6 +951,13 @@ fn replay_settings(evidence: &Value) -> okur_core::settings::Settings {
                 .map(str::to_owned)
         };
         settings.auto_forms_mode = jcf("FormsMode", "AutoFormsMode").is_none_or(|v| v != "0");
+        // Say All Reads, `SayAllMode` in Options: 0 line (JAWS's default), 1 sentence, 2
+        // paragraph (677-681 record them).
+        settings.say_all_unit = options
+            .get("SayAllMode")
+            .and_then(Value::as_str)
+            .map(okur_core::settings::SayAllUnit::from_jcf)
+            .unwrap_or_default();
         // The user verbosity level, `Verbosity` in Options: 0 Beginner (JAWS's default), 1
         // Intermediate, 2 Advanced (548-555 record each).
         settings.verbosity.level = match options.get("Verbosity").and_then(Value::as_str) {

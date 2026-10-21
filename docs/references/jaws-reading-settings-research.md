@@ -798,8 +798,12 @@ The synthesizer was given:
   - Right Shift skips paragraphs in Paragraph mode (Doc [S5]).
 - **The Say All scheme:** Say All Text With Sounds or Say All Text Only. The Quick Settings
   topic adds No Change, its default (Doc [S5], [H2]).
-- **Okur:** Say All reads by line only (`cursor.rs:601-617`). It has no rewind or fast forward
-  by unit, and no scheme.
+- **Okur (2026-10-21):** Say All Reads is a setting (`say_all_unit`: line, sentence,
+  paragraph; the settings dialog's "Say All Reads"), and replay takes `SayAllMode`. Say All
+  reads a page by the unit, and Right and Left move by it. A sentence is what Alt+Down reads
+  [obs, 291]; a paragraph what Ctrl+Down reads. Still by line: a text field's Say All, and
+  Line with Pauses (`LinePauses`). How JAWS splits the page by sentence and paragraph waits
+  for 677-681 (round 124).
 - **Record:**
   - Say All (CapsLock+A, and Insert+Down) over the Say All paragraph, at each unit. The
     recorder's fragments show where JAWS breaks the speech.

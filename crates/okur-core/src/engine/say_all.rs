@@ -19,30 +19,42 @@ const AHEAD: usize = 3;
 /// A Say All in progress.
 #[derive(Debug, Default)]
 pub(super) struct SayAll {
-    /// The lines with the synthesizer: each one's mark and line index, oldest first.
+    /// The pieces with the synthesizer: each one's mark and index, oldest first.
     queued: VecDeque<(u64, usize)>,
-    /// The next line to hand over.
+    /// The next piece to hand over.
     next_line: usize,
-    /// The line reading started on, which rewinding goes no further back than.
+    /// The piece reading started on, which rewinding goes no further back than.
     start_line: usize,
-    /// In a text field, its lines from the caret's on, each with the character offset it
-    /// starts at; the line indexes above are into them. `None` in a page.
-    field: Option<Vec<(usize, String)>>,
+    /// What is read, and what the indexes above are into.
+    source: Source,
     /// The page's last word has been handed over after its last line.
     ended: bool,
 }
 
+/// What a Say All reads, piece by piece.
+#[derive(Debug, Default)]
+enum Source {
+    /// The page's lines.
+    #[default]
+    PageLines,
+    /// The page's sentences or paragraphs (Say All Reads), each with the offset it starts at.
+    PageUnits(Vec<(usize, String)>),
+    /// A text field's lines from the caret's on, each with the character offset it starts at.
+    Field(Vec<(usize, String)>),
+}
+
 impl ScreenReaderEngine {
-    /// Starts reading from the virtual cursor's line to the end of the page.
+    /// Starts reading from the virtual cursor's line, or its sentence or paragraph, to the
+    /// end of the page.
     pub(super) fn start_say_all(&mut self) -> Option<String> {
-        let line = self.cursor.current_line_index();
-        self.begin_say_all(line, None, true)
+        let (index, source) = self.page_source(self.cursor.offset);
+        self.begin_say_all(index, source, true)
     }
 
     /// Starts reading a text field from the caret's line to its end, the caret following.
     pub(super) fn start_field_say_all(&mut self) -> Option<String> {
         let lines = crate::editing::lines_from_caret(self.last_text.as_ref()?);
-        self.begin_say_all(0, Some(lines), true)
+        self.begin_say_all(0, Source::Field(lines), true)
     }
 
     /// A page just loaded is read from its top, behind what was said of it (its title and
@@ -51,24 +63,35 @@ impl ScreenReaderEngine {
     /// page's end.
     pub(super) fn start_page_say_all(&mut self) -> Option<String> {
         self.cursor.move_to_start();
-        let said = self.begin_say_all(0, None, false);
+        let (index, source) = self.page_source(self.cursor.offset);
+        let said = self.begin_say_all(index, source, false);
         if self.say_all.is_none() {
             self.cursor.move_to_start();
         }
         said
     }
 
-    fn begin_say_all(
-        &mut self,
-        line: usize,
-        field: Option<Vec<(usize, String)>>,
-        interrupt: bool,
-    ) -> Option<String> {
+    /// The page read by the Say All Reads unit, and the piece at `offset`: by line, the
+    /// cursor's line; by sentence or paragraph, the one the offset is in.
+    fn page_source(&self, offset: usize) -> (usize, Source) {
+        match self.cursor.say_all_units(self.settings.say_all_unit) {
+            Some(units) => {
+                let index = units
+                    .iter()
+                    .rposition(|(start, _)| *start <= offset)
+                    .unwrap_or(0);
+                (index, Source::PageUnits(units))
+            }
+            None => (self.cursor.current_line_index(), Source::PageLines),
+        }
+    }
+
+    fn begin_say_all(&mut self, line: usize, source: Source, interrupt: bool) -> Option<String> {
         let mut reading = SayAll {
             queued: VecDeque::new(),
             next_line: line,
             start_line: line,
-            field,
+            source,
             ended: false,
         };
         let progress = self.speech.reports_marks();
@@ -76,8 +99,10 @@ impl ScreenReaderEngine {
         let said = self.hand_over(&mut reading, ahead, interrupt);
         if progress {
             self.say_all = Some(reading);
-        } else if let (Some(&(_, last)), None) = (reading.queued.back(), &reading.field) {
-            self.cursor.move_to_line(last);
+        } else if let Some(&(_, last)) = reading.queued.back() {
+            if !matches!(reading.source, Source::Field(_)) {
+                self.follow_reading(&reading, last);
+            }
         }
         Some(said.join("\n"))
     }
@@ -106,13 +131,14 @@ impl ScreenReaderEngine {
     }
 
     /// A key pressed during a Say All that steers it instead of ending it (JAWS 2025 help,
-    /// Keystrokes for Reading Text): Right fast-forwards to the next line and Left rewinds to
-    /// the one before, no further back than where reading started; PageUp and PageDown make
-    /// the voice faster and slower; in a page a quick key moves, and reading goes on from
-    /// there [obs, 500/s10, s11]. `None` for any other key, which ends the Say All.
+    /// Keystrokes for Reading Text): Right fast-forwards to the next line (or sentence, or
+    /// paragraph: Say All Reads) and Left rewinds to the one before, no further back than
+    /// where reading started; PageUp and PageDown make the voice faster and slower; in a page
+    /// a quick key moves, and reading goes on from there [obs, 500/s10, s11]. `None` for any
+    /// other key, which ends the Say All.
     pub(super) fn say_all_key(&mut self, event: &KeyEvent) -> Option<KeyAction> {
         let reading = self.say_all.as_ref()?;
-        let in_page = reading.field.is_none();
+        let in_page = !matches!(reading.source, Source::Field(_));
         let m = &event.modifiers;
         if m.ctrl || m.alt || m.insert || m.win || m.caps_lock || (in_page && self.forms_mode) {
             return None;
@@ -139,13 +165,14 @@ impl ScreenReaderEngine {
                 self.speech.stop();
                 self.say_all = None;
                 let _ = self.execute(command);
-                let moved = self.cursor.current_line_index();
+                let (moved, source) = self.page_source(self.cursor.offset);
                 if moved == current {
                     // Nothing more to move to: JAWS's message is said and reading ends.
                     return Some(KeyAction::Consume);
                 }
                 self.say_all = Some(SayAll {
                     start_line: start_line.min(moved),
+                    source,
                     ..SayAll::default()
                 });
                 moved
@@ -166,7 +193,7 @@ impl ScreenReaderEngine {
             queued: VecDeque::new(),
             next_line: from,
             start_line: old.start_line.min(from),
-            field: old.field,
+            source: old.source,
             ended: false,
         };
         if self.say_all_line(&reading, from).is_none() {
@@ -183,20 +210,32 @@ impl ScreenReaderEngine {
         self.say_all = None;
     }
 
-    /// Line `index` of the Say All: the page's, or the field's.
+    /// Piece `index` of the Say All: the page's line, sentence or paragraph, or the field's
+    /// line.
     fn say_all_line(&self, reading: &SayAll, index: usize) -> Option<String> {
-        match &reading.field {
-            Some(lines) => lines.get(index).map(|(_, text)| text.clone()),
-            None => self.cursor.line_text(index),
+        match &reading.source {
+            Source::PageLines => self.cursor.line_text(index),
+            Source::PageUnits(units) | Source::Field(units) => {
+                units.get(index).map(|(_, text)| text.clone())
+            }
         }
     }
 
-    /// The cursor goes to line `index` as it is read: the virtual cursor, or the field's
-    /// caret, to the line's start.
+    /// The cursor goes to piece `index` as it is read: the virtual cursor, or the field's
+    /// caret, to the piece's start.
     fn follow_reading(&mut self, reading: &SayAll, index: usize) {
-        let Some(lines) = &reading.field else {
-            self.cursor.move_to_line(index);
-            return;
+        let lines = match &reading.source {
+            Source::PageLines => {
+                self.cursor.move_to_line(index);
+                return;
+            }
+            Source::PageUnits(units) => {
+                if let Some(&(offset, _)) = units.get(index) {
+                    self.cursor.move_to(offset);
+                }
+                return;
+            }
+            Source::Field(lines) => lines,
         };
         let (Some(&(offset, _)), Some(context)) = (lines.get(index), self.last_text.clone()) else {
             return;
@@ -229,8 +268,8 @@ impl ScreenReaderEngine {
                     .last()
                     .and_then(|l| l.text.split_whitespace().last())
                     .map(str::to_owned);
-                if let (None, false, Some(word), Some(last)) =
-                    (&reading.field, reading.ended, word, last)
+                let in_page = !matches!(reading.source, Source::Field(_));
+                if let (true, false, Some(word), Some(last)) = (in_page, reading.ended, word, last)
                 {
                     reading.ended = true;
                     let mark = self.next_mark;
@@ -435,5 +474,82 @@ mod tests {
             Some("Line 1\nLine 2\nLine 3\nLine 4\nLine 5\n5")
         );
         assert_eq!(engine.cursor.current_line(), "Line 5");
+    }
+
+    /// Two paragraphs of two sentences each, after a heading.
+    fn prose(speech: Box<dyn SpeechOutput>) -> ScreenReaderEngine {
+        let doc = AomNode::new(0, Role::Document).with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Hours"),
+            AomNode::new(2, Role::Paragraph)
+                .with_text("The library opens at nine. It closes late."),
+            AomNode::new(3, Role::Paragraph).with_text("Volunteers help. Ask at the desk."),
+        ]);
+        let mut engine =
+            ScreenReaderEngine::new(VirtualCursor::new(VirtualBuffer::from_aom(&doc)), speech);
+        engine.cursor.move_to_start();
+        engine
+    }
+
+    /// Say All Reads at Sentence hands the synthesizer a sentence at a time, and Right and Left
+    /// move by sentence; at Paragraph, a paragraph at a time (JAWS 2025 help: Say All Reads,
+    /// Keystrokes for Reading Text).
+    #[test]
+    fn say_all_reads_by_sentence_or_paragraph() {
+        use crate::settings::SayAllUnit;
+        let speech = Progress::default();
+        let mut engine = prose(Box::new(speech.clone()));
+        engine.settings.say_all_unit = SayAllUnit::Sentence;
+        let _ = engine.start_say_all();
+        let texts = |speech: &Progress| {
+            marks(speech)
+                .into_iter()
+                .map(|(t, _)| t)
+                .collect::<Vec<_>>()
+        };
+        assert_eq!(
+            texts(&speech).get(1..4),
+            Some(
+                &[
+                    "The library opens at nine.".to_owned(),
+                    "It closes late.".to_owned(),
+                    "Volunteers help.".to_owned(),
+                ][..]
+            )
+        );
+        engine.speech_reached(mark_of(&speech, "The library opens at nine."));
+        press(&mut engine, Key::RightArrow);
+        // Reading goes on from the next sentence, to the page's end and its last word again.
+        let handed = texts(&speech);
+        assert_eq!(
+            handed.get(handed.len().saturating_sub(4)..),
+            Some(
+                &[
+                    "It closes late.".to_owned(),
+                    "Volunteers help.".to_owned(),
+                    "Ask at the desk.".to_owned(),
+                    "desk.".to_owned(),
+                ][..]
+            )
+        );
+        assert_eq!(engine.cursor.current_sentence(), "It closes late.");
+        press(&mut engine, Key::LeftArrow);
+        assert_eq!(
+            engine.cursor.current_sentence(),
+            "The library opens at nine."
+        );
+
+        let mut engine = prose(Box::new(crate::speech::MockSpeechOutput::default()));
+        engine.settings.say_all_unit = SayAllUnit::Paragraph;
+        let said = engine.start_say_all().unwrap_or_default();
+        let parts: Vec<&str> = said.lines().collect();
+        assert_eq!(
+            parts.get(1..3),
+            Some(
+                &[
+                    "The library opens at nine. It closes late.",
+                    "Volunteers help. Ask at the desk.",
+                ][..]
+            )
+        );
     }
 }

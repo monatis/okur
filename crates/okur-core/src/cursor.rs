@@ -1609,6 +1609,47 @@ impl VirtualCursor {
         units
     }
 
+    /// Say All's pieces by `unit`, from the page's top: each one's offset and what is said.
+    /// `None` by line: Say All reads the page's lines.
+    pub fn say_all_units(&self, unit: crate::settings::SayAllUnit) -> Option<Vec<(usize, String)>> {
+        match unit {
+            crate::settings::SayAllUnit::Line => None,
+            crate::settings::SayAllUnit::Sentence => Some(self.sentence_units()),
+            crate::settings::SayAllUnit::Paragraph => Some(self.paragraph_units()),
+        }
+    }
+
+    /// The page's paragraphs as Say All reads them, each said as Ctrl+Down says it; a line in
+    /// no paragraph is one of its own.
+    fn paragraph_units(&self) -> Vec<(usize, String)> {
+        let paragraphs = &self.buffer.paragraphs;
+        let mut units: Vec<(usize, String)> = Vec::new();
+        for line in &self.buffer.lines {
+            let at = line.start_offset;
+            let index = paragraphs.partition_point(|p| p.start_offset <= at);
+            let paragraph = index
+                .checked_sub(1)
+                .and_then(|i| paragraphs.get(i))
+                .filter(|p| at < p.end_offset);
+            match paragraph {
+                Some(p)
+                    if units
+                        .last()
+                        .is_some_and(|(start, _)| *start == p.start_offset) => {}
+                Some(p) => units.push((p.start_offset, p.speech.clone())),
+                None => units.push((at, line.speech.clone())),
+            }
+        }
+        units
+    }
+
+    /// Moves to `offset`, as Say All reaches the piece that starts there.
+    pub fn move_to(&mut self, offset: usize) {
+        self.offset = offset;
+        self.current_node_id = self.buffer.line_at_offset(offset).map(|l| l.node_id);
+        self.selection = None;
+    }
+
     /// Alt+NumpadPlus and Alt+NumpadMinus: the next or prior sentence, read; at the page's end
     /// or top, the sentence the cursor is in [obs, 291/s6-s8].
     pub fn move_sentence(&mut self, forward: bool) -> String {

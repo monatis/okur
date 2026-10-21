@@ -7,7 +7,7 @@ use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
 
 use crate::messages::{msg, StaticMessage};
 use crate::settings::{
-    KeyboardLayout, KeyboardSettings, LiveRegionAppend, OkurKey, Punctuation, Settings,
+    KeyboardLayout, KeyboardSettings, LiveRegionAppend, OkurKey, Punctuation, SayAllUnit, Settings,
     Synthesizer, TypingEcho, VerbosityLevel, ViewerDisplay,
 };
 
@@ -40,6 +40,12 @@ const PUNCTUATIONS: [(Punctuation, Label); 4] = [
 const ECHOES: [(TypingEcho, Label); 2] = [
     (TypingEcho::None, msg::settings_typing_echo_off),
     (TypingEcho::Characters, msg::settings_typing_echo_characters),
+];
+/// JAWS's Say All Reads choices (Settings Center, Say All).
+const SAY_ALL_UNITS: [(SayAllUnit, Label); 3] = [
+    (SayAllUnit::Line, msg::settings_say_all_unit_line),
+    (SayAllUnit::Sentence, msg::settings_say_all_unit_sentence),
+    (SayAllUnit::Paragraph, msg::settings_say_all_unit_paragraph),
 ];
 /// JAWS's user verbosity levels.
 const LEVELS: [(VerbosityLevel, Label); 3] = [
@@ -193,6 +199,14 @@ impl SettingsDialog {
                     choice(names(&ECHOES), position(&ECHOES, s.typing_echo)),
                 ),
                 control(
+                    "say_all_unit",
+                    msg::settings_say_all_unit(),
+                    choice(
+                        names(&SAY_ALL_UNITS),
+                        position(&SAY_ALL_UNITS, s.say_all_unit),
+                    ),
+                ),
+                control(
                     "verbosity",
                     msg::settings_verbosity(),
                     choice(names(&LEVELS), position(&LEVELS, s.verbosity.level)),
@@ -306,6 +320,11 @@ impl SettingsDialog {
                     s.typing_echo = echo;
                 }
             }
+            ("say_all_unit", Value::Selected(i)) => {
+                if let Some(unit) = pick(&SAY_ALL_UNITS, i) {
+                    s.say_all_unit = unit;
+                }
+            }
             ("verbosity", Value::Selected(i)) => {
                 if let Some(level) = pick(&LEVELS, i) {
                     s.verbosity.level = level;
@@ -390,6 +409,13 @@ mod tests {
             })
         );
         assert_eq!(
+            find("say_all_unit"),
+            Some(ControlKind::Choice {
+                options: vec!["Line".into(), "Sentence".into(), "Paragraph".into()],
+                selected: 0
+            })
+        );
+        assert_eq!(
             find("viewer_on_screen"),
             Some(ControlKind::CheckBox { checked: true })
         );
@@ -431,6 +457,10 @@ mod tests {
             dialog.handle(&changed("punctuation", Value::Selected(3))),
             Outcome::Nothing
         );
+        assert_eq!(
+            dialog.handle(&changed("say_all_unit", Value::Selected(1))),
+            Outcome::Nothing
+        );
         // Another dialog's events change nothing.
         let other = FromUi::DialogChanged {
             id: 9,
@@ -445,6 +475,7 @@ mod tests {
         let mut expected = Settings {
             typing_echo: TypingEcho::None,
             viewer_display: ViewerDisplay::SpeechOnly,
+            say_all_unit: SayAllUnit::Sentence,
             ..Default::default()
         };
         expected.voice.rate = 3;

@@ -100,6 +100,29 @@ pub enum LiveRegionAppend {
     WholeText,
 }
 
+/// What Say All gives the synthesizer at a time, and what Left and Right during it move by:
+/// JAWS's Say All Reads, `SayAllMode` in `DEFAULT.JCF`'s Options (0 line, its default; 1
+/// sentence; 2 paragraph).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SayAllUnit {
+    #[default]
+    Line,
+    Sentence,
+    Paragraph,
+}
+
+impl SayAllUnit {
+    /// The unit a `DEFAULT.JCF` `SayAllMode` value sets; any other value is a line.
+    pub fn from_jcf(value: &str) -> Self {
+        match value.trim() {
+            "1" => Self::Sentence,
+            "2" => Self::Paragraph,
+            _ => Self::Line,
+        }
+    }
+}
+
 /// What typing a character says (Basic Settings: Typing Echo).
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -467,6 +490,8 @@ pub struct Settings {
     pub keyboard: KeyboardSettings,
     pub live_region_append: LiveRegionAppend,
     pub typing_echo: TypingEcho,
+    /// What Say All reads at a time: a line, a sentence or a paragraph.
+    pub say_all_unit: SayAllUnit,
     pub viewer_display: ViewerDisplay,
     /// Forms mode turns on by itself when the focus lands on a field, as JAWS's Auto Forms
     /// Mode (`[FormsMode] AutoFormsMode`, on by default). Off, a field takes Enter first,
@@ -489,6 +514,7 @@ impl Default for Settings {
             keyboard: KeyboardSettings::default(),
             live_region_append: LiveRegionAppend::default(),
             typing_echo: TypingEcho::default(),
+            say_all_unit: SayAllUnit::default(),
             viewer_display: ViewerDisplay::default(),
             auto_forms_mode: true,
             verbosity: Verbosity::default(),
@@ -545,6 +571,7 @@ impl Settings {
             keyboard: KeyboardSettings::for_layout(KeyboardLayout::Laptop),
             live_region_append: LiveRegionAppend::WholeText,
             typing_echo: TypingEcho::None,
+            say_all_unit: SayAllUnit::Line,
             viewer_display: ViewerDisplay::OnScreen,
             auto_forms_mode: false,
             verbosity,

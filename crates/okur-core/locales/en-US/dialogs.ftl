@@ -34,6 +34,12 @@ settings-typing-echo = Typing &Echo:
 settings-typing-echo-off = Off
 settings-typing-echo-characters = Characters
 # JAWS's user verbosity levels (Settings Center): what is said, and how much.
+# JAWS's Say All Reads: what Say All reads at a time, and what Left and Right during it move
+# by. The other letters of its name are taken.
+settings-say-all-unit = Say All Rea&ds:
+settings-say-all-unit-line = Line
+settings-say-all-unit-sentence = Sentence
+settings-say-all-unit-paragraph = Paragraph
 settings-verbosity = Ver&bosity Level:
 settings-verbosity-beginner = Beginner
 settings-verbosity-intermediate = Intermediate
