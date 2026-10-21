@@ -1,0 +1,102 @@
+{
+  "id": "674-desktop-notepad-page-setup-intermediate",
+  "name": "Notepad's Page Setup dialog (Alt+F, U): Tab through the paper size and source, the orientation radio buttons, the margins, header and footer, Insert+E, Say Window (Insert+B), and Escape (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 544-desktop-notepad-page-setup)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Alt+F"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "U",
+      "settle_max_ms": 15000
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Insert+E"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Insert+B",
+      "settle_max_ms": 90000
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}
