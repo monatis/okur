@@ -1,0 +1,103 @@
+{
+  "id": "700-web-speech-on-demand-mode",
+  "name": "Speech On Demand turned on (DEFAULT.JCF Options SpeechMode=1, LessSpeechMode=0) on the news article: Down, Insert+Up, H, Insert+Up, Down, Insert+T, Insert+5, Ctrl+Right, Tab, Insert+Up (keys in and out of the key map's Speech On Demand list), then S in the speech layer, Down, S again, Down",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "SpeechMode": "1",
+        "LessSpeechMode": "0"
+      }
+    }
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+T"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+5"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "S"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "S"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Down"
+    }
+  ]
+}
