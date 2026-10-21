@@ -359,6 +359,15 @@ the morning. This is how it was done; it needs fresh permission each time.
   our tracer sees them thinly ("&Move To Link", no role), and Okur draws its own dialogs.
   Replaying 222-226 compares Okur's reading of JAWS's dialog. Measuring Okur's dialog needs a
   live run of Okur with the same keys.
+- **JAWS's Results Viewer gives the recordings nothing.** Once Skim Reading's Create Summary
+  or the Word List's Summary opens it, no key gets any speech, ours or TypeKey's, Escape
+  included (762, 767, 768, rounds 179 and 183). Left open, it took the focus back when a later
+  trial's dialog closed, and that trial read it (763/s23, round 180). `run-scenario.ps1` now
+  closes ResultsViewer and NotificationViewer before each trial
+  (`lab_state_cleared.jaws_viewers_closed`).
+- **`opendesk exec` can hang past its `--timeout`.** A deploy waited ten minutes on its first
+  remote call (2026-10-21); stopping the hung `opendesk.exe` let the script go on. List them
+  with `Get-Process opendesk` when a lab command takes far longer than it should.
 
 ## 9. Open questions to settle on old-pc
 

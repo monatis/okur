@@ -625,6 +625,13 @@ divergences! {
     ],
     "After the PlaceMarker List closed (Escape after K opened it, MoveTo), the focus back in      the page, Say Line said nothing, in every trial of these scenarios. The virtual cursor is      on its line, which Okur reads.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
+
+    Difference::Step => [
+        "763-web-skim-reading-rule-types/s23",
+        "763-web-skim-reading-rule-types/s24",
+    ],
+    "Escape in Skim Reading with the focus on Skim Reading Indication (after Shift+Tab and Up      Arrow there) closes the dialog and opens JAWS's summary in its Results Viewer, which      then says nothing to Say Line: in every trial of two recordings. Escape from the rule      type only closes the dialog (760/s14). Okur's Escape closes the dialog and gives the      page back, as Close does.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 }
 
 /// The divergence covering `step`, if any.

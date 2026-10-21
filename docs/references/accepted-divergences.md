@@ -580,6 +580,19 @@ A step can be in more than one entry; all of its entries apply.
   and only in this mode.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-21.
 
+### Escape in Skim Reading makes JAWS's summary
+
+- Steps: `763-web-skim-reading-rule-types/s23`, `763-web-skim-reading-rule-types/s24`.
+- Difference: the whole step. After Shift+Tab and Up Arrow on Skim Reading Indication, Escape
+  closes JAWS's Skim Reading dialog and opens its summary in the Results Viewer ("1. City
+  Library Expands Evening Hours - Riverside Gazette Link | To activate press Enter."), as Create
+  Summary does (762/s2); Say Line then says nothing in the viewer. Okur's Escape closes the
+  dialog and gives the page back.
+- Why: Escape is Close, and Escape from the rule type closes the dialog only (760/s14). The
+  summary came in every trial of two recordings (rounds 180 and 184, the second with JAWS's
+  viewers closed before each trial), so it is JAWS's own doing, not a window left open.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-21.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row

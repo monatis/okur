@@ -86,7 +86,9 @@ in [accepted divergences](docs/references/accepted-divergences.md).
     PageDown; Say All by line, sentence or paragraph (Say All Reads, in Okur Settings), where
     Right and Left skip and go back by that unit, PageUp and PageDown change the rate, and the
     cursor stays where you stopped it; skim reading (Ctrl+Insert+Down), each paragraph by its
-    first line;
+    first line or its first sentence, as chosen in Skim Reading (Ctrl+Shift+Insert+Down);
+  - the Word List (Ctrl+Insert+W): the page's words, most used first, and W and Shift+W to the
+    next and prior line with the word chosen;
   - quick navigation keys: headings and their levels, links, form fields, edits, buttons,
     check boxes, radio buttons, combo boxes, lists and list items, tables, graphics, regions,
     articles, divisions, separators, tabs and mail links; N past a run of links; the first
@@ -196,8 +198,9 @@ documentation describes and Okur lacks, most important first. Among them:
   draw their own text), the mouse following it as it moves, and the mouse button locks;
 - the keys JAWS adds for the clipboard: saying it (Insert+Windows+X), viewing it and adding
   to it (copying, cutting and pasting already work);
-- the Word List, and the Skim Reading dialog's own rules and summary;
-- notifications (toasts) and the notification history;
+- Skim Reading's text, attribute and color rules, its summary, and the Word List's summary;
+- notifications (toasts) and the notification history (Insert+Space, Shift+N says the last
+  one again);
 - the rest of what the verbosity levels change, as further recordings show it;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab

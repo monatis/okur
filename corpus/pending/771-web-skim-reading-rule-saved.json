@@ -1,0 +1,37 @@
+{
+  "id": "771-web-skim-reading-rule-saved",
+  "name": "Skim Reading's rule type kept from 769 (Read First Sentence of Every Paragraph): Ctrl+Shift+Insert+Down, Up Arrow back to Read First Line of Every Paragraph and Alt+S (Start Skim Reading) typed by JAWS, Insert+Up (one trial: it sets the rule type back)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "Ctrl+Shift+Insert+Down",
+      "settle_max_ms": 30000,
+      "id": "s1"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")",
+      "id": "s2"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+S\")",
+      "settle_max_ms": 150000,
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s4"
+    }
+  ]
+}
