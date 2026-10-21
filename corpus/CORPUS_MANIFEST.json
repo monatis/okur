@@ -5282,13 +5282,27 @@
         "deterministic": false,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "704-web-placemarker-two",
+      "fixture": "placemarkers.html",
+      "evidence": {
+        "sha256": "33954c7ae0eac432ff1f817fa130980eb0f0315cc5d46acd0c1ea794db63a339",
+        "capture_script_sha256": "8d1c09e7a5837c7b8032e3525616f14db8e815323d92b7f301c125f8aaf5e36e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 364,
-    "scenarios_with_evidence": 364,
-    "total_trials": 1146,
-    "successful_trials": 1146,
+    "scenarios": 365,
+    "scenarios_with_evidence": 365,
+    "total_trials": 1149,
+    "successful_trials": 1149,
     "deterministic_scenarios": 227
   }
 }
