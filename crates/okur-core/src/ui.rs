@@ -12,6 +12,7 @@ pub mod lists;
 pub mod placemarkers;
 pub mod quit;
 pub mod settings;
+pub mod skim;
 pub mod tray;
 pub mod windows;
 

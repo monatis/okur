@@ -300,3 +300,41 @@ flexible-web-delete-no = &No
 flexible-web-unsaved-question = You have created temporary Flexible Web customizations. If you continue without saving them, these customizations will be lost. Would you like to save your temporary customizations?
 flexible-web-unsaved-yes = &Yes
 flexible-web-unsaved-no = &No
+
+## Skim Reading (Control+Shift+Insert+Down), as JAWS's [obs, 760, 763].
+
+skim-dialog = Skim Reading
+skim-rule = Use Rule Type:
+skim-rule-first-line = Read First Line of Every Paragraph
+skim-rule-first-sentence = Read First Sentence of Every Paragraph
+skim-rule-text = Text Rules Apply for Reading
+skim-rule-attributes = Attributes and Color Rules Apply for Reading
+skim-rules-history = &Rules History:
+# The rules history's entry before any rule is made.
+skim-rules-new = <New>
+skim-pattern = Text Search &Pattern:
+skim-regex = Use regular e&xpression
+skim-unit = Speak &Unit:
+skim-unit-lines = Lines Containing Text Rule
+skim-delete = &Delete Rule
+skim-delete-all = Delete A&ll Rules
+skim-text-color = Text Color:
+skim-background = Background Color:
+# A color rule's color before one is chosen: any.
+skim-any-color = *
+skim-bold = Bold
+skim-italic = Italic
+skim-underline = Underline
+skim-strikeout = Strikeout
+skim-double-strikeout = Double Strikeout
+skim-superscript = Superscript
+skim-subscript = Subscript
+skim-shadow = Shadow
+skim-outline = Outline
+skim-indication = Skim Reading &Indication
+skim-start = &Start Skim Reading
+skim-summary = Create Summar&y
+skim-close = &Close
+skim-help = &Help
+# Start Skim Reading with text rules or attribute and color rules, which Okur cannot read by yet.
+skim-rules-not-yet = Okur cannot skim by text, attribute or color rules yet.

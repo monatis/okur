@@ -37,6 +37,7 @@ mod quit;
 mod reading;
 mod routing;
 mod say_all;
+mod skim;
 mod speech_mode;
 mod state;
 #[cfg(test)]
@@ -244,6 +245,9 @@ pub struct ScreenReaderEngine {
     list_dialog: Option<crate::ui::lists::ListDialog>,
     /// The word chosen in the Word List, which W and Shift+W move to.
     word_from_list: Option<String>,
+    /// Skim Reading while it is open, and its choices, which Ctrl+Insert+Down reads by.
+    skim_dialog: Option<crate::ui::skim::SkimDialog>,
+    skim_options: crate::ui::skim::SkimOptions,
     /// JAWS Find, while it is open.
     find_dialog: Option<crate::ui::find::FindDialog>,
     /// The Window List while it is open, and whether its windows were asked for and not come.
@@ -404,6 +408,8 @@ impl ScreenReaderEngine {
             settings_dialog: None,
             list_dialog: None,
             word_from_list: None,
+            skim_dialog: None,
+            skim_options: crate::ui::skim::SkimOptions::default(),
             find_dialog: None,
             window_list: None,
             window_list_asked: false,
@@ -1429,6 +1435,7 @@ impl ScreenReaderEngine {
                 self.handle_list_event(message)
             }
             _ if self.is_find_event(message) => self.handle_find_event(message),
+            _ if self.is_skim_event(message) => self.handle_skim_event(message),
             _ if self.is_window_list_event(message) => self.handle_window_list_event(message),
             _ if self.is_tray_event(message) => self.handle_tray_event(message),
             _ if self.is_jump_event(message) => self.handle_jump_event(message),

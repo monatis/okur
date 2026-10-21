@@ -54,6 +54,8 @@ pub enum Command {
     SayAll,
     /// Ctrl+Insert+Down (StartSkimRead): Say All with the first line of each paragraph.
     SkimRead,
+    /// Ctrl+Shift+Insert+Down (SkimReadDialog): Skim Reading, how Ctrl+Insert+Down skims.
+    SkimReadDialog,
     SayLine,
     SayWord,
     SayCharacter,
@@ -579,6 +581,8 @@ impl Command {
             "DefineATempPlaceMarker" => DefineTempPlaceMarker,
             "SelectAPlaceMarker" => SelectAPlaceMarker,
             "WordList" => WordList,
+            "StartSkimRead" => SkimRead,
+            "SkimReadDialog" => SkimReadDialog,
             "MoveToNextWordFromList" => NextWordFromList,
             "MoveToPriorWordFromList" => PriorWordFromList,
             "7" | "SpeakPlaceMarkerN(1)" => SpeakPlaceMarker(1),
@@ -812,6 +816,8 @@ static BINDINGS: &[Binding] = &{
         bind(DownArrow, OKUR, SayAll),
         // Default.JKM: Control+JAWSKey+DownArrow=StartSkimRead.
         bind(DownArrow, OKUR_CTRL, SkimRead),
+        // Default.JKM: Control+Shift+JAWSKey+DownArrow=SkimReadDialog.
+        bind(DownArrow, OKUR_CTRL.shift(Yes), SkimReadDialog),
         bind(UpArrow, OKUR, SayLine),
         bind(RightArrow, OKUR, SayNextWord),
         bind(LeftArrow, OKUR, SayPriorWord),

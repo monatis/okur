@@ -68,7 +68,15 @@ impl ScreenReaderEngine {
     /// line, every other line whole: "The Riverside City Library will stay open ... The change
     /// follows a survey in which", then the next element [obs, 761] (JAWS 2025 help, Skim
     /// Reading, by its default rule, Read First Line of Every Paragraph).
+    /// With Read First Sentence of Every Paragraph chosen in Skim Reading, each paragraph is
+    /// read by its first sentence instead (JAWS 2025 help, Skim Reading).
     pub(super) fn start_skim_read(&mut self) -> Option<String> {
+        if let Some(said) = self.skim_rule_unread() {
+            return Some(said);
+        }
+        if self.skim_options.rule == crate::ui::skim::SkimRule::FirstSentence {
+            return self.start_skim_read_by_sentence();
+        }
         let from = self.cursor.current_line_index();
         let buffer = &self.cursor.buffer;
         let rows = buffer
@@ -101,6 +109,30 @@ impl ScreenReaderEngine {
             }
         }
         self.begin_say_all(0, Source::PageSkim(read), true)
+    }
+
+    /// Skim reading by sentence: from the virtual cursor's paragraph on, each paragraph's
+    /// first sentence.
+    fn start_skim_read_by_sentence(&mut self) -> Option<String> {
+        let at = self.cursor.offset;
+        let sentences = self
+            .cursor
+            .say_all_units(crate::settings::SayAllUnit::Sentence)
+            .unwrap_or_default();
+        let read: Vec<(usize, String)> = self
+            .cursor
+            .buffer
+            .paragraphs
+            .iter()
+            .filter(|p| p.end_offset > at)
+            .filter_map(|p| {
+                sentences
+                    .iter()
+                    .find(|(start, _)| *start >= p.start_offset && *start < p.end_offset)
+                    .cloned()
+            })
+            .collect();
+        self.begin_say_all(0, Source::PageUnits(read), true)
     }
 
     /// A page just loaded is read from its top, behind what was said of it (its title and
