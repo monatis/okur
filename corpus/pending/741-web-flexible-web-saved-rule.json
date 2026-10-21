@@ -1,0 +1,259 @@
+{
+  "id": "741-web-flexible-web-saved-rule",
+  "name": "A Flexible Web rule saved, applied on reload and deleted: the advertisement hidden (R three times, Down, Insert+Space then X, Alt+N three times, Enter); Save temporary customizations as a rule (Insert+Space then X, Down Arrow three times, Alt+N), \"Okur lab rule\" typed, Tab four times, Enter; F5, Ctrl+Home, R four times; View or change where rules apply (Insert+Space then X, Down Arrow four times, Alt+N), Tab, Delete, Enter, Escape twice; F5, Ctrl+Home, R four times (keys in the wizard typed by JAWS)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/flexible-web.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Space",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "settle_max_ms": 30000,
+      "id": "s6"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s7"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s8"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s9"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s10"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Space",
+      "id": "s11"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "settle_max_ms": 30000,
+      "id": "s12"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s13"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s14"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s15"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s16"
+    },
+    {
+      "type": "text",
+      "command": "Okur lab rule",
+      "id": "s17"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s18"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s19"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s20"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s21"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s22"
+    },
+    {
+      "type": "key",
+      "command": "F5",
+      "settle_max_ms": 30000,
+      "id": "s23"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Home",
+      "id": "s24"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s25"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s26"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s27"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s28"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Space",
+      "id": "s29"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "settle_max_ms": 30000,
+      "id": "s30"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s31"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s32"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s33"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s34"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s35"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s36"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Delete\")",
+      "settle_max_ms": 30000,
+      "id": "s37"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s38"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")",
+      "id": "s39"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")",
+      "id": "s40"
+    },
+    {
+      "type": "key",
+      "command": "F5",
+      "settle_max_ms": 30000,
+      "id": "s41"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Home",
+      "id": "s42"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s43"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s44"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s45"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s46"
+    }
+  ]
+}
