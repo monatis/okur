@@ -155,6 +155,8 @@ pub struct ScreenReaderEngine {
     /// The PlaceMarkers saved (Ctrl+Shift+K), and where they are kept.
     placemarkers: crate::placemarkers::PlaceMarkers,
     placemarker_store: Option<Box<dyn crate::placemarkers::PlaceMarkerStore>>,
+    /// The PlaceMarker List while it is open, and the dialog it opened.
+    placemarker_list: Option<placemarkers::ListState>,
     /// The custom labels (Insert+Ctrl+Tab), and where they are kept.
     custom_labels: crate::labels::CustomLabels,
     label_store: Option<Box<dyn crate::labels::LabelStore>>,
@@ -335,6 +337,7 @@ impl ScreenReaderEngine {
             temp_placemarkers: std::collections::HashMap::new(),
             placemarkers: crate::placemarkers::PlaceMarkers::default(),
             placemarker_store: None,
+            placemarker_list: None,
             custom_labels: crate::labels::CustomLabels::default(),
             label_store: None,
             label_dialog: None,
@@ -1281,6 +1284,7 @@ impl ScreenReaderEngine {
             _ if self.is_tray_event(message) => self.handle_tray_event(message),
             _ if self.is_jump_event(message) => self.handle_jump_event(message),
             _ if self.is_label_event(message) => self.handle_label_event(message),
+            _ if self.is_placemarker_event(message) => self.handle_placemarker_event(message),
             _ if self.is_quit_event(message) => self.handle_quit_event(message),
             _ => {
                 let outcome = self.settings_dialog.as_mut()?.handle(message);

@@ -251,6 +251,15 @@ pub enum Command {
     /// Ctrl+Windows+K in a page (DefineATempPlaceMarker): one temporary PlaceMarker per page,
     /// at the virtual cursor, for this session.
     DefineTempPlaceMarker,
+    /// Ctrl+Shift+K in a page (SelectAPlaceMarker): the PlaceMarker List, to add, move to,
+    /// rename or remove the page's PlaceMarkers.
+    SelectAPlaceMarker,
+    /// 7, 8, 9, 0 in a page (SpeakPlaceMarkerN): says the page's PlaceMarker 1 to 4 without
+    /// moving to it.
+    SpeakPlaceMarker(u8),
+    /// Shift+7 to Shift+0 in a page (MoveToPlaceMarkerN): moves to the page's PlaceMarker 1
+    /// to 4.
+    MoveToPlaceMarkerNumber(u8),
     /// Ctrl+Insert+Tab in a page (Assign Custom Label): a name for the element at the virtual
     /// cursor, read in place of its own.
     AssignCustomLabel,
@@ -506,6 +515,15 @@ impl Command {
             "ListTaskTrayIcons" | "Insert+F11" => SystemTrayList,
             "JumpToLine" => JumpToLine,
             "DefineATempPlaceMarker" => DefineTempPlaceMarker,
+            "SelectAPlaceMarker" => SelectAPlaceMarker,
+            "7" | "SpeakPlaceMarkerN(1)" => SpeakPlaceMarker(1),
+            "8" | "SpeakPlaceMarkerN(2)" => SpeakPlaceMarker(2),
+            "9" | "SpeakPlaceMarkerN(3)" => SpeakPlaceMarker(3),
+            "0" | "SpeakPlaceMarkerN(4)" => SpeakPlaceMarker(4),
+            "+7" | "MoveToPlaceMarkerN(1)" => MoveToPlaceMarkerNumber(1),
+            "+8" | "MoveToPlaceMarkerN(2)" => MoveToPlaceMarkerNumber(2),
+            "+9" | "MoveToPlaceMarkerN(3)" => MoveToPlaceMarkerNumber(3),
+            "+0" | "MoveToPlaceMarkerN(4)" => MoveToPlaceMarkerNumber(4),
             "CreatePrompt" | "AssignCustomLabel" => AssignCustomLabel,
             "JumpReturnFromLine" => JumpReturnFromLine,
             "ScreenSensitiveHelp" | "Insert+F1" => ScreenSensitiveHelp,
@@ -1053,6 +1071,7 @@ static BINDINGS: &[Binding] = &{
         bind(Alpha('T'), SHIFT, MoveToPrior(Table)),
         bind(Alpha('T'), ALONE, MoveToNext(Table)),
         bind(Alpha('K'), CTRL_WIN, DefineTempPlaceMarker),
+        bind(Alpha('K'), CTRL_SHIFT, SelectAPlaceMarker),
         bind(Alpha('K'), SHIFT, MoveToPrior(PlaceMarker)),
         bind(Alpha('K'), ALONE, MoveToNext(PlaceMarker)),
         bind(Alpha('U'), SHIFT, MoveToPrior(UnvisitedLink)),
@@ -1106,6 +1125,14 @@ static BINDINGS: &[Binding] = &{
         bind(Digit(5), ALONE, MoveToNext(HeadingLevel(5))),
         bind(Digit(6), SHIFT, MoveToPrior(HeadingLevel(6))),
         bind(Digit(6), ALONE, MoveToNext(HeadingLevel(6))),
+        bind(Digit(7), SHIFT, MoveToPlaceMarkerNumber(1)),
+        bind(Digit(7), ALONE, SpeakPlaceMarker(1)),
+        bind(Digit(8), SHIFT, MoveToPlaceMarkerNumber(2)),
+        bind(Digit(8), ALONE, SpeakPlaceMarker(2)),
+        bind(Digit(9), SHIFT, MoveToPlaceMarkerNumber(3)),
+        bind(Digit(9), ALONE, SpeakPlaceMarker(3)),
+        bind(Digit(0), SHIFT, MoveToPlaceMarkerNumber(4)),
+        bind(Digit(0), ALONE, SpeakPlaceMarker(4)),
         bind(Semicolon, SHIFT, MoveToPrior(OnMouseOver)),
         bind(Semicolon, ALONE, MoveToNext(OnMouseOver)),
         bind(Slash, SHIFT, MoveToPrior(OnClick)),

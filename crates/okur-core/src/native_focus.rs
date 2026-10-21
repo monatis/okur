@@ -504,6 +504,19 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
             lines.push(Line::new(parts));
             lines.extend(value);
         }
+        // A list view with the focus itself, holding no item to give it to: "PlaceMarker
+        // List view | 0 items | To move to items use the Arrow keys." [obs, 699/s6, 702/s4].
+        Role::List if focus.list_view => {
+            lines.push(Line::new(vec![
+                name_part(name),
+                role(msg::role_list_view().as_str()),
+            ]));
+            match focus.item_count {
+                Some(0) => lines.push(Line::of(PartKind::Position, msg::items_count(0))),
+                _ => lines.extend(position(focus)),
+            }
+            lines.push(Line::of(PartKind::Hint, msg::hint_move_to_items_arrows()).on_arrival());
+        }
         // A window taking focus is announced by its title alone (the window change).
         Role::Window => {}
         _ => {

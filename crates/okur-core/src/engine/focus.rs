@@ -985,13 +985,25 @@ impl ScreenReaderEngine {
             .as_deref()
             .or(focus.window_title.as_deref())
             .unwrap_or("");
-        let mut lines = vec![match &focus.dialog_text {
-            Some(_) => Line::new(vec![
-                Part::new(PartKind::Container, win),
+        // The dialogs it opened over first, outermost first [obs, 702/s5, s27].
+        let dialog_line = |name: &str| {
+            Line::new(vec![
+                Part::new(PartKind::Container, name),
                 Part::role(msg::role_dialog().as_str()),
-            ]),
+            ])
+        };
+        let mut lines: Vec<Line> = match &focus.dialog_text {
+            Some(_) => focus
+                .outer_dialogs
+                .iter()
+                .map(|name| dialog_line(name))
+                .collect(),
+            None => Vec::new(),
+        };
+        lines.push(match &focus.dialog_text {
+            Some(_) => dialog_line(win),
             None => Line::text(win),
-        }];
+        });
         lines.extend(
             focus
                 .dialog_text

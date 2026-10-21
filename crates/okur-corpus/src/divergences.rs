@@ -524,6 +524,14 @@ divergences! {
      labelled the field to go on working there. Okur builds the page again with the cursor \
      still on the field, and Say Line reads it with its label (\"lamp Edit\").",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
+
+    Difference::Step => [
+        "702-web-placemarker-saved/s8",
+        "702-web-placemarker-saved/s9",
+        "702-web-placemarker-saved/s10",
+    ],
+    "After a PlaceMarker is added, JAWS builds the page again and reads it from its top as it      does on loading: Ctrl+Home gets \"selected\" and that reading, K then says \"wrapping to      bottom\" before the PlaceMarker after the reading moved the cursor down, and Insert+Up      says \"Not in a Table\", in every trial. Okur keeps the page and its cursor: Ctrl+Home      says the page's title, K the PlaceMarker's line, Insert+Up that line.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 }
 
 /// The divergence covering `step`, if any.

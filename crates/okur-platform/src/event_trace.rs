@@ -938,6 +938,19 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         // "Local Disk"): JAWS 2025 opens Local Disk (C:) Properties naming the page instead,
         // "General page" (dev box, 2026-10-15).
         focus.dialog_page = event.dialog_page.clone();
+        // The dialog boxes in the focus's chain over which the active one opened: owned by
+        // them, UI Automation puts it inside them.
+        let dialogs: Vec<&UiaNode> = event
+            .focus_chain
+            .iter()
+            .filter(|n| {
+                n.control_type == UIA_WINDOW && n.class_name.as_deref() == Some(WIN32_DIALOG_CLASS)
+            })
+            .collect();
+        focus.outer_dialogs = dialogs
+            .split_last()
+            .map(|(_, outer)| outer.iter().filter_map(|n| n.name.clone()).collect())
+            .unwrap_or_default();
         focus.group_box = event.group_box.clone();
         focus.default_button = event.default_button.clone();
         // A text that names a control beside it is that control's label, said with the
@@ -1193,6 +1206,19 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             focus.item_index = Some(index + 1);
             focus.item_count = Some(peers.len());
         }
+    }
+    // A list view with the focus itself, as one without items has it: named by the text
+    // before it (its window's), and its count, not its place among its peers: "PlaceMarker
+    // List view | 0 items" [obs, 699/s6, 702/s4].
+    if focused.control_type == UIA_LIST && is_list_view(focused.class_name.as_deref()) {
+        focus.list_view = true;
+        if focus.name.as_deref().is_none_or(|n| n.trim().is_empty()) {
+            focus.name.clone_from(&focused.label);
+        }
+        focus.item_index = None;
+        focus.item_count = focused
+            .grid_row_count
+            .and_then(|count| usize::try_from(count).ok());
     }
     Some(focus)
 }

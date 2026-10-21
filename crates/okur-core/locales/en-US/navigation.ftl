@@ -31,6 +31,8 @@ flow-has-flows-from = Has Flows From
 quicknav-none-placemarkers = There are no PlaceMarkers on this page.
 # Ctrl+Windows+K, before the line the cursor is on.
 placemarker-temporary-set = Temporary PlaceMarker set
+# 7, 8, 9, 0 (or with Shift) for a PlaceMarker the page does not have [obs, 702/s14].
+placemarker-none-numbered = No place marker #{ $number }
 quicknav-none-radio-buttons = There are no radio buttons on this page.
 quicknav-none-regions = There are no regions on this page.
 quicknav-none-tables = There are no tables on this page.

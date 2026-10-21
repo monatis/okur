@@ -138,6 +138,10 @@ pub struct FocusEvent {
     /// The container is a list view, a list of items with columns (JAWS's "List view"),
     /// not a list box.
     pub container_is_list_view: bool,
+    /// The focus is a list view itself, not an item of it: an empty one, as JAWS's
+    /// PlaceMarker List without PlaceMarkers [obs, 699/s6].
+    #[serde(default)]
+    pub list_view: bool,
     /// The focused menu item is on a menu bar (a page's ARIA menu bar), not in a menu.
     #[serde(default)]
     pub in_menu_bar: bool,
@@ -186,6 +190,10 @@ pub struct FocusEvent {
     /// When the focus is on a property sheet's page in that dialog box: the page's name,
     /// announced as the dialog opens ("General page").
     pub dialog_page: Option<String>,
+    /// The dialog boxes the active one opened over, outermost first: JAWS names them before
+    /// it ("PlaceMarker List dialog | Add PlaceMarker dialog | Name: Edit" [obs, 702/s5]).
+    #[serde(default)]
+    pub outer_dialogs: Vec<String>,
     /// When the focused control is inside a dialog box's group box: the group box's text,
     /// which JAWS says before the control's name ("Speech Rate: left right slider").
     #[serde(default)]
@@ -331,6 +339,7 @@ impl FocusEvent {
             container_role: None,
             container_name: None,
             container_is_list_view: false,
+            list_view: false,
             in_menu_bar: false,
             under_menu_bar: false,
             in_menu: false,
@@ -365,6 +374,7 @@ impl FocusEvent {
             multi_line: false,
             plain_edit: false,
             spin_box: false,
+            outer_dialogs: Vec::new(),
             menu_bar: Vec::new(),
             status_bar: Vec::new(),
             app: None,

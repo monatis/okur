@@ -51,6 +51,11 @@ impl ScreenReaderEngine {
             Command::SystemTrayList => return self.ask_tray_list(),
             Command::JumpToLine => return self.open_jump(),
             Command::DefineTempPlaceMarker => return self.define_temp_placemarker(),
+            Command::SelectAPlaceMarker => return self.open_placemarker_list(),
+            Command::SpeakPlaceMarker(number) => return self.say_placemarker_number(number, false),
+            Command::MoveToPlaceMarkerNumber(number) => {
+                return self.say_placemarker_number(number, true)
+            }
             Command::AssignCustomLabel => return self.open_custom_label(),
             Command::JumpReturnFromLine => return self.jump_back(),
             Command::ScreenSensitiveHelp => return self.screen_sensitive_help(),

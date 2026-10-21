@@ -366,6 +366,12 @@ fn handle(message: ToUi) {
         ToUi::DialogShow { dialog } => crate::dialog::show(&dialog),
         ToUi::DialogSet { id, control, value } => crate::dialog::set_value(id, &control, value),
         ToUi::DialogClose { id } => crate::dialog::close(id),
+        ToUi::DialogEnable {
+            id,
+            control,
+            enabled,
+        } => crate::dialog::enable(id, &control, enabled),
+        ToUi::DialogDefault { id, control } => crate::dialog::make_default(id, &control),
         ToUi::DialogItems {
             id,
             control,

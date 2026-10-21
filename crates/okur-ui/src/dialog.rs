@@ -11,13 +11,14 @@ use windows::Win32::Foundation::{HWND, LPARAM, WPARAM};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::System::Threading::{AttachThreadInput, GetCurrentThreadId};
 use windows::Win32::UI::Controls::{
-    BST_CHECKED, BST_UNCHECKED, EM_SETSEL, HTREEITEM, LVCF_WIDTH, LVCOLUMNW, LVIF_STATE, LVIF_TEXT,
-    LVIS_FOCUSED, LVIS_SELECTED, LVITEMW, LVM_DELETEALLITEMS, LVM_ENSUREVISIBLE, LVM_INSERTCOLUMNW,
-    LVM_INSERTITEMW, LVM_SETEXTENDEDLISTVIEWSTYLE, LVM_SETITEMSTATE, LVN_ITEMCHANGED,
-    LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NMTREEVIEWW, NM_DBLCLK, TBM_SETPAGESIZE, TBM_SETPOS,
-    TBM_SETRANGEMAX, TBM_SETRANGEMIN, TBM_SETTICFREQ, TVE_EXPAND, TVGN_CARET, TVGN_NEXTVISIBLE,
-    TVGN_ROOT, TVIF_TEXT, TVINSERTSTRUCTW, TVINSERTSTRUCTW_0, TVITEMW, TVI_LAST, TVI_ROOT,
-    TVM_EXPAND, TVM_GETNEXTITEM, TVM_INSERTITEMW, TVM_SELECTITEM, TVN_SELCHANGEDW,
+    BST_CHECKED, BST_UNCHECKED, EM_SETSEL, HTREEITEM, LVCF_TEXT, LVCF_WIDTH, LVCOLUMNW, LVIF_STATE,
+    LVIF_TEXT, LVIS_FOCUSED, LVIS_SELECTED, LVITEMW, LVM_DELETEALLITEMS, LVM_ENSUREVISIBLE,
+    LVM_INSERTCOLUMNW, LVM_INSERTITEMW, LVM_SETEXTENDEDLISTVIEWSTYLE, LVM_SETITEMSTATE,
+    LVM_SETITEMTEXTW, LVN_ITEMCHANGED, LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NMTREEVIEWW,
+    NM_DBLCLK, TBM_SETPAGESIZE, TBM_SETPOS, TBM_SETRANGEMAX, TBM_SETRANGEMIN, TBM_SETTICFREQ,
+    TVE_EXPAND, TVGN_CARET, TVGN_NEXTVISIBLE, TVGN_ROOT, TVIF_TEXT, TVINSERTSTRUCTW,
+    TVINSERTSTRUCTW_0, TVITEMW, TVI_LAST, TVI_ROOT, TVM_EXPAND, TVM_GETNEXTITEM, TVM_INSERTITEMW,
+    TVM_SELECTITEM, TVN_SELCHANGEDW,
 };
 use windows::Win32::UI::Input::KeyboardAndMouse::EnableWindow;
 use windows::Win32::UI::WindowsAndMessaging::{
@@ -34,6 +35,12 @@ use crate::template::{self, IDCANCEL};
 
 /// TBM_GETPOS: a slider's position.
 const TBM_GETPOS: u32 = 0x0400;
+/// BM_SETSTYLE, and the push button styles it sets: the default button's frame.
+const BM_SETSTYLE: u32 = 0x00F4;
+const BS_PUSHBUTTON: usize = 0;
+const BS_DEFPUSHBUTTON: usize = 1;
+/// DM_SETDEFID: the button Enter presses.
+const DM_SETDEFID: u32 = 0x0401;
 
 /// One control of an open dialog.
 struct OpenControl {
@@ -73,6 +80,7 @@ fn initial(kind: &ControlKind) -> Option<Value> {
         | ControlKind::ListBox { selected, .. }
         | ControlKind::Tree { selected, .. }
         | ControlKind::Radios { selected, .. } => Some(Value::Selected(*selected)),
+        ControlKind::Table { selected, .. } => selected.map(Value::Selected),
         ControlKind::CheckBox { checked } => Some(Value::Checked(*checked)),
         ControlKind::Slider { value, .. } => Some(Value::Number(*value)),
         ControlKind::Text { text }
@@ -98,6 +106,13 @@ pub fn show(spec: &DialogSpec) {
     }
     // SAFETY: a plain query.
     let previous = unsafe { GetForegroundWindow() };
+    // A dialog opened from one of Okur's own is owned by it, as JAWS's Add PlaceMarker is by
+    // its PlaceMarker List: the focus is then in both, and both are named [obs, 702/s5].
+    let owner = DIALOGS.with(|d| {
+        d.try_borrow()
+            .ok()
+            .and_then(|d| d.iter().any(|o| o.window == previous).then_some(previous))
+    });
     let layout = template::layout(spec);
     let words = template::encode(&spec.title, &layout);
     // SAFETY: the template is a well-formed DLGTEMPLATEEX, four-byte aligned, alive for the
@@ -107,7 +122,7 @@ pub fn show(spec: &DialogSpec) {
         CreateDialogIndirectParamW(
             instance,
             words.as_ptr().cast::<DLGTEMPLATE>(),
-            None,
+            owner,
             Some(dialog_proc),
             LPARAM(0),
         )
@@ -214,6 +229,11 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
                 );
                 set_items(item, items, *selected);
             }
+            ControlKind::Table {
+                columns,
+                rows,
+                selected,
+            } => fill_table(item, columns, rows, *selected),
             ControlKind::Tree { items, selected } => fill_tree(item, items, *selected),
             ControlKind::ListBox { items, selected } => fill_list_box(item, items, *selected),
             ControlKind::Radios { selected, .. } => {
@@ -240,6 +260,87 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
             }
             // Its text is the template's.
             ControlKind::Group | ControlKind::Button { .. } | ControlKind::Message { .. } => {}
+        }
+    }
+}
+
+/// Fills a table: its columns' headers, then its rows; the row `selected`, or, with none, the
+/// first has the focus without being selected.
+fn fill_table(list: HWND, columns: &[String], rows: &[Vec<String>], selected: Option<usize>) {
+    // SAFETY: messages to our own list view; each string outlives its call.
+    unsafe {
+        SendMessageW(
+            list,
+            LVM_SETEXTENDEDLISTVIEWSTYLE,
+            Some(WPARAM(LVS_EX_FULLROWSELECT as usize)),
+            Some(LPARAM(LVS_EX_FULLROWSELECT as isize)),
+        );
+        let mut client = windows::Win32::Foundation::RECT::default();
+        let _ = GetClientRect(list, &mut client);
+        let width = client.right - client.left;
+        let others = i32::try_from(columns.len().saturating_sub(1)).unwrap_or(1);
+        for (index, header) in columns.iter().enumerate() {
+            let mut text = wide(header);
+            // The first column, the item's own text, takes most of the width.
+            let cx = match (index, others) {
+                (_, 0) => width,
+                (0, _) => width * 3 / 5,
+                _ => width * 2 / 5 / others,
+            };
+            let column = LVCOLUMNW {
+                mask: LVCF_WIDTH | LVCF_TEXT,
+                cx,
+                pszText: PWSTR(text.as_mut_ptr()),
+                ..Default::default()
+            };
+            SendMessageW(
+                list,
+                LVM_INSERTCOLUMNW,
+                Some(WPARAM(index)),
+                Some(LPARAM(&column as *const LVCOLUMNW as isize)),
+            );
+        }
+        SendMessageW(list, LVM_DELETEALLITEMS, None, None);
+        for (row_index, row) in rows.iter().enumerate() {
+            for (cell_index, cell) in row.iter().enumerate() {
+                let mut text = wide(cell);
+                let item = LVITEMW {
+                    mask: LVIF_TEXT,
+                    iItem: i32::try_from(row_index).unwrap_or(i32::MAX),
+                    iSubItem: i32::try_from(cell_index).unwrap_or(i32::MAX),
+                    pszText: PWSTR(text.as_mut_ptr()),
+                    ..Default::default()
+                };
+                let message = if cell_index == 0 {
+                    LVM_INSERTITEMW
+                } else {
+                    LVM_SETITEMTEXTW
+                };
+                SendMessageW(
+                    list,
+                    message,
+                    Some(WPARAM(row_index)),
+                    Some(LPARAM(&item as *const LVITEMW as isize)),
+                );
+            }
+        }
+        match selected {
+            Some(index) => select_item(list, index),
+            None if !rows.is_empty() => {
+                let state = LVITEMW {
+                    mask: LVIF_STATE,
+                    state: LVIS_FOCUSED,
+                    stateMask: LVIS_FOCUSED,
+                    ..Default::default()
+                };
+                SendMessageW(
+                    list,
+                    LVM_SETITEMSTATE,
+                    Some(WPARAM(0)),
+                    Some(LPARAM(&state as *const LVITEMW as isize)),
+                );
+            }
+            None => {}
         }
     }
 }
@@ -430,7 +531,9 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
                     Some(LPARAM(*number as isize)),
                 );
             }
-            (ControlKind::List { .. }, Value::Selected(i)) => select_item(item, *i),
+            (ControlKind::List { .. } | ControlKind::Table { .. }, Value::Selected(i)) => {
+                select_item(item, *i)
+            }
             (ControlKind::Tree { .. }, Value::Selected(i)) => select_tree_item(item, *i),
             (ControlKind::ListBox { .. }, Value::Selected(i)) => {
                 SendMessageW(item, LB_SETCURSEL, Some(WPARAM(*i)), None);
@@ -499,6 +602,63 @@ pub fn set_value(id: u32, control: &str, value: Value) {
         if let Ok(item) = unsafe { GetDlgItem(Some(window), i32::from(window_id)) } {
             remember(window, window_id, value.clone());
             set(window, index, item, &kind, &value);
+        }
+    }
+}
+
+/// Makes `control` of dialog `id` available, or not.
+pub fn enable(id: u32, control: &str, enabled: bool) {
+    if let Some((window, window_id, _, _)) = find(id, control) {
+        // SAFETY: a child of our own dialog.
+        if let Ok(item) = unsafe { GetDlgItem(Some(window), i32::from(window_id)) } {
+            let _ = unsafe { EnableWindow(item, enabled) };
+        }
+    }
+}
+
+/// Makes the button `control` the default of dialog `id`, the one Enter presses, framed as
+/// the default.
+pub fn make_default(id: u32, control: &str) {
+    let buttons = DIALOGS.with(|d| {
+        d.try_borrow_mut().ok().and_then(|mut d| {
+            let dialog = d.iter_mut().find(|o| o.id == id)?;
+            let window = dialog.window;
+            let buttons: Vec<(u16, bool)> = dialog
+                .controls
+                .iter_mut()
+                .filter_map(|c| match &mut c.kind {
+                    ControlKind::Button { default } => {
+                        *default = c.name == control;
+                        Some((c.window_id, *default))
+                    }
+                    _ => None,
+                })
+                .collect();
+            Some((window, buttons))
+        })
+    });
+    let Some((window, buttons)) = buttons else {
+        return;
+    };
+    for (window_id, default) in buttons {
+        // SAFETY: messages to our own dialog and its buttons.
+        unsafe {
+            if let Ok(button) = GetDlgItem(Some(window), i32::from(window_id)) {
+                let style = if default {
+                    BS_DEFPUSHBUTTON
+                } else {
+                    BS_PUSHBUTTON
+                };
+                SendMessageW(button, BM_SETSTYLE, Some(WPARAM(style)), Some(LPARAM(1)));
+            }
+            if default {
+                SendMessageW(
+                    window,
+                    DM_SETDEFID,
+                    Some(WPARAM(usize::from(window_id))),
+                    None,
+                );
+            }
         }
     }
 }
@@ -767,7 +927,10 @@ unsafe extern "system" fn dialog_proc(
                 }
                 return 1;
             }
-            if !matches!(hit.kind, ControlKind::List { .. }) {
+            if !matches!(
+                hit.kind,
+                ControlKind::List { .. } | ControlKind::Table { .. }
+            ) {
                 return 0;
             }
             match header.code {

@@ -78,6 +78,15 @@ pub enum ControlKind {
         items: Vec<String>,
         selected: usize,
     },
+    /// A list of rows under column headers, named by its label (not shown), with none
+    /// selected until the user picks one: JAWS's PlaceMarker List, "PlaceMarker List view |
+    /// Not Selected Water in a closed bottle is allowed; meals are not. | Document | 1 of 1"
+    /// [obs, 702/s18]. With rows and none selected, the first has the focus.
+    Table {
+        columns: Vec<String>,
+        rows: Vec<Vec<String>>,
+        selected: Option<usize>,
+    },
     /// A list box of items, one selected, named by its label shown above it: JAWS's Window
     /// List, "Running Applications List box" [obs, 511/s1].
     ListBox {
@@ -152,6 +161,15 @@ pub enum ToUi {
         items: Vec<String>,
         selected: usize,
     },
+    /// Make a control available or not, as a button is while the list has no item chosen.
+    DialogEnable {
+        id: u32,
+        control: String,
+        enabled: bool,
+    },
+    /// Make a button the dialog's default, which Enter presses: JAWS's PlaceMarker List
+    /// makes MoveTo the default once a PlaceMarker is chosen, Add before.
+    DialogDefault { id: u32, control: String },
     /// Close a dialog.
     DialogClose { id: u32 },
     /// Show the Virtual Viewer's text on screen, without taking the focus, with `mark` on

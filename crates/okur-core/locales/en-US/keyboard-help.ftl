@@ -449,6 +449,12 @@ command-system-tray-list = Lists the icons of the notification area, to click on
 # JumpToLine (J in a page).
 command-jump-to-line = Asks for a line number and moves to that line.
 command-define-temp-placemarker = Marks the cursor's place in the page for this session, to come back to with K.
+# SelectAPlaceMarker (Control+Shift+K in a page).
+command-select-a-placemarker = Lists the page's PlaceMarkers, to move to one, or to add, rename or remove them.
+# SpeakPlaceMarkerN (7, 8, 9, 0 in a page).
+command-speak-placemarker = Says the text at the page's PlaceMarker { $number } without moving there.
+# MoveToPlaceMarkerN (Shift+7, 8, 9, 0 in a page).
+command-move-to-placemarker = Moves to the page's PlaceMarker { $number }.
 command-assign-custom-label = Gives the element at the cursor a name of your own, read in place of its own on its site's pages.
 # JumpReturnFromLine (Shift+J in a page).
 command-jump-return-from-line = Moves back to where the last jump to a line was made.

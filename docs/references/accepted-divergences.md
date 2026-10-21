@@ -259,6 +259,18 @@ A step can be in more than one entry; all of its entries apply.
   Say Line reads it with its label ("lamp Edit").
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-21.
 
+### JAWS reads the page again after a PlaceMarker is added
+
+- Steps: `702-web-placemarker-saved/s8`, `702-web-placemarker-saved/s9`,
+  `702-web-placemarker-saved/s10`.
+- Difference: the whole step.
+- Why: once a PlaceMarker is added, JAWS builds the page again and reads it from its top, as
+  on loading, in every trial. Ctrl+Home then gets "selected" and that reading; K says
+  "wrapping to bottom" before the PlaceMarker, since the reading moved the cursor down; and
+  Insert+Up says "Not in a Table". Okur keeps the page and its cursor, so Ctrl+Home says
+  the page's title and K and Insert+Up say the PlaceMarker's line.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-21.
+
 ### JAWS names the Page Setup preview's pictures after a label and the title
 
 - Steps: `544-desktop-notepad-page-setup/s13`, and the same at Intermediate and Advanced,

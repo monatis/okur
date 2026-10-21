@@ -38,6 +38,9 @@ pub struct DialogMirror {
     /// The title of the dialog last closed: JAWS's dialog, standing for it, can still report
     /// a focus of its own as it goes, which Okur's window would not.
     closed: Option<String>,
+    /// Dialogs another one opened over (the PlaceMarker List under Add), each with its
+    /// focused control: the last is in front again when the one over it closes.
+    below: Vec<(DialogSpec, Option<usize>)>,
 }
 
 impl DialogMirror {
@@ -47,17 +50,62 @@ impl DialogMirror {
             match message {
                 ToUi::DialogShow { dialog } => {
                     self.closed = None;
-                    self.focused = dialog.controls.iter().position(is_tab_stop);
-                    self.dialog = Some(dialog);
+                    let focused = dialog.controls.iter().position(is_tab_stop);
+                    let over = self.dialog.replace(dialog);
+                    if let Some(over) =
+                        over.filter(|d| Some(d.id) != self.dialog.as_ref().map(|n| n.id))
+                    {
+                        self.below.push((over, self.focused));
+                    }
+                    self.focused = focused;
                 }
                 ToUi::DialogClose { id } if self.dialog.as_ref().is_some_and(|d| d.id == id) => {
-                    self.closed = self.dialog.as_ref().map(|d| plain(&d.title));
-                    self.dialog = None;
-                    self.focused = None;
+                    self.close_front();
+                }
+                ToUi::DialogClose { id } => self.below.retain(|(d, _)| d.id != id),
+                ToUi::DialogEnable {
+                    id,
+                    control,
+                    enabled,
+                } => {
+                    if let Some(c) = self.control_of(id, &control) {
+                        c.enabled = enabled;
+                    }
+                }
+                ToUi::DialogDefault { id, control } => {
+                    let dialog = self
+                        .dialog
+                        .iter_mut()
+                        .chain(self.below.iter_mut().map(|(d, _)| d))
+                        .find(|d| d.id == id);
+                    for c in dialog.into_iter().flat_map(|d| d.controls.iter_mut()) {
+                        if let ControlKind::Button { default } = &mut c.kind {
+                            *default = c.id == control;
+                        }
+                    }
                 }
                 _ => {}
             }
         }
+    }
+
+    /// The dialog in front closes: the one under it, if any, is in front again.
+    fn close_front(&mut self) {
+        self.closed = self.dialog.as_ref().map(|d| plain(&d.title));
+        let (dialog, focused) = self.below.pop().map_or((None, None), |(d, f)| (Some(d), f));
+        self.dialog = dialog;
+        self.focused = focused;
+    }
+
+    /// Control `control` of dialog `id`, in front or under another.
+    fn control_of(&mut self, id: u32, control: &str) -> Option<&mut Control> {
+        self.dialog
+            .iter_mut()
+            .chain(self.below.iter_mut().map(|(d, _)| d))
+            .find(|d| d.id == id)?
+            .controls
+            .iter_mut()
+            .find(|c| c.id == control)
     }
 
     pub fn is_open(&self) -> bool {
@@ -154,6 +202,28 @@ impl DialogMirror {
                         None => (false, None),
                     }
                 }
+                // A table's row by its first column; chosen only when the list reports it
+                // selected: JAWS's PlaceMarker List opens with its first row "Not Selected"
+                // [obs, 702/s18].
+                (ControlKind::Table { rows, selected, .. }, Role::ListItem) => {
+                    let first =
+                        |i: usize| rows.get(i).and_then(|row| row.first()).map(|c| plain(c));
+                    let at = focus
+                        .item_index
+                        .and_then(|i| i.checked_sub(1))
+                        .filter(|&i| first(i).as_deref() == Some(name.as_str()))
+                        .or_else(|| {
+                            (0..rows.len()).find(|&i| first(i).as_deref() == Some(name.as_str()))
+                        });
+                    match at {
+                        Some(i) if focus.states.selected == Some(true) && *selected != Some(i) => {
+                            *selected = Some(i);
+                            (true, Some(Value::Selected(i)))
+                        }
+                        Some(_) => (true, None),
+                        None => (false, None),
+                    }
+                }
                 (ControlKind::Tree { items, selected }, Role::TreeItem) => {
                     match items.iter().position(|item| plain(&item.text) == name) {
                         Some(i) if i != *selected => {
@@ -234,6 +304,19 @@ impl DialogMirror {
         let Some(dialog) = &self.dialog else {
             return Vec::new();
         };
+        // Alt and a letter: the control whose label marks that letter as its access key, as
+        // the window's dialog manager finds it: a button pressed ("Remo&ve All" for Alt+V
+        // [obs, 702/s27]), a radio option chosen, any other control taking the focus.
+        if let (Key::Alpha(letter), true) = (
+            event.key,
+            event.modifiers.alt
+                && !event.modifiers.ctrl
+                && !event.modifiers.shift
+                && !event.modifiers.insert
+                && !event.modifiers.win,
+        ) {
+            return self.access_key(letter);
+        }
         if !event.modifiers.is_empty() {
             return Vec::new();
         }
@@ -265,11 +348,70 @@ impl DialogMirror {
             _ => None,
         };
         if matches!(report, Some(FromUi::DialogClosed { .. })) {
-            self.closed = self.dialog.as_ref().map(|d| plain(&d.title));
-            self.dialog = None;
-            self.focused = None;
+            self.close_front();
         }
         report.into_iter().collect()
+    }
+}
+
+/// Whether `label` marks `letter` as its access key ("Remo&ve All" for V).
+fn marks(label: &str, letter: char) -> bool {
+    label
+        .split('&')
+        .skip(1)
+        .filter_map(|rest| rest.chars().next())
+        .any(|c| c.eq_ignore_ascii_case(&letter))
+}
+
+impl DialogMirror {
+    /// Alt+`letter` in the dialog in front.
+    fn access_key(&mut self, letter: char) -> Vec<FromUi> {
+        let Some(dialog) = &mut self.dialog else {
+            return Vec::new();
+        };
+        let id = dialog.id;
+        let mut reports = Vec::new();
+        let mut closes = false;
+        for (index, control) in dialog.controls.iter_mut().enumerate() {
+            if !control.enabled {
+                continue;
+            }
+            if let ControlKind::Radios { options, selected } = &mut control.kind {
+                if let Some(option) = options.iter().position(|o| marks(o, letter)) {
+                    self.focused = Some(index);
+                    if option != *selected {
+                        *selected = option;
+                        reports.push(FromUi::DialogChanged {
+                            id,
+                            control: control.id.clone(),
+                            value: Value::Selected(option),
+                        });
+                    }
+                    break;
+                }
+                continue;
+            }
+            if !marks(&control.label, letter) {
+                continue;
+            }
+            self.focused = Some(index);
+            if matches!(control.kind, ControlKind::Button { .. }) {
+                if control.id == "cancel" {
+                    closes = true;
+                    reports.push(FromUi::DialogClosed { id });
+                } else {
+                    reports.push(FromUi::DialogPressed {
+                        id,
+                        control: control.id.clone(),
+                    });
+                }
+            }
+            break;
+        }
+        if closes {
+            self.close_front();
+        }
+        reports
     }
 }
 
@@ -365,5 +507,88 @@ mod tests {
             }]
         );
         assert_eq!(mirror.typed("b"), Vec::new());
+    }
+
+    /// A dialog Okur opens over another (Remove All's question over the PlaceMarker List):
+    /// closing it puts the one under it in front again; Alt and a letter press the button it
+    /// marks, and the default moves as Okur asks [obs, 702/s27, s28].
+    #[test]
+    fn a_dialog_over_another_and_its_access_keys() {
+        use okur_core::input::{Key, KeyEvent, Modifiers};
+        let button = |id: &str, label: &str, default: bool| Control {
+            id: id.to_owned(),
+            label: label.to_owned(),
+            kind: ControlKind::Button { default },
+            enabled: true,
+        };
+        let host = RecordingUiHost::default();
+        let mut mirror = DialogMirror::default();
+        host.send(ToUi::DialogShow {
+            dialog: DialogSpec {
+                id: 1,
+                title: "PlaceMarker List".to_owned(),
+                controls: vec![
+                    Control {
+                        id: "markers".to_owned(),
+                        label: "PlaceMarker".to_owned(),
+                        kind: ControlKind::Table {
+                            columns: vec!["PlaceMarker".to_owned()],
+                            rows: vec![vec!["Water".to_owned()]],
+                            selected: None,
+                        },
+                        enabled: true,
+                    },
+                    button("add", "&Add...", true),
+                    button("moveto", "&MoveTo", false),
+                    button("removeall", "Remo&ve All", false),
+                    button("cancel", "&Cancel", false),
+                ],
+            },
+        });
+        host.send(ToUi::DialogDefault {
+            id: 1,
+            control: "moveto".to_owned(),
+        });
+        mirror.sync(&host);
+        let alt = Modifiers {
+            alt: true,
+            ..Modifiers::none()
+        };
+        // Enter in the list presses the default Okur made it.
+        assert_eq!(
+            mirror.key(&KeyEvent::new(Key::Enter, Modifiers::none(), true)),
+            [FromUi::DialogPressed {
+                id: 1,
+                control: "moveto".to_owned()
+            }]
+        );
+        assert_eq!(
+            mirror.key(&KeyEvent::new(Key::Alpha('V'), alt, true)),
+            [FromUi::DialogPressed {
+                id: 1,
+                control: "removeall".to_owned()
+            }]
+        );
+        host.send(ToUi::DialogShow {
+            dialog: DialogSpec {
+                id: 2,
+                title: "PlaceMarker RemoveAll Warning".to_owned(),
+                controls: vec![button("yes", "&Yes", true), button("cancel", "&No", false)],
+            },
+        });
+        mirror.sync(&host);
+        // No closes the question; the list is in front again, the focus on Remove All.
+        assert_eq!(
+            mirror.key(&KeyEvent::new(Key::Alpha('N'), alt, true)),
+            [FromUi::DialogClosed { id: 2 }]
+        );
+        assert!(mirror.is_open());
+        assert_eq!(
+            mirror.key(&KeyEvent::new(Key::Enter, Modifiers::none(), true)),
+            [FromUi::DialogPressed {
+                id: 1,
+                control: "removeall".to_owned()
+            }]
+        );
     }
 }

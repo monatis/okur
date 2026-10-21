@@ -167,3 +167,38 @@ custom-label-ok = OK
 custom-label-cancel = Cancel
 # Insert+Ctrl+Tab where there is nothing to label (a paragraph): no dialog opens (JAWS, live).
 custom-label-not-here = A Custom Label cannot be created for this item.
+
+## The PlaceMarker List (Ctrl+Shift+K in a page): JAWS 2025's dialog [obs, 699, 702]. An "&"
+## marks a label's access key, as in JAWS's dialog.
+
+placemarker-list-title = PlaceMarker List
+# The list's name and its first column's header.
+placemarker-list-markers = PlaceMarker
+placemarker-list-column-domain = Generalized to Domain
+# The second column of a PlaceMarker kept for its page alone, or for its whole site.
+placemarker-scope-document = Document
+placemarker-scope-domain = Domain
+# The temporary PlaceMarker (Ctrl+Windows+K), as the list names it.
+placemarker-temporary = Temporary
+placemarker-list-add = &Add...
+placemarker-list-move-to = &MoveTo
+placemarker-list-change = C&hange...
+placemarker-list-remove = &Remove
+placemarker-list-remove-all = Remo&ve All
+placemarker-list-cancel = &Cancel
+placemarker-list-display = Display PlaceMarkers For:
+placemarker-list-display-url = &URL
+placemarker-list-display-domain = &Domain
+placemarker-list-display-all = A&ll
+# Add, from the list: the text at the cursor is proposed as the name [obs, 702/s5].
+placemarker-add-title = Add PlaceMarker
+# Change, from the list: the chosen PlaceMarker's name.
+placemarker-change-title = Change PlaceMarker
+placemarker-add-name = &Name:
+placemarker-add-ok = OK
+placemarker-add-cancel = Cancel
+# Remove All, from the list [obs, 702/s27].
+placemarker-remove-all-title = PlaceMarker RemoveAll Warning
+placemarker-remove-all-question = Are you sure you want to remove all PlaceMarkers?
+placemarker-remove-all-yes = &Yes
+placemarker-remove-all-no = &No

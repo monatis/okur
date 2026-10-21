@@ -8,6 +8,7 @@ pub mod find;
 pub mod jump;
 pub mod label;
 pub mod lists;
+pub mod placemarkers;
 pub mod quit;
 pub mod settings;
 pub mod tray;

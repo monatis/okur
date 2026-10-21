@@ -1251,6 +1251,131 @@ fn k_finds_a_saved_placemarker_of_the_page() {
     assert_eq!(k(&mut engine, true), "Water in a closed bottle is allowed.");
 }
 
+/// Ctrl+Shift+K opens the PlaceMarker List; Add proposes the cursor's line; OK keeps it and
+/// closes both dialogs; 7 says it, 8 has none; Remove All, answered Yes, takes it away and
+/// closes both [obs, 702/s4-s6, s13, s14, s27, s28].
+#[test]
+fn a_placemarker_is_added_and_removed_in_the_list() {
+    use crate::ui::{ControlKind, FromUi, ToUi};
+    let url = "file:///C:/corpus/fixtures/placemarkers.html";
+    let mut page = AomNode::new(0, Role::Document).with_children(vec![
+        AomNode::new(1, Role::Heading { level: 2 }).with_text("Food and drink"),
+        AomNode::new(2, Role::Paragraph).with_text("Water in a closed bottle is allowed."),
+    ]);
+    page.attributes.insert("url".to_owned(), url.to_owned());
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(speech.clone()),
+    );
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    engine.cursor.move_to_start();
+    engine.execute_command("{DOWN}");
+    assert!(engine.cursor.current_line().contains("Water"));
+    let ctrl_shift = Modifiers {
+        ctrl: true,
+        shift: true,
+        ..Modifiers::none()
+    };
+    let shown = |ui: &crate::ui::RecordingUiHost| {
+        ui.take().into_iter().find_map(|m| match m {
+            ToUi::DialogShow { dialog } => Some(dialog),
+            _ => None,
+        })
+    };
+    let ui_event = |engine: &mut ScreenReaderEngine, message: FromUi| {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(message))
+    };
+    engine.handle_key_event(&KeyEvent::new(Key::Alpha('K'), ctrl_shift, true));
+    let list = shown(&ui);
+    assert_eq!(
+        list.as_ref().map(|d| d.title.as_str()),
+        Some("PlaceMarker List")
+    );
+    let list_id = list.map_or(0, |d| d.id);
+    ui_event(
+        &mut engine,
+        FromUi::DialogPressed {
+            id: list_id,
+            control: "add".into(),
+        },
+    );
+    let add = shown(&ui);
+    assert_eq!(
+        add.as_ref()
+            .and_then(|d| d.controls.first())
+            .map(|c| c.kind.clone()),
+        Some(ControlKind::Edit {
+            text: "Water in a closed bottle is allowed.".into()
+        })
+    );
+    let add_id = add.map_or(0, |d| d.id);
+    let said = ui_event(
+        &mut engine,
+        FromUi::DialogPressed {
+            id: add_id,
+            control: "ok".into(),
+        },
+    );
+    assert_eq!(said, None);
+    assert_eq!(
+        ui.take(),
+        [
+            ToUi::DialogClose { id: add_id },
+            ToUi::DialogClose { id: list_id }
+        ]
+    );
+    // Back on the heading, 7 says the PlaceMarker's line where it is; 8 has none.
+    engine.cursor.move_to_start();
+    let digit = |engine: &mut ScreenReaderEngine, d: u8| {
+        let _ = speech.take();
+        engine.handle_key_event(&KeyEvent::new(Key::Digit(d), Modifiers::none(), true));
+        speech.take().join("\n")
+    };
+    assert_eq!(
+        digit(&mut engine, 7),
+        "Water in a closed bottle is allowed."
+    );
+    assert!(engine.cursor.current_line().contains("Food"));
+    assert_eq!(digit(&mut engine, 8), "No place marker #2");
+    // Remove All, answered Yes.
+    engine.handle_key_event(&KeyEvent::new(Key::Alpha('K'), ctrl_shift, true));
+    let list = shown(&ui);
+    let rows = list
+        .as_ref()
+        .and_then(|d| d.controls.first())
+        .map(|c| c.kind.clone());
+    assert!(
+        matches!(&rows, Some(ControlKind::Table { rows, .. }) if rows.len() == 1),
+        "{rows:?}"
+    );
+    let list_id = list.map_or(0, |d| d.id);
+    ui_event(
+        &mut engine,
+        FromUi::DialogPressed {
+            id: list_id,
+            control: "removeall".into(),
+        },
+    );
+    let question = shown(&ui).map_or(0, |d| d.id);
+    ui_event(
+        &mut engine,
+        FromUi::DialogPressed {
+            id: question,
+            control: "yes".into(),
+        },
+    );
+    assert_eq!(
+        ui.take(),
+        [
+            ToUi::DialogClose { id: question },
+            ToUi::DialogClose { id: list_id }
+        ]
+    );
+    assert_eq!(digit(&mut engine, 7), "No place marker #1");
+}
+
 /// A page's field has its text's colors. With the virtual cursor: another field's as the page
 /// shows them ("navy on yellow"), "default on default" while it is empty, the focused field's
 /// as typed in; in forms mode the colors at the caret, an empty field's too [obs, 662/s2, s5,

@@ -1181,7 +1181,7 @@ impl VirtualCursor {
     }
 
     /// The speech of the line starting at `offset`, as Down Arrow would speak it.
-    fn line_speech_at(&self, offset: usize) -> String {
+    pub(crate) fn line_speech_at(&self, offset: usize) -> String {
         self.buffer
             .line_at_offset(offset)
             .map(|l| self.format_line_announcement(l))

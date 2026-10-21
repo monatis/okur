@@ -151,7 +151,10 @@ pub fn layout(dialog: &DialogSpec) -> Layout {
     if dialog.controls.iter().any(|c| {
         matches!(
             c.kind,
-            ControlKind::List { .. } | ControlKind::ListBox { .. } | ControlKind::Tree { .. }
+            ControlKind::List { .. }
+                | ControlKind::ListBox { .. }
+                | ControlKind::Tree { .. }
+                | ControlKind::Table { .. }
         )
     }) {
         list_layout(dialog)
@@ -255,6 +258,25 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
         let first = !after_button;
         after_button = matches!(control.kind, ControlKind::Button { .. });
         match &control.kind {
+            // A table shows its columns' headers: JAWS's PlaceMarker List, "PlaceMarker" and
+            // "Generalized to Domain".
+            ControlKind::Table { .. } => items.push(Item {
+                class: Class::Named("SysListView32"),
+                style: WS_CHILD
+                    | WS_VISIBLE
+                    | WS_BORDER
+                    | WS_TABSTOP
+                    | WS_GROUP
+                    | LVS_REPORT
+                    | LVS_SINGLESEL
+                    | LVS_SHOWSELALWAYS,
+                x: MARGIN,
+                y: MARGIN,
+                cx: list_width,
+                cy: LIST_HEIGHT,
+                id,
+                text: control.label.clone(),
+            }),
             ControlKind::List { .. } => items.push(Item {
                 class: Class::Named("SysListView32"),
                 style: WS_CHILD
@@ -578,7 +600,10 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
                 ) + ROW_GAP
                     + 2;
             }
-            ControlKind::List { .. } | ControlKind::ListBox { .. } | ControlKind::Tree { .. } => {}
+            ControlKind::List { .. }
+            | ControlKind::ListBox { .. }
+            | ControlKind::Tree { .. }
+            | ControlKind::Table { .. } => {}
             ControlKind::Button { default } => {
                 buttons.push((id, control.label.clone(), *default));
             }
@@ -780,6 +805,36 @@ mod tests {
             .is_some_and(|(m, ok)| ok.y > m.y + m.cy && ok.id == IDOK));
         assert_eq!(message_height("short", 266), 8);
         assert_eq!(message_height(&"x".repeat(70), 266), 16);
+    }
+
+    /// A table is a list view that shows its columns' headers, as JAWS's PlaceMarker List
+    /// does; a plain list hides its one header.
+    #[test]
+    fn a_table_shows_its_headers() {
+        let spec = DialogSpec {
+            id: 2,
+            title: "PlaceMarker List".into(),
+            controls: vec![
+                control(
+                    "markers",
+                    "PlaceMarker",
+                    ControlKind::Table {
+                        columns: vec!["PlaceMarker".into(), "Generalized to Domain".into()],
+                        rows: Vec::new(),
+                        selected: None,
+                    },
+                ),
+                control("cancel", "&Cancel", ControlKind::Button { default: false }),
+            ],
+        };
+        let layout = layout(&spec);
+        let list = layout
+            .items
+            .iter()
+            .find(|i| i.class == Class::Named("SysListView32"));
+        assert!(list.is_some_and(|l| l.style & LVS_REPORT != 0
+            && l.style & LVS_NOCOLUMNHEADER == 0
+            && l.text == "PlaceMarker"));
     }
 
     #[test]
