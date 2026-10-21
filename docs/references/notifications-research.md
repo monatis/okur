@@ -94,6 +94,21 @@ At nvaccess/nvda master (2026-10-21):
   about Focus Assist.
 - Applications' own UIA notification events from the background are not NVDA's toast path.
 
+## Built so far (2026-10-22)
+
+- **Toasts said as they show** (`1b6a460`): the tracer records the shell's WindowOpened, and a
+  window holding a `NormalToastView` becomes `AccessibilityEvent::Toast`, said once by its
+  name, with its sender (770).
+- **Insert+Space, Shift+N and Ctrl+N** (`4662125`, `cb92608`): the last notification again,
+  "No notification" before any; toasts off and on, kept while off (773).
+- **The Notification History** (`ed3c449`): Insert+Space, N, as 774 shows JAWS's, with the
+  details on Enter and Clear History; the last 500 kept while Okur runs.
+- **Rules** (`5aee2fb`): Create Rule... with JAWS's controls (775); the first rule a toast
+  matches mutes it or keeps it out of the history while Enable Rules is checked.
+- **Not yet:** the rule's name prompt, Manage Rules, rules saved to the settings folder,
+  Shorten and Play Sound, braille; applications' own UIA notifications in the history; toasts
+  Focus Assist hides (UserNotificationListener); the past 24 hours across restarts.
+
 ## What it means for Okur
 
 1. **Speaking toasts:** subscribe to UIA WindowOpened desktop-wide and take the
