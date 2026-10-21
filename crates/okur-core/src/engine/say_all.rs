@@ -264,7 +264,8 @@ impl ScreenReaderEngine {
         while reading.queued.len() < keep {
             let Some(text) = self.say_all_line(reading, reading.next_line) else {
                 // At a page's end JAWS says its last word again, where reading leaves the
-                // cursor: "content information end end" [obs, 111/s1, 408/s10, 613/s26].
+                // cursor: "content information end end" [obs, 111/s1, 408/s10, 613/s26],
+                // without the period that ends it ("delivery. delivery" [obs, 712/s1]).
                 let last = reading.next_line.checked_sub(1);
                 let word = self
                     .cursor
@@ -272,7 +273,10 @@ impl ScreenReaderEngine {
                     .lines
                     .last()
                     .and_then(|l| l.text.split_whitespace().last())
-                    .map(str::to_owned);
+                    .map(|w| {
+                        let bare = w.trim_end_matches('.');
+                        if bare.is_empty() { w } else { bare }.to_owned()
+                    });
                 let in_page = !matches!(reading.source, Source::Field(_));
                 if let (true, false, Some(word), Some(last)) = (in_page, reading.ended, word, last)
                 {
@@ -523,7 +527,8 @@ mod tests {
         );
         engine.speech_reached(mark_of(&speech, "The library opens at nine."));
         press(&mut engine, Key::RightArrow);
-        // Reading goes on from the next sentence, to the page's end and its last word again.
+        // Reading goes on from the next sentence, to the page's end and its last word again,
+        // without its period [obs, 712/s1].
         let handed = texts(&speech);
         assert_eq!(
             handed.get(handed.len().saturating_sub(4)..),
@@ -532,7 +537,7 @@ mod tests {
                     "It closes late.".to_owned(),
                     "Volunteers help.".to_owned(),
                     "Ask at the desk.".to_owned(),
-                    "desk.".to_owned(),
+                    "desk".to_owned(),
                 ][..]
             )
         );

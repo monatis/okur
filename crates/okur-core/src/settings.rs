@@ -180,6 +180,36 @@ impl LessSpeech {
     }
 }
 
+/// When forms mode turns on by itself (Settings Center: Forms Mode; `[FormsMode]
+/// AutoFormsMode`: 0 manual, 1 auto, 2 semi-auto).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum FormsMode {
+    /// A field the focus or an arrow reaches is in forms mode: JAWS's default. Off, a field
+    /// takes Enter first, and arrows in a page's menu stay the virtual cursor's (old-pc,
+    /// 2026-10-18).
+    #[default]
+    Auto,
+    /// Only Tab and Shift+Tab onto a field turn forms mode on ("only when you move to a form
+    /// control using Tab or Shift+Tab", What's New in JAWS 2018): Tab reads as with Auto
+    /// [obs, 714 against 287].
+    SemiAuto,
+    /// Enter turns forms mode on: old-pc's `AutoFormsMode=0`.
+    Manual,
+}
+
+impl FormsMode {
+    /// The mode a `DEFAULT.JCF` `AutoFormsMode` value sets: 0 manual, 2 semi-auto [obs,
+    /// 714]; any other value is auto, JAWS's default.
+    pub fn from_jcf(value: &str) -> Self {
+        match value.trim() {
+            "0" => Self::Manual,
+            "2" => Self::SemiAuto,
+            _ => Self::Auto,
+        }
+    }
+}
+
 /// What typing a character says (Basic Settings: Typing Echo).
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -566,14 +596,17 @@ pub struct Settings {
     /// Less speech on demand or muted.
     pub less_speech: LessSpeech,
     pub viewer_display: ViewerDisplay,
-    /// Forms mode turns on by itself when the focus lands on a field, as JAWS's Auto Forms
-    /// Mode (`[FormsMode] AutoFormsMode`, on by default). Off, a field takes Enter first,
-    /// and arrows in a page's menu stay the virtual cursor's (old-pc, 2026-10-18).
-    pub auto_forms_mode: bool,
+    /// When forms mode turns on by itself.
+    pub forms_mode: FormsMode,
     /// What is said and how much: a control's access key is said after it ("alt+Y") while
     /// the `access_key` output type is on, as JAWS's Access Key output (`[OutputModes]
     /// ACCESS_KEY`, on by default).
     pub verbosity: Verbosity,
+    /// A page is read from its top once it loads, after its title and summary: JAWS's
+    /// "Document and Web Pages Automatically Read When Loaded" (Settings Center, Web/HTML/PDFs,
+    /// Reading; `[HTML] SayAllOnDocumentLoad`), on in JAWS 2025. Off, the title and the
+    /// summary are said and the cursor waits at the top [obs, 712, 713].
+    pub read_page_on_load: bool,
     /// Insert+F4 asks before Okur exits, as JAWS's "Prompt to Confirm When Exiting JAWS"
     /// (Options > Basics), checked by default: "When cleared, JAWS immediately closes when you
     /// use any of the commands to exit the program including INSERT+F4" (JAWS 2025 help).
@@ -591,8 +624,9 @@ impl Default for Settings {
             speech_mode: SpeechMode::default(),
             less_speech: LessSpeech::default(),
             viewer_display: ViewerDisplay::default(),
-            auto_forms_mode: true,
+            forms_mode: FormsMode::Auto,
             verbosity: Verbosity::default(),
+            read_page_on_load: true,
             confirm_exit: true,
         }
     }
@@ -651,9 +685,10 @@ impl Settings {
             speech_mode: SpeechMode::Full,
             less_speech: LessSpeech::OnDemand,
             viewer_display: ViewerDisplay::OnScreen,
-            auto_forms_mode: false,
+            forms_mode: FormsMode::Manual,
             verbosity,
-            // Not in old-pc's JCF: JAWS's default.
+            // Neither is in old-pc's JCF: JAWS's defaults.
+            read_page_on_load: true,
             confirm_exit: true,
         }
     }
@@ -677,11 +712,11 @@ mod tests {
     fn forms_mode_and_access_keys_default_to_jaws() {
         let access_keys = |s: &Settings| s.verbosity.is_on(OutputType::AccessKey);
         let defaults = Settings::default();
-        assert!(defaults.auto_forms_mode && access_keys(&defaults));
+        assert!(defaults.forms_mode == FormsMode::Auto && access_keys(&defaults));
         let reference = Settings::reference_machine();
-        assert!(!reference.auto_forms_mode && !access_keys(&reference));
+        assert!(reference.forms_mode == FormsMode::Manual && !access_keys(&reference));
         let older: Result<Settings, _> = serde_json::from_str(r#"{"typing_echo":"none"}"#);
-        assert!(older.is_ok_and(|s| s.auto_forms_mode && access_keys(&s)));
+        assert!(older.is_ok_and(|s| s.forms_mode == FormsMode::Auto && access_keys(&s)));
     }
 
     /// Verbosity starts at Beginner with every output type on and long messages; a JCF

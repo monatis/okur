@@ -290,17 +290,17 @@ mod tests {
         );
         layers.sites.insert(
             "example.org".into(),
-            values(json!({"auto_forms_mode": false})),
+            values(json!({"forms_mode": "manual"})),
         );
         let everywhere = layers.resolve(None, None);
         assert_eq!(everywhere.voice.punctuation, Punctuation::Some);
         assert_eq!(everywhere.typing_echo, TypingEcho::None);
-        assert!(everywhere.auto_forms_mode);
+        assert_eq!(everywhere.forms_mode, crate::settings::FormsMode::Auto);
         let notepad = layers.resolve(Some("notepad"), None);
         assert_eq!(notepad.voice.punctuation, Punctuation::All);
         assert_eq!(notepad.typing_echo, TypingEcho::None);
         let site = layers.resolve(Some("chrome"), Some("example.org"));
-        assert!(!site.auto_forms_mode);
+        assert_eq!(site.forms_mode, crate::settings::FormsMode::Manual);
         assert_eq!(site.voice.punctuation, Punctuation::Some);
         layers.set_for_session(&["voice", "punctuation"], json!("none"));
         assert_eq!(

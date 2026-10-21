@@ -124,9 +124,10 @@ impl ScreenReaderEngine {
         self.load_buffer(buffer);
         self.app_mode = AppMode::VirtualBuffer;
         self.last_window_title = Some(title.to_owned());
-        // JAWS on a page load: the page's title, its summary, then Say All from the top, its
-        // "Automatically read pages when loaded" being on by default [obs, 507/s1, 538/s1,
-        // 539/s1]. JAWS's Smart Glance sentence after the summary is not Okur's.
+        // JAWS on a page load: the page's title, its summary, then Say All from the top while
+        // "Document and Web Pages Automatically Read When Loaded" is on, as by default [obs,
+        // 507/s1, 538/s1, 539/s1, 712/s1]; off, the cursor waits at the top [obs, 713]. JAWS's
+        // Smart Glance sentence after the summary is not Okur's.
         let said = [
             format!("{title}  \u{1d} {} \u{1e}", msg::role_document()),
             self.page_summary(),
@@ -134,7 +135,12 @@ impl ScreenReaderEngine {
         for (i, part) in said.iter().enumerate() {
             self.speech.speak(part, i == 0);
         }
-        let reading = self.start_page_say_all().unwrap_or_default();
+        let reading = if self.settings.read_page_on_load {
+            self.start_page_say_all().unwrap_or_default()
+        } else {
+            self.cursor.move_to_start();
+            String::new()
+        };
         Some(
             said.into_iter()
                 .chain(std::iter::once(reading))

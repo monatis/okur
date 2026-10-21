@@ -59,6 +59,14 @@ settings-less-speech-on-demand = Speech On Demand
 settings-less-speech-muted = Mute
 settings-live-region-whole-text = Read the &Whole Text of a Growing Live Region
 settings-viewer-on-screen = &Show Virtual Viewer on Screen
+# JAWS's "Document and Web Pages Automatically Read When Loaded" (Settings Center,
+# Web/HTML/PDFs, Reading). Its D is Say All Reads', its M Forms Mode's.
+settings-read-page-on-load = Docume&nt and Web Pages Automatically Read When Loaded
+# JAWS's Forms Mode (Settings Center): when forms mode turns on by itself.
+settings-forms-mode = For&ms Mode:
+settings-forms-mode-auto = Auto
+settings-forms-mode-semi-auto = Semi-Auto
+settings-forms-mode-manual = Manual
 # JAWS's "Prompt to Confirm When Exiting JAWS" (Options > Basics): Insert+F4 asks first.
 settings-confirm-exit = Prompt to &Confirm When Exiting Okur
 settings-ok = OK

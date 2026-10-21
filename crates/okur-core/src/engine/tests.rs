@@ -4499,7 +4499,7 @@ fn tab_turns_forms_mode_on_once_the_virtual_cursor_has_moved() {
         let speech = SharedSpeech::default();
         let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
         let mut changed = engine.settings.clone();
-        changed.auto_forms_mode = false;
+        changed.forms_mode = crate::settings::FormsMode::Manual;
         engine.set_settings(changed);
         engine.handle_document_loaded("Web Menus", VirtualBuffer::from_aom(&page));
         engine.on_idle();
@@ -4541,7 +4541,7 @@ fn without_auto_forms_mode_the_arrows_read_a_fields_line() {
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
     let mut changed = engine.settings.clone();
-    changed.auto_forms_mode = false;
+    changed.forms_mode = crate::settings::FormsMode::Manual;
     engine.set_settings(changed);
     engine.handle_focus_event(&page_document());
     engine.cursor.move_to_start();
@@ -4614,7 +4614,7 @@ fn without_auto_forms_mode_a_field_waits_for_enter() {
         Box::new(MockSpeechOutput::new()),
     );
     let mut changed = engine.settings.clone();
-    changed.auto_forms_mode = false;
+    changed.forms_mode = crate::settings::FormsMode::Manual;
     engine.set_settings(changed);
     let search = || {
         let mut focus = FocusEvent::new(Role::Edit)
@@ -4643,7 +4643,7 @@ fn without_auto_forms_mode_a_field_waits_for_enter() {
 fn without_auto_forms_mode_a_page_menu_leaves_the_arrows_to_the_cursor() {
     let (mut engine, _speech) = engine_on_a_page();
     let mut changed = engine.settings.clone();
-    changed.auto_forms_mode = false;
+    changed.forms_mode = crate::settings::FormsMode::Manual;
     engine.set_settings(changed);
     let mut file = FocusEvent::new(Role::MenuItem).with_name("File");
     file.in_document = true;
@@ -4766,7 +4766,7 @@ fn a_page_menu_in_browse_mode_is_read_by_the_virtual_cursor() {
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
     let mut changed = engine.settings.clone();
-    changed.auto_forms_mode = false;
+    changed.forms_mode = crate::settings::FormsMode::Manual;
     engine.set_settings(changed);
     let mut file = FocusEvent::new(Role::MenuItem)
         .with_node_id(3)

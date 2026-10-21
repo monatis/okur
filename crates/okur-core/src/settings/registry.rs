@@ -11,8 +11,8 @@ use serde::Serialize;
 use serde_json::{Map, Value};
 
 use super::{
-    KeyboardLayout, KeyboardSettings, LessSpeech, OkurKey, OutputType, Punctuation, SayAllUnit,
-    Settings, SpeechMode, Synthesizer, TypingEcho, Verbosity, VerbosityLevel,
+    FormsMode, KeyboardLayout, KeyboardSettings, LessSpeech, OkurKey, OutputType, Punctuation,
+    SayAllUnit, Settings, SpeechMode, Synthesizer, TypingEcho, Verbosity, VerbosityLevel,
 };
 use crate::messages::{msg, StaticMessage};
 use crate::settings_layers::Scope;
@@ -323,20 +323,16 @@ pub static SETTINGS: &[SettingSpec] = &[
         None,
         Kind::Structured,
     ),
-    // Auto Forms Mode (`[FormsMode] AutoFormsMode`, on unless "0"); its three-way Forms Mode
-    // (Auto, Semi-Auto, Manual) comes with its dialog control.
+    // Forms Mode (`[FormsMode] AutoFormsMode`; 287, 204 and 714 record each).
     SettingSpec {
         jaws: default_jcf("FormsMode", "AutoFormsMode", |v| {
-            Value::Bool(v.trim() != "0")
+            json(FormsMode::from_jcf(v))
         }),
         ..spec(
-            "auto_forms_mode",
+            "forms_mode",
             Group::Reading,
-            None,
-            Kind::Check {
-                on: Literal::Bool(true),
-                off: Literal::Bool(false),
-            },
+            Some(msg::settings_forms_mode),
+            Kind::Choice(choices::<FormsMode>),
         )
     },
     spec(
@@ -357,6 +353,20 @@ pub static SETTINGS: &[SettingSpec] = &[
             off: Literal::Text("speech_only"),
         },
     ),
+    SettingSpec {
+        jaws: default_jcf("HTML", "SayAllOnDocumentLoad", |v| {
+            Value::Bool(v.trim() != "0")
+        }),
+        ..spec(
+            "read_page_on_load",
+            Group::Reading,
+            Some(msg::settings_read_page_on_load),
+            Kind::Check {
+                on: Literal::Bool(true),
+                off: Literal::Bool(false),
+            },
+        )
+    },
     spec(
         "confirm_exit",
         Group::Reading,
@@ -597,6 +607,18 @@ impl Choices for OkurKey {
     }
 }
 
+/// JAWS's Forms Mode choices, as Settings Center lists them.
+impl Choices for FormsMode {
+    const ALL: &'static [Self] = &[Self::Auto, Self::SemiAuto, Self::Manual];
+    fn label(self) -> StaticMessage {
+        match self {
+            Self::Auto => msg::settings_forms_mode_auto(),
+            Self::SemiAuto => msg::settings_forms_mode_semi_auto(),
+            Self::Manual => msg::settings_forms_mode_manual(),
+        }
+    }
+}
+
 /// JAWS's typing echo choices, as Settings Center names them (User Options).
 impl Choices for TypingEcho {
     const ALL: &'static [Self] = &[Self::None, Self::Characters, Self::Words, Self::Both];
@@ -814,6 +836,6 @@ mod tests {
         assert_eq!(imported, expected);
         let desktop = import_jaws(&base, &|_, _, _| None);
         assert_eq!(desktop.keyboard, KeyboardSettings::default());
-        assert!(desktop.auto_forms_mode);
+        assert_eq!(desktop.forms_mode, FormsMode::Auto);
     }
 }

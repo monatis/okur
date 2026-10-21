@@ -708,7 +708,14 @@ impl ScreenReaderEngine {
                 m.alt && !m.ctrl && !m.shift && !m.insert && matches!(event.key, Key::Alpha(_)),
             );
         }
-        let page_menu_in_browse = self.menus.is_page() && !self.settings.auto_forms_mode;
+        // A page's menu keeps its keys in forms mode, which Auto Forms Mode turns on in it and
+        // Semi-Auto when Tab brought the focus there.
+        let page_menu_in_browse = self.menus.is_page()
+            && match self.settings.forms_mode {
+                crate::settings::FormsMode::Auto => false,
+                crate::settings::FormsMode::SemiAuto => !self.forms_mode,
+                crate::settings::FormsMode::Manual => true,
+            };
         if self.menus.in_menu_mode() && !page_menu_in_browse {
             return KeyAction::PassThrough;
         }
@@ -979,7 +986,7 @@ impl ScreenReaderEngine {
             if is_edit {
                 self.forms_mode = true;
                 self.cursor.forms_mode_active = true;
-                if self.settings.auto_forms_mode {
+                if self.settings.forms_mode != crate::settings::FormsMode::Manual {
                     self.cursor.move_to_node_id(id);
                     // A field an arrow had left, with Auto Forms Mode: Shift+Tab back onto it
                     // turned forms mode on and JAWS said nothing [obs, 284/s11]; Tab onto it

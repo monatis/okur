@@ -659,7 +659,7 @@ impl ScreenReaderEngine {
     /// with JAWS"); other controls stay in browse mode (280/s13, s18). The focus event that
     /// follows is not said again.
     pub(super) fn arrow_onto_field(&mut self, down: bool) -> Option<String> {
-        if !self.settings.auto_forms_mode
+        if self.settings.forms_mode != crate::settings::FormsMode::Auto
             || self.forms_mode
             || self.app_mode != AppMode::VirtualBuffer
         {
@@ -758,7 +758,9 @@ impl ScreenReaderEngine {
             Key::UpArrow => false,
             _ => return None,
         };
-        if !self.settings.auto_forms_mode || !event.modifiers.is_empty() {
+        if self.settings.forms_mode != crate::settings::FormsMode::Auto
+            || !event.modifiers.is_empty()
+        {
             return None;
         }
         let field = self

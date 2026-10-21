@@ -10,6 +10,16 @@ use crate::messages::msg;
 use crate::speech::SpeechFormatter;
 
 impl ScreenReaderEngine {
+    /// Whether the focus landing on a field turns forms mode on by itself: always with Auto
+    /// Forms Mode, when Tab or Shift+Tab brought it with Semi-Auto, never with Manual.
+    pub(super) fn focus_turns_forms_mode_on(&self) -> bool {
+        match self.settings.forms_mode {
+            crate::settings::FormsMode::Auto => true,
+            crate::settings::FormsMode::SemiAuto => self.last_key_tabs,
+            crate::settings::FormsMode::Manual => false,
+        }
+    }
+
     /// An option the focused field points at, said as JAWS says it (dev box, 2026-10-16): its
     /// list on the way in ("Fruits list | with 3 items"), then "Apple | 1 of 3 | To move to an
     /// item press the Arrow keys."
@@ -182,7 +192,7 @@ impl ScreenReaderEngine {
             // app menu over a page) leaves forms mode as it was: menu mode takes its keys.
             if focus.in_document
                 && self.app_mode == AppMode::VirtualBuffer
-                && self.settings.auto_forms_mode
+                && self.focus_turns_forms_mode_on()
             {
                 self.forms_mode = true;
                 self.cursor.forms_mode_active = true;
@@ -456,7 +466,7 @@ impl ScreenReaderEngine {
             // on, as on a list box: WhatsApp's messages are rows its arrows move through.
             // JAWS 2025 stays in browse mode there, and the user has to turn forms mode on
             // (dev box, 2026-10-17); Okur gives the item its keys, as the user asked.
-            let auto_forms = self.settings.auto_forms_mode;
+            let auto_forms = self.focus_turns_forms_mode_on();
             let widget_item = (self.forms_mode || (self.last_key_tabs && auto_forms))
                 && (target_id.is_some_and(|id| self.in_widget_item(id))
                     || (target_id.is_none() && focus_in_widget(focus)));

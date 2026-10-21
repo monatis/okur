@@ -405,7 +405,7 @@ mod tests {
         layers.change(&Scope::Application("notepad".into()), &before, &after, None);
         let before = layers.resolve(Some("chrome"), Some("example.org"));
         let mut after = before.clone();
-        after.auto_forms_mode = false;
+        after.forms_mode = okur_core::settings::FormsMode::Manual;
         layers.change(
             &Scope::Site("example.org".into()),
             &before,
