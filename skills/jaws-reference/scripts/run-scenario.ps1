@@ -287,9 +287,20 @@ function Focus-Target([string]$procName) {
         Get-Process $procName -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero } | Select-Object -First 1
     }
     if (-not $proc) { throw "No '$procName' window found." }
-    [void][SrKeyInput]::ShowWindow($proc.MainWindowHandle, 9)
-    [void][SrKeyInput]::SetForegroundWindow($proc.MainWindowHandle)
-    Start-Sleep -Milliseconds 250
+    # Windows can refuse to bring the window forward right after another one took the front:
+    # JAWS's own window, after JAWS restarted with a scenario's settings, kept it, and the
+    # trial's keys reached no page (round 124's first trials of 662, 677 and 678). The window
+    # is asked until it is in front, minimized and restored if asking is not enough, as a
+    # desktop fixture is.
+    $handle = $proc.MainWindowHandle
+    for ($k = 0; $k -lt 30; $k++) {
+        if ($k -eq 10 -or $k -eq 20) { [void][SrKeyInput]::ShowWindow($handle, 6) }
+        [void][SrKeyInput]::ShowWindow($handle, 9)
+        [void][SrKeyInput]::SetForegroundWindow($handle)
+        Start-Sleep -Milliseconds 100
+        if ([SrKeyInput]::GetForegroundWindow() -eq $handle) { break }
+    }
+    Start-Sleep -Milliseconds 150
 }
 
 # Runs jaws-process.ps1 elevated: JAWS runs elevated, and so must what stops it.
