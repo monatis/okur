@@ -48,6 +48,8 @@ pub enum Outcome {
     CreateRule(usize),
     /// Clear History.
     Clear,
+    /// Manage Rules...
+    Manage,
     Closed,
 }
 
@@ -143,6 +145,7 @@ impl HistoryDialog {
                     self.selected = 0;
                     Outcome::Clear
                 }
+                "manage" if self.has_rules => Outcome::Manage,
                 "cancel" => Outcome::Closed,
                 _ => Outcome::Nothing,
             },
@@ -390,6 +393,8 @@ pub struct CreateRuleDialog {
     rule: Rule,
     /// The notification's sender, which Limit to notifications from names.
     from: Option<String>,
+    /// Modify... in Manage Rules: "Modify Rule", the rule's choices shown [obs, 787/s11].
+    modifying: bool,
 }
 
 impl CreateRuleDialog {
@@ -407,6 +412,22 @@ impl CreateRuleDialog {
                 enabled: true,
             },
             from: sender.map(str::to_owned),
+            modifying: false,
+        }
+    }
+
+    /// Whether this is Modify Rule, for a rule kept.
+    pub fn modifying(&self) -> bool {
+        self.modifying
+    }
+
+    /// Modify Rule for a rule kept: its own choices [obs, 787/s11-s14].
+    pub fn modify(id: u32, rule: &Rule) -> Self {
+        Self {
+            id,
+            rule: rule.clone(),
+            from: rule.sender.clone(),
+            modifying: true,
         }
     }
 
@@ -422,7 +443,11 @@ impl CreateRuleDialog {
         };
         DialogSpec {
             id: self.id,
-            title: msg::notification_rule_title().to_string(),
+            title: if self.modifying {
+                msg::notification_rule_modify_title().to_string()
+            } else {
+                msg::notification_rule_title().to_string()
+            },
             controls: vec![
                 control(
                     "received",
@@ -436,7 +461,10 @@ impl CreateRuleDialog {
                         .iter()
                         .map(|t| t.label().to_string())
                         .collect(),
-                    0,
+                    RuleType::ALL
+                        .iter()
+                        .position(|&t| t == self.rule.kind)
+                        .unwrap_or(0),
                 ),
                 labelled(
                     "text",
@@ -464,7 +492,10 @@ impl CreateRuleDialog {
                         .iter()
                         .map(|a| a.label().to_string())
                         .collect(),
-                    0,
+                    SpeechAction::ALL
+                        .iter()
+                        .position(|&a| a == self.rule.speech)
+                        .unwrap_or(0),
                 ),
                 control(
                     "braille_group",
@@ -480,7 +511,9 @@ impl CreateRuleDialog {
                 control(
                     "hidden",
                     msg::notification_rule_hidden(),
-                    ControlKind::CheckBox { checked: false },
+                    ControlKind::CheckBox {
+                        checked: self.rule.hidden,
+                    },
                 ),
                 control(
                     "ok",
@@ -528,6 +561,171 @@ impl CreateRuleDialog {
             FromUi::DialogClosed { id } if *id == self.id => RuleOutcome::Closed,
             _ => RuleOutcome::Nothing,
         }
+    }
+}
+
+/// A rule's row in Manage Rules: its name, its sender, what is said, what braille shows, and
+/// whether it is on: "Okur lab rule Windows PowerShell Mute Show flash message Enabled" [obs,
+/// 787/s8, s16].
+pub fn rule_row(rule: &Rule) -> String {
+    let braille = BRAILLE_ACTIONS
+        .get(rule.braille)
+        .map(|label| label().to_string());
+    let state = if rule.enabled {
+        msg::notification_rule_enabled()
+    } else {
+        msg::notification_rule_disabled()
+    };
+    [
+        Some(rule.name.clone()),
+        rule.sender.clone(),
+        Some(rule.speech.label().to_string()),
+        braille,
+        Some(state.to_string()),
+    ]
+    .into_iter()
+    .flatten()
+    .filter(|part| !part.is_empty())
+    .collect::<Vec<_>>()
+    .join(" ")
+}
+
+/// What the engine does after Manage Rules handled a message, each on the rule chosen.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ManageOutcome {
+    Nothing,
+    Modify(usize),
+    Rename(usize),
+    /// Disable, or Enable.
+    Toggle(usize),
+    Delete(usize),
+    Closed,
+}
+
+/// Manage Notification Rules (Manage Rules... in the history). Its controls are JAWS 2025's
+/// [obs, 784/s6-s10, 787/s8]: the list "Rules", then Modify..., Rename..., Disable and Delete,
+/// available with a rule chosen, and Close.
+#[derive(Debug, Clone)]
+pub struct ManageRulesDialog {
+    pub id: u32,
+    rows: Vec<String>,
+    selected: usize,
+}
+
+impl ManageRulesDialog {
+    pub fn new(id: u32, rules: &NotificationRules) -> Self {
+        Self {
+            id,
+            rows: rules.rules.iter().map(rule_row).collect(),
+            selected: 0,
+        }
+    }
+
+    pub fn spec(&self) -> DialogSpec {
+        let any = !self.rows.is_empty();
+        let button = |id: &str, label: StaticMessage| Control {
+            enabled: any,
+            ..control(id, label, ControlKind::Button { default: false })
+        };
+        DialogSpec {
+            id: self.id,
+            title: msg::notification_rules_title().to_string(),
+            controls: vec![
+                control(
+                    "rules",
+                    msg::notification_rules_list(),
+                    ControlKind::ListBox {
+                        items: self.rows.clone(),
+                        selected: self.selected,
+                    },
+                ),
+                button("modify", msg::notification_rules_modify()),
+                button("rename", msg::notification_rules_rename()),
+                button("toggle", msg::notification_rules_toggle()),
+                button("delete", msg::notification_rules_delete()),
+                control(
+                    "cancel",
+                    msg::notification_rules_close(),
+                    ControlKind::Button { default: false },
+                ),
+            ],
+        }
+    }
+
+    /// The rows after a change, the chosen one kept where it still is.
+    pub fn set_rows(&mut self, rows: Vec<String>) -> Vec<okur_ui_model::ToUi> {
+        use okur_ui_model::ToUi;
+        let had = !self.rows.is_empty();
+        self.rows = rows;
+        self.selected = self.selected.min(self.rows.len().saturating_sub(1));
+        let mut messages = vec![ToUi::DialogItems {
+            id: self.id,
+            control: "rules".to_owned(),
+            items: self.rows.clone(),
+            selected: self.selected,
+        }];
+        if had && self.rows.is_empty() {
+            messages.extend(["modify", "rename", "toggle", "delete"].map(|control| {
+                ToUi::DialogEnable {
+                    id: self.id,
+                    control: control.to_owned(),
+                    enabled: false,
+                }
+            }));
+        }
+        messages
+    }
+
+    pub fn handle(&mut self, event: &FromUi) -> ManageOutcome {
+        match event {
+            FromUi::DialogChanged { id, control, value } if *id == self.id => {
+                if let ("rules", Value::Selected(i)) = (control.as_str(), value) {
+                    self.selected = *i;
+                }
+                ManageOutcome::Nothing
+            }
+            FromUi::DialogPressed { id, control } if *id == self.id => {
+                let chosen = (self.selected < self.rows.len()).then_some(self.selected);
+                match (control.as_str(), chosen) {
+                    ("modify", Some(i)) => ManageOutcome::Modify(i),
+                    ("rename", Some(i)) => ManageOutcome::Rename(i),
+                    ("toggle", Some(i)) => ManageOutcome::Toggle(i),
+                    ("delete", Some(i)) => ManageOutcome::Delete(i),
+                    ("cancel", _) => ManageOutcome::Closed,
+                    _ => ManageOutcome::Nothing,
+                }
+            }
+            FromUi::DialogClosed { id } if *id == self.id => ManageOutcome::Closed,
+            _ => ManageOutcome::Nothing,
+        }
+    }
+}
+
+/// Delete's question: "Confirm Delete | Are you sure you want to delete this rule? | Yes",
+/// Yes the default [obs, 787/s17].
+pub fn confirm_delete(id: u32) -> DialogSpec {
+    DialogSpec {
+        id,
+        title: msg::notification_rules_confirm_title().to_string(),
+        controls: vec![
+            control(
+                "question",
+                msg::notification_rules_confirm(),
+                ControlKind::Message {
+                    text: msg::notification_rules_confirm().to_string(),
+                },
+            ),
+            control(
+                "ok",
+                msg::notification_rules_yes(),
+                ControlKind::Button { default: true },
+            ),
+            control(
+                "cancel",
+                msg::notification_rules_no(),
+                ControlKind::Button { default: false },
+            ),
+        ],
     }
 }
 

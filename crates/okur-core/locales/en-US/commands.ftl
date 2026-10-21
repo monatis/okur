@@ -151,10 +151,28 @@ notification-rule-braille-short = Show shortened flash message
 notification-rule-hidden = Don't Show in History
 notification-rule-ok = OK
 notification-rule-cancel = Cancel
+# Modify... in Manage Rules [obs, 787/s11].
+notification-rule-modify-title = Modify Rule
 # After Create Rule's OK [obs, 783/s7].
 notification-rule-name-title = Name Your Rule
 notification-rule-name-prompt = Please enter a name for the rule.
 notification-rule-name = Rule Name:
+# Manage Rules... in the Notification History [obs, 784, 787]. The access keys are JAWS's.
+notification-rules-title = Manage Notification Rules
+notification-rules-list = &Rules
+notification-rules-modify = &Modify...
+notification-rules-rename = Re&name...
+notification-rules-toggle = Dis&able
+notification-rules-delete = &Delete
+notification-rules-close = &Close
+# A rule's state, ending its row.
+notification-rule-enabled = Enabled
+notification-rule-disabled = Disabled
+# Delete's question [obs, 787/s17].
+notification-rules-confirm-title = Confirm Delete
+notification-rules-confirm = Are you sure you want to delete this rule?
+notification-rules-yes = &Yes
+notification-rules-no = &No
 
 ## Say Default Button (Insert+E) and the settings in use (Insert+Q) [obs, 513]
 

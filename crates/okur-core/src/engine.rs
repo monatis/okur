@@ -308,6 +308,11 @@ pub struct ScreenReaderEngine {
     /// Name Your Rule while it is open, and the notification the rule was made from.
     notification_name_dialog: Option<crate::ui::notifications::NameRuleDialog>,
     notification_rule_text: Option<String>,
+    /// Manage Rules while it is open, Delete's question over it (its dialog and the rule), and
+    /// the rule Modify... or Rename... is changing.
+    notification_manage: Option<crate::ui::notifications::ManageRulesDialog>,
+    notification_confirm: Option<(u32, usize)>,
+    notification_editing: Option<usize>,
     /// The last notification that came, for Insert+Space, Shift+N, even one the history
     /// leaves out.
     last_notification: Option<String>,
@@ -464,6 +469,9 @@ impl ScreenReaderEngine {
             notification_rule_dialog: None,
             notification_name_dialog: None,
             notification_rule_text: None,
+            notification_manage: None,
+            notification_confirm: None,
+            notification_editing: None,
             last_notification: None,
             toasts_unsaid: false,
             table_layer: false,

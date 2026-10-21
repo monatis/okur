@@ -6359,3 +6359,95 @@ fn skim_reading_by_a_text_rule_reads_what_holds_the_pattern() {
         "{by_sentence:?}"
     );
 }
+
+/// Manage Rules: the rules' rows as JAWS's, "Digest Mail Mute Show flash message Enabled";
+/// Disable, Rename... and Delete with its question [obs, 787/s8-s18].
+#[test]
+fn manage_rules_disables_renames_and_deletes() {
+    use crate::ui::notifications::{NotificationRules, Rule, RuleType, SpeechAction};
+    use crate::ui::{FromUi, ToUi, Value};
+    let (mut engine, _speech) = engine_on_a_page();
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    engine.set_notification_rules(
+        NotificationRules {
+            enabled: true,
+            rules: vec![Rule {
+                name: "Digest".into(),
+                kind: RuleType::Contains,
+                text: "Weekly digest".into(),
+                sender: Some("Mail".into()),
+                speech: SpeechAction::Mute,
+                braille: 1,
+                hidden: false,
+                enabled: true,
+            }],
+        },
+        None,
+    );
+    let shown = |ui: &crate::ui::RecordingUiHost| {
+        ui.take().into_iter().find_map(|m| match m {
+            ToUi::DialogShow { dialog } => Some(dialog),
+            _ => None,
+        })
+    };
+    let press = |engine: &mut ScreenReaderEngine, id: u32, control: &str| {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+            id,
+            control: control.into(),
+        }));
+    };
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    for (key, modifiers) in [(Key::Space, insert), (Key::Alpha('N'), Modifiers::none())] {
+        for down in [true, false] {
+            engine.handle_key_event(&KeyEvent::new(key, modifiers, down));
+        }
+    }
+    let history = shown(&ui).map(|d| d.id).unwrap_or(0);
+    press(&mut engine, history, "manage");
+    let Some(manage) = shown(&ui) else {
+        panic_free_fail("no Manage Rules");
+        return;
+    };
+    assert_eq!(manage.title, "Manage Notification Rules");
+    let rows = |messages: Vec<ToUi>| {
+        messages.into_iter().find_map(|m| match m {
+            ToUi::DialogItems { items, .. } => Some(items),
+            _ => None,
+        })
+    };
+    press(&mut engine, manage.id, "toggle");
+    assert_eq!(
+        rows(ui.take()),
+        Some(vec![
+            "Digest Mail Mute Show flash message Disabled".to_owned()
+        ])
+    );
+    press(&mut engine, manage.id, "rename");
+    let naming = shown(&ui).map(|d| d.id).unwrap_or(0);
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id: naming,
+        control: "name".into(),
+        value: Value::Text("Mail digest".into()),
+    }));
+    press(&mut engine, naming, "ok");
+    assert_eq!(
+        rows(ui.take()),
+        Some(vec![
+            "Mail digest Mail Mute Show flash message Disabled".to_owned()
+        ])
+    );
+    press(&mut engine, manage.id, "delete");
+    let confirm = match shown(&ui) {
+        Some(dialog) if dialog.title == "Confirm Delete" => dialog.id,
+        other => {
+            panic_free_fail(&format!("no question: {other:?}"));
+            return;
+        }
+    };
+    press(&mut engine, confirm, "ok");
+    assert_eq!(rows(ui.take()), Some(Vec::new()));
+}
