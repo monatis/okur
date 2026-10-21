@@ -1,0 +1,87 @@
+{
+  "id": "736-form-tab-order-tutor-off",
+  "name": "204 (Tab through the sign-up form) with the Tutor output type off at every level (TUTOR=0|0|0)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "OutputModes": {
+        "TUTOR": "0|0|0|Tutor"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Tab"
+    }
+  ]
+}
