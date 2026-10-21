@@ -71,7 +71,9 @@ reset leaves in front when it is not the launched one (a trial fails if another 
 
 Settling: after each action the default audio endpoint is metered (okur wait-silence; JAWS is
 the only audio source on the reference machine) until it has been silent for quiet_ms (default
-500) after speech, or no speech started within 800 ms, or settle_max_ms (default 10000) elapses.
+500) after speech, or no speech started within onset_ms (default 800), or settle_max_ms (default
+10000) elapses. A step after which JAWS starts speaking late (it reads the page again a moment
+after a PlaceMarker is added, 702/s6-s8) sets onset_ms, so that speech is the step's own.
 The speech history is then copied exactly once; polling it is impossible because JAWS speaks and
 records a "Copy speech history to clipboard" confirmation on every copy. JAWS queues that
 confirmation behind the speech it still holds, so the step's recorder records end where it
@@ -884,7 +886,8 @@ for ($t = 1; $t -le $Repetitions; $t++) {
             Start-Sleep -Milliseconds ([int]$d.after_ms)
             $dispatchOk = (Send-Chord $d.command) -and $dispatchOk
         }
-        $observed = Wait-Silence -OnsetMs 800 -QuietMs $quietMs -MaxMs $maxMs
+        $onsetMs = if ($step.onset_ms) { [int]$step.onset_ms } else { 800 }
+        $observed = Wait-Silence -OnsetMs $onsetMs -QuietMs $quietMs -MaxMs $maxMs
         # "capture_clipboard": what the step copied (e.g. Ctrl+C in the Virtual Viewer), read
         # before the speech history copy replaces it.
         $clipboard = if ($step.capture_clipboard) { Get-Clipboard -Raw -ErrorAction SilentlyContinue } else { $null }
