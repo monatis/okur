@@ -404,13 +404,14 @@ fn run_scenario(
                 *offset,
             ));
         }
-        // A key JAWS typed into its own dialog (`TypeKey("Tab")`) is the user's key in Okur's.
+        // A key or a text JAWS typed into its own dialog (`TypeKey("Tab")`,
+        // `TypeString("name")`) is the user's in Okur's.
         let typed = (step.step_type == "jaws_function")
-            .then(|| typed_key(&step.command))
+            .then(|| typed_by_jaws(&step.command))
             .flatten();
         // A key sent with UI Access (into JAWS's modal dialogs) is the user's key too.
         let (step_type, command) = match typed {
-            Some(key) => ("key", key),
+            Some(typed) => typed,
             None if step.step_type == "key_ui_access" => ("key", step.command.as_str()),
             None => (step.step_type.as_str(), step.command.as_str()),
         };
@@ -989,12 +990,20 @@ fn press(
     Ok(())
 }
 
-/// The key a `TypeKey("…")` JAWS function call types, as a chord name.
-fn typed_key(call: &str) -> Option<&str> {
-    call.trim()
-        .strip_prefix("TypeKey(\"")?
-        .strip_suffix("\")")
-        .filter(|key| !key.is_empty())
+/// What a JAWS function call types, as the step that types it: `TypeKey("…")` a key, by its
+/// chord name, `TypeString("…")` a text.
+fn typed_by_jaws(call: &str) -> Option<(&'static str, &str)> {
+    let argument = |function: &str| {
+        call.trim()
+            .strip_prefix(function)?
+            .strip_prefix("(\"")?
+            .strip_suffix("\")")
+    };
+    match (argument("TypeKey"), argument("TypeString")) {
+        (Some(key), _) if !key.is_empty() => Some(("key", key)),
+        (_, Some(text)) => Some(("text", text)),
+        _ => None,
+    }
 }
 
 /// Keys the engine sent the application come back through the keyboard hook live, as plain
