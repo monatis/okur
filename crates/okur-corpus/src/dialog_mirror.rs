@@ -42,6 +42,8 @@ pub struct DialogMirror {
     /// Dialogs another one opened over (the PlaceMarker List under Add), each with its
     /// focused control: the last is in front again when the one over it closes.
     below: Vec<(DialogSpec, Option<usize>)>,
+    /// The check list row F2 is renaming: the row the focus comes back to under another name.
+    renaming: Option<usize>,
 }
 
 /// A wizard's page as the window shows it: the page's controls, then its sheet's buttons, named
@@ -312,6 +314,28 @@ impl DialogMirror {
                         .or_else(|| {
                             (0..rows.len()).find(|&i| first(i).as_deref() == Some(name.as_str()))
                         });
+                    // The row being renamed, back under its new name [obs, 751/s20].
+                    let renamed = match (at, self.renaming) {
+                        (None, Some(row))
+                            if focus.item_index.and_then(|i| i.checked_sub(1)) == Some(row) =>
+                        {
+                            rows.get_mut(row).and_then(|r| r.first_mut()).map(|cell| {
+                                name.clone_into(cell);
+                                row
+                            })
+                        }
+                        _ => None,
+                    };
+                    if let Some(row) = renamed {
+                        self.renaming = None;
+                        self.focused = Some(index);
+                        reports.push(FromUi::DialogChanged {
+                            id: dialog.id,
+                            control: control.id.clone(),
+                            value: Value::ItemRenamed(row, name.clone()),
+                        });
+                        break;
+                    }
                     match at {
                         Some(i) => {
                             let turned = match (focus.states.checked, checked.get_mut(i)) {
@@ -441,6 +465,14 @@ impl DialogMirror {
                 }
             }
         };
+        // While a row is renamed in place, Enter keeps the name and Escape drops it: the edit's
+        // keys, not the dialog's [obs, 751/s20].
+        if self.renaming.is_some() && matches!(event.key, Key::Enter | Key::Escape) {
+            if event.key == Key::Escape {
+                self.renaming = None;
+            }
+            return Vec::new();
+        }
         let report = match event.key {
             Key::Escape => Some(FromUi::DialogClosed { id: dialog.id }),
             Key::Enter => focused
@@ -455,17 +487,25 @@ impl DialogMirror {
             Key::Space => focused
                 .filter(|c| matches!(c.kind, ControlKind::Button { .. }))
                 .map(press),
-            // Delete and F2 on a check list's row.
-            Key::Delete | Key::F(2) => focused
+            // Delete and F2 on a check list's row; F2 renames it in place.
+            Key::F(2) => {
+                if let Some(ControlKind::CheckList { selected, .. }) = focused.map(|c| &c.kind) {
+                    self.renaming = Some(*selected);
+                }
+                focused
+                    .filter(|c| matches!(c.kind, ControlKind::CheckList { .. }))
+                    .map(|c| FromUi::DialogKey {
+                        id: dialog.id,
+                        control: c.id.clone(),
+                        key: okur_core::ui::DialogKey::Rename,
+                    })
+            }
+            Key::Delete => focused
                 .filter(|c| matches!(c.kind, ControlKind::CheckList { .. }))
                 .map(|c| FromUi::DialogKey {
                     id: dialog.id,
                     control: c.id.clone(),
-                    key: if event.key == Key::Delete {
-                        okur_core::ui::DialogKey::Delete
-                    } else {
-                        okur_core::ui::DialogKey::Rename
-                    },
+                    key: okur_core::ui::DialogKey::Delete,
                 }),
             _ => None,
         };

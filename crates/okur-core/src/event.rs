@@ -146,6 +146,10 @@ pub struct FocusEvent {
     /// edit the selected item press f2." [obs, 748/s7].
     #[serde(default)]
     pub list_edits_labels: bool,
+    /// The focus is the edit a list view opens on its item to rename it (F2): unnamed, and
+    /// not in the list, which the focus enters again after it [obs, 751/s18, s20].
+    #[serde(default)]
+    pub list_label_edit: bool,
     /// The focused menu item is on a menu bar (a page's ARIA menu bar), not in a menu.
     #[serde(default)]
     pub in_menu_bar: bool,
@@ -359,6 +363,7 @@ impl FocusEvent {
             container_is_list_view: false,
             list_view: false,
             list_edits_labels: false,
+            list_label_edit: false,
             in_menu_bar: false,
             under_menu_bar: false,
             in_menu: false,

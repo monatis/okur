@@ -278,6 +278,7 @@ impl FlexibleWebWizard {
                         ControlKind::CheckList {
                             columns: Vec::new(),
                             rows: self.made.iter().map(|c| vec![c.label()]).collect(),
+                            renamable: false,
                             checked: self.checked.clone(),
                             selected: 0,
                         },
@@ -436,6 +437,11 @@ pub enum RulesOutcome {
         area: Area,
         on: bool,
     },
+    /// Rename `from` to `to`, which no other rule has.
+    Rename {
+        from: String,
+        to: String,
+    },
     /// Delete `rule`: the question, `question`, answered Yes.
     Delete {
         rule: String,
@@ -524,6 +530,7 @@ impl RulesDialog {
                         rows,
                         checked,
                         selected: self.rule,
+                        renamable: true,
                     },
                 ),
                 control(
@@ -619,6 +626,19 @@ impl RulesDialog {
                         self.rule = *i;
                         RulesOutcome::Nothing
                     }
+                    ("rules", Value::ItemRenamed(i, to)) => match rules.rules.get(*i) {
+                        Some(rule)
+                            if !to.trim().is_empty()
+                                && rule.name != *to
+                                && !rules.rules.iter().any(|r| r.name == *to) =>
+                        {
+                            RulesOutcome::Rename {
+                                from: rule.name.clone(),
+                                to: to.trim().to_owned(),
+                            }
+                        }
+                        _ => RulesOutcome::Nothing,
+                    },
                     // A check turned: only a change from the rule's state there is the user's.
                     ("rules", Value::ItemChecked(i, on)) => {
                         match (rules.rules.get(*i), self.areas.get(self.area)) {
@@ -902,6 +922,7 @@ mod tests {
                         rows: vec![vec!["Hide MainRegion 1 from the top".into()]],
                         checked: vec![true],
                         selected: 0,
+                        renamable: false,
                     }
                 ),
                 (

@@ -253,8 +253,9 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
             }
         }
         Role::Edit => {
-            // [hyp] An unlabelled edit takes the window title as its name (306/s5).
-            let name = if name.is_empty() {
+            // [hyp] An unlabelled edit takes the window title as its name (306/s5); not a list
+            // view's edit renaming its item, " Edit | Okur start rule" [obs, 751/s18].
+            let name = if name.is_empty() && !focus.list_label_edit {
                 named(focus.window_title.as_deref().unwrap_or_default())
             } else {
                 name
@@ -430,16 +431,7 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                 // Closed, a word too ("Current Site: localhost Closed" [obs, 748/s9]; File
                 // Explorer's "OneDrive Closed"), but a state in a WinForms tree: "Documents
                 // closed" [obs, 303/s4].
-                Some(false)
-                    if [
-                        &focus.platform.window_class,
-                        &focus.platform.container_class,
-                    ]
-                    .iter()
-                    .any(|c| c.as_deref().is_some_and(|c| c.starts_with("WindowsForms"))) =>
-                {
-                    parts.push(state(msg::state_closed().as_str()))
-                }
+                Some(false) if winforms(focus) => parts.push(state(msg::state_closed().as_str())),
                 Some(false) => parts.push(Part::new(
                     PartKind::Message,
                     format!(" {}", msg::state_closed_word()),
@@ -701,6 +693,17 @@ impl NativeFocus {
         self.last = Some(key);
         Some(speech)
     }
+}
+
+/// Whether `focus` is in a WinForms control, which JAWS reads its own way (a tree's states as
+/// marked states, its item opened with its name and count [obs, 303/s4, s7]).
+fn winforms(focus: &FocusEvent) -> bool {
+    [
+        &focus.platform.window_class,
+        &focus.platform.container_class,
+    ]
+    .iter()
+    .any(|c| c.as_deref().is_some_and(|c| c.starts_with("WindowsForms")))
 }
 
 /// A read-only text field: its name, "read only edit", and its caret's line, or its first.
@@ -1062,6 +1065,20 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<Announce
                 && after.states.checked == Some(true) =>
         {
             Some(Announcement::from_text(checked(after).render().trim()))
+        }
+        // Opened outside a WinForms tree, only the state and an empty one: " ‹open› ‹›" [obs,
+        // 748/s10, 751/s11].
+        Role::TreeItem
+            if before.states.expanded != after.states.expanded
+                && after.states.expanded == Some(true)
+                && !winforms(after) =>
+        {
+            Some(Announcement::new(vec![Line::new(vec![
+                Part::text(" "),
+                state(msg::state_open().as_str()),
+                Part::text(" "),
+                state(""),
+            ])]))
         }
         Role::TreeItem if before.states.expanded != after.states.expanded => {
             // [obs, 303/s7, 304/s16–s17]: "Documents | ‹open› | 2 items",

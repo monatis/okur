@@ -488,6 +488,16 @@ impl Rules {
         }
     }
 
+    /// Renames `from` to `to`, its settings with it.
+    pub fn rename(&mut self, from: &str, to: &str) {
+        for rule in self.rules.iter_mut().filter(|r| r.name == from) {
+            to.clone_into(&mut rule.name);
+        }
+        for setting in self.settings.iter_mut().filter(|s| s.rule == from) {
+            to.clone_into(&mut setting.rule);
+        }
+    }
+
     /// Deletes `rule` and its settings everywhere.
     pub fn remove(&mut self, rule: &str) {
         self.rules.retain(|r| r.name != rule);
@@ -678,5 +688,48 @@ mod tests {
         let heading = elements_at(&page, 8).remove(0);
         let by_id = customizations(&page, &heading, Action::Hide).remove(2);
         assert_eq!(by_id.find(&page), [8]);
+    }
+
+    /// A rule saved for the page is on there and off above it, "Set for" naming where; on for
+    /// the site, it is on there and on the page below; renamed and deleted with its settings
+    /// [obs, 748/s7, s12, s15; 751/s9, s10, s20, s22].
+    #[test]
+    fn a_rule_is_on_or_off_per_area() {
+        let url = "file:///C:/corpus/fixtures/flexible-web.html";
+        let areas = Area::around(url);
+        assert_eq!(
+            areas.iter().map(Area::label).collect::<Vec<_>>(),
+            [
+                "Global",
+                "Current Site: localhost",
+                "Current Page: C:/corpus/fixtures/flexible-web.html"
+            ]
+        );
+        let mut rules = Rules::default();
+        let rule = Rule {
+            name: "Okur start rule".into(),
+            customizations: Vec::new(),
+        };
+        rules.save(rule, Area::of(Scope::Page, url));
+        assert_eq!(
+            rules.state("Okur start rule", &areas, 0),
+            (false, Area::Global)
+        );
+        assert_eq!(
+            rules.state("Okur start rule", &areas, 1),
+            (false, Area::Global)
+        );
+        let page = rules.state("Okur start rule", &areas, 2);
+        assert_eq!((page.0, page.1.set_for()), (true, "Page".to_owned()));
+        assert_eq!(rules.active(&areas, 1), 0);
+        rules.set("Okur start rule", Area::of(Scope::Site, url), true);
+        let site = rules.state("Okur start rule", &areas, 1);
+        assert_eq!((site.0, site.1.set_for()), (true, "Site".to_owned()));
+        assert_eq!(rules.active(&areas, 1), 1);
+        assert_eq!(rules.for_page(url).count(), 1);
+        rules.rename("Okur start rule", "Okur renamed rule");
+        assert!(rules.state("Okur renamed rule", &areas, 1).0);
+        rules.remove("Okur renamed rule");
+        assert_eq!(rules, Rules::default());
     }
 }

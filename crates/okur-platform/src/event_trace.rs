@@ -635,6 +635,14 @@ pub fn focus_event_from_chain(
         event.item_count = None;
         return Some(event);
     }
+    // A list view's edit renaming its item (F2) is not in the list [obs, 751/s18, s20].
+    if focused.control_type == UIA_EDIT
+        && parent.is_some_and(|p| is_list_view(p.class_name.as_deref()))
+    {
+        event.list_label_edit = true;
+        event.groups.clear();
+        return Some(event);
+    }
     // The nearest structural container (list, group, tab list, tree, table, dialog, landmark).
     for ancestor in chain.iter().rev().skip(1) {
         let mut a = ancestor.clone();

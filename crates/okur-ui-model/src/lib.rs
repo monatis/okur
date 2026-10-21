@@ -88,6 +88,10 @@ pub enum ControlKind {
         rows: Vec<Vec<String>>,
         checked: Vec<bool>,
         selected: usize,
+        /// F2 edits the selected row's first cell, its name, in place: JAWS's rules list,
+        /// "To edit the selected item press f2." [obs, 751/s18-s20].
+        #[serde(default)]
+        renamable: bool,
     },
     /// A read-only text the user can Tab to and read with the reading keys, named by its
     /// label shown above it: JAWS's rules dialog, "View or Change Where Rules are Applied read
@@ -171,6 +175,8 @@ pub enum Value {
     Selected(usize),
     /// A check list's item checked or not, by its index.
     ItemChecked(usize, bool),
+    /// A check list's item renamed in place (F2), by its index.
+    ItemRenamed(usize, String),
     Number(i32),
     Text(String),
 }

@@ -242,6 +242,11 @@ impl ScreenReaderEngine {
                 self.rules_changed();
                 send.push(dialog.refreshed(&self.flexible_web_rules));
             }
+            RulesOutcome::Rename { from, to } => {
+                self.flexible_web_rules.rename(&from, &to);
+                self.rules_changed();
+                send.push(dialog.refreshed(&self.flexible_web_rules));
+            }
             RulesOutcome::Delete { rule, question } => {
                 self.flexible_web_rules.remove(&rule);
                 self.rules_changed();

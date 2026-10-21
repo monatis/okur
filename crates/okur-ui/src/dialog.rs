@@ -13,9 +13,10 @@ use windows::Win32::System::Threading::{AttachThreadInput, GetCurrentThreadId};
 use windows::Win32::UI::Controls::{
     BST_CHECKED, BST_UNCHECKED, EM_SETSEL, HTREEITEM, LVCF_TEXT, LVCF_WIDTH, LVCOLUMNW, LVIF_STATE,
     LVIF_TEXT, LVIS_FOCUSED, LVIS_SELECTED, LVIS_STATEIMAGEMASK, LVITEMW, LVM_DELETEALLITEMS,
-    LVM_ENSUREVISIBLE, LVM_INSERTCOLUMNW, LVM_INSERTITEMW, LVM_SETEXTENDEDLISTVIEWSTYLE,
-    LVM_SETITEMSTATE, LVM_SETITEMTEXTW, LVN_ITEMCHANGED, LVN_KEYDOWN, LVS_EX_CHECKBOXES,
-    LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NMLVKEYDOWN, NMTREEVIEWW, NM_DBLCLK, TBM_SETPAGESIZE,
+    LVM_EDITLABELW, LVM_ENSUREVISIBLE, LVM_GETNEXTITEM, LVM_INSERTCOLUMNW, LVM_INSERTITEMW,
+    LVM_SETEXTENDEDLISTVIEWSTYLE, LVM_SETITEMSTATE, LVM_SETITEMTEXTW, LVNI_SELECTED,
+    LVN_ENDLABELEDITW, LVN_ITEMCHANGED, LVN_KEYDOWN, LVS_EX_CHECKBOXES, LVS_EX_FULLROWSELECT,
+    NMHDR, NMLISTVIEW, NMLVDISPINFOW, NMLVKEYDOWN, NMTREEVIEWW, NM_DBLCLK, TBM_SETPAGESIZE,
     TBM_SETPOS, TBM_SETRANGEMAX, TBM_SETRANGEMIN, TBM_SETTICFREQ, TVE_EXPAND, TVGN_CARET,
     TVGN_CHILD, TVGN_NEXT, TVGN_ROOT, TVIF_TEXT, TVINSERTSTRUCTW, TVINSERTSTRUCTW_0, TVITEMW,
     TVI_LAST, TVI_ROOT, TVM_EXPAND, TVM_GETNEXTITEM, TVM_INSERTITEMW, TVM_SELECTITEM,
@@ -263,6 +264,7 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
                 rows,
                 checked,
                 selected,
+                ..
             } => {
                 SendMessageW(
                     item,
@@ -1123,6 +1125,47 @@ pub(crate) unsafe extern "system" fn dialog_proc(
                             key,
                         });
                     }
+                    // F2 edits the selected row's name in place, where the list allows it.
+                    if key == Some(DialogKey::Rename)
+                        && matches!(
+                            hit.kind,
+                            ControlKind::CheckList {
+                                renamable: true,
+                                ..
+                            }
+                        )
+                    {
+                        // SAFETY: messages to our own list view.
+                        unsafe {
+                            let row = SendMessageW(
+                                header.hwndFrom,
+                                LVM_GETNEXTITEM,
+                                Some(WPARAM(usize::MAX)),
+                                Some(LPARAM(LVNI_SELECTED as isize)),
+                            );
+                            SendMessageW(
+                                header.hwndFrom,
+                                LVM_EDITLABELW,
+                                Some(WPARAM(row.0 as usize)),
+                                None,
+                            );
+                        }
+                    }
+                }
+                // The name edited in place: told, and the edit declined, the rows coming back
+                // from Okur with the rule renamed, or as they were [obs, 751/s20].
+                LVN_ENDLABELEDITW if matches!(hit.kind, ControlKind::CheckList { .. }) => {
+                    // SAFETY: the end of a label edit sends an NMLVDISPINFOW.
+                    let info = unsafe { &*(lparam.0 as *const NMLVDISPINFOW) };
+                    if !info.item.pszText.is_null() {
+                        // SAFETY: the edited text, null-terminated, for this notification's
+                        // time.
+                        let text = unsafe { info.item.pszText.to_string() }.unwrap_or_default();
+                        if let Ok(row) = usize::try_from(info.item.iItem) {
+                            changed(window, &hit, Value::ItemRenamed(row, text));
+                        }
+                    }
+                    return 0;
                 }
                 _ => return 0,
             }

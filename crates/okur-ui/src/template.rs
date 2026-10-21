@@ -45,6 +45,7 @@ const TVS_SHOWSELALWAYS: u32 = 0x20;
 const LVS_SINGLESEL: u32 = 0x4;
 const LVS_SHOWSELALWAYS: u32 = 0x8;
 const LVS_NOCOLUMNHEADER: u32 = 0x4000;
+const LVS_EDITLABELS: u32 = 0x200;
 const LBS_NOTIFY: u32 = 0x1;
 const LBS_NOINTEGRALHEIGHT: u32 = 0x100;
 const TBS_AUTOTICKS: u32 = 1;
@@ -383,7 +384,9 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
             }),
             // A list of one column shows no header; a check list with columns shows theirs
             // ("Rule", "Set for" [obs, 748/s7]).
-            ControlKind::CheckList { columns, .. } if !columns.is_empty() => items.push(Item {
+            ControlKind::CheckList {
+                columns, renamable, ..
+            } if !columns.is_empty() => items.push(Item {
                 class: Class::Named("SysListView32"),
                 style: WS_CHILD
                     | WS_VISIBLE
@@ -392,7 +395,8 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                     | WS_GROUP
                     | LVS_REPORT
                     | LVS_SINGLESEL
-                    | LVS_SHOWSELALWAYS,
+                    | LVS_SHOWSELALWAYS
+                    | if *renamable { LVS_EDITLABELS } else { 0 },
                 x: MARGIN,
                 y: list_y,
                 cx: list_width,
