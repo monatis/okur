@@ -1,0 +1,130 @@
+{
+  "id": "705-web-flexible-web-wizard",
+  "name": "Flexible Web's wizard on a page with an advertisement, cancelled: H, Insert+Space then X, Tab five times through its first page, Alt+N (Next), Tab five times, Alt+N, Tab five times, Escape twice, Insert+Up (keys in the wizard typed by JAWS). Nothing is customized",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/flexible-web.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "X"
+    },
+    {
+      "id": "s4",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s5",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s6",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s7",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s8",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s9",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+    },
+    {
+      "id": "s10",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s11",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s12",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s13",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s14",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s15",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")"
+    },
+    {
+      "id": "s16",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s17",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s18",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s19",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s20",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s21",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    },
+    {
+      "id": "s22",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    },
+    {
+      "id": "s23",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}
