@@ -1,0 +1,29 @@
+{
+  "id": "679-article-say-all-line-pauses",
+  "name": "Say All from the top of the article (with JAWS's Say All Reads set to Line with Pauses, DEFAULT.JCF Options LinePauses=1; otherwise as 111-article-say-all)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Down",
+      "settle_max_ms": 90000,
+      "quiet_ms": 1500
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "LinePauses": "1"
+      }
+    }
+  }
+}
