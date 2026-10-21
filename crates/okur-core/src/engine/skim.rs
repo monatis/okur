@@ -57,9 +57,27 @@ impl ScreenReaderEngine {
         }
         self.returning_from_dialog();
         match outcome {
+            // Started from the dialog, skim reading ends in its summary, by either rule type
+            // [obs, 769/s3, 771/s3]; Ctrl+Insert+Down does not open one [obs, 761/s1].
+            // Without the synthesizer's progress the whole reading is handed over at once, and
+            // the summary follows it.
             Outcome::Start(options) => {
-                self.skim_options = options;
-                self.start_skim_read()
+                self.skim_options = options.clone();
+                let pieces =
+                    (options.rule != SkimRule::Attributes).then(|| self.skim_pieces(&options));
+                let read = self.start_skim_read();
+                let Some(pieces) = pieces else {
+                    return read;
+                };
+                if self.say_all.is_some() {
+                    self.summary_after_skim = Some(pieces);
+                    return read;
+                }
+                let summary = self.show_skim_summary(pieces);
+                match (read, summary) {
+                    (Some(read), Some(summary)) => Some(format!("{read}\n{summary}")),
+                    (read, summary) => read.or(summary),
+                }
             }
             Outcome::Summary(options) => self.open_skim_summary(&options),
             Outcome::Nothing | Outcome::Send(_) | Outcome::Closed(_) => None,
@@ -70,13 +88,21 @@ impl ScreenReaderEngine {
     /// viewer "Skim Reading Results", each piece numbered: "1. City Library Expands Evening
     /// Hours - Riverside Gazette" [obs, 762/s2]. Enter on a piece moves there (JAWS 2025 help,
     /// Skim Reading Dialog).
-    fn open_skim_summary(&mut self, options: &crate::ui::skim::SkimOptions) -> Option<String> {
+    pub(super) fn open_skim_summary(
+        &mut self,
+        options: &crate::ui::skim::SkimOptions,
+    ) -> Option<String> {
         if options.rule == SkimRule::Attributes {
             let said = crate::messages::msg::skim_rules_not_yet().to_string();
             self.speech.speak(&said, true);
             return Some(said);
         }
         let pieces = self.skim_pieces(options);
+        self.show_skim_summary(pieces)
+    }
+
+    /// The summary's `pieces` in the viewer "Skim Reading Results", each numbered.
+    fn show_skim_summary(&mut self, pieces: Vec<(usize, String)>) -> Option<String> {
         if pieces.is_empty() {
             return None;
         }
@@ -98,9 +124,23 @@ impl ScreenReaderEngine {
                 .with_title(title.clone()),
         );
         self.show_viewer_window();
-        let said = format!("{title}\n{first}");
-        self.speech.speak(&said, true);
+        // The viewer's title, then its first piece as the link it is in JAWS's viewer: "Skim
+        // Reading Results | 1. City Library Expands Evening Hours - Riverside Gazette Link |
+        // To activate press Enter." [obs, 763/s23].
+        let said = format!(
+            "{title}\n{first}{}\n{}",
+            crate::linearize::role_marker(crate::messages::msg::role_link().as_str()),
+            crate::messages::msg::hint_activate_enter()
+        );
+        self.speech.speak(&said, false);
         Some(said)
+    }
+
+    /// The end of a skim started from the dialog: its summary [obs, 769/s3, 771/s3].
+    pub(super) fn skim_ended(&mut self) {
+        if let Some(pieces) = self.summary_after_skim.take() {
+            let _ = self.show_skim_summary(pieces);
+        }
     }
 
     /// Enter on a summary's piece: the virtual cursor moves there and reads its line.

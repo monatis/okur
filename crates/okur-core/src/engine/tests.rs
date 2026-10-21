@@ -5882,7 +5882,16 @@ fn skim_reading_reads_by_the_rule_chosen() {
             control: "start".into(),
         }))
         .unwrap_or_default();
-    assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
+    // Started from the dialog, the reading ends in its summary, from where it started [obs,
+    // 769/s3, 771/s3].
+    let sent = ui.take();
+    assert_eq!(sent.first(), Some(&ToUi::DialogClose { id }));
+    assert!(
+        sent.iter()
+            .any(|m| matches!(m, ToUi::ViewerShow { lines, .. }
+            if lines.first().map(String::as_str) == Some("1. Hours"))),
+        "{sent:?}"
+    );
     assert!(read.contains("The library opens late."), "{read:?}");
     assert!(read.contains("Weekends stay the same."), "{read:?}");
     assert!(
@@ -6046,7 +6055,10 @@ fn create_summary_lists_what_skim_reading_reads() {
         id,
         control: "summary".into(),
     }));
-    assert_eq!(said.as_deref(), Some("Skim Reading Results\n1. Hours"));
+    assert_eq!(
+        said.as_deref(),
+        Some("Skim Reading Results\n1. Hours \u{1d} Link \u{1e} \nTo activate press Enter.")
+    );
     let shown = ui.take();
     assert!(
         shown

@@ -249,6 +249,9 @@ pub struct ScreenReaderEngine {
     /// Skim Reading while it is open, and its choices, which Ctrl+Insert+Down reads by.
     skim_dialog: Option<crate::ui::skim::SkimDialog>,
     skim_options: crate::ui::skim::SkimOptions,
+    /// A skim started from Skim Reading: its summary, taken as it started, opens as it ends
+    /// [obs, 769/s3, 771/s3].
+    summary_after_skim: Option<Vec<(usize, String)>>,
     /// JAWS Find, while it is open.
     find_dialog: Option<crate::ui::find::FindDialog>,
     /// The Window List while it is open, and whether its windows were asked for and not come.
@@ -428,6 +431,7 @@ impl ScreenReaderEngine {
             word_from_list: None,
             skim_dialog: None,
             skim_options: crate::ui::skim::SkimOptions::default(),
+            summary_after_skim: None,
             find_dialog: None,
             window_list: None,
             window_list_asked: false,

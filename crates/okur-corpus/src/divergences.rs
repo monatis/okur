@@ -640,6 +640,15 @@ divergences! {
     ],
     "Closing Skim Reading after its rule type was changed, even back to the first, by Escape      (763, 777) or by Close's Alt+C (776), closes the dialog and opens JAWS's summary in      its Results Viewer, which then says nothing to Say Line: in every trial of four      recordings, and Close after Delete Rule did too (781). With nothing changed, Escape      only closes the dialog (760/s14). Okur's Escape and Close close the dialog and give the      page back.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
+
+    Difference::Step => [
+        "769-web-skim-read-by-sentence/s4",
+        "769-web-skim-read-by-sentence/s6",
+        "769-web-skim-read-by-sentence/s7",
+        "771-web-skim-reading-rule-saved/s4",
+    ],
+    "In JAWS's Results Viewer, which skim reading started from its dialog opens at its end,      the recordings got nothing for Say Line, the arrows or Escape, by our keys or JAWS's      TypeKey (762, 767, 768, 769, 771), while Tab got its links (780). Okur's viewer reads      its lines as the Virtual Viewer does, and Escape closes it and reads the page's line.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-22";
 }
 
 /// The divergence covering `step`, if any.

@@ -282,6 +282,7 @@ impl ScreenReaderEngine {
     }
 
     fn begin_say_all(&mut self, line: usize, source: Source, interrupt: bool) -> Option<String> {
+        self.summary_after_skim = None;
         let mut reading = SayAll {
             queued: VecDeque::new(),
             next_line: line,
@@ -322,6 +323,10 @@ impl ScreenReaderEngine {
             self.follow_reading(&reading, line);
         }
         let _ = self.hand_over(&mut reading, AHEAD + 1, false);
+        // The last word said: the reading is over.
+        if reading.ended && reading.queued.len() <= 1 {
+            self.skim_ended();
+        }
         self.say_all = Some(reading);
     }
 

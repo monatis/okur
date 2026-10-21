@@ -602,6 +602,20 @@ A step can be in more than one entry; all of its entries apply.
   196, not imported, as it hangs on a rule 778 left saved in JAWS).
 - Decided under the owner's rule on JAWS's accidents, 2026-10-21.
 
+### JAWS's summary viewer says nothing to Say Line and Escape
+
+- Steps: `769-web-skim-read-by-sentence/s4`, `769-web-skim-read-by-sentence/s6`,
+  `769-web-skim-read-by-sentence/s7`, `771-web-skim-reading-rule-saved/s4`.
+- Difference: the whole step. Skim reading started from its dialog ends in its summary, in
+  JAWS's Results Viewer and in Okur's viewer. There JAWS says nothing to Say Line, the arrows
+  or Escape; Okur reads the summary's line, and Escape closes the viewer and reads the page's
+  line.
+- Why: in every recording with JAWS's Results Viewer in front (762, 767, 768, 769, 771), its
+  reading keys and Escape got no speech, by our keys or by JAWS's TypeKey, while Tab got its
+  links read (780). A viewer that does not answer Say Line cannot be read line by line; Okur's
+  reads its lines as the Virtual Viewer does.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-22.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row
