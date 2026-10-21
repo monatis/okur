@@ -1,0 +1,27 @@
+{
+  "id": "711-desktop-typing-echo-jcf-3",
+  "name": "Typing echo set to 3 in JAWS's settings file (TypingEcho=3): \"ab cd\" typed, Backspace, then Enter",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-reading.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Reading Fixture"
+  },
+  "jaws_settings": { "DEFAULT.JCF": { "Options": { "TypingEcho": "3" } } },
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Enter"
+    ]
+  },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "A" },
+    { "id": "s2", "type": "key", "command": "B" },
+    { "id": "s3", "type": "key", "command": "Space" },
+    { "id": "s4", "type": "key", "command": "C" },
+    { "id": "s5", "type": "key", "command": "D" },
+    { "id": "s6", "type": "key", "command": "Backspace" },
+    { "id": "s7", "type": "key", "command": "Enter" }
+  ]
+}
