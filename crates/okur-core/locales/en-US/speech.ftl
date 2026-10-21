@@ -27,6 +27,11 @@ cursor-virtual-pc-short = virtual PC
 cursor-okur = Okur Cursor
 cursor-pc = PC Cursor
 cursor-route-okur-to-pc = Route Okur to PC
+# The three above with short messages (Intermediate, Advanced), as JAWS says "JAWS", "JAWS to
+# PC" and "PC" [obs, 697, 698].
+cursor-okur-short = Okur
+cursor-pc-short = PC
+cursor-route-okur-to-pc-short = Okur to PC
 cursor-okur-active = Okur Cursor active
 cursor-pc-active = PC Cursor active
 cursor-position = { $x }, { $y }

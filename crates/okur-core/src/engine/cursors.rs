@@ -24,10 +24,20 @@ pub enum ActiveCursor {
 }
 
 impl ScreenReaderEngine {
+    /// A cursor message, its short form with short messages (Intermediate, Advanced): "JAWS",
+    /// "JAWS to PC", "PC" [obs, 697, 698].
+    fn cursor_message(&self, long: impl ToString, short: impl ToString) -> String {
+        match self.settings.verbosity.message_length() {
+            crate::settings::MessageLength::Long => long.to_string(),
+            crate::settings::MessageLength::Short => short.to_string(),
+        }
+    }
+
     /// Numpad Minus: "Okur Cursor", where JAWS says "JAWS Cursor" [obs, 516/s1].
     pub(super) fn activate_okur_cursor(&mut self) -> Option<String> {
         self.active_cursor = ActiveCursor::Okur;
-        self.say(msg::cursor_okur().to_string())
+        let said = self.cursor_message(msg::cursor_okur(), msg::cursor_okur_short());
+        self.say(said)
     }
 
     /// Numpad Plus with the JAWS cursor active: "PC Cursor" [obs, 516/s7].
@@ -38,7 +48,8 @@ impl ScreenReaderEngine {
             let said = self.virtual_pc_message();
             return self.say(said);
         }
-        self.say(msg::cursor_pc().to_string())
+        let said = self.cursor_message(msg::cursor_pc(), msg::cursor_pc_short());
+        self.say(said)
     }
 
     /// Insert+Numpad Minus: the mouse goes to the PC cursor, "Route Okur to PC" (JAWS: "Route
@@ -56,7 +67,11 @@ impl ScreenReaderEngine {
             .as_ref()
             .filter(|_| self.app_mode != super::AppMode::VirtualBuffer)
             .map(|text| crate::editing::lines_and_caret_line(text).1);
-        self.say(msg::cursor_route_okur_to_pc().to_string())
+        let said = self.cursor_message(
+            msg::cursor_route_okur_to_pc(),
+            msg::cursor_route_okur_to_pc_short(),
+        );
+        self.say(said)
     }
 
     /// Whether the reading keys read the Okur cursor's line in a text field.
