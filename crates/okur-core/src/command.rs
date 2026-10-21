@@ -260,6 +260,9 @@ pub enum Command {
     /// Alt+Shift with an arrow (MouseUp, MouseDown, MouseLeft, MouseRight): the mouse moved a
     /// step that way.
     MoveMouse(MouseStep),
+    /// Ctrl+Insert+Numpad Slash (DragAndDrop): pressed where the drag starts, then where it
+    /// drops.
+    DragAndDrop,
     /// Insert+Numpad Star (RightMouseButtonLock): the right button, likewise.
     RightMouseButtonLock,
     /// Insert+Numpad Plus (RoutePCCursorToJAWS): the PC cursor, or the virtual one, to the
@@ -606,6 +609,7 @@ impl Command {
             "ControlLeftMouseClick" => ModifiedLeftMouseClick(ClickModifier::Control),
             "ShiftLeftMouseClick" => ModifiedLeftMouseClick(ClickModifier::Shift),
             "AltLeftMouseClick" => ModifiedLeftMouseClick(ClickModifier::Alt),
+            "DragAndDrop" => DragAndDrop,
             "MouseUp" => MoveMouse(MouseStep::Up),
             "MouseDown" => MoveMouse(MouseStep::Down),
             "MouseLeft" => MoveMouse(MouseStep::Left),
@@ -1088,6 +1092,8 @@ static BINDINGS: &[Binding] = &{
             ModifiedLeftMouseClick(ClickModifier::Alt),
         ),
         bind(Key::NumpadStar, CTRL, RightMouseClick),
+        // Default.JKM: Control+JAWSKey+NumPadSlash=DragAndDrop.
+        bind(Key::NumpadSlash, OKUR_CTRL, DragAndDrop),
         bind(UpArrow, ALT_SHIFT, MoveMouse(MouseStep::Up)),
         bind(DownArrow, ALT_SHIFT, MoveMouse(MouseStep::Down)),
         bind(LeftArrow, ALT_SHIFT, MoveMouse(MouseStep::Left)),

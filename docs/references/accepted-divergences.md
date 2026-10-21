@@ -616,6 +616,19 @@ A step can be in more than one entry; all of its entries apply.
   reads its lines as the Virtual Viewer does.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-22.
 
+### JAWS's drag and drop finds nothing to drag in Notepad
+
+- Steps: `790-desktop-drag-and-drop-in-notepad/s6`.
+- Difference: the whole step. Ctrl+Insert+Numpad Slash's first press, with the mouse on
+  Notepad's text, says how to drop (790/s2, matched); after the mouse moved three steps, the
+  second press said "The object to be dragged was not found. This may be because it has been
+  covered by another window. | The drag and drop action has been canceled." in every trial.
+  Okur drags from where the first press was to where the mouse is, and says nothing.
+- Why: nothing covered Notepad's window, so the message does not say why the drag failed; a
+  drag that does what the first press promised is more use. A recording of a drag JAWS
+  completes would show what it says then.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-22.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row

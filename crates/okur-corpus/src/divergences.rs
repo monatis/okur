@@ -641,6 +641,10 @@ divergences! {
     "Closing Skim Reading by Escape (763, 777) or by Close's Alt+C (776) closes the dialog and      opens JAWS's summary in its Results Viewer, which then says nothing to Say Line: in      every trial of four recordings, after changes and right after it opened (781, 782);      only 760's Escape, after Tab through the dialog, closed it alone. Okur's Escape and      Close close the dialog and give the page back.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
+    Difference::Step => ["790-desktop-drag-and-drop-in-notepad/s6"],
+    "Drag and drop's second Ctrl+Insert+Numpad Slash in Notepad, after the mouse moved three      steps along the text, said in every trial that the object to be dragged was not found      and canceled. Okur drags from where the first press was to where the mouse is, and says      nothing.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-22";
+
     Difference::Step => [
         "769-web-skim-read-by-sentence/s4",
         "769-web-skim-read-by-sentence/s6",

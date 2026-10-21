@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6224,
-  "total_steps": 6463,
-  "accepted_divergences": 168,
+  "matched_steps": 6225,
+  "total_steps": 6462,
+  "accepted_divergences": 169,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -6643,11 +6643,11 @@
     "789-desktop-mouse-clicks-and-moves-in-notepad/s8": "match",
     "789-desktop-mouse-clicks-and-moves-in-notepad/s9": "match",
     "790-desktop-drag-and-drop-in-notepad/s1": "match",
-    "790-desktop-drag-and-drop-in-notepad/s2": "mismatch",
+    "790-desktop-drag-and-drop-in-notepad/s2": "match",
     "790-desktop-drag-and-drop-in-notepad/s3": "match",
     "790-desktop-drag-and-drop-in-notepad/s4": "match",
     "790-desktop-drag-and-drop-in-notepad/s5": "match",
-    "790-desktop-drag-and-drop-in-notepad/s6": "mismatch",
+    "790-desktop-drag-and-drop-in-notepad/s6": "accepted divergence",
     "790-desktop-drag-and-drop-in-notepad/s7": "match",
     "790-desktop-drag-and-drop-in-notepad/s8": "match"
   }

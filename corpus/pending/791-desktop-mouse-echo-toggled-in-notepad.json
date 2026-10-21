@@ -1,0 +1,83 @@
+{
+  "id": "791-desktop-mouse-echo-toggled-in-notepad",
+  "name": "Mouse echo toggled in Notepad: Insert+NumpadMinus, Alt+Shift+Down, Insert+Space, E, O (mouse echo), Alt+Shift+Down twice, Insert+Space, E, O again, Alt+Shift+Up, NumpadPlus, Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+NumpadMinus"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Alt+Shift+Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Alt+Shift+Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Alt+Shift+Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Alt+Shift+Up"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "NumpadPlus"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}

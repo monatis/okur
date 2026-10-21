@@ -80,6 +80,13 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Drags with the left button from `from` to `to`, in screen pixels (drag and drop).
+    /// False when unsupported.
+    fn drag_mouse(&self, from: (i32, i32), to: (i32, i32)) -> bool {
+        let _ = (from, to);
+        false
+    }
+
     fn read_window(&self, window: bool) -> bool {
         let _ = window;
         false

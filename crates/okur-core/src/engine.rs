@@ -296,6 +296,8 @@ pub struct ScreenReaderEngine {
     /// The mouse buttons held down by their locks (Insert+Numpad Slash and Star).
     left_button_locked: bool,
     right_button_locked: bool,
+    /// Where drag and drop starts, once Ctrl+Insert+Numpad Slash was pressed there.
+    drag_from: Option<(i32, i32)>,
     /// The notifications that came, the latest last, for Insert+Space, Shift+N and the
     /// Notification History.
     notifications: std::collections::VecDeque<crate::ui::notifications::Notification>,
@@ -466,6 +468,7 @@ impl ScreenReaderEngine {
             layer_open: false,
             left_button_locked: false,
             right_button_locked: false,
+            drag_from: None,
             notifications: std::collections::VecDeque::new(),
             notification_history: None,
             notification_details: None,
@@ -766,7 +769,8 @@ impl ScreenReaderEngine {
                 | Command::LeftMouseButtonLock
                 | Command::RightMouseButtonLock
                 | Command::ModifiedLeftMouseClick(_)
-                | Command::MoveMouse(_)),
+                | Command::MoveMouse(_)
+                | Command::DragAndDrop),
             ) = crate::command::command_for(event)
             {
                 let in_page = self.app_mode == AppMode::VirtualBuffer;

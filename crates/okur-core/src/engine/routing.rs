@@ -203,6 +203,27 @@ impl ScreenReaderEngine {
         self.say(said.to_string())
     }
 
+    /// Ctrl+Insert+Numpad Slash: pressed where the drag starts, the mouse's place is kept and
+    /// how to drop is said, as JAWS says it in its words around its name [obs, 790/s2];
+    /// pressed again, the left button drags from there to where the mouse is now, silently.
+    /// JAWS's second press found nothing to drag in Notepad's text (790/s6, an accepted
+    /// divergence).
+    pub(super) fn drag_and_drop(&mut self) -> Option<String> {
+        let here = self.mouse.or(self.pc_cursor_point());
+        match self.drag_from.take() {
+            None => {
+                self.drag_from = here;
+                self.say(msg::drag_and_drop_start().to_string())
+            }
+            Some(from) => {
+                if let (Some(to), Some(actions)) = (here, &self.actions) {
+                    actions.drag_mouse(from, to);
+                }
+                None
+            }
+        }
+    }
+
     /// A click where the mouse is, or at the PC cursor when Okur has not placed it.
     fn click_at_mouse(&self, click: crate::actions::MouseClick) {
         if let (Some((x, y)), Some(actions)) =

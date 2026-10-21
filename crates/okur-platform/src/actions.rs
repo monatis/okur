@@ -539,6 +539,11 @@ mod windows_actions {
             crate::actions::clipboard_text()
         }
 
+        fn drag_mouse(&self, from: (i32, i32), to: (i32, i32)) -> bool {
+            super::drag(from, to);
+            true
+        }
+
         fn move_mouse(&self, x: i32, y: i32) -> bool {
             use windows::Win32::UI::WindowsAndMessaging::SetCursorPos;
             // SAFETY: plain Win32 call; it only moves the pointer.
@@ -731,6 +736,24 @@ fn click_at(x: i32, y: i32, click: okur_core::actions::MouseClick) {
         }
         SendInput(&inputs, size);
     }
+}
+
+/// A drag with the left button: pressed at `from`, moved to `to` in steps, as a hand would,
+/// let go there.
+#[cfg(windows)]
+fn drag(from: (i32, i32), to: (i32, i32)) {
+    use okur_core::actions::MouseClick;
+    use windows::Win32::UI::WindowsAndMessaging::SetCursorPos;
+    const STEPS: i32 = 8;
+    click_at(from.0, from.1, MouseClick::LeftDown);
+    for step in 1..=STEPS {
+        let x = from.0 + (to.0 - from.0) * step / STEPS;
+        let y = from.1 + (to.1 - from.1) * step / STEPS;
+        // SAFETY: a plain Win32 call moving the pointer.
+        let _ = unsafe { SetCursorPos(x, y) };
+        std::thread::sleep(std::time::Duration::from_millis(15));
+    }
+    click_at(to.0, to.1, MouseClick::LeftUp);
 }
 
 /// Puts `text` on the clipboard as Unicode text (CF_UNICODETEXT).

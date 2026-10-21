@@ -448,6 +448,8 @@ command-left-mouse-click = Clicks the left mouse button on the element at the cu
 command-right-mouse-click = Clicks the right mouse button where the mouse is.
 # ControlLeftMouseClick, ShiftLeftMouseClick, AltLeftMouseClick (Numpad Slash with Control, Shift or Alt).
 command-modified-mouse-click = Clicks the left mouse button where the mouse is, with the key held.
+# DragAndDrop (Control+Insert+Numpad Slash).
+command-drag-and-drop = Drags with the mouse: pressed where the drag starts, then where it drops.
 # MouseUp, MouseDown, MouseLeft, MouseRight (Alt+Shift with the arrows).
 command-move-mouse = Moves the mouse a little that way.
 # LeftMouseButtonLock (Insert+Numpad Slash).

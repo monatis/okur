@@ -211,6 +211,8 @@ right-button-unlocked = right button unlocked
 control-mouse-click = Control Mouse Click
 shift-mouse-click = Shift Mouse Click
 alt-mouse-click = alt Mouse Click
+# Ctrl+Insert+Numpad Slash, its first press: JAWS's words, Okur in its name [obs, 790/s2].
+drag-and-drop-start = To drag and drop, place the Okur, PC or touch cursor in the drop location and press Control+Insert+NumPadSlash.
 # Alt+Shift with the arrows [obs, 789/s6-s9].
 mouse-up = Mouse Up
 mouse-down = Mouse Down
