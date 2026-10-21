@@ -5242,6 +5242,20 @@
       }
     },
     {
+      "scenario_id": "700-web-speech-on-demand-mode",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "b582725cd1d744339db5c3da99071365072d0b4ec85f97d95e2aedbebfe32825",
+        "capture_script_sha256": "cce52dcf0192daea79cea30bca8b7874d916988af88acad8a4ef389dd627924e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "701-web-placemarker-add-dialog",
       "fixture": "placemarkers.html",
       "evidence": {
@@ -5296,13 +5310,55 @@
         "deterministic": false,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "705-web-flexible-web-wizard",
+      "fixture": "flexible-web.html",
+      "evidence": {
+        "sha256": "7f84e955c0543ce8119857911c018cf85038d3a3f9e920d825c53aaa50c9faab",
+        "capture_script_sha256": "cce52dcf0192daea79cea30bca8b7874d916988af88acad8a4ef389dd627924e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "706-web-speech-layer-mute",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "35477536cd5ffc3ced0d1eb436a1d3b32bcceffb3d61f6efe667b2fc76e575be",
+        "capture_script_sha256": "cce52dcf0192daea79cea30bca8b7874d916988af88acad8a4ef389dd627924e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "707-web-speech-on-demand-toggle",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "6a6744351d998a45d238ba17fe21bc467e147b385a092dbf8ec1f991f4e375ce",
+        "capture_script_sha256": "cce52dcf0192daea79cea30bca8b7874d916988af88acad8a4ef389dd627924e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 365,
-    "scenarios_with_evidence": 365,
-    "total_trials": 1149,
-    "successful_trials": 1149,
-    "deterministic_scenarios": 227
+    "scenarios": 369,
+    "scenarios_with_evidence": 369,
+    "total_trials": 1161,
+    "successful_trials": 1161,
+    "deterministic_scenarios": 229
   }
 }
