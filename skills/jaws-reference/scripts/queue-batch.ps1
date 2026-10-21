@@ -28,7 +28,7 @@ param(
     # <OutputDir>\snapshots before the batch: a capture must not run during another batch.
     # Several are named with commas ("a.html,b.html"): -File passes them as one string.
     [string[]]$Snapshots = @(),
-    # Harness scripts (and okur.exe, okur-lab.exe) copied into place once the batch before has finished, so a
+    # Harness scripts (and okur.exe, okur-ui.exe, okur-lab.exe) copied into place once the batch before has finished, so a
     # changed capture script reaches only the batches queued after the change (each batch's
     # evidence then names one capture script hash). Scenarios (*.json) in it go to
     # corpus\scenarios the same way, so a scenario the batch before also runs changes only
@@ -59,10 +59,10 @@ if ($StagedScripts) {
         Copy-Item -LiteralPath $script.FullName -Destination (Join-Path $PSScriptRoot $script.Name) -Force
         "installed $($script.Name) $((Get-FileHash -LiteralPath $script.FullName).Hash.ToLower())" | Out-File $log -Append -Encoding utf8
     }
-    # Staged programs (the screen reader, okur.exe; the harness's tracer, okur-lab.exe) are
-    # installed the same way: replacing one while a batch traces would fail, the file being in
-    # use.
-    foreach ($program in 'okur.exe', 'okur-lab.exe') {
+    # Staged programs (the screen reader, okur.exe, and its windows, okur-ui.exe; the harness's
+    # tracer, okur-lab.exe) are installed the same way: replacing one while a batch traces
+    # would fail, the file being in use.
+    foreach ($program in 'okur.exe', 'okur-ui.exe', 'okur-lab.exe') {
         $binary = Join-Path $StagedScripts $program
         if (Test-Path -LiteralPath $binary) {
             Copy-Item -LiteralPath $binary -Destination (Join-Path 'C:\Users\ailabs\sr-harness\bin' $program) -Force
