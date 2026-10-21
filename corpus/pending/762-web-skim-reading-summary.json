@@ -1,0 +1,58 @@
+{
+  "id": "762-web-skim-reading-summary",
+  "name": "Skim Reading's Create Summary on the news article: Ctrl+Shift+Insert+Down, Enter (Create Summary), Down Arrow three times, Insert+Up, Escape, Insert+Up (keys in the dialog and the viewer typed by JAWS)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "Ctrl+Shift+Insert+Down",
+      "settle_max_ms": 30000,
+      "id": "s1"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s2"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s3"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s4"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s5"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Insert+Up\")",
+      "id": "s6"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")",
+      "settle_max_ms": 30000,
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s8"
+    }
+  ]
+}

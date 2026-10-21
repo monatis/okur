@@ -57,15 +57,15 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `16a73a2` (2026-10-21).
+Every figure is tool output, rerun for this README at commit `6eea9fd` (2026-10-21).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **5889 of 6111** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **5743 of 6073** | `okur-lab parity` |
+| Steps matching JAWS's speech history, word for word | **6014 of 6243** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **5881 of 6205** | `okur-lab parity` |
 | Steps left out on purpose (accepted divergences, each a written decision) | **158** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **409, 1267** (all 1267 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1307 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
+| Recorded JAWS scenarios, trials | **419, 1297** (all 1297 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1311 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
@@ -85,7 +85,8 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   - reading by character, word, line, sentence and paragraph; Home, End, PageUp and
     PageDown; Say All by line, sentence or paragraph (Say All Reads, in Okur Settings), where
     Right and Left skip and go back by that unit, PageUp and PageDown change the rate, and the
-    cursor stays where you stopped it;
+    cursor stays where you stopped it; skim reading (Ctrl+Insert+Down), each paragraph by its
+    first line;
   - quick navigation keys: headings and their levels, links, form fields, edits, buttons,
     check boxes, radio buttons, combo boxes, lists and list items, tables, graphics, regions,
     articles, divisions, separators, tabs and mail links; N past a run of links; the first
@@ -195,7 +196,7 @@ documentation describes and Okur lacks, most important first. Among them:
   draw their own text), the mouse following it as it moves, and the mouse button locks;
 - the keys JAWS adds for the clipboard: saying it (Insert+Windows+X), viewing it and adding
   to it (copying, cutting and pasting already work);
-- the Word List and skim reading;
+- the Word List, and the Skim Reading dialog's own rules and summary;
 - notifications (toasts) and the notification history;
 - the rest of what the verbosity levels change, as further recordings show it;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
