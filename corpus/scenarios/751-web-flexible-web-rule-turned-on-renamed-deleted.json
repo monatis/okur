@@ -1,0 +1,156 @@
+{
+  "id": "751-web-flexible-web-rule-turned-on-renamed-deleted",
+  "name": "Flexible Web's rules dialog after 750 saved a rule for the page: the rule turned on for the site, renamed and deleted: Insert+Space then X, Alt+V, Tab twice to Finish, Enter; Down Arrow, Tab, Space, Shift+Tab, Right Arrow, Down Arrow, Tab, Shift+Tab, Up Arrow twice, Tab; F2, \"Okur renamed rule\" typed, Enter; Delete, Alt+Y; Tab, Enter (Close); F5, Ctrl+Home (keys and text in the dialogs typed by JAWS)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/flexible-web.html",
+  "target_app": "chrome",
+  "continues": "750-web-flexible-web-start-at-rule",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "Insert+Space",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "settle_max_ms": 30000,
+      "id": "s2"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+V\")",
+      "id": "s3"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s4"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s5"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s6"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s7"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s8"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Space\")",
+      "settle_max_ms": 30000,
+      "id": "s9"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s10"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"RightArrow\")",
+      "id": "s11"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s12"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s13"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s14"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")",
+      "id": "s15"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")",
+      "id": "s16"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s17"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"F2\")",
+      "settle_max_ms": 30000,
+      "id": "s18"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeString(\"Okur renamed rule\")",
+      "settle_max_ms": 30000,
+      "id": "s19"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s20"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Delete\")",
+      "settle_max_ms": 30000,
+      "id": "s21"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+Y\")",
+      "settle_max_ms": 30000,
+      "id": "s22"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s23"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s24"
+    },
+    {
+      "type": "key",
+      "command": "F5",
+      "settle_max_ms": 30000,
+      "id": "s25"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Home",
+      "id": "s26"
+    }
+  ]
+}
