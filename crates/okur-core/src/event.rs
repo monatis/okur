@@ -88,10 +88,14 @@ pub enum ChangeKind {
 
 /// Menu mode transitions (MSAA `EVENT_SYSTEM_MENU*`). Focus within menus arrives as focus
 /// events on [`Role::MenuItem`].
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum MenuEvent {
-    /// The menu bar became active.
-    Start,
+    /// Menu mode started, from this window (its class): the menu bar became active, or a
+    /// popup menu is about to open.
+    Start {
+        #[serde(default)]
+        window_class: Option<String>,
+    },
     /// Menu mode ended; focus returns to the application.
     End,
     /// A popup menu opened.

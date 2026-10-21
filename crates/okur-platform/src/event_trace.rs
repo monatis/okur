@@ -847,10 +847,13 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         .as_ref()
         .filter(|o| o.role == Some(MSAA_MENUITEM) && !uia_has_item)
     {
-        return Some(
-            okur_core::FocusEvent::new(okur_core::Role::MenuItem)
-                .with_name(object.name.clone().unwrap_or_default()),
-        );
+        // Unavailable, as MSAA says (STATE_SYSTEM_UNAVAILABLE): "Undo Unavailable" [obs,
+        // 756/s15].
+        const STATE_SYSTEM_UNAVAILABLE: u32 = 0x1;
+        let mut item = okur_core::FocusEvent::new(okur_core::Role::MenuItem)
+            .with_name(object.name.clone().unwrap_or_default());
+        item.states.disabled = object.states & STATE_SYSTEM_UNAVAILABLE != 0;
+        return Some(item);
     }
     if let Some(focus) = netui_focus(event) {
         return Some(focus);
@@ -1272,7 +1275,9 @@ pub use capture::{
 pub fn menu_event_from_trace(event: &TraceEvent) -> Option<okur_core::MenuEvent> {
     use okur_core::MenuEvent;
     match event.event.as_str() {
-        "menu_start" => Some(MenuEvent::Start),
+        "menu_start" => Some(MenuEvent::Start {
+            window_class: event.window_class.clone(),
+        }),
         "menu_end" => Some(MenuEvent::End),
         "menu_popup_start" => Some(MenuEvent::PopupStart),
         "menu_popup_end" => Some(MenuEvent::PopupEnd),

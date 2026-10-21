@@ -230,7 +230,7 @@ impl ScreenReaderEngine {
                 // A modern menu reports its items' positions; a Win32 one does not (302).
                 self.menus.modern_focus(focus)
             } else {
-                self.menus.focus(name)
+                self.menus.focus(name, focus.states.disabled)
             }?;
             self.speech.speak(&speech, true);
             return Some(speech);
@@ -1075,8 +1075,10 @@ impl ScreenReaderEngine {
     pub fn handle_menu_event(&mut self, event: crate::event::MenuEvent) -> Option<String> {
         use crate::event::MenuEvent;
         match event {
-            MenuEvent::Start => {
-                self.menus.start();
+            MenuEvent::Start { window_class } => {
+                // Windows' Win+X menu, from its launcher, is read its own way [obs, 520/s3].
+                self.menus
+                    .start(window_class.as_deref() == Some("LauncherTipWnd"));
                 None
             }
             MenuEvent::PopupStart => {

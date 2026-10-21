@@ -697,7 +697,10 @@ impl ScreenReaderEngine {
                 command @ (Command::OkurCursor
                 | Command::PcCursor
                 | Command::RouteOkurToPc
-                | Command::SayActiveCursor),
+                | Command::RoutePcToOkur
+                | Command::SayActiveCursor
+                | Command::LeftMouseClick
+                | Command::RightMouseClick),
             ) = crate::command::command_for(event)
             {
                 let in_page = self.app_mode == AppMode::VirtualBuffer;
@@ -1165,7 +1168,7 @@ impl ScreenReaderEngine {
                 None
             }
             AccessibilityEvent::Focus(focus) => self.handle_focus_event(focus),
-            AccessibilityEvent::Menu(menu) => self.handle_menu_event(*menu),
+            AccessibilityEvent::Menu(menu) => self.handle_menu_event(menu.clone()),
             AccessibilityEvent::Change { kind, control } => self.handle_change(*kind, control),
             AccessibilityEvent::TextContext(context) => self.handle_text_context(context),
             AccessibilityEvent::Selected(item) => self.handle_selected(item),

@@ -65,6 +65,8 @@ impl ScreenReaderEngine {
             Command::RoutePcToVirtual => return self.route_pc_to_virtual(),
             Command::SelectAFrame => return self.select_a_frame(),
             Command::LeftMouseClick => return self.left_mouse_click(),
+            Command::RightMouseClick => return self.right_mouse_click(),
+            Command::RoutePcToOkur => return self.route_pc_to_okur(),
             Command::WindowList => return self.ask_window_list(),
             Command::SystemTrayList => return self.ask_tray_list(),
             Command::JumpToLine => return self.open_jump(),

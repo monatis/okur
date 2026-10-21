@@ -1165,6 +1165,9 @@ pub struct Menus {
     /// item has the focus: Chrome's app menu opens with none, and its first item is focused
     /// by the next Down.
     started: bool,
+    /// Menu mode started from Windows' Win+X launcher, whose menu JAWS reads its own way
+    /// [obs, 520/s3].
+    launcher: bool,
     /// The page's menu session began on a menu bar or in one of its menus.
     from_bar: bool,
     /// The session was opened by an access key (Alt+F): JAWS says the menu that opens, not
@@ -1228,9 +1231,10 @@ impl Menus {
         self.active && self.open.is_empty() && self.on_bar_item && !self.page
     }
 
-    /// The system reported menu mode starting.
-    pub fn start(&mut self) {
+    /// The system reported menu mode starting, from Windows' Win+X launcher or elsewhere.
+    pub fn start(&mut self, launcher: bool) {
         self.started = true;
+        self.launcher = launcher;
     }
 
     /// The menu item that has the focus, while menus are active.
@@ -1244,22 +1248,41 @@ impl Menus {
         self.current = None;
     }
 
-    /// Focus landed on a menu item.
-    pub fn focus(&mut self, name: &str) -> Option<String> {
+    /// Focus landed on a menu item, unavailable or not.
+    pub fn focus(&mut self, name: &str, unavailable: bool) -> Option<String> {
         let name = name.trim();
         let switching = self.closed.take().is_some() && self.open.is_empty();
         let speech = if !self.active && self.popup_pending {
-            // A menu that opened before any item had the focus, with no menu bar above it
-            // (Windows' Win+X menu), is a context menu: the item is its popup's first
-            // [obs, 520/s3]. A page's menus are [`Menus::page_focus`]'s.
+            // A menu that opened before any item had the focus, with no menu bar above it, is
+            // a context menu: the item is its popup's first. It says how to move in it before
+            // the item, as Chrome's app menu does, the item said with its state ("Context Menu
+            // | | To navigate press Up or Down Arrow. | Undo Unavailable" [obs, 756/s15,
+            // 220/s1]); Windows' Win+X menu says it after [obs, 520/s3]. A page's menus are
+            // [`Menus::page_focus`]'s.
             self.active = true;
             self.popup_pending = false;
             self.popup_shown = true;
-            Some(format!(
-                "{}\n\n{name}\n{}",
-                role_marker(msg::role_context_menu().as_str()),
-                msg::hint_menu_items_up_down()
-            ))
+            let said = if unavailable {
+                format!(
+                    "{name}  {}",
+                    crate::linearize::state_marker(msg::state_unavailable().as_str())
+                )
+            } else {
+                name.to_owned()
+            };
+            Some(if self.launcher {
+                format!(
+                    "{}\n\n{said}\n{}",
+                    role_marker(msg::role_context_menu().as_str()),
+                    msg::hint_menu_items_up_down()
+                )
+            } else {
+                format!(
+                    "{}\n\n{}\n{said}",
+                    role_marker(msg::role_context_menu().as_str()),
+                    msg::hint_context_menu_up_down()
+                )
+            })
         } else if !self.active {
             self.active = true;
             // Opened by an access key, its popup follows at once and says the menu.
@@ -1480,10 +1503,10 @@ mod tests {
     #[test]
     fn a_menu_mode_that_showed_nothing_ends_silently() {
         let mut m = Menus::default();
-        m.start();
+        m.start(false);
         assert!(!m.end());
-        m.start();
-        let _ = m.focus("File");
+        m.start(false);
+        let _ = m.focus("File", false);
         assert!(m.end());
     }
 
@@ -1493,10 +1516,10 @@ mod tests {
     fn a_menu_opened_by_its_access_key() {
         let mut m = Menus::default();
         m.access_key(true);
-        assert_eq!(m.focus("File"), None);
+        assert_eq!(m.focus("File", false), None);
         m.popup_start();
         assert_eq!(
-            m.focus("New\tCtrl+N").as_deref().map(norm),
+            m.focus("New\tCtrl+N", false).as_deref().map(norm),
             Some(norm(&format!(
                 "File menu\nNew\tCtrl+N\n{}",
                 msg::hint_menu_items_up_down()
@@ -1504,14 +1527,14 @@ mod tests {
         );
         m.end();
         m.access_key(false);
-        assert!(m.focus("File").is_some_and(|s| s.contains("File")));
+        assert!(m.focus("File", false).is_some_and(|s| s.contains("File")));
     }
 
     /// 302-desktop-menu-bar, as one session: Alt, Down ×3, Right, Down, Escape, Escape.
     #[test]
     fn menu_session() {
         let mut m = Menus::default();
-        let s1 = m.focus("File");
+        let s1 = m.focus("File", false);
         assert_eq!(
             s1.as_deref().map(norm),
             Some(norm(
@@ -1520,18 +1543,18 @@ mod tests {
         );
         m.popup_start();
         assert_eq!(
-            m.focus("New").as_deref().map(norm),
+            m.focus("New", false).as_deref().map(norm),
             Some(norm("  \u{1d} menu \u{1e} \n  \nFile menu\nNew \nTo move through items press up or down arrow."))
         );
-        assert_eq!(m.focus("Open...").as_deref(), Some("Open..."));
-        assert_eq!(m.focus("Exit").as_deref(), Some("Exit"));
+        assert_eq!(m.focus("Open...", false).as_deref(), Some("Open..."));
+        assert_eq!(m.focus("Exit", false).as_deref(), Some("Exit"));
         // Right: the File popup closes, Edit gets focus silently, its popup opens.
         m.popup_end();
-        assert_eq!(m.focus("Edit"), None);
+        assert_eq!(m.focus("Edit", false), None);
         m.popup_start();
-        assert_eq!(m.focus("Copy").as_deref(), Some("Edit menu\nCopy"));
+        assert_eq!(m.focus("Copy", false).as_deref(), Some("Edit menu\nCopy"));
         assert_eq!(m.idle(), None);
-        assert_eq!(m.focus("Paste").as_deref(), Some("Paste"));
+        assert_eq!(m.focus("Paste", false).as_deref(), Some("Paste"));
         // Escape closes the popup; nothing follows, so the bar item is announced on idle.
         m.popup_end();
         assert_eq!(
@@ -1789,22 +1812,42 @@ To activate press Enter."
         assert!(m.end());
     }
 
+    /// An application's context menu says how to move in it first, and its unavailable item
+    /// so: "Context Menu | | To navigate press Up or Down Arrow. | Undo Unavailable" [obs,
+    /// 756/s15].
+    #[test]
+    fn a_context_menu_says_its_hint_first() {
+        let mut m = Menus::default();
+        m.start(false);
+        m.popup_start();
+        assert_eq!(
+            m.focus("Undo", true).as_deref().map(norm),
+            Some(norm(
+                "  Context Menu  
+
+To navigate press Up or Down Arrow.
+Undo  Unavailable"
+            ))
+        );
+    }
+
     /// A menu whose popup opens before any item has the focus, with no menu bar item open
     /// (Windows' Win+X menu), is a context menu [obs, 520/s3]; Escape moves the focus back
     /// to a bar item, which is said once the events go quiet.
     #[test]
     fn a_popup_opened_with_no_menu_bar_is_a_context_menu() {
         let mut m = Menus::default();
+        m.start(true);
         m.popup_start();
         assert_eq!(
-            m.focus("New").as_deref().map(norm),
+            m.focus("New", false).as_deref().map(norm),
             Some(norm(
                 " \u{1d} Context Menu \u{1e} \n\nNew\nTo move through items press up or down arrow."
             ))
         );
-        assert_eq!(m.focus("Open").as_deref(), Some("Open"));
+        assert_eq!(m.focus("Open", false).as_deref(), Some("Open"));
         m.popup_end();
-        assert_eq!(m.focus("File"), None);
+        assert_eq!(m.focus("File", false), None);
         assert_eq!(
             m.idle().as_deref().map(norm),
             Some(norm(

@@ -140,6 +140,7 @@ route-pc-to-virtual = Route PC to Virtual Cursor
 no-frames-in-page = No frames found in page
 # Numpad Slash, before the click on the element at the virtual cursor [obs, 534/s2].
 left-mouse-button = left mouse button
+right-mouse-button = right mouse button
 
 ## Say Default Button in a dialog box, and Say Current Control Hot Key (Shift+Numpad5) [obs, 537]
 

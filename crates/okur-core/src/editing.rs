@@ -384,9 +384,13 @@ fn word_at(context: &TextContext) -> String {
 }
 
 /// The word around the caret, whole (Say Word reads it wherever in the word the caret is):
-/// the field's word, or the run between spaces.
+/// as JAWS splits words, letters and digits apart from punctuation ("println" in
+/// "println!(" [obs, 756/s9]); else the field's word, or the run between spaces.
 pub fn word_around(context: &TextContext) -> String {
     let text = chars(&context.text);
+    if let Some((start, end)) = web_word_at(&context.text, context.caret) {
+        return text.get(start..end).unwrap_or_default().iter().collect();
+    }
     if let Some((start, end)) = field_word(context) {
         let word: String = text.get(start..end).unwrap_or_default().iter().collect();
         return word.trim().to_owned();

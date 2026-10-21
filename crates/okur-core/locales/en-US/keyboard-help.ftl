@@ -442,6 +442,8 @@ command-route-pc-to-virtual = Moves the focus to the element at the virtual curs
 command-select-a-frame = Lists the page's frames, to move to one.
 # NumPadSlash.
 command-left-mouse-click = Clicks the left mouse button on the element at the cursor.
+command-right-mouse-click = Clicks the right mouse button where the mouse is.
+command-route-pc-to-okur = Moves the PC cursor, or the virtual cursor, to the Okur cursor.
 # WindowList (Insert+F10).
 command-window-list = Lists the open windows, to switch to one.
 # ListTaskTrayIcons (Insert+F11).

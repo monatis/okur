@@ -27,42 +27,20 @@ pub enum OkurPlace {
     Text { line: usize, column: Option<usize> },
 }
 
-/// A character's kind for the Okur cursor's words: letters and digits make words, other marks
-/// make their own, "main" and "()" [obs, 754/s11], spaces part them.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum CharKind {
-    Space,
-    Word,
-    Mark,
-}
-
-fn char_kind(c: char) -> CharKind {
-    if c.is_whitespace() {
-        CharKind::Space
-    } else if c.is_alphanumeric() {
-        CharKind::Word
-    } else {
-        CharKind::Mark
-    }
-}
-
-/// Where the words of `text` start.
+/// Where the words of `text` start, as JAWS splits words: letters and digits apart from
+/// other marks, "main" and "()" [obs, 754/s11] ([`crate::editing::web_word_at`]).
 fn word_starts(text: &[char]) -> Vec<usize> {
-    let kind = |i: usize| text.get(i).map_or(CharKind::Space, |c| char_kind(*c));
+    let line: String = text.iter().collect();
     (0..text.len())
-        .filter(|&i| {
-            kind(i) != CharKind::Space && i.checked_sub(1).is_none_or(|p| kind(p) != kind(i))
-        })
+        .filter(|&i| crate::editing::web_word_at(&line, i).is_some_and(|(start, _)| start == i))
         .collect()
 }
 
 /// The word of `text` starting at `start`.
 fn word_at(text: &[char], start: usize) -> String {
-    let kind = text.get(start).map(|c| char_kind(*c));
-    text.iter()
-        .skip(start)
-        .take_while(|c| Some(char_kind(**c)) == kind)
-        .collect()
+    let line: String = text.iter().collect();
+    let end = crate::editing::web_word_at(&line, start).map_or(start, |(_, end)| end);
+    text.get(start..end).unwrap_or_default().iter().collect()
 }
 
 /// Whether a page's line is text its screen shows: not the page's title, nor a region's or a
@@ -129,6 +107,31 @@ impl ScreenReaderEngine {
             msg::cursor_route_okur_to_pc(),
             msg::cursor_route_okur_to_pc_short(),
         );
+        self.say(said)
+    }
+
+    /// Insert+Numpad Plus: the PC cursor to the Okur cursor, "Route PC to Okur" (JAWS: "Route
+    /// PC to JAWS") [obs, 756/s13, s14]. In a page the virtual cursor goes to the Okur cursor's
+    /// line; elsewhere a click at the mouse brings the caret there.
+    pub(super) fn route_pc_to_okur(&mut self) -> Option<String> {
+        if self.app_mode == super::AppMode::VirtualBuffer {
+            if let Some(OkurPlace::Text { line, .. }) = self.okur_place {
+                let start = self
+                    .cursor
+                    .buffer
+                    .lines
+                    .iter()
+                    .filter(|l| screen_line(l))
+                    .nth(line)
+                    .map(|l| l.start_offset);
+                if let Some(start) = start {
+                    self.cursor.move_to(start);
+                }
+            }
+        } else if let (Some((x, y)), Some(actions)) = (self.mouse, &self.actions) {
+            actions.click_mouse(x, y, crate::actions::MouseClick::LeftSingle);
+        }
+        let said = msg::cursor_route_pc_to_okur().to_string();
         self.say(said)
     }
 
@@ -538,7 +541,7 @@ impl ScreenReaderEngine {
     /// Where the PC cursor is on the screen: the middle pixel of the focused element (its
     /// right and bottom edges are outside it): the mouse Route JAWS to PC put on a button
     /// 1000 to 1090 wide was at 1044 [obs, 516 traces].
-    fn pc_cursor_point(&self) -> Option<(i32, i32)> {
+    pub(super) fn pc_cursor_point(&self) -> Option<(i32, i32)> {
         let [left, top, right, bottom] = self.focus_bounds?;
         Some(((left + right - 1) / 2, (top + bottom - 1) / 2))
     }

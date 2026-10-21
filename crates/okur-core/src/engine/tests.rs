@@ -4775,7 +4775,9 @@ fn a_menu_takes_the_keys_before_any_item_is_focused() {
     let (mut engine, _speech) = engine_on_a_page();
     let down = key(Key::DownArrow);
     assert_eq!(engine.handle_key_event(&down), KeyAction::Consume);
-    engine.handle_accessibility_event(&AccessibilityEvent::Menu(crate::event::MenuEvent::Start));
+    engine.handle_accessibility_event(&AccessibilityEvent::Menu(crate::event::MenuEvent::Start {
+        window_class: None,
+    }));
     engine.handle_accessibility_event(&AccessibilityEvent::Menu(
         crate::event::MenuEvent::PopupStart,
     ));
@@ -5490,7 +5492,9 @@ fn notepads_edit_and_its_menu_bar() {
         "{arrival:?}"
     );
     assert!(!arrival.contains("Text Editor"), "{arrival:?}");
-    engine.handle_accessibility_event(&AccessibilityEvent::Menu(crate::event::MenuEvent::Start));
+    engine.handle_accessibility_event(&AccessibilityEvent::Menu(crate::event::MenuEvent::Start {
+        window_class: None,
+    }));
     let mut file = FocusEvent::new(Role::MenuItem).with_name("File");
     file.in_menu_bar = true;
     engine.handle_focus_event(&file);

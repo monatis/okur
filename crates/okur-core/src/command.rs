@@ -240,8 +240,14 @@ pub enum Command {
     RoutePcToVirtual,
     /// Insert+F9: the page's frames.
     SelectAFrame,
-    /// Numpad Slash: a left mouse click, on the element at the virtual cursor in a page.
+    /// Numpad Slash: a left mouse click, on the element at the virtual cursor in a page, at
+    /// the mouse elsewhere.
     LeftMouseClick,
+    /// Numpad Star: a right mouse click, at the mouse.
+    RightMouseClick,
+    /// Insert+Numpad Plus (RoutePCCursorToJAWS): the PC cursor, or the virtual one, to the
+    /// Okur cursor.
+    RoutePcToOkur,
     /// Insert+F10: the Window List, the running applications' windows to switch to.
     WindowList,
     /// Insert+F11 (ListTaskTrayIcons): the notification area's icons, to click one.
@@ -552,6 +558,8 @@ impl Command {
             "RoutePCToVirtual" | "Ctrl+Insert+Delete" => RoutePcToVirtual,
             "SelectAFrame" | "Insert+F9" => SelectAFrame,
             "LeftMouseButton" | "NumpadSlash" => LeftMouseClick,
+            "RightMouseButton" | "NumpadStar" => RightMouseClick,
+            "RoutePCCursorToJAWS" => RoutePcToOkur,
             "WindowList" | "Insert+F10" => WindowList,
             "ListTaskTrayIcons" | "Insert+F11" => SystemTrayList,
             "JumpToLine" => JumpToLine,
@@ -888,6 +896,7 @@ static BINDINGS: &[Binding] = &{
         bind(NumpadMinus, OKUR, RouteOkurToPc),
         bind(NumpadMinus, ALONE, OkurCursor),
         bind(NumpadPlus, ALONE, PcCursor),
+        bind(NumpadPlus, OKUR, RoutePcToOkur),
         bind(
             Key::Delete,
             ANY.alt(Yes).ctrl(No).shift(No).insert(No),
@@ -990,6 +999,7 @@ static BINDINGS: &[Binding] = &{
         bind(Key::Delete, CTRL_INSERT, RoutePcToVirtual),
         bind(Key::F(9), OKUR, SelectAFrame),
         bind(Key::NumpadSlash, ALONE, LeftMouseClick),
+        bind(Key::NumpadStar, ALONE, RightMouseClick),
         bind(Key::F(10), OKUR, WindowList),
         bind(Key::F(11), OKUR, SystemTrayList),
         // Default.JKM: JAWSKey+F4=ShutDownJAWS; "Shut Down JAWS: INSERT+F4" (keystrokes).

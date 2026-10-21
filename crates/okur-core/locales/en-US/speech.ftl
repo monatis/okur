@@ -27,6 +27,8 @@ cursor-virtual-pc-short = virtual PC
 cursor-okur = Okur Cursor
 cursor-pc = PC Cursor
 cursor-route-okur-to-pc = Route Okur to PC
+# Insert+Numpad Plus, where JAWS says "Route PC to JAWS" [obs, 756/s13].
+cursor-route-pc-to-okur = Route PC to Okur
 # The three above with short messages (Intermediate, Advanced), as JAWS says "JAWS", "JAWS to
 # PC" and "PC" [obs, 697, 698].
 cursor-okur-short = Okur

@@ -115,7 +115,14 @@ impl ScreenReaderEngine {
     /// then checked [obs, 534/s2, s4, s9]. Elsewhere JAWS clicks at the mouse pointer, which
     /// Okur does not move yet.
     pub(super) fn left_mouse_click(&mut self) -> Option<String> {
-        if self.app_mode != AppMode::VirtualBuffer || self.forms_mode {
+        // Outside a page, at the mouse: "left mouse button", the caret going where it clicks
+        // [obs, 756/s6, s9].
+        if self.app_mode != AppMode::VirtualBuffer {
+            let said = self.say(msg::left_mouse_button().to_string());
+            self.click_at_mouse(crate::actions::MouseClick::LeftSingle);
+            return said;
+        }
+        if self.forms_mode {
             return None;
         }
         let said = self.say(msg::left_mouse_button().to_string());
@@ -125,5 +132,22 @@ impl ScreenReaderEngine {
             actions.activate(node);
         }
         said
+    }
+
+    /// Numpad Star: "right mouse button", clicked at the mouse; the application's context
+    /// menu opens there [obs, 756/s15].
+    pub(super) fn right_mouse_click(&mut self) -> Option<String> {
+        let said = self.say(msg::right_mouse_button().to_string());
+        self.click_at_mouse(crate::actions::MouseClick::RightSingle);
+        said
+    }
+
+    /// A click where the mouse is, or at the PC cursor when Okur has not placed it.
+    fn click_at_mouse(&self, click: crate::actions::MouseClick) {
+        if let (Some((x, y)), Some(actions)) =
+            (self.mouse.or(self.pc_cursor_point()), &self.actions)
+        {
+            actions.click_mouse(x, y, click);
+        }
     }
 }
