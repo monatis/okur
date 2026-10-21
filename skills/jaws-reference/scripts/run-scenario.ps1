@@ -123,6 +123,28 @@ public static class SrKeyInput {
         return name.ToString();
     }
 
+    [StructLayout(LayoutKind.Sequential)] struct RECT { public int l, t, r, b; }
+    [StructLayout(LayoutKind.Sequential)] struct GUITHREADINFO {
+        public int cbSize; public uint flags;
+        public IntPtr hwndActive, hwndFocus, hwndCapture, hwndMenuOwner, hwndMoveSize, hwndCaret;
+        public RECT rcCaret;
+    }
+    [DllImport("user32.dll")] static extern bool GetGUIThreadInfo(uint thread, ref GUITHREADINFO info);
+
+    /// The class of the window with the keyboard focus, in the window in front ("" for none):
+    /// Chrome's page is Chrome_RenderWidgetHostHWND, its frame and address bar
+    /// Chrome_WidgetWin_1.
+    public static string FocusClass() {
+        uint pid;
+        uint thread = GetWindowThreadProcessId(GetForegroundWindow(), out pid);
+        var info = new GUITHREADINFO();
+        info.cbSize = Marshal.SizeOf(info);
+        if (thread == 0 || !GetGUIThreadInfo(thread, ref info) || info.hwndFocus == IntPtr.Zero) return "";
+        var name = new StringBuilder(64);
+        GetClassName(info.hwndFocus, name, name.Capacity);
+        return name.ToString();
+    }
+
     /// The process of the window in front.
     public static uint ForegroundProcess() {
         uint pid;
@@ -801,6 +823,18 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         # JAWS starts Say All on page load by default; the reset keys interrupt it, so the
         # load wait is bounded and only the post-reset silence decides whether setup settled.
         $loadQuiet = Wait-Silence -OnsetMs 1500 -QuietMs 700 -MaxMs 3000
+        # The keys go to the page only with the keyboard focus in it. Chrome in front with the
+        # focus on its frame (or the taskbar holding it) left every key of rounds 138 and 139's
+        # first scenarios unread: JAWS said only the window's title (700, 701). F6 moves the
+        # focus from the frame and the address bar to the page; a trial still without it fails.
+        if ($targetProc -eq 'chrome') {
+            for ($f = 0; $f -lt 3 -and [SrKeyInput]::FocusClass() -ne 'Chrome_RenderWidgetHostHWND'; $f++) {
+                Focus-Target $targetProc
+                [void](Send-Chord "F6"); Start-Sleep -Milliseconds 400
+            }
+            $trialResult.page_focus = [SrKeyInput]::FocusClass()
+            if ($trialResult.page_focus -ne 'Chrome_RenderWidgetHostHWND') { $trialResult.trial_success = $false }
+        }
     }
     # An explicit (possibly empty) reset.keys list wins; browser scenarios default to Ctrl+Home.
     $hasResetKeys = $scenario.reset -and ($scenario.reset.PSObject.Properties.Name -contains 'keys')
