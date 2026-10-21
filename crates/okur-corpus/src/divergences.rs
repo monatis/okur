@@ -269,6 +269,7 @@ divergences! {
 
     Difference::JawsAlsoSays("Preview Bottom:") => [
         "544-desktop-notepad-page-setup/s13",
+        "674-desktop-notepad-page-setup-intermediate/s13",
     ],
     "Say Window in Notepad's Page Setup dialog ends, in JAWS, with the Preview box's three \
      pictures of the page, read by names they do not have: \"Bottom:\" twice, the label \
@@ -279,9 +280,17 @@ divergences! {
 
     Difference::JawsAlsoSays("Preview Page Setup") => [
         "544-desktop-notepad-page-setup/s13",
+        "674-desktop-notepad-page-setup-intermediate/s13",
     ],
     "The last of the Page Setup preview's pictures, named after the dialog's title (see the \
      entry before).",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
+    Difference::JawsAlsoSays("\nBottom: \nBottom: \nPage Setup") => [
+        "675-desktop-notepad-page-setup-advanced/s13",
+    ],
+    "The Page Setup preview's pictures at Advanced, without the box's name before each (see \
+     the entries before).",
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
     Difference::Step => [
@@ -445,6 +454,7 @@ divergences! {
     Difference::Step => [
         "541-desktop-notepad-font-dialog/s2",
         "665-desktop-font-dialog-say-window/s2",
+        "673-desktop-font-dialog-say-window-advanced/s2",
     ],
     "Opening Notepad's Font dialog, JAWS says the font, \"Consolas\", before the dialog, then \
      again in the field (in 3 of 3 trials of round 56, 2 of 3 earlier): the dialog fills its \

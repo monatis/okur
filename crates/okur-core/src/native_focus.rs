@@ -702,6 +702,9 @@ pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> Announceme
             .map(named)
             .filter(|g| !g.is_empty() && !(after_label && item.role == Role::Edit));
         let mut parts = match group {
+            // After its label, the box's name again, which Advanced leaves out: "Size: |
+            // Combo box" [obs, 675/s13].
+            Some(group) if after_label => vec![Part::new(PartKind::GroupName, group)],
             Some(group) if name.is_empty() => vec![name_part(group)],
             Some(group) => vec![
                 Part::new(PartKind::GroupName, format!("{group} ")),

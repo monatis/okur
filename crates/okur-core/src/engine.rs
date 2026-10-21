@@ -145,6 +145,9 @@ pub struct ScreenReaderEngine {
     last_key_selects: bool,
     /// The last key was Tab or Shift+Tab: the focus it moves is the user's.
     last_key_tabs: bool,
+    /// The last key was Escape alone: a dialog it closes may first move the focus to its
+    /// Cancel button.
+    last_key_escapes: bool,
     /// The Alt key is down: pressed on its own and not yet released (Alt held through
     /// Tabs in the task switcher).
     alt_held: bool,
@@ -312,6 +315,7 @@ impl ScreenReaderEngine {
             edit_read_in_console: false,
             last_key_selects: false,
             last_key_tabs: false,
+            last_key_escapes: false,
             alt_held: false,
             pass_next_key: false,
             menus: crate::native_focus::Menus::default(),
@@ -457,6 +461,8 @@ impl ScreenReaderEngine {
         self.last_typed = event.text;
         self.edit_read_in_console = false;
         self.last_key_tabs = event.key == Key::Tab && !event.modifiers.ctrl && !event.modifiers.alt;
+        self.last_key_escapes =
+            event.key == Key::Escape && event.modifiers == crate::input::Modifiers::none();
         self.last_key_selects = event.modifiers.shift
             && !event.modifiers.alt
             && matches!(

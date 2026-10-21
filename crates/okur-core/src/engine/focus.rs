@@ -834,6 +834,17 @@ impl ScreenReaderEngine {
         if window_changed {
             self.native_focus.reset();
         }
+        // Escape presses a dialog's Cancel button (IDCANCEL, control id 2), and a dialog that
+        // moves the focus there as it closes is gone a moment later: JAWS says nothing of the
+        // button, only the window the focus returns to [obs, 544/s14, 674/s14, 675/s14].
+        if self.last_key_escapes
+            && focus.in_dialog_box
+            && focus.role == Role::Button
+            && focus.platform.automation_id.as_deref() == Some("2")
+        {
+            self.last_native_focus = Some(focus.clone());
+            return None;
+        }
         let control = self.native_focus.focus(focus);
         // The focus moved onto another page of the dialog's property sheet (Ctrl+Tab): the
         // page is said first, "General Page" [obs, 323/s11].

@@ -228,8 +228,10 @@ A step can be in more than one entry; all of its entries apply.
 
 ### JAWS names the Page Setup preview's pictures after a label and the title
 
-- Steps: `544-desktop-notepad-page-setup/s13`.
-- Difference: JAWS also says "Preview Bottom:" (twice) and "Preview Page Setup".
+- Steps: `544-desktop-notepad-page-setup/s13`, and the same at Intermediate and Advanced,
+  `674-desktop-notepad-page-setup-intermediate/s13`, `675-desktop-notepad-page-setup-advanced/s13`.
+- Difference: JAWS also says "Preview Bottom:" (twice) and "Preview Page Setup"; at Advanced,
+  which leaves the box's name out, "Bottom:" twice and "Page Setup".
 - Why: Say Window (Insert+B) in Notepad's Page Setup dialog ends, in JAWS, with the Preview
   box's three pictures of the page, read by names they do not have: "Bottom:" twice (the label
   before them in the dialog) and "Page Setup" (the dialog's title). The pictures have no text.
@@ -374,7 +376,8 @@ A step can be in more than one entry; all of its entries apply.
 ### The Font dialog's font is said before the dialog
 
 - Steps: `541-desktop-notepad-font-dialog/s2`, and the same opening in 665 (rounds 115 and 119),
-  `665-desktop-font-dialog-say-window/s2`.
+  `665-desktop-font-dialog-say-window/s2`, and at Advanced in round 123,
+  `673-desktop-font-dialog-say-window-advanced/s2`.
 - Difference: the whole step. JAWS says "Consolas" between the Notepad edit it leaves and
   "Font dialog", then again in the Font field; Okur says the dialog, then the field with its
   font once.
