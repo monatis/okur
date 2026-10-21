@@ -34,6 +34,9 @@ listing=$(timeout 360 opendesk exec --peer "$PEER" --timeout 300 --file "$query"
 
 # One pull can hang on a connection that stopped answering (rounds 50, 54, 55): each gets a
 # time limit and three tries, and a file that still fails is named and left for the next run.
+# Files are hashed from standard input: sha256sum marks its line with a backslash for a name
+# that has one (a Windows path such as $TEMP's), which no hash would then match. A pull does
+# not read the listing either.
 PULL_TIMEOUT=${PULL_TIMEOUT:-180}
 fetched=0
 same=0
@@ -41,15 +44,16 @@ failed=()
 while read -r hash rel; do
     [ -n "$hash" ] || continue
     dest="$LOCAL/$rel"
-    if [ -f "$dest" ] && [ "$(sha256sum "$dest" | cut -d' ' -f1)" = "$hash" ]; then
+    if [ -f "$dest" ] && [ "$(sha256sum < "$dest" | cut -d' ' -f1)" = "$hash" ]; then
         same=$((same + 1))
         continue
     fi
     mkdir -p "$(dirname "$dest")"
     got=no
     for _ in 1 2 3; do
-        if timeout "$PULL_TIMEOUT" opendesk pull --peer "$PEER" "$REMOTE/$rel" "$dest" > /dev/null 2>&1 \
-            && [ "$(sha256sum "$dest" | cut -d' ' -f1)" = "$hash" ]; then
+        if timeout "$PULL_TIMEOUT" opendesk pull --peer "$PEER" "$REMOTE/$rel" "$dest" \
+            < /dev/null > /dev/null 2>&1 \
+            && [ "$(sha256sum < "$dest" | cut -d' ' -f1)" = "$hash" ]; then
             got=yes
             break
         fi
