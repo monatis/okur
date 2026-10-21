@@ -57,19 +57,19 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `922619e` (2026-10-21).
+Every figure is tool output, rerun for this README at commit `b001875` (2026-10-21).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **5288 of 5500** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **5156 of 5462** | `okur-lab parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **129** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **377, 1185** (all 1185 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1293 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **5718 of 5927** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **5575 of 5889** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **143** | `okur-lab parity` |
+| Recorded JAWS scenarios, trials | **402, 1260** (all 1260 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1303 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
-The 129 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
+The 143 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
 accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
 place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
 Okur says its help in its own words. Each one is listed, with the reason and who decided it,
@@ -162,7 +162,13 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   and muted speech (Insert+Space, then Shift+S), as JAWS has them, what is not spoken still
   written to the Speech History.
 - **Settings** declared in one table, so the settings dialog, the command line (`okur run --set
-  <setting>=<value>`) and the import of JAWS's own settings files offer the same values.
+  <setting>=<value>`) and the import of JAWS's own settings files offer the same values. Among
+  them, as JAWS has them: Caps Indicate, mixed case, numbers read as digits, dollar amounts
+  left to the voice, same page links, graphics shown or not, how a heading is said, and which
+  parts of a control verbosity says (its type, its state, its position, its hints).
+- **Flexible Web** (Insert+Space, then X): JAWS's wizard, page for page, hides an element of a
+  page (a region, a heading, a list) found by its kind, its text, its id or its place, until
+  another page loads; Undo takes it back. Saving customizations as rules comes next.
 - **Verbosity levels:** Beginner, Intermediate and Advanced, as JAWS has them. Above
   Beginner Okur says the short messages JAWS says there ("Last row", "3 columns and 3 rows",
   "virtual PC"); at Advanced it leaves out what JAWS leaves out, such as a list's positions, a
@@ -185,7 +191,6 @@ documentation describes and Okur lacks, most important first. Among them:
   to it (copying, cutting and pasting already work);
 - the Word List and skim reading;
 - notifications (toasts) and the notification history;
-- Flexible Web;
 - the rest of what the verbosity levels change, as further recordings show it;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
