@@ -284,6 +284,8 @@ flexible-web-rules-text = Use the tree view below to select the area of the web 
 flexible-web-area-global = Global
 flexible-web-area-site = Current Site: { $site }
 flexible-web-area-page = Current Page: { $page }
+# How many rules are on in an area, after its place in the tree [obs, 748/s8, s13].
+flexible-web-area-active = { $count } Active
 flexible-web-rules-column-rule = Rule
 flexible-web-rules-column-set-for = Set for
 flexible-web-set-for-global = Global

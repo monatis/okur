@@ -555,6 +555,18 @@ pub fn focus_event_from_chain(
                 .filter(|a| a.control_type == UIA_TREEITEM)
                 .count(),
         );
+        // The item it is in, which JAWS says after a level change: "level 1 | Primary
+        // Navigation | 1 of 1 | Banner" [obs, 241/s2]; not in a WinForms tree, "level 1 |
+        // Reports | 1 of 2" [obs, 303/s8].
+        if !window_class.is_some_and(|c| c.starts_with("WindowsForms")) {
+            event.item_parent = chain
+                .iter()
+                .rev()
+                .skip(1)
+                .find(|a| a.control_type == UIA_TREEITEM)
+                .and_then(|a| a.name.clone())
+                .filter(|n| !n.trim().is_empty());
+        }
     }
     event.help_text = focused
         .full_description

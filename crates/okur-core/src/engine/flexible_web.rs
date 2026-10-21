@@ -57,6 +57,25 @@ impl ScreenReaderEngine {
         &self.flexible_web_rules
     }
 
+    /// A focus in the rules dialog's tree, with what the dialog says of its areas: how many
+    /// rules are on there [obs, 748/s8].
+    pub(super) fn with_rules_details(
+        &self,
+        focus: &crate::event::FocusEvent,
+    ) -> Option<crate::event::FocusEvent> {
+        let dialog = self.flexible_web_rules_dialog.as_ref()?;
+        let title = msg::flexible_web_rules_title().to_string();
+        if focus.role != crate::aom::Role::TreeItem
+            || focus.window_title.as_deref() != Some(title.as_str())
+        {
+            return None;
+        }
+        let status = dialog.tree_status(focus.name.as_deref()?, &self.flexible_web_rules)?;
+        let mut focus = focus.clone();
+        focus.item_status = Some(status);
+        Some(focus)
+    }
+
     /// Insert+Space, then X: Flexible Web's wizard, on the elements at the virtual cursor.
     /// Okur says nothing itself: the wizard is read as it takes the focus [obs, 705/s3].
     /// Outside a page: "You must be in the web page area to activate Flexible Web."

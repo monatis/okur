@@ -155,6 +155,9 @@ impl ScreenReaderEngine {
     }
 
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
+        // In one of Okur's own dialogs, what it knows of the control it draws.
+        let detailed = self.with_rules_details(focus);
+        let focus = detailed.as_ref().unwrap_or(focus);
         if focus.bounds.is_some() {
             self.focus_bounds = focus.bounds;
         }

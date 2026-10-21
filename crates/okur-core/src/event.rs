@@ -187,6 +187,15 @@ pub struct FocusEvent {
     pub tree_level: Option<usize>,
     /// Number of child items (an expanded tree item's children).
     pub child_count: Option<usize>,
+    /// A tree item's status, said after its place as the focus enters the tree: Okur's rules
+    /// dialog's "0 Active", as JAWS's [obs, 748/s8].
+    #[serde(default)]
+    pub item_status: Option<String>,
+    /// A tree item's parent, said after its place when an arrow changes the level: Okur's
+    /// rules dialog's "level 2 | Current Page: ... | 1 of 1 | Current Site: localhost", as
+    /// JAWS's [obs, 748/s11, s14].
+    #[serde(default)]
+    pub item_parent: Option<String>,
     /// For a text field: its text, caret and selection when it got focus.
     pub text: Option<TextContext>,
     /// When the active window is a dialog box (Win32 `#32770`): its static text.
@@ -362,6 +371,8 @@ impl FocusEvent {
             unique_id: None,
             web_application: None,
             tree_level: None,
+            item_status: None,
+            item_parent: None,
             child_count: None,
             text: None,
             dialog_text: None,

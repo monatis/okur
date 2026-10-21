@@ -9,6 +9,9 @@ state-open = open
 state-opened = Opened
 # A native tree item that hides its children.
 state-closed = closed
+# A closed tree item, said as a word after its name but in WinForms trees: "Current Site:
+# localhost Closed" [obs, 748/s9].
+state-closed-word = Closed
 state-collapsed = collapsed
 state-expanded = expanded
 # The element opens a popup (aria-haspopup); its kind follows. JAWS's spacing and capitals.

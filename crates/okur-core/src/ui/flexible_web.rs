@@ -542,6 +542,13 @@ impl RulesDialog {
         }
     }
 
+    /// What the tree says of the area named `name` after its place: how many rules are on
+    /// there ("1 Active" [obs, 748/s13]).
+    pub fn tree_status(&self, name: &str, rules: &Rules) -> Option<String> {
+        let at = self.areas.iter().position(|area| area.label() == name)?;
+        Some(msg::flexible_web_area_active(rules.active(&self.areas, at)).to_string())
+    }
+
     /// The rules list as it stands, for the area chosen.
     pub fn refreshed(&mut self, rules: &Rules) -> ToUi {
         self.rule = self.rule.min(rules.rules.len().saturating_sub(1));

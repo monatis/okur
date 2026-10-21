@@ -427,7 +427,23 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                     PartKind::Message,
                     format!(" {}", msg::state_opened()),
                 )),
-                Some(false) => parts.push(state(msg::state_closed().as_str())),
+                // Closed, a word too ("Current Site: localhost Closed" [obs, 748/s9]; File
+                // Explorer's "OneDrive Closed"), but a state in a WinForms tree: "Documents
+                // closed" [obs, 303/s4].
+                Some(false)
+                    if [
+                        &focus.platform.window_class,
+                        &focus.platform.container_class,
+                    ]
+                    .iter()
+                    .any(|c| c.as_deref().is_some_and(|c| c.starts_with("WindowsForms"))) =>
+                {
+                    parts.push(state(msg::state_closed().as_str()))
+                }
+                Some(false) => parts.push(Part::new(
+                    PartKind::Message,
+                    format!(" {}", msg::state_closed_word()),
+                )),
                 None => {}
             }
             lines.push(Line::new(parts));
@@ -436,6 +452,12 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                 None => lines.extend(position(focus)),
             }
             if entering {
+                lines.extend(
+                    focus
+                        .item_status
+                        .clone()
+                        .map(|status| Line::of(PartKind::Text, status)),
+                );
                 lines.push(Line::of(PartKind::Hint, msg::hint_tree_arrows()));
             }
         }
@@ -649,6 +671,8 @@ impl NativeFocus {
                 // Tab into the tree names no level (303/s4), and the arrows go on from the
                 // item's: the first Down at that level says the item alone (303/s5, trial 1:
                 // "Pictures"; File Explorer's navigation pane, "Gallery", dev box 2026-10-17).
+                // Once, the first Down to another level said the item alone too (748/s9),
+                // where Up after Tab said the level (748/s14): not a rule yet.
                 self.tree_level = focus.tree_level;
             } else if let Some(level) = focus.tree_level {
                 // Arrow keys in a tree announce a level different from the last one
@@ -660,6 +684,12 @@ impl NativeFocus {
                         0,
                         Line::of(PartKind::Level, msg::tree_level_changed(level))
                             .short(msg::tree_level_changed_short(level).to_string()),
+                    );
+                    speech.lines.extend(
+                        focus
+                            .item_parent
+                            .clone()
+                            .map(|p| Line::of(PartKind::Text, p)),
                     );
                 } else if let Some(at) = position(focus).map(|p| p.render()) {
                     speech.lines.retain(|line| line.render() != at);
@@ -2081,7 +2111,7 @@ To activate press Enter."
             event(Role::TreeItem, "Documents"),
             Role::Tree,
             "",
-            "SysTreeView32",
+            "WindowsForms10.SysTreeView32.app.0.1",
         );
         item.states.expanded = Some(false);
         item.item_index = Some(1);
@@ -2286,6 +2316,8 @@ mod tree_tests {
     fn tree_item(name: &str, level: usize, index: usize, count: usize) -> FocusEvent {
         let mut item = FocusEvent::new(Role::TreeItem).with_name(name);
         item.container_role = Some(Role::Tree);
+        // 303's WinForms tree.
+        item.platform.container_class = Some("WindowsForms10.SysTreeView32.app.0.1".into());
         item.tree_level = Some(level);
         item.item_index = Some(index);
         item.item_count = Some(count);
