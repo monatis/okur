@@ -92,6 +92,7 @@ key-help-passes = Goes to the application.
 
 # SayAll (Insert+Down Arrow).
 command-say-all = Reads from the cursor to the end.
+command-skim-read = Reads from the cursor to the end, each paragraph by its first line.
 # SayAll pressed twice quickly in Keyboard Help.
 command-say-all-long = { command-say-all } The cursor follows the reading, and Control stops it on the line last heard.
 # SayLine (Insert+Up Arrow).

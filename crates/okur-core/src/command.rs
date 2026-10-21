@@ -52,6 +52,8 @@ pub enum Element {
 pub enum Command {
     // Reading where the cursor is.
     SayAll,
+    /// Ctrl+Insert+Down (StartSkimRead): Say All with the first line of each paragraph.
+    SkimRead,
     SayLine,
     SayWord,
     SayCharacter,
@@ -355,6 +357,7 @@ impl Command {
         matches!(
             self,
             SayAll
+                | SkimRead
                 | SayLine
                 | SpellLine
                 | SayWord
@@ -797,6 +800,8 @@ static BINDINGS: &[Binding] = &{
         bind(UpArrow, SHIFT.insert(No), SelectPriorLine),
         // Say All and Say Line.
         bind(DownArrow, OKUR, SayAll),
+        // Default.JKM: Control+JAWSKey+DownArrow=StartSkimRead.
+        bind(DownArrow, OKUR_CTRL, SkimRead),
         bind(UpArrow, OKUR, SayLine),
         bind(RightArrow, OKUR, SayNextWord),
         bind(LeftArrow, OKUR, SayPriorWord),

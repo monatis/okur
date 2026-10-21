@@ -41,6 +41,8 @@ enum Source {
     PageUnits(Vec<(usize, String)>),
     /// A text field's lines from the caret's on, each with the character offset it starts at.
     Field(Vec<(usize, String)>),
+    /// The page's lines skimmed: the indexes of those read, each paragraph's first.
+    PageSkim(Vec<usize>),
 }
 
 impl ScreenReaderEngine {
@@ -60,6 +62,45 @@ impl ScreenReaderEngine {
             _ => crate::editing::lines_from_caret(context),
         };
         self.begin_say_all(0, Source::Field(pieces), true)
+    }
+
+    /// Ctrl+Insert+Down: Say All from the virtual cursor's line, a paragraph read by its first
+    /// line, every other line whole: "The Riverside City Library will stay open ... The change
+    /// follows a survey in which", then the next element [obs, 761] (JAWS 2025 help, Skim
+    /// Reading, by its default rule, Read First Line of Every Paragraph).
+    pub(super) fn start_skim_read(&mut self) -> Option<String> {
+        let from = self.cursor.current_line_index();
+        let buffer = &self.cursor.buffer;
+        let rows = buffer
+            .page()
+            .map(|page| table_rows(page))
+            .unwrap_or_default();
+        let row = |line: usize| {
+            buffer
+                .lines
+                .get(line)
+                .and_then(|l| rows.get(&l.node_id))
+                .copied()
+        };
+        // Each paragraph's first line, as the virtual cursor's paragraphs part the page: a
+        // region's start or a heading that goes on a paragraph is left out with it ("Primary
+        // navigation region", "What changes" [obs, 761/s1]). A table's row is one
+        // paragraph, read by its first cell ("Central", "Northside").
+        let mut read: Vec<usize> = Vec::new();
+        for line in buffer
+            .paragraphs
+            .iter()
+            .filter_map(|p| buffer.line_at_offset(p.start_offset).map(|l| l.line_index))
+            .filter(|&line| line >= from)
+        {
+            let same_row = read
+                .last()
+                .is_some_and(|&before| row(line).is_some() && row(line) == row(before));
+            if read.last() != Some(&line) && !same_row {
+                read.push(line);
+            }
+        }
+        self.begin_say_all(0, Source::PageSkim(read), true)
     }
 
     /// A page just loaded is read from its top, behind what was said of it (its title and
@@ -220,6 +261,7 @@ impl ScreenReaderEngine {
     fn say_all_line(&self, reading: &SayAll, index: usize) -> Option<String> {
         match &reading.source {
             Source::PageLines => self.cursor.line_text(index),
+            Source::PageSkim(lines) => lines.get(index).and_then(|&i| self.cursor.line_text(i)),
             Source::PageUnits(units) | Source::Field(units) => {
                 units.get(index).map(|(_, text)| text.clone())
             }
@@ -232,6 +274,12 @@ impl ScreenReaderEngine {
         let lines = match &reading.source {
             Source::PageLines => {
                 self.cursor.move_to_line(index);
+                return;
+            }
+            Source::PageSkim(lines) => {
+                if let Some(&line) = lines.get(index) {
+                    self.cursor.move_to_line(line);
+                }
                 return;
             }
             Source::PageUnits(units) => {
@@ -266,13 +314,23 @@ impl ScreenReaderEngine {
                 // At a page's end JAWS says its last word again, where reading leaves the
                 // cursor: "content information end end" [obs, 111/s1, 408/s10, 613/s26],
                 // without the period that ends it ("delivery. delivery" [obs, 712/s1]).
+                // Skimming says the last line's first word instead: "content information
+                // end content" [obs, 761/s1].
                 let last = reading.next_line.checked_sub(1);
+                let skim = matches!(reading.source, Source::PageSkim(_));
                 let word = self
                     .cursor
                     .buffer
                     .lines
                     .last()
-                    .and_then(|l| l.text.split_whitespace().last())
+                    .and_then(|l| {
+                        let mut words = l.text.split_whitespace();
+                        if skim {
+                            words.next()
+                        } else {
+                            words.last()
+                        }
+                    })
                     .map(|w| {
                         let bare = w.trim_end_matches('.');
                         if bare.is_empty() { w } else { bare }.to_owned()
@@ -299,6 +357,25 @@ impl ScreenReaderEngine {
         }
         said
     }
+}
+
+/// Every node of `page` in a table row, by that row's node.
+fn table_rows(page: &crate::aom::AomNode) -> std::collections::HashMap<usize, usize> {
+    use crate::aom::Role;
+    let mut found = std::collections::HashMap::new();
+    let mut pending = vec![(page, None)];
+    while let Some((node, around)) = pending.pop() {
+        let block = if node.role == Role::TableRow {
+            Some(node.id)
+        } else {
+            around
+        };
+        if let Some(block) = block {
+            found.insert(node.id, block);
+        }
+        pending.extend(node.children.iter().map(|child| (child, block)));
+    }
+    found
 }
 
 #[cfg(test)]
@@ -560,6 +637,39 @@ mod tests {
                     "Volunteers help. Ask at the desk.",
                 ][..]
             )
+        );
+    }
+
+    /// Skim reading reads each paragraph by its first line, a long paragraph's next lines and
+    /// a link inside it left out, and ends saying the last line's first word [obs, 761/s1].
+    #[test]
+    fn skim_reading_reads_each_paragraphs_first_line() {
+        let long = "The Riverside City Library will stay open until nine on weekdays starting in                     April, the board announced on Tuesday. The change follows a survey in which                     most respondents asked for later hours.";
+        let doc = AomNode::new(0, Role::Document).with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Hours"),
+            AomNode::new(2, Role::Paragraph).with_children(vec![
+                AomNode::new(3, Role::Text).with_text("By "),
+                AomNode::new(4, Role::Link { href: None }).with_text("Maria Lopez"),
+            ]),
+            AomNode::new(5, Role::Paragraph).with_text(long),
+            AomNode::new(6, Role::Paragraph).with_text("Volunteers help at the desk."),
+        ]);
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(VirtualBuffer::from_aom(&doc)),
+            Box::new(crate::speech::MockSpeechOutput::default()),
+        );
+        engine.cursor.move_to_start();
+        let said = engine.start_skim_read().unwrap_or_default();
+        assert!(said.contains("Hours"), "{said}");
+        assert!(said.contains("The change follows"), "{said}");
+        assert!(!said.contains("most respondents"), "{said}");
+        assert!(!said.contains("Maria Lopez"), "{said}");
+        assert!(
+            said.ends_with(
+                "Volunteers help at the desk.
+Volunteers"
+            ),
+            "{said}"
         );
     }
 }

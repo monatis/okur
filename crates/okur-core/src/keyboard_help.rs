@@ -145,6 +145,7 @@ fn descriptions(command: &Command) -> Descriptions {
     match command {
         // Reading where the cursor is.
         SayAll => two(msg::command_say_all(), msg::command_say_all_long()),
+        SkimRead => one(msg::command_skim_read()),
         SayLine => two(msg::command_say_line(), msg::command_say_line_long()),
         SayWord => two(msg::command_say_word(), msg::command_say_word_long()),
         SayCharacter => two(
@@ -594,6 +595,7 @@ mod tests {
         use Command::*;
         let mut commands = vec![
             SayAll,
+            SkimRead,
             SayLine,
             SayWord,
             SayCharacter,
