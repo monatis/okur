@@ -57,19 +57,19 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `cb92608` (2026-10-21).
+Every figure is tool output, rerun for this README at commit `9b181c9` (2026-10-22).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **6113 of 6339** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **5980 of 6301** | `okur-lab parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **160** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **428, 1320** (1319 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1319 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **6197 of 6434** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **6064 of 6396** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **168** | `okur-lab parity` |
+| Recorded JAWS scenarios, trials | **433, 1329** (1328 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1330 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
-The 160 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
+The 168 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
 accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
 place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
 Okur says its help in its own words. Each one is listed, with the reason and who decided it,
@@ -86,7 +86,9 @@ in [accepted divergences](docs/references/accepted-divergences.md).
     PageDown; Say All by line, sentence or paragraph (Say All Reads, in Okur Settings), where
     Right and Left skip and go back by that unit, PageUp and PageDown change the rate, and the
     cursor stays where you stopped it; skim reading (Ctrl+Insert+Down), each paragraph by its
-    first line or its first sentence, as chosen in Skim Reading (Ctrl+Shift+Insert+Down);
+    first line or its first sentence, or the lines, sentences or paragraphs a text rule finds,
+    as chosen in Skim Reading (Ctrl+Shift+Insert+Down), whose Create Summary lists them, each a
+    link to its place;
   - the Word List (Ctrl+Insert+W): the page's words, most used first, and W and Shift+W to the
     next and prior line with the word chosen;
   - quick navigation keys: headings and their levels, links, form fields, edits, buttons,
@@ -159,8 +161,9 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   consoles, Windows Terminal included; the Speech History (Insert+Space, then H; Ctrl+H
   copies it and Shift+H clears it).
 - **Windows' notifications** (toasts) said as they come, whatever is in front; Insert+Space,
-  then Shift+N says the last one again, and Insert+Space, then Ctrl+N stops and starts saying
-  them.
+  then Shift+N says the last one again, Insert+Space, then Ctrl+N stops and starts saying them,
+  and Insert+Space, then N opens the Notification History, with the rules that mute a
+  notification or leave it out of the history (Create Rule..., Manage Rules...).
 - **Okur's own dialogs** are real Windows dialogs: the lists above, Okur Find and the Window
   List, with the same controls and labels as JAWS's, and Okur Settings (Insert+6 or Insert+V),
   whose changes are kept for all applications, the application in front or the page's site.
@@ -201,8 +204,9 @@ documentation describes and Okur lacks, most important first. Among them:
   draw their own text), the mouse following it as it moves, and the mouse button locks;
 - the keys JAWS adds for the clipboard: saying it (Insert+Windows+X), viewing it and adding
   to it (copying, cutting and pasting already work);
-- Skim Reading's text, attribute and color rules, its summary, and the Word List's summary;
-- the notification history (Insert+Space, then N) and its rules;
+- Skim Reading's attribute and color rules, and the Word List's summary;
+- notification rules that shorten a notification or play a sound, toasts Focus Assist hides,
+  and applications' own notifications in the history;
 - the rest of what the verbosity levels change, as further recordings show it;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab

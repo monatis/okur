@@ -1,0 +1,58 @@
+{
+  "id": "788-desktop-mouse-button-locks-in-notepad",
+  "name": "The mouse button locks in Notepad: Insert+NumpadMinus (Route JAWS to PC), Insert+NumpadSlash twice (left button lock on and off), Insert+NumpadStar twice (right button lock on and off), Escape, NumpadPlus (PC cursor), Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+NumpadMinus"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+NumpadSlash"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Insert+NumpadSlash"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+NumpadStar"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+NumpadStar"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "NumpadPlus"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}
