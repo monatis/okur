@@ -1,8 +1,11 @@
 //! Windows' notifications: a toast said as it shows, whatever is in front, and kept for
-//! Insert+Space, Shift+N (RepeatLastNotification) (`docs/references/notifications-research.md`).
+//! Insert+Space, Shift+N (RepeatLastNotification) and the Notification History (Insert+Space,
+//! N) (`docs/references/notifications-research.md`).
 
 use super::ScreenReaderEngine;
 use crate::messages::msg;
+use crate::ui::notifications::{HistoryDialog, Notification, Outcome};
+use crate::ui::{FromUi, ToUi};
 
 /// How many notifications are kept: JAWS's Notification History holds at most 500 (FSCast
 /// 216, June 2022).
@@ -11,10 +14,19 @@ const KEPT: usize = 500;
 impl ScreenReaderEngine {
     /// A toast as it shows: JAWS says it by the shell's name for it, "New notification from
     /// Windows PowerShell, SR Fixture, Build finished in 12 seconds. 1 of 1", after what was
-    /// being said [obs, 770/s1].
-    /// With toast announcements turned off it is kept, not said [obs, 773/s3, s5].
-    pub(super) fn toast_shown(&mut self, text: &str) -> Option<String> {
-        self.notifications.push_back(text.to_owned());
+    /// being said [obs, 770/s1]. With toast announcements turned off it is kept, not said
+    /// [obs, 773/s3, s5].
+    pub(super) fn toast_shown(&mut self, text: &str, sender: Option<&str>) -> Option<String> {
+        let time = self
+            .clock
+            .as_deref()
+            .map(|clock| crate::clock::say_time(clock, false))
+            .unwrap_or_default();
+        self.notifications.push_back(Notification {
+            text: text.to_owned(),
+            sender: sender.map(str::to_owned),
+            time,
+        });
         while self.notifications.len() > KEPT {
             self.notifications.pop_front();
         }
@@ -43,8 +55,98 @@ impl ScreenReaderEngine {
         let said = self
             .notifications
             .back()
-            .cloned()
+            .map(|n| n.text.clone())
             .unwrap_or_else(|| msg::notification_none().to_string());
         self.speech.speak(&said, true);
+    }
+
+    /// Insert+Space, N: the Notification History, the latest first [obs, 774/s3]. Okur says
+    /// nothing itself: it reads the dialog as the dialog takes the focus.
+    pub(super) fn open_notification_history(&mut self) {
+        let Some(ui) = self.ui.as_ref() else {
+            return;
+        };
+        if let Some(open) = &self.notification_history {
+            ui.send(ToUi::DialogShow {
+                dialog: open.spec(),
+            });
+            return;
+        }
+        self.dialog_count += 1;
+        let rows = self
+            .notifications
+            .iter()
+            .rev()
+            .map(Notification::row)
+            .collect();
+        let dialog = HistoryDialog::new(self.dialog_count, rows, self.notification_rules);
+        ui.send(ToUi::DialogShow {
+            dialog: dialog.spec(),
+        });
+        self.notification_history = Some(dialog);
+    }
+
+    /// Whether `message` is the Notification History's or its details'.
+    pub(super) fn is_notification_event(&self, message: &FromUi) -> bool {
+        let id = super::dialog_of(message);
+        id.is_some()
+            && (self.notification_history.as_ref().map(|d| d.id) == id
+                || self.notification_details == id)
+    }
+
+    /// What the user did to the Notification History or a notification's details.
+    pub(super) fn handle_notification_event(&mut self, message: &FromUi) -> Option<String> {
+        if self.notification_details.is_some()
+            && self.notification_details == super::dialog_of(message)
+        {
+            // The details close; the history is in front again.
+            if matches!(message, FromUi::DialogClosed { .. }) {
+                self.notification_details = None;
+            }
+            return None;
+        }
+        let outcome = self.notification_history.as_mut()?.handle(message);
+        match outcome {
+            Outcome::Nothing => None,
+            Outcome::Details(row) => {
+                let latest = self.notifications.len().checked_sub(row + 1)?;
+                let text = self.notifications.get(latest)?.text.clone();
+                let ui = self.ui.as_ref()?;
+                self.dialog_count += 1;
+                ui.send(ToUi::DialogShow {
+                    dialog: crate::ui::notifications::details(self.dialog_count, &text),
+                });
+                self.notification_details = Some(self.dialog_count);
+                None
+            }
+            Outcome::CreateRule => {
+                let said = msg::notification_rules_not_yet().to_string();
+                self.speech.speak(&said, true);
+                Some(said)
+            }
+            Outcome::Clear => {
+                self.notifications.clear();
+                let ui = self.ui.as_ref()?;
+                let id = self.notification_history.as_ref()?.id;
+                ui.send(ToUi::DialogItems {
+                    id,
+                    control: "notifications".to_owned(),
+                    items: Vec::new(),
+                    selected: 0,
+                });
+                None
+            }
+            Outcome::Closed => {
+                if let Some(dialog) = self.notification_history.take() {
+                    self.notification_rules = dialog.rules();
+                    if let (FromUi::DialogPressed { .. }, Some(ui)) = (message, &self.ui) {
+                        ui.send(ToUi::DialogClose { id: dialog.id });
+                    }
+                }
+                // The window left takes the focus back and is read again, as JAWS reads it
+                // after its Notification History [obs, 774/s13, 770/s7].
+                None
+            }
+        }
     }
 }

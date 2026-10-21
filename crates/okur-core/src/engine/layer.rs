@@ -1,6 +1,7 @@
 //! The Insert+Space layer: Insert+Space, released, then one key (JAWS 2025 help, Layered
 //! Keystrokes). H opens the Speech History, Shift+H clears it and Ctrl+H copies it; S turns
-//! speech off and on, and Shift+S (Speech On Demand) is not available in full speech; Shift+N
+//! speech off and on, and Shift+S (Speech On Demand) is not available in full speech; N opens
+//! the Notification History (ShowNotificationHistory), Shift+N
 //! says the last notification again (RepeatLastNotification) and Ctrl+N stops and starts
 //! saying toasts (ToggleToastNotificationAnnouncement). Escape,
 //! Space, Tab and Enter leave the layer, as any other key does [obs, 517, 566, 570].
@@ -47,6 +48,7 @@ impl ScreenReaderEngine {
             Key::Alpha('S') if shift_only => self.speech_on_demand_toggle(),
             Key::Alpha('S') if plain => self.mute_synthesizer(),
             Key::Alpha('T') if plain => self.start_table_layer(),
+            Key::Alpha('N') if plain => self.open_notification_history(),
             Key::Alpha('N') if shift_only => self.repeat_last_notification(),
             Key::Alpha('N') if ctrl_only => self.toggle_toast_announcements(),
             // Flexible Web's wizard (DoFlexibleWebDialog) [obs, 705/s3].

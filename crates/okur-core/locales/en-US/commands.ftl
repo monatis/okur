@@ -117,6 +117,18 @@ notification-none = No notification
 # Insert+Space, Control+N (ToggleToastNotificationAnnouncement) [obs, 773/s2, s7].
 toast-announcements-off = Toast notification announcements disabled
 toast-announcements-on = Toast notification announcements enabled
+# The Notification History (Insert+Space, N), as JAWS's [obs, 774].
+notification-history-title = Notification History
+notification-history-list = Recent Notifications
+notification-history-rules = Enable Rules
+notification-history-create-rule = Create Rule...
+notification-history-clear = Clear History
+notification-history-close = Close
+# Enter on a notification in the history [obs, 774/s11].
+notification-details-title = Notification Details
+notification-details-text = Notification Text:
+# Create Rule... in the Notification History, before Okur has notification rules.
+notification-rules-not-yet = Okur cannot make notification rules yet.
 
 ## Say Default Button (Insert+E) and the settings in use (Insert+Q) [obs, 513]
 

@@ -891,6 +891,15 @@ fn lookup(window: HWND, control_id: u16) -> Option<Hit> {
     })
 }
 
+/// The control of dialog `window` that has the focus.
+fn focused_hit(window: HWND) -> Option<Hit> {
+    use windows::Win32::UI::Input::KeyboardAndMouse::GetFocus;
+    use windows::Win32::UI::WindowsAndMessaging::GetDlgCtrlID;
+    // SAFETY: plain Win32 queries; the focus may be any window of this thread.
+    let id = unsafe { GetDlgCtrlID(GetFocus()) };
+    lookup(window, u16::try_from(id).ok()?)
+}
+
 fn remember(window: HWND, window_id: u16, value: Value) {
     DIALOGS.with(|d| {
         if let Ok(mut d) = d.try_borrow_mut() {
@@ -1003,6 +1012,20 @@ pub(crate) unsafe extern "system" fn dialog_proc(
                     crate::win32::tell(&FromUi::DialogClosed { id });
                 }
                 return 1;
+            }
+            // Enter in a list box of a dialog with no default button: the item is chosen, as
+            // Enter on a notification in JAWS's Notification History shows its details
+            // [obs, 774/s11].
+            if control_id == template::IDOK && lookup(window, control_id).is_none() {
+                if let Some(list) = focused_hit(window)
+                    .filter(|hit| matches!(hit.kind, ControlKind::ListBox { .. }))
+                {
+                    crate::win32::tell(&FromUi::DialogPressed {
+                        id: list.dialog,
+                        control: list.name,
+                    });
+                    return 1;
+                }
             }
             let Some(hit) = lookup(window, control_id) else {
                 return 0;

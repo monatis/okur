@@ -5977,7 +5977,10 @@ fn a_toast_is_said_and_repeated_on_request() {
     const TOAST: &str = "New notification from Windows PowerShell, SR Fixture, Build finished in 12 seconds. 1 of 1";
     assert_eq!(
         engine
-            .handle_accessibility_event(&AccessibilityEvent::Toast(TOAST.to_owned()))
+            .handle_accessibility_event(&AccessibilityEvent::Toast {
+                text: TOAST.to_owned(),
+                sender: Some("Windows PowerShell".to_owned()),
+            })
             .as_deref(),
         Some(TOAST)
     );
@@ -5993,7 +5996,10 @@ fn a_toast_is_said_and_repeated_on_request() {
     );
     const LATER: &str = "New notification from Mail, Lunch, Noon at the cafe. 1 of 1";
     assert_eq!(
-        engine.handle_accessibility_event(&AccessibilityEvent::Toast(LATER.to_owned())),
+        engine.handle_accessibility_event(&AccessibilityEvent::Toast {
+            text: LATER.to_owned(),
+            sender: Some("Mail".to_owned()),
+        }),
         None
     );
     assert_eq!(layer_key(&mut engine, Key::Alpha('N'), shift), [LATER]);
@@ -6075,4 +6081,97 @@ fn create_summary_lists_what_skim_reading_reads() {
     engine.execute_command("TopOfFile");
     let skimmed = engine.execute_command("StartSkimRead").unwrap_or_default();
     assert!(skimmed.contains("It closes at nine."), "{skimmed:?}");
+}
+
+/// Insert+Space, N: the Notification History, the latest first, each row the text, sender and
+/// time; Enter on a row shows its details; Clear History empties it [obs, 774].
+#[test]
+fn the_notification_history_lists_the_toasts_that_came() {
+    use crate::ui::{ControlKind, FromUi, ToUi};
+    let (mut engine, speech) = engine_on_a_page();
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    for (text, sender) in [
+        ("New notification from Mail, Lunch. 1 of 1", "Mail"),
+        (
+            "New notification from Windows PowerShell, Build finished. 1 of 1",
+            "Windows PowerShell",
+        ),
+    ] {
+        engine.handle_accessibility_event(&AccessibilityEvent::Toast {
+            text: text.to_owned(),
+            sender: Some(sender.to_owned()),
+        });
+    }
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    for (key, modifiers) in [(Key::Space, insert), (Key::Alpha('N'), Modifiers::none())] {
+        for down in [true, false] {
+            engine.handle_key_event(&KeyEvent::new(key, modifiers, down));
+        }
+    }
+    speech.take();
+    let Some(ToUi::DialogShow { dialog }) = ui.take().first().cloned() else {
+        panic_free_fail("no history shown");
+        return;
+    };
+    assert_eq!(dialog.title, "Notification History");
+    // Without a clock the time is left out.
+    assert_eq!(
+        dialog.controls.first().map(|c| c.kind.clone()),
+        Some(ControlKind::ListBox {
+            items: vec![
+                "New notification from Windows PowerShell, Build finished. 1 of 1 Windows PowerShell".to_owned(),
+                "New notification from Mail, Lunch. 1 of 1 Mail".to_owned(),
+            ],
+            selected: 0
+        })
+    );
+    let id = dialog.id;
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "notifications".into(),
+    }));
+    let Some(ToUi::DialogShow { dialog: details }) = ui.take().first().cloned() else {
+        panic_free_fail("no details shown");
+        return;
+    };
+    assert_eq!(details.title, "Notification Details");
+    assert_eq!(
+        details.controls.first().map(|c| c.kind.clone()),
+        Some(ControlKind::Note {
+            text: "New notification from Windows PowerShell, Build finished. 1 of 1".to_owned()
+        })
+    );
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogClosed {
+        id: details.id,
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "clear".into(),
+    }));
+    assert!(ui
+        .take()
+        .iter()
+        .any(|m| matches!(m, ToUi::DialogItems { items, .. } if items.is_empty())));
+    for (key, modifiers) in [
+        (Key::Space, insert),
+        (
+            Key::Alpha('N'),
+            Modifiers {
+                shift: true,
+                ..Modifiers::none()
+            },
+        ),
+    ] {
+        for down in [true, false] {
+            engine.handle_key_event(&KeyEvent::new(key, modifiers, down));
+        }
+    }
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some("No notification")
+    );
 }

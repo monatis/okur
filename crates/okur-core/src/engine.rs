@@ -290,8 +290,14 @@ pub struct ScreenReaderEngine {
     rate_change: i32,
     /// Insert+Space was pressed: the next key is the layer's.
     layer_open: bool,
-    /// The notifications that came, the latest last, for Insert+Space, Shift+N.
-    notifications: std::collections::VecDeque<String>,
+    /// The notifications that came, the latest last, for Insert+Space, Shift+N and the
+    /// Notification History.
+    notifications: std::collections::VecDeque<crate::ui::notifications::Notification>,
+    /// The Notification History while it is open, and the details shown over it.
+    notification_history: Option<crate::ui::notifications::HistoryDialog>,
+    notification_details: Option<u32>,
+    /// The Notification History's Enable Rules.
+    notification_rules: bool,
     /// Toasts are kept but not said (Insert+Space, Ctrl+N).
     toasts_unsaid: bool,
     /// The table layer (Insert+Space, T): the arrows move by cell until Escape.
@@ -437,6 +443,9 @@ impl ScreenReaderEngine {
             rate_change: 0,
             layer_open: false,
             notifications: std::collections::VecDeque::new(),
+            notification_history: None,
+            notification_details: None,
+            notification_rules: true,
             toasts_unsaid: false,
             table_layer: false,
             clicked: None,
@@ -1217,7 +1226,7 @@ impl ScreenReaderEngine {
                 self.mouse = Some((*x, *y));
                 None
             }
-            AccessibilityEvent::Toast(text) => self.toast_shown(text),
+            AccessibilityEvent::Toast { text, sender } => self.toast_shown(text, sender.as_deref()),
             AccessibilityEvent::WindowRenamed(title) => {
                 self.window_renamed(title);
                 None
@@ -1450,6 +1459,7 @@ impl ScreenReaderEngine {
             }
             _ if self.is_find_event(message) => self.handle_find_event(message),
             _ if self.is_skim_event(message) => self.handle_skim_event(message),
+            _ if self.is_notification_event(message) => self.handle_notification_event(message),
             _ if self.is_window_list_event(message) => self.handle_window_list_event(message),
             _ if self.is_tray_event(message) => self.handle_tray_event(message),
             _ if self.is_jump_event(message) => self.handle_jump_event(message),

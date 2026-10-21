@@ -1399,7 +1399,7 @@ impl EventConverter {
             return vec![okur_core::AccessibilityEvent::LiveRegion(live)];
         }
         if event.event == "uia_window_opened" {
-            let Some(text) = event.focus_subtree.as_ref().and_then(toast_text) else {
+            let Some((text, sender)) = event.focus_subtree.as_ref().and_then(toast_text) else {
                 return Vec::new();
             };
             let repeat = self.last_toast.as_ref().is_some_and(|(said, at)| {
@@ -1409,7 +1409,7 @@ impl EventConverter {
                 return Vec::new();
             }
             self.last_toast = Some((text.clone(), event.t_ms));
-            return vec![okur_core::AccessibilityEvent::Toast(text)];
+            return vec![okur_core::AccessibilityEvent::Toast { text, sender }];
         }
         if let Some(notification) = &event.notification {
             let repeat = self.last_notification.as_ref().is_some_and(|(text, at)| {
@@ -1660,17 +1660,26 @@ fn notification_event(notification: &TraceNotification) -> okur_core::Accessibil
 /// shows its page again: " Brightness Change brightness for the built-in display | Show more
 /// settings" (the slider inside is left out; dev box, 2026-10-17). A text region says its
 /// name. A region whose live setting is off says nothing.
-/// A toast's text, in a window of the shell that opened: its view's name (AutomationId
-/// `NormalToastView`, on Windows 10), as JAWS says it [obs, 770/s1].
-fn toast_text(window: &UiaNode) -> Option<String> {
+/// A toast's text and sender, in a window of the shell that opened: its view's name
+/// (AutomationId `NormalToastView`, on Windows 10), as JAWS says it, and its `SenderName`'s
+/// [obs, 770/s1].
+fn toast_text(window: &UiaNode) -> Option<(String, Option<String>)> {
     const TOAST_VIEW: &str = "NormalToastView";
-    if window.automation_id.as_deref() == Some(TOAST_VIEW) {
-        return window
-            .name
+    const SENDER: &str = "SenderName";
+    let named = |node: &UiaNode| {
+        node.name
             .as_deref()
             .map(str::trim)
             .filter(|n| !n.is_empty())
-            .map(str::to_owned);
+            .map(str::to_owned)
+    };
+    if window.automation_id.as_deref() == Some(TOAST_VIEW) {
+        let sender = window
+            .children
+            .iter()
+            .find(|c| c.automation_id.as_deref() == Some(SENDER))
+            .and_then(named);
+        return named(window).map(|text| (text, sender));
     }
     window.children.iter().find_map(toast_text)
 }
@@ -4644,10 +4653,16 @@ mod tests {
             "New notification from Windows PowerShell, SR Fixture, Build finished in 12 seconds. 1 of 1";
         let view = UiaNode {
             automation_id: Some("NormalToastView".to_owned()),
-            children: vec![UiaNode {
-                automation_id: Some("TitleText".to_owned()),
-                ..node(UIA_TEXT, "SR Fixture", false)
-            }],
+            children: vec![
+                UiaNode {
+                    automation_id: Some("SenderName".to_owned()),
+                    ..node(UIA_TEXT, "Windows PowerShell", false)
+                },
+                UiaNode {
+                    automation_id: Some("TitleText".to_owned()),
+                    ..node(UIA_TEXT, "SR Fixture", false)
+                },
+            ],
             ..node(UIA_WINDOW, TOAST, false)
         };
         let window = UiaNode {
@@ -4660,7 +4675,10 @@ mod tests {
         opened.focus_subtree = Some(view);
         assert_eq!(
             converter.convert(&opened),
-            vec![okur_core::AccessibilityEvent::Toast(TOAST.to_owned())]
+            vec![okur_core::AccessibilityEvent::Toast {
+                text: TOAST.to_owned(),
+                sender: Some("Windows PowerShell".to_owned())
+            }]
         );
         opened.t_ms += 13;
         opened.focus_subtree = Some(window);

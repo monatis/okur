@@ -9,6 +9,7 @@ pub mod flexible_web;
 pub mod jump;
 pub mod label;
 pub mod lists;
+pub mod notifications;
 pub mod placemarkers;
 pub mod quit;
 pub mod settings;
