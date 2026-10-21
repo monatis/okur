@@ -1,0 +1,96 @@
+{
+  "id": "696-web-followed-link-advanced",
+  "name": "A link followed from its page reads as visited: the reset follows the first link (Tab, Enter) and comes back (Alt+Left); then Tab, Tab, Shift+Tab, Ctrl+Home, V, V, U, Insert+Up, Down over the list, the Links List (Insert+F7) and Escape (at JAWS's Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 689-web-followed-link)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/followed-links.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home",
+      "Tab",
+      "Enter",
+      "Alt+Left",
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Shift+Tab"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "V"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "V"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "U"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Insert+F7"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Escape"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "2"
+      }
+    }
+  }
+}
