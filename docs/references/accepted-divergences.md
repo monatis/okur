@@ -502,12 +502,15 @@ A step can be in more than one entry; all of its entries apply.
   `716-web-flexible-web-hide-and-undo/s21`, `716-web-flexible-web-hide-and-undo/s22`), and
   `725-web-flexible-web-hidden-region-read/s14`, `725-web-flexible-web-hidden-region-read/s15`,
   `725-web-flexible-web-hidden-region-read/s27`, `725-web-flexible-web-hidden-region-read/s28`,
-  `725-web-flexible-web-hidden-region-read/s29`, `725-web-flexible-web-hidden-region-read/s30`.
+  `725-web-flexible-web-hidden-region-read/s29`, `725-web-flexible-web-hidden-region-read/s30`,
+  and after JAWS's refresh `735-web-flexible-web-hidden-after-refresh/s15`,
+  `735-web-flexible-web-hidden-after-refresh/s16`.
 - Difference: the whole step. JAWS reads the region it was asked to hide (the banner in 716,
   the advertisement in 725); Okur reads on without it.
 - Why: after Finish the customization exists (the wizard's first page offers "Undo Hide
   ComplementaryRegion 1 from the top ..." [obs, 725/s34]), yet R finds the hidden region and
-  Down reads its lines, in every trial of rounds 153 and 157 (2026-10-21). JAWS's guide
+  Down reads its lines, in every trial of rounds 153 and 157 (2026-10-21), and after JAWS's
+  refresh, Insert+Escape ("Screen updated"), in round 160. JAWS's guide
   (Surf's Up, chapter 16) says a customization "is immediately applied to the page". After
   Undo both read the region again.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-21.

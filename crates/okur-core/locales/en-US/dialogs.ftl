@@ -232,13 +232,16 @@ placemarker-remove-all-no = &No
 flexible-web-heading = heading level { $level }
 flexible-web-frame = frame
 flexible-web-hide-from-top = Hide { $kind } { $number } from the top
-flexible-web-hide-from-top-with-text = Hide { $kind } { $number } from the top with text: "{ $text }"
 flexible-web-hide-from-bottom = Hide { $kind } { $number } from the bottom
 flexible-web-hide-all = Hide all { $kinds }
-flexible-web-hide-all-with-text = Hide all { $kinds } with text: "{ $text }"
 flexible-web-start-from-top = Start at { $kind } { $number } from the top
-flexible-web-start-from-top-with-text = Start at { $kind } { $number } from the top with text: "{ $text }"
 flexible-web-start-from-bottom = Start at { $kind } { $number } from the bottom
+flexible-web-start-any = Start at any { $kind }
+# What a customization's element has, after where it is: "Hide all heading level 1s with id =
+# "events"" [obs, 734/s8].
+flexible-web-with-text = with text: "{ $text }"
+flexible-web-with-id = with id = "{ $id }"
+flexible-web-with-text-and-id = with text: "{ $text }", and with id = "{ $id }"
 
 ## Flexible Web's wizard, its pages as JAWS's are [obs, 705, 708, 716, 720, 726]. A radio
 ## button's "&" marks its access key, as the wizard's own labels do.

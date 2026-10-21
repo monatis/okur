@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
   "matched_steps": 5639,
-  "total_steps": 5848,
-  "accepted_divergences": 141,
+  "total_steps": 5846,
+  "accepted_divergences": 143,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -5988,8 +5988,8 @@
     "735-web-flexible-web-hidden-after-refresh/s12": "match",
     "735-web-flexible-web-hidden-after-refresh/s13": "match",
     "735-web-flexible-web-hidden-after-refresh/s14": "match",
-    "735-web-flexible-web-hidden-after-refresh/s15": "mismatch",
-    "735-web-flexible-web-hidden-after-refresh/s16": "mismatch",
+    "735-web-flexible-web-hidden-after-refresh/s15": "accepted divergence",
+    "735-web-flexible-web-hidden-after-refresh/s16": "accepted divergence",
     "735-web-flexible-web-hidden-after-refresh/s17": "match",
     "735-web-flexible-web-hidden-after-refresh/s18": "match",
     "735-web-flexible-web-hidden-after-refresh/s19": "match",

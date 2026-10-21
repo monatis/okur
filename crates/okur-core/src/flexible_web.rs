@@ -137,6 +137,16 @@ pub struct Element {
     pub kind: Kind,
     /// Its text: a region's name, a heading's words; a list has none.
     pub text: String,
+    /// Its id in the page ("events").
+    pub id: Option<String>,
+}
+
+fn dom_id(node: &AomNode) -> Option<String> {
+    node.attributes
+        .get("id")
+        .map(|id| id.trim())
+        .filter(|id| !id.is_empty())
+        .map(str::to_owned)
 }
 
 impl Element {
@@ -147,6 +157,7 @@ impl Element {
             node: node.id,
             kind,
             text,
+            id: dom_id(node),
         })
     }
 
@@ -200,40 +211,52 @@ pub struct Customization {
     pub kind: Kind,
     /// Only the elements with this text.
     pub text: Option<String>,
+    /// Only the elements with this id.
+    #[serde(default)]
+    pub id: Option<String>,
     pub place: Place,
 }
 
 impl Customization {
-    /// As the wizard and its first page name it: "Hide MainRegion 1 from the top", "Hide all
-    /// ComplementaryRegions with text: "Advertisement"" [obs, 708/s15-s17, 720/s12-s14].
+    /// As the wizard and its first page name it: what it does and where, then what the element
+    /// has: "Hide heading level 1 1 from the top with text: "Weekend events", and with id =
+    /// "events"", "Hide all heading level 1s with id = "events"", "Start at any heading level
+    /// 1" [obs, 708/s15-s17, 720/s12-s14, 732/s7-s12, 733/s9-s13, 734/s6-s11].
     pub fn label(&self) -> String {
         let kind = self.kind.name();
-        let text = self.text.clone().unwrap_or_default();
-        let hide = self.action == Action::Hide;
-        match (self.place, self.text.is_some(), hide) {
-            (Place::FromTop(n), false, true) => msg::flexible_web_hide_from_top(kind, n),
-            (Place::FromTop(n), true, true) => {
-                msg::flexible_web_hide_from_top_with_text(kind, n, text)
-            }
-            (Place::FromBottom(n), _, true) => msg::flexible_web_hide_from_bottom(kind, n),
-            (Place::All, false, true) => msg::flexible_web_hide_all(self.kind.plural()),
-            (Place::All, true, true) => {
-                msg::flexible_web_hide_all_with_text(self.kind.plural(), text)
-            }
-            (Place::FromTop(n), false, false) => msg::flexible_web_start_from_top(kind, n),
-            (Place::FromTop(n), true, false) => {
-                msg::flexible_web_start_from_top_with_text(kind, n, text)
-            }
-            (Place::FromBottom(n), _, false) => msg::flexible_web_start_from_bottom(kind, n),
-            (Place::All, _, false) => msg::flexible_web_start_from_top(kind, 1),
+        let place = match (self.action, self.place) {
+            (Action::Hide, Place::FromTop(n)) => msg::flexible_web_hide_from_top(kind, n),
+            (Action::Hide, Place::FromBottom(n)) => msg::flexible_web_hide_from_bottom(kind, n),
+            (Action::Hide, Place::All) => msg::flexible_web_hide_all(self.kind.plural()),
+            (Action::StartAt, Place::FromTop(n)) => msg::flexible_web_start_from_top(kind, n),
+            (Action::StartAt, Place::FromBottom(n)) => msg::flexible_web_start_from_bottom(kind, n),
+            (Action::StartAt, Place::All) => msg::flexible_web_start_any(kind),
         }
-        .to_string()
+        .to_string();
+        let has = match (&self.text, &self.id) {
+            (Some(text), Some(id)) => {
+                Some(msg::flexible_web_with_text_and_id(text.clone(), id.clone()))
+            }
+            (Some(text), None) => Some(msg::flexible_web_with_text(text.clone())),
+            (None, Some(id)) => Some(msg::flexible_web_with_id(id.clone())),
+            (None, None) => None,
+        };
+        match has {
+            Some(has) => format!("{place} {has}"),
+            None => place,
+        }
     }
 
     /// The page's elements this customization finds, in the page's order.
     pub fn find(&self, page: &AomNode) -> Vec<usize> {
         let mut found = Vec::new();
-        collect(page, &self.kind, self.text.as_deref(), &mut found);
+        collect(
+            page,
+            &self.kind,
+            self.text.as_deref(),
+            self.id.as_deref(),
+            &mut found,
+        );
         match self.place {
             Place::All => found,
             Place::FromTop(n) => found.get(n.wrapping_sub(1)).copied().into_iter().collect(),
@@ -248,49 +271,67 @@ impl Customization {
     }
 }
 
-/// The page's elements of `kind` (with `text`), in its order.
-fn collect(node: &AomNode, kind: &Kind, text: Option<&str>, out: &mut Vec<usize>) {
-    if kind.matches(node) && text.is_none_or(|t| text_for(kind, node) == t) {
+/// The page's elements of `kind` (with `text`, with `id`), in its order.
+fn collect(
+    node: &AomNode,
+    kind: &Kind,
+    text: Option<&str>,
+    id: Option<&str>,
+    out: &mut Vec<usize>,
+) {
+    if kind.matches(node)
+        && text.is_none_or(|t| text_for(kind, node) == t)
+        && id.is_none_or(|i| dom_id(node).as_deref() == Some(i))
+    {
         out.push(node.id);
     }
     for child in &node.children {
-        collect(child, kind, text, out);
+        collect(child, kind, text, id, out);
     }
 }
 
-/// The customizations the wizard offers for `element`: with a text, the nth from the top with
-/// that text, all with that text, the nth from the top, the nth from the bottom and all; with
-/// none, the last three [obs, 720/s12-s14; 708/s15-s17; the guide's frames]. Reading starts at
-/// one element, so its "all" is not offered.
+/// The customizations the wizard offers for `element`, for hiding it or starting to read at
+/// it alike [obs, 732-734]: what the element has first (the nth from the top with its text
+/// and its id, all with its text, all with its id; with a text alone, the nth from the top
+/// with it and all with it [obs, 733/s9-s10]); then the nth from the top, the nth from the
+/// bottom and all [obs, 708/s15-s17].
 pub fn customizations(page: &AomNode, element: &Element, action: Action) -> Vec<Customization> {
-    let mut all = Vec::new();
-    collect(page, &element.kind, None, &mut all);
-    let mut with_text = Vec::new();
-    collect(page, &element.kind, Some(&element.text), &mut with_text);
-    let place_in = |list: &[usize]| list.iter().position(|&id| id == element.node);
-    let Some(index) = place_in(&all) else {
-        return Vec::new();
-    };
-    let make = |text: Option<String>, place: Place| Customization {
+    let text = Some(element.text.clone()).filter(|t| !t.is_empty());
+    let id = element.id.clone();
+    let make = |text: Option<String>, id: Option<String>, place: Place| Customization {
         action,
         kind: element.kind.clone(),
         text,
+        id,
         place,
     };
+    // The element's place among those with `text` and `id`, and how many they are.
+    let place_among = |text: Option<&str>, id: Option<&str>| {
+        let mut found = Vec::new();
+        collect(page, &element.kind, text, id, &mut found);
+        found
+            .iter()
+            .position(|&n| n == element.node)
+            .map(|i| (i, found.len()))
+    };
+    let Some((index, count)) = place_among(None, None) else {
+        return Vec::new();
+    };
     let mut offered = Vec::new();
-    if !element.text.is_empty() {
-        if let Some(i) = place_in(&with_text) {
-            offered.push(make(Some(element.text.clone()), Place::FromTop(i + 1)));
-            if action == Action::Hide {
-                offered.push(make(Some(element.text.clone()), Place::All));
-            }
+    if text.is_some() || id.is_some() {
+        if let Some((i, _)) = place_among(text.as_deref(), id.as_deref()) {
+            offered.push(make(text.clone(), id.clone(), Place::FromTop(i + 1)));
+        }
+        if text.is_some() {
+            offered.push(make(text.clone(), None, Place::All));
+        }
+        if id.is_some() {
+            offered.push(make(None, id.clone(), Place::All));
         }
     }
-    offered.push(make(None, Place::FromTop(index + 1)));
-    offered.push(make(None, Place::FromBottom(all.len() - index)));
-    if action == Action::Hide {
-        offered.push(make(None, Place::All));
-    }
+    offered.push(make(None, None, Place::FromTop(index + 1)));
+    offered.push(make(None, None, Place::FromBottom(count - index)));
+    offered.push(make(None, None, Place::All));
     offered
 }
 
@@ -324,8 +365,12 @@ mod tests {
     }
 
     /// The Flexible Web fixture's page: a banner holding the sections' navigation and its
-    /// list, the advertisement, and the main region with its heading.
+    /// list, the advertisement, and the main region with its heading, whose id is "events".
     fn page() -> AomNode {
+        let mut heading = AomNode::new(8, Role::Heading { level: 1 }).with_text("Weekend events");
+        heading
+            .attributes
+            .insert("id".to_owned(), "events".to_owned());
         AomNode::new(0, Role::Document).with_children(vec![
             region(
                 1,
@@ -348,12 +393,7 @@ mod tests {
                 Some("Advertisement"),
                 vec![AomNode::new(6, Role::Paragraph).with_text("Spring sale")],
             ),
-            region(
-                7,
-                "main",
-                None,
-                vec![AomNode::new(8, Role::Heading { level: 1 }).with_text("Weekend events")],
-            ),
+            region(7, "main", None, vec![heading]),
         ])
     }
 
@@ -376,30 +416,36 @@ mod tests {
         assert_eq!(labels(6), ["ComplementaryRegion Advertisement"]);
     }
 
-    #[test]
-    fn the_customizations_offered_and_what_they_find() {
-        let page = page();
-        let labels = |id: usize| -> Vec<String> {
-            let element = elements_at(&page, id).into_iter().last();
-            element
-                .map(|e| customizations(&page, &e, Action::Hide))
-                .unwrap_or_default()
-                .iter()
-                .map(Customization::label)
-                .collect()
+    fn offered(page: &AomNode, id: usize, innermost: bool, action: Action) -> Vec<String> {
+        let elements = elements_at(page, id);
+        let element = if innermost {
+            elements.first()
+        } else {
+            elements.last()
         };
+        element
+            .map(|e| customizations(page, e, action))
+            .unwrap_or_default()
+            .iter()
+            .map(Customization::label)
+            .collect()
+    }
+
+    #[test]
+    fn the_customizations_offered_as_jaws_lists_them() {
+        let page = page();
         // [obs, 708/s15-s17]
         assert_eq!(
-            labels(8),
+            offered(&page, 8, false, Action::Hide),
             [
                 "Hide MainRegion 1 from the top",
                 "Hide MainRegion 1 from the bottom",
                 "Hide all MainRegions"
             ]
         );
-        // [obs, 720/s12-s14], and the two after them as the guide's frames have them.
+        // [obs, 733/s9-s13]
         assert_eq!(
-            labels(6),
+            offered(&page, 6, true, Action::Hide),
             [
                 "Hide ComplementaryRegion 1 from the top with text: \"Advertisement\"",
                 "Hide all ComplementaryRegions with text: \"Advertisement\"",
@@ -408,23 +454,43 @@ mod tests {
                 "Hide all ComplementaryRegions"
             ]
         );
+        // [obs, 734/s6-s11]
+        assert_eq!(
+            offered(&page, 8, true, Action::Hide),
+            [
+                "Hide heading level 1 1 from the top with text: \"Weekend events\", and with id = \"events\"",
+                "Hide all heading level 1s with text: \"Weekend events\"",
+                "Hide all heading level 1s with id = \"events\"",
+                "Hide heading level 1 1 from the top",
+                "Hide heading level 1 1 from the bottom",
+                "Hide all heading level 1s"
+            ]
+        );
+        // [obs, 732/s7-s12]
+        assert_eq!(
+            offered(&page, 8, true, Action::StartAt),
+            [
+                "Start at heading level 1 1 from the top with text: \"Weekend events\", and with id = \"events\"",
+                "Start at any heading level 1 with text: \"Weekend events\"",
+                "Start at any heading level 1 with id = \"events\"",
+                "Start at heading level 1 1 from the top",
+                "Start at heading level 1 1 from the bottom",
+                "Start at any heading level 1"
+            ]
+        );
+    }
+
+    #[test]
+    fn a_customization_finds_its_element_and_hides_it() {
+        let page = page();
         let advertisement = elements_at(&page, 6).remove(0);
         let first = customizations(&page, &advertisement, Action::Hide).remove(0);
         assert_eq!(first.find(&page), [5]);
         let hidden = without(&page, &first.find(&page));
         assert!(elements_at(&hidden, 6).is_empty());
         assert_eq!(elements_at(&hidden, 8).len(), 2);
-        // Reading starts at one element: no "all" [the guide: "Start at heading level 2 1
-        // from the top"].
         let heading = elements_at(&page, 8).remove(0);
-        let start: Vec<String> = customizations(&page, &heading, Action::StartAt)
-            .iter()
-            .map(Customization::label)
-            .collect();
-        assert_eq!(
-            start.first().map(String::as_str),
-            Some("Start at heading level 1 1 from the top with text: \"Weekend events\"")
-        );
-        assert!(start.iter().all(|s| !s.contains("all")));
+        let by_id = customizations(&page, &heading, Action::Hide).remove(2);
+        assert_eq!(by_id.find(&page), [8]);
     }
 }

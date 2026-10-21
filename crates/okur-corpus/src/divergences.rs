@@ -571,8 +571,10 @@ divergences! {
         "725-web-flexible-web-hidden-region-read/s28",
         "725-web-flexible-web-hidden-region-read/s29",
         "725-web-flexible-web-hidden-region-read/s30",
+        "735-web-flexible-web-hidden-after-refresh/s15",
+        "735-web-flexible-web-hidden-after-refresh/s16",
     ],
-    "After Flexible Web hides a region, JAWS still reads it, in every trial: R finds the      hidden advertisement and Down reads its lines, though the wizard's first page then      offers its Undo. JAWS's guide says a customization \"is immediately applied to the      page\". Okur takes the region out of the page it reads, and Undo puts it back.",
+    "After Flexible Web hides a region, JAWS still reads it, in every trial: R finds the      hidden advertisement and Down reads its lines, though the wizard's first page then      offers its Undo, and after JAWS's refresh (Insert+Escape) too. JAWS's guide says a customization \"is immediately applied to the      page\". Okur takes the region out of the page it reads, and Undo puts it back.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
     Difference::Step => ["711-desktop-typing-echo-jcf-3/s7"],
