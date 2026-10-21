@@ -212,6 +212,16 @@ pub fn application_id(app: &str) -> String {
     base.to_lowercase()
 }
 
+/// An application's name as the settings dialog shows it: its id with a capital first letter,
+/// as JAWS's Settings Center names it ("Notepad", "Chrome").
+pub fn application_name(id: &str) -> String {
+    let mut chars = id.chars();
+    chars
+        .next()
+        .map(|first| first.to_uppercase().chain(chars).collect())
+        .unwrap_or_default()
+}
+
 /// A page's site: the host of its address, in small letters. JAWS keeps Personalized Web
 /// Settings per domain or subdomain (shopping.yahoo.com's do not apply to mail.yahoo.com), so
 /// the whole host is the key. A page without a host (`file:///`) has no site.

@@ -203,6 +203,8 @@ pub struct ScreenReaderEngine {
     settings_layers: crate::settings_layers::SettingsLayers,
     /// The application and the site `settings` were looked up for.
     settings_place: (Option<String>, Option<String>),
+    /// The application in front when the settings dialog opened, whose site settings it keeps.
+    settings_dialog_application: Option<String>,
     /// The settings dialog, while it is open.
     settings_dialog: Option<crate::ui::settings::SettingsDialog>,
     /// The list dialog open (the Links List, the Heading List).
@@ -345,6 +347,7 @@ impl ScreenReaderEngine {
             settings_store: None,
             settings_layers: crate::settings_layers::SettingsLayers::default(),
             settings_place: (None, None),
+            settings_dialog_application: None,
             settings_dialog: None,
             list_dialog: None,
             find_dialog: None,
@@ -1127,20 +1130,22 @@ impl ScreenReaderEngine {
         }
     }
 
-    /// Makes the settings dialog's changes Okur's, now, for all applications: the voice
-    /// included, and kept in the settings store. Only what the dialog changed is kept: a level
-    /// set for the session is not saved with it.
-    pub fn apply_settings(&mut self, settings: crate::settings::Settings) {
+    /// Makes the settings dialog's changes Okur's, now, in `scope` (all applications, one
+    /// application, one site), where they were `before`: the voice included, and kept in the
+    /// settings store. Only what the dialog changed is kept: a level set for the session is not
+    /// saved with it.
+    fn apply_settings(
+        &mut self,
+        scope: &crate::settings_layers::Scope,
+        before: &crate::settings::Settings,
+        settings: &crate::settings::Settings,
+    ) {
         if settings.viewer_display != crate::settings::ViewerDisplay::OnScreen {
             self.close_viewer_window();
         }
-        let application = self.settings_place.0.clone();
-        self.settings_layers.change(
-            &crate::settings_layers::Scope::Global,
-            &self.settings,
-            &settings,
-            application.as_deref(),
-        );
+        let application = self.settings_dialog_application.clone();
+        self.settings_layers
+            .change(scope, before, settings, application.as_deref());
         if let Some(store) = &self.settings_store {
             store.save(&self.settings_layers);
         }
@@ -1175,28 +1180,65 @@ impl ScreenReaderEngine {
         Some(name)
     }
 
+    /// Where the settings dialog can keep its settings, each with the settings in force there,
+    /// and the one it opens on: the application in front, as JAWS's Settings Center does, when
+    /// the focus is in one; all applications, and the site when the focus is on a page. The
+    /// application is remembered: once the dialog has the focus, it is the one in front.
+    fn settings_places(&mut self) -> (Vec<crate::ui::settings::Place>, usize) {
+        use crate::settings_layers::Scope;
+        use crate::ui::settings::Place;
+        let (application, site) = self.settings_place.clone();
+        self.settings_dialog_application = application.clone();
+        let layers = &self.settings_layers;
+        let mut places = vec![Place {
+            scope: Scope::Global,
+            name: msg::settings_scope_all().to_string(),
+            settings: layers.resolve(None, None),
+        }];
+        if let Some(app) = &application {
+            places.push(Place {
+                scope: Scope::Application(app.clone()),
+                name: crate::settings_layers::application_name(app),
+                settings: layers.resolve(Some(app), None),
+            });
+        }
+        if let Some(site) = &site {
+            places.push(Place {
+                scope: Scope::Site(site.clone()),
+                name: msg::settings_scope_site(site.as_str()).render(),
+                settings: layers.resolve(application.as_deref(), Some(site)),
+            });
+        }
+        let opened_on = usize::from(application.is_some());
+        (places, opened_on)
+    }
+
     /// Opens the settings dialog, or brings it to the front. Okur speaks nothing itself: it
     /// reads the dialog when the dialog takes the focus, as any application's.
     pub(crate) fn open_settings(&mut self) -> Option<String> {
-        let Some(ui) = &self.ui else {
+        if self.ui.is_none() {
             let speech = msg::settings_dialog_unavailable().to_string();
             self.speech.speak(&speech, true);
             return Some(speech);
-        };
+        }
         let dialog = match self.settings_dialog.take() {
             Some(dialog) => dialog,
             None => {
                 self.dialog_count += 1;
+                let (places, place) = self.settings_places();
                 crate::ui::settings::SettingsDialog::new(
                     self.dialog_count,
-                    &self.settings,
+                    places,
+                    place,
                     self.speech.voices(),
                 )
             }
         };
-        ui.send(crate::ui::ToUi::DialogShow {
-            dialog: dialog.spec(),
-        });
+        if let Some(ui) = &self.ui {
+            ui.send(crate::ui::ToUi::DialogShow {
+                dialog: dialog.spec(),
+            });
+        }
         self.settings_dialog = Some(dialog);
         None
     }
@@ -1233,8 +1275,13 @@ impl ScreenReaderEngine {
                             messages.into_iter().for_each(|m| ui.send(m));
                         }
                     }
-                    Outcome::Apply { settings, close } => {
-                        self.apply_settings(settings);
+                    Outcome::Apply {
+                        scope,
+                        before,
+                        settings,
+                        close,
+                    } => {
+                        self.apply_settings(&scope, &before, &settings);
                         if close {
                             if let Some(dialog) = self.settings_dialog.take() {
                                 if let Some(ui) = &self.ui {

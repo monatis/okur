@@ -10,6 +10,7 @@ use crate::settings::{
     KeyboardLayout, KeyboardSettings, LiveRegionAppend, OkurKey, Punctuation, SayAllUnit, Settings,
     Synthesizer, TypingEcho, VerbosityLevel, ViewerDisplay,
 };
+use crate::settings_layers::Scope;
 
 /// A choice's label in the catalog.
 type Label = fn() -> StaticMessage;
@@ -63,8 +64,11 @@ pub enum Outcome {
     Nothing,
     /// Send these to the dialog.
     Send(Vec<ToUi>),
-    /// Make these Okur's settings; with `close`, close the dialog too.
+    /// Make these Okur's settings for `scope`, where they were `before`; with `close`, close
+    /// the dialog too.
     Apply {
+        scope: Scope,
+        before: Settings,
         settings: Settings,
         close: bool,
     },
@@ -72,10 +76,26 @@ pub enum Outcome {
     Closed,
 }
 
+/// Where the dialog's settings are kept, as its "Settings for" box offers it: all
+/// applications, the application in front, the site of its page (JAWS's Settings Center opens
+/// on the application in front, and its Application box chooses another or "Default (All
+/// Applications)"; Quick Settings changes the application in front, or the site in
+/// Personalize Web Settings).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Place {
+    pub scope: Scope,
+    /// As the box shows it.
+    pub name: String,
+    /// The settings in force there.
+    pub settings: Settings,
+}
+
 /// The settings dialog's state.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SettingsDialog {
     pub id: u32,
+    places: Vec<Place>,
+    place: usize,
     draft: Settings,
     voices: Vec<String>,
 }
@@ -102,13 +122,51 @@ fn control(id: &str, label: StaticMessage, kind: ControlKind) -> Control {
 }
 
 impl SettingsDialog {
-    /// The dialog over `settings`, offering `voices` (the synthesizer's, by name).
-    pub fn new(id: u32, settings: &Settings, voices: Vec<String>) -> Self {
+    /// The dialog over `places`, showing the settings of `place` among them, offering `voices`
+    /// (the synthesizer's, by name).
+    pub fn new(id: u32, places: Vec<Place>, place: usize, voices: Vec<String>) -> Self {
+        let place = place.min(places.len().saturating_sub(1));
+        let draft = places
+            .get(place)
+            .map(|p| p.settings.clone())
+            .unwrap_or_default();
         Self {
             id,
-            draft: settings.clone(),
+            places,
+            place,
+            draft,
             voices,
         }
+    }
+
+    /// The settings shown when the dialog's place was chosen.
+    fn shown(&self) -> Settings {
+        self.places
+            .get(self.place)
+            .map(|p| p.settings.clone())
+            .unwrap_or_default()
+    }
+
+    /// Every control's value, as the dialog is to show it.
+    fn values(&self) -> Vec<ToUi> {
+        self.spec()
+            .controls
+            .into_iter()
+            .filter(|c| c.id != "scope")
+            .filter_map(|c| {
+                let value = match c.kind {
+                    ControlKind::Choice { selected, .. } => Value::Selected(selected),
+                    ControlKind::Slider { value, .. } => Value::Number(value),
+                    ControlKind::CheckBox { checked } => Value::Checked(checked),
+                    _ => return None,
+                };
+                Some(ToUi::DialogSet {
+                    id: self.id,
+                    control: c.id,
+                    value,
+                })
+            })
+            .collect()
     }
 
     /// The settings as the dialog shows them now.
@@ -137,6 +195,14 @@ impl SettingsDialog {
             id: self.id,
             title: msg::settings_dialog_title().to_string(),
             controls: vec![
+                control(
+                    "scope",
+                    msg::settings_scope(),
+                    choice(
+                        self.places.iter().map(|p| p.name.clone()).collect(),
+                        self.place,
+                    ),
+                ),
                 control("speech", msg::settings_group_speech(), ControlKind::Group),
                 control(
                     "synthesizer",
@@ -258,14 +324,23 @@ impl SettingsDialog {
                 self.change(control, value.clone())
             }
             FromUi::DialogPressed { id, control } if *id == self.id => match control.as_str() {
-                "ok" => Outcome::Apply {
-                    settings: self.draft.clone(),
-                    close: true,
-                },
-                "apply" => Outcome::Apply {
-                    settings: self.draft.clone(),
-                    close: false,
-                },
+                "ok" | "apply" => {
+                    let before = self.shown();
+                    let scope = self
+                        .places
+                        .get(self.place)
+                        .map_or(Scope::Global, |p| p.scope.clone());
+                    // What was applied is what the place now holds.
+                    if let Some(place) = self.places.get_mut(self.place) {
+                        place.settings = self.draft.clone();
+                    }
+                    Outcome::Apply {
+                        scope,
+                        before,
+                        settings: self.draft.clone(),
+                        close: control == "ok",
+                    }
+                }
                 _ => Outcome::Nothing,
             },
             FromUi::DialogClosed { id } if *id == self.id => Outcome::Closed,
@@ -274,6 +349,15 @@ impl SettingsDialog {
     }
 
     fn change(&mut self, control: &str, value: Value) -> Outcome {
+        // Another place: its settings are shown.
+        if let ("scope", Value::Selected(i)) = (control, &value) {
+            if *i != self.place && *i < self.places.len() {
+                self.place = *i;
+                self.draft = self.shown();
+                return Outcome::Send(self.values());
+            }
+            return Outcome::Nothing;
+        }
         let s = &mut self.draft;
         match (control, value) {
             ("synthesizer", Value::Selected(i)) => {
@@ -355,6 +439,15 @@ impl SettingsDialog {
 mod tests {
     use super::*;
 
+    /// The dialog's one place, all applications, with `settings`.
+    fn everywhere(settings: &Settings) -> Vec<Place> {
+        vec![Place {
+            scope: Scope::Global,
+            name: "Default (All Applications)".into(),
+            settings: settings.clone(),
+        }]
+    }
+
     fn changed(control: &str, value: Value) -> FromUi {
         FromUi::DialogChanged {
             id: 4,
@@ -372,7 +465,8 @@ mod tests {
         settings.voice.voice = Some("Microsoft Zira".to_owned());
         let dialog = SettingsDialog::new(
             4,
-            &settings,
+            everywhere(&settings),
+            0,
             vec!["Microsoft David".into(), "Microsoft Zira".into()],
         );
         let spec = dialog.spec();
@@ -440,7 +534,7 @@ mod tests {
 
     #[test]
     fn changes_are_drafted_until_applied_and_cancel_drops_them() {
-        let mut dialog = SettingsDialog::new(4, &Settings::default(), Vec::new());
+        let mut dialog = SettingsDialog::new(4, everywhere(&Settings::default()), 0, Vec::new());
         assert_eq!(
             dialog.handle(&changed("rate", Value::Number(3))),
             Outcome::Nothing
@@ -483,6 +577,8 @@ mod tests {
         assert_eq!(
             applied,
             Outcome::Apply {
+                scope: Scope::Global,
+                before: Settings::default(),
                 settings: expected.clone(),
                 close: false
             }
@@ -493,6 +589,8 @@ mod tests {
                 control: "ok".into()
             }),
             Outcome::Apply {
+                scope: Scope::Global,
+                before: expected.clone(),
                 settings: expected,
                 close: true
             }
@@ -503,9 +601,66 @@ mod tests {
         );
     }
 
+    /// "Settings for" chooses where the dialog's changes go, as JAWS's Settings Center's
+    /// Application box: the dialog opens on the application in front with its settings, shows
+    /// all applications' when chosen, and applies to the place chosen.
+    #[test]
+    fn the_dialog_keeps_its_changes_where_chosen() {
+        let global = Settings::default();
+        let mut notepad = global.clone();
+        notepad.voice.punctuation = crate::settings::Punctuation::All;
+        let places = vec![
+            everywhere(&global).remove(0),
+            Place {
+                scope: Scope::Application("notepad".into()),
+                name: "Notepad".into(),
+                settings: notepad.clone(),
+            },
+        ];
+        let mut dialog = SettingsDialog::new(4, places, 1, Vec::new());
+        let scope_box = dialog
+            .spec()
+            .controls
+            .into_iter()
+            .find(|c| c.id == "scope")
+            .map(|c| (c.label, c.kind));
+        assert_eq!(
+            scope_box,
+            Some((
+                "Settings &for:".to_owned(),
+                ControlKind::Choice {
+                    options: vec!["Default (All Applications)".into(), "Notepad".into()],
+                    selected: 1
+                }
+            ))
+        );
+        assert_eq!(dialog.draft(), &notepad);
+        // All applications: their settings are shown, punctuation among them.
+        let shown = dialog.handle(&changed("scope", Value::Selected(0)));
+        let punctuation = ToUi::DialogSet {
+            id: 4,
+            control: "punctuation".into(),
+            value: Value::Selected(position(&PUNCTUATIONS, global.voice.punctuation)),
+        };
+        assert!(
+            matches!(&shown, Outcome::Send(set) if set.contains(&punctuation)),
+            "{shown:?}"
+        );
+        assert_eq!(dialog.draft(), &global);
+        dialog.handle(&changed("typing_echo", Value::Selected(0)));
+        let applied = dialog.handle(&FromUi::DialogPressed {
+            id: 4,
+            control: "apply".into(),
+        });
+        assert!(
+            matches!(&applied, Outcome::Apply { scope: Scope::Global, before, .. } if *before == global),
+            "{applied:?}"
+        );
+    }
+
     #[test]
     fn a_layout_brings_its_own_jaws_key() {
-        let mut dialog = SettingsDialog::new(4, &Settings::default(), Vec::new());
+        let mut dialog = SettingsDialog::new(4, everywhere(&Settings::default()), 0, Vec::new());
         assert_eq!(
             dialog.handle(&changed("layout", Value::Selected(1))),
             Outcome::Send(vec![ToUi::DialogSet {

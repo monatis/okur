@@ -34,6 +34,11 @@ settings-typing-echo = Typing &Echo:
 settings-typing-echo-off = Off
 settings-typing-echo-characters = Characters
 # JAWS's user verbosity levels (Settings Center): what is said, and how much.
+# Where the dialog's settings are kept, as JAWS's Settings Center's Application box chooses it: all
+# applications (JAWS's words), the application in front (its name), the site of its page.
+settings-scope = Settings &for:
+settings-scope-all = Default (All Applications)
+settings-scope-site = { $site } (web site)
 # JAWS's Say All Reads: what Say All reads at a time, and what Left and Right during it move
 # by. The other letters of its name are taken.
 settings-say-all-unit = Say All Rea&ds:
