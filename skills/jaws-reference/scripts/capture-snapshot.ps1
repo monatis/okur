@@ -72,8 +72,25 @@ if ($outDir -and -not (Test-Path $outDir)) { New-Item -ItemType Directory -Path 
 
 $cliArgs = @('snapshot', '--api', $Api, '--out', $OutputPath, '--fixture', $fixturePath)
 if ($chromeVersion) { $cliArgs += @('--process-version', $chromeVersion) }
-& $Okur @cliArgs
-if ($LASTEXITCODE -ne 0) { throw "okur snapshot failed with exit code $LASTEXITCODE" }
+# A Chrome started a moment ago can still be loading the page: its document is then one busy
+# node (round 135's custom-label capture), or the capture fails. It is captured again, after a
+# wait, up to five times.
+for ($attempt = 1; $attempt -le 5; $attempt++) {
+    & $Okur @cliArgs
+    $captured = $LASTEXITCODE -eq 0
+    $nodes = 0
+    if ($captured) {
+        try {
+            $nodes = [int]((Get-Content -Raw -Encoding UTF8 $OutputPath | ConvertFrom-Json).provenance.node_count)
+        } catch { $nodes = 0 }
+    }
+    if ($captured -and $nodes -gt 2) { break }
+    if ($attempt -eq 5) {
+        if (-not $captured) { throw "okur snapshot failed with exit code $LASTEXITCODE" }
+        throw "The page was still loading after $attempt captures ($nodes nodes)."
+    }
+    Start-Sleep -Milliseconds 2000
+}
 
 # Close the tab this capture opened (every capture opens a new one), but only while the
 # fixture is still the foreground tab, so no other window receives Ctrl+W.
