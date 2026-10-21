@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6188,
-  "total_steps": 6414,
+  "matched_steps": 6197,
+  "total_steps": 6434,
   "accepted_divergences": 168,
   "errors": [],
   "steps": {
@@ -6600,6 +6600,26 @@
     "783-desktop-notification-rule-saved/s6": "mismatch",
     "783-desktop-notification-rule-saved/s7": "match",
     "783-desktop-notification-rule-saved/s8": "match",
-    "783-desktop-notification-rule-saved/s9": "match"
+    "783-desktop-notification-rule-saved/s9": "match",
+    "787-desktop-notification-rule-made-managed-deleted/s1": "match",
+    "787-desktop-notification-rule-made-managed-deleted/s10": "mismatch",
+    "787-desktop-notification-rule-made-managed-deleted/s11": "mismatch",
+    "787-desktop-notification-rule-made-managed-deleted/s12": "mismatch",
+    "787-desktop-notification-rule-made-managed-deleted/s13": "match",
+    "787-desktop-notification-rule-made-managed-deleted/s14": "mismatch",
+    "787-desktop-notification-rule-made-managed-deleted/s15": "mismatch",
+    "787-desktop-notification-rule-made-managed-deleted/s16": "mismatch",
+    "787-desktop-notification-rule-made-managed-deleted/s17": "mismatch",
+    "787-desktop-notification-rule-made-managed-deleted/s18": "mismatch",
+    "787-desktop-notification-rule-made-managed-deleted/s19": "mismatch",
+    "787-desktop-notification-rule-made-managed-deleted/s2": "match",
+    "787-desktop-notification-rule-made-managed-deleted/s20": "match",
+    "787-desktop-notification-rule-made-managed-deleted/s3": "match",
+    "787-desktop-notification-rule-made-managed-deleted/s4": "mismatch",
+    "787-desktop-notification-rule-made-managed-deleted/s5": "match",
+    "787-desktop-notification-rule-made-managed-deleted/s6": "match",
+    "787-desktop-notification-rule-made-managed-deleted/s7": "match",
+    "787-desktop-notification-rule-made-managed-deleted/s8": "mismatch",
+    "787-desktop-notification-rule-made-managed-deleted/s9": "match"
   }
 }

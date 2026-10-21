@@ -6234,13 +6234,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "787-desktop-notification-rule-made-managed-deleted",
+      "fixture": "desktop-notifications.ps1",
+      "evidence": {
+        "sha256": "96eb09b5dd835d5e2f0cb9e82caacf0667b1715838e2330c21c31aa1aa1d7bbe",
+        "capture_script_sha256": "043f2870b1499dacb80869fd8b86f5c8abac741d2a75c2c4ca9f04ab0f4e4e3a",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 432,
-    "scenarios_with_evidence": 432,
-    "total_trials": 1326,
-    "successful_trials": 1325,
+    "scenarios": 433,
+    "scenarios_with_evidence": 433,
+    "total_trials": 1329,
+    "successful_trials": 1328,
     "deterministic_scenarios": 279
   }
 }
