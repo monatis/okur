@@ -28,6 +28,7 @@ mod help;
 mod information;
 mod jump;
 mod key_help;
+mod labels;
 mod layer;
 mod page;
 mod placemarkers;
@@ -151,6 +152,11 @@ pub struct ScreenReaderEngine {
     last_key_escapes: bool,
     /// Each page's temporary PlaceMarker (Ctrl+Windows+K), by its address, for the session.
     temp_placemarkers: std::collections::HashMap<String, usize>,
+    /// The custom labels (Insert+Ctrl+Tab), and where they are kept.
+    custom_labels: crate::labels::CustomLabels,
+    label_store: Option<Box<dyn crate::labels::LabelStore>>,
+    /// Custom Label while it is open, and the node it labels.
+    label_dialog: Option<(crate::ui::label::LabelDialog, usize)>,
     /// The Alt key is down: pressed on its own and not yet released (Alt held through
     /// Tabs in the task switcher).
     alt_held: bool,
@@ -324,6 +330,9 @@ impl ScreenReaderEngine {
             last_key_tabs: false,
             last_key_escapes: false,
             temp_placemarkers: std::collections::HashMap::new(),
+            custom_labels: crate::labels::CustomLabels::default(),
+            label_store: None,
+            label_dialog: None,
             alt_held: false,
             pass_next_key: false,
             menus: crate::native_focus::Menus::default(),
@@ -391,6 +400,7 @@ impl ScreenReaderEngine {
 
     /// Replaces the active document buffer and resets the cursor.
     pub fn load_buffer(&mut self, buffer: VirtualBuffer) {
+        let buffer = self.labeled(buffer);
         crate::retire::retire(std::mem::replace(
             &mut self.cursor,
             VirtualCursor::new(buffer),
@@ -1265,6 +1275,7 @@ impl ScreenReaderEngine {
             _ if self.is_window_list_event(message) => self.handle_window_list_event(message),
             _ if self.is_tray_event(message) => self.handle_tray_event(message),
             _ if self.is_jump_event(message) => self.handle_jump_event(message),
+            _ if self.is_label_event(message) => self.handle_label_event(message),
             _ if self.is_quit_event(message) => self.handle_quit_event(message),
             _ => {
                 let outcome = self.settings_dialog.as_mut()?.handle(message);

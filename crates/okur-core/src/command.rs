@@ -251,6 +251,9 @@ pub enum Command {
     /// Ctrl+Windows+K in a page (DefineATempPlaceMarker): one temporary PlaceMarker per page,
     /// at the virtual cursor, for this session.
     DefineTempPlaceMarker,
+    /// Ctrl+Insert+Tab in a page (Assign Custom Label): a name for the element at the virtual
+    /// cursor, read in place of its own.
+    AssignCustomLabel,
     /// Shift+J in a page (JumpReturnFromLine): back to where the last jump was made.
     JumpReturnFromLine,
 
@@ -503,6 +506,7 @@ impl Command {
             "ListTaskTrayIcons" | "Insert+F11" => SystemTrayList,
             "JumpToLine" => JumpToLine,
             "DefineATempPlaceMarker" => DefineTempPlaceMarker,
+            "CreatePrompt" | "AssignCustomLabel" => AssignCustomLabel,
             "JumpReturnFromLine" => JumpReturnFromLine,
             "ScreenSensitiveHelp" | "Insert+F1" => ScreenSensitiveHelp,
             "HotKeyHelp" | "Insert+H" => HotKeyHelp,
@@ -886,6 +890,7 @@ static BINDINGS: &[Binding] = &{
         // Windows and focus.
         bind(Digit(3), OKUR, PassKeyThrough),
         bind(Alpha('B'), OKUR, SayWindow),
+        bind(Key::Tab, CTRL_INSERT, AssignCustomLabel),
         bind(Key::Tab, OKUR, SayCurrentFocus),
         bind(Alpha('T'), OKUR, SayWindowTitle),
         bind(

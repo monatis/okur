@@ -20,6 +20,7 @@ const APPLICATIONS: &str = "applications";
 const SITES: &str = "sites";
 
 /// The folder of Okur's settings files.
+#[derive(Debug, Clone)]
 pub struct SettingsFolder {
     folder: PathBuf,
 }
@@ -142,6 +143,45 @@ impl SettingsStore for SettingsFolder {
             if let Err(e) = result {
                 tracing::warn!(folder = ?self.folder, error = %e, "settings not saved");
             }
+        }
+    }
+}
+
+/// The custom labels' file: a table per site (or page), each element's label in it.
+const LABELS: &str = "labels.toml";
+
+impl SettingsFolder {
+    /// The custom labels kept (Insert+Ctrl+Tab). A missing or unreadable file is none, the
+    /// second logged.
+    pub fn load_labels(&self) -> okur_core::labels::CustomLabels {
+        let path = self.folder.join(LABELS);
+        let Ok(text) = std::fs::read_to_string(&path) else {
+            return okur_core::labels::CustomLabels::default();
+        };
+        toml::from_str(&text)
+            .map_err(|e| tracing::warn!(?path, error = %e, "labels file not read"))
+            .unwrap_or_default()
+    }
+}
+
+impl okur_core::labels::LabelStore for SettingsFolder {
+    /// The whole file, written through a temporary one: the labels are Okur's to write.
+    fn save(&self, labels: &okur_core::labels::CustomLabels) {
+        let write = || -> std::io::Result<()> {
+            let text = toml::to_string(labels).map_err(std::io::Error::other)?;
+            std::fs::create_dir_all(&self.folder)?;
+            let path = self.folder.join(LABELS);
+            let temporary = path.with_extension("toml.tmp");
+            std::fs::write(
+                &temporary,
+                format!(
+                    "# Okur's custom labels (Insert+Ctrl+Tab), by site, then by element.\n{text}"
+                ),
+            )?;
+            std::fs::rename(&temporary, path)
+        };
+        if let Err(e) = write() {
+            tracing::warn!(folder = ?self.folder, error = %e, "labels not saved");
         }
     }
 }
@@ -358,6 +398,24 @@ mod tests {
             "{notepad}"
         );
         assert!(root.join("sites/example.org.toml").exists());
+        let _ = std::fs::remove_dir_all(&root);
+    }
+
+    /// Custom labels are saved in labels.toml and read back the same.
+    #[test]
+    fn labels_survive_a_save() {
+        use okur_core::labels::{CustomLabels, LabelStore};
+        let root = folder("labels");
+        let files = SettingsFolder::at(&root);
+        assert_eq!(files.load_labels(), CustomLabels::default());
+        let mut labels = CustomLabels::default();
+        labels
+            .places
+            .entry("library.example".into())
+            .or_default()
+            .insert("id pickup-branch".into(), "lamp".into());
+        LabelStore::save(&files, &labels);
+        assert_eq!(files.load_labels(), labels);
         let _ = std::fs::remove_dir_all(&root);
     }
 

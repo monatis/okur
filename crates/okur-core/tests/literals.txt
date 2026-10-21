@@ -17,6 +17,8 @@ okur-core/src/linearize.rs: "flows-to"
 okur-core/src/aom.rs: "visited"
 okur-core/src/speech.rs: "mailto:"
 okur-core/src/command.rs: *
+# Custom labels' keys and attributes, kept in the labels file, never said.
+okur-core/src/labels.rs: *
 # The color table's file, and the CSS color notation Chromium reports.
 okur-core/src/color.rs: "../locales/en-US/colors.txt"
 okur-core/src/color.rs: "rgba("
@@ -219,6 +221,10 @@ okur-core/src/ui/settings.rs: "layout"
 okur-core/src/ui/settings.rs: "ok"
 okur-core/src/ui/settings.rs: "punctuation"
 okur-core/src/ui/settings.rs: "rate"
+okur-core/src/ui/label.rs: "cancel"
+okur-core/src/ui/label.rs: "label"
+okur-core/src/ui/label.rs: "ok"
+okur-core/src/ui/label.rs: "prompt"
 okur-core/src/ui/settings.rs: "scope"
 okur-core/src/ui/settings.rs: "reading"
 okur-core/src/ui/settings.rs: "speech"

@@ -539,8 +539,10 @@ pub async fn run(config: RunConfig) {
     // A big page whose control changed is built again off the engine, which the keyboard
     // hook waits on (performance review P3); a smaller one at once, in a few milliseconds.
     engine.set_page_builds_elsewhere(PAGE_BUILDS_ELSEWHERE_FROM);
-    // The settings dialog keeps what it changes in the settings folder.
+    // The settings dialog keeps what it changes in the settings folder, and so do custom
+    // labels.
     if let Some(folder) = settings_folder {
+        engine.set_custom_labels(folder.load_labels(), Some(Box::new(folder.clone())));
         engine.set_settings_store(Box::new(folder));
     }
     // Say System Time (Insert+F12) in the user's locale formats.

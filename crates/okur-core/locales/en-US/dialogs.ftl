@@ -157,3 +157,13 @@ jump-ok = OK
 jump-cancel = Cancel
 # Shift+J before any jump [obs, 559/s7].
 jump-none = No previous jump
+
+## Custom Label (Insert+Ctrl+Tab in a page): JAWS 2025's dialog [obs, 688/s9], its text and
+## its field named alike.
+
+custom-label-title = Custom Label
+custom-label-prompt = Enter a custom label for this item
+custom-label-ok = OK
+custom-label-cancel = Cancel
+# Insert+Ctrl+Tab where there is nothing to label (a paragraph): no dialog opens (JAWS, live).
+custom-label-not-here = A Custom Label cannot be created for this item.

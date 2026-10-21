@@ -51,6 +51,7 @@ impl ScreenReaderEngine {
             Command::SystemTrayList => return self.ask_tray_list(),
             Command::JumpToLine => return self.open_jump(),
             Command::DefineTempPlaceMarker => return self.define_temp_placemarker(),
+            Command::AssignCustomLabel => return self.open_custom_label(),
             Command::JumpReturnFromLine => return self.jump_back(),
             Command::ScreenSensitiveHelp => return self.screen_sensitive_help(),
             Command::HotKeyHelp => return self.hot_key_help(),

@@ -6,6 +6,7 @@ use std::sync::{Arc, Mutex};
 
 pub mod find;
 pub mod jump;
+pub mod label;
 pub mod lists;
 pub mod quit;
 pub mod settings;

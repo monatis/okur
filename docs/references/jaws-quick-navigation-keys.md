@@ -121,7 +121,7 @@ the Say All command".
 | Insert+F9 | SelectAFrame | partial: "No frames found in page"; the frames list is missing | 536 |
 | Ctrl+Insert+Down, Ctrl+Shift+Insert+Down | StartSkimRead, SkimReadDialog | gap | |
 | Insert+5 | SayColor | gap | |
-| Ctrl+Insert+Tab | CreatePrompt | gap | |
+| Ctrl+Insert+Tab | CreatePrompt | built: the Custom Label dialog, labels per site | 688 |
 | Insert+Space, then X | DoFlexibleWebDialog (Flexible Web) | gap | |
 
 Other `Default.JKM` facts:

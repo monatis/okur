@@ -1022,6 +1022,115 @@ fn the_okur_cursor_reads_a_text_fields_lines() {
     assert_eq!(press(&mut engine, Key::LeftArrow, false), "");
 }
 
+/// Ctrl+Insert+Tab on a page's field opens Custom Label; OK with "lamp" names the field "lamp"
+/// in the page's reading and keeps it in the store; the virtual cursor stays on the field.
+/// An emptied label gives the field its name back [obs, 688/s9-s18].
+#[test]
+fn a_custom_label_names_a_pages_field() {
+    use crate::ui::{FromUi, ToUi, Value};
+    let mut field = AomNode::new(2, Role::Edit).with_name("Branch");
+    field
+        .attributes
+        .insert("id".to_owned(), "pickup-branch".to_owned());
+    let mut page = AomNode::new(0, Role::Document)
+        .with_name("Book Pickup")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Book pickup"),
+            field,
+        ]);
+    page.attributes.insert(
+        "url".to_owned(),
+        "https://library.example/pickup".to_owned(),
+    );
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(MockSpeechOutput::new()),
+    );
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    #[derive(Clone, Default)]
+    struct Kept(std::sync::Arc<std::sync::Mutex<Vec<crate::labels::CustomLabels>>>);
+    impl crate::labels::LabelStore for Kept {
+        fn save(&self, labels: &crate::labels::CustomLabels) {
+            if let Ok(mut kept) = self.0.lock() {
+                kept.push(labels.clone());
+            }
+        }
+    }
+    let kept = Kept::default();
+    engine.set_custom_labels(Default::default(), Some(Box::new(kept.clone())));
+    engine.cursor.move_to_start();
+    // On text there is nothing to label, and no dialog opens.
+    assert_eq!(
+        engine.execute_command("CreatePrompt").as_deref(),
+        Some("A Custom Label cannot be created for this item.")
+    );
+    assert!(ui.take().is_empty());
+    for _ in 0..5 {
+        if engine.cursor.current_line().contains("Branch") {
+            break;
+        }
+        engine.execute_command("{DOWN}");
+    }
+    let ctrl_insert = Modifiers {
+        ctrl: true,
+        insert: true,
+        ..Modifiers::none()
+    };
+    engine.handle_key_event(&KeyEvent::new(Key::Tab, ctrl_insert, true));
+    let shown = ui.take();
+    let id = shown
+        .iter()
+        .find_map(|m| match m {
+            ToUi::DialogShow { dialog } if dialog.title == "Custom Label" => Some(dialog.id),
+            _ => None,
+        })
+        .unwrap_or_default();
+    assert!(id > 0, "{shown:?}");
+    let typed = |text: &str| FromUi::DialogChanged {
+        id,
+        control: "label".to_owned(),
+        value: Value::Text(text.to_owned()),
+    };
+    let ok = FromUi::DialogPressed {
+        id,
+        control: "ok".to_owned(),
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(typed("lamp")));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(ok.clone()));
+    assert!(engine.cursor.current_line().contains("lamp"));
+    assert!(!engine.cursor.current_line().contains("Branch"));
+    let saved = kept.0.lock().map(|k| k.clone()).unwrap_or_default();
+    assert_eq!(
+        saved
+            .last()
+            .and_then(|l| l.places.get("library.example"))
+            .and_then(|p| p.get("id pickup-branch"))
+            .map(String::as_str),
+        Some("lamp")
+    );
+    // Emptied, the label is taken away.
+    engine.handle_key_event(&KeyEvent::new(Key::Tab, ctrl_insert, true));
+    let id = ui
+        .take()
+        .iter()
+        .find_map(|m| match m {
+            ToUi::DialogShow { dialog } => Some(dialog.id),
+            _ => None,
+        })
+        .unwrap_or_default();
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "label".to_owned(),
+        value: Value::Text(String::new()),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "ok".to_owned(),
+    }));
+    assert!(engine.cursor.current_line().contains("Branch"));
+}
+
 /// Ctrl+Windows+K sets the page's temporary PlaceMarker, "Temporary PlaceMarker set" and the
 /// line; K and Shift+K go back to it and say the element there, again from the marker itself;
 /// before one is set K says there are none [obs, 687/s4-s9, 221/s4].

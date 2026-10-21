@@ -13,6 +13,7 @@ pub mod engine;
 pub mod event;
 pub mod input;
 pub mod keyboard_help;
+pub mod labels;
 pub mod linearize;
 pub mod live_text;
 pub mod messages;
