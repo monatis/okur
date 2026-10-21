@@ -97,8 +97,8 @@ A step can be in more than one entry; all of its entries apply.
   then the browser's title, or its version, said before the dialog; one trial of 560/s4 has
   none of it); and Skim Reading, `760-web-skim-reading-dialog/s1` and
   `763-web-skim-reading-rule-types/s1`, `769-web-skim-read-by-sentence/s1`,
-  `771-web-skim-reading-rule-saved/s1` and `776-web-skim-reading-text-rules-controls/s1` (its
-  rule type said before the dialog).
+  `771-web-skim-reading-rule-saved/s1`, `776-web-skim-reading-text-rules-controls/s1` and
+  `777-web-skim-reading-speak-unit-and-attributes/s1` (its rule type said before the dialog).
 - In the recordings of 2026-10-19 (round 9, JAWS freshly started for the batch), JAWS no longer
   said its version or the list's tutor message before the Links List, the Heading List and
   Virtual HTML Features, and said nothing before some dialogs at all: those steps were taken
@@ -582,19 +582,22 @@ A step can be in more than one entry; all of its entries apply.
   and only in this mode.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-21.
 
-### Closing Skim Reading on Skim Reading Indication makes JAWS's summary
+### Closing Skim Reading after changing its rule type makes JAWS's summary
 
 - Steps: `763-web-skim-reading-rule-types/s23`, `763-web-skim-reading-rule-types/s24`,
-  `776-web-skim-reading-text-rules-controls/s19`, `776-web-skim-reading-text-rules-controls/s20`.
-- Difference: the whole step. With the focus on Skim Reading Indication, Escape (763) or Close's
-  Alt+C (776) closes JAWS's Skim Reading dialog and opens its summary in the Results Viewer ("1.
-  City Library Expands Evening Hours - Riverside Gazette Link | To activate press Enter."), as
-  Create Summary does (762/s2); Say Line then says nothing in the viewer. Okur's Escape and
-  Close close the dialog and give the page back.
+  `776-web-skim-reading-text-rules-controls/s19`, `776-web-skim-reading-text-rules-controls/s20`,
+  `777-web-skim-reading-speak-unit-and-attributes/s28`,
+  `777-web-skim-reading-speak-unit-and-attributes/s29`.
+- Difference: the whole step. After the rule type was changed, even back to the first, Escape
+  (763, 777) or Close's Alt+C (776) closes JAWS's Skim Reading dialog and opens its summary in
+  the Results Viewer ("1. City Library Expands Evening Hours - Riverside Gazette Link | To
+  activate press Enter."), as Create Summary does (762/s2); Say Line then says nothing in the
+  viewer. Okur's Escape and Close close the dialog and give the page back.
 - Why: Escape and Close close the dialog "without saving the last changes made" (JAWS 2025
-  help, Skim Reading Dialog), and Escape from the rule type closes it only (760/s14). The
-  summary came in every trial of three recordings (rounds 180, 184 and 191, the last two with
-  JAWS's viewers closed before each trial), so it is JAWS's own doing, not a window left open.
+  help, Skim Reading Dialog), and with the rule type untouched Escape closes it only
+  (760/s14). The summary came in every trial of four recordings (rounds 180, 184, 191 and 192,
+  the last three with JAWS's viewers closed before each trial), wherever the focus was, so it
+  is JAWS's own doing, not a window left open.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-21.
 
 ## Considered and not accepted

@@ -85,14 +85,12 @@ const RULE_CONTROLS: [&str; 17] = [
 
 /// Whether a rules' control is available with `rule` chosen: Rules History, Text Search
 /// Pattern, Speak Unit and Use regular expression with text rules [obs, 776/s4-s7]; Rules
-/// History, Speak Unit, the colors and the attributes with attribute and color rules (JAWS 2025
-/// help, Skim Reading Dialog: the attributes "are only available when the Attributes and Color
-/// Rules Apply for Reading radio button is selected", regular expressions only with text
-/// rules); Delete Rule and Delete All Rules once a rule is saved, which Okur does not yet.
+/// History, the colors and the attributes with attribute and color rules [obs, 777/s15-s19];
+/// Delete Rule and Delete All Rules once a rule is saved, which Okur does not yet.
 fn available(rule: SkimRule, control: &str) -> bool {
     match control {
-        "history" | "unit" => matches!(rule, SkimRule::TextRules | SkimRule::Attributes),
-        "pattern" | "regex" => rule == SkimRule::TextRules,
+        "history" => matches!(rule, SkimRule::TextRules | SkimRule::Attributes),
+        "pattern" | "unit" | "regex" => rule == SkimRule::TextRules,
         "delete" | "delete_all" => false,
         _ => rule == SkimRule::Attributes,
     }
@@ -174,7 +172,22 @@ impl SkimDialog {
                     text: String::new(),
                 },
             ),
-            rule_choice("unit", msg::skim_unit(), msg::skim_unit_lines()),
+            control(
+                "unit",
+                msg::skim_unit(),
+                ControlKind::Choice {
+                    options: [
+                        msg::skim_unit_lines(),
+                        msg::skim_unit_sentences(),
+                        msg::skim_unit_paragraphs(),
+                    ]
+                    .iter()
+                    .map(ToString::to_string)
+                    .collect(),
+                    selected: 0,
+                },
+                available(rule, "unit"),
+            ),
             unavailable("regex", msg::skim_regex(), unchecked()),
             unavailable(
                 "delete",
@@ -186,6 +199,7 @@ impl SkimDialog {
                 msg::skim_delete_all(),
                 ControlKind::Button { default: false },
             ),
+            control("colors", msg::skim_color_rules(), ControlKind::Group, true),
             rule_choice("text_color", msg::skim_text_color(), msg::skim_any_color()),
             rule_choice("background", msg::skim_background(), msg::skim_any_color()),
         ];
@@ -277,7 +291,7 @@ mod tests {
         let stops: Vec<&str> = spec
             .controls
             .iter()
-            .filter(|c| c.enabled)
+            .filter(|c| c.enabled && c.kind != ControlKind::Group)
             .map(|c| c.label.as_str())
             .collect();
         assert_eq!(
@@ -327,7 +341,7 @@ mod tests {
             let spec = dialog.spec();
             spec.controls
                 .iter()
-                .filter(|c| c.enabled)
+                .filter(|c| c.enabled && c.kind != ControlKind::Group)
                 .map(|c| c.id.as_str())
                 .collect::<Vec<_>>()
                 .into_iter()

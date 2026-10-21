@@ -148,6 +148,7 @@ divergences! {
         "769-web-skim-read-by-sentence/s1",
         "771-web-skim-reading-rule-saved/s1",
         "776-web-skim-reading-text-rules-controls/s1",
+        "777-web-skim-reading-speak-unit-and-attributes/s1",
     ],
     "Opening one of its list dialogs, JAWS's speech passes through its own windows before it \
      names the dialog: its main window (its version, a list's tutor message) and the browser's \
@@ -634,8 +635,10 @@ divergences! {
         "763-web-skim-reading-rule-types/s24",
         "776-web-skim-reading-text-rules-controls/s19",
         "776-web-skim-reading-text-rules-controls/s20",
+        "777-web-skim-reading-speak-unit-and-attributes/s28",
+        "777-web-skim-reading-speak-unit-and-attributes/s29",
     ],
-    "Closing Skim Reading with the focus on Skim Reading Indication, by Escape (763) or by      Close's Alt+C (776), closes the dialog and opens JAWS's summary in its Results Viewer,      which then says nothing to Say Line: in every trial of three recordings. Escape from      the rule type only closes the dialog (760/s14). Okur's Escape and Close close the      dialog and give the page back.",
+    "Closing Skim Reading after its rule type was changed, even back to the first, by Escape      (763, 777) or by Close's Alt+C (776), closes the dialog and opens JAWS's summary in      its Results Viewer, which then says nothing to Say Line: in every trial of four      recordings. With the rule type untouched, Escape only closes the dialog (760/s14).      Okur's Escape and Close close the dialog and give the page back.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 }
 
