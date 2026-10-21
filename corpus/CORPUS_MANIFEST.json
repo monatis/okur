@@ -5534,13 +5534,69 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "721-web-words-mixed-case-off",
+      "fixture": "reading-settings.html",
+      "evidence": {
+        "sha256": "6e321a7a8ac0e8c0aadd8d4bb0a8fb7d7bedce4a034aec6213ffe67e8eb6ccad",
+        "capture_script_sha256": "006506ca38fbde82e79082a7411b68da6d48149d668f46fe88973c61aa9dbd73",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "722-web-words-numbers-digits",
+      "fixture": "reading-settings.html",
+      "evidence": {
+        "sha256": "ea9397969d918a32b108fafc005bd889eb32ad26badd47bcd8cd7c70712c83ab",
+        "capture_script_sha256": "006506ca38fbde82e79082a7411b68da6d48149d668f46fe88973c61aa9dbd73",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "723-web-words-say-dollars",
+      "fixture": "reading-settings.html",
+      "evidence": {
+        "sha256": "92dcff5822a2fc68e14c3eeb794dc7f1bea51fe5f4dedfdbced102a22226a83d",
+        "capture_script_sha256": "006506ca38fbde82e79082a7411b68da6d48149d668f46fe88973c61aa9dbd73",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "724-article-links-same-page-off",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "49c2196eb047eea022e615903843a0f77219418a6bafef9eee2c6dbd9d3cc345",
+        "capture_script_sha256": "006506ca38fbde82e79082a7411b68da6d48149d668f46fe88973c61aa9dbd73",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 382,
-    "scenarios_with_evidence": 382,
-    "total_trials": 1200,
-    "successful_trials": 1200,
-    "deterministic_scenarios": 240
+    "scenarios": 386,
+    "scenarios_with_evidence": 386,
+    "total_trials": 1212,
+    "successful_trials": 1212,
+    "deterministic_scenarios": 244
   }
 }
