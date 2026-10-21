@@ -1,0 +1,94 @@
+{
+  "id": "732-web-flexible-web-start-at-heading-choices",
+  "name": "Flexible Web's six Start reading choices for the heading, cancelled: H, Insert+Space then X, Alt+N, Down Arrow (Start reading at an element), Alt+N twice, Down Arrow five times, Escape twice, Insert+Up (keys in the wizard typed by JAWS)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/flexible-web.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "H",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Space",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "settle_max_ms": 30000,
+      "id": "s3"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s4"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s5"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s6"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s7"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s8"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s9"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s10"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s11"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s12"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")",
+      "id": "s13"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")",
+      "id": "s14"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s15"
+    }
+  ]
+}

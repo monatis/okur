@@ -1,0 +1,153 @@
+{
+  "id": "735-web-flexible-web-hidden-after-refresh",
+  "name": "Flexible Web hides the advertisement region, then the virtual buffer is refreshed (Insert+Escape) and the regions read from the top (Ctrl+Home, R four times); Undo (Insert+Space then X, Down Arrow twice, Enter) (keys in the wizard typed by JAWS)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/flexible-web.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Space",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "settle_max_ms": 30000,
+      "id": "s6"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s7"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s8"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s9"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s10"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Escape",
+      "settle_max_ms": 30000,
+      "id": "s11"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Home",
+      "id": "s12"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s13"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s14"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s15"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s16"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Space",
+      "id": "s17"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "settle_max_ms": 30000,
+      "id": "s18"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s19"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s20"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s21"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Home",
+      "id": "s22"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s23"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s24"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s25"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s26"
+    }
+  ]
+}
