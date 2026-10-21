@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
   "matched_steps": 6013,
-  "total_steps": 6241,
+  "total_steps": 6243,
   "accepted_divergences": 158,
   "errors": [],
   "steps": {
@@ -6417,6 +6417,8 @@
     "760-web-skim-reading-dialog/s6": "match",
     "760-web-skim-reading-dialog/s7": "match",
     "760-web-skim-reading-dialog/s8": "match",
-    "760-web-skim-reading-dialog/s9": "match"
+    "760-web-skim-reading-dialog/s9": "match",
+    "761-web-skim-read/s1": "mismatch",
+    "761-web-skim-read/s2": "mismatch"
   }
 }
