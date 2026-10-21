@@ -6253,3 +6253,69 @@ fn a_notification_rule_mutes_what_it_matches() {
     )
     .is_some());
 }
+
+/// Skimming by a text rule reads the lines that hold its pattern, whatever its capitals; by
+/// sentence, the sentences (JAWS 2025 help, Skim Reading Dialog; [obs, 776, 777]).
+#[test]
+fn skim_reading_by_a_text_rule_reads_what_holds_the_pattern() {
+    use crate::ui::{FromUi, ToUi, Value};
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Hours")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph)
+                .with_text("The Library opens late. It closes at nine."),
+            AomNode::new(2, Role::Paragraph).with_text("Weekends stay the same."),
+            AomNode::new(3, Role::Paragraph).with_text("Ask the library staff. They know."),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let skim = |engine: &mut ScreenReaderEngine, unit: usize| {
+        engine.execute_command("TopOfFile");
+        engine.execute_command("SkimReadDialog");
+        let id = ui
+            .take()
+            .iter()
+            .find_map(|m| match m {
+                ToUi::DialogShow { dialog } => Some(dialog.id),
+                _ => None,
+            })
+            .unwrap_or(0);
+        for (control, value) in [
+            ("rule", Value::Selected(2)),
+            ("pattern", Value::Text("library".into())),
+            ("unit", Value::Selected(unit)),
+        ] {
+            engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+                id,
+                control: control.into(),
+                value,
+            }));
+        }
+        engine
+            .handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+                id,
+                control: "start".into(),
+            }))
+            .unwrap_or_default()
+    };
+    let by_line = skim(&mut engine, 0);
+    assert!(
+        by_line.contains("The Library opens late. It closes at nine."),
+        "{by_line:?}"
+    );
+    assert!(by_line.contains("Ask the library staff."), "{by_line:?}");
+    assert!(!by_line.contains("Weekends"), "{by_line:?}");
+    let by_sentence = skim(&mut engine, 1);
+    assert!(
+        by_sentence.contains("The Library opens late."),
+        "{by_sentence:?}"
+    );
+    assert!(
+        !by_sentence.contains("nine") && !by_sentence.contains("They know"),
+        "{by_sentence:?}"
+    );
+}

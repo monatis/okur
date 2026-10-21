@@ -78,6 +78,10 @@ impl ScreenReaderEngine {
             let read = self.skim_sentences();
             return self.begin_say_all(0, Source::PageUnits(read), true);
         }
+        if self.skim_options.rule == crate::ui::skim::SkimRule::TextRules {
+            let read = self.skim_by_text_rule(&self.skim_options.clone());
+            return self.begin_say_all(0, Source::PageUnits(read), true);
+        }
         let read = self.skim_lines();
         self.begin_say_all(0, Source::PageSkim(read), true)
     }
@@ -86,9 +90,13 @@ impl ScreenReaderEngine {
     /// starts at, without role marks: Create Summary's pieces (JAWS 2025 help, Skim Reading
     /// Dialog: "all the text you would hear if you began skim reading from your present
     /// location").
-    pub(super) fn skim_pieces(&self, rule: crate::ui::skim::SkimRule) -> Vec<(usize, String)> {
-        let pieces: Vec<(usize, String)> = match rule {
+    pub(super) fn skim_pieces(
+        &self,
+        options: &crate::ui::skim::SkimOptions,
+    ) -> Vec<(usize, String)> {
+        let pieces: Vec<(usize, String)> = match options.rule {
             crate::ui::skim::SkimRule::FirstSentence => self.skim_sentences(),
+            crate::ui::skim::SkimRule::TextRules => self.skim_by_text_rule(options),
             _ => self
                 .skim_lines()
                 .into_iter()
@@ -102,6 +110,44 @@ impl ScreenReaderEngine {
             .into_iter()
             .map(|(offset, text)| (offset, without_role_marks(&text)))
             .filter(|(_, text)| !text.is_empty())
+            .collect()
+    }
+
+    /// Skim reading by a text rule: from the virtual cursor on, the lines, sentences or
+    /// paragraphs (Speak Unit) that hold the rule's pattern (JAWS 2025 help, Skim Reading
+    /// Dialog: "JAWS then reads the line, sentence, or paragraph that contains the matching
+    /// text").
+    fn skim_by_text_rule(&self, options: &crate::ui::skim::SkimOptions) -> Vec<(usize, String)> {
+        use crate::settings::SayAllUnit;
+        use crate::ui::skim::SpeakUnit;
+        let at = self.cursor.offset;
+        let units: Vec<(usize, String)> = match options.unit {
+            SpeakUnit::Lines => self
+                .cursor
+                .buffer
+                .lines
+                .iter()
+                .filter_map(|line| {
+                    Some((line.start_offset, self.cursor.line_text(line.line_index)?))
+                })
+                .collect(),
+            SpeakUnit::Sentences => self
+                .cursor
+                .say_all_units(SayAllUnit::Sentence)
+                .unwrap_or_default(),
+            SpeakUnit::Paragraphs => self
+                .cursor
+                .say_all_units(SayAllUnit::Paragraph)
+                .unwrap_or_default(),
+        };
+        let from = units
+            .iter()
+            .rposition(|(start, _)| *start <= at)
+            .unwrap_or(0);
+        units
+            .into_iter()
+            .skip(from)
+            .filter(|(_, text)| options.finds(&without_role_marks(text)))
             .collect()
     }
 

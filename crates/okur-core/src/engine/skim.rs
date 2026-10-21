@@ -20,7 +20,7 @@ impl ScreenReaderEngine {
             Some(dialog) => dialog,
             None => {
                 self.dialog_count += 1;
-                SkimDialog::new(self.dialog_count, self.skim_options)
+                SkimDialog::new(self.dialog_count, self.skim_options.clone())
             }
         };
         ui.send(ToUi::DialogShow {
@@ -61,7 +61,7 @@ impl ScreenReaderEngine {
                 self.skim_options = options;
                 self.start_skim_read()
             }
-            Outcome::Summary(options) => self.open_skim_summary(options.rule),
+            Outcome::Summary(options) => self.open_skim_summary(&options),
             Outcome::Nothing | Outcome::Send(_) | Outcome::Closed(_) => None,
         }
     }
@@ -70,13 +70,13 @@ impl ScreenReaderEngine {
     /// viewer "Skim Reading Results", each piece numbered: "1. City Library Expands Evening
     /// Hours - Riverside Gazette" [obs, 762/s2]. Enter on a piece moves there (JAWS 2025 help,
     /// Skim Reading Dialog).
-    fn open_skim_summary(&mut self, rule: SkimRule) -> Option<String> {
-        if matches!(rule, SkimRule::TextRules | SkimRule::Attributes) {
+    fn open_skim_summary(&mut self, options: &crate::ui::skim::SkimOptions) -> Option<String> {
+        if options.rule == SkimRule::Attributes {
             let said = crate::messages::msg::skim_rules_not_yet().to_string();
             self.speech.speak(&said, true);
             return Some(said);
         }
-        let pieces = self.skim_pieces(rule);
+        let pieces = self.skim_pieces(options);
         if pieces.is_empty() {
             return None;
         }
@@ -112,8 +112,8 @@ impl ScreenReaderEngine {
     /// The rule Ctrl+Insert+Down reads by, when Okur cannot read by it: said so.
     pub(super) fn skim_rule_unread(&mut self) -> Option<String> {
         match self.skim_options.rule {
-            SkimRule::FirstLine | SkimRule::FirstSentence => None,
-            SkimRule::TextRules | SkimRule::Attributes => {
+            SkimRule::FirstLine | SkimRule::FirstSentence | SkimRule::TextRules => None,
+            SkimRule::Attributes => {
                 let said = crate::messages::msg::skim_rules_not_yet().to_string();
                 self.speech.speak(&said, true);
                 Some(said)

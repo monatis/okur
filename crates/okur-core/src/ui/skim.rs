@@ -45,12 +45,30 @@ impl SkimRule {
     }
 }
 
+/// What a text rule reads of the text it finds: Speak Unit's options [obs, 777/s6-s8].
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum SpeakUnit {
+    #[default]
+    Lines,
+    Sentences,
+    Paragraphs,
+}
+
+impl SpeakUnit {
+    pub const ALL: [Self; 3] = [Self::Lines, Self::Sentences, Self::Paragraphs];
+}
+
 /// The dialog's choices, kept from one opening to the next.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SkimOptions {
     pub rule: SkimRule,
     /// Skim Reading Indication, checked at first [obs, 760/s2].
     pub indication: bool,
+    /// Text Search Pattern: what a text rule looks for.
+    pub pattern: String,
+    /// Use regular expression: the pattern is one.
+    pub regex: bool,
+    pub unit: SpeakUnit,
 }
 
 impl Default for SkimOptions {
@@ -58,7 +76,28 @@ impl Default for SkimOptions {
         Self {
             rule: SkimRule::FirstLine,
             indication: true,
+            pattern: String::new(),
+            regex: false,
+            unit: SpeakUnit::Lines,
         }
+    }
+}
+
+impl SkimOptions {
+    /// Whether a text rule finds its pattern in `text`, whatever its capitals. A pattern that is
+    /// not a regular expression finds nothing.
+    pub fn finds(&self, text: &str) -> bool {
+        let pattern = self.pattern.trim();
+        if pattern.is_empty() {
+            return false;
+        }
+        if self.regex {
+            return regex::RegexBuilder::new(pattern)
+                .case_insensitive(true)
+                .build()
+                .is_ok_and(|r| r.is_match(text));
+        }
+        text.to_lowercase().contains(&pattern.to_lowercase())
     }
 }
 
@@ -169,7 +208,7 @@ impl SkimDialog {
                 "pattern",
                 msg::skim_pattern(),
                 ControlKind::Edit {
-                    text: String::new(),
+                    text: self.options.pattern.clone(),
                 },
             ),
             control(
@@ -184,11 +223,20 @@ impl SkimDialog {
                     .iter()
                     .map(ToString::to_string)
                     .collect(),
-                    selected: 0,
+                    selected: SpeakUnit::ALL
+                        .iter()
+                        .position(|&unit| unit == self.options.unit)
+                        .unwrap_or(0),
                 },
                 available(rule, "unit"),
             ),
-            unavailable("regex", msg::skim_regex(), unchecked()),
+            unavailable(
+                "regex",
+                msg::skim_regex(),
+                ControlKind::CheckBox {
+                    checked: self.options.regex,
+                },
+            ),
             unavailable(
                 "delete",
                 msg::skim_delete(),
@@ -262,17 +310,24 @@ impl SkimDialog {
                         }
                     }
                     ("indication", Value::Checked(on)) => self.options.indication = *on,
+                    ("pattern", Value::Text(text)) => self.options.pattern = text.clone(),
+                    ("regex", Value::Checked(on)) => self.options.regex = *on,
+                    ("unit", Value::Selected(i)) => {
+                        if let Some(&unit) = SpeakUnit::ALL.get(*i) {
+                            self.options.unit = unit;
+                        }
+                    }
                     _ => {}
                 }
                 Outcome::Nothing
             }
             FromUi::DialogPressed { id, control } if *id == self.id => match control.as_str() {
-                "start" => Outcome::Start(self.options),
-                "summary" => Outcome::Summary(self.options),
-                "cancel" => Outcome::Closed(self.options),
+                "start" => Outcome::Start(self.options.clone()),
+                "summary" => Outcome::Summary(self.options.clone()),
+                "cancel" => Outcome::Closed(self.options.clone()),
                 _ => Outcome::Nothing,
             },
-            FromUi::DialogClosed { id } if *id == self.id => Outcome::Closed(self.options),
+            FromUi::DialogClosed { id } if *id == self.id => Outcome::Closed(self.options.clone()),
             _ => Outcome::Nothing,
         }
     }
@@ -389,7 +444,7 @@ mod tests {
         });
         let chosen = SkimOptions {
             rule: SkimRule::FirstSentence,
-            indication: true,
+            ..SkimOptions::default()
         };
         let pressed = |dialog: &mut SkimDialog, control: &str| {
             dialog.handle(&FromUi::DialogPressed {
@@ -397,8 +452,14 @@ mod tests {
                 control: control.to_owned(),
             })
         };
-        assert_eq!(pressed(&mut dialog, "start"), Outcome::Start(chosen));
-        assert_eq!(pressed(&mut dialog, "summary"), Outcome::Summary(chosen));
+        assert_eq!(
+            pressed(&mut dialog, "start"),
+            Outcome::Start(chosen.clone())
+        );
+        assert_eq!(
+            pressed(&mut dialog, "summary"),
+            Outcome::Summary(chosen.clone())
+        );
         assert_eq!(
             dialog.handle(&FromUi::DialogClosed { id: 1 }),
             Outcome::Closed(chosen)
