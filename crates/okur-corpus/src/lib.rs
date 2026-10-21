@@ -37,15 +37,24 @@ mod tests {
             report.errors
         );
         assert_eq!(parity::check_baseline(&dir, &report), Ok(()));
+        // Each step on the history layer, and on the spoken layer where it was recorded.
         let steps: Vec<(&str, &str, &[String])> = report
             .steps
             .iter()
-            .map(|s| {
-                (
+            .flat_map(|s| {
+                let history = (
                     s.key.as_str(),
                     s.engine.as_str(),
                     s.jaws_variants.as_slice(),
-                )
+                );
+                let spoken = s.spoken.as_ref().map(|spoken| {
+                    (
+                        s.key.as_str(),
+                        spoken.engine.as_str(),
+                        spoken.jaws_variants.as_slice(),
+                    )
+                });
+                std::iter::once(history).chain(spoken)
             })
             .collect();
         assert_eq!(divergences::check(&steps), Ok(()));

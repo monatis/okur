@@ -199,13 +199,15 @@ pub enum TypingEcho {
 }
 
 impl TypingEcho {
-    /// The echo a `DEFAULT.JCF` `TypingEcho` value sets: "0" is none; anything else is read
-    /// as characters (which values JAWS writes for words and for both is not known yet).
+    /// The echo a `DEFAULT.JCF` `TypingEcho` value sets: 0 none, 1 characters, 2 words, 3
+    /// both [obs, 709-711: each value set in the file, "ab cd" typed]; any other value is
+    /// characters, JAWS's default.
     pub fn from_jcf(value: &str) -> Self {
-        if value.trim() == "0" {
-            Self::None
-        } else {
-            Self::Characters
+        match value.trim() {
+            "0" => Self::None,
+            "2" => Self::Words,
+            "3" => Self::Both,
+            _ => Self::Characters,
         }
     }
 
@@ -754,6 +756,26 @@ mod tests {
         assert!(!json.to_lowercase().contains("jaws"), "{json}");
         let back: Result<Settings, _> = serde_json::from_str(&json);
         assert!(back.is_ok_and(|s| s == settings));
+    }
+
+    /// `TypingEcho` in `DEFAULT.JCF`: 0 none, 1 characters, 2 words, 3 both [obs, 709-711];
+    /// a value JAWS was not seen to write is its default, characters.
+    #[test]
+    fn typing_echo_reads_jaws_values() {
+        let read: Vec<TypingEcho> = ["0", "1", "2", "3", "7"]
+            .into_iter()
+            .map(TypingEcho::from_jcf)
+            .collect();
+        assert_eq!(
+            read,
+            [
+                TypingEcho::None,
+                TypingEcho::Characters,
+                TypingEcho::Words,
+                TypingEcho::Both,
+                TypingEcho::Characters
+            ]
+        );
     }
 
     #[test]

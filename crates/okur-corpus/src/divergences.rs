@@ -558,6 +558,10 @@ divergences! {
     "After a PlaceMarker is added, JAWS builds the page again and reads it from its top as it      does on loading: Ctrl+Home gets \"selected\" and that reading, K then says \"wrapping to      bottom\" before the PlaceMarker after the reading moved the cursor down, and Insert+Up      says \"Not in a Table\", in every trial. Okur keeps the page and its cursor: Ctrl+Home      says the page's title, K the PlaceMarker's line, Insert+Up that line.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
+    Difference::Step => ["711-desktop-typing-echo-jcf-3/s7"],
+    "With typing echo set to both characters and words, a word corrected with Backspace is not      said when Enter ends it: \"c d\", Backspace, Enter says only \"Enter\", in every trial,      while the same keys with words alone say \"c\" then \"Enter\" (710/s7), and both says      the word an uncorrected Enter ends (403/s27). Okur says the word as it stands in both      modes.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
+
     Difference::Step => [
         "701-web-placemarker-add-dialog/s15",
         "703-web-placemarker-none/s6",
@@ -618,30 +622,45 @@ pub fn compare(step: &str, okur: &str, jaws: &[String]) -> Comparison {
 }
 
 /// Every divergence still describes the corpus: its steps exist; a phrase JAWS also says is in
-/// JAWS's transcripts and one Okur also says is in Okur's speech; and a whole step does not
-/// match JAWS exactly. `steps` are the replayed steps: (key, Okur's speech, JAWS's
-/// transcripts).
+/// JAWS's transcripts and one Okur also says is in Okur's speech, on some layer; and a whole
+/// step does not match JAWS exactly on every layer (a typing echo differs only in what is
+/// spoken, the speech history holding none). `steps` are the replayed steps, one entry per
+/// layer compared: (key, Okur's speech, JAWS's transcripts).
 pub fn check(steps: &[(&str, &str, &[String])]) -> Result<(), String> {
     let mut stale = Vec::new();
     for divergence in DIVERGENCES {
         for &key in divergence.steps {
-            let Some(&(_, okur, jaws)) = steps.iter().find(|(k, _, _)| *k == key) else {
+            let layers: Vec<(&str, &[String])> = steps
+                .iter()
+                .filter(|(k, _, _)| *k == key)
+                .map(|&(_, okur, jaws)| (okur, jaws))
+                .collect();
+            if layers.is_empty() {
                 stale.push(format!("{key}: no such step"));
                 continue;
+            }
+            let any = |test: &dyn Fn(&str, &[String]) -> bool| {
+                layers.iter().any(|&(okur, jaws)| test(okur, jaws))
             };
             match divergence.difference {
-                Difference::JawsAlsoSays(phrase) if !jaws.iter().any(|v| v.contains(phrase)) => {
+                Difference::JawsAlsoSays(phrase)
+                    if !any(&|_, jaws| jaws.iter().any(|v| v.contains(phrase))) =>
+                {
                     stale.push(format!("{key}: JAWS no longer says {phrase:?}"));
                 }
-                Difference::OkurAlsoSays(phrase) if !okur.contains(phrase) => {
+                Difference::OkurAlsoSays(phrase) if !any(&|okur, _| okur.contains(phrase)) => {
                     stale.push(format!("{key}: Okur no longer says {phrase:?}"));
                 }
                 Difference::JawsSaysBeforeItsDialog
-                    if !jaws.iter().any(|v| from_its_dialog(v).is_some()) =>
+                    if !any(&|_, jaws| jaws.iter().any(|v| from_its_dialog(v).is_some())) =>
                 {
                     stale.push(format!("{key}: JAWS says nothing before its dialog"));
                 }
-                Difference::Step if jaws.iter().any(|v| comparable(v) == comparable(okur)) => {
+                Difference::Step
+                    if !any(&|okur, jaws| {
+                        !jaws.iter().any(|v| comparable(v) == comparable(okur))
+                    }) =>
+                {
                     stale.push(format!("{key}: Okur now matches JAWS"));
                 }
                 _ => {}
@@ -767,6 +786,30 @@ mod tests {
                 &jaws(&["No font"])
             ),
             Comparison::Accepted
+        );
+    }
+
+    /// A whole step that matches JAWS on the history layer still differs while its spoken layer
+    /// does: a typing echo is spoken, never written to the history.
+    #[test]
+    fn a_step_that_differs_on_one_layer_is_not_stale() {
+        let blank = vec![String::new()];
+        let enter = vec!["Enter".to_owned()];
+        let key = "711-desktop-typing-echo-jcf-3/s7";
+        let differs: Vec<(&str, &str, &[String])> =
+            vec![(key, "", &blank), (key, "c Enter", &enter)];
+        let result = check(&differs);
+        assert!(
+            !result.as_ref().is_err_and(|e| e.contains(key)),
+            "{result:?}"
+        );
+        let matches: Vec<(&str, &str, &[String])> = vec![(key, "", &blank), (key, "Enter", &enter)];
+        let result = check(&matches);
+        assert!(
+            result
+                .as_ref()
+                .is_err_and(|e| e.contains(&format!("{key}: Okur now matches JAWS"))),
+            "{result:?}"
         );
     }
 
