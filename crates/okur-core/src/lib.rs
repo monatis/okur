@@ -11,6 +11,7 @@ pub mod editing;
 pub mod element_lists;
 pub mod engine;
 pub mod event;
+pub mod flexible_web;
 pub mod input;
 pub mod keyboard_help;
 pub mod labels;

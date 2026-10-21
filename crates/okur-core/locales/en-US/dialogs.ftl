@@ -224,3 +224,18 @@ placemarker-remove-all-title = PlaceMarker RemoveAll Warning
 placemarker-remove-all-question = Are you sure you want to remove all PlaceMarkers?
 placemarker-remove-all-yes = &Yes
 placemarker-remove-all-no = &No
+
+## Flexible Web (Insert+Space, then X): its customizations, as JAWS's wizard names them
+## [obs, 705, 708, 716, 720; the guide, Surf's Up chapter 16]. $kind is an element's kind as
+## the wizard names it ("MainRegion", "heading level 1"), $kinds its plural.
+
+flexible-web-heading = heading level { $level }
+flexible-web-frame = frame
+flexible-web-hide-from-top = Hide { $kind } { $number } from the top
+flexible-web-hide-from-top-with-text = Hide { $kind } { $number } from the top with text: "{ $text }"
+flexible-web-hide-from-bottom = Hide { $kind } { $number } from the bottom
+flexible-web-hide-all = Hide all { $kinds }
+flexible-web-hide-all-with-text = Hide all { $kinds } with text: "{ $text }"
+flexible-web-start-from-top = Start at { $kind } { $number } from the top
+flexible-web-start-from-top-with-text = Start at { $kind } { $number } from the top with text: "{ $text }"
+flexible-web-start-from-bottom = Start at { $kind } { $number } from the bottom
