@@ -5775,8 +5775,8 @@ fn speech_on_demand_speaks_only_its_commands() {
 }
 
 /// The Word List: W before a word is chosen says how to choose one; OK moves to the chosen
-/// word's first line, found within other words, and W and Shift+W go on from there [obs,
-/// 560/s3, s6-s10].
+/// word's first line, found within other words, and W and Shift+W go on from there, wrapping
+/// [obs, 560/s3, s6-s10, 766/s5-s8].
 #[test]
 fn the_word_list_chooses_a_word_for_w() {
     use crate::ui::{ControlKind, FromUi, ToUi, Value};
@@ -5833,5 +5833,13 @@ fn the_word_list_chooses_a_word_for_w() {
     assert_eq!(
         engine.execute_command("MoveToPriorWordFromList").as_deref(),
         Some("The library opens early")
+    );
+    // Before the first, the search goes on from the bottom [obs, 766/s7].
+    assert_eq!(
+        engine.execute_command("MoveToPriorWordFromList").as_deref(),
+        Some(
+            "wrapping to bottom
+Reopens in May"
+        )
     );
 }

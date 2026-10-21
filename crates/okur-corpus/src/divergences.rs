@@ -140,6 +140,9 @@ divergences! {
         "704-web-placemarker-two/s44",
         "560-web-word-list/s1",
         "560-web-word-list/s4",
+        "764-web-word-list-a-word-followed/s1",
+        "765-web-word-list-dialog-and-case/s1",
+        "766-web-word-list-past-the-last/s1",
     ],
     "Opening one of its list dialogs, JAWS's speech passes through its own windows before it \
      names the dialog: its main window (its version, a list's tutor message) and the browser's \
