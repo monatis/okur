@@ -895,6 +895,15 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         top_window,
     )?;
     let focused = event.focus_chain.last()?;
+    // A WPF dialog's window takes the focus a moment before its first control does, with
+    // nothing of the dialog's text; the control's focus brings it, said with the dialog:
+    // "Name Your Rule dialog | Please enter a name for the rule. | Rule Name: Edit" [obs,
+    // 783/s7]. The window's own focus is not one.
+    if let Some(window) = dialog.filter(|w| w.class_name.as_deref() != Some(WIN32_DIALOG_CLASS)) {
+        if focused.control_type == UIA_WINDOW && focused.runtime_id == window.runtime_id {
+            return None;
+        }
+    }
     toolbar_button(event, focused, &mut focus);
     // A Win32 dialog's control names its access key through MSAA only: the focus event's
     // object is the control ("Script: Combo box … Alt+r" [obs, 541/s8]).
@@ -922,7 +931,10 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .or_else(|| event.top_window_class.clone())
             .or_else(|| active_window.and_then(|w| w.class_name.clone()))
     };
-    focus.in_dialog_box = focus.platform.top_window_class.as_deref() == Some(WIN32_DIALOG_CLASS);
+    // A window UI Automation calls a dialog is one too, whatever draws it: JAWS's WPF windows,
+    // "Name Your Rule dialog" [obs, 783/s7].
+    focus.in_dialog_box =
+        focus.platform.top_window_class.as_deref() == Some(WIN32_DIALOG_CLASS) || dialog.is_some();
     focus.multi_line = multi_line_edit(
         event
             .focus_window_class
@@ -956,7 +968,9 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     // A dialog box (Win32 #32770, as a message box is) is announced with its static text,
     // which sits beside its buttons [obs, 306/s1]. Other windows are announced by title only
     // (306/s10).
-    if active_window.and_then(|w| w.class_name.as_deref()) == Some(WIN32_DIALOG_CLASS) {
+    if active_window.and_then(|w| w.class_name.as_deref()) == Some(WIN32_DIALOG_CLASS)
+        || dialog.is_some()
+    {
         // On a property sheet's page, the text beside the focus is the page's labels ("Type:",
         // "Local Disk"): JAWS 2025 opens Local Disk (C:) Properties naming the page instead,
         // "General page" (dev box, 2026-10-15). A wizard shows no tabs and takes its page's
@@ -984,6 +998,28 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .unwrap_or_default();
         focus.group_box = event.group_box.clone();
         focus.default_button = event.default_button.clone();
+        // An unnamed field is named by the text just before it, as a Win32 dialog's static
+        // text names the field after it; UI Automation gives a WPF dialog's field no name:
+        // "Please enter a name for the rule. | Rule Name: Edit" [obs, 783/s7].
+        let field = matches!(focused.control_type, UIA_EDIT | UIA_COMBOBOX)
+            && focused.name.as_deref().is_none_or(|n| n.trim().is_empty());
+        let label_before = field
+            .then(|| {
+                let at = event.focus_siblings.iter().position(|s| {
+                    s.control_type == focused.control_type
+                        && s.name.as_deref().is_none_or(|n| n.trim().is_empty())
+                        && (s.runtime_id.is_none() || s.runtime_id == focused.runtime_id)
+                })?;
+                let before = event.focus_siblings.get(at.checked_sub(1)?)?;
+                (before.control_type == UIA_TEXT)
+                    .then(|| before.name.clone())
+                    .flatten()
+                    .filter(|n| !n.trim().is_empty())
+            })
+            .flatten();
+        if let Some(label) = &label_before {
+            focus.name = Some(label.clone());
+        }
         // A text that names a control beside it is that control's label, said with the
         // control, not as the dialog's text: JAWS opened Okur's settings with "Okur Settings
         // dialog | Speech Synthesizer: Combo box", without "Voice:", "Rate:" (dev box,
@@ -1035,6 +1071,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         if let Some(tree) = &event.dialog_tree {
             control_names(tree, &prompt, &mut labels);
         }
+        labels.extend(label_before.as_deref());
         let text: Vec<&str> = event
             .focus_siblings
             .iter()
