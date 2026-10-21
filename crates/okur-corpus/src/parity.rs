@@ -724,9 +724,7 @@ struct RecordingSpeech {
     spoken: Log,
     /// The punctuation level the engine's voice settings give the synthesizer.
     punctuation: std::sync::Arc<std::sync::Mutex<okur_core::settings::Punctuation>>,
-    /// Speech muted (Insert+Space, S): nothing is kept, as JAWS keeps nothing [obs, 517/s7].
-    muted: std::sync::Arc<std::sync::atomic::AtomicBool>,
-    /// Speech On Demand between its commands: kept in the history, not spoken [obs, 700].
+    /// Less speech: kept in the history, not spoken [obs, 700, 707].
     unspoken: std::sync::Arc<std::sync::atomic::AtomicBool>,
 }
 
@@ -743,10 +741,6 @@ fn drain(log: &Log) -> Vec<String> {
 }
 
 impl RecordingSpeech {
-    fn silent(&self) -> bool {
-        self.muted.load(std::sync::atomic::Ordering::SeqCst)
-    }
-
     fn unspoken(&self) -> bool {
         self.unspoken.load(std::sync::atomic::Ordering::SeqCst)
     }
@@ -760,9 +754,6 @@ impl RecordingSpeech {
 
     /// `symbols`: every symbol named (a selection, a word read on its own).
     fn push(&self, text: &str, symbols: bool) {
-        if self.silent() {
-            return;
-        }
         let level = self
             .punctuation
             .lock()
@@ -792,7 +783,7 @@ impl RecordingSpeech {
 impl okur_core::speech::SpeechOutput for RecordingSpeech {
     /// JAWS's speech history has no typing echo, but its synthesizer speaks it.
     fn speak_echo(&mut self, text: &str) {
-        if self.silent() {
+        if self.unspoken() {
             return;
         }
         let pitch = okur_core::pronounce::character_pitch(text);
@@ -817,10 +808,10 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
     }
 
     fn speak_character(&mut self, text: &str, _interrupt: bool) {
-        if self.silent() {
+        append(&self.history, text.to_owned());
+        if self.unspoken() {
             return;
         }
-        append(&self.history, text.to_owned());
         let pitch = okur_core::pronounce::character_pitch(text);
         append(
             &self.spoken,
@@ -829,30 +820,30 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
     }
 
     fn speak_spelled(&mut self, text: &str, _interrupt: bool) {
-        if self.silent() {
+        append(&self.history, okur_core::pronounce::spelled(text));
+        if self.unspoken() {
             return;
         }
-        append(&self.history, okur_core::pronounce::spelled(text));
         for (part, pitch) in okur_core::pronounce::spelled_parts(text) {
             append(&self.spoken, okur_core::pronounce::pitched(&part, pitch));
         }
     }
 
     fn speak_spelled_selection(&mut self, text: &str, _interrupt: bool) {
-        if self.silent() {
+        append(&self.history, text.to_owned());
+        if self.unspoken() {
             return;
         }
-        append(&self.history, text.to_owned());
         for (part, pitch) in okur_core::pronounce::spelled_parts(text) {
             append(&self.spoken, okur_core::pronounce::pitched(&part, pitch));
         }
     }
 
     fn speak_phonetic(&mut self, text: &str, _interrupt: bool) {
-        if self.silent() {
+        append(&self.history, text.to_owned());
+        if self.unspoken() {
             return;
         }
-        append(&self.history, text.to_owned());
         let pitch = okur_core::pronounce::character_pitch(text);
         append(
             &self.spoken,
@@ -861,10 +852,6 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
     }
 
     fn stop(&mut self) {}
-
-    fn set_muted(&mut self, muted: bool) {
-        self.muted.store(muted, std::sync::atomic::Ordering::SeqCst);
-    }
 
     fn set_unspoken(&mut self, unspoken: bool) {
         self.unspoken

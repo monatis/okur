@@ -276,8 +276,6 @@ pub struct ScreenReaderEngine {
     /// The named groups the virtual cursor entered as an element list's Enter moved it to
     /// a control: said before the page as the focus comes back [obs, 260/s3, 246/s3].
     list_entered_groups: Vec<String>,
-    /// Speech turned off with Insert+Space, S.
-    speech_muted: bool,
     /// Full Speech or less speech for this session, as Insert+Space, S set it; else the
     /// settings'.
     speech_mode_session: Option<crate::settings::SpeechMode>,
@@ -402,7 +400,6 @@ impl ScreenReaderEngine {
             clicked: None,
             radio_switched: None,
             list_entered_groups: Vec::new(),
-            speech_muted: false,
             speech_mode_session: None,
             less_speech_session: None,
             settings: crate::settings::Settings::default(),

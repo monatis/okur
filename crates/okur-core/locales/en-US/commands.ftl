@@ -108,6 +108,10 @@ speech-on-demand-unavailable = Not available in Full Speech mode
 # Insert+Space, S from less speech, and back to less speech on demand [obs, 700/s12, s15].
 speech-mode-full = Full Speech
 speech-mode-on-demand = Speech On Demand
+# Insert+Space, Shift+S in less speech, muting it and back to on demand, with JAWS's own
+# capitals [obs, 707/s3, s7].
+less-speech-set-muted = Speech off set to speech mute
+less-speech-set-on-demand = speech off set to speech on demand
 
 ## Say Default Button (Insert+E) and the settings in use (Insert+Q) [obs, 513]
 

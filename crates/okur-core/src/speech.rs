@@ -1000,15 +1000,10 @@ pub trait SpeechOutput: Send + Sync {
         let _ = voice;
     }
 
-    /// Speech muted (Insert+Space, S): nothing is spoken, nor kept in the history, until it is
-    /// unmuted [obs, 517/s7].
-    fn set_muted(&mut self, muted: bool) {
-        let _ = muted;
-    }
-
-    /// Speech On Demand between its commands: what is said from now on is kept in the speech
-    /// history but not given to the synthesizer, until it is spoken again [obs, 700/s1, s3:
-    /// Down and H silent, "banner" and the heading in the history].
+    /// Less speech (Speech On Demand between its commands, or muted): what is said from now on
+    /// is kept in the speech history but not given to the synthesizer, until it is spoken
+    /// again [obs, 700/s1, s3: Down and H silent, "banner" and the heading in the history;
+    /// 707/s4, s5 muted].
     fn set_unspoken(&mut self, unspoken: bool) {
         let _ = unspoken;
     }

@@ -156,16 +156,16 @@ mod tests {
     use crate::speech::SpeechOutput;
     use std::sync::{Arc, Mutex};
 
-    /// Speech that keeps what it says and honors mute.
+    /// Speech that keeps what it speaks, and speaks nothing it is told to keep unspoken.
     #[derive(Clone, Default)]
     struct Speech {
         said: Arc<Mutex<Vec<String>>>,
-        muted: Arc<Mutex<bool>>,
+        unspoken: Arc<Mutex<bool>>,
     }
 
     impl SpeechOutput for Speech {
         fn speak(&mut self, text: &str, _interrupt: bool) {
-            if !self.muted.lock().is_ok_and(|m| *m) {
+            if !self.unspoken.lock().is_ok_and(|m| *m) {
                 if let Ok(mut said) = self.said.lock() {
                     said.push(text.to_owned());
                 }
@@ -180,9 +180,9 @@ mod tests {
                 said.clear();
             }
         }
-        fn set_muted(&mut self, muted: bool) {
-            if let Ok(mut m) = self.muted.lock() {
-                *m = muted;
+        fn set_unspoken(&mut self, unspoken: bool) {
+            if let Ok(mut m) = self.unspoken.lock() {
+                *m = unspoken;
             }
         }
     }
@@ -193,8 +193,10 @@ mod tests {
         engine.handle_key_event(&KeyEvent::new(key, modifiers, true))
     }
 
+    /// Insert+Space, S goes to Speech On Demand, saying so, where Down says nothing; again, to
+    /// full speech [obs, 706/s3-s8].
     #[test]
-    fn insert_space_then_s_turns_speech_off_and_on() {
+    fn insert_space_then_s_goes_to_speech_on_demand_and_back() {
         let page = AomNode::new(0, Role::Document).with_children(vec![
             AomNode::new(1, Role::Paragraph).with_text("First"),
             AomNode::new(2, Role::Paragraph).with_text("Second"),
@@ -212,11 +214,13 @@ mod tests {
             press(&mut engine, Key::Alpha('S'), false),
             KeyAction::Consume
         );
+        assert!(said(&speech).iter().any(|s| s == "Speech On Demand"));
         let _ = press(&mut engine, Key::DownArrow, false);
-        // The muted Down moved to "Second" and said nothing.
+        // Down moved to "Second" and said nothing.
         assert!(!said(&speech).iter().any(|s| s.contains("Second")));
         let _ = press(&mut engine, Key::Space, true);
         let _ = press(&mut engine, Key::Alpha('S'), false);
+        assert!(said(&speech).iter().any(|s| s == "Full Speech"));
         let _ = press(&mut engine, Key::DownArrow, false);
         assert!(said(&speech).iter().any(|s| s.contains("Third")));
         // Outside the layer, S is a quick key again.

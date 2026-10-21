@@ -136,7 +136,6 @@ pub struct SpeechThread {
     /// Where a Say All part's mark goes as the synthesizer starts it.
     report_to: Arc<Mutex<Option<MarkReport>>>,
     /// Speech muted (Insert+Space, S): nothing is sent or logged.
-    muted: bool,
     /// Speech On Demand between its commands: kept, not spoken.
     unspoken: bool,
     /// What was said lately, for the Speech History viewer.
@@ -222,7 +221,6 @@ impl SpeechThread {
             log,
             voices,
             report_to,
-            muted: false,
             unspoken: false,
             recent: std::collections::VecDeque::new(),
         }
@@ -372,7 +370,7 @@ fn report(to: &Mutex<Option<MarkReport>>, mark: u64) {
 
 impl SpeechThread {
     fn send(&self, request: Request) {
-        if (self.muted || self.unspoken) && request.speaks() {
+        if self.unspoken && request.speaks() {
             return;
         }
         self.pending.fetch_add(1, Ordering::SeqCst);
@@ -382,9 +380,6 @@ impl SpeechThread {
     }
 
     fn record(&mut self, kind: SpeechLogKind, text: &str, interrupt: bool) {
-        if self.muted {
-            return;
-        }
         if kind == SpeechLogKind::Speak && !text.trim().is_empty() {
             if self.recent.len() == HISTORY {
                 self.recent.pop_front();
@@ -418,15 +413,12 @@ impl SpeechOutput for SpeechThread {
         self.report_to.lock().is_ok_and(|to| to.is_some())
     }
 
-    fn set_muted(&mut self, muted: bool) {
-        if muted && !self.muted {
+    /// Kept in the history and the speech log, not spoken: less speech. What was being spoken
+    /// stops as it begins.
+    fn set_unspoken(&mut self, unspoken: bool) {
+        if unspoken && !self.unspoken {
             self.send(Request::Stop);
         }
-        self.muted = muted;
-    }
-
-    /// Kept in the history and the speech log, not spoken: Speech On Demand.
-    fn set_unspoken(&mut self, unspoken: bool) {
         self.unspoken = unspoken;
     }
 
