@@ -57,19 +57,19 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `e3eab4f` (2026-10-21).
+Every figure is tool output, rerun for this README at commit `fc87b50` (2026-10-21).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **4805 of 4978** | `okur parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **4683 of 4940** | `okur parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **105** | `okur parity` |
-| Recorded JAWS scenarios, trials | **334, 1056** (all 1056 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1252 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **4915 of 5104** | `okur parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **4794 of 5066** | `okur parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **110** | `okur parity` |
+| Recorded JAWS scenarios, trials | **351, 1107** (all 1107 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1259 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
-The 105 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
+The 110 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
 accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
 place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
 Okur says its help in its own words. Each one is listed, with the reason and who decided it,
@@ -83,15 +83,17 @@ in [accepted divergences](docs/references/accepted-divergences.md).
 
 - **Web pages in browse mode** with the Virtual PC Cursor:
   - reading by character, word, line, sentence and paragraph; Home, End, PageUp and
-    PageDown; Say All, where Right and Left skip and go back a line, PageUp and PageDown
-    change the rate, and the cursor stays where you stopped it;
+    PageDown; Say All by line, sentence or paragraph (Say All Reads, in Okur Settings), where
+    Right and Left skip and go back by that unit, PageUp and PageDown change the rate, and the
+    cursor stays where you stopped it;
   - quick navigation keys: headings and their levels, links, form fields, edits, buttons,
     check boxes, radio buttons, combo boxes, lists and list items, tables, graphics, regions,
     articles, divisions, separators, tabs and mail links; N past a run of links; the first
-    and last heading or form field; Shift+Comma and Shift+Period to the start and end of a
-    list, table or region; Equals to where the page says reading goes next (aria-flowto); S
-    and D to the next element of the same or of another type (and Ctrl+Insert with Up, Right
-    and Left); Jump to Line (J, and Shift+J back);
+    and last heading or form field; V and U to the next visited and unvisited link; a
+    temporary PlaceMarker (Ctrl+Windows+K) to come back to with K; Shift+Comma and Shift+Period
+    to the start and end of a list, table or region; Equals to where the page says reading goes
+    next (aria-flowto); S and D to the next element of the same or of another type (and
+    Ctrl+Insert with Up, Right and Left); Jump to Line (J, and Shift+J back);
   - the lists of links, headings and form fields (Insert+F7, Insert+F6, Insert+F5), Virtual
     HTML Features (Insert+F3), the element lists on Ctrl+Insert and a letter (buttons, edits,
     check boxes, radio buttons, combo boxes, graphics, lists, articles, paragraphs, block
@@ -135,8 +137,8 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   cursor, Insert+Numpad Minus to bring the mouse to the PC cursor, and Alt+Delete for where
   the active cursor is.
 - **Information keys:** the time and date (Insert+F12), the settings in use (Insert+Q), the
-  application's version (Ctrl+Insert+V), and in a page the text's colors by the names JAWS
-  gives them (Insert+5: "blue2 on white").
+  application's version (Ctrl+Insert+V), and the colors of a page's text or a text field by the
+  names JAWS gives them (Insert+5: "blue2 on white").
 - **Help** in Okur's own words: Insert+F1 for the control or the page element you are on,
   Insert+H for Okur's keys there, Insert+W for Windows' keys, and Keyboard Help (Insert+1),
   where each key is named and described instead of run.
@@ -174,8 +176,8 @@ documentation describes and Okur lacks, most important first. Among them:
 - Speech On Demand (Shift+S in the speech layer only says it is not available, as JAWS does
   in full speech mode);
 - notifications (toasts) and the notification history;
-- Say All by sentence or paragraph;
-- visited links, PlaceMarkers, custom labels and Flexible Web;
+- what is said for a visited link, saved PlaceMarkers and the PlaceMarker List, custom labels
+  and Flexible Web;
 - settings for one application or one site from the dialog: Okur uses them from its
   settings file, but the dialog saves for all applications;
 - the rest of what the verbosity levels change, as further recordings show it;
