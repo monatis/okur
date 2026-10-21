@@ -1,0 +1,85 @@
+{
+  "id": "755-desktop-jaws-cursor-in-a-dialog",
+  "name": "The JAWS cursor in Notepad's Go To Line dialog: Ctrl+G, Insert+Numpad Minus, Numpad Minus, Insert+Up, Down twice, Insert+Up, Page Up, Insert+Up, Down, Insert+Up, Numpad Plus, Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "Ctrl+G",
+      "settle_max_ms": 15000,
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "Insert+NumpadMinus",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "NumpadMinus",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "PageUp",
+      "id": "s8"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s9"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s10"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s11"
+    },
+    {
+      "type": "key",
+      "command": "NumpadPlus",
+      "id": "s12"
+    },
+    {
+      "type": "key",
+      "command": "Escape",
+      "settle_max_ms": 15000,
+      "id": "s13"
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "id": "754-desktop-jaws-cursor-keys-in-notepad",
+  "name": "The JAWS cursor's other keys in Notepad: Insert+Numpad Minus, Numpad Minus, Down; End, Numpad5, Home, Numpad5; Ctrl+Right, Ctrl+Left, Left, Insert+Left; Page Down, Insert+Up, Up, Insert+Up; Numpad Plus",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "Insert+NumpadMinus",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "NumpadMinus",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "End",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "Numpad5",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "Home",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Numpad5",
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Right",
+      "id": "s8"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Left",
+      "id": "s9"
+    },
+    {
+      "type": "key",
+      "command": "Left",
+      "id": "s10"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Left",
+      "id": "s11"
+    },
+    {
+      "type": "key",
+      "command": "PageDown",
+      "id": "s12"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s13"
+    },
+    {
+      "type": "key",
+      "command": "Up",
+      "id": "s14"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s15"
+    },
+    {
+      "type": "key",
+      "command": "NumpadPlus",
+      "id": "s16"
+    }
+  ]
+}
