@@ -1,8 +1,8 @@
 {
   "id": "704-web-placemarker-two",
-  "name": "Two saved PlaceMarkers on the reading room page, removed at the end: H, Down, Ctrl+Shift+K, Enter, Enter; Ctrl+Home, H three times, Down, the same; Ctrl+Home, K three times, Shift+K, 7, 8, 9; Ctrl+Shift+K, Down Arrow (a PlaceMarker chosen), Tab eight times, Alt+H (Change), Escape, Alt+M (MoveTo), Insert+Up; Ctrl+Shift+K, Down Arrow, Alt+R (Remove), Alt+V (Remove All), Enter (Yes), K, Escape (keys in the dialogs typed by JAWS)",
+  "name": "Two saved PlaceMarkers on the reading room page, removed at the end: H, Down, Ctrl+Shift+K, Enter, Enter (waiting for the page read again); Ctrl+Home, H three times, Down, the same; Ctrl+Home, K three times, Shift+K, 7, 8, 9; Ctrl+Shift+K, Down Arrow (a PlaceMarker chosen), Tab eight times, Alt+H (Change), Escape; Ctrl+Shift+K, Down Arrow, Alt+M (MoveTo), Insert+Up; Ctrl+Shift+K, Down Arrow, Alt+R (Remove); Ctrl+Shift+K, Alt+V (Remove All), Enter (Yes), K, Escape (keys in the dialogs typed by JAWS)",
   "category": "realistic-pages",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/placemarkers.html",
   "target_app": "chrome",
   "reset": {
@@ -34,7 +34,9 @@
     {
       "id": "s5",
       "type": "jaws_function",
-      "command": "TypeKey(\"Enter\")"
+      "command": "TypeKey(\"Enter\")",
+      "onset_ms": 4000,
+      "settle_max_ms": 40000
     },
     {
       "id": "s6",
@@ -74,7 +76,9 @@
     {
       "id": "s13",
       "type": "jaws_function",
-      "command": "TypeKey(\"Enter\")"
+      "command": "TypeKey(\"Enter\")",
+      "onset_ms": 4000,
+      "settle_max_ms": 40000
     },
     {
       "id": "s14",
@@ -178,46 +182,61 @@
     },
     {
       "id": "s34",
-      "type": "jaws_function",
-      "command": "TypeKey(\"Alt+M\")"
-    },
-    {
-      "id": "s35",
-      "type": "key",
-      "command": "Insert+Up"
-    },
-    {
-      "id": "s36",
       "type": "key",
       "command": "Ctrl+Shift+K"
     },
     {
-      "id": "s37",
+      "id": "s35",
       "type": "jaws_function",
       "command": "TypeKey(\"DownArrow\")"
     },
     {
-      "id": "s38",
+      "id": "s36",
       "type": "jaws_function",
-      "command": "TypeKey(\"Alt+R\")"
+      "command": "TypeKey(\"Alt+M\")"
+    },
+    {
+      "id": "s37",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s38",
+      "type": "key",
+      "command": "Ctrl+Shift+K"
     },
     {
       "id": "s39",
       "type": "jaws_function",
-      "command": "TypeKey(\"Alt+V\")"
+      "command": "TypeKey(\"DownArrow\")"
     },
     {
       "id": "s40",
       "type": "jaws_function",
-      "command": "TypeKey(\"Enter\")"
+      "command": "TypeKey(\"Alt+R\")"
     },
     {
       "id": "s41",
       "type": "key",
-      "command": "K"
+      "command": "Ctrl+Shift+K"
     },
     {
       "id": "s42",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+V\")"
+    },
+    {
+      "id": "s43",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s44",
+      "type": "key",
+      "command": "K"
+    },
+    {
+      "id": "s45",
       "type": "jaws_function",
       "command": "TypeKey(\"Escape\")"
     }
