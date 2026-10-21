@@ -410,6 +410,15 @@ function Read-SpeechHistoryOnce([long]$SpokenStart) {
         [void](Wait-Silence -OnsetMs 300 -QuietMs 500 -MaxMs 10000)
         $records = @(Read-SpokenSince $SpokenStart)
         $spokenEnd = 'silence'
+        # A step that turned full speech back on (Shift+S in the speech layer) hears the
+        # confirmation again (700/s12-s14, round 142): the step's speech ends where it begins.
+        for ($i = 0; $i -lt $records.Count; $i++) {
+            if ((Get-SpokenText $records[$i]).Trim() -eq $CopyConfirmation) {
+                if ($i -gt 0) { $records = @($records[0..($i - 1)]) } else { $records = @() }
+                $spokenEnd = 'confirmation'
+                break
+            }
+        }
     } elseif (Test-Path $SpokenLog) {
         $spokenEnd = 'timeout'
         $deadline = [DateTime]::UtcNow.AddMilliseconds($ConfirmationWaitMs)
@@ -758,6 +767,40 @@ if ($scenario.fixture -and -not $launch) {
     Start-Sleep -Milliseconds 2000
 }
 
+# Whether JAWS reads the page: Say Line there says a line of it, not the window's title with
+# the browser's name (705, round 142).
+function Test-JawsInPage {
+    Stop-ReaderSpeech
+    Clear-ReaderHistory
+    [void](Wait-Silence -OnsetMs 150 -QuietMs 300 -MaxMs 5000)
+    $start = Get-SpokenOffset
+    [void](Send-Chord "Insert+Up")
+    [void](Wait-Silence -OnsetMs 800 -QuietMs 500 -MaxMs 10000)
+    $said = (Read-SpeechHistoryOnce $start).text
+    return -not [string]::IsNullOrWhiteSpace($said) -and $said.Trim() -notmatch 'Google Chrome$'
+}
+
+# The lab Chrome closed and started again on the fixture, in front, its page focused.
+function Restart-LabPage {
+    foreach ($p in Get-ChromeBrowserProcesses) {
+        if (Test-LabChrome $p) { Stop-Process -Id $p.ProcessId -Force -ErrorAction SilentlyContinue }
+    }
+    Start-Sleep -Seconds 2
+    [void](Start-LabChrome $scenario.fixture)
+    for ($i = 0; $i -lt 100; $i++) {
+        $w = Get-LabChromeWindow | Where-Object { -not $expectedTitle -or ($_.MainWindowTitle -and $_.MainWindowTitle.StartsWith($expectedTitle)) }
+        if ($w) { break }
+        Start-Sleep -Milliseconds 200
+    }
+    Start-Sleep -Seconds 3
+    Focus-Target 'chrome'
+    for ($f = 0; $f -lt 4; $f++) {
+        if ((& $Okur focus | Select-Object -Last 1 | ConvertFrom-Json).in_document) { break }
+        [void](Send-Chord "F6"); Start-Sleep -Milliseconds 500
+    }
+    [void](Wait-Silence -OnsetMs 1500 -QuietMs 700 -MaxMs 10000)
+}
+
 # The tracer runs elevated: stopping it may need elevation too.
 function Stop-Tracer($process) {
     try { $process.Kill() } catch {
@@ -842,6 +885,25 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     foreach ($rk in $resetKeys) {
         [void](Send-Chord $rk)
         $resetQuiet = Wait-Silence -OnsetMs 800 -QuietMs 500 -MaxMs 10000
+    }
+    # JAWS can be outside the page though Chrome is in front with UI Automation's focus in it:
+    # H said nothing and Say Line the window's title, "... - Google Chrome", for every key of
+    # 705 in round 142 (and of 700 in 138, 701 in 139). Say Line in the page says a line of
+    # it; with the browser's name, the lab Chrome is started again once, and a trial still
+    # outside the page fails.
+    if ($targetProc -eq 'chrome' -and $Reader -eq 'jaws' -and -not $launch) {
+        $inPage = Test-JawsInPage
+        if (-not $inPage) {
+            Restart-LabPage
+            foreach ($rk in $resetKeys) {
+                [void](Send-Chord $rk)
+                $resetQuiet = Wait-Silence -OnsetMs 800 -QuietMs 500 -MaxMs 10000
+            }
+            $inPage = Test-JawsInPage
+            $trialResult.chrome_restarted = $true
+        }
+        $trialResult.jaws_in_page = $inPage
+        if (-not $inPage) { $trialResult.trial_success = $false }
     }
     Stop-ReaderSpeech
     Clear-ReaderHistory
