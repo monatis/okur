@@ -531,6 +531,39 @@ A step can be in more than one entry; all of its entries apply.
   (Surf's Up, chapter 16) says rules are applied whenever a page they apply to loads.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-21.
 
+### The question before unsaved Flexible Web customizations is not read
+
+- Steps: `742-web-flexible-web-save-page-and-reload-question/s30`,
+  `746-web-flexible-web-rule-saved-from-question/s11`.
+- Difference: the whole step. When a page loads while the page before has temporary
+  customizations, JAWS asks whether to save them and says only "Flexible Web dialog | Yes
+  Button | To activate press spacebar."; Okur says the page's title, then the dialog with its
+  question, "You have created temporary Flexible Web customizations. If you continue without
+  saving them, these customizations will be lost. Would you like to save your temporary
+  customizations?", and Yes.
+- Why: the question is the dialog's text (the trace has it), and JAWS reads the text of its
+  other message boxes ("Are you sure you want to remove all PlaceMarkers?" [obs, 702/s27]). A
+  Yes heard without its question cannot be answered.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-21.
+
+### The focus stays in JAWS's window after the save page the question opened
+
+- Steps: `742-web-flexible-web-save-page-and-reload-question/s39`,
+  `742-web-flexible-web-save-page-and-reload-question/s41`,
+  `742-web-flexible-web-save-page-and-reload-question/s42`,
+  `742-web-flexible-web-save-page-and-reload-question/s43`,
+  `742-web-flexible-web-save-page-and-reload-question/s44`,
+  `742-web-flexible-web-save-page-and-reload-question/s45`,
+  `742-web-flexible-web-save-page-and-reload-question/s46`.
+- Difference: the whole step. After Escape on the save page that the question opened, JAWS
+  leaves the focus in its own hidden main window (the trace's foreground is "JAWS
+  Professional"): F5 reloads nothing, and Ctrl+Home and R say nothing. Okur's wizard gives the
+  focus back to the page, which F5 reloads and reads.
+- Why: the user is left in a window that cannot be seen and does not answer, and must find
+  the page again with Alt+Tab. JAWS does the same after Finish there (746/s21-s23, where both
+  are silent in replay, as the focus events are JAWS's).
+- Decided under the owner's rule on JAWS's accidents, 2026-10-21.
+
 ### A corrected word is not said at its end (typing echo both)
 
 - Steps: `711-desktop-typing-echo-jcf-3/s7`.

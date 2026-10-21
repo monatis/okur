@@ -588,6 +588,25 @@ divergences! {
     "A Flexible Web rule saved for the page does not hide the advertisement when the page      loads again: JAWS reads it on loading and R finds it, as after a temporary      customization (725). Okur applies the rule as the page loads, as the guide describes      rules: the page has one region and one link less, and R goes from the navigation region      to the main region.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
+    Difference::Step => [
+        "742-web-flexible-web-save-page-and-reload-question/s30",
+        "746-web-flexible-web-rule-saved-from-question/s11",
+    ],
+    "When a page loads while the one before has temporary Flexible Web customizations, JAWS      asks whether to save them, and says only \"Flexible Web dialog | Yes Button\": not the      question, though it reads the question of its other message boxes (\"Are you sure you      want to remove all PlaceMarkers?\", 702/s27). Okur says the page's title, then the      dialog with its question.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
+
+    Difference::Step => [
+        "742-web-flexible-web-save-page-and-reload-question/s39",
+        "742-web-flexible-web-save-page-and-reload-question/s41",
+        "742-web-flexible-web-save-page-and-reload-question/s42",
+        "742-web-flexible-web-save-page-and-reload-question/s43",
+        "742-web-flexible-web-save-page-and-reload-question/s44",
+        "742-web-flexible-web-save-page-and-reload-question/s45",
+        "742-web-flexible-web-save-page-and-reload-question/s46",
+    ],
+    "After Escape on Flexible Web's save page that the question as a page loads opened, the      focus is left in JAWS's own hidden main window: F5 reloads nothing and Ctrl+Home and R      say nothing. Okur's wizard gives the focus back to the page, which F5 reloads and reads.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
+
     Difference::Step => ["711-desktop-typing-echo-jcf-3/s7"],
     "With typing echo set to both characters and words, a word corrected with Backspace is not      said when Enter ends it: \"c d\", Backspace, Enter says only \"Enter\", in every trial,      while the same keys with words alone say \"c\" then \"Enter\" (710/s7), and both says      the word an uncorrected Enter ends (403/s27). Okur says the word as it stands in both      modes.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";

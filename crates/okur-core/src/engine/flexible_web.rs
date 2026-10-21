@@ -48,6 +48,11 @@ impl ScreenReaderEngine {
         self.flexible_web_store = store;
     }
 
+    /// The Flexible Web rules saved.
+    pub fn flexible_web_rules(&self) -> &Rules {
+        &self.flexible_web_rules
+    }
+
     /// Insert+Space, then X: Flexible Web's wizard, on the elements at the virtual cursor.
     /// Okur says nothing itself: the wizard is read as it takes the focus [obs, 705/s3].
     /// Outside a page: "You must be in the web page area to activate Flexible Web."

@@ -282,6 +282,35 @@ fn run_scenario(
     scenario: &Scenario,
     api: Api,
 ) -> Result<Vec<StepParity>, String> {
+    replay_scenario(corpus_dir, scenario, api, 0).map(|(steps, _)| steps)
+}
+
+/// The scenarios a scenario can continue, one after another, at most.
+const LONGEST_CONTINUATION: usize = 8;
+
+/// Replays `scenario`, after the scenario it continues (`depth` of them before it): its
+/// steps, and the Flexible Web rules Okur saved by its end.
+fn replay_scenario(
+    corpus_dir: &Path,
+    scenario: &Scenario,
+    api: Api,
+    depth: usize,
+) -> Result<(Vec<StepParity>, okur_core::flexible_web::Rules), String> {
+    let saved = match &scenario.continues {
+        Some(_) if depth >= LONGEST_CONTINUATION => {
+            return Err(format!(
+                "continues more than {LONGEST_CONTINUATION} scenarios before it"
+            ))
+        }
+        Some(before) => {
+            let before = Scenario::load_from_file(
+                corpus_dir.join("scenarios").join(format!("{before}.json")),
+            )
+            .map_err(|e| format!("continues {before}: {e}"))?;
+            replay_scenario(corpus_dir, &before, api, depth + 1)?.1
+        }
+        None => okur_core::flexible_web::Rules::default(),
+    };
     let evidence_path = corpus_dir
         .join("evidence")
         .join(format!("{}-evidence.json", scenario.id));
@@ -341,8 +370,10 @@ fn run_scenario(
     // Actions succeed as they did live; their effects arrive as the recorded events.
     let actions = okur_core::actions::RecordingActions::default();
     engine.set_actions(Box::new(actions.clone()));
-    // JAWS's settings when the evidence was recorded.
+    // JAWS's settings when the evidence was recorded, and what Okur saved in the scenario
+    // this one continues.
     engine.set_settings(replay_settings(&evidence));
+    engine.set_flexible_web_rules(saved, None);
     if desktop {
         engine.app_mode = okur_core::engine::AppMode::NativeControl;
     }
@@ -594,7 +625,7 @@ fn run_scenario(
             spoken: spoken_parity,
         });
     }
-    Ok(steps)
+    Ok((steps, engine.flexible_web_rules().clone()))
 }
 
 /// Runs every scenario in `corpus_dir/scenarios` against its evidence and snapshot.

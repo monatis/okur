@@ -16,6 +16,10 @@ pub struct Scenario {
     pub launch: Option<serde_json::Value>,
     #[serde(default)]
     pub reset: Option<ScenarioReset>,
+    /// The scenario recorded just before it, whose saved state it starts from (a Flexible Web
+    /// rule saved there): replay runs that one first, and keeps what Okur saved.
+    #[serde(default)]
+    pub continues: Option<String>,
     pub steps: Vec<ScenarioStep>,
 }
 
