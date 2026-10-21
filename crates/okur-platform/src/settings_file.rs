@@ -566,6 +566,7 @@ mod tests {
                 speech: SpeechAction::Mute,
                 braille: 1,
                 hidden: true,
+                enabled: false,
             }],
         };
         NotificationRuleStore::save(&files, &rules);

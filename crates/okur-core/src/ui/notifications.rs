@@ -234,6 +234,9 @@ pub struct Rule {
     /// Don't Show in History.
     #[serde(default)]
     pub hidden: bool,
+    /// Turned off in Manage Rules (Disable): kept, deciding nothing [obs, 784/s6].
+    #[serde(default = "rules_enabled")]
+    pub enabled: bool,
 }
 
 /// The notification rules kept, the first that matches deciding, and whether they apply
@@ -265,7 +268,9 @@ impl NotificationRules {
         if !self.enabled {
             return None;
         }
-        self.rules.iter().find(|rule| rule.matches(text, sender))
+        self.rules
+            .iter()
+            .find(|rule| rule.enabled && rule.matches(text, sender))
     }
 }
 
@@ -399,6 +404,7 @@ impl CreateRuleDialog {
                 speech: SpeechAction::Mute,
                 braille: 1,
                 hidden: false,
+                enabled: true,
             },
             from: sender.map(str::to_owned),
         }
