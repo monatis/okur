@@ -65,6 +65,19 @@ pub struct Ia2TextState {
     pub selection: Option<(i32, i32)>,
     /// The runs marked as spelling errors (`invalid:spelling`), in UTF-16 code units.
     pub misspelled: Vec<(i32, i32)>,
+    /// The CSS colors (`color`, `background-color`) of the character at the caret, or of the
+    /// last one at the text's end; none in an empty text.
+    pub color: Option<String>,
+    pub background: Option<String>,
+}
+
+/// What one walk over a text's formatting runs finds: its misspellings, and the colors of
+/// the run at one offset.
+#[derive(Debug, Default)]
+struct TextRuns {
+    misspelled: Vec<(i32, i32)>,
+    color: Option<String>,
+    background: Option<String>,
 }
 
 /// Where a text object's caret and first selection are, and its length, in UTF-16 code
@@ -324,7 +337,7 @@ mod com {
 
     pub mod capture {
         use super::super::{
-            parse_attributes, Ia2Node, Ia2TextPosition, Ia2TextRun, Ia2TextState,
+            parse_attributes, Ia2Node, Ia2TextPosition, Ia2TextRun, Ia2TextState, TextRuns,
             EMBEDDED_OBJECT_CHAR, FONT_ATTRIBUTES, IA2_TEXT_BOUNDARY_LINE, IA2_TEXT_OFFSET_LENGTH,
         };
         use super::{IAccessible2, IAccessibleRelation, IAccessibleText};
@@ -861,21 +874,25 @@ mod com {
                         .map_err(|e| err("caretOffset", e))?;
                 }
                 let text = all.to_string();
-                let misspelled = self.misspelled(text.encode_utf16().count());
+                let length = i32::try_from(text.encode_utf16().count()).unwrap_or(i32::MAX);
+                let at = (length > 0).then(|| caret.clamp(0, length - 1));
+                let runs = self.runs(length, at);
                 Ok(Ia2TextState {
                     text,
                     caret: caret.max(0),
                     selection: self.selection(),
-                    misspelled,
+                    misspelled: runs.misspelled,
+                    color: runs.color,
+                    background: runs.background,
                 })
             }
 
             /// The runs of its text marked as spelling errors (`invalid:spelling`), in UTF-16
-            /// code units; at most 256 runs are read.
-            fn misspelled(&self, length: usize) -> Vec<(i32, i32)> {
+            /// code units, and the colors of the run holding offset `at`; at most 256 runs
+            /// are read.
+            fn runs(&self, length: i32, at: Option<i32>) -> TextRuns {
                 const MAX_RUNS: usize = 256;
-                let length = i32::try_from(length).unwrap_or(i32::MAX);
-                let mut ranges = Vec::new();
+                let mut found = TextRuns::default();
                 let mut offset = 0i32;
                 for _ in 0..MAX_RUNS {
                     if offset >= length {
@@ -892,15 +909,20 @@ mod com {
                     if read.is_err() || end <= offset {
                         break;
                     }
-                    let spelling = parse_attributes(&attrs.to_string())
+                    let mut attributes = parse_attributes(&attrs.to_string());
+                    let spelling = attributes
                         .get("invalid")
                         .is_some_and(|kind| kind.split(',').any(|k| k.trim() == "spelling"));
                     if spelling {
-                        ranges.push((start, end));
+                        found.misspelled.push((start, end));
+                    }
+                    if at.is_some_and(|at| start <= at && at < end) {
+                        found.color = attributes.remove("color");
+                        found.background = attributes.remove("background-color");
                     }
                     offset = end;
                 }
-                ranges
+                found
             }
 
             fn selection(&self) -> Option<(i32, i32)> {

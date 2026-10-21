@@ -1164,10 +1164,20 @@ impl ScreenReaderEngine {
     /// [obs, 565, 618, 530/s2]. Elsewhere a text field's colors, which JAWS reads from the
     /// screen; other controls have none.
     fn say_color(&mut self) -> Option<String> {
+        // A page's focused field, in forms mode or under the virtual cursor, has the colors of
+        // its text at the caret, "black on white", and none while it is empty [obs, 662/s2,
+        // s5, s7].
+        let on_focused_field = self.app_mode == AppMode::VirtualBuffer
+            && (self.forms_mode
+                || self
+                    .cursor
+                    .buffer
+                    .find_edit_node(self.cursor.offset)
+                    .is_some_and(|field| Some(field.id) == self.last_page_focus));
         // Outside a page, a text field's colors at its caret, "black on white" [obs, 661/s1];
         // JAWS says "default on default" where it finds none, on a dialog's button [obs,
         // 513/s3].
-        let formatting = if self.app_mode == AppMode::VirtualBuffer {
+        let formatting = if self.app_mode == AppMode::VirtualBuffer && !on_focused_field {
             self.cursor
                 .buffer
                 .text_formatting_at_offset(self.cursor.offset)

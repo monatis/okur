@@ -913,6 +913,60 @@ fn say_color_names_the_text_and_background_colors() {
     );
 }
 
+/// A page's focused field has its text's colors: "default on default" while it is empty,
+/// "black on white" once typed in, in forms mode and again under the virtual cursor after
+/// Escape [obs, 662/s2, s5, s7].
+#[test]
+fn say_color_in_a_page_field_is_its_texts() {
+    use crate::color::Rgb;
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Create Your Account")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 }).with_text("Create Your Account"),
+            AomNode::new(2, Role::Edit).with_name("Full name"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let context = |text: &str, colored: bool| crate::event::TextContext {
+        text: text.into(),
+        caret: text.chars().count(),
+        selection: None,
+        font: colored.then(|| crate::event::FontInfo {
+            color: Some(Rgb::new(0, 0, 0)),
+            background: Some(Rgb::new(255, 255, 255)),
+            ..crate::event::FontInfo::default()
+        }),
+        word: None,
+        misspelled: Vec::new(),
+    };
+    engine.execute_command("{DOWN}");
+    assert_eq!(
+        engine.execute_command("SayColor").as_deref(),
+        Some("default on default")
+    );
+    let mut focus = FocusEvent::new(Role::Edit)
+        .with_node_id(2)
+        .with_name("Full name");
+    focus.in_document = true;
+    focus.text = Some(context("", false));
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(focus));
+    assert_eq!(
+        engine.execute_command("SayColor").as_deref(),
+        Some("default on default")
+    );
+    engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context("ab", true)));
+    assert_eq!(
+        engine.execute_command("SayColor").as_deref(),
+        Some("black on white")
+    );
+    engine.handle_key_event(&KeyEvent::new(Key::Escape, Modifiers::none(), true));
+    assert!(!engine.forms_mode);
+    assert_eq!(
+        engine.execute_command("SayColor").as_deref(),
+        Some("black on white")
+    );
+}
+
 #[test]
 fn test_engine_modal_dialog_confinement_and_escape() {
     let mut dlg = AomNode::new(10, Role::Dialog)

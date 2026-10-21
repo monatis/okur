@@ -226,9 +226,18 @@ mod reader {
     }
 
     /// A Chromium text object's state, its UTF-16 offsets made character offsets. Its word
-    /// is a page field's, which stops at punctuation as Chrome's word moves do.
+    /// is a page field's, which stops at punctuation as Chrome's word moves do. Its font is
+    /// the colors at its caret alone, for Say Color ("black on white" in a page field with
+    /// text [obs, 662/s5, s7]); Say Font has its own reading of a page field.
     pub fn from_ia2(state: xa11y_windows::ia2::Ia2TextState) -> TextContext {
         let caret = utf16_to_chars(&state.text, state.caret);
+        let css = |value: Option<&String>| value.and_then(|v| okur_core::color::Rgb::parse_css(v));
+        let (color, background) = (css(state.color.as_ref()), css(state.background.as_ref()));
+        let font = (color.is_some() || background.is_some()).then(|| okur_core::FontInfo {
+            color,
+            background,
+            ..okur_core::FontInfo::default()
+        });
         TextContext {
             caret,
             selection: state.selection.map(|(s, e)| {
@@ -249,7 +258,7 @@ mod reader {
                 })
                 .collect(),
             text: state.text,
-            font: None,
+            font,
         }
     }
 
