@@ -1,0 +1,45 @@
+{
+  "id": "703-web-placemarker-none",
+  "name": "K on a page without PlaceMarkers, before and after its PlaceMarker List was opened (the custom label page): K, Ctrl+Shift+K, Escape, K, Escape, Insert+Up (keys in the dialog typed by JAWS). 699 and 702 found K opening the list where 221 says there are none",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/custom-label.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "K"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Ctrl+Shift+K"
+    },
+    {
+      "id": "s3",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "K"
+    },
+    {
+      "id": "s5",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}
