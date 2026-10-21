@@ -12,13 +12,13 @@ use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::System::Threading::{AttachThreadInput, GetCurrentThreadId};
 use windows::Win32::UI::Controls::{
     BST_CHECKED, BST_UNCHECKED, EM_SETSEL, HTREEITEM, LVCF_TEXT, LVCF_WIDTH, LVCOLUMNW, LVIF_STATE,
-    LVIF_TEXT, LVIS_FOCUSED, LVIS_SELECTED, LVITEMW, LVM_DELETEALLITEMS, LVM_ENSUREVISIBLE,
-    LVM_INSERTCOLUMNW, LVM_INSERTITEMW, LVM_SETEXTENDEDLISTVIEWSTYLE, LVM_SETITEMSTATE,
-    LVM_SETITEMTEXTW, LVN_ITEMCHANGED, LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NMTREEVIEWW,
-    NM_DBLCLK, TBM_SETPAGESIZE, TBM_SETPOS, TBM_SETRANGEMAX, TBM_SETRANGEMIN, TBM_SETTICFREQ,
-    TVE_EXPAND, TVGN_CARET, TVGN_NEXTVISIBLE, TVGN_ROOT, TVIF_TEXT, TVINSERTSTRUCTW,
-    TVINSERTSTRUCTW_0, TVITEMW, TVI_LAST, TVI_ROOT, TVM_EXPAND, TVM_GETNEXTITEM, TVM_INSERTITEMW,
-    TVM_SELECTITEM, TVN_SELCHANGEDW,
+    LVIF_TEXT, LVIS_FOCUSED, LVIS_SELECTED, LVIS_STATEIMAGEMASK, LVITEMW, LVM_DELETEALLITEMS,
+    LVM_ENSUREVISIBLE, LVM_INSERTCOLUMNW, LVM_INSERTITEMW, LVM_SETEXTENDEDLISTVIEWSTYLE,
+    LVM_SETITEMSTATE, LVM_SETITEMTEXTW, LVN_ITEMCHANGED, LVS_EX_CHECKBOXES, LVS_EX_FULLROWSELECT,
+    NMHDR, NMLISTVIEW, NMTREEVIEWW, NM_DBLCLK, TBM_SETPAGESIZE, TBM_SETPOS, TBM_SETRANGEMAX,
+    TBM_SETRANGEMIN, TBM_SETTICFREQ, TVE_EXPAND, TVGN_CARET, TVGN_NEXTVISIBLE, TVGN_ROOT,
+    TVIF_TEXT, TVINSERTSTRUCTW, TVINSERTSTRUCTW_0, TVITEMW, TVI_LAST, TVI_ROOT, TVM_EXPAND,
+    TVM_GETNEXTITEM, TVM_INSERTITEMW, TVM_SELECTITEM, TVN_SELCHANGEDW,
 };
 use windows::Win32::UI::Input::KeyboardAndMouse::EnableWindow;
 use windows::Win32::UI::WindowsAndMessaging::{
@@ -79,6 +79,7 @@ fn initial(kind: &ControlKind) -> Option<Value> {
     match kind {
         ControlKind::Choice { selected, .. }
         | ControlKind::List { selected, .. }
+        | ControlKind::CheckList { selected, .. }
         | ControlKind::ListBox { selected, .. }
         | ControlKind::Tree { selected, .. }
         | ControlKind::Radios { selected, .. }
@@ -252,6 +253,36 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
                     Some(LPARAM(&column as *const LVCOLUMNW as isize)),
                 );
                 set_items(item, items, *selected);
+            }
+            ControlKind::CheckList {
+                items,
+                checked,
+                selected,
+            } => {
+                let styles = LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES;
+                SendMessageW(
+                    item,
+                    LVM_SETEXTENDEDLISTVIEWSTYLE,
+                    Some(WPARAM(styles as usize)),
+                    Some(LPARAM(styles as isize)),
+                );
+                let mut client = windows::Win32::Foundation::RECT::default();
+                let _ = GetClientRect(item, &mut client);
+                let column = LVCOLUMNW {
+                    mask: LVCF_WIDTH,
+                    cx: client.right - client.left,
+                    ..Default::default()
+                };
+                SendMessageW(
+                    item,
+                    LVM_INSERTCOLUMNW,
+                    Some(WPARAM(0)),
+                    Some(LPARAM(&column as *const LVCOLUMNW as isize)),
+                );
+                set_items(item, items, *selected);
+                for (index, checked) in checked.iter().enumerate() {
+                    check_item(item, index, *checked);
+                }
             }
             ControlKind::Table {
                 columns,
@@ -506,6 +537,26 @@ fn set_items(list: HWND, items: &[String], selected: usize) {
     }
 }
 
+/// A check list's item checked or not: its state image, 2 checked and 1 not.
+fn check_item(list: HWND, index: usize, checked: bool) {
+    let image = if checked { 2u32 } else { 1 };
+    let state = LVITEMW {
+        mask: LVIF_STATE,
+        state: windows::Win32::UI::Controls::LIST_VIEW_ITEM_STATE_FLAGS(image << 12),
+        stateMask: LVIS_STATEIMAGEMASK,
+        ..Default::default()
+    };
+    // SAFETY: a message to our own list view; the item state outlives the call.
+    unsafe {
+        SendMessageW(
+            list,
+            LVM_SETITEMSTATE,
+            Some(WPARAM(index)),
+            Some(LPARAM(&state as *const LVITEMW as isize)),
+        );
+    }
+}
+
 fn select_item(list: HWND, index: usize) {
     let state = LVITEMW {
         mask: LVIF_STATE,
@@ -555,8 +606,14 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
                     Some(LPARAM(*number as isize)),
                 );
             }
-            (ControlKind::List { .. } | ControlKind::Table { .. }, Value::Selected(i)) => {
-                select_item(item, *i)
+            (
+                ControlKind::List { .. }
+                | ControlKind::CheckList { .. }
+                | ControlKind::Table { .. },
+                Value::Selected(i),
+            ) => select_item(item, *i),
+            (ControlKind::CheckList { .. }, Value::ItemChecked(i, checked)) => {
+                check_item(item, *i, *checked)
             }
             (ControlKind::Tree { .. }, Value::Selected(i)) => select_tree_item(item, *i),
             (ControlKind::ListBox { .. }, Value::Selected(i)) => {
@@ -997,7 +1054,9 @@ pub(crate) unsafe extern "system" fn dialog_proc(
             }
             if !matches!(
                 hit.kind,
-                ControlKind::List { .. } | ControlKind::Table { .. }
+                ControlKind::List { .. }
+                    | ControlKind::CheckList { .. }
+                    | ControlKind::Table { .. }
             ) {
                 return 0;
             }
@@ -1009,6 +1068,16 @@ pub(crate) unsafe extern "system" fn dialog_proc(
                         && change.uOldState & LVIS_SELECTED.0 == 0;
                     if let (true, Ok(index)) = (now_selected, usize::try_from(change.iItem)) {
                         changed(window, &hit, Value::Selected(index));
+                    }
+                    // A check box turned: its state image, 1 not checked and 2 checked; one
+                    // set from none is the list being filled.
+                    let image = |state: u32| (state & LVIS_STATEIMAGEMASK.0) >> 12;
+                    let (old, new) = (image(change.uOldState), image(change.uNewState));
+                    if let (true, Ok(index)) = (
+                        old != 0 && new != 0 && old != new,
+                        usize::try_from(change.iItem),
+                    ) {
+                        changed(window, &hit, Value::ItemChecked(index, new == 2));
                     }
                 }
                 NM_DBLCLK => press_default(window),

@@ -78,6 +78,14 @@ pub enum ControlKind {
         items: Vec<String>,
         selected: usize,
     },
+    /// A list of items, each with a check box, one selected. Its label names it and is not
+    /// shown: JAWS's Save Temporary Customizations, " List view | Hide ComplementaryRegion 1
+    /// from the top with text: "Advertisement" checked | 1 of 1" [obs, 742/s18].
+    CheckList {
+        items: Vec<String>,
+        checked: Vec<bool>,
+        selected: usize,
+    },
     /// A list of rows under column headers, named by its label (not shown), with none
     /// selected until the user picks one: JAWS's PlaceMarker List, "PlaceMarker List view |
     /// Not Selected Water in a closed bottle is allowed; meals are not. | Document | 1 of 1"
@@ -144,6 +152,8 @@ pub struct TreeItem {
 pub enum Value {
     Checked(bool),
     Selected(usize),
+    /// A check list's item checked or not, by its index.
+    ItemChecked(usize, bool),
     Number(i32),
     Text(String),
 }
@@ -154,6 +164,8 @@ pub struct WizardButtons {
     pub back: bool,
     /// Next; without it, Finish takes its place.
     pub next: bool,
+    /// Finish available; without Next it is shown either way, unavailable until it can finish
+    /// (JAWS's Save Temporary Customizations, until the rule has a name [obs, 740]).
     pub finish: bool,
 }
 
@@ -209,6 +221,8 @@ pub enum ToUi {
         page: DialogSpec,
         buttons: WizardButtons,
     },
+    /// Wizard `id`'s buttons on the page shown: Finish once the rule has a name [obs, 742/s26].
+    WizardButtons { id: u32, buttons: WizardButtons },
     /// Show the Virtual Viewer's text on screen, without taking the focus, with `mark` on
     /// what the virtual cursor read last. Okur keeps the keys: the window only shows them
     /// to someone watching, as JAWS's does.

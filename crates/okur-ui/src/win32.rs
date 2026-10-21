@@ -373,6 +373,7 @@ fn handle(message: ToUi) {
         }
         ToUi::WizardShow { wizard } => crate::wizard::show(&wizard),
         ToUi::WizardPage { id, page, buttons } => crate::wizard::turn(id, &page, buttons),
+        ToUi::WizardButtons { id, buttons } => crate::wizard::buttons(id, buttons),
         ToUi::DialogEnable {
             id,
             control,

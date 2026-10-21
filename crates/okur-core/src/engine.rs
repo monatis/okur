@@ -169,6 +169,11 @@ pub struct ScreenReaderEngine {
     flexible_web: Option<crate::ui::flexible_web::FlexibleWebWizard>,
     /// The customizations Flexible Web made on the page in front.
     page_customizations: flexible_web::PageCustomizations,
+    /// The Flexible Web rules saved, and where they are kept.
+    flexible_web_rules: crate::flexible_web::Rules,
+    flexible_web_store: Option<Box<dyn crate::flexible_web::RuleStore>>,
+    /// Temporary customizations of a page left, while Okur asks whether to save them.
+    flexible_web_leaving: Option<flexible_web::Leaving>,
     /// The custom labels (Insert+Ctrl+Tab), and where they are kept.
     custom_labels: crate::labels::CustomLabels,
     label_store: Option<Box<dyn crate::labels::LabelStore>>,
@@ -357,6 +362,9 @@ impl ScreenReaderEngine {
             placemarker_list_seen: None,
             flexible_web: None,
             page_customizations: flexible_web::PageCustomizations::default(),
+            flexible_web_rules: crate::flexible_web::Rules::default(),
+            flexible_web_store: None,
+            flexible_web_leaving: None,
             custom_labels: crate::labels::CustomLabels::default(),
             label_store: None,
             label_dialog: None,
@@ -429,6 +437,7 @@ impl ScreenReaderEngine {
     /// Replaces the active document buffer and resets the cursor.
     pub fn load_buffer(&mut self, buffer: VirtualBuffer) {
         self.forget_customizations();
+        self.keep_original(&buffer);
         let buffer = self.prepared(buffer);
         crate::retire::retire(std::mem::replace(
             &mut self.cursor,

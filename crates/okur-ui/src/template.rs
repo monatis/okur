@@ -153,6 +153,7 @@ pub fn layout(dialog: &DialogSpec) -> Layout {
         matches!(
             c.kind,
             ControlKind::List { .. }
+                | ControlKind::CheckList { .. }
                 | ControlKind::ListBox { .. }
                 | ControlKind::Tree { .. }
                 | ControlKind::Table { .. }
@@ -312,7 +313,7 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                 id,
                 text: control.label.clone(),
             }),
-            ControlKind::List { .. } => items.push(Item {
+            ControlKind::List { .. } | ControlKind::CheckList { .. } => items.push(Item {
                 class: Class::Named("SysListView32"),
                 style: WS_CHILD
                     | WS_VISIBLE
@@ -653,6 +654,7 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
                     + 2;
             }
             ControlKind::List { .. }
+            | ControlKind::CheckList { .. }
             | ControlKind::ListBox { .. }
             | ControlKind::Tree { .. }
             | ControlKind::Table { .. } => {}
@@ -772,6 +774,61 @@ pub fn page_layout(page: &DialogSpec) -> Layout {
                     text: String::new(),
                 });
                 y += 60 + ROW_GAP;
+            }
+            // A field under the label that names it: "Rule Name: Edit", "How would you like
+            // this rule to apply? Combo box" [obs, 742/s16, s19].
+            ControlKind::Edit { .. } | ControlKind::Choice { .. } => {
+                let height = message_height(&control.label, width);
+                items.push(Item {
+                    class: Class::Static,
+                    style: WS_CHILD | WS_VISIBLE,
+                    x: left,
+                    y,
+                    cx: width,
+                    cy: height,
+                    id: LABEL_ID,
+                    text: control.label.clone(),
+                });
+                y += height + 2;
+                let (class, style, cy) = match &control.kind {
+                    ControlKind::Edit { .. } => (Class::Edit, WS_BORDER | ES_AUTOHSCROLL, 12),
+                    // The list's height when it drops down.
+                    _ => (Class::ComboBox, CBS_DROPDOWNLIST | WS_VSCROLL, 120),
+                };
+                items.push(Item {
+                    class,
+                    style: WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_GROUP | style,
+                    x: left,
+                    y,
+                    cx: width,
+                    cy,
+                    id,
+                    text: String::new(),
+                });
+                y += 12 + ROW_GAP;
+            }
+            // A list view with check boxes, named by its label, which is not shown: JAWS's
+            // " List view" [obs, 742/s18].
+            ControlKind::CheckList { .. } => {
+                items.push(Item {
+                    class: Class::Named("SysListView32"),
+                    style: WS_CHILD
+                        | WS_VISIBLE
+                        | WS_BORDER
+                        | WS_TABSTOP
+                        | WS_GROUP
+                        | LVS_REPORT
+                        | LVS_SINGLESEL
+                        | LVS_SHOWSELALWAYS
+                        | LVS_NOCOLUMNHEADER,
+                    x: left,
+                    y,
+                    cx: width,
+                    cy: 40,
+                    id,
+                    text: control.label.clone(),
+                });
+                y += 40 + ROW_GAP;
             }
             _ => {}
         }

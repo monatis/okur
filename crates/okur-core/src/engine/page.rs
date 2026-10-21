@@ -121,9 +121,19 @@ impl ScreenReaderEngine {
         self.web_application = None;
         self.last_live_text.clear();
         self.live_streams.clear();
+        let leaving = self.leaving_customizations();
         self.load_buffer(buffer);
         self.app_mode = AppMode::VirtualBuffer;
         self.last_window_title = Some(title.to_owned());
+        // With temporary customizations on the page before, Flexible Web asks whether to save
+        // them as the page loads, before its summary and its reading [obs, 742/s30]: the
+        // page's title, then the question.
+        if let Some(leaving) = leaving {
+            let said = format!("{title}  \u{1d} {} \u{1e}", msg::role_document());
+            self.speech.speak(&said, true);
+            self.ask_about_leaving(leaving);
+            return Some(said);
+        }
         // JAWS on a page load: the page's title, its summary, then Say All from the top while
         // "Document and Web Pages Automatically Read When Loaded" is on, as by default [obs,
         // 507/s1, 538/s1, 539/s1, 712/s1]; off, the cursor waits at the top [obs, 713]. JAWS's
@@ -715,6 +725,7 @@ impl ScreenReaderEngine {
     /// cursor's place.
     pub(super) fn apply_pending_page(&mut self) {
         if let Some(buffer) = self.pending_page.take() {
+            self.keep_original(&buffer);
             let buffer = self.prepared(buffer);
             let offset = self.cursor.offset;
             let line = self.cursor.buffer.line_at_offset(offset);

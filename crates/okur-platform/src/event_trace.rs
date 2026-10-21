@@ -1094,12 +1094,14 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             focus.container_name = label_before(tree, container.runtime_id.as_deref());
         }
         // With no text before it, the list is named by its dialog: "Select a System Tray Icon
-        // List box" (JAWS's own dialog, its only list unlabelled [obs, 511/s4]).
+        // List box" (JAWS's own dialog, its only list unlabelled [obs, 511/s4]); not on a
+        // wizard's page, whose title is the dialog's: " List view" [obs, 742/s18].
         if focus
             .container_name
             .as_deref()
             .is_none_or(|n| n.trim().is_empty())
             && focus.container_role == Some(okur_core::Role::List)
+            && focus.wizard_page.is_none()
         {
             focus.container_name = event
                 .dialog_tree

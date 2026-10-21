@@ -1390,6 +1390,151 @@ fn a_placemarker_is_added_and_removed_in_the_list() {
     );
 }
 
+/// Flexible Web: the advertisement hidden, then saved as a rule for the page, holds when the
+/// page loads again, with no question; a customization left unsaved is asked about as the
+/// page loads, and Yes opens the wizard on its last page alone [obs, 742/s16-s31].
+#[test]
+fn a_flexible_web_rule_is_saved_and_holds_when_the_page_loads() {
+    use crate::flexible_web::Scope;
+    use crate::ui::{FromUi, ToUi, Value};
+    let url = "file:///C:/corpus/fixtures/flexible-web.html";
+    let mut advertisement = AomNode::new(
+        1,
+        Role::Landmark {
+            landmark_type: "complementary".into(),
+        },
+    )
+    .with_children(vec![
+        AomNode::new(2, Role::Paragraph).with_text("Spring sale at Main Street Shoes.")
+    ]);
+    advertisement.name = Some("Advertisement".into());
+    let mut page = AomNode::new(0, Role::Document).with_children(vec![
+        AomNode::new(3, Role::Heading { level: 1 }).with_text("Weekend events"),
+        advertisement,
+    ]);
+    page.attributes.insert("url".to_owned(), url.to_owned());
+    page.name = Some("Weekend Events".into());
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(speech.clone()),
+    );
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let wizard_shown = |ui: &crate::ui::RecordingUiHost| {
+        ui.take().into_iter().find_map(|m| match m {
+            ToUi::WizardShow { wizard } => Some(wizard),
+            _ => None,
+        })
+    };
+    let ui_event = |engine: &mut ScreenReaderEngine, message: FromUi| {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(message))
+    };
+    let press = |engine: &mut ScreenReaderEngine, id: u32, control: &str| {
+        ui_event(
+            engine,
+            FromUi::DialogPressed {
+                id,
+                control: control.into(),
+            },
+        )
+    };
+    let change = |engine: &mut ScreenReaderEngine, id: u32, control: &str, value: Value| {
+        ui_event(
+            engine,
+            FromUi::DialogChanged {
+                id,
+                control: control.into(),
+                value,
+            },
+        )
+    };
+    let reload = |engine: &mut ScreenReaderEngine| {
+        let _ = speech.take();
+        engine.reload_asked = true;
+        engine.handle_document_loaded("Weekend Events", VirtualBuffer::from_aom(&page))
+    };
+    let reads_advertisement =
+        |engine: &ScreenReaderEngine| engine.cursor.buffer.text.contains("Spring sale");
+
+    // The advertisement hidden: Next three times from its paragraph, Finish.
+    let paragraph = engine.cursor.buffer.start_of(2).unwrap_or_default();
+    engine.cursor.move_to(paragraph);
+    assert!(engine.cursor.current_line().contains("Spring sale"));
+    let _ = engine.open_flexible_web();
+    let id = wizard_shown(&ui).map_or(0, |w| w.id);
+    for _ in 0..3 {
+        press(&mut engine, id, "next");
+    }
+    press(&mut engine, id, "finish");
+    assert!(!reads_advertisement(&engine));
+
+    // Saved as a rule for the page: Save temporary customizations as a rule, Next, a name,
+    // To the current page, Finish.
+    let _ = engine.open_flexible_web();
+    let id = wizard_shown(&ui).map_or(0, |w| w.id);
+    change(&mut engine, id, "task", Value::Selected(3));
+    press(&mut engine, id, "next");
+    let _ = ui.take();
+    change(&mut engine, id, "name", Value::Text("Okur lab rule".into()));
+    assert!(ui.take().iter().any(|m| matches!(
+        m,
+        ToUi::WizardButtons { buttons, .. } if buttons.finish
+    )));
+    change(&mut engine, id, "scope", Value::Selected(2));
+    press(&mut engine, id, "finish");
+    let rules = &engine.flexible_web_rules.rules;
+    assert_eq!(rules.len(), 1);
+    assert!(rules
+        .first()
+        .is_some_and(|r| r.name == "Okur lab rule" && r.scope == Scope::Page));
+    assert!(!reads_advertisement(&engine));
+
+    // Loaded again: the rule holds, and nothing is left to ask about.
+    let said = reload(&mut engine).unwrap_or_default();
+    assert!(said.starts_with("Weekend Events"), "{said}");
+    assert!(!reads_advertisement(&engine));
+    assert!(!ui
+        .take()
+        .iter()
+        .any(|m| matches!(m, ToUi::DialogShow { .. })));
+
+    // A heading hidden and left unsaved: loading the page again asks, after its title alone.
+    let heading = engine.cursor.buffer.start_of(3).unwrap_or_default();
+    engine.cursor.move_to(heading);
+    let _ = engine.open_flexible_web();
+    let id = wizard_shown(&ui).map_or(0, |w| w.id);
+    for _ in 0..3 {
+        press(&mut engine, id, "next");
+    }
+    press(&mut engine, id, "finish");
+    assert!(!engine.cursor.buffer.text.contains("Weekend events"));
+    let said = reload(&mut engine);
+    assert_eq!(
+        said.as_deref(),
+        Some("Weekend Events  \u{1d} document \u{1e}")
+    );
+    let question = ui.take().into_iter().find_map(|m| match m {
+        ToUi::DialogShow { dialog } => Some(dialog),
+        _ => None,
+    });
+    assert_eq!(
+        question.as_ref().map(|q| q.title.as_str()),
+        Some("Flexible Web")
+    );
+    // The page loaded as it is, but for the rule.
+    assert!(engine.cursor.buffer.text.contains("Weekend events"));
+    assert!(!reads_advertisement(&engine));
+    // Yes: the wizard's last page alone, with the heading's customization.
+    press(&mut engine, question.map_or(0, |q| q.id), "yes");
+    let saving = wizard_shown(&ui);
+    assert_eq!(
+        saving.as_ref().map(|w| w.page.title.as_str()),
+        Some("Save Temporary Customizations")
+    );
+    assert!(saving.is_some_and(|w| !w.buttons.back));
+}
+
 /// A page's field has its text's colors. With the virtual cursor: another field's as the page
 /// shows them ("navy on yellow"), "default on default" while it is empty, the focused field's
 /// as typed in; in forms mode the colors at the caret, an empty field's too [obs, 662/s2, s5,

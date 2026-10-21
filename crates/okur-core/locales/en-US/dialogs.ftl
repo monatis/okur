@@ -268,3 +268,15 @@ flexible-web-customization-question = Select a customization
 # Insert+Space, X outside a page.
 flexible-web-not-in-page = You must be in the web page area to activate Flexible Web.
 flexible-web-no-elements = No customizable elements were found at the current virtual PC cursor location. Please change the cursor's location and try again.
+# Saving the temporary customizations as a rule: the last page, its name, its customizations
+# and where it applies [obs, 740, 742/s16-s28].
+flexible-web-save-title = Save Temporary Customizations
+flexible-web-rule-name = Rule Name:
+flexible-web-scope-question = How would you like this rule to apply?
+flexible-web-scope-everywhere = Globally
+flexible-web-scope-site = To the current site
+flexible-web-scope-page = To the current page
+# Another page loading while the one before has temporary customizations [obs, 742/s30].
+flexible-web-unsaved-question = You have created temporary Flexible Web customizations. If you continue without saving them, these customizations will be lost. Would you like to save your temporary customizations?
+flexible-web-unsaved-yes = &Yes
+flexible-web-unsaved-no = &No

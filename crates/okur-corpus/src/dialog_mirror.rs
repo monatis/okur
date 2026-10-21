@@ -82,6 +82,18 @@ impl DialogMirror {
                     self.dialog = Some(page);
                     continue;
                 }
+                ToUi::WizardButtons { id, buttons } => {
+                    for (control, enabled) in [
+                        ("back", buttons.back),
+                        ("next", buttons.next),
+                        ("finish", buttons.finish),
+                    ] {
+                        if let Some(c) = self.control_of(id, control) {
+                            c.enabled = enabled;
+                        }
+                    }
+                    continue;
+                }
                 other => other,
             };
             match message {

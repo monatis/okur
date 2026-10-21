@@ -20,7 +20,7 @@ use windows::Win32::UI::Controls::{
     PROPSHEETHEADERW_V2_2, PROPSHEETPAGEW, PROPSHEETPAGEW_0, PSH_MODELESS, PSH_WIZARD, PSM_ADDPAGE,
     PSM_GETCURRENTPAGEHWND, PSM_ISDIALOGMESSAGE, PSM_SETCURSEL, PSM_SETWIZBUTTONS, PSN_QUERYCANCEL,
     PSN_SETACTIVE, PSN_WIZBACK, PSN_WIZFINISH, PSN_WIZNEXT, PSP_DLGINDIRECT, PSP_USETITLE,
-    PSWIZB_BACK, PSWIZB_FINISH, PSWIZB_NEXT,
+    PSWIZB_BACK, PSWIZB_DISABLEDFINISH, PSWIZB_FINISH, PSWIZB_NEXT,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
     DestroyWindow, GetForegroundWindow, GetNextDlgTabItem, IsWindow, PostMessageW, SendMessageW,
@@ -72,6 +72,8 @@ fn flags(buttons: WizardButtons) -> u32 {
     }
     if buttons.finish {
         flags |= PSWIZB_FINISH;
+    } else if !buttons.next {
+        flags |= PSWIZB_DISABLEDFINISH;
     }
     flags
 }
@@ -221,6 +223,20 @@ pub fn turn(id: u32, page: &DialogSpec, buttons: WizardButtons) {
         }
     });
     focus_first_control(sheet);
+}
+
+/// Wizard `id`'s buttons on the page shown, and when it is shown again.
+pub fn buttons(id: u32, buttons: WizardButtons) {
+    let sheet = WIZARDS.with(|w| {
+        w.try_borrow_mut().ok().and_then(|mut w| {
+            let open = w.iter_mut().find(|o| o.id == id)?;
+            open.buttons = buttons;
+            Some(open.sheet)
+        })
+    });
+    if let Some(sheet) = sheet {
+        set_buttons(sheet, buttons);
+    }
 }
 
 /// The focus on the shown page's first control, as on a dialog's opening.

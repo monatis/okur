@@ -9,14 +9,18 @@
 //! - "Choose an element": the elements at the virtual cursor, innermost first
 //!   ([`crate::flexible_web::elements_at`]);
 //! - "Choose a customization": what finds that element again
-//!   ([`crate::flexible_web::customizations`]); Finish makes it.
+//!   ([`crate::flexible_web::customizations`]); Finish makes it;
+//! - "Save Temporary Customizations", after Save temporary customizations as a rule, or
+//!   opened alone when a page loads after customizations were made on the one before: "Rule
+//!   Name:", the customizations made, each checked, and "How would you like this rule to
+//!   apply?"; Finish, unavailable until the rule has a name, saves it [obs, 740, 742].
 //!
 //! Back, Next and Finish come from the wizard's window; Okur turns its pages.
 
 use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, Value, WizardButtons, WizardSpec};
 
 use crate::aom::AomNode;
-use crate::flexible_web::{customizations, Action, Customization, Element};
+use crate::flexible_web::{customizations, Action, Customization, Element, Scope};
 use crate::messages::msg;
 
 /// The wizard's pages, in order.
@@ -26,12 +30,19 @@ enum Page {
     Action,
     Element,
     Customization,
+    Save,
 }
 
 /// The first page's choices, in order.
 const CREATE: usize = 0;
 const RETRY: usize = 1;
 const UNDO: usize = 2;
+const SAVE: usize = 3;
+const VIEW: usize = 4;
+
+/// The scope a rule is saved with unless the user chooses another: "To the current site"
+/// [obs, 742/s19].
+const DEFAULT_SCOPE: usize = 1;
 
 /// What the engine does after a message from the wizard.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -45,6 +56,15 @@ pub enum Outcome {
     Undo,
     /// Next with no element at the cursor to customize.
     NoElements,
+    /// The page's buttons changed (Finish once the rule has a name).
+    Buttons(WizardButtons),
+    /// Finish on the last page: save the checked customizations as a rule; the wizard
+    /// closes.
+    Save {
+        name: String,
+        scope: Scope,
+        customizations: Vec<Customization>,
+    },
     /// Cancel or Escape: the wizard is gone.
     Closed,
 }
@@ -64,31 +84,54 @@ pub struct FlexibleWebWizard {
     pub id: u32,
     page: Page,
     task: usize,
-    /// The customization made last on the page, which Retry and Undo name.
-    last: Option<String>,
+    /// The temporary customizations made on the page; Retry and Undo name the last.
+    made: Vec<Customization>,
+    /// Whether rules are saved, which View or change where rules apply needs.
+    rules: bool,
     enabled: bool,
     action: Action,
     elements: Vec<Element>,
     element: usize,
     offered: Vec<Customization>,
     customization: usize,
+    /// The last page's rule: its name, the customizations it keeps, where it applies.
+    name: String,
+    checked: Vec<bool>,
+    scope: usize,
+    /// Opened on the last page alone, with no page before it.
+    saving_only: bool,
 }
 
 impl FlexibleWebWizard {
-    /// The wizard on its first page, for the `elements` at the cursor, after the customization
-    /// made `last` on the page, if any.
-    pub fn new(id: u32, elements: Vec<Element>, last: Option<String>) -> Self {
+    /// The wizard on its first page, for the `elements` at the cursor, after the temporary
+    /// customizations `made` on the page, `rules` saying whether rules are saved.
+    pub fn new(id: u32, elements: Vec<Element>, made: Vec<Customization>, rules: bool) -> Self {
         Self {
             id,
             page: Page::Start,
             task: CREATE,
-            last,
+            checked: vec![true; made.len()],
+            made,
+            rules,
             enabled: true,
             action: Action::Hide,
             elements,
             element: 0,
             offered: Vec::new(),
             customization: 0,
+            name: String::new(),
+            scope: DEFAULT_SCOPE,
+            saving_only: false,
+        }
+    }
+
+    /// The wizard on its last page alone, saving `made` as a rule: as JAWS's opens when the
+    /// question before another page loads is answered Yes [obs, 742/s31].
+    pub fn saving(id: u32, made: Vec<Customization>) -> Self {
+        Self {
+            page: Page::Save,
+            saving_only: true,
+            ..Self::new(id, Vec::new(), made, false)
         }
     }
 
@@ -105,17 +148,17 @@ impl FlexibleWebWizard {
     fn page_spec(&self) -> (DialogSpec, WizardButtons) {
         let (title, controls, buttons) = match self.page {
             Page::Start => {
-                let (retry, undo) = match &self.last {
+                let (retry, undo) = match self.made.last().map(Customization::label) {
                     Some(last) => (
                         msg::flexible_web_retry(last.clone()).to_string(),
-                        msg::flexible_web_undo(last.clone()).to_string(),
+                        msg::flexible_web_undo(last).to_string(),
                     ),
                     None => (
                         msg::flexible_web_retry_none().to_string(),
                         msg::flexible_web_undo_none().to_string(),
                     ),
                 };
-                let made = self.last.is_some();
+                let made = !self.made.is_empty();
                 (
                     msg::flexible_web_title(),
                     vec![
@@ -138,7 +181,7 @@ impl FlexibleWebWizard {
                                     msg::flexible_web_view().to_string(),
                                 ],
                                 selected: self.task,
-                                enabled: vec![true, made, made, made, false],
+                                enabled: vec![true, made, made, made, self.rules],
                             },
                         ),
                         control(
@@ -149,11 +192,7 @@ impl FlexibleWebWizard {
                             },
                         ),
                     ],
-                    WizardButtons {
-                        back: false,
-                        next: true,
-                        finish: false,
-                    },
+                    self.start_buttons(),
                 )
             }
             Page::Action => (
@@ -217,6 +256,36 @@ impl FlexibleWebWizard {
                     finish: true,
                 },
             ),
+            Page::Save => (
+                msg::flexible_web_save_title(),
+                vec![
+                    control(
+                        "name",
+                        msg::flexible_web_rule_name().to_string(),
+                        ControlKind::Edit {
+                            text: self.name.clone(),
+                        },
+                    ),
+                    control(
+                        "customizations",
+                        String::new(),
+                        ControlKind::CheckList {
+                            items: self.made.iter().map(Customization::label).collect(),
+                            checked: self.checked.clone(),
+                            selected: 0,
+                        },
+                    ),
+                    control(
+                        "scope",
+                        msg::flexible_web_scope_question().to_string(),
+                        ControlKind::Choice {
+                            options: Scope::ALL.iter().map(|s| s.label()).collect(),
+                            selected: self.scope,
+                        },
+                    ),
+                ],
+                self.save_buttons(),
+            ),
         };
         (
             DialogSpec {
@@ -226,6 +295,27 @@ impl FlexibleWebWizard {
             },
             buttons,
         )
+    }
+
+    /// The first page's buttons: Next, or Finish in its place for View or change where rules
+    /// apply [obs, 743/s34-s37].
+    fn start_buttons(&self) -> WizardButtons {
+        let view = self.task == VIEW;
+        WizardButtons {
+            back: false,
+            next: !view,
+            finish: view,
+        }
+    }
+
+    /// The last page's buttons: Back unless it was opened alone, Finish once the rule has a
+    /// name [obs, 740, 742/s26].
+    fn save_buttons(&self) -> WizardButtons {
+        WizardButtons {
+            back: !self.saving_only,
+            next: false,
+            finish: !self.name.trim().is_empty(),
+        }
     }
 
     fn turn(&mut self, page: Page) -> Outcome {
@@ -240,7 +330,14 @@ impl FlexibleWebWizard {
         match event {
             FromUi::DialogChanged { id, control, value } if *id == self.id => {
                 match (control.as_str(), value) {
-                    ("task", Value::Selected(i)) => self.task = *i,
+                    ("task", Value::Selected(i)) => {
+                        let before = self.start_buttons();
+                        self.task = *i;
+                        let after = self.start_buttons();
+                        if after != before {
+                            return Outcome::Buttons(after);
+                        }
+                    }
                     ("enabled", Value::Checked(checked)) => self.enabled = *checked,
                     ("action", Value::Selected(i)) => {
                         self.action = if *i == 1 {
@@ -251,6 +348,20 @@ impl FlexibleWebWizard {
                     }
                     ("element", Value::Selected(i)) => self.element = *i,
                     ("customization", Value::Selected(i)) => self.customization = *i,
+                    ("name", Value::Text(text)) => {
+                        let before = self.save_buttons();
+                        text.clone_into(&mut self.name);
+                        let after = self.save_buttons();
+                        if after != before {
+                            return Outcome::Buttons(after);
+                        }
+                    }
+                    ("customizations", Value::ItemChecked(i, checked)) => {
+                        if let Some(c) = self.checked.get_mut(*i) {
+                            *c = *checked;
+                        }
+                    }
+                    ("scope", Value::Selected(i)) if *i < Scope::ALL.len() => self.scope = *i,
                     _ => {}
                 }
                 Outcome::Nothing
@@ -261,6 +372,7 @@ impl FlexibleWebWizard {
                         CREATE | RETRY if self.elements.is_empty() => Outcome::NoElements,
                         CREATE | RETRY => self.turn(Page::Action),
                         UNDO => Outcome::Undo,
+                        SAVE => self.turn(Page::Save),
                         _ => Outcome::Nothing,
                     },
                     ("next", Page::Action) => self.turn(Page::Element),
@@ -278,6 +390,18 @@ impl FlexibleWebWizard {
                     ("back", Page::Action) => self.turn(Page::Start),
                     ("back", Page::Element) => self.turn(Page::Action),
                     ("back", Page::Customization) => self.turn(Page::Element),
+                    ("back", Page::Save) if !self.saving_only => self.turn(Page::Start),
+                    ("finish", Page::Save) if !self.name.trim().is_empty() => Outcome::Save {
+                        name: self.name.trim().to_owned(),
+                        scope: Scope::ALL.get(self.scope).copied().unwrap_or(Scope::Site),
+                        customizations: self
+                            .made
+                            .iter()
+                            .zip(&self.checked)
+                            .filter(|(_, checked)| **checked)
+                            .map(|(c, _)| c.clone())
+                            .collect(),
+                    },
                     ("finish", Page::Customization) => self
                         .offered
                         .get(self.customization)
@@ -288,6 +412,57 @@ impl FlexibleWebWizard {
             }
             FromUi::DialogClosed { id } if *id == self.id => Outcome::Closed,
             _ => Outcome::Nothing,
+        }
+    }
+}
+
+/// The question before the temporary customizations made on a page are lost to another page
+/// loading: "Flexible Web", the question, Yes (the default, with the focus) and No [obs,
+/// 742/s30]. JAWS says the dialog and Yes without the question; Okur reads it, as JAWS
+/// reads its other questions [obs, 702/s27] (`docs/references/accepted-divergences.md`).
+#[derive(Debug, Clone)]
+pub struct UnsavedQuestion {
+    pub id: u32,
+}
+
+impl UnsavedQuestion {
+    pub fn spec(&self) -> DialogSpec {
+        DialogSpec {
+            id: self.id,
+            title: msg::flexible_web_title().to_string(),
+            controls: vec![
+                control(
+                    "question",
+                    String::new(),
+                    ControlKind::Message {
+                        text: msg::flexible_web_unsaved_question().to_string(),
+                    },
+                ),
+                control(
+                    "yes",
+                    msg::flexible_web_unsaved_yes().to_string(),
+                    ControlKind::Button { default: true },
+                ),
+                control(
+                    "no",
+                    msg::flexible_web_unsaved_no().to_string(),
+                    ControlKind::Button { default: false },
+                ),
+            ],
+        }
+    }
+
+    /// The answer `event` gives: yes, or no (No, or the question closed); none for anything
+    /// else.
+    pub fn answer(&self, event: &FromUi) -> Option<bool> {
+        match event {
+            FromUi::DialogPressed { id, control } if *id == self.id => match control.as_str() {
+                "yes" => Some(true),
+                "no" => Some(false),
+                _ => None,
+            },
+            FromUi::DialogClosed { id } if *id == self.id => Some(false),
+            _ => None,
         }
     }
 }
@@ -310,6 +485,17 @@ mod tests {
         ]);
         main.name = None;
         AomNode::new(0, Role::Document).with_children(vec![main])
+    }
+
+    /// "Hide MainRegion 1 from the top".
+    fn hide_main() -> Customization {
+        Customization {
+            action: Action::Hide,
+            kind: crate::flexible_web::Kind::Region("main".into()),
+            text: None,
+            id: None,
+            place: crate::flexible_web::Place::FromTop(1),
+        }
     }
 
     fn pressed(control: &str) -> FromUi {
@@ -336,7 +522,7 @@ mod tests {
     #[test]
     fn the_wizard_goes_through_its_pages() {
         let page = page();
-        let mut wizard = FlexibleWebWizard::new(7, elements_at(&page, 2), None);
+        let mut wizard = FlexibleWebWizard::new(7, elements_at(&page, 2), Vec::new(), false);
         let start = wizard.spec();
         assert_eq!(start.page.title, "Flexible Web");
         assert_eq!(
@@ -397,11 +583,7 @@ mod tests {
     #[test]
     fn undo_names_the_customization_and_undoes_it() {
         let page = page();
-        let mut wizard = FlexibleWebWizard::new(
-            7,
-            elements_at(&page, 2),
-            Some("Hide MainRegion 1 from the top".into()),
-        );
+        let mut wizard = FlexibleWebWizard::new(7, elements_at(&page, 2), vec![hide_main()], false);
         let start = wizard.spec();
         assert!(texts(&start.page)
             .get(1)
@@ -419,7 +601,7 @@ mod tests {
             wizard.handle(&FromUi::DialogClosed { id: 7 }, Some(&page)),
             Outcome::Closed
         );
-        let mut nothing = FlexibleWebWizard::new(8, Vec::new(), None);
+        let mut nothing = FlexibleWebWizard::new(8, Vec::new(), Vec::new(), false);
         assert_eq!(
             nothing.handle(
                 &FromUi::DialogPressed {
@@ -430,5 +612,110 @@ mod tests {
             ),
             Outcome::NoElements
         );
+    }
+
+    fn changed(control: &str, value: Value) -> FromUi {
+        FromUi::DialogChanged {
+            id: 7,
+            control: control.into(),
+            value,
+        }
+    }
+
+    /// Save temporary customizations as a rule, then Next: the rule's name, the customizations
+    /// checked, where it applies (To the current site first); Finish once the name is typed
+    /// [obs, 742/s16-s28].
+    #[test]
+    fn the_last_page_saves_a_named_rule() {
+        let page = page();
+        let mut wizard = FlexibleWebWizard::new(7, Vec::new(), vec![hide_main()], false);
+        wizard.handle(&changed("task", Value::Selected(SAVE)), Some(&page));
+        let outcome = wizard.handle(&pressed("next"), Some(&page));
+        assert!(matches!(outcome, Outcome::Turn(..)), "{outcome:?}");
+        let Outcome::Turn(save, buttons) = outcome else {
+            return;
+        };
+        assert_eq!(save.title, "Save Temporary Customizations");
+        let kinds: Vec<(&str, &str, &ControlKind)> = save
+            .controls
+            .iter()
+            .map(|c| (c.id.as_str(), c.label.as_str(), &c.kind))
+            .collect();
+        assert_eq!(
+            kinds,
+            [
+                (
+                    "name",
+                    "Rule Name:",
+                    &ControlKind::Edit {
+                        text: String::new()
+                    }
+                ),
+                (
+                    "customizations",
+                    "",
+                    &ControlKind::CheckList {
+                        items: vec!["Hide MainRegion 1 from the top".into()],
+                        checked: vec![true],
+                        selected: 0,
+                    }
+                ),
+                (
+                    "scope",
+                    "How would you like this rule to apply?",
+                    &ControlKind::Choice {
+                        options: vec![
+                            "Globally".into(),
+                            "To the current site".into(),
+                            "To the current page".into()
+                        ],
+                        selected: 1,
+                    }
+                ),
+            ]
+        );
+        assert_eq!(
+            buttons,
+            WizardButtons {
+                back: true,
+                next: false,
+                finish: false
+            }
+        );
+        // Finish does nothing before the rule has a name.
+        assert_eq!(
+            wizard.handle(&pressed("finish"), Some(&page)),
+            Outcome::Nothing
+        );
+        assert_eq!(
+            wizard.handle(
+                &changed("name", Value::Text("Okur lab rule".into())),
+                Some(&page)
+            ),
+            Outcome::Buttons(WizardButtons {
+                back: true,
+                next: false,
+                finish: true
+            })
+        );
+        wizard.handle(&changed("scope", Value::Selected(2)), Some(&page));
+        assert_eq!(
+            wizard.handle(&pressed("finish"), Some(&page)),
+            Outcome::Save {
+                name: "Okur lab rule".into(),
+                scope: Scope::Page,
+                customizations: vec![hide_main()],
+            }
+        );
+    }
+
+    /// Opened alone, from the question before another page loads, the last page has nothing
+    /// before it [obs, 742/s31].
+    #[test]
+    fn the_last_page_alone_has_no_back() {
+        let wizard = FlexibleWebWizard::saving(7, vec![hide_main()]);
+        let spec = wizard.spec();
+        assert_eq!(spec.page.title, "Save Temporary Customizations");
+        assert!(!spec.buttons.back && !spec.buttons.next && !spec.buttons.finish);
     }
 }

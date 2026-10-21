@@ -515,6 +515,22 @@ A step can be in more than one entry; all of its entries apply.
   Undo both read the region again.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-21.
 
+### A saved Flexible Web rule hides nothing when the page loads
+
+- Steps: `743-web-flexible-web-saved-rule-for-page/s24`,
+  `743-web-flexible-web-saved-rule-for-page/s28`, `743-web-flexible-web-saved-rule-for-page/s29`,
+  `743-web-flexible-web-saved-rule-for-page/s46`, `743-web-flexible-web-saved-rule-for-page/s50`,
+  `743-web-flexible-web-saved-rule-for-page/s51`.
+- Difference: the whole step. After the advertisement's customization was saved as a rule To
+  the current page, JAWS reads the advertisement as the page loads again and R finds it; Okur
+  applies the rule as the page loads: its summary counts one region and one link less, and R
+  goes from the navigation region to the main region.
+- Why: the rule exists (the wizard's first page then offers View or change where rules apply
+  [obs, 743/s32]), yet JAWS hides nothing, as it hides nothing after a temporary
+  customization (above). JAWS's guide
+  (Surf's Up, chapter 16) says rules are applied whenever a page they apply to loads.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-21.
+
 ### A corrected word is not said at its end (typing echo both)
 
 - Steps: `711-desktop-typing-echo-jcf-3/s7`.

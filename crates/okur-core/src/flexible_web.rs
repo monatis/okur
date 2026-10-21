@@ -348,6 +348,94 @@ pub fn without(page: &AomNode, hidden: &[usize]) -> AomNode {
     kept
 }
 
+/// Where a saved rule applies, as the wizard asks it: "How would you like this rule to
+/// apply?", Globally, To the current site (the first choice), To the current page [obs,
+/// 742/s19-s23].
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Scope {
+    /// "Globally": on every page.
+    Everywhere,
+    /// "To the current site": on every page of the site it was saved on.
+    Site,
+    /// "To the current page": on the page it was saved on.
+    Page,
+}
+
+impl Scope {
+    /// In the wizard's order.
+    pub const ALL: [Scope; 3] = [Scope::Everywhere, Scope::Site, Scope::Page];
+
+    /// As the wizard names it.
+    pub fn label(self) -> String {
+        match self {
+            Scope::Everywhere => msg::flexible_web_scope_everywhere(),
+            Scope::Site => msg::flexible_web_scope_site(),
+            Scope::Page => msg::flexible_web_scope_page(),
+        }
+        .to_string()
+    }
+}
+
+/// A rule: customizations saved under a name, applied whenever a page it applies to loads
+/// (the guide, Surf's Up chapter 16).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Rule {
+    pub name: String,
+    pub scope: Scope,
+    /// The site or the page address it was saved for; none for a rule applied everywhere.
+    /// A page with no site (a file) keeps its rules for the site to itself.
+    #[serde(default)]
+    pub place: Option<String>,
+    pub customizations: Vec<Customization>,
+}
+
+impl Rule {
+    /// A rule named `name`, saved on the page at `url`.
+    pub fn new(name: String, scope: Scope, url: &str, customizations: Vec<Customization>) -> Self {
+        Self {
+            name,
+            scope,
+            place: place_for(scope, url),
+            customizations,
+        }
+    }
+
+    /// Whether the rule applies to the page at `url`.
+    pub fn applies_to(&self, url: &str) -> bool {
+        self.scope == Scope::Everywhere || place_for(self.scope, url) == self.place
+    }
+}
+
+/// What a rule with `scope` saved on `url` keeps of the address.
+fn place_for(scope: Scope, url: &str) -> Option<String> {
+    let page = || crate::placemarkers::page_of(url);
+    match scope {
+        Scope::Everywhere => None,
+        Scope::Site => Some(crate::settings_layers::site_of(url).unwrap_or_else(page)),
+        Scope::Page => Some(page()),
+    }
+}
+
+/// Every saved rule, in the order they were saved.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Rules {
+    #[serde(default)]
+    pub rules: Vec<Rule>,
+}
+
+impl Rules {
+    /// The rules that apply to the page at `url`.
+    pub fn for_page<'a>(&'a self, url: &'a str) -> impl Iterator<Item = &'a Rule> + 'a {
+        self.rules.iter().filter(move |rule| rule.applies_to(url))
+    }
+}
+
+/// Where rules are kept, so that they hold the next time Okur starts.
+pub trait RuleStore: Send {
+    fn save(&self, rules: &Rules);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

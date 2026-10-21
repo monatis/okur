@@ -577,6 +577,17 @@ divergences! {
     "After Flexible Web hides a region, JAWS still reads it, in every trial: R finds the      hidden advertisement and Down reads its lines, though the wizard's first page then      offers its Undo, and after JAWS's refresh (Insert+Escape) too. JAWS's guide says a customization \"is immediately applied to the      page\". Okur takes the region out of the page it reads, and Undo puts it back.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
+    Difference::Step => [
+        "743-web-flexible-web-saved-rule-for-page/s24",
+        "743-web-flexible-web-saved-rule-for-page/s28",
+        "743-web-flexible-web-saved-rule-for-page/s29",
+        "743-web-flexible-web-saved-rule-for-page/s46",
+        "743-web-flexible-web-saved-rule-for-page/s50",
+        "743-web-flexible-web-saved-rule-for-page/s51",
+    ],
+    "A Flexible Web rule saved for the page does not hide the advertisement when the page      loads again: JAWS reads it on loading and R finds it, as after a temporary      customization (725). Okur applies the rule as the page loads, as the guide describes      rules: the page has one region and one link less, and R goes from the navigation region      to the main region.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
+
     Difference::Step => ["711-desktop-typing-echo-jcf-3/s7"],
     "With typing echo set to both characters and words, a word corrected with Backspace is not      said when Enter ends it: \"c d\", Backspace, Enter says only \"Enter\", in every trial,      while the same keys with words alone say \"c\" then \"Enter\" (710/s7), and both says      the word an uncorrected Enter ends (403/s27). Okur says the word as it stands in both      modes.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";

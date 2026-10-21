@@ -348,6 +348,22 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                     PartKind::Name,
                     msg::list_item_not_selected(name).render(),
                 ));
+            } else if let (true, Some(checked)) =
+                (focus.container_is_list_view, focus.states.checked)
+            {
+                // A list view's item with a check box says its state after its name, with no
+                // marks: "Hide ComplementaryRegion 1 from the top with text: "Advertisement"
+                // checked" [obs, 742/s18].
+                let state = if checked {
+                    msg::state_checked()
+                } else {
+                    msg::state_not_checked()
+                };
+                lines.push(Line::new(vec![
+                    Part::new(PartKind::Name, name),
+                    Part::text(" "),
+                    Part::text(state.to_string()),
+                ]));
             } else {
                 lines.push(Line::of(PartKind::Name, name));
             }

@@ -151,6 +151,9 @@ impl SettingsStore for SettingsFolder {
 const LABELS: &str = "labels.toml";
 /// The saved PlaceMarkers' file: a list per page address.
 const PLACEMARKERS: &str = "placemarkers.toml";
+/// The saved Flexible Web rules' file: each with its name, where it applies and its
+/// customizations.
+const FLEXIBLE_WEB: &str = "flexible-web.toml";
 
 impl SettingsFolder {
     /// The custom labels kept (Insert+Ctrl+Tab). A missing or unreadable file is none, the
@@ -162,6 +165,11 @@ impl SettingsFolder {
     /// The PlaceMarkers saved (Ctrl+Shift+K), as [`Self::load_labels`].
     pub fn load_placemarkers(&self) -> okur_core::placemarkers::PlaceMarkers {
         self.load_own(PLACEMARKERS)
+    }
+
+    /// The Flexible Web rules saved (Insert+Space, then X), as [`Self::load_labels`].
+    pub fn load_flexible_web_rules(&self) -> okur_core::flexible_web::Rules {
+        self.load_own(FLEXIBLE_WEB)
     }
 
     /// One of the files Okur writes itself; none when missing or unreadable (logged).
@@ -208,6 +216,16 @@ impl okur_core::placemarkers::PlaceMarkerStore for SettingsFolder {
             PLACEMARKERS,
             "Okur's saved PlaceMarkers (Ctrl+Shift+K), by page address.",
             markers,
+        );
+    }
+}
+
+impl okur_core::flexible_web::RuleStore for SettingsFolder {
+    fn save(&self, rules: &okur_core::flexible_web::Rules) {
+        self.save_own(
+            FLEXIBLE_WEB,
+            "Okur's Flexible Web rules (Insert+Space, then X): where each applies, and what it hides.",
+            rules,
         );
     }
 }
@@ -465,6 +483,42 @@ mod tests {
         PlaceMarkerStore::save(&files, &markers);
         assert!(root.join("placemarkers.toml").exists());
         assert_eq!(files.load_placemarkers(), markers);
+        let _ = std::fs::remove_dir_all(&root);
+    }
+
+    /// Saved Flexible Web rules are kept in flexible-web.toml and read back the same.
+    #[test]
+    fn flexible_web_rules_survive_a_save() {
+        use okur_core::flexible_web::{
+            Action, Customization, Kind, Place, Rule, RuleStore, Rules, Scope,
+        };
+        let root = folder("flexible-web");
+        let files = SettingsFolder::at(&root);
+        assert_eq!(files.load_flexible_web_rules(), Rules::default());
+        let hide = |kind, text: Option<&str>| Customization {
+            action: Action::Hide,
+            kind,
+            text: text.map(str::to_owned),
+            id: Some("events".into()),
+            place: Place::FromTop(1),
+        };
+        let rules = Rules {
+            rules: vec![
+                Rule::new(
+                    "Okur lab rule".into(),
+                    Scope::Page,
+                    "file:///C:/corpus/fixtures/flexible-web.html#news",
+                    vec![
+                        hide(Kind::Region("complementary".into()), Some("Advertisement")),
+                        hide(Kind::Heading(1), None),
+                    ],
+                ),
+                Rule::new("Everywhere".into(), Scope::Everywhere, "", vec![]),
+            ],
+        };
+        RuleStore::save(&files, &rules);
+        assert!(root.join("flexible-web.toml").exists());
+        assert_eq!(files.load_flexible_web_rules(), rules);
         let _ = std::fs::remove_dir_all(&root);
     }
 
