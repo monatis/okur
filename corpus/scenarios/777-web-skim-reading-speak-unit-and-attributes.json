@@ -1,0 +1,162 @@
+{
+  "id": "777-web-skim-reading-speak-unit-and-attributes",
+  "name": "Skim Reading's Speak Unit and the attribute rules' controls: Ctrl+Shift+Insert+Down, Down Arrow twice (Text Rules), Tab three times to Speak Unit, Down Arrow twice and Up Arrow twice, Shift+Tab three times, Down Arrow (Attributes and Color Rules), Tab five times, Shift+Tab five times, Up Arrow three times back to the first line, Escape there, typed by JAWS (one trial: nothing started, nothing saved)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "Ctrl+Shift+Insert+Down",
+      "settle_max_ms": 30000,
+      "id": "s1"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s2"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s3"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s4"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s5"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s6"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s7"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s8"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")",
+      "id": "s9"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")",
+      "id": "s10"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s11"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s12"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s13"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s14"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s15"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s16"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s17"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s18"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s19"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s20"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s21"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s22"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s23"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s24"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")",
+      "id": "s25"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")",
+      "id": "s26"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"UpArrow\")",
+      "id": "s27"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")",
+      "settle_max_ms": 30000,
+      "id": "s28"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s29"
+    }
+  ]
+}
