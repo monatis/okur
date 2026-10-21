@@ -130,6 +130,10 @@ divergences! {
         "511-desktop-window-list-and-tray/s4",
         "506-web-jaws-find/s1",
         "699-web-placemarker-list/s12",
+        "701-web-placemarker-add-dialog/s4",
+        "701-web-placemarker-add-dialog/s13",
+        "703-web-placemarker-none/s2",
+        "703-web-placemarker-none/s4",
     ],
     "Opening one of its list dialogs, JAWS's speech passes through its own windows before it \
      names the dialog: its main window (its version, a list's tutor message) and the browser's \
@@ -532,6 +536,13 @@ divergences! {
         "702-web-placemarker-saved/s10",
     ],
     "After a PlaceMarker is added, JAWS builds the page again and reads it from its top as it      does on loading: Ctrl+Home gets \"selected\" and that reading, K then says \"wrapping to      bottom\" before the PlaceMarker after the reading moved the cursor down, and Insert+Up      says \"Not in a Table\", in every trial. Okur keeps the page and its cursor: Ctrl+Home      says the page's title, K the PlaceMarker's line, Insert+Up that line.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
+
+    Difference::Step => [
+        "701-web-placemarker-add-dialog/s15",
+        "703-web-placemarker-none/s6",
+    ],
+    "After K opened the PlaceMarker List on a page without PlaceMarkers and Escape closed it,      the focus back in the page, Say Line said nothing, in every trial of both scenarios. The      virtual cursor is still on its line, which Okur reads.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 }
 

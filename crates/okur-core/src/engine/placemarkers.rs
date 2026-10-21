@@ -296,13 +296,13 @@ impl ScreenReaderEngine {
                 self.cursor.move_to(offset);
                 (false, self.say(self.cursor.current_line()))
             }
-            // The list again, without it.
+            // Remove closes the list, as OK does [obs, 704 round 141, trial 1: Alt+V after
+            // it reached the page].
             ListOutcome::Remove(row) => {
                 if let Some(marker) = state.markers.get(row).cloned() {
                     self.forget(&state.page, &marker);
                 }
-                self.close(id);
-                self.open_placemarker_list();
+                self.close_list(state);
                 (false, None)
             }
             ListOutcome::Closed => {
@@ -325,9 +325,12 @@ impl ScreenReaderEngine {
                     state.child = Some(child);
                     (true, None)
                 }
+                // Cancel or Escape closes the list too, the focus going back to the page
+                // quietly [obs, 701/s11].
                 NameOutcome::Closed => {
                     self.close(dialog.id);
-                    (true, None)
+                    self.close_list(state);
+                    (false, None)
                 }
                 // "Anchor to text" makes its text field available.
                 NameOutcome::Anchoring(anchored) => {

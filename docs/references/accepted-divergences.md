@@ -87,7 +87,9 @@ A step can be in more than one entry; all of its entries apply.
   `260-web-list-tabs-enter/s1`; and Insert+F11's Select a System Tray Icon,
   `511-desktop-window-list-and-tray/s4` (its version, round 57); and JAWS Find,
   `506-web-jaws-find/s1` (its Find what field said before the dialog, in some trials); and
-  the PlaceMarker List opened by K, `699-web-placemarker-list/s12` (its list said before the
+  the PlaceMarker List, `699-web-placemarker-list/s12`, `701-web-placemarker-add-dialog/s4`,
+  `701-web-placemarker-add-dialog/s13`, `703-web-placemarker-none/s2` and
+  `703-web-placemarker-none/s4` (its list, its version or its main window said before the
   dialog, in some trials).
 - In the recordings of 2026-10-19 (round 9, JAWS freshly started for the batch), JAWS no longer
   said its version or the list's tutor message before the Links List, the Heading List and
@@ -271,6 +273,15 @@ A step can be in more than one entry; all of its entries apply.
   "wrapping to bottom" before the PlaceMarker, since the reading moved the cursor down; and
   Insert+Up says "Not in a Table". Okur keeps the page and its cursor, so Ctrl+Home says
   the page's title and K and Insert+Up say the PlaceMarker's line.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-21.
+
+### JAWS's Say Line is silent after the PlaceMarker List that K opened
+
+- Steps: `701-web-placemarker-add-dialog/s15`, `703-web-placemarker-none/s6`.
+- Difference: the whole step.
+- Why: on a page without PlaceMarkers, K opened the PlaceMarker List and Escape closed it,
+  the focus back in the page; Say Line then said nothing, in every trial of both scenarios.
+  The virtual cursor is still on its line, and Okur reads it.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-21.
 
 ### JAWS names the Page Setup preview's pictures after a label and the title
