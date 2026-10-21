@@ -1,0 +1,68 @@
+{
+  "id": "759-desktop-jaws-cursor-restriction-cycle",
+  "name": "The JAWS cursor's restrictions in turn in Notepad: Insert+Numpad Minus, Numpad Minus, Insert+R six times, Alt+Delete, Numpad Plus",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "Insert+NumpadMinus",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "NumpadMinus",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "Insert+R",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Insert+R",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "Insert+R",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "Insert+R",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Insert+R",
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "Insert+R",
+      "id": "s8"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s9"
+    },
+    {
+      "type": "key",
+      "command": "NumpadPlus",
+      "id": "s10"
+    }
+  ]
+}

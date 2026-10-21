@@ -1,0 +1,26 @@
+{
+  "id": "761-web-skim-read",
+  "name": "Skim reading the news article with the first line of each paragraph: Ctrl+Insert+Down, then Insert+Up where it stopped",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "Ctrl+Insert+Down",
+      "settle_max_ms": 150000,
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s2"
+    }
+  ]
+}

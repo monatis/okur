@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 5992,
-  "total_steps": 6216,
+  "matched_steps": 6013,
+  "total_steps": 6241,
   "accepted_divergences": 158,
   "errors": [],
   "steps": {
@@ -6392,6 +6392,31 @@
     "758-web-mouse-keys-on-a-link/s4": "match",
     "758-web-mouse-keys-on-a-link/s5": "match",
     "758-web-mouse-keys-on-a-link/s6": "match",
-    "758-web-mouse-keys-on-a-link/s7": "mismatch"
+    "758-web-mouse-keys-on-a-link/s7": "mismatch",
+    "759-desktop-jaws-cursor-restriction-cycle/s1": "match",
+    "759-desktop-jaws-cursor-restriction-cycle/s10": "match",
+    "759-desktop-jaws-cursor-restriction-cycle/s2": "match",
+    "759-desktop-jaws-cursor-restriction-cycle/s3": "match",
+    "759-desktop-jaws-cursor-restriction-cycle/s4": "match",
+    "759-desktop-jaws-cursor-restriction-cycle/s5": "match",
+    "759-desktop-jaws-cursor-restriction-cycle/s6": "match",
+    "759-desktop-jaws-cursor-restriction-cycle/s7": "match",
+    "759-desktop-jaws-cursor-restriction-cycle/s8": "match",
+    "759-desktop-jaws-cursor-restriction-cycle/s9": "mismatch",
+    "760-web-skim-reading-dialog/s1": "mismatch",
+    "760-web-skim-reading-dialog/s10": "match",
+    "760-web-skim-reading-dialog/s11": "match",
+    "760-web-skim-reading-dialog/s12": "match",
+    "760-web-skim-reading-dialog/s13": "match",
+    "760-web-skim-reading-dialog/s14": "mismatch",
+    "760-web-skim-reading-dialog/s15": "mismatch",
+    "760-web-skim-reading-dialog/s2": "match",
+    "760-web-skim-reading-dialog/s3": "match",
+    "760-web-skim-reading-dialog/s4": "match",
+    "760-web-skim-reading-dialog/s5": "match",
+    "760-web-skim-reading-dialog/s6": "match",
+    "760-web-skim-reading-dialog/s7": "match",
+    "760-web-skim-reading-dialog/s8": "match",
+    "760-web-skim-reading-dialog/s9": "match"
   }
 }
