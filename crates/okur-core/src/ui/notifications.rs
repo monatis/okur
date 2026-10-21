@@ -8,6 +8,7 @@
 //! Notification History).
 
 use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, Value};
+use serde::{Deserialize, Serialize};
 
 use crate::messages::{msg, StaticMessage};
 
@@ -145,7 +146,8 @@ impl HistoryDialog {
 
 /// What a rule compares a notification's text with: Rule Type's options (JAWS 2025 help,
 /// Notification History, Creating a Notification Rule).
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum RuleType {
     Contains,
     BeginsWith,
@@ -174,7 +176,8 @@ impl RuleType {
 
 /// What is said of a notification a rule matches: Speech Action's options. Mute is a new
 /// rule's [obs, 775/s9].
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum SpeechAction {
     Mute,
     /// Another message in its place (its Shortened Text, not built yet: said whole).
@@ -206,17 +209,58 @@ const BRAILLE_ACTIONS: [fn() -> StaticMessage; 3] = [
 ];
 
 /// A notification rule: which notifications it matches and what is done with them.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Rule {
     pub kind: RuleType,
     pub text: String,
     /// Limited to the notifications of this sender.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub sender: Option<String>,
     pub speech: SpeechAction,
     /// Braille Action's option, by its index.
+    #[serde(default)]
     pub braille: usize,
     /// Don't Show in History.
+    #[serde(default)]
     pub hidden: bool,
+}
+
+/// The notification rules kept, the first that matches deciding, and whether they apply
+/// (Enable Rules).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct NotificationRules {
+    #[serde(default = "rules_enabled")]
+    pub enabled: bool,
+    #[serde(default)]
+    pub rules: Vec<Rule>,
+}
+
+fn rules_enabled() -> bool {
+    true
+}
+
+impl Default for NotificationRules {
+    fn default() -> Self {
+        Self {
+            enabled: true,
+            rules: Vec::new(),
+        }
+    }
+}
+
+impl NotificationRules {
+    /// The rule that decides for a notification of `sender` saying `text`, while rules apply.
+    pub fn deciding(&self, text: &str, sender: Option<&str>) -> Option<&Rule> {
+        if !self.enabled {
+            return None;
+        }
+        self.rules.iter().find(|rule| rule.matches(text, sender))
+    }
+}
+
+/// Where the notification rules are kept between runs (Okur's settings folder).
+pub trait NotificationRuleStore: Send {
+    fn save(&self, rules: &NotificationRules);
 }
 
 impl Rule {

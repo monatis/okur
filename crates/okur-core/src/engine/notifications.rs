@@ -22,14 +22,7 @@ impl ScreenReaderEngine {
     /// Sound, not built yet) says nothing, Don't Show in History leaves it out of the history
     /// (JAWS 2025 help, Notification History).
     pub(super) fn toast_shown(&mut self, text: &str, sender: Option<&str>) -> Option<String> {
-        let rule = self
-            .notification_rules
-            .then(|| {
-                self.notification_rule_list
-                    .iter()
-                    .find(|rule| rule.matches(text, sender))
-            })
-            .flatten();
+        let rule = self.notification_rules.deciding(text, sender);
         let hidden = rule.is_some_and(|rule| rule.hidden);
         let silent = rule.is_some_and(|rule| {
             matches!(rule.speech, SpeechAction::Mute | SpeechAction::PlaySound)
@@ -79,6 +72,22 @@ impl ScreenReaderEngine {
         self.speech.speak(&said, true);
     }
 
+    /// The notification rules kept, and where to keep them when they change.
+    pub fn set_notification_rules(
+        &mut self,
+        rules: crate::ui::notifications::NotificationRules,
+        store: Option<Box<dyn crate::ui::notifications::NotificationRuleStore>>,
+    ) {
+        self.notification_rules = rules;
+        self.notification_rule_store = store;
+    }
+
+    fn save_notification_rules(&self) {
+        if let Some(store) = &self.notification_rule_store {
+            store.save(&self.notification_rules);
+        }
+    }
+
     /// Insert+Space, N: the Notification History, the latest first [obs, 774/s3]. Okur says
     /// nothing itself: it reads the dialog as the dialog takes the focus.
     pub(super) fn open_notification_history(&mut self) {
@@ -98,7 +107,7 @@ impl ScreenReaderEngine {
             .rev()
             .map(Notification::row)
             .collect();
-        let dialog = HistoryDialog::new(self.dialog_count, rows, self.notification_rules);
+        let dialog = HistoryDialog::new(self.dialog_count, rows, self.notification_rules.enabled);
         ui.send(ToUi::DialogShow {
             dialog: dialog.spec(),
         });
@@ -133,7 +142,8 @@ impl ScreenReaderEngine {
             match dialog.handle(message) {
                 RuleOutcome::Nothing => {}
                 RuleOutcome::Save(rule) => {
-                    self.notification_rule_list.push(rule);
+                    self.notification_rules.rules.push(rule);
+                    self.save_notification_rules();
                     if let (Some(dialog), Some(ui)) =
                         (self.notification_rule_dialog.take(), &self.ui)
                     {
@@ -190,7 +200,10 @@ impl ScreenReaderEngine {
             }
             Outcome::Closed => {
                 if let Some(dialog) = self.notification_history.take() {
-                    self.notification_rules = dialog.rules();
+                    if self.notification_rules.enabled != dialog.rules() {
+                        self.notification_rules.enabled = dialog.rules();
+                        self.save_notification_rules();
+                    }
                     if let (FromUi::DialogPressed { .. }, Some(ui)) = (message, &self.ui) {
                         ui.send(ToUi::DialogClose { id: dialog.id });
                     }

@@ -299,11 +299,11 @@ pub struct ScreenReaderEngine {
     /// The Notification History while it is open, and the details shown over it.
     notification_history: Option<crate::ui::notifications::HistoryDialog>,
     notification_details: Option<u32>,
-    /// The Notification History's Enable Rules.
-    notification_rules: bool,
-    /// The notification rules made with Create Rule, the first that matches deciding, and
-    /// the dialog while it is open.
-    notification_rule_list: Vec<crate::ui::notifications::Rule>,
+    /// The notification rules made with Create Rule, the first that matches deciding, with
+    /// the Notification History's Enable Rules, and where they are kept.
+    notification_rules: crate::ui::notifications::NotificationRules,
+    notification_rule_store: Option<Box<dyn crate::ui::notifications::NotificationRuleStore>>,
+    /// Create Rule while it is open.
     notification_rule_dialog: Option<crate::ui::notifications::CreateRuleDialog>,
     /// The last notification that came, for Insert+Space, Shift+N, even one the history
     /// leaves out.
@@ -456,8 +456,8 @@ impl ScreenReaderEngine {
             notifications: std::collections::VecDeque::new(),
             notification_history: None,
             notification_details: None,
-            notification_rules: true,
-            notification_rule_list: Vec::new(),
+            notification_rules: crate::ui::notifications::NotificationRules::default(),
+            notification_rule_store: None,
             notification_rule_dialog: None,
             last_notification: None,
             toasts_unsaid: false,

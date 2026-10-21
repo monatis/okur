@@ -154,6 +154,7 @@ const PLACEMARKERS: &str = "placemarkers.toml";
 /// The saved Flexible Web rules' file: each with its name, where it applies and its
 /// customizations.
 const FLEXIBLE_WEB: &str = "flexible-web.toml";
+const NOTIFICATION_RULES: &str = "notification-rules.toml";
 
 impl SettingsFolder {
     /// The custom labels kept (Insert+Ctrl+Tab). A missing or unreadable file is none, the
@@ -170,6 +171,12 @@ impl SettingsFolder {
     /// The Flexible Web rules saved (Insert+Space, then X), as [`Self::load_labels`].
     pub fn load_flexible_web_rules(&self) -> okur_core::flexible_web::Rules {
         self.load_own(FLEXIBLE_WEB)
+    }
+
+    /// The notification rules kept (Create Rule... in the Notification History), as
+    /// [`Self::load_labels`].
+    pub fn load_notification_rules(&self) -> okur_core::ui::notifications::NotificationRules {
+        self.load_own(NOTIFICATION_RULES)
     }
 
     /// One of the files Okur writes itself; none when missing or unreadable (logged).
@@ -225,6 +232,16 @@ impl okur_core::flexible_web::RuleStore for SettingsFolder {
         self.save_own(
             FLEXIBLE_WEB,
             "Okur's Flexible Web rules (Insert+Space, then X): where each applies, and what it hides.",
+            rules,
+        );
+    }
+}
+
+impl okur_core::ui::notifications::NotificationRuleStore for SettingsFolder {
+    fn save(&self, rules: &okur_core::ui::notifications::NotificationRules) {
+        self.save_own(
+            NOTIFICATION_RULES,
+            "Okur's notification rules (Insert+Space, then N): the first a notification matches decides what is said of it.",
             rules,
         );
     }
@@ -524,6 +541,35 @@ mod tests {
         RuleStore::save(&files, &rules);
         assert!(root.join("flexible-web.toml").exists());
         assert_eq!(files.load_flexible_web_rules(), rules);
+        let _ = std::fs::remove_dir_all(&root);
+    }
+
+    /// Notification rules are kept in notification-rules.toml and read back the same.
+    #[test]
+    fn notification_rules_survive_a_save() {
+        use okur_core::ui::notifications::{
+            NotificationRuleStore, NotificationRules, Rule, RuleType, SpeechAction,
+        };
+        let root = folder("notification-rules");
+        let files = SettingsFolder::at(&root);
+        assert_eq!(
+            files.load_notification_rules(),
+            NotificationRules::default()
+        );
+        let rules = NotificationRules {
+            enabled: false,
+            rules: vec![Rule {
+                kind: RuleType::BeginsWith,
+                text: "New notification from Mail".into(),
+                sender: Some("Mail".into()),
+                speech: SpeechAction::Mute,
+                braille: 1,
+                hidden: true,
+            }],
+        };
+        NotificationRuleStore::save(&files, &rules);
+        assert!(root.join("notification-rules.toml").exists());
+        assert_eq!(files.load_notification_rules(), rules);
         let _ = std::fs::remove_dir_all(&root);
     }
 

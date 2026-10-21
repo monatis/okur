@@ -550,6 +550,10 @@ pub async fn run(config: RunConfig) {
             folder.load_flexible_web_rules(),
             Some(Box::new(folder.clone())),
         );
+        engine.set_notification_rules(
+            folder.load_notification_rules(),
+            Some(Box::new(folder.clone())),
+        );
         engine.set_settings_store(Box::new(folder));
     }
     // Say System Time (Insert+F12) in the user's locale formats.
