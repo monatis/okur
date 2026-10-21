@@ -1,0 +1,87 @@
+{
+  "id": "724-article-links-same-page-off",
+  "name": "105 (links on the news article) with same page links not identified (IdentifySamePageLinks=0)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "HTML": {
+        "IdentifySamePageLinks": "0"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "U"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "U"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "U"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "U"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "U"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "U"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "U"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "U"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "U"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "U"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "U"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Shift+U"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Shift+U"
+    }
+  ]
+}
