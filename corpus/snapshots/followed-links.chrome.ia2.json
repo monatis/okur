@@ -1,0 +1,746 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Library News - Riverside Library - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "155.0.8059.85",
+    "fixture_sha256": "ec88eef2075c2776865de1d013b707cf40154f214a242ea5f16adecf2ff5663d",
+    "captured_at_unix_ms": 1792548847039,
+    "node_count": 19,
+    "capture_ms": 151
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Library News - Riverside Library",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/followed-links.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "unique_id": -804,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -819,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          },
+          {
+            "start": 1,
+            "end": 3,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Library news",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -806,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Library news",
+            "lines": [
+              [
+                0,
+                12
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 12,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Library news",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -801,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Library news",
+                "lines": [
+                  [
+                    0,
+                    12
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 12,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "24pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 33,
+            "ia2_role": 33,
+            "msaa_states": 64,
+            "ia2_states": 1024,
+            "unique_id": -818,
+            "attributes": {
+              "display": "block",
+              "setsize": "3",
+              "tag": "ul",
+              "text-align": "left"
+            },
+            "group_position": [
+              0,
+              3,
+              0
+            ],
+            "text": "￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 3,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 34,
+                "ia2_role": 34,
+                "msaa_states": 64,
+                "ia2_states": 1024,
+                "unique_id": -820,
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "1",
+                  "setsize": "3",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  1,
+                  3,
+                  1
+                ],
+                "text": "• ￼",
+                "lines": [
+                  [
+                    0,
+                    3
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 2,
+                    "end": 3,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(85,26,139)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "• ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -823,
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "text": "• ",
+                    "lines": [
+                      [
+                        0,
+                        2
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 2,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "City Library Expands Evening Hours",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+                    "msaa_states": 13631488,
+                    "ia2_states": 1024,
+                    "unique_id": -811,
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "City Library Expands Evening Hours",
+                    "lines": [
+                      [
+                        0,
+                        34
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 34,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(85,26,139)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "City Library Expands Evening Hours",
+                        "msaa_states": 12582912,
+                        "ia2_states": 1024,
+                        "unique_id": -822,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "City Library Expands Evening Hours",
+                        "lines": [
+                          [
+                            0,
+                            34
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 34,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(85,26,139)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 34,
+                "ia2_role": 34,
+                "msaa_states": 64,
+                "ia2_states": 1024,
+                "unique_id": -809,
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "2",
+                  "setsize": "3",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  1,
+                  3,
+                  2
+                ],
+                "text": "• ￼",
+                "lines": [
+                  [
+                    0,
+                    3
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 2,
+                    "end": 3,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "• ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -816,
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "text": "• ",
+                    "lines": [
+                      [
+                        0,
+                        2
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 2,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Spring catalog",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/never-opened-catalog.html",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -821,
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Spring catalog",
+                    "lines": [
+                      [
+                        0,
+                        14
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 14,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Spring catalog",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -814,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Spring catalog",
+                        "lines": [
+                          [
+                            0,
+                            14
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 14,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 34,
+                "ia2_role": 34,
+                "msaa_states": 64,
+                "ia2_states": 1024,
+                "unique_id": -810,
+                "attributes": {
+                  "display": "list-item",
+                  "level": "1",
+                  "posinset": "3",
+                  "setsize": "3",
+                  "tag": "li",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  1,
+                  3,
+                  3
+                ],
+                "text": "• ￼",
+                "lines": [
+                  [
+                    0,
+                    3
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 2,
+                    "end": 3,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "• ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -824,
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "::marker",
+                      "text-align": "left"
+                    },
+                    "text": "• ",
+                    "lines": [
+                      [
+                        0,
+                        2
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 2,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Volunteer form",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/never-opened-volunteers.html",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -813,
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Volunteer form",
+                    "lines": [
+                      [
+                        0,
+                        14
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 14,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Volunteer form",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -817,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Volunteer form",
+                        "lines": [
+                          [
+                            0,
+                            14
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 14,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -802,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "Follow a story to read it in full.",
+            "lines": [
+              [
+                0,
+                34
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 34,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Follow a story to read it in full.",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -803,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Follow a story to read it in full.",
+                "lines": [
+                  [
+                    0,
+                    34
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 34,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
