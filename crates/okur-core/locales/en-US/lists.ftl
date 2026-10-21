@@ -96,3 +96,15 @@ region-tree-contentinfo = Content information
 region-tree-search = Search
 region-tree-form = Form
 region-tree-region = Region
+
+## The Word List (Ctrl+Insert+W), as JAWS's [obs, 560].
+
+list-dialog-words = Word List
+# The name of its list of words, as JAWS's dialog names it.
+list-dialog-words-list = List1
+word-list-ok = OK
+word-list-cancel = Cancel
+word-list-summary = &Summary
+# W or Shift+W in a page before a word was chosen in the Word List [obs, 560/s3].
+word-list-none = No word list has been created.
+word-list-none-hint = To create the word list, press control+Insert+W.

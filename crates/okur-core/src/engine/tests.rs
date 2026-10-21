@@ -5773,3 +5773,65 @@ fn speech_on_demand_speaks_only_its_commands() {
     assert!(history.contains("Second line."), "{history}");
     assert_eq!(spoken, "");
 }
+
+/// The Word List: W before a word is chosen says how to choose one; OK moves to the chosen
+/// word's first line, found within other words, and W and Shift+W go on from there [obs,
+/// 560/s3, s6-s10].
+#[test]
+fn the_word_list_chooses_a_word_for_w() {
+    use crate::ui::{ControlKind, FromUi, ToUi, Value};
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Words")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Opening hours"),
+            AomNode::new(2, Role::Paragraph).with_text("The library opens early"),
+            AomNode::new(3, Role::Paragraph).with_text("Hours change"),
+            AomNode::new(4, Role::Paragraph).with_text("Reopens in May"),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    assert_eq!(
+        engine.execute_command("MoveToNextWordFromList").as_deref(),
+        Some("No word list has been created.\nTo create the word list, press control+Insert+W.")
+    );
+    engine.execute_command("WordList");
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "Word List");
+    let Some(ControlKind::List { items, .. }) = dialog.controls.first().map(|c| c.kind.clone())
+    else {
+        panic_free_fail("no list");
+        return;
+    };
+    // "opens" twice ("Reopens" is another word), first of the words seen twice.
+    let Some(opens) = items.iter().position(|item| item.starts_with("opens")) else {
+        panic_free_fail(&format!("no opens in {items:?}"));
+        return;
+    };
+    let id = dialog.id;
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "words".into(),
+        value: Value::Selected(opens),
+    }));
+    let moved = engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "ok".into(),
+    }));
+    assert_eq!(moved.as_deref(), Some("The library opens early"));
+    assert_eq!(
+        engine.execute_command("MoveToNextWordFromList").as_deref(),
+        Some("Reopens in May")
+    );
+    assert_eq!(
+        engine.execute_command("MoveToPriorWordFromList").as_deref(),
+        Some("The library opens early")
+    );
+}

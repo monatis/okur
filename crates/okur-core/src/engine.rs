@@ -47,6 +47,7 @@ mod tray;
 #[cfg(test)]
 mod web_app_tests;
 mod window_list;
+mod word_list;
 
 pub use state::AppMode;
 
@@ -241,6 +242,8 @@ pub struct ScreenReaderEngine {
     settings_dialog: Option<crate::ui::settings::SettingsDialog>,
     /// The list dialog open (the Links List, the Heading List).
     list_dialog: Option<crate::ui::lists::ListDialog>,
+    /// The word chosen in the Word List, which W and Shift+W move to.
+    word_from_list: Option<String>,
     /// JAWS Find, while it is open.
     find_dialog: Option<crate::ui::find::FindDialog>,
     /// The Window List while it is open, and whether its windows were asked for and not come.
@@ -400,6 +403,7 @@ impl ScreenReaderEngine {
             settings_dialog_application: None,
             settings_dialog: None,
             list_dialog: None,
+            word_from_list: None,
             find_dialog: None,
             window_list: None,
             window_list_asked: false,
@@ -1542,6 +1546,13 @@ impl ScreenReaderEngine {
                 )
             }
             ListKind::Features => (Some(ListDialog::features(id)), String::new()),
+            ListKind::Words => {
+                let words = crate::word_list::words(&self.cursor.buffer);
+                (
+                    (!words.is_empty()).then(|| ListDialog::words(id, &words)),
+                    String::new(),
+                )
+            }
             ListKind::Regions => {
                 let regions = crate::element_lists::regions(&self.cursor.buffer);
                 (
@@ -1610,6 +1621,15 @@ impl ScreenReaderEngine {
             // for Quality Service | To activate press Enter."
             // A heading's line is read as the virtual cursor reads it, not as H says the
             // heading: "heading level 1 Web App Patterns" [obs, 224/s10].
+            // OK in the Word List moves to the word's first line from the virtual cursor's, as
+            // W does after it [obs, 560/s6].
+            Outcome::MoveTo(entry) if kind == ListKind::Words => {
+                close(self);
+                self.word_from_list = Some(entry.sort_key);
+                let said = self.word_from_list_line(true, true)?;
+                self.speech.speak(&said, true);
+                Some(said)
+            }
             Outcome::MoveTo(entry) => {
                 close(self);
                 let said = self.cursor.jump_to_element_offset(entry.offset);
@@ -1634,6 +1654,7 @@ impl ScreenReaderEngine {
                     ListKind::Headings
                     | ListKind::FormFields
                     | ListKind::Features
+                    | ListKind::Words
                     | ListKind::Elements(_) => self.cursor.current_line(),
                 };
                 self.speech.speak(&speech, true);

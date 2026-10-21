@@ -455,6 +455,12 @@ command-jump-to-line = Asks for a line number and moves to that line.
 command-define-temp-placemarker = Marks the cursor's place in the page for this session, to come back to with K.
 # SelectAPlaceMarker (Control+Shift+K in a page).
 command-select-a-placemarker = Lists the page's PlaceMarkers, to move to one, or to add, rename or remove them.
+# WordList (Control+Insert+W in a page).
+command-word-list = Lists the page's words, most used first, to move to one.
+# MoveToNextWordFromList (W in a page).
+command-next-word-from-list = Moves to the next line with the word chosen in the Word List.
+# MoveToPriorWordFromList (Shift+W in a page).
+command-prior-word-from-list = Moves to the prior line with the word chosen in the Word List.
 # SpeakPlaceMarkerN (7, 8, 9, 0 in a page).
 command-speak-placemarker = Says the text at the page's PlaceMarker { $number } without moving there.
 # MoveToPlaceMarkerN (Shift+7, 8, 9, 0 in a page).

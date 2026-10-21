@@ -13,7 +13,9 @@
 //! - JAWS's element lists (Insert+Ctrl and a letter: "Select a Button", ...): list "List1",
 //!   OK (the default) and Cancel; their items are `crate::element_lists` [obs, 231-259];
 //! - Document Regions (Insert+Ctrl+R): tree "Regions" of the page's regions, Move To region
-//!   start (the default) and Cancel [obs, 241, 256, 274].
+//!   start (the default) and Cancel [obs, 241, 256, 274];
+//! - the Word List (Ctrl+Insert+W): list "List1" of the page's words, "m (10)", OK (the
+//!   default), Cancel and Summary; its words are `crate::word_list` [obs, 560].
 //!
 //! See `docs/references/jaws-dialogs-and-visual-features.md` for the dialogs' layout.
 
@@ -22,6 +24,7 @@ use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, TreeItem, Va
 use crate::buffer::{FormFieldListItem, HeadingListItem, LinkListItem};
 use crate::element_lists::{ElementItem, ElementList, RegionItem};
 use crate::messages::{msg, StaticMessage};
+use crate::word_list::Word;
 
 const LINK_SORTS: [fn() -> StaticMessage; 2] = [
     msg::links_list_sort_tab_order,
@@ -51,6 +54,8 @@ pub enum ListKind {
     Elements(ElementList),
     /// Document Regions: a tree.
     Regions,
+    /// The Word List.
+    Words,
 }
 
 /// The element lists Virtual HTML Features offers, in JAWS's order [obs, 230/s1-s22].
@@ -263,6 +268,21 @@ impl Entry {
         }
     }
 
+    /// A word of the Word List, at its first place: "m (10)". Its `sort_key` is the word.
+    pub fn word(word: &Word) -> Self {
+        Self {
+            text: word.label(),
+            sort_key: word.word.clone(),
+            level: None,
+            address: None,
+            same_page: false,
+            visited: false,
+            node_id: 0,
+            offset: word.offsets.first().copied().unwrap_or(0),
+            feature: None,
+        }
+    }
+
     /// One of Virtual HTML Features' lists, by its name.
     pub fn feature(feature: HtmlFeature) -> Self {
         let name = feature.name().to_string();
@@ -370,6 +390,11 @@ impl ListDialog {
         )
     }
 
+    /// The Word List over the page's `words`, in their order, the first selected.
+    pub fn words(id: u32, words: &[Word]) -> Self {
+        Self::new(id, ListKind::Words, words.iter().map(Entry::word).collect())
+    }
+
     /// Virtual HTML Features: JAWS's element lists, the first selected.
     pub fn features(id: u32) -> Self {
         Self::new(
@@ -406,6 +431,7 @@ impl ListDialog {
             ListKind::Features => "lists",
             ListKind::Elements(_) => "elements",
             ListKind::Regions => "regions",
+            ListKind::Words => "words",
         }
     }
 
@@ -422,7 +448,8 @@ impl ListDialog {
             ListKind::FormFields
             | ListKind::Features
             | ListKind::Elements(_)
-            | ListKind::Regions => Vec::new(),
+            | ListKind::Regions
+            | ListKind::Words => Vec::new(),
         }
     }
 
@@ -440,7 +467,8 @@ impl ListDialog {
                 ListKind::FormFields
                 | ListKind::Features
                 | ListKind::Elements(_)
-                | ListKind::Regions,
+                | ListKind::Regions
+                | ListKind::Words,
                 _,
             ) => true,
         };
@@ -600,6 +628,15 @@ impl ListDialog {
                     button("cancel", msg::regions_cancel(), false),
                 ],
             ),
+            ListKind::Words => (
+                msg::list_dialog_words(),
+                vec![
+                    list(msg::list_dialog_words_list()),
+                    button("ok", msg::word_list_ok(), true),
+                    button("cancel", msg::word_list_cancel(), false),
+                    button("summary", msg::word_list_summary(), false),
+                ],
+            ),
         };
         DialogSpec {
             id: self.id,
@@ -620,7 +657,8 @@ impl ListDialog {
             | ListKind::FormFields
             | ListKind::Features
             | ListKind::Elements(_)
-            | ListKind::Regions => Vec::new(),
+            | ListKind::Regions
+            | ListKind::Words => Vec::new(),
         }
     }
 
@@ -673,7 +711,9 @@ impl ListDialog {
                     ("ok", Some(entry), ListKind::Elements(list)) if list.focuses() => {
                         Outcome::Focus(entry.clone())
                     }
-                    ("ok", Some(entry), ListKind::Elements(_)) => Outcome::MoveTo(entry.clone()),
+                    ("ok", Some(entry), ListKind::Elements(_) | ListKind::Words) => {
+                        Outcome::MoveTo(entry.clone())
+                    }
                     ("ok", Some(entry), ListKind::Features) => {
                         entry.feature.map_or(Outcome::Nothing, Outcome::Open)
                     }

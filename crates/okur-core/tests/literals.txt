@@ -26,6 +26,7 @@ okur-core/src/labels.rs: *
 okur-core/src/color.rs: "../locales/en-US/colors.txt"
 okur-core/src/color.rs: "rgba("
 okur-core/src/color.rs: "rgb("
+okur-core/src/word_list.rs: "../locales/en-US/word-list-common-words.txt"
 okur-core/src/actions.rs: "activate"
 okur-core/src/actions.rs: "caret"
 okur-core/src/actions.rs: "caret to"
@@ -233,6 +234,8 @@ okur-core/src/ui/lists.rs: "move"
 okur-core/src/ui/lists.rs: "ok"
 okur-core/src/ui/lists.rs: "regions"
 okur-core/src/ui/lists.rs: "sort"
+okur-core/src/ui/lists.rs: "summary"
+okur-core/src/ui/lists.rs: "words"
 # The settings table: setting ids (their paths in the settings file, also their controls' ids),
 # dialog group ids and JAWS's settings file keys.
 okur-core/src/settings/registry.rs: *

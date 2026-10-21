@@ -273,6 +273,13 @@ pub enum Command {
     /// Ctrl+Insert+Tab in a page (Assign Custom Label): a name for the element at the virtual
     /// cursor, read in place of its own.
     AssignCustomLabel,
+    /// Ctrl+Insert+W in a page (WordList): the Word List, the page's words, to move to one.
+    WordList,
+    /// W in a page (MoveToNextWordFromList): the next line with the word chosen in the Word
+    /// List.
+    NextWordFromList,
+    /// Shift+W in a page (MoveToPriorWordFromList): the prior one.
+    PriorWordFromList,
     /// Shift+J in a page (JumpReturnFromLine): back to where the last jump was made.
     JumpReturnFromLine,
 
@@ -571,6 +578,9 @@ impl Command {
             "JumpToLine" => JumpToLine,
             "DefineATempPlaceMarker" => DefineTempPlaceMarker,
             "SelectAPlaceMarker" => SelectAPlaceMarker,
+            "WordList" => WordList,
+            "MoveToNextWordFromList" => NextWordFromList,
+            "MoveToPriorWordFromList" => PriorWordFromList,
             "7" | "SpeakPlaceMarkerN(1)" => SpeakPlaceMarker(1),
             "8" | "SpeakPlaceMarkerN(2)" => SpeakPlaceMarker(2),
             "9" | "SpeakPlaceMarkerN(3)" => SpeakPlaceMarker(3),
@@ -1133,6 +1143,11 @@ static BINDINGS: &[Binding] = &{
         bind(Alpha('T'), ALONE, MoveToNext(Table)),
         bind(Alpha('K'), CTRL_WIN, DefineTempPlaceMarker),
         bind(Alpha('K'), CTRL_SHIFT, SelectAPlaceMarker),
+        // Default.JKM: Control+JAWSKey+W=WordList, W=MoveToNextWordFromList,
+        // Shift+W=MoveToPriorWordFromList.
+        bind(Alpha('W'), OKUR_CTRL, WordList),
+        bind(Alpha('W'), SHIFT, PriorWordFromList),
+        bind(Alpha('W'), ALONE, NextWordFromList),
         bind(Alpha('K'), SHIFT, MoveToPrior(PlaceMarker)),
         bind(Alpha('K'), ALONE, MoveToNext(PlaceMarker)),
         bind(Alpha('U'), SHIFT, MoveToPrior(UnvisitedLink)),

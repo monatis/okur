@@ -29,6 +29,7 @@ pub mod text_analysis;
 pub mod ui;
 pub mod viewer;
 pub mod viewer_text;
+pub mod word_list;
 
 pub use aom::{AomNode, NodeStates, Role};
 pub use buffer::{

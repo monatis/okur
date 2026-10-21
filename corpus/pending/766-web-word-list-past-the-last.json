@@ -1,0 +1,62 @@
+{
+  "id": "766-web-word-list-past-the-last",
+  "name": "The Word List's last word, followed past its place: Ctrl+Insert+W, End, Enter, Insert+Up, W twice, Shift+W twice, Insert+Up (keys in the dialog typed by JAWS)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "Ctrl+Insert+W",
+      "settle_max_ms": 30000,
+      "id": "s1"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"End\")",
+      "id": "s2"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "W",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "W",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Shift+W",
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "Shift+W",
+      "id": "s8"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s9"
+    }
+  ]
+}
