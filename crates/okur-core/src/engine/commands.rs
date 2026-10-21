@@ -570,7 +570,18 @@ impl ScreenReaderEngine {
                 self.speech
                     .speak_selected_character(before, &character, after, true);
             } else if selected_text && !text.is_empty() {
-                self.speech.speak_symbols(text, true);
+                // A long selection's last characters that begin with a line break: JAWS's
+                // synthesizer says the break as "blank" after "characters up to", which its
+                // history leaves out [obs, 620/s10, s14, s35]. Only a long selection's summary
+                // keeps an empty line ([`crate::cursor`]).
+                match text.split_once("\n\n") {
+                    Some((summary, last)) => {
+                        self.speech.speak_symbols(summary, true);
+                        self.speech.speak_character("\n", false);
+                        self.speech.speak_symbols(last, false);
+                    }
+                    None => self.speech.speak_symbols(text, true),
+                }
             } else if !text.is_empty() {
                 self.speech.speak(text, true);
             }
