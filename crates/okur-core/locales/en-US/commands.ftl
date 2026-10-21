@@ -127,8 +127,29 @@ notification-history-close = Close
 # Enter on a notification in the history [obs, 774/s11].
 notification-details-title = Notification Details
 notification-details-text = Notification Text:
-# Create Rule... in the Notification History, before Okur has notification rules.
-notification-rules-not-yet = Okur cannot make notification rules yet.
+# Create Rule..., as JAWS's [obs, 775/s6-s13; JAWS 2025 help, Notification History].
+notification-rule-title = Create Rule
+notification-rule-received = Received Notification
+notification-rule-type = Rule Type
+notification-rule-contains = Contains
+notification-rule-begins = Begins with
+notification-rule-ends = Ends with
+notification-rule-pattern = Matches pattern
+# The check box after the rule's text, naming the notification's sender.
+notification-rule-limit = Limit to notifications from { $sender }
+notification-rule-speech-group = Speech or Sound Action
+notification-rule-speech = Speech Action
+notification-rule-mute = Mute
+notification-rule-shorten = Shorten
+notification-rule-sound = Play Sound
+notification-rule-speak = Speak the full message
+notification-rule-braille = Braille Action
+notification-rule-braille-none = Show nothing
+notification-rule-braille-flash = Show flash message
+notification-rule-braille-short = Show shortened flash message
+notification-rule-hidden = Don't Show in History
+notification-rule-ok = OK
+notification-rule-cancel = Cancel
 
 ## Say Default Button (Insert+E) and the settings in use (Insert+Q) [obs, 513]
 

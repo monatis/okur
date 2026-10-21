@@ -298,6 +298,13 @@ pub struct ScreenReaderEngine {
     notification_details: Option<u32>,
     /// The Notification History's Enable Rules.
     notification_rules: bool,
+    /// The notification rules made with Create Rule, the first that matches deciding, and
+    /// the dialog while it is open.
+    notification_rule_list: Vec<crate::ui::notifications::Rule>,
+    notification_rule_dialog: Option<crate::ui::notifications::CreateRuleDialog>,
+    /// The last notification that came, for Insert+Space, Shift+N, even one the history
+    /// leaves out.
+    last_notification: Option<String>,
     /// Toasts are kept but not said (Insert+Space, Ctrl+N).
     toasts_unsaid: bool,
     /// The table layer (Insert+Space, T): the arrows move by cell until Escape.
@@ -446,6 +453,9 @@ impl ScreenReaderEngine {
             notification_history: None,
             notification_details: None,
             notification_rules: true,
+            notification_rule_list: Vec::new(),
+            notification_rule_dialog: None,
+            last_notification: None,
             toasts_unsaid: false,
             table_layer: false,
             clicked: None,

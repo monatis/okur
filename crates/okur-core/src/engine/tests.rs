@@ -6175,3 +6175,81 @@ fn the_notification_history_lists_the_toasts_that_came() {
         Some("No notification")
     );
 }
+
+/// Create Rule... on a notification makes a rule, Mute at first: the next notification it
+/// matches is kept, not said, and Shift+N still says it (JAWS 2025 help, Notification History;
+/// [obs, 775]). Enable Rules unchecked, it is said again.
+#[test]
+fn a_notification_rule_mutes_what_it_matches() {
+    use crate::ui::{FromUi, ToUi, Value};
+    let (mut engine, speech) = engine_on_a_page();
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let toast = |engine: &mut ScreenReaderEngine, text: &str| {
+        engine.handle_accessibility_event(&AccessibilityEvent::Toast {
+            text: text.to_owned(),
+            sender: Some("Mail".to_owned()),
+        })
+    };
+    toast(
+        &mut engine,
+        "New notification from Mail, Weekly digest. 1 of 1",
+    );
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    for (key, modifiers) in [(Key::Space, insert), (Key::Alpha('N'), Modifiers::none())] {
+        for down in [true, false] {
+            engine.handle_key_event(&KeyEvent::new(key, modifiers, down));
+        }
+    }
+    let history = match ui.take().first() {
+        Some(ToUi::DialogShow { dialog }) => dialog.id,
+        _ => 0,
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: history,
+        control: "create".into(),
+    }));
+    let rule = match ui.take().first() {
+        Some(ToUi::DialogShow { dialog }) if dialog.title == "Create Rule" => dialog.id,
+        other => {
+            panic_free_fail(&format!("no Create Rule: {other:?}"));
+            return;
+        }
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id: rule,
+        control: "text".into(),
+        value: Value::Text("Weekly digest".into()),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: rule,
+        control: "ok".into(),
+    }));
+    assert_eq!(ui.take(), [ToUi::DialogClose { id: rule }]);
+    speech.take();
+    assert_eq!(
+        toast(
+            &mut engine,
+            "New notification from Mail, Weekly digest. 1 of 1"
+        ),
+        None
+    );
+    assert!(speech.take().is_empty());
+    assert!(toast(&mut engine, "New notification from Mail, Lunch. 1 of 1").is_some());
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id: history,
+        control: "rules".into(),
+        value: Value::Checked(false),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogClosed {
+        id: history,
+    }));
+    assert!(toast(
+        &mut engine,
+        "New notification from Mail, Weekly digest. 1 of 1"
+    )
+    .is_some());
+}

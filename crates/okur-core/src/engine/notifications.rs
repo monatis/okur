@@ -4,7 +4,9 @@
 
 use super::ScreenReaderEngine;
 use crate::messages::msg;
-use crate::ui::notifications::{HistoryDialog, Notification, Outcome};
+use crate::ui::notifications::{
+    CreateRuleDialog, HistoryDialog, Notification, Outcome, RuleOutcome, SpeechAction,
+};
 use crate::ui::{FromUi, ToUi};
 
 /// How many notifications are kept: JAWS's Notification History holds at most 500 (FSCast
@@ -16,21 +18,39 @@ impl ScreenReaderEngine {
     /// Windows PowerShell, SR Fixture, Build finished in 12 seconds. 1 of 1", after what was
     /// being said [obs, 770/s1]. With toast announcements turned off it is kept, not said
     /// [obs, 773/s3, s5].
+    /// While Enable Rules is checked, the first rule that matches it decides: Mute (or Play
+    /// Sound, not built yet) says nothing, Don't Show in History leaves it out of the history
+    /// (JAWS 2025 help, Notification History).
     pub(super) fn toast_shown(&mut self, text: &str, sender: Option<&str>) -> Option<String> {
-        let time = self
-            .clock
-            .as_deref()
-            .map(|clock| crate::clock::say_time(clock, false))
-            .unwrap_or_default();
-        self.notifications.push_back(Notification {
-            text: text.to_owned(),
-            sender: sender.map(str::to_owned),
-            time,
+        let rule = self
+            .notification_rules
+            .then(|| {
+                self.notification_rule_list
+                    .iter()
+                    .find(|rule| rule.matches(text, sender))
+            })
+            .flatten();
+        let hidden = rule.is_some_and(|rule| rule.hidden);
+        let silent = rule.is_some_and(|rule| {
+            matches!(rule.speech, SpeechAction::Mute | SpeechAction::PlaySound)
         });
-        while self.notifications.len() > KEPT {
-            self.notifications.pop_front();
+        self.last_notification = Some(text.to_owned());
+        if !hidden {
+            let time = self
+                .clock
+                .as_deref()
+                .map(|clock| crate::clock::say_time(clock, false))
+                .unwrap_or_default();
+            self.notifications.push_back(Notification {
+                text: text.to_owned(),
+                sender: sender.map(str::to_owned),
+                time,
+            });
+            while self.notifications.len() > KEPT {
+                self.notifications.pop_front();
+            }
         }
-        if self.toasts_unsaid {
+        if self.toasts_unsaid || silent {
             return None;
         }
         self.speech.speak(text, false);
@@ -53,9 +73,8 @@ impl ScreenReaderEngine {
     /// "No notification" [obs, 533/s3].
     pub(super) fn repeat_last_notification(&mut self) {
         let said = self
-            .notifications
-            .back()
-            .map(|n| n.text.clone())
+            .last_notification
+            .clone()
             .unwrap_or_else(|| msg::notification_none().to_string());
         self.speech.speak(&said, true);
     }
@@ -91,7 +110,8 @@ impl ScreenReaderEngine {
         let id = super::dialog_of(message);
         id.is_some()
             && (self.notification_history.as_ref().map(|d| d.id) == id
-                || self.notification_details == id)
+                || self.notification_details == id
+                || self.notification_rule_dialog.as_ref().map(|d| d.id) == id)
     }
 
     /// What the user did to the Notification History or a notification's details.
@@ -102,6 +122,25 @@ impl ScreenReaderEngine {
             // The details close; the history is in front again.
             if matches!(message, FromUi::DialogClosed { .. }) {
                 self.notification_details = None;
+            }
+            return None;
+        }
+        if let Some(dialog) = self
+            .notification_rule_dialog
+            .as_mut()
+            .filter(|d| Some(d.id) == super::dialog_of(message))
+        {
+            match dialog.handle(message) {
+                RuleOutcome::Nothing => {}
+                RuleOutcome::Save(rule) => {
+                    self.notification_rule_list.push(rule);
+                    if let (Some(dialog), Some(ui)) =
+                        (self.notification_rule_dialog.take(), &self.ui)
+                    {
+                        ui.send(ToUi::DialogClose { id: dialog.id });
+                    }
+                }
+                RuleOutcome::Closed => self.notification_rule_dialog = None,
             }
             return None;
         }
@@ -119,13 +158,26 @@ impl ScreenReaderEngine {
                 self.notification_details = Some(self.dialog_count);
                 None
             }
-            Outcome::CreateRule => {
-                let said = msg::notification_rules_not_yet().to_string();
-                self.speech.speak(&said, true);
-                Some(said)
+            // Create Rule... for the notification chosen [obs, 775/s6].
+            Outcome::CreateRule(row) => {
+                let latest = self.notifications.len().checked_sub(row + 1)?;
+                let chosen = self.notifications.get(latest)?;
+                self.dialog_count += 1;
+                let dialog = CreateRuleDialog::new(
+                    self.dialog_count,
+                    &chosen.text,
+                    chosen.sender.as_deref(),
+                );
+                self.ui.as_ref()?.send(ToUi::DialogShow {
+                    dialog: dialog.spec(),
+                });
+                self.notification_rule_dialog = Some(dialog);
+                None
             }
+            // Clear History forgets them all, the last one with them.
             Outcome::Clear => {
                 self.notifications.clear();
+                self.last_notification = None;
                 let ui = self.ui.as_ref()?;
                 let id = self.notification_history.as_ref()?.id;
                 ui.send(ToUi::DialogItems {
