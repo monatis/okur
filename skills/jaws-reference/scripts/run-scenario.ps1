@@ -711,6 +711,14 @@ function Clear-LabState {
         $shellClosed += $cls
         [void](Send-Chord "Escape"); Start-Sleep -Milliseconds 300
     }
+    # JAWS's viewers left open by an earlier trial take the focus back when a later trial's
+    # dialog closes, and that trial reads them: the Results Viewer of Skim Reading's summary
+    # (762, round 179) answered Escape in 763's Skim Reading dialog (round 180, s23). They are
+    # closed; JAWS starts them again when asked.
+    $viewers = @(Get-Process ResultsViewer, NotificationViewer -ErrorAction SilentlyContinue)
+    foreach ($v in $viewers) { Stop-Process -Id $v.Id -Force -ErrorAction SilentlyContinue }
+    if ($viewers.Count -gt 0) { Start-Sleep -Milliseconds 500 }
+    $viewersClosed = @($viewers | ForEach-Object { $_.ProcessName })
     $held = Get-HeldModifiers
     $window = [SrKeyInput]::FindWindow('JFWUI2', [NullString]::Value)
     $jawsInWay = $window -ne [IntPtr]::Zero -and (
@@ -718,12 +726,13 @@ function Clear-LabState {
     $jawsProcess = Get-Process jfw -ErrorAction SilentlyContinue | Select-Object -First 1
     $dialogs = if ($jawsProcess) { [SrKeyInput]::JawsDialogs([uint32]$jawsProcess.Id).Count } else { 0 }
     if ($held.Count -eq 0 -and -not $jawsInWay -and $dialogs -eq 0) {
-        if ($shellClosed.Count -eq 0) { return $null }
-        return [ordered]@{ shell_windows_closed = $shellClosed }
+        if ($shellClosed.Count -eq 0 -and $viewersClosed.Count -eq 0) { return $null }
+        return [ordered]@{ shell_windows_closed = $shellClosed; jaws_viewers_closed = $viewersClosed }
     }
     Invoke-ClearLabState
     [ordered]@{
         shell_windows_closed = $shellClosed
+        jaws_viewers_closed = $viewersClosed
         modifiers_held = @($held | ForEach-Object { '0x{0:X2}' -f $_ })
         jaws_window_in_front = $jawsInWay
         jaws_dialogs_closed = $dialogs
