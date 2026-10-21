@@ -886,6 +886,11 @@ pub fn say_focus(focus: &FocusEvent) -> String {
 /// Focus without what a key does on it ("Subscribe to updates check box checked", "General Tab
 /// selected" [obs, 503/s3, s16]).
 pub fn reading_line(focus: &FocusEvent) -> String {
+    // An empty list view has no line to read: JAWS's Say Line says nothing in the
+    // PlaceMarker List without PlaceMarkers [obs, 699/s13].
+    if focus.list_view && focus.item_count == Some(0) {
+        return String::new();
+    }
     control_lines(focus, false)
         .iter()
         .filter(|l| !l.on_arrival)

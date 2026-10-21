@@ -185,39 +185,66 @@ impl ListDialog {
     }
 }
 
+/// A PlaceMarker as Add or Change leaves it.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Details {
+    pub name: String,
+    /// Define for all pages on current domain.
+    pub domain: bool,
+    /// Anchor to text, and the text.
+    pub anchor: Option<String>,
+}
+
 /// What the engine does after a message from Add or Change.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum NameOutcome {
     Nothing,
-    /// OK, with the name typed.
-    Name(String),
+    /// "Anchor to text" was checked or cleared: its text field is available or not.
+    Anchoring(bool),
+    /// OK.
+    Done(Details),
     Closed,
 }
 
-/// Add PlaceMarker, or Change PlaceMarker for one already kept: its name.
+/// Add PlaceMarker, or Change PlaceMarker for one already kept. Its controls, in JAWS 2025's
+/// Tab order [obs, 701/s5-s10]: Name, "Define for all pages on current domain", "Anchor to
+/// text" (both clear), then OK and Cancel; the anchor's text field ("Anchor Text:") is
+/// available only while "Anchor to text" is checked.
 #[derive(Debug, Clone)]
 pub struct NameDialog {
     pub id: u32,
     change: bool,
     name: String,
+    domain: bool,
+    anchored: bool,
+    anchor: String,
 }
 
+/// The anchor's text field, made available as "Anchor to text" is checked.
+pub const ANCHOR_TEXT: &str = "anchortext";
+
 impl NameDialog {
-    /// Add, proposing `name` (the text at the cursor).
-    pub fn add(id: u32, name: &str) -> Self {
+    /// Add, proposing `text` (the text at the cursor) as the name and as the anchor.
+    pub fn add(id: u32, text: &str) -> Self {
         Self {
             id,
             change: false,
-            name: name.to_owned(),
+            name: text.to_owned(),
+            domain: false,
+            anchored: false,
+            anchor: text.to_owned(),
         }
     }
 
-    /// Change, for a PlaceMarker named `name`.
-    pub fn change(id: u32, name: &str) -> Self {
+    /// Change, for a PlaceMarker as it is.
+    pub fn change(id: u32, details: &Details) -> Self {
         Self {
             id,
             change: true,
-            name: name.to_owned(),
+            name: details.name.clone(),
+            domain: details.domain,
+            anchored: details.anchor.is_some(),
+            anchor: details.anchor.clone().unwrap_or_default(),
         }
     }
 
@@ -239,6 +266,30 @@ impl NameDialog {
                     },
                     true,
                 ),
+                control(
+                    "domain",
+                    msg::placemarker_add_domain().to_string(),
+                    ControlKind::CheckBox {
+                        checked: self.domain,
+                    },
+                    true,
+                ),
+                control(
+                    "anchored",
+                    msg::placemarker_add_anchored().to_string(),
+                    ControlKind::CheckBox {
+                        checked: self.anchored,
+                    },
+                    true,
+                ),
+                control(
+                    ANCHOR_TEXT,
+                    msg::placemarker_add_anchor_text().to_string(),
+                    ControlKind::Edit {
+                        text: self.anchor.clone(),
+                    },
+                    self.anchored,
+                ),
                 button("ok", msg::placemarker_add_ok().to_string(), true, true),
                 button(
                     "cancel",
@@ -252,19 +303,27 @@ impl NameDialog {
 
     pub fn handle(&mut self, event: &FromUi) -> NameOutcome {
         match event {
-            FromUi::DialogChanged {
-                id,
-                control,
-                value: Value::Text(text),
-            } if *id == self.id && control == "name" => {
-                self.name.clone_from(text);
+            FromUi::DialogChanged { id, control, value } if *id == self.id => {
+                match (control.as_str(), value) {
+                    ("name", Value::Text(text)) => self.name.clone_from(text),
+                    ("domain", Value::Checked(checked)) => self.domain = *checked,
+                    ("anchored", Value::Checked(checked)) => {
+                        self.anchored = *checked;
+                        return NameOutcome::Anchoring(*checked);
+                    }
+                    (ANCHOR_TEXT, Value::Text(text)) => self.anchor.clone_from(text),
+                    _ => {}
+                }
                 NameOutcome::Nothing
             }
             FromUi::DialogPressed { id, control } if *id == self.id => match control.as_str() {
                 // A PlaceMarker needs a name: OK with none does nothing.
-                "ok" if !self.name.trim().is_empty() => {
-                    NameOutcome::Name(self.name.trim().to_owned())
-                }
+                "ok" if !self.name.trim().is_empty() => NameOutcome::Done(Details {
+                    name: self.name.trim().to_owned(),
+                    domain: self.domain,
+                    anchor: (self.anchored && !self.anchor.trim().is_empty())
+                        .then(|| self.anchor.trim().to_owned()),
+                }),
                 "cancel" => NameOutcome::Closed,
                 _ => NameOutcome::Nothing,
             },
@@ -439,6 +498,20 @@ mod tests {
         assert_eq!(spec.title, "Add PlaceMarker");
         assert_eq!(
             spec.controls
+                .iter()
+                .map(|c| (c.id.as_str(), c.label.as_str(), c.enabled))
+                .collect::<Vec<_>>(),
+            [
+                ("name", "&Name:", true),
+                ("domain", "&Define for all pages on current domain", true),
+                ("anchored", "&Anchor to text", true),
+                (ANCHOR_TEXT, "Anchor &Text:", false),
+                ("ok", "&OK", true),
+                ("cancel", "&Cancel", true),
+            ]
+        );
+        assert_eq!(
+            spec.controls
                 .first()
                 .map(|c| (c.label.clone(), c.kind.clone())),
             Some((
@@ -460,11 +533,42 @@ mod tests {
         let _ = dialog.handle(&typed("  "));
         assert_eq!(dialog.handle(&ok), NameOutcome::Nothing);
         let _ = dialog.handle(&typed("Drinks "));
-        assert_eq!(dialog.handle(&ok), NameOutcome::Name("Drinks".to_owned()));
         assert_eq!(
-            NameDialog::change(3, "x").spec().title,
-            "Change PlaceMarker"
+            dialog.handle(&ok),
+            NameOutcome::Done(Details {
+                name: "Drinks".to_owned(),
+                domain: false,
+                anchor: None
+            })
         );
+        // Anchored to text, its field available; the domain box checked.
+        let checked = |control: &str| FromUi::DialogChanged {
+            id: 3,
+            control: control.to_owned(),
+            value: Value::Checked(true),
+        };
+        assert_eq!(
+            dialog.handle(&checked("anchored")),
+            NameOutcome::Anchoring(true)
+        );
+        let _ = dialog.handle(&checked("domain"));
+        assert_eq!(
+            dialog.handle(&ok),
+            NameOutcome::Done(Details {
+                name: "Drinks".to_owned(),
+                domain: true,
+                anchor: Some("Water in a closed bottle".to_owned())
+            })
+        );
+        let change = NameDialog::change(
+            3,
+            &Details {
+                name: "x".to_owned(),
+                domain: false,
+                anchor: None,
+            },
+        );
+        assert_eq!(change.spec().title, "Change PlaceMarker");
     }
 
     /// The Remove All question: Yes, the default, or No, which Escape answers [obs,

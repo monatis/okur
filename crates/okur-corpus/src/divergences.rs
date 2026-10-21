@@ -129,6 +129,7 @@ divergences! {
         "260-web-list-tabs-enter/s1",
         "511-desktop-window-list-and-tray/s4",
         "506-web-jaws-find/s1",
+        "699-web-placemarker-list/s12",
     ],
     "Opening one of its list dialogs, JAWS's speech passes through its own windows before it \
      names the dialog: its main window (its version, a list's tutor message) and the browser's \

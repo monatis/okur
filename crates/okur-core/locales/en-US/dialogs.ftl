@@ -195,8 +195,12 @@ placemarker-add-title = Add PlaceMarker
 # Change, from the list: the chosen PlaceMarker's name.
 placemarker-change-title = Change PlaceMarker
 placemarker-add-name = &Name:
-placemarker-add-ok = OK
-placemarker-add-cancel = Cancel
+placemarker-add-domain = &Define for all pages on current domain
+# Found by this text where the page's text moved, not kept at its character.
+placemarker-add-anchored = &Anchor to text
+placemarker-add-anchor-text = Anchor &Text:
+placemarker-add-ok = &OK
+placemarker-add-cancel = &Cancel
 # Remove All, from the list [obs, 702/s27].
 placemarker-remove-all-title = PlaceMarker RemoveAll Warning
 placemarker-remove-all-question = Are you sure you want to remove all PlaceMarkers?

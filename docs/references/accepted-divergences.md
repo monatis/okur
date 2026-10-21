@@ -86,7 +86,9 @@ A step can be in more than one entry; all of its entries apply.
   `258-web-list-glance-highlights-enter/s1`, `259-web-list-divisions-enter/s1`,
   `260-web-list-tabs-enter/s1`; and Insert+F11's Select a System Tray Icon,
   `511-desktop-window-list-and-tray/s4` (its version, round 57); and JAWS Find,
-  `506-web-jaws-find/s1` (its Find what field said before the dialog, in some trials).
+  `506-web-jaws-find/s1` (its Find what field said before the dialog, in some trials); and
+  the PlaceMarker List opened by K, `699-web-placemarker-list/s12` (its list said before the
+  dialog, in some trials).
 - In the recordings of 2026-10-19 (round 9, JAWS freshly started for the batch), JAWS no longer
   said its version or the list's tutor message before the Links List, the Heading List and
   Virtual HTML Features, and said nothing before some dialogs at all: those steps were taken

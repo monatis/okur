@@ -12,8 +12,8 @@ use super::{AppMode, ScreenReaderEngine};
 use crate::messages::msg;
 use crate::placemarkers::{place_in, PlaceMarker, PlaceMarkerStore, PlaceMarkers};
 use crate::ui::placemarkers::{
-    ListDialog, ListOutcome, NameDialog, NameOutcome, RemoveAllDialog, RemoveAllOutcome, Row,
-    FOR_CHOSEN,
+    Details, ListDialog, ListOutcome, NameDialog, NameOutcome, RemoveAllDialog, RemoveAllOutcome,
+    Row, ANCHOR_TEXT, FOR_CHOSEN,
 };
 use crate::ui::{FromUi, ToUi};
 
@@ -133,9 +133,16 @@ impl ScreenReaderEngine {
             .collect()
     }
 
-    /// K or Shift+K: the next or prior PlaceMarker of the page.
+    /// K or Shift+K: the next or prior PlaceMarker of the page. Without any, once the page's
+    /// PlaceMarker List was opened since it loaded, K opens it, to add one [obs, 703/s1, s4;
+    /// 702/s30].
     pub(super) fn move_to_placemarker(&mut self, forward: bool) -> Option<String> {
         let markers = self.placemarker_offsets();
+        if markers.is_empty()
+            && self.placemarker_list_seen.as_deref() == Some(self.placemarker_page().as_str())
+        {
+            return self.open_placemarker_list();
+        }
         // Said by quick navigation, as the other elements are.
         Some(
             self.cursor
@@ -177,6 +184,7 @@ impl ScreenReaderEngine {
             .map(|(marker, row, _)| (marker, row))
             .unzip();
         self.ui.as_ref()?;
+        self.placemarker_list_seen = Some(page.clone());
         self.dialog_count += 1;
         let dialog = ListDialog::new(self.dialog_count, rows);
         self.show(dialog.spec());
@@ -253,14 +261,15 @@ impl ScreenReaderEngine {
                 (true, None)
             }
             ListOutcome::Change(row) => {
-                let name = self
-                    .page_markers(&state.page)
-                    .into_iter()
-                    .nth(row)
-                    .map(|(_, row, _)| row.name)
-                    .unwrap_or_default();
+                let details = state
+                    .markers
+                    .get(row)
+                    .and_then(|marker| self.details_of(&state.page, marker));
+                let Some(details) = details else {
+                    return (true, None);
+                };
                 self.dialog_count += 1;
-                let dialog = NameDialog::change(self.dialog_count, &name);
+                let dialog = NameDialog::change(self.dialog_count, &details);
                 self.show(dialog.spec());
                 state.child = Some(Child::Name(dialog, Some(row)));
                 (true, None)
@@ -320,10 +329,22 @@ impl ScreenReaderEngine {
                     self.close(dialog.id);
                     (true, None)
                 }
-                NameOutcome::Name(name) => {
+                // "Anchor to text" makes its text field available.
+                NameOutcome::Anchoring(anchored) => {
+                    if let Some(ui) = &self.ui {
+                        ui.send(ToUi::DialogEnable {
+                            id: dialog.id,
+                            control: ANCHOR_TEXT.to_owned(),
+                            enabled: anchored,
+                        });
+                    }
+                    state.child = Some(child);
+                    (true, None)
+                }
+                NameOutcome::Done(details) => {
                     match row.and_then(|row| state.markers.get(row).cloned()) {
-                        Some(marker) => self.rename(&state.page, &marker, &name),
-                        None => self.add_placemarker(&state.page, name),
+                        Some(marker) => self.change(&state.page, &marker, details),
+                        None => self.add_placemarker(&state.page, details),
                     }
                     // OK closes the list too [obs, 702/s6].
                     self.close(dialog.id);
@@ -373,27 +394,38 @@ impl ScreenReaderEngine {
         self.returning_from_dialog();
     }
 
-    /// A new PlaceMarker at the virtual cursor, named `name`, kept for the page.
-    fn add_placemarker(&mut self, page: &str, name: String) {
-        let line = self
-            .cursor
-            .buffer
-            .line_at_offset(self.cursor.offset)
-            .map(|line| line.text.clone())
-            .unwrap_or_default();
+    /// A new PlaceMarker at the virtual cursor, as Add left it, kept for the page.
+    fn add_placemarker(&mut self, page: &str, details: Details) {
         let marker = PlaceMarker {
-            name,
+            name: details.name,
             offset: self.cursor.offset,
-            line,
-            domain: false,
+            anchor: details.anchor,
+            domain: details.domain,
         };
         self.placemarkers.add(page, marker);
         self.save_placemarkers();
     }
 
-    fn rename(&mut self, page: &str, marker: &Marker, name: &str) {
+    /// A saved PlaceMarker as Change shows it; the temporary one has none to change.
+    fn details_of(&self, page: &str, marker: &Marker) -> Option<Details> {
+        let (page, index) = match marker {
+            Marker::Own(index) => (crate::placemarkers::page_of(page), *index),
+            Marker::Site { page, index } => (page.clone(), *index),
+            Marker::Temporary => return None,
+        };
+        let saved = self.placemarkers.pages.get(&page)?.get(index)?;
+        Some(Details {
+            name: saved.name.clone(),
+            domain: saved.domain,
+            anchor: saved.anchor.clone(),
+        })
+    }
+
+    fn change(&mut self, page: &str, marker: &Marker, details: Details) {
         if let Some(saved) = self.saved_mut(page, marker) {
-            name.clone_into(&mut saved.name);
+            saved.name = details.name;
+            saved.domain = details.domain;
+            saved.anchor = details.anchor;
             self.save_placemarkers();
         }
     }

@@ -157,6 +157,9 @@ pub struct ScreenReaderEngine {
     placemarker_store: Option<Box<dyn crate::placemarkers::PlaceMarkerStore>>,
     /// The PlaceMarker List while it is open, and the dialog it opened.
     placemarker_list: Option<placemarkers::ListState>,
+    /// The page whose PlaceMarker List was opened since it loaded: K without PlaceMarkers
+    /// opens the list there [obs, 703/s4].
+    placemarker_list_seen: Option<String>,
     /// The custom labels (Insert+Ctrl+Tab), and where they are kept.
     custom_labels: crate::labels::CustomLabels,
     label_store: Option<Box<dyn crate::labels::LabelStore>>,
@@ -338,6 +341,7 @@ impl ScreenReaderEngine {
             placemarkers: crate::placemarkers::PlaceMarkers::default(),
             placemarker_store: None,
             placemarker_list: None,
+            placemarker_list_seen: None,
             custom_labels: crate::labels::CustomLabels::default(),
             label_store: None,
             label_dialog: None,
@@ -418,6 +422,7 @@ impl ScreenReaderEngine {
         self.forms_mode = false;
         self.app_mode = AppMode::VirtualBuffer;
         self.say_all = None;
+        self.placemarker_list_seen = None;
     }
 
     /// The application module that owns `focus`, whose hooks apply to it.

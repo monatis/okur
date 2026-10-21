@@ -1216,7 +1216,7 @@ fn k_finds_a_saved_placemarker_of_the_page() {
         PlaceMarker {
             name: "Water in a closed bottle is allowed.".to_owned(),
             offset: 3,
-            line: "Water in a closed bottle is allowed.".to_owned(),
+            anchor: Some("Water in a closed bottle".to_owned()),
             domain: false,
         },
     );
@@ -1225,7 +1225,7 @@ fn k_finds_a_saved_placemarker_of_the_page() {
         PlaceMarker {
             name: "Elsewhere".to_owned(),
             offset: 0,
-            line: "Phones stay silent.".to_owned(),
+            anchor: None,
             domain: false,
         },
     );
@@ -1374,6 +1374,20 @@ fn a_placemarker_is_added_and_removed_in_the_list() {
         ]
     );
     assert_eq!(digit(&mut engine, 7), "No place marker #1");
+    // The list was opened on this page: K without PlaceMarkers opens it [obs, 703/s4]; on the
+    // page loaded again, K says there are none [obs, 703/s1].
+    engine.handle_key_event(&KeyEvent::new(Key::Alpha('K'), Modifiers::none(), true));
+    assert_eq!(
+        shown(&ui).map(|d| d.title),
+        Some("PlaceMarker List".to_owned())
+    );
+    engine.load_buffer(VirtualBuffer::from_aom(&page));
+    let _ = speech.take();
+    engine.handle_key_event(&KeyEvent::new(Key::Alpha('K'), Modifiers::none(), true));
+    assert_eq!(
+        speech.take().join("\n"),
+        msg::quicknav_none_placemarkers().to_string()
+    );
 }
 
 /// A page's field has its text's colors. With the virtual cursor: another field's as the page

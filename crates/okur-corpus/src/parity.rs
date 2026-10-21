@@ -490,7 +490,12 @@ fn run_scenario(
                         // Where JAWS's dialog differs from Okur's window, the focus is Okur's;
                         // JAWS's dialog going away after Okur's closed is not.
                         if let okur_core::AccessibilityEvent::Focus(focus) = &mut converted {
-                            if mirror.is_closed_dialog(focus) {
+                            // A focus whose window is JAWS's own main window itself, its
+                            // version text, is JAWS's alone, though its traced chain can be
+                            // the browser's ("JAWS Professional" [obs, 699/s2]).
+                            if mirror.is_closed_dialog(focus)
+                                || focus.platform.top_window_class.as_deref() == Some("JFWUI2")
+                            {
                                 continue;
                             }
                             mirror.as_okur_window(focus);

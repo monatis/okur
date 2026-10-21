@@ -1,8 +1,9 @@
 //! Saved PlaceMarkers: places in a page the user named, to come back to with K, Shift+K and the
 //! PlaceMarker List (Ctrl+Shift+K), from one visit to the next (JAWS 2025 help, Surf's Up
 //! chapter 15). JAWS keeps them per page address; one generalized to the domain is offered on
-//! every page of its site. A PlaceMarker returns to the exact character it was set at. Okur
-//! keeps the line's text with the place, so that a page whose text moved still finds it.
+//! every page of its site. A PlaceMarker returns to the exact character it was set at; one
+//! anchored to text (Add's "Anchor to text" [obs, 701]) is found by that text where the
+//! page's text moved.
 
 use std::collections::BTreeMap;
 
@@ -17,9 +18,10 @@ pub struct PlaceMarker {
     pub name: String,
     /// The character it was set at, in the page's text.
     pub offset: usize,
-    /// The text of the line it was set on, to find it where the page's text moved.
+    /// The text it is anchored to, found where the page's text moved; none for a PlaceMarker
+    /// kept at its character.
     #[serde(default)]
-    pub line: String,
+    pub anchor: Option<String>,
     /// Generalized to the domain: offered on every page of the site.
     #[serde(default)]
     pub domain: bool,
@@ -90,27 +92,28 @@ impl PlaceMarkers {
     }
 }
 
-/// Where `marker` is in `buffer`: at its character when its line is still there; else at the
-/// start of the line with its text nearest to it; else at its character, within the page.
+/// Where `marker` is in `buffer`: where its anchor text is, nearest its character when the
+/// page has it more than once; else at its character, within the page.
 pub fn place_in(buffer: &VirtualBuffer, marker: &PlaceMarker) -> usize {
-    let last = buffer.len().saturating_sub(1);
-    let at = marker.offset.min(last);
-    let wanted = marker.line.trim();
-    if wanted.is_empty() {
+    let at = marker.offset.min(buffer.len().saturating_sub(1));
+    let Some(anchor) = marker
+        .anchor
+        .as_deref()
+        .map(str::trim)
+        .filter(|a| !a.is_empty())
+    else {
         return at;
-    }
-    if buffer
-        .line_at_offset(at)
-        .is_some_and(|line| line.text.trim() == wanted)
-    {
-        return at;
-    }
+    };
     buffer
         .lines
         .iter()
-        .filter(|line| line.text.trim() == wanted)
-        .min_by_key(|line| line.start_offset.abs_diff(marker.offset))
-        .map_or(at, |line| line.start_offset)
+        .filter_map(|line| {
+            let byte = line.text.find(anchor)?;
+            let chars = line.text.get(..byte)?.chars().count();
+            Some(line.start_offset + chars)
+        })
+        .min_by_key(|found| found.abs_diff(marker.offset))
+        .unwrap_or(at)
 }
 
 #[cfg(test)]
@@ -122,7 +125,7 @@ mod tests {
         PlaceMarker {
             name: name.to_owned(),
             offset,
-            line: name.to_owned(),
+            anchor: None,
             domain,
         }
     }
@@ -166,7 +169,7 @@ mod tests {
     }
 
     #[test]
-    fn a_marker_finds_its_line_where_the_text_moved() {
+    fn an_anchored_marker_finds_its_text_where_the_text_moved() {
         let page = |first: &str| {
             AomNode::new(0, Role::Document).with_children(vec![
                 AomNode::new(1, Role::Paragraph).with_text(first),
@@ -179,14 +182,15 @@ mod tests {
             .iter()
             .find(|l| l.text.contains("Water"))
             .map_or(0, |l| l.start_offset);
-        let saved = PlaceMarker {
+        let mut saved = PlaceMarker {
             name: "Water".to_owned(),
             offset: start + 6,
-            line: "Water in a closed bottle.".to_owned(),
+            anchor: Some("closed bottle".to_owned()),
             domain: false,
         };
-        assert_eq!(place_in(&before, &saved), start + 6);
-        // A longer first paragraph moves the line: its start is found.
+        assert_eq!(place_in(&before, &saved), start + 11);
+        // A longer first paragraph moves the text: the anchored one finds it, the other
+        // stays at its character.
         let after = VirtualBuffer::from_aom(&page("Quiet study is welcome on every floor."));
         let moved = after
             .lines
@@ -194,6 +198,8 @@ mod tests {
             .find(|l| l.text.contains("Water"))
             .map_or(0, |l| l.start_offset);
         assert_ne!(moved, start);
-        assert_eq!(place_in(&after, &saved), moved);
+        assert_eq!(place_in(&after, &saved), moved + 11);
+        saved.anchor = None;
+        assert_eq!(place_in(&after, &saved), start + 6);
     }
 }

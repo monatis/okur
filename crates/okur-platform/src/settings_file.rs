@@ -458,7 +458,7 @@ mod tests {
             PlaceMarker {
                 name: "Water in a closed bottle".into(),
                 offset: 120,
-                line: "Water in a closed bottle is allowed; meals are not.".into(),
+                anchor: None,
                 domain: false,
             },
         );
