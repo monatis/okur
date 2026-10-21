@@ -1,0 +1,227 @@
+{
+  "id": "720-web-flexible-web-hide-advertisement",
+  "name": "Flexible Web hides the advertisement region and undoes it: R three times and Down into the advertisement, Insert+Space then X, Alt+N twice (Choose an element), Down Arrow twice, End, Alt+N (Choose a customization), Down Arrow twice, Home, Enter (Finish); Ctrl+Home and Down nine times; Insert+Space then X, Down Arrow twice (Undo), Enter; Ctrl+Home and Down nine times (keys in the wizard typed by JAWS)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/flexible-web.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "R",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Space",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "settle_max_ms": 30000,
+      "id": "s6"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s7"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s8"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s9"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s10"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"End\")",
+      "id": "s11"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+N\")",
+      "settle_max_ms": 30000,
+      "id": "s12"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s13"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s14"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Home\")",
+      "id": "s15"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s16"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Home",
+      "id": "s17"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s18"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s19"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s20"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s21"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s22"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s23"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s24"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s25"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s26"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Space",
+      "id": "s27"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "settle_max_ms": 30000,
+      "id": "s28"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s29"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")",
+      "id": "s30"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 30000,
+      "id": "s31"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Home",
+      "id": "s32"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s33"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s34"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s35"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s36"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s37"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s38"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s39"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s40"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s41"
+    }
+  ]
+}
