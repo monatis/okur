@@ -50,6 +50,7 @@ impl ScreenReaderEngine {
             Command::WindowList => return self.ask_window_list(),
             Command::SystemTrayList => return self.ask_tray_list(),
             Command::JumpToLine => return self.open_jump(),
+            Command::DefineTempPlaceMarker => return self.define_temp_placemarker(),
             Command::JumpReturnFromLine => return self.jump_back(),
             Command::ScreenSensitiveHelp => return self.screen_sensitive_help(),
             Command::HotKeyHelp => return self.hot_key_help(),
@@ -1082,6 +1083,9 @@ impl ScreenReaderEngine {
 
     /// Quick navigation to the next or prior `element`.
     fn move_to_element(&mut self, element: Element, next: bool) -> Option<String> {
+        if element == Element::PlaceMarker {
+            return self.move_to_placemarker(next);
+        }
         let c = &mut self.cursor;
         match (element, next) {
             (Element::Heading, true) => c.move_next_heading(),
@@ -1099,8 +1103,8 @@ impl ScreenReaderEngine {
             (Element::OnClick, next) => c.move_on_click(next),
             (Element::Tab, true) => c.move_next_tab(),
             (Element::Tab, false) => c.move_prior_tab(),
-            // Place markers are not built yet, so a page has none [obs, 221/s4-s5].
-            (Element::PlaceMarker, _) => Some(msg::quicknav_none_placemarkers().to_string()),
+            // Handled before: the engine keeps the PlaceMarkers.
+            (Element::PlaceMarker, _) => None,
             (Element::Graphic, true) => c.move_next_graphic(),
             (Element::Graphic, false) => c.move_prior_graphic(),
             (Element::RadioButton, true) => c.move_next_radio_button(),

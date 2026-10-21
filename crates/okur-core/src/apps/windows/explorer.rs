@@ -146,7 +146,7 @@ fn entry(e: &Entry<'_>) -> Announcement {
     lines.push(Line::of(
         PartKind::Name,
         if e.selected == Some(false) {
-            msg::explorer_item_not_selected(e.name).render()
+            msg::list_item_not_selected(e.name).render()
         } else {
             e.name.to_owned()
         },

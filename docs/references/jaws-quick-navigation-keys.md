@@ -44,7 +44,7 @@ the Say All command".
 | H | moveToNextHeading | Heading | built | |
 | I | MoveToNextListItem | Item in a List | built | |
 | J | JumpToLine (Shift: JumpReturnFromLine) | Jump to Line, Return to Previous Line | gap | 299 |
-| K | MoveToNextPlaceMarker | PlaceMarker | bound; PlaceMarkers not built | helper dialogs plan |
+| K | MoveToNextPlaceMarker | PlaceMarker | built for the temporary PlaceMarker; saved ones and the list not yet | 687 |
 | L | MoveToNextList | List | built | |
 | M | MoveToNextFrame | Frame | bound | |
 | N | MoveToNextNonLinkText | Non-link Text | built | 289 |
@@ -95,7 +95,7 @@ the Say All command".
 | Ctrl+Insert+Y | SelectAGlanceHighlight | gap (backlog: which text counts) | |
 | Ctrl+Insert+Slash, Ctrl+Insert+SemiColon, Insert+Win+SemiColon | SelectAnOnClickElement, SelectAnOnMouseOverElement | gap | |
 | Ctrl+Insert+Backslash | SelectAMailToLink | gap | |
-| Ctrl+Shift+K, Ctrl+Win+K | SelectAPlaceMarker, DefineATempPlaceMarker | gap | helper dialogs plan |
+| Ctrl+Shift+K, Ctrl+Win+K | SelectAPlaceMarker, DefineATempPlaceMarker | Ctrl+Win+K built (687); the list not yet | 687 |
 | Ctrl+Insert+Enter | OnMouseOver | gap | |
 | Shift+Insert+F1, Ctrl+Shift+Insert+F1 | DisplayBasicElementInfo / DisplayAdvancedElementInfo | gap | |
 | Ctrl+Insert+F7 | IndicateLinkSourceURL | built (the link's address) | 536 |

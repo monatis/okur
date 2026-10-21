@@ -29,6 +29,8 @@ flow-has-flows-to = Has Flows To
 flow-has-flows-from = Has Flows From
 # Place markers: places on a page the user marked.
 quicknav-none-placemarkers = There are no PlaceMarkers on this page.
+# Ctrl+Windows+K, before the line the cursor is on.
+placemarker-temporary-set = Temporary PlaceMarker set
 quicknav-none-radio-buttons = There are no radio buttons on this page.
 quicknav-none-regions = There are no regions on this page.
 quicknav-none-tables = There are no tables on this page.

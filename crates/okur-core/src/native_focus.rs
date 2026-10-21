@@ -331,7 +331,16 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
             lines.extend(access_key(focus, false));
         }
         Role::ListItem => {
-            lines.push(Line::of(PartKind::Name, name));
+            // A list view's item with the focus but not selected: "Not Selected Temporary"
+            // [obs, 687/s11].
+            if focus.container_is_list_view && focus.states.selected == Some(false) {
+                lines.push(Line::of(
+                    PartKind::Name,
+                    msg::list_item_not_selected(name).render(),
+                ));
+            } else {
+                lines.push(Line::of(PartKind::Name, name));
+            }
             lines.extend(
                 focus
                     .columns

@@ -1785,6 +1785,37 @@ impl VirtualCursor {
         )
     }
 
+    /// K and Shift+K: the next or prior of `markers` after the cursor, around the page's end
+    /// without a wrapping message, said as the element there: a link "Maria Lopez same page
+    /// link", a control as it takes the focus, else the line [obs, 687/s6-s8]. `None` when
+    /// there are none.
+    pub fn move_to_placemarker(&mut self, markers: &[usize], forward: bool) -> Option<String> {
+        let last = self.buffer.len().saturating_sub(1);
+        let mut sorted: Vec<usize> = markers.iter().map(|&m| m.min(last)).collect();
+        sorted.sort_unstable();
+        sorted.dedup();
+        let here = self.offset;
+        let target = if forward {
+            sorted.iter().find(|&&m| m > here).or(sorted.first())
+        } else {
+            sorted.iter().rev().find(|&&m| m < here).or(sorted.last())
+        }
+        .copied()?;
+        self.move_to(target);
+        if let Some(link) = self.buffer.find_link_node(target) {
+            let name = link
+                .name
+                .clone()
+                .or_else(|| link.text.clone())
+                .unwrap_or_default();
+            return Some(SpeechFormatter::format_link_focus(&name, link));
+        }
+        if let Some(control) = self.buffer.find_form_control_node(target) {
+            return Some(SpeechFormatter::format_form_control_node(control));
+        }
+        Some(self.current_line())
+    }
+
     /// Moves to the next or prior link whose page was opened before (V, Shift+V; `visited`),
     /// or was not (U, Shift+U): the browser's visited state, IA2's traversed.
     pub fn move_link_by_visit(&mut self, visited: bool, forward: bool) -> Option<String> {

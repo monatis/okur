@@ -30,6 +30,7 @@ mod jump;
 mod key_help;
 mod layer;
 mod page;
+mod placemarkers;
 mod quit;
 mod reading;
 mod routing;
@@ -148,6 +149,8 @@ pub struct ScreenReaderEngine {
     /// The last key was Escape alone: a dialog it closes may first move the focus to its
     /// Cancel button.
     last_key_escapes: bool,
+    /// Each page's temporary PlaceMarker (Ctrl+Windows+K), by its address, for the session.
+    temp_placemarkers: std::collections::HashMap<String, usize>,
     /// The Alt key is down: pressed on its own and not yet released (Alt held through
     /// Tabs in the task switcher).
     alt_held: bool,
@@ -316,6 +319,7 @@ impl ScreenReaderEngine {
             last_key_selects: false,
             last_key_tabs: false,
             last_key_escapes: false,
+            temp_placemarkers: std::collections::HashMap::new(),
             alt_held: false,
             pass_next_key: false,
             menus: crate::native_focus::Menus::default(),

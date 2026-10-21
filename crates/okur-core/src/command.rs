@@ -248,6 +248,9 @@ pub enum Command {
     SystemTrayList,
     /// J in a page (JumpToLine): Jump To Line, a line number to move to.
     JumpToLine,
+    /// Ctrl+Windows+K in a page (DefineATempPlaceMarker): one temporary PlaceMarker per page,
+    /// at the virtual cursor, for this session.
+    DefineTempPlaceMarker,
     /// Shift+J in a page (JumpReturnFromLine): back to where the last jump was made.
     JumpReturnFromLine,
 
@@ -499,6 +502,7 @@ impl Command {
             "WindowList" | "Insert+F10" => WindowList,
             "ListTaskTrayIcons" | "Insert+F11" => SystemTrayList,
             "JumpToLine" => JumpToLine,
+            "DefineATempPlaceMarker" => DefineTempPlaceMarker,
             "JumpReturnFromLine" => JumpReturnFromLine,
             "ScreenSensitiveHelp" | "Insert+F1" => ScreenSensitiveHelp,
             "HotKeyHelp" | "Insert+H" => HotKeyHelp,
@@ -701,6 +705,8 @@ const CTRL_ALT: Chord = ANY.ctrl(Yes).alt(Yes);
 const CTRL_INSERT: Chord = ANY.ctrl(Yes).insert(Yes).alt(No).shift(No);
 /// Windows and Alt.
 const WIN_ALT: Chord = ANY.win(Yes).alt(Yes).ctrl(No).shift(No).insert(No);
+/// Ctrl and Windows.
+const CTRL_WIN: Chord = ANY.ctrl(Yes).win(Yes).alt(No).shift(No).insert(No);
 /// Ctrl, Alt and the Okur key.
 const CTRL_ALT_INSERT: Chord = ANY.ctrl(Yes).alt(Yes).insert(Yes).shift(No);
 
@@ -1041,10 +1047,13 @@ static BINDINGS: &[Binding] = &{
         bind(Key::Enter, OKUR, NextNonLinkText),
         bind(Alpha('T'), SHIFT, MoveToPrior(Table)),
         bind(Alpha('T'), ALONE, MoveToNext(Table)),
+        bind(Alpha('K'), CTRL_WIN, DefineTempPlaceMarker),
         bind(Alpha('K'), SHIFT, MoveToPrior(PlaceMarker)),
         bind(Alpha('K'), ALONE, MoveToNext(PlaceMarker)),
-        bind(Alpha('U'), SHIFT, MoveToPrior(Link)),
-        bind(Alpha('U'), ALONE, MoveToNext(Link)),
+        bind(Alpha('U'), SHIFT, MoveToPrior(UnvisitedLink)),
+        bind(Alpha('U'), ALONE, MoveToNext(UnvisitedLink)),
+        bind(Alpha('V'), SHIFT, MoveToPrior(VisitedLink)),
+        bind(Alpha('V'), ALONE, MoveToNext(VisitedLink)),
         bind(Alpha('F'), SHIFT, MoveToPrior(FormField)),
         bind(Alpha('F'), ALONE, MoveToNext(FormField)),
         bind(Alpha('B'), SHIFT, MoveToPrior(Button)),

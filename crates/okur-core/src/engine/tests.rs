@@ -952,6 +952,15 @@ fn v_and_u_move_by_visited_and_unvisited_links() {
     assert!(said(&mut engine, "U").contains("Spring catalog"));
     assert!(said(&mut engine, "U").contains("Volunteer form"));
     assert!(said(&mut engine, "+U").contains("Spring catalog"));
+    // The keys themselves: V to the next visited link, U to the next unvisited one.
+    engine.cursor.move_to_start();
+    let press = |engine: &mut ScreenReaderEngine, c: char| {
+        engine.handle_key_event(&KeyEvent::new(Key::Alpha(c), Modifiers::none(), true));
+        engine.cursor.current_line()
+    };
+    assert!(press(&mut engine, 'V').contains("This reading list"));
+    assert!(press(&mut engine, 'U').contains("Spring catalog"));
+    assert!(press(&mut engine, 'V').contains("City Library"));
     let unvisited = AomNode::new(0, Role::Document).with_children(vec![link(2, "Spring", false)]);
     let mut engine = ScreenReaderEngine::new(
         VirtualCursor::new(VirtualBuffer::from_aom(&unvisited)),
@@ -961,6 +970,67 @@ fn v_and_u_move_by_visited_and_unvisited_links() {
         engine.execute_command("V").as_deref(),
         Some(msg::quicknav_none_visited_links().as_str())
     );
+}
+
+/// Ctrl+Windows+K sets the page's temporary PlaceMarker, "Temporary PlaceMarker set" and the
+/// line; K and Shift+K go back to it and say the element there, again from the marker itself;
+/// before one is set K says there are none [obs, 687/s4-s9, 221/s4].
+#[test]
+fn a_temporary_placemarker_is_set_and_found_with_k() {
+    let mut link = AomNode::new(
+        2,
+        Role::Link {
+            href: Some("page.html".to_owned()),
+        },
+    )
+    .with_name("Maria Lopez");
+    link.attributes
+        .insert("same_page".to_owned(), "true".to_owned());
+    let page = AomNode::new(0, Role::Document).with_children(vec![
+        AomNode::new(1, Role::Heading { level: 1 }).with_text("Library news"),
+        AomNode::new(3, Role::Paragraph).with_children(vec![link]),
+        AomNode::new(4, Role::Paragraph).with_text("The end."),
+    ]);
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(speech.clone()),
+    );
+    engine.cursor.move_to_start();
+    let key = |engine: &mut ScreenReaderEngine, c: char, modifiers: Modifiers| {
+        let _ = speech.take();
+        engine.handle_key_event(&KeyEvent::new(Key::Alpha(c), modifiers, true));
+        speech.take().join("\n")
+    };
+    assert_eq!(
+        key(&mut engine, 'K', Modifiers::none()),
+        msg::quicknav_none_placemarkers().to_string()
+    );
+    engine.execute_command("{DOWN}");
+    let ctrl_win = Modifiers {
+        ctrl: true,
+        win: true,
+        ..Modifiers::none()
+    };
+    let set = key(&mut engine, 'K', ctrl_win);
+    assert!(set.starts_with("Temporary PlaceMarker set\n"), "{set}");
+    assert!(set.contains("Maria Lopez"), "{set}");
+    engine.cursor.move_to_start();
+    let found = engine
+        .cursor
+        .buffer
+        .node(2)
+        .map(|link| crate::speech::SpeechFormatter::format_link_focus("Maria Lopez", link))
+        .unwrap_or_default();
+    assert!(found.contains("Maria Lopez"), "{found}");
+    assert_eq!(key(&mut engine, 'K', Modifiers::none()), found);
+    assert!(engine.cursor.current_line().contains("Maria Lopez"));
+    assert_eq!(key(&mut engine, 'K', Modifiers::none()), found);
+    let shift = Modifiers {
+        shift: true,
+        ..Modifiers::none()
+    };
+    assert_eq!(key(&mut engine, 'K', shift), found);
 }
 
 /// A page's field has its text's colors. With the virtual cursor: another field's as the page

@@ -448,6 +448,7 @@ command-window-list = Lists the open windows, to switch to one.
 command-system-tray-list = Lists the icons of the notification area, to click one.
 # JumpToLine (J in a page).
 command-jump-to-line = Asks for a line number and moves to that line.
+command-define-temp-placemarker = Marks the cursor's place in the page for this session, to come back to with K.
 # JumpReturnFromLine (Shift+J in a page).
 command-jump-return-from-line = Moves back to where the last jump to a line was made.
 

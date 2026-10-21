@@ -226,6 +226,20 @@ A step can be in more than one entry; all of its entries apply.
   name already gives its column and row ("Quantity Row 1"), and Okur says nothing more.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### JAWS's Say All by sentence or paragraph in a text box starts elsewhere
+
+- Steps: `684-desktop-say-all-by-sentence/s1`, `684-desktop-say-all-by-sentence/s5`,
+  `685-desktop-say-all-by-paragraph/s1`, `685-desktop-say-all-by-paragraph/s5`.
+- Difference: the whole step.
+- Why: Say All in a WinForms text box, from the line "Say All reads this. It has three
+  sentences. The last one ends here.", in every trial:
+  - by sentence, JAWS starts with the text after the line before's "P.M." ("aB9 é €"), says
+    the line's last two sentences, and stops before the text's last line;
+  - by paragraph, it reads the text box's first line ("Hello, world. Is it done? ...").
+  By line it reads from the caret's line to the end (686). Okur reads from the caret's
+  sentence or paragraph to the end.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ### JAWS names the Page Setup preview's pictures after a label and the title
 
 - Steps: `544-desktop-notepad-page-setup/s13`, and the same at Intermediate and Advanced,

@@ -12,5 +12,6 @@ hint-desktop-rename = To edit the selected item press f2.
 explorer-title = File Explorer
 # A file or folder the system gives no name.
 explorer-item-unnamed = Item
-# An item of File Explorer's file list that is not selected, said before its name.
-explorer-item-not-selected = Not Selected { $name }
+# A list view's item that has the focus but is not selected, File Explorer's file list's among
+# them, said before its name.
+list-item-not-selected = Not Selected { $name }

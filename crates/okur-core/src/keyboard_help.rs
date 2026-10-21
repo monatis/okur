@@ -327,6 +327,7 @@ fn descriptions(command: &Command) -> Descriptions {
         WindowList => one(msg::command_window_list()),
         SystemTrayList => one(msg::command_system_tray_list()),
         JumpToLine => one(msg::command_jump_to_line()),
+        DefineTempPlaceMarker => one(msg::command_define_temp_placemarker()),
         JumpReturnFromLine => one(msg::command_jump_return_from_line()),
 
         // Help.
@@ -705,6 +706,7 @@ mod tests {
             WindowList,
             SystemTrayList,
             JumpToLine,
+            DefineTempPlaceMarker,
             JumpReturnFromLine,
             ScreenSensitiveHelp,
             HotKeyHelp,

@@ -464,6 +464,21 @@ divergences! {
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
     Difference::Step => [
+        "684-desktop-say-all-by-sentence/s1",
+        "684-desktop-say-all-by-sentence/s5",
+        "685-desktop-say-all-by-paragraph/s1",
+        "685-desktop-say-all-by-paragraph/s5",
+    ],
+    "Say All in a WinForms text box by sentence or by paragraph, from the line \"Say All reads \
+     this. It has three sentences. The last one ends here.\": by sentence JAWS starts with the \
+     text after the line before's \"P.M.\" (\"aB9 é €\"), then the line's last two sentences, \
+     and stops before the text's last line; by paragraph it reads the text box's first line, \
+     \"Hello, world. Is it done? Yes! Wait; maybe: no.\", in every trial. By line it reads \
+     from the caret's line to the end (686). Okur reads from the caret's sentence or \
+     paragraph to the end.",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
+    Difference::Step => [
         "522-desktop-wordpad-reading/s1",
         "522-desktop-wordpad-reading/s2",
         "522-desktop-wordpad-reading/s3",
