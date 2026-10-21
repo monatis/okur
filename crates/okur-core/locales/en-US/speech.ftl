@@ -42,6 +42,8 @@ cursor-restriction-application = Application window restriction
 cursor-restriction-real = Real window restriction
 cursor-restriction-current = Current window restriction
 cursor-restriction-focus = Focus window restriction
+cursor-restriction-frame = Frame restriction
+cursor-unrestricted = Unrestricted
 
 # Said for an empty line, or in place of an empty field's value.
 blank = blank

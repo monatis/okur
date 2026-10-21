@@ -141,8 +141,11 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   JAWS does it (runs of spaces, stray or unspaced punctuation, a missing capital, brackets and
   quotes left open, each with its column).
 - **The cursors:** Numpad Minus to the Okur cursor at the mouse, Numpad Plus back to the PC
-  cursor, Insert+Numpad Minus to bring the mouse to the PC cursor, and Alt+Delete for where
-  the active cursor is; in a text field the Okur cursor reads line by line.
+  cursor, Insert+Numpad Minus to bring the Okur cursor to the PC cursor, Insert+Numpad Plus
+  the other way, Insert+R for where the Okur cursor may go, and Alt+Delete for where the
+  active cursor is. The Okur cursor reads a text field, a page as its screen shows it, or a
+  dialog's rows, by line, word and character, with Page Up and Page Down to the window's top
+  and bottom. Numpad Slash and Numpad Star click the left and right mouse buttons.
 - **Information keys:** the time and date (Insert+F12), the settings in use (Insert+Q), the
   application's version (Ctrl+Insert+V), and the colors of a page's text or a text field by the
   names JAWS gives them (Insert+5: "blue2 on white").
@@ -188,8 +191,8 @@ The [reference documentation](docs/references/) describes these behaviors in det
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
 - Microsoft Word, Outlook and Excel, not yet supported or checked;
-- reading the screen with the Okur cursor outside text fields (in a text field it reads line by
-  line), and the mouse keys outside web pages;
+- reading with the Okur cursor where the screen has no text to give (images, applications that
+  draw their own text), the mouse following it as it moves, and the mouse button locks;
 - the keys JAWS adds for the clipboard: saying it (Insert+Windows+X), viewing it and adding
   to it (copying, cutting and pasting already work);
 - the Word List and skim reading;

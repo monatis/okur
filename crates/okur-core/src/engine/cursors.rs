@@ -13,7 +13,8 @@
 use super::ScreenReaderEngine;
 use crate::messages::msg;
 
-/// Where the Okur cursor may go, which Insert+R changes in turn [obs, 757].
+/// Where the Okur cursor may go, which Insert+R changes in turn, back to the application's
+/// after none [obs, 757, 759].
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub enum Restriction {
     /// The application's window, as the cursor starts.
@@ -25,6 +26,10 @@ pub enum Restriction {
     Current,
     /// The focused control: Page Up goes to its first line [obs, 757/s14].
     Focus,
+    /// The frame the focus is in.
+    Frame,
+    /// Nowhere it may not go.
+    Unrestricted,
 }
 
 impl Restriction {
@@ -34,7 +39,9 @@ impl Restriction {
             Restriction::Application => Restriction::Real,
             Restriction::Real => Restriction::Current,
             Restriction::Current => Restriction::Focus,
-            Restriction::Focus => Restriction::Application,
+            Restriction::Focus => Restriction::Frame,
+            Restriction::Frame => Restriction::Unrestricted,
+            Restriction::Unrestricted => Restriction::Application,
         }
     }
 
@@ -44,6 +51,8 @@ impl Restriction {
             Restriction::Real => msg::cursor_restriction_real(),
             Restriction::Current => msg::cursor_restriction_current(),
             Restriction::Focus => msg::cursor_restriction_focus(),
+            Restriction::Frame => msg::cursor_restriction_frame(),
+            Restriction::Unrestricted => msg::cursor_unrestricted(),
         }
         .to_string()
     }
