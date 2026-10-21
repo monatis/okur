@@ -5464,13 +5464,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "716-web-flexible-web-hide-and-undo",
+      "fixture": "flexible-web.html",
+      "evidence": {
+        "sha256": "14b4df9e7859fe71ed91d53e2622383a1edc771383c5225c298de50dd3ffe1e9",
+        "capture_script_sha256": "006506ca38fbde82e79082a7411b68da6d48149d668f46fe88973c61aa9dbd73",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 377,
-    "scenarios_with_evidence": 377,
-    "total_trials": 1185,
-    "successful_trials": 1185,
+    "scenarios": 378,
+    "scenarios_with_evidence": 378,
+    "total_trials": 1188,
+    "successful_trials": 1188,
     "deterministic_scenarios": 236
   }
 }
