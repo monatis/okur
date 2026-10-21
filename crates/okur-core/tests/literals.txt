@@ -261,6 +261,10 @@ okur-ui/src/win32.rs: "OkurUiControl"
 okur-ui/src/win32.rs: "OkurVirtualViewer"
 okur-ui/src/win32.rs: "okur-ui input"
 okur-ui/src/win32.rs: "system"
+okur-ui/src/wizard.rs: "system"
+okur-ui/src/wizard.rs: "back"
+okur-ui/src/wizard.rs: "next"
+okur-ui/src/wizard.rs: "finish"
 okur-ui/src/win32.rs: "{folder}\shell32.dll"
 
 [locale-data]

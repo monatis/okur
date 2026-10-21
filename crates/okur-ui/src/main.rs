@@ -11,6 +11,8 @@ mod dialog;
 mod template;
 #[cfg(windows)]
 mod win32;
+#[cfg(windows)]
+mod wizard;
 
 fn main() {
     #[cfg(windows)]

@@ -15,6 +15,7 @@ const WS_TABSTOP: u32 = 0x0001_0000;
 const WS_GROUP: u32 = 0x0002_0000;
 const WS_VSCROLL: u32 = 0x0020_0000;
 const WS_POPUP: u32 = 0x8000_0000;
+const WS_DISABLED: u32 = 0x0800_0000;
 const WS_CAPTION: u32 = 0x00C0_0000;
 const WS_SYSMENU: u32 = 0x0008_0000;
 const DS_SETFONT: u32 = 0x40;
@@ -205,6 +206,40 @@ fn push_radios(
     y + height
 }
 
+/// Radio buttons standing alone, one a row, at `x`, `y`, `width` wide, those not
+/// `enabled` unavailable; returns the bottom. The first starts the group and is its tab stop.
+fn push_plain_radios(
+    items: &mut Vec<Item>,
+    index: usize,
+    options: &[String],
+    enabled: &[bool],
+    (x, y, width): (i16, i16, i16),
+) -> i16 {
+    for (option, text) in options.iter().enumerate() {
+        let first = if option == 0 {
+            WS_TABSTOP | WS_GROUP
+        } else {
+            0
+        };
+        let disabled = if enabled.get(option).copied().unwrap_or(true) {
+            0
+        } else {
+            WS_DISABLED
+        };
+        items.push(Item {
+            class: Class::Button,
+            style: WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON | first | disabled,
+            x,
+            y: y + i16::try_from(option).unwrap_or(0) * 12,
+            cx: width,
+            cy: 10,
+            id: radio_id(index, option),
+            text: text.clone(),
+        });
+    }
+    y + i16::try_from(options.len()).unwrap_or(0) * 12
+}
+
 fn read_only_text(x: i16, y: i16, cx: i16, id: u16) -> Item {
     Item {
         class: Class::Edit,
@@ -368,6 +403,17 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                     (button_x, button_y),
                 ));
                 button_y += BUTTON_HEIGHT + 4;
+            }
+            ControlKind::RadioButtons {
+                options, enabled, ..
+            } => {
+                y = push_plain_radios(
+                    &mut items,
+                    index,
+                    options,
+                    enabled,
+                    (MARGIN, y, WIDTH - 2 * MARGIN),
+                ) + ROW_GAP;
             }
             ControlKind::Radios { options, .. } => {
                 let x = MARGIN + column * (column_width + 6);
@@ -588,6 +634,12 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
                 };
                 y += height + ROW_GAP;
             }
+            ControlKind::RadioButtons {
+                options, enabled, ..
+            } => {
+                y = push_plain_radios(&mut items, index, options, enabled, (left, y, right - left))
+                    + ROW_GAP;
+            }
             ControlKind::Radios { options, .. } => {
                 close(&mut items, &mut group, &mut y);
                 y = push_radios(
@@ -628,6 +680,110 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
     }
 }
 
+/// The size of a wizard's page, in dialog units: JAWS's Flexible Web's (a standard wizard's).
+const PAGE_WIDTH: i16 = 276;
+const PAGE_HEIGHT: i16 = 140;
+
+/// Lays out a wizard's page: its controls one under another, in the description's order (the
+/// tab order): its text, its radio buttons or its list box under the label naming it, its
+/// check boxes. The wizard's buttons are its sheet's.
+pub fn page_layout(page: &DialogSpec) -> Layout {
+    let mut items = Vec::new();
+    let mut ids = Vec::new();
+    let mut y = MARGIN;
+    let (left, width) = (MARGIN, PAGE_WIDTH - 2 * MARGIN);
+    for (index, control) in page.controls.iter().enumerate() {
+        let id = window_id(index, &control.id);
+        ids.push(id);
+        match &control.kind {
+            ControlKind::Message { text } => {
+                let height = message_height(text, width);
+                items.push(Item {
+                    class: Class::Static,
+                    style: WS_CHILD | WS_VISIBLE | SS_NOPREFIX,
+                    x: left,
+                    y,
+                    cx: width,
+                    cy: height,
+                    id,
+                    text: text.clone(),
+                });
+                y += height + ROW_GAP;
+            }
+            ControlKind::RadioButtons {
+                options, enabled, ..
+            } => {
+                y = push_plain_radios(&mut items, index, options, enabled, (left, y, width))
+                    + ROW_GAP;
+            }
+            ControlKind::Radios { options, .. } => {
+                y = push_radios(
+                    &mut items,
+                    index,
+                    id,
+                    &control.label,
+                    options,
+                    (left, y, width),
+                ) + ROW_GAP;
+            }
+            ControlKind::CheckBox { .. } => {
+                items.push(Item {
+                    class: Class::Button,
+                    style: WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_GROUP | BS_AUTOCHECKBOX,
+                    x: left,
+                    y,
+                    cx: width,
+                    cy: 10,
+                    id,
+                    text: control.label.clone(),
+                });
+                y += 10 + ROW_GAP;
+            }
+            // A list box named by the label above it: "Which of the following elements would
+            // you like to customize? List box" [obs, 705/s15].
+            ControlKind::ListBox { .. } => {
+                let height = message_height(&control.label, width);
+                items.push(Item {
+                    class: Class::Static,
+                    style: WS_CHILD | WS_VISIBLE,
+                    x: left,
+                    y,
+                    cx: width,
+                    cy: height,
+                    id: LABEL_ID,
+                    text: control.label.clone(),
+                });
+                y += height + 2;
+                items.push(Item {
+                    class: Class::Named("LISTBOX"),
+                    style: WS_CHILD
+                        | WS_VISIBLE
+                        | WS_BORDER
+                        | WS_TABSTOP
+                        | WS_GROUP
+                        | WS_VSCROLL
+                        | LBS_NOTIFY
+                        | LBS_NOINTEGRALHEIGHT,
+                    x: left,
+                    y,
+                    cx: width,
+                    cy: 60,
+                    id,
+                    text: String::new(),
+                });
+                y += 60 + ROW_GAP;
+            }
+            _ => {}
+        }
+    }
+    Layout {
+        width: PAGE_WIDTH,
+        height: PAGE_HEIGHT.max(y + MARGIN),
+        items,
+        ids,
+    }
+}
+
 fn push_dword(words: &mut Vec<u16>, value: u32) {
     words.push((value & 0xFFFF) as u16);
     words.push((value >> 16) as u16);
@@ -641,13 +797,30 @@ fn push_text(words: &mut Vec<u16>, text: &str) {
 /// `layout` as a `DLGTEMPLATEEX` titled `title`, in 32-bit words: Windows wants the
 /// template and each item aligned on four bytes.
 pub fn encode(title: &str, layout: &Layout) -> Vec<u32> {
+    encode_with(
+        title,
+        layout,
+        WS_EX_TOPMOST | WS_EX_CONTROLPARENT,
+        WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_SETFONT | DS_MODALFRAME | DS_CENTER,
+    )
+}
+
+/// A wizard's page as a property page's template: a child of its sheet, hidden and disabled
+/// until the sheet shows it, its caption the page's title.
+pub fn encode_page(title: &str, layout: &Layout) -> Vec<u32> {
+    encode_with(
+        title,
+        layout,
+        WS_EX_CONTROLPARENT,
+        WS_CHILD | WS_DISABLED | WS_CAPTION | DS_SETFONT,
+    )
+}
+
+fn encode_with(title: &str, layout: &Layout, ex_style: u32, style: u32) -> Vec<u32> {
     let mut words: Vec<u16> = vec![1, 0xFFFF];
     push_dword(&mut words, 0); // help id
-    push_dword(&mut words, WS_EX_TOPMOST | WS_EX_CONTROLPARENT);
-    push_dword(
-        &mut words,
-        WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_SETFONT | DS_MODALFRAME | DS_CENTER,
-    );
+    push_dword(&mut words, ex_style);
+    push_dword(&mut words, style);
     words.push(u16::try_from(layout.items.len()).unwrap_or(0));
     for v in [0, 0, layout.width, layout.height] {
         words.push(v as u16);
@@ -805,6 +978,59 @@ mod tests {
             .is_some_and(|(m, ok)| ok.y > m.y + m.cy && ok.id == IDOK));
         assert_eq!(message_height("short", 266), 8);
         assert_eq!(message_height(&"x".repeat(70), 266), 16);
+    }
+
+    /// A wizard's page, as JAWS's Flexible Web's first one: its question as static text, its
+    /// radio buttons alone, those not yet possible unavailable, the first the tab stop, then
+    /// its check box; no buttons (the sheet's), and a child's template [obs, 705/s3, s4].
+    #[test]
+    fn a_wizard_page_is_its_controls_one_under_another() {
+        let page = DialogSpec {
+            id: 3,
+            title: "Flexible Web".into(),
+            controls: vec![
+                control(
+                    "question",
+                    "",
+                    ControlKind::Message {
+                        text: "What would you like to do?".into(),
+                    },
+                ),
+                control(
+                    "action",
+                    "",
+                    ControlKind::RadioButtons {
+                        options: vec!["Create a new customization".into(), "Retry  . . .".into()],
+                        selected: 0,
+                        enabled: vec![true, false],
+                    },
+                ),
+                control(
+                    "enabled",
+                    "Enable Flexible Web",
+                    ControlKind::CheckBox { checked: true },
+                ),
+            ],
+        };
+        let layout = page_layout(&page);
+        let styles: Vec<(Class, u32, String)> = layout
+            .items
+            .iter()
+            .map(|i| (i.class.clone(), i.style, i.text.clone()))
+            .collect();
+        assert_eq!(styles.len(), 4, "{styles:?}");
+        let radio = |n: usize| layout.items.get(n).map(|i| i.style).unwrap_or(0);
+        assert!(radio(1) & WS_TABSTOP != 0 && radio(1) & WS_DISABLED == 0);
+        assert!(radio(2) & WS_TABSTOP == 0 && radio(2) & WS_DISABLED != 0);
+        assert_eq!(layout.items.get(1).map(|i| i.id), Some(radio_id(1, 0)));
+        // No push button of its own: Back, Next and Cancel are the sheet's.
+        assert!(layout
+            .items
+            .iter()
+            .all(|i| i.class != Class::Button || i.style & 0xF != BS_PUSHBUTTON));
+        let words = encode_page("Flexible Web", &layout);
+        let style = words.get(3).copied().unwrap_or(0);
+        assert!(style & WS_CHILD != 0 && style & WS_POPUP == 0, "{style:#x}");
     }
 
     /// A table is a list view that shows its columns' headers, as JAWS's PlaceMarker List

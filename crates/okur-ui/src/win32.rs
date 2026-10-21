@@ -278,8 +278,9 @@ pub fn run() {
     // SAFETY: the standard message loop of this thread's windows.
     unsafe {
         while GetMessageW(&mut msg, None, 0, 0).as_bool() {
-            // A dialog's keys (Tab, access keys, Enter, Escape) go to the dialog manager.
-            if crate::dialog::is_dialog_message(&msg) {
+            // A dialog's keys (Tab, access keys, Enter, Escape) go to the dialog manager, a
+            // wizard's to its sheet's.
+            if crate::wizard::is_dialog_message(&msg) || crate::dialog::is_dialog_message(&msg) {
                 continue;
             }
             let _ = TranslateMessage(&msg);
@@ -365,7 +366,13 @@ fn handle(message: ToUi) {
         ToUi::ViewerClose => hide_viewer(),
         ToUi::DialogShow { dialog } => crate::dialog::show(&dialog),
         ToUi::DialogSet { id, control, value } => crate::dialog::set_value(id, &control, value),
-        ToUi::DialogClose { id } => crate::dialog::close(id),
+        ToUi::DialogClose { id } => {
+            if !crate::wizard::close(id) {
+                crate::dialog::close(id);
+            }
+        }
+        ToUi::WizardShow { wizard } => crate::wizard::show(&wizard),
+        ToUi::WizardPage { id, page, buttons } => crate::wizard::turn(id, &page, buttons),
         ToUi::DialogEnable {
             id,
             control,

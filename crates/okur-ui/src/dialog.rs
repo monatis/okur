@@ -62,6 +62,8 @@ struct OpenDialog {
     /// closes, as when a dialog of its own closes.
     previous: HWND,
     controls: Vec<OpenControl>,
+    /// A wizard's page: a child of its sheet, whose keys the sheet's dialog manager runs.
+    page: bool,
 }
 
 thread_local! {
@@ -79,7 +81,8 @@ fn initial(kind: &ControlKind) -> Option<Value> {
         | ControlKind::List { selected, .. }
         | ControlKind::ListBox { selected, .. }
         | ControlKind::Tree { selected, .. }
-        | ControlKind::Radios { selected, .. } => Some(Value::Selected(*selected)),
+        | ControlKind::Radios { selected, .. }
+        | ControlKind::RadioButtons { selected, .. } => Some(Value::Selected(*selected)),
         ControlKind::Table { selected, .. } => selected.map(Value::Selected),
         ControlKind::CheckBox { checked } => Some(Value::Checked(*checked)),
         ControlKind::Slider { value, .. } => Some(Value::Number(*value)),
@@ -149,6 +152,7 @@ pub fn show(spec: &DialogSpec) {
                 id: spec.id,
                 previous,
                 controls,
+                page: false,
             });
         }
     });
@@ -236,7 +240,7 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
             } => fill_table(item, columns, rows, *selected),
             ControlKind::Tree { items, selected } => fill_tree(item, items, *selected),
             ControlKind::ListBox { items, selected } => fill_list_box(item, items, *selected),
-            ControlKind::Radios { selected, .. } => {
+            ControlKind::Radios { selected, .. } | ControlKind::RadioButtons { selected, .. } => {
                 set(window, index, item, kind, &Value::Selected(*selected));
             }
             ControlKind::Text { text } => {
@@ -538,7 +542,10 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
             (ControlKind::ListBox { .. }, Value::Selected(i)) => {
                 SendMessageW(item, LB_SETCURSEL, Some(WPARAM(*i)), None);
             }
-            (ControlKind::Radios { options, .. }, Value::Selected(chosen)) => {
+            (
+                ControlKind::Radios { options, .. } | ControlKind::RadioButtons { options, .. },
+                Value::Selected(chosen),
+            ) => {
                 for option in 0..options.len() {
                     let id = template::radio_id(index, option);
                     if let Ok(radio) = GetDlgItem(Some(window), i32::from(id)) {
@@ -716,10 +723,11 @@ pub fn close(id: u32) {
 }
 
 /// Lets the dialog manager handle `msg` (Tab, access keys, Enter, Escape); true when it did.
+/// A wizard's pages are left to their sheet's ([`crate::wizard::is_dialog_message`]).
 pub fn is_dialog_message(msg: &MSG) -> bool {
     let windows: Vec<HWND> = DIALOGS.with(|d| {
         d.try_borrow()
-            .map(|d| d.iter().map(|o| o.window).collect())
+            .map(|d| d.iter().filter(|o| !o.page).map(|o| o.window).collect())
             .unwrap_or_default()
     });
     windows
@@ -731,7 +739,7 @@ pub fn is_dialog_message(msg: &MSG) -> bool {
 /// Brings `window` to the front. Windows lets only the foreground thread give the
 /// foreground away, so the input of the window in front is attached for the switch, as
 /// `okur-lab front` does.
-fn bring_forward(window: HWND) {
+pub(crate) fn bring_forward(window: HWND) {
     // SAFETY: plain window calls; the thread input is detached again below.
     unsafe {
         let front = GetWindowThreadProcessId(GetForegroundWindow(), None);
@@ -833,7 +841,55 @@ fn press_default(window: HWND) {
     }
 }
 
-unsafe extern "system" fn dialog_proc(
+/// Takes the controls of a wizard's page, created by its sheet from `spec`, as an open
+/// dialog's: their values are set and told as any dialog's are. `ids` are the template's
+/// window ids, in the description's order.
+pub(crate) fn adopt_page(window: HWND, spec: &DialogSpec, ids: &[u16]) {
+    let controls = spec
+        .controls
+        .iter()
+        .zip(ids)
+        .map(|(c, &window_id)| OpenControl {
+            window_id,
+            name: c.id.clone(),
+            kind: c.kind.clone(),
+            last: initial(&c.kind),
+        })
+        .collect();
+    DIALOGS.with(|d| {
+        if let Ok(mut d) = d.try_borrow_mut() {
+            d.push(OpenDialog {
+                window,
+                id: spec.id,
+                previous: HWND::default(),
+                controls,
+                page: true,
+            });
+        }
+    });
+    for (index, (control, &id)) in spec.controls.iter().zip(ids).enumerate() {
+        // SAFETY: a child of the page just created.
+        let Ok(item) = (unsafe { GetDlgItem(Some(window), i32::from(id)) }) else {
+            continue;
+        };
+        fill(window, index, item, &control.kind);
+        if !control.enabled {
+            // SAFETY: disabling our own control.
+            let _ = unsafe { EnableWindow(item, false) };
+        }
+    }
+}
+
+/// Forgets a wizard's page as its sheet removes it.
+pub(crate) fn forget_page(window: HWND) {
+    DIALOGS.with(|d| {
+        if let Ok(mut d) = d.try_borrow_mut() {
+            d.retain(|o| o.window != window);
+        }
+    });
+}
+
+pub(crate) unsafe extern "system" fn dialog_proc(
     window: HWND,
     msg: u32,
     wparam: WPARAM,
@@ -858,7 +914,9 @@ unsafe extern "system" fn dialog_proc(
                 return 0;
             };
             match (&hit.kind, hit.option) {
-                (ControlKind::Radios { .. }, Some(option)) if code == BN_CLICKED => {
+                (ControlKind::Radios { .. } | ControlKind::RadioButtons { .. }, Some(option))
+                    if code == BN_CLICKED =>
+                {
                     changed(window, &hit, Value::Selected(option));
                 }
                 (ControlKind::Button { .. }, _) if code == BN_CLICKED => {

@@ -106,6 +106,14 @@ pub enum ControlKind {
         options: Vec<String>,
         selected: usize,
     },
+    /// Radio buttons standing alone, with no group box, the label not shown; those not yet
+    /// possible are unavailable (`enabled`, one per option): a wizard's choices, as JAWS's
+    /// Flexible Web offers "Create a new customization" alone at first [obs, 705/s3].
+    RadioButtons {
+        options: Vec<String>,
+        selected: usize,
+        enabled: Vec<bool>,
+    },
     /// A read-only line of text, outside the tab order: the Links List's link address.
     Text {
         text: String,
@@ -140,6 +148,26 @@ pub enum Value {
     Text(String),
 }
 
+/// A wizard's buttons available on its page.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct WizardButtons {
+    pub back: bool,
+    /// Next; without it, Finish takes its place.
+    pub next: bool,
+    pub finish: bool,
+}
+
+/// A wizard: one page at a time under Back, Next (or Finish) and Cancel, the window titled
+/// with the page's title, as a Windows property-sheet wizard is (JAWS's Flexible Web [obs,
+/// 705/s3, s9]). The page is a dialog description without buttons.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct WizardSpec {
+    /// Okur's number for the wizard; events carry it back, as a dialog's.
+    pub id: u32,
+    pub page: DialogSpec,
+    pub buttons: WizardButtons,
+}
+
 /// What Okur asks `okur-ui` to show.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
@@ -170,8 +198,17 @@ pub enum ToUi {
     /// Make a button the dialog's default, which Enter presses: JAWS's PlaceMarker List
     /// makes MoveTo the default once a PlaceMarker is chosen, Add before.
     DialogDefault { id: u32, control: String },
-    /// Close a dialog.
+    /// Close a dialog, or a wizard.
     DialogClose { id: u32 },
+    /// Show a wizard in front on its first page, the focus on the page's first control.
+    WizardShow { wizard: WizardSpec },
+    /// Turn wizard `id` to another page, the focus on its first control. Its buttons
+    /// ("back", "next", "finish") come back as [`FromUi::DialogPressed`].
+    WizardPage {
+        id: u32,
+        page: DialogSpec,
+        buttons: WizardButtons,
+    },
     /// Show the Virtual Viewer's text on screen, without taking the focus, with `mark` on
     /// what the virtual cursor read last. Okur keeps the keys: the window only shows them
     /// to someone watching, as JAWS's does.
@@ -199,7 +236,8 @@ pub enum FromUi {
         control: String,
         value: Value,
     },
-    /// The user pressed a button other than "cancel".
+    /// The user pressed a button other than "cancel"; a wizard's are "back", "next" and
+    /// "finish".
     DialogPressed { id: u32, control: String },
     /// The dialog was cancelled (its Cancel button, Escape, its close box) and is gone.
     DialogClosed { id: u32 },
