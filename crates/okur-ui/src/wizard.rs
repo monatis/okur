@@ -18,9 +18,9 @@ use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::UI::Controls::{
     CreatePropertySheetPageW, PropertySheetW, HPROPSHEETPAGE, NMHDR, PROPSHEETHEADERW_V2,
     PROPSHEETHEADERW_V2_2, PROPSHEETPAGEW, PROPSHEETPAGEW_0, PSH_MODELESS, PSH_WIZARD, PSM_ADDPAGE,
-    PSM_GETCURRENTPAGEHWND, PSM_ISDIALOGMESSAGE, PSM_REMOVEPAGE, PSM_SETCURSEL, PSM_SETWIZBUTTONS,
-    PSN_QUERYCANCEL, PSN_SETACTIVE, PSN_WIZBACK, PSN_WIZFINISH, PSN_WIZNEXT, PSP_DLGINDIRECT,
-    PSP_USETITLE, PSWIZB_BACK, PSWIZB_FINISH, PSWIZB_NEXT,
+    PSM_GETCURRENTPAGEHWND, PSM_ISDIALOGMESSAGE, PSM_SETCURSEL, PSM_SETWIZBUTTONS, PSN_QUERYCANCEL,
+    PSN_SETACTIVE, PSN_WIZBACK, PSN_WIZFINISH, PSN_WIZNEXT, PSP_DLGINDIRECT, PSP_USETITLE,
+    PSWIZB_BACK, PSWIZB_FINISH, PSWIZB_NEXT,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
     DestroyWindow, GetForegroundWindow, GetNextDlgTabItem, IsWindow, PostMessageW, SendMessageW,
@@ -178,7 +178,9 @@ pub fn show(spec: &WizardSpec) {
 }
 
 /// Turns wizard `id` to `page`, with `buttons`: the page is added and shown, the focus on its
-/// first control, and the page before it removed.
+/// first control. The pages before it stay in the sheet, hidden: once one was removed, the
+/// sheet sent Next to the page it had chosen before, not to the one shown, and Okur heard
+/// nothing of it (old-pc, 2026-10-21).
 pub fn turn(id: u32, page: &DialogSpec, buttons: WizardButtons) {
     let Some((sheet, old)) = WIZARDS.with(|w| {
         w.try_borrow_mut().ok().and_then(|mut w| {
@@ -193,8 +195,8 @@ pub fn turn(id: u32, page: &DialogSpec, buttons: WizardButtons) {
     let Some(handle) = create_page(page, &mut kept) else {
         return;
     };
-    // SAFETY: messages to our own sheet with a page handle it now holds; the old page, at
-    // index 0, is removed once the new one is shown.
+    // SAFETY: messages to our own sheet with a page handle it now holds, which chooses the
+    // page whatever the index.
     unsafe {
         SendMessageW(
             sheet,
@@ -205,17 +207,16 @@ pub fn turn(id: u32, page: &DialogSpec, buttons: WizardButtons) {
         SendMessageW(
             sheet,
             PSM_SETCURSEL,
-            Some(WPARAM(1)),
+            Some(WPARAM(0)),
             Some(LPARAM(handle.0 as isize)),
         );
-        SendMessageW(sheet, PSM_REMOVEPAGE, Some(WPARAM(0)), Some(LPARAM(0)));
     }
+    // The page before is hidden: its controls are no longer Okur's.
     crate::dialog::forget_page(old);
     WIZARDS.with(|w| {
         if let Ok(mut w) = w.try_borrow_mut() {
             if let Some(open) = w.iter_mut().find(|o| o.id == id) {
-                // The old page's template goes with it.
-                open.kept = kept;
+                open.kept.extend(kept);
             }
         }
     });

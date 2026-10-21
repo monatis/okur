@@ -156,7 +156,28 @@ pub fn show(spec: &DialogSpec) {
             });
         }
     });
-    for (index, (control, &id)) in spec.controls.iter().zip(&layout.ids).enumerate() {
+    fill_all(window, &spec.controls, &layout.ids);
+    bring_forward(window);
+}
+
+/// Gives each control of a dialog just created its value, and dims those not available. Radio
+/// buttons standing alone have no window of their own id: each of theirs is set.
+fn fill_all(window: HWND, controls: &[okur_ui_model::Control], ids: &[u16]) {
+    for (index, (control, &id)) in controls.iter().zip(ids).enumerate() {
+        if let ControlKind::RadioButtons { options, .. } = &control.kind {
+            fill(window, index, HWND::default(), &control.kind);
+            if !control.enabled {
+                for option in 0..options.len() {
+                    // SAFETY: a child of the dialog just created, dimmed.
+                    if let Ok(radio) = unsafe {
+                        GetDlgItem(Some(window), i32::from(template::radio_id(index, option)))
+                    } {
+                        let _ = unsafe { EnableWindow(radio, false) };
+                    }
+                }
+            }
+            continue;
+        }
         // SAFETY: a child of the dialog just created.
         let Ok(item) = (unsafe { GetDlgItem(Some(window), i32::from(id)) }) else {
             continue;
@@ -167,7 +188,6 @@ pub fn show(spec: &DialogSpec) {
             let _ = unsafe { EnableWindow(item, false) };
         }
     }
-    bring_forward(window);
 }
 
 /// Gives a control its initial value.
@@ -867,17 +887,7 @@ pub(crate) fn adopt_page(window: HWND, spec: &DialogSpec, ids: &[u16]) {
             });
         }
     });
-    for (index, (control, &id)) in spec.controls.iter().zip(ids).enumerate() {
-        // SAFETY: a child of the page just created.
-        let Ok(item) = (unsafe { GetDlgItem(Some(window), i32::from(id)) }) else {
-            continue;
-        };
-        fill(window, index, item, &control.kind);
-        if !control.enabled {
-            // SAFETY: disabling our own control.
-            let _ = unsafe { EnableWindow(item, false) };
-        }
-    }
+    fill_all(window, &spec.controls, ids);
 }
 
 /// Forgets a wizard's page as its sheet removes it.
