@@ -635,6 +635,9 @@ pub struct Settings {
     /// the `access_key` output type is on, as JAWS's Access Key output (`[OutputModes]
     /// ACCESS_KEY`, on by default).
     pub verbosity: Verbosity,
+    /// A link to a place on its page is a "same page link": JAWS's Identify Same Page Links
+    /// (`[HTML] IdentifySamePageLinks`, on by default). Off, it is a "Link" [obs, 724].
+    pub identify_same_page_links: bool,
     /// A page is read from its top once it loads, after its title and summary: JAWS's
     /// "Document and Web Pages Automatically Read When Loaded" (Settings Center, Web/HTML/PDFs,
     /// Reading; `[HTML] SayAllOnDocumentLoad`), on in JAWS 2025. Off, the title and the
@@ -659,6 +662,7 @@ impl Default for Settings {
             viewer_display: ViewerDisplay::default(),
             forms_mode: FormsMode::Auto,
             verbosity: Verbosity::default(),
+            identify_same_page_links: true,
             read_page_on_load: true,
             confirm_exit: true,
         }
@@ -720,7 +724,8 @@ impl Settings {
             viewer_display: ViewerDisplay::OnScreen,
             forms_mode: FormsMode::Manual,
             verbosity,
-            // Neither is in old-pc's JCF: JAWS's defaults.
+            // None is in old-pc's JCF: JAWS's defaults.
+            identify_same_page_links: true,
             read_page_on_load: true,
             confirm_exit: true,
         }

@@ -421,7 +421,7 @@ impl ScreenReaderEngine {
 
     /// Replaces the active document buffer and resets the cursor.
     pub fn load_buffer(&mut self, buffer: VirtualBuffer) {
-        let buffer = self.labeled(buffer);
+        let buffer = self.with_reading_choices(self.labeled(buffer));
         crate::retire::retire(std::mem::replace(
             &mut self.cursor,
             VirtualCursor::new(buffer),
@@ -432,6 +432,59 @@ impl ScreenReaderEngine {
         self.app_mode = AppMode::VirtualBuffer;
         self.say_all = None;
         self.placemarker_list_seen = None;
+    }
+
+    /// The page as the user's reading choices read it: same page links as plain links with
+    /// Identify Same Page Links off [obs, 724], marked on the page so that every buffer built
+    /// from it keeps the choice.
+    fn with_reading_choices(&self, buffer: VirtualBuffer) -> VirtualBuffer {
+        let Some(page) = buffer.page().and_then(|page| self.chosen_page(page)) else {
+            return buffer;
+        };
+        crate::retire::retire(buffer);
+        VirtualBuffer::from_aom_owned(page)
+    }
+
+    /// `page` marked as the reading choices ask, when its mark differs from them.
+    fn chosen_page(&self, page: &crate::aom::AomNode) -> Option<crate::aom::AomNode> {
+        let plain = !self.settings.identify_same_page_links;
+        let mark = crate::linearize::PLAIN_SAME_PAGE_LINKS;
+        if page.attributes.contains_key(mark) == plain {
+            return None;
+        }
+        let mut marked = page.clone();
+        if plain {
+            marked.attributes.insert(mark.to_owned(), "true".to_owned());
+        } else {
+            marked.attributes.remove(mark);
+        }
+        Some(marked)
+    }
+
+    /// The page in front built again with the reading choices in force, the cursor on the
+    /// element it was on.
+    fn reread_with_choices(&mut self) {
+        let Some(page) = self
+            .cursor
+            .buffer
+            .page()
+            .and_then(|page| self.chosen_page(page))
+        else {
+            return;
+        };
+        let at = self.cursor.current_node_id;
+        let offset = self.cursor.offset;
+        crate::retire::retire(std::mem::replace(
+            &mut self.cursor.buffer,
+            VirtualBuffer::from_aom_owned(page),
+        ));
+        self.say_all = None;
+        match at.and_then(|id| self.cursor.buffer.start_of(id)) {
+            Some(start) => self.cursor.move_to(start),
+            None => self
+                .cursor
+                .move_to(offset.min(self.cursor.buffer.text.len())),
+        }
     }
 
     /// The application module that owns `focus`, whose hooks apply to it.
@@ -1149,11 +1202,16 @@ impl ScreenReaderEngine {
             .settings_layers
             .resolve(application.as_deref(), site.as_deref());
         let voice_changed = settings.voice != self.settings.voice;
+        let choices_changed =
+            settings.identify_same_page_links != self.settings.identify_same_page_links;
         // The cursor says a page control's focus itself, at the verbosity in force.
         self.cursor.verbosity = settings.verbosity.clone();
         self.settings = settings;
         if voice_changed {
             self.configure_voice();
+        }
+        if choices_changed {
+            self.reread_with_choices();
         }
         self.sync_speech_mode();
     }

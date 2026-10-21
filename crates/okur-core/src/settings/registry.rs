@@ -384,6 +384,12 @@ pub static SETTINGS: &[SettingSpec] = &[
         },
     ),
     SettingSpec {
+        jaws: default_jcf("HTML", "IdentifySamePageLinks", |v| {
+            Value::Bool(v.trim() != "0")
+        }),
+        ..spec("identify_same_page_links", Group::Reading, None, CHECK)
+    },
+    SettingSpec {
         jaws: default_jcf("HTML", "SayAllOnDocumentLoad", |v| {
             Value::Bool(v.trim() != "0")
         }),

@@ -224,7 +224,15 @@ struct Builder<'a> {
     /// group), as (node id, name, value): set on the page once the visit is over, since the
     /// page is only the buffer's then.
     annotations: Vec<(usize, &'static str, String)>,
+    /// A link to a place on the page is a "same page link"; off, a "Link" as any other
+    /// ([`PLAIN_SAME_PAGE_LINKS`]).
+    same_page_links: bool,
 }
+
+/// The page's attribute that says its same page links are read as plain links: JAWS's
+/// `IdentifySamePageLinks=0` (724/s1: "Link Riverside Gazette"). Okur's reading choice, set
+/// on the page as it loads, so that every buffer built from the page keeps it.
+pub const PLAIN_SAME_PAGE_LINKS: &str = "okur_plain_same_page_links";
 
 impl<'a> Builder<'a> {
     fn new(document_url: Option<&'a str>) -> Self {
@@ -240,6 +248,7 @@ impl<'a> Builder<'a> {
             document_url,
             paragraph_ends: Vec::new(),
             annotations: Vec::new(),
+            same_page_links: true,
         }
     }
 
@@ -783,7 +792,7 @@ impl<'a> Builder<'a> {
         // aria-roledescription takes the role's place in reading ("‹ chip › Rust").
         let kind = match node.role_description() {
             Some(description) => description,
-            None if same_page => msg::role_link_same_page().as_str(),
+            None if same_page && self.same_page_links => msg::role_link_same_page().as_str(),
             // A mailto: link is a "Send Mail Link" [obs, 293/s1].
             None if href.is_some_and(|h| h.starts_with("mailto:")) => {
                 msg::role_link_mailto().as_str()
@@ -1436,6 +1445,7 @@ fn resolve_flows(buffer: &mut VirtualBuffer) {
 fn visit_page(root: &AomNode) -> (VirtualBuffer, Vec<(usize, &'static str, String)>) {
     let document_url = attr(root, "url");
     let mut builder = Builder::new(document_url);
+    builder.same_page_links = attr(root, PLAIN_SAME_PAGE_LINKS).is_none();
     builder.buffer.root_id = Some(root.id);
     builder.buffer.mark_readable(root.id);
 
@@ -1677,6 +1687,25 @@ mod tests {
                 format!("{same_page}{}Step two", state_marker("Current Step")),
                 format!("{link}{}Today", state_marker("Current")),
             ]
+        );
+    }
+
+    /// With Identify Same Page Links off, the page carries the choice and a link to its own
+    /// places is a "Link" like any other [obs, 724/s1].
+    #[test]
+    fn same_page_links_can_read_as_plain_links() {
+        let page = github_tabs().page().map(|p| AomNode::clone(p));
+        assert!(page.is_some());
+        let Some(mut page) = page else {
+            return;
+        };
+        page.attributes
+            .insert(PLAIN_SAME_PAGE_LINKS.to_owned(), "true".to_owned());
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&page);
+        let speech: Vec<&str> = buffer.lines.iter().map(|l| l.speech.as_str()).collect();
+        assert_eq!(
+            speech.get(1).copied(),
+            Some(format!("{}Skip", role_marker("Link")).as_str())
         );
     }
 
