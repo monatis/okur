@@ -23,6 +23,7 @@ const DOUBLE_PRESS_MS: u64 = 350;
 mod commands;
 mod cursors;
 mod find;
+mod flexible_web;
 mod focus;
 mod help;
 mod information;
@@ -164,6 +165,10 @@ pub struct ScreenReaderEngine {
     /// The page whose PlaceMarker List was opened since it loaded: K without PlaceMarkers
     /// opens the list there [obs, 703/s4].
     placemarker_list_seen: Option<String>,
+    /// Flexible Web's wizard, while it is open.
+    flexible_web: Option<crate::ui::flexible_web::FlexibleWebWizard>,
+    /// The customizations Flexible Web made on the page in front.
+    page_customizations: flexible_web::PageCustomizations,
     /// The custom labels (Insert+Ctrl+Tab), and where they are kept.
     custom_labels: crate::labels::CustomLabels,
     label_store: Option<Box<dyn crate::labels::LabelStore>>,
@@ -350,6 +355,8 @@ impl ScreenReaderEngine {
             placemarker_store: None,
             placemarker_list: None,
             placemarker_list_seen: None,
+            flexible_web: None,
+            page_customizations: flexible_web::PageCustomizations::default(),
             custom_labels: crate::labels::CustomLabels::default(),
             label_store: None,
             label_dialog: None,
@@ -421,7 +428,8 @@ impl ScreenReaderEngine {
 
     /// Replaces the active document buffer and resets the cursor.
     pub fn load_buffer(&mut self, buffer: VirtualBuffer) {
-        let buffer = self.with_reading_choices(self.labeled(buffer));
+        self.forget_customizations();
+        let buffer = self.prepared(buffer);
         crate::retire::retire(std::mem::replace(
             &mut self.cursor,
             VirtualCursor::new(buffer),
@@ -432,6 +440,12 @@ impl ScreenReaderEngine {
         self.app_mode = AppMode::VirtualBuffer;
         self.say_all = None;
         self.placemarker_list_seen = None;
+    }
+
+    /// A page as Okur reads it: with the custom labels given on its site, the user's reading
+    /// choices, and what Flexible Web hides on it.
+    pub(super) fn prepared(&self, buffer: VirtualBuffer) -> VirtualBuffer {
+        self.with_customizations(self.with_reading_choices(self.labeled(buffer)))
     }
 
     /// The page as the user's reading choices read it ([`Self::chosen_page`]), marked on the
@@ -1396,6 +1410,7 @@ impl ScreenReaderEngine {
             _ if self.is_jump_event(message) => self.handle_jump_event(message),
             _ if self.is_label_event(message) => self.handle_label_event(message),
             _ if self.is_placemarker_event(message) => self.handle_placemarker_event(message),
+            _ if self.is_flexible_web_event(message) => self.handle_flexible_web_event(message),
             _ if self.is_quit_event(message) => self.handle_quit_event(message),
             _ => {
                 let outcome = self.settings_dialog.as_mut()?.handle(message);

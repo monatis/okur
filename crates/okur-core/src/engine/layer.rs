@@ -45,6 +45,10 @@ impl ScreenReaderEngine {
             Key::Alpha('S') if shift_only => self.speech_on_demand_toggle(),
             Key::Alpha('S') if plain => self.mute_synthesizer(),
             Key::Alpha('T') if plain => self.start_table_layer(),
+            // Flexible Web's wizard (DoFlexibleWebDialog) [obs, 705/s3].
+            Key::Alpha('X') if plain => {
+                let _ = self.open_flexible_web();
+            }
             _ => {}
         }
         Some(KeyAction::Consume)

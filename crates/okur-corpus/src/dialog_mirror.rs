@@ -12,6 +12,7 @@
 //! the focused button; Escape and Cancel close the dialog.
 
 use okur_core::input::{Key, KeyEvent};
+use okur_core::ui::WizardButtons;
 use okur_core::ui::{Control, ControlKind, DialogSpec, FromUi, RecordingUiHost, ToUi, Value};
 use okur_core::{FocusEvent, Role};
 
@@ -43,10 +44,46 @@ pub struct DialogMirror {
     below: Vec<(DialogSpec, Option<usize>)>,
 }
 
+/// A wizard's page as the window shows it: the page's controls, then its sheet's buttons, named
+/// as JAWS's wizard names them ("< Back", "Next >", "Cancel" [obs, 705/s5, s10]), Next the
+/// default or Finish in its place, those not available unavailable: Alt+N on the last page
+/// presses nothing [obs, 708/s25].
+fn wizard_dialog(mut page: DialogSpec, buttons: WizardButtons) -> DialogSpec {
+    let button = |id: &str, label: &str, default: bool, enabled: bool| Control {
+        id: id.to_owned(),
+        label: label.to_owned(),
+        kind: ControlKind::Button { default },
+        enabled,
+    };
+    page.controls.extend([
+        button("back", "< &Back", false, buttons.back),
+        button("next", "&Next >", buttons.next, buttons.next),
+        button("finish", "Finish", !buttons.next, buttons.finish),
+        button("cancel", "Cancel", false, true),
+    ]);
+    page
+}
+
 impl DialogMirror {
     /// Takes what the engine sent its windows: a dialog shown or closed.
     pub fn sync(&mut self, host: &RecordingUiHost) {
         for message in host.take() {
+            let message = match message {
+                // A wizard is a dialog: its page and its sheet's buttons, the page turned in
+                // the same window.
+                ToUi::WizardShow { wizard } => ToUi::DialogShow {
+                    dialog: wizard_dialog(wizard.page, wizard.buttons),
+                },
+                ToUi::WizardPage { id, page, buttons }
+                    if self.dialog.as_ref().is_some_and(|d| d.id == id) =>
+                {
+                    let page = wizard_dialog(page, buttons);
+                    self.focused = page.controls.iter().position(is_tab_stop);
+                    self.dialog = Some(page);
+                    continue;
+                }
+                other => other,
+            };
             match message {
                 ToUi::DialogShow { dialog } => {
                     self.closed = None;
@@ -234,16 +271,20 @@ impl DialogMirror {
                         None => (false, None),
                     }
                 }
-                (ControlKind::Radios { options, selected }, Role::RadioButton) => {
-                    match options.iter().position(|option| plain(option) == name) {
-                        Some(i) if i != *selected && focus.states.checked == Some(true) => {
-                            *selected = i;
-                            (true, Some(Value::Selected(i)))
-                        }
-                        Some(_) => (true, None),
-                        None => (false, None),
+                (
+                    ControlKind::Radios { options, selected }
+                    | ControlKind::RadioButtons {
+                        options, selected, ..
+                    },
+                    Role::RadioButton,
+                ) => match options.iter().position(|option| plain(option) == name) {
+                    Some(i) if i != *selected && focus.states.checked == Some(true) => {
+                        *selected = i;
+                        (true, Some(Value::Selected(i)))
                     }
-                }
+                    Some(_) => (true, None),
+                    None => (false, None),
+                },
                 // The text typed into an edit combo, as its window reports each change
                 // ("b", "bo", … "board" in JAWS Find's Find what [obs, 506/s2-s6]), or into an
                 // edit (Custom Label's "lamp" [obs, 688/s10-s13]).
@@ -376,7 +417,11 @@ impl DialogMirror {
             if !control.enabled {
                 continue;
             }
-            if let ControlKind::Radios { options, selected } = &mut control.kind {
+            if let ControlKind::Radios { options, selected }
+            | ControlKind::RadioButtons {
+                options, selected, ..
+            } = &mut control.kind
+            {
                 if let Some(option) = options.iter().position(|o| marks(o, letter)) {
                     self.focused = Some(index);
                     if option != *selected {

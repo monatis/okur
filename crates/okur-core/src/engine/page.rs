@@ -715,7 +715,7 @@ impl ScreenReaderEngine {
     /// cursor's place.
     pub(super) fn apply_pending_page(&mut self) {
         if let Some(buffer) = self.pending_page.take() {
-            let buffer = self.labeled(buffer);
+            let buffer = self.prepared(buffer);
             let offset = self.cursor.offset;
             let line = self.cursor.buffer.line_at_offset(offset);
             // A cursor on the focus stays on it: the focus is found again by its state, where

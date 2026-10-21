@@ -230,6 +230,16 @@ okur-core/src/ui/lists.rs: "sort"
 # The settings table: setting ids (their paths in the settings file, also their controls' ids),
 # dialog group ids and JAWS's settings file keys.
 okur-core/src/settings/registry.rs: *
+# Flexible Web's wizard: its controls' ids and its sheet's buttons.
+okur-core/src/ui/flexible_web.rs: "question"
+okur-core/src/ui/flexible_web.rs: "task"
+okur-core/src/ui/flexible_web.rs: "enabled"
+okur-core/src/ui/flexible_web.rs: "action"
+okur-core/src/ui/flexible_web.rs: "element"
+okur-core/src/ui/flexible_web.rs: "customization"
+okur-core/src/ui/flexible_web.rs: "next"
+okur-core/src/ui/flexible_web.rs: "back"
+okur-core/src/ui/flexible_web.rs: "finish"
 okur-core/src/ui/settings.rs: "apply"
 okur-core/src/ui/settings.rs: "cancel"
 okur-core/src/ui/settings.rs: "ok"

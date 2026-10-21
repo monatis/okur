@@ -494,6 +494,24 @@ A step can be in more than one entry; all of its entries apply.
   read the document is not a target.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### A region Flexible Web hides is still read
+
+- Steps: `716-web-flexible-web-hide-and-undo/s17` to `/s22` (the full keys:
+  `716-web-flexible-web-hide-and-undo/s17`, `716-web-flexible-web-hide-and-undo/s18`,
+  `716-web-flexible-web-hide-and-undo/s19`, `716-web-flexible-web-hide-and-undo/s20`,
+  `716-web-flexible-web-hide-and-undo/s21`, `716-web-flexible-web-hide-and-undo/s22`), and
+  `725-web-flexible-web-hidden-region-read/s14`, `725-web-flexible-web-hidden-region-read/s15`,
+  `725-web-flexible-web-hidden-region-read/s27`, `725-web-flexible-web-hidden-region-read/s28`,
+  `725-web-flexible-web-hidden-region-read/s29`, `725-web-flexible-web-hidden-region-read/s30`.
+- Difference: the whole step. JAWS reads the region it was asked to hide (the banner in 716,
+  the advertisement in 725); Okur reads on without it.
+- Why: after Finish the customization exists (the wizard's first page offers "Undo Hide
+  ComplementaryRegion 1 from the top ..." [obs, 725/s34]), yet R finds the hidden region and
+  Down reads its lines, in every trial of rounds 153 and 157 (2026-10-21). JAWS's guide
+  (Surf's Up, chapter 16) says a customization "is immediately applied to the page". After
+  Undo both read the region again.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-21.
+
 ### A corrected word is not said at its end (typing echo both)
 
 - Steps: `711-desktop-typing-echo-jcf-3/s7`.

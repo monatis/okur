@@ -239,3 +239,29 @@ flexible-web-hide-all-with-text = Hide all { $kinds } with text: "{ $text }"
 flexible-web-start-from-top = Start at { $kind } { $number } from the top
 flexible-web-start-from-top-with-text = Start at { $kind } { $number } from the top with text: "{ $text }"
 flexible-web-start-from-bottom = Start at { $kind } { $number } from the bottom
+
+## Flexible Web's wizard, its pages as JAWS's are [obs, 705, 708, 716, 720, 726]. A radio
+## button's "&" marks its access key, as the wizard's own labels do.
+
+flexible-web-title = Flexible Web
+flexible-web-start-question = What would you like to do?
+flexible-web-create = Create a new customization
+# Retry and Undo name the customization made last; with none, two spaces and three dots.
+flexible-web-retry = &Retry { $customization }
+flexible-web-retry-none = &Retry  . . .
+flexible-web-undo = &Undo { $customization }
+flexible-web-undo-none = &Undo  . . .
+flexible-web-save = &Save temporary customizations as a rule
+flexible-web-view = &View or change where rules apply
+flexible-web-enable = Enable Flexible Web
+flexible-web-action-title = Choose an Action
+flexible-web-action-question = How would you like to customize the page?
+flexible-web-hide = &Hide an element
+flexible-web-start-reading = &Start reading at an element
+flexible-web-element-title = Choose an element
+flexible-web-element-question = Which of the following elements would you like to customize?
+flexible-web-customization-title = Choose a customization
+flexible-web-customization-question = Select a customization
+# Insert+Space, X outside a page.
+flexible-web-not-in-page = You must be in the web page area to activate Flexible Web.
+flexible-web-no-elements = No customizable elements were found at the current virtual PC cursor location. Please change the cursor's location and try again.

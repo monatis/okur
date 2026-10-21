@@ -558,6 +558,23 @@ divergences! {
     "After a PlaceMarker is added, JAWS builds the page again and reads it from its top as it      does on loading: Ctrl+Home gets \"selected\" and that reading, K then says \"wrapping to      bottom\" before the PlaceMarker after the reading moved the cursor down, and Insert+Up      says \"Not in a Table\", in every trial. Okur keeps the page and its cursor: Ctrl+Home      says the page's title, K the PlaceMarker's line, Insert+Up that line.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
+    Difference::Step => [
+        "716-web-flexible-web-hide-and-undo/s17",
+        "716-web-flexible-web-hide-and-undo/s18",
+        "716-web-flexible-web-hide-and-undo/s19",
+        "716-web-flexible-web-hide-and-undo/s20",
+        "716-web-flexible-web-hide-and-undo/s21",
+        "716-web-flexible-web-hide-and-undo/s22",
+        "725-web-flexible-web-hidden-region-read/s14",
+        "725-web-flexible-web-hidden-region-read/s15",
+        "725-web-flexible-web-hidden-region-read/s27",
+        "725-web-flexible-web-hidden-region-read/s28",
+        "725-web-flexible-web-hidden-region-read/s29",
+        "725-web-flexible-web-hidden-region-read/s30",
+    ],
+    "After Flexible Web hides a region, JAWS still reads it, in every trial: R finds the      hidden advertisement and Down reads its lines, though the wizard's first page then      offers its Undo. JAWS's guide says a customization \"is immediately applied to the      page\". Okur takes the region out of the page it reads, and Undo puts it back.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
+
     Difference::Step => ["711-desktop-typing-echo-jcf-3/s7"],
     "With typing echo set to both characters and words, a word corrected with Backspace is not      said when Enter ends it: \"c d\", Backspace, Enter says only \"Enter\", in every trial,      while the same keys with words alone say \"c\" then \"Enter\" (710/s7), and both says      the word an uncorrected Enter ends (403/s27). Okur says the word as it stands in both      modes.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
