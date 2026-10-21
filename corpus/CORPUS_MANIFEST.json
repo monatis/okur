@@ -6262,13 +6262,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "789-desktop-mouse-clicks-and-moves-in-notepad",
+      "fixture": "desktop-notepad.ps1",
+      "evidence": {
+        "sha256": "f0154ef10fb00825dde73c7e5b806782e19d486107996b42562ef12186082035",
+        "capture_script_sha256": "043f2870b1499dacb80869fd8b86f5c8abac741d2a75c2c4ca9f04ab0f4e4e3a",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 434,
-    "scenarios_with_evidence": 434,
-    "total_trials": 1332,
-    "successful_trials": 1331,
-    "deterministic_scenarios": 280
+    "scenarios": 435,
+    "scenarios_with_evidence": 435,
+    "total_trials": 1335,
+    "successful_trials": 1334,
+    "deterministic_scenarios": 281
   }
 }
