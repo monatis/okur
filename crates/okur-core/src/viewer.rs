@@ -55,6 +55,10 @@ pub struct VirtualViewer {
     links: Vec<(usize, crate::command::Command)>,
     /// The lines that are places of the page, and the offset Enter on each moves to.
     places: Vec<(usize, usize)>,
+    /// Tab has gone to a place: the next Tab goes past it. Before, the first Tab takes the
+    /// place the viewer is on, as JAWS's summary has no link focused as it opens [obs,
+    /// 780/s3].
+    on_place: bool,
     /// The window's title, when not the Virtual Viewer's: "Skim Reading Results".
     title: Option<String>,
 }
@@ -98,6 +102,7 @@ impl VirtualViewer {
             read: (0, 0),
             links: Vec::new(),
             places: Vec::new(),
+            on_place: false,
             title: None,
         };
         viewer.read_line();
@@ -209,6 +214,37 @@ impl VirtualViewer {
             .collect()
     }
 
+    /// The next place's line (the prior with `forward` false), wrapping, said as a link.
+    fn next_place(&mut self, forward: bool) -> String {
+        let lines: Vec<usize> = self.places.iter().map(|(line, _)| *line).collect();
+        let here = !self.on_place;
+        self.on_place = true;
+        let next = if forward {
+            lines
+                .iter()
+                .find(|&&l| l > self.line || (here && l == self.line))
+                .or(lines.first())
+        } else {
+            lines
+                .iter()
+                .rev()
+                .find(|&&l| l < self.line)
+                .or(lines.last())
+        };
+        if let Some(&line) = next {
+            self.line = line;
+        }
+        self.column = 0;
+        self.read_line();
+        format!(
+            "{}{}
+{}",
+            self.line_text(),
+            crate::linearize::role_marker(crate::messages::msg::role_link().as_str()),
+            crate::messages::msg::hint_activate_enter()
+        )
+    }
+
     fn move_line(&mut self, down: bool) -> String {
         if down && self.line + 1 < self.lines.len() {
             self.line += 1;
@@ -293,8 +329,15 @@ impl VirtualViewer {
                 ViewerAction::Speak(Some(s))
             }
         };
+        let shift_only = m.shift && !m.ctrl && !m.alt && !m.win && !m.insert;
         match event.key {
             Key::Escape if plain => ViewerAction::Close,
+            // Tab and Shift+Tab go from place to place, wrapping, each said as a link: "1. City
+            // Library Expands Evening Hours - Riverside Gazette Link | To activate press
+            // Enter." (JAWS's skim reading summary [obs, 780/s3-s14]).
+            Key::Tab if (plain || shift_only) && !self.places.is_empty() => {
+                speak(self.next_place(plain))
+            }
             Key::Enter if plain => {
                 if let Some(&(_, offset)) = self.places.iter().find(|(line, _)| *line == self.line)
                 {
@@ -458,5 +501,38 @@ mod tests {
         // A message opens on its last line.
         let message = VirtualViewer::message(vec!["Font information:".into(), "Press".into()]);
         assert_eq!(message.mark(), span(1, 0, 5));
+    }
+
+    /// Tab goes from place to place in a summary, the first Tab to the first, wrapping, each
+    /// said as a link; Shift+Tab back; Enter moves to it [obs, 780/s3-s15].
+    #[test]
+    fn tab_goes_from_place_to_place() {
+        let mut viewer = VirtualViewer::new(vec!["1. Hours".into(), "2. Opens late.".into()])
+            .with_places(vec![(0, 0), (1, 40)]);
+        let tab = |viewer: &mut VirtualViewer, shift: bool| {
+            viewer.key(&KeyEvent::new(
+                Key::Tab,
+                Modifiers {
+                    shift,
+                    ..Modifiers::none()
+                },
+                true,
+            ))
+        };
+        let link = |line: &str| {
+            ViewerAction::Speak(Some(format!(
+                "{line}{}
+To activate press Enter.",
+                crate::linearize::role_marker("Link")
+            )))
+        };
+        assert_eq!(tab(&mut viewer, false), link("1. Hours"));
+        assert_eq!(tab(&mut viewer, false), link("2. Opens late."));
+        assert_eq!(tab(&mut viewer, false), link("1. Hours"));
+        assert_eq!(tab(&mut viewer, true), link("2. Opens late."));
+        assert_eq!(
+            press(&mut viewer, Key::Enter, false),
+            ViewerAction::MoveTo(40)
+        );
     }
 }

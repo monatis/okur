@@ -1,0 +1,73 @@
+{
+  "id": "781-web-skim-reading-delete-rule",
+  "name": "Skim Reading's Delete Rule on 778's text rule: Ctrl+Shift+Insert+Down, Tab twice to Delete Rule, Space, then Insert+Tab, Shift+Tab three times, Insert+Tab, typed by JAWS but for Insert+Tab, and Alt+C (one trial)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "Ctrl+Shift+Insert+Down",
+      "settle_max_ms": 30000,
+      "id": "s1"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s2"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")",
+      "id": "s3"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Space\")",
+      "settle_max_ms": 15000,
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Tab",
+      "id": "s5"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s6"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s7"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Shift+Tab\")",
+      "id": "s8"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Tab",
+      "id": "s9"
+    },
+    {
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+C\")",
+      "settle_max_ms": 30000,
+      "id": "s10"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s11"
+    }
+  ]
+}
