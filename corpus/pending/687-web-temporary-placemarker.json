@@ -1,0 +1,25 @@
+{
+  "id": "687-web-temporary-placemarker",
+  "name": "A temporary PlaceMarker in the news article: Down to a paragraph, Ctrl+Windows+K (DefineATempPlaceMarker), Ctrl+Home, K and K again to it, Shift+K, the PlaceMarker List (Ctrl+Shift+K) and Escape, then 7 (SpeakPlaceMarkerN 1) and Shift+7",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "H" },
+    { "id": "s2", "type": "key", "command": "Down" },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Ctrl+Win+K" },
+    { "id": "s5", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s6", "type": "key", "command": "K" },
+    { "id": "s7", "type": "key", "command": "K" },
+    { "id": "s8", "type": "key", "command": "Shift+K" },
+    { "id": "s9", "type": "key", "command": "Insert+Up" },
+    { "id": "s10", "type": "key", "command": "Ctrl+Home" },
+    { "id": "s11", "type": "key", "command": "Ctrl+Shift+K" },
+    { "id": "s12", "type": "key", "command": "Escape" },
+    { "id": "s13", "type": "key", "command": "7" },
+    { "id": "s14", "type": "key", "command": "Shift+7" }
+  ]
+}
