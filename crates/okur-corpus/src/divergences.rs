@@ -267,6 +267,23 @@ divergences! {
      to find. The cell's name already gives its column and row (\"Quantity Row 1\").",
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
+    Difference::JawsAlsoSays("Preview Bottom:") => [
+        "544-desktop-notepad-page-setup/s13",
+    ],
+    "Say Window in Notepad's Page Setup dialog ends, in JAWS, with the Preview box's three \
+     pictures of the page, read by names they do not have: \"Bottom:\" twice, the label \
+     before them in the dialog, and \"Page Setup\", the dialog's title (the next entry). They \
+     have no text. Okur reads no picture in Say Window, as JAWS reads none in the other \
+     dialogs recorded.",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
+    Difference::JawsAlsoSays("Preview Page Setup") => [
+        "544-desktop-notepad-page-setup/s13",
+    ],
+    "The last of the Page Setup preview's pictures, named after the dialog's title (see the \
+     entry before).",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
     Difference::Step => [
         "313-desktop-say-font/s1",
         "313-desktop-say-font/s2",

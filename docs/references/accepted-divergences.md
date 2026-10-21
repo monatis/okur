@@ -226,6 +226,16 @@ A step can be in more than one entry; all of its entries apply.
   name already gives its column and row ("Quantity Row 1"), and Okur says nothing more.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### JAWS names the Page Setup preview's pictures after a label and the title
+
+- Steps: `544-desktop-notepad-page-setup/s13`.
+- Difference: JAWS also says "Preview Bottom:" (twice) and "Preview Page Setup".
+- Why: Say Window (Insert+B) in Notepad's Page Setup dialog ends, in JAWS, with the Preview
+  box's three pictures of the page, read by names they do not have: "Bottom:" twice (the label
+  before them in the dialog) and "Page Setup" (the dialog's title). The pictures have no text.
+  Okur reads no picture in Say Window, as JAWS reads none in the other dialogs recorded.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ### JAWS finds no font in a WinForms text box
 
 - Steps: `313-desktop-say-font/s1`, `313-desktop-say-font/s2`, `313-desktop-say-font/s3`,

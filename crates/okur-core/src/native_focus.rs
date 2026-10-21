@@ -685,15 +685,22 @@ pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> Announceme
     let items: Vec<_> = items.iter().filter(|i| i.role != Role::Image).collect();
     let mut labelled = false;
     for (i, item) in items.iter().enumerate() {
-        let name = if std::mem::take(&mut labelled) {
+        let after_label = std::mem::take(&mut labelled);
+        let name = if after_label {
             String::new()
         } else {
             named(&item.name)
         };
         // A control in a group box is named after it: "Direction Up radio button" [obs,
         // 540/s4]; the box's name is a part of its own, which Advanced leaves out [obs,
-        // 612/s4].
-        let group = item.group.as_deref().map(named).filter(|g| !g.is_empty());
+        // 612/s4]. A field after its label has the box's name with the label only:
+        // "Margins (inches) Left: | Edit | 0.75", where a combo box says it again ("Paper
+        // Size: | Paper | Combo box") [obs, 544/s13].
+        let group = item
+            .group
+            .as_deref()
+            .map(named)
+            .filter(|g| !g.is_empty() && !(after_label && item.role == Role::Edit));
         let mut parts = match group {
             Some(group) if name.is_empty() => vec![name_part(group)],
             Some(group) => vec![
@@ -767,6 +774,11 @@ pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> Announceme
                     }
                     .as_str(),
                 ));
+            }
+            // An empty field is "Edit", in plain words like a combo box's "Combo box", with
+            // no value: "Header: | Edit" [obs, 544/s13].
+            Role::Edit if !item.read_only && item.value.as_deref().is_none_or(str::is_empty) => {
+                parts.push(Part::new(PartKind::Message, msg::role_edit().to_string()));
             }
             Role::Edit => parts.push(role(
                 if item.read_only {
