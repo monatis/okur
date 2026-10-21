@@ -5222,13 +5222,41 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "699-web-placemarker-list",
+      "fixture": "placemarkers.html",
+      "evidence": {
+        "sha256": "acb725af3b419e29974cb2d9e28ef6ee40a2b60fa35f4e94d9797887f46cc49a",
+        "capture_script_sha256": "3b53f62dc5cc8c31d4a5b9bd65a4e04f89612bd829b56e63bc3803171c5f711a",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "702-web-placemarker-saved",
+      "fixture": "placemarkers.html",
+      "evidence": {
+        "sha256": "938f2b621758167a1afc3414b271d63f92e3e6be414852ad01cde1d3b33498ae",
+        "capture_script_sha256": "3b53f62dc5cc8c31d4a5b9bd65a4e04f89612bd829b56e63bc3803171c5f711a",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 360,
-    "scenarios_with_evidence": 360,
-    "total_trials": 1134,
-    "successful_trials": 1134,
+    "scenarios": 362,
+    "scenarios_with_evidence": 362,
+    "total_trials": 1140,
+    "successful_trials": 1140,
     "deterministic_scenarios": 227
   }
 }
