@@ -358,8 +358,9 @@ No other level has evidence.
   - Words says each word after Space or Enter;
   - Characters and Words does both (Doc [S3]).
 - **Default:** Characters (Doc [H2], [H3], [H6]). Old-pc has `TypingEcho=0`, so echo is off
-  there (Obs, provenance). The meaning of other values is **Open**: choose each in Settings
-  Center and compare `DEFAULT.JCF`.
+  there (Obs, provenance). The other values: 1 characters, 2 words, 3 both (Obs, 709-711: each
+  value set in `DEFAULT.JCF`, "ab cd" typed). With 3, a word corrected with Backspace was not
+  said at its end, as it is with 2 (711/s7, an accepted divergence).
 - **Other typing settings:**
   - **The Keyboard voice:** Voice Adjustment has its own Keyboard voice for typing echo, with
     its own punctuation (Doc [H1], [W4]).
