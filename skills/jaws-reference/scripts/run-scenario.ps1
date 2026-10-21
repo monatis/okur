@@ -56,8 +56,9 @@ Step types:
   text         Characters typed as Unicode input, whatever the keyboard layout:
                "%TEMP%\sr-dialogs" into a file dialog's name field.
   jaws_script  JAWS script name dispatched through FSAPI RunScript.
-  jaws_function  JAWS function call through FSAPI RunFunction: TypeKey("Down") for keys inside
-               JAWS's own dialogs (Links List, Find), which run elevated and refuse our keys.
+  jaws_function  JAWS function call through FSAPI RunFunction: TypeKey("Down") for keys and
+               TypeString("name") for text inside JAWS's own dialogs (Links List, Find,
+               Flexible Web), which run elevated and refuse our keys and text.
   Any step may say "history": false: JAWS's speech history is neither cleared nor read for it,
                and the step keeps only the speech recorder's text (steps in Keyboard Help, which
                describes the history scripts instead of running them).
@@ -241,6 +242,18 @@ function Resolve-Key([string]$name) {
     if ($n -match '^f([1-9]|1[0-2])$') { return @((0x6F + [int]$Matches[1]), $false, 0) }
     if ($n -match '^[a-z0-9]$') { return @([int][char]$n.ToUpperInvariant(), $false, 0) }
     throw "Unknown key name '$name'"
+}
+
+# Text typed character by character as Unicode input, so old-pc's Turkish layout types it as
+# written ("%TEMP%\sr-dialogs" into a file dialog). Environment variables are left for the
+# application to expand.
+function Send-Text([string]$text) {
+    $ok = $true
+    foreach ($c in $text.ToCharArray()) {
+        $ok = [SrKeyInput]::Char($c) -and $ok
+        Start-Sleep -Milliseconds 40
+    }
+    return $ok
 }
 
 function Send-Chord([string]$chord) {
@@ -512,25 +525,18 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
             return $sent.ExitCode -eq 0
         }
         'jaws_script' { if (-not $jaws) { return $false }; return [bool]$jaws.RunScript($command) }
-        # A JAWS function call through FSAPI RunFunction, e.g. TypeKey("Down"): keys JAWS types
-        # itself reach its own elevated dialogs, which refuse ours. With Okur reading, the key
-        # is the user's key in Okur's dialog.
+        # A JAWS function call through FSAPI RunFunction, e.g. TypeKey("Down") or
+        # TypeString("name"): keys and text JAWS types itself reach its own elevated dialogs,
+        # which refuse ours (741's rule name never arrived). With Okur reading, the key or the
+        # text is the user's in Okur's dialog.
         'jaws_function' {
             if ($jaws) { return [bool]$jaws.RunFunction($command) }
             if ($command -match '^TypeKey\("(.+)"\)$') { return Send-Chord $Matches[1] }
+            if ($command -match '^TypeString\("(.*)"\)$') { return Send-Text $Matches[1] }
             return $false
         }
-        # Text typed character by character as Unicode input, so old-pc's Turkish layout
-        # types it as written ("%TEMP%\sr-dialogs" into a file dialog). Environment variables
-        # are left for the application to expand.
-        'text' {
-            $ok = $true
-            foreach ($c in $command.ToCharArray()) {
-                $ok = [SrKeyInput]::Char($c) -and $ok
-                Start-Sleep -Milliseconds 40
-            }
-            return $ok
-        }
+        # Text typed by us: JAWS's own dialogs refuse it (use TypeString there).
+        'text' { return Send-Text $command }
         'keyboard'    { [System.Windows.Forms.SendKeys]::SendWait($command); return $true }
         default       { throw "Unsupported step type '$type'" }
     }
