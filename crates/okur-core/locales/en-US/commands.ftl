@@ -202,6 +202,11 @@ no-frames-in-page = No frames found in page
 # Numpad Slash, before the click on the element at the virtual cursor [obs, 534/s2].
 left-mouse-button = left mouse button
 right-mouse-button = right mouse button
+# The mouse button locks, Insert+Numpad Slash and Star, with JAWS's capitals [obs, 788/s2-s5].
+left-button-locked = left button locked
+left-button-unlocked = Left button unlocked
+right-button-locked = right button locked
+right-button-unlocked = right button unlocked
 
 ## Say Default Button in a dialog box, and Say Current Control Hot Key (Shift+Numpad5) [obs, 537]
 

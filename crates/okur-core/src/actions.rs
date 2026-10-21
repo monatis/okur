@@ -13,6 +13,11 @@ pub enum MouseClick {
     LeftSingle,
     RightSingle,
     LeftDouble,
+    /// A button pressed and held, or let go: the mouse button locks.
+    LeftDown,
+    LeftUp,
+    RightDown,
+    RightUp,
 }
 
 /// Platform actions on the live element a buffer node was captured from.

@@ -708,16 +708,20 @@ fn click_at(x: i32, y: i32, click: okur_core::actions::MouseClick) {
             },
         },
     };
-    let (down, up) = match click {
-        MouseClick::RightSingle => (MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP),
-        MouseClick::LeftSingle | MouseClick::LeftDouble => {
-            (MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP)
-        }
+    let inputs = match click {
+        MouseClick::RightSingle => vec![button(MOUSEEVENTF_RIGHTDOWN), button(MOUSEEVENTF_RIGHTUP)],
+        MouseClick::LeftSingle => vec![button(MOUSEEVENTF_LEFTDOWN), button(MOUSEEVENTF_LEFTUP)],
+        MouseClick::LeftDouble => vec![
+            button(MOUSEEVENTF_LEFTDOWN),
+            button(MOUSEEVENTF_LEFTUP),
+            button(MOUSEEVENTF_LEFTDOWN),
+            button(MOUSEEVENTF_LEFTUP),
+        ],
+        MouseClick::LeftDown => vec![button(MOUSEEVENTF_LEFTDOWN)],
+        MouseClick::LeftUp => vec![button(MOUSEEVENTF_LEFTUP)],
+        MouseClick::RightDown => vec![button(MOUSEEVENTF_RIGHTDOWN)],
+        MouseClick::RightUp => vec![button(MOUSEEVENTF_RIGHTUP)],
     };
-    let mut inputs = vec![button(down), button(up)];
-    if click == MouseClick::LeftDouble {
-        inputs.extend([button(down), button(up)]);
-    }
     let size = i32::try_from(std::mem::size_of::<INPUT>()).unwrap_or(0);
     // SAFETY: plain Win32 calls: the pointer moves, then well-formed mouse button inputs.
     unsafe {

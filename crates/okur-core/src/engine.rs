@@ -293,6 +293,9 @@ pub struct ScreenReaderEngine {
     rate_change: i32,
     /// Insert+Space was pressed: the next key is the layer's.
     layer_open: bool,
+    /// The mouse buttons held down by their locks (Insert+Numpad Slash and Star).
+    left_button_locked: bool,
+    right_button_locked: bool,
     /// The notifications that came, the latest last, for Insert+Space, Shift+N and the
     /// Notification History.
     notifications: std::collections::VecDeque<crate::ui::notifications::Notification>,
@@ -461,6 +464,8 @@ impl ScreenReaderEngine {
             virtual_cursor_off: false,
             rate_change: 0,
             layer_open: false,
+            left_button_locked: false,
+            right_button_locked: false,
             notifications: std::collections::VecDeque::new(),
             notification_history: None,
             notification_details: None,
@@ -757,7 +762,9 @@ impl ScreenReaderEngine {
                 | Command::RestrictOkurCursor
                 | Command::SayActiveCursor
                 | Command::LeftMouseClick
-                | Command::RightMouseClick),
+                | Command::RightMouseClick
+                | Command::LeftMouseButtonLock
+                | Command::RightMouseButtonLock),
             ) = crate::command::command_for(event)
             {
                 let in_page = self.app_mode == AppMode::VirtualBuffer;

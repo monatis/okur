@@ -66,6 +66,8 @@ impl ScreenReaderEngine {
             Command::SelectAFrame => return self.select_a_frame(),
             Command::LeftMouseClick => return self.left_mouse_click(),
             Command::RightMouseClick => return self.right_mouse_click(),
+            Command::LeftMouseButtonLock => return self.mouse_button_lock(false),
+            Command::RightMouseButtonLock => return self.mouse_button_lock(true),
             Command::RoutePcToOkur => return self.route_pc_to_okur(),
             Command::RestrictOkurCursor => return self.restrict_okur_cursor(),
             Command::WindowList => return self.ask_window_list(),

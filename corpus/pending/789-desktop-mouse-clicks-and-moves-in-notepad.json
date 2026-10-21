@@ -1,0 +1,83 @@
+{
+  "id": "789-desktop-mouse-clicks-and-moves-in-notepad",
+  "name": "Clicks with Ctrl, Shift and Alt and the mouse moved by keys in Notepad: Insert+NumpadMinus, Ctrl+NumpadSlash, Shift+NumpadSlash, Alt+NumpadSlash, Escape, Alt+Shift with Down, Right, Up and Left, Ctrl+NumpadStar, Escape, NumpadPlus, Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+NumpadMinus"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Ctrl+NumpadSlash"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Shift+NumpadSlash"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Alt+NumpadSlash"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Alt+Shift+Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Alt+Shift+Right"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Alt+Shift+Up"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Alt+Shift+Left"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Ctrl+NumpadStar"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "NumpadPlus"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}

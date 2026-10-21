@@ -446,6 +446,10 @@ command-select-a-frame = Lists the page's frames, to move to one.
 # NumPadSlash.
 command-left-mouse-click = Clicks the left mouse button on the element at the cursor.
 command-right-mouse-click = Clicks the right mouse button where the mouse is.
+# LeftMouseButtonLock (Insert+Numpad Slash).
+command-left-mouse-lock = Holds the left mouse button down where the mouse is, or lets it go.
+# RightMouseButtonLock (Insert+Numpad Star).
+command-right-mouse-lock = Holds the right mouse button down where the mouse is, or lets it go.
 command-restrict-okur-cursor = Restricts the Okur cursor to the next area: the application's window, the real window, the current window, the focused control's, the frame, or none.
 command-route-pc-to-okur = Moves the PC cursor, or the virtual cursor, to the Okur cursor.
 # WindowList (Insert+F10).

@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6201,
+  "matched_steps": 6205,
   "total_steps": 6442,
   "accepted_divergences": 168,
   "errors": [],
@@ -6622,10 +6622,10 @@
     "787-desktop-notification-rule-made-managed-deleted/s8": "mismatch",
     "787-desktop-notification-rule-made-managed-deleted/s9": "match",
     "788-desktop-mouse-button-locks-in-notepad/s1": "match",
-    "788-desktop-mouse-button-locks-in-notepad/s2": "mismatch",
-    "788-desktop-mouse-button-locks-in-notepad/s3": "mismatch",
-    "788-desktop-mouse-button-locks-in-notepad/s4": "mismatch",
-    "788-desktop-mouse-button-locks-in-notepad/s5": "mismatch",
+    "788-desktop-mouse-button-locks-in-notepad/s2": "match",
+    "788-desktop-mouse-button-locks-in-notepad/s3": "match",
+    "788-desktop-mouse-button-locks-in-notepad/s4": "match",
+    "788-desktop-mouse-button-locks-in-notepad/s5": "match",
     "788-desktop-mouse-button-locks-in-notepad/s6": "match",
     "788-desktop-mouse-button-locks-in-notepad/s7": "match",
     "788-desktop-mouse-button-locks-in-notepad/s8": "match"

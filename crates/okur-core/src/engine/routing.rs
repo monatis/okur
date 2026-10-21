@@ -142,6 +142,28 @@ impl ScreenReaderEngine {
         said
     }
 
+    /// Insert+Numpad Slash and Insert+Numpad Star: the button held down where the mouse is,
+    /// then let go, said as JAWS says them, "left button locked", "Left button unlocked"
+    /// [obs, 788/s2-s5]. Letting the right button go opens what it opens, a context menu.
+    pub(super) fn mouse_button_lock(&mut self, right: bool) -> Option<String> {
+        use crate::actions::MouseClick;
+        let locked = if right {
+            &mut self.right_button_locked
+        } else {
+            &mut self.left_button_locked
+        };
+        *locked = !*locked;
+        let (click, said) = match (right, *locked) {
+            (false, true) => (MouseClick::LeftDown, msg::left_button_locked()),
+            (false, false) => (MouseClick::LeftUp, msg::left_button_unlocked()),
+            (true, true) => (MouseClick::RightDown, msg::right_button_locked()),
+            (true, false) => (MouseClick::RightUp, msg::right_button_unlocked()),
+        };
+        let said = self.say(said.to_string());
+        self.click_at_mouse(click);
+        said
+    }
+
     /// A click where the mouse is, or at the PC cursor when Okur has not placed it.
     fn click_at_mouse(&self, click: crate::actions::MouseClick) {
         if let (Some((x, y)), Some(actions)) =

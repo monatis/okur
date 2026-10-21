@@ -251,6 +251,11 @@ pub enum Command {
     LeftMouseClick,
     /// Numpad Star: a right mouse click, at the mouse.
     RightMouseClick,
+    /// Insert+Numpad Slash (LeftMouseButtonLock): the left button held down at the mouse, then
+    /// let go.
+    LeftMouseButtonLock,
+    /// Insert+Numpad Star (RightMouseButtonLock): the right button, likewise.
+    RightMouseButtonLock,
     /// Insert+Numpad Plus (RoutePCCursorToJAWS): the PC cursor, or the virtual one, to the
     /// Okur cursor.
     RoutePcToOkur,
@@ -574,6 +579,8 @@ impl Command {
             "SelectAFrame" | "Insert+F9" => SelectAFrame,
             "LeftMouseButton" | "NumpadSlash" => LeftMouseClick,
             "RightMouseButton" | "NumpadStar" => RightMouseClick,
+            "LeftMouseButtonLock" => LeftMouseButtonLock,
+            "RightMouseButtonLock" => RightMouseButtonLock,
             "RoutePCCursorToJAWS" => RoutePcToOkur,
             "WindowList" | "Insert+F10" => WindowList,
             "ListTaskTrayIcons" | "Insert+F11" => SystemTrayList,
@@ -1026,6 +1033,10 @@ static BINDINGS: &[Binding] = &{
         bind(Key::F(9), OKUR, SelectAFrame),
         bind(Key::NumpadSlash, ALONE, LeftMouseClick),
         bind(Key::NumpadStar, ALONE, RightMouseClick),
+        // Default.JKM: JAWSKey+NumPadSlash=LeftMouseButtonLock,
+        // JAWSKey+NumPadStar=RightMouseButtonLock.
+        bind(Key::NumpadSlash, OKUR, LeftMouseButtonLock),
+        bind(Key::NumpadStar, OKUR, RightMouseButtonLock),
         bind(Key::F(10), OKUR, WindowList),
         bind(Key::F(11), OKUR, SystemTrayList),
         // Default.JKM: JAWSKey+F4=ShutDownJAWS; "Shut Down JAWS: INSERT+F4" (keystrokes).
