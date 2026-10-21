@@ -123,6 +123,11 @@ pub struct UiaNode {
     pub has_keyboard_focus: bool,
     pub is_control_element: bool,
     pub is_content_element: bool,
+    /// A Win32 static or button its application paints itself: its window text is not what
+    /// it shows, and Say Window does not read it (the Font dialog's sample, "AaBbYyZz"
+    /// [obs, 665/s3]).
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub owner_drawn: bool,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub children: Vec<UiaNode>,
 }
@@ -567,6 +572,7 @@ pub(crate) mod capture {
             has_keyboard_focus: boolean(el, UIA_HasKeyboardFocusPropertyId).unwrap_or(false),
             is_control_element: boolean(el, UIA_IsControlElementPropertyId).unwrap_or(false),
             is_content_element: boolean(el, UIA_IsContentElementPropertyId).unwrap_or(false),
+            owner_drawn: false,
             children: Vec::new(),
         };
 
@@ -1068,6 +1074,44 @@ pub(crate) mod capture {
         UIA_IsOffscreenPropertyId,
     ];
 
+    /// A Win32 combo box's selected item, counted from 1, and its item count
+    /// (`CB_GETCURSEL`, `CB_GETCOUNT`), 0 of 0 when it has none; `None` for another kind of
+    /// combo box or none selected.
+    fn combo_box_place(element: &IUIAutomationElement) -> Option<(i32, i32)> {
+        use windows::Win32::Foundation::{LPARAM, WPARAM};
+        use windows::Win32::UI::WindowsAndMessaging::{SendMessageTimeoutW, SMTO_ABORTIFHUNG};
+        const CB_GETCOUNT: u32 = 0x0146;
+        const CB_GETCURSEL: u32 = 0x0147;
+        // SAFETY: a property read on a valid element.
+        let hwnd = unsafe { element.CurrentNativeWindowHandle() }
+            .ok()
+            .filter(|h| !h.is_invalid())?;
+        let ask = |message: u32| {
+            let mut result = 0usize;
+            // SAFETY: a read-only query with a timeout, to a window that may be gone.
+            let sent = unsafe {
+                SendMessageTimeoutW(
+                    hwnd,
+                    message,
+                    WPARAM(0),
+                    LPARAM(0),
+                    SMTO_ABORTIFHUNG,
+                    200,
+                    Some(&mut result),
+                )
+            };
+            // CB_ERR is -1, as the low 32 bits of the result.
+            (sent.0 != 0).then_some(result as i32)
+        };
+        // An empty list is 0 of 0: "blank | 0 items" [obs, 544/s13].
+        let count = ask(CB_GETCOUNT).filter(|&n| n >= 0)?;
+        if count == 0 {
+            return Some((0, 0));
+        }
+        let index = ask(CB_GETCURSEL).filter(|&i| i >= 0)?;
+        Some((index + 1, count))
+    }
+
     /// [`read_subtree`] for a window: a list's, tree's or grid's items are read a level at a
     /// time, in one call each, with [`ITEM_PROPERTIES`].
     fn read_window_tree(
@@ -1111,6 +1155,21 @@ pub(crate) mod capture {
         }
         *budget = budget.checked_sub(1)?;
         let mut node = read_node(element, usize::MAX);
+        // A Win32 combo box's place in its whole list, which Say Window says after it ("38 of
+        // 187" [obs, 665/s3]): its list's items are read where shown only.
+        if node.control_type == UIA_ComboBoxControlTypeId.0 && node.position_in_set.is_none() {
+            if let Some((index, count)) = combo_box_place(element) {
+                node.position_in_set = Some(index);
+                node.size_of_set = Some(count);
+            }
+        }
+        if node.control_type == UIA_TextControlTypeId.0 {
+            // SAFETY: a property read on a valid element.
+            node.owner_drawn = unsafe { element.CurrentNativeWindowHandle() }
+                .ok()
+                .filter(|h| !h.is_invalid())
+                .is_some_and(crate::screen_lines::owner_drawn);
+        }
         if depth == 0 {
             return Some(node);
         }

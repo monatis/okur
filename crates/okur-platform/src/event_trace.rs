@@ -247,27 +247,109 @@ pub(crate) fn without_nested_tree_items(mut tree: UiaNode) -> UiaNode {
 /// A dialog's controls in reading order (depth first), below the dialog itself: what Say
 /// Window reads. Nameless containers (panes, groups) are passed through.
 fn window_items(tree: &UiaNode) -> Vec<okur_core::WindowItem> {
+    const UIA_COMBOBOX: i32 = 50003;
+    const UIA_EDIT: i32 = 50004;
+    const UIA_LINK: i32 = 50005;
+    const UIA_SCROLLBAR: i32 = 50014;
+    const UIA_PANE: i32 = 50033;
+    /// A control as Say Window reads it, without what is inside it.
+    fn item(node: &UiaNode) -> Option<okur_core::WindowItem> {
+        let mut leaf = node.clone();
+        leaf.children.clear();
+        let aom = crate::uia_snapshot::to_aom(&leaf);
+        let name = node.name.clone().unwrap_or_default();
+        (!name.trim().is_empty() || aom.value.is_some()).then(|| okur_core::WindowItem {
+            role: aom.role.clone(),
+            name: okur_core::viewer_text::without_marks(&name),
+            value: aom
+                .value
+                .as_deref()
+                .map(okur_core::viewer_text::without_marks)
+                .filter(|v| !v.is_empty()),
+            expanded: aom.states.expanded,
+            checked: aom.states.checked,
+            read_only: node.value_is_read_only == Some(true),
+            group: node.group_box.clone(),
+            place: None,
+            in_combo_box: false,
+        })
+    }
+    /// A Win32 combo box as JAWS's Say Window reads it [obs, 665/s3, 544/s13]: the box, its
+    /// value with its list's shown items and its place, then its list (its selected item)
+    /// and its field, the value and place again; a drop-down list is the box alone. Its
+    /// scroll bar and drop-down button are not read.
+    fn combo_box(node: &UiaNode, items: &mut Vec<okur_core::WindowItem>) {
+        let place = node
+            .position_in_set
+            .zip(node.size_of_set)
+            .and_then(|(i, n)| Some((usize::try_from(i).ok()?, usize::try_from(n).ok()?)));
+        let list = node.children.iter().find(|c| c.control_type == UIA_LIST);
+        let field = node.children.iter().find(|c| c.control_type == UIA_EDIT);
+        let shown: Vec<&str> = list
+            .map(|l| {
+                l.children
+                    .iter()
+                    .filter(|c| c.control_type == UIA_LISTITEM)
+                    .filter_map(|c| c.name.as_deref())
+                    .collect()
+            })
+            .unwrap_or_default();
+        let Some(mut combo) = item(node) else {
+            return;
+        };
+        combo.place = place;
+        combo.value = match (combo.value.take(), shown.is_empty()) {
+            (Some(value), false) => Some(format!("{value} {}", shown.join(" "))),
+            (value, _) => value,
+        };
+        items.push(combo);
+        if let Some(list) = list {
+            let selected = list
+                .children
+                .iter()
+                .find(|c| c.is_selected == Some(true))
+                .and_then(|c| c.name.clone());
+            items.push(okur_core::WindowItem {
+                role: okur_core::Role::List,
+                name: String::new(),
+                value: selected,
+                expanded: None,
+                checked: None,
+                read_only: false,
+                group: None,
+                place: None,
+                in_combo_box: true,
+            });
+        }
+        if let Some(mut edit) = field.and_then(item) {
+            edit.place = place;
+            edit.in_combo_box = true;
+            items.push(edit);
+        }
+    }
     fn walk(node: &UiaNode, items: &mut Vec<okur_core::WindowItem>) {
         for child in &node.children {
-            let mut leaf = child.clone();
-            leaf.children.clear();
-            let aom = crate::uia_snapshot::to_aom(&leaf);
-            let name = child.name.clone().unwrap_or_default();
-            if !name.trim().is_empty() || aom.value.is_some() {
-                items.push(okur_core::WindowItem {
-                    role: aom.role.clone(),
-                    name: okur_core::viewer_text::without_marks(&name),
-                    value: aom
-                        .value
-                        .as_deref()
-                        .map(okur_core::viewer_text::without_marks)
-                        .filter(|v| !v.is_empty()),
-                    expanded: aom.states.expanded,
-                    checked: aom.states.checked,
-                    read_only: child.value_is_read_only == Some(true),
-                    group: child.group_box.clone(),
-                });
+            match child.control_type {
+                UIA_SCROLLBAR => continue,
+                UIA_TEXT if child.owner_drawn => continue,
+                UIA_COMBOBOX if child.position_in_set.is_some() => {
+                    combo_box(child, items);
+                    continue;
+                }
+                // A link in a pane of its own name (a SysLink): the link alone [obs, 665/s3].
+                UIA_PANE
+                    if child.children.len() == 1
+                        && child
+                            .children
+                            .iter()
+                            .all(|c| c.control_type == UIA_LINK && c.name == child.name) =>
+                {
+                    walk(child, items);
+                    continue;
+                }
+                _ => {}
             }
+            items.extend(item(child));
             walk(child, items);
         }
     }
@@ -3888,6 +3970,114 @@ mod tests {
             is_enabled: true,
             ..UiaNode::default()
         }
+    }
+
+    /// Say Window in Notepad's Font dialog, from its tree as the tracer reads it (a list's
+    /// shown items, a combo box's place, the owner-drawn sample marked): JAWS's words
+    /// [obs, 665/s3], but for the Size list's name, which JAWS says and the other lists'
+    /// it does not.
+    #[test]
+    fn say_window_reads_a_font_dialog_as_jaws_does() {
+        const COMBOBOX: i32 = 50003;
+        const EDIT: i32 = 50004;
+        const LINK: i32 = 50005;
+        const LISTITEM: i32 = 50007;
+        const LIST: i32 = 50008;
+        const SCROLLBAR: i32 = 50014;
+        const TEXT: i32 = 50020;
+        const GROUP: i32 = 50026;
+        const PANE: i32 = 50033;
+        let with = |mut n: UiaNode, children: Vec<UiaNode>| {
+            n.children = children;
+            n
+        };
+        let valued = |control_type: i32, name: &str, value: &str| UiaNode {
+            value: Some(value.to_owned()),
+            ..node(control_type, name, false)
+        };
+        let combo = |label: &str, value: &str, items: &[&str], place: (i32, i32)| {
+            let item = |name: &&str| UiaNode {
+                is_selected: Some(*name == value),
+                ..node(LISTITEM, name, false)
+            };
+            let list = with(
+                node(LIST, label, false),
+                std::iter::once(with(
+                    node(SCROLLBAR, "Vertical", false),
+                    vec![node(50000, "Line down", false)],
+                ))
+                .chain(items.iter().map(item))
+                .collect(),
+            );
+            UiaNode {
+                position_in_set: Some(place.0),
+                size_of_set: Some(place.1),
+                ..with(
+                    valued(COMBOBOX, label, value),
+                    vec![list, valued(EDIT, label, value)],
+                )
+            }
+        };
+        let fonts = [
+            "Consolas",
+            "Constantia",
+            "Cooper",
+            "Copperplate Gothic",
+            "Corbel",
+            "Courier",
+            "Courier New",
+        ];
+        let script = UiaNode {
+            position_in_set: Some(1),
+            size_of_set: Some(7),
+            ..with(
+                valued(COMBOBOX, "Script:", "Western"),
+                vec![
+                    valued(TEXT, "Script:", "Western"),
+                    node(50000, "Open", false),
+                ],
+            )
+        };
+        let tree = with(
+            node(50032, "Font", false),
+            vec![
+                node(TEXT, "Font:", false),
+                combo("Font:", "Consolas", &fonts, (38, 187)),
+                node(TEXT, "Font style:", false),
+                combo(
+                    "Font style:",
+                    "Regular",
+                    &["Regular", "Italic", "Bold", "Bold Italic"],
+                    (1, 4),
+                ),
+                node(GROUP, "Sample", false),
+                UiaNode {
+                    owner_drawn: true,
+                    ..node(TEXT, "AaBbYyZz", false)
+                },
+                node(TEXT, "Script:", false),
+                script,
+                with(
+                    node(PANE, "Show more fonts", false),
+                    vec![node(LINK, "Show more fonts", false)],
+                ),
+                node(50000, "OK", false),
+            ],
+        );
+        let said = okur_core::native_focus::say_window("Font", &window_items(&tree)).render();
+        let words = |s: &str| s.split_whitespace().collect::<Vec<_>>().join(" ");
+        assert_eq!(
+            words(&said),
+            words(
+                "Font dialog\nFont: \nCombo box\nConsolas Consolas Constantia Cooper \
+                 Copperplate Gothic Corbel Courier Courier New\n38 of 187\n \u{1d} List box \
+                 \u{1e} \nConsolas\nFont:  \u{1d} edit combo \u{1e} \nConsolas\n38 of 187\n\
+                 Font style: \nCombo box\nRegular Regular Italic Bold Bold Italic\n1 of 4\n \
+                 \u{1d} List box \u{1e} \nRegular\nFont style:  \u{1d} edit combo \u{1e} \n\
+                 Regular\n1 of 4\nSample  \u{1d} group \u{1e} \nScript: \nCombo box\n\
+                 Western\n1 of 7\nShow more fonts  \u{1d} Link \u{1e} \nOK  \u{1d} Button \u{1e}"
+            )
+        );
     }
 
     /// A dialog's controls read for one focus are used again for the next while only the

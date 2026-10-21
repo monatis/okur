@@ -114,6 +114,13 @@ pub struct WindowItem {
     /// The group box the control sits in: Say Window names the control after it.
     #[serde(default)]
     pub group: Option<String>,
+    /// A combo box's place in its whole list, said after it and after its field: "38 of 187"
+    /// [obs, 665/s3].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub place: Option<(usize, usize)>,
+    /// A part of a combo box: its list ("List box") or its field ("edit combo").
+    #[serde(default)]
+    pub in_combo_box: bool,
 }
 
 /// Event representing OS-level keyboard focus changes across applications and controls.

@@ -2,6 +2,9 @@
 
 # An item's place among its siblings: "2 of 5".
 position = { $index } of { $total }
+# An empty list's size, where a place would be: a combo box with no items in Say Window,
+# "blank | 0 items" [obs, 544/s13].
+items-count = { $count } items
 
 # A progress bar's value, in percent.
 progress-percent = { $value }%

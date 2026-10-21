@@ -695,6 +695,8 @@ fn a_dialog_shown_after_its_focus_gives_say_window_its_controls() {
         checked: None,
         read_only: false,
         group: None,
+        place: None,
+        in_combo_box: false,
     }];
     speech.take();
     assert_eq!(

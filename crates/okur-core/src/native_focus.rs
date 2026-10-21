@@ -702,7 +702,54 @@ pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> Announceme
             ],
             None => vec![name_part(name)],
         };
+        // A Win32 combo box with its place: its label or group, "Combo box", its value with
+        // its list's shown items, its place; empty, "blank" and "0 items" [obs, 665/s3,
+        // 544/s13].
+        if let (Role::ComboBox, Some((index, total)), false) =
+            (&item.role, item.place, item.in_combo_box)
+        {
+            let head = Line::new(parts);
+            if !head.render().trim().is_empty() {
+                lines.push(head);
+            }
+            lines.push(Line::of(
+                PartKind::Message,
+                msg::role_combo_box_focus().as_str(),
+            ));
+            lines.push(Line::of(
+                PartKind::Value,
+                item.value
+                    .clone()
+                    .unwrap_or_else(|| msg::blank().to_string()),
+            ));
+            lines.push(Line::of(
+                PartKind::Position,
+                if total == 0 {
+                    msg::items_count(0).to_string()
+                } else {
+                    msg::position(index, total).to_string()
+                },
+            ));
+            continue;
+        }
         match item.role {
+            // A combo box's list: "List box", then its selected item [obs, 665/s3].
+            Role::List if item.in_combo_box => {
+                parts.push(role(msg::role_list_box().as_str()));
+            }
+            // A combo box's field: "Font: edit combo", its value and the box's place.
+            Role::Edit if item.in_combo_box => {
+                parts.push(role(msg::role_edit_combo().as_str()));
+                parts.extend(item.value.clone().map(|v| Part::new(PartKind::Value, v)));
+                lines.push(Line::new(parts));
+                if let Some((index, total)) = item.place.filter(|&(_, total)| total > 0) {
+                    lines.push(Line::of(
+                        PartKind::Position,
+                        msg::position(index, total).to_string(),
+                    ));
+                }
+                continue;
+            }
             // A group box: "Direction group" [obs, 540/s4].
             Role::Group => parts.push(role(msg::role_group().as_str())),
             Role::Text => {
@@ -1992,6 +2039,8 @@ To activate press Enter."
                 checked,
                 read_only: false,
                 group: group.map(str::to_owned),
+                place: None,
+                in_combo_box: false,
             };
         // Notepad's Find dialog [obs, 540/s4].
         let items = [
@@ -2022,6 +2071,8 @@ To activate press Enter."
             checked: None,
             read_only: false,
             group: None,
+            place: None,
+            in_combo_box: false,
         };
         let read_only = |name: &str, value: &str| WindowItem {
             read_only: true,
