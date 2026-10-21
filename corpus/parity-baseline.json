@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur -- parity --write-baseline",
-  "matched_steps": 5087,
-  "total_steps": 5283,
+  "matched_steps": 5101,
+  "total_steps": 5304,
   "accepted_divergences": 114,
   "errors": [],
   "steps": {
@@ -5385,6 +5385,21 @@
     "699-web-placemarker-list/s7": "match",
     "699-web-placemarker-list/s8": "match",
     "699-web-placemarker-list/s9": "match",
+    "701-web-placemarker-add-dialog/s1": "match",
+    "701-web-placemarker-add-dialog/s10": "match",
+    "701-web-placemarker-add-dialog/s11": "mismatch",
+    "701-web-placemarker-add-dialog/s12": "match",
+    "701-web-placemarker-add-dialog/s13": "mismatch",
+    "701-web-placemarker-add-dialog/s14": "match",
+    "701-web-placemarker-add-dialog/s15": "mismatch",
+    "701-web-placemarker-add-dialog/s2": "match",
+    "701-web-placemarker-add-dialog/s3": "match",
+    "701-web-placemarker-add-dialog/s4": "mismatch",
+    "701-web-placemarker-add-dialog/s5": "match",
+    "701-web-placemarker-add-dialog/s6": "match",
+    "701-web-placemarker-add-dialog/s7": "match",
+    "701-web-placemarker-add-dialog/s8": "match",
+    "701-web-placemarker-add-dialog/s9": "match",
     "702-web-placemarker-saved/s1": "match",
     "702-web-placemarker-saved/s10": "accepted divergence",
     "702-web-placemarker-saved/s11": "match",
@@ -5415,6 +5430,12 @@
     "702-web-placemarker-saved/s6": "match",
     "702-web-placemarker-saved/s7": "match",
     "702-web-placemarker-saved/s8": "accepted divergence",
-    "702-web-placemarker-saved/s9": "accepted divergence"
+    "702-web-placemarker-saved/s9": "accepted divergence",
+    "703-web-placemarker-none/s1": "match",
+    "703-web-placemarker-none/s2": "mismatch",
+    "703-web-placemarker-none/s3": "match",
+    "703-web-placemarker-none/s4": "mismatch",
+    "703-web-placemarker-none/s5": "match",
+    "703-web-placemarker-none/s6": "mismatch"
   }
 }
