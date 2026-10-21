@@ -402,7 +402,13 @@ function Read-SpeechHistoryOnce([long]$SpokenStart) {
     }
     $records = @()
     $spokenEnd = 'no-recorder'
-    if (Test-Path $SpokenLog) {
+    if ($script:QuietConfirmation -and (Test-Path $SpokenLog)) {
+        # JAWS speaks no confirmation: the step's speech is what the recorder heard since it
+        # began, once the audio is silent.
+        [void](Wait-Silence -OnsetMs 300 -QuietMs 500 -MaxMs 10000)
+        $records = @(Read-SpokenSince $SpokenStart)
+        $spokenEnd = 'silence'
+    } elseif (Test-Path $SpokenLog) {
         $spokenEnd = 'timeout'
         $deadline = [DateTime]::UtcNow.AddMilliseconds($ConfirmationWaitMs)
         $limit = [DateTime]::UtcNow.AddMilliseconds($ConfirmationMaxMs)
@@ -568,6 +574,14 @@ if ($Reader -eq 'jaws') {
     } elseif ($applied) {
         throw "JAWS runs with settings another scenario applied: put them back first (jaws-settings.ps1 -Restore, then restart JAWS)."
     }
+}
+# With less speech (DEFAULT.JCF SpeechMode=1: Speech On Demand, or speech muted) JAWS does not
+# speak its copy confirmation, which every step waited for in vain (700, round 138): a step's
+# speech is then read once the audio is silent.
+$script:QuietConfirmation = $false
+if ($Reader -eq 'jaws' -and $asks) {
+    $options = $scenario.jaws_settings.'DEFAULT.JCF'.Options
+    if ($options -and "$($options.SpeechMode)" -eq '1') { $script:QuietConfirmation = $true }
 }
 
 $expectedTitle = $null
