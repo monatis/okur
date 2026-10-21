@@ -1,0 +1,25 @@
+{
+  "id": "713-web-page-load-reading-off",
+  "name": "A short page loaded again (F5) with page load reading off (SayAllOnDocumentLoad=0), then Say Line and Down",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "HTML": {
+        "SayAllOnDocumentLoad": "0"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "F5", "settle_max_ms": 30000 },
+    { "id": "s2", "type": "key", "command": "Insert+Up" },
+    { "id": "s3", "type": "key", "command": "Down" }
+  ]
+}
