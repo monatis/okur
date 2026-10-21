@@ -446,6 +446,10 @@ command-select-a-frame = Lists the page's frames, to move to one.
 # NumPadSlash.
 command-left-mouse-click = Clicks the left mouse button on the element at the cursor.
 command-right-mouse-click = Clicks the right mouse button where the mouse is.
+# ControlLeftMouseClick, ShiftLeftMouseClick, AltLeftMouseClick (Numpad Slash with Control, Shift or Alt).
+command-modified-mouse-click = Clicks the left mouse button where the mouse is, with the key held.
+# MouseUp, MouseDown, MouseLeft, MouseRight (Alt+Shift with the arrows).
+command-move-mouse = Moves the mouse a little that way.
 # LeftMouseButtonLock (Insert+Numpad Slash).
 command-left-mouse-lock = Holds the left mouse button down where the mouse is, or lets it go.
 # RightMouseButtonLock (Insert+Numpad Star).

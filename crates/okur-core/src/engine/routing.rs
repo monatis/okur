@@ -164,6 +164,45 @@ impl ScreenReaderEngine {
         said
     }
 
+    /// Ctrl, Shift or Alt with Numpad Slash: a left click at the mouse, the key held by the
+    /// user, said as JAWS says it: "Control Mouse Click", "Shift Mouse Click", "alt Mouse
+    /// Click" [obs, 789/s2-s4].
+    pub(super) fn modified_left_mouse_click(
+        &mut self,
+        modifier: crate::command::ClickModifier,
+    ) -> Option<String> {
+        use crate::command::ClickModifier;
+        let said = match modifier {
+            ClickModifier::Control => msg::control_mouse_click(),
+            ClickModifier::Shift => msg::shift_mouse_click(),
+            ClickModifier::Alt => msg::alt_mouse_click(),
+        };
+        let said = self.say(said.to_string());
+        self.click_at_mouse(crate::actions::MouseClick::LeftSingle);
+        said
+    }
+
+    /// Alt+Shift with an arrow: the mouse a step that way, "Mouse Down" [obs, 789/s6-s9]. A
+    /// step is three pixels, as JAWS moved it on the reference machine.
+    pub(super) fn move_mouse_step(&mut self, step: crate::command::MouseStep) -> Option<String> {
+        use crate::command::MouseStep;
+        const STEP: i32 = 3;
+        let (dx, dy, said) = match step {
+            MouseStep::Up => (0, -STEP, msg::mouse_up()),
+            MouseStep::Down => (0, STEP, msg::mouse_down()),
+            MouseStep::Left => (-STEP, 0, msg::mouse_left()),
+            MouseStep::Right => (STEP, 0, msg::mouse_right()),
+        };
+        if let Some((x, y)) = self.mouse.or(self.pc_cursor_point()) {
+            let (x, y) = (x + dx, y + dy);
+            if let Some(actions) = &self.actions {
+                actions.move_mouse(x, y);
+            }
+            self.mouse = Some((x, y));
+        }
+        self.say(said.to_string())
+    }
+
     /// A click where the mouse is, or at the PC cursor when Okur has not placed it.
     fn click_at_mouse(&self, click: crate::actions::MouseClick) {
         if let (Some((x, y)), Some(actions)) =

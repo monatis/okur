@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6210,
+  "matched_steps": 6218,
   "total_steps": 6455,
   "accepted_divergences": 168,
   "errors": [],
@@ -6630,17 +6630,17 @@
     "788-desktop-mouse-button-locks-in-notepad/s7": "match",
     "788-desktop-mouse-button-locks-in-notepad/s8": "match",
     "789-desktop-mouse-clicks-and-moves-in-notepad/s1": "match",
-    "789-desktop-mouse-clicks-and-moves-in-notepad/s10": "mismatch",
+    "789-desktop-mouse-clicks-and-moves-in-notepad/s10": "match",
     "789-desktop-mouse-clicks-and-moves-in-notepad/s11": "match",
     "789-desktop-mouse-clicks-and-moves-in-notepad/s12": "match",
     "789-desktop-mouse-clicks-and-moves-in-notepad/s13": "match",
-    "789-desktop-mouse-clicks-and-moves-in-notepad/s2": "mismatch",
-    "789-desktop-mouse-clicks-and-moves-in-notepad/s3": "mismatch",
-    "789-desktop-mouse-clicks-and-moves-in-notepad/s4": "mismatch",
+    "789-desktop-mouse-clicks-and-moves-in-notepad/s2": "match",
+    "789-desktop-mouse-clicks-and-moves-in-notepad/s3": "match",
+    "789-desktop-mouse-clicks-and-moves-in-notepad/s4": "match",
     "789-desktop-mouse-clicks-and-moves-in-notepad/s5": "match",
-    "789-desktop-mouse-clicks-and-moves-in-notepad/s6": "mismatch",
-    "789-desktop-mouse-clicks-and-moves-in-notepad/s7": "mismatch",
-    "789-desktop-mouse-clicks-and-moves-in-notepad/s8": "mismatch",
-    "789-desktop-mouse-clicks-and-moves-in-notepad/s9": "mismatch"
+    "789-desktop-mouse-clicks-and-moves-in-notepad/s6": "match",
+    "789-desktop-mouse-clicks-and-moves-in-notepad/s7": "match",
+    "789-desktop-mouse-clicks-and-moves-in-notepad/s8": "match",
+    "789-desktop-mouse-clicks-and-moves-in-notepad/s9": "match"
   }
 }

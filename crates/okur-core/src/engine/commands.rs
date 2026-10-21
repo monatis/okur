@@ -67,6 +67,10 @@ impl ScreenReaderEngine {
             Command::LeftMouseClick => return self.left_mouse_click(),
             Command::RightMouseClick => return self.right_mouse_click(),
             Command::LeftMouseButtonLock => return self.mouse_button_lock(false),
+            Command::ModifiedLeftMouseClick(modifier) => {
+                return self.modified_left_mouse_click(modifier)
+            }
+            Command::MoveMouse(step) => return self.move_mouse_step(step),
             Command::RightMouseButtonLock => return self.mouse_button_lock(true),
             Command::RoutePcToOkur => return self.route_pc_to_okur(),
             Command::RestrictOkurCursor => return self.restrict_okur_cursor(),

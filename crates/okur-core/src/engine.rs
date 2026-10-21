@@ -764,7 +764,9 @@ impl ScreenReaderEngine {
                 | Command::LeftMouseClick
                 | Command::RightMouseClick
                 | Command::LeftMouseButtonLock
-                | Command::RightMouseButtonLock),
+                | Command::RightMouseButtonLock
+                | Command::ModifiedLeftMouseClick(_)
+                | Command::MoveMouse(_)),
             ) = crate::command::command_for(event)
             {
                 let in_page = self.app_mode == AppMode::VirtualBuffer;

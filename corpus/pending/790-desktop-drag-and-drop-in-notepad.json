@@ -1,0 +1,58 @@
+{
+  "id": "790-desktop-drag-and-drop-in-notepad",
+  "name": "Drag and drop in Notepad: Insert+NumpadMinus, Ctrl+Insert+NumpadSlash, Alt+Shift+Right three times, Ctrl+Insert+NumpadSlash, NumpadPlus (PC cursor), Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+NumpadMinus"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Ctrl+Insert+NumpadSlash"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Alt+Shift+Right"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Alt+Shift+Right"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Alt+Shift+Right"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Ctrl+Insert+NumpadSlash"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "NumpadPlus"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}

@@ -254,6 +254,12 @@ pub enum Command {
     /// Insert+Numpad Slash (LeftMouseButtonLock): the left button held down at the mouse, then
     /// let go.
     LeftMouseButtonLock,
+    /// Ctrl, Shift or Alt with Numpad Slash (ControlLeftMouseClick, ShiftLeftMouseClick,
+    /// AltLeftMouseClick): a left click at the mouse with that key held.
+    ModifiedLeftMouseClick(ClickModifier),
+    /// Alt+Shift with an arrow (MouseUp, MouseDown, MouseLeft, MouseRight): the mouse moved a
+    /// step that way.
+    MoveMouse(MouseStep),
     /// Insert+Numpad Star (RightMouseButtonLock): the right button, likewise.
     RightMouseButtonLock,
     /// Insert+Numpad Plus (RoutePCCursorToJAWS): the PC cursor, or the virtual one, to the
@@ -357,6 +363,23 @@ pub enum Command {
     // Okur itself.
     /// Insert+F4 (ShutDownJAWS): Okur exits, after its question when `confirm_exit` is on.
     ShutDown,
+}
+
+/// The key held for a modified left click.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum ClickModifier {
+    Control,
+    Shift,
+    Alt,
+}
+
+/// A direction the mouse moves by keys.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum MouseStep {
+    Up,
+    Down,
+    Left,
+    Right,
 }
 
 impl Command {
@@ -580,6 +603,13 @@ impl Command {
             "LeftMouseButton" | "NumpadSlash" => LeftMouseClick,
             "RightMouseButton" | "NumpadStar" => RightMouseClick,
             "LeftMouseButtonLock" => LeftMouseButtonLock,
+            "ControlLeftMouseClick" => ModifiedLeftMouseClick(ClickModifier::Control),
+            "ShiftLeftMouseClick" => ModifiedLeftMouseClick(ClickModifier::Shift),
+            "AltLeftMouseClick" => ModifiedLeftMouseClick(ClickModifier::Alt),
+            "MouseUp" => MoveMouse(MouseStep::Up),
+            "MouseDown" => MoveMouse(MouseStep::Down),
+            "MouseLeft" => MoveMouse(MouseStep::Left),
+            "MouseRight" => MoveMouse(MouseStep::Right),
             "RightMouseButtonLock" => RightMouseButtonLock,
             "RoutePCCursorToJAWS" => RoutePcToOkur,
             "WindowList" | "Insert+F10" => WindowList,
@@ -799,6 +829,8 @@ const OKUR_CTRL: Chord = ANY.insert(Yes).ctrl(Yes).shift(No).alt(No);
 const OKUR_SHIFT: Chord = ANY.insert(Yes).shift(Yes).ctrl(No).alt(No);
 /// Ctrl and Alt, with or without Shift.
 const CTRL_ALT: Chord = ANY.ctrl(Yes).alt(Yes);
+
+const ALT_SHIFT: Chord = ANY.alt(Yes).shift(Yes).ctrl(No).insert(No);
 /// Ctrl and the Okur key: the element lists.
 const CTRL_INSERT: Chord = ANY.ctrl(Yes).insert(Yes).alt(No).shift(No);
 /// Windows and Alt.
@@ -1037,6 +1069,29 @@ static BINDINGS: &[Binding] = &{
         // JAWSKey+NumPadStar=RightMouseButtonLock.
         bind(Key::NumpadSlash, OKUR, LeftMouseButtonLock),
         bind(Key::NumpadStar, OKUR, RightMouseButtonLock),
+        // Default.JKM: Control+NumPadSlash=ControlLeftMouseClick, Shift+NumPadSlash=
+        // ShiftLeftMouseClick, Alt+NumPadSlash=AltLeftMouseClick, Control+NumPadStar=
+        // RightMouseButton, Alt+Shift+the arrows=MouseUp, MouseDown, MouseLeft, MouseRight.
+        bind(
+            Key::NumpadSlash,
+            CTRL,
+            ModifiedLeftMouseClick(ClickModifier::Control),
+        ),
+        bind(
+            Key::NumpadSlash,
+            SHIFT,
+            ModifiedLeftMouseClick(ClickModifier::Shift),
+        ),
+        bind(
+            Key::NumpadSlash,
+            ANY.alt(Yes).ctrl(No).shift(No).insert(No),
+            ModifiedLeftMouseClick(ClickModifier::Alt),
+        ),
+        bind(Key::NumpadStar, CTRL, RightMouseClick),
+        bind(UpArrow, ALT_SHIFT, MoveMouse(MouseStep::Up)),
+        bind(DownArrow, ALT_SHIFT, MoveMouse(MouseStep::Down)),
+        bind(LeftArrow, ALT_SHIFT, MoveMouse(MouseStep::Left)),
+        bind(RightArrow, ALT_SHIFT, MoveMouse(MouseStep::Right)),
         bind(Key::F(10), OKUR, WindowList),
         bind(Key::F(11), OKUR, SystemTrayList),
         // Default.JKM: JAWSKey+F4=ShutDownJAWS; "Shut Down JAWS: INSERT+F4" (keystrokes).

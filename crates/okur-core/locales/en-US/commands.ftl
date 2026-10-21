@@ -207,6 +207,15 @@ left-button-locked = left button locked
 left-button-unlocked = Left button unlocked
 right-button-locked = right button locked
 right-button-unlocked = right button unlocked
+# Ctrl, Shift and Alt with Numpad Slash, with JAWS's capitals [obs, 789/s2-s4].
+control-mouse-click = Control Mouse Click
+shift-mouse-click = Shift Mouse Click
+alt-mouse-click = alt Mouse Click
+# Alt+Shift with the arrows [obs, 789/s6-s9].
+mouse-up = Mouse Up
+mouse-down = Mouse Down
+mouse-left = Mouse Left
+mouse-right = Mouse Right
 
 ## Say Default Button in a dialog box, and Say Current Control Hot Key (Shift+Numpad5) [obs, 537]
 
