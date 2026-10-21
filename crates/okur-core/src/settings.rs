@@ -341,6 +341,32 @@ impl Punctuation {
     }
 }
 
+/// How running text is given to the synthesizer: JAWS's Text Processing, `DEFAULT.JCF`'s
+/// Options `MixedCase`, `Numbers` and `SayDollars` [obs, 721-723 against 407].
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default)]
+pub struct TextProcessing {
+    /// A word is split where a capital follows a small letter ("get Element By Id"); off, it
+    /// is given whole, while letters and digits are still split ("System 32") [obs, 721].
+    pub mixed_case: bool,
+    /// Every number digit by digit ("4 2"), its point, comma and colon by name ("2 point 5",
+    /// "1 Comma 0 0 0", "1 0 Colon 3 0"), an ordinal whole ("1st") [obs, 722].
+    pub numbers_as_digits: bool,
+    /// Dollar and euro amounts go to the synthesizer as written ("$0.02", "€"), for it to say
+    /// [obs, 723].
+    pub say_dollars: bool,
+}
+
+impl Default for TextProcessing {
+    fn default() -> Self {
+        Self {
+            mixed_case: true,
+            numbers_as_digits: false,
+            say_dollars: false,
+        }
+    }
+}
+
 /// The voice Okur speaks with (JAWS: Voice Adjustment).
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(default)]
@@ -358,6 +384,8 @@ pub struct VoiceSettings {
     /// A capital read alone or spelled is said at a raised pitch: JAWS's Caps Indicate
     /// (`IndicateCaps` in `DEFAULT.JCF`'s Options, on by default) [obs, 408, 717].
     pub indicate_caps: bool,
+    /// How running text is given to the voice.
+    pub text: TextProcessing,
 }
 
 impl Default for VoiceSettings {
@@ -369,6 +397,7 @@ impl Default for VoiceSettings {
             volume: 100,
             punctuation: Punctuation::default(),
             indicate_caps: true,
+            text: TextProcessing::default(),
         }
     }
 }

@@ -295,7 +295,7 @@ fn carry_out(
         let indicate_caps = tts.indicate_caps;
         match request {
             Request::Marked(text, mark, interrupt) => {
-                let spoken = okur_core::pronounce::spoken(&text, tts.punctuation);
+                let spoken = okur_core::pronounce::spoken_with(&text, tts.punctuation, tts.text);
                 let _ = tts.engine.speak_marked(&spoken, mark, interrupt);
                 tracing::debug!(
                     mark,
@@ -312,7 +312,7 @@ fn carry_out(
                 // Long text (Say All) in parts, so that speech starts after the
                 // first part's pronunciation, not the whole text's.
                 for (i, part) in parts(&text).enumerate() {
-                    let spoken = okur_core::pronounce::spoken(part, tts.punctuation);
+                    let spoken = okur_core::pronounce::spoken_with(part, tts.punctuation, tts.text);
                     let _ = tts.engine.speak(&spoken, interrupt && i == 0);
                 }
             }

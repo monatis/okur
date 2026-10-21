@@ -7,7 +7,7 @@
 //! the synthesizer and for comparison with what JAWS sent its synthesizer (the speech
 //! recorder voice's log, `observation.spoken`).
 
-use crate::settings::Punctuation;
+use crate::settings::{Punctuation, TextProcessing};
 
 /// The name JAWS speaks for a character read on its own, when it names it.
 pub fn character_name(c: char) -> Option<&'static str> {
@@ -137,7 +137,18 @@ pub fn pitched(text: &str, pitch: i32) -> String {
 ///   after it one by one at All;
 /// - a time's colon, a percent after a number and an apostrophe inside a word stay.
 pub fn spoken(text: &str, level: Punctuation) -> String {
-    render(text, level, level == Punctuation::All)
+    spoken_with(text, level, TextProcessing::default())
+}
+
+/// [`spoken`] with Text Processing set otherwise than JAWS's defaults: mixed case left whole,
+/// numbers digit by digit, dollars and euros left to the synthesizer [obs, 721-723].
+pub fn spoken_with(text: &str, level: Punctuation, processing: TextProcessing) -> String {
+    render(
+        text,
+        level,
+        level == Punctuation::All || processing.numbers_as_digits,
+        processing,
+    )
 }
 
 /// Text for the synthesizer with every symbol named, whatever the level: a selection and a
@@ -145,15 +156,25 @@ pub fn spoken(text: &str, level: Punctuation) -> String {
 /// [obs, 213/s11]). Numbers stay as at the lower levels: "photo dot jpg 1.2 MB" after Ctrl+A
 /// [obs, 322/s16].
 pub fn spoken_symbols(text: &str) -> String {
-    render(text, Punctuation::All, false)
+    render(text, Punctuation::All, false, TextProcessing::default())
 }
 
 /// `spoken`'s work; `point_digits`: a decimal point is "point" and the digits after it are
 /// read one by one, as at All.
-fn render(text: &str, level: Punctuation, point_digits: bool) -> String {
-    let text = single_digits(&split_words(&respelled(&repeats_filtered(
-        &text.replace(['\u{1d}', '\u{1e}'], " "),
-    ))));
+fn render(
+    text: &str,
+    level: Punctuation,
+    point_digits: bool,
+    processing: TextProcessing,
+) -> String {
+    let digits = processing.numbers_as_digits;
+    let text = single_digits(
+        &split_words(
+            &respelled(&repeats_filtered(&text.replace(['\u{1d}', '\u{1e}'], " "))),
+            processing.mixed_case,
+        ),
+        digits,
+    );
     let chars: Vec<char> = text.chars().collect();
     let mut out = String::with_capacity(text.len() * 2);
     let word = |out: &mut String, name: &str| {
@@ -166,6 +187,11 @@ fn render(text: &str, level: Punctuation, point_digits: bool) -> String {
         let prev = i.checked_sub(1).and_then(|p| chars.get(p)).copied();
         let next = chars.get(i + 1).copied();
         i += 1;
+        // Dollars and euros left to the synthesizer [obs, 723/s23, s29].
+        if processing.say_dollars && matches!(c, '$' | '\u{20ac}') {
+            out.push(c);
+            continue;
+        }
         if let Some(name) = named_always(c) {
             word(&mut out, &name);
             continue;
@@ -204,6 +230,10 @@ fn render(text: &str, level: Punctuation, point_digits: bool) -> String {
             '.' if is_alphanumeric(prev) && is_alphanumeric(next) => dot(&mut out),
             '.' if next.is_some_and(char::is_alphabetic) => dot(&mut out),
             '%' if is_digit(prev) => out.push(c),
+            // Numbers digit by digit name the colon and the comma between digits, capitalized
+            // as JAWS gives them [obs, 722/s21, s22].
+            ':' if digits && is_digit(prev) && is_digit(next) => word(&mut out, "Colon"),
+            ',' if digits && is_digit(prev) && is_digit(next) => word(&mut out, "Comma"),
             ':' if is_digit(prev) && is_digit(next) => out.push(c),
             // A thousands separator is part of the number, never named: "1,000,000", "dollar
             // 1,250.50" [obs, 405/s14, s15; 407/s21].
@@ -308,7 +338,8 @@ fn respelled(text: &str) -> String {
 /// A word starts where a capital follows a small letter, at the last capital of a run of them
 /// followed by a small letter ("XMLHttpRequest" as "XML Http Request" [obs, 405/s1]), and where
 /// letters and digits meet, but for an ordinal's ending ("1st", "2nd", "3rd" [obs, 405/s7]).
-fn split_words(text: &str) -> String {
+/// With `mixed_case` off, only letters and digits are split [obs, 721/s1, s7].
+fn split_words(text: &str, mixed_case: bool) -> String {
     let chars: Vec<char> = text.chars().collect();
     let mut out = String::with_capacity(text.len() + 8);
     for (i, &c) in chars.iter().enumerate() {
@@ -319,8 +350,8 @@ fn split_words(text: &str) -> String {
             let run_ends =
                 p.is_uppercase() && c.is_uppercase() && next.is_some_and(char::is_lowercase);
             let ordinal = p.is_ascii_digit() && is_ordinal_ending(&chars, i);
-            if (p.is_lowercase() && c.is_uppercase())
-                || run_ends
+            if (mixed_case && p.is_lowercase() && c.is_uppercase())
+                || (mixed_case && run_ends)
                 || (p.is_alphabetic() && c.is_ascii_digit())
                 || (p.is_ascii_digit() && c.is_alphabetic() && !ordinal)
             {
@@ -344,8 +375,9 @@ fn is_ordinal_ending(chars: &[char], start: usize) -> bool {
     matches!(ending.as_str(), "st" | "nd" | "rd" | "th")
 }
 
-/// Numbers of five or more digits, and numbers with dashes, digit by digit.
-fn single_digits(text: &str) -> String {
+/// Numbers of five or more digits, and numbers with dashes, digit by digit; with `all`,
+/// every number but an ordinal ("1st" [obs, 722/s11]).
+fn single_digits(text: &str, all: bool) -> String {
     let chars: Vec<char> = text.chars().collect();
     let mut out = String::with_capacity(text.len() * 2);
     let mut i = 0;
@@ -365,7 +397,8 @@ fn single_digits(text: &str) -> String {
             i += 1;
         }
         let digits = number.chars().filter(char::is_ascii_digit).count();
-        if number.contains('-') || digits >= 5 {
+        let ordinal = is_ordinal_ending(&chars, i);
+        if number.contains('-') || digits >= 5 || (all && !ordinal) {
             let spaced: Vec<String> = number.chars().map(|d| d.to_string()).collect();
             out.push_str(&spaced.join(" "));
         } else {
@@ -670,6 +703,41 @@ mod tests {
         );
         assert_eq!(spoken_symbols("photo.jpg 1.2 MB"), "photo dot jpg 1.2 MB");
         assert_eq!(spoken_symbols("dog,"), "dog comma,");
+    }
+
+    /// Text Processing set otherwise than JAWS's defaults: mixed case whole, numbers digit by
+    /// digit, dollars and euros left to the synthesizer [obs, 721-723 against 407].
+    #[test]
+    fn text_processing_set_otherwise() {
+        let with = |text: &str, processing: TextProcessing| {
+            spoken_with(text, Punctuation::Most, processing)
+        };
+        let plain = TextProcessing::default();
+        assert_eq!(with("getElementById aB9", plain), "get Element By Id a B 9");
+        let whole = TextProcessing {
+            mixed_case: false,
+            ..plain
+        };
+        assert_eq!(
+            with("getElementById System32", whole),
+            "getElementById System 32"
+        );
+        let digits = TextProcessing {
+            numbers_as_digits: true,
+            ..plain
+        };
+        assert_eq!(with("42 2.5 1st", digits), "4 2 2 point 5 1st");
+        assert_eq!(
+            with("1,000,000 10:30", digits),
+            "1 Comma 0 0 0 Comma 0 0 0 1 0 Colon 3 0"
+        );
+        assert_eq!(with("$1,250.50", digits), "dollar 1 Comma 2 5 0 point 5 0");
+        let dollars = TextProcessing {
+            say_dollars: true,
+            ..plain
+        };
+        assert_eq!(with("$0.02 €", dollars), "$0.02 €");
+        assert_eq!(with("$0.02 €", plain), "dollar 0.02 euro sign");
     }
 
     #[test]

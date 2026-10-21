@@ -198,6 +198,12 @@ const fn default_jcf(section: &'static str, key: &'static str, decode: fn(&str) 
     }
 }
 
+/// A check box's kind: on or off.
+const CHECK: Kind = Kind::Check {
+    on: Literal::Bool(true),
+    off: Literal::Bool(false),
+};
+
 /// Every setting, in the order the settings dialog shows them within each group.
 pub static SETTINGS: &[SettingSpec] = &[
     SettingSpec {
@@ -244,6 +250,18 @@ pub static SETTINGS: &[SettingSpec] = &[
                 off: Literal::Bool(false),
             },
         )
+    },
+    SettingSpec {
+        jaws: default_jcf("Options", "MixedCase", |v| Value::Bool(v.trim() != "0")),
+        ..spec("voice.text.mixed_case", Group::Speech, None, CHECK)
+    },
+    SettingSpec {
+        jaws: default_jcf("Options", "Numbers", |v| Value::Bool(v.trim() == "1")),
+        ..spec("voice.text.numbers_as_digits", Group::Speech, None, CHECK)
+    },
+    SettingSpec {
+        jaws: default_jcf("Options", "SayDollars", |v| Value::Bool(v.trim() == "1")),
+        ..spec("voice.text.say_dollars", Group::Speech, None, CHECK)
     },
     // Full Speech or less speech, and less speech's kind (`SpeechMode`, `LessSpeechMode`;
     // 700 and 707 record them); Insert+Space, S and Shift+S change them for the session.

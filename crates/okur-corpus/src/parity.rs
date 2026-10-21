@@ -728,6 +728,8 @@ struct RecordingSpeech {
     unspoken: std::sync::Arc<std::sync::atomic::AtomicBool>,
     /// Capitals at the voice's pitch: Caps Indicate off in the engine's voice settings.
     plain_capitals: std::sync::Arc<std::sync::atomic::AtomicBool>,
+    /// The voice settings' Text Processing.
+    text: std::sync::Arc<std::sync::Mutex<okur_core::settings::TextProcessing>>,
 }
 
 fn append(log: &Log, text: String) {
@@ -768,7 +770,11 @@ impl RecordingSpeech {
         let spoken = if symbols {
             okur_core::pronounce::spoken_symbols(text)
         } else {
-            okur_core::pronounce::spoken(text, level)
+            okur_core::pronounce::spoken_with(
+                text,
+                level,
+                self.text.lock().map(|t| *t).unwrap_or_default(),
+            )
         };
         append(&self.spoken, spoken);
     }
@@ -818,6 +824,9 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
         }
         self.plain_capitals
             .store(!voice.indicate_caps, std::sync::atomic::Ordering::SeqCst);
+        if let Ok(mut text) = self.text.lock() {
+            *text = voice.text;
+        }
     }
 
     fn speak_character(&mut self, text: &str, _interrupt: bool) {

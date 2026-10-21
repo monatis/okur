@@ -149,6 +149,8 @@ pub struct TtsManager {
     punctuation: okur_core::settings::Punctuation,
     /// Capitals read alone or spelled at a raised pitch (the voice settings' Caps Indicate).
     pub(crate) indicate_caps: bool,
+    /// How running text is given to the voice (the voice settings' Text Processing).
+    pub(crate) text: okur_core::settings::TextProcessing,
     /// The voice settings last applied, so that a change applies only what differs.
     applied: Option<okur_core::settings::VoiceSettings>,
 }
@@ -163,6 +165,7 @@ impl TtsManager {
             speech_log: None,
             punctuation: okur_core::settings::Punctuation::default(),
             indicate_caps: true,
+            text: okur_core::settings::TextProcessing::default(),
             applied: None,
         })
     }
@@ -236,8 +239,10 @@ impl TtsManager {
         if let Some(log) = self.speech_log.as_mut() {
             log.record(SpeechLogKind::Speak, text, interrupt);
         }
-        self.engine
-            .speak(&okur_core::pronounce::spoken(text, level), interrupt)
+        self.engine.speak(
+            &okur_core::pronounce::spoken_with(text, level, self.text),
+            interrupt,
+        )
     }
 
     /// Immediately stops speech.
@@ -406,6 +411,7 @@ impl okur_core::speech::SpeechOutput for TtsManager {
     fn configure(&mut self, voice: &okur_core::settings::VoiceSettings) {
         self.punctuation = voice.punctuation;
         self.indicate_caps = voice.indicate_caps;
+        self.text = voice.text;
         let applied = self.applied.replace(voice.clone());
         if let Some(applied) =
             applied.filter(|a| a.synthesizer == voice.synthesizer && a.voice == voice.voice)
