@@ -48,8 +48,8 @@ Where to go from here:
 > Cursor, the lists of links, headings and other elements, tables, selecting and copying),
 > dialog boxes and menus, Notepad, File Explorer, Windows Settings, Windows Terminal, the
 > desktop, Alt+Tab and Windows search are read as JAWS reads them. It is not yet a
-> replacement for your screen reader: Microsoft Office, reading the screen with the Okur
-> cursor, and the keys that say or show the clipboard are among what is still missing (see
+> replacement for your screen reader: Microsoft Office and reading the screen with the Okur
+> cursor are among what is still missing (see
 > [Not yet](#not-yet)). Those everyday gaps on Windows are being closed first; macOS, whose
 > accessibility layer is in place, comes after them.
 >
@@ -170,6 +170,9 @@ in [accepted divergences](docs/references/accepted-divergences.md).
 - **The Virtual Viewer** (Insert+Alt+W) on screen as JAWS shows it, for windows, controls and
   consoles, Windows Terminal included; the Speech History (Insert+Space, then H; Ctrl+H
   copies it and Shift+H clears it).
+- **The clipboard keys**: Windows+Insert+X says the clipboard's text, Insert+Space, then C
+  shows it in a viewer, and Insert+Windows+C adds the selection to it; Ctrl+C or Ctrl+X after
+  that asks before overwriting it, as JAWS does.
 - **Windows' notifications** (toasts), and applications' own (as Teams sends them), said as
   they come, whatever is in front; Insert+Space, then Shift+N says the last one again,
   Insert+Space, then Ctrl+N stops and starts saying toasts, and Insert+Space, then N opens the
@@ -214,8 +217,6 @@ documentation describes and Okur lacks, most important first. Among them:
 - Microsoft Word, Outlook and Excel, not yet supported or checked;
 - reading with the Okur cursor where the screen has no text to give (images, applications that
   draw their own text);
-- the keys JAWS adds for the clipboard: saying it (Insert+Windows+X), viewing it and adding
-  to it (copying, cutting and pasting already work);
 - toasts Focus Assist hides;
 - the rest of what the verbosity levels change, as further recordings show it;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
