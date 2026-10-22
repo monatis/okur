@@ -365,6 +365,11 @@ the morning. This is how it was done; it needs fresh permission each time.
   trial's dialog closed, and that trial read it (763/s23, round 180). `run-scenario.ps1` now
   closes ResultsViewer and NotificationViewer before each trial
   (`lab_state_cleared.jaws_viewers_closed`).
+- **JAWS's mouse echo answers no mouse the harness moves.** `run-scenario.ps1`'s `mouse` step
+  (absolute SendInput moves, as a hand makes them) and JAWS's own Alt+Shift+arrow moves got no
+  echo, in Notepad or Chrome, by 6 to 360 pixels, after waits up to 2 s (791, 794-796); each
+  move only stopped speech. Mouse echo's speech cannot be recorded with the harness; its
+  layer and settings can (791, 792, 797).
 - **`opendesk exec` can hang past its `--timeout`.** A deploy waited ten minutes on its first
   remote call (2026-10-21); stopping the hung `opendesk.exe` let the script go on. List them
   with `Get-Process opendesk` when a lab command takes far longer than it should.

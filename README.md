@@ -57,19 +57,19 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `9b181c9` (2026-10-22).
+Every figure is tool output, rerun for this README at commit `823ec70` (2026-10-22).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **6197 of 6434** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **6064 of 6396** | `okur-lab parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **168** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **433, 1329** (1328 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1330 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **6267 of 6504** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **6133 of 6466** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **169** | `okur-lab parity` |
+| Recorded JAWS scenarios, trials | **439, 1347** (1346 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1335 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
-The 168 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
+The 169 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
 accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
 place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
 Okur says its help in its own words. Each one is listed, with the reason and who decided it,
@@ -150,7 +150,13 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   the other way, Insert+R for where the Okur cursor may go, and Alt+Delete for where the
   active cursor is. The Okur cursor reads a text field, a page as its screen shows it, or a
   dialog's rows, by line, word and character, with Page Up and Page Down to the window's top
-  and bottom. Numpad Slash and Numpad Star click the left and right mouse buttons.
+  and bottom.
+- **The mouse:** Numpad Slash and Numpad Star click the left and right buttons, with Ctrl,
+  Shift or Alt for a click with that key held; Insert+Numpad Slash and Star hold a button down
+  and let it go; Ctrl+Insert+Numpad Slash drags and drops; Alt+Shift and the arrows move the
+  mouse a little. Mouse echo says what the mouse rests on, by character, word, line or
+  paragraph, set in Okur Settings or with Insert+Space, E (O turns it on and off, C, W, L and P
+  choose the unit).
 - **Information keys:** the time and date (Insert+F12), the settings in use (Insert+Q), the
   application's version (Ctrl+Insert+V), and the colors of a page's text or a text field by the
   names JAWS gives them (Insert+5: "blue2 on white").
@@ -201,7 +207,7 @@ The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what 
 documentation describes and Okur lacks, most important first. Among them:
 - Microsoft Word, Outlook and Excel, not yet supported or checked;
 - reading with the Okur cursor where the screen has no text to give (images, applications that
-  draw their own text), the mouse following it as it moves, and the mouse button locks;
+  draw their own text), and the mouse following it as it moves;
 - the keys JAWS adds for the clipboard: saying it (Insert+Windows+X), viewing it and adding
   to it (copying, cutting and pasting already work);
 - Skim Reading's attribute and color rules, and the Word List's summary;
