@@ -1,0 +1,60 @@
+# Plan: everyday-use gaps, round 21 (2026-10-22)
+
+Follows [`../handoff/2026-10-22-everyday-gaps-round-21.md`](../handoff/2026-10-22-everyday-gaps-round-21.md).
+The owner's order stands: the README's "Not yet" list, in its order, and Okur's settings made
+as customizable as JAWS's
+([`../references/jaws-customization-map.md`](../references/jaws-customization-map.md)). Each item is
+found in JAWS's documentation, recorded on old-pc, then built. JAWS's accidents become accepted
+divergences. old-pc always has a round queued behind the running one. Okur's own words never
+use JAWS's name (AGENTS.md §1.5).
+
+The workflow, every stretch: this plan, then implementation, then proof with
+`okur-lab parity`, then a dated handoff and the next plan, with AGENTS.md pointing at them. A
+stretch is a few hours or about thirty commits, not more. A feature that draws a window or
+reads the screen live is also checked live on old-pc (`run-scenario.ps1 -Reader okur`, then
+`okur-lab live-parity`).
+
+## 0. old-pc
+
+- **820's traces**: the tracer recorded no UIA notification in rounds 247 to 249, though JAWS
+  spoke the fixture's every time. Find why with the experiment's trace and debug log
+  (`sr-harness\exp\uianotify`), fix the tracer, record 820 again, and import it; its replay
+  should then list "Upload finished: report.pdf powershell" in Okur's history.
+- Import round 250 (821, the edits page by character) and build what it shows.
+- Live: Okur reading a page with deleted, inserted and highlighted text and raised numbers
+  (819's keys, `-Reader okur`), since the live buffer is read from IA2 as the snapshots are.
+
+## 1. The README's next items
+
+- **Toasts Focus Assist hides**: how JAWS hears a toast that shows no banner (533). Research
+  first, without changing old-pc's notification settings (they are the owner's).
+- The clipboard keys (627, needs `okur-lab-keys` signed), the rest of verbosity.
+- Reading with the Okur cursor where the screen has no text to give, after the above.
+
+## 2. What this stretch's recordings left
+
+- Word reading said the last mark before a word (819); character reading over a mark is 821.
+- `<ins>` and `<mark>` in skim reading's attribute rules: none of JAWS's check boxes is for
+  them; leave as is unless a recording shows otherwise.
+- Superscript marks: JAWS's rule (a number of two or more characters right after a digit) is
+  from 817 and 818; a decimal or signed exponent other than "-6" is unrecorded.
+
+## 3. Okur's own dialogs, as JAWS's are read
+
+- After Disable in Manage Rules, JAWS's list reads the renamed row (787/s16); an empty list says
+  "List box" and its hint (787/s18).
+- JAWS's "Contains text" for the rule's unnamed text field and its "_Rules": judge as accidents.
+
+## 4. Unchanged
+
+- 748's opening and "dialog" plain on return; Start reading at on load.
+- Settings: the dialog's labels, capitals and line pauses in Say All, live regions and
+  indentation, Settings Center.
+- Say All progress in replay; 769/s3's byline.
+
+## 5. Owner
+
+- Import the development certificate on old-pc (`sr-harness\signing\`), so that
+  `okur-lab-keys` can be installed (517, 627).
+- Office on old-pc is not activated (518, 519, 521 wait for it).
+- Code signing for releases, when the owner chooses.
