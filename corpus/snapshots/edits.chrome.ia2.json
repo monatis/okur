@@ -1,0 +1,967 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Edits and Marks - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "155.0.8059.85",
+    "fixture_sha256": "3bab5ebf98cd834069ec7c5ddd49e44b302707220075d645b9cbedf6e93443f2",
+    "captured_at_unix_ms": 1792676932998,
+    "node_count": 26,
+    "capture_ms": 289
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Edits and Marks",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/edits.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "unique_id": -2916,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼￼￼￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        6
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "24pt",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "start": 1,
+        "end": 6,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1044,
+        "name": "Edits and marks",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -2893,
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "group_position": [
+          1,
+          0,
+          0
+        ],
+        "text": "Edits and marks",
+        "lines": [
+          [
+            0,
+            15
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 15,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Edits and marks",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -2901,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Edits and marks",
+            "lines": [
+              [
+                0,
+                15
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 15,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -2898,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "The price was ￼ ￼ dollars.",
+        "lines": [
+          [
+            0,
+            26
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 14,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          },
+          {
+            "start": 14,
+            "end": 15,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt",
+              "text-line-through-style": "solid"
+            }
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          },
+          {
+            "start": 16,
+            "end": 17,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt",
+              "text-underline-style": "solid"
+            }
+          },
+          {
+            "start": 17,
+            "end": 26,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "The price was ",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -2921,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "The price was ",
+            "lines": [
+              [
+                0,
+                14
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 14,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1071,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -2903,
+            "attributes": {
+              "display": "inline",
+              "tag": "del",
+              "text-align": "left"
+            },
+            "text": "twelve",
+            "lines": [
+              [
+                0,
+                6
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 6,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-line-through-style": "solid"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "twelve",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -2924,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "twelve",
+                "lines": [
+                  [
+                    0,
+                    6
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 6,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-line-through-style": "solid"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": " ",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -2923,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": " ",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1072,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -2907,
+            "attributes": {
+              "display": "inline",
+              "tag": "ins",
+              "text-align": "left"
+            },
+            "text": "ten",
+            "lines": [
+              [
+                0,
+                3
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 3,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "ten",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -2932,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "ten",
+                "lines": [
+                  [
+                    0,
+                    3
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 3,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": " dollars.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -2905,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": " dollars.",
+            "lines": [
+              [
+                0,
+                9
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 9,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -2918,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "￼",
+        "lines": [
+          [
+            0,
+            1
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt",
+              "text-underline-style": "solid"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1072,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -2911,
+            "attributes": {
+              "display": "inline",
+              "tag": "ins",
+              "text-align": "left"
+            },
+            "text": "A whole line inserted.",
+            "lines": [
+              [
+                0,
+                22
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 22,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "A whole line inserted.",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -2897,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "A whole line inserted.",
+                "lines": [
+                  [
+                    0,
+                    22
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 22,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -2908,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Search for ￼ found it.",
+        "lines": [
+          [
+            0,
+            22
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 11,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          },
+          {
+            "start": 11,
+            "end": 12,
+            "attributes": {
+              "background-color": "rgb(255,255,0)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          },
+          {
+            "start": 12,
+            "end": 22,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Search for ",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -2914,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Search for ",
+            "lines": [
+              [
+                0,
+                11
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 11,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1074,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -2895,
+            "attributes": {
+              "display": "inline",
+              "tag": "mark",
+              "text-align": "left"
+            },
+            "text": "library",
+            "lines": [
+              [
+                0,
+                7
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 7,
+                "attributes": {
+                  "background-color": "rgb(255,255,0)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "library",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -2922,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "library",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(255,255,0)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": " found it.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -2925,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": " found it.",
+            "lines": [
+              [
+                0,
+                10
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 10,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -2892,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "A mole holds 10￼ particles.",
+        "lines": [
+          [
+            0,
+            27
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 15,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          },
+          {
+            "start": 15,
+            "end": 16,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "10pt",
+              "text-position": "super"
+            }
+          },
+          {
+            "start": 16,
+            "end": 27,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "A mole holds 10",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -2896,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "A mole holds 10",
+            "lines": [
+              [
+                0,
+                15
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 15,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1065,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -2920,
+            "attributes": {
+              "display": "inline",
+              "tag": "sup",
+              "text-align": "left"
+            },
+            "text": "23",
+            "lines": [
+              [
+                0,
+                2
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "10pt",
+                  "text-position": "super"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "23",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -2902,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "23",
+                "lines": [
+                  [
+                    0,
+                    2
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "10pt",
+                      "text-position": "super"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": " particles.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -2900,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": " particles.",
+            "lines": [
+              [
+                0,
+                11
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 11,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -2919,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Another plain line at the end.",
+        "lines": [
+          [
+            0,
+            30
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 30,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Another plain line at the end.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -2915,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Another plain line at the end.",
+            "lines": [
+              [
+                0,
+                30
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 30,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
