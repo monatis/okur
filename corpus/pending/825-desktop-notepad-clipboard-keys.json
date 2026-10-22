@@ -1,6 +1,6 @@
 {
   "id": "825-desktop-notepad-clipboard-keys",
-  "name": "JAWS's clipboard keys in Notepad: a line copied, SayClipboard (Windows+JAWSKey+X, by script name: an injected Windows-key chord opens Windows' Win+X menu), View Clipboard Text (Insert+Space, C), Say Line in it and Escape (with UI Access, which closes JAWS's Clipboard Text window); the next line selected, AppendSelectedTextToClipboard (Insert+Windows+C, by name), SayClipboard and View Clipboard Text again; then a line copied with Ctrl+C, JAWS's Overwrite Clipboard question answered Yes (Y, with UI Access) and SayClipboard, so each trial ends with the clipboard as Ctrl+C leaves it",
+  "name": "JAWS's clipboard keys in Notepad: a line copied, SayClipboard (Windows+JAWSKey+X, by script name: an injected Windows-key chord opens Windows' Win+X menu), View Clipboard Text (Insert+Space, C), Say Line in it and Escape (with UI Access, which closes JAWS's Clipboard Text window); the next line selected, AppendSelectedTextToClipboard (Insert+Windows+C, by name), SayClipboard and View Clipboard Text again; then a line copied with Ctrl+C, JAWS's Overwrite Clipboard question answered Yes (Y, with UI Access) and SayClipboard, so each trial ends with the clipboard as Ctrl+C leaves it. No step reads JAWS's speech history, which the harness copies through the clipboard (round 256's SayClipboard read that copy): the speech recorder's text is kept",
   "category": "desktop",
   "version": "1.0.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
@@ -17,106 +17,126 @@
     {
       "id": "s1",
       "type": "key",
-      "command": "Shift+End"
+      "command": "Shift+End",
+      "history": false
     },
     {
       "id": "s2",
       "type": "key",
       "command": "Ctrl+C",
-      "capture_clipboard": true
+      "capture_clipboard": true,
+      "history": false
     },
     {
       "id": "s3",
       "type": "jaws_script",
-      "command": "SayClipboard"
+      "command": "SayClipboard",
+      "history": false
     },
     {
       "id": "s4",
       "type": "key",
-      "command": "Insert+Space"
+      "command": "Insert+Space",
+      "history": false
     },
     {
       "id": "s5",
       "type": "key",
       "command": "C",
-      "settle_max_ms": 15000
+      "settle_max_ms": 15000,
+      "history": false
     },
     {
       "id": "s6",
       "type": "key",
-      "command": "Insert+Up"
+      "command": "Insert+Up",
+      "history": false
     },
     {
       "id": "s7",
       "type": "key_ui_access",
-      "command": "Escape"
+      "command": "Escape",
+      "history": false
     },
     {
       "id": "s8",
       "type": "key",
-      "command": "Down"
+      "command": "Down",
+      "history": false
     },
     {
       "id": "s9",
       "type": "key",
-      "command": "Home"
+      "command": "Home",
+      "history": false
     },
     {
       "id": "s10",
       "type": "key",
-      "command": "Shift+End"
+      "command": "Shift+End",
+      "history": false
     },
     {
       "id": "s11",
       "type": "jaws_script",
       "command": "AppendSelectedTextToClipboard",
-      "capture_clipboard": true
+      "capture_clipboard": true,
+      "history": false
     },
     {
       "id": "s12",
       "type": "jaws_script",
-      "command": "SayClipboard"
+      "command": "SayClipboard",
+      "history": false
     },
     {
       "id": "s13",
       "type": "key",
-      "command": "Insert+Space"
+      "command": "Insert+Space",
+      "history": false
     },
     {
       "id": "s14",
       "type": "key",
       "command": "C",
-      "settle_max_ms": 15000
+      "settle_max_ms": 15000,
+      "history": false
     },
     {
       "id": "s15",
       "type": "key_ui_access",
-      "command": "Escape"
+      "command": "Escape",
+      "history": false
     },
     {
       "id": "s16",
       "type": "key",
-      "command": "Home"
+      "command": "Home",
+      "history": false
     },
     {
       "id": "s17",
       "type": "key",
-      "command": "Shift+End"
+      "command": "Shift+End",
+      "history": false
     },
     {
       "id": "s18",
       "type": "key",
-      "command": "Ctrl+C"
+      "command": "Ctrl+C",
+      "history": false
     },
     {
       "id": "s19",
       "type": "key_ui_access",
-      "command": "Y"
+      "command": "Y",
+      "history": false
     },
     {
       "id": "s20",
       "type": "jaws_script",
-      "command": "SayClipboard"
+      "command": "SayClipboard",
+      "history": false
     }
   ]
 }

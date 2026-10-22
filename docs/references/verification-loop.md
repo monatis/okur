@@ -293,6 +293,18 @@ the morning. This is how it was done; it needs fresh permission each time.
 
 - **Files.** Perl `s|...|...|` mangles files whose text contains `|`; use the Edit tool.
   `cargo fmt` can reformat a region between your read and your edit, so re-read it first.
+  A Windows path written through a `node -e` string loses its backslashes (`\P` is not an
+  escape): run-scenario's `okur-lab-keys` path read `C:Program FilesOkur Lab...` for weeks.
+- **The clipboard.** run-scenario reads JAWS's speech history through the clipboard after each
+  step and leaves the copy there, so a scenario about the clipboard marks its steps
+  `"history": false` (the recorder's text is kept): round 256's SayClipboard read the step
+  before's history, "Copied selection to clipboard" (825).
+- **Windows-key chords.** Windows takes an injected Windows-key chord (Windows+Insert+X opens
+  its Win+X menu), sent with UI Access too and in either order; JAWS's scripts for such keys
+  are called by name. `key_ui_access` keys reach JAWS's own windows (jfw.exe), its Results
+  Viewer (ResultsViewer.exe: View Clipboard Text) and Okur's (okur-ui.exe).
+- **A desktop fixture runs in powershell.exe**, so JAWS treats its window as PowerShell's;
+  for an application's own behavior use the application (Notepad: `desktop-notepad.ps1`).
 - **UIA.** Ask for the focused element once per event and read around that element: a second
   `GetFocusedElement` right after a window switch blocked for 7 s.
   - Never read a document's siblings or subtree on focus.
