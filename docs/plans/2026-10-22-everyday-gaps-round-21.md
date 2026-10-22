@@ -30,8 +30,9 @@ reads the screen live is also checked live on old-pc (`run-scenario.ps1 -Reader 
   old-pc), then a Chromium page's and a WPF window's notifications. Until then 820 waits,
   its JAWS evidence good (rounds 248, 249).
 - Round 250 (821, the edits page by character) is imported and built (`d4beaf5`).
-- Live: Okur reading a page with deleted, inserted and highlighted text and raised numbers
-  (819's keys, `-Reader okur`), since the live buffer is read from IA2 as the snapshots are.
+- Live run 251, Okur itself reading 819's keys on old-pc: `okur-lab live-parity` "Okur live:
+  24/24 steps match JAWS exactly; 0 accepted divergences not counted" and "Okur live, spoken:
+  24/24 steps send the synthesizer what JAWS sent its own".
 
 ## 1. The README's next items
 
