@@ -601,6 +601,9 @@ struct FocusKey {
     /// Tells apart controls of one role and name side by side: Windows Settings' "Night
     /// light" toggle switch and the "Night light" button next to it.
     element_class: Option<String>,
+    /// A row's further columns: the focus coming back to a row whose texts changed is said
+    /// again, "... Disabled | 1 of 1" after Disable [obs, 787/s16].
+    columns: Vec<String>,
 }
 
 impl FocusKey {
@@ -612,6 +615,7 @@ impl FocusKey {
             item_count: focus.item_count,
             container: ContainerKey::of(focus),
             element_class: focus.platform.element_class.clone(),
+            columns: focus.columns.clone(),
         }
     }
 }
@@ -1575,6 +1579,23 @@ mod tests {
         );
         assert!(m.end());
         assert!(!m.is_active());
+    }
+
+    /// A row the focus comes back to is said again when its texts changed, not as a repeat.
+    #[test]
+    fn a_row_whose_texts_changed_is_said_again() {
+        let row = |state: &str| {
+            let mut focus = FocusEvent::new(Role::ListItem).with_name("Okur lab rule");
+            focus.columns = vec!["Mute".to_owned(), state.to_owned()];
+            focus.item_index = Some(1);
+            focus.item_count = Some(1);
+            focus
+        };
+        let mut native = NativeFocus::default();
+        assert!(native.focus(&row("Enabled")).is_some());
+        assert!(native.focus(&row("Enabled")).is_none(), "a repeat");
+        // Disable gives the list its focus back with the row renamed [obs, 787/s16].
+        assert!(native.focus(&row("Disabled")).is_some());
     }
 
     /// Windows Settings' Display page with Tab, JAWS on the dev box (2026-10-16): the groups
