@@ -54,7 +54,9 @@ reads the screen live is also checked live on old-pc (`run-scenario.ps1 -Reader 
 
 - Done: the renamed row after Disable (`522d67c`, 787/s16), an empty list's "List box" and hint
   (`629d819`, 787/s18), and JAWS's "Rules _Rules" as an accepted phrase.
-- JAWS's "Contains text" for the rule's unnamed text field and its "_Rules": judge as accidents.
+- JAWS's "edit | Contains text" for the rule's unnamed text field (775/s7, 787/s12, 798/s5,
+  801/s5, 802/s5): JAWS's field is a multi-line WPF text box, whose text JAWS does not read on
+  arrival; decide whether Okur's own field should be one too, or the difference accepted.
 
 ## 4. Unchanged
 
