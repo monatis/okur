@@ -6430,13 +6430,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "805-web-skim-read-by-text-color",
+      "fixture": "colors.html",
+      "evidence": {
+        "sha256": "b936dcc968e6b2bb33f7f13b44e903e5203f3a8e54b44b7e8e9c671f9b0eedb5",
+        "capture_script_sha256": "4e9cdf8a1e7122d71e8500cfc5c79a70fe852ea794bd6e4e59bb1454b2853c6e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 1,
+        "successful_trials": 1,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 446,
-    "scenarios_with_evidence": 446,
-    "total_trials": 1360,
-    "successful_trials": 1354,
-    "deterministic_scenarios": 290
+    "scenarios": 447,
+    "scenarios_with_evidence": 447,
+    "total_trials": 1361,
+    "successful_trials": 1355,
+    "deterministic_scenarios": 291
   }
 }
