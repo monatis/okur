@@ -1,0 +1,98 @@
+{
+  "id": "792-desktop-mouse-echo-units-in-notepad",
+  "name": "Mouse echo units in Notepad: Insert+Space, E, then C, W, P, L (character, word, paragraph, back to line), and Escape leaving the layer",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "C"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "W"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "P"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "L"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}
