@@ -568,6 +568,16 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
             lines.push(Line::of(PartKind::Hint, msg::hint_move_to_items_arrows()).on_arrival());
             lines.extend(rename_hint(focus).map(Line::on_arrival));
         }
+        // A list box with the focus itself, as one holding no item to give it to has it: "Rules
+        // List box | To move to an item press the Arrow keys." [obs, 787/s18, 798/s20]. Its
+        // place among the dialog's controls is not said.
+        Role::List => {
+            lines.push(Line::new(vec![
+                name_part(name),
+                role(msg::role_list_box().as_str()),
+            ]));
+            lines.push(Line::of(PartKind::Hint, msg::hint_move_to_an_item_arrows()).on_arrival());
+        }
         // A window taking focus is announced by its title alone (the window change).
         Role::Window => {}
         _ => {

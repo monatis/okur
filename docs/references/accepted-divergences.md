@@ -674,6 +674,19 @@ A step can be in more than one entry; all of its entries apply.
   for 10²³.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-22.
 
+### JAWS says Manage Rules' label twice, its underscore and all
+
+- Steps: `787-desktop-notification-rule-made-managed-deleted/s8`,
+  `787-desktop-notification-rule-made-managed-deleted/s10`,
+  `787-desktop-notification-rule-made-managed-deleted/s15`,
+  `787-desktop-notification-rule-made-managed-deleted/s18`,
+  `798-desktop-notification-rule-shorten/s18`, `798-desktop-notification-rule-shorten/s20`.
+- Difference: the phrase "_Rules" and the "Rules" after it. Opening Manage Notification Rules,
+  JAWS says "Rules _Rules", then "Rules List box": the list's label as the WPF window holds it,
+  the access key's underscore in it, before the list by its name. Okur says "Rules List box".
+- Why: the underscore is markup for the access key, not text, and the name is said once.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-22.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row

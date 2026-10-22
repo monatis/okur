@@ -180,6 +180,19 @@ divergences! {
      list is \"... List\": a typo in JAWS's text, not a name to copy.",
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
+    Difference::JawsAlsoSays("_Rules\nRules") => [
+        "787-desktop-notification-rule-made-managed-deleted/s8",
+        "787-desktop-notification-rule-made-managed-deleted/s10",
+        "787-desktop-notification-rule-made-managed-deleted/s15",
+        "787-desktop-notification-rule-made-managed-deleted/s18",
+        "798-desktop-notification-rule-shorten/s18",
+        "798-desktop-notification-rule-shorten/s20",
+    ],
+    "Manage Notification Rules says its list's label twice, \"Rules _Rules\", then \"Rules List \
+     box\": the label's text as WPF holds it, its access key's underscore and all, before the \
+     list. Okur says the list by its name once.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-22";
+
     Difference::JawsAlsoSays("Space run at column 12") => ["614-desktop-text-analysis-rules/s23"],
     "JAWS's text analysis names a run of spaces one column past the end of \"Hello!World\", \
      which has no space at all; it names none past the end of the other fourteen lines, \
