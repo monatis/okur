@@ -57,15 +57,15 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `823ec70` (2026-10-22).
+Every figure is tool output, rerun for this README at commit `c94c504` (2026-10-22).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **6267 of 6504** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **6133 of 6466** | `okur-lab parity` |
+| Steps matching JAWS's speech history, word for word | **6347 of 6587** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **6210 of 6549** | `okur-lab parity` |
 | Steps left out on purpose (accepted divergences, each a written decision) | **169** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **439, 1347** (1346 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1335 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
+| Recorded JAWS scenarios, trials | **445, 1359** (1353 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1347 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
@@ -86,9 +86,9 @@ in [accepted divergences](docs/references/accepted-divergences.md).
     PageDown; Say All by line, sentence or paragraph (Say All Reads, in Okur Settings), where
     Right and Left skip and go back by that unit, PageUp and PageDown change the rate, and the
     cursor stays where you stopped it; skim reading (Ctrl+Insert+Down), each paragraph by its
-    first line or its first sentence, or the lines, sentences or paragraphs a text rule finds,
-    as chosen in Skim Reading (Ctrl+Shift+Insert+Down), whose Create Summary lists them, each a
-    link to its place;
+    first line or its first sentence, the lines, sentences or paragraphs a text rule finds, or
+    the lines with bold, italic or underlined text, as chosen in Skim Reading
+    (Ctrl+Shift+Insert+Down), whose Create Summary lists them, each a link to its place;
   - the Word List (Ctrl+Insert+W): the page's words, most used first, and W and Shift+W to the
     next and prior line with the word chosen;
   - quick navigation keys: headings and their levels, links, form fields, edits, buttons,
@@ -150,7 +150,7 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   the other way, Insert+R for where the Okur cursor may go, and Alt+Delete for where the
   active cursor is. The Okur cursor reads a text field, a page as its screen shows it, or a
   dialog's rows, by line, word and character, with Page Up and Page Down to the window's top
-  and bottom.
+  and bottom; in a text field or on a page, the mouse goes with it.
 - **The mouse:** Numpad Slash and Numpad Star click the left and right buttons, with Ctrl,
   Shift or Alt for a click with that key held; Insert+Numpad Slash and Star hold a button down
   and let it go; Ctrl+Insert+Numpad Slash drags and drops; Alt+Shift and the arrows move the
@@ -169,7 +169,8 @@ in [accepted divergences](docs/references/accepted-divergences.md).
 - **Windows' notifications** (toasts) said as they come, whatever is in front; Insert+Space,
   then Shift+N says the last one again, Insert+Space, then Ctrl+N stops and starts saying them,
   and Insert+Space, then N opens the Notification History, with the rules that mute a
-  notification or leave it out of the history (Create Rule..., Manage Rules...).
+  notification, say a shorter text in its place, or leave it out of the history (Create
+  Rule..., Manage Rules...).
 - **Okur's own dialogs** are real Windows dialogs: the lists above, Okur Find and the Window
   List, with the same controls and labels as JAWS's, and Okur Settings (Insert+6 or Insert+V),
   whose changes are kept for all applications, the application in front or the page's site.
@@ -207,11 +208,12 @@ The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what 
 documentation describes and Okur lacks, most important first. Among them:
 - Microsoft Word, Outlook and Excel, not yet supported or checked;
 - reading with the Okur cursor where the screen has no text to give (images, applications that
-  draw their own text), and the mouse following it as it moves;
+  draw their own text);
 - the keys JAWS adds for the clipboard: saying it (Insert+Windows+X), viewing it and adding
   to it (copying, cutting and pasting already work);
-- Skim Reading's attribute and color rules, and the Word List's summary;
-- notification rules that shorten a notification or play a sound, toasts Focus Assist hides,
+- Skim Reading's color rules and the attributes other than bold, italic and underline, and the
+  Word List's summary;
+- notification rules that play a sound, toasts Focus Assist hides,
   and applications' own notifications in the history;
 - the rest of what the verbosity levels change, as further recordings show it;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
