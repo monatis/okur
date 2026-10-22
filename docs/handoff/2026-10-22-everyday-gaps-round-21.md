@@ -106,8 +106,11 @@ spoke, so its replay could not show Okur's reading of it. Experiments after this
 first version (`okur-lab probe-notifications`, `b1dea4e`) found that no UI Automation
 registration in a plain process hears the fixture's notifications on old-pc, though JAWS speaks
 them; the plan of round 21 says what to try next. Round 250 (821, the edits page by character)
-is imported, and Okur says the marks by character too (`d4beaf5`, 821 43/43). Live run 251 has
-Okur itself read 819's keys on old-pc.
+is imported, and Okur says the marks by character too (`d4beaf5`, 821 43/43). Live run 251,
+Okur itself reading 819's keys on old-pc: `okur-lab live-parity` "Okur live: 24/24 steps match
+JAWS exactly". Later still: 822 and 823 (819 at Intermediate and Advanced verbosity, the marks
+unchanged) imported; 787/s16 and s18 fixed (`522d67c`, `629d819`); 820 imported with its
+replay's gap (`5994b30`).
 
 ## Not done, and why
 

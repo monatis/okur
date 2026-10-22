@@ -27,8 +27,9 @@ reads the screen live is also checked live on old-pc (`run-scenario.ps1 -Reader 
   window's process fired no WinEvent in UI Automation's range (0x4E00-0x4EFF), only a state
   and a name change. How JAWS hears WinForms' notification is open: test whether UI Access
   matters (JAWS has it; `okur-lab-keys` has it once the development certificate is on
-  old-pc), then a Chromium page's and a WPF window's notifications. Until then 820 waits,
-  its JAWS evidence good (rounds 248, 249).
+  old-pc), then a Chromium page's. A WPF window's (.NET 4.8's `RaiseNotificationEvent`)
+  reached neither the probe nor JAWS. 820 is imported (`5994b30`, round 249); its replay
+  differs at s1, s5 and s8 until the tracer hears these notifications.
 - Round 250 (821, the edits page by character) is imported and built (`d4beaf5`).
 - Live run 251, Okur itself reading 819's keys on old-pc: `okur-lab live-parity` "Okur live:
   24/24 steps match JAWS exactly; 0 accepted divergences not counted" and "Okur live, spoken:
@@ -51,8 +52,8 @@ reads the screen live is also checked live on old-pc (`run-scenario.ps1 -Reader 
 
 ## 3. Okur's own dialogs, as JAWS's are read
 
-- After Disable in Manage Rules, JAWS's list reads the renamed row (787/s16); an empty list says
-  "List box" and its hint (787/s18).
+- Done: the renamed row after Disable (`522d67c`, 787/s16), an empty list's "List box" and hint
+  (`629d819`, 787/s18), and JAWS's "Rules _Rules" as an accepted phrase.
 - JAWS's "Contains text" for the rule's unnamed text field and its "_Rules": judge as accidents.
 
 ## 4. Unchanged
