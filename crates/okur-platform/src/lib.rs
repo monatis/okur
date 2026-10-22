@@ -13,6 +13,7 @@ pub mod ia2_snapshot;
 pub mod instance;
 #[cfg(windows)]
 pub mod lowered_process;
+pub mod mouse_point;
 pub mod privacy;
 pub mod process;
 pub mod registry;

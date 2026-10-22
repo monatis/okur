@@ -111,6 +111,9 @@ mod windows_actions {
         SwitchTo(u64),
         /// The notification area's icons, answered even when there are none.
         ListTray,
+        /// What the mouse points to at a point of the screen (mouse echo), answered when
+        /// something is there.
+        Point(i32, i32),
     }
 
     /// The virtual key of a key the screen reader sends for a reading command.
@@ -298,6 +301,24 @@ mod windows_actions {
                                 let _ = events.send(AccessibilityEvent::TopWindows(windows));
                             }
                             Request::SwitchTo(id) => crate::top_windows::switch_to(id),
+                            Request::Point(x, y) => {
+                                let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
+                                else {
+                                    continue;
+                                };
+                                let started = Instant::now();
+                                let Some((chain, texts)) = crate::mouse_point::read(uia, x, y)
+                                else {
+                                    continue;
+                                };
+                                tracing::debug!(
+                                    ms = started.elapsed().as_millis(),
+                                    "mouse point read"
+                                );
+                                let point = crate::event_trace::TracePoint { at: [x, y], texts };
+                                let _ = events
+                                    .send(crate::event_trace::mouse_point_event(&chain, &point));
+                            }
                             Request::ListTray => {
                                 let Some(events) = events.as_ref() else {
                                     tracing::warn!("tray list impossible: no event channel");
@@ -500,6 +521,10 @@ mod windows_actions {
 
         fn list_tray_icons(&self) -> bool {
             self.send(Request::ListTray)
+        }
+
+        fn read_at_point(&self, x: i32, y: i32) -> bool {
+            self.send(Request::Point(x, y))
         }
 
         /// On a thread of its own, once Okur's dialog has had time to close: a click while it

@@ -80,6 +80,13 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Reads what the mouse points to at `x`, `y` in screen pixels, answered with
+    /// [`crate::AccessibilityEvent::MousePoint`] (mouse echo). False when unsupported.
+    fn read_at_point(&self, x: i32, y: i32) -> bool {
+        let _ = (x, y);
+        false
+    }
+
     /// Drags with the left button from `from` to `to`, in screen pixels (drag and drop).
     /// False when unsupported.
     fn drag_mouse(&self, from: (i32, i32), to: (i32, i32)) -> bool {

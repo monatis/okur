@@ -11,6 +11,43 @@ pub enum Politeness {
     Assertive,
 }
 
+/// A control's text at a point of the screen by unit, as the control gives it (UI
+/// Automation's text range at the point, expanded): what mouse echo says, as its unit chooses.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct UnitTexts {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub character: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub word: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub line: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub paragraph: Option<String>,
+}
+
+impl UnitTexts {
+    /// The text of `unit`.
+    pub fn of(&self, unit: crate::settings::MouseEchoUnit) -> Option<&str> {
+        use crate::settings::MouseEchoUnit;
+        match unit {
+            MouseEchoUnit::Character => self.character.as_deref(),
+            MouseEchoUnit::Word => self.word.as_deref(),
+            MouseEchoUnit::Line => self.line.as_deref(),
+            MouseEchoUnit::Paragraph => self.paragraph.as_deref(),
+        }
+    }
+}
+
+/// What the mouse points to, at `x`, `y` in screen pixels: the control there, as a focus
+/// on it would be described, and its text there by unit.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct MousePoint {
+    pub x: i32,
+    pub y: i32,
+    pub control: Option<FocusEvent>,
+    pub texts: UnitTexts,
+}
+
 /// The focused text field's text, caret and selection, as read through the platform.
 /// Offsets are in characters.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -594,6 +631,9 @@ pub enum AccessibilityEvent {
         x: i32,
         y: i32,
     },
+    /// What the mouse points to where it came to rest: read live when the engine asks
+    /// ([`crate::actions::ApplicationActions::read_at_point`]), traced where the mouse rested.
+    MousePoint(Box<MousePoint>),
     /// A Windows notification's banner as it shows (a toast), by the name the shell gives it:
     /// "New notification from Windows PowerShell, SR Fixture, Build finished in 12 seconds. 1
     /// of 1", and its sender, "Windows PowerShell" [obs, 770/s1].

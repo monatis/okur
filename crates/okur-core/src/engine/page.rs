@@ -831,6 +831,7 @@ impl ScreenReaderEngine {
     /// event supersedes it (a closed popup menu, unless focus moved on).
     pub fn on_idle(&mut self) -> Option<String> {
         self.apply_pending_page();
+        self.mouse_echo_idle();
         let menu = self.menus.idle();
         if let Some(speech) = &menu {
             self.speech.speak(speech, true);

@@ -215,6 +215,18 @@ pub struct TraceEvent {
     /// the JAWS cursor follows (Alt+Delete, "JAWS Cursor active | 1834, 235" [obs, 516/s2]).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub mouse: Option<[i32; 2]>,
+    /// For a `mouse_point`, traced where the mouse came to rest: the point and the text there
+    /// by unit; the element there and its ancestors are the `focus_chain` (mouse echo).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub point: Option<TracePoint>,
+}
+
+/// Where the mouse came to rest and the text there by unit ([`crate::mouse_point`]).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct TracePoint {
+    pub at: [i32; 2],
+    #[serde(default)]
+    pub texts: okur_core::UnitTexts,
 }
 
 /// A UIA notification (`UiaRaiseNotificationEvent`): Windows Settings' search box says
@@ -1419,12 +1431,26 @@ const SHELL_ITEM_TYPE: &str = "System.ItemTypeText";
 /// The Windows Shell property of an item's size ("1 KB"), likewise.
 const SHELL_ITEM_SIZE: &str = "System.Size";
 
+/// What the mouse points to, as the engine takes it: the control there described as a focus on
+/// it would be, and its text there by unit. Shared by the converter and the live worker.
+pub fn mouse_point_event(chain: &[UiaNode], point: &TracePoint) -> okur_core::AccessibilityEvent {
+    okur_core::AccessibilityEvent::MousePoint(Box::new(okur_core::MousePoint {
+        x: point.at[0],
+        y: point.at[1],
+        control: focus_event_from_chain(chain, None, None),
+        texts: point.texts.clone(),
+    }))
+}
+
 /// How long the same UIA notification again is not said, in milliseconds.
 const NOTIFICATION_REPEAT_MS: u128 = 2000;
 
 impl EventConverter {
     /// The engine events for one captured event, in order (usually one, or none).
     pub fn convert(&mut self, event: &TraceEvent) -> Vec<okur_core::AccessibilityEvent> {
+        if let Some(point) = &event.point {
+            return vec![mouse_point_event(&event.focus_chain, point)];
+        }
         if let Some([x, y]) = event.mouse {
             return vec![okur_core::AccessibilityEvent::MouseMoved { x, y }];
         }
@@ -2030,7 +2056,7 @@ fn keeps_dialog_read(event: &str, push_button: bool) -> bool {
 mod capture {
     use super::{
         event_name, in_dialog_box, keeps_dialog_read, reports_position, TraceEvent, TraceHeader,
-        TraceObject, TRACE_FORMAT_VERSION, UIA_FOCUS_WINDOWS, UIA_SELECTION_PROCESSES,
+        TraceObject, TracePoint, TRACE_FORMAT_VERSION, UIA_FOCUS_WINDOWS, UIA_SELECTION_PROCESSES,
     };
     use crate::uia_snapshot::capture::{
         automation, column_headers_of, focus_chain_from, focus_context_of, focus_subtree_of,
@@ -2122,6 +2148,8 @@ mod capture {
         record_page_changes: bool,
         /// Where the mouse pointer was when last looked at.
         last_mouse: Option<[i32; 2]>,
+        /// When the mouse last moved, until what it points to is traced where it rests.
+        mouse_moved_at: Option<std::time::Instant>,
         /// The controls of the dialog in front as last read, for the next focus in it.
         dialog_read: Option<DialogRead>,
     }
@@ -2810,6 +2838,7 @@ mod capture {
                     dialog_tree: None,
                     notification: None,
                     mouse: None,
+                    point: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -3226,6 +3255,7 @@ mod capture {
                     dialog_tree: None,
                     notification: Some(notification),
                     mouse: None,
+                    point: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -3233,8 +3263,13 @@ mod capture {
         }
     }
 
+    /// How long the mouse stays where it went before a trace reads what it points to.
+    const MOUSE_REST: std::time::Duration = std::time::Duration::from_millis(100);
+
     /// Records where the mouse pointer went, when it moved since last looked at: the JAWS
-    /// cursor follows it, and JAWS's routing moves it. Windows raises no event for that.
+    /// cursor follows it, and JAWS's routing moves it. Windows raises no event for that. A
+    /// trace (not the live screen reader, which asks when it wants) also records what the
+    /// mouse points to once it rests there, a `mouse_point`, for mouse echo in replay.
     fn record_mouse_move() {
         use windows::Win32::Foundation::POINT;
         use windows::Win32::UI::WindowsAndMessaging::GetCursorPos;
@@ -3248,50 +3283,74 @@ mod capture {
             let mut state = state.borrow_mut();
             let Some(state) = state.as_mut() else { return };
             if state.last_mouse == Some(at) {
+                let rested = state
+                    .mouse_moved_at
+                    .is_some_and(|moved| moved.elapsed() >= MOUSE_REST);
+                if !state.live && rested {
+                    state.mouse_moved_at = None;
+                    let read = state
+                        .uia
+                        .as_ref()
+                        .and_then(|uia| crate::mouse_point::read(uia, at[0], at[1]));
+                    if let Some((chain, texts)) = read {
+                        let mut event = mouse_event(None);
+                        event.event = "mouse_point".to_owned();
+                        event.focus_chain = chain;
+                        event.point = Some(TracePoint { at, texts });
+                        (state.sink)(event);
+                        state.count += 1;
+                    }
+                }
                 return;
             }
             state.last_mouse = Some(at);
-            let event = TraceEvent {
-                t_ms: now_ms(),
-                event: "mouse_move".to_owned(),
-                win_event: 0,
-                hwnd: 0,
-                id_object: 0,
-                id_child: 0,
-                window_class: None,
-                window_style: None,
-                spin_box: false,
-                focus_window_class: None,
-                menu_bar: Vec::new(),
-                status_bar: Vec::new(),
-                window_title: None,
-                process: None,
-                process_product: None,
-                process_version: None,
-                object: None,
-                focus_chain: Vec::new(),
-                focus_siblings: Vec::new(),
-                focus_subtree: None,
-                list_position: None,
-                column_headers: Vec::new(),
-                text_context: None,
-                region: None,
-                page: None,
-                top_window_title: None,
-                top_window_class: None,
-                virtual_desktop: None,
-                dialog_lines: Vec::new(),
-                dialog_text: Vec::new(),
-                dialog_page: None,
-                group_box: None,
-                default_button: None,
-                dialog_tree: None,
-                notification: None,
-                mouse: Some(at),
-            };
-            (state.sink)(event);
+            state.mouse_moved_at = Some(std::time::Instant::now());
+            (state.sink)(mouse_event(Some(at)));
             state.count += 1;
         });
+    }
+
+    /// A `mouse_move` to `at`, with nothing else read.
+    fn mouse_event(at: Option<[i32; 2]>) -> TraceEvent {
+        TraceEvent {
+            t_ms: now_ms(),
+            event: "mouse_move".to_owned(),
+            win_event: 0,
+            hwnd: 0,
+            id_object: 0,
+            id_child: 0,
+            window_class: None,
+            window_style: None,
+            spin_box: false,
+            focus_window_class: None,
+            menu_bar: Vec::new(),
+            status_bar: Vec::new(),
+            window_title: None,
+            process: None,
+            process_product: None,
+            process_version: None,
+            object: None,
+            focus_chain: Vec::new(),
+            focus_siblings: Vec::new(),
+            focus_subtree: None,
+            list_position: None,
+            column_headers: Vec::new(),
+            text_context: None,
+            region: None,
+            page: None,
+            top_window_title: None,
+            top_window_class: None,
+            virtual_desktop: None,
+            dialog_lines: Vec::new(),
+            dialog_text: Vec::new(),
+            dialog_page: None,
+            group_box: None,
+            default_button: None,
+            dialog_tree: None,
+            notification: None,
+            mouse: at,
+            point: None,
+        }
     }
 
     /// UIA's notification event id.
@@ -3405,6 +3464,7 @@ mod capture {
                     dialog_tree: None,
                     notification: None,
                     mouse: None,
+                    point: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -3515,6 +3575,7 @@ mod capture {
                     dialog_tree: None,
                     notification: None,
                     mouse: None,
+                    point: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -3999,6 +4060,7 @@ mod capture {
                 dialog_tree,
                 notification: None,
                 mouse: None,
+                point: None,
             };
             (state.sink)(event);
             state.count += 1;
@@ -4076,6 +4138,7 @@ mod capture {
                 live,
                 last_object_focus: None,
                 last_mouse: None,
+                mouse_moved_at: None,
                 last_focus_read: None,
                 dialog_read: None,
                 page_changed,
@@ -5023,6 +5086,7 @@ mod tests {
             dialog_tree: None,
             notification: None,
             mouse: None,
+            point: None,
         }
     }
 
@@ -5039,6 +5103,49 @@ mod tests {
         assert_eq!(
             focus.map(|f| (f.item_index, f.item_count)),
             Some((Some(2), Some(3)))
+        );
+    }
+
+    /// A traced `mouse_point` is what the mouse points to: the control there and its text by
+    /// unit, for mouse echo in replay; a `mouse_move` stays a move.
+    #[test]
+    fn a_mouse_point_is_what_the_mouse_points_to() {
+        let mut event = focus_event(Vec::new());
+        event.event = "mouse_point".to_owned();
+        event.point = Some(TracePoint {
+            at: [16, 87],
+            texts: okur_core::UnitTexts {
+                line: Some(
+                    "fn main() {
+"
+                    .to_owned(),
+                ),
+                ..Default::default()
+            },
+        });
+        let converted = EventConverter::default().convert(&event);
+        let point = match converted.as_slice() {
+            [okur_core::AccessibilityEvent::MousePoint(point)] => Some(point),
+            _ => None,
+        };
+        assert_eq!(point.map(|p| (p.x, p.y)), Some((16, 87)), "{converted:?}");
+        assert_eq!(
+            point.and_then(|p| p.texts.line.as_deref()),
+            Some(
+                "fn main() {
+"
+            )
+        );
+        assert_eq!(
+            point.and_then(|p| p.control.as_ref()?.name.as_deref()),
+            Some("Pro")
+        );
+        let mut moved = focus_event(Vec::new());
+        moved.event = "mouse_move".to_owned();
+        moved.mouse = Some([16, 87]);
+        assert_eq!(
+            EventConverter::default().convert(&moved),
+            [okur_core::AccessibilityEvent::MouseMoved { x: 16, y: 87 }]
         );
     }
 

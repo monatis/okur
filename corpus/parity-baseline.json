@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6266,
+  "matched_steps": 6267,
   "total_steps": 6504,
   "accepted_divergences": 169,
   "errors": [],
@@ -6688,7 +6688,7 @@
     "797-desktop-mouse-echo-unit-turns-echo-on/s3": "match",
     "797-desktop-mouse-echo-unit-turns-echo-on/s4": "match",
     "797-desktop-mouse-echo-unit-turns-echo-on/s5": "match",
-    "797-desktop-mouse-echo-unit-turns-echo-on/s6": "mismatch",
+    "797-desktop-mouse-echo-unit-turns-echo-on/s6": "match",
     "797-desktop-mouse-echo-unit-turns-echo-on/s7": "match",
     "797-desktop-mouse-echo-unit-turns-echo-on/s8": "match",
     "797-desktop-mouse-echo-unit-turns-echo-on/s9": "match"

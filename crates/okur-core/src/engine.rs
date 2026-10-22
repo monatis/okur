@@ -328,6 +328,10 @@ pub struct ScreenReaderEngine {
     table_layer: bool,
     /// The mouse echo layer (Insert+Space, E): the next key is its.
     mouse_echo_layer: bool,
+    /// When the mouse last moved, until mouse echo reads what it rests on.
+    mouse_moved_at: Option<std::time::Instant>,
+    /// What mouse echo said last, not said again while the mouse stays in it.
+    last_mouse_echo: Option<String>,
     /// The page element Numpad Slash clicked at the virtual cursor: its focus is said as
     /// Enter's is, with the regions it is in [obs, 534/s2].
     clicked: Option<usize>,
@@ -487,6 +491,8 @@ impl ScreenReaderEngine {
             toasts_unsaid: false,
             table_layer: false,
             mouse_echo_layer: false,
+            mouse_moved_at: None,
+            last_mouse_echo: None,
             clicked: None,
             radio_switched: None,
             list_entered_groups: Vec::new(),
@@ -1270,9 +1276,10 @@ impl ScreenReaderEngine {
                 None
             }
             AccessibilityEvent::MouseMoved { x, y } => {
-                self.mouse = Some((*x, *y));
+                self.mouse_moved(*x, *y);
                 None
             }
+            AccessibilityEvent::MousePoint(point) => self.mouse_point(point),
             AccessibilityEvent::Toast { text, sender } => self.toast_shown(text, sender.as_deref()),
             AccessibilityEvent::WindowRenamed(title) => {
                 self.window_renamed(title);
