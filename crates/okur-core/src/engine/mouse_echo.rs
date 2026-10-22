@@ -164,12 +164,20 @@ fn mouse_echo_speech(point: &MousePoint, echo: &crate::settings::MouseEcho) -> S
     let mut parts: Vec<String> = Vec::new();
     let unit_text = point.texts.of(echo.unit);
     let control = point.control.as_ref();
-    if let Some(text) = unit_text.or_else(|| {
+    // A control that gives its text by unit says no name in its place: a word unit over
+    // spaces finds no word, and the edit's name ("Text Editor") is not it (old-pc, live run
+    // 227).
+    let gives_text = point.texts.line.is_some() || point.texts.paragraph.is_some();
+    let name = || {
         control
             .and_then(|c| c.name.clone())
             .filter(|n| !n.trim().is_empty())
-    }) {
-        parts.push(text);
+    };
+    match unit_text.or_else(|| (!gives_text).then(name).flatten()) {
+        Some(text) => parts.push(text),
+        // Nothing of the unit there (spaces): nothing is said.
+        None if gives_text => return String::new(),
+        None => {}
     }
     if let Some(control) = control {
         if echo.control_type_and_state {
@@ -385,6 +393,29 @@ mod tests {
             in_indentation.of(MouseEchoUnit::Character).as_deref(),
             Some(" ")
         );
+    }
+
+    /// Over a line's spaces the word unit finds no word, and nothing is said: not the edit's
+    /// name, not its type (old-pc, live run 227).
+    #[test]
+    fn no_word_over_spaces_says_nothing() {
+        let mut control = crate::event::FocusEvent::new(Role::Edit);
+        control.name = Some("Text Editor".into());
+        let point = crate::event::MousePoint {
+            x: 1,
+            y: 1,
+            control: Some(control),
+            texts: crate::event::UnitTexts {
+                line: Some("    let total = 1;\r\n".into()),
+                column: Some(2),
+                ..crate::event::UnitTexts::default()
+            },
+        };
+        let echo = crate::settings::MouseEcho {
+            unit: crate::settings::MouseEchoUnit::Word,
+            ..crate::settings::MouseEcho::default()
+        };
+        assert_eq!(super::mouse_echo_speech(&point, &echo), "");
     }
 
     /// A control that gives no text by unit is said by its name, then its type and state.
