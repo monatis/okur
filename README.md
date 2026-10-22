@@ -87,7 +87,7 @@ in [accepted divergences](docs/references/accepted-divergences.md).
     Right and Left skip and go back by that unit, PageUp and PageDown change the rate, and the
     cursor stays where you stopped it; skim reading (Ctrl+Insert+Down), each paragraph by its
     first line or its first sentence, the lines, sentences or paragraphs a text rule finds, or
-    the lines with bold, italic or underlined text, as chosen in Skim Reading
+    the lines with bold, italic or underlined text or text in a color, as chosen in Skim Reading
     (Ctrl+Shift+Insert+Down), whose Create Summary lists them, each a link to its place;
   - the Word List (Ctrl+Insert+W): the page's words, most used first, and W and Shift+W to the
     next and prior line with the word chosen;
@@ -169,8 +169,8 @@ in [accepted divergences](docs/references/accepted-divergences.md).
 - **Windows' notifications** (toasts) said as they come, whatever is in front; Insert+Space,
   then Shift+N says the last one again, Insert+Space, then Ctrl+N stops and starts saying them,
   and Insert+Space, then N opens the Notification History, with the rules that mute a
-  notification, say a shorter text in its place, or leave it out of the history (Create
-  Rule..., Manage Rules...).
+  notification, say a shorter text or play a sound in its place, or leave it out of the
+  history (Create Rule..., Manage Rules...).
 - **Okur's own dialogs** are real Windows dialogs: the lists above, Okur Find and the Window
   List, with the same controls and labels as JAWS's, and Okur Settings (Insert+6 or Insert+V),
   whose changes are kept for all applications, the application in front or the page's site.
@@ -211,10 +211,8 @@ documentation describes and Okur lacks, most important first. Among them:
   draw their own text);
 - the keys JAWS adds for the clipboard: saying it (Insert+Windows+X), viewing it and adding
   to it (copying, cutting and pasting already work);
-- Skim Reading's color rules and the attributes other than bold, italic and underline, and the
-  Word List's summary;
-- notification rules that play a sound, toasts Focus Assist hides,
-  and applications' own notifications in the history;
+- Skim Reading's attributes other than bold, italic and underline, and the Word List's summary;
+- toasts Focus Assist hides, and applications' own notifications in the history;
 - the rest of what the verbosity levels change, as further recordings show it;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
