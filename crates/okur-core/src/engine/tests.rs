@@ -4011,11 +4011,10 @@ fn a_notification_echoing_the_typed_character_says_nothing() {
     let mut key = KeyEvent::new(Key::Alpha('I'), Modifiers::none(), true);
     key.text = Some('ı');
     engine.handle_key_event(&key);
-    let notification = |text: &str| {
-        let mut live = LiveRegionEvent::new(text, Politeness::Polite);
-        live.region_id = Some("uia-notification".to_owned());
-        live.atomic = true;
-        AccessibilityEvent::LiveRegion(live)
+    let notification = |text: &str| AccessibilityEvent::AppNotification {
+        text: text.to_owned(),
+        politeness: Politeness::Polite,
+        app: Some("WindowsTerminal".to_owned()),
     };
     assert_eq!(engine.handle_accessibility_event(&notification("ı")), None);
     assert_eq!(
@@ -6200,6 +6199,66 @@ fn create_summary_lists_what_skim_reading_reads() {
     engine.execute_command("TopOfFile");
     let skimmed = engine.execute_command("StartSkimRead").unwrap_or_default();
     assert!(skimmed.contains("It closes at nine."), "{skimmed:?}");
+}
+
+/// An application's own notification (UI Automation's) is said as it comes, with toast
+/// announcements off too, kept in the history under its program's name, and said again by
+/// Insert+Space, Shift+N [obs, 820/s1, s3, s8].
+#[test]
+fn an_applications_notification_is_said_and_kept_by_its_program() {
+    use crate::ui::{ControlKind, ToUi};
+    let (mut engine, speech) = engine_on_a_page();
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    let layer = |engine: &mut ScreenReaderEngine, key: Key, modifiers: Modifiers| {
+        for (key, modifiers) in [(Key::Space, insert), (key, modifiers)] {
+            for down in [true, false] {
+                engine.handle_key_event(&KeyEvent::new(key, modifiers, down));
+            }
+        }
+    };
+    // Toast announcements off: Insert+Space, Ctrl+N.
+    let ctrl = Modifiers {
+        ctrl: true,
+        ..Modifiers::none()
+    };
+    let shift = Modifiers {
+        shift: true,
+        ..Modifiers::none()
+    };
+    layer(&mut engine, Key::Alpha('N'), ctrl);
+    speech.take();
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::AppNotification {
+        text: "Upload finished: report.pdf".to_owned(),
+        politeness: Politeness::Assertive,
+        app: Some("powershell".to_owned()),
+    });
+    assert_eq!(said.as_deref(), Some("Upload finished: report.pdf"));
+    layer(&mut engine, Key::Alpha('N'), shift);
+    let repeated = speech.take();
+    assert!(
+        repeated
+            .iter()
+            .any(|said| said.contains("Upload finished: report.pdf")),
+        "Shift+N repeats it: {repeated:?}"
+    );
+    layer(&mut engine, Key::Alpha('N'), Modifiers::none());
+    let Some(ToUi::DialogShow { dialog }) = ui.take().first().cloned() else {
+        panic_free_fail("no history shown");
+        return;
+    };
+    // Without a clock the time is left out.
+    assert_eq!(
+        dialog.controls.first().map(|c| c.kind.clone()),
+        Some(ControlKind::ListBox {
+            items: vec!["Upload finished: report.pdf powershell".to_owned()],
+            selected: 0
+        })
+    );
 }
 
 /// Insert+Space, N: the Notification History, the latest first, each row the text, sender and

@@ -236,6 +236,10 @@ pub struct TraceNotification {
     pub text: String,
     /// `NotificationProcessing`: 0 and 1 are important (they interrupt), 2 to 4 are not.
     pub processing: i32,
+    /// The executable of the program that raised it ("powershell.exe"): the Notification
+    /// History's sender [obs, 820/s3].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub process: Option<String>,
 }
 
 /// A dialog's tree without the items inside its tree views' items: a file dialog's navigation
@@ -1753,20 +1757,27 @@ fn text_lines(node: &crate::ia2_snapshot::Ia2Node, out: &mut Vec<String>) {
     }
 }
 
-/// A UIA notification, said as a live region's announcement: whole each time (the same text
-/// again too), interrupting speech when the application marks it important.
+/// A UIA notification, said as an announcement, interrupting speech when the application marks
+/// it important, under its program's name without ".exe" ("powershell" [obs, 820/s3]).
 fn notification_event(notification: &TraceNotification) -> okur_core::AccessibilityEvent {
-    use okur_core::{LiveRegionEvent, Politeness};
+    use okur_core::Politeness;
     // NotificationProcessing_ImportantAll and _ImportantMostRecent.
     let politeness = if matches!(notification.processing, 0 | 1) {
         Politeness::Assertive
     } else {
         Politeness::Polite
     };
-    let mut live = LiveRegionEvent::new(notification.text.trim(), politeness);
-    live.region_id = Some("uia-notification".to_owned());
-    live.atomic = true;
-    okur_core::AccessibilityEvent::LiveRegion(live)
+    let app = notification.process.as_deref().map(|name| {
+        name.rsplit_once('.')
+            .filter(|(_, extension)| extension.eq_ignore_ascii_case("exe"))
+            .map_or(name, |(stem, _)| stem)
+            .to_owned()
+    });
+    okur_core::AccessibilityEvent::AppNotification {
+        text: notification.text.trim().to_owned(),
+        politeness,
+        app,
+    }
 }
 
 /// A native application's live region changed (UIA): the texts it holds, then its own name
@@ -3239,6 +3250,7 @@ mod capture {
                 queue.push_back(super::TraceNotification {
                     text,
                     processing: processing.0,
+                    process: process_name_of(pid),
                 });
             }
             // SAFETY: the post targets a thread that pumps messages until the handler is
@@ -4967,12 +4979,16 @@ mod tests {
             event.notification = Some(TraceNotification {
                 text: "Suggestions available".to_owned(),
                 processing: 3,
+                process: Some("SystemSettings.exe".to_owned()),
             });
             event
         };
         let mut converter = EventConverter::default();
         let said = |events: Vec<okur_core::AccessibilityEvent>| match events.first() {
-            Some(okur_core::AccessibilityEvent::LiveRegion(live)) => Some(live.text.clone()),
+            Some(okur_core::AccessibilityEvent::AppNotification { text, app, .. }) => {
+                assert_eq!(app.as_deref(), Some("SystemSettings"));
+                Some(text.clone())
+            }
             _ => None,
         };
         assert_eq!(

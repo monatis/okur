@@ -673,6 +673,16 @@ pub enum AccessibilityEvent {
         text: String,
         sender: Option<String>,
     },
+    /// A notification an application raised through UI Automation (`UiaRaiseNotificationEvent`,
+    /// as Teams notifies, not a toast): said as it comes, interrupting when the application
+    /// marks it important, and kept in the Notification History under its program's name,
+    /// "Upload finished: report.pdf powershell 4:53 PM" [obs, 820/s1, s3].
+    AppNotification {
+        text: String,
+        politeness: Politeness,
+        /// The program's name, its executable's without ".exe".
+        app: Option<String>,
+    },
     /// The window in front was renamed: a console takes the title what runs in it sets
     /// ("SR Console Fixture" after PowerShell's own, 321).
     WindowRenamed(String),

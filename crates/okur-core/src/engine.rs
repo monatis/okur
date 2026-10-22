@@ -1291,6 +1291,11 @@ impl ScreenReaderEngine {
             }
             AccessibilityEvent::MousePoint(point) => self.mouse_point(point),
             AccessibilityEvent::Toast { text, sender } => self.toast_shown(text, sender.as_deref()),
+            AccessibilityEvent::AppNotification {
+                text,
+                politeness,
+                app,
+            } => self.app_notification(text, *politeness, app.as_deref()),
             AccessibilityEvent::WindowRenamed(title) => {
                 self.window_renamed(title);
                 None

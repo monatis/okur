@@ -14,6 +14,10 @@ use crate::ui::{FromUi, ToUi};
 /// 216, June 2022).
 const KEPT: usize = 500;
 
+/// The announcement "region" applications' notifications are said as: one, read whole each
+/// time.
+pub(super) const APP_NOTIFICATIONS: &str = "uia-notification";
+
 impl ScreenReaderEngine {
     /// A toast as it shows: JAWS says it by the shell's name for it, "New notification from
     /// Windows PowerShell, SR Fixture, Build finished in 12 seconds. 1 of 1", after what was
@@ -23,6 +27,45 @@ impl ScreenReaderEngine {
     /// Sound, not built yet) says nothing, Don't Show in History leaves it out of the history
     /// (JAWS 2025 help, Notification History).
     pub(super) fn toast_shown(&mut self, text: &str, sender: Option<&str>) -> Option<String> {
+        let said = self.notification_received(text, sender, self.toasts_unsaid);
+        let said = said.filter(|said| !self.toasts_unsaid && !said.trim().is_empty())?;
+        self.speech.speak(&said, false);
+        Some(said)
+    }
+
+    /// An application's own notification (UI Automation's, as Teams sends): kept as a toast
+    /// is, under its program's name, "Upload finished: report.pdf powershell 4:53 PM" [obs,
+    /// 820/s3], and said as an announcement, interrupting when the application marks it
+    /// important [obs, 820/s1]. Its rule decides as a toast's does; Insert+Space, Ctrl+N
+    /// leaves it said, being for toasts only (JAWS 2025 help, Notification History). An
+    /// application's echo of what was just typed is neither said nor kept.
+    pub(super) fn app_notification(
+        &mut self,
+        text: &str,
+        politeness: crate::event::Politeness,
+        app: Option<&str>,
+    ) -> Option<String> {
+        if self.notification_is_echo(text) {
+            return None;
+        }
+        let said = self
+            .notification_received(text, app, false)
+            .filter(|said| !said.trim().is_empty())?;
+        let mut live = crate::event::LiveRegionEvent::new(said, politeness);
+        live.region_id = Some(APP_NOTIFICATIONS.to_owned());
+        live.atomic = true;
+        self.handle_live_region_event(&live)
+    }
+
+    /// A notification received, a toast or an application's: kept for Shift+N, and in the
+    /// history unless its rule leaves it out; its rule's sound played unless `quiet`. Returns
+    /// what is said for it: nothing when its rule mutes it or plays a sound in its place.
+    fn notification_received(
+        &mut self,
+        text: &str,
+        sender: Option<&str>,
+        quiet: bool,
+    ) -> Option<String> {
         let rule = self.notification_rules.deciding(text, sender);
         let hidden = rule.is_some_and(|rule| rule.hidden);
         let said = match rule {
@@ -34,8 +77,7 @@ impl ScreenReaderEngine {
             .filter(|rule| rule.speech == crate::ui::notifications::SpeechAction::PlaySound)
             .map(|rule| rule.sound.clone())
             .filter(|path| !path.trim().is_empty());
-        if let (Some(path), Some(sounds), false) = (sound, self.sounds.as_mut(), self.toasts_unsaid)
-        {
+        if let (Some(path), Some(sounds), false) = (sound, self.sounds.as_mut(), quiet) {
             sounds.play_file(&path);
         }
         self.last_notification = Some(text.to_owned());
@@ -54,9 +96,7 @@ impl ScreenReaderEngine {
                 self.notifications.pop_front();
             }
         }
-        let said = said.filter(|said| !self.toasts_unsaid && !said.trim().is_empty())?;
-        self.speech.speak(&said, false);
-        Some(said)
+        said
     }
 
     /// Insert+Space, Ctrl+N: toasts said or not, until Okur exits, as JAWS's until it

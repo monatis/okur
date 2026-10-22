@@ -850,35 +850,28 @@ impl ScreenReaderEngine {
         menu.or(streamed)
     }
 
-    /// Handles an ARIA live region announcement event with politeness consideration.
-    pub fn handle_live_region_event(&mut self, live: &LiveRegionEvent) -> Option<String> {
+    /// Whether an application's notification is its echo of what was just typed or edited,
+    /// which Okur's own reading says.
+    pub(super) fn notification_is_echo(&self, text: &str) -> bool {
         // A notification of just the character the last key typed is the application's echo
         // of it (Windows Terminal with the Turkish "ı"; dev box, 2026-10-17): typing echo says
         // typed characters, as the setting has it.
-        let mut text = live.text.trim().chars();
-        let notification = live.region_id.as_deref() == Some("uia-notification");
-        if notification
-            && self.last_typed.is_some()
-            && text.next() == self.last_typed
-            && text.next().is_none()
-        {
-            return None;
+        let mut text = text.trim().chars();
+        if self.last_typed.is_some() && text.next() == self.last_typed && text.next().is_none() {
+            return true;
         }
         // While an edit key's result is being read in a field the application also announces,
         // and after it until the next key (a console redrawing the line after Backspace:
         // Windows Terminal said "c" after deleting "b"), the reading says it.
-        if notification && self.edit_read_in_console {
-            return None;
-        }
-        if notification
-            && self.pending_edit.is_some()
-            && self
-                .last_native_focus
-                .as_ref()
-                .is_some_and(|field| self.app_for(field).is_some_and(|app| app.types_into(field)))
-        {
-            return None;
-        }
+        self.edit_read_in_console
+            || (self.pending_edit.is_some()
+                && self.last_native_focus.as_ref().is_some_and(|field| {
+                    self.app_for(field).is_some_and(|app| app.types_into(field))
+                }))
+    }
+
+    /// Handles an ARIA live region announcement event with politeness consideration.
+    pub fn handle_live_region_event(&mut self, live: &LiveRegionEvent) -> Option<String> {
         if live.politeness == Politeness::Off {
             // Kept current, never spoken.
             self.live_region_additions(live);
