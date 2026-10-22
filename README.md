@@ -57,19 +57,19 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `c94c504` (2026-10-22).
+Every figure is tool output, rerun for this README at commit `a09021c` (2026-10-22).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **6347 of 6587** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **6210 of 6549** | `okur-lab parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **169** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **445, 1359** (1353 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1347 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **6540 of 6776** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **6403 of 6738** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **181** | `okur-lab parity` |
+| Recorded JAWS scenarios, trials | **459, 1383** (1377 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1357 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
-The 169 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
+The 181 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
 accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
 place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
 Okur says its help in its own words. Each one is listed, with the reason and who decided it,
@@ -170,9 +170,10 @@ in [accepted divergences](docs/references/accepted-divergences.md).
 - **The Virtual Viewer** (Insert+Alt+W) on screen as JAWS shows it, for windows, controls and
   consoles, Windows Terminal included; the Speech History (Insert+Space, then H; Ctrl+H
   copies it and Shift+H clears it).
-- **Windows' notifications** (toasts) said as they come, whatever is in front; Insert+Space,
-  then Shift+N says the last one again, Insert+Space, then Ctrl+N stops and starts saying them,
-  and Insert+Space, then N opens the Notification History, with the rules that mute a
+- **Windows' notifications** (toasts), and applications' own (as Teams sends them), said as
+  they come, whatever is in front; Insert+Space, then Shift+N says the last one again,
+  Insert+Space, then Ctrl+N stops and starts saying toasts, and Insert+Space, then N opens the
+  Notification History, each listed with the program it came from, with the rules that mute a
   notification, say a shorter text or play a sound in its place, or leave it out of the
   history (Create Rule..., Manage Rules...).
 - **Okur's own dialogs** are real Windows dialogs: the lists above, Okur Find and the Window
@@ -215,7 +216,7 @@ documentation describes and Okur lacks, most important first. Among them:
   draw their own text);
 - the keys JAWS adds for the clipboard: saying it (Insert+Windows+X), viewing it and adding
   to it (copying, cutting and pasting already work);
-- toasts Focus Assist hides, and applications' own notifications in the history;
+- toasts Focus Assist hides;
 - the rest of what the verbosity levels change, as further recordings show it;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
