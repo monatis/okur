@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- invariants --write-baseline",
-  "total_violations": 16,
+  "total_violations": 0,
   "violations": {
     "activation.chrome.ia2.json": [],
     "activation.chrome.uia.json": [],
@@ -51,28 +51,9 @@
     "structural-navigation.chrome.uia.json": [],
     "tables-navigation.chrome.ia2.json": [],
     "tables-navigation.chrome.uia.json": [],
-    "text-attributes.chrome.ia2.json": [
-      "[words never merge text from different elements] word \"mc2\" spans elements",
-      "[words never merge text from different elements] word \"1st\" spans elements",
-      "[words never merge text from different elements] word \"2nd\" spans elements",
-      "[words never merge text from different elements] word \"H2O\" spans elements",
-      "[words never merge text from different elements] word \"CO2\" spans elements"
-    ],
-    "text-attributes.chrome.uia.json": [
-      "[words never merge text from different elements] word \"mc2\" spans elements",
-      "[words never merge text from different elements] word \"1st\" spans elements",
-      "[words never merge text from different elements] word \"2nd\" spans elements",
-      "[words never merge text from different elements] word \"H2O\" spans elements",
-      "[words never merge text from different elements] word \"CO2\" spans elements"
-    ],
-    "text-positions.chrome.ia2.json": [
-      "[words never merge text from different elements] word \"1023\" spans elements",
-      "[words never merge text from different elements] word \"xn\" spans elements",
-      "[words never merge text from different elements] word \"marka\" spans elements",
-      "[words never merge text from different elements] word \"log10\" spans elements",
-      "[words never merge text from different elements] word \"xi\" spans elements",
-      "[words never merge text from different elements] word \"aij\" spans elements"
-    ],
+    "text-attributes.chrome.ia2.json": [],
+    "text-attributes.chrome.uia.json": [],
+    "text-positions.chrome.ia2.json": [],
     "turkish-text.chrome.ia2.json": [],
     "turkish-text.chrome.uia.json": [],
     "virtual-keys.chrome.ia2.json": [],

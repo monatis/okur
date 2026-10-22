@@ -132,6 +132,7 @@ impl FontInfo {
             alignment: self.alignment.clone(),
             color: self.color,
             background: self.background,
+            ..crate::aom::TextFormatting::default()
         }
     }
 }

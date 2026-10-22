@@ -22,6 +22,10 @@ const RS: char = '\u{1d}';
 const RE: char = '\u{1e}';
 /// A horizontal rule's line, as JAWS shows it [obs, 292/s1].
 const SEPARATOR_LINE: &str = "-----";
+/// Where deleted text starts and ends in a run's text: noncharacters, which no page holds,
+/// said as "Deletion" and "end Deletion" and left out of the line's text.
+const DELETION_START: char = '\u{FDD0}';
+const DELETION_END: char = '\u{FDD1}';
 
 pub(crate) fn role_marker(name: &str) -> String {
     format!(" {RS} {name} {RE} ")
@@ -29,6 +33,41 @@ pub(crate) fn role_marker(name: &str) -> String {
 
 pub(crate) fn state_marker(name: &str) -> String {
     format!(" {RS}{name}{RE} ")
+}
+
+/// A mark in a line's flow, as JAWS brackets it: "Deletion " [obs, 814/s3].
+fn flow_marker(name: &str) -> String {
+    format!(" {RS}{name} {RE} ")
+}
+
+/// A line of a run with its deletion marks: its text, without them; its speech, with them
+/// said; and the marks that end it, which are said at the next line's start, as JAWS says
+/// the "end Deletion" of a paragraph struck through whole [obs, 814/s4-s5].
+fn marked_line(line: &str) -> (String, String, String) {
+    let text: String = line
+        .chars()
+        .filter(|&c| c != DELETION_START && c != DELETION_END)
+        .collect();
+    if text.len() == line.len() {
+        return (text, line.to_owned(), String::new());
+    }
+    let body = line.trim_end_matches(|c: char| c == DELETION_END || c.is_whitespace());
+    let carried = line
+        .get(body.len()..)
+        .unwrap_or_default()
+        .chars()
+        .filter(|&c| c == DELETION_END)
+        .map(|_| flow_marker(msg::role_deletion_end().as_str()))
+        .collect();
+    let speech = body
+        .chars()
+        .map(|c| match c {
+            DELETION_START => flow_marker(msg::role_deletion().as_str()),
+            DELETION_END => flow_marker(msg::role_deletion_end().as_str()),
+            c => c.to_string(),
+        })
+        .collect();
+    (text, speech, carried)
 }
 
 /// A heading's only control, when it is a button named as the heading is: GitHub's "Collapse
@@ -230,6 +269,9 @@ struct Builder<'a> {
     /// Graphics are read; off, left out of the page ([`NO_GRAPHICS`]).
     graphics: bool,
     headings: crate::settings::HeadingIndication,
+    /// Marks said at the start of the next line: the "end Deletion" of deleted text that
+    /// ended its line.
+    pending_marks: String,
 }
 
 /// The page's attribute that says its same page links are read as plain links: JAWS's
@@ -272,6 +314,7 @@ impl<'a> Builder<'a> {
             same_page_links: true,
             graphics: true,
             headings: crate::settings::HeadingIndication::Level,
+            pending_marks: String::new(),
         }
     }
 
@@ -301,6 +344,11 @@ impl<'a> Builder<'a> {
     /// Appends a line. `text` goes into the flat buffer (word/character navigation);
     /// `speech` is what the virtual cursor speaks on it. Returns the line's start offset.
     fn emit(&mut self, node_id: usize, role: Role, text: &str, speech: String) -> usize {
+        let speech = if self.pending_marks.is_empty() {
+            speech
+        } else {
+            std::mem::take(&mut self.pending_marks) + &speech
+        };
         if !self.buffer.text.is_empty() {
             self.buffer.text.push('\n');
         }
@@ -377,7 +425,10 @@ impl<'a> Builder<'a> {
             return;
         }
         let mut text = squash(&run.text);
-        if text.is_empty() {
+        if text
+            .chars()
+            .all(|c| c == DELETION_START || c == DELETION_END)
+        {
             return;
         }
         // The space where a link's line break cuts the text stays with it: "© 2026 Riverside
@@ -392,8 +443,11 @@ impl<'a> Builder<'a> {
         let node_id = run.node_id.unwrap_or_default();
         let role = run.role.unwrap_or(Role::Text);
         for line in wrap_lines(&text, MAX_LINE_LENGTH) {
-            self.emit(node_id, role.clone(), line, line.to_owned());
+            let (plain, speech, carried) = marked_line(line);
+            self.emit(node_id, role.clone(), &plain, speech);
+            self.pending_marks.push_str(&carried);
         }
+        text.retain(|c| c != DELETION_START && c != DELETION_END);
         self.last_text_line = Some(text);
     }
 
@@ -586,6 +640,13 @@ impl<'a> Builder<'a> {
         let first_line = self.buffer.lines.len();
 
         match self.classify(node, parent) {
+            // Deleted text is said between its marks [obs, 814/s3].
+            Class::Inline if attr(node, "aria_role") == Some("deletion") => {
+                self.push_inline_text(node, &DELETION_START.to_string());
+                self.push_own_text(node);
+                self.visit_children(node);
+                self.push_inline_text(node, &DELETION_END.to_string());
+            }
             Class::Inline => {
                 self.push_own_text(node);
                 self.visit_children(node);
@@ -1625,6 +1686,64 @@ mod tests {
                 .insert("current".to_owned(), current.to_owned());
         }
         node
+    }
+
+    /// Struck or deleted text is said between "Deletion" and "end Deletion", which are not the
+    /// line's text; a paragraph deleted whole says its end at the next line's start [obs,
+    /// 814/s3-s5].
+    #[test]
+    fn deleted_text_is_said_between_its_marks() {
+        let text = |id: usize, t: &str| AomNode::new(id, Role::Text).with_text(t);
+        let deleted = |id: usize, t: &str| {
+            let mut node = AomNode::new(id, Role::Text).with_children(vec![text(id + 1, t)]);
+            node.attributes
+                .insert("aria_role".to_owned(), "deletion".to_owned());
+            node
+        };
+        let paragraph = |id: usize, children: Vec<AomNode>| {
+            AomNode::new(id, Role::Paragraph).with_children(children)
+        };
+        let root = AomNode::new(0, Role::Document).with_children(vec![
+            paragraph(
+                1,
+                vec![
+                    text(2, "The price was "),
+                    deleted(3, "twelve dollars"),
+                    text(5, ", now ten."),
+                ],
+            ),
+            paragraph(6, vec![deleted(7, "A whole line struck through.")]),
+            paragraph(9, vec![text(10, "The meeting is on Tuesday.")]),
+        ]);
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let read: Vec<(&str, String)> = buffer
+            .lines
+            .iter()
+            .map(|l| {
+                (
+                    l.text.as_str(),
+                    l.speech.split_whitespace().collect::<Vec<_>>().join(" "),
+                )
+            })
+            .collect();
+        assert_eq!(
+            read,
+            vec![
+                (
+                    "The price was twelve dollars, now ten.",
+                    "The price was \u{1d}Deletion \u{1e} twelve dollars \u{1d}end Deletion \u{1e} , now ten."
+                        .to_owned()
+                ),
+                (
+                    "A whole line struck through.",
+                    "\u{1d}Deletion \u{1e} A whole line struck through.".to_owned()
+                ),
+                (
+                    "The meeting is on Tuesday.",
+                    "\u{1d}end Deletion \u{1e} The meeting is on Tuesday.".to_owned()
+                ),
+            ]
+        );
     }
 
     /// The text around inline links as JAWS's holds it [obs, 635; 562/s13, s17, s20]: the space

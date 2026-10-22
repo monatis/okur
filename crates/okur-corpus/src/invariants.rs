@@ -24,6 +24,14 @@ fn walk<'a>(node: &'a AomNode, out: &mut Vec<&'a AomNode>) {
     }
 }
 
+/// The text of `node`'s text leaves, joined as they flow.
+fn inline_flow(node: &AomNode, out: &mut String) {
+    if node.role == Role::Text {
+        out.push_str(node.text.as_deref().unwrap_or_default());
+    }
+    node.children.iter().for_each(|c| inline_flow(c, out));
+}
+
 /// Every non-empty `Text` node's text must be spoken when reading the page line by line
 /// with Down Arrow from the top.
 pub const TEXT_REACHABLE: &str = "all text is reachable with Down Arrow";
@@ -185,12 +193,26 @@ pub fn check(aom: &AomNode) -> Vec<Violation> {
         }
     }
 
-    // Every word on a flow line must come from a single element's text.
+    // Every word on a flow line must come from a single element's text, or from the inline
+    // flow of an element holding only inline text (a paragraph's): "mc2" with its raised
+    // "2", "1st" with its "st" (JAWS's word [obs, 811/s15]).
     let sources: Vec<String> = nodes
         .iter()
         .flat_map(|n| [n.text.as_deref(), n.name.as_deref(), n.value.as_deref()])
         .flatten()
         .map(str::to_owned)
+        .chain(
+            nodes
+                .iter()
+                .filter(|n| {
+                    !n.children.is_empty() && n.children.iter().all(|c| c.role == Role::Text)
+                })
+                .map(|n| {
+                    let mut flow = String::new();
+                    inline_flow(n, &mut flow);
+                    flow
+                }),
+        )
         .collect();
     for word in &buffer.words {
         let Some(line) = buffer
@@ -306,4 +328,35 @@ pub fn write_baseline(
 ) -> Result<(), String> {
     std::fs::write(corpus_dir.join(BASELINE_FILE), render_baseline(results)?)
         .map_err(|e| e.to_string())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{check, WORDS_WITHIN_NODES};
+    use okur_core::{AomNode, Role};
+
+    /// A word that runs into a raised or lowered part, "mc2" and "1st", is one word of the
+    /// paragraph's inline flow, as JAWS reads "1st" [obs, 811/s15]: no element's text holds it
+    /// whole, yet it merges nothing.
+    #[test]
+    fn a_word_across_inline_elements_is_one_word() {
+        let raised = |id: usize, text: &str| {
+            AomNode::new(id, Role::Text)
+                .with_children(vec![AomNode::new(id + 1, Role::Text).with_text(text)])
+        };
+        let page =
+            AomNode::new(0, Role::Document).with_children(vec![AomNode::new(1, Role::Group)
+                .with_children(vec![
+                    AomNode::new(2, Role::Text).with_text("E = mc"),
+                    raised(3, "2"),
+                    AomNode::new(5, Role::Text).with_text(" and the 1"),
+                    raised(6, "st"),
+                    AomNode::new(8, Role::Text).with_text(" floor."),
+                ])]);
+        let merged: Vec<_> = check(&page)
+            .into_iter()
+            .filter(|v| v.invariant == WORDS_WITHIN_NODES)
+            .collect();
+        assert!(merged.is_empty(), "{merged:?}");
+    }
 }

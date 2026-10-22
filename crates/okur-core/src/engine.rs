@@ -255,9 +255,9 @@ pub struct ScreenReaderEngine {
     /// A skim started from Skim Reading: its summary, taken as it started, opens as it ends
     /// [obs, 769/s3, 771/s3].
     summary_after_skim: Option<Vec<(usize, String)>>,
-    /// What the next skim reading says at its end, before its last word: an attribute rule's
-    /// "11 matches found".
-    skim_found: Option<String>,
+    /// What the next skim reading says at its end: an attribute rule's "11 matches found" and
+    /// the word it leaves the cursor in.
+    skim_found: Option<say_all::SkimFound>,
     /// JAWS Find, while it is open.
     find_dialog: Option<crate::ui::find::FindDialog>,
     /// The Window List while it is open, and whether its windows were asked for and not come.

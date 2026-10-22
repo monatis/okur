@@ -154,6 +154,13 @@ divergences! {
         "803-web-skim-read-by-italic/s1",
         "804-web-skim-read-by-underline/s1",
         "805-web-skim-read-by-text-color/s1",
+        "809-web-skim-read-by-strikeout/s1",
+        "810-web-skim-read-by-double-strikeout/s1",
+        "811-web-skim-read-by-superscript/s1",
+        "812-web-skim-read-by-subscript/s1",
+        "813-web-skim-read-by-shadow/s1",
+        "815-web-skim-read-by-superscript-positions/s1",
+        "816-web-skim-read-by-subscript-positions/s1",
     ],
     "Opening one of its list dialogs, JAWS's speech passes through its own windows before it \
      names the dialog: its main window (its version, a list's tutor message) and the browser's \
@@ -655,6 +662,17 @@ divergences! {
         "808-web-word-list-summary-by-alt-s/s8",
     ],
     "The Word List's Summary, by Alt+S or by Space on it (807), closed the dialog and said      the page, and opened nothing, in every trial: Tab, Enter and Insert+Up after it met the      page. JAWS's help says it opens the virtual viewer with a link for each sentence holding      the word, which Okur does.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-22";
+
+    Difference::Step => [
+        "811-web-skim-read-by-superscript/s15",
+        "812-web-skim-read-by-subscript/s16",
+        "816-web-skim-read-by-subscript-positions/s16",
+    ],
+    "Skim reading's Superscript and Subscript skip raised and lowered text of one character: \
+     JAWS found 1st and 2nd, 10 to the 23rd, log10 and aij, but not E = mc2, x to the n, a \
+     footnote's a, H2O, CO2 or x sub i, though Chromium marks them all (text-position). Okur \
+     finds every raised and lowered text, as JAWS's help describes the rules.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-22";
 
     Difference::Step => ["790-desktop-drag-and-drop-in-notepad/s6"],

@@ -69,10 +69,19 @@ pub(super) struct SayAll {
     source: Source,
     /// The page's last word has been handed over after its last line.
     ended: bool,
-    /// Said before that word, at the end: an attribute rule's "11 matches found", whose
-    /// word is then its last line's first, where its reading leaves the cursor ("Related"
-    /// [obs, 799/s10]).
-    found: Option<String>,
+    /// Said at the end in place of the page's last word: an attribute rule's count and word.
+    found: Option<SkimFound>,
+}
+
+/// What skim reading by an attribute rule says after its lines.
+#[derive(Debug, Clone)]
+pub(super) struct SkimFound {
+    /// How many lines were found: "11 matches found" [obs, 799/s10].
+    count: String,
+    /// The word where reading leaves the cursor: the one the last line's found text starts
+    /// in, "on" for a struck "on Monday" [obs, 809/s13], "1st" for its raised "st" [obs,
+    /// 811/s15], "Related" for a whole heading [obs, 799/s10].
+    word: Option<String>,
 }
 
 /// What a Say All reads, piece by piece.
@@ -124,11 +133,21 @@ impl ScreenReaderEngine {
             return self.begin_say_all(0, Source::PageUnits(read), true);
         }
         // An attribute rule's lines, then how many were found: "11 matches found" [obs,
-        // 799/s10].
+        // 799/s10]. Where no line has the attribute, nothing is said [obs, 810/s14].
         if self.skim_options.rule == crate::ui::skim::SkimRule::Attributes {
-            let read = self.skim_by_attributes(&self.skim_options.clone());
-            self.skim_found =
-                Some(crate::messages::msg::skim_matches_found(read.len().to_string()).render());
+            let found = self.skim_by_attributes(&self.skim_options.clone());
+            if found.is_empty() {
+                return None;
+            }
+            let word = found
+                .last()
+                .and_then(|&(_, offset)| self.cursor.buffer.word_at_offset(offset))
+                .map(|word| word.text.clone());
+            self.skim_found = Some(SkimFound {
+                count: crate::messages::msg::skim_matches_found(found.len().to_string()).render(),
+                word,
+            });
+            let read = found.into_iter().map(|(line, _)| line).collect();
             return self.begin_say_all(0, Source::PageSkim(read), true);
         }
         let read = self.skim_lines();
@@ -149,7 +168,7 @@ impl ScreenReaderEngine {
             crate::ui::skim::SkimRule::Attributes => self
                 .skim_by_attributes(options)
                 .into_iter()
-                .filter_map(|i| {
+                .filter_map(|(i, _)| {
                     let line = self.cursor.buffer.lines.get(i)?;
                     Some((line.start_offset, self.cursor.line_text(i)?))
                 })
@@ -172,8 +191,12 @@ impl ScreenReaderEngine {
 
     /// Skim reading by an attribute rule: from the virtual cursor's line on, the lines holding
     /// text with every attribute checked, as JAWS reads them: a heading, a paragraph's line
-    /// with its bold "9 p.m.", a table's header cells [obs, 799/s10].
-    pub(super) fn skim_by_attributes(&self, options: &crate::ui::skim::SkimOptions) -> Vec<usize> {
+    /// with its bold "9 p.m.", a table's header cells [obs, 799/s10]. Each with the offset
+    /// its first such text starts at.
+    pub(super) fn skim_by_attributes(
+        &self,
+        options: &crate::ui::skim::SkimOptions,
+    ) -> Vec<(usize, usize)> {
         let from = self.cursor.current_line_index();
         let buffer = &self.cursor.buffer;
         let inline = buffer
@@ -198,16 +221,22 @@ impl ScreenReaderEngine {
             // an article's, taken from its first text, is not its lines'. A line's inline
             // text of another element (a paragraph's <strong>) is in the line's own text, so
             // it is found among the line's element's siblings.
-            .filter(|line| {
-                (line.start_offset..line.end_offset).any(|offset| {
+            .filter_map(|line| {
+                let formatted = (line.start_offset..line.end_offset).find(|&offset| {
                     buffer
                         .text_formatting_at_offset(offset)
                         .is_some_and(|f| options.has_attributes(&f))
-                }) || inline
-                    .get(&line.node_id)
-                    .is_some_and(|texts| texts.iter().any(|t| line.text.contains(t.as_str())))
+                });
+                let inline = inline.get(&line.node_id).and_then(|texts| {
+                    texts
+                        .iter()
+                        .filter_map(|t| line.text.find(t.as_str()))
+                        .min()
+                        .map(|at| line.start_offset + at)
+                });
+                let first = formatted.into_iter().chain(inline).min()?;
+                Some((line.line_index, first))
             })
-            .map(|line| line.line_index)
             .collect()
     }
 
@@ -578,14 +607,11 @@ impl ScreenReaderEngine {
                 // end content" [obs, 761/s1].
                 let last = reading.next_line.checked_sub(1);
                 let skim = matches!(reading.source, Source::PageSkim(_));
-                // After an attribute rule's lines and its count, its last line's first word,
-                // without its role ("Related" [obs, 799/s10]).
+                // After an attribute rule's lines and its count, the word its last line's
+                // found text starts in, without its role ("Related" [obs, 799/s10]).
                 let found = reading.found.take();
                 let word = match (&reading.source, &found) {
-                    (Source::PageSkim(lines), Some(_)) => last
-                        .and_then(|i| lines.get(i))
-                        .and_then(|&i| self.cursor.buffer.lines.get(i))
-                        .and_then(|l| l.text.split_whitespace().next().map(str::to_owned)),
+                    (Source::PageSkim(_), Some(found)) => found.word.clone(),
                     _ => self.cursor.buffer.lines.last().and_then(|l| {
                         let mut words = l.text.split_whitespace();
                         if skim { words.next() } else { words.last() }.map(str::to_owned)
@@ -603,12 +629,12 @@ impl ScreenReaderEngine {
                 if let (true, false, Some(word), Some(last)) = (in_page, reading.ended, word, last)
                 {
                     reading.ended = true;
-                    if let Some(found) = found {
+                    if let Some(SkimFound { count, .. }) = found {
                         let mark = self.next_mark;
                         self.next_mark += 1;
-                        self.speech.speak_marked(&found, mark, false);
+                        self.speech.speak_marked(&count, mark, false);
                         reading.queued.push_back((mark, last));
-                        said.push(found);
+                        said.push(count);
                     }
                     let mark = self.next_mark;
                     self.next_mark += 1;

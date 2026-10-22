@@ -100,8 +100,12 @@ A step can be in more than one entry; all of its entries apply.
   `771-web-skim-reading-rule-saved/s1`, `776-web-skim-reading-text-rules-controls/s1`,
   `777-web-skim-reading-speak-unit-and-attributes/s1`, `799-web-skim-read-by-bold/s1`,
   `800-web-skim-reading-back-to-first-lines/s1`, `803-web-skim-read-by-italic/s1`,
-  `804-web-skim-read-by-underline/s1` and `805-web-skim-read-by-text-color/s1` (its rule
-  type, or its rules' history, said before the dialog).
+  `804-web-skim-read-by-underline/s1`, `805-web-skim-read-by-text-color/s1`,
+  `809-web-skim-read-by-strikeout/s1`, `810-web-skim-read-by-double-strikeout/s1`,
+  `811-web-skim-read-by-superscript/s1`, `812-web-skim-read-by-subscript/s1`,
+  `813-web-skim-read-by-shadow/s1`, `815-web-skim-read-by-superscript-positions/s1` and
+  `816-web-skim-read-by-subscript-positions/s1` (its rule type, or its rules' history, said before the
+  dialog).
 - In the recordings of 2026-10-19 (round 9, JAWS freshly started for the batch), JAWS no longer
   said its version or the list's tutor message before the Links List, the Heading List and
   Virtual HTML Features, and said nothing before some dialogs at all: those steps were taken
@@ -645,6 +649,23 @@ A step can be in more than one entry; all of its entries apply.
   list of links. Each link is a sentence that contains the selected word.").
 - Why: the help describes a feature JAWS did not show on the lab's page; Okur gives what it
   describes.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-22.
+
+### JAWS's Superscript and Subscript skip one character
+
+- Steps: `811-web-skim-read-by-superscript/s15`, `812-web-skim-read-by-subscript/s16`,
+  `816-web-skim-read-by-subscript-positions/s16`.
+- Difference: the lines found. Skimming by an attribute rule with Superscript checked, JAWS
+  found "The 1st and 2nd floors are open." and "A mole holds 6 × 10 superscript 23 end
+  superscript particles." (815), but not "Einstein's E = mc2 dates from 1905.", "The sum runs
+  to xn at most." or "Footnote marka after a word."; with Subscript, "The scale uses log10
+  steps." and "The entry aij sits in row i.", but not H2O, CO2 or "Each term xi is counted
+  once.", and said nothing when it found none (812). Chromium marks every one of them
+  `text-position:super` or `sub` (the pages' IA2 snapshots); JAWS skips those of one
+  character. Okur finds every raised and lowered text.
+- Why: JAWS's help says the rules find text with the attribute; leaving out a one-character
+  superscript or subscript, the commonest kind (x², H₂O, a footnote mark), hides what the user
+  asked for.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-22.
 
 ## Considered and not accepted

@@ -27,6 +27,10 @@ role-edit-read-only = read only edit
 role-edit-combo = edit combo
 # An edit with arrows beside it that step its value (an up-down control).
 role-edit-spin-box = edit spin box
+# Struck or deleted text in a page (<s>, <del>), said before it and, as its end, after it:
+# "The price was Deletion twelve dollars end Deletion, now ten."
+role-deletion = Deletion
+role-deletion-end = end Deletion
 # A web page, said after its title.
 role-document = document
 # The fallback type of an item in the Form Fields list.

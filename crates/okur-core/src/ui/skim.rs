@@ -109,9 +109,9 @@ impl SkimOptions {
     /// those chosen, by their names ("Pure red text." for red [obs, 805/s10]), and any of the
     /// attributes checked: with Bold and Italic checked, JAWS read the lines with bold text
     /// and the line with italic text, "12 matches found" [obs, 803/s12], though its help
-    /// calls the choices cumulative. Bold, italic and underline are read from the page; the
-    /// other attributes, which Okur does not read, find nothing. With nothing chosen, nothing
-    /// is found.
+    /// calls the choices cumulative. Bold, italic, underline, strikeout, superscript and
+    /// subscript are read from the page; the other attributes, which Okur does not read, find
+    /// nothing. With nothing chosen, nothing is found.
     pub fn has_attributes(&self, formatting: &crate::aom::TextFormatting) -> bool {
         let named = |color: Option<crate::color::Rgb>, chosen: &Option<String>| match chosen {
             None => true,
@@ -124,6 +124,9 @@ impl SkimOptions {
             "bold" => formatting.bold,
             "italic" => formatting.italic,
             "underline" => formatting.underline,
+            "strikeout" => formatting.strikeout,
+            "superscript" => formatting.superscript,
+            "subscript" => formatting.subscript,
             _ => false,
         });
         (colors || !self.attributes.is_empty())
@@ -478,6 +481,15 @@ mod tests {
         options.attributes = vec!["bold".into(), "italic".into()];
         assert!(options.has_attributes(&italic));
         assert!(!options.has_attributes(&crate::aom::TextFormatting::default()));
+        let raised = crate::aom::TextFormatting {
+            superscript: true,
+            ..crate::aom::TextFormatting::default()
+        };
+        assert!(!options.has_attributes(&raised));
+        options.attributes = vec!["superscript".into()];
+        assert!(options.has_attributes(&raised));
+        options.attributes = vec!["subscript".into(), "strikeout".into()];
+        assert!(!options.has_attributes(&raised));
     }
 
     #[test]

@@ -34,6 +34,7 @@ pub mod roles {
     pub const IA2_ROLE_TOGGLE_BUTTON: i32 = 0x42A;
     pub const IA2_ROLE_COMPLEMENTARY_CONTENT: i32 = 0x42C;
     pub const IA2_ROLE_LANDMARK: i32 = 0x42D;
+    pub const IA2_ROLE_CONTENT_DELETION: i32 = 0x42F;
     pub const IA2_ROLE_BLOCK_QUOTE: i32 = 0x431;
 }
 
@@ -158,15 +159,18 @@ pub struct Ia2TextRun {
     pub attributes: BTreeMap<String, String>,
 }
 
-/// The text attributes a run keeps: Say Font's, and Say Color's (`color`,
-/// `background-color`, as Chromium gives them: `rgb(0, 0, 238)`).
-pub const FONT_ATTRIBUTES: [&str; 8] = [
+/// The text attributes a run keeps: Say Font's, Say Color's (`color`, `background-color`,
+/// as Chromium gives them: `rgb(0, 0, 238)`), and the rest skim reading finds text by
+/// (`text-position`: `super` or `sub`; `text-line-through-type`, a double strikeout).
+pub const FONT_ATTRIBUTES: [&str; 10] = [
     "font-family",
     "font-size",
     "font-weight",
     "font-style",
     "text-underline-style",
     "text-line-through-style",
+    "text-line-through-type",
+    "text-position",
     "color",
     "background-color",
 ];

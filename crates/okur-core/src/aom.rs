@@ -113,6 +113,14 @@ pub struct TextFormatting {
     pub italic: bool,
     #[serde(default)]
     pub underline: bool,
+    /// Struck through (IA2 `text-line-through-style`): Skim Reading's Strikeout.
+    #[serde(default)]
+    pub strikeout: bool,
+    /// Raised or lowered (IA2 `text-position`): Skim Reading's Superscript and Subscript.
+    #[serde(default)]
+    pub superscript: bool,
+    #[serde(default)]
+    pub subscript: bool,
     #[serde(default)]
     pub alignment: Option<String>,
     /// The text's color, for Say Color.
@@ -171,6 +179,9 @@ impl TextFormatting {
             bold: child.bold || self.bold,
             italic: child.italic || self.italic,
             underline: child.underline || self.underline,
+            strikeout: child.strikeout || self.strikeout,
+            superscript: child.superscript || self.superscript,
+            subscript: child.subscript || self.subscript,
             alignment: child.alignment.clone().or_else(|| self.alignment.clone()),
             color: child.color.or(self.color),
             background: child.background.or(self.background),

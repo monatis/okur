@@ -6592,9 +6592,10 @@ fn skim_reading_by_bold_reads_the_lines_with_bold_text() {
     assert!(read.contains("Library hours"), "{read:?}");
     assert!(read.contains("Open until 9 p.m. on weekdays."), "{read:?}");
     assert!(!read.contains("Weekends"), "{read:?}");
-    // The count, then the last line's first word, where the cursor stops ("11 matches found
-    // | Related" [obs, 799/s10]).
-    assert!(read.ends_with("2 matches found\nOpen"), "{read:?}");
+    // The count, then the word the last line's bold text starts in, where the cursor stops
+    // ("11 matches found | Related" [obs, 799/s10]; "on" for a struck "on Monday" mid-line
+    // [obs, 809/s13]).
+    assert!(read.ends_with("2 matches found\n9"), "{read:?}");
 }
 
 /// Manage Rules: the rules' rows as JAWS's, "Digest Mail Mute Show flash message Enabled";

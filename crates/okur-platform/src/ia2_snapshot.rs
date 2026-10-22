@@ -159,7 +159,8 @@ fn font_size_points(raw: &str) -> Option<f32> {
 }
 
 /// Say Font's and Say Color's formatting from an IA2 text run (`font-family`, `font-size`,
-/// `font-weight`, `font-style`, `text-underline-style`, `color`, `background-color`).
+/// `font-weight`, `font-style`, `text-underline-style`, `color`, `background-color`), and
+/// what skim reading finds text by (`text-line-through-style`, `text-position`).
 fn text_formatting(
     attributes: &std::collections::BTreeMap<String, String>,
 ) -> Option<okur_core::aom::TextFormatting> {
@@ -179,6 +180,9 @@ fn text_formatting(
         bold,
         italic: get("font-style").is_some_and(|s| s == "italic" || s == "oblique"),
         underline: get("text-underline-style").is_some_and(|s| !s.is_empty() && s != "none"),
+        strikeout: get("text-line-through-style").is_some_and(|s| !s.is_empty() && s != "none"),
+        superscript: get("text-position") == Some("super"),
+        subscript: get("text-position") == Some("sub"),
         alignment: None,
         color: get("color").and_then(okur_core::color::Rgb::parse_css),
         background: get("background-color").and_then(okur_core::color::Rgb::parse_css),
@@ -369,6 +373,11 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
             }
         }
     }
+    // Struck or deleted text (<s>, <del>), which JAWS reads between "Deletion" and "end
+    // Deletion" [obs, 814/s3].
+    if node.ia2_role == Some(xa11y_windows::ia2::roles::IA2_ROLE_CONTENT_DELETION) {
+        set_attr("aria_role", "deletion".to_owned());
+    }
     if node.ia2_states & ia2_state::REQUIRED != 0 {
         set_attr("required", "true".to_owned());
     }
@@ -474,6 +483,28 @@ mod tests {
                 .collect(),
             ..Default::default()
         }
+    }
+
+    /// Struck-through, raised and lowered text, as Chromium marks its runs
+    /// (`text-line-through-style:solid`, `text-position:super` or `sub`): what skim reading's
+    /// Strikeout, Superscript and Subscript find.
+    #[test]
+    fn a_run_says_struck_raised_and_lowered_text() {
+        let run = |pairs: &[(&str, &str)]| {
+            let attributes = [("font-family", "Times New Roman"), ("font-size", "12pt")]
+                .iter()
+                .chain(pairs)
+                .map(|(k, v)| ((*k).to_owned(), (*v).to_owned()))
+                .collect();
+            super::text_formatting(&attributes).unwrap_or_default()
+        };
+        assert!(run(&[("text-line-through-style", "solid")]).strikeout);
+        assert!(!run(&[("text-line-through-style", "none")]).strikeout);
+        let raised = run(&[("text-position", "super")]);
+        assert!(raised.superscript && !raised.subscript);
+        let lowered = run(&[("text-position", "sub")]);
+        assert!(lowered.subscript && !lowered.superscript);
+        assert!(!run(&[("text-position", "baseline")]).superscript);
     }
 
     /// Chromium calls every `div` and `span` an MSAA grouping; only IA2's role tells a
