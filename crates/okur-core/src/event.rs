@@ -23,18 +23,43 @@ pub struct UnitTexts {
     pub line: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub paragraph: Option<String>,
+    /// Where the point is in `line`, in characters: the word and the character there are
+    /// then found as Okur splits words, not as the control's own units give them (Notepad's
+    /// word unit gave "{\r\n    " in a line's indentation; old-pc, 2026-10-22).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub column: Option<usize>,
 }
 
 impl UnitTexts {
-    /// The text of `unit`.
-    pub fn of(&self, unit: crate::settings::MouseEchoUnit) -> Option<&str> {
+    /// The text of `unit`: a line or paragraph without its indentation and line break, the
+    /// word or the character at the point's column of the line.
+    pub fn of(&self, unit: crate::settings::MouseEchoUnit) -> Option<String> {
         use crate::settings::MouseEchoUnit;
+        let line = self
+            .line
+            .as_deref()
+            .map(|l| l.trim_end_matches(['\r', '\n']));
+        let at = line.zip(self.column);
         match unit {
-            MouseEchoUnit::Character => self.character.as_deref(),
-            MouseEchoUnit::Word => self.word.as_deref(),
-            MouseEchoUnit::Line => self.line.as_deref(),
-            MouseEchoUnit::Paragraph => self.paragraph.as_deref(),
+            MouseEchoUnit::Character => match at {
+                Some((line, column)) => line.chars().nth(column).map(String::from),
+                None => self.character.clone(),
+            },
+            MouseEchoUnit::Word => match at {
+                Some((line, column)) => {
+                    crate::editing::web_word_at(line, column).map(|(start, end)| {
+                        line.chars()
+                            .skip(start)
+                            .take(end.saturating_sub(start))
+                            .collect()
+                    })
+                }
+                None => self.word.as_deref().map(|w| w.trim().to_owned()),
+            },
+            MouseEchoUnit::Line => line.map(|l| l.trim().to_owned()),
+            MouseEchoUnit::Paragraph => self.paragraph.as_deref().map(|p| p.trim().to_owned()),
         }
+        .filter(|text| !text.is_empty())
     }
 }
 

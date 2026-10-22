@@ -13,7 +13,8 @@ mod reader {
     use okur_core::UnitTexts;
     use windows::Win32::Foundation::POINT;
     use windows::Win32::UI::Accessibility::{
-        IUIAutomation, IUIAutomationTextPattern, TextUnit, TextUnit_Character, TextUnit_Line,
+        IUIAutomation, IUIAutomationTextPattern, TextPatternRangeEndpoint_End,
+        TextPatternRangeEndpoint_Start, TextUnit, TextUnit_Character, TextUnit_Line,
         TextUnit_Paragraph, TextUnit_Word, UIA_TextPatternId,
     };
 
@@ -41,11 +42,24 @@ mod reader {
                         let text = range.GetText(MAX_UNIT_CHARS).ok()?.to_string();
                         Some(text)
                     };
+                    // The point's column: the text from its line's start to it.
+                    let column = range.Clone().ok().and_then(|line| {
+                        line.ExpandToEnclosingUnit(TextUnit_Line).ok()?;
+                        line.MoveEndpointByRange(
+                            TextPatternRangeEndpoint_End,
+                            &range,
+                            TextPatternRangeEndpoint_Start,
+                        )
+                        .ok()?;
+                        let before = line.GetText(MAX_UNIT_CHARS).ok()?.to_string();
+                        Some(before.chars().count())
+                    });
                     UnitTexts {
                         character: unit(TextUnit_Character),
                         word: unit(TextUnit_Word),
                         line: unit(TextUnit_Line),
                         paragraph: unit(TextUnit_Paragraph),
+                        column,
                     }
                 })
                 .unwrap_or_default();

@@ -126,7 +126,12 @@ impl ScreenReaderEngine {
             return None;
         }
         self.last_mouse_echo = Some(said.clone());
-        self.speech.speak(&said, echo.interrupt);
+        // A character alone is said as the reading keys say it ("space").
+        if said.chars().count() == 1 {
+            self.speech.speak_character(&said, echo.interrupt);
+        } else {
+            self.speech.speak(&said, echo.interrupt);
+        }
         Some(said)
     }
 
@@ -157,11 +162,7 @@ impl ScreenReaderEngine {
 fn mouse_echo_speech(point: &MousePoint, echo: &crate::settings::MouseEcho) -> String {
     use crate::aom::Role;
     let mut parts: Vec<String> = Vec::new();
-    let unit_text = point
-        .texts
-        .of(echo.unit)
-        .map(|t| t.trim_end_matches(['\r', '\n']).to_owned())
-        .filter(|t| !t.trim().is_empty());
+    let unit_text = point.texts.of(echo.unit);
     let control = point.control.as_ref();
     if let Some(text) = unit_text.or_else(|| {
         control
@@ -288,6 +289,7 @@ mod tests {
                 word: line.split(' ').next().map(String::from),
                 line: Some(format!("{line}\r\n")),
                 paragraph: Some(format!("{line}\r\n")),
+                column: None,
             },
         }
     }
@@ -353,6 +355,36 @@ mod tests {
         engine.own_mouse_move_until = None;
         let _ = engine.handle_accessibility_event(&AccessibilityEvent::MouseMoved { x: 9, y: 5 });
         assert!(engine.mouse_moved_at.is_some());
+    }
+
+    /// With the point's column known, the word and the character are the line's there, as
+    /// Okur splits words; a line or paragraph loses its indentation and line break.
+    #[test]
+    fn the_word_and_character_are_found_in_the_line() {
+        use crate::settings::MouseEchoUnit;
+        let texts = crate::event::UnitTexts {
+            line: Some("    let total = price * 1.5; // tax\r\n".into()),
+            word: Some("{\r\n    ".into()),
+            character: Some(" ".into()),
+            paragraph: None,
+            column: Some(9),
+        };
+        assert_eq!(texts.of(MouseEchoUnit::Word).as_deref(), Some("total"));
+        assert_eq!(texts.of(MouseEchoUnit::Character).as_deref(), Some("o"));
+        assert_eq!(
+            texts.of(MouseEchoUnit::Line).as_deref(),
+            Some("let total = price * 1.5; // tax")
+        );
+        let in_indentation = crate::event::UnitTexts {
+            column: Some(1),
+            ..texts.clone()
+        };
+        // No word on a space; the space itself as a character.
+        assert_eq!(in_indentation.of(MouseEchoUnit::Word), None);
+        assert_eq!(
+            in_indentation.of(MouseEchoUnit::Character).as_deref(),
+            Some(" ")
+        );
     }
 
     /// A control that gives no text by unit is said by its name, then its type and state.
