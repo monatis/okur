@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6498,
-  "total_steps": 6735,
+  "matched_steps": 6514,
+  "total_steps": 6755,
   "accepted_divergences": 178,
   "errors": [],
   "steps": {
@@ -6931,6 +6931,26 @@
     "816-web-skim-read-by-subscript-positions/s6": "match",
     "816-web-skim-read-by-subscript-positions/s7": "match",
     "816-web-skim-read-by-subscript-positions/s8": "match",
-    "816-web-skim-read-by-subscript-positions/s9": "match"
+    "816-web-skim-read-by-subscript-positions/s9": "match",
+    "817-web-text-positions-read-down/s1": "match",
+    "817-web-text-positions-read-down/s2": "match",
+    "817-web-text-positions-read-down/s3": "mismatch",
+    "817-web-text-positions-read-down/s4": "match",
+    "817-web-text-positions-read-down/s5": "match",
+    "817-web-text-positions-read-down/s6": "match",
+    "817-web-text-positions-read-down/s7": "match",
+    "817-web-text-positions-read-down/s8": "match",
+    "817-web-text-positions-read-down/s9": "match",
+    "818-web-number-positions-read-down/s1": "match",
+    "818-web-number-positions-read-down/s10": "match",
+    "818-web-number-positions-read-down/s11": "match",
+    "818-web-number-positions-read-down/s2": "match",
+    "818-web-number-positions-read-down/s3": "mismatch",
+    "818-web-number-positions-read-down/s4": "mismatch",
+    "818-web-number-positions-read-down/s5": "match",
+    "818-web-number-positions-read-down/s6": "match",
+    "818-web-number-positions-read-down/s7": "match",
+    "818-web-number-positions-read-down/s8": "match",
+    "818-web-number-positions-read-down/s9": "mismatch"
   }
 }

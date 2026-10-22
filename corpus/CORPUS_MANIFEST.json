@@ -6582,13 +6582,41 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "817-web-text-positions-read-down",
+      "fixture": "text-positions.html",
+      "evidence": {
+        "sha256": "0ac699bd9b92b26648b0d8e313649ebc906aa9f09dbb3e9b4deceb28c3290ca4",
+        "capture_script_sha256": "4e9cdf8a1e7122d71e8500cfc5c79a70fe852ea794bd6e4e59bb1454b2853c6e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "818-web-number-positions-read-down",
+      "fixture": "number-positions.html",
+      "evidence": {
+        "sha256": "71fc5de453158148c57f5bec18a2285d065538dd1ebf164eaa7a542a079105c1",
+        "capture_script_sha256": "4e9cdf8a1e7122d71e8500cfc5c79a70fe852ea794bd6e4e59bb1454b2853c6e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 456,
-    "scenarios_with_evidence": 456,
-    "total_trials": 1374,
-    "successful_trials": 1368,
-    "deterministic_scenarios": 299
+    "scenarios": 458,
+    "scenarios_with_evidence": 458,
+    "total_trials": 1380,
+    "successful_trials": 1374,
+    "deterministic_scenarios": 301
   }
 }
