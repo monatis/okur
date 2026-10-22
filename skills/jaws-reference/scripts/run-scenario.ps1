@@ -548,10 +548,12 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
             return [SrKeyInput]::Key([uint16]$k[0], $k[1], $true, [uint16]$k[2])
         }
         # Started through ShellExecute (Start-Process), as Windows requires to grant UI Access;
-        # JAWS's dialogs are jfw.exe's, Okur's okur-ui.exe's.
+        # JAWS's dialogs are jfw.exe's, its Results Viewer windows (View Clipboard Text's
+        # "Clipboard Text", which Escape from a plain program leaves open, 561) ResultsViewer's,
+        # Okur's okur-ui.exe's.
         'key_ui_access' {
             if (-not (Test-Path -LiteralPath $LabKeys)) { return $false }
-            $sent = Start-Process -FilePath $LabKeys -ArgumentList @('--allow', 'jfw,okur-ui', "`"$command`"") -WindowStyle Hidden -Wait -PassThru
+            $sent = Start-Process -FilePath $LabKeys -ArgumentList @('--allow', 'jfw,ResultsViewer,okur-ui', "`"$command`"") -WindowStyle Hidden -Wait -PassThru
             return $sent.ExitCode -eq 0
         }
         'jaws_script' { if (-not $jaws) { return $false }; return [bool]$jaws.RunScript($command) }
