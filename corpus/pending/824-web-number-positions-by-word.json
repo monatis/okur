@@ -1,0 +1,100 @@
+{
+  "id": "824-web-number-positions-by-word",
+  "name": "The numbers page by word: Ctrl+Right along 2 cubed (one raised digit), 10 to the 23rd and 10 to the -6th (raised numbers after a number)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/number-positions.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Ctrl+Right"
+    }
+  ]
+}
