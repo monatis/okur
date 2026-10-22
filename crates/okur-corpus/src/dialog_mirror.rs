@@ -250,7 +250,12 @@ impl DialogMirror {
         };
         let name = focus.name.as_deref().map(plain).unwrap_or_default();
         let mut reports = Vec::new();
+        let focused = self.focused;
         for (index, control) in dialog.controls.iter_mut().enumerate() {
+            // An unnamed field's change is the focused field's: a WPF edit is named only
+            // through the text before it, which its value changes do not carry (Create
+            // Rule's Shortened Text [obs, 798/s10]).
+            let unnamed_here = name.is_empty() && focused == Some(index);
             let (here, report) = match (&mut control.kind, &focus.role) {
                 (
                     ControlKind::List { items, selected }
@@ -384,13 +389,32 @@ impl DialogMirror {
                 (
                     ControlKind::ComboEdit { text, .. } | ControlKind::Edit { text },
                     Role::Edit | Role::ComboBox | Role::Document,
-                ) if plain(&control.label) == name => match focus.value.as_deref() {
-                    Some(value) if value != text => {
-                        value.clone_into(text);
-                        (true, Some(Value::Text(value.to_owned())))
+                ) if plain(&control.label) == name || unnamed_here => {
+                    match focus.value.as_deref() {
+                        Some(value) if value != text => {
+                            value.clone_into(text);
+                            (true, Some(Value::Text(value.to_owned())))
+                        }
+                        _ => (true, None),
                     }
-                    _ => (true, None),
-                },
+                }
+                // A combo box's choice, as its window reports the arrows choosing it (Create
+                // Rule's Speech Action going to "Shorten" [obs, 798/s8]), by the traced value.
+                (ControlKind::Choice { options, selected }, Role::ComboBox)
+                    if plain(&control.label) == name =>
+                {
+                    let value = focus.value.as_deref().map(plain);
+                    match options
+                        .iter()
+                        .position(|option| Some(plain(option)) == value)
+                    {
+                        Some(i) if i != *selected => {
+                            *selected = i;
+                            (true, Some(Value::Selected(i)))
+                        }
+                        _ => (true, None),
+                    }
+                }
                 (ControlKind::Button { .. }, Role::Button)
                 | (ControlKind::CheckBox { .. }, Role::CheckBox) => {
                     (plain(&control.label) == name, None)

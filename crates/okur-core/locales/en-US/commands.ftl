@@ -129,11 +129,11 @@ mouse-echo-unit-line = line
 mouse-echo-unit-paragraph = paragraph
 # The Notification History (Insert+Space, N), as JAWS's [obs, 774].
 notification-history-title = Notification History
-notification-history-list = Recent Notifications
-notification-history-rules = Enable Rules
-notification-history-create-rule = Create Rule...
-notification-history-manage = Manage Rules...
-notification-history-clear = Clear History
+notification-history-list = Recent &Notifications
+notification-history-rules = &Enable Rules
+notification-history-create-rule = &Create Rule...
+notification-history-manage = &Manage Rules...
+notification-history-clear = C&lear History
 notification-history-close = Close
 # Enter on a notification in the history [obs, 774/s11].
 notification-details-title = Notification Details
@@ -154,8 +154,8 @@ notification-rule-mute = Mute
 notification-rule-shorten = Shorten
 notification-rule-sound = Play Sound
 notification-rule-speak = Speak the full message
-# Shorten's message (JAWS 2025 help: the Shortened Text edit field).
-notification-rule-shortened = Shortened Text
+# Shorten's message, labelled as JAWS's Create Rule labels it [obs, 798/s9].
+notification-rule-shortened = Shortened Text:
 notification-rule-braille = Braille Action
 notification-rule-braille-none = Show nothing
 notification-rule-braille-flash = Show flash message

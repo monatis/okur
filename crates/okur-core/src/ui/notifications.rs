@@ -953,12 +953,13 @@ mod tests {
         let labels: Vec<&str> = spec.controls.iter().map(|c| c.label.as_str()).collect();
         assert_eq!(
             labels,
+            // With JAWS's access keys (Alt+C for Create Rule... [obs, 787/s4]).
             [
-                "Recent Notifications",
-                "Enable Rules",
-                "Create Rule...",
-                "Manage Rules...",
-                "Clear History",
+                "Recent &Notifications",
+                "&Enable Rules",
+                "&Create Rule...",
+                "&Manage Rules...",
+                "C&lear History",
                 "Close"
             ]
         );

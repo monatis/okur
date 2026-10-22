@@ -198,6 +198,7 @@ impl ScreenReaderEngine {
                 }
                 // OK asks the rule's name, the notification's text proposed [obs, 783/s7].
                 RuleOutcome::Save(rule) => {
+                    tracing::debug!(kind = ?rule.kind, text = %rule.text, speech = ?rule.speech, shortened = %rule.shortened, "notification rule made");
                     self.dialog_count += 1;
                     let proposed = self
                         .notification_rule_text
