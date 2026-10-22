@@ -684,6 +684,9 @@ divergences! {
         "816-web-skim-read-by-subscript-positions/s16",
         "818-web-number-positions-read-down/s2",
         "818-web-number-positions-read-down/s7",
+        "824-web-number-positions-by-word/s2",
+        "824-web-number-positions-by-word/s5",
+        "824-web-number-positions-by-word/s6",
     ],
     "JAWS passes over raised and lowered text of one character: skim reading's Superscript \
      and Subscript found 1st and 2nd, 10 to the 23rd, log10 and aij, but not E = mc2, x to the \

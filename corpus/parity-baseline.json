@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
   "matched_steps": 6656,
-  "total_steps": 6892,
-  "accepted_divergences": 181,
+  "total_steps": 6889,
+  "accepted_divergences": 184,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -7084,11 +7084,11 @@
     "824-web-number-positions-by-word/s15": "match",
     "824-web-number-positions-by-word/s16": "match",
     "824-web-number-positions-by-word/s17": "match",
-    "824-web-number-positions-by-word/s2": "mismatch",
+    "824-web-number-positions-by-word/s2": "accepted divergence",
     "824-web-number-positions-by-word/s3": "match",
     "824-web-number-positions-by-word/s4": "match",
-    "824-web-number-positions-by-word/s5": "mismatch",
-    "824-web-number-positions-by-word/s6": "mismatch",
+    "824-web-number-positions-by-word/s5": "accepted divergence",
+    "824-web-number-positions-by-word/s6": "accepted divergence",
     "824-web-number-positions-by-word/s7": "match",
     "824-web-number-positions-by-word/s8": "match",
     "824-web-number-positions-by-word/s9": "match"

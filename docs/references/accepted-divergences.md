@@ -656,8 +656,10 @@ A step can be in more than one entry; all of its entries apply.
 - Steps: `811-web-skim-read-by-superscript/s15`, `812-web-skim-read-by-subscript/s16`,
   `815-web-skim-read-by-superscript-positions/s15`,
   `816-web-skim-read-by-subscript-positions/s16`, `818-web-number-positions-read-down/s2`,
-  `818-web-number-positions-read-down/s7`.
-- Difference: the lines found, and two lines' marks. Skimming by an attribute rule with Superscript checked, JAWS
+  `818-web-number-positions-read-down/s7`, `824-web-number-positions-by-word/s2`,
+  `824-web-number-positions-by-word/s5`, `824-web-number-positions-by-word/s6`.
+- Difference: the lines found, and the marks of a one-digit number after a number, by line
+  and by word (824: JAWS's "23", Okur's "2 superscript 3", then "end superscript in"). Skimming by an attribute rule with Superscript checked, JAWS
   found "The 1st and 2nd floors are open." and "A mole holds 6 × 10 superscript 23 end
   superscript particles." (815), but not "Einstein's E = mc2 dates from 1905.", "The sum runs
   to xn at most." or "Footnote marka after a word."; with Subscript, "The scale uses log10
