@@ -1,12 +1,12 @@
 {
-  "id": "561-desktop-clipboard-keys",
-  "name": "The clipboard in a native edit: a line copied, then JAWS's SayClipboard (Windows+JAWSKey+X, called by name: Windows' Win+X menu takes the keys), View Clipboard Text (Insert+Space, C) and Escape (with UI Access, which closes JAWS's Clipboard Text window); a second line selected and AppendSelectedTextToClipboard (Insert+Windows+C, by name), SayClipboard and View Clipboard Text again; then the line selected again and copied, JAWS's Overwrite Clipboard question answered Yes (Y, with UI Access), and SayClipboard: each trial ends with the clipboard as Ctrl+C leaves it",
+  "id": "825-desktop-notepad-clipboard-keys",
+  "name": "JAWS's clipboard keys in Notepad: a line copied, SayClipboard (Windows+JAWSKey+X, by script name: an injected Windows-key chord opens Windows' Win+X menu), View Clipboard Text (Insert+Space, C), Say Line in it and Escape (with UI Access, which closes JAWS's Clipboard Text window); the next line selected, AppendSelectedTextToClipboard (Insert+Windows+C, by name), SayClipboard and View Clipboard Text again; then a line copied with Ctrl+C, JAWS's Overwrite Clipboard question answered Yes (Y, with UI Access) and SayClipboard, so each trial ends with the clipboard as Ctrl+C leaves it",
   "category": "desktop",
   "version": "1.0.0",
-  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
   "target_app": "desktop",
   "launch": {
-    "window_title": "SR Editor Fixture"
+    "window_title": "sr-notepad-fixture.txt - Notepad"
   },
   "reset": {
     "keys": [
