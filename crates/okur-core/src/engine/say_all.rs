@@ -257,6 +257,10 @@ impl ScreenReaderEngine {
             .page()
             .map(|page| table_rows(page))
             .unwrap_or_default();
+        let headers = buffer
+            .page()
+            .map(|page| column_header_rows(page))
+            .unwrap_or_default();
         let row = |line: usize| {
             buffer
                 .lines
@@ -267,7 +271,8 @@ impl ScreenReaderEngine {
         // Each paragraph's first line, as the virtual cursor's paragraphs part the page: a
         // region's start or a heading that goes on a paragraph is left out with it ("Primary
         // navigation region", "What changes" [obs, 761/s1]). A table's row is one
-        // paragraph, read by its first cell ("Central", "Northside").
+        // paragraph, read by its first cell ("Central", "Northside"); its row of column
+        // headers is not read ("Branch" [obs, 761/s1, 800/s6]).
         let mut read: Vec<usize> = Vec::new();
         for line in buffer
             .paragraphs
@@ -278,7 +283,8 @@ impl ScreenReaderEngine {
             let same_row = read
                 .last()
                 .is_some_and(|&before| row(line).is_some() && row(line) == row(before));
-            if read.last() != Some(&line) && !same_row {
+            let header_row = row(line).is_some_and(|r| headers.contains(&r));
+            if read.last() != Some(&line) && !same_row && !header_row {
                 read.push(line);
             }
         }
@@ -639,6 +645,27 @@ fn without_role_marks(text: &str) -> String {
         }
     }
     plain.split_whitespace().collect::<Vec<_>>().join(" ")
+}
+
+/// The table rows of `page` made of column headers only (`<th scope="col">`), by node id.
+fn column_header_rows(page: &crate::aom::AomNode) -> std::collections::HashSet<usize> {
+    use crate::aom::Role;
+    let column_header = |cell: &crate::aom::AomNode| {
+        cell.attributes.get("tag").map(String::as_str) == Some("th")
+            && cell.attributes.get("scope").map(String::as_str) == Some("col")
+    };
+    let mut found = std::collections::HashSet::new();
+    let mut pending = vec![page];
+    while let Some(node) = pending.pop() {
+        if node.role == Role::TableRow
+            && !node.children.is_empty()
+            && node.children.iter().all(column_header)
+        {
+            found.insert(node.id);
+        }
+        pending.extend(node.children.iter());
+    }
+    found
 }
 
 fn table_rows(page: &crate::aom::AomNode) -> std::collections::HashMap<usize, usize> {

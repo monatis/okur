@@ -101,18 +101,18 @@ pub const ATTRIBUTES: [&str; 9] = [
 ];
 
 impl SkimOptions {
-    /// Whether text formatted as `formatting` has every attribute checked ("The selections
-    /// made are cumulative", JAWS 2025 help, Skim Reading Dialog): bold, italic and
-    /// underline, which Okur reads from the page; the others, which it does not, find
-    /// nothing. With none checked, nothing is found.
+    /// Whether text formatted as `formatting` has any attribute checked: with Bold and
+    /// Italic checked, JAWS read the lines with bold text and the line with italic text,
+    /// "12 matches found" [obs, 803/s12], though its help calls the choices cumulative.
+    /// Bold, italic and underline are read from the page; the others, which Okur does not
+    /// read, find nothing. With none checked, nothing is found.
     pub fn has_attributes(&self, formatting: &crate::aom::TextFormatting) -> bool {
-        !self.attributes.is_empty()
-            && self.attributes.iter().all(|a| match a.as_str() {
-                "bold" => formatting.bold,
-                "italic" => formatting.italic,
-                "underline" => formatting.underline,
-                _ => false,
-            })
+        self.attributes.iter().any(|a| match a.as_str() {
+            "bold" => formatting.bold,
+            "italic" => formatting.italic,
+            "underline" => formatting.underline,
+            _ => false,
+        })
     }
 
     /// Whether a text rule finds its pattern in `text`, whatever its capitals. A pattern that is
@@ -375,6 +375,21 @@ impl SkimDialog {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// Checked attributes find text with any of them: Bold and Italic found the bold lines and
+    /// the italic one [obs, 803/s12]; none checked finds nothing.
+    #[test]
+    fn checked_attributes_find_text_with_any_of_them() {
+        let italic = crate::aom::TextFormatting {
+            italic: true,
+            ..crate::aom::TextFormatting::default()
+        };
+        let mut options = SkimOptions::default();
+        assert!(!options.has_attributes(&italic));
+        options.attributes = vec!["bold".into(), "italic".into()];
+        assert!(options.has_attributes(&italic));
+        assert!(!options.has_attributes(&crate::aom::TextFormatting::default()));
+    }
 
     #[test]
     fn the_dialog_is_jaws_skim_reading() {

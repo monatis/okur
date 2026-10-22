@@ -407,3 +407,8 @@ okur-core/src/ui/placemarkers.rs: "domain"
 # The mouse echo setting toggled by Insert+Space, E, O.
 okur-core/src/engine/mouse_echo.rs: "enabled"
 okur-core/src/engine/mouse_echo.rs: "unit"
+# The attributes a page's column header cells carry, for skim reading's table rows.
+okur-core/src/engine/say_all.rs: "col"
+okur-core/src/engine/say_all.rs: "scope"
+okur-core/src/engine/say_all.rs: "tag"
+okur-core/src/engine/say_all.rs: "th"

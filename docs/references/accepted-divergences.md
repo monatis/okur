@@ -98,8 +98,9 @@ A step can be in more than one entry; all of its entries apply.
   none of it); and Skim Reading, `760-web-skim-reading-dialog/s1` and
   `763-web-skim-reading-rule-types/s1`, `769-web-skim-read-by-sentence/s1`,
   `771-web-skim-reading-rule-saved/s1`, `776-web-skim-reading-text-rules-controls/s1`,
-  `777-web-skim-reading-speak-unit-and-attributes/s1` and `799-web-skim-read-by-bold/s1` (its rule
-  type said before the dialog).
+  `777-web-skim-reading-speak-unit-and-attributes/s1`, `799-web-skim-read-by-bold/s1`,
+  `800-web-skim-reading-back-to-first-lines/s1` and `803-web-skim-read-by-italic/s1` (its rule
+  type, or its rules' history, said before the dialog).
 - In the recordings of 2026-10-19 (round 9, JAWS freshly started for the batch), JAWS no longer
   said its version or the list's tutor message before the Links List, the Heading List and
   Virtual HTML Features, and said nothing before some dialogs at all: those steps were taken
