@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6642,
-  "total_steps": 6875,
+  "matched_steps": 6656,
+  "total_steps": 6892,
   "accepted_divergences": 181,
   "errors": [],
   "steps": {
@@ -7074,6 +7074,23 @@
     "823-web-edits-read-by-line-and-word-advanced/s6": "match",
     "823-web-edits-read-by-line-and-word-advanced/s7": "match",
     "823-web-edits-read-by-line-and-word-advanced/s8": "match",
-    "823-web-edits-read-by-line-and-word-advanced/s9": "match"
+    "823-web-edits-read-by-line-and-word-advanced/s9": "match",
+    "824-web-number-positions-by-word/s1": "match",
+    "824-web-number-positions-by-word/s10": "match",
+    "824-web-number-positions-by-word/s11": "match",
+    "824-web-number-positions-by-word/s12": "match",
+    "824-web-number-positions-by-word/s13": "match",
+    "824-web-number-positions-by-word/s14": "match",
+    "824-web-number-positions-by-word/s15": "match",
+    "824-web-number-positions-by-word/s16": "match",
+    "824-web-number-positions-by-word/s17": "match",
+    "824-web-number-positions-by-word/s2": "mismatch",
+    "824-web-number-positions-by-word/s3": "match",
+    "824-web-number-positions-by-word/s4": "match",
+    "824-web-number-positions-by-word/s5": "mismatch",
+    "824-web-number-positions-by-word/s6": "mismatch",
+    "824-web-number-positions-by-word/s7": "match",
+    "824-web-number-positions-by-word/s8": "match",
+    "824-web-number-positions-by-word/s9": "match"
   }
 }

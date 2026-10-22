@@ -6688,13 +6688,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "824-web-number-positions-by-word",
+      "fixture": "number-positions.html",
+      "evidence": {
+        "sha256": "36d73ad3e3bd79dcc0e6e40986bd90e53f00cbf7be8176f35f0c99992ce0cc65",
+        "capture_script_sha256": "4e9cdf8a1e7122d71e8500cfc5c79a70fe852ea794bd6e4e59bb1454b2853c6e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 463,
-    "scenarios_with_evidence": 463,
-    "total_trials": 1395,
-    "successful_trials": 1389,
-    "deterministic_scenarios": 305
+    "scenarios": 464,
+    "scenarios_with_evidence": 464,
+    "total_trials": 1398,
+    "successful_trials": 1392,
+    "deterministic_scenarios": 306
   }
 }
