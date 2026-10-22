@@ -349,7 +349,7 @@ skim-start = &Start Skim Reading
 skim-summary = Create Summar&y
 skim-close = &Close
 skim-help = &Help
-# Start Skim Reading or Create Summary with attribute and color rules, which Okur cannot read by yet.
-skim-rules-not-yet = Okur cannot skim by attribute or color rules yet.
+# Said after skim reading by an attribute rule [obs, 799/s10].
+skim-matches-found = { $count } matches found
 # The viewer Create Summary opens [obs, 763/s23].
 skim-results-title = Skim Reading Results

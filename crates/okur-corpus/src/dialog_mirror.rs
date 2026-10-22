@@ -415,10 +415,20 @@ impl DialogMirror {
                         _ => (true, None),
                     }
                 }
-                (ControlKind::Button { .. }, Role::Button)
-                | (ControlKind::CheckBox { .. }, Role::CheckBox) => {
-                    (plain(&control.label) == name, None)
+                // A check box turned, as its window reports Space on it (Skim Reading's Bold
+                // [obs, 799/s9]), by the traced state.
+                (ControlKind::CheckBox { checked }, Role::CheckBox)
+                    if plain(&control.label) == name =>
+                {
+                    match focus.states.checked {
+                        Some(now) if now != *checked => {
+                            *checked = now;
+                            (true, Some(Value::Checked(now)))
+                        }
+                        _ => (true, None),
+                    }
                 }
+                (ControlKind::Button { .. }, Role::Button) => (plain(&control.label) == name, None),
                 _ => (false, None),
             };
             if here {

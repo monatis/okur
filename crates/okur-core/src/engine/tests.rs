@@ -6412,6 +6412,76 @@ fn skim_reading_by_a_text_rule_reads_what_holds_the_pattern() {
     );
 }
 
+/// Skimming by an attribute rule with Bold checked reads the lines holding bold text: a
+/// heading, a paragraph's line with a bold word inline, not a plain paragraph; then how many
+/// were found, and the last line's first word [obs, 799/s10].
+#[test]
+fn skim_reading_by_bold_reads_the_lines_with_bold_text() {
+    use crate::aom::TextFormatting;
+    use crate::ui::{FromUi, ToUi, Value};
+    let bold = TextFormatting {
+        bold: true,
+        ..TextFormatting::default()
+    };
+    let plain = TextFormatting::default();
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Hours")
+        .with_children(vec![
+            AomNode::new(1, Role::Heading { level: 1 })
+                .with_text("Library hours")
+                .with_formatting(bold.clone()),
+            AomNode::new(2, Role::Paragraph).with_children(vec![
+                AomNode::new(3, Role::Text)
+                    .with_text("Open until ")
+                    .with_formatting(plain.clone()),
+                AomNode::new(4, Role::Text)
+                    .with_text("9 p.m.")
+                    .with_formatting(bold),
+                AomNode::new(5, Role::Text)
+                    .with_text(" on weekdays.")
+                    .with_formatting(plain.clone()),
+            ]),
+            AomNode::new(6, Role::Paragraph)
+                .with_text("Weekends stay the same.")
+                .with_formatting(plain),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    engine.execute_command("TopOfFile");
+    engine.execute_command("SkimReadDialog");
+    let id = ui
+        .take()
+        .iter()
+        .find_map(|m| match m {
+            ToUi::DialogShow { dialog } => Some(dialog.id),
+            _ => None,
+        })
+        .unwrap_or(0);
+    for (control, value) in [("rule", Value::Selected(3)), ("bold", Value::Checked(true))] {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+            id,
+            control: control.into(),
+            value,
+        }));
+    }
+    let read = engine
+        .handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+            id,
+            control: "start".into(),
+        }))
+        .unwrap_or_default();
+    assert!(read.contains("Library hours"), "{read:?}");
+    assert!(read.contains("Open until 9 p.m. on weekdays."), "{read:?}");
+    assert!(!read.contains("Weekends"), "{read:?}");
+    // The count, then the last line's first word, where the cursor stops ("11 matches found
+    // | Related" [obs, 799/s10]).
+    assert!(read.ends_with("2 matches found\nOpen"), "{read:?}");
+}
+
 /// Manage Rules: the rules' rows as JAWS's, "Digest Mail Mute Show flash message Enabled";
 /// Disable, Rename... and Delete with its question [obs, 787/s8-s18].
 #[test]

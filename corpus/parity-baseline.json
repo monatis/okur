@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6299,
+  "matched_steps": 6301,
   "total_steps": 6536,
   "accepted_divergences": 169,
   "errors": [],
@@ -6714,8 +6714,8 @@
     "798-desktop-notification-rule-shorten/s7": "match",
     "798-desktop-notification-rule-shorten/s8": "match",
     "798-desktop-notification-rule-shorten/s9": "mismatch",
-    "799-web-skim-read-by-bold/s1": "mismatch",
-    "799-web-skim-read-by-bold/s10": "mismatch",
+    "799-web-skim-read-by-bold/s1": "match",
+    "799-web-skim-read-by-bold/s10": "match",
     "799-web-skim-read-by-bold/s2": "match",
     "799-web-skim-read-by-bold/s3": "match",
     "799-web-skim-read-by-bold/s4": "match",

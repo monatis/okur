@@ -12,6 +12,46 @@ use std::collections::VecDeque;
 use super::ScreenReaderEngine;
 use crate::input::{Key, KeyAction, KeyEvent};
 
+/// For each element, the texts of its siblings (itself included) and their contents with
+/// every attribute `options` checks: what a line read for that element holds inline.
+fn inline_texts_with(
+    page: &crate::aom::AomNode,
+    options: &crate::ui::skim::SkimOptions,
+) -> std::collections::HashMap<usize, Vec<String>> {
+    fn texts(
+        node: &crate::aom::AomNode,
+        options: &crate::ui::skim::SkimOptions,
+        out: &mut Vec<String>,
+    ) {
+        // Inline text only: a heading or a region in the element holds lines of its own.
+        if node.role != crate::aom::Role::Text {
+            return;
+        }
+        let own = node.text.as_deref().or(node.name.as_deref()).map(str::trim);
+        match (node.formatting.as_ref(), own) {
+            (Some(f), Some(text)) if !text.is_empty() && options.has_attributes(f) => {
+                out.push(text.to_owned());
+            }
+            _ => node.children.iter().for_each(|c| texts(c, options, out)),
+        }
+    }
+    let mut found = std::collections::HashMap::new();
+    let mut stack = vec![page];
+    while let Some(node) = stack.pop() {
+        let mut siblings = Vec::new();
+        for child in &node.children {
+            texts(child, options, &mut siblings);
+        }
+        if !siblings.is_empty() {
+            for child in &node.children {
+                found.insert(child.id, siblings.clone());
+            }
+        }
+        stack.extend(node.children.iter());
+    }
+    found
+}
+
 /// Lines with the synthesizer ahead of the one being spoken: enough that no pause falls
 /// between lines, few enough that a long page is not handed over whole.
 const AHEAD: usize = 3;
@@ -29,6 +69,10 @@ pub(super) struct SayAll {
     source: Source,
     /// The page's last word has been handed over after its last line.
     ended: bool,
+    /// Said before that word, at the end: an attribute rule's "11 matches found", whose
+    /// word is then its last line's first, where its reading leaves the cursor ("Related"
+    /// [obs, 799/s10]).
+    found: Option<String>,
 }
 
 /// What a Say All reads, piece by piece.
@@ -71,9 +115,6 @@ impl ScreenReaderEngine {
     /// With Read First Sentence of Every Paragraph chosen in Skim Reading, each paragraph is
     /// read by its first sentence instead (JAWS 2025 help, Skim Reading).
     pub(super) fn start_skim_read(&mut self) -> Option<String> {
-        if let Some(said) = self.skim_rule_unread() {
-            return Some(said);
-        }
         if self.skim_options.rule == crate::ui::skim::SkimRule::FirstSentence {
             let read = self.skim_sentences();
             return self.begin_say_all(0, Source::PageUnits(read), true);
@@ -81,6 +122,14 @@ impl ScreenReaderEngine {
         if self.skim_options.rule == crate::ui::skim::SkimRule::TextRules {
             let read = self.skim_by_text_rule(&self.skim_options.clone());
             return self.begin_say_all(0, Source::PageUnits(read), true);
+        }
+        // An attribute rule's lines, then how many were found: "11 matches found" [obs,
+        // 799/s10].
+        if self.skim_options.rule == crate::ui::skim::SkimRule::Attributes {
+            let read = self.skim_by_attributes(&self.skim_options.clone());
+            self.skim_found =
+                Some(crate::messages::msg::skim_matches_found(read.len().to_string()).render());
+            return self.begin_say_all(0, Source::PageSkim(read), true);
         }
         let read = self.skim_lines();
         self.begin_say_all(0, Source::PageSkim(read), true)
@@ -97,6 +146,14 @@ impl ScreenReaderEngine {
         let pieces: Vec<(usize, String)> = match options.rule {
             crate::ui::skim::SkimRule::FirstSentence => self.skim_sentences(),
             crate::ui::skim::SkimRule::TextRules => self.skim_by_text_rule(options),
+            crate::ui::skim::SkimRule::Attributes => self
+                .skim_by_attributes(options)
+                .into_iter()
+                .filter_map(|i| {
+                    let line = self.cursor.buffer.lines.get(i)?;
+                    Some((line.start_offset, self.cursor.line_text(i)?))
+                })
+                .collect(),
             _ => self
                 .skim_lines()
                 .into_iter()
@@ -110,6 +167,47 @@ impl ScreenReaderEngine {
             .into_iter()
             .map(|(offset, text)| (offset, without_role_marks(&text)))
             .filter(|(_, text)| !text.is_empty())
+            .collect()
+    }
+
+    /// Skim reading by an attribute rule: from the virtual cursor's line on, the lines holding
+    /// text with every attribute checked, as JAWS reads them: a heading, a paragraph's line
+    /// with its bold "9 p.m.", a table's header cells [obs, 799/s10].
+    pub(super) fn skim_by_attributes(&self, options: &crate::ui::skim::SkimOptions) -> Vec<usize> {
+        let from = self.cursor.current_line_index();
+        let buffer = &self.cursor.buffer;
+        let inline = buffer
+            .page()
+            .map(|page| inline_texts_with(page, options))
+            .unwrap_or_default();
+        buffer
+            .lines
+            .iter()
+            .filter(|line| line.line_index >= from && !line.text.trim().is_empty())
+            // Not the lines Okur says for an element: a region's or a list's announcement.
+            .filter(|line| {
+                !matches!(
+                    line.role,
+                    crate::aom::Role::Document
+                        | crate::aom::Role::Landmark { .. }
+                        | crate::aom::Role::List
+                        | crate::aom::Role::Table
+                )
+            })
+            // Each character by its own text's formatting, as Say Font finds it: a region's or
+            // an article's, taken from its first text, is not its lines'. A line's inline
+            // text of another element (a paragraph's <strong>) is in the line's own text, so
+            // it is found among the line's element's siblings.
+            .filter(|line| {
+                (line.start_offset..line.end_offset).any(|offset| {
+                    buffer
+                        .text_formatting_at_offset(offset)
+                        .is_some_and(|f| options.has_attributes(&f))
+                }) || inline
+                    .get(&line.node_id)
+                    .is_some_and(|texts| texts.iter().any(|t| line.text.contains(t.as_str())))
+            })
+            .map(|line| line.line_index)
             .collect()
     }
 
@@ -289,6 +387,7 @@ impl ScreenReaderEngine {
             start_line: line,
             source,
             ended: false,
+            found: self.skim_found.take(),
         };
         let progress = self.speech.reports_marks();
         let ahead = if progress { AHEAD + 1 } else { usize::MAX };
@@ -395,6 +494,7 @@ impl ScreenReaderEngine {
             start_line: old.start_line.min(from),
             source: old.source,
             ended: false,
+            found: old.found,
         };
         if self.say_all_line(&reading, from).is_none() {
             // Past the last line: reading ends where it was.
@@ -472,27 +572,38 @@ impl ScreenReaderEngine {
                 // end content" [obs, 761/s1].
                 let last = reading.next_line.checked_sub(1);
                 let skim = matches!(reading.source, Source::PageSkim(_));
-                let word = self
-                    .cursor
-                    .buffer
-                    .lines
-                    .last()
-                    .and_then(|l| {
+                // After an attribute rule's lines and its count, its last line's first word,
+                // without its role ("Related" [obs, 799/s10]).
+                let found = reading.found.take();
+                let word = match (&reading.source, &found) {
+                    (Source::PageSkim(lines), Some(_)) => last
+                        .and_then(|i| lines.get(i))
+                        .and_then(|&i| self.cursor.buffer.lines.get(i))
+                        .and_then(|l| l.text.split_whitespace().next().map(str::to_owned)),
+                    _ => self.cursor.buffer.lines.last().and_then(|l| {
                         let mut words = l.text.split_whitespace();
-                        if skim {
-                            words.next()
-                        } else {
-                            words.last()
-                        }
-                    })
-                    .map(|w| {
-                        let bare = w.trim_end_matches('.');
-                        if bare.is_empty() { w } else { bare }.to_owned()
-                    });
+                        if skim { words.next() } else { words.last() }.map(str::to_owned)
+                    }),
+                }
+                .map(|w| {
+                    let bare = w.trim_end_matches('.');
+                    if bare.is_empty() {
+                        w.clone()
+                    } else {
+                        bare.to_owned()
+                    }
+                });
                 let in_page = !matches!(reading.source, Source::Field(_));
                 if let (true, false, Some(word), Some(last)) = (in_page, reading.ended, word, last)
                 {
                     reading.ended = true;
+                    if let Some(found) = found {
+                        let mark = self.next_mark;
+                        self.next_mark += 1;
+                        self.speech.speak_marked(&found, mark, false);
+                        reading.queued.push_back((mark, last));
+                        said.push(found);
+                    }
                     let mark = self.next_mark;
                     self.next_mark += 1;
                     self.speech.speak_marked(&word, mark, false);

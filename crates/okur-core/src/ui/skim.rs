@@ -62,6 +62,9 @@ impl SpeakUnit {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SkimOptions {
     pub rule: SkimRule,
+    /// The attribute check boxes checked, by their control ids ("bold", "italic"): text
+    /// with all of them is what an attribute rule finds.
+    pub attributes: Vec<String>,
     /// Skim Reading Indication, checked at first [obs, 760/s2].
     pub indication: bool,
     /// Text Search Pattern: what a text rule looks for.
@@ -75,6 +78,7 @@ impl Default for SkimOptions {
     fn default() -> Self {
         Self {
             rule: SkimRule::FirstLine,
+            attributes: Vec::new(),
             indication: true,
             pattern: String::new(),
             regex: false,
@@ -83,7 +87,34 @@ impl Default for SkimOptions {
     }
 }
 
+/// The attribute check boxes, by control id, in JAWS's order.
+pub const ATTRIBUTES: [&str; 9] = [
+    "bold",
+    "italic",
+    "underline",
+    "strikeout",
+    "double_strikeout",
+    "superscript",
+    "subscript",
+    "shadow",
+    "outline",
+];
+
 impl SkimOptions {
+    /// Whether text formatted as `formatting` has every attribute checked ("The selections
+    /// made are cumulative", JAWS 2025 help, Skim Reading Dialog): bold, italic and
+    /// underline, which Okur reads from the page; the others, which it does not, find
+    /// nothing. With none checked, nothing is found.
+    pub fn has_attributes(&self, formatting: &crate::aom::TextFormatting) -> bool {
+        !self.attributes.is_empty()
+            && self.attributes.iter().all(|a| match a.as_str() {
+                "bold" => formatting.bold,
+                "italic" => formatting.italic,
+                "underline" => formatting.underline,
+                _ => false,
+            })
+    }
+
     /// Whether a text rule finds its pattern in `text`, whatever its capitals. A pattern that is
     /// not a regular expression finds nothing.
     pub fn finds(&self, text: &str) -> bool {
@@ -186,7 +217,6 @@ impl SkimDialog {
         let unavailable = |id: &str, label: StaticMessage, kind: ControlKind| {
             control(id, label, kind, available(rule, id))
         };
-        let unchecked = || ControlKind::CheckBox { checked: false };
         let mut controls = vec![
             control(
                 "rule",
@@ -264,7 +294,10 @@ impl SkimDialog {
                 ("outline", msg::skim_outline()),
             ]
             .into_iter()
-            .map(|(id, label)| unavailable(id, label, unchecked())),
+            .map(|(id, label)| {
+                let checked = self.options.attributes.iter().any(|a| a == id);
+                unavailable(id, label, ControlKind::CheckBox { checked })
+            }),
         );
         controls.extend([
             control(
@@ -312,6 +345,12 @@ impl SkimDialog {
                     ("indication", Value::Checked(on)) => self.options.indication = *on,
                     ("pattern", Value::Text(text)) => self.options.pattern = text.clone(),
                     ("regex", Value::Checked(on)) => self.options.regex = *on,
+                    (attribute, Value::Checked(on)) if ATTRIBUTES.contains(&attribute) => {
+                        self.options.attributes.retain(|a| a != attribute);
+                        if *on {
+                            self.options.attributes.push(attribute.to_owned());
+                        }
+                    }
                     ("unit", Value::Selected(i)) => {
                         if let Some(&unit) = SpeakUnit::ALL.get(*i) {
                             self.options.unit = unit;

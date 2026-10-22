@@ -58,7 +58,8 @@ impl ScreenReaderEngine {
         self.returning_from_dialog();
         match outcome {
             // Started from the dialog, skim reading ends in its summary, by either rule type
-            // [obs, 769/s3, 771/s3]; Ctrl+Insert+Down does not open one [obs, 761/s1].
+            // [obs, 769/s3, 771/s3]; Ctrl+Insert+Down does not open one [obs, 761/s1]. An
+            // attribute rule's reading opens none: JAWS's left no Results Viewer [obs, 799].
             // Without the synthesizer's progress the whole reading is handed over at once, and
             // the summary follows it.
             Outcome::Start(options) => {
@@ -92,11 +93,6 @@ impl ScreenReaderEngine {
         &mut self,
         options: &crate::ui::skim::SkimOptions,
     ) -> Option<String> {
-        if options.rule == SkimRule::Attributes {
-            let said = crate::messages::msg::skim_rules_not_yet().to_string();
-            self.speech.speak(&said, true);
-            return Some(said);
-        }
         let pieces = self.skim_pieces(options);
         self.show_skim_summary(pieces)
     }
@@ -147,17 +143,5 @@ impl ScreenReaderEngine {
     pub(super) fn move_to_summary_place(&mut self, offset: usize) {
         let said = self.cursor.jump_to_element_offset(offset);
         self.speech.speak(&said, true);
-    }
-
-    /// The rule Ctrl+Insert+Down reads by, when Okur cannot read by it: said so.
-    pub(super) fn skim_rule_unread(&mut self) -> Option<String> {
-        match self.skim_options.rule {
-            SkimRule::FirstLine | SkimRule::FirstSentence | SkimRule::TextRules => None,
-            SkimRule::Attributes => {
-                let said = crate::messages::msg::skim_rules_not_yet().to_string();
-                self.speech.speak(&said, true);
-                Some(said)
-            }
-        }
     }
 }
