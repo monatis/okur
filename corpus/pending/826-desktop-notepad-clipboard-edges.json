@@ -1,0 +1,96 @@
+{
+  "id": "826-desktop-notepad-clipboard-edges",
+  "name": "The clipboard keys' edges in Notepad: a line copied, AppendSelectedTextToClipboard with nothing selected, the next line selected and appended, Ctrl+X answered No (N, with UI Access), SayClipboard, Ctrl+C answered Yes (Y) and SayClipboard; no step reads JAWS's history, which the harness copies through the clipboard",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Shift+End",
+      "history": false
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Ctrl+C",
+      "history": false
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Home",
+      "history": false
+    },
+    {
+      "id": "s4",
+      "type": "jaws_script",
+      "command": "AppendSelectedTextToClipboard",
+      "history": false
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down",
+      "history": false
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Shift+End",
+      "history": false
+    },
+    {
+      "id": "s7",
+      "type": "jaws_script",
+      "command": "AppendSelectedTextToClipboard",
+      "history": false
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Ctrl+X",
+      "history": false
+    },
+    {
+      "id": "s9",
+      "type": "key_ui_access",
+      "command": "N",
+      "history": false
+    },
+    {
+      "id": "s10",
+      "type": "jaws_script",
+      "command": "SayClipboard",
+      "history": false
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Ctrl+C",
+      "history": false
+    },
+    {
+      "id": "s12",
+      "type": "key_ui_access",
+      "command": "Y",
+      "history": false
+    },
+    {
+      "id": "s13",
+      "type": "jaws_script",
+      "command": "SayClipboard",
+      "history": false
+    }
+  ]
+}
