@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6301,
-  "total_steps": 6536,
+  "matched_steps": 6315,
+  "total_steps": 6553,
   "accepted_divergences": 169,
   "errors": [],
   "steps": {
@@ -6723,6 +6723,23 @@
     "799-web-skim-read-by-bold/s6": "match",
     "799-web-skim-read-by-bold/s7": "match",
     "799-web-skim-read-by-bold/s8": "match",
-    "799-web-skim-read-by-bold/s9": "match"
+    "799-web-skim-read-by-bold/s9": "match",
+    "801-desktop-notification-rule-play-sound-controls/s1": "match",
+    "801-desktop-notification-rule-play-sound-controls/s10": "match",
+    "801-desktop-notification-rule-play-sound-controls/s11": "mismatch",
+    "801-desktop-notification-rule-play-sound-controls/s12": "match",
+    "801-desktop-notification-rule-play-sound-controls/s13": "match",
+    "801-desktop-notification-rule-play-sound-controls/s14": "match",
+    "801-desktop-notification-rule-play-sound-controls/s15": "match",
+    "801-desktop-notification-rule-play-sound-controls/s16": "match",
+    "801-desktop-notification-rule-play-sound-controls/s17": "match",
+    "801-desktop-notification-rule-play-sound-controls/s2": "match",
+    "801-desktop-notification-rule-play-sound-controls/s3": "match",
+    "801-desktop-notification-rule-play-sound-controls/s4": "match",
+    "801-desktop-notification-rule-play-sound-controls/s5": "mismatch",
+    "801-desktop-notification-rule-play-sound-controls/s6": "mismatch",
+    "801-desktop-notification-rule-play-sound-controls/s7": "match",
+    "801-desktop-notification-rule-play-sound-controls/s8": "match",
+    "801-desktop-notification-rule-play-sound-controls/s9": "match"
   }
 }

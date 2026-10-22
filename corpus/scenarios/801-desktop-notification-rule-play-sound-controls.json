@@ -1,0 +1,102 @@
+{
+  "id": "801-desktop-notification-rule-play-sound-controls",
+  "name": "Create Rule with Play Sound: Space on Show notification, Insert+Space, N, Alt+C (Create Rule...), Tab to the rule text and SayLine, Tab twice to Speech Action, Down Arrow twice (Play Sound), Tab five times through what follows, Escape twice, typed by JAWS (leaves no rule)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notifications.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Notification Fixture"
+  },
+  "expects_notifications": true,
+  "reset": {
+    "keys": []
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "N"
+    },
+    {
+      "id": "s4",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+C\")"
+    },
+    {
+      "id": "s5",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s6",
+      "type": "jaws_script",
+      "command": "SayLine"
+    },
+    {
+      "id": "s7",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s8",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s9",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s10",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s11",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s12",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s13",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s14",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s15",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s16",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    },
+    {
+      "id": "s17",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    }
+  ]
+}

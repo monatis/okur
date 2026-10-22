@@ -6360,13 +6360,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "801-desktop-notification-rule-play-sound-controls",
+      "fixture": "desktop-notifications.ps1",
+      "evidence": {
+        "sha256": "c1072d46ddae4ec7d63e9f65667fc728ad3009fd56ebdc5419cb0d1b23955a7f",
+        "capture_script_sha256": "4e9cdf8a1e7122d71e8500cfc5c79a70fe852ea794bd6e4e59bb1454b2853c6e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 2,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 441,
-    "scenarios_with_evidence": 441,
-    "total_trials": 1351,
-    "successful_trials": 1347,
+    "scenarios": 442,
+    "scenarios_with_evidence": 442,
+    "total_trials": 1354,
+    "successful_trials": 1349,
     "deterministic_scenarios": 287
   }
 }
