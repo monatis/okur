@@ -87,10 +87,14 @@ in [accepted divergences](docs/references/accepted-divergences.md).
     Right and Left skip and go back by that unit, PageUp and PageDown change the rate, and the
     cursor stays where you stopped it; skim reading (Ctrl+Insert+Down), each paragraph by its
     first line or its first sentence, the lines, sentences or paragraphs a text rule finds, or
-    the lines with bold, italic or underlined text or text in a color, as chosen in Skim Reading
-    (Ctrl+Shift+Insert+Down), whose Create Summary lists them, each a link to its place;
-  - the Word List (Ctrl+Insert+W): the page's words, most used first, and W and Shift+W to the
-    next and prior line with the word chosen;
+    the lines with bold, italic, underlined, struck, raised or lowered text or text in a color,
+    as chosen in Skim Reading (Ctrl+Shift+Insert+Down), whose Create Summary lists them, each a
+    link to its place;
+  - deleted text said between "Deletion" and "end Deletion", and a raised or lowered number
+    after a number between "superscript" or "subscript" and their end ("10 superscript 23");
+  - the Word List (Ctrl+Insert+W): the page's words, most used first, W and Shift+W to the
+    next and prior line with the word chosen, and its Summary: the sentences holding the word,
+    each a link to its place;
   - quick navigation keys: headings and their levels, links, form fields, edits, buttons,
     check boxes, radio buttons, combo boxes, lists and list items, tables, graphics, regions,
     articles, divisions, separators, tabs and mail links; N past a run of links; the first
@@ -211,7 +215,6 @@ documentation describes and Okur lacks, most important first. Among them:
   draw their own text);
 - the keys JAWS adds for the clipboard: saying it (Insert+Windows+X), viewing it and adding
   to it (copying, cutting and pasting already work);
-- Skim Reading's attributes other than bold, italic and underline, and the Word List's summary;
 - toasts Focus Assist hides, and applications' own notifications in the history;
 - the rest of what the verbosity levels change, as further recordings show it;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
