@@ -17,10 +17,17 @@ reads the screen live is also checked live on old-pc (`run-scenario.ps1 -Reader 
 ## 0. old-pc
 
 - **820's traces**: the tracer recorded no UIA notification in rounds 247 to 249, though JAWS
-  spoke the fixture's every time. Find why with the experiment's trace and debug log
-  (`sr-harness\exp\uianotify`), fix the tracer, record 820 again, and import it; its replay
-  should then list "Upload finished: report.pdf powershell" in Okur's history.
-- Import round 250 (821, the edits page by character) and build what it shows.
+  spoke the fixture's every time. `okur-lab probe-notifications` (`b1dea4e`) registered five
+  ways at once (the desktop root's subtree and the window's, in the control and the raw view,
+  and the generic automation event): none heard a WinForms notification, whether raised
+  through `RaiseAutomationNotification` or `UiaRaiseNotificationEvent` on the window's host
+  provider, while JAWS spoke each (its speech history). A test on Calculator ("Hesap
+  Makinesi" on old-pc) did not run: the keys did not reach it. Next: get the Calculator test
+  to run (a known notifier); if it is heard and WinForms' is not, compare their providers; if
+  neither, test whether UI Access matters (JAWS has it; `okur-lab-keys` has it once the
+  development certificate is on old-pc). Until then 820 waits, its JAWS evidence good (rounds
+  248, 249).
+- Round 250 (821, the edits page by character) is imported and built (`d4beaf5`).
 - Live: Okur reading a page with deleted, inserted and highlighted text and raised numbers
   (819's keys, `-Reader okur`), since the live buffer is read from IA2 as the snapshots are.
 

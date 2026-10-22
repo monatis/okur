@@ -102,9 +102,12 @@ Each is the named command's output at `a09021c`:
 
 Rounds 229 to 246 are imported. 820 was recorded three times (rounds 247 to 249; 248 and 249
 with every trial successful) and is **not imported**: no trace holds the notification JAWS
-spoke, so its replay could not show Okur's reading of it. An experiment queued after round 250
-traces the fixture with a debug log (`sr-harness\exp\uianotify`). Round 250 (821, the edits page
-by character) is recording.
+spoke, so its replay could not show Okur's reading of it. Experiments after this handoff's
+first version (`okur-lab probe-notifications`, `b1dea4e`) found that no UI Automation
+registration in a plain process hears the fixture's notifications on old-pc, though JAWS speaks
+them; the plan of round 21 says what to try next. Round 250 (821, the edits page by character)
+is imported, and Okur says the marks by character too (`d4beaf5`, 821 43/43). Live run 251 has
+Okur itself read 819's keys on old-pc.
 
 ## Not done, and why
 
