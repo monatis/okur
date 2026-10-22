@@ -1,0 +1,70 @@
+{
+  "id": "818-web-number-positions-read-down",
+  "name": "The numbers page read line by line with Down Arrow: superscript and subscript digits after digits and after letters (2 cubed, 10 to the 23rd and -6th, x to the 10th, 21st, base 2, 16 and 10, H2SO4)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/number-positions.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down"
+    }
+  ]
+}

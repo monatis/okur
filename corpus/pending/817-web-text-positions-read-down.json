@@ -1,0 +1,60 @@
+{
+  "id": "817-web-text-positions-read-down",
+  "name": "The positions page read line by line with Down Arrow: one- and two-character superscripts and subscripts, digits and letters",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/text-positions.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    }
+  ]
+}
