@@ -35,7 +35,9 @@ pub mod roles {
     pub const IA2_ROLE_COMPLEMENTARY_CONTENT: i32 = 0x42C;
     pub const IA2_ROLE_LANDMARK: i32 = 0x42D;
     pub const IA2_ROLE_CONTENT_DELETION: i32 = 0x42F;
+    pub const IA2_ROLE_CONTENT_INSERTION: i32 = 0x430;
     pub const IA2_ROLE_BLOCK_QUOTE: i32 = 0x431;
+    pub const IA2_ROLE_MARK: i32 = 0x432;
 }
 
 /// Selected MSAA states (`oleacc.h`).

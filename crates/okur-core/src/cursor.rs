@@ -956,7 +956,11 @@ impl VirtualCursor {
                 return None;
             }
             self.offset = next_word.start_offset;
-            Some(SpeechFormatter::format_word(&next_word.text))
+            Some(
+                self.buffer
+                    .marked_word(next_word)
+                    .unwrap_or_else(|| SpeechFormatter::format_word(&next_word.text)),
+            )
         } else {
             None
         }
@@ -976,7 +980,11 @@ impl VirtualCursor {
                 return None;
             }
             self.offset = prior_word.start_offset;
-            Some(SpeechFormatter::format_word(&prior_word.text))
+            Some(
+                self.buffer
+                    .marked_word(prior_word)
+                    .unwrap_or_else(|| SpeechFormatter::format_word(&prior_word.text)),
+            )
         } else {
             None
         }
@@ -985,7 +993,9 @@ impl VirtualCursor {
     /// Speaks current word without moving cursor (`SayWord`).
     pub fn current_word(&self) -> String {
         if let Some(word) = self.buffer.word_at_offset(self.offset) {
-            SpeechFormatter::format_word(&word.text)
+            self.buffer
+                .marked_word(word)
+                .unwrap_or_else(|| SpeechFormatter::format_word(&word.text))
         } else {
             String::new()
         }

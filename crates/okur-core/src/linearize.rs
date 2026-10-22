@@ -38,9 +38,20 @@ const SUPERSCRIPT_START: char = '\u{FDD2}';
 const SUPERSCRIPT_END: char = '\u{FDD3}';
 const SUBSCRIPT_START: char = '\u{FDD4}';
 const SUBSCRIPT_END: char = '\u{FDD5}';
+const INSERTION_START: char = '\u{FDD6}';
+const INSERTION_END: char = '\u{FDD7}';
+const MARK_START: char = '\u{FDD8}';
+const MARK_END: char = '\u{FDD9}';
 
 fn is_flow_mark(c: char) -> bool {
-    ('\u{FDD0}'..='\u{FDD5}').contains(&c)
+    ('\u{FDD0}'..='\u{FDD9}').contains(&c)
+}
+
+fn is_flow_end(c: char) -> bool {
+    matches!(
+        c,
+        DELETION_END | SUPERSCRIPT_END | SUBSCRIPT_END | INSERTION_END | MARK_END
+    )
 }
 
 /// What a flow mark says, as JAWS brackets it: "\u{1d}Deletion \u{1e}" [obs, 814/s3],
@@ -52,13 +63,18 @@ fn flow_marker(mark: char) -> String {
         SUPERSCRIPT_START => msg::role_superscript(),
         SUPERSCRIPT_END => msg::role_superscript_end(),
         SUBSCRIPT_START => msg::role_subscript(),
-        _ => msg::role_subscript_end(),
+        SUBSCRIPT_END => msg::role_subscript_end(),
+        INSERTION_START => msg::role_insertion(),
+        INSERTION_END => msg::role_insertion_end(),
+        MARK_START => msg::role_mark(),
+        _ => msg::role_mark_end(),
     };
     format!(" {RS}{} {RE} ", name.as_str())
 }
 
 /// The marks an inline element is said between, given the run's text before it: deleted text
-/// (IA2's content deletion) between "Deletion" and "end Deletion" [obs, 814/s3]; a raised or
+/// (IA2's content deletion) between "Deletion" and "end Deletion" [obs, 814/s3], inserted and
+/// highlighted text likewise ("Insertion", "mark" [obs, 819/s2, s4]); a raised or
 /// lowered number right after a digit between "superscript" or "subscript" and their end,
 /// "10 superscript 23", "10 superscript -6", "5 subscript 10" [obs, 818/s3, s4, s9], where
 /// read together they would make another number. JAWS leaves a one-digit one unmarked ("2
@@ -66,8 +82,11 @@ fn flow_marker(mark: char) -> String {
 /// text; Okur marks it too (accepted divergence). Raised letters ("21st") and a number after
 /// letters ("x10", "H2SO4") are read as they are [obs, 818/s5, s6, s8, s10].
 fn flow_marks(node: &AomNode, before: &str) -> Option<(char, char)> {
-    if attr(node, "aria_role") == Some("deletion") {
-        return Some((DELETION_START, DELETION_END));
+    match attr(node, "aria_role") {
+        Some("deletion") => return Some((DELETION_START, DELETION_END)),
+        Some("insertion") => return Some((INSERTION_START, INSERTION_END)),
+        Some("mark") => return Some((MARK_START, MARK_END)),
+        _ => {}
     }
     let formatting = node.formatting.as_ref()?;
     if node.text.is_some() || node.children.is_empty() {
@@ -94,33 +113,53 @@ fn flow_marks(node: &AomNode, before: &str) -> Option<(char, char)> {
 }
 
 /// A line of a run with its flow marks: its text, without them; its speech, with them said;
-/// and the marks that end it, which are said at the next line's start, as JAWS says the "end
-/// Deletion" of a paragraph struck through whole [obs, 814/s4-s5].
-fn marked_line(line: &str) -> (String, String, String) {
+/// the marks said within it, each with the byte in its text it stands at; and the marks that
+/// end it, which are said at the next line's start, as JAWS says the "end Deletion" of a
+/// paragraph struck through whole [obs, 814/s4-s5].
+fn marked_line(line: &str) -> MarkedLine {
     let text: String = line.chars().filter(|&c| !is_flow_mark(c)).collect();
     if text.len() == line.len() {
-        return (text, line.to_owned(), String::new());
+        return MarkedLine {
+            speech: line.to_owned(),
+            text,
+            marks: Vec::new(),
+            carried: Vec::new(),
+        };
     }
-    let ends = |c: char| matches!(c, DELETION_END | SUPERSCRIPT_END | SUBSCRIPT_END);
-    let body = line.trim_end_matches(|c: char| ends(c) || c.is_whitespace());
+    let body = line.trim_end_matches(|c: char| is_flow_end(c) || c.is_whitespace());
     let carried = line
         .get(body.len()..)
         .unwrap_or_default()
         .chars()
-        .filter(|&c| ends(c))
+        .filter(|&c| is_flow_end(c))
         .map(flow_marker)
         .collect();
-    let speech = body
-        .chars()
-        .map(|c| {
-            if is_flow_mark(c) {
-                flow_marker(c)
-            } else {
-                c.to_string()
-            }
-        })
-        .collect();
-    (text, speech, carried)
+    let mut speech = String::new();
+    let mut marks = Vec::new();
+    let mut at = 0;
+    for c in body.chars() {
+        if is_flow_mark(c) {
+            let marker = flow_marker(c);
+            speech.push_str(&marker);
+            marks.push((at, marker));
+        } else {
+            speech.push(c);
+            at += c.len_utf8();
+        }
+    }
+    MarkedLine {
+        text,
+        speech,
+        marks,
+        carried,
+    }
+}
+
+struct MarkedLine {
+    text: String,
+    speech: String,
+    marks: Vec<(usize, String)>,
+    carried: Vec<String>,
 }
 
 /// A heading's only control, when it is a button named as the heading is: GitHub's "Collapse
@@ -324,7 +363,7 @@ struct Builder<'a> {
     headings: crate::settings::HeadingIndication,
     /// Marks said at the start of the next line: the "end Deletion" of deleted text that
     /// ended its line.
-    pending_marks: String,
+    pending_marks: Vec<String>,
 }
 
 /// The page's attribute that says its same page links are read as plain links: JAWS's
@@ -367,7 +406,7 @@ impl<'a> Builder<'a> {
             same_page_links: true,
             graphics: true,
             headings: crate::settings::HeadingIndication::Level,
-            pending_marks: String::new(),
+            pending_marks: Vec::new(),
         }
     }
 
@@ -397,15 +436,15 @@ impl<'a> Builder<'a> {
     /// Appends a line. `text` goes into the flat buffer (word/character navigation);
     /// `speech` is what the virtual cursor speaks on it. Returns the line's start offset.
     fn emit(&mut self, node_id: usize, role: Role, text: &str, speech: String) -> usize {
-        let speech = if self.pending_marks.is_empty() {
-            speech
-        } else {
-            std::mem::take(&mut self.pending_marks) + &speech
-        };
+        let carried = std::mem::take(&mut self.pending_marks);
+        let speech = carried.concat() + &speech;
         if !self.buffer.text.is_empty() {
             self.buffer.text.push('\n');
         }
         let start = self.offset();
+        self.buffer
+            .flow_marks
+            .extend(carried.into_iter().map(|mark| (start, mark)));
         self.buffer.text.push_str(text);
         let end = self.offset();
         self.buffer.lines.push(BufferLine {
@@ -493,9 +532,12 @@ impl<'a> Builder<'a> {
         let node_id = run.node_id.unwrap_or_default();
         let role = run.role.unwrap_or(Role::Text);
         for line in wrap_lines(&text, MAX_LINE_LENGTH) {
-            let (plain, speech, carried) = marked_line(line);
-            self.emit(node_id, role.clone(), &plain, speech);
-            self.pending_marks.push_str(&carried);
+            let line = marked_line(line);
+            let start = self.emit(node_id, role.clone(), &line.text, line.speech);
+            self.buffer
+                .flow_marks
+                .extend(line.marks.into_iter().map(|(at, mark)| (start + at, mark)));
+            self.pending_marks.extend(line.carried);
         }
         text.retain(|c| !is_flow_mark(c));
         self.last_text_line = Some(text);
@@ -1736,6 +1778,67 @@ mod tests {
                 .insert("current".to_owned(), current.to_owned());
         }
         node
+    }
+
+    /// By word, the last mark before a word is said with it, and a mark inside it where it
+    /// stands: "Deletion twelve", "Insertion ten" without the "end Deletion" between, "end
+    /// Insertion dollars", "10 superscript 23" [obs, 819/s12-s14, s23].
+    #[test]
+    fn a_word_says_the_mark_before_it_and_those_inside() {
+        let text = |id: usize, t: &str| AomNode::new(id, Role::Text).with_text(t);
+        let marked = |id: usize, t: &str, role: &str| {
+            let mut node = AomNode::new(id, Role::Text).with_children(vec![text(id + 1, t)]);
+            node.attributes
+                .insert("aria_role".to_owned(), role.to_owned());
+            node
+        };
+        let raised = crate::aom::TextFormatting {
+            superscript: true,
+            ..Default::default()
+        };
+        let root = AomNode::new(0, Role::Document).with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_children(vec![
+                text(2, "Was "),
+                marked(3, "twelve", "deletion"),
+                text(5, " "),
+                marked(6, "ten", "insertion"),
+                text(8, " dollars."),
+            ]),
+            AomNode::new(9, Role::Paragraph).with_children(vec![
+                text(10, "Holds 10"),
+                AomNode::new(11, Role::Text)
+                    .with_formatting(raised.clone())
+                    .with_children(vec![text(12, "23").with_formatting(raised)]),
+                text(13, " particles."),
+            ]),
+        ]);
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let said: Vec<String> = buffer
+            .words
+            .iter()
+            .map(|w| {
+                buffer
+                    .marked_word(w)
+                    .unwrap_or_else(|| w.text.clone())
+                    .split_whitespace()
+                    .collect::<Vec<_>>()
+                    .join(" ")
+            })
+            .collect();
+        assert_eq!(
+            said,
+            vec![
+                "Was",
+                "\u{1d}Deletion \u{1e} twelve",
+                "\u{1d}Insertion \u{1e} ten",
+                "\u{1d}end Insertion \u{1e} dollars",
+                ".",
+                "Holds",
+                "10 \u{1d}superscript \u{1e} 23",
+                "\u{1d}end superscript \u{1e} particles",
+                ".",
+            ]
+        );
     }
 
     /// A raised or lowered number right after a number is said between its marks, a one-digit

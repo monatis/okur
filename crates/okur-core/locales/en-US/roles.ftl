@@ -31,6 +31,12 @@ role-edit-spin-box = edit spin box
 # "The price was Deletion twelve dollars end Deletion, now ten."
 role-deletion = Deletion
 role-deletion-end = end Deletion
+# Inserted text (<ins>), said the same way [obs, 819/s2].
+role-insertion = Insertion
+role-insertion-end = end Insertion
+# Highlighted text (<mark>), said the same way [obs, 819/s4].
+role-mark = mark
+role-mark-end = end mark
 # A raised or lowered number after a number, said around it: "10 superscript 23 end
 # superscript", "5 subscript 10 end subscript".
 role-superscript = superscript

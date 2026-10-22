@@ -373,10 +373,18 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
             }
         }
     }
-    // Struck or deleted text (<s>, <del>), which JAWS reads between "Deletion" and "end
-    // Deletion" [obs, 814/s3].
-    if node.ia2_role == Some(xa11y_windows::ia2::roles::IA2_ROLE_CONTENT_DELETION) {
-        set_attr("aria_role", "deletion".to_owned());
+    // Struck, deleted, inserted and highlighted text (<s>, <del>, <ins>, <mark>), which JAWS
+    // reads between "Deletion" and "end Deletion" and the like [obs, 814/s3, 819/s2, s4].
+    {
+        use xa11y_windows::ia2::roles::{
+            IA2_ROLE_CONTENT_DELETION, IA2_ROLE_CONTENT_INSERTION, IA2_ROLE_MARK,
+        };
+        match node.ia2_role {
+            Some(IA2_ROLE_CONTENT_DELETION) => set_attr("aria_role", "deletion".to_owned()),
+            Some(IA2_ROLE_CONTENT_INSERTION) => set_attr("aria_role", "insertion".to_owned()),
+            Some(IA2_ROLE_MARK) => set_attr("aria_role", "mark".to_owned()),
+            _ => {}
+        }
     }
     if node.ia2_states & ia2_state::REQUIRED != 0 {
         set_attr("required", "true".to_owned());

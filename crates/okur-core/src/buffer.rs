@@ -185,6 +185,9 @@ pub struct VirtualBuffer {
     /// The node the buffer was built from (the page).
     pub root_id: Option<usize>,
     pub text: String,
+    /// The marks said in a line's flow but not part of its text ("Deletion", "end
+    /// superscript"), each at the offset it stands at, in order.
+    pub flow_marks: Vec<(usize, String)>,
     pub spans: Vec<BufferSpan>,
     pub lines: Vec<BufferLine>,
     pub words: Vec<BufferWord>,
@@ -808,6 +811,43 @@ impl VirtualBuffer {
     }
 
     /// Returns the word containing or starting at the given offset.
+    /// A word as JAWS says it moving by word where marks stand around it: the last mark between
+    /// the word before and it, then the word with the marks inside it: "Deletion twelve",
+    /// "Insertion ten" (the "end Deletion" after twelve left out), "end Insertion dollars",
+    /// "10 superscript 23" [obs, 819/s12-s14, s19, s23, s24]. None where no mark is near.
+    pub fn marked_word(&self, word: &BufferWord) -> Option<String> {
+        let before = word
+            .word_index
+            .checked_sub(1)
+            .and_then(|i| self.words.get(i))
+            .map_or(0, |w| w.end_offset);
+        let first = self.flow_marks.partition_point(|(at, _)| *at < before);
+        let near: Vec<&(usize, String)> = self
+            .flow_marks
+            .get(first..)
+            .unwrap_or_default()
+            .iter()
+            .take_while(|(at, _)| *at < word.end_offset)
+            .collect();
+        if near.is_empty() {
+            return None;
+        }
+        let mut speech = near
+            .iter()
+            .rev()
+            .find(|(at, _)| *at <= word.start_offset)
+            .map(|(_, mark)| mark.clone())
+            .unwrap_or_default();
+        let mut from = word.start_offset;
+        for (at, mark) in near.iter().filter(|(at, _)| *at > word.start_offset) {
+            speech.push_str(self.text.get(from..*at).unwrap_or_default());
+            speech.push_str(mark);
+            from = *at;
+        }
+        speech.push_str(self.text.get(from..word.end_offset).unwrap_or_default());
+        Some(speech)
+    }
+
     pub fn word_at_offset(&self, offset: usize) -> Option<&BufferWord> {
         let first = self.words.partition_point(|w| w.end_offset <= offset);
         self.words

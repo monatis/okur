@@ -15,6 +15,8 @@ okur-core/src/cursor.rs: "mailto:"
 okur-core/src/linearize.rs: "mailto:"
 okur-core/src/linearize.rs: "flows-to"
 okur-core/src/linearize.rs: "deletion"
+okur-core/src/linearize.rs: "insertion"
+okur-core/src/linearize.rs: "mark"
 # Heading Indication's values as the page's mark holds them.
 okur-core/src/linearize.rs: "text"
 okur-core/src/linearize.rs: "heading"
