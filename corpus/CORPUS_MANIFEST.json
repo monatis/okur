@@ -6632,13 +6632,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "821-web-edits-read-by-character",
+      "fixture": "edits.html",
+      "evidence": {
+        "sha256": "7e9f4107f6433391d5fc67215bbf6526103ea61d23e913969925a019dae2911b",
+        "capture_script_sha256": "4e9cdf8a1e7122d71e8500cfc5c79a70fe852ea794bd6e4e59bb1454b2853c6e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 459,
-    "scenarios_with_evidence": 459,
-    "total_trials": 1383,
-    "successful_trials": 1377,
-    "deterministic_scenarios": 302
+    "scenarios": 460,
+    "scenarios_with_evidence": 460,
+    "total_trials": 1386,
+    "successful_trials": 1380,
+    "deterministic_scenarios": 303
   }
 }
