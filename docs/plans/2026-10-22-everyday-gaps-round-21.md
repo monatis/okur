@@ -21,12 +21,14 @@ reads the screen live is also checked live on old-pc (`run-scenario.ps1 -Reader 
   ways at once (the desktop root's subtree and the window's, in the control and the raw view,
   and the generic automation event): none heard a WinForms notification, whether raised
   through `RaiseAutomationNotification` or `UiaRaiseNotificationEvent` on the window's host
-  provider, while JAWS spoke each (its speech history). A test on Calculator ("Hesap
-  Makinesi" on old-pc) did not run: the keys did not reach it. Next: get the Calculator test
-  to run (a known notifier); if it is heard and WinForms' is not, compare their providers; if
-  neither, test whether UI Access matters (JAWS has it; `okur-lab-keys` has it once the
-  development certificate is on old-pc). Until then 820 waits, its JAWS evidence good (rounds
-  248, 249).
+  provider, while JAWS spoke each (its speech history). Calculator's notifications ("Ekran
+  değeri 5") are heard by every registration, so Okur's client works; registrations on the
+  focused element (element scope, and with its ancestors) heard WinForms' no better, and the
+  window's process fired no WinEvent in UI Automation's range (0x4E00-0x4EFF), only a state
+  and a name change. How JAWS hears WinForms' notification is open: test whether UI Access
+  matters (JAWS has it; `okur-lab-keys` has it once the development certificate is on
+  old-pc), then a Chromium page's and a WPF window's notifications. Until then 820 waits,
+  its JAWS evidence good (rounds 248, 249).
 - Round 250 (821, the edits page by character) is imported and built (`d4beaf5`).
 - Live: Okur reading a page with deleted, inserted and highlighted text and raised numbers
   (819's keys, `-Reader okur`), since the live buffer is read from IA2 as the snapshots are.
