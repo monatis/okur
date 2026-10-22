@@ -196,6 +196,29 @@ const CT_TEXT: i32 = 50020;
 const CT_TREE: i32 = 50023;
 const CT_TREEITEM: i32 = 50024;
 const CT_GROUP: i32 = 50026;
+
+/// A WPF label's text without its access-key mark: "_Received Notification" is "Received
+/// Notification", the underscore marking R; a doubled underscore is one.
+pub(crate) fn without_access_mark(text: &str) -> String {
+    let mut out = String::with_capacity(text.len());
+    let mut chars = text.chars().peekable();
+    let mut marked = false;
+    while let Some(c) = chars.next() {
+        if c == '_' {
+            if chars.peek() == Some(&'_') {
+                out.push('_');
+                chars.next();
+                continue;
+            }
+            if !marked {
+                marked = true;
+                continue;
+            }
+        }
+        out.push(c);
+    }
+    out
+}
 const CT_DATAGRID: i32 = 50028;
 const CT_DATAITEM: i32 = 50029;
 const CT_DOCUMENT: i32 = 50030;
@@ -596,6 +619,11 @@ pub(crate) mod capture {
             owner_drawn: false,
             children: Vec::new(),
         };
+        // A closed WPF combo box gives its choice only through its selection: JAWS says it
+        // ("Rule Type Combo box Contains" [obs, 775/s6]).
+        if node.control_type == super::CT_COMBOBOX && node.value.is_none() {
+            node.value = selected_name(el);
+        }
 
         // Bound recursion on pathological trees; Chrome documents are far shallower.
         if depth < 256 {
@@ -741,6 +769,15 @@ pub(crate) mod capture {
                 if node.is_dialog == Some(true) && node.name.is_none() {
                     node.label = first_text(&walker, &request, &el);
                 }
+                // An unnamed WPF group box by its header, its first text, without the
+                // access-key mark: JAWS names "Received Notification" [obs, 775/s6].
+                if node.control_type == super::CT_GROUP
+                    && node.name.is_none()
+                    && node.class_name.as_deref() == Some("GroupBox")
+                {
+                    node.label = first_text(&walker, &request, &el)
+                        .map(|header| super::without_access_mark(&header));
+                }
                 chain.push(node);
                 current = walker.GetParentElementBuildCache(&el, &request).ok();
             }
@@ -780,6 +817,28 @@ pub(crate) mod capture {
         let text = String::from_utf16_lossy(buf.get(..usize::try_from(len).ok()?)?);
         let text = text.trim();
         (!text.is_empty()).then(|| text.to_owned())
+    }
+
+    /// The name of a selection container's first selected item: a closed WPF combo box's
+    /// choice, for which it gives no value.
+    fn selected_name(el: &IUIAutomationElement) -> Option<String> {
+        // SAFETY: UIA pattern calls on a valid element.
+        unsafe {
+            let pattern: IUIAutomationSelectionPattern =
+                el.GetCurrentPatternAs(UIA_SelectionPatternId).ok()?;
+            let selection = pattern.GetCurrentSelection().ok()?;
+            if selection.Length().ok()? < 1 {
+                return None;
+            }
+            let name = selection
+                .GetElement(0)
+                .ok()?
+                .CurrentName()
+                .ok()?
+                .to_string();
+            let name = name.trim();
+            (!name.is_empty()).then(|| name.to_owned())
+        }
     }
 
     /// The name of `element`'s first child text, if any (among its first few children).
@@ -1572,5 +1631,22 @@ pub(crate) mod capture {
                     .unwrap_or_default()
             })
             .clone()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::without_access_mark;
+
+    /// WPF's access-key mark goes, a doubled underscore stays one [obs, 775/s6].
+    #[test]
+    fn a_wpf_label_loses_its_access_key_mark() {
+        assert_eq!(
+            without_access_mark("_Received Notification"),
+            "Received Notification"
+        );
+        assert_eq!(without_access_mark("Speech or _Sound"), "Speech or Sound");
+        assert_eq!(without_access_mark("snake__case"), "snake_case");
+        assert_eq!(without_access_mark("No mark"), "No mark");
     }
 }

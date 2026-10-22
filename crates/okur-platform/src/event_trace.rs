@@ -720,9 +720,12 @@ fn nested_groups(chain: &[UiaNode]) -> (Vec<okur_core::GroupEntry>, bool) {
     let ancestors = chain.len().saturating_sub(1);
     for (i, ancestor) in chain.iter().enumerate().take(ancestors).rev() {
         match ancestor.control_type {
-            UIA_GROUP | UIA_TEXT => {
-                entries.extend(named(ancestor).map(okur_core::GroupEntry::group))
-            }
+            // An unnamed WPF group box by its header (`UiaNode::label`).
+            UIA_GROUP | UIA_TEXT => entries.extend(
+                named(ancestor)
+                    .or_else(|| ancestor.label.clone())
+                    .map(okur_core::GroupEntry::group),
+            ),
             // An unnamed list is named by the text just before it (`UiaNode::label`).
             UIA_LIST => entries.push(okur_core::GroupEntry::list(
                 named(ancestor)
@@ -4640,6 +4643,15 @@ mod tests {
         let groups = |names: &[&str]| -> Vec<GroupEntry> {
             names.iter().map(|n| GroupEntry::group(*n)).collect()
         };
+        // An unnamed WPF group box, named by its header [obs, 775/s6].
+        let mut group_box = node(UIA_GROUP, "", false);
+        group_box.name = None;
+        group_box.label = Some("Received Notification".to_owned());
+        let wpf = [group_box, node(50003, "Rule Type", true)];
+        assert_eq!(
+            nested_groups(&wpf),
+            (groups(&["Received Notification"]), false)
+        );
         let toggle = [
             node(UIA_PANE, "", false),
             node(UIA_GROUP, "Brightness & color", false),
