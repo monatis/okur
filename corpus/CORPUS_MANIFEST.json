@@ -6183,12 +6183,12 @@
       "scenario_id": "775-desktop-notification-create-rule-dialog",
       "fixture": "desktop-notifications.ps1",
       "evidence": {
-        "sha256": "fbd5b474811f67fb582dfe5189d249a0d23343cfd00219c590fc72c0b19b2daf",
-        "capture_script_sha256": "043f2870b1499dacb80869fd8b86f5c8abac741d2a75c2c4ca9f04ab0f4e4e3a",
+        "sha256": "acf6379b314149be5f4114575f54e6110d9d97b75947f34f17ea9b533c831849",
+        "capture_script_sha256": "4e9cdf8a1e7122d71e8500cfc5c79a70fe852ea794bd6e4e59bb1454b2853c6e",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
-        "successful_trials": 3,
+        "successful_trials": 2,
         "deterministic": false,
         "summary_consistent": true
       }
@@ -6239,8 +6239,8 @@
       "scenario_id": "787-desktop-notification-rule-made-managed-deleted",
       "fixture": "desktop-notifications.ps1",
       "evidence": {
-        "sha256": "96eb09b5dd835d5e2f0cb9e82caacf0667b1715838e2330c21c31aa1aa1d7bbe",
-        "capture_script_sha256": "043f2870b1499dacb80869fd8b86f5c8abac741d2a75c2c4ca9f04ab0f4e4e3a",
+        "sha256": "fbe86513ae9443850f00fe77d4bf3530da483e69268111827c2c527b8c12aa9e",
+        "capture_script_sha256": "4e9cdf8a1e7122d71e8500cfc5c79a70fe852ea794bd6e4e59bb1454b2853c6e",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -6338,7 +6338,7 @@
     "scenarios": 439,
     "scenarios_with_evidence": 439,
     "total_trials": 1347,
-    "successful_trials": 1346,
+    "successful_trials": 1345,
     "deterministic_scenarios": 285
   }
 }
