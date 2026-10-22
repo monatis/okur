@@ -6318,13 +6318,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "797-desktop-mouse-echo-unit-turns-echo-on",
+      "fixture": "desktop-notepad.ps1",
+      "evidence": {
+        "sha256": "dde7845dfdef8dfc34aa116a27f1d586cd79da0cc65155896306a32dbff3d4e4",
+        "capture_script_sha256": "4e9cdf8a1e7122d71e8500cfc5c79a70fe852ea794bd6e4e59bb1454b2853c6e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 438,
-    "scenarios_with_evidence": 438,
-    "total_trials": 1344,
-    "successful_trials": 1343,
-    "deterministic_scenarios": 284
+    "scenarios": 439,
+    "scenarios_with_evidence": 439,
+    "total_trials": 1347,
+    "successful_trials": 1346,
+    "deterministic_scenarios": 285
   }
 }

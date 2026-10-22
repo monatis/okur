@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6254,
-  "total_steps": 6491,
+  "matched_steps": 6266,
+  "total_steps": 6504,
   "accepted_divergences": 169,
   "errors": [],
   "steps": {
@@ -6678,6 +6678,19 @@
     "792-desktop-mouse-echo-units-in-notepad/s6": "match",
     "792-desktop-mouse-echo-units-in-notepad/s7": "match",
     "792-desktop-mouse-echo-units-in-notepad/s8": "match",
-    "792-desktop-mouse-echo-units-in-notepad/s9": "match"
+    "792-desktop-mouse-echo-units-in-notepad/s9": "match",
+    "797-desktop-mouse-echo-unit-turns-echo-on/s1": "match",
+    "797-desktop-mouse-echo-unit-turns-echo-on/s10": "match",
+    "797-desktop-mouse-echo-unit-turns-echo-on/s11": "match",
+    "797-desktop-mouse-echo-unit-turns-echo-on/s12": "match",
+    "797-desktop-mouse-echo-unit-turns-echo-on/s13": "match",
+    "797-desktop-mouse-echo-unit-turns-echo-on/s2": "match",
+    "797-desktop-mouse-echo-unit-turns-echo-on/s3": "match",
+    "797-desktop-mouse-echo-unit-turns-echo-on/s4": "match",
+    "797-desktop-mouse-echo-unit-turns-echo-on/s5": "match",
+    "797-desktop-mouse-echo-unit-turns-echo-on/s6": "mismatch",
+    "797-desktop-mouse-echo-unit-turns-echo-on/s7": "match",
+    "797-desktop-mouse-echo-unit-turns-echo-on/s8": "match",
+    "797-desktop-mouse-echo-unit-turns-echo-on/s9": "match"
   }
 }

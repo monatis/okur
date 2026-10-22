@@ -1,0 +1,83 @@
+{
+  "id": "797-desktop-mouse-echo-unit-turns-echo-on",
+  "name": "A mouse echo unit turns mouse echo on, in Notepad: with echo off, Insert+Space, E, W, then Insert+Space, E, O; Insert+Space, E, L, then O again (ends off, on line)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "W"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "L"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}
