@@ -360,15 +360,32 @@ impl ScreenReaderEngine {
     }
 
     /// The Okur cursor is the mouse: in a text field, the mouse goes onto the character the
-    /// Okur cursor is at, or the line's first when it is before it, as JAWS's cursor moves the
-    /// mouse (the traces of 752-754 follow it). Echo does not read this move.
+    /// Okur cursor is at, or the line's first when it is before it; on a page, onto the start
+    /// of the element its line is, as JAWS's cursor moves the mouse (the traces of 752-754
+    /// follow it). Echo does not read this move.
     fn mouse_to_okur_place(&mut self) {
-        if self.app_mode == super::AppMode::VirtualBuffer || self.okur_dialog_rows().is_some() {
-            return;
-        }
         let Some(OkurPlace::Text { line, column }) = self.okur_place else {
             return;
         };
+        if self.app_mode == super::AppMode::VirtualBuffer {
+            let node = self
+                .cursor
+                .buffer
+                .lines
+                .iter()
+                .filter(|l| screen_line(l))
+                .nth(line)
+                .and_then(|l| self.cursor.buffer.node(l.node_id));
+            if let (Some(node), Some(actions)) = (node, &self.actions) {
+                if actions.move_mouse_to_node(node) {
+                    self.note_own_mouse_move();
+                }
+            }
+            return;
+        }
+        if self.okur_dialog_rows().is_some() {
+            return;
+        }
         let Some(context) = self.last_text.as_ref() else {
             return;
         };

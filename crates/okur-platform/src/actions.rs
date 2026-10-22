@@ -117,6 +117,10 @@ mod windows_actions {
         /// The mouse onto the focused edit's character at an offset of its text as last read
         /// (the Okur cursor).
         MouseToText(String, usize),
+        /// The mouse onto a page object, by its IA2 uniqueID or, read through UIA, its
+        /// RuntimeId (the Okur cursor on a page).
+        MouseToObject(i32),
+        MouseToUiaObject(Vec<i32>),
     }
 
     /// The virtual key of a key the screen reader sends for a reading command.
@@ -294,6 +298,24 @@ mod windows_actions {
                                     tracing::debug!(offset, "mouse not moved: not a Win32 edit");
                                 }
                             }
+                            Request::MouseToObject(id) => {
+                                let window = page_in_front();
+                                match xa11y_windows::ia2::chromium_object_location(window, id) {
+                                    Ok(place) => mouse_onto(place),
+                                    Err(e) => tracing::debug!("no place for IA2 object {id}: {e}"),
+                                }
+                            }
+                            Request::MouseToUiaObject(id) => {
+                                let Some(uia) = uia.as_ref() else {
+                                    continue;
+                                };
+                                match uia_object_location(uia, &id) {
+                                    Ok(place) => mouse_onto(place),
+                                    Err(e) => {
+                                        tracing::debug!("no place for UIA object {id:?}: {e}")
+                                    }
+                                }
+                            }
                             Request::Caret(text, offset) => {
                                 if !crate::text_context::move_caret_in_edit(&text, offset) {
                                     tracing::debug!(offset, "caret not moved: not a Win32 edit");
@@ -362,6 +384,33 @@ mod windows_actions {
             }
             runtime_id(node).is_some_and(|id| self.send(Request::UiaObject(id, action)))
         }
+    }
+
+    /// Where the UIA element with RuntimeId `id` in the window in front is on the screen:
+    /// `[left, top, width, height]`.
+    fn uia_object_location(uia: &IUIAutomation, id: &[i32]) -> Result<[i32; 4], String> {
+        use xa11y_windows::uia_element::find_by_runtime_id;
+        // SAFETY: plain Win32 and UIA calls on valid objects.
+        let root =
+            unsafe { uia.ElementFromHandle(GetForegroundWindow()) }.map_err(|e| e.to_string())?;
+        let element = find_by_runtime_id(uia, &root, id).ok_or("not found")?;
+        // SAFETY: a UIA property read on a valid element.
+        let rect = unsafe { element.CurrentBoundingRectangle() }.map_err(|e| e.to_string())?;
+        Ok([
+            rect.left,
+            rect.top,
+            rect.right - rect.left,
+            rect.bottom - rect.top,
+        ])
+    }
+
+    /// The mouse onto the start of a place `[left, top, width, height]`: a pixel in, half its
+    /// first line down (a line taken as 20 pixels at most).
+    fn mouse_onto([left, top, _width, height]: [i32; 4]) {
+        use windows::Win32::UI::WindowsAndMessaging::SetCursorPos;
+        let y = top + height.clamp(0, 20) / 2;
+        // SAFETY: a plain Win32 call moving the pointer.
+        let _ = unsafe { SetCursorPos(left + 1, y) };
     }
 
     /// Focuses or activates the UIA element with RuntimeId `id` in the window in front.
@@ -517,6 +566,13 @@ mod windows_actions {
 
         fn move_mouse_to_text(&self, context: &TextContext, offset: usize) -> bool {
             self.send(Request::MouseToText(context.text.clone(), offset))
+        }
+
+        fn move_mouse_to_node(&self, node: &okur_core::AomNode) -> bool {
+            if let Some(id) = unique_id(node) {
+                return self.send(Request::MouseToObject(id));
+            }
+            runtime_id(node).is_some_and(|id| self.send(Request::MouseToUiaObject(id)))
         }
 
         fn read_window(&self, window: bool) -> bool {

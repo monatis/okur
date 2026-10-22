@@ -209,8 +209,9 @@ pub fn parse_attributes(raw: &str) -> BTreeMap<String, String> {
 
 #[cfg(target_os = "windows")]
 pub use com::capture::{
-    capture_chromium_document, capture_chromium_object, chromium_caret_text, chromium_text_state,
-    has_chromium_document, perform_chromium_action, ChromiumTextField, Ia2Action, Ia2CaptureError,
+    capture_chromium_document, capture_chromium_object, chromium_caret_text,
+    chromium_object_location, chromium_text_state, has_chromium_document, perform_chromium_action,
+    ChromiumTextField, Ia2Action, Ia2CaptureError,
 };
 
 #[cfg(target_os = "windows")]
@@ -683,6 +684,27 @@ mod com {
                 }
             }
             .map_err(|e| err("MSAA action", e))
+        }
+
+        /// Where a live object of a Chromium window's page is on the screen, by its IA2
+        /// `uniqueID`: `[left, top, width, height]` in pixels (MSAA `accLocation`).
+        pub fn chromium_object_location(
+            top_level: HWND,
+            unique_id: i32,
+        ) -> Result<[i32; 4], Ia2CaptureError> {
+            let document = chromium_document(top_level)?;
+            let child_id = if unique_id < 0 { unique_id } else { -unique_id };
+            let child = VARIANT::from(child_id);
+            // SAFETY: MSAA child lookup on a valid IAccessible; Chromium returns an object.
+            let target: IAccessible = unsafe { document.get_accChild(&child) }
+                .map_err(|e| err("accChild", e))?
+                .cast()
+                .map_err(|e| err("IAccessible of the target", e))?;
+            let (mut x, mut y, mut width, mut height) = (0, 0, 0, 0);
+            // SAFETY: a plain MSAA call on a valid IAccessible with valid out-pointers.
+            unsafe { target.accLocation(&mut x, &mut y, &mut width, &mut height, &self_child()) }
+                .map_err(|e| err("accLocation", e))?;
+            Ok([x, y, width, height])
         }
 
         /// The caret of the focused object in a Chromium window's page: `(caret offset,

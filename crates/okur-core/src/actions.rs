@@ -145,6 +145,13 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Puts the mouse on a page element's first line, at its start: the Okur cursor's place
+    /// on a page. False when unsupported.
+    fn move_mouse_to_node(&self, node: &AomNode) -> bool {
+        let _ = node;
+        false
+    }
+
     /// Sends a key chord to the application, pressed in order and released in reverse: a
     /// reading command that moves the caret is the application's own key (the laptop
     /// layout's CapsLock+O is Down). The keys come back through the keyboard hook marked as
@@ -341,6 +348,10 @@ impl ApplicationActions for RecordingActions {
             log.push(("mouse to text".to_owned(), offset));
         }
         true
+    }
+
+    fn move_mouse_to_node(&self, node: &AomNode) -> bool {
+        self.record("mouse to node", node)
     }
 
     fn copy_text(&self, text: &str) -> bool {

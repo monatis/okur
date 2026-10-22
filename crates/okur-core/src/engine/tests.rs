@@ -1068,6 +1068,8 @@ fn the_okur_cursor_reads_a_pages_lines() {
     );
     let heading = engine.cursor.buffer.start_of(2).unwrap_or_default();
     engine.cursor.move_to(heading);
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
     let press = |engine: &mut ScreenReaderEngine, key: Key, modifiers: Modifiers| {
         let _ = speech.take();
         engine.handle_key_event(&KeyEvent::new(key, modifiers, true));
@@ -1100,6 +1102,15 @@ fn the_okur_cursor_reads_a_pages_lines() {
     );
     press(&mut engine, Key::NumpadPlus, Modifiers::none());
     assert!(engine.cursor.current_line().contains("Weekend events"));
+    // The mouse went with it: onto the paragraph for Down, Right and Ctrl+Right; Page Up, to
+    // the window's top, leaves it.
+    let to: Vec<usize> = actions
+        .requests()
+        .iter()
+        .filter(|(what, _)| what == "mouse to node")
+        .map(|(_, node)| *node)
+        .collect();
+    assert_eq!(to, [3, 3, 3]);
 }
 
 /// Ctrl+Insert+Tab on a page's field opens Custom Label; OK with "lamp" names the field "lamp"
