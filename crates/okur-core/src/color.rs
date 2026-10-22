@@ -29,6 +29,15 @@ fn table() -> &'static [(Rgb, String)] {
     })
 }
 
+/// The table's names, each once, in alphabetical order: the colors Skim Reading's color rules
+/// offer, as JAWS's list them after "*" ("red", 415 of 514 [obs, 805/s7]).
+pub fn names() -> Vec<&'static str> {
+    let mut names: Vec<&'static str> = table().iter().map(|(_, name)| name.as_str()).collect();
+    names.sort_unstable_by_key(|name| name.to_lowercase());
+    names.dedup();
+    names
+}
+
 /// The name said for `color`: its table entry's, else the nearest entry's.
 pub fn name_of(color: Rgb) -> Option<&'static str> {
     table()

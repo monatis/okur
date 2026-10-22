@@ -62,9 +62,11 @@ impl SpeakUnit {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SkimOptions {
     pub rule: SkimRule,
-    /// The attribute check boxes checked, by their control ids ("bold", "italic"): text
-    /// with all of them is what an attribute rule finds.
+    /// The attribute check boxes checked, by their control ids ("bold", "italic").
     pub attributes: Vec<String>,
+    /// Text Color and Background Color: a color's name, none for "*" (any).
+    pub text_color: Option<String>,
+    pub background: Option<String>,
     /// Skim Reading Indication, checked at first [obs, 760/s2].
     pub indication: bool,
     /// Text Search Pattern: what a text rule looks for.
@@ -79,6 +81,8 @@ impl Default for SkimOptions {
         Self {
             rule: SkimRule::FirstLine,
             attributes: Vec::new(),
+            text_color: None,
+            background: None,
             indication: true,
             pattern: String::new(),
             regex: false,
@@ -101,18 +105,31 @@ pub const ATTRIBUTES: [&str; 9] = [
 ];
 
 impl SkimOptions {
-    /// Whether text formatted as `formatting` has any attribute checked: with Bold and
-    /// Italic checked, JAWS read the lines with bold text and the line with italic text,
-    /// "12 matches found" [obs, 803/s12], though its help calls the choices cumulative.
-    /// Bold, italic and underline are read from the page; the others, which Okur does not
-    /// read, find nothing. With none checked, nothing is found.
+    /// Whether an attribute and color rule finds text formatted as `formatting`: its colors,
+    /// those chosen, by their names ("Pure red text." for red [obs, 805/s10]), and any of the
+    /// attributes checked: with Bold and Italic checked, JAWS read the lines with bold text
+    /// and the line with italic text, "12 matches found" [obs, 803/s12], though its help
+    /// calls the choices cumulative. Bold, italic and underline are read from the page; the
+    /// other attributes, which Okur does not read, find nothing. With nothing chosen, nothing
+    /// is found.
     pub fn has_attributes(&self, formatting: &crate::aom::TextFormatting) -> bool {
-        self.attributes.iter().any(|a| match a.as_str() {
+        let named = |color: Option<crate::color::Rgb>, chosen: &Option<String>| match chosen {
+            None => true,
+            Some(chosen) => color
+                .and_then(crate::color::name_of)
+                .is_some_and(|name| name.eq_ignore_ascii_case(chosen)),
+        };
+        let colors = self.text_color.is_some() || self.background.is_some();
+        let attributes = self.attributes.iter().any(|a| match a.as_str() {
             "bold" => formatting.bold,
             "italic" => formatting.italic,
             "underline" => formatting.underline,
             _ => false,
-        })
+        });
+        (colors || !self.attributes.is_empty())
+            && named(formatting.color, &self.text_color)
+            && named(formatting.background, &self.background)
+            && (self.attributes.is_empty() || attributes)
     }
 
     /// Whether a text rule finds its pattern in `text`, whatever its capitals. A pattern that is
@@ -214,6 +231,25 @@ impl SkimDialog {
                 available(rule, id),
             )
         };
+        // "*", then the color names, as JAWS's lists offer them [obs, 805/s6, s7].
+        let color_choice = |id: &str, label: StaticMessage, chosen: &Option<String>| {
+            let names = crate::color::names();
+            let selected = chosen
+                .as_deref()
+                .and_then(|c| names.iter().position(|n| n.eq_ignore_ascii_case(c)))
+                .map_or(0, |i| i + 1);
+            control(
+                id,
+                label,
+                ControlKind::Choice {
+                    options: std::iter::once(msg::skim_any_color().to_string())
+                        .chain(names.iter().map(|n| (*n).to_owned()))
+                        .collect(),
+                    selected,
+                },
+                available(rule, id),
+            )
+        };
         let unavailable = |id: &str, label: StaticMessage, kind: ControlKind| {
             control(id, label, kind, available(rule, id))
         };
@@ -278,8 +314,16 @@ impl SkimDialog {
                 ControlKind::Button { default: false },
             ),
             control("colors", msg::skim_color_rules(), ControlKind::Group, true),
-            rule_choice("text_color", msg::skim_text_color(), msg::skim_any_color()),
-            rule_choice("background", msg::skim_background(), msg::skim_any_color()),
+            color_choice(
+                "text_color",
+                msg::skim_text_color(),
+                &self.options.text_color,
+            ),
+            color_choice(
+                "background",
+                msg::skim_background(),
+                &self.options.background,
+            ),
         ];
         controls.extend(
             [
@@ -345,6 +389,16 @@ impl SkimDialog {
                     ("indication", Value::Checked(on)) => self.options.indication = *on,
                     ("pattern", Value::Text(text)) => self.options.pattern = text.clone(),
                     ("regex", Value::Checked(on)) => self.options.regex = *on,
+                    ("text_color" | "background", Value::Selected(i)) => {
+                        let color = i
+                            .checked_sub(1)
+                            .and_then(|i| crate::color::names().get(i).map(|n| (*n).to_owned()));
+                        if control == "text_color" {
+                            self.options.text_color = color;
+                        } else {
+                            self.options.background = color;
+                        }
+                    }
                     (attribute, Value::Checked(on)) if ATTRIBUTES.contains(&attribute) => {
                         self.options.attributes.retain(|a| a != attribute);
                         if *on {
@@ -375,6 +429,41 @@ impl SkimDialog {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// A color chosen finds text in it, by its name [obs, 805/s10]; with an attribute too,
+    /// text in that color with the attribute.
+    #[test]
+    fn a_color_rule_finds_text_in_its_color() {
+        let red = crate::aom::TextFormatting {
+            color: Some(crate::color::Rgb::new(255, 0, 0)),
+            ..crate::aom::TextFormatting::default()
+        };
+        let navy = crate::aom::TextFormatting {
+            color: Some(crate::color::Rgb::new(0, 0, 128)),
+            ..crate::aom::TextFormatting::default()
+        };
+        let mut options = SkimOptions {
+            text_color: Some("red".into()),
+            ..SkimOptions::default()
+        };
+        assert!(options.has_attributes(&red));
+        assert!(!options.has_attributes(&navy));
+        options.attributes = vec!["bold".into()];
+        assert!(!options.has_attributes(&red));
+        // The dialog offers "*" then the names, "red" among them.
+        let dialog = SkimDialog::new(1, SkimOptions::default());
+        let offered = dialog
+            .spec()
+            .controls
+            .into_iter()
+            .find_map(|c| match c.kind {
+                ControlKind::Choice { options, .. } if c.id == "text_color" => Some(options),
+                _ => None,
+            });
+        assert!(offered.as_ref().is_some_and(
+            |o| o.first().map(String::as_str) == Some("*") && o.iter().any(|n| n == "red")
+        ));
+    }
 
     /// Checked attributes find text with any of them: Bold and Italic found the bold lines and
     /// the italic one [obs, 803/s12]; none checked finds nothing.
