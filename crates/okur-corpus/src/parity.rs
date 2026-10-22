@@ -447,12 +447,13 @@ fn replay_scenario(
             None => (step.step_type.as_str(), step.command.as_str()),
         };
         let engine_speech = match step_type {
-            "key" | "key_down" | "key_up" | "text" => {
+            "key" | "key_down" | "key_up" | "text" | "mouse" => {
                 match step_type {
                     // Text typed into the application reaches it, not the screen reader's
                     // commands; with the reference machine's typing echo off, only the
-                    // step's events are Okur's to read.
-                    "text" => {}
+                    // step's events are Okur's to read. The mouse moved by hand is its
+                    // traced moves.
+                    "text" | "mouse" => {}
                     // A key held across steps (Alt through several Tabs), and its release.
                     "key_down" | "key_up" => {
                         let down = step_type == "key_down";

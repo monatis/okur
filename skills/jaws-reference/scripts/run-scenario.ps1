@@ -65,6 +65,9 @@ Step types:
   key_ui_access  A key sent with UI Access by okur-lab-keys.exe (-LabKeys): it reaches JAWS's
                modal dialogs, which TypeKey closes (559/s2). Needs the signed program under
                Program Files.
+  mouse        The mouse moved by "dx,dy" pixels from where it is ("0,20": down 20), in
+               absolute SendInput steps a low-level mouse hook sees, as a hand moves it
+               (JAWS's mouse echo); Insert+NumpadMinus first puts it at the caret.
   key_down     A key pressed and held across the following steps ("Alt" through several
                Tabs); key_up releases it. Held keys are released when a trial ends.
   keyboard     Legacy .NET SendKeys string (kept so scenarios 01-30 stay reproducible).
@@ -196,6 +199,33 @@ public static class SrKeyInput {
     /// The virtual key the active layout gives the key with this scan code.
     public static ushort VkForScan(ushort scan) {
         return (ushort)MapVirtualKey(scan, 1);
+    }
+
+    [StructLayout(LayoutKind.Sequential)] struct POINT { public int x, y; }
+    [DllImport("user32.dll")] static extern bool GetCursorPos(out POINT p);
+    [DllImport("user32.dll")] static extern int GetSystemMetrics(int index);
+
+    /// The mouse moved by dx, dy pixels from where it is, as a hand moves it: absolute
+    /// SendInput moves in eight steps 15 ms apart, which low-level mouse hooks see (JAWS's
+    /// mouse echo), where SetCursorPos raises none.
+    public static bool MouseBy(int dx, int dy) {
+        POINT from;
+        if (!GetCursorPos(out from)) return false;
+        int left = GetSystemMetrics(76), top = GetSystemMetrics(77);
+        int width = Math.Max(2, GetSystemMetrics(78)), height = Math.Max(2, GetSystemMetrics(79));
+        const int steps = 8;
+        INPUT[] input = new INPUT[1];
+        for (int i = 1; i <= steps; i++) {
+            int x = from.x + dx * i / steps, y = from.y + dy * i / steps;
+            input[0].type = 0;
+            input[0].u.mi.dx = (int)(((long)(x - left) * 65535) / (width - 1));
+            input[0].u.mi.dy = (int)(((long)(y - top) * 65535) / (height - 1));
+            // MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK
+            input[0].u.mi.dwFlags = 0x1 | 0x8000 | 0x4000;
+            if (SendInput(1, input, Marshal.SizeOf(typeof(INPUT))) != 1) return false;
+            System.Threading.Thread.Sleep(15);
+        }
+        return true;
     }
 }
 "@
@@ -537,6 +567,11 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
         }
         # Text typed by us: JAWS's own dialogs refuse it (use TypeString there).
         'text' { return Send-Text $command }
+        # The mouse moved by "dx,dy" pixels from where it is, as a hand moves it.
+        'mouse' {
+            if ($command -notmatch '^\s*(-?\d+)\s*,\s*(-?\d+)\s*$') { throw "mouse step '$command' is not dx,dy" }
+            return [SrKeyInput]::MouseBy([int]$Matches[1], [int]$Matches[2])
+        }
         'keyboard'    { [System.Windows.Forms.SendKeys]::SendWait($command); return $true }
         default       { throw "Unsupported step type '$type'" }
     }
