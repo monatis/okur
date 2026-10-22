@@ -1,0 +1,230 @@
+{
+  "id": "821-web-edits-read-by-character",
+  "name": "The edits page by character: Right Arrow along the price line (deleted twelve, inserted ten), Say Line on it, then along the highlighted line (Search for library)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/edits.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s22",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s23",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s24",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s25",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s26",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s27",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s28",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s29",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s30",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s31",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s32",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s33",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s34",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s35",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s36",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s37",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s38",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s39",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s40",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s41",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s42",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s43",
+      "type": "key",
+      "command": "Right"
+    }
+  ]
+}
