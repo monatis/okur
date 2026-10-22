@@ -1,0 +1,127 @@
+{
+  "id": "798-desktop-notification-rule-shorten",
+  "name": "A notification rule that shortens: Space on Show notification, Insert+Space, N, Alt+C (Create Rule...), Tab three times to Speech Action, Down Arrow (Shorten), Tab to Shortened Text, Build done typed, Enter (OK), Okur shorten rule typed and Enter, Escape; Space again (the notification, shortened), Insert+Space, N, Alt+M (Manage Rules...), Alt+D (Delete), Alt+Y (Yes), Escape twice, typed by JAWS (leaves no rule)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notifications.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Notification Fixture"
+  },
+  "expects_notifications": true,
+  "reset": {
+    "keys": []
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "N"
+    },
+    {
+      "id": "s4",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+C\")"
+    },
+    {
+      "id": "s5",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s6",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s7",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s8",
+      "type": "jaws_function",
+      "command": "TypeKey(\"DownArrow\")"
+    },
+    {
+      "id": "s9",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s10",
+      "type": "jaws_function",
+      "command": "TypeString(\"Build done\")"
+    },
+    {
+      "id": "s11",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s12",
+      "type": "jaws_function",
+      "command": "TypeString(\"Okur shorten rule\")"
+    },
+    {
+      "id": "s13",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s14",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Space"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "N"
+    },
+    {
+      "id": "s18",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+M\")"
+    },
+    {
+      "id": "s19",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+D\")"
+    },
+    {
+      "id": "s20",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Alt+Y\")"
+    },
+    {
+      "id": "s21",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    },
+    {
+      "id": "s22",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    }
+  ]
+}
