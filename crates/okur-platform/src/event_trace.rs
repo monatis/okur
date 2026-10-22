@@ -3230,6 +3230,7 @@ mod capture {
             use windows::Win32::Foundation::{LPARAM, WPARAM};
             use windows::Win32::UI::WindowsAndMessaging::PostThreadMessageW;
             let text = display.to_string();
+            tracing::debug!(%text, "UIA notification");
             if text.trim().is_empty() {
                 return Ok(());
             }
@@ -4286,6 +4287,9 @@ mod capture {
             uia.cast::<windows::Win32::UI::Accessibility::IUIAutomation5>()
                 .ok()
         });
+        // On old-pc this handler heard none of the notifications a WinForms window raised, which
+        // JAWS spoke (820, rounds 247 to 249), nor did any registration `okur-lab
+        // probe-notifications` tries; why is open (the plan of round 21).
         let uia_notification_added = match (uia5.as_ref(), root.as_ref()) {
             // SAFETY: a desktop-wide UIA handler, removed before this thread stops pumping.
             (Some(uia5), Some(root)) => unsafe {
@@ -4295,6 +4299,11 @@ mod capture {
             .is_ok(),
             _ => false,
         };
+        tracing::debug!(
+            added = uia_notification_added,
+            uia5 = uia5.is_some(),
+            "UIA notification handler"
+        );
         let uia_window_opened: IUIAutomationEventHandler = UiaWindowOpenedHandler { thread }.into();
         let uia_window_opened_added = match (uia.as_ref(), root.as_ref()) {
             // SAFETY: a desktop-wide UIA handler, removed before this thread stops pumping.

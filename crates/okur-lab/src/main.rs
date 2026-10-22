@@ -128,6 +128,16 @@ enum Commands {
     /// name, control type, class, and whether it is in a document (a web page's). The harness
     /// checks a web trial starts in its page (Windows)
     Focus,
+    /// Watch a window for UI Automation notifications, registered several ways at once, and
+    /// print which registration heard what (Windows; research, never evidence)
+    ProbeNotifications {
+        /// The window's title
+        #[arg(long)]
+        window: String,
+        /// How long to watch, in milliseconds
+        #[arg(long, default_value_t = 15000)]
+        millis: u64,
+    },
     /// Print JAWS's speech history (through FSAPI; the clipboard's text is put back)
     JawsHistory {
         /// Empty the history after reading it
@@ -1043,6 +1053,15 @@ async fn main() {
             {
                 eprintln!("the focus is only read on Windows");
                 std::process::exit(1);
+            }
+        }
+        Some(Commands::ProbeNotifications { window, millis }) => {
+            match okur_platform::uia_probe::notification_registrations(&window, millis) {
+                Ok(lines) => lines.iter().for_each(|line| println!("{line}")),
+                Err(e) => {
+                    eprintln!("{e}");
+                    std::process::exit(1);
+                }
             }
         }
         Some(Commands::JawsHistory { clear }) => {

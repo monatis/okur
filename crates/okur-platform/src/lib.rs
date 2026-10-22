@@ -25,6 +25,7 @@ pub mod text_context;
 pub mod top_windows;
 pub mod tts;
 pub mod ui_host;
+pub mod uia_probe;
 pub mod uia_snapshot;
 pub mod virtual_desktop;
 pub mod window_text;
