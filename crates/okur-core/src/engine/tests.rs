@@ -981,7 +981,8 @@ fn v_and_u_move_by_visited_and_unvisited_links() {
 /// The Okur cursor in a text field, routed to the caret, moves over the field's lines with Up
 /// and Down and reads them without their indentation; Insert+Up reads its line; on a line it
 /// is before the first character, where Left says nothing and Right says the first, a space;
-/// Ctrl+Right says the next word, which punctuation ends [obs, 690, 752, 754/s11].
+/// Ctrl+Right says the next word, which punctuation ends [obs, 690, 752, 754/s11]. The mouse
+/// goes with it, onto the line's first character and then the character it is at.
 #[test]
 fn the_okur_cursor_reads_a_text_fields_lines() {
     let speech = SharedSpeech::default();
@@ -990,6 +991,16 @@ fn the_okur_cursor_reads_a_text_fields_lines() {
         Box::new(speech.clone()),
     );
     engine.set_settings(crate::settings::Settings::reference_machine());
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mouse_to = |actions: &crate::actions::RecordingActions| {
+        actions
+            .requests()
+            .iter()
+            .filter(|(what, _)| what == "mouse to text")
+            .map(|(_, offset)| *offset)
+            .collect::<Vec<_>>()
+    };
     let mut field = FocusEvent::new(Role::Edit).with_name("Text Editor");
     field.text = Some(crate::event::TextContext {
         text: "fn main() {\r\n    let total = 1;\r\n    println!(\"{total}\");\r\n}".into(),
@@ -1035,6 +1046,9 @@ fn the_okur_cursor_reads_a_text_fields_lines() {
         )
     };
     assert_eq!(ctrl_right(&mut engine), "println");
+    // Down twice to the lines starting at 13 and 33; Insert+Up does not move it; Left stays
+    // before the first character; Right to the space at 33; Ctrl+Right to "println" at 37.
+    assert_eq!(mouse_to(&actions), [13, 33, 33, 33, 37]);
 }
 
 /// The Okur cursor on a page, routed to the virtual cursor, reads the page's lines as its

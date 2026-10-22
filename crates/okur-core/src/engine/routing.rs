@@ -199,6 +199,7 @@ impl ScreenReaderEngine {
                 actions.move_mouse(x, y);
             }
             self.mouse = Some((x, y));
+            self.note_own_mouse_move();
         }
         self.say(said.to_string())
     }

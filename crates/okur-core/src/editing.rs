@@ -254,6 +254,26 @@ pub fn lines_and_caret_line(context: &TextContext) -> (Vec<String>, usize) {
     (lines, caret_line)
 }
 
+/// The character offset each line of `context`'s text starts at, the lines as
+/// [`lines_and_caret_line`] splits them.
+pub fn line_starts(context: &TextContext) -> Vec<usize> {
+    let text = chars(&context.text);
+    let mut starts = vec![0];
+    let mut i = 0;
+    while i < text.len() {
+        if text.get(i).is_some_and(|c| is_line_break(*c)) {
+            i += 1;
+            if text.get(i - 1) == Some(&'\r') && text.get(i) == Some(&'\n') {
+                i += 1;
+            }
+            starts.push(i);
+            continue;
+        }
+        i += 1;
+    }
+    starts
+}
+
 /// The sentences from the one the caret is in to the end of the text, each with the
 /// character offset it starts at: what Say All reads in a text field by sentence (Say All
 /// Reads). A sentence ends at a line's end too; a line without a sentence mark is one.

@@ -68,6 +68,15 @@ impl ScreenReaderEngine {
     /// once with Mouse Echo Instant, else once it rests there ([`Self::mouse_echo_idle`]).
     pub(super) fn mouse_moved(&mut self, x: i32, y: i32) {
         self.mouse = Some((x, y));
+        // Okur's own moves (routing, the Okur cursor, Alt+Shift and the arrows) are not
+        // echoed, as JAWS's were not (791/s6, s7).
+        if self
+            .own_mouse_move_until
+            .is_some_and(|until| std::time::Instant::now() < until)
+        {
+            self.mouse_moved_at = None;
+            return;
+        }
         self.mouse_moved_at = Some(std::time::Instant::now());
         let echo = self.settings.mouse_echo;
         if echo.enabled && echo.instant {
@@ -76,6 +85,13 @@ impl ScreenReaderEngine {
                 actions.read_at_point(x, y);
             }
         }
+    }
+
+    /// Okur moved the mouse itself: the moves the platform reports meanwhile are not echoed.
+    pub(super) fn note_own_mouse_move(&mut self) {
+        const OWN_MOVE: std::time::Duration = std::time::Duration::from_millis(400);
+        self.own_mouse_move_until = Some(std::time::Instant::now() + OWN_MOVE);
+        self.mouse_moved_at = None;
     }
 
     /// While mouse echo is on, what the mouse points to is read once it has rested for the
@@ -320,6 +336,23 @@ mod tests {
             point(&mut engine, 50, "main() {").as_deref(),
             Some("main() Edit")
         );
+    }
+
+    /// The mouse Okur moves itself (routing, the Okur cursor) is not echoed, as JAWS did not
+    /// echo its own moves (791/s6, s7); the user's next move is.
+    #[test]
+    fn okurs_own_mouse_moves_are_not_echoed() {
+        use crate::event::AccessibilityEvent;
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document))),
+            Box::new(SharedSpeech::default()),
+        );
+        engine.note_own_mouse_move();
+        let _ = engine.handle_accessibility_event(&AccessibilityEvent::MouseMoved { x: 5, y: 5 });
+        assert!(engine.mouse_moved_at.is_none());
+        engine.own_mouse_move_until = None;
+        let _ = engine.handle_accessibility_event(&AccessibilityEvent::MouseMoved { x: 9, y: 5 });
+        assert!(engine.mouse_moved_at.is_some());
     }
 
     /// A control that gives no text by unit is said by its name, then its type and state.

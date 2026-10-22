@@ -145,6 +145,7 @@ impl ScreenReaderEngine {
                 actions.move_mouse(x, y);
             }
             self.mouse = Some((x, y));
+            self.note_own_mouse_move();
         }
         // The Okur cursor is now on the caret's line, or the virtual cursor's.
         self.okur_place = self.routed_place();
@@ -348,10 +349,43 @@ impl ScreenReaderEngine {
     /// line's ends and Page Up to the window's top, quietly [obs, 752, 753]. None for any other
     /// key.
     pub(super) fn okur_cursor_key(&mut self, event: &crate::input::KeyEvent) -> Option<()> {
-        use crate::input::Key;
         if !self.okur_place_active() {
             return None;
         }
+        let moved = self.move_okur_cursor(event);
+        if moved.is_some() {
+            self.mouse_to_okur_place();
+        }
+        moved
+    }
+
+    /// The Okur cursor is the mouse: in a text field, the mouse goes onto the character the
+    /// Okur cursor is at, or the line's first when it is before it, as JAWS's cursor moves the
+    /// mouse (the traces of 752-754 follow it). Echo does not read this move.
+    fn mouse_to_okur_place(&mut self) {
+        if self.app_mode == super::AppMode::VirtualBuffer || self.okur_dialog_rows().is_some() {
+            return;
+        }
+        let Some(OkurPlace::Text { line, column }) = self.okur_place else {
+            return;
+        };
+        let Some(context) = self.last_text.as_ref() else {
+            return;
+        };
+        let Some(start) = crate::editing::line_starts(context).get(line).copied() else {
+            return;
+        };
+        let offset = start + column.unwrap_or(0);
+        if let Some(actions) = &self.actions {
+            if actions.move_mouse_to_text(context, offset) {
+                self.note_own_mouse_move();
+            }
+        }
+    }
+
+    /// The Okur cursor's movement for `event`, without the mouse.
+    fn move_okur_cursor(&mut self, event: &crate::input::KeyEvent) -> Option<()> {
+        use crate::input::Key;
         let ctrl = event.modifiers.ctrl
             && !event.modifiers.alt
             && !event.modifiers.shift

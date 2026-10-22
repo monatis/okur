@@ -114,6 +114,9 @@ mod windows_actions {
         /// What the mouse points to at a point of the screen (mouse echo), answered when
         /// something is there.
         Point(i32, i32),
+        /// The mouse onto the focused edit's character at an offset of its text as last read
+        /// (the Okur cursor).
+        MouseToText(String, usize),
     }
 
     /// The virtual key of a key the screen reader sends for a reading command.
@@ -284,6 +287,11 @@ mod windows_actions {
                             Request::Copy(text) => {
                                 if let Err(e) = super::set_clipboard_text(&text) {
                                     tracing::warn!("copy to the clipboard failed: {e}");
+                                }
+                            }
+                            Request::MouseToText(text, offset) => {
+                                if !crate::text_context::mouse_to_character_in_edit(&text, offset) {
+                                    tracing::debug!(offset, "mouse not moved: not a Win32 edit");
                                 }
                             }
                             Request::Caret(text, offset) => {
@@ -505,6 +513,10 @@ mod windows_actions {
 
         fn move_caret(&self, context: &TextContext, offset: usize) -> bool {
             self.send(Request::Caret(context.text.clone(), offset))
+        }
+
+        fn move_mouse_to_text(&self, context: &TextContext, offset: usize) -> bool {
+            self.send(Request::MouseToText(context.text.clone(), offset))
         }
 
         fn read_window(&self, window: bool) -> bool {

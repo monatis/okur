@@ -34,8 +34,8 @@ pub fn css_alignment(align: &str) -> Option<&'static str> {
 
 #[cfg(windows)]
 pub use reader::{
-    focus_is_in_page, from_ia2, ia2_position, move_caret_in_edit, read_focused,
-    read_focused_outside_page, with_paragraph_alignment,
+    focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit, move_caret_in_edit,
+    read_focused, read_focused_outside_page, with_paragraph_alignment,
 };
 
 #[cfg(windows)]
@@ -202,6 +202,86 @@ mod reader {
                 None,
             );
             set.0 != 0
+        }
+    }
+
+    /// Puts the mouse on character `offset` of the focused Win32 edit's `text`: its place
+    /// (EM_POSFROMCHAR, in the edit's client area), half a line down, a pixel in. False for
+    /// any other field, or a character the edit does not show.
+    pub fn mouse_to_character_in_edit(text: &str, offset: usize) -> bool {
+        use windows::Win32::Foundation::{LPARAM, POINT, WPARAM};
+        use windows::Win32::Graphics::Gdi::ClientToScreen;
+        use windows::Win32::UI::WindowsAndMessaging::{
+            SendMessageTimeoutW, SetCursorPos, SMTO_ABORTIFHUNG,
+        };
+        const EM_POSFROMCHAR: u32 = 0x00D6;
+        const EM_LINEINDEX: u32 = 0x00BB;
+        const EM_LINEFROMCHAR: u32 = 0x00C9;
+        let Some((hwnd, class)) = focused_window() else {
+            return false;
+        };
+        // A rich edit takes a pointer to fill, which another process cannot be given.
+        if !class.contains("EDIT") || class.contains("RICHEDIT") {
+            return false;
+        }
+        let units: usize = text.chars().take(offset).map(char::len_utf16).sum();
+        let send = |message: u32, w: usize| -> Option<isize> {
+            let mut result = 0usize;
+            // SAFETY: a standard edit message to the focused window, which may be another
+            // process's; a hung window is given up on.
+            let sent = unsafe {
+                SendMessageTimeoutW(
+                    hwnd,
+                    message,
+                    WPARAM(w),
+                    LPARAM(0),
+                    SMTO_ABORTIFHUNG,
+                    500,
+                    Some(&mut result),
+                )
+            };
+            (sent.0 != 0).then_some(result as isize)
+        };
+        // LOWORD x, HIWORD y, each signed; -1 for a character past the text.
+        let position = |units: usize| -> Option<(i32, i32)> {
+            let packed = send(EM_POSFROMCHAR, units)?;
+            if packed == -1 {
+                return None;
+            }
+            Some((
+                i32::from((packed & 0xFFFF) as u16 as i16),
+                i32::from(((packed >> 16) & 0xFFFF) as u16 as i16),
+            ))
+        };
+        let Some((x, y)) = position(units) else {
+            return false;
+        };
+        // The line's height: the next line's top, or the line above's.
+        let line = send(EM_LINEFROMCHAR, units).unwrap_or(0).max(0) as usize;
+        let next_top = send(EM_LINEINDEX, line + 1)
+            .filter(|&start| start > 0)
+            .and_then(|start| position(start as usize))
+            .map(|(_, top)| top - y);
+        let above_top = line
+            .checked_sub(1)
+            .and_then(|above| send(EM_LINEINDEX, above))
+            .filter(|&start| start >= 0)
+            .and_then(|start| position(start as usize))
+            .map(|(_, top)| y - top);
+        let height = next_top
+            .or(above_top)
+            .filter(|h| (4..200).contains(h))
+            .unwrap_or(16);
+        let mut point = POINT {
+            x: x + 1,
+            y: y + height / 2,
+        };
+        // SAFETY: plain Win32 calls with a valid window and point.
+        unsafe {
+            if !ClientToScreen(hwnd, &mut point).as_bool() {
+                return false;
+            }
+            SetCursorPos(point.x, point.y).is_ok()
         }
     }
 

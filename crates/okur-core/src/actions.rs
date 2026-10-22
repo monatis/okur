@@ -137,6 +137,14 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Puts the mouse on the focused text field's character at `offset` of `context`, the
+    /// field as last read: the Okur cursor's place. False when unsupported or not a field it
+    /// can find the character of.
+    fn move_mouse_to_text(&self, context: &crate::event::TextContext, offset: usize) -> bool {
+        let _ = (context, offset);
+        false
+    }
+
     /// Sends a key chord to the application, pressed in order and released in reverse: a
     /// reading command that moves the caret is the application's own key (the laptop
     /// layout's CapsLock+O is Down). The keys come back through the keyboard hook marked as
@@ -324,6 +332,13 @@ impl ApplicationActions for RecordingActions {
     fn move_caret(&self, _context: &crate::event::TextContext, offset: usize) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push(("caret to".to_owned(), offset));
+        }
+        true
+    }
+
+    fn move_mouse_to_text(&self, _context: &crate::event::TextContext, offset: usize) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("mouse to text".to_owned(), offset));
         }
         true
     }

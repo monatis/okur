@@ -330,6 +330,8 @@ pub struct ScreenReaderEngine {
     mouse_echo_layer: bool,
     /// When the mouse last moved, until mouse echo reads what it rests on.
     mouse_moved_at: Option<std::time::Instant>,
+    /// Until when the mouse's moves are Okur's own, not echoed.
+    own_mouse_move_until: Option<std::time::Instant>,
     /// What mouse echo said last, not said again while the mouse stays in it.
     last_mouse_echo: Option<String>,
     /// The page element Numpad Slash clicked at the virtual cursor: its focus is said as
@@ -492,6 +494,7 @@ impl ScreenReaderEngine {
             table_layer: false,
             mouse_echo_layer: false,
             mouse_moved_at: None,
+            own_mouse_move_until: None,
             last_mouse_echo: None,
             clicked: None,
             radio_switched: None,
