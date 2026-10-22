@@ -245,6 +245,16 @@ pub enum ToUi {
     /// Move the dialog's focus to a control: the rules' list after Disable, as JAWS's
     /// Manage Notification Rules gives it back the focus.
     DialogFocus { id: u32, control: String },
+    /// Show the system's Open dialog over dialog `id` for a file, as JAWS's Select Sound...
+    /// opens Windows' (802/s12): the file types offered as (name, pattern) pairs, and the
+    /// folder it opens in (none: the system's sounds). The path chosen is put in the edit
+    /// `control` and reported as its change; cancelled, nothing is.
+    FileOpen {
+        id: u32,
+        control: String,
+        filter: Vec<(String, String)>,
+        folder: Option<String>,
+    },
     /// Close a dialog, or a wizard.
     DialogClose { id: u32 },
     /// Show a wizard in front on its first page, the focus on the page's first control.

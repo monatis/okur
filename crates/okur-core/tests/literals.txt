@@ -412,3 +412,6 @@ okur-core/src/engine/say_all.rs: "col"
 okur-core/src/engine/say_all.rs: "scope"
 okur-core/src/engine/say_all.rs: "tag"
 okur-core/src/engine/say_all.rs: "th"
+# Select Sound...'s file pattern, and the system's sounds folder it opens in.
+okur-core/src/ui/notifications.rs: "*.wav"
+okur-ui/src/dialog.rs: "{windows}\\Media"

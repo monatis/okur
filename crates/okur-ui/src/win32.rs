@@ -381,6 +381,12 @@ fn handle(message: ToUi) {
         } => crate::dialog::enable(id, &control, enabled),
         ToUi::DialogDefault { id, control } => crate::dialog::make_default(id, &control),
         ToUi::DialogFocus { id, control } => crate::dialog::focus(id, &control),
+        ToUi::FileOpen {
+            id,
+            control,
+            filter,
+            folder,
+        } => crate::dialog::open_file(id, &control, &filter, folder.as_deref()),
         ToUi::DialogItems {
             id,
             control,

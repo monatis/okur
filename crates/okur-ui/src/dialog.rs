@@ -731,6 +731,67 @@ pub fn focus(id: u32, control: &str) {
     }
 }
 
+/// Shows the system's Open dialog over dialog `id`, modal, and puts the file chosen in its
+/// edit `control`, reported as the edit's change. `folder` none opens Windows' sounds
+/// (`%WINDIR%\Media`).
+pub fn open_file(id: u32, control: &str, filter: &[(String, String)], folder: Option<&str>) {
+    use windows::core::PCWSTR;
+    use windows::Win32::UI::Controls::Dialogs::{
+        GetOpenFileNameW, OFN_FILEMUSTEXIST, OFN_HIDEREADONLY, OFN_NOCHANGEDIR, OFN_PATHMUSTEXIST,
+        OPENFILENAMEW,
+    };
+    let Some((window, _, _, _)) = find(id, control) else {
+        return;
+    };
+    let wide = |text: &str| -> Vec<u16> { text.encode_utf16().chain(std::iter::once(0)).collect() };
+    let filter: Vec<u16> = filter
+        .iter()
+        .flat_map(|(name, pattern)| wide(name).into_iter().chain(wide(pattern)))
+        .chain(std::iter::once(0))
+        .collect();
+    let folder = folder
+        .map(str::to_owned)
+        .or_else(sounds_folder)
+        .map(|f| wide(&f));
+    let mut file = vec![0u16; 1024];
+    let mut request = OPENFILENAMEW {
+        lStructSize: u32::try_from(std::mem::size_of::<OPENFILENAMEW>()).unwrap_or(0),
+        hwndOwner: window,
+        lpstrFilter: PCWSTR(filter.as_ptr()),
+        lpstrFile: PWSTR(file.as_mut_ptr()),
+        nMaxFile: u32::try_from(file.len()).unwrap_or(0),
+        lpstrInitialDir: folder
+            .as_ref()
+            .map_or(PCWSTR::null(), |f| PCWSTR(f.as_ptr())),
+        Flags: OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_NOCHANGEDIR,
+        ..Default::default()
+    };
+    // SAFETY: every buffer the request points to outlives the modal call.
+    if !unsafe { GetOpenFileNameW(&mut request) }.as_bool() {
+        return;
+    }
+    let length = file.iter().position(|&c| c == 0).unwrap_or(file.len());
+    let Some(path) = file.get(..length).map(String::from_utf16_lossy) else {
+        return;
+    };
+    set_value(id, control, Value::Text(path.clone()));
+    crate::win32::tell(&FromUi::DialogChanged {
+        id,
+        control: control.to_owned(),
+        value: Value::Text(path),
+    });
+}
+
+/// Windows' sounds folder, `%WINDIR%\Media`.
+fn sounds_folder() -> Option<String> {
+    use windows::Win32::System::SystemInformation::GetWindowsDirectoryW;
+    let mut buffer = [0u16; 260];
+    // SAFETY: a buffer of the length given.
+    let length = unsafe { GetWindowsDirectoryW(Some(&mut buffer)) };
+    let windows = String::from_utf16_lossy(buffer.get(..usize::try_from(length).ok()?)?);
+    (!windows.is_empty()).then(|| format!("{windows}\\Media"))
+}
+
 /// Makes the button `control` the default of dialog `id`, the one Enter presses, framed as
 /// the default.
 pub fn make_default(id: u32, control: &str) {

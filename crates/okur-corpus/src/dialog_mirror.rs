@@ -44,6 +44,9 @@ pub struct DialogMirror {
     below: Vec<(DialogSpec, Option<usize>)>,
     /// The check list row F2 is renaming: the row the focus comes back to under another name.
     renaming: Option<usize>,
+    /// The system's Open dialog shown over this dialog (Select Sound...): keys and text are
+    /// its own until Escape closes it [obs, 802/s13].
+    file_open: Option<u32>,
 }
 
 /// A wizard's page as the window shows it: the page's controls, then its sheet's buttons, named
@@ -142,6 +145,8 @@ impl DialogMirror {
                         *selected = new_selected;
                     }
                 }
+                // The system's Open dialog over Okur's: its keys are its own until it closes.
+                ToUi::FileOpen { id, .. } => self.file_open = Some(id),
                 ToUi::DialogFocus { id, control } => {
                     let at = self
                         .dialog
@@ -255,6 +260,9 @@ impl DialogMirror {
     /// Okur's it is, and the window's report of a list item selected, a radio button checked
     /// or a text typed.
     pub fn focus(&mut self, focus: &FocusEvent) -> Vec<FromUi> {
+        if self.file_open.is_some() {
+            return Vec::new();
+        }
         let Some(dialog) = &mut self.dialog else {
             return Vec::new();
         };
@@ -458,6 +466,9 @@ impl DialogMirror {
     /// Okur's window reports of the text typed into its focused edit combo ("b", "bo", …
     /// "board" in JAWS Find's Find what [obs, 633/s2-s6]).
     pub fn typed(&mut self, typed: &str) -> Vec<FromUi> {
+        if self.file_open.is_some() {
+            return Vec::new();
+        }
         let Some(dialog) = &mut self.dialog else {
             return Vec::new();
         };
@@ -479,6 +490,12 @@ impl DialogMirror {
 
     /// What the window reports for a key the user pressed in it.
     pub fn key(&mut self, event: &KeyEvent) -> Vec<FromUi> {
+        if self.file_open.is_some() {
+            if event.key == Key::Escape && event.modifiers.is_empty() {
+                self.file_open = None;
+            }
+            return Vec::new();
+        }
         let Some(dialog) = &self.dialog else {
             return Vec::new();
         };

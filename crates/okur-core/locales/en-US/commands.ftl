@@ -161,6 +161,9 @@ notification-rule-shortened = Shortened Text:
 notification-rule-sound-path = Path to Sound File:
 notification-rule-select-sound = Select Sound...
 notification-rule-play-sound = Play Sound
+# Select Sound...'s file types, in the system's Open dialog.
+notification-rule-sound-files = Sound Files (*.wav)
+notification-rule-all-files = All Files (*.*)
 notification-rule-braille = Braille Action
 notification-rule-braille-none = Show nothing
 notification-rule-braille-flash = Show flash message

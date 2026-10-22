@@ -674,6 +674,23 @@ impl CreateRuleDialog {
                 "play_sound" if !self.rule.sound.trim().is_empty() => {
                     RuleOutcome::Play(self.rule.sound.clone())
                 }
+                // Select Sound...: the system's Open dialog, for Path to Sound File, as JAWS's
+                // opens Windows' [obs, 802/s12].
+                "select_sound" => RuleOutcome::Send(vec![ToUi::FileOpen {
+                    id: self.id,
+                    control: "sound".to_owned(),
+                    filter: vec![
+                        (
+                            msg::notification_rule_sound_files().to_string(),
+                            "*.wav".to_owned(),
+                        ),
+                        (
+                            msg::notification_rule_all_files().to_string(),
+                            "*.*".to_owned(),
+                        ),
+                    ],
+                    folder: None,
+                }]),
                 "cancel" => RuleOutcome::Closed,
                 _ => RuleOutcome::Nothing,
             },
@@ -945,6 +962,18 @@ mod tests {
                 control: "play_sound".into(),
             }),
             RuleOutcome::Play(r"C:\Windows\Media\chimes.wav".into())
+        );
+        // Select Sound...: the system's Open dialog for the sound's path.
+        let open = dialog.handle(&FromUi::DialogPressed {
+            id: 5,
+            control: "select_sound".into(),
+        });
+        assert!(
+            matches!(&open, RuleOutcome::Send(messages) if matches!(
+                messages.as_slice(),
+                [ToUi::FileOpen { id: 5, control, .. }] if control == "sound"
+            )),
+            "{open:?}"
         );
     }
 
