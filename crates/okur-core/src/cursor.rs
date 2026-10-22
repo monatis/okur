@@ -1020,7 +1020,10 @@ impl VirtualCursor {
         if next_offset <= max_offset && next_offset < self.buffer.len() {
             self.offset = next_offset;
             let ch = self.buffer.char_at(self.offset)?;
-            Some(SpeechFormatter::format_char(ch))
+            Some(
+                self.buffer
+                    .marked_char(self.offset, SpeechFormatter::format_char(ch)),
+            )
         } else if next_offset <= max_offset {
             self.offset = next_offset;
             None
@@ -1050,13 +1053,17 @@ impl VirtualCursor {
 
         self.offset = prev;
         let ch = self.buffer.char_at(self.offset)?;
-        Some(SpeechFormatter::format_char(ch))
+        Some(
+            self.buffer
+                .marked_char(self.offset, SpeechFormatter::format_char(ch)),
+        )
     }
 
     /// Speaks current character without moving cursor (`SayCharacter`).
     pub fn current_char(&self) -> String {
         if let Some(ch) = self.buffer.char_at(self.offset) {
-            SpeechFormatter::format_char(ch)
+            self.buffer
+                .marked_char(self.offset, SpeechFormatter::format_char(ch))
         } else {
             String::new()
         }

@@ -848,6 +848,28 @@ impl VirtualBuffer {
         Some(speech)
     }
 
+    /// A character as JAWS says it moving by character where marks stand at it: the marks
+    /// first, "Deletion t", and a space that ends marked text as its mark alone, "end Deletion"
+    /// [obs, 821/s16, s22, s23]. `said` is the character as said without marks.
+    pub fn marked_char(&self, offset: usize, said: String) -> String {
+        let first = self.flow_marks.partition_point(|(at, _)| *at < offset);
+        let marks: String = self
+            .flow_marks
+            .get(first..)
+            .unwrap_or_default()
+            .iter()
+            .take_while(|(at, _)| *at == offset)
+            .map(|(_, mark)| mark.as_str())
+            .collect();
+        if marks.is_empty() {
+            return said;
+        }
+        if said.trim().is_empty() {
+            return marks;
+        }
+        marks + &said
+    }
+
     pub fn word_at_offset(&self, offset: usize) -> Option<&BufferWord> {
         let first = self.words.partition_point(|w| w.end_offset <= offset);
         self.words

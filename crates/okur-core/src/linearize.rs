@@ -1839,6 +1839,28 @@ mod tests {
                 ".",
             ]
         );
+        // By character, the marks standing at it, and at a space only its mark [obs,
+        // 821/s16, s22, s23].
+        let char_at = |at: usize| {
+            buffer
+                .marked_char(
+                    at,
+                    buffer
+                        .text
+                        .get(at..)
+                        .and_then(|rest| rest.chars().next())
+                        .map(String::from)
+                        .unwrap_or_default(),
+                )
+                .split_whitespace()
+                .collect::<Vec<_>>()
+                .join(" ")
+        };
+        let twelve = buffer.text.find("twelve").unwrap_or_default();
+        assert_eq!(char_at(twelve), "\u{1d}Deletion \u{1e} t");
+        assert_eq!(char_at(twelve + 1), "w");
+        assert_eq!(char_at(twelve + 6), "\u{1d}end Deletion \u{1e}");
+        assert_eq!(char_at(twelve + 7), "\u{1d}Insertion \u{1e} t");
     }
 
     /// A raised or lowered number right after a number is said between its marks, a one-digit
