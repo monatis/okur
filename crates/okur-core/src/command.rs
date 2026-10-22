@@ -221,6 +221,12 @@ pub enum Command {
     SayBottomLineOfWindow,
     /// Insert+E: the dialog box's default button, or "Not in a dialog box".
     SayDefaultButton,
+    /// Windows+Insert+X: the clipboard's text.
+    SayClipboard,
+    /// Insert+Space, C: the clipboard's text in a viewer.
+    ViewClipboardText,
+    /// Insert+Windows+C: the selection added to the clipboard.
+    AppendSelectedTextToClipboard,
     /// Insert+Q: which settings are loaded, and the application in use.
     SayConfiguration,
     /// Ctrl+Insert+V: the application's product name and version.
@@ -591,6 +597,9 @@ impl Command {
             "SayTopLineOfWindow" | "Insert+End" => SayTopLineOfWindow,
             "SayBottomLineOfWindow" | "Insert+PageDown" => SayBottomLineOfWindow,
             "SayDefaultButton" | "Insert+E" => SayDefaultButton,
+            "SayClipboard" => SayClipboard,
+            "ViewClipboardText" => ViewClipboardText,
+            "AppendSelectedTextToClipboard" => AppendSelectedTextToClipboard,
             "SayConfiguration" | "Insert+Q" => SayConfiguration,
             "SayAppVersion" => SayAppVersion,
             "SayHotKey" | "Shift+Numpad5" => SayHotKey,
@@ -1059,6 +1068,10 @@ static BINDINGS: &[Binding] = &{
         bind(Digit(6), OKUR, SettingsCenter),
         // The dialog box's default button, and the settings in use (JAWS 2025 help) [obs, 513].
         bind(Alpha('E'), OKUR, SayDefaultButton),
+        // The clipboard keys (Default.JKM: Windows+JAWSKey+X=SayClipboard,
+        // Insert+Windows+C=AppendSelectedTextToClipboard) [obs, 825].
+        bind(Alpha('X'), OKUR.win(Yes), SayClipboard),
+        bind(Alpha('C'), OKUR.win(Yes), AppendSelectedTextToClipboard),
         bind(Alpha('Q'), OKUR, SayConfiguration),
         bind(Alpha('V'), CTRL_INSERT, SayAppVersion),
         // A page's link address, routing the cursors, frames, and the prior heading by the

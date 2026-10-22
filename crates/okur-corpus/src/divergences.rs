@@ -696,6 +696,13 @@ divergences! {
      as JAWS's help describes the rules, and marks a one-digit number after a number too.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-22";
 
+    Difference::Step => ["520-desktop-say-clipboard/s3"],
+    "The recording's Windows+Insert+X never reached JAWS: Windows takes an injected \
+     Windows-key chord and opened its own Win+X menu, which JAWS read. Pressed by a hand, the \
+     key is JAWS's SayClipboard, which reads the clipboard (825, by script name); Okur reads \
+     it, then the menu the replay's trace holds.",
+    "the agent, 2026-10-22: the evidence records the harness's injected chord, not JAWS's key";
+
     Difference::Step => ["790-desktop-drag-and-drop-in-notepad/s6"],
     "Drag and drop's second Ctrl+Insert+Numpad Slash in Notepad, after the mouse moved three      steps along the text, said in every trial that the object to be dragged was not found      and canceled. Okur drags from where the first press was to where the mouse is, and says      nothing.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-22";

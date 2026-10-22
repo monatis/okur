@@ -12,6 +12,16 @@ clipboard-cut-selection = cut selection to clipboard
 clipboard-cut-selection-short = cut
 # Ctrl+V [obs, 504/s6].
 clipboard-pasted = Pasted from clipboard
+# The selection added to the clipboard's text (Insert+Windows+C).
+clipboard-appended-selection = Appended selection to clipboard
+# View Clipboard Text's viewer: its title, its first line, and its last line.
+clipboard-viewer-title = Clipboard Text
+clipboard-viewer-close = Press Escape to close the clipboard text viewer.
+# The question before Ctrl+C or Ctrl+X overwrites a clipboard the selection was added to.
+clipboard-overwrite-title = Overwrite Clipboard
+clipboard-overwrite-question = Pressing Control+C or Control+X will overwrite the clipboard. Do you want to continue this operation?
+clipboard-overwrite-yes = &Yes
+clipboard-overwrite-no = &No
 clipboard-pasted-short = Pasted
 # Ctrl+Z [obs, 504/s7].
 edit-undo = Undo

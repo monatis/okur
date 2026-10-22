@@ -129,6 +129,13 @@ pub trait ApplicationActions: Send {
         None
     }
 
+    /// An application copied `text` from its field (Ctrl+C, Ctrl+X): the application filled
+    /// the system clipboard itself, so nothing is done; a replay, which has no application,
+    /// keeps it as its clipboard.
+    fn application_copied(&self, text: &str) {
+        let _ = text;
+    }
+
     /// Puts the focused text field's caret at character `offset` of `context`, the field as last
     /// read: the sentence keys move it. The move comes back as the field's caret event. Returns
     /// false when unsupported or not a field it can move.
@@ -364,6 +371,10 @@ impl ApplicationActions for RecordingActions {
 
     fn clipboard_text(&self) -> Option<String> {
         self.clipboard.lock().ok().and_then(|c| c.clone())
+    }
+
+    fn application_copied(&self, text: &str) {
+        self.set_clipboard(text);
     }
 
     fn move_mouse(&self, x: i32, y: i32) -> bool {

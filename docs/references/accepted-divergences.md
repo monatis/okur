@@ -689,6 +689,18 @@ A step can be in more than one entry; all of its entries apply.
 - Why: the underscore is markup for the access key, not text, and the name is said once.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-22.
 
+### The recording of Windows+Insert+X holds Windows' menu, not JAWS
+
+- Steps: `520-desktop-say-clipboard/s3`.
+- Difference: the whole step. The harness pressed Windows+Insert+X by injecting the keys, and
+  Windows takes an injected Windows-key chord: its own Win+X menu opened ("Context Menu | Apps
+  and Features"), and JAWS read the menu. Sent with UI Access, and with Insert first, it does
+  the same (old-pc, 2026-10-22). Pressed by a hand, the key is JAWS's SayClipboard, which
+  reads the clipboard's text (825, the script called by name). Okur reads the clipboard there,
+  then the menu the replay's trace holds.
+- Why: the recording is of the harness's injected chord, not of JAWS's key.
+- Decided by the agent, 2026-10-22.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row

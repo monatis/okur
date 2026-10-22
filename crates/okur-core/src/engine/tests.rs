@@ -6261,6 +6261,84 @@ fn an_applications_notification_is_said_and_kept_by_its_program() {
     );
 }
 
+/// The clipboard keys in a text field [obs, 825]: Okur key+Windows+C adds the selection to the
+/// clipboard on a line of its own, Windows+Okur key+X reads it a line each, and Ctrl+C after it
+/// asks before overwriting the clipboard; Yes copies the selection.
+#[test]
+fn the_clipboard_keys_append_say_and_ask_before_overwriting() {
+    use crate::actions::ApplicationActions;
+    use crate::ui::{FromUi, ToUi};
+    let (mut engine, speech) = engine_with_speech();
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let text = "fn main() {\r\nlet total = 1;";
+    let second = text.find("let").unwrap_or_default();
+    let context = |selection: (usize, usize)| crate::event::TextContext {
+        text: text.to_owned(),
+        caret: selection.1,
+        selection: Some(selection),
+        font: None,
+        word: None,
+        misspelled: Vec::new(),
+    };
+    let mut field = FocusEvent::new(Role::Edit).with_window_title("Notes - Notepad");
+    field.multi_line = true;
+    field.text = Some(context((0, 11)));
+    engine.handle_focus_event(&field);
+    actions.set_clipboard("fn main() {");
+    engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context((
+        second,
+        text.len(),
+    ))));
+    let with = |insert: bool, win: bool, ctrl: bool| Modifiers {
+        insert,
+        win,
+        ctrl,
+        ..Modifiers::none()
+    };
+    speech.take();
+    engine.handle_key_event(&KeyEvent::new(
+        Key::Alpha('C'),
+        with(true, true, false),
+        true,
+    ));
+    assert_eq!(
+        actions.clipboard_text().as_deref(),
+        Some("fn main() {\r\nlet total = 1;")
+    );
+    assert!(norm(&speech.take().join("\n")).contains("Appended selection to clipboard"));
+    engine.handle_key_event(&KeyEvent::new(
+        Key::Alpha('X'),
+        with(true, true, false),
+        true,
+    ));
+    assert_eq!(
+        norm(&speech.take().join("\n")),
+        "fn main() { let total = 1;"
+    );
+    assert_eq!(
+        engine.handle_key_event(&KeyEvent::new(
+            Key::Alpha('C'),
+            with(false, false, true),
+            true
+        )),
+        KeyAction::Consume
+    );
+    let Some(ToUi::DialogShow { dialog }) = ui.take().first().cloned() else {
+        panic_free_fail("no question shown");
+        return;
+    };
+    assert_eq!(dialog.title, "Overwrite Clipboard");
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: dialog.id,
+        control: "yes".into(),
+    }));
+    assert_eq!(actions.clipboard_text().as_deref(), Some("let total = 1;"));
+    assert!(norm(&speech.take().join("\n")).contains("Copied selection to clipboard"));
+}
+
 /// Insert+Space, N: the Notification History, the latest first, each row the text, sender and
 /// time; Enter on a row shows its details; Clear History empties it [obs, 774].
 #[test]

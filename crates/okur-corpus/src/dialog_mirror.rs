@@ -516,6 +516,13 @@ impl DialogMirror {
             return Vec::new();
         }
         let focused = self.focused.and_then(|i| dialog.controls.get(i));
+        // A letter alone on a button is its access key too, as a dialog's buttons take it: Y
+        // answers Yes (Overwrite Clipboard [obs, 825/s19]).
+        if let (Key::Alpha(letter), Some(ControlKind::Button { .. })) =
+            (event.key, focused.map(|c| &c.kind))
+        {
+            return self.access_key(letter);
+        }
         let press = |control: &Control| {
             if control.id == "cancel" {
                 FromUi::DialogClosed { id: dialog.id }

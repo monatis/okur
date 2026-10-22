@@ -164,6 +164,20 @@ impl ScreenReaderEngine {
         let context = &context;
         let before = self.last_text.replace(context.clone());
         let key = self.pending_edit.take()?;
+        // What Ctrl+C or Ctrl+X took from the field is the clipboard's now (a replay keeps it,
+        // for the clipboard keys [obs, 825/s3]).
+        let copied = match key {
+            crate::editing::EditKey::Copy => crate::editing::selected_text(context),
+            crate::editing::EditKey::Cut => before
+                .as_ref()
+                .map(crate::editing::selected_text)
+                .unwrap_or_default(),
+            _ => String::new(),
+        };
+        if let (false, Some(actions)) = (copied.is_empty(), self.actions.as_ref()) {
+            actions.application_copied(&copied);
+            self.clipboard_appended = false;
+        }
         let field = self.text_field_line();
         let mut speech = crate::editing::speech_in(
             key,

@@ -4,6 +4,7 @@
 
 use std::sync::{Arc, Mutex};
 
+pub mod clipboard;
 pub mod find;
 pub mod flexible_web;
 pub mod jump;

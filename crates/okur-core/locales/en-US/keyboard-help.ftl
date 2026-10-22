@@ -362,6 +362,12 @@ command-select-html-element = Selects the element at the cursor.
 command-select-html-element-long = { command-select-html-element } On a web page, the whole element is selected, such as a paragraph or a list.
 # Control+C with text selected by the virtual cursor.
 command-copy-selection = Copies the selected text to the clipboard.
+# SayClipboard (Windows+Insert+X).
+command-say-clipboard = Reads the text on the clipboard.
+# ViewClipboardText (Insert+Space, then C).
+command-view-clipboard-text = Shows the text on the clipboard in a viewer.
+# AppendSelectedTextToClipboard (Insert+Windows+C).
+command-append-selection-to-clipboard = Adds the selected text to the text on the clipboard.
 # SaySelectedText (Insert+Shift+Down Arrow).
 command-say-selected-text = Reads the selected text.
 # The same, the longer description.

@@ -49,6 +49,10 @@ impl ScreenReaderEngine {
             Key::Alpha('S') if shift_only => self.speech_on_demand_toggle(),
             Key::Alpha('S') if plain => self.mute_synthesizer(),
             Key::Alpha('T') if plain => self.start_table_layer(),
+            // View Clipboard Text (ViewClipboardText) [obs, 825/s5].
+            Key::Alpha('C') if plain => {
+                let _ = self.view_clipboard_text();
+            }
             Key::Alpha('E') if plain => self.start_mouse_echo_layer(),
             Key::Alpha('N') if plain => self.open_notification_history(),
             Key::Alpha('N') if shift_only => self.repeat_last_notification(),

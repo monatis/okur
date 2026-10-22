@@ -61,6 +61,10 @@ pub struct VirtualViewer {
     on_place: bool,
     /// The window's title, when not the Virtual Viewer's: "Skim Reading Results".
     title: Option<String>,
+    /// A window of its own as JAWS's is (its Results Viewer's "Clipboard Text"), not JAWS's
+    /// Virtual Viewer: closing it returns to the application's window, which is announced
+    /// again [obs, 825/s7].
+    own_window: bool,
 }
 
 /// Word classes: a word is a run of one class.
@@ -104,6 +108,7 @@ impl VirtualViewer {
             places: Vec::new(),
             on_place: false,
             title: None,
+            own_window: false,
         };
         viewer.read_line();
         viewer
@@ -137,6 +142,17 @@ impl VirtualViewer {
     pub fn with_title(mut self, title: String) -> Self {
         self.title = Some(title);
         self
+    }
+
+    /// The same viewer, a window of its own (see `own_window`).
+    pub fn in_own_window(mut self) -> Self {
+        self.own_window = true;
+        self
+    }
+
+    /// Whether closing it returns to the application's window, announced again.
+    pub fn own_window(&self) -> bool {
+        self.own_window
     }
 
     /// The window's own title, if it has one.

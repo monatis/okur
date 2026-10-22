@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6656,
-  "total_steps": 6889,
-  "accepted_divergences": 184,
+  "matched_steps": 6655,
+  "total_steps": 6888,
+  "accepted_divergences": 185,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -2424,7 +2424,7 @@
     "517-web-speech-layer-keys/s9": "mismatch",
     "520-desktop-say-clipboard/s1": "match",
     "520-desktop-say-clipboard/s2": "match",
-    "520-desktop-say-clipboard/s3": "match",
+    "520-desktop-say-clipboard/s3": "accepted divergence",
     "520-desktop-say-clipboard/s4": "match",
     "520-desktop-say-clipboard/s5": "match",
     "522-desktop-wordpad-reading/s1": "accepted divergence",

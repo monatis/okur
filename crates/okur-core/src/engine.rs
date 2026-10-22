@@ -20,6 +20,7 @@ use crate::speech::SpeechOutput;
 /// [obs, 654]; Keyboard Help took 400 ms as two presses [obs, 642/s3].
 const DOUBLE_PRESS_MS: u64 = 350;
 
+mod clipboard;
 mod commands;
 mod cursors;
 mod find;
@@ -372,6 +373,11 @@ pub struct ScreenReaderEngine {
     live_streams: std::collections::HashMap<String, page::LiveStream>,
     /// The question before Okur exits, while it is open (Insert+F4).
     quit_dialog: Option<crate::ui::quit::QuitDialog>,
+    /// The selection was added to the clipboard (Okur key+Windows+C): Ctrl+C and Ctrl+X ask
+    /// before overwriting it, until a copy or a cut does.
+    clipboard_appended: bool,
+    /// The question asked before overwriting the clipboard, while it is open.
+    overwrite_dialog: Option<crate::ui::clipboard::OverwriteDialog>,
     /// How the engine asks its host to end Okur; None when headless.
     exit: Option<quit::ExitRequest>,
 }
@@ -517,6 +523,8 @@ impl ScreenReaderEngine {
             last_live_text: std::collections::HashMap::new(),
             live_streams: std::collections::HashMap::new(),
             quit_dialog: None,
+            clipboard_appended: false,
+            overwrite_dialog: None,
             exit: None,
         }
     }
@@ -869,9 +877,18 @@ impl ScreenReaderEngine {
                     return KeyAction::Consume;
                 }
                 ViewerAction::Close => {
+                    let own_window = self.viewer.as_ref().is_some_and(|v| v.own_window());
                     self.viewer = None;
                     self.close_viewer_window();
-                    self.speak_focus_again();
+                    if own_window {
+                        // The application's window, as the focus comes back to it, is
+                        // announced again: "sr-notepad-fixture.txt - Notepad | edit | Type in
+                        // text." [obs, 825/s7].
+                        self.last_window_title = None;
+                        self.native_focus.reset();
+                    } else {
+                        self.speak_focus_again();
+                    }
                     return KeyAction::Consume;
                 }
                 ViewerAction::Run(command) => {
@@ -997,6 +1014,9 @@ impl ScreenReaderEngine {
         // navigation and typing keys MUST pass through to the OS so Windows
         // handles arrow navigation, Tab cycling, and initial-letter jumps natively!
         if self.app_mode != AppMode::VirtualBuffer {
+            if self.ask_before_overwriting(event) {
+                return KeyAction::Consume;
+            }
             // Ctrl+Home and Ctrl+End in an application's grid are its top and bottom of file
             // [obs, 545/s6, s7].
             let file_key = event.modifiers.ctrl
@@ -1541,6 +1561,7 @@ impl ScreenReaderEngine {
             _ if self.is_placemarker_event(message) => self.handle_placemarker_event(message),
             _ if self.is_flexible_web_event(message) => self.handle_flexible_web_event(message),
             _ if self.is_quit_event(message) => self.handle_quit_event(message),
+            _ if self.is_overwrite_event(message) => self.handle_overwrite_event(message),
             _ => {
                 let outcome = self.settings_dialog.as_mut()?.handle(message);
                 match outcome {
