@@ -29,6 +29,15 @@ impl ScreenReaderEngine {
             Some(rule) => rule.spoken(text),
             None => Some(text.to_owned()),
         };
+        // Play Sound: the rule's sound in the notification's place.
+        let sound = rule
+            .filter(|rule| rule.speech == crate::ui::notifications::SpeechAction::PlaySound)
+            .map(|rule| rule.sound.clone())
+            .filter(|path| !path.trim().is_empty());
+        if let (Some(path), Some(sounds), false) = (sound, self.sounds.as_mut(), self.toasts_unsaid)
+        {
+            sounds.play_file(&path);
+        }
         self.last_notification = Some(text.to_owned());
         if !hidden {
             let time = self
@@ -179,6 +188,11 @@ impl ScreenReaderEngine {
                         messages.into_iter().for_each(|m| ui.send(m));
                     }
                 }
+                RuleOutcome::Play(path) => {
+                    if let Some(sounds) = self.sounds.as_mut() {
+                        sounds.play_file(&path);
+                    }
+                }
                 RuleOutcome::Save(rule) if dialog.modifying() => {
                     let id = dialog.id;
                     if let Some(kept) = self
@@ -229,6 +243,11 @@ impl ScreenReaderEngine {
                 RuleOutcome::Send(messages) => {
                     if let Some(ui) = &self.ui {
                         messages.into_iter().for_each(|m| ui.send(m));
+                    }
+                }
+                RuleOutcome::Play(path) => {
+                    if let Some(sounds) = self.sounds.as_mut() {
+                        sounds.play_file(&path);
                     }
                 }
                 // Rename... in Manage Rules: the rule takes the name [obs, 787/s9].

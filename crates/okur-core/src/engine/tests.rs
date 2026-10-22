@@ -6240,6 +6240,49 @@ fn the_notification_history_lists_the_toasts_that_came() {
     );
 }
 
+/// A rule that plays a sound plays its file in the notification's place and says nothing
+/// (JAWS 2025 help, Notification History: "plays a specified sound instead of speaking").
+#[test]
+fn a_play_sound_rule_plays_its_file_instead() {
+    use crate::ui::notifications::{NotificationRules, Rule, RuleType, SpeechAction};
+    let (mut engine, speech) = engine_on_a_page();
+    let sounds = crate::sound::RecordingSounds::default();
+    engine.set_sounds(Box::new(sounds.clone()));
+    engine.set_notification_rules(
+        NotificationRules {
+            enabled: true,
+            rules: vec![Rule {
+                name: "Build".into(),
+                kind: RuleType::Contains,
+                text: "Build finished".into(),
+                sender: None,
+                speech: SpeechAction::PlaySound,
+                braille: 1,
+                hidden: false,
+                shortened: String::new(),
+                sound: r"C:\Windows\Media\chimes.wav".into(),
+                enabled: true,
+            }],
+        },
+        None,
+    );
+    let _ = speech.take();
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::Toast {
+        text: "New notification from Windows PowerShell, SR Fixture, Build finished in 12 seconds. 1 of 1".to_owned(),
+        sender: Some("Windows PowerShell".to_owned()),
+    });
+    assert_eq!(said, None);
+    assert!(speech.take().is_empty());
+    assert_eq!(sounds.take(), [r"C:\Windows\Media\chimes.wav"]);
+    // Another notification is said, and plays nothing.
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::Toast {
+        text: "New notification from Mail, Lunch. 1 of 1".to_owned(),
+        sender: Some("Mail".to_owned()),
+    });
+    assert!(said.is_some());
+    assert!(sounds.take().is_empty());
+}
+
 /// Create Rule... on a notification makes a rule, Mute at first: the next notification it
 /// matches is kept, not said, and Shift+N still says it (JAWS 2025 help, Notification History;
 /// [obs, 775]). Enable Rules unchecked, it is said again.
@@ -6503,6 +6546,7 @@ fn manage_rules_disables_renames_and_deletes() {
                 braille: 1,
                 hidden: false,
                 shortened: String::new(),
+                sound: String::new(),
                 enabled: true,
             }],
         },

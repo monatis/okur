@@ -20,6 +20,7 @@ pub mod registry;
 pub mod screen_lines;
 pub mod settings_file;
 pub mod signature;
+pub mod sound;
 pub mod text_context;
 pub mod top_windows;
 pub mod tts;

@@ -560,6 +560,7 @@ pub async fn run(config: RunConfig) {
     // Say System Time (Insert+F12) in the user's locale formats.
     #[cfg(windows)]
     engine.set_clock(Box::new(okur_platform::clock::WindowsClock));
+    engine.set_sounds(Box::new(okur_platform::sound::WindowsSounds));
     // Every way out comes here: the exit path below takes it from the first.
     let (exit_tx, mut exit_rx) = tokio::sync::mpsc::unbounded_channel::<ExitReason>();
     // Insert+F4: the engine asks; this host ends Okur.

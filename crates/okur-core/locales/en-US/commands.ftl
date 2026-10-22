@@ -152,10 +152,15 @@ notification-rule-speech-group = Speech or Sound Action
 notification-rule-speech = Speech Action
 notification-rule-mute = Mute
 notification-rule-shorten = Shorten
-notification-rule-sound = Play Sound
+# The choice reads "Play sound", the button "Play Sound" [obs, 801/s10, s13].
+notification-rule-sound = Play sound
 notification-rule-speak = Speak the full message
 # Shorten's message, labelled as JAWS's Create Rule labels it [obs, 798/s9].
 notification-rule-shortened = Shortened Text:
+# Play Sound's controls, as JAWS's Create Rule labels them [obs, 801/s11-s13].
+notification-rule-sound-path = Path to Sound File:
+notification-rule-select-sound = Select Sound...
+notification-rule-play-sound = Play Sound
 notification-rule-braille = Braille Action
 notification-rule-braille-none = Show nothing
 notification-rule-braille-flash = Show flash message

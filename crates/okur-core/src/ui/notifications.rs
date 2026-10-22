@@ -193,7 +193,7 @@ pub enum SpeechAction {
     Mute,
     /// Another message in its place: its Shortened Text.
     Shorten,
-    /// A sound in its place (not built yet: nothing said).
+    /// A sound in its place: its Path to Sound File.
     PlaySound,
     SpeakFull,
 }
@@ -240,6 +240,9 @@ pub struct Rule {
     /// Shorten's message, said in the notification's place.
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub shortened: String,
+    /// Play Sound's file, played in the notification's place.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub sound: String,
     /// Turned off in Manage Rules (Disable): kept, deciding nothing [obs, 784/s6].
     #[serde(default = "rules_enabled")]
     pub enabled: bool,
@@ -318,7 +321,7 @@ pub trait NotificationRuleStore: Send {
 
 impl Rule {
     /// What is said for a notification saying `text` that this rule decides: nothing for
-    /// Mute and Play Sound (its sound not built yet), the whole of it for Speak the full
+    /// Mute and Play Sound (its sound is played instead), the whole of it for Speak the full
     /// message, and Shorten's message, in which a pattern rule's `\1`, `\2` ... are the
     /// pattern's captures and `\\` a backslash (JAWS 2025 help, Notification History).
     pub fn spoken(&self, text: &str) -> Option<String> {
@@ -358,6 +361,8 @@ pub enum RuleOutcome {
     Nothing,
     /// Send these to the dialog.
     Send(Vec<ToUi>),
+    /// Play this sound file (Play Sound's preview).
+    Play(String),
     /// OK: the rule.
     Save(Rule),
     Closed,
@@ -464,6 +469,7 @@ impl CreateRuleDialog {
                 braille: 1,
                 hidden: false,
                 shortened: String::new(),
+                sound: String::new(),
                 enabled: true,
             },
             from: sender.map(str::to_owned),
@@ -564,6 +570,34 @@ impl CreateRuleDialog {
                         },
                     )
                 },
+                // Play Sound's file, Select Sound... and Play Sound, available once Play sound
+                // is chosen [obs, 801/s11-s13].
+                Control {
+                    enabled: self.rule.speech == SpeechAction::PlaySound,
+                    ..control(
+                        "sound",
+                        msg::notification_rule_sound_path(),
+                        ControlKind::Edit {
+                            text: self.rule.sound.clone(),
+                        },
+                    )
+                },
+                Control {
+                    enabled: self.rule.speech == SpeechAction::PlaySound,
+                    ..control(
+                        "select_sound",
+                        msg::notification_rule_select_sound(),
+                        ControlKind::Button { default: false },
+                    )
+                },
+                Control {
+                    enabled: self.rule.speech == SpeechAction::PlaySound,
+                    ..control(
+                        "play_sound",
+                        msg::notification_rule_play_sound(),
+                        ControlKind::Button { default: false },
+                    )
+                },
                 control(
                     "braille_group",
                     msg::notification_rule_braille(),
@@ -612,14 +646,22 @@ impl CreateRuleDialog {
                     ("speech", Value::Selected(i)) => {
                         if let Some(&speech) = SpeechAction::ALL.get(*i) {
                             self.rule.speech = speech;
-                            return RuleOutcome::Send(vec![ToUi::DialogEnable {
+                            let enable = |control: &str, enabled: bool| ToUi::DialogEnable {
                                 id: self.id,
-                                control: "shortened".to_owned(),
-                                enabled: speech == SpeechAction::Shorten,
-                            }]);
+                                control: control.to_owned(),
+                                enabled,
+                            };
+                            let sound = speech == SpeechAction::PlaySound;
+                            return RuleOutcome::Send(vec![
+                                enable("shortened", speech == SpeechAction::Shorten),
+                                enable("sound", sound),
+                                enable("select_sound", sound),
+                                enable("play_sound", sound),
+                            ]);
                         }
                     }
                     ("shortened", Value::Text(text)) => self.rule.shortened = text.clone(),
+                    ("sound", Value::Text(text)) => self.rule.sound = text.clone(),
                     ("braille", Value::Selected(i)) => self.rule.braille = *i,
                     ("hidden", Value::Checked(on)) => self.rule.hidden = *on,
                     _ => {}
@@ -628,6 +670,10 @@ impl CreateRuleDialog {
             }
             FromUi::DialogPressed { id, control } if *id == self.id => match control.as_str() {
                 "ok" if !self.rule.text.trim().is_empty() => RuleOutcome::Save(self.rule.clone()),
+                // Play Sound: the file chosen, played now.
+                "play_sound" if !self.rule.sound.trim().is_empty() => {
+                    RuleOutcome::Play(self.rule.sound.clone())
+                }
                 "cancel" => RuleOutcome::Closed,
                 _ => RuleOutcome::Nothing,
             },
@@ -846,6 +892,62 @@ mod tests {
         );
     }
 
+    /// Play sound makes Path to Sound File, Select Sound... and Play Sound available, and Play
+    /// Sound plays the file given [obs, 801/s10-s13].
+    #[test]
+    fn play_sound_shows_its_controls_and_plays_the_file() {
+        let mut dialog = CreateRuleDialog::new(5, "Build finished", None);
+        let chose = dialog.handle(&FromUi::DialogChanged {
+            id: 5,
+            control: "speech".into(),
+            value: Value::Selected(2),
+        });
+        let RuleOutcome::Send(messages) = chose else {
+            assert_eq!(chose, RuleOutcome::Nothing, "no Send");
+            return;
+        };
+        let enabled: Vec<(String, bool)> = messages
+            .into_iter()
+            .filter_map(|m| match m {
+                ToUi::DialogEnable {
+                    control, enabled, ..
+                } => Some((control, enabled)),
+                _ => None,
+            })
+            .collect();
+        assert_eq!(
+            enabled,
+            [
+                ("shortened".to_owned(), false),
+                ("sound".to_owned(), true),
+                ("select_sound".to_owned(), true),
+                ("play_sound".to_owned(), true),
+            ]
+        );
+        let labels: Vec<String> = dialog
+            .spec()
+            .controls
+            .iter()
+            .filter(|c| c.enabled)
+            .map(|c| c.label.clone())
+            .collect();
+        assert!(labels
+            .windows(3)
+            .any(|w| w == ["Path to Sound File:", "Select Sound...", "Play Sound"]));
+        let _ = dialog.handle(&FromUi::DialogChanged {
+            id: 5,
+            control: "sound".into(),
+            value: Value::Text(r"C:\Windows\Media\chimes.wav".into()),
+        });
+        assert_eq!(
+            dialog.handle(&FromUi::DialogPressed {
+                id: 5,
+                control: "play_sound".into(),
+            }),
+            RuleOutcome::Play(r"C:\Windows\Media\chimes.wav".into())
+        );
+    }
+
     /// Shortened Text is available once Shorten is chosen.
     #[test]
     fn shortened_text_follows_shorten() {
@@ -864,13 +966,13 @@ mod tests {
             control: "speech".into(),
             value: Value::Selected(1),
         });
-        assert_eq!(
-            chose,
-            RuleOutcome::Send(vec![ToUi::DialogEnable {
+        assert!(
+            matches!(&chose, RuleOutcome::Send(messages) if messages.contains(&ToUi::DialogEnable {
                 id: 5,
                 control: "shortened".into(),
                 enabled: true,
-            }])
+            })),
+            "{chose:?}"
         );
         assert_eq!(shortened(&dialog), Some(true));
         let _ = dialog.handle(&FromUi::DialogChanged {

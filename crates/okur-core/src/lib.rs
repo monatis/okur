@@ -24,6 +24,7 @@ pub mod pronounce;
 pub mod retire;
 pub mod settings;
 pub mod settings_layers;
+pub mod sound;
 pub mod speech;
 pub mod text_analysis;
 pub mod ui;

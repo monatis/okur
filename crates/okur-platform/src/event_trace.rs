@@ -1035,6 +1035,31 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         if let Some(label) = &label_before {
             focus.name = Some(label.clone());
         }
+        // A WPF group box's line is its header and the texts before the control in it, said
+        // again when the line changes: "Speech or Sound Action Path to Sound File:" before
+        // "Path to Sound File: Edit", after the combo box in the same group [obs, 801/s11,
+        // 798/s9].
+        let in_group_box = event.focus_chain.iter().rev().nth(1).is_some_and(|parent| {
+            parent.control_type == 50026 && parent.class_name.as_deref() == Some("GroupBox")
+        });
+        if in_group_box && focused.runtime_id.is_some() {
+            let at = event
+                .focus_siblings
+                .iter()
+                .position(|s| s.runtime_id == focused.runtime_id);
+            let texts: Vec<String> = at
+                .and_then(|at| event.focus_siblings.get(..at))
+                .unwrap_or_default()
+                .iter()
+                .filter(|s| s.control_type == UIA_TEXT)
+                .filter_map(|s| s.name.as_deref().map(str::trim))
+                .filter(|n| !n.is_empty() && !n.starts_with('_'))
+                .map(str::to_owned)
+                .collect();
+            if let (false, Some(group)) = (texts.is_empty(), focus.groups.last_mut()) {
+                group.name = format!("{} {}", group.name, texts.join(" "));
+            }
+        }
         // A text that names a control beside it is that control's label, said with the
         // control, not as the dialog's text: JAWS opened Okur's settings with "Okur Settings
         // dialog | Speech Synthesizer: Combo box", without "Voice:", "Rate:" (dev box,
@@ -5115,6 +5140,45 @@ mod tests {
         assert_eq!(
             focus.map(|f| (f.item_index, f.item_count)),
             Some((Some(2), Some(3)))
+        );
+    }
+
+    /// A field in a WPF group box: named by the text before it, and its group's line is the
+    /// header and that text: "Speech or Sound Action Path to Sound File: | Path to Sound File:
+    /// Edit" [obs, 801/s11].
+    #[test]
+    fn a_wpf_group_boxs_line_takes_the_texts_before_the_control() {
+        const GROUP: i32 = 50026;
+        const EDIT: i32 = 50004;
+        const COMBO: i32 = 50003;
+        let mut group = node(GROUP, "", false);
+        group.name = None;
+        group.class_name = Some("GroupBox".to_owned());
+        group.label = Some("Speech or Sound Action".to_owned());
+        let mut edit = node(EDIT, "", true);
+        edit.name = None;
+        edit.runtime_id = Some(vec![7, 1, 4]);
+        let mut event = focus_event(vec![
+            node(TEXT, "_Speech or Sound Action", false),
+            node(COMBO, "Speech Action", false),
+            node(TEXT, "Path to Sound File:", false),
+            edit.clone(),
+            node(UIA_BUTTON, "Select Sound...", false),
+        ]);
+        let mut window = node(UIA_WINDOW, "Create Rule", false);
+        window.is_dialog = Some(true);
+        event.focus_chain = vec![window, group, edit];
+        let focus = focus_event_from_trace(&event);
+        assert_eq!(
+            focus.as_ref().and_then(|f| f.name.as_deref()),
+            Some("Path to Sound File:")
+        );
+        assert_eq!(
+            focus
+                .as_ref()
+                .and_then(|f| f.groups.last())
+                .map(|g| g.name.as_str()),
+            Some("Speech or Sound Action Path to Sound File:")
         );
     }
 

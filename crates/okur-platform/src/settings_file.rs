@@ -567,6 +567,7 @@ mod tests {
                 braille: 1,
                 hidden: true,
                 shortened: String::new(),
+                sound: String::new(),
                 enabled: false,
             }],
         };

@@ -231,6 +231,8 @@ pub struct ScreenReaderEngine {
     actions: Option<Box<dyn crate::actions::ApplicationActions>>,
     /// The local time and locale formats for Say System Time; None when headless.
     clock: Option<Box<dyn crate::clock::Clock>>,
+    /// Plays sound files: a notification rule's Play Sound.
+    sounds: Option<Box<dyn crate::sound::SoundOutput>>,
     /// Okur's own windows (`okur-ui`); None when headless.
     ui: Option<Box<dyn crate::ui::UiHost>>,
     /// Where changed settings are kept; None when headless.
@@ -446,6 +448,7 @@ impl ScreenReaderEngine {
             last_text: None,
             actions: None,
             clock: None,
+            sounds: None,
             ui: None,
             settings_store: None,
             settings_layers: crate::settings_layers::SettingsLayers::default(),
@@ -1319,6 +1322,11 @@ impl ScreenReaderEngine {
     /// edit act on the page and not only on the buffer.
     pub fn set_actions(&mut self, actions: Box<dyn crate::actions::ApplicationActions>) {
         self.actions = Some(actions);
+    }
+
+    /// Gives the engine the platform's sound output (a notification rule's Play Sound).
+    pub fn set_sounds(&mut self, sounds: Box<dyn crate::sound::SoundOutput>) {
+        self.sounds = Some(sounds);
     }
 
     /// Gives the engine the system clock and locale formats (Say System Time).
