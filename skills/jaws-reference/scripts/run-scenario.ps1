@@ -32,7 +32,7 @@ param(
     [string]$OkurDebugLog,
     # The lab's key sender with UI Access (crates/okur/src/bin/okur-lab-keys.rs), signed with the
     # development certificate and copied here once by the owner: key_ui_access steps use it.
-    [string]$LabKeys = 'C:Program FilesOkur Labokur-lab-keys.exe',
+    [string]$LabKeys = 'C:\Program Files\Okur Lab\okur-lab-keys.exe',
     [switch]$Quiet
 )
 
