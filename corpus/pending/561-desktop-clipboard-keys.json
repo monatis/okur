@@ -1,6 +1,6 @@
 {
   "id": "561-desktop-clipboard-keys",
-  "name": "The clipboard in a native edit: a line copied, then JAWS's SayClipboard (Windows+JAWSKey+X, called by name: Windows' Win+X menu takes the keys), View Clipboard Text (Insert+Space, C) and Escape (with UI Access, which closes JAWS's Clipboard Text window); a second line selected and AppendSelectedTextToClipboard (Insert+Windows+C, by name), SayClipboard and View Clipboard Text again",
+  "name": "The clipboard in a native edit: a line copied, then JAWS's SayClipboard (Windows+JAWSKey+X, called by name: Windows' Win+X menu takes the keys), View Clipboard Text (Insert+Space, C) and Escape (with UI Access, which closes JAWS's Clipboard Text window); a second line selected and AppendSelectedTextToClipboard (Insert+Windows+C, by name), SayClipboard and View Clipboard Text again; then the line selected again and copied, JAWS's Overwrite Clipboard question answered Yes (Y, with UI Access), and SayClipboard: each trial ends with the clipboard as Ctrl+C leaves it",
   "category": "desktop",
   "version": "1.0.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
@@ -92,6 +92,31 @@
       "id": "s15",
       "type": "key_ui_access",
       "command": "Escape"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Home"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Shift+End"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Ctrl+C"
+    },
+    {
+      "id": "s19",
+      "type": "key_ui_access",
+      "command": "Y"
+    },
+    {
+      "id": "s20",
+      "type": "jaws_script",
+      "command": "SayClipboard"
     }
   ]
 }
