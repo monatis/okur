@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6359,
+  "matched_steps": 6360,
   "total_steps": 6599,
   "accepted_divergences": 169,
   "errors": [],
@@ -6775,7 +6775,7 @@
     "803-web-skim-read-by-italic/s7": "match",
     "803-web-skim-read-by-italic/s8": "match",
     "803-web-skim-read-by-italic/s9": "match",
-    "804-web-skim-read-by-underline/s1": "mismatch",
+    "804-web-skim-read-by-underline/s1": "match",
     "804-web-skim-read-by-underline/s10": "match",
     "804-web-skim-read-by-underline/s11": "match",
     "804-web-skim-read-by-underline/s12": "match",

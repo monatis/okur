@@ -152,6 +152,7 @@ divergences! {
         "799-web-skim-read-by-bold/s1",
         "800-web-skim-reading-back-to-first-lines/s1",
         "803-web-skim-read-by-italic/s1",
+        "804-web-skim-read-by-underline/s1",
     ],
     "Opening one of its list dialogs, JAWS's speech passes through its own windows before it \
      names the dialog: its main window (its version, a list's tutor message) and the browser's \
