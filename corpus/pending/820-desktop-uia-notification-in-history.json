@@ -33,7 +33,8 @@
     {
       "id": "s4",
       "type": "jaws_function",
-      "command": "TypeKey(\"Enter\")"
+      "command": "TypeKey(\"Enter\")",
+      "settle_max_ms": 20000
     },
     {
       "id": "s5",
