@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6370,
+  "matched_steps": 6371,
   "total_steps": 6609,
   "accepted_divergences": 169,
   "errors": [],
@@ -6611,7 +6611,7 @@
     "787-desktop-notification-rule-made-managed-deleted/s16": "mismatch",
     "787-desktop-notification-rule-made-managed-deleted/s17": "mismatch",
     "787-desktop-notification-rule-made-managed-deleted/s18": "mismatch",
-    "787-desktop-notification-rule-made-managed-deleted/s19": "mismatch",
+    "787-desktop-notification-rule-made-managed-deleted/s19": "match",
     "787-desktop-notification-rule-made-managed-deleted/s2": "match",
     "787-desktop-notification-rule-made-managed-deleted/s20": "match",
     "787-desktop-notification-rule-made-managed-deleted/s3": "match",

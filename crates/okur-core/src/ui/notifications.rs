@@ -86,6 +86,17 @@ impl HistoryDialog {
         }
     }
 
+    /// Manage Rules... available or not, as rules are made and deleted: the message that
+    /// tells the window.
+    pub fn set_has_rules(&mut self, has_rules: bool) -> ToUi {
+        self.has_rules = has_rules;
+        ToUi::DialogEnable {
+            id: self.id,
+            control: "manage".to_owned(),
+            enabled: has_rules,
+        }
+    }
+
     pub fn spec(&self) -> DialogSpec {
         let button = |id: &str, label: StaticMessage| {
             control(id, label, ControlKind::Button { default: false })

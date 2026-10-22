@@ -151,6 +151,16 @@ impl ScreenReaderEngine {
         }
     }
 
+    /// The history's Manage Rules... available while rules are kept: the dialog's state and its
+    /// window both (the button was shown available after the first rule while the dialog still
+    /// refused it; the replay of 787/s8 found it).
+    fn history_has_rules(&mut self) {
+        let any = !self.notification_rules.rules.is_empty();
+        if let (Some(history), Some(ui)) = (self.notification_history.as_mut(), &self.ui) {
+            ui.send(history.set_has_rules(any));
+        }
+    }
+
     /// Shows `dialog` over the history's dialogs.
     fn show_over(&mut self, dialog: crate::ui::DialogSpec) {
         if let Some(ui) = &self.ui {
@@ -278,14 +288,8 @@ impl ScreenReaderEngine {
                         {
                             ui.send(ToUi::DialogClose { id });
                         }
-                        if let Some(history) = &self.notification_history {
-                            ui.send(ToUi::DialogEnable {
-                                id: history.id,
-                                control: "manage".to_owned(),
-                                enabled: true,
-                            });
-                        }
                     }
+                    self.history_has_rules();
                 }
                 RuleOutcome::Closed => {
                     self.notification_name_dialog = None;
@@ -366,14 +370,7 @@ impl ScreenReaderEngine {
                     if matches!(message, FromUi::DialogPressed { .. }) {
                         self.close_dialog(manage_id);
                     }
-                    let any = !self.notification_rules.rules.is_empty();
-                    if let (Some(history), Some(ui)) = (&self.notification_history, &self.ui) {
-                        ui.send(ToUi::DialogEnable {
-                            id: history.id,
-                            control: "manage".to_owned(),
-                            enabled: any,
-                        });
-                    }
+                    self.history_has_rules();
                 }
             }
             return None;

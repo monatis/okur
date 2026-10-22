@@ -6374,6 +6374,23 @@ fn a_notification_rule_mutes_what_it_matches() {
     );
     assert!(speech.take().is_empty());
     assert!(toast(&mut engine, "New notification from Mail, Lunch. 1 of 1").is_some());
+    // The first rule made, Manage Rules... is available and opens [obs, 787/s8].
+    let _ = ui.take();
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: history,
+        control: "manage".into(),
+    }));
+    let manage = ui.take().into_iter().find_map(|m| match m {
+        ToUi::DialogShow { dialog } => Some(dialog),
+        _ => None,
+    });
+    assert_eq!(
+        manage.as_ref().map(|d| d.title.as_str()),
+        Some("Manage Notification Rules")
+    );
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogClosed {
+        id: manage.map_or(0, |d| d.id),
+    }));
     engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
         id: history,
         control: "rules".into(),
