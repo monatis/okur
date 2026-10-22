@@ -1046,9 +1046,10 @@ fn the_okur_cursor_reads_a_text_fields_lines() {
         )
     };
     assert_eq!(ctrl_right(&mut engine), "println");
-    // Down twice to the lines starting at 13 and 33; Insert+Up does not move it; Left stays
-    // before the first character; Right to the space at 33; Ctrl+Right to "println" at 37.
-    assert_eq!(mouse_to(&actions), [13, 33, 33, 33, 37]);
+    // Insert+Numpad Minus to the caret at 0; Down twice to the lines starting at 13 and 33;
+    // Insert+Up does not move it; Left stays before the first character; Right to the space
+    // at 33; Ctrl+Right to "println" at 37.
+    assert_eq!(mouse_to(&actions), [0, 13, 33, 33, 33, 37]);
 }
 
 /// The Okur cursor on a page, routed to the virtual cursor, reads the page's lines as its
@@ -1102,15 +1103,15 @@ fn the_okur_cursor_reads_a_pages_lines() {
     );
     press(&mut engine, Key::NumpadPlus, Modifiers::none());
     assert!(engine.cursor.current_line().contains("Weekend events"));
-    // The mouse went with it: onto the paragraph for Down, Right and Ctrl+Right; Page Up, to
-    // the window's top, leaves it.
+    // The mouse went with it: onto the heading for Insert+Numpad Minus, the paragraph for
+    // Down, Right and Ctrl+Right; Page Up, to the window's top, leaves it.
     let to: Vec<usize> = actions
         .requests()
         .iter()
         .filter(|(what, _)| what == "mouse to node")
         .map(|(_, node)| *node)
         .collect();
-    assert_eq!(to, [3, 3, 3]);
+    assert_eq!(to, [2, 3, 3, 3]);
 }
 
 /// Ctrl+Insert+Tab on a page's field opens Custom Label; OK with "lamp" names the field "lamp"

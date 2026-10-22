@@ -147,6 +147,23 @@ impl ScreenReaderEngine {
             self.mouse = Some((x, y));
             self.note_own_mouse_move();
         }
+        // Then onto the caret's character in a text field, as JAWS's route put it on the
+        // first line's first character in Notepad (the trace of 794, 2026-10-22), or onto the
+        // virtual cursor's element on a page; where neither is found, the focus's middle
+        // stays.
+        if let Some(actions) = &self.actions {
+            let moved = if self.app_mode == super::AppMode::VirtualBuffer {
+                self.node_under_cursor()
+                    .is_some_and(|node| actions.move_mouse_to_node(node))
+            } else {
+                self.last_text
+                    .as_ref()
+                    .is_some_and(|context| actions.move_mouse_to_text(context, context.caret))
+            };
+            if moved {
+                self.note_own_mouse_move();
+            }
+        }
         // The Okur cursor is now on the caret's line, or the virtual cursor's.
         self.okur_place = self.routed_place();
         let said = self.cursor_message(
