@@ -1000,13 +1000,27 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         focus.wizard_page = wizard_page;
         // The dialog boxes in the focus's chain over which the active one opened: owned by
         // them, UI Automation puts it inside them.
-        let dialogs: Vec<&UiaNode> = event
+        let win32 = |n: &&UiaNode| {
+            n.control_type == UIA_WINDOW && n.class_name.as_deref() == Some(WIN32_DIALOG_CLASS)
+        };
+        let dialogs: Vec<&UiaNode> = event.focus_chain.iter().filter(win32).collect();
+        // Over a Win32 message box, a WPF window UI Automation calls a dialog is named too,
+        // plainly: JAWS says "Manage Notification Rules" before the "Confirm Delete" box it
+        // owns [obs, 787/s17]; a WPF dialog over another names only itself (787/s5).
+        let over_win32 = event
             .focus_chain
             .iter()
-            .filter(|n| {
-                n.control_type == UIA_WINDOW && n.class_name.as_deref() == Some(WIN32_DIALOG_CLASS)
-            })
-            .collect();
+            .rev()
+            .find(|n| n.control_type == UIA_WINDOW)
+            .is_some_and(|n| win32(&n));
+        if over_win32 {
+            focus.outer_windows = event
+                .focus_chain
+                .iter()
+                .filter(|n| n.control_type == UIA_WINDOW && n.is_dialog == Some(true) && !win32(n))
+                .filter_map(|n| n.name.clone())
+                .collect();
+        }
         focus.outer_dialogs = dialogs
             .split_last()
             .map(|(_, outer)| outer.iter().filter_map(|n| n.name.clone()).collect())
@@ -5141,6 +5155,30 @@ mod tests {
             focus.map(|f| (f.item_index, f.item_count)),
             Some((Some(2), Some(3)))
         );
+    }
+
+    /// A Win32 message box over a WPF dialog window: the window is named plainly before the box
+    /// ("Manage Notification Rules | Confirm Delete dialog" [obs, 787/s17]); a WPF dialog over
+    /// another names no outer window (787/s5).
+    #[test]
+    fn a_message_box_names_the_wpf_window_it_opened_over() {
+        let mut manage = node(UIA_WINDOW, "Manage Notification Rules", false);
+        manage.is_dialog = Some(true);
+        manage.class_name = Some("Window".to_owned());
+        let mut confirm = node(UIA_WINDOW, "Confirm Delete", false);
+        confirm.class_name = Some(WIN32_DIALOG_CLASS.to_owned());
+        let mut event = focus_event(Vec::new());
+        event.focus_chain = vec![manage.clone(), confirm, node(UIA_BUTTON, "Yes", true)];
+        let focus = focus_event_from_trace(&event);
+        assert_eq!(
+            focus.as_ref().map(|f| f.outer_windows.clone()),
+            Some(vec!["Manage Notification Rules".to_owned()])
+        );
+        let mut name_rule = node(UIA_WINDOW, "Name Your Rule", false);
+        name_rule.is_dialog = Some(true);
+        event.focus_chain = vec![manage, name_rule, node(UIA_BUTTON, "OK", true)];
+        let focus = focus_event_from_trace(&event);
+        assert_eq!(focus.map(|f| f.outer_windows), Some(Vec::new()));
     }
 
     /// A field in a WPF group box: named by the text before it, and its group's line is the

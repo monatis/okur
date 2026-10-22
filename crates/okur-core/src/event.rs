@@ -282,6 +282,11 @@ pub struct FocusEvent {
     /// it ("PlaceMarker List dialog | Add PlaceMarker dialog | Name: Edit" [obs, 702/s5]).
     #[serde(default)]
     pub outer_dialogs: Vec<String>,
+    /// The windows a message box opened over that are not dialog boxes (a WPF dialog
+    /// window), outermost first: JAWS names them plainly before it ("Manage Notification
+    /// Rules | Confirm Delete dialog" [obs, 787/s17]).
+    #[serde(default)]
+    pub outer_windows: Vec<String>,
     /// When the focused control is inside a dialog box's group box: the group box's text,
     /// which JAWS says before the control's name ("Speech Rate: left right slider").
     #[serde(default)]
@@ -468,6 +473,7 @@ impl FocusEvent {
             plain_edit: false,
             spin_box: false,
             outer_dialogs: Vec::new(),
+            outer_windows: Vec::new(),
             menu_bar: Vec::new(),
             status_bar: Vec::new(),
             app: None,

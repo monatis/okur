@@ -1037,9 +1037,10 @@ impl ScreenReaderEngine {
         };
         let mut lines: Vec<Line> = match &focus.dialog_text {
             Some(_) => focus
-                .outer_dialogs
+                .outer_windows
                 .iter()
-                .map(|name| dialog_line(name))
+                .map(|name| Line::text(name.as_str()))
+                .chain(focus.outer_dialogs.iter().map(|name| dialog_line(name)))
                 .collect(),
             None => Vec::new(),
         };
