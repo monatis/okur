@@ -498,6 +498,16 @@ impl ScreenReaderEngine {
             return self.page_change(control);
         }
         let control = self.keys_as_output(control);
+        // Only the focused control's changes are said: a dialog opening changes its combo box
+        // before the focus reaches it, and JAWS says nothing of it (Modify Rule's "Contains",
+        // 787/s11).
+        let same = self
+            .last_native_focus
+            .as_ref()
+            .is_some_and(|before| before.role == control.role && before.name == control.name);
+        if !same {
+            return None;
+        }
         let before = self.last_native_focus.replace(control.clone())?;
         let speech = self
             .said(crate::native_focus::change_speech(&before, &control)?)

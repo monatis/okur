@@ -61,6 +61,32 @@ fn a_page_buttons_expanded_state_is_spoken() {
     assert_eq!(engine.handle_accessibility_event(&changed(false)), None);
 }
 
+/// Only the focused control's changes are said: Modify Rule opening changes its Rule Type
+/// combo box before the focus reaches it, and JAWS says nothing of it [obs, 787/s11]; the
+/// focused combo box's own change is said.
+#[test]
+fn a_change_of_a_control_without_the_focus_is_not_said() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let rules = FocusEvent::new(Role::List).with_name("Rules");
+    engine.handle_focus_event(&rules);
+    let combo = |value: &str| {
+        let mut control = FocusEvent::new(Role::ComboBox).with_name("Rule Type");
+        control.value = Some(value.to_owned());
+        AccessibilityEvent::Change {
+            kind: crate::event::ChangeKind::Value,
+            control,
+        }
+    };
+    assert_eq!(engine.handle_accessibility_event(&combo("Contains")), None);
+    let mut focused = FocusEvent::new(Role::ComboBox).with_name("Rule Type");
+    focused.value = Some("Contains".to_owned());
+    engine.handle_focus_event(&focused);
+    assert!(engine
+        .handle_accessibility_event(&combo("Begins with"))
+        .is_some_and(|said| said.contains("Begins with")));
+}
+
 /// A check box toggled on a big page: the host builds the page again off the engine
 /// (performance review P3). The change is said as when the page is built at once, and the
 /// node has the new state at once (the same change again says nothing); the lines keep the
