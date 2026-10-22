@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6329,
-  "total_steps": 6569,
+  "matched_steps": 6343,
+  "total_steps": 6587,
   "accepted_divergences": 169,
   "errors": [],
   "steps": {
@@ -6724,6 +6724,12 @@
     "799-web-skim-read-by-bold/s7": "match",
     "799-web-skim-read-by-bold/s8": "match",
     "799-web-skim-read-by-bold/s9": "match",
+    "800-web-skim-reading-back-to-first-lines/s1": "mismatch",
+    "800-web-skim-reading-back-to-first-lines/s2": "match",
+    "800-web-skim-reading-back-to-first-lines/s3": "match",
+    "800-web-skim-reading-back-to-first-lines/s4": "match",
+    "800-web-skim-reading-back-to-first-lines/s5": "match",
+    "800-web-skim-reading-back-to-first-lines/s6": "mismatch",
     "801-desktop-notification-rule-play-sound-controls/s1": "match",
     "801-desktop-notification-rule-play-sound-controls/s10": "match",
     "801-desktop-notification-rule-play-sound-controls/s11": "match",
@@ -6756,6 +6762,18 @@
     "802-desktop-notification-rule-select-sound/s6": "match",
     "802-desktop-notification-rule-select-sound/s7": "match",
     "802-desktop-notification-rule-select-sound/s8": "match",
-    "802-desktop-notification-rule-select-sound/s9": "match"
+    "802-desktop-notification-rule-select-sound/s9": "match",
+    "803-web-skim-read-by-italic/s1": "mismatch",
+    "803-web-skim-read-by-italic/s10": "match",
+    "803-web-skim-read-by-italic/s11": "match",
+    "803-web-skim-read-by-italic/s12": "mismatch",
+    "803-web-skim-read-by-italic/s2": "match",
+    "803-web-skim-read-by-italic/s3": "match",
+    "803-web-skim-read-by-italic/s4": "match",
+    "803-web-skim-read-by-italic/s5": "match",
+    "803-web-skim-read-by-italic/s6": "match",
+    "803-web-skim-read-by-italic/s7": "match",
+    "803-web-skim-read-by-italic/s8": "match",
+    "803-web-skim-read-by-italic/s9": "match"
   }
 }
