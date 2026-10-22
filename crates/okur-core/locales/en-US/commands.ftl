@@ -122,6 +122,11 @@ toast-announcements-on = Toast notification announcements enabled
 mouse-echo-layer = Mouse echo layer
 mouse-echo-on = on
 mouse-echo-off = off
+# C, W, P and L in the mouse echo layer [obs, 792/s3, s6, s9, s12].
+mouse-echo-unit-character = character
+mouse-echo-unit-word = word
+mouse-echo-unit-line = line
+mouse-echo-unit-paragraph = paragraph
 # The Notification History (Insert+Space, N), as JAWS's [obs, 774].
 notification-history-title = Notification History
 notification-history-list = Recent Notifications
