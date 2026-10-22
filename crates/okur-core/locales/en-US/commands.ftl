@@ -154,6 +154,8 @@ notification-rule-mute = Mute
 notification-rule-shorten = Shorten
 notification-rule-sound = Play Sound
 notification-rule-speak = Speak the full message
+# Shorten's message (JAWS 2025 help: the Shortened Text edit field).
+notification-rule-shortened = Shortened Text
 notification-rule-braille = Braille Action
 notification-rule-braille-none = Show nothing
 notification-rule-braille-flash = Show flash message

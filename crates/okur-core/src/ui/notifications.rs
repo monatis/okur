@@ -7,7 +7,7 @@
 //! "Notification Text:" [obs, 774/s11]. JAWS keeps the past 24 hours (JAWS 2025 help,
 //! Notification History).
 
-use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, Value};
+use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
 use serde::{Deserialize, Serialize};
 
 use crate::messages::{msg, StaticMessage};
@@ -191,7 +191,7 @@ impl RuleType {
 #[serde(rename_all = "snake_case")]
 pub enum SpeechAction {
     Mute,
-    /// Another message in its place (its Shortened Text, not built yet: said whole).
+    /// Another message in its place: its Shortened Text.
     Shorten,
     /// A sound in its place (not built yet: nothing said).
     PlaySound,
@@ -237,6 +237,9 @@ pub struct Rule {
     /// Don't Show in History.
     #[serde(default)]
     pub hidden: bool,
+    /// Shorten's message, said in the notification's place.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub shortened: String,
     /// Turned off in Manage Rules (Disable): kept, deciding nothing [obs, 784/s6].
     #[serde(default = "rules_enabled")]
     pub enabled: bool,
@@ -277,12 +280,61 @@ impl NotificationRules {
     }
 }
 
+/// `shortened` with `\n` replaced by capture `n` (none for a capture that did not take
+/// part) and `\\` by a backslash.
+fn with_captures(shortened: &str, captures: Option<&regex::Captures>) -> String {
+    let mut out = String::with_capacity(shortened.len());
+    let mut chars = shortened.chars().peekable();
+    while let Some(c) = chars.next() {
+        if c != '\\' {
+            out.push(c);
+            continue;
+        }
+        match chars.peek().copied() {
+            Some('\\') => {
+                out.push('\\');
+                chars.next();
+            }
+            Some(digit) if digit.is_ascii_digit() => {
+                chars.next();
+                let index = digit.to_digit(10).and_then(|d| usize::try_from(d).ok());
+                if let Some(found) = index
+                    .zip(captures)
+                    .and_then(|(index, captures)| captures.get(index))
+                {
+                    out.push_str(found.as_str());
+                }
+            }
+            _ => out.push(c),
+        }
+    }
+    out
+}
+
 /// Where the notification rules are kept between runs (Okur's settings folder).
 pub trait NotificationRuleStore: Send {
     fn save(&self, rules: &NotificationRules);
 }
 
 impl Rule {
+    /// What is said for a notification saying `text` that this rule decides: nothing for
+    /// Mute and Play Sound (its sound not built yet), the whole of it for Speak the full
+    /// message, and Shorten's message, in which a pattern rule's `\1`, `\2` ... are the
+    /// pattern's captures and `\\` a backslash (JAWS 2025 help, Notification History).
+    pub fn spoken(&self, text: &str) -> Option<String> {
+        match self.speech {
+            SpeechAction::Mute | SpeechAction::PlaySound => None,
+            SpeechAction::SpeakFull => Some(text.to_owned()),
+            SpeechAction::Shorten if self.kind == RuleType::MatchesPattern => {
+                let captures = regex::Regex::new(&self.text)
+                    .ok()
+                    .and_then(|pattern| pattern.captures(text));
+                Some(with_captures(&self.shortened, captures.as_ref()))
+            }
+            SpeechAction::Shorten => Some(self.shortened.clone()),
+        }
+    }
+
     /// Whether the rule acts on a notification of `sender` saying `text`. A pattern that is
     /// not a regular expression matches nothing.
     pub fn matches(&self, text: &str, sender: Option<&str>) -> bool {
@@ -304,6 +356,8 @@ impl Rule {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum RuleOutcome {
     Nothing,
+    /// Send these to the dialog.
+    Send(Vec<ToUi>),
     /// OK: the rule.
     Save(Rule),
     Closed,
@@ -409,6 +463,7 @@ impl CreateRuleDialog {
                 speech: SpeechAction::Mute,
                 braille: 1,
                 hidden: false,
+                shortened: String::new(),
                 enabled: true,
             },
             from: sender.map(str::to_owned),
@@ -497,6 +552,18 @@ impl CreateRuleDialog {
                         .position(|&a| a == self.rule.speech)
                         .unwrap_or(0),
                 ),
+                // Shorten's message, available once Shorten is chosen (JAWS 2025 help: "press
+                // TAB to move to the Shortened Text edit field").
+                Control {
+                    enabled: self.rule.speech == SpeechAction::Shorten,
+                    ..control(
+                        "shortened",
+                        msg::notification_rule_shortened(),
+                        ControlKind::Edit {
+                            text: self.rule.shortened.clone(),
+                        },
+                    )
+                },
                 control(
                     "braille_group",
                     msg::notification_rule_braille(),
@@ -545,8 +612,14 @@ impl CreateRuleDialog {
                     ("speech", Value::Selected(i)) => {
                         if let Some(&speech) = SpeechAction::ALL.get(*i) {
                             self.rule.speech = speech;
+                            return RuleOutcome::Send(vec![ToUi::DialogEnable {
+                                id: self.id,
+                                control: "shortened".to_owned(),
+                                enabled: speech == SpeechAction::Shorten,
+                            }]);
                         }
                     }
+                    ("shortened", Value::Text(text)) => self.rule.shortened = text.clone(),
                     ("braille", Value::Selected(i)) => self.rule.braille = *i,
                     ("hidden", Value::Checked(on)) => self.rule.hidden = *on,
                     _ => {}
@@ -749,6 +822,65 @@ pub fn details(id: u32, text: &str) -> DialogSpec {
 mod tests {
     use super::*;
 
+    /// What a rule says for a notification: nothing for Mute and Play Sound, the whole for
+    /// Speak the full message, Shorten's message, with a pattern's captures for \1 and \2
+    /// and \\ for a backslash (JAWS 2025 help, Notification History).
+    #[test]
+    fn a_rule_says_the_notification_as_its_action_chooses() {
+        const TEXT: &str = "New notification from Windows PowerShell, SR Fixture, Build finished in 12 seconds. 1 of 1";
+        let mut rule = CreateRuleDialog::new(1, "Build finished", None).rule;
+        assert_eq!(rule.spoken(TEXT), None);
+        rule.speech = SpeechAction::PlaySound;
+        assert_eq!(rule.spoken(TEXT), None);
+        rule.speech = SpeechAction::SpeakFull;
+        assert_eq!(rule.spoken(TEXT).as_deref(), Some(TEXT));
+        rule.speech = SpeechAction::Shorten;
+        rule.shortened = "Build done".into();
+        assert_eq!(rule.spoken(TEXT).as_deref(), Some("Build done"));
+        rule.kind = RuleType::MatchesPattern;
+        rule.text = "^New notification from (.*?), (.*?),".into();
+        rule.shortened = r"\2 from \1, \\1 kept, \3 none".into();
+        assert_eq!(
+            rule.spoken(TEXT).as_deref(),
+            Some(r"SR Fixture from Windows PowerShell, \1 kept,  none")
+        );
+    }
+
+    /// Shortened Text is available once Shorten is chosen.
+    #[test]
+    fn shortened_text_follows_shorten() {
+        let mut dialog = CreateRuleDialog::new(5, "Build finished", None);
+        let shortened = |dialog: &CreateRuleDialog| {
+            dialog
+                .spec()
+                .controls
+                .iter()
+                .find(|c| c.id == "shortened")
+                .map(|c| c.enabled)
+        };
+        assert_eq!(shortened(&dialog), Some(false));
+        let chose = dialog.handle(&FromUi::DialogChanged {
+            id: 5,
+            control: "speech".into(),
+            value: Value::Selected(1),
+        });
+        assert_eq!(
+            chose,
+            RuleOutcome::Send(vec![ToUi::DialogEnable {
+                id: 5,
+                control: "shortened".into(),
+                enabled: true,
+            }])
+        );
+        assert_eq!(shortened(&dialog), Some(true));
+        let _ = dialog.handle(&FromUi::DialogChanged {
+            id: 5,
+            control: "shortened".into(),
+            value: Value::Text("Build done".into()),
+        });
+        assert_eq!(dialog.rule.shortened, "Build done");
+    }
+
     /// Create Rule's controls, in JAWS's order [obs, 775/s6-s13], and its rule.
     #[test]
     fn create_rule_is_jaws_and_makes_a_rule() {
@@ -756,7 +888,13 @@ mod tests {
         let mut dialog = CreateRuleDialog::new(5, TEXT, Some("Windows PowerShell"));
         let spec = dialog.spec();
         assert_eq!(spec.title, "Create Rule");
-        let labels: Vec<&str> = spec.controls.iter().map(|c| c.label.as_str()).collect();
+        // The controls Tab reaches: Shortened Text waits for Shorten.
+        let labels: Vec<&str> = spec
+            .controls
+            .iter()
+            .filter(|c| c.enabled)
+            .map(|c| c.label.as_str())
+            .collect();
         assert_eq!(
             labels,
             [

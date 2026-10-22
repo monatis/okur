@@ -566,6 +566,7 @@ mod tests {
                 speech: SpeechAction::Mute,
                 braille: 1,
                 hidden: true,
+                shortened: String::new(),
                 enabled: false,
             }],
         };

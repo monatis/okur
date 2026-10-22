@@ -6405,6 +6405,7 @@ fn manage_rules_disables_renames_and_deletes() {
                 speech: SpeechAction::Mute,
                 braille: 1,
                 hidden: false,
+                shortened: String::new(),
                 enabled: true,
             }],
         },

@@ -6,7 +6,7 @@ use super::ScreenReaderEngine;
 use crate::messages::msg;
 use crate::ui::notifications::{
     rule_row, CreateRuleDialog, HistoryDialog, ManageOutcome, ManageRulesDialog, NameRuleDialog,
-    Notification, Outcome, RuleOutcome, SpeechAction,
+    Notification, Outcome, RuleOutcome,
 };
 use crate::ui::{FromUi, ToUi};
 
@@ -25,9 +25,10 @@ impl ScreenReaderEngine {
     pub(super) fn toast_shown(&mut self, text: &str, sender: Option<&str>) -> Option<String> {
         let rule = self.notification_rules.deciding(text, sender);
         let hidden = rule.is_some_and(|rule| rule.hidden);
-        let silent = rule.is_some_and(|rule| {
-            matches!(rule.speech, SpeechAction::Mute | SpeechAction::PlaySound)
-        });
+        let said = match rule {
+            Some(rule) => rule.spoken(text),
+            None => Some(text.to_owned()),
+        };
         self.last_notification = Some(text.to_owned());
         if !hidden {
             let time = self
@@ -44,11 +45,9 @@ impl ScreenReaderEngine {
                 self.notifications.pop_front();
             }
         }
-        if self.toasts_unsaid || silent {
-            return None;
-        }
-        self.speech.speak(text, false);
-        Some(text.to_owned())
+        let said = said.filter(|said| !self.toasts_unsaid && !said.trim().is_empty())?;
+        self.speech.speak(&said, false);
+        Some(said)
     }
 
     /// Insert+Space, Ctrl+N: toasts said or not, until Okur exits, as JAWS's until it
@@ -175,6 +174,11 @@ impl ScreenReaderEngine {
         {
             match dialog.handle(message) {
                 RuleOutcome::Nothing => {}
+                RuleOutcome::Send(messages) => {
+                    if let Some(ui) = &self.ui {
+                        messages.into_iter().for_each(|m| ui.send(m));
+                    }
+                }
                 RuleOutcome::Save(rule) if dialog.modifying() => {
                     let id = dialog.id;
                     if let Some(kept) = self
@@ -221,6 +225,11 @@ impl ScreenReaderEngine {
         {
             match naming.handle(message) {
                 RuleOutcome::Nothing => {}
+                RuleOutcome::Send(messages) => {
+                    if let Some(ui) = &self.ui {
+                        messages.into_iter().for_each(|m| ui.send(m));
+                    }
+                }
                 // Rename... in Manage Rules: the rule takes the name [obs, 787/s9].
                 RuleOutcome::Save(rule) if self.notification_editing.is_some() => {
                     let id = naming.id;
