@@ -99,6 +99,17 @@ impl ScreenReaderEngine {
 
     /// The summary's `pieces` in the viewer "Skim Reading Results", each numbered.
     fn show_skim_summary(&mut self, pieces: Vec<(usize, String)>) -> Option<String> {
+        let title = crate::messages::msg::skim_results_title().to_string();
+        self.show_summary(title, pieces)
+    }
+
+    /// `pieces` in the viewer titled `title`, each numbered and a link to its place: skim
+    /// reading's summary, and the Word List's.
+    pub(super) fn show_summary(
+        &mut self,
+        title: String,
+        pieces: Vec<(usize, String)>,
+    ) -> Option<String> {
         if pieces.is_empty() {
             return None;
         }
@@ -112,7 +123,6 @@ impl ScreenReaderEngine {
             .enumerate()
             .map(|(i, (offset, _))| (i, *offset))
             .collect();
-        let title = crate::messages::msg::skim_results_title().to_string();
         let first = lines.first().cloned().unwrap_or_default();
         self.viewer = Some(
             crate::viewer::VirtualViewer::new(lines)

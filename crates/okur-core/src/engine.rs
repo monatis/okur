@@ -1723,6 +1723,10 @@ impl ScreenReaderEngine {
             // heading: "heading level 1 Web App Patterns" [obs, 224/s10].
             // OK in the Word List moves to the word's first line from the virtual cursor's, as
             // W does after it [obs, 560/s6].
+            Outcome::Summary(entry) => {
+                close(self);
+                self.show_word_summary(&entry.sort_key)
+            }
             Outcome::MoveTo(entry) if kind == ListKind::Words => {
                 close(self);
                 self.word_from_list = Some(entry.sort_key);

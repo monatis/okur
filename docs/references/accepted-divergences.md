@@ -632,6 +632,21 @@ A step can be in more than one entry; all of its entries apply.
   completes would show what it says then.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-22.
 
+### JAWS's Word List Summary opens nothing
+
+- Steps: `808-web-word-list-summary-by-alt-s/s3`, `808-web-word-list-summary-by-alt-s/s4`,
+  `808-web-word-list-summary-by-alt-s/s5`, `808-web-word-list-summary-by-alt-s/s6`,
+  `808-web-word-list-summary-by-alt-s/s7`, `808-web-word-list-summary-by-alt-s/s8`.
+- Difference: the whole steps. With "library" chosen in the Word List, Summary (Alt+S, or Space
+  on it in 807) closed the dialog and said the page, "City Library Expands Evening Hours -
+  Riverside Gazette document"; nothing opened, and Tab, Enter and Insert+Up met the page.
+  Okur shows "Word List Summary" in its viewer, a numbered link for each sentence holding the
+  word, as JAWS's help describes it ("The Summary button opens the virtual viewer with a
+  list of links. Each link is a sentence that contains the selected word.").
+- Why: the help describes a feature JAWS did not show on the lab's page; Okur gives what it
+  describes.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-22.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row

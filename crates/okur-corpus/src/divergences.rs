@@ -646,6 +646,17 @@ divergences! {
     "Closing Skim Reading by Escape (763, 777) or by Close's Alt+C (776) closes the dialog and      opens JAWS's summary in its Results Viewer, which then says nothing to Say Line: in      every trial of four recordings, after changes and right after it opened (781, 782);      only 760's Escape, after Tab through the dialog, closed it alone. Okur's Escape and      Close close the dialog and give the page back.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
+    Difference::Step => [
+        "808-web-word-list-summary-by-alt-s/s3",
+        "808-web-word-list-summary-by-alt-s/s4",
+        "808-web-word-list-summary-by-alt-s/s5",
+        "808-web-word-list-summary-by-alt-s/s6",
+        "808-web-word-list-summary-by-alt-s/s7",
+        "808-web-word-list-summary-by-alt-s/s8",
+    ],
+    "The Word List's Summary, by Alt+S or by Space on it (807), closed the dialog and said      the page, and opened nothing, in every trial: Tab, Enter and Insert+Up after it met the      page. JAWS's help says it opens the virtual viewer with a link for each sentence holding      the word, which Okur does.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-22";
+
     Difference::Step => ["790-desktop-drag-and-drop-in-notepad/s6"],
     "Drag and drop's second Ctrl+Insert+Numpad Slash in Notepad, after the mouse moved three      steps along the text, said in every trial that the object to be dragged was not found      and canceled. Okur drags from where the first press was to where the mouse is, and says      nothing.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-22";

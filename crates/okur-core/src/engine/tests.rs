@@ -5896,6 +5896,61 @@ Reopens in May"
     );
 }
 
+/// The Word List's Summary shows the sentences holding the word, whole and whatever its
+/// capitals, each numbered and a link to its place (JAWS 2025 help, Word Index).
+#[test]
+fn the_word_lists_summary_lists_the_sentences_with_the_word() {
+    use crate::ui::{ControlKind, FromUi, ToUi, Value};
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Words")
+        .with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("The Library opens early. Hours change."),
+            AomNode::new(2, Role::Paragraph)
+                .with_text("Two libraries close. Ask the library staff."),
+        ]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    engine.execute_command("WordList");
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    let Some(ControlKind::List { items, .. }) = dialog.controls.first().map(|c| c.kind.clone())
+    else {
+        panic_free_fail("no list");
+        return;
+    };
+    let Some(library) = items
+        .iter()
+        .position(|item| item.to_lowercase().starts_with("library"))
+    else {
+        panic_free_fail(&format!("no library in {items:?}"));
+        return;
+    };
+    let id = dialog.id;
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "words".into(),
+        value: Value::Selected(library),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "summary".into(),
+    }));
+    let shown = ui.take();
+    assert!(
+        shown.iter().any(|m| matches!(m, ToUi::ViewerShow { title, lines, .. }
+            if title == "Word List Summary"
+                && lines == &["1. The Library opens early.".to_owned(), "2. Ask the library staff.".to_owned()])),
+        "{shown:?}"
+    );
+}
+
 /// Skim Reading's dialog chooses how Ctrl+Insert+Down reads: by first sentence, each
 /// paragraph's first sentence only (JAWS 2025 help, Skim Reading); the choice stays.
 #[test]

@@ -315,6 +315,8 @@ pub enum Outcome {
     Focus(Entry),
     /// Open the chosen list in place of Virtual HTML Features (OK there).
     Open(HtmlFeature),
+    /// Close the Word List and show the sentences holding the word (Summary).
+    Summary(Entry),
     /// The dialog is gone; the cursor stays.
     Closed,
 }
@@ -717,6 +719,7 @@ impl ListDialog {
                     ("ok", Some(entry), ListKind::Features) => {
                         entry.feature.map_or(Outcome::Nothing, Outcome::Open)
                     }
+                    ("summary", Some(entry), ListKind::Words) => Outcome::Summary(entry.clone()),
                     _ => Outcome::Nothing,
                 }
             }

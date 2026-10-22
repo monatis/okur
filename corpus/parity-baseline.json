@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6380,
-  "total_steps": 6617,
-  "accepted_divergences": 169,
+  "matched_steps": 6375,
+  "total_steps": 6611,
+  "accepted_divergences": 175,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -6799,11 +6799,11 @@
     "805-web-skim-read-by-text-color/s9": "match",
     "808-web-word-list-summary-by-alt-s/s1": "match",
     "808-web-word-list-summary-by-alt-s/s2": "match",
-    "808-web-word-list-summary-by-alt-s/s3": "mismatch",
-    "808-web-word-list-summary-by-alt-s/s4": "match",
-    "808-web-word-list-summary-by-alt-s/s5": "match",
-    "808-web-word-list-summary-by-alt-s/s6": "match",
-    "808-web-word-list-summary-by-alt-s/s7": "match",
-    "808-web-word-list-summary-by-alt-s/s8": "match"
+    "808-web-word-list-summary-by-alt-s/s3": "accepted divergence",
+    "808-web-word-list-summary-by-alt-s/s4": "accepted divergence",
+    "808-web-word-list-summary-by-alt-s/s5": "accepted divergence",
+    "808-web-word-list-summary-by-alt-s/s6": "accepted divergence",
+    "808-web-word-list-summary-by-alt-s/s7": "accepted divergence",
+    "808-web-word-list-summary-by-alt-s/s8": "accepted divergence"
   }
 }

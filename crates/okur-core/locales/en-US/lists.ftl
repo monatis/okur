@@ -105,6 +105,8 @@ list-dialog-words-list = List1
 word-list-ok = OK
 word-list-cancel = Cancel
 word-list-summary = &Summary
+# The viewer Summary opens: the sentences holding the word chosen, each a link to its place.
+word-list-summary-title = Word List Summary
 # W or Shift+W in a page before a word was chosen in the Word List [obs, 560/s3].
 word-list-none = No word list has been created.
 word-list-none-hint = To create the word list, press control+Insert+W.

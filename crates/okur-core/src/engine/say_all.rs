@@ -633,7 +633,7 @@ impl ScreenReaderEngine {
 /// Every node of `page` in a table row, by that row's node.
 /// `text` without its role marks ("\u{1d} same page link \u{1e} Riverside Gazette": "Riverside
 /// Gazette"), its spaces single.
-fn without_role_marks(text: &str) -> String {
+pub(super) fn without_role_marks(text: &str) -> String {
     let mut plain = String::new();
     let mut in_mark = false;
     for c in text.chars() {

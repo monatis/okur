@@ -10,6 +10,34 @@ use super::{AppMode, ScreenReaderEngine};
 use crate::messages::msg;
 
 impl ScreenReaderEngine {
+    /// The Word List's Summary: the page's sentences holding `word`, whatever its capitals,
+    /// each a link to its place in the viewer "Word List Summary" (JAWS 2025 help, Word
+    /// Index: "The Summary button opens the virtual viewer with a list of links. Each link is
+    /// a sentence that contains the selected word."). JAWS's own Summary opened nothing on the
+    /// lab's page [obs, 808/s3], an accepted divergence.
+    pub(super) fn show_word_summary(&mut self, word: &str) -> Option<String> {
+        let word = word.to_lowercase();
+        // The word whole, as the list counts words: "library" in "Library", not in "libraries".
+        let holds = |text: &str| {
+            let lower = text.to_lowercase();
+            lower.match_indices(word.as_str()).any(|(at, found)| {
+                let start = lower.get(..at).map_or(0, |b| b.chars().count());
+                let end = start + found.chars().count();
+                crate::editing::web_word_at(&lower, start) == Some((start, end))
+            })
+        };
+        let pieces: Vec<(usize, String)> = self
+            .cursor
+            .say_all_units(crate::settings::SayAllUnit::Sentence)
+            .unwrap_or_default()
+            .into_iter()
+            .map(|(offset, text)| (offset, super::say_all::without_role_marks(text.trim())))
+            .filter(|(_, text)| holds(text))
+            .collect();
+        let title = crate::messages::msg::word_list_summary_title().to_string();
+        self.show_summary(title, pieces)
+    }
+
     /// The line with the chosen word after the virtual cursor's (before it with `forward`
     /// false), or from its own with `here`, whatever its capitals: the cursor goes there, its
     /// line is returned. Past the page's end the search goes on from its top, said "wrapping to
