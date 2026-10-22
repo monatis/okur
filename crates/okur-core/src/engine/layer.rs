@@ -3,7 +3,8 @@
 //! speech off and on, and Shift+S (Speech On Demand) is not available in full speech; N opens
 //! the Notification History (ShowNotificationHistory), Shift+N
 //! says the last notification again (RepeatLastNotification) and Ctrl+N stops and starts
-//! saying toasts (ToggleToastNotificationAnnouncement). Escape,
+//! saying toasts (ToggleToastNotificationAnnouncement); E opens the mouse echo layer (the
+//! mouse_echo module). Escape,
 //! Space, Tab and Enter leave the layer, as any other key does [obs, 517, 566, 570].
 
 use super::{AppMode, ScreenReaderEngine};
@@ -48,6 +49,7 @@ impl ScreenReaderEngine {
             Key::Alpha('S') if shift_only => self.speech_on_demand_toggle(),
             Key::Alpha('S') if plain => self.mute_synthesizer(),
             Key::Alpha('T') if plain => self.start_table_layer(),
+            Key::Alpha('E') if plain => self.start_mouse_echo_layer(),
             Key::Alpha('N') if plain => self.open_notification_history(),
             Key::Alpha('N') if shift_only => self.repeat_last_notification(),
             Key::Alpha('N') if ctrl_only => self.toggle_toast_announcements(),

@@ -24,8 +24,8 @@ pub enum Outcome {
     /// the dialog too.
     Apply {
         scope: Scope,
-        before: Settings,
-        settings: Settings,
+        before: Box<Settings>,
+        settings: Box<Settings>,
         close: bool,
     },
     /// The dialog is gone; nothing more is applied.
@@ -254,8 +254,8 @@ impl SettingsDialog {
                     }
                     Outcome::Apply {
                         scope,
-                        before,
-                        settings: self.draft.clone(),
+                        before: Box::new(before),
+                        settings: Box::new(self.draft.clone()),
                         close: control == "ok",
                     }
                 }
@@ -473,8 +473,8 @@ mod tests {
             applied,
             Outcome::Apply {
                 scope: Scope::Global,
-                before: Settings::default(),
-                settings: expected.clone(),
+                before: Box::default(),
+                settings: Box::new(expected.clone()),
                 close: false
             }
         );
@@ -485,8 +485,8 @@ mod tests {
             }),
             Outcome::Apply {
                 scope: Scope::Global,
-                before: expected.clone(),
-                settings: expected,
+                before: Box::new(expected.clone()),
+                settings: Box::new(expected),
                 close: true
             }
         );
@@ -549,7 +549,7 @@ mod tests {
             control: "apply".into(),
         });
         assert!(
-            matches!(&applied, Outcome::Apply { scope: Scope::Global, before, .. } if *before == global),
+            matches!(&applied, Outcome::Apply { scope: Scope::Global, before, .. } if **before == global),
             "{applied:?}"
         );
     }

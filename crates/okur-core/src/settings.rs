@@ -136,6 +136,72 @@ impl SayAllUnit {
     }
 }
 
+/// How much mouse echo says of what is under the mouse: JAWS's Mouse Echo Unit,
+/// `MouseSpeechEchoUnit` in `DEFAULT.JCF`'s Options (0 character, 1 word, 2 line, its default; 3
+/// paragraph).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum MouseEchoUnit {
+    Character,
+    Word,
+    #[default]
+    Line,
+    Paragraph,
+}
+
+impl MouseEchoUnit {
+    /// The unit a `DEFAULT.JCF` `MouseSpeechEchoUnit` value sets; any other value is a line.
+    pub fn from_jcf(value: &str) -> Self {
+        match value.trim() {
+            "0" => Self::Character,
+            "1" => Self::Word,
+            "3" => Self::Paragraph,
+            _ => Self::Line,
+        }
+    }
+}
+
+/// Mouse echo: what the mouse points to said as it moves, as JAWS's Mouse Echo group sets it
+/// (Settings Center help; `DEFAULT.JCF`'s Options, JAWS's defaults here).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default)]
+pub struct MouseEcho {
+    /// Enable Mouse Echo (`MouseSpeechEnabled`), off by default; Insert+Space, E, O turns it
+    /// on and off.
+    pub enabled: bool,
+    /// Mouse Echo Unit (`MouseSpeechEchoUnit`).
+    pub unit: MouseEchoUnit,
+    /// Mouse Echo Instant (`MouseSpeechInstant`): said while the mouse moves, not after it
+    /// rests for `delay_ms`. Off by default.
+    pub instant: bool,
+    /// Mouse Echo Delay (`MouseSpeechDelay`): how long the mouse rests before what it points
+    /// to is said, 400 milliseconds by default.
+    pub delay_ms: u32,
+    /// Mouse Echo Interrupt (`MouseMovementStopsSpeech`): the mouse moving onto text stops
+    /// speech. On by default.
+    pub interrupt: bool,
+    /// Speak Control Type and State of Item (`MouseEchoSpeaksControlTypeAndState`), after
+    /// the text. On by default.
+    pub control_type_and_state: bool,
+    /// Speak Description of Item (`MouseEchoSpeaksHelpAndDescription`), after the text. Off
+    /// by default.
+    pub description: bool,
+}
+
+impl Default for MouseEcho {
+    fn default() -> Self {
+        Self {
+            enabled: false,
+            unit: MouseEchoUnit::Line,
+            instant: false,
+            delay_ms: 400,
+            interrupt: true,
+            control_type_and_state: true,
+            description: false,
+        }
+    }
+}
+
 /// How much is spoken: JAWS's Full Speech, or less speech (`SpeechMode` in `DEFAULT.JCF`'s
 /// Options: 0 full, its default; 1 less), the kind of less speech being [`LessSpeech`].
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
@@ -711,6 +777,7 @@ pub struct Settings {
     /// (Options > Basics), checked by default: "When cleared, JAWS immediately closes when you
     /// use any of the commands to exit the program including INSERT+F4" (JAWS 2025 help).
     pub confirm_exit: bool,
+    pub mouse_echo: MouseEcho,
 }
 
 impl Default for Settings {
@@ -731,6 +798,7 @@ impl Default for Settings {
             heading_indication: HeadingIndication::Level,
             read_page_on_load: true,
             confirm_exit: true,
+            mouse_echo: MouseEcho::default(),
         }
     }
 }
@@ -796,6 +864,8 @@ impl Settings {
             heading_indication: HeadingIndication::Level,
             read_page_on_load: true,
             confirm_exit: true,
+            // Not in old-pc's user JCF: the shared one's, JAWS's defaults.
+            mouse_echo: MouseEcho::default(),
         }
     }
 }

@@ -11,9 +11,9 @@ use serde::Serialize;
 use serde_json::{Map, Value};
 
 use super::{
-    FormsMode, HeadingIndication, KeyboardLayout, KeyboardSettings, LessSpeech, OkurKey,
-    OutputType, Punctuation, SayAllUnit, Settings, SpeechMode, Synthesizer, TypingEcho, Verbosity,
-    VerbosityLevel,
+    FormsMode, HeadingIndication, KeyboardLayout, KeyboardSettings, LessSpeech, MouseEchoUnit,
+    OkurKey, OutputType, Punctuation, SayAllUnit, Settings, SpeechMode, Synthesizer, TypingEcho,
+    Verbosity, VerbosityLevel,
 };
 use crate::messages::{msg, StaticMessage};
 use crate::settings_layers::Scope;
@@ -57,10 +57,16 @@ pub enum Group {
     Speech,
     Keyboard,
     Reading,
+    MouseEcho,
 }
 
 impl Group {
-    pub const ALL: [Group; 3] = [Group::Speech, Group::Keyboard, Group::Reading];
+    pub const ALL: [Group; 4] = [
+        Group::Speech,
+        Group::Keyboard,
+        Group::Reading,
+        Group::MouseEcho,
+    ];
 
     /// The group's control id in a dialog.
     pub fn id(self) -> &'static str {
@@ -68,6 +74,7 @@ impl Group {
             Self::Speech => "speech",
             Self::Keyboard => "keyboard",
             Self::Reading => "reading",
+            Self::MouseEcho => "mouse_echo",
         }
     }
 
@@ -76,6 +83,7 @@ impl Group {
             Self::Speech => msg::settings_group_speech(),
             Self::Keyboard => msg::settings_group_keyboard(),
             Self::Reading => msg::settings_group_reading(),
+            Self::MouseEcho => msg::settings_group_mouse_echo(),
         }
     }
 }
@@ -431,6 +439,75 @@ pub static SETTINGS: &[SettingSpec] = &[
             off: Literal::Bool(false),
         },
     ),
+    // JAWS's Mouse Echo group (Settings Center help), in its order.
+    SettingSpec {
+        jaws: default_jcf("Options", "MouseSpeechEnabled", |v| {
+            Value::Bool(v.trim() == "1")
+        }),
+        ..spec(
+            "mouse_echo.enabled",
+            Group::MouseEcho,
+            Some(msg::settings_mouse_echo_enabled),
+            CHECK,
+        )
+    },
+    SettingSpec {
+        jaws: default_jcf("Options", "MouseMovementStopsSpeech", |v| {
+            Value::Bool(v.trim() != "0")
+        }),
+        ..spec("mouse_echo.interrupt", Group::MouseEcho, None, CHECK)
+    },
+    SettingSpec {
+        jaws: default_jcf("Options", "MouseSpeechInstant", |v| {
+            Value::Bool(v.trim() == "1")
+        }),
+        ..spec(
+            "mouse_echo.instant",
+            Group::MouseEcho,
+            Some(msg::settings_mouse_echo_instant),
+            CHECK,
+        )
+    },
+    SettingSpec {
+        jaws: default_jcf("Options", "MouseSpeechDelay", |v| {
+            v.trim().parse::<u32>().map_or(Value::Null, Value::from)
+        }),
+        ..spec(
+            "mouse_echo.delay_ms",
+            Group::MouseEcho,
+            // No letter is left for its access key: the settings file and the command line.
+            None,
+            Kind::Range { min: 0, max: 5000 },
+        )
+    },
+    SettingSpec {
+        jaws: default_jcf("Options", "MouseSpeechEchoUnit", |v| {
+            json(MouseEchoUnit::from_jcf(v))
+        }),
+        ..spec(
+            "mouse_echo.unit",
+            Group::MouseEcho,
+            Some(msg::settings_mouse_echo_unit),
+            Kind::Choice(choices::<MouseEchoUnit>),
+        )
+    },
+    SettingSpec {
+        jaws: default_jcf("Options", "MouseEchoSpeaksHelpAndDescription", |v| {
+            Value::Bool(v.trim() == "1")
+        }),
+        ..spec("mouse_echo.description", Group::MouseEcho, None, CHECK)
+    },
+    SettingSpec {
+        jaws: default_jcf("Options", "MouseEchoSpeaksControlTypeAndState", |v| {
+            Value::Bool(v.trim() != "0")
+        }),
+        ..spec(
+            "mouse_echo.control_type_and_state",
+            Group::MouseEcho,
+            None,
+            CHECK,
+        )
+    },
 ];
 
 /// The setting with `id`.
@@ -707,6 +784,19 @@ impl Choices for SayAllUnit {
     }
 }
 
+/// JAWS's Mouse Echo Unit choices (Settings Center help).
+impl Choices for MouseEchoUnit {
+    const ALL: &'static [Self] = &[Self::Character, Self::Word, Self::Line, Self::Paragraph];
+    fn label(self) -> StaticMessage {
+        match self {
+            Self::Character => msg::settings_mouse_echo_unit_character(),
+            Self::Word => msg::settings_mouse_echo_unit_word(),
+            Self::Line => msg::settings_mouse_echo_unit_line(),
+            Self::Paragraph => msg::settings_mouse_echo_unit_paragraph(),
+        }
+    }
+}
+
 /// JAWS's user verbosity levels.
 impl Choices for VerbosityLevel {
     const ALL: &'static [Self] = &[Self::Beginner, Self::Intermediate, Self::Advanced];
@@ -901,5 +991,42 @@ mod tests {
         let desktop = import_jaws(&base, &|_, _, _| None);
         assert_eq!(desktop.keyboard, KeyboardSettings::default());
         assert_eq!(desktop.forms_mode, FormsMode::Auto);
+    }
+
+    /// JAWS's Mouse Echo keys, as its shipped `DEFAULT.JCF` writes them, are Okur's defaults;
+    /// changed, they are read as they say.
+    #[test]
+    fn the_jaws_import_reads_mouse_echo() {
+        let shipped = |_: JawsFile, section: &str, key: &str| {
+            let found = match (section, key) {
+                ("Options", "MouseSpeechEnabled") => "0",
+                ("Options", "MouseSpeechInstant") => "0",
+                ("Options", "MouseSpeechDelay") => "400",
+                ("Options", "MouseSpeechEchoUnit") => "2",
+                ("Options", "MouseMovementStopsSpeech") => "1",
+                ("Options", "MouseEchoSpeaksControlTypeAndState") => "1",
+                ("Options", "MouseEchoSpeaksHelpAndDescription") => "0",
+                _ => return None,
+            };
+            Some(found.to_owned())
+        };
+        let base = Settings::default();
+        assert_eq!(
+            import_jaws(&base, &shipped).mouse_echo,
+            crate::settings::MouseEcho::default()
+        );
+        let changed = |_: JawsFile, section: &str, key: &str| {
+            let found = match (section, key) {
+                ("Options", "MouseSpeechEnabled") => "1",
+                ("Options", "MouseSpeechDelay") => "1000",
+                ("Options", "MouseSpeechEchoUnit") => "1",
+                _ => return None,
+            };
+            Some(found.to_owned())
+        };
+        let echo = import_jaws(&base, &changed).mouse_echo;
+        assert!(echo.enabled);
+        assert_eq!(echo.delay_ms, 1000);
+        assert_eq!(echo.unit, MouseEchoUnit::Word);
     }
 }

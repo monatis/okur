@@ -117,6 +117,11 @@ notification-none = No notification
 # Insert+Space, Control+N (ToggleToastNotificationAnnouncement) [obs, 773/s2, s7].
 toast-announcements-off = Toast notification announcements disabled
 toast-announcements-on = Toast notification announcements enabled
+# The mouse echo layer (Insert+Space, E), and O turning mouse echo on and off [obs, 791/s4,
+# s5, s10].
+mouse-echo-layer = Mouse echo layer
+mouse-echo-on = on
+mouse-echo-off = off
 # The Notification History (Insert+Space, N), as JAWS's [obs, 774].
 notification-history-title = Notification History
 notification-history-list = Recent Notifications

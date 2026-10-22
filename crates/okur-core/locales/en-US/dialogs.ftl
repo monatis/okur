@@ -71,6 +71,15 @@ settings-forms-mode-semi-auto = Semi-Auto
 settings-forms-mode-manual = Manual
 # JAWS's "Prompt to Confirm When Exiting JAWS" (Options > Basics): Insert+F4 asks first.
 settings-confirm-exit = Prompt to &Confirm When Exiting Okur
+# JAWS's Mouse Echo group (Settings Center): what the mouse points to said as it moves.
+settings-group-mouse-echo = Mouse Echo
+settings-mouse-echo-enabled = Enable Mouse Ec&ho
+settings-mouse-echo-instant = Mouse Echo Ins&tant
+settings-mouse-echo-unit = Mouse Echo &Unit:
+settings-mouse-echo-unit-character = Character
+settings-mouse-echo-unit-word = Word
+settings-mouse-echo-unit-line = Line
+settings-mouse-echo-unit-paragraph = Paragraph
 settings-ok = OK
 settings-cancel = Cancel
 settings-apply = &Apply

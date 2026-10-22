@@ -31,6 +31,7 @@ mod jump;
 mod key_help;
 mod labels;
 mod layer;
+mod mouse_echo;
 mod notifications;
 mod page;
 mod placemarkers;
@@ -325,6 +326,8 @@ pub struct ScreenReaderEngine {
     toasts_unsaid: bool,
     /// The table layer (Insert+Space, T): the arrows move by cell until Escape.
     table_layer: bool,
+    /// The mouse echo layer (Insert+Space, E): the next key is its.
+    mouse_echo_layer: bool,
     /// The page element Numpad Slash clicked at the virtual cursor: its focus is said as
     /// Enter's is, with the regions it is in [obs, 534/s2].
     clicked: Option<usize>,
@@ -483,6 +486,7 @@ impl ScreenReaderEngine {
             last_notification: None,
             toasts_unsaid: false,
             table_layer: false,
+            mouse_echo_layer: false,
             clicked: None,
             radio_switched: None,
             list_entered_groups: Vec::new(),
@@ -726,6 +730,9 @@ impl ScreenReaderEngine {
 
         // The key after Insert+Space is the layer's.
         if let Some(action) = self.layer_key(event) {
+            return action;
+        }
+        if let Some(action) = self.mouse_echo_layer_key(event) {
             return action;
         }
         if let Some(action) = self.table_layer_key(event) {

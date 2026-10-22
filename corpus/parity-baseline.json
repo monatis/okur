@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6234,
+  "matched_steps": 6238,
   "total_steps": 6475,
   "accepted_divergences": 169,
   "errors": [],
@@ -6651,17 +6651,17 @@
     "790-desktop-drag-and-drop-in-notepad/s7": "match",
     "790-desktop-drag-and-drop-in-notepad/s8": "match",
     "791-desktop-mouse-echo-toggled-in-notepad/s1": "match",
-    "791-desktop-mouse-echo-toggled-in-notepad/s10": "mismatch",
+    "791-desktop-mouse-echo-toggled-in-notepad/s10": "match",
     "791-desktop-mouse-echo-toggled-in-notepad/s11": "match",
     "791-desktop-mouse-echo-toggled-in-notepad/s12": "match",
     "791-desktop-mouse-echo-toggled-in-notepad/s13": "match",
     "791-desktop-mouse-echo-toggled-in-notepad/s2": "match",
     "791-desktop-mouse-echo-toggled-in-notepad/s3": "match",
-    "791-desktop-mouse-echo-toggled-in-notepad/s4": "mismatch",
-    "791-desktop-mouse-echo-toggled-in-notepad/s5": "mismatch",
+    "791-desktop-mouse-echo-toggled-in-notepad/s4": "match",
+    "791-desktop-mouse-echo-toggled-in-notepad/s5": "match",
     "791-desktop-mouse-echo-toggled-in-notepad/s6": "match",
     "791-desktop-mouse-echo-toggled-in-notepad/s7": "match",
     "791-desktop-mouse-echo-toggled-in-notepad/s8": "match",
-    "791-desktop-mouse-echo-toggled-in-notepad/s9": "mismatch"
+    "791-desktop-mouse-echo-toggled-in-notepad/s9": "match"
   }
 }
