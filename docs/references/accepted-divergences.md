@@ -651,21 +651,27 @@ A step can be in more than one entry; all of its entries apply.
   describes.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-22.
 
-### JAWS's Superscript and Subscript skip one character
+### JAWS passes over raised and lowered text of one character
 
 - Steps: `811-web-skim-read-by-superscript/s15`, `812-web-skim-read-by-subscript/s16`,
-  `816-web-skim-read-by-subscript-positions/s16`.
-- Difference: the lines found. Skimming by an attribute rule with Superscript checked, JAWS
+  `815-web-skim-read-by-superscript-positions/s15`,
+  `816-web-skim-read-by-subscript-positions/s16`, `818-web-number-positions-read-down/s2`,
+  `818-web-number-positions-read-down/s7`.
+- Difference: the lines found, and two lines' marks. Skimming by an attribute rule with Superscript checked, JAWS
   found "The 1st and 2nd floors are open." and "A mole holds 6 × 10 superscript 23 end
   superscript particles." (815), but not "Einstein's E = mc2 dates from 1905.", "The sum runs
   to xn at most." or "Footnote marka after a word."; with Subscript, "The scale uses log10
   steps." and "The entry aij sits in row i.", but not H2O, CO2 or "Each term xi is counted
   once.", and said nothing when it found none (812). Chromium marks every one of them
   `text-position:super` or `sub` (the pages' IA2 snapshots); JAWS skips those of one
-  character. Okur finds every raised and lowered text.
+  character. Okur finds every raised and lowered text. Reading by line, JAWS says a raised
+  or lowered number right after a number between marks, "10 superscript 23 end superscript",
+  "5 subscript 10 end subscript", but not one of one digit: "Two cubed is 23 in short.",
+  "Binary 1012 is five." (818). Okur marks those too: "2 superscript 3 end superscript".
 - Why: JAWS's help says the rules find text with the attribute; leaving out a one-character
   superscript or subscript, the commonest kind (x², H₂O, a footnote mark), hides what the user
-  asked for.
+  asked for, and reading 2³ as 23 says another number, the very thing JAWS's marks prevent
+  for 10²³.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-22.
 
 ## Considered and not accepted

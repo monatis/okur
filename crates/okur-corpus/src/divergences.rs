@@ -667,12 +667,17 @@ divergences! {
     Difference::Step => [
         "811-web-skim-read-by-superscript/s15",
         "812-web-skim-read-by-subscript/s16",
+        "815-web-skim-read-by-superscript-positions/s15",
         "816-web-skim-read-by-subscript-positions/s16",
+        "818-web-number-positions-read-down/s2",
+        "818-web-number-positions-read-down/s7",
     ],
-    "Skim reading's Superscript and Subscript skip raised and lowered text of one character: \
-     JAWS found 1st and 2nd, 10 to the 23rd, log10 and aij, but not E = mc2, x to the n, a \
-     footnote's a, H2O, CO2 or x sub i, though Chromium marks them all (text-position). Okur \
-     finds every raised and lowered text, as JAWS's help describes the rules.",
+    "JAWS passes over raised and lowered text of one character: skim reading's Superscript \
+     and Subscript found 1st and 2nd, 10 to the 23rd, log10 and aij, but not E = mc2, x to the \
+     n, a footnote's a, H2O, CO2 or x sub i, though Chromium marks them all (text-position); \
+     and a line reads 2 cubed as \"23\" and binary 101 as \"1012\", where it marks 10 to the \
+     23rd (\"10 superscript 23 end superscript\"). Okur finds every raised and lowered text, \
+     as JAWS's help describes the rules, and marks a one-digit number after a number too.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-22";
 
     Difference::Step => ["790-desktop-drag-and-drop-in-notepad/s6"],

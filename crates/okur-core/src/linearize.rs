@@ -22,11 +22,6 @@ const RS: char = '\u{1d}';
 const RE: char = '\u{1e}';
 /// A horizontal rule's line, as JAWS shows it [obs, 292/s1].
 const SEPARATOR_LINE: &str = "-----";
-/// Where deleted text starts and ends in a run's text: noncharacters, which no page holds,
-/// said as "Deletion" and "end Deletion" and left out of the line's text.
-const DELETION_START: char = '\u{FDD0}';
-const DELETION_END: char = '\u{FDD1}';
-
 pub(crate) fn role_marker(name: &str) -> String {
     format!(" {RS} {name} {RE} ")
 }
@@ -35,36 +30,94 @@ pub(crate) fn state_marker(name: &str) -> String {
     format!(" {RS}{name}{RE} ")
 }
 
-/// A mark in a line's flow, as JAWS brackets it: "Deletion " [obs, 814/s3].
-fn flow_marker(name: &str) -> String {
-    format!(" {RS}{name} {RE} ")
+/// Where an element said between two marks starts and ends in a run's text: noncharacters,
+/// which no page holds, left out of the line's text and said as the marks.
+const DELETION_START: char = '\u{FDD0}';
+const DELETION_END: char = '\u{FDD1}';
+const SUPERSCRIPT_START: char = '\u{FDD2}';
+const SUPERSCRIPT_END: char = '\u{FDD3}';
+const SUBSCRIPT_START: char = '\u{FDD4}';
+const SUBSCRIPT_END: char = '\u{FDD5}';
+
+fn is_flow_mark(c: char) -> bool {
+    ('\u{FDD0}'..='\u{FDD5}').contains(&c)
 }
 
-/// A line of a run with its deletion marks: its text, without them; its speech, with them
-/// said; and the marks that end it, which are said at the next line's start, as JAWS says
-/// the "end Deletion" of a paragraph struck through whole [obs, 814/s4-s5].
+/// What a flow mark says, as JAWS brackets it: "\u{1d}Deletion \u{1e}" [obs, 814/s3],
+/// "\u{1d}superscript \u{1e}" [obs, 818/s3].
+fn flow_marker(mark: char) -> String {
+    let name = match mark {
+        DELETION_START => msg::role_deletion(),
+        DELETION_END => msg::role_deletion_end(),
+        SUPERSCRIPT_START => msg::role_superscript(),
+        SUPERSCRIPT_END => msg::role_superscript_end(),
+        SUBSCRIPT_START => msg::role_subscript(),
+        _ => msg::role_subscript_end(),
+    };
+    format!(" {RS}{} {RE} ", name.as_str())
+}
+
+/// The marks an inline element is said between, given the run's text before it: deleted text
+/// (IA2's content deletion) between "Deletion" and "end Deletion" [obs, 814/s3]; a raised or
+/// lowered number right after a digit between "superscript" or "subscript" and their end,
+/// "10 superscript 23", "10 superscript -6", "5 subscript 10" [obs, 818/s3, s4, s9], where
+/// read together they would make another number. JAWS leaves a one-digit one unmarked ("2
+/// cubed is 23", "1012" for binary 101 [obs, 818/s2, s7]), as its skim reading skips such
+/// text; Okur marks it too (accepted divergence). Raised letters ("21st") and a number after
+/// letters ("x10", "H2SO4") are read as they are [obs, 818/s5, s6, s8, s10].
+fn flow_marks(node: &AomNode, before: &str) -> Option<(char, char)> {
+    if attr(node, "aria_role") == Some("deletion") {
+        return Some((DELETION_START, DELETION_END));
+    }
+    let formatting = node.formatting.as_ref()?;
+    if node.text.is_some() || node.children.is_empty() {
+        return None;
+    }
+    let after_digit = before
+        .trim_end_matches(is_flow_mark)
+        .ends_with(|c: char| c.is_ascii_digit());
+    let content = text_content(node);
+    let digits = content
+        .strip_prefix(['-', '+', '\u{2212}'])
+        .unwrap_or(&content);
+    let number = !digits.is_empty() && digits.chars().all(|c| c.is_ascii_digit());
+    if !after_digit || !number {
+        return None;
+    }
+    if formatting.superscript {
+        Some((SUPERSCRIPT_START, SUPERSCRIPT_END))
+    } else if formatting.subscript {
+        Some((SUBSCRIPT_START, SUBSCRIPT_END))
+    } else {
+        None
+    }
+}
+
+/// A line of a run with its flow marks: its text, without them; its speech, with them said;
+/// and the marks that end it, which are said at the next line's start, as JAWS says the "end
+/// Deletion" of a paragraph struck through whole [obs, 814/s4-s5].
 fn marked_line(line: &str) -> (String, String, String) {
-    let text: String = line
-        .chars()
-        .filter(|&c| c != DELETION_START && c != DELETION_END)
-        .collect();
+    let text: String = line.chars().filter(|&c| !is_flow_mark(c)).collect();
     if text.len() == line.len() {
         return (text, line.to_owned(), String::new());
     }
-    let body = line.trim_end_matches(|c: char| c == DELETION_END || c.is_whitespace());
+    let ends = |c: char| matches!(c, DELETION_END | SUPERSCRIPT_END | SUBSCRIPT_END);
+    let body = line.trim_end_matches(|c: char| ends(c) || c.is_whitespace());
     let carried = line
         .get(body.len()..)
         .unwrap_or_default()
         .chars()
-        .filter(|&c| c == DELETION_END)
-        .map(|_| flow_marker(msg::role_deletion_end().as_str()))
+        .filter(|&c| ends(c))
+        .map(flow_marker)
         .collect();
     let speech = body
         .chars()
-        .map(|c| match c {
-            DELETION_START => flow_marker(msg::role_deletion().as_str()),
-            DELETION_END => flow_marker(msg::role_deletion_end().as_str()),
-            c => c.to_string(),
+        .map(|c| {
+            if is_flow_mark(c) {
+                flow_marker(c)
+            } else {
+                c.to_string()
+            }
         })
         .collect();
     (text, speech, carried)
@@ -425,10 +478,7 @@ impl<'a> Builder<'a> {
             return;
         }
         let mut text = squash(&run.text);
-        if text
-            .chars()
-            .all(|c| c == DELETION_START || c == DELETION_END)
-        {
+        if text.chars().all(is_flow_mark) {
             return;
         }
         // The space where a link's line break cuts the text stays with it: "© 2026 Riverside
@@ -447,7 +497,7 @@ impl<'a> Builder<'a> {
             self.emit(node_id, role.clone(), &plain, speech);
             self.pending_marks.push_str(&carried);
         }
-        text.retain(|c| c != DELETION_START && c != DELETION_END);
+        text.retain(|c| !is_flow_mark(c));
         self.last_text_line = Some(text);
     }
 
@@ -456,7 +506,7 @@ impl<'a> Builder<'a> {
         if self.run.text.trim().is_empty() {
             if let Some(idx) = self.absorb_punctuation_into.take() {
                 let split = text
-                    .find(|c: char| c.is_whitespace() || c.is_alphanumeric())
+                    .find(|c: char| c.is_whitespace() || c.is_alphanumeric() || is_flow_mark(c))
                     .unwrap_or(text.len());
                 let (punct, rest) = text.split_at(split);
                 if !punct.is_empty() {
@@ -640,16 +690,16 @@ impl<'a> Builder<'a> {
         let first_line = self.buffer.lines.len();
 
         match self.classify(node, parent) {
-            // Deleted text is said between its marks [obs, 814/s3].
-            Class::Inline if attr(node, "aria_role") == Some("deletion") => {
-                self.push_inline_text(node, &DELETION_START.to_string());
-                self.push_own_text(node);
-                self.visit_children(node);
-                self.push_inline_text(node, &DELETION_END.to_string());
-            }
             Class::Inline => {
+                let marks = flow_marks(node, &self.run.text);
+                if let Some((start, _)) = marks {
+                    self.push_inline_text(node, &start.to_string());
+                }
                 self.push_own_text(node);
                 self.visit_children(node);
+                if let Some((_, end)) = marks {
+                    self.push_inline_text(node, &end.to_string());
+                }
             }
             Class::Block => {
                 self.flush();
@@ -1686,6 +1736,101 @@ mod tests {
                 .insert("current".to_owned(), current.to_owned());
         }
         node
+    }
+
+    /// A raised or lowered number right after a number is said between its marks, a one-digit
+    /// one too; raised letters and a number after letters are not [obs, 818/s3, s5, s6, s9].
+    #[test]
+    fn a_raised_number_after_a_number_is_marked() {
+        let text = |id: usize, t: &str| AomNode::new(id, Role::Text).with_text(t);
+        let positioned = |id: usize, t: &str, superscript: bool| {
+            let formatting = crate::aom::TextFormatting {
+                superscript,
+                subscript: !superscript,
+                ..Default::default()
+            };
+            AomNode::new(id, Role::Text)
+                .with_formatting(formatting.clone())
+                .with_children(vec![text(id + 1, t).with_formatting(formatting)])
+        };
+        let paragraph = |id: usize, children: Vec<AomNode>| {
+            AomNode::new(id, Role::Paragraph).with_children(children)
+        };
+        let root = AomNode::new(0, Role::Document).with_children(vec![
+            paragraph(
+                1,
+                vec![
+                    text(2, "It holds 10"),
+                    positioned(3, "23", true),
+                    text(5, " items."),
+                ],
+            ),
+            paragraph(
+                6,
+                vec![
+                    text(7, "Two cubed is 2"),
+                    positioned(8, "3", true),
+                    text(10, " here."),
+                ],
+            ),
+            paragraph(
+                11,
+                vec![
+                    text(12, "The value 5"),
+                    positioned(13, "10", false),
+                    text(15, " is decimal."),
+                ],
+            ),
+            paragraph(
+                16,
+                vec![
+                    text(17, "The 21"),
+                    positioned(18, "st", true),
+                    text(20, " day."),
+                ],
+            ),
+            paragraph(
+                21,
+                vec![
+                    text(22, "The power x"),
+                    positioned(23, "10", true),
+                    text(25, " grows."),
+                ],
+            ),
+        ]);
+        let buffer = crate::buffer::VirtualBuffer::from_aom(&root);
+        let read: Vec<(&str, String)> = buffer
+            .lines
+            .iter()
+            .map(|l| {
+                (
+                    l.text.as_str(),
+                    l.speech.split_whitespace().collect::<Vec<_>>().join(" "),
+                )
+            })
+            .collect();
+        assert_eq!(
+            read,
+            vec![
+                (
+                    "It holds 1023 items.",
+                    "It holds 10 \u{1d}superscript \u{1e} 23 \u{1d}end superscript \u{1e} items."
+                        .to_owned()
+                ),
+                (
+                    "Two cubed is 23 here.",
+                    "Two cubed is 2 \u{1d}superscript \u{1e} 3 \u{1d}end superscript \u{1e} here."
+                        .to_owned()
+                ),
+                (
+                    "The value 510 is decimal.",
+                    "The value 5 \u{1d}subscript \u{1e} 10 \u{1d}end subscript \u{1e} is decimal."
+                        .to_owned()
+                ),
+                ("The 21st day.", "The 21st day.".to_owned()),
+                ("The power x10 grows.", "The power x10 grows.".to_owned()),
+            ]
+        );
     }
 
     /// Struck or deleted text is said between "Deletion" and "end Deletion", which are not the

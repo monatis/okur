@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6514,
-  "total_steps": 6755,
-  "accepted_divergences": 178,
+  "matched_steps": 6516,
+  "total_steps": 6752,
+  "accepted_divergences": 181,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -6907,7 +6907,7 @@
     "815-web-skim-read-by-superscript-positions/s12": "match",
     "815-web-skim-read-by-superscript-positions/s13": "match",
     "815-web-skim-read-by-superscript-positions/s14": "match",
-    "815-web-skim-read-by-superscript-positions/s15": "mismatch",
+    "815-web-skim-read-by-superscript-positions/s15": "accepted divergence",
     "815-web-skim-read-by-superscript-positions/s2": "match",
     "815-web-skim-read-by-superscript-positions/s3": "match",
     "815-web-skim-read-by-superscript-positions/s4": "match",
@@ -6934,7 +6934,7 @@
     "816-web-skim-read-by-subscript-positions/s9": "match",
     "817-web-text-positions-read-down/s1": "match",
     "817-web-text-positions-read-down/s2": "match",
-    "817-web-text-positions-read-down/s3": "mismatch",
+    "817-web-text-positions-read-down/s3": "match",
     "817-web-text-positions-read-down/s4": "match",
     "817-web-text-positions-read-down/s5": "match",
     "817-web-text-positions-read-down/s6": "match",
@@ -6944,13 +6944,13 @@
     "818-web-number-positions-read-down/s1": "match",
     "818-web-number-positions-read-down/s10": "match",
     "818-web-number-positions-read-down/s11": "match",
-    "818-web-number-positions-read-down/s2": "match",
-    "818-web-number-positions-read-down/s3": "mismatch",
-    "818-web-number-positions-read-down/s4": "mismatch",
+    "818-web-number-positions-read-down/s2": "accepted divergence",
+    "818-web-number-positions-read-down/s3": "match",
+    "818-web-number-positions-read-down/s4": "match",
     "818-web-number-positions-read-down/s5": "match",
     "818-web-number-positions-read-down/s6": "match",
-    "818-web-number-positions-read-down/s7": "match",
+    "818-web-number-positions-read-down/s7": "accepted divergence",
     "818-web-number-positions-read-down/s8": "match",
-    "818-web-number-positions-read-down/s9": "mismatch"
+    "818-web-number-positions-read-down/s9": "match"
   }
 }
