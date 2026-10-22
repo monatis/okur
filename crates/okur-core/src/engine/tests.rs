@@ -6543,8 +6543,14 @@ fn manage_rules_disables_renames_and_deletes() {
         })
     };
     press(&mut engine, manage.id, "toggle");
+    let toggled = ui.take();
+    // The list takes the focus back, as JAWS's does [obs, 787/s16].
+    assert!(toggled.iter().any(|m| matches!(
+        m,
+        ToUi::DialogFocus { id, control } if *id == manage.id && control == "rules"
+    )));
     assert_eq!(
-        rows(ui.take()),
+        rows(toggled),
         Some(vec![
             "Digest Mail Mute Show flash message Disabled".to_owned()
         ])

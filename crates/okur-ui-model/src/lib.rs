@@ -242,6 +242,9 @@ pub enum ToUi {
     /// Make a button the dialog's default, which Enter presses: JAWS's PlaceMarker List
     /// makes MoveTo the default once a PlaceMarker is chosen, Add before.
     DialogDefault { id: u32, control: String },
+    /// Move the dialog's focus to a control: the rules' list after Disable, as JAWS's
+    /// Manage Notification Rules gives it back the focus.
+    DialogFocus { id: u32, control: String },
     /// Close a dialog, or a wizard.
     DialogClose { id: u32 },
     /// Show a wizard in front on its first page, the focus on the page's first control.

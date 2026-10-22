@@ -380,6 +380,7 @@ fn handle(message: ToUi) {
             enabled,
         } => crate::dialog::enable(id, &control, enabled),
         ToUi::DialogDefault { id, control } => crate::dialog::make_default(id, &control),
+        ToUi::DialogFocus { id, control } => crate::dialog::focus(id, &control),
         ToUi::DialogItems {
             id,
             control,

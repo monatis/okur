@@ -323,10 +323,18 @@ impl ScreenReaderEngine {
                     self.notification_editing = Some(i);
                 }
                 // Disable and Enable: the row says the rule's state [obs, 787/s16].
+                // The list takes the focus back, its row renamed, as JAWS's does: "... Disabled
+                // | 1 of 1" [obs, 787/s16].
                 ManageOutcome::Toggle(i) => {
                     let rule = self.notification_rules.rules.get_mut(i)?;
                     rule.enabled = !rule.enabled;
                     self.notification_rules_changed();
+                    if let Some(ui) = &self.ui {
+                        ui.send(ToUi::DialogFocus {
+                            id: manage_id,
+                            control: "rules".to_owned(),
+                        });
+                    }
                 }
                 ManageOutcome::Delete(i) => {
                     self.dialog_count += 1;

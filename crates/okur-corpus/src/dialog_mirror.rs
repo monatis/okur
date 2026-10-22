@@ -142,6 +142,16 @@ impl DialogMirror {
                         *selected = new_selected;
                     }
                 }
+                ToUi::DialogFocus { id, control } => {
+                    let at = self
+                        .dialog
+                        .as_ref()
+                        .filter(|d| d.id == id)
+                        .and_then(|d| d.controls.iter().position(|c| c.id == control));
+                    if at.is_some() {
+                        self.focused = at;
+                    }
+                }
                 ToUi::DialogDefault { id, control } => {
                     let dialog = self
                         .dialog

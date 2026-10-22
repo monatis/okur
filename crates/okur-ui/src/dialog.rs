@@ -712,6 +712,25 @@ pub fn enable(id: u32, control: &str, enabled: bool) {
     }
 }
 
+/// Moves the focus of dialog `id` to `control`, as the dialog manager moves it
+/// (WM_NEXTDLGCTL), the default button following.
+pub fn focus(id: u32, control: &str) {
+    use windows::Win32::UI::WindowsAndMessaging::WM_NEXTDLGCTL;
+    if let Some((window, window_id, _, _)) = find(id, control) {
+        // SAFETY: a child of our own dialog, and a message to that dialog.
+        if let Ok(item) = unsafe { GetDlgItem(Some(window), i32::from(window_id)) } {
+            let _ = unsafe {
+                SendMessageW(
+                    window,
+                    WM_NEXTDLGCTL,
+                    Some(WPARAM(item.0 as usize)),
+                    Some(LPARAM(1)),
+                )
+            };
+        }
+    }
+}
+
 /// Makes the button `control` the default of dialog `id`, the one Enter presses, framed as
 /// the default.
 pub fn make_default(id: u32, control: &str) {
