@@ -1,0 +1,121 @@
+{
+  "id": "814-web-text-attributes-read-down",
+  "name": "The attributes page read line by line with Down Arrow (struck text, a double strikeout, superscripts, subscripts, a shadow), the struck price read by word with Ctrl+Right, then Say All from the top",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/text-attributes.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "Insert+Down",
+      "settle_max_ms": 60000
+    }
+  ]
+}
