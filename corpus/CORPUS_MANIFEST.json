@@ -6444,13 +6444,27 @@
         "deterministic": true,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "808-web-word-list-summary-by-alt-s",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "db6260add71aaacd0dd50a283f3324eab49f0641497f63db95cb44004b3e209b",
+        "capture_script_sha256": "4e9cdf8a1e7122d71e8500cfc5c79a70fe852ea794bd6e4e59bb1454b2853c6e",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 447,
-    "scenarios_with_evidence": 447,
-    "total_trials": 1361,
-    "successful_trials": 1355,
+    "scenarios": 448,
+    "scenarios_with_evidence": 448,
+    "total_trials": 1364,
+    "successful_trials": 1358,
     "deterministic_scenarios": 291
   }
 }
