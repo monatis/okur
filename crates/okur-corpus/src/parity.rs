@@ -1113,6 +1113,10 @@ fn replayable(event: &TraceEvent) -> bool {
     if event.event == "uia_window_opened" {
         return event.focus_subtree.is_some();
     }
+    // A console's screen after it wrote to it, for Screen Echo [obs, 962].
+    if event.event == "console_update" {
+        return event.text_context.is_some();
+    }
     menu_event_from_trace(event).is_some()
         || (matches!(
             event.event.as_str(),
