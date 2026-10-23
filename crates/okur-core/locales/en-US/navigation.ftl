@@ -20,6 +20,8 @@ quicknav-none-lists = There are no lists on this page.
 quicknav-none-math = There are no math equations on this page.
 # Elements that react to the mouse moving over them (onMouseOver).
 quicknav-none-on-mouse-over = There are no onMouseOver elements on this page.
+# Short messages (Intermediate and Advanced) [obs, 831/s8, 832/s8].
+quicknav-none-on-mouse-over-short = No onMouseOver elements
 # Elements with a click handler (onClick).
 quicknav-none-clickable = There are no clickable elements on this page.
 # aria-flowto: the element at the cursor flows to no other, or none flows to it.
@@ -47,6 +49,9 @@ quicknav-wrap-bottom = wrapping to bottom
 # "level1" without a space.
 quicknav-heading-level-none-top = No more headings at level1.
 quicknav-heading-level-none = No more headings at level{ $level } in this section.
+# Short messages (Intermediate and Advanced): no period, "in section" [obs, 829/s4-s8, 830/s4-s8].
+quicknav-heading-level-none-top-short = No more headings at level1
+quicknav-heading-level-none-short = No more headings at level{ $level } in section
 
 # Entering a math equation's viewer.
 math-viewer-entered = Math Viewer. Press Escape to exit.

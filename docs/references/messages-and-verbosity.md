@@ -108,7 +108,11 @@ Shortcut parts of a native focus says what the focus says without those keys.
   catalog entry of its own, `<id>-short`, learned from the Intermediate recordings (572-581):
   "virtual PC" for "virtual PC Cursor", a tree level's number for "level 1", "3 columns and
   3 rows" for "table with 3 columns and 3 rows", "Last row" for "You are on the last row in
-  the table."; "Open List Box" and Insert+T's "Title is" have none (they are left out). In an
+  the table."; "Open List Box" and Insert+T's "Title is" have none (they are left out).
+  Round 259 (827-858, the web keys at both levels) added "No more headings at level2 in
+  section" (no "this", no period), "No onMouseOver elements", Insert+Z's "Off" and "On", and
+  the page's summary without "Page has" ("5Regions, 5headings and 12links"); Insert+Escape's
+  "Screen updated" is a message of JAWS's own, left out at Advanced. In an
   announcement a part carries its short form (`Part::short`, `Line::short`), and the engine's
   verbosity filter says it ([`Announcement::shorten`]); text built outside announcements
   (the virtual cursor's table keys) asks `message_length` itself. A message without a recorded

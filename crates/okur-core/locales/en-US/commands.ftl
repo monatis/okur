@@ -99,7 +99,10 @@ quick-keys-suspended = Quick Keys Suspended
 quick-keys-resumed = Resuming Quick Keys
 virtual-cursor-off = use virtual PC cursor off
 virtual-cursor-on = use virtual PC cursor on
-# Insert+Escape, Refresh Screen [obs, 298/s13, 512/s7].
+# Short messages (Intermediate and Advanced) [obs, 841/s9, s11; 842/s9, s11].
+virtual-cursor-off-short = Off
+virtual-cursor-on-short = On
+# Insert+Escape, Refresh Screen [obs, 298/s13, 512/s7]; at Advanced, nothing [obs, 842/s13].
 screen-updated = Screen updated
 
 ## The voice rate changed with Ctrl+Alt+PageUp and PageDown [obs, 512]
@@ -277,3 +280,6 @@ page-load-links = { $count ->
 }
 page-load-summary-two = Page has { $first } and { $second }
 page-load-summary-three = Page has { $first }, { $second } and { $third }
+# Short messages (Intermediate and Advanced) [obs, 855/s1, 857/s1].
+page-load-summary-two-short = { $first } and { $second }
+page-load-summary-three-short = { $first }, { $second } and { $third }

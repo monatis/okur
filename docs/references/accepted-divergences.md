@@ -184,8 +184,15 @@ A step can be in more than one entry; all of its entries apply.
 
 - Steps: `507-web-page-load-and-numpad-plus/s1` ("There are 2 Smart Glance Highlights on
   this page."), `538-web-page-load-summary-news-article/s1` ("There are 4 ..."),
-  `539-web-page-load-summary-tables-navigation/s1` ("There are 1 ...").
-- Difference: JAWS also says "There are N Smart Glance Highlights on this page.".
+  `539-web-page-load-summary-tables-navigation/s1` ("There are 1 ..."); above Beginner, its
+  short message "N Smart Glance Highlights": `847-web-page-load-and-numpad-plus-intermediate/s1`,
+  `848-web-page-load-and-numpad-plus-advanced/s1` ("2 ..."),
+  `855-web-page-load-summary-news-article-intermediate/s1`,
+  `856-web-page-load-summary-news-article-advanced/s1` ("4 ..."),
+  `857-web-page-load-summary-tables-navigation-intermediate/s1`,
+  `858-web-page-load-summary-tables-navigation-advanced/s1` ("1 ...").
+- Difference: JAWS also says "There are N Smart Glance Highlights on this page." ("N Smart
+  Glance Highlights" above Beginner).
 - Why: Smart Glance highlights are the content JAWS's own heuristic picks as a page's most
   important; no observation defines them, and Okur does not have them. Okur's page-load
   summary stops at the regions, headings and links.

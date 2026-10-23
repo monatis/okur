@@ -6911,3 +6911,46 @@ fn typed_field_text_follows_its_field_into_a_refreshed_page() {
     assert_eq!(engine.field_texts.get(&7).map(String::as_str), Some("ada"));
     assert_eq!(engine.field_texts.get(&3), None);
 }
+
+/// Insert+Z says "use virtual PC cursor off" at Beginner and "Off" above it, then "On"; Insert+
+/// Escape says "Screen updated" but at Advanced, where JAWS leaves its own messages out
+/// [obs, 298/s9-s13; 841/s9, s11; 842/s9, s11, s13].
+#[test]
+fn the_cursor_toggle_and_refresh_say_the_levels_messages() {
+    use crate::settings::VerbosityLevel;
+    for (level, off, on, refreshed) in [
+        (
+            VerbosityLevel::Beginner,
+            "use virtual PC cursor off",
+            "use virtual PC cursor on",
+            Some("Screen updated"),
+        ),
+        (
+            VerbosityLevel::Intermediate,
+            "Off",
+            "On",
+            Some("Screen updated"),
+        ),
+        (VerbosityLevel::Advanced, "Off", "On", None),
+    ] {
+        let speech = SharedSpeech::default();
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(create_test_buffer()),
+            Box::new(speech.clone()),
+        );
+        let mut settings = engine.settings.clone();
+        settings.verbosity.level = level;
+        engine.set_settings(settings);
+        speech.take();
+        engine.execute_command("VirtualPCCursorToggle");
+        assert_eq!(speech.take(), vec![off.to_owned()], "{level:?}");
+        engine.execute_command("VirtualPCCursorToggle");
+        assert_eq!(speech.take(), vec![on.to_owned()], "{level:?}");
+        engine.execute_command("RefreshScreen");
+        assert_eq!(
+            speech.take(),
+            refreshed.map(str::to_owned).into_iter().collect::<Vec<_>>(),
+            "{level:?}"
+        );
+    }
+}

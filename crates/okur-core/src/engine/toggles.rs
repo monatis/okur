@@ -47,11 +47,24 @@ impl ScreenReaderEngine {
             return None;
         }
         self.virtual_cursor_off = !self.virtual_cursor_off;
+        // Short messages say "Off" and "On" alone [obs, 841/s9, s11].
+        let short =
+            self.settings.verbosity.message_length() == crate::settings::MessageLength::Short;
         if self.virtual_cursor_off {
-            self.say(msg::virtual_cursor_off().to_string())
+            let said = if short {
+                msg::virtual_cursor_off_short()
+            } else {
+                msg::virtual_cursor_off()
+            };
+            self.say(said.to_string())
         } else {
             let _ = self.cursor.move_to_start();
-            self.say(msg::virtual_cursor_on().to_string())
+            let said = if short {
+                msg::virtual_cursor_on_short()
+            } else {
+                msg::virtual_cursor_on()
+            };
+            self.say(said.to_string())
         }
     }
 
@@ -66,6 +79,14 @@ impl ScreenReaderEngine {
             if let Some(actions) = &self.actions {
                 actions.refresh_page();
             }
+        }
+        // A message of JAWS's own, which Advanced leaves out [obs, 842/s13].
+        if !self
+            .settings
+            .verbosity
+            .is_on(crate::settings::OutputType::OkurMessage)
+        {
+            return None;
         }
         self.say(msg::screen_updated().to_string())
     }

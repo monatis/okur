@@ -283,6 +283,27 @@ divergences! {
     "JAWS's Smart Glance: see the next entry.",
     "the agent with the gaps report's row 20, 2026-10-20";
 
+    Difference::JawsAlsoSays("1 Smart Glance Highlights") => [
+        "857-web-page-load-summary-tables-navigation-intermediate/s1",
+        "858-web-page-load-summary-tables-navigation-advanced/s1",
+    ],
+    "JAWS's Smart Glance, its short message above Beginner: see the entry for 538.",
+    "the agent with round 259, 2026-10-23";
+
+    Difference::JawsAlsoSays("2 Smart Glance Highlights") => [
+        "847-web-page-load-and-numpad-plus-intermediate/s1",
+        "848-web-page-load-and-numpad-plus-advanced/s1",
+    ],
+    "JAWS's Smart Glance, its short message above Beginner: see the entry for 538.",
+    "the agent with round 259, 2026-10-23";
+
+    Difference::JawsAlsoSays("4 Smart Glance Highlights") => [
+        "855-web-page-load-summary-news-article-intermediate/s1",
+        "856-web-page-load-summary-news-article-advanced/s1",
+    ],
+    "JAWS's Smart Glance, its short message above Beginner: see the entry for 538.",
+    "the agent with round 259, 2026-10-23";
+
     Difference::JawsAlsoSays("There are 2 Smart Glance Highlights on this page.") => [
         "507-web-page-load-and-numpad-plus/s1",
     ],

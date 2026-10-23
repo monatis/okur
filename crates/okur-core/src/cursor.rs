@@ -1504,7 +1504,7 @@ impl VirtualCursor {
         .map(|h| h.0);
         Some(match target {
             Some(off) => self.move_to_heading_level(off, level),
-            None => Self::no_more_headings(level),
+            None => self.no_more_headings(level),
         })
     }
 
@@ -1527,12 +1527,14 @@ impl VirtualCursor {
         Some(self.control_focus_speech(target, previous))
     }
 
-    /// Heading level keys do not wrap (§12).
-    fn no_more_headings(level: u32) -> String {
-        if level == 1 {
-            msg::quicknav_heading_level_none_top().to_string()
-        } else {
-            msg::quicknav_heading_level_none(level).render()
+    /// Heading level keys do not wrap (§12); short messages say it without "this" and the
+    /// period [obs, 829/s4-s8].
+    fn no_more_headings(&self, level: u32) -> String {
+        match (level == 1, self.short_messages()) {
+            (true, false) => msg::quicknav_heading_level_none_top().to_string(),
+            (true, true) => msg::quicknav_heading_level_none_top_short().to_string(),
+            (false, false) => msg::quicknav_heading_level_none(level).render(),
+            (false, true) => msg::quicknav_heading_level_none_short(level).render(),
         }
     }
 
@@ -1819,7 +1821,7 @@ impl VirtualCursor {
             .map(|h| h.0);
         Some(match target {
             Some(off) => self.move_to_heading_level(off, level),
-            None => Self::no_more_headings(level),
+            None => self.no_more_headings(level),
         })
     }
 
@@ -1835,7 +1837,7 @@ impl VirtualCursor {
             .map(|h| h.0);
         Some(match target {
             Some(off) => self.move_to_heading_level(off, level),
-            None => Self::no_more_headings(level),
+            None => self.no_more_headings(level),
         })
     }
 
@@ -2203,13 +2205,25 @@ impl VirtualCursor {
     /// event handlers, so the index stays empty until a source (IAccessible2) provides it.
     pub fn move_next_on_mouse_over(&mut self) -> Option<String> {
         let t = self.buffer.on_mouse_over.clone();
-        self.line_nav(t, true, msg::quicknav_none_on_mouse_over().as_str())
+        let none = self.no_on_mouse_over();
+        self.line_nav(t, true, &none)
+    }
+
+    /// What `;` says on a page without onMouseOver elements; short messages say it short
+    /// [obs, 831/s8].
+    fn no_on_mouse_over(&self) -> String {
+        if self.short_messages() {
+            msg::quicknav_none_on_mouse_over_short().to_string()
+        } else {
+            msg::quicknav_none_on_mouse_over().to_string()
+        }
     }
 
     /// Moves cursor to prior onMouseOver element (`Shift+;`).
     pub fn move_prior_on_mouse_over(&mut self) -> Option<String> {
         let t = self.buffer.on_mouse_over.clone();
-        self.line_nav(t, false, msg::quicknav_none_on_mouse_over().as_str())
+        let none = self.no_on_mouse_over();
+        self.line_nav(t, false, &none)
     }
 
     /// Moves to the next or prior element with a click handler (`/`, `Shift+/`). JAWS in

@@ -181,15 +181,19 @@ impl ScreenReaderEngine {
         let (regions, headings, links) = counts;
         let headings = msg::page_load_headings(headings).to_string();
         let links = msg::page_load_links(links).to_string();
-        if regions == 0 {
-            msg::page_load_summary_two(headings, links).to_string()
-        } else {
-            msg::page_load_summary_three(
-                msg::page_load_regions(regions).to_string(),
-                headings,
-                links,
-            )
-            .to_string()
+        // Short messages leave "Page has" out [obs, 855/s1, 857/s1].
+        let short =
+            self.settings.verbosity.message_length() == crate::settings::MessageLength::Short;
+        let regions = (regions > 0).then(|| msg::page_load_regions(regions).to_string());
+        match (regions, short) {
+            (None, false) => msg::page_load_summary_two(headings, links).to_string(),
+            (None, true) => msg::page_load_summary_two_short(headings, links).to_string(),
+            (Some(regions), false) => {
+                msg::page_load_summary_three(regions, headings, links).to_string()
+            }
+            (Some(regions), true) => {
+                msg::page_load_summary_three_short(regions, headings, links).to_string()
+            }
         }
     }
 
