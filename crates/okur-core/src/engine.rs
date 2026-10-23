@@ -75,6 +75,34 @@ enum PendingViewer {
     Screen { window: bool },
 }
 
+/// The marks the reading choices put on a page's root ([`ScreenReaderEngine::reading_marks`]):
+/// each mark with its value, `None` where the mark is left off.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ReadingMarks([(&'static str, Option<String>); 3]);
+
+impl ReadingMarks {
+    /// Whether `page` carries these marks already.
+    pub fn on(&self, page: &crate::aom::AomNode) -> bool {
+        self.0
+            .iter()
+            .all(|(mark, value)| page.attributes.get(*mark) == value.as_ref())
+    }
+
+    /// Puts these marks on `page`'s root.
+    pub fn mark(&self, page: &mut crate::aom::AomNode) {
+        for (mark, value) in &self.0 {
+            match value {
+                Some(value) => {
+                    page.attributes.insert((*mark).to_owned(), value.clone());
+                }
+                None => {
+                    page.attributes.remove(*mark);
+                }
+            }
+        }
+    }
+}
+
 /// Primary runtime engine for screen reader execution, coordinating virtual cursor navigation,
 /// speech output, and interactive input event handling.
 pub struct ScreenReaderEngine {
@@ -562,12 +590,15 @@ impl ScreenReaderEngine {
         VirtualBuffer::from_aom_owned(page)
     }
 
-    /// `page` marked as the reading choices ask, when its marks differ from them: same page
-    /// links read as plain links, graphics left out [obs, 724, 727].
-    fn chosen_page(&self, page: &crate::aom::AomNode) -> Option<crate::aom::AomNode> {
+    /// The marks the reading choices put on a page: same page links read as plain links,
+    /// graphics left out [obs, 724, 727], how a heading is said. A host that builds pages off
+    /// the engine marks them first ([`ReadingMarks::mark`]): a page captured again came
+    /// without them, and was copied and built again under the engine for every refresh
+    /// (performance review 2026-10-23, C2).
+    pub fn reading_marks(&self) -> ReadingMarks {
         use crate::settings::HeadingIndication;
         let on = |on: bool| on.then(|| "true".to_owned());
-        let marks = [
+        ReadingMarks([
             (
                 crate::linearize::PLAIN_SAME_PAGE_LINKS,
                 on(!self.settings.identify_same_page_links),
@@ -585,24 +616,17 @@ impl ScreenReaderEngine {
                         .and_then(|v| v.as_str().map(str::to_owned)),
                 },
             ),
-        ];
-        if marks
-            .iter()
-            .all(|(mark, value)| page.attributes.get(*mark) == value.as_ref())
-        {
+        ])
+    }
+
+    /// `page` marked as the reading choices ask, when its marks differ from them.
+    fn chosen_page(&self, page: &crate::aom::AomNode) -> Option<crate::aom::AomNode> {
+        let marks = self.reading_marks();
+        if marks.on(page) {
             return None;
         }
         let mut marked = page.clone();
-        for (mark, value) in marks {
-            match value {
-                Some(value) => {
-                    marked.attributes.insert(mark.to_owned(), value);
-                }
-                None => {
-                    marked.attributes.remove(mark);
-                }
-            }
-        }
+        marks.mark(&mut marked);
         Some(marked)
     }
 

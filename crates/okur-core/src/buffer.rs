@@ -1432,6 +1432,57 @@ impl VirtualBuffer {
             .and_then(|n| n.formatting.clone())
     }
 
+    /// The text's formatting as [`Self::text_formatting_at_offset`] finds it at each offset,
+    /// in runs: each run's first offset with the span whose node's formatting it has; `None`
+    /// where no span holds the offset or the smallest one is said for its element. A run lasts
+    /// to the next one's start. Made in one sweep over the spans' starts and ends: skim
+    /// reading by attributes asked each character's formatting of every span, the text's
+    /// bytes times the spans, in the keyboard hook (performance review 2026-10-23, C1).
+    pub fn formatting_runs(&self) -> Vec<(usize, Option<usize>)> {
+        let bounds: HashSet<usize> = self.bounded.iter().flat_map(|&(s, e)| [s, e]).collect();
+        let key = |i: usize| {
+            let span = self.spans.get(i)?;
+            Some((span.end_offset.saturating_sub(span.start_offset), i))
+        };
+        // Each span joins at its start and leaves after its end, which it holds.
+        let mut edges: Vec<(usize, bool, usize)> = Vec::with_capacity(self.spans.len() * 2);
+        for (i, span) in self.spans.iter().enumerate() {
+            edges.push((span.start_offset, true, i));
+            edges.push((span.end_offset.saturating_add(1), false, i));
+        }
+        edges.sort_unstable_by_key(|&(offset, ..)| offset);
+        // The spans holding the offset, smallest first and, of equal ones, the first made: the
+        // one `min_by_key` takes.
+        let mut holding: std::collections::BTreeSet<(usize, usize)> =
+            std::collections::BTreeSet::new();
+        let mut runs: Vec<(usize, Option<usize>)> = Vec::new();
+        let mut edges = edges.into_iter().peekable();
+        while let Some((offset, joins, i)) = edges.next() {
+            let mut edge = Some((joins, i));
+            while let Some((joins, i)) = edge.take() {
+                if let Some(key) = key(i) {
+                    if joins {
+                        holding.insert(key);
+                    } else {
+                        holding.remove(&key);
+                    }
+                }
+                edge = edges
+                    .next_if(|&(next, ..)| next == offset)
+                    .map(|(_, joins, i)| (joins, i));
+            }
+            let span = holding.first().map(|&(_, i)| i).filter(|&i| {
+                self.spans
+                    .get(i)
+                    .is_some_and(|s| s.role != Role::Document && !bounds.contains(&s.start_offset))
+            });
+            if runs.last().map(|&(_, last)| last) != Some(span) {
+                runs.push((offset, span));
+            }
+        }
+        runs
+    }
+
     /// Returns the list of all links in the document for the Links List dialog.
     pub fn get_links_list(&self) -> Vec<LinkListItem> {
         let mut items = Vec::new();
@@ -1552,6 +1603,75 @@ mod tests {
 
     fn text(buffer: Option<&VirtualBuffer>, id: usize) -> Option<&str> {
         buffer?.node(id)?.text.as_deref()
+    }
+
+    /// The formatting runs give every offset the formatting that asking for it there gives:
+    /// nested inline runs, a region's and a list's starts and ends said for the element, and
+    /// the document.
+    #[test]
+    fn formatting_runs_give_each_offset_its_formatting() {
+        use crate::aom::TextFormatting;
+        let with = |f: fn(&mut TextFormatting)| {
+            let mut formatting = TextFormatting::default();
+            f(&mut formatting);
+            formatting
+        };
+        let bold = with(|f| f.bold = true);
+        let struck = with(|f| f.strikeout = true);
+        let raised = with(|f| f.superscript = true);
+        let page = AomNode::new(0, Role::Document)
+            .with_name("Runs")
+            .with_children(vec![
+                AomNode::new(1, Role::Heading { level: 2 })
+                    .with_text("Hours")
+                    .with_formatting(bold.clone()),
+                AomNode::new(
+                    2,
+                    Role::Landmark {
+                        landmark_type: "region".to_owned(),
+                    },
+                )
+                .with_name("Notes")
+                .with_formatting(struck.clone())
+                .with_children(vec![AomNode::new(3, Role::Paragraph).with_children(vec![
+                    AomNode::new(4, Role::Text)
+                        .with_text("The 1")
+                        .with_formatting(TextFormatting::default()),
+                    AomNode::new(5, Role::Text)
+                        .with_text("st")
+                        .with_formatting(raised),
+                    AomNode::new(6, Role::Text)
+                        .with_text(" is on ")
+                        .with_formatting(TextFormatting::default()),
+                    AomNode::new(7, Role::Text)
+                        .with_text("Monday")
+                        .with_formatting(struck),
+                ])]),
+                AomNode::new(8, Role::List).with_children(vec![
+                    AomNode::new(9, Role::ListItem)
+                        .with_text("One")
+                        .with_formatting(bold),
+                    AomNode::new(10, Role::ListItem).with_text("Two"),
+                ]),
+            ]);
+        let buffer = VirtualBuffer::from_aom(&page);
+        let runs = buffer.formatting_runs();
+        for offset in 0..buffer.text.len() + 2 {
+            let run = runs
+                .iter()
+                .rev()
+                .find(|&&(start, _)| start <= offset)
+                .and_then(|&(_, span)| span);
+            let by_runs = run
+                .and_then(|span| buffer.spans.get(span))
+                .and_then(|span| buffer.node(span.node_id))
+                .and_then(|node| node.formatting.clone());
+            assert_eq!(
+                by_runs,
+                buffer.text_formatting_at_offset(offset),
+                "offset {offset}"
+            );
+        }
     }
 
     #[test]

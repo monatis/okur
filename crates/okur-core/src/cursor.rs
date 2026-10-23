@@ -1628,8 +1628,13 @@ impl VirtualCursor {
     /// follows it on its line: "same page link Maria Lopez" | ", published" [obs, 677/s1]. A
     /// line without a sentence is one.
     fn sentence_units(&self) -> Vec<(usize, String)> {
+        self.sentence_units_of(0..self.buffer.lines.len())
+    }
+
+    /// [`Self::sentence_units`] of the lines `lines`: a line's sentences are its own.
+    fn sentence_units_of(&self, lines: std::ops::Range<usize>) -> Vec<(usize, String)> {
         let mut units = Vec::new();
-        for line in &self.buffer.lines {
+        for line in self.buffer.lines.get(lines).unwrap_or_default() {
             let (mark, text, speech) = split_list_mark(line);
             if let Some(mark) = mark {
                 units.push((line.start_offset, mark.to_owned()));
@@ -1737,7 +1742,7 @@ impl VirtualCursor {
     /// or top, the sentence the cursor is in [obs, 291/s6-s8].
     pub fn move_sentence(&mut self, forward: bool) -> String {
         self.selection = None;
-        let units = self.sentence_units();
+        let units = self.sentences_near_cursor();
         let here = self.offset;
         let current = units.iter().rposition(|(offset, _)| *offset <= here);
         let target = if forward {
@@ -1755,7 +1760,7 @@ impl VirtualCursor {
 
     /// Alt+Numpad5: the sentence the cursor is in [obs, 291/s9].
     pub fn current_sentence(&self) -> String {
-        let units = self.sentence_units();
+        let units = self.sentences_near_cursor();
         units
             .iter()
             .rev()
@@ -1763,6 +1768,19 @@ impl VirtualCursor {
             .or(units.first())
             .map(|(_, said)| said.clone())
             .unwrap_or_default()
+    }
+
+    /// The sentences of the lines around the cursor's, as many as the sentence keys look at:
+    /// every line has one at least, all before its end, so the sentence the cursor is in is on
+    /// its line or the one before, the prior one at most a line further back, and the next on
+    /// its line or the one after. The page's every sentence was made per press (performance
+    /// review 2026-10-23, C3).
+    fn sentences_near_cursor(&self) -> Vec<(usize, String)> {
+        let lines = &self.buffer.lines;
+        // The last line starting at or before the cursor; lines after it start past it.
+        let here = lines.partition_point(|line| line.start_offset <= self.offset);
+        let from = here.saturating_sub(3);
+        self.sentence_units_of(from..here.saturating_add(1).min(lines.len()))
     }
 
     /// Ctrl+Numpad5: the paragraph the cursor is in [obs, 291/s10].
@@ -2000,11 +2018,7 @@ impl VirtualCursor {
     /// Moves to the next or prior division (`Z`, `Shift+Z`): the page's `div` elements the
     /// Divisions list holds, read as their line [obs, 292/s6-s10].
     pub fn move_division(&mut self, forward: bool) -> Option<String> {
-        let targets: Vec<usize> = crate::element_lists::ElementList::Divisions
-            .items(&self.buffer)
-            .iter()
-            .map(|item| item.offset)
-            .collect();
+        let targets = crate::element_lists::ElementList::Divisions.offsets(&self.buffer);
         self.line_nav(targets, forward, msg::quicknav_none_divisions().as_str())
     }
 

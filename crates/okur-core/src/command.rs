@@ -1345,7 +1345,19 @@ static LAPTOP_BINDINGS: &[Binding] = &{
     ]
 };
 
-fn lookup(bindings: &[Binding], event: &KeyEvent) -> Option<Command> {
+/// A key map's bindings by key, each key's in the map's order: a key's lookup scanned all of
+/// the map's, several times per key pressed (performance review 2026-10-23, C18).
+type ByKey = std::collections::HashMap<Key, Vec<&'static Binding>>;
+
+fn by_key(bindings: &'static [Binding]) -> ByKey {
+    let mut map = ByKey::new();
+    for binding in bindings {
+        map.entry(binding.key).or_default().push(binding);
+    }
+    map
+}
+
+fn lookup(bindings: &ByKey, event: &KeyEvent) -> Option<Command> {
     if !event.is_down {
         return None;
     }
@@ -1354,15 +1366,17 @@ fn lookup(bindings: &[Binding], event: &KeyEvent) -> Option<Command> {
         key => key,
     };
     bindings
+        .get(&key)?
         .iter()
-        .find(|b| b.key == key && b.chord.matches(event))
+        .find(|b| b.chord.matches(event))
         .map(|b| b.command.clone())
 }
 
 /// The command a key runs in JAWS's desktop key map. `event` is resolved: `modifiers.insert`
 /// is the JAWS key ([`KeyboardSettings::resolve`]).
 pub fn command_for(event: &KeyEvent) -> Option<Command> {
-    lookup(BINDINGS, event)
+    static MAP: std::sync::OnceLock<ByKey> = std::sync::OnceLock::new();
+    lookup(MAP.get_or_init(|| by_key(BINDINGS)), event)
 }
 
 /// The command a key runs only in `keyboard`'s layout, where that layout has its own: the
@@ -1370,7 +1384,10 @@ pub fn command_for(event: &KeyEvent) -> Option<Command> {
 pub fn layout_command_for(keyboard: &KeyboardSettings, event: &KeyEvent) -> Option<Command> {
     match keyboard.layout {
         // The laptop keys are CapsLock's; Insert keeps the desktop's keys in the laptop layout.
-        KeyboardLayout::Laptop if event.modifiers.caps_lock => lookup(LAPTOP_BINDINGS, event),
+        KeyboardLayout::Laptop if event.modifiers.caps_lock => {
+            static MAP: std::sync::OnceLock<ByKey> = std::sync::OnceLock::new();
+            lookup(MAP.get_or_init(|| by_key(LAPTOP_BINDINGS)), event)
+        }
         KeyboardLayout::Laptop => None,
         KeyboardLayout::Desktop => None,
     }

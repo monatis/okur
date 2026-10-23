@@ -6834,3 +6834,80 @@ fn manage_rules_disables_renames_and_deletes() {
     press(&mut engine, confirm, "ok");
     assert_eq!(rows(ui.take()), Some(Vec::new()));
 }
+
+/// A page the host marked with the reading choices before building it is taken as built; a
+/// page without the marks is built again with them (performance review 2026-10-23, C2).
+#[test]
+fn a_page_marked_with_the_reading_choices_is_not_built_again() {
+    let page = || {
+        AomNode::new(0, Role::Document)
+            .with_name("Pictures")
+            .with_children(vec![
+                AomNode::new(1, Role::Image).with_name("A lighthouse"),
+                AomNode::new(2, Role::Paragraph).with_text("At dusk."),
+            ])
+    };
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(create_test_buffer()),
+        Box::new(MockSpeechOutput::default()),
+    );
+    engine.settings.show_graphics = false;
+    let marks = engine.reading_marks();
+    let mut marked = page();
+    marks.mark(&mut marked);
+    assert!(marks.on(&marked));
+    let buffer = VirtualBuffer::from_aom_owned(marked);
+    let built = buffer.page().map(|p| std::sync::Arc::as_ptr(p) as usize);
+    let prepared = engine.prepared(buffer);
+    assert_eq!(
+        prepared.page().map(|p| std::sync::Arc::as_ptr(p) as usize),
+        built
+    );
+    assert!(!prepared.text.contains("lighthouse"), "{}", prepared.text);
+
+    let prepared = engine.prepared(VirtualBuffer::from_aom(&page()));
+    assert!(prepared.page().is_some_and(|p| marks.on(p)));
+    assert!(!prepared.text.contains("lighthouse"), "{}", prepared.text);
+}
+
+/// The text typed in a page's field goes with the field when a refresh numbers the page anew:
+/// to the same object's new number, not to the field the old number now gives (performance
+/// review 2026-10-23, C21).
+#[test]
+fn typed_field_text_follows_its_field_into_a_refreshed_page() {
+    let field = |id: usize, object: &str, name: &str| {
+        let mut node = AomNode::new(id, Role::Edit).with_name(name);
+        node.attributes
+            .insert(crate::aom::UNIQUE_ID_ATTR.to_owned(), object.to_owned());
+        node
+    };
+    let page = |children: Vec<AomNode>| {
+        let mut page = AomNode::new(0, Role::Document)
+            .with_name("Sign up")
+            .with_children(children);
+        page.attributes
+            .insert("url".to_owned(), "https://example.test/".to_owned());
+        VirtualBuffer::from_aom_owned(page)
+    };
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(page(vec![
+            field(3, "-10", "Full name"),
+            field(4, "-11", "Email"),
+        ])),
+        Box::new(MockSpeechOutput::default()),
+    );
+    engine.field_texts.insert(3, "ada".to_owned());
+    let title = engine
+        .cursor
+        .buffer
+        .document_title()
+        .unwrap_or_default()
+        .to_owned();
+    engine.handle_page_refreshed(
+        &title,
+        page(vec![field(3, "-11", "Email"), field(7, "-10", "Full name")]),
+    );
+    engine.apply_pending_page();
+    assert_eq!(engine.field_texts.get(&7).map(String::as_str), Some("ada"));
+    assert_eq!(engine.field_texts.get(&3), None);
+}

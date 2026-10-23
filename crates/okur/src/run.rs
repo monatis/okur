@@ -823,12 +823,20 @@ pub async fn run(config: RunConfig) {
                     Some(AccessibilityEvent::DocumentLoaded { title, root }) => {
                         let url = root.attributes.get("url").cloned();
                         give_way_to_keys();
-                        let refresh =
-                            lock_engine(&engine_events).is_page_in_front(title, url.as_deref());
-                        let root = std::mem::replace(
+                        let (refresh, marks) = {
+                            let eng = lock_engine(&engine_events);
+                            (
+                                eng.is_page_in_front(title, url.as_deref()),
+                                eng.reading_marks(),
+                            )
+                        };
+                        let mut root = std::mem::replace(
                             root,
                             okur_core::AomNode::new(0, okur_core::Role::Document),
                         );
+                        // Built as the reading choices read it, so the engine need not build
+                        // it again.
+                        marks.mark(&mut root);
                         if refresh {
                             refreshes_sent += 1;
                             let (number, title) = (refreshes_sent, std::mem::take(title));

@@ -13,11 +13,25 @@ use super::ScreenReaderEngine;
 use crate::input::{Key, KeyAction, KeyEvent};
 
 /// For each element, the texts of its siblings (itself included) and their contents with
-/// every attribute `options` checks: what a line read for that element holds inline.
+/// every attribute `options` checks: what a line read for that element holds inline. Kept
+/// once per parent, each child pointing to its parent's: a copy for each child grew with the
+/// square of a parent's children (performance review 2026-10-23, C1).
+struct InlineTexts {
+    of_child: std::collections::HashMap<usize, usize>,
+    texts: Vec<Vec<String>>,
+}
+
+impl InlineTexts {
+    fn get(&self, id: usize) -> Option<&[String]> {
+        let at = *self.of_child.get(&id)?;
+        self.texts.get(at).map(Vec::as_slice)
+    }
+}
+
 fn inline_texts_with(
     page: &crate::aom::AomNode,
     options: &crate::ui::skim::SkimOptions,
-) -> std::collections::HashMap<usize, Vec<String>> {
+) -> InlineTexts {
     fn texts(
         node: &crate::aom::AomNode,
         options: &crate::ui::skim::SkimOptions,
@@ -35,7 +49,10 @@ fn inline_texts_with(
             _ => node.children.iter().for_each(|c| texts(c, options, out)),
         }
     }
-    let mut found = std::collections::HashMap::new();
+    let mut found = InlineTexts {
+        of_child: std::collections::HashMap::new(),
+        texts: Vec::new(),
+    };
     let mut stack = vec![page];
     while let Some(node) = stack.pop() {
         let mut siblings = Vec::new();
@@ -44,8 +61,9 @@ fn inline_texts_with(
         }
         if !siblings.is_empty() {
             for child in &node.children {
-                found.insert(child.id, siblings.clone());
+                found.of_child.insert(child.id, found.texts.len());
             }
+            found.texts.push(siblings);
         }
         stack.extend(node.children.iter());
     }
@@ -199,10 +217,20 @@ impl ScreenReaderEngine {
     ) -> Vec<(usize, usize)> {
         let from = self.cursor.current_line_index();
         let buffer = &self.cursor.buffer;
-        let inline = buffer
-            .page()
-            .map(|page| inline_texts_with(page, options))
-            .unwrap_or_default();
+        let inline = buffer.page().map(|page| inline_texts_with(page, options));
+        // Each span's node checked once, its runs found by offset.
+        let runs = buffer.formatting_runs();
+        let mut checked: std::collections::HashMap<usize, bool> = std::collections::HashMap::new();
+        let mut has_attributes = |span: usize| {
+            *checked.entry(span).or_insert_with(|| {
+                buffer
+                    .spans
+                    .get(span)
+                    .and_then(|s| buffer.node(s.node_id))
+                    .and_then(|n| n.formatting.as_ref())
+                    .is_some_and(|f| options.has_attributes(f))
+            })
+        };
         buffer
             .lines
             .iter()
@@ -222,18 +250,26 @@ impl ScreenReaderEngine {
             // text of another element (a paragraph's <strong>) is in the line's own text, so
             // it is found among the line's element's siblings.
             .filter_map(|line| {
-                let formatted = (line.start_offset..line.end_offset).find(|&offset| {
-                    buffer
-                        .text_formatting_at_offset(offset)
-                        .is_some_and(|f| options.has_attributes(&f))
-                });
-                let inline = inline.get(&line.node_id).and_then(|texts| {
-                    texts
-                        .iter()
-                        .filter_map(|t| line.text.find(t.as_str()))
-                        .min()
-                        .map(|at| line.start_offset + at)
-                });
+                let first_run = runs
+                    .partition_point(|&(start, _)| start <= line.start_offset)
+                    .saturating_sub(1);
+                let formatted = runs
+                    .get(first_run..)
+                    .unwrap_or_default()
+                    .iter()
+                    .take_while(|&&(start, _)| start < line.end_offset)
+                    .find(|&&(_, span)| span.is_some_and(&mut has_attributes))
+                    .map(|&(start, _)| start.max(line.start_offset));
+                let inline = inline
+                    .as_ref()
+                    .and_then(|i| i.get(line.node_id))
+                    .and_then(|texts| {
+                        texts
+                            .iter()
+                            .filter_map(|t| line.text.find(t.as_str()))
+                            .min()
+                            .map(|at| line.start_offset + at)
+                    });
                 let first = formatted.into_iter().chain(inline).min()?;
                 Some((line.line_index, first))
             })
@@ -348,9 +384,12 @@ impl ScreenReaderEngine {
         // 9 a.m." [obs, 769/s3]).
         let mut read: Vec<(usize, Option<usize>)> = Vec::new();
         for paragraph in buffer.paragraphs.iter().filter(|p| p.end_offset > at) {
+            // Sentences are in the page's order: the last starting at or before the
+            // paragraph, found by halving (a scan per paragraph was quadratic; performance
+            // review 2026-10-23, C11).
             let Some(index) = sentences
-                .iter()
-                .rposition(|(start, _)| *start <= paragraph.start_offset)
+                .partition_point(|(start, _)| *start <= paragraph.start_offset)
+                .checked_sub(1)
             else {
                 continue;
             };
@@ -762,6 +801,64 @@ mod tests {
             .lock()
             .map(|p| p.iter().map(|(t, m, _)| (t.clone(), *m)).collect())
             .unwrap_or_default()
+    }
+
+    /// The sentence keys, which make only the sentences of the lines around the cursor, say
+    /// and move to what the page's every sentence gives, from every offset: list items with
+    /// their marks, a link going on past its name, lines of several sentences, a line of none.
+    #[test]
+    fn the_sentence_keys_find_what_the_whole_page_gives() {
+        use crate::settings::SayAllUnit;
+        let doc = AomNode::new(0, Role::Document).with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("First one. Second one! Third?"),
+            AomNode::new(2, Role::List).with_children(vec![
+                AomNode::new(3, Role::ListItem).with_text("Weekday hours: 9 a.m. Late on Fridays."),
+                AomNode::new(4, Role::ListItem).with_children(vec![AomNode::new(
+                    5,
+                    Role::Link { href: None },
+                )
+                .with_name("Maria Lopez")
+                .with_text("Maria Lopez")]),
+            ]),
+            AomNode::new(6, Role::Paragraph).with_children(vec![
+                AomNode::new(7, Role::Link { href: None })
+                    .with_name("Paragraphs")
+                    .with_text("Paragraphs"),
+                AomNode::new(8, Role::Text).with_text(", published today. More here."),
+            ]),
+            AomNode::new(9, Role::Paragraph).with_text("12"),
+            AomNode::new(10, Role::Paragraph).with_text("Last line. The end."),
+        ]);
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&doc));
+        let all = cursor
+            .say_all_units(SayAllUnit::Sentence)
+            .unwrap_or_default();
+        assert!(all.len() > 8, "{all:?}");
+        for offset in 0..cursor.buffer.text.len() + 2 {
+            let current = all.iter().rposition(|(at, _)| *at <= offset);
+            let said = |i: Option<usize>| {
+                i.and_then(|i| all.get(i))
+                    .map(|(_, s)| s.clone())
+                    .unwrap_or_default()
+            };
+            let mut here = cursor.clone();
+            here.offset = offset;
+            assert_eq!(
+                here.current_sentence(),
+                said(current.or((!all.is_empty()).then_some(0))),
+                "current at {offset}"
+            );
+            let next = all.iter().position(|(at, _)| *at > offset).or(current);
+            let mut moved = here.clone();
+            assert_eq!(moved.move_sentence(true), said(next), "next from {offset}");
+            let prior = current.and_then(|i| i.checked_sub(1)).or(current);
+            let mut moved = here.clone();
+            assert_eq!(
+                moved.move_sentence(false),
+                said(prior),
+                "prior from {offset}"
+            );
+        }
     }
 
     #[test]

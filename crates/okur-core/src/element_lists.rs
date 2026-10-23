@@ -150,6 +150,27 @@ impl ElementList {
             .collect()
     }
 
+    /// Where [`Self::items`]'s elements start, without their texts: a block is listed when
+    /// any of its text shows, found at its first letter. The Z key made every division's text
+    /// to keep only its offset (performance review 2026-10-23, C9).
+    pub fn offsets(self, buffer: &VirtualBuffer) -> Vec<usize> {
+        let blocks = matches!(
+            self,
+            Self::Lists | Self::Articles | Self::Paragraphs | Self::BlockQuotes | Self::Divisions
+        );
+        if !blocks {
+            return self.items(buffer).iter().map(|item| item.offset).collect();
+        }
+        buffer
+            .page_nodes()
+            .filter(|node| self.holds(node))
+            .filter(|node| {
+                shows_text(node) || node.name.as_deref().is_some_and(|n| !n.trim().is_empty())
+            })
+            .filter_map(|node| buffer.start_of_subtree(node))
+            .collect()
+    }
+
     fn text(self, buffer: &VirtualBuffer, node: &AomNode) -> String {
         let name = node
             .name
@@ -291,6 +312,30 @@ fn tag(node: &AomNode) -> Option<&str> {
 /// are not spaces: the item keeps no more, and more pieces only lengthen the text after them.
 /// A division around the whole page gathered all of its text, once per wrapper (performance
 /// review, 2026-10-20, P1).
+/// Whether [`block_text`] of `node` has a letter, found without making it.
+fn shows_text(node: &AomNode) -> bool {
+    let mut stack = vec![node];
+    while let Some(node) = stack.pop() {
+        if node.states.hidden {
+            continue;
+        }
+        if node.children.is_empty() {
+            let piece = node
+                .text
+                .as_deref()
+                .filter(|t| !t.is_empty())
+                .or(node.name.as_deref())
+                .unwrap_or_default();
+            if !piece.trim().is_empty() {
+                return true;
+            }
+            continue;
+        }
+        stack.extend(node.children.iter().rev());
+    }
+    false
+}
+
 fn block_text(node: &AomNode) -> String {
     let mut text = String::new();
     let mut kept = 0;
@@ -346,6 +391,48 @@ mod tests {
         let mut text = String::new();
         pieces(node, &mut text);
         text.split_whitespace().collect::<Vec<_>>().join(" ")
+    }
+
+    /// The block lists' offsets alone are their items' offsets: divisions with text, with only
+    /// a name, with only spaces or hidden text (left out), nested ones, paragraphs and lists.
+    #[test]
+    fn a_lists_offsets_are_its_items_offsets() {
+        let div = |id: usize, children: Vec<AomNode>| {
+            let mut node = AomNode::new(id, Role::Group).with_children(children);
+            node.attributes.insert("tag".to_owned(), "div".to_owned());
+            node
+        };
+        let mut hidden = AomNode::new(31, Role::Text).with_text("Hidden");
+        hidden.states.hidden = true;
+        let page = AomNode::new(0, Role::Document).with_children(vec![
+            div(
+                1,
+                vec![AomNode::new(2, Role::Paragraph).with_text("First block")],
+            ),
+            div(3, vec![AomNode::new(4, Role::Text).with_text("   ")]).with_name("Message"),
+            div(5, vec![AomNode::new(6, Role::Text).with_text("  ")]),
+            div(30, vec![hidden]),
+            div(
+                7,
+                vec![div(8, vec![AomNode::new(9, Role::Text).with_text("Inner")])],
+            ),
+            AomNode::new(10, Role::List).with_children(vec![
+                AomNode::new(11, Role::ListItem).with_text("One"),
+                AomNode::new(12, Role::ListItem).with_text("Two"),
+            ]),
+            AomNode::new(13, Role::Paragraph).with_text("Last"),
+        ]);
+        let buffer = VirtualBuffer::from_aom(&page);
+        for list in [
+            ElementList::Divisions,
+            ElementList::Paragraphs,
+            ElementList::Lists,
+            ElementList::Buttons,
+        ] {
+            let offsets: Vec<usize> = list.items(&buffer).iter().map(|i| i.offset).collect();
+            assert_eq!(list.offsets(&buffer), offsets, "{list:?}");
+        }
+        assert!(ElementList::Divisions.offsets(&buffer).len() >= 3);
     }
 
     /// A block's first `ITEM_LENGTH` characters, all a list item keeps, are the whole text's,

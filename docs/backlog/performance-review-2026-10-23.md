@@ -7,7 +7,7 @@ each for threading and latency (T), the core engine (C) and the platform layer (
 on [`performance-review-2026-10-20.md`](performance-review-2026-10-20.md) and
 [`responsiveness-review-2026-10-19.md`](responsiveness-review-2026-10-19.md).
 
-Line numbers are as of `a0628bf4`. Each finding below names what the reviewer saw and what was
+Line numbers are as of `a0628bf4`. Every change to the engine kept the three parity runs byte-identical (`skills/jaws-reference/scripts/parity-snapshot.sh` before and after, `diff -r`). Each finding below names what the reviewer saw and what was
 done. A change to what the live reader reads does not show in parity (replay feeds recorded
 traces), so such changes get tests where a test can hold them and a live run on old-pc.
 
@@ -15,12 +15,20 @@ traces), so such changes get tests where a test can hold them and a live run on 
 
 | Finding | Status | Commit |
 |---|---|---|
-| P1: a WinEvent delivered inside another's read aborted the reader | done: events wait their turn (`in_turn`) | this batch |
-| P2, T2: the clipboard read in the keyboard hook, unbounded by its block's size | done: read on a thread of its own, waited for 150 ms; the scan bounded by `GlobalSize` | this batch |
-| P23: `set_clipboard_text` leaked its block when not set | done | this batch |
-| T3: a drag slept 120 ms in the keyboard hook | done: on the actions worker | this batch |
-| P24: `EM_GETSEL`'s 16-bit words | done: the out-pointers | this batch |
-| T8: a panic while the engine was held left the reader deaf | done: the lock recovered, a key's or an event's panic caught and logged, every panic logged | this batch |
+| P1: a WinEvent delivered inside another's read aborted the reader | done: events wait their turn (`in_turn`) | `ad0be50f` |
+| P2, T2: the clipboard read in the keyboard hook, unbounded by its block's size | done: read on a thread of its own, waited for 150 ms; the scan bounded by `GlobalSize` | `ad0be50f` |
+| P23: `set_clipboard_text` leaked its block when not set | done | `ad0be50f` |
+| T3: a drag slept 120 ms in the keyboard hook | done: on the actions worker | `ad0be50f` |
+| P24: `EM_GETSEL`'s 16-bit words | done: the out-pointers | `ad0be50f` |
+| T8: a panic while the engine was held left the reader deaf | done: the lock recovered, a key's or an event's panic caught and logged, every panic logged | `ad0be50f` |
+| C1: skim by attributes asked each byte's formatting of every span; inline texts copied per child | done: the formatting runs made in one sweep (`formatting_runs`, tested against every offset), inline texts kept once per parent | this batch |
+| C11: skim by sentence searched all sentences per paragraph | done: halving | this batch |
+| C3: the sentence keys made every sentence of the page per press | done: the lines around the cursor (tested against the whole page at every offset) | this batch |
+| C18: a key's command looked up through all 276 bindings, up to six times | done: bindings by key | this batch |
+| C9: Z made every division's text for its offset | done: offsets alone (tested against the items) | this batch |
+| C2 (reading choices): with a reading choice not the default, every refresh was copied and built again under the engine | done: the host marks the page before building it off the engine; labels and Flexible Web rules still rebuild, only on sites that have them | this batch |
+| C21: typed field text kept by capture numbers, never dropped | done: carried to the new capture's numbers by object or DOM id | this batch |
+| C19, C24 | not changed: the copy is of offsets already gathered; the mute happens only on a quiet return from Okur's dialogs | |
 
 The rest are listed below in the order they are taken.
 

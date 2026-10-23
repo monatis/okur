@@ -768,7 +768,35 @@ impl ScreenReaderEngine {
                         n.name.clone(),
                     )
                 });
+            // The text typed in fields, by node, goes to the new capture's numbers as the focus
+            // does, by the same object or DOM id; a field known by neither stays on a field the
+            // number still gives. Entries for numbers the new capture gave other nodes were read for them,
+            // and piled up on a page kept open (performance review 2026-10-23, C21).
+            let typed: Vec<(usize, Option<String>, Option<String>, String)> =
+                std::mem::take(&mut self.field_texts)
+                    .into_iter()
+                    .map(|(id, text)| {
+                        let node = self.cursor.buffer.node(id);
+                        let attribute = |name: &str| node?.attributes.get(name).cloned();
+                        (id, attribute(UNIQUE_ID_ATTR), attribute("id"), text)
+                    })
+                    .collect();
             crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, buffer));
+            let buffer = &self.cursor.buffer;
+            self.field_texts = typed
+                .into_iter()
+                .filter_map(|(id, object, dom_id, text)| {
+                    let id = match (object.as_deref(), dom_id.as_deref()) {
+                        (None, None) => {
+                            buffer.node(id).filter(|n| n.role == Role::Edit).map(|_| id)
+                        }
+                        (object, dom_id) => object
+                            .and_then(|object| buffer.node_with_object(object))
+                            .or_else(|| dom_id.and_then(|d| buffer.node_with_dom_id(d))),
+                    }?;
+                    Some((id, text))
+                })
+                .collect();
             // Line numbers changed: a Say All stops following.
             self.say_all = None;
             // Node ids are the capture's own: the focus is found again as the same object (IA2
