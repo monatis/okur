@@ -31,6 +31,8 @@ fn key_from_name(name: &str) -> Option<Key> {
         "scrolllock" => Key::ScrollLock,
         "alt" => Key::Alt,
         "ctrl" | "control" => Key::Control,
+        // Pressed alone, as a key that does nothing while a step waits [1001/s9].
+        "shift" => Key::Shift,
         "semicolon" => Key::Semicolon,
         "apostrophe" => Key::Apostrophe,
         "comma" => Key::Comma,
@@ -129,6 +131,7 @@ mod tests {
         assert_eq!(parse_chord("Shift+H").map(|e| e.key), Ok(Key::Alpha('H')));
         assert_eq!(parse_chord("F7").map(|e| e.key), Ok(Key::F(7)));
         assert_eq!(parse_chord("2").map(|e| e.key), Ok(Key::Digit(2)));
+        assert_eq!(parse_chord("Shift").map(|e| e.key), Ok(Key::Shift));
         assert!(parse_chord("Hyper+X").is_err());
         assert!(parse_chord("Ctrl+").is_err());
     }

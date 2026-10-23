@@ -282,6 +282,17 @@ enum Commands {
         #[arg(long)]
         control: bool,
     },
+    /// Print the Okur cursor's lines for the window in front, as its experimental screen text
+    /// reads them (Windows): the text UI Automation places on it, with --recognize the words
+    /// Windows' OCR reads in it too. Research, never evidence
+    ScreenText {
+        /// Recognize the window's pixels too (Insert+Space, O, W)
+        #[arg(long)]
+        recognize: bool,
+        /// Print each line's pieces: their source and place
+        #[arg(long)]
+        pieces: bool,
+    },
     /// Print a speech log recorded with `run --speech-log`
     History {
         /// Path of the speech log file
@@ -653,6 +664,37 @@ async fn main() {
             {
                 let _ = control;
                 eprintln!("window-text is only available on Windows");
+                std::process::exit(1);
+            }
+        }
+        Some(Commands::ScreenText { recognize, pieces }) => {
+            #[cfg(windows)]
+            match okur_platform::window_text::foreground_screen(recognize) {
+                Ok(model) => {
+                    for line in model.lines() {
+                        println!("{}", line.text);
+                        if pieces {
+                            let chars: Vec<char> = line.text.chars().collect();
+                            for piece in &line.pieces {
+                                let text: String =
+                                    chars.iter().skip(piece.start).take(piece.chars).collect();
+                                println!(
+                                    "    {:?} {},{} {},{}: {text}",
+                                    piece.source, piece.left, piece.top, piece.right, piece.bottom
+                                );
+                            }
+                        }
+                    }
+                }
+                Err(e) => {
+                    eprintln!("{e}");
+                    std::process::exit(1);
+                }
+            }
+            #[cfg(not(windows))]
+            {
+                let _ = (recognize, pieces);
+                eprintln!("screen-text is only available on Windows");
                 std::process::exit(1);
             }
         }

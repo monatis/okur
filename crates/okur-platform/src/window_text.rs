@@ -504,6 +504,33 @@ mod reader {
     }
 }
 
+/// The Okur cursor's model of the window in front, with the words recognized in it when
+/// `recognize`: `okur-lab screen-text`, to see what the experimental screen text reads.
+#[cfg(windows)]
+pub fn foreground_screen(
+    recognize: bool,
+) -> Result<okur_core::screen_model::ScreenModel, crate::PlatformError> {
+    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+    // SAFETY: COM for this thread's UIA client.
+    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+    let uia = crate::uia_snapshot::capture::automation()?;
+    // SAFETY: plain Win32 call with no preconditions.
+    let accessible = window_runs(&uia, unsafe { GetForegroundWindow() }).ok_or_else(|| {
+        crate::PlatformError::EventListenerError("the window could not be read".to_owned())
+    })?;
+    let recognized = if recognize {
+        crate::ocr::recognize(okur_core::actions::RecognitionArea::Window)?
+    } else {
+        Vec::new()
+    };
+    Ok(okur_core::screen_model::ScreenModel {
+        window: None,
+        accessible,
+        recognized,
+    })
+}
+
 /// The Virtual Viewer's lines for the window in front, or with `control`, its focused
 /// control: `okur-lab window-text`, to compare with JAWS's viewer.
 #[cfg(windows)]
