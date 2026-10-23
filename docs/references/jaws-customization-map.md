@@ -216,8 +216,8 @@ with no way to change it), **Missing** (neither). §4.13 and §4.14 list setting
 |---|---|---|---|---|---|---|
 | 41 | Typing Echo; Insert+2 cycles it | Off, **Characters**, Words, Characters and Words | all, per application; the key for the session | [R] §2 | Partial | All four in the engine and on Insert+2 (`settings.rs:126-187`, `engine.rs:1188-1199`); the dialog and `--typing-echo` offer two (`ui/settings.rs:40-44`, `run.rs:68-77`); replay understands only "0" (`settings.rs:144-153`) |
 | 42 | Manage Key Labels: each key's spoken label and Speak, Mute or Always Speak (Alt+T); Tab muted since 2019; muting Letters silences letters in Characters echo only | | | [F7], [S-space]; [R] §3 | Missing | |
-| 43 | Typing Interrupt (`DEFAULT.JCF` `[Options]` `TypingInterrupt`, shipped 1: "pressing a key that is not bound to macro will interrupt speech") | **on** | | [R] §3; the shipped `DEFAULT.JCF` (old-pc, 2026-10-23) | Missing; recorded on and off by 914, 915 (round 264) | |
-| 43a | Reading Interrupt (`[Options]` `ReadingInterrupt`, shipped 1: "pressing a key that is bound to a macro will interrupt speech") | **on** | | the shipped `DEFAULT.JCF` (old-pc, 2026-10-23) | Missing; recorded on and off by 916, 917 (round 264) | |
+| 43 | Typing Interrupt (`DEFAULT.JCF` `[Options]` `TypingInterrupt`, shipped 1: "pressing a key that is not bound to macro will interrupt speech") | **on** | | [R] §3; the shipped `DEFAULT.JCF` (old-pc, 2026-10-23) | Missing; round 264 (914 on, 915 off: X typed during a Say All in Chrome's text area) inconclusive, both settings reading on in some trials and stopping in others; no trial settled, nothing imported | |
+| 43a | Reading Interrupt (`[Options]` `ReadingInterrupt`, shipped 1: "pressing a key that is bound to a macro will interrupt speech") | **on** | | the shipped `DEFAULT.JCF` (old-pc, 2026-10-23) | Missing. Recorded (round 264): on, Insert+T during a page's Say All stops it (916, imported); off, Insert+T's answer is said in the middle of the reading ("Title is ... heading is City Library Expands Evening Hours") and the Say All reads on to the page's end (917, every trial; not imported, its Say All never settled) | |
 | 44 | Key Repeat (`[Options]` `KeyRepeat`, shipped 1, where the help gives it cleared) | **off** in the help, 1 in the shipped file | | [R] §3; the shipped `DEFAULT.JCF` | Missing | |
 | 45 | Insert Key Mode (Insert as a sticky key) | **off** | | [F3]; [R] §3 | Missing | |
 | 46 | Keyboard Layout | **Desktop**, Laptop (the Startup Wizard also lists Kinesis) | all | [S-wizard]; [R] §1 | Built | `keyboard.layout`: Desktop, Laptop (`settings.rs:12-22`) |
@@ -282,7 +282,7 @@ with no way to change it), **Missing** (neither). §4.13 and §4.14 list setting
 
 | # | JAWS | Values, default | Scope | Source | Okur | Okur today |
 |---|---|---|---|---|---|---|
-| 85 | Screen Echo (Insert+S cycles it for the moment; `[Options]` `ScreenEcho`: 0 off, 1 highlighted, 2 all, shipped 1) | echo no text, **echo highlighted text**, echo all text | all, per application | [R] §8.6; the shipped `DEFAULT.JCF` | Missing; Insert+S recorded by 913 (round 264) | |
+| 85 | Screen Echo (Insert+S cycles it for the moment; `[Options]` `ScreenEcho`: 0 off, 1 highlighted, 2 all, shipped 1) | echo no text, **echo highlighted text**, echo all text | all, per application | [R] §8.6; the shipped `DEFAULT.JCF` | Missing; Insert+S says "All", "None", "Highlighted" from the default (913/s1-s3) | |
 | 86 | Mouse Echo: enable (**off**); interrupt; instant; delay; unit (character, word, **line**, paragraph); speak the item's description; speak its control type and state. Insert+Space, E, then O toggles it and C, W, L, P choose the unit | off | all, per application | [KS], [F1], [S-mouse], [LN-mouse], [SAOMAI] (JAWS 18 defaults) | Missing | |
 | 87 | Show Virtual Viewer on Screen | **on** | | [`jaws-dialogs-and-visual-features.md`](jaws-dialogs-and-visual-features.md) | Built | `viewer_display`, in the dialog (`settings.rs:189-198`) |
 | 88 | Screen Shade (Insert+Space, F11; Quick Settings) | | | [KS], [F8] | Missing | |
@@ -308,7 +308,7 @@ with no way to change it), **Missing** (neither). §4.13 and §4.14 list setting
 | 102 | Lines per page (PageUp and PageDown) | **24** | | [W3C-lines]; [R] §8.6 | Partial | Constant 24 (`cursor.rs:6-8`) |
 | 103 | Maximum line length (applies to Screen Layout) | 150, per Okur's code comment (`[HTML] MaxLineLength`) | | [R] §8.6 | Partial | Constant 150 (`linearize.rs:72-74`) |
 | 104 | Document Presentation Mode (Select Layout) | **Simple Layout**, Screen Layout | all, per browser | [SU8] | Partial | Simple layout only |
-| 105 | Smart Navigation (Insert+X for the moment) | **off**, controls, controls and tables, tables (2023) | all, per application | [F3], [KS], [S-wizard]; [R] §4 | Missing | |
+| 105 | Smart Navigation (Insert+X for the moment) | **off**, controls, controls and tables, tables (2023) | all, per application | [F3], [KS], [S-wizard]; [R] §4 | Missing; Insert+X alternates "Smart Navigation: Controls and Tables" and "Smart Navigation: Off" (913/s5-s8) | |
 | 106 | Navigation Quick Key Delay (forms mode after pausing on a field) | **Never**, 1 to 5 s | per site | [SU9] | Missing | |
 | 106a | Virtual cursor on or off remembered per browser tab | **on** (since 2020) | all, per browser | [SE-2020], [S-vpc] | Missing | Insert+Z holds for the session, across tabs (`engine/toggles.rs:45-56`) |
 | 107 | Announce live region updates (in every application since 2022) | **on** | all, per application, per site | [F4], [SE-2022] | Missing | Always spoken, by politeness (`engine/page.rs:845-892`) |
