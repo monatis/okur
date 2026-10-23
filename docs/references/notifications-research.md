@@ -134,3 +134,29 @@ At nvaccess/nvda master (2026-10-21):
   owner's setting on old-pc: ask before turning it off, or find a toast that shows through it
   (an alarm or a reminder).
 - Read JAWS's 2025 help on the Notification History on old-pc.
+
+## Applications' own UI Automation notifications (2026-10-23)
+
+Scenario 820: a WinForms window (`desktop-uia-notifications.ps1`, .NET Framework 4.8 in
+`powershell.exe`) raises a notification through `AccessibleObject.RaiseAutomationNotification`
+as its button is pressed. JAWS says it ("Upload finished: report.pdf") and lists it in its
+Notification History under "powershell" (820/s1, s3). Okur's tracer heard nothing (rounds
+247-249), and neither did `okur-lab probe-notifications`, which registers for UI Automation
+notifications seven ways (the root's and the window's subtree, control and raw views; the
+focused element, with and without its ancestors; and as a generic automation event): every
+registration answered Ok, and no notification came. The same probe hears Calculator's.
+
+Two hypotheses were ruled out on old-pc, with the fixture's copy raising its notification by
+itself 8 s after its window shows (`sr-harness\experiments\exp2`, experiments 8 and 9):
+- **UI Access:** the probe signed with the development certificate, `uiAccess="true"`, installed
+  by the owner in `C:\Program Files\Okur Lab` and started through the shell (as JAWS runs, with
+  UI Access) heard nothing either.
+- **Registering before the window existed:** started 3 s after the window showed and its button
+  took the focus, both probes heard nothing.
+
+Neither probe saw any WinEvent of the window's process at the notification's time (only its
+window's creation, state and name changes as it showed). How JAWS hears it is open: JAWS's own
+code runs inside applications' processes, which an Okur client does not. Next: whether
+`RaiseAutomationNotification` returns true in that process (the fixture discards the result),
+and whether a notification raised by a UIA provider of the window itself (`notify-host.ps1`,
+experiment 4) reaches JAWS. Until then 820's speech is a known gap, not an accepted divergence.

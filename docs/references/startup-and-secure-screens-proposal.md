@@ -11,6 +11,15 @@ the owner: `sr-harnesssigninginstall-okur.ps1`, elevated, checks each program's 
 signer and runs `okur-setup.exe install --no-start --no-start-after-sign-in`. M3's checks
 below follow it.
 
+**2026-10-23, after the owner's install:** `C:Program FilesOkur` holds `okur-setup.exe`,
+`okur-sr.exe` and `okur-ui.exe`, each Valid (`Get-AuthenticodeSignature`); the AT key
+`okur_okur_v1` exists. `okur-sr.exe --doctor-exit`, started through the shell, reported (excerpt,
+pasted): `integrity High (0x3000)`, `TokenUIAccess 1`, `elevated no (limited token)`, `reads
+elevated windows yes`, `in Program Files yes`, `signature valid`, `manifest level=asInvoker
+uiAccess=true`; both `Configuration` lists hold JAWS's names only ("Okur not listed"). E1 with
+the certificate: the UI Access program starts and has UI Access. Still to check: `okur-ui`'s
+lowered token, an elevated Notepad read by the installed Okur, sign-out, and uninstall.
+
 ## Status
 
 As of 2026-10-20, branch `worktree-agent-a941eac1fa29ee91b`, rebased on `main` at `c719d58`.
