@@ -45,7 +45,7 @@ impl Restriction {
         }
     }
 
-    fn message(self) -> String {
+    fn message(self) -> crate::messages::StaticMessage {
         match self {
             Restriction::Application => msg::cursor_restriction_application(),
             Restriction::Real => msg::cursor_restriction_real(),
@@ -54,7 +54,6 @@ impl Restriction {
             Restriction::Frame => msg::cursor_restriction_frame(),
             Restriction::Unrestricted => msg::cursor_unrestricted(),
         }
-        .to_string()
     }
 }
 
@@ -177,7 +176,7 @@ impl ScreenReaderEngine {
     /// window's [obs, 757/s3, s7, s11].
     pub(super) fn restrict_okur_cursor(&mut self) -> Option<String> {
         self.okur_restriction = self.okur_restriction.next();
-        let said = self.okur_restriction.message();
+        let said = self.said_short(self.okur_restriction.message());
         self.say(said)
     }
 
@@ -646,7 +645,7 @@ impl ScreenReaderEngine {
 
     /// Alt+Delete: the active cursor and where it is, "PC Cursor active | 1045, 544"; the JAWS
     /// cursor adds its restriction, "Application window restriction" [obs, 513/s2, 516/s2,
-    /// s8]. JAWS counts the screen's pixels from 1: the mouse at 835, 435 is "836, 436" [obs,
+    /// s8], with short messages "Application" [obs, 932/s2, 933/s2]. JAWS counts the screen's pixels from 1: the mouse at 835, 435 is "836, 436" [obs,
     /// 516/s2 and its trace].
     pub(super) fn say_active_cursor(&mut self) -> Option<String> {
         let (name, at) = match self.active_cursor {
@@ -658,7 +657,7 @@ impl ScreenReaderEngine {
             msg::cursor_position((x + 1).to_string(), (y + 1).to_string()).to_string()
         }));
         if self.active_cursor == ActiveCursor::Okur {
-            said.push(self.okur_restriction.message());
+            said.push(self.said_short(self.okur_restriction.message()));
         }
         for (i, line) in said.iter().enumerate() {
             self.speech.speak(line, i == 0);

@@ -7,7 +7,8 @@ use super::{AppMode, ScreenReaderEngine};
 use crate::messages::msg;
 
 impl ScreenReaderEngine {
-    /// Insert+E: with no dialog box in front, "Not in a dialog box" [obs, 513/s1, s7]. In one,
+    /// Insert+E: with no dialog box in front, "Not in a dialog box" [obs, 513/s1, s7], with
+    /// short messages "Not in a dialog" [obs, 930/s1, s7]. In one,
     /// its default button, which is the focused button when a button has the focus: "default
     /// button is No", "default button is Cancel" after Tab [obs, 537/s3, s6]; else the one the
     /// dialog names, "default button is Find Next" [obs, 540/s2].
@@ -17,7 +18,7 @@ impl ScreenReaderEngine {
             .as_ref()
             .filter(|f| self.app_mode != AppMode::VirtualBuffer && f.in_dialog_box);
         let Some(focus) = focus else {
-            return self.say(msg::not_in_dialog_box().to_string());
+            return self.say(self.said_short(msg::not_in_dialog_box()));
         };
         let name = if focus.role == crate::aom::Role::Button {
             focus.name.clone().unwrap_or_default()
@@ -99,17 +100,24 @@ impl ScreenReaderEngine {
 
     /// Insert+Q: "Default settings are loaded" when the application has no settings of its
     /// own, then its executable, said and spelled: "The application currently being used is
-    /// powershell.exe", "p o w e r s h e l l . e x e" [obs, 513/s5]. What JAWS says for an
+    /// powershell.exe", "p o w e r s h e l l . e x e" [obs, 513/s5]; with short messages
+    /// "Default settings.", "powershell.exe," [obs, 930/s5, 931/s5]. What JAWS says for an
     /// application with settings of its own is not recorded yet; Okur names the application
     /// alone then.
     pub(super) fn say_configuration(&mut self) -> Option<String> {
         let app = self.last_native_focus.as_ref()?.app.clone()?;
         let id = crate::settings_layers::application_id(&app);
         let mut said = Vec::new();
+        let short =
+            self.settings.verbosity.message_length() == crate::settings::MessageLength::Short;
         if !self.settings_layers.applications.contains_key(&id) {
-            said.push(msg::default_settings_loaded().to_string());
+            said.push(self.said_short(msg::default_settings_loaded()));
         }
-        said.push(msg::application_in_use(app.as_str()).to_string());
+        said.push(if short {
+            msg::application_in_use_short(app.as_str()).to_string()
+        } else {
+            msg::application_in_use(app.as_str()).to_string()
+        });
         for (i, text) in said.iter().enumerate() {
             self.speech.speak(text, i == 0);
         }

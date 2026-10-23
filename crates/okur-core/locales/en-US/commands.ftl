@@ -215,10 +215,14 @@ notification-rules-no = &No
 
 # Insert+E with no dialog box in front.
 not-in-dialog-box = Not in a dialog box
+not-in-dialog-box-short = Not in a dialog
 # Insert+Q when the application has no settings of its own.
 default-settings-loaded = Default settings are loaded
+default-settings-loaded-short = Default settings.
 # Insert+Q: the application's executable, then spelled.
 application-in-use = The application currently being used is { $app }
+# The same with short messages [obs, 930/s5].
+application-in-use-short = { $app },
 # Ctrl+Insert+V: the application's product name and version [obs, 513/s4].
 app-version = { $product } Version { $version }
 

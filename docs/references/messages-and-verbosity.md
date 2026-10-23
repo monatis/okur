@@ -118,7 +118,10 @@ Shortcut parts of a native focus says what the focus says without those keys.
   this page." of the family has its `-short`, reached through `StaticMessage::short`),
   Insert+F5's "no form fields" (Insert+F7's and Insert+Ctrl+R's keep their long forms), a
   table's edge left out at Advanced ("end of row"), and, at Advanced, a toolbar entered said as
-  a group name and left out with it. In an
+  a group name and left out with it. Round 267 (918-953, the desktop's dialogs and cursors
+  and more web keys at both levels) added Insert+E's "Not in a dialog", Insert+Q's "Default
+  settings." and "powershell.exe,", the Okur cursor's "Application" for "Application window
+  restriction", and "Virtual Find" left out before Okur Find (926, 930-933). In an
   announcement a part carries its short form (`Part::short`, `Line::short`), and the engine's
   verbosity filter says it ([`Announcement::shorten`]); text built outside announcements
   (the virtual cursor's table keys) asks `message_length` itself. A message without a recorded
@@ -131,7 +134,7 @@ Output types are Okur's ids (`OutputType`), each mapped to JAWS's `DEFAULT.JCF`
 |---|---|---|---|
 | `access_key` | `ACCESS_KEY` (`0\|0\|0\|Access Key`) | AccessKey, Shortcut | off on old-pc (shipped `1\|1\|1`) |
 | `hint` | not known yet | Hint | on |
-| `list_position` | `ANNOUNCE_POSITION_AND_COUNT` (shipped `1\|2\|0`) | ListPosition | off at Advanced: a list's item, a combo box's open list (548-549, 590) |
+| `list_position` | `ANNOUNCE_POSITION_AND_COUNT` (shipped `1\|2\|0`) | ListPosition | off at Advanced: a list's item, a combo box's open list, an edit combo's item as the arrows move it (548-549, 590, 935) |
 | `description` | not known yet | Description | off at Advanced (552-553) |
 | `control_group_name` | `CONTROL_GROUP_NAME` (shipped `1\|2\|0`) | GroupName | off at Advanced: a dialog control's group box (585) |
 | `select` | `SELECT` (shipped `1\|2\|0`) | (strings, `editing::Wording`) | off at Advanced: "selected" and "unselected" as a selection changes (608, 609) |

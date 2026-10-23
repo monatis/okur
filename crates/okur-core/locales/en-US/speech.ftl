@@ -38,6 +38,7 @@ cursor-okur-active = Okur Cursor active
 cursor-pc-active = PC Cursor active
 cursor-position = { $x }, { $y }
 cursor-restriction-application = Application window restriction
+cursor-restriction-application-short = Application
 # Insert+R in turn [obs, 757/s3, s7, s11].
 cursor-restriction-real = Real window restriction
 cursor-restriction-current = Current window restriction

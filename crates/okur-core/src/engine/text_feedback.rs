@@ -188,8 +188,14 @@ impl ScreenReaderEngine {
             crate::editing::Wording::of(&self.settings.verbosity),
         )?;
         // An edit combo's line is the item its list selected: said with its position
-        // ("Constantia | 39 of 187" [obs, 541/s3]).
-        if key == crate::editing::EditKey::Line {
+        // ("Constantia | 39 of 187" [obs, 541/s3]), a list's, which Advanced verbosity leaves
+        // out ("Constantia" [obs, 935/s3, s4]).
+        if key == crate::editing::EditKey::Line
+            && self
+                .settings
+                .verbosity
+                .is_on(crate::settings::OutputType::ListPosition)
+        {
             let count = self
                 .last_native_focus
                 .as_ref()

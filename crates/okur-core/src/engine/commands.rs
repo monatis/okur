@@ -537,8 +537,13 @@ impl ScreenReaderEngine {
             }),
 
             // In-buffer find commands
+            // "Virtual Find" first in a page, with long messages only [obs, 506/s1; 926/s1,
+            // 927/s1].
             Command::VirtualFind => {
-                if self.app_mode == AppMode::VirtualBuffer {
+                if self.app_mode == AppMode::VirtualBuffer
+                    && self.settings.verbosity.message_length()
+                        == crate::settings::MessageLength::Long
+                {
                     self.speech.speak(msg::virtual_find().as_str(), true);
                 }
                 return self.open_find();
