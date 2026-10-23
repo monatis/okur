@@ -1,0 +1,20 @@
+{
+  "id": "913-web-screen-echo-and-smart-navigation-toggles",
+  "name": "Insert+S (Screen Echo: JAWS's SetScreenEcho, highlighted, all, none) three times and Insert+X (Smart Navigation) four times in a page, each a whole round so that JAWS ends as it began, with Down after each round: what each press says (the reading settings research, item 8.6, open)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+S" },
+    { "id": "s2", "type": "key", "command": "Insert+S" },
+    { "id": "s3", "type": "key", "command": "Insert+S" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Insert+X" },
+    { "id": "s6", "type": "key", "command": "Insert+X" },
+    { "id": "s7", "type": "key", "command": "Insert+X" },
+    { "id": "s8", "type": "key", "command": "Insert+X" },
+    { "id": "s9", "type": "key", "command": "Down" }
+  ]
+}
