@@ -156,3 +156,7 @@ text-analysis-unopened = Unopened { $symbol } at column { $column }
 text-analysis-stray-punctuation = Stray punctuation { $symbol } at column { $column }
 text-analysis-unspaced-punctuation = Unspaced punctuation { $symbol } at column { $column }
 text-analysis-unclosed = Unclosed { $symbol } at column { $column }
+
+# With indentation said (Say Indented Characters): a line at the margin, read as a line or as
+# a Say All starts [obs, 729/s1, s10].
+indentation-left-margin = Left Margin

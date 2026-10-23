@@ -773,6 +773,10 @@ pub struct Settings {
     /// Reading; `[HTML] SayAllOnDocumentLoad`), on in JAWS 2025. Off, the title and the
     /// summary are said and the cursor waits at the top [obs, 712, 713].
     pub read_page_on_load: bool,
+    /// Indentation is said: JAWS's Say Indented Characters (`[Options] Indentation`, 0 by
+    /// default). A line at the margin is said with "Left Margin" when it is read as a line and
+    /// as a Say All starts [obs, 729/s1, s7, s8, s10].
+    pub indentation: bool,
     /// Insert+F4 asks before Okur exits, as JAWS's "Prompt to Confirm When Exiting JAWS"
     /// (Options > Basics), checked by default: "When cleared, JAWS immediately closes when you
     /// use any of the commands to exit the program including INSERT+F4" (JAWS 2025 help).
@@ -797,6 +801,7 @@ impl Default for Settings {
             show_graphics: true,
             heading_indication: HeadingIndication::Level,
             read_page_on_load: true,
+            indentation: false,
             confirm_exit: true,
             mouse_echo: MouseEcho::default(),
         }
@@ -863,6 +868,7 @@ impl Settings {
             show_graphics: true,
             heading_indication: HeadingIndication::Level,
             read_page_on_load: true,
+            indentation: false,
             confirm_exit: true,
             // Not in old-pc's user JCF: the shared one's, JAWS's defaults.
             mouse_echo: MouseEcho::default(),

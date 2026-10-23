@@ -683,6 +683,27 @@ impl ScreenReaderEngine {
                 }
                 break;
             };
+            // The first piece of a page's reading starts at the margin's mark when indentation
+            // is said [obs, 729/s10].
+            let first = reading.queued.is_empty() && reading.next_line == reading.start_line;
+            let start = match &reading.source {
+                Source::PageLines => self
+                    .cursor
+                    .buffer
+                    .lines
+                    .get(reading.next_line)
+                    .map(|l| l.start_offset),
+                Source::PageUnits(units) => units.get(reading.next_line).map(|&(at, _)| at),
+                Source::PageSkim(read) => read
+                    .get(reading.next_line)
+                    .and_then(|&i| self.cursor.buffer.lines.get(i))
+                    .map(|l| l.start_offset),
+                Source::Field(_) => None,
+            };
+            let text = match start.filter(|_| first) {
+                Some(at) => self.with_margin_mark(at, text),
+                None => text,
+            };
             let mark = self.next_mark;
             self.next_mark += 1;
             self.speech

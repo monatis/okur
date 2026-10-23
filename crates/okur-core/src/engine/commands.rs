@@ -523,7 +523,7 @@ impl ScreenReaderEngine {
             {
                 Some(msg::blank().to_string())
             }
-            Command::SayLine => Some(self.line_here()),
+            Command::SayLine => Some(self.at_margin(self.line_here())),
             Command::SayWord => Some(self.cursor.current_word()),
             Command::SayCharacter | Command::SayCharacterPhonetic => Some(self.character_here()),
             // Its value in decimal, said digit by digit [obs, 401/s3: "Character 7 4" for J;
@@ -861,6 +861,34 @@ impl ScreenReaderEngine {
     /// collapsed Northside" [obs, 507/s7, 248/s4, 249/s4]; Down onto it reads the line alone
     /// [obs, 201/s5, s17]. A radio button is said with its position [obs, 246/s4]; JAWS leaves
     /// it out right after its mouse click checked one, an accepted divergence (534/s10).
+    /// `line`, the virtual cursor's line read whole, with "Left Margin" before it when
+    /// indentation is said and the line starts at the margin [obs, 729/s1, s7, s8].
+    pub(super) fn at_margin(&self, line: String) -> String {
+        let offset = self.cursor.offset;
+        self.with_margin_mark(offset, line)
+    }
+
+    /// `text`, read from the virtual cursor's line at `offset`, with "Left Margin" before
+    /// it when indentation is said and that line starts at the margin.
+    pub(super) fn with_margin_mark(&self, offset: usize, text: String) -> String {
+        let at_margin = self.settings.indentation
+            && self.app_mode == AppMode::VirtualBuffer
+            && !self.forms_mode
+            && self
+                .cursor
+                .buffer
+                .line_at_offset(offset)
+                .is_some_and(|l| l.text.starts_with(|c: char| !c.is_whitespace()));
+        if at_margin {
+            format!(
+                "{}{text}",
+                crate::linearize::state_marker(msg::indentation_left_margin().as_str())
+            )
+        } else {
+            text
+        }
+    }
+
     pub(super) fn line_here(&self) -> String {
         use crate::announcement::PartKind;
         // A focused tab adds its place among its list's tabs: "Advanced Tab 2 of 2" [obs,

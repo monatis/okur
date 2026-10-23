@@ -7039,3 +7039,32 @@ fn a_tables_edge_is_said_but_at_advanced() {
         );
     }
 }
+
+/// With indentation said, Say Line puts "Left Margin" before a page line at the margin, and a
+/// Say All its first line; off (JAWS's default), neither [obs, 729/s1, s10].
+#[test]
+fn indentation_says_left_margin_before_a_line_at_the_margin() {
+    for indentation in [true, false] {
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(create_test_buffer()),
+            Box::new(MockSpeechOutput::default()),
+        );
+        let mut settings = engine.settings.clone();
+        settings.indentation = indentation;
+        engine.set_settings(settings);
+        engine.app_mode = AppMode::VirtualBuffer;
+        let _ = engine
+            .cursor
+            .find_text("This is interactive paragraph.", true);
+        let said = engine.execute_command("SayLine").unwrap_or_default();
+        let read = engine.start_say_all().unwrap_or_default();
+        let first = read.lines().next().unwrap_or_default().to_owned();
+        if indentation {
+            assert!(said.contains("Left Margin"), "{said:?}");
+            assert!(first.contains("Left Margin"), "{first:?}");
+            assert_eq!(read.matches("Left Margin").count(), 1, "{read:?}");
+        } else {
+            assert!(!said.contains("Left Margin") && !read.contains("Left Margin"));
+        }
+    }
+}

@@ -406,6 +406,10 @@ pub static SETTINGS: &[SettingSpec] = &[
         ..spec("show_graphics", Group::Reading, None, CHECK)
     },
     SettingSpec {
+        jaws: default_jcf("Options", "Indentation", |v| Value::Bool(v.trim() != "0")),
+        ..spec("indentation", Group::Reading, None, CHECK)
+    },
+    SettingSpec {
         jaws: default_jcf("HTML", "HeadingIndication", |v| {
             json(HeadingIndication::from_jcf(v))
         }),
