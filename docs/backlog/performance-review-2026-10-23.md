@@ -29,18 +29,25 @@ traces), so such changes get tests where a test can hold them and a live run on 
 | C2 (reading choices): with a reading choice not the default, every refresh was copied and built again under the engine | done: the host marks the page before building it off the engine; labels and Flexible Web rules still rebuild, only on sites that have them | `ccf6737e` |
 | C21: typed field text kept by capture numbers, never dropped | done: carried to the new capture's numbers by object or DOM id | `ccf6737e` |
 | C19, C24 | not changed: the copy is of offsets already gathered; the mute happens only on a quiet return from Okur's dialogs | |
-| P7: UIA's focus asked for a third time per change event | done: the subtree read from the element already fetched | this batch |
-| P10: the MSAA object read twice for live state and selection changes | done: the first read kept | this batch |
-| P3 (counts): a UIA text read sent the text from the document's start four more times | done: only the caret counted from the start; the selection's end and the word from the caret, over their own texts | this batch |
-| T19: two copies of every spoken event string, logged or not | done: made only for the log or the console | this batch |
-| T12: a stop waited for every part of a long text to be handed over | done: the parts stop at the next one | this batch |
-| T20: Speech History entries of any length | done: 32 KB each | this batch |
-| T15: the Virtual Viewer counted every line before the mark on each redraw | done: the lines' starts made once per text | this batch |
-| T16: Okur's lists refilled with drawing on | done: drawn once after | this batch |
-| T6: mouse moves put off the idle work | done: only other events do | this batch |
-| T9: stopping waited on stuck threads | done: 2 s, then left | this batch |
+| P7: UIA's focus asked for a third time per change event | done: the subtree read from the element already fetched | `609b381f` |
+| P10: the MSAA object read twice for live state and selection changes | done: the first read kept | `609b381f` |
+| P3 (counts): a UIA text read sent the text from the document's start four more times | done: only the caret counted from the start; the selection's end and the word from the caret, over their own texts | `609b381f` |
+| T19: two copies of every spoken event string, logged or not | done: made only for the log or the console | `609b381f` |
+| T12: a stop waited for every part of a long text to be handed over | done: the parts stop at the next one | `609b381f` |
+| T20: Speech History entries of any length | done: 32 KB each | `609b381f` |
+| T15: the Virtual Viewer counted every line before the mark on each redraw | done: the lines' starts made once per text | `609b381f` |
+| T16: Okur's lists refilled with drawing on | done: drawn once after | `609b381f` |
+| T6: mouse moves put off the idle work | done: only other events do | `609b381f` |
+| T9: stopping waited on stuck threads | done: 2 s, then left | `609b381f` |
 | P17, T11, T18 | not changed: in-process calls of microseconds; files written on the user's own changes; the speech log is the harness's | |
 | P4: a full read per typed character | open: dropping the read live turns the event into a value change the engine would say; needs a trace of typing to decide | |
+| C5: a state or value changed through the buffer dropped the page's indexes | done: `node_state_mut` changes states and values in place, the indexes kept | this batch |
+| C6: a page focus walked the whole page for a node's ancestors up to four times | done: through the buffer's slots where the page has one node of the id | this batch |
+| C8: a live region's spoken text copied per change | done: compared in place | this batch |
+| P12: the page's document searched for through the browser's whole window | done: Chromium's one page window shown is the document; the search stays for the rest | this batch |
+| P5 (client): a UIA client made for every page capture | done: one per capturing thread; moving the quick capture off the WinEvent thread is still open | this batch |
+| P6 | open: the actions worker's client keeps UIA's default timeouts; a 1 s one would cut reads of big windows | |
+| P9, P11, P20 | not changed: a plain field has one attribute run; UIA's process id comes from the window, not the application; the process name is a kernel query | |
 
 The rest are listed below in the order they are taken.
 

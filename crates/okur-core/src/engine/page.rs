@@ -308,7 +308,7 @@ impl ScreenReaderEngine {
             return Vec::new();
         };
         let mut ancestors = Vec::new();
-        if !ancestors_of(root, line.node_id, &mut ancestors) {
+        if !ancestors_in(buffer, root, line.node_id, &mut ancestors) {
             return Vec::new();
         }
         let is_region = |node: &AomNode| {
@@ -378,7 +378,7 @@ impl ScreenReaderEngine {
                 .root_id
                 .and_then(|r| self.cursor.buffer.node(r))
             {
-                ancestors_of(root, id, &mut path);
+                ancestors_in(&self.cursor.buffer, root, id, &mut path);
             }
             path
         };
@@ -436,7 +436,7 @@ impl ScreenReaderEngine {
             return String::new();
         };
         let mut ancestors = Vec::new();
-        ancestors_of(root, node_id, &mut ancestors);
+        ancestors_in(&self.cursor.buffer, root, node_id, &mut ancestors);
         ancestors
             .iter()
             .filter_map(|n| {
@@ -951,18 +951,20 @@ impl ScreenReaderEngine {
     fn live_stream_piece(&mut self, live: &LiveRegionEvent) -> (String, bool) {
         let key = live.region_id.clone().unwrap_or_default();
         let new_text = live.text.clone();
-        let (spoken_text, existed) = match self.live_streams.get(&key) {
-            Some(stream) => (
-                stream
-                    .text
-                    .get(..stream.spoken)
-                    .unwrap_or_default()
-                    .to_owned(),
-                true,
-            ),
-            None => (self.region_old_lines(live).join("\n"), false),
+        // What was spoken of it, compared in place: a copy of it per change made a reply
+        // streamed token by token cost the square of its length (performance review
+        // 2026-10-23, C8).
+        let (spoken_len, existed, goes_on) = match self.live_streams.get(&key) {
+            Some(stream) => {
+                let spoken = stream.text.get(..stream.spoken).unwrap_or_default();
+                (spoken.len(), true, new_text.starts_with(spoken))
+            }
+            None => {
+                let old = self.region_old_lines(live).join("\n");
+                (old.len(), false, new_text.starts_with(&old))
+            }
         };
-        if !new_text.starts_with(&spoken_text) {
+        if !goes_on {
             let added = self.live_region_additions(live);
             let spoken = new_text.len();
             self.live_streams.insert(
@@ -976,7 +978,7 @@ impl ScreenReaderEngine {
             return (added, false);
         }
         self.note_live_text(live);
-        let continues = existed && !spoken_text.is_empty();
+        let continues = existed && spoken_len > 0;
         // While the last piece is still being spoken, what arrives gathers, and is read as one
         // phrase once speech is free: a fast stream is read in phrases, not word by word.
         if continues && self.speech.is_speaking() {
@@ -987,10 +989,10 @@ impl ScreenReaderEngine {
             return (String::new(), true);
         }
         let appended_on_line = !new_text
-            .get(spoken_text.len()..)
+            .get(spoken_len..)
             .unwrap_or_default()
             .starts_with('\n');
-        let start = crate::live_text::word_start(&new_text, spoken_text.len());
+        let start = crate::live_text::word_start(&new_text, spoken_len);
         let end = if continues && appended_on_line {
             crate::live_text::complete_end(&new_text, start)
         } else {
@@ -1218,7 +1220,29 @@ impl ScreenReaderEngine {
             return false;
         };
         let mut path = Vec::new();
-        ancestors_of(root, id, &mut path) && path.iter().rev().take(8).any(|n| item(&n.role))
+        ancestors_in(&self.cursor.buffer, root, id, &mut path)
+            && path.iter().rev().take(8).any(|n| item(&n.role))
+    }
+}
+
+/// [`ancestors_of`] the page's root, from the buffer's index where the page has one node
+/// `id`: a page focus walked the whole page for it up to four times (performance review
+/// 2026-10-23, C6).
+fn ancestors_in<'a>(
+    buffer: &'a VirtualBuffer,
+    root: &'a AomNode,
+    id: usize,
+    out: &mut Vec<&'a AomNode>,
+) -> bool {
+    let indexed = buffer
+        .ancestors_of_only(id)
+        .filter(|chain| chain.first().is_some_and(|page| std::ptr::eq(*page, root)));
+    match indexed {
+        Some(chain) => {
+            out.extend(chain);
+            true
+        }
+        None => ancestors_of(root, id, out),
     }
 }
 
@@ -1238,6 +1262,51 @@ fn ancestors_of<'a>(node: &'a AomNode, id: usize, out: &mut Vec<&'a AomNode>) ->
 mod tests {
     use super::*;
     use crate::aom::AomNode;
+
+    /// The nodes around a node found through the buffer's index are those the walk finds,
+    /// for every node of a page with nested regions, a hidden node, an id the page repeats
+    /// and the page itself.
+    #[test]
+    fn ancestors_through_the_index_are_the_walks() {
+        let region = |id: usize, children: Vec<AomNode>| {
+            AomNode::new(
+                id,
+                Role::Landmark {
+                    landmark_type: "main".to_owned(),
+                },
+            )
+            .with_children(children)
+        };
+        let mut hidden = AomNode::new(9, Role::Paragraph).with_text("Hidden");
+        hidden.states.hidden = true;
+        let page = AomNode::new(0, Role::Document).with_children(vec![
+            region(
+                1,
+                vec![
+                    AomNode::new(2, Role::Heading { level: 1 }).with_text("Title"),
+                    region(3, vec![AomNode::new(4, Role::Paragraph).with_text("Deep")]),
+                    hidden,
+                ],
+            ),
+            AomNode::new(5, Role::Paragraph).with_text("First five"),
+            AomNode::new(5, Role::Paragraph).with_text("Second five"),
+            AomNode::new(6, Role::List)
+                .with_children(vec![AomNode::new(7, Role::ListItem).with_text("Item")]),
+        ]);
+        let buffer = VirtualBuffer::from_aom(&page);
+        let Some(root) = buffer.root_id.and_then(|r| buffer.node(r)) else {
+            return;
+        };
+        let ids = |nodes: &[&AomNode]| nodes.iter().map(|n| n.id).collect::<Vec<_>>();
+        for id in 0..12 {
+            let (mut walked, mut indexed) = (Vec::new(), Vec::new());
+            let found = ancestors_of(root, id, &mut walked);
+            assert_eq!(ancestors_in(&buffer, root, id, &mut indexed), found, "{id}");
+            assert_eq!(ids(&indexed), ids(&walked), "{id}");
+        }
+        assert!(buffer.ancestors_of_only(4).is_some());
+        assert!(buffer.ancestors_of_only(5).is_none());
+    }
 
     /// The roles [`same_roles`] lists are those [`same_role`] accepts.
     #[test]

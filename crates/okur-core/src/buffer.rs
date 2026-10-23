@@ -246,6 +246,8 @@ pub struct VirtualBuffer {
     slots: Vec<NodeSlot>,
     /// Each node id's slot (for an id the page repeats, its last node in document order).
     slot_of: HashMap<usize, usize>,
+    /// The ids the page gives more than one node.
+    repeated_ids: HashSet<usize>,
     /// The page nodes the buffer reads; hidden ones are not.
     readable: HashSet<usize>,
     /// Each IA2 uniqueID's page node (the smallest id, where a page repeats one), so a node
@@ -262,6 +264,13 @@ pub struct VirtualBuffer {
     /// dropped with [`PageIndex`]: that focus scanned every node under the engine's lock
     /// (performance review, 2026-10-20, P9).
     name_index: std::sync::OnceLock<HashMap<(Role, String), usize>>,
+}
+
+/// What [`VirtualBuffer::node_state_mut`] lets change of a page node.
+pub struct NodeState<'a> {
+    pub states: &'a mut crate::aom::NodeStates,
+    pub value: &'a mut Option<String>,
+    pub value_now: &'a mut Option<f64>,
 }
 
 /// Where each page node first shows in the buffer, as indexes into `spans`, the first in the
@@ -442,6 +451,7 @@ impl VirtualBuffer {
     pub(crate) fn set_page(&mut self, page: AomNode) {
         self.slots.clear();
         self.slot_of.clear();
+        self.repeated_ids.clear();
         self.root_id = Some(page.id);
         self.slots.push(NodeSlot {
             parent: None,
@@ -451,7 +461,9 @@ impl VirtualBuffer {
         // linearizer meets them.
         let mut stack = vec![(&page, 0_usize)];
         while let Some((node, slot)) = stack.pop() {
-            self.slot_of.insert(node.id, slot);
+            if self.slot_of.insert(node.id, slot).is_some() {
+                self.repeated_ids.insert(node.id);
+            }
             for (index, child) in node.children.iter().enumerate().rev() {
                 self.slots.push(NodeSlot {
                     parent: Some(slot),
@@ -650,6 +662,20 @@ impl VirtualBuffer {
 
     /// The page nodes around node `id`, nearest first: its parent, the parent's parent, up to
     /// the page.
+    /// The nodes around the page's one node `id`, outermost first, the page itself first;
+    /// `None` where the page has no node `id` or several, or `id` is the page's.
+    pub fn ancestors_of_only(&self, id: usize) -> Option<Vec<&AomNode>> {
+        if self.repeated_ids.contains(&id)
+            || self.root_id == Some(id)
+            || !self.slot_of.contains_key(&id)
+        {
+            return None;
+        }
+        let mut chain = self.ancestors(id);
+        chain.reverse();
+        Some(chain)
+    }
+
     pub fn ancestors(&self, id: usize) -> Vec<&AomNode> {
         let (Some(page), Some(path)) = (
             self.page.as_deref(),
@@ -696,6 +722,25 @@ impl VirtualBuffer {
             node = node.children.get_mut(index)?;
         }
         Some(node)
+    }
+
+    /// Page node `id`'s states and values, to change in place. No index holds them, so the
+    /// indexes are kept: a check box toggled through [`Self::node_mut`] had the next lookup
+    /// index the whole page again (performance review 2026-10-23, C5).
+    pub fn node_state_mut(&mut self, id: usize) -> Option<NodeState<'_>> {
+        if !self.readable.contains(&id) {
+            return None;
+        }
+        let path = self.path_to(*self.slot_of.get(&id)?)?;
+        let mut node = std::sync::Arc::make_mut(self.page.as_mut()?);
+        for index in path {
+            node = node.children.get_mut(index)?;
+        }
+        Some(NodeState {
+            states: &mut node.states,
+            value: &mut node.value,
+            value_now: &mut node.value_now,
+        })
     }
 
     /// Whether the buffer reads page node `id`.
@@ -1672,6 +1717,26 @@ mod tests {
                 "offset {offset}"
             );
         }
+    }
+
+    /// A node's state changed in place keeps the page's indexes; a node changed whole drops
+    /// them.
+    #[test]
+    fn a_nodes_state_changed_in_place_keeps_the_indexes() {
+        let mut buffer = VirtualBuffer::from_aom(&page());
+        assert!(buffer.start_of(3).is_some());
+        assert!(buffer.page_index.get().is_some());
+        if let Some(state) = buffer.node_state_mut(2) {
+            state.states.checked = Some(true);
+            *state.value = Some("on".to_owned());
+        }
+        assert!(buffer.page_index.get().is_some());
+        let changed = buffer.node(2);
+        assert_eq!(changed.and_then(|n| n.states.checked), Some(true));
+        assert_eq!(changed.and_then(|n| n.value.as_deref()), Some("on"));
+        assert!(buffer.node_state_mut(4).is_none());
+        let _ = buffer.node_mut(2);
+        assert!(buffer.page_index.get().is_none());
     }
 
     #[test]

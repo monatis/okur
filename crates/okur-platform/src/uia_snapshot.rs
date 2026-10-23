@@ -1494,6 +1494,85 @@ pub(crate) mod capture {
         Some(node)
     }
 
+    /// The page's `Document` element in `window`: a Chromium window's one page window shown
+    /// (`Chrome_RenderWidgetHostHWND`) is its document; otherwise the first document found
+    /// below the window. The search went through the browser's own controls first, on every
+    /// page capture (performance review 2026-10-23, P12).
+    fn page_document(
+        uia: &IUIAutomation,
+        window: windows::Win32::Foundation::HWND,
+    ) -> Option<IUIAutomationElement> {
+        use windows::core::BOOL;
+        use windows::Win32::Foundation::{HWND, LPARAM};
+        use windows::Win32::UI::WindowsAndMessaging::{EnumChildWindows, IsWindowVisible};
+        unsafe extern "system" fn collect(hwnd: HWND, pages: LPARAM) -> BOOL {
+            let mut class = [0u16; 32];
+            // SAFETY: a class name read into a valid buffer; LPARAM is the Vec passed below,
+            // alive for the call.
+            unsafe {
+                let length = GetClassNameW(hwnd, &mut class);
+                let page = class.get(..length as usize).is_some_and(|c| {
+                    "Chrome_RenderWidgetHostHWND"
+                        .encode_utf16()
+                        .eq(c.iter().copied())
+                });
+                if page && IsWindowVisible(hwnd).as_bool() {
+                    (*(pages.0 as *mut Vec<HWND>)).push(hwnd);
+                }
+            }
+            BOOL(1)
+        }
+        let mut pages: Vec<HWND> = Vec::new();
+        // SAFETY: the callback only pushes into the Vec, which outlives the call.
+        let _ = unsafe {
+            EnumChildWindows(
+                Some(window),
+                Some(collect),
+                LPARAM(std::ptr::from_mut(&mut pages) as isize),
+            )
+        };
+        if let [page] = pages.as_slice() {
+            // SAFETY: UIA client queries on a valid automation object and window.
+            let document = unsafe { uia.ElementFromHandle(*page) }.ok().filter(|e| {
+                unsafe { e.CurrentControlType() }.is_ok_and(|t| t == UIA_DocumentControlTypeId)
+            });
+            if document.is_some() {
+                return document;
+            }
+        }
+        // SAFETY: UIA client queries on a valid automation object.
+        unsafe {
+            let top = uia.ElementFromHandle(window).ok()?;
+            let is_document = uia
+                .CreatePropertyCondition(
+                    UIA_ControlTypePropertyId,
+                    &VARIANT::from(UIA_DocumentControlTypeId.0),
+                )
+                .ok()?;
+            top.FindFirst(TreeScope_Descendants, &is_document).ok()
+        }
+    }
+
+    thread_local! {
+        /// Each capturing thread's UIA client: one was made for every capture.
+        static CLIENT: std::cell::RefCell<Option<IUIAutomation>> =
+            const { std::cell::RefCell::new(None) };
+    }
+
+    /// This thread's UIA client for page captures, made on its first. Without
+    /// [`automation`]'s timeouts: capturing a big page's tree in one request takes seconds.
+    fn capture_client() -> Result<IUIAutomation, PlatformError> {
+        if let Some(uia) = CLIENT.with(|c| c.borrow().clone()) {
+            return Ok(uia);
+        }
+        // SAFETY: standard in-process COM activation.
+        let uia: IUIAutomation =
+            unsafe { CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER) }
+                .map_err(|e| err("create CUIAutomation8", e))?;
+        CLIENT.with(|c| *c.borrow_mut() = Some(uia.clone()));
+        Ok(uia)
+    }
+
     /// Captures the first `Document` element in the foreground window (e.g. a Chrome tab's
     /// web content) with its entire raw-view subtree, in a single cached request.
     pub fn capture_foreground_document(
@@ -1504,9 +1583,7 @@ pub(crate) mod capture {
         // SAFETY: standard COM initialization; S_FALSE/RPC_E_CHANGED_MODE are tolerated
         // because UIA client calls work from either apartment for this one-shot capture.
         let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-        let uia: IUIAutomation =
-            unsafe { CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER) }
-                .map_err(|e| err("create CUIAutomation8", e))?;
+        let uia = capture_client()?;
 
         // SAFETY: plain Win32 call with no preconditions.
         let hwnd = unsafe { GetForegroundWindow() };
@@ -1515,17 +1592,7 @@ pub(crate) mod capture {
         }
         let (window_title, window_class) = window_text(hwnd);
 
-        let window = unsafe { uia.ElementFromHandle(hwnd) }
-            .map_err(|e| err("ElementFromHandle(foreground)", e))?;
-        let is_document = unsafe {
-            uia.CreatePropertyCondition(
-                UIA_ControlTypePropertyId,
-                &VARIANT::from(UIA_DocumentControlTypeId.0),
-            )
-        }
-        .map_err(|e| err("CreatePropertyCondition", e))?;
-        let document = unsafe { window.FindFirst(TreeScope_Descendants, &is_document) }
-            .map_err(|_| PlatformError::NoDocumentFound)?;
+        let document = page_document(&uia, hwnd).ok_or(PlatformError::NoDocumentFound)?;
 
         let request = unsafe { uia.CreateCacheRequest() }.map_err(|e| err("cache", e))?;
         for &prop in PROPERTIES {
@@ -1581,14 +1648,7 @@ pub(crate) mod capture {
                 if hwnd.is_invalid() {
                     return None;
                 }
-                let window = uia.ElementFromHandle(hwnd).ok()?;
-                let is_document = uia
-                    .CreatePropertyCondition(
-                        UIA_ControlTypePropertyId,
-                        &VARIANT::from(UIA_DocumentControlTypeId.0),
-                    )
-                    .ok()?;
-                let document = window.FindFirst(TreeScope_Descendants, &is_document).ok()?;
+                let document = page_document(uia, hwnd)?;
                 let mut condition: Option<IUIAutomationCondition> = None;
                 for id in ids {
                     let this = uia

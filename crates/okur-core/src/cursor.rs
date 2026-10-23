@@ -2384,7 +2384,7 @@ impl VirtualCursor {
         match role {
             Role::CheckBox => {
                 let new_checked = !current_checked;
-                if let Some(node) = self.buffer.node_mut(node_id) {
+                if let Some(node) = self.buffer.node_state_mut(node_id) {
                     node.states.checked = Some(new_checked);
                 }
                 let doc_title = self
@@ -2408,7 +2408,7 @@ impl VirtualCursor {
                 Some(format!(" \u{001d}{}\u{001e}", msg::state_selected()))
             }
             Role::ComboBox => {
-                if let Some(node) = self.buffer.node_mut(node_id) {
+                if let Some(node) = self.buffer.node_state_mut(node_id) {
                     let is_exp = node.states.expanded.unwrap_or(false);
                     node.states.expanded = Some(!is_exp);
                     if !is_exp {
@@ -2428,9 +2428,8 @@ impl VirtualCursor {
     /// Expands the active combobox (`Alt+DownArrow`).
     pub fn expand_combobox(&mut self) -> Option<String> {
         let node_id = self.current_node()?.id;
-        let node = self.buffer.node_mut(node_id)?;
-        if node.role == Role::ComboBox {
-            node.states.expanded = Some(true);
+        if self.buffer.node(node_id)?.role == Role::ComboBox {
+            self.buffer.node_state_mut(node_id)?.states.expanded = Some(true);
             Some(msg::state_expanded().to_string())
         } else {
             None
@@ -2440,9 +2439,8 @@ impl VirtualCursor {
     /// Collapses the active combobox (`Escape` or `Alt+UpArrow`).
     pub fn collapse_combobox(&mut self) -> Option<String> {
         let node_id = self.current_node()?.id;
-        let node = self.buffer.node_mut(node_id)?;
-        if node.role == Role::ComboBox {
-            node.states.expanded = Some(false);
+        if self.buffer.node(node_id)?.role == Role::ComboBox {
+            self.buffer.node_state_mut(node_id)?.states.expanded = Some(false);
             Some(msg::state_collapsed().to_string())
         } else {
             None
@@ -2484,8 +2482,8 @@ impl VirtualCursor {
             .or_else(|| next_child.text.clone())
             .unwrap_or_default();
 
-        if let Some(mut_node) = self.buffer.node_mut(node_id) {
-            mut_node.value = Some(next_val.clone());
+        if let Some(mut_node) = self.buffer.node_state_mut(node_id) {
+            *mut_node.value = Some(next_val.clone());
         }
 
         Some(next_val)
@@ -2517,8 +2515,8 @@ impl VirtualCursor {
             .or_else(|| prior_child.text.clone())
             .unwrap_or_default();
 
-        if let Some(mut_node) = self.buffer.node_mut(node_id) {
-            mut_node.value = Some(prior_val.clone());
+        if let Some(mut_node) = self.buffer.node_state_mut(node_id) {
+            *mut_node.value = Some(prior_val.clone());
         }
 
         Some(prior_val)
@@ -2533,7 +2531,7 @@ impl VirtualCursor {
 
         match node.states.expanded {
             Some(false) => {
-                if let Some(mut_node) = self.buffer.node_mut(node.id) {
+                if let Some(mut_node) = self.buffer.node_state_mut(node.id) {
                     mut_node.states.expanded = Some(true);
                 }
                 Some(msg::state_expanded().to_string())
@@ -2570,7 +2568,7 @@ impl VirtualCursor {
         }
 
         if node.states.expanded == Some(true) {
-            if let Some(mut_node) = self.buffer.node_mut(node.id) {
+            if let Some(mut_node) = self.buffer.node_state_mut(node.id) {
                 mut_node.states.expanded = Some(false);
             }
             Some(msg::state_collapsed().to_string())
@@ -2606,8 +2604,8 @@ impl VirtualCursor {
         let current = node.value_now.unwrap_or(0.0);
         let new_val = (current + step).min(max);
 
-        if let Some(mut_node) = self.buffer.node_mut(node_id) {
-            mut_node.value_now = Some(new_val);
+        if let Some(mut_node) = self.buffer.node_state_mut(node_id) {
+            *mut_node.value_now = Some(new_val);
         }
 
         Some(format!("{:.0}", new_val))
@@ -2626,8 +2624,8 @@ impl VirtualCursor {
         let current = node.value_now.unwrap_or(0.0);
         let new_val = (current - step).max(min);
 
-        if let Some(mut_node) = self.buffer.node_mut(node_id) {
-            mut_node.value_now = Some(new_val);
+        if let Some(mut_node) = self.buffer.node_state_mut(node_id) {
+            *mut_node.value_now = Some(new_val);
         }
 
         Some(format!("{:.0}", new_val))
