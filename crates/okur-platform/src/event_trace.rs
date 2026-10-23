@@ -1023,6 +1023,29 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .as_deref()
             .or(event.window_class.as_deref()),
     );
+    // A classic RichEdit field is known by its MSAA name (a ribbon's "Font family", "Font
+    // size"), where UI Automation's proxy names every one "RichEdit Control"; the name tells
+    // two fields apart, though neither is said [obs, 970/s9, s10].
+    if focus.rich_edit && focus.role == okur_core::Role::Edit {
+        if let Some(name) = event
+            .object
+            .as_ref()
+            .filter(|o| o.role == Some(MSAA_TEXT))
+            .and_then(|o| o.name.clone())
+        {
+            focus.name = Some(name);
+        }
+        // Its value as MSAA gives it: the text read with the focus can still be the field
+        // before's, "Calibri" in the size field where JAWS says "16" [obs, 970/s9].
+        if !focus.multi_line {
+            if let Some(value) = event.object.as_ref().and_then(|o| o.value.clone()) {
+                if focus.text.as_ref().is_some_and(|t| t.text != value) {
+                    focus.text = None;
+                }
+                focus.value = Some(value);
+            }
+        }
+    }
     focus.spin_box = event.spin_box && focus.role == okur_core::Role::Edit;
     focus.menu_bar = event
         .menu_bar
@@ -2064,6 +2087,8 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     };
     let tab = role == Role::Tab;
     let mut focus = okur_core::FocusEvent::new(role).with_name(name.to_owned());
+    // Its value: a split button's "Paste (Ctrl+V)" [obs, 970/s4].
+    focus.value = object.value.clone().filter(|v| !v.trim().is_empty());
     if tab {
         focus.states.selected = Some(object.states & SELECTED != 0);
         // Its place among the tabs shown: "Home Tab selected 1 of 2" (JAWS's own places lag a
@@ -2078,8 +2103,26 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
             .position(|s| s.name.as_deref() == Some(name))
             .map(|i| i + 1);
         focus.item_count = focus.item_index.map(|_| shown.len());
+    } else if event.msaa_ancestors.last().and_then(|a| a.role) == Some(TOOLBAR) {
+        // A command in one of the ribbon's groups: its place among the group's commands shown,
+        // "Copy 3 of 3" (JAWS's lags a key behind, "1 of 3" [obs, 970/s5]).
+        let shown: Vec<&MsaaNode> = event
+            .msaa_siblings
+            .iter()
+            .filter(|s| s.states & MSAA_INVISIBLE == 0)
+            .collect();
+        focus.item_index = shown
+            .iter()
+            .position(|s| s.name.as_deref() == Some(name) && s.role == object.role)
+            .map(|i| i + 1);
+        focus.item_count = focus.item_index.map(|_| shown.len());
     }
     apply_msaa_states(&mut focus, object.states);
+    // Unavailable, as MSAA says: "Copy Button Unavailable" [obs, 970/s5].
+    if object.states & MSAA_UNAVAILABLE != 0 {
+        focus.states.disabled = true;
+    }
+    focus.groups = ribbon_groups(event);
     focus.app = event.process.clone();
     focus.app_product = event.process_product.clone();
     focus.app_version = event.process_version.clone();
@@ -2100,6 +2143,50 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
 
 /// MSAA's invisible state: a ribbon's hidden tab ("Print preview").
 const MSAA_INVISIBLE: u32 = 0x8000;
+/// MSAA's unavailable state.
+const MSAA_UNAVAILABLE: u32 = 0x1;
+/// MSAA's editable text role.
+const MSAA_TEXT: i32 = 0x2A;
+/// MSAA's tool bar role: a ribbon's group of commands.
+const TOOLBAR: i32 = 0x16;
+
+/// The ribbon's panes, as UI Automation names them (the window itself is not one of them).
+fn ribbon_panes(event: &TraceEvent) -> impl Iterator<Item = okur_core::GroupEntry> + '_ {
+    const PANE: i32 = 50033;
+    event
+        .focus_chain
+        .iter()
+        .skip(1)
+        .filter(|n| n.control_type == PANE)
+        .filter_map(|n| n.name.as_deref().map(str::trim).filter(|n| !n.is_empty()))
+        .map(okur_core::GroupEntry::group)
+}
+
+/// The groups a ribbon's control is in: the ribbon's panes, then its MSAA ancestors inside
+/// the ribbon's own page, each named one: the row of tabs, the lower ribbon, a tab's page with
+/// its value, a tool bar, a grouping with its description: "Lower Ribbon | Home | Ribbon tab |
+/// Clipboard Tool bar | Paste Click here for more options such as pasting only plain text."
+/// [obs, 970/s4]. Without its ancestors (older traces), none.
+fn ribbon_groups(event: &TraceEvent) -> Vec<okur_core::GroupEntry> {
+    use okur_core::GroupEntry;
+    const PAGETABLIST: i32 = 0x3C;
+    if event.msaa_ancestors.is_empty() {
+        return Vec::new();
+    }
+    let inner = event.msaa_ancestors.iter().skip(1).filter_map(|a| {
+        let name = a.name.as_deref().map(str::trim).filter(|n| !n.is_empty())?;
+        Some(match a.role {
+            Some(PAGETABLIST) => GroupEntry::tab_list(name),
+            Some(TOOLBAR) => GroupEntry::tool_bar(name),
+            _ => {
+                let value = a.value.as_deref().map(str::trim).filter(|v| *v != name);
+                let detail = a.description.as_deref().or(value).map(str::to_owned);
+                GroupEntry::group(name).with_detail(detail)
+            }
+        })
+    });
+    ribbon_panes(event).chain(inner).collect()
+}
 
 /// The tab a ribbon holds focused when the ribbon itself takes the focus (Alt, F10), from the
 /// ribbon's MSAA objects: "UIRibbonDockTop | Ribbon | Ribbon | Ribbon | Ribbon tabs Tab | Home
@@ -2110,7 +2197,6 @@ fn ribbon_tab(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     const PROPERTYPAGE: i32 = 0x26;
     const PAGETABLIST: i32 = 0x3C;
     const PAGETAB: i32 = 0x25;
-    const PANE: i32 = 50033;
     const FOCUSED: u32 = 0x4;
     const SELECTED: u32 = 0x2;
     fn tab_list(node: &MsaaNode) -> Option<&MsaaNode> {
@@ -2144,15 +2230,8 @@ fn ribbon_tab(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     focus.states.selected = Some(tab.states & SELECTED != 0);
     focus.item_index = Some(index + 1);
     focus.item_count = Some(shown.len());
-    // The ribbon's panes, as UI Automation names them (the window itself is not one of them),
-    // then its row of tabs.
-    focus.groups = event
-        .focus_chain
-        .iter()
-        .skip(1)
-        .filter(|n| n.control_type == PANE)
-        .filter_map(|n| n.name.as_deref().map(str::trim).filter(|n| !n.is_empty()))
-        .map(GroupEntry::group)
+    // The ribbon's panes, then its row of tabs.
+    focus.groups = ribbon_panes(event)
         .chain(list.name.clone().map(GroupEntry::tab_list))
         .collect();
     focus.app = event.process.clone();
@@ -5823,6 +5902,73 @@ mod tests {
             class_name: Some("#32770".to_owned()),
             ..node(control_type, name, false)
         }
+    }
+
+    /// A command in the lower ribbon names what it is in, from its MSAA ancestors: "Lower
+    /// Ribbon | Home | Ribbon tab | Clipboard Tool bar | Paste Click here for more options
+    /// such as pasting only plain text." [obs, 970/s4], and it is on the ribbon's menus.
+    #[test]
+    fn a_lower_ribbon_command_names_its_groups() {
+        let msaa = |role: i32, name: &str, value: &str, description: &str| MsaaNode {
+            role: Some(role),
+            name: (!name.is_empty()).then(|| name.to_owned()),
+            states: 0,
+            value: (!value.is_empty()).then(|| value.to_owned()),
+            description: (!description.is_empty()).then(|| description.to_owned()),
+            children: Vec::new(),
+        };
+        let event = TraceEvent {
+            window_class: Some("NetUIHWND".to_owned()),
+            object: Some(TraceObject {
+                role: Some(0x3E),
+                name: Some("Paste".to_owned()),
+                value: Some("Paste (Ctrl+V)".to_owned()),
+                states: 0x10_0004,
+                shortcut: None,
+            }),
+            focus_chain: vec![
+                node(UIA_WINDOW, "WordPad", false),
+                node(50033, "UIRibbonDockTop", false),
+            ],
+            msaa_ancestors: vec![
+                msaa(0x26, "Ribbon", "Ribbon", ""),
+                msaa(0x10, "Lower Ribbon", "Lower Ribbon", ""),
+                msaa(0x0A, "", "", ""),
+                msaa(0x26, "Home", "Ribbon tab", ""),
+                msaa(0x16, "Clipboard", "Group", ""),
+                msaa(
+                    0x14,
+                    "Paste",
+                    "",
+                    "Click here for more options such as pasting only plain text.",
+                ),
+            ],
+            ..focus_event(Vec::new())
+        };
+        let focus = netui_focus(&event);
+        assert!(focus.is_some());
+        let Some(focus) = focus else { return };
+        assert_eq!(focus.value.as_deref(), Some("Paste (Ctrl+V)"));
+        assert!(focus.ribbon_menu);
+        let groups: Vec<(&str, bool, Option<&str>)> = focus
+            .groups
+            .iter()
+            .map(|g| (g.name.as_str(), g.tool_bar, g.detail.as_deref()))
+            .collect();
+        assert_eq!(
+            groups,
+            [
+                ("UIRibbonDockTop", false, None),
+                ("Lower Ribbon", false, None),
+                ("Home", false, Some("Ribbon tab")),
+                ("Clipboard", true, None),
+                (
+                    "Paste",
+                    false,
+                    Some("Click here for more options such as pasting only plain text.")
+                ),
+            ]
+        );
     }
 
     /// Classic RichEdit windows, not Windows 11 Notepad's, which names itself, nor plain edits.

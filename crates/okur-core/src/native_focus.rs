@@ -272,7 +272,11 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
         Role::Edit => {
             // [hyp] An unlabelled edit takes the window title as its name (306/s5); not a list
             // view's edit renaming its item, " Edit | Okur start rule" [obs, 751/s18].
-            let name = if name.is_empty() && !focus.list_label_edit {
+            // A classic RichEdit outside a dialog box is nameless, as JAWS reads a ribbon's font
+            // field: " Edit | Calibri | Type in text." [obs, 970/s6].
+            let name = if focus.rich_edit && !focus.in_dialog_box {
+                String::new()
+            } else if name.is_empty() && !focus.list_label_edit {
                 named(focus.window_title.as_deref().unwrap_or_default())
             } else {
                 name
@@ -487,10 +491,18 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
         // the address bar's breadcrumb, "This PC split button | 1 of 6", the position it
         // reports. No hint.
         Role::SplitButton => {
+            // Its value, a ribbon's "Paste (Ctrl+V)" [obs, 970/s4].
+            let value = focus
+                .value
+                .as_deref()
+                .map(str::trim)
+                .filter(|v| !v.is_empty() && *v != name.trim())
+                .map(|v| Line::of(PartKind::Value, v));
             lines.push(Line::new(vec![
                 name_part(name),
                 role(msg::role_split_button().as_str()),
             ]));
+            lines.extend(value);
             lines.extend(position(focus));
         }
         Role::MenuButton => {
@@ -522,8 +534,17 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                     None => {}
                 }
             }
+            // Unavailable, and then no hint: a ribbon's "Copy Button Unavailable" [obs,
+            // 970/s5].
+            if focus.states.disabled {
+                if let Some(line) = lines.last_mut() {
+                    line.parts.push(state(msg::state_unavailable().as_str()));
+                }
+            }
             lines.extend(position(focus));
-            lines.push(Line::of(PartKind::Hint, msg::hint_activate_spacebar()));
+            if !focus.states.disabled {
+                lines.push(Line::of(PartKind::Hint, msg::hint_activate_spacebar()));
+            }
             lines.extend(access_key(focus, true));
         }
         // Windows Settings' Brightness (JAWS, dev box 2026-10-16): "Brightness left right
@@ -809,6 +830,11 @@ fn focus_speech_within(
                     Part::new(PartKind::Container, name),
                     role(msg::role_tab().as_str()),
                 ])
+            } else if entry.tool_bar {
+                Line::new(vec![
+                    Part::new(PartKind::Container, name),
+                    role(msg::role_tool_bar().as_str()),
+                ])
             } else if entry.list {
                 let kind = if i == last && focus.container_is_list_view {
                     msg::role_list_view()
@@ -820,6 +846,9 @@ fn focus_speech_within(
             } else {
                 Line::of(PartKind::Container, name)
             });
+            if let Some(detail) = entry.detail.as_deref().filter(|d| !d.trim().is_empty()) {
+                lines.push(Line::of(PartKind::Container, detail.trim()));
+            }
         }
     } else if !within {
         lines.extend(container_entry(focus));

@@ -383,6 +383,13 @@ pub struct GroupEntry {
     /// A row of tabs (said with its role): a ribbon's, "Ribbon tabs | Tab" [obs, 970/s1].
     #[serde(default)]
     pub tab_list: bool,
+    /// A tool bar (said with its role): a ribbon's group, "Clipboard Tool bar" [obs, 970/s4].
+    #[serde(default)]
+    pub tool_bar: bool,
+    /// What is said after its name: a ribbon page's "Ribbon tab", a split button's group's
+    /// description [obs, 970/s4].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub detail: Option<String>,
 }
 
 impl GroupEntry {
@@ -392,6 +399,8 @@ impl GroupEntry {
             list: false,
             dialog: false,
             tab_list: false,
+            tool_bar: false,
+            detail: None,
         }
     }
 
@@ -414,6 +423,19 @@ impl GroupEntry {
             tab_list: true,
             ..Self::group(name)
         }
+    }
+
+    pub fn tool_bar(name: impl Into<String>) -> Self {
+        Self {
+            tool_bar: true,
+            ..Self::group(name)
+        }
+    }
+
+    /// This entry with `detail` said after its name.
+    pub fn with_detail(mut self, detail: Option<String>) -> Self {
+        self.detail = detail;
+        self
     }
 }
 
