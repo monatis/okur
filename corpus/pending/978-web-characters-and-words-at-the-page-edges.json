@@ -1,0 +1,90 @@
+{
+  "id": "978-web-characters-and-words-at-the-page-edges",
+  "name": "The virtual cursor at a page's edges at JAWS's default (957/s6-s8: Left at the top said the first character again): Left, Ctrl+Left and Up at the top; Ctrl+End, then Right, Ctrl+Right and Down at the bottom, twice each",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/virtual-keys.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Ctrl+End"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "End"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}

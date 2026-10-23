@@ -1,0 +1,155 @@
+{
+  "id": "977-web-characters-and-words-over-controls",
+  "name": "Right and Ctrl+Right across controls at JAWS's default (958/s20: Ctrl+Right from a button's name went to the next line's word, where Okur's buffer has the role \"Button\" as text): B to Count, Right to its end and past it, Ctrl+Right through the buttons, the check box, the radio buttons' group, the field and the combo box, then Ctrl+Left back, and Left past the start of Count",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/activation.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "B"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s22",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s23",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s24",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s25",
+      "type": "key",
+      "command": "B"
+    },
+    {
+      "id": "s26",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s27",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s28",
+      "type": "key",
+      "command": "Left"
+    }
+  ]
+}
