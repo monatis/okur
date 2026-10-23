@@ -1,0 +1,105 @@
+{
+  "id": "1008-desktop-jaws-cursor-graphics-all",
+  "name": "1007 with every graphic spoken ([OSM] IncludeGraphics=2): \"graphic\" and the number JAWS gives an unlabeled one",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-graphics.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Graphics Fixture"
+  },
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "OSM": {
+        "IncludeGraphics": "2"
+      }
+    }
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+NumpadMinus"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "NumpadMinus"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "PageUp"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Home"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "NumpadPlus"
+    }
+  ]
+}
