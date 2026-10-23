@@ -466,6 +466,48 @@
       }
     },
     {
+      "scenario_id": "1007-desktop-jaws-cursor-graphics",
+      "fixture": "desktop-graphics.ps1",
+      "evidence": {
+        "sha256": "e9d85c0e72b5b25c6c473478095e09a5fed6f04bc84f7b51009513247be09c57",
+        "capture_script_sha256": "3ccee65e236fea15af7fcf69c34ab9642aede65209bbf655c7103b663a0f58d1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1008-desktop-jaws-cursor-graphics-all",
+      "fixture": "desktop-graphics.ps1",
+      "evidence": {
+        "sha256": "0cfdad0ee67ccc139fc289aca5959b2a80f210ff59c1ee0a8efda2d5d0eff94f",
+        "capture_script_sha256": "3ccee65e236fea15af7fcf69c34ab9642aede65209bbf655c7103b663a0f58d1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1009-desktop-jaws-cursor-graphics-all-monitor",
+      "fixture": "desktop-graphics.ps1",
+      "evidence": {
+        "sha256": "0c714403be179257cf5cd88998b332706bf243d5988b8cf6041709ea8c139e59",
+        "capture_script_sha256": "3ccee65e236fea15af7fcf69c34ab9642aede65209bbf655c7103b663a0f58d1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "101-article-read-down",
       "fixture": "news-article.html",
       "evidence": {
@@ -9133,10 +9175,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 636,
-    "scenarios_with_evidence": 636,
-    "total_trials": 1914,
-    "successful_trials": 1898,
-    "deterministic_scenarios": 410
+    "scenarios": 639,
+    "scenarios_with_evidence": 639,
+    "total_trials": 1923,
+    "successful_trials": 1907,
+    "deterministic_scenarios": 412
   }
 }
