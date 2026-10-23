@@ -1,0 +1,45 @@
+{
+  "id": "989-desktop-typing-interrupt-off",
+  "name": "988 with Typing Interrupt off (TypingInterrupt=0)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-reading.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Reading Fixture"
+  },
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "TypingInterrupt": "0"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Down",
+      "during": [
+        {
+          "after_ms": 2000,
+          "command": "X"
+        },
+        {
+          "after_ms": 4000,
+          "command": "Ctrl"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}
