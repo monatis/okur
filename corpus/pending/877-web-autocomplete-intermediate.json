@@ -1,0 +1,88 @@
+{
+  "id": "877-web-autocomplete-intermediate",
+  "name": "An autocomplete: Enter forms mode, type, Down and Up through its options, Enter takes one (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 211-web-autocomplete)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Escape",
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Enter"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Enter"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}

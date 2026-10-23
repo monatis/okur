@@ -1,0 +1,62 @@
+{
+  "id": "893-web-rate-on-the-fly-intermediate",
+  "name": "Voice rate on the fly (Alt+Ctrl+PageUp and PageDown) with Insert+Up after each, then back, and Insert+Escape (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 512-web-rate-on-the-fly)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Ctrl+Alt+PageUp"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Ctrl+Alt+PageDown"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Ctrl+Alt+PageDown"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Ctrl+Alt+PageUp"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+Escape"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}

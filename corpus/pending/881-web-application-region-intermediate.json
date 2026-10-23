@@ -1,0 +1,88 @@
+{
+  "id": "881-web-application-region-intermediate",
+  "name": "An application region: its name on the way in, and H, Down and Escape are the page's (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 215-web-application-region)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/web-app-patterns.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Escape",
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Tab"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}

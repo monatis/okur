@@ -1,0 +1,52 @@
+{
+  "id": "891-web-first-last-headings-fields-intermediate",
+  "name": "First and last heading (Alt+Insert+Home, Alt+Insert+End), first and last at a level (Ctrl+Alt+Insert+2, Ctrl+Alt+Insert+Shift+2), on the article (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 295-web-first-last-headings-fields)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Alt+Insert+End"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Alt+Insert+Home"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Ctrl+Alt+Insert+Shift+2"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Ctrl+Alt+Insert+2"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Ctrl+Alt+Insert+3"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Ctrl+Alt+Insert+Shift+3"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}

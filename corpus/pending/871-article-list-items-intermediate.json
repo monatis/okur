@@ -1,0 +1,117 @@
+{
+  "id": "871-article-list-items-intermediate",
+  "name": "I and Shift+I around nested list items (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 114-article-list-items)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "I"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "I"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "I"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "I"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "I"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "I"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "I"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Shift+I"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Shift+I"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "L"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "L"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "L"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "I"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "I"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Shift+I"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Shift+I"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Shift+I"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}

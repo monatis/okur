@@ -1,0 +1,92 @@
+{
+  "id": "873-form-fields-intermediate",
+  "name": "Cycle form fields with F and Shift+F, including wrap (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 202-form-fields)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/signup-form.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "F"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "F"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "F"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "F"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "F"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "F"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "F"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "F"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "F"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "F"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "F"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "F"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Shift+F"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Shift+F"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}
