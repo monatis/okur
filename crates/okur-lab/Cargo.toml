@@ -27,6 +27,16 @@ path = "src/bin/okur-lab-keys.rs"
 test = false
 bench = false
 
+# The reference machine's UI Automation notification probe, with UI Access: whether a client
+# with it hears an application's notifications a plain one does not (WinForms', which JAWS
+# speaks). A harness tool, never installed for users; signed and under Program Files, as UI
+# Access requires.
+[[bin]]
+name = "okur-lab-notify-probe"
+path = "src/bin/okur-lab-notify-probe.rs"
+test = false
+bench = false
+
 [dependencies]
 okur = { path = "../okur" }
 okur-core = { workspace = true }

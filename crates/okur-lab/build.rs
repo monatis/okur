@@ -1,6 +1,7 @@
 //! Embeds each program's application manifest at link time (Windows, MSVC):
 //! - `okur-lab.exe`, the verification harness's console program: `asInvoker`, no UI Access;
 //! - `okur-lab-keys.exe`, the reference machine's key sender: `asInvoker` with `uiAccess="true"`.
+//! - `okur-lab-notify-probe.exe`, its UI Automation notification probe: the same.
 //!
 //! Each manifest is whole, its `trustInfo` included, so the linker is told to add no UAC
 //! fragment of its own (`/MANIFESTUAC:NO`) that could collide with it
@@ -10,9 +11,10 @@
 use std::path::PathBuf;
 
 /// Each program and its manifest file under `manifests/`.
-const MANIFESTS: [(&str, &str); 2] = [
+const MANIFESTS: [(&str, &str); 3] = [
     ("okur-lab", "okur-lab.manifest"),
     ("okur-lab-keys", "okur-lab-keys.manifest"),
+    ("okur-lab-notify-probe", "okur-lab-notify-probe.manifest"),
 ];
 
 fn main() {
