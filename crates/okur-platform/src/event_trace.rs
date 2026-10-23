@@ -427,6 +427,20 @@ fn window_items(tree: &UiaNode) -> Vec<okur_core::WindowItem> {
 /// Whether a window is an edit of several lines: an edit window class (Win32's Edit, WinForms'
 /// `WindowsForms10.EDIT…`, RichEdit) with ES_MULTILINE in its style. The bit means something
 /// else for other classes.
+/// Whether a window is a classic RichEdit (`RichEdit`, `RichEdit20W`, `RICHEDIT50W`), not
+/// Windows 11 Notepad's `RichEditD2DPT`, which names itself.
+fn rich_edit(class: Option<&str>) -> bool {
+    class.is_some_and(|c| {
+        let c = c.to_ascii_uppercase();
+        c.strip_prefix("RICHEDIT").is_some_and(|version| {
+            version
+                .trim_end_matches(['A', 'W'])
+                .chars()
+                .all(|d| d.is_ascii_digit())
+        })
+    })
+}
+
 /// Whether a window is a plain Win32 edit (Win32's Edit, WinForms' `WindowsForms10.EDIT…`), not
 /// RichEdit.
 fn plain_edit(class: Option<&str>) -> bool {
@@ -998,6 +1012,12 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         event.window_style,
     );
     focus.plain_edit = plain_edit(
+        event
+            .focus_window_class
+            .as_deref()
+            .or(event.window_class.as_deref()),
+    );
+    focus.rich_edit = rich_edit(
         event
             .focus_window_class
             .as_deref()
@@ -2065,6 +2085,16 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     focus.app_version = event.process_version.clone();
     focus.bounds = event.focus_chain.last().and_then(|n| n.bounds);
     focus.in_ribbon = true;
+    // On the ribbon's menus: a tab, or a command on a tab's page (a property page inside the
+    // ribbon's own, the lower ribbon's "Home"), not Minimize the Ribbon or the Quick Access
+    // Toolbar beside them.
+    const PROPERTYPAGE: i32 = 0x26;
+    let pages = event
+        .msaa_ancestors
+        .iter()
+        .filter(|a| a.role == Some(PROPERTYPAGE))
+        .count();
+    focus.ribbon_menu = tab || pages >= 2;
     Some(focus)
 }
 
@@ -2130,6 +2160,7 @@ fn ribbon_tab(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     focus.app_version = event.process_version.clone();
     focus.bounds = event.focus_chain.last().and_then(|n| n.bounds);
     focus.in_ribbon = true;
+    focus.ribbon_menu = true;
     Some(focus)
 }
 
@@ -5791,6 +5822,17 @@ mod tests {
         UiaNode {
             class_name: Some("#32770".to_owned()),
             ..node(control_type, name, false)
+        }
+    }
+
+    /// Classic RichEdit windows, not Windows 11 Notepad's, which names itself, nor plain edits.
+    #[test]
+    fn classic_rich_edits_are_told_apart() {
+        for class in ["RICHEDIT50W", "RichEdit20W", "RichEdit20A", "RichEdit"] {
+            assert!(rich_edit(Some(class)), "{class}");
+        }
+        for class in ["RichEditD2DPT", "Edit", "WindowsForms10.EDIT.app.0.1"] {
+            assert!(!rich_edit(Some(class)), "{class}");
         }
     }
 

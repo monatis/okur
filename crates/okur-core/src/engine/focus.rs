@@ -240,13 +240,24 @@ impl ScreenReaderEngine {
         // A native focus outside the menus while they are active: a modern menu closed with
         // no menu-end event (File Explorer's context menu, Escape: "Leaving menus | Items View
         // MultiSelect ListBox | backlog | …"; JAWS on the dev box, 2026-10-17).
-        let leaving_message = self.leaving_menus_message();
-        // The ribbon is read as menus are: its tabs entered from outside it say "Upper Ribbon"
-        // first, and the focus leaving its tabs and commands for a field or the document says
-        // "Leaving menus" [obs, 970/s1, s6; 971/s1-s4; 972/s1].
-        let ribbon_entered = focus.in_ribbon && !self.in_ribbon;
-        let ribbon_left = !focus.in_ribbon && self.in_ribbon;
-        self.in_ribbon = focus.in_ribbon;
+        // The ribbon is read as menus are: its tabs entered from outside its menus say "Upper
+        // Ribbon" first; the focus leaving its tabs and commands says "Leaving menus", and
+        // "Leaving ribbons" after it when another of the ribbon's buttons takes it [obs, 970/s1,
+        // s6; 971/s1-s4; 972/s1, s3; 523/s4].
+        let in_menu = focus.in_ribbon && focus.ribbon_menu;
+        let ribbon_entered = in_menu && !self.in_ribbon_menu;
+        let ribbon_left = !in_menu && self.in_ribbon_menu;
+        self.in_ribbon_menu = in_menu;
+        let leaving_message = if ribbon_left && focus.in_ribbon {
+            format!(
+                "{}
+{}",
+                msg::menus_left(),
+                msg::ribbons_left()
+            )
+        } else {
+            self.leaving_menus_message()
+        };
         let leaving_menus =
             (!focus.in_document && self.menus.in_menu_mode() && self.menus.end()) || ribbon_left;
         // The control the menus give the focus back to is said again [obs, 302/s8, 547/s8].

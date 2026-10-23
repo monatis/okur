@@ -420,8 +420,8 @@ pub struct ScreenReaderEngine {
     /// The selection was added to the clipboard (Okur key+Windows+C): Ctrl+C and Ctrl+X ask
     /// before overwriting it, until a copy or a cut does.
     clipboard_appended: bool,
-    /// The focus is on a ribbon's tabs or commands, which JAWS reads as menus.
-    in_ribbon: bool,
+    /// The focus is on a ribbon's menus, its tabs or commands, which JAWS reads as menus.
+    in_ribbon_menu: bool,
     /// The rows a console showed when last read, which its next writing is compared with.
     screen_rows: Option<Vec<String>>,
     /// The question asked before overwriting the clipboard, while it is open.
@@ -573,7 +573,7 @@ impl ScreenReaderEngine {
             quit_dialog: None,
             clipboard_appended: false,
             screen_rows: None,
-            in_ribbon: false,
+            in_ribbon_menu: false,
             overwrite_dialog: None,
             exit: None,
         }

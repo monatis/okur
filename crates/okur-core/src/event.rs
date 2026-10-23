@@ -243,6 +243,11 @@ pub struct FocusEvent {
     /// without a property sheet's page hint [obs, 523/s2, s3].
     #[serde(default)]
     pub in_ribbon: bool,
+    /// In the ribbon, on its menus: a tab, or a command on a tab's page (the lower ribbon), not
+    /// the buttons around them (Minimize the Ribbon, the Quick Access Toolbar), which JAWS
+    /// leaves the menus for: "Leaving menus | Leaving ribbons" [obs, 523/s4, 972/s3].
+    #[serde(default)]
+    pub ribbon_menu: bool,
     /// The focused element is inside a browser document (its focus chain has a document).
     pub in_document: bool,
     /// The element's DOM id, when it is in a document and has one.
@@ -334,6 +339,10 @@ pub struct FocusEvent {
     /// of a selection over several lines in it [obs, 313/s7, 529/s6, s9, s10].
     #[serde(default)]
     pub plain_edit: bool,
+    /// A classic RichEdit window (WordPad's document), which UI Automation's proxy names by the
+    /// window's own text ("Rich Text Window"), not a label.
+    #[serde(default)]
+    pub rich_edit: bool,
     /// An edit with an up-down control attached (a spin box): "Number of copies: edit spin
     /// box" [obs, 546/s8].
     #[serde(default)]
@@ -452,6 +461,7 @@ impl FocusEvent {
             columns: Vec::new(),
             column_headers: Vec::new(),
             in_ribbon: false,
+            ribbon_menu: false,
             in_document: false,
             dom_id: None,
             unique_id: None,
@@ -481,6 +491,7 @@ impl FocusEvent {
             read_only: None,
             multi_line: false,
             plain_edit: false,
+            rich_edit: false,
             spin_box: false,
             outer_dialogs: Vec::new(),
             outer_windows: Vec::new(),

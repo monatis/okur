@@ -7171,6 +7171,7 @@ fn a_ribbon_is_entered_and_left_as_menus_are() {
     let mut tab = FocusEvent::new(Role::Tab).with_name("Home");
     tab.window_title = document.window_title.clone();
     tab.in_ribbon = true;
+    tab.ribbon_menu = true;
     tab.states.selected = Some(true);
     let said = engine
         .handle_accessibility_event(&AccessibilityEvent::Focus(tab))
@@ -7180,7 +7181,33 @@ fn a_ribbon_is_entered_and_left_as_menus_are() {
         Some(crate::linearize::role_marker("Upper Ribbon").as_str())
     );
     let said = engine
-        .handle_accessibility_event(&AccessibilityEvent::Focus(document))
+        .handle_accessibility_event(&AccessibilityEvent::Focus(document.clone()))
         .unwrap_or_default();
     assert!(said.starts_with(&msg::menus_left().to_string()), "{said}");
+
+    // From its tabs to another of its buttons: "Leaving menus | Leaving ribbons", then the
+    // document says nothing of them [obs, 523/s4, s6].
+    let mut tab = FocusEvent::new(Role::Tab).with_name("View");
+    tab.window_title = document.window_title.clone();
+    tab.in_ribbon = true;
+    tab.ribbon_menu = true;
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(tab));
+    let mut minimize = FocusEvent::new(Role::Button).with_name("Minimize the Ribbon");
+    minimize.window_title = document.window_title.clone();
+    minimize.in_ribbon = true;
+    let said = engine
+        .handle_accessibility_event(&AccessibilityEvent::Focus(minimize))
+        .unwrap_or_default();
+    let leaving = format!(
+        "{}
+{}
+",
+        msg::menus_left(),
+        msg::ribbons_left()
+    );
+    assert!(said.starts_with(&leaving), "{said}");
+    let said = engine
+        .handle_accessibility_event(&AccessibilityEvent::Focus(document))
+        .unwrap_or_default();
+    assert!(!said.contains(&msg::menus_left().to_string()), "{said}");
 }

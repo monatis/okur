@@ -248,8 +248,12 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
         }
         // A native text document (Windows 11 Notepad's RichEdit, MSAA "editable text"): an
         // edit whose text is not read on arrival. JAWS 2025, dev box: "viewer-test.txt -
-        // Notepad | Text editor edit | Contains text".
+        // Notepad | Text editor edit | Contains text". A classic RichEdit in a main window
+        // (WordPad's) is nameless, as a plain edit is, and says how to type in it: " edit |
+        // Contains text | Type in text." [obs, 523/s6, 971/s2, s4].
         Role::Document if !focus.in_document && focus.read_only == Some(false) => {
+            let classic = focus.rich_edit && !focus.in_dialog_box;
+            let name = if classic { String::new() } else { name };
             lines.push(Line::new(vec![
                 name_part(name),
                 role(msg::role_edit_multiline().as_str()),
@@ -260,6 +264,9 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                 .is_some_and(|t| !t.text.trim().is_empty())
             {
                 lines.push(Line::of(PartKind::Value, msg::field_contains_text()).on_arrival());
+            }
+            if classic {
+                lines.push(Line::of(PartKind::Hint, msg::hint_type_in_text()));
             }
         }
         Role::Edit => {

@@ -46,6 +46,8 @@ title-heading-is = heading is { $heading }
 menus-left = Leaving menus
 # A ribbon's tabs entered from outside it, said as a role [obs, 970/s1, 972/s1].
 ribbon-upper = Upper Ribbon
+# The ribbon's menus left for another of its buttons, after "Leaving menus" [obs, 523/s4, 972/s3].
+ribbons-left = Leaving ribbons
 # Said as a window's own menu bar is left from the bar itself (Alt, or Escape on the bar).
 menu-bar-left = leaving menu bar
 # The same with short messages [obs, 942/s8, s11].
