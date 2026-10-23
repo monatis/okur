@@ -7158,3 +7158,29 @@ fn a_consoles_new_output_is_said_while_screen_echo_is_on() {
     let said = engine.handle_accessibility_event(&AccessibilityEvent::ConsoleText(more));
     assert_eq!(said, None);
 }
+
+/// The ribbon is read as menus are: its tab entered from the document says "Upper Ribbon"
+/// first, and the document taking the focus back says "Leaving menus" [obs, 971/s1, s2].
+#[test]
+fn a_ribbon_is_entered_and_left_as_menus_are() {
+    let blank = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(blank, Box::new(MockSpeechOutput::new()));
+    let mut document = FocusEvent::new(Role::Edit).with_name("Notes");
+    document.window_title = Some("Notes - Editor".to_owned());
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(document.clone()));
+    let mut tab = FocusEvent::new(Role::Tab).with_name("Home");
+    tab.window_title = document.window_title.clone();
+    tab.in_ribbon = true;
+    tab.states.selected = Some(true);
+    let said = engine
+        .handle_accessibility_event(&AccessibilityEvent::Focus(tab))
+        .unwrap_or_default();
+    assert_eq!(
+        said.lines().next(),
+        Some(crate::linearize::role_marker("Upper Ribbon").as_str())
+    );
+    let said = engine
+        .handle_accessibility_event(&AccessibilityEvent::Focus(document))
+        .unwrap_or_default();
+    assert!(said.starts_with(&msg::menus_left().to_string()), "{said}");
+}

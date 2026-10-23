@@ -797,6 +797,11 @@ fn focus_speech_within(
                     Part::new(PartKind::Container, name),
                     role(msg::role_dialog().as_str()),
                 ])
+            } else if entry.tab_list {
+                Line::new(vec![
+                    Part::new(PartKind::Container, name),
+                    role(msg::role_tab().as_str()),
+                ])
             } else if entry.list {
                 let kind = if i == last && focus.container_is_list_view {
                     msg::role_list_view()

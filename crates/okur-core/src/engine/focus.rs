@@ -241,7 +241,14 @@ impl ScreenReaderEngine {
         // no menu-end event (File Explorer's context menu, Escape: "Leaving menus | Items View
         // MultiSelect ListBox | backlog | …"; JAWS on the dev box, 2026-10-17).
         let leaving_message = self.leaving_menus_message();
-        let leaving_menus = !focus.in_document && self.menus.in_menu_mode() && self.menus.end();
+        // The ribbon is read as menus are: its tabs entered from outside it say "Upper Ribbon"
+        // first, and the focus leaving its tabs and commands for a field or the document says
+        // "Leaving menus" [obs, 970/s1, s6; 971/s1-s4; 972/s1].
+        let ribbon_entered = focus.in_ribbon && !self.in_ribbon;
+        let ribbon_left = !focus.in_ribbon && self.in_ribbon;
+        self.in_ribbon = focus.in_ribbon;
+        let leaving_menus =
+            (!focus.in_document && self.menus.in_menu_mode() && self.menus.end()) || ribbon_left;
         // The control the menus give the focus back to is said again [obs, 302/s8, 547/s8].
         if leaving_menus {
             self.native_focus.forget_last();
@@ -928,6 +935,13 @@ impl ScreenReaderEngine {
             control
         };
         let mut speech = with_leaving(self.said(announcement).render());
+        if ribbon_entered && focus.role == Role::Tab {
+            let upper = crate::linearize::role_marker(msg::ribbon_upper().as_str());
+            speech = format!(
+                "{upper}
+{speech}"
+            );
+        }
         // Ctrl+Home or Ctrl+End in a grid: after the cell, "top of file" or "Bottom of file"
         // and the cell read again, as Say Line reads it: "Price Row 2 | selected | 18.00 |
         // Bottom of file | Price Row 2 | selected | 18.00" [obs, 545/s6, s7].

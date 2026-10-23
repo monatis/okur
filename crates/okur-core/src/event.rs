@@ -371,6 +371,9 @@ pub struct GroupEntry {
     /// automatically ... dialog".
     #[serde(default)]
     pub dialog: bool,
+    /// A row of tabs (said with its role): a ribbon's, "Ribbon tabs | Tab" [obs, 970/s1].
+    #[serde(default)]
+    pub tab_list: bool,
 }
 
 impl GroupEntry {
@@ -379,22 +382,28 @@ impl GroupEntry {
             name: name.into(),
             list: false,
             dialog: false,
+            tab_list: false,
         }
     }
 
     pub fn list(name: impl Into<String>) -> Self {
         Self {
-            name: name.into(),
             list: true,
-            dialog: false,
+            ..Self::group(name)
         }
     }
 
     pub fn dialog(name: impl Into<String>) -> Self {
         Self {
-            name: name.into(),
-            list: false,
             dialog: true,
+            ..Self::group(name)
+        }
+    }
+
+    pub fn tab_list(name: impl Into<String>) -> Self {
+        Self {
+            tab_list: true,
+            ..Self::group(name)
         }
     }
 }

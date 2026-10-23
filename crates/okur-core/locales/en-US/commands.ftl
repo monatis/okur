@@ -44,6 +44,8 @@ title-region-level = level { $level }
 title-heading-is = heading is { $heading }
 # Menus closed: the focus is back where it was.
 menus-left = Leaving menus
+# A ribbon's tabs entered from outside it, said as a role [obs, 970/s1, 972/s1].
+ribbon-upper = Upper Ribbon
 # Said as a window's own menu bar is left from the bar itself (Alt, or Escape on the bar).
 menu-bar-left = leaving menu bar
 # The same with short messages [obs, 942/s8, s11].

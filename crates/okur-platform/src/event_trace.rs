@@ -109,6 +109,11 @@ pub struct MsaaNode {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     pub states: u32,
+    /// Its value and description, read for a NetUI control's ancestors only.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub children: Vec<MsaaNode>,
 }
@@ -241,6 +246,15 @@ pub struct TraceEvent {
     /// (a ribbon tab's place among the tabs).
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub msaa_siblings: Vec<MsaaNode>,
+    /// For a focus on a NetUI control: its MSAA ancestors inside the NetUI window, outermost
+    /// first, without their children (the lower ribbon, the tab's page, the group: "Lower Ribbon
+    /// | Home | Ribbon tab | Clipboard Tool bar" [obs, 970/s4]).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub msaa_ancestors: Vec<MsaaNode>,
+    /// For that focus: the control's MSAA description ("Click here for more options such as
+    /// pasting only plain text." [obs, 970/s4]).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub msaa_description: Option<String>,
 }
 
 /// Where the mouse came to rest and the text there by unit ([`crate::mouse_point`]).
@@ -2003,6 +2017,10 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
         return None;
     }
     let object = event.object.as_ref()?;
+    // Alt or F10 gives the focus to the ribbon itself: its selected tab is the focus.
+    if let Some(tab) = ribbon_tab(event) {
+        return Some(tab);
+    }
     let name = object
         .name
         .as_deref()
@@ -2028,8 +2046,85 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     let mut focus = okur_core::FocusEvent::new(role).with_name(name.to_owned());
     if tab {
         focus.states.selected = Some(object.states & SELECTED != 0);
+        // Its place among the tabs shown: "Home Tab selected 1 of 2" (JAWS's own places lag a
+        // key behind: "View 1 of 2", then "Home 2 of 2" [obs, 970/s2, s3]).
+        let shown: Vec<&MsaaNode> = event
+            .msaa_siblings
+            .iter()
+            .filter(|s| s.role == Some(PAGETAB) && s.states & MSAA_INVISIBLE == 0)
+            .collect();
+        focus.item_index = shown
+            .iter()
+            .position(|s| s.name.as_deref() == Some(name))
+            .map(|i| i + 1);
+        focus.item_count = focus.item_index.map(|_| shown.len());
     }
     apply_msaa_states(&mut focus, object.states);
+    focus.app = event.process.clone();
+    focus.app_product = event.process_product.clone();
+    focus.app_version = event.process_version.clone();
+    focus.bounds = event.focus_chain.last().and_then(|n| n.bounds);
+    focus.in_ribbon = true;
+    Some(focus)
+}
+
+/// MSAA's invisible state: a ribbon's hidden tab ("Print preview").
+const MSAA_INVISIBLE: u32 = 0x8000;
+
+/// The tab a ribbon holds focused when the ribbon itself takes the focus (Alt, F10), from the
+/// ribbon's MSAA objects: "UIRibbonDockTop | Ribbon | Ribbon | Ribbon | Ribbon tabs Tab | Home
+/// Tab selected | 1 of 2" [obs, 970/s1, 972/s1], the ribbon's named panes and its row of tabs
+/// as the groups entered.
+fn ribbon_tab(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
+    use okur_core::{GroupEntry, Role};
+    const PROPERTYPAGE: i32 = 0x26;
+    const PAGETABLIST: i32 = 0x3C;
+    const PAGETAB: i32 = 0x25;
+    const PANE: i32 = 50033;
+    const FOCUSED: u32 = 0x4;
+    const SELECTED: u32 = 0x2;
+    fn tab_list(node: &MsaaNode) -> Option<&MsaaNode> {
+        if node.role == Some(PAGETABLIST) {
+            return Some(node);
+        }
+        node.children.iter().find_map(tab_list)
+    }
+    fn tabs<'a>(node: &'a MsaaNode, out: &mut Vec<&'a MsaaNode>) {
+        for child in &node.children {
+            if child.role == Some(PAGETAB) {
+                out.push(child);
+            } else {
+                tabs(child, out);
+            }
+        }
+    }
+    if event.object.as_ref()?.role != Some(PROPERTYPAGE) {
+        return None;
+    }
+    let list = tab_list(event.msaa_tree.as_ref()?)?;
+    let mut all = Vec::new();
+    tabs(list, &mut all);
+    let shown: Vec<&MsaaNode> = all
+        .into_iter()
+        .filter(|t| t.states & MSAA_INVISIBLE == 0)
+        .collect();
+    let index = shown.iter().position(|t| t.states & FOCUSED != 0)?;
+    let tab = shown.get(index)?;
+    let mut focus = okur_core::FocusEvent::new(Role::Tab).with_name(tab.name.clone()?);
+    focus.states.selected = Some(tab.states & SELECTED != 0);
+    focus.item_index = Some(index + 1);
+    focus.item_count = Some(shown.len());
+    // The ribbon's panes, as UI Automation names them (the window itself is not one of them),
+    // then its row of tabs.
+    focus.groups = event
+        .focus_chain
+        .iter()
+        .skip(1)
+        .filter(|n| n.control_type == PANE)
+        .filter_map(|n| n.name.as_deref().map(str::trim).filter(|n| !n.is_empty()))
+        .map(GroupEntry::group)
+        .chain(list.name.clone().map(GroupEntry::tab_list))
+        .collect();
     focus.app = event.process.clone();
     focus.app_product = event.process_product.clone();
     focus.app_version = event.process_version.clone();
@@ -2915,22 +3010,24 @@ mod capture {
     /// MSAA's roles of the objects whose children a NetUI focus reads: the ribbon itself (a
     /// property page) and the panes and groupings around a tab row.
     const NETUI_CONTAINERS: [i32; 4] = [0x0A, 0x10, 0x14, 0x26];
-    /// MSAA's page tab, whose siblings a NetUI focus reads.
-    const NETUI_TAB: i32 = 0x25;
+    /// MSAA's window role: where a NetUI control's ancestors stop.
+    const MSAA_WINDOW: i32 = 0x09;
+    /// How many of a NetUI control's ancestors are read at most.
+    const NETUI_ANCESTORS: usize = 8;
+
+    /// What a NetUI focus reads of its MSAA objects ([`netui_read`]).
+    #[derive(Default)]
+    struct NetuiRead {
+        tree: Option<super::MsaaNode>,
+        siblings: Vec<super::MsaaNode>,
+        ancestors: Vec<super::MsaaNode>,
+        description: Option<String>,
+    }
 
     /// For a NetUI focus whose MSAA object has `role`: a container's children to
-    /// [`NETUI_DEPTH`], or a tab's siblings without theirs, at most [`NETUI_BUDGET`]
-    /// objects; nothing for the buttons and boxes the arrows go through, so that they cost
-    /// no more than before.
-    fn netui_tree(
-        hwnd: HWND,
-        id_object: i32,
-        id_child: i32,
-        role: i32,
-    ) -> (Option<super::MsaaNode>, Vec<super::MsaaNode>) {
-        if !NETUI_CONTAINERS.contains(&role) && role != NETUI_TAB {
-            return (None, Vec::new());
-        }
+    /// [`NETUI_DEPTH`] (the ribbon Alt focuses), at most [`NETUI_BUDGET`] objects; a control's
+    /// siblings without theirs, its ancestors up to the window, and its description.
+    fn netui_read(hwnd: HWND, id_object: i32, id_child: i32, role: i32) -> NetuiRead {
         use windows::Win32::UI::Accessibility::IAccessible;
         let mut acc: Option<IAccessible> = None;
         let mut child = VARIANT::default();
@@ -2945,29 +3042,66 @@ mod capture {
             )
         };
         let Some(acc) = acc.filter(|_| found.is_ok()) else {
-            return (None, Vec::new());
+            return NetuiRead::default();
         };
         let mut budget = NETUI_BUDGET;
-        if role != NETUI_TAB {
-            return (
-                Some(msaa_node(&acc, &child, NETUI_DEPTH, &mut budget)),
-                Vec::new(),
-            );
+        if NETUI_CONTAINERS.contains(&role) {
+            return NetuiRead {
+                tree: Some(msaa_node(&acc, &child, NETUI_DEPTH, &mut budget)),
+                ..NetuiRead::default()
+            };
         }
+        // SAFETY: a property read on a valid IAccessible.
+        let description = unsafe { acc.get_accDescription(&child) }
+            .ok()
+            .map(|d| d.to_string())
+            .filter(|d| !d.trim().is_empty());
         // A simple element's parent is the object that named it; a full object asks its own.
-        let parent = if is_self(&child) {
+        let parent_of = |object: &IAccessible| {
             // SAFETY: a property read on a valid IAccessible.
-            unsafe { acc.accParent() }
+            unsafe { object.accParent() }
                 .ok()
                 .and_then(|p| windows::core::Interface::cast::<IAccessible>(&p).ok())
+        };
+        let parent = if is_self(&child) {
+            parent_of(&acc)
         } else {
             Some(acc)
         };
-        let mut budget = NETUI_BUDGET;
         let siblings = parent
-            .map(|p| msaa_node(&p, &VARIANT::from(0i32), 1, &mut budget).children)
+            .as_ref()
+            .map(|p| msaa_node(p, &VARIANT::from(0i32), 1, &mut budget).children)
             .unwrap_or_default();
-        (None, siblings)
+        let mut ancestors = Vec::new();
+        let mut next = parent;
+        while let Some(object) = next.take() {
+            let mut node = msaa_node(&object, &VARIANT::from(0i32), 0, &mut budget);
+            if node.role == Some(MSAA_WINDOW) || ancestors.len() == NETUI_ANCESTORS {
+                break;
+            }
+            let own = VARIANT::from(0i32);
+            // SAFETY: property reads on a valid IAccessible.
+            let (value, description) = unsafe {
+                (
+                    object.get_accValue(&own).ok(),
+                    object.get_accDescription(&own).ok(),
+                )
+            };
+            let text = |b: Option<windows::core::BSTR>| {
+                b.map(|b| b.to_string()).filter(|t| !t.trim().is_empty())
+            };
+            node.value = text(value);
+            node.description = text(description);
+            ancestors.push(node);
+            next = parent_of(&object);
+        }
+        ancestors.reverse();
+        NetuiRead {
+            tree: None,
+            siblings,
+            ancestors,
+            description,
+        }
     }
 
     /// Whether an MSAA child variant names the object itself (`CHILDID_SELF`).
@@ -3002,6 +3136,8 @@ mod capture {
                     .ok()
                     .and_then(|v| i32::try_from(&v).ok())
                     .map_or(0, |s| s as u32),
+                value: None,
+                description: None,
                 children: Vec::new(),
             }
         };
@@ -3186,6 +3322,8 @@ mod capture {
                     point: None,
                     msaa_tree: None,
                     msaa_siblings: Vec::new(),
+                    msaa_ancestors: Vec::new(),
+                    msaa_description: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -3607,6 +3745,8 @@ mod capture {
                     point: None,
                     msaa_tree: None,
                     msaa_siblings: Vec::new(),
+                    msaa_ancestors: Vec::new(),
+                    msaa_description: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -3703,6 +3843,8 @@ mod capture {
             point: None,
             msaa_tree: None,
             msaa_siblings: Vec::new(),
+            msaa_ancestors: Vec::new(),
+            msaa_description: None,
         }
     }
 
@@ -3820,6 +3962,8 @@ mod capture {
                     point: None,
                     msaa_tree: None,
                     msaa_siblings: Vec::new(),
+                    msaa_ancestors: Vec::new(),
+                    msaa_description: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -3933,6 +4077,8 @@ mod capture {
                     point: None,
                     msaa_tree: None,
                     msaa_siblings: Vec::new(),
+                    msaa_ancestors: Vec::new(),
+                    msaa_description: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -4351,12 +4497,13 @@ mod capture {
                     .flatten(),
             };
             // A NetUI window's focus: its MSAA objects, which UI Automation does not reach.
-            let (msaa_tree, msaa_siblings) = match object.as_ref().and_then(|o| o.role) {
+            let netui = match object.as_ref().and_then(|o| o.role) {
                 Some(role) if focused && class == NETUI_WINDOW => {
-                    netui_tree(hwnd, id_object, id_child, role)
+                    netui_read(hwnd, id_object, id_child, role)
                 }
-                _ => (None, Vec::new()),
+                _ => NetuiRead::default(),
             };
+            let (msaa_tree, msaa_siblings) = (netui.tree, netui.siblings);
             stages.push(("msaa", clock.elapsed().as_millis()));
             if clock.elapsed() > SLOW_EVENT {
                 tracing::debug!(event = name, %class, ?stages, "slow event read");
@@ -4436,6 +4583,8 @@ mod capture {
                 point: None,
                 msaa_tree,
                 msaa_siblings,
+                msaa_ancestors: netui.ancestors,
+                msaa_description: netui.description,
             };
             (state.sink)(event);
             state.count += 1;
@@ -5505,6 +5654,8 @@ mod tests {
             point: None,
             msaa_tree: None,
             msaa_siblings: Vec::new(),
+            msaa_ancestors: Vec::new(),
+            msaa_description: None,
         }
     }
 
@@ -5641,6 +5792,79 @@ mod tests {
             class_name: Some("#32770".to_owned()),
             ..node(control_type, name, false)
         }
+    }
+
+    /// WordPad's ribbon given the focus by Alt: its focused tab, with its place among the tabs
+    /// shown and the ribbon's panes and row of tabs as the groups entered [obs, 970/s1].
+    #[test]
+    fn alt_on_a_ribbon_focuses_its_selected_tab() {
+        let msaa = |role: i32, name: &str, states: u32, children: Vec<MsaaNode>| MsaaNode {
+            role: Some(role),
+            name: (!name.is_empty()).then(|| name.to_owned()),
+            states,
+            value: None,
+            description: None,
+            children,
+        };
+        let tabs = msaa(
+            0x3C,
+            "Ribbon tabs",
+            0,
+            vec![msaa(
+                0x0A,
+                "",
+                0,
+                vec![
+                    msaa(0x25, "Home", 0x30_0006, Vec::new()),
+                    msaa(0x25, "View", 0x30_0000, Vec::new()),
+                    msaa(0x25, "Print preview", 0x8001, Vec::new()),
+                ],
+            )],
+        );
+        let pane = |name: &str| node(50033, name, false);
+        let event = TraceEvent {
+            window_class: Some("NetUIHWND".to_owned()),
+            object: Some(TraceObject {
+                role: Some(0x26),
+                name: Some("Ribbon".to_owned()),
+                value: Some("Ribbon".to_owned()),
+                states: 0,
+                shortcut: None,
+            }),
+            focus_chain: vec![
+                node(UIA_WINDOW, "sr-wordpad-fixture.rtf - WordPad", false),
+                pane("UIRibbonDockTop"),
+                pane("Ribbon"),
+                pane("Ribbon"),
+                pane(""),
+                pane("Ribbon"),
+            ],
+            msaa_tree: Some(msaa(0x26, "Ribbon", 0, vec![tabs])),
+            ..focus_event(Vec::new())
+        };
+        let focus = netui_focus(&event);
+        assert!(focus.is_some());
+        let Some(focus) = focus else { return };
+        assert_eq!(focus.role, okur_core::Role::Tab);
+        assert_eq!(focus.name.as_deref(), Some("Home"));
+        assert_eq!(focus.states.selected, Some(true));
+        assert_eq!((focus.item_index, focus.item_count), (Some(1), Some(2)));
+        assert!(focus.in_ribbon);
+        let groups: Vec<(&str, bool)> = focus
+            .groups
+            .iter()
+            .map(|g| (g.name.as_str(), g.tab_list))
+            .collect();
+        assert_eq!(
+            groups,
+            [
+                ("UIRibbonDockTop", false),
+                ("Ribbon", false),
+                ("Ribbon", false),
+                ("Ribbon", false),
+                ("Ribbon tabs", true)
+            ]
+        );
     }
 
     /// Local Disk (C:) Properties opening, focus on the General page's Label field, as traced
