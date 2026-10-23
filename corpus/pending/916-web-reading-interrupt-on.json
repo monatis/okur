@@ -1,0 +1,14 @@
+{
+  "id": "916-web-reading-interrupt-on",
+  "name": "Reading Interrupt on (DEFAULT.JCF Options ReadingInterrupt=1; JAWS's shipped default is 1, 'pressing a key that is bound to a macro will interrupt speech'): Say All on the news article with Insert+T pressed 2.5 s in, then Insert+Up: whether a bound key stops speech and Say All",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Down", "during": [{ "after_ms": 2500, "command": "Insert+T" }] },
+    { "id": "s2", "type": "key", "command": "Insert+Up" }
+  ],
+  "jaws_settings": { "DEFAULT.JCF": { "Options": { "ReadingInterrupt": "1" } } }
+}
