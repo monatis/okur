@@ -121,7 +121,9 @@ Shortcut parts of a native focus says what the focus says without those keys.
   a group name and left out with it. Round 267 (918-953, the desktop's dialogs and cursors
   and more web keys at both levels) added Insert+E's "Not in a dialog", Insert+Q's "Default
   settings." and "powershell.exe,", the Okur cursor's "Application" for "Application window
-  restriction", and "Virtual Find" left out before Okur Find (926, 930-933). In an
+  restriction", "Virtual Find" left out before Okur Find (926, 930-933), Notepad's "Leaving
+  menus" for "leaving menu bar", and Insert+Tab's text analysis without "column" ("Stray
+  punctuation { at 11", "initial cap t at 16", 942). In an
   announcement a part carries its short form (`Part::short`, `Line::short`), and the engine's
   verbosity filter says it ([`Announcement::shorten`]); text built outside announcements
   (the virtual cursor's table keys) asks `message_length` itself. A message without a recorded

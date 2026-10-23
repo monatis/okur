@@ -170,6 +170,13 @@ text-analysis-unopened = Unopened { $symbol } at column { $column }
 text-analysis-stray-punctuation = Stray punctuation { $symbol } at column { $column }
 text-analysis-unspaced-punctuation = Unspaced punctuation { $symbol } at column { $column }
 text-analysis-unclosed = Unclosed { $symbol } at column { $column }
+# The same with short messages, without "column" (and "Missing") [obs, 942/s1, s6]; the
+# inverted cap and the unopened are not recorded so yet.
+text-analysis-space-run-short = Space run at { $column }
+text-analysis-missing-initial-cap-short = initial cap { $symbol } at { $column }
+text-analysis-stray-punctuation-short = Stray punctuation { $symbol } at { $column }
+text-analysis-unspaced-punctuation-short = Unspaced punctuation { $symbol } at { $column }
+text-analysis-unclosed-short = Unclosed { $symbol } at { $column }
 
 # With indentation said (Say Indented Characters): a line at the margin, read as a line or as
 # a Say All starts [obs, 729/s1, s10].

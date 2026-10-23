@@ -152,7 +152,14 @@ impl ScreenReaderEngine {
                         matches!(f.role, crate::aom::Role::Edit | crate::aom::Role::Document)
                     })
                     .and(self.last_text.as_ref())
-                    .map(|text| crate::text_analysis::describe_line(&text.text, text.caret))
+                    .map(|text| {
+                        crate::text_analysis::describe_line_as(
+                            &text.text,
+                            text.caret,
+                            self.settings.verbosity.message_length()
+                                == crate::settings::MessageLength::Short,
+                        )
+                    })
                     .unwrap_or_default();
                 let speech = std::iter::once(speech)
                     .chain(analysis)

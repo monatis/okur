@@ -46,6 +46,8 @@ title-heading-is = heading is { $heading }
 menus-left = Leaving menus
 # Said as a window's own menu bar is left from the bar itself (Alt, or Escape on the bar).
 menu-bar-left = leaving menu bar
+# The same with short messages [obs, 942/s8, s11].
+menu-bar-left-short = Leaving menus
 # A list's size, said after its name and role: "Fruits list | with 3 items".
 list-items-count = with { $count } items
 

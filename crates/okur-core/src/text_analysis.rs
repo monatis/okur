@@ -42,6 +42,12 @@ enum Kind {
 /// What Insert+Tab adds for the line around `caret` (a character offset into `text`), one
 /// entry per inconsistency, in column order.
 pub fn describe_line(text: &str, caret: usize) -> Vec<String> {
+    describe_line_as(text, caret, false)
+}
+
+/// [`describe_line`], with short messages when `short`: "Stray punctuation { at 11",
+/// "initial cap t at 16" [obs, 942/s1, s6].
+pub fn describe_line_as(text: &str, caret: usize, short: bool) -> Vec<String> {
     let chars: Vec<char> = text.chars().collect();
     let caret = caret.min(chars.len());
     // The text's lines as character ranges, without their breaks.
@@ -82,13 +88,26 @@ pub fn describe_line(text: &str, caret: usize) -> Vec<String> {
     found.sort_by_key(|&(column, kind)| (column, kind));
     found
         .into_iter()
-        .map(|(column, kind)| describe(column, kind))
+        .map(|(column, kind)| describe(column, kind, short))
         .collect()
 }
 
-fn describe(column: usize, kind: Kind) -> String {
+fn describe(column: usize, kind: Kind, short: bool) -> String {
     let symbol = |c: char| c.to_string();
     match kind {
+        Kind::SpaceRun if short => msg::text_analysis_space_run_short(column).to_string(),
+        Kind::MissingInitialCap(c) if short => {
+            msg::text_analysis_missing_initial_cap_short(symbol(c), column).to_string()
+        }
+        Kind::StrayPunctuation(c) if short => {
+            msg::text_analysis_stray_punctuation_short(symbol(c), column).to_string()
+        }
+        Kind::UnspacedPunctuation(c) if short => {
+            msg::text_analysis_unspaced_punctuation_short(symbol(c), column).to_string()
+        }
+        Kind::Unclosed(c) if short => {
+            msg::text_analysis_unclosed_short(symbol(c), column).to_string()
+        }
         Kind::SpaceRun => msg::text_analysis_space_run(column).to_string(),
         Kind::MissingInitialCap(c) => {
             msg::text_analysis_missing_initial_cap(symbol(c), column).to_string()

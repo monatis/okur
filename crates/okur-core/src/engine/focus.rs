@@ -103,14 +103,15 @@ impl ScreenReaderEngine {
 
     /// What JAWS says as native menus close: "leaving menu bar" when a window's own (Win32)
     /// menu bar is left from the bar itself, with Alt or Escape [obs, 547/s8, s11]; else
-    /// "Leaving menus" (an item chosen in a menu, 544/s2; a WinForms menu strip, 302/s8).
+    /// "Leaving menus" (an item chosen in a menu, 544/s2; a WinForms menu strip, 302/s8), as
+    /// the menu bar's is with short messages [obs, 942/s8, s11].
     fn leaving_menus_message(&self) -> String {
         let own_bar = self
             .last_native_focus
             .as_ref()
             .is_some_and(|f| !f.menu_bar.is_empty());
         if self.menus.on_bar() && own_bar {
-            msg::menu_bar_left().to_string()
+            self.said_short(msg::menu_bar_left())
         } else {
             msg::menus_left().to_string()
         }
