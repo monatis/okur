@@ -1001,11 +1001,22 @@ pub(crate) mod capture {
                 let parent = uia.ControlViewWalker()?.GetParentElement(focused)?;
                 let header =
                     parent.FindFirst(TreeScope_Children, &by_type(UIA_HeaderControlTypeId)?)?;
-                let items =
-                    header.FindAll(TreeScope_Children, &by_type(UIA_HeaderItemControlTypeId)?)?;
+                // The headers' names come with them, in one call: asked of each header, a
+                // list's every focus made a call per column (performance review 2026-10-23,
+                // P14).
+                let names_request =
+                    request_for(uia, AutomationElementMode_None, &[UIA_NamePropertyId])
+                        .ok_or_else(|| {
+                            windows::core::Error::from(windows::Win32::Foundation::E_FAIL)
+                        })?;
+                let items = header.FindAllBuildCache(
+                    TreeScope_Children,
+                    &by_type(UIA_HeaderItemControlTypeId)?,
+                    &names_request,
+                )?;
                 let mut names = Vec::new();
                 for index in 0..items.Length()? {
-                    names.push(items.GetElement(index)?.CurrentName()?.to_string());
+                    names.push(items.GetElement(index)?.CachedName()?.to_string());
                 }
                 Ok(names)
             };

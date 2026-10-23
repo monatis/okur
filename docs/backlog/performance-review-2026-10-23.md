@@ -48,8 +48,9 @@ traces), so such changes get tests where a test can hold them and a live run on 
 | P5 (client): a UIA client made for every page capture | done: one per capturing thread; moving the quick capture off the WinEvent thread is still open | `b76fab99` |
 | P6 | open: the actions worker's client keeps UIA's default timeouts; a 1 s one would cut reads of big windows | |
 | P9, P11, P20 | not changed: a plain field has one attribute run; UIA's process id comes from the window, not the application; the process name is a kernel query | |
-| C4: each edit key made the field's text a vector of characters two to four times | done for the caret's line and character (`line_bytes`, tested against the vectors at every caret); the commands that read further keep theirs | this batch |
+| C4: each edit key made the field's text a vector of characters two to four times | done for the caret's line and character (`line_bytes`, tested against the vectors at every caret); the commands that read further keep theirs | `4a56c7e8` |
 | C7, C10 | not changed: a focus's copy is microseconds beside its reads; S, D and N stay O(page) per press, a cache keyed by the buffer's version is the next step | |
+| P14: a list item's column headers named one call each | done: the names come with the headers in one cached call; live check with 514 to come | this batch |
 | P3 (polls) | open: after a key a UIA field is read whole every 15 ms until it changes; polling the caret alone needs a "before" in the same units, which the engine's text does not give for RichEdit | |
 
 The rest are listed below in the order they are taken.
@@ -139,3 +140,29 @@ The rest are listed below in the order they are taken.
 22. xa11y-windows `uia.rs` and `bridge.rs` unused on Windows.
 23. `set_clipboard_text` leak: done.
 24. `EM_GETSEL`: done.
+
+## T1, the engine in the keyboard hook: the plan
+
+The one finding that is the design itself. Every key runs `handle_key_event` inside the
+low-level hook's callback, under the mutex the event loop also takes; the 150 ms wait for the
+lock, the re-install after a slow key, `KEYS_WAITING` and the `retire` thread all work around
+it, and every other finding that runs "on the hook" (the clipboard, the drag, Z on a big page)
+is a case of it. The change, in steps that each keep parity:
+
+1. **The hook decides from a snapshot.** The engine publishes, after each key and event, what
+   decides whether a key is taken: the key owner (virtual cursor, forms mode, a menu, one of
+   Okur's dialogs, a layer, Keyboard Help), the bound chords of that owner, and the pass-through
+   keys of the application in front. The hook reads it without a lock (an `ArcSwap` or a
+   seqlock of a small struct), takes or passes the key, and sends it on.
+2. **One engine thread.** The keys taken go, with their time, to a thread that owns the engine
+   without a mutex and serves keys before events, marks and page builds (a priority queue of
+   two lanes). The event loop's handlers become messages to it.
+3. **What a key needs from the screen is asked of workers** (the clipboard, text reads, the
+   window's lines), as the text after an edit key already is: the engine says what it has and
+   finishes the command when the answer comes.
+
+Step 1 needs every place that decides "taken or passed" in `handle_key_event` to be a function
+of the snapshot; `routing.rs` already gathers most of them. The risk is a key the snapshot
+calls taken that the engine would have passed, or the reverse, while a mode changes between
+two keys; the snapshot is replaced before the key that changed it returns, so a following key
+sees the new mode, as now.
