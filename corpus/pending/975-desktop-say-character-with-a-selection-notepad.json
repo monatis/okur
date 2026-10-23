@@ -1,0 +1,128 @@
+{
+  "id": "975-desktop-say-character-with-a-selection-notepad",
+  "name": "974 in Notepad's field",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Shift+End"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "CapsLock+Comma"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "End"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "CapsLock+Comma"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Shift+Home"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "CapsLock+Comma"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Home"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Shift+Right"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Shift+Right"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Shift+Right"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "CapsLock+Comma"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "CapsLock+K"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Shift+Left"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Shift+Left"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Shift+Left"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Shift+Left"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Shift+Left"
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "CapsLock+Comma"
+    },
+    {
+      "id": "s22",
+      "type": "key",
+      "command": "CapsLock+K"
+    }
+  ]
+}

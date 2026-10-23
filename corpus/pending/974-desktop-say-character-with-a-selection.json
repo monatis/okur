@@ -1,0 +1,128 @@
+{
+  "id": "974-desktop-say-character-with-a-selection",
+  "name": "Say Character (CapsLock+Comma) and Say Word (CapsLock+K) with a selection in a WinForms field (510's): after Shift+End, at the line's end, after Shift+Home, after Shift+Right three times from the fourth character and after Shift+Left five times back past it: which character a selection's caret gives (510/s15 said \".\" after Shift+End)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-reading.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Reading Fixture"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Shift+End"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "CapsLock+Comma"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "End"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "CapsLock+Comma"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Shift+Home"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "CapsLock+Comma"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Home"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Shift+Right"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Shift+Right"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Shift+Right"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "CapsLock+Comma"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "CapsLock+K"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Shift+Left"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Shift+Left"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Shift+Left"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Shift+Left"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Shift+Left"
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "CapsLock+Comma"
+    },
+    {
+      "id": "s22",
+      "type": "key",
+      "command": "CapsLock+K"
+    }
+  ]
+}
