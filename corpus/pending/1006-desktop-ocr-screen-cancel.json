@@ -1,0 +1,53 @@
+{
+  "id": "1006-desktop-ocr-screen-cancel",
+  "name": "Recognizing the whole screen (Insert+Space, O, S) cancelled at once (Insert+Space, O, Q pressed while it works): what the cancel says, and where the cursors are",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-drawn-text.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Drawn Text Fixture"
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "S",
+      "settle_max_ms": 30000,
+      "during": [
+        {
+          "after_ms": 300,
+          "command": "Insert+Space"
+        },
+        {
+          "after_ms": 150,
+          "command": "O"
+        },
+        {
+          "after_ms": 150,
+          "command": "Q"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Alt+Delete"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "NumpadPlus"
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "id": "1004-desktop-background-ocr-counter",
+  "name": "1001 down to the counter's line: Background OCR (Insert+Space, O, B), the JAWS cursor on the picture whose counter changes every two seconds, read again after four quiet seconds twice: whether the recognized line follows the picture, and whether anything is said unasked",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-changing-text.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Changing Text Fixture"
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "B",
+      "settle_max_ms": 30000
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "NumpadMinus"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "PageUp"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Shift",
+      "onset_ms": 4000
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Shift",
+      "onset_ms": 4000
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Q"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "NumpadPlus"
+    }
+  ]
+}
