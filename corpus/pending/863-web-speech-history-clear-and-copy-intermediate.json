@@ -1,0 +1,75 @@
+{
+  "id": "863-web-speech-history-clear-and-copy-intermediate",
+  "name": "The Insert+Space layer's other Speech History keys: Ctrl+H copies the history to the clipboard, Shift+H clears it, and H then shows what was said since; Escape closes it (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 570-web-speech-history-clear-and-copy)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Ctrl+H",
+      "copies_speech_history": true,
+      "capture_clipboard": true
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Shift+H"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "H",
+      "settle_max_ms": 20000
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Escape"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}
