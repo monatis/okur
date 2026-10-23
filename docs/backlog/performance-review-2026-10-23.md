@@ -47,13 +47,13 @@ traces), so such changes get tests where a test can hold them and a live run on 
 | P12: the page's document searched for through the browser's whole window | done: Chromium's one page window shown is the document; the search stays for the rest | `b76fab99` |
 | P5 (client): a UIA client made for every page capture | done: one per capturing thread; moving the quick capture off the WinEvent thread is still open | `b76fab99` |
 | P5 (capture) | kept: the quick capture runs on the WinEvent thread so that a new page reaches the engine before its first focus, which is then said in the page; on the page worker the focus would come first | |
-| P6: the actions worker's UIA client kept UIA's default timeouts (20 s for an answer) | done: 2 s to connect, 5 s for an answer (the page captures keep theirs: a big page's tree takes seconds); IA2 and MSAA calls have none still; live check to come | this batch |
+| P6: the actions worker's UIA client kept UIA's default timeouts (20 s for an answer) | done: 2 s to connect, 5 s for an answer (the page captures keep theirs: a big page's tree takes seconds); IA2 and MSAA calls have none still; live run 265: speech unchanged | `a8861c54` |
 | T13, T14: OneCore's synthesis and audio polled every 2-4 ms; Say All's progress every 20 ms | not changed: each poll costs microseconds and delays speech by at most its interval; an event-driven player is a rewrite for no audible gain | |
 | P9, P11, P20 | not changed: a plain field has one attribute run; UIA's process id comes from the window, not the application; the process name is a kernel query | |
 | C4: each edit key made the field's text a vector of characters two to four times | done for the caret's line and character (`line_bytes`, tested against the vectors at every caret); the commands that read further keep theirs | `4a56c7e8` |
 | C7, C10 | not changed: a focus's copy is microseconds beside its reads; S, D and N take 3.5-4.3 ms on 25,032 nodes (measured below) | |
 | P14: a list item's column headers named one call each | done: the names come with the headers in one cached call; live check with 514 to come | `4fd2617e` |
-| P3 (polls): after a key at an edge a desktop field was read every 15 ms for the whole 250 ms | done for fields outside pages: two messages sent in turn to the focus window tell that the application has taken the key, and two reads after that the same end the wait; Chromium's fields keep their 2 ms position poll (the page changes in another process); live check to come (504, 660) | this batch |
+| P3 (polls): after a key at an edge a desktop field was read every 15 ms for the whole 250 ms | done for fields outside pages: two messages sent in turn to the focus window tell that the application has taken the key, and two reads after that the same end the wait; Chromium's fields keep their 2 ms position poll (the page changes in another process); live run 266: text read p90 266 → 32 ms, speech unchanged | `16d2ede4` |
 
 The rest are listed below in the order they are taken.
 
@@ -82,6 +82,17 @@ nine scenarios on old-pc, one trial each, with a debug log (`sr-harnessexperimen
 
   The state change's read is P10 and P7; the text read's median is P3's fewer transfers; its
   90th percentile is the polling after a key at a text boundary (the settle time), still open.
+
+## Live checks of the later changes (live runs 265 and 266)
+
+- **Live run 265** (`b76fab9` against `c2bc506`: C4's caret line, P14's column headers, P6's
+  timeouts), 504, 514, 660 and 825 on old-pc: the two builds sent the synthesizer the same text
+  at every step of all four. `okur-lab latency`, text context read (26) p50 / p90 / p99: 29.0 /
+  267.0 / 273.0 ms before, 20.0 / 262.0 / 270.0 after.
+- **Live run 266** (`c2bc506` against `16d2ede`: P3's wait ending once the application has
+  taken the key), 504, 660 and 825: the same text at every step of all three. Text context read
+  (26) p50 / p90 / p99: 16.0 / 266.0 / 271.0 ms before, 20.0 / 32.0 / 35.0 after: a key that
+  changes nothing is said about 230 ms sooner.
 
 ## Threading and latency (T)
 
