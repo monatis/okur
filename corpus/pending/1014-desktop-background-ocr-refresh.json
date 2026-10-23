@@ -1,0 +1,211 @@
+{
+  "id": "1014-desktop-background-ocr-refresh",
+  "name": "How often Background OCR (Insert+Space, O, B) recognizes the window again: the JAWS cursor on the line of a picture whose counter changes every two seconds, read once a second for twelve seconds (1004 read it the same over ten seconds), with the window's text and Windows' OCR of it saved after each step for Okur's experimental screen text",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-changing-text.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Changing Text Fixture"
+  },
+  "trace_screen": true,
+  "trace_ocr": true,
+  "okur_settings": {
+    "experimental.screen_text": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "B",
+      "settle_max_ms": 30000
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "NumpadMinus"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "PageUp"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Shift",
+      "onset_ms": 1000
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Shift",
+      "onset_ms": 1000
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Shift",
+      "onset_ms": 1000
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Shift",
+      "onset_ms": 1000
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Shift",
+      "onset_ms": 1000
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Shift",
+      "onset_ms": 1000
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "Shift",
+      "onset_ms": 1000
+    },
+    {
+      "id": "s22",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s23",
+      "type": "key",
+      "command": "Shift",
+      "onset_ms": 1000
+    },
+    {
+      "id": "s24",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s25",
+      "type": "key",
+      "command": "Shift",
+      "onset_ms": 1000
+    },
+    {
+      "id": "s26",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s27",
+      "type": "key",
+      "command": "Shift",
+      "onset_ms": 1000
+    },
+    {
+      "id": "s28",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s29",
+      "type": "key",
+      "command": "Shift",
+      "onset_ms": 1000
+    },
+    {
+      "id": "s30",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s31",
+      "type": "key",
+      "command": "Shift",
+      "onset_ms": 1000
+    },
+    {
+      "id": "s32",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s33",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s34",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s35",
+      "type": "key",
+      "command": "Q"
+    },
+    {
+      "id": "s36",
+      "type": "key",
+      "command": "NumpadPlus"
+    }
+  ]
+}
