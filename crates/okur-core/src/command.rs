@@ -368,6 +368,10 @@ pub enum Command {
     SetPunctuationLevel,
     /// The next typing echo, until Okur exits (Insert+2).
     NextTypingEcho,
+    /// The next screen echo, until Okur exits (Insert+S; JAWS's SetScreenEcho).
+    NextScreenEcho,
+    /// Smart Navigation on or off, until Okur exits (Insert+X; JAWS's SmartNavToggle).
+    ToggleSmartNavigation,
 
     // Okur itself.
     /// Insert+F4 (ShutDownJAWS): Okur exits, after its question when `confirm_exit` is on.
@@ -706,6 +710,8 @@ impl Command {
             "SettingsCenter" => SettingsCenter,
             "SetPunctuationLevel" | "Insert+Shift+2" | "JAWSKey+Shift+2" => SetPunctuationLevel,
             "Insert+2" | "JAWSKey+2" => NextTypingEcho,
+            "Insert+S" | "JAWSKey+S" | "SetScreenEcho" => NextScreenEcho,
+            "Insert+X" | "JAWSKey+X" | "SmartNavToggle" => ToggleSmartNavigation,
             _ => return None,
         })
     }
@@ -1072,6 +1078,9 @@ static BINDINGS: &[Binding] = &{
         // Insert+Windows+C=AppendSelectedTextToClipboard) [obs, 825].
         bind(Alpha('X'), OKUR.win(Yes), SayClipboard),
         bind(Alpha('C'), OKUR.win(Yes), AppendSelectedTextToClipboard),
+        // Screen Echo and Smart Navigation (Default.JKM: SetScreenEcho, SmartNavToggle) [obs, 913].
+        bind(Alpha('S'), OKUR, NextScreenEcho),
+        bind(Alpha('X'), OKUR, ToggleSmartNavigation),
         bind(Alpha('Q'), OKUR, SayConfiguration),
         bind(Alpha('V'), CTRL_INSERT, SayAppVersion),
         // A page's link address, routing the cursors, frames, and the prior heading by the

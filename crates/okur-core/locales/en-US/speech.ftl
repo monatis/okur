@@ -86,6 +86,19 @@ typing-echo-both = Both characters and words
 typing-echo-space = Space
 typing-echo-enter = Enter
 
+## Screen Echo (Insert+S)
+
+screen-echo-none = None
+screen-echo-highlighted = Highlighted
+screen-echo-all = All
+
+## Smart Navigation (Insert+X)
+
+smart-navigation-off = Smart Navigation: Off
+smart-navigation-controls = Smart Navigation: Controls
+smart-navigation-tables = Smart Navigation: Tables
+smart-navigation-controls-and-tables = Smart Navigation: Controls and Tables
+
 ## Say Character pressed three times quickly
 
 # The character's value, digit by digit: "Character 7 4" for J, "Character 8 3 6 4" for the

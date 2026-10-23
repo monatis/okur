@@ -613,6 +613,10 @@ command-open-settings = Opens Okur's settings.
 command-set-punctuation-level = Changes how much punctuation is read, until Okur exits.
 # Insert+2.
 command-next-typing-echo = Changes what is said as you type: characters, words, both, or nothing, until Okur exits.
+# SetScreenEcho (Insert+S).
+command-next-screen-echo = Changes how much of the text written to the screen is read: highlighted text, all, or none, until Okur exits.
+# SmartNavToggle (Insert+X).
+command-toggle-smart-navigation = Turns Smart Navigation on or off, until Okur exits.
 # ShutDownJAWS (Insert+F4).
 command-shut-down = Exits Okur.
 # The same, the longer description.

@@ -311,6 +311,106 @@ impl HeadingIndication {
     }
 }
 
+/// What is read of the text an application writes to the screen: JAWS's Screen Echo
+/// (`[Options] ScreenEcho`: 0 none, 1 highlighted, 2 all; 1 in its shipped `DEFAULT.JCF`).
+/// Insert+S moves it on for the session [obs, 913/s1-s3].
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ScreenEcho {
+    None,
+    #[default]
+    Highlighted,
+    All,
+}
+
+impl ScreenEcho {
+    pub const ALL: [Self; 3] = [Self::None, Self::Highlighted, Self::All];
+
+    /// The echo a `DEFAULT.JCF` `ScreenEcho` value sets: 0 none, 2 all; any other value
+    /// highlighted text, JAWS's default.
+    pub fn from_jcf(value: &str) -> Self {
+        match value.trim() {
+            "0" => Self::None,
+            "2" => Self::All,
+            _ => Self::Highlighted,
+        }
+    }
+
+    /// The echo Insert+S moves to: from highlighted, all, none and highlighted again
+    /// [obs, 913/s1-s3].
+    pub fn next(self) -> Self {
+        match self {
+            Self::Highlighted => Self::All,
+            Self::All => Self::None,
+            Self::None => Self::Highlighted,
+        }
+    }
+
+    /// The echo's name, as Insert+S says it [obs, 913/s1-s3].
+    pub fn name(self) -> String {
+        use crate::messages::msg;
+        match self {
+            Self::None => msg::screen_echo_none(),
+            Self::Highlighted => msg::screen_echo_highlighted(),
+            Self::All => msg::screen_echo_all(),
+        }
+        .to_string()
+    }
+}
+
+/// What the virtual cursor's character and word keys treat as one unit: JAWS's Smart
+/// Navigation (`[HTML] SmartNavigation`, a bit pattern its `DEFAULT.JCF` describes: 1 a
+/// control, 2 a table cell; 0 by default).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SmartNavigation {
+    #[default]
+    Off,
+    Controls,
+    Tables,
+    ControlsAndTables,
+}
+
+impl SmartNavigation {
+    pub const ALL: [Self; 4] = [
+        Self::Off,
+        Self::Controls,
+        Self::Tables,
+        Self::ControlsAndTables,
+    ];
+
+    /// The navigation a `DEFAULT.JCF` `SmartNavigation` value sets; any value but 1, 2 and
+    /// 3 is off, JAWS's default.
+    pub fn from_jcf(value: &str) -> Self {
+        match value.trim() {
+            "1" => Self::Controls,
+            "2" => Self::Tables,
+            "3" => Self::ControlsAndTables,
+            _ => Self::Off,
+        }
+    }
+
+    /// What Insert+X turns it to: off, from off controls and tables [obs, 913/s5-s8].
+    pub fn toggled(self) -> Self {
+        match self {
+            Self::Off => Self::ControlsAndTables,
+            _ => Self::Off,
+        }
+    }
+
+    /// What Insert+X says of it [obs, 913/s5, s6].
+    pub fn name(self) -> String {
+        use crate::messages::msg;
+        match self {
+            Self::Off => msg::smart_navigation_off(),
+            Self::Controls => msg::smart_navigation_controls(),
+            Self::Tables => msg::smart_navigation_tables(),
+            Self::ControlsAndTables => msg::smart_navigation_controls_and_tables(),
+        }
+        .to_string()
+    }
+}
+
 /// What typing a character says (Basic Settings: Typing Echo).
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -777,6 +877,10 @@ pub struct Settings {
     /// default). A line at the margin is said with "Left Margin" when it is read as a line and
     /// as a Say All starts [obs, 729/s1, s7, s8, s10].
     pub indentation: bool,
+    /// What is read of the text an application writes to the screen.
+    pub screen_echo: ScreenEcho,
+    /// What the virtual cursor's character and word keys treat as one unit.
+    pub smart_navigation: SmartNavigation,
     /// Insert+F4 asks before Okur exits, as JAWS's "Prompt to Confirm When Exiting JAWS"
     /// (Options > Basics), checked by default: "When cleared, JAWS immediately closes when you
     /// use any of the commands to exit the program including INSERT+F4" (JAWS 2025 help).
@@ -802,6 +906,8 @@ impl Default for Settings {
             heading_indication: HeadingIndication::Level,
             read_page_on_load: true,
             indentation: false,
+            screen_echo: ScreenEcho::default(),
+            smart_navigation: SmartNavigation::default(),
             confirm_exit: true,
             mouse_echo: MouseEcho::default(),
         }
@@ -869,6 +975,8 @@ impl Settings {
             heading_indication: HeadingIndication::Level,
             read_page_on_load: true,
             indentation: false,
+            screen_echo: ScreenEcho::default(),
+            smart_navigation: SmartNavigation::default(),
             confirm_exit: true,
             // Not in old-pc's user JCF: the shared one's, JAWS's defaults.
             mouse_echo: MouseEcho::default(),

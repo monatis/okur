@@ -1509,6 +1509,32 @@ impl ScreenReaderEngine {
         Some(name)
     }
 
+    /// Screen Echo (Insert+S): the next echo, for this session only, as Typing Echo.
+    pub(crate) fn next_screen_echo(&mut self) -> Option<String> {
+        let echo = self.settings.screen_echo.next();
+        self.settings_layers.set_for_session(
+            &["screen_echo"],
+            serde_json::to_value(echo).unwrap_or_default(),
+        );
+        self.resolve_settings();
+        let name = echo.name();
+        self.speech.speak(&name, true);
+        Some(name)
+    }
+
+    /// Smart Navigation (Insert+X): on or off, for this session only, as Typing Echo.
+    pub(crate) fn toggle_smart_navigation(&mut self) -> Option<String> {
+        let navigation = self.settings.smart_navigation.toggled();
+        self.settings_layers.set_for_session(
+            &["smart_navigation"],
+            serde_json::to_value(navigation).unwrap_or_default(),
+        );
+        self.resolve_settings();
+        let name = navigation.name();
+        self.speech.speak(&name, true);
+        Some(name)
+    }
+
     /// Where the settings dialog can keep its settings, each with the settings in force there,
     /// and the one it opens on: the application in front, as JAWS's Settings Center does, when
     /// the focus is in one; all applications, and the site when the focus is on a page. The

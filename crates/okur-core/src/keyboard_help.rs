@@ -410,6 +410,8 @@ fn descriptions(command: &Command) -> Descriptions {
         QuickSettings | SettingsCenter => one(msg::command_open_settings()),
         SetPunctuationLevel => one(msg::command_set_punctuation_level()),
         NextTypingEcho => one(msg::command_next_typing_echo()),
+        NextScreenEcho => one(msg::command_next_screen_echo()),
+        ToggleSmartNavigation => one(msg::command_toggle_smart_navigation()),
         ShutDown => two(msg::command_shut_down(), msg::command_shut_down_long()),
     }
 }
@@ -782,6 +784,8 @@ mod tests {
             SettingsCenter,
             SetPunctuationLevel,
             NextTypingEcho,
+            NextScreenEcho,
+            ToggleSmartNavigation,
             ShutDown,
         ];
         let elements = [

@@ -215,6 +215,8 @@ impl ScreenReaderEngine {
             Command::QuickSettings | Command::SettingsCenter => return self.open_settings(),
             Command::SetPunctuationLevel => return self.next_punctuation_level(),
             Command::NextTypingEcho => return self.next_typing_echo(),
+            Command::NextScreenEcho => return self.next_screen_echo(),
+            Command::ToggleSmartNavigation => return self.toggle_smart_navigation(),
             Command::SpellWord => return self.spell(false),
             Command::SpellLine => return self.spell(true),
             Command::SayFont => return self.say_font(false),

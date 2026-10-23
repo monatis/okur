@@ -12,8 +12,8 @@ use serde_json::{Map, Value};
 
 use super::{
     FormsMode, HeadingIndication, KeyboardLayout, KeyboardSettings, LessSpeech, MouseEchoUnit,
-    OkurKey, OutputType, Punctuation, SayAllUnit, Settings, SpeechMode, Synthesizer, TypingEcho,
-    Verbosity, VerbosityLevel,
+    OkurKey, OutputType, Punctuation, SayAllUnit, ScreenEcho, Settings, SmartNavigation,
+    SpeechMode, Synthesizer, TypingEcho, Verbosity, VerbosityLevel,
 };
 use crate::messages::{msg, StaticMessage};
 use crate::settings_layers::Scope;
@@ -408,6 +408,26 @@ pub static SETTINGS: &[SettingSpec] = &[
     SettingSpec {
         jaws: default_jcf("Options", "Indentation", |v| Value::Bool(v.trim() != "0")),
         ..spec("indentation", Group::Reading, None, CHECK)
+    },
+    SettingSpec {
+        jaws: default_jcf("Options", "ScreenEcho", |v| json(ScreenEcho::from_jcf(v))),
+        ..spec(
+            "screen_echo",
+            Group::Reading,
+            None,
+            Kind::Values(|| ScreenEcho::ALL.iter().map(|e| json(*e)).collect()),
+        )
+    },
+    SettingSpec {
+        jaws: default_jcf("HTML", "SmartNavigation", |v| {
+            json(SmartNavigation::from_jcf(v))
+        }),
+        ..spec(
+            "smart_navigation",
+            Group::Reading,
+            None,
+            Kind::Values(|| SmartNavigation::ALL.iter().map(|n| json(*n)).collect()),
+        )
     },
     SettingSpec {
         jaws: default_jcf("HTML", "HeadingIndication", |v| {

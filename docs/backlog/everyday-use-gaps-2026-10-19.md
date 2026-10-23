@@ -115,7 +115,7 @@ P0 blocks daily use, P1 is expected by a JAWS user within days, P2 is later.
 | 39 | Screen | Screen echo, key repeat, typing interrupt | [S2, H4] | **Missing** | P2 | [R] item 3 |
 | 40 | Reading | Skim reading, Word Index | [H13] | **Done** (2026-10-21, 2026-10-22): skim reading by first line, first sentence, text rules and attributes, the Skim Reading dialog and its summary; the Word List (Ctrl+Insert+W) | P2 | 760-818, 560, 764-766, 808 |
 | 41 | Web | Element information, link source, F8, frames list, visited links, live-region filter, mouse over | [P1, W1] | **Partial** (2026-10-19): the link's address (Ctrl+Insert+F7), routing (Insert+Delete, Ctrl+Insert+Delete) and the frames list's "No frames found in page" (Insert+F9) [536]; element information, visited links, the live-region filter and mouse over are missing | P2 | 536 |
-| 42 | Web | PlaceMarkers, custom labels, Flexible Web, Smart Navigation | [P1, S4, W2] | **Partial** (2026-10-21): PlaceMarkers, custom labels and Flexible Web are built (the README lists them); Smart Navigation (Insert+X) is missing, its toggle recorded by 913 (round 264) | P2 | 691, 699, 705-742, 913 |
+| 42 | Web | PlaceMarkers, custom labels, Flexible Web, Smart Navigation | [P1, S4, W2] | **Partial** (2026-10-21): PlaceMarkers, custom labels and Flexible Web are built (the README lists them); Smart Navigation's toggle (Insert+X) is built (913, 2026-10-23), its units of the character and word keys are not | P2 | 691, 699, 705-742, 913 |
 | 43 | Other | Audio ducking, keyboard lock, schemes, dictionary, language switching | [H4, H8] | **Missing** | P2 | — |
 
 **Later, not in this list:**

@@ -88,7 +88,7 @@ the Say All command".
 | Alt+Win+Home / End | StepToStartOfElement / StepToEndOfElement | built | 294 |
 | Insert+N | NavigationModeToggle (quick keys on, off, Say All only) | built (Say All only acts as off until Say All takes keys) | 298 |
 | Ctrl+Insert+N, Insert+Shift+Z | QuickNavigationKeysSuspendOrResume | built | 298 |
-| Insert+X | SmartNavToggle | gap | |
+| Insert+X | SmartNavToggle | toggle built (the setting `smart_navigation`, `[HTML] SmartNavigation`); what it changes is not | 913 |
 | Insert+F3 | VirtualHTMLFeatures | built | |
 | Insert+F5, F6, F7 | SelectAFormField, SelectAHeading, SelectALink | built | |
 | Ctrl+Insert+A, B, C, E, G, L, O, P, Q, R, T, X, Z, `'` | the element lists | built | |
