@@ -1,0 +1,87 @@
+{
+  "id": "841-web-quick-keys-and-cursor-toggles-intermediate",
+  "name": "Insert+N (quick keys on and off), Insert+Shift+Z (suspend and resume), Insert+Z (the virtual cursor off and on), Insert+Escape (refresh), with H between (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 298-web-quick-keys-and-cursor-toggles)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+N"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Insert+N"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+Shift+Z"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+Shift+Z"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Insert+Z"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Insert+Z"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Insert+Escape"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}

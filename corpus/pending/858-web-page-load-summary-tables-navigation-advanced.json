@@ -1,0 +1,38 @@
+{
+  "id": "858-web-page-load-summary-tables-navigation-advanced",
+  "name": "The page-load summary and the reading that follows on a page with one heading, tables, and no links or regions: Ctrl+R, Ctrl after 7 s, then Insert+Up where reading stopped (at JAWS's Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 539-web-page-load-summary-tables-navigation)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/tables-navigation.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Ctrl+R",
+      "during": [
+        {
+          "after_ms": 7000,
+          "command": "Ctrl"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "2"
+      }
+    }
+  }
+}

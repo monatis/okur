@@ -1,0 +1,62 @@
+{
+  "id": "830-article-heading-levels-advanced",
+  "name": "Heading level quick keys 1, 2, 3 including wrap (at JAWS's Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 104-article-heading-levels)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "2"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "2"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "2"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "2"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "3"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "3"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "1"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "1"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "2"
+      }
+    }
+  }
+}

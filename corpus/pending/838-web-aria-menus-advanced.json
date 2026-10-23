@@ -1,0 +1,83 @@
+{
+  "id": "838-web-aria-menus-advanced",
+  "name": "An ARIA menu bar: into it with Tab, a menu and its sub menu, out with Escape, and a menu opened from the editor with Alt+Shift+F (at JAWS's Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 218-web-aria-menus)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/web-menus.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Escape",
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Alt+Shift+F"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Escape"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "2"
+      }
+    }
+  }
+}

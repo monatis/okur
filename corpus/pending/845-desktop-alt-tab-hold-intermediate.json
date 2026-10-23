@@ -1,0 +1,56 @@
+{
+  "id": "845-desktop-alt-tab-hold-intermediate",
+  "name": "Alt held down through several Tabs in the task switcher, then released (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 317-desktop-alt-tab-hold)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-dialogs.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Dialog Fixture"
+  },
+  "reset": {
+    "keys": [
+      "Tab",
+      "Enter"
+    ],
+    "window_title": "SR Second Window"
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key_down",
+      "command": "Alt"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Tab",
+      "settle_max_ms": 15000
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Tab",
+      "settle_max_ms": 15000
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Tab",
+      "settle_max_ms": 15000
+    },
+    {
+      "id": "s5",
+      "type": "key_up",
+      "command": "Alt",
+      "settle_max_ms": 15000
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}

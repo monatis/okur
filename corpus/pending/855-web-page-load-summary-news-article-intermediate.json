@@ -1,0 +1,38 @@
+{
+  "id": "855-web-page-load-summary-news-article-intermediate",
+  "name": "The page-load summary and the reading that follows on a page with 5 regions, 5 headings and 12 links: Ctrl+R, Ctrl after 7 s, then Insert+Up where reading stopped (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 538-web-page-load-summary-news-article)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Ctrl+R",
+      "during": [
+        {
+          "after_ms": 7000,
+          "command": "Ctrl"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}

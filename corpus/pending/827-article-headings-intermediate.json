@@ -1,0 +1,62 @@
+{
+  "id": "827-article-headings-intermediate",
+  "name": "Cycle headings with H and Shift+H, including wrap (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 103-article-headings)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Shift+H"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Shift+H"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}
