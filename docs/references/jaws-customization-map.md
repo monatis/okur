@@ -216,8 +216,9 @@ with no way to change it), **Missing** (neither). §4.13 and §4.14 list setting
 |---|---|---|---|---|---|---|
 | 41 | Typing Echo; Insert+2 cycles it | Off, **Characters**, Words, Characters and Words | all, per application; the key for the session | [R] §2 | Partial | All four in the engine and on Insert+2 (`settings.rs:126-187`, `engine.rs:1188-1199`); the dialog and `--typing-echo` offer two (`ui/settings.rs:40-44`, `run.rs:68-77`); replay understands only "0" (`settings.rs:144-153`) |
 | 42 | Manage Key Labels: each key's spoken label and Speak, Mute or Always Speak (Alt+T); Tab muted since 2019; muting Letters silences letters in Characters echo only | | | [F7], [S-space]; [R] §3 | Missing | |
-| 43 | Typing Interrupt | **on** | | [R] §3 | Missing | |
-| 44 | Key Repeat | **off** | | [R] §3 | Missing | |
+| 43 | Typing Interrupt (`DEFAULT.JCF` `[Options]` `TypingInterrupt`, shipped 1: "pressing a key that is not bound to macro will interrupt speech") | **on** | | [R] §3; the shipped `DEFAULT.JCF` (old-pc, 2026-10-23) | Missing; recorded on and off by 914, 915 (round 264) | |
+| 43a | Reading Interrupt (`[Options]` `ReadingInterrupt`, shipped 1: "pressing a key that is bound to a macro will interrupt speech") | **on** | | the shipped `DEFAULT.JCF` (old-pc, 2026-10-23) | Missing; recorded on and off by 916, 917 (round 264) | |
+| 44 | Key Repeat (`[Options]` `KeyRepeat`, shipped 1, where the help gives it cleared) | **off** in the help, 1 in the shipped file | | [R] §3; the shipped `DEFAULT.JCF` | Missing | |
 | 45 | Insert Key Mode (Insert as a sticky key) | **off** | | [F3]; [R] §3 | Missing | |
 | 46 | Keyboard Layout | **Desktop**, Laptop (the Startup Wizard also lists Kinesis) | all | [S-wizard]; [R] §1 | Built | `keyboard.layout`: Desktop, Laptop (`settings.rs:12-22`) |
 | 47 | JAWS Key for current layout (Okur: the Okur key) | Insert; CapsLock; ScrollLock; Muhenkan on Japanese keyboards | default file only | [F2]; [R] §9.1 | Built | `keyboard.okur_key`: Insert, Caps Lock, Scroll Lock (`settings.rs:24-41`); not restricted to the global scope |
@@ -281,7 +282,7 @@ with no way to change it), **Missing** (neither). §4.13 and §4.14 list setting
 
 | # | JAWS | Values, default | Scope | Source | Okur | Okur today |
 |---|---|---|---|---|---|---|
-| 85 | Screen Echo (Insert+S cycles it for the moment) | echo no text, **echo highlighted text**, echo all text | all, per application | [R] §8.6 | Missing | |
+| 85 | Screen Echo (Insert+S cycles it for the moment; `[Options]` `ScreenEcho`: 0 off, 1 highlighted, 2 all, shipped 1) | echo no text, **echo highlighted text**, echo all text | all, per application | [R] §8.6; the shipped `DEFAULT.JCF` | Missing; Insert+S recorded by 913 (round 264) | |
 | 86 | Mouse Echo: enable (**off**); interrupt; instant; delay; unit (character, word, **line**, paragraph); speak the item's description; speak its control type and state. Insert+Space, E, then O toggles it and C, W, L, P choose the unit | off | all, per application | [KS], [F1], [S-mouse], [LN-mouse], [SAOMAI] (JAWS 18 defaults) | Missing | |
 | 87 | Show Virtual Viewer on Screen | **on** | | [`jaws-dialogs-and-visual-features.md`](jaws-dialogs-and-visual-features.md) | Built | `viewer_display`, in the dialog (`settings.rs:189-198`) |
 | 88 | Screen Shade (Insert+Space, F11; Quick Settings) | | | [KS], [F8] | Missing | |
