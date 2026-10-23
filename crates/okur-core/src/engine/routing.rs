@@ -71,7 +71,16 @@ impl ScreenReaderEngine {
             actions.focus(node);
         }
         self.routed = true;
-        self.say(msg::route_pc_to_virtual().to_string())
+        // "PC to Virtual" with short messages; nothing at Advanced, as JAWS's own messages
+        // [obs, 905/s2, 906/s2].
+        if !self
+            .settings
+            .verbosity
+            .is_on(crate::settings::OutputType::OkurMessage)
+        {
+            return Some(String::new());
+        }
+        self.say(self.said_short(msg::route_pc_to_virtual()))
     }
 
     /// Insert+F9: on a page without frames, "No frames found in page" [obs, 536/s12]. A page

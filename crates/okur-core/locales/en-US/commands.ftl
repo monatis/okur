@@ -234,6 +234,8 @@ list-view-columns = this listview only contains { $count } columns.
 route-virtual-to-pc = Route Virtual to PC
 # Ctrl+Insert+Delete: the focus goes to the virtual cursor.
 route-pc-to-virtual = Route PC to Virtual Cursor
+# Short messages (Intermediate); Advanced says nothing [obs, 905/s2, 906/s2].
+route-pc-to-virtual-short = PC to Virtual
 # Insert+F9 on a page without frames.
 no-frames-in-page = No frames found in page
 # Numpad Slash, before the click on the element at the virtual cursor [obs, 534/s2].
