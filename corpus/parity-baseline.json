@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 8288,
-  "total_steps": 8670,
+  "matched_steps": 8290,
+  "total_steps": 8674,
   "accepted_divergences": 214,
   "errors": [],
   "steps": {
@@ -9001,6 +9001,10 @@
     "987-web-screen-layout-links-in-text/s6": "mismatch",
     "987-web-screen-layout-links-in-text/s7": "mismatch",
     "987-web-screen-layout-links-in-text/s8": "mismatch",
-    "987-web-screen-layout-links-in-text/s9": "mismatch"
+    "987-web-screen-layout-links-in-text/s9": "mismatch",
+    "988-desktop-typing-interrupt-on/s1": "mismatch",
+    "988-desktop-typing-interrupt-on/s2": "match",
+    "989-desktop-typing-interrupt-off/s1": "mismatch",
+    "989-desktop-typing-interrupt-off/s2": "match"
   }
 }
