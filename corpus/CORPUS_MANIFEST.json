@@ -550,6 +550,20 @@
       }
     },
     {
+      "scenario_id": "1012-desktop-screen-text-ocr-click",
+      "fixture": "desktop-drawn-text.ps1",
+      "evidence": {
+        "sha256": "d48cb2e46abf8ddf023acae4736043e8a07565989c607851a34fb4fbd326e287",
+        "capture_script_sha256": "1d23a87edd9ad08e799e337eb20b404605971eec5d95349a4d89ccd32e695f89",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "1013-desktop-screen-text-wpf",
       "fixture": "desktop-wpf-text.ps1",
       "evidence": {
@@ -569,6 +583,20 @@
       "evidence": {
         "sha256": "df26af00fa6db577a018ac0b53f6409e76ffe7e83dbbe00d8af37603d97615db",
         "capture_script_sha256": "34a697a1f90f84e4db551840f8de3f2b0ef860dcb405cc1cbc2ce56c0045592f",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1015-desktop-screen-text-ocr-window-english",
+      "fixture": "desktop-drawn-text.ps1",
+      "evidence": {
+        "sha256": "fbee1aca6a7792d443824818fd196eebaa7104c2d97173c06530235f54eea70b",
+        "capture_script_sha256": "1d23a87edd9ad08e799e337eb20b404605971eec5d95349a4d89ccd32e695f89",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -9231,10 +9259,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 643,
-    "scenarios_with_evidence": 643,
-    "total_trials": 1935,
-    "successful_trials": 1919,
-    "deterministic_scenarios": 414
+    "scenarios": 645,
+    "scenarios_with_evidence": 645,
+    "total_trials": 1941,
+    "successful_trials": 1925,
+    "deterministic_scenarios": 415
   }
 }
