@@ -185,5 +185,5 @@ Experiments 10 and 11 (old-pc, 2026-10-23):
   listens. Only the window's creation, state and name WinEvents came.
 - **So:** an application raising notifications from a .NET Framework WinForms control is heard
   in its own process only (JAWS's code runs inside applications). Okur, an out-of-process client
-  as NVDA is, hears notifications from providers of their own (Calculator, Windows Settings,
-  WPF, Chromium, .NET 5+ WinForms), and 820 stays a known gap.
+  as NVDA is, hears notifications from providers of their own (Calculator's, which the probe
+  hears; others not tried), and 820 stays a known gap.
