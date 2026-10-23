@@ -112,7 +112,13 @@ Shortcut parts of a native focus says what the focus says without those keys.
   Round 259 (827-858, the web keys at both levels) added "No more headings at level2 in
   section" (no "this", no period), "No onMouseOver elements", Insert+Z's "Off" and "On", and
   the page's summary without "Page has" ("5Regions, 5headings and 12links"); Insert+Escape's
-  "Screen updated" is a message of JAWS's own, left out at Advanced. In an
+  "Screen updated" is a message of JAWS's own, left out at Advanced.
+  Round 263 (865-912, 24 more web scenarios at both levels) added the quick keys'
+  nothing-found messages, "No PlaceMarkers", "No clickable elements" (every "There are no ... on
+  this page." of the family has its `-short`, reached through `StaticMessage::short`),
+  Insert+F5's "no form fields" (Insert+F7's and Insert+Ctrl+R's keep their long forms), a
+  table's edge left out at Advanced ("end of row"), and, at Advanced, a toolbar entered said as
+  a group name and left out with it. In an
   announcement a part carries its short form (`Part::short`, `Line::short`), and the engine's
   verbosity filter says it ([`Announcement::shorten`]); text built outside announcements
   (the virtual cursor's table keys) asks `message_length` itself. A message without a recorded
