@@ -1,0 +1,76 @@
+{
+  "id": "1012-desktop-screen-text-ocr-click",
+  "name": "1005's keys (Numpad Slash on the recognized \"Start\" with Microsoft's engine), with the window's text and Windows' OCR of it saved after each step for Okur's experimental screen text",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-drawn-text.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Drawn Text Fixture"
+  },
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "OCR": {
+        "UseMicrosoftOcrForScreenRecognitions": "1"
+      }
+    }
+  },
+  "trace_screen": true,
+  "trace_ocr": true,
+  "okur_settings": {
+    "experimental.screen_text": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "W",
+      "settle_max_ms": 30000
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "PageDown"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "NumpadSlash"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Insert+T"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "NumpadPlus"
+    }
+  ]
+}
