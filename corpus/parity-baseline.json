@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 6849,
+  "matched_steps": 6850,
   "total_steps": 7096,
   "accepted_divergences": 187,
   "errors": [],
@@ -3711,7 +3711,7 @@
     "610-desktop-save-as-dialog-advanced/s3": "match",
     "610-desktop-save-as-dialog-advanced/s4": "match",
     "610-desktop-save-as-dialog-advanced/s5": "match",
-    "610-desktop-save-as-dialog-advanced/s6": "mismatch",
+    "610-desktop-save-as-dialog-advanced/s6": "match",
     "610-desktop-save-as-dialog-advanced/s7": "match",
     "610-desktop-save-as-dialog-advanced/s8": "match",
     "610-desktop-save-as-dialog-advanced/s9": "match",

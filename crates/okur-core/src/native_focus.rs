@@ -57,8 +57,18 @@ fn container_entry(focus: &FocusEvent) -> Option<Line> {
         Role::List if focus.container_is_list_view => msg::role_list_view().as_str(),
         Role::List => msg::role_list_box().as_str(),
         Role::Tree => msg::role_tree_view().as_str(),
-        // "Tool bar | Hide Folders Button" (a file dialog's unnamed toolbar [obs, 524/s6]).
-        Role::ToolBar => msg::role_tool_bar().as_str(),
+        // "Tool bar | Hide Folders Button" (a file dialog's unnamed toolbar [obs, 524/s6]): a
+        // group of controls, said as JAWS's group names are, and left out with them at Advanced
+        // ("Hide Folders Button" [obs, 610/s6]), where a list's and a tree's stay [obs, 589].
+        Role::ToolBar => {
+            return Some(Line::new(vec![
+                Part::new(PartKind::GroupName, name),
+                Part::new(
+                    PartKind::GroupName,
+                    crate::linearize::role_marker(msg::role_tool_bar().as_str()),
+                ),
+            ]))
+        }
         _ => return None,
     };
     Some(Line::new(vec![
