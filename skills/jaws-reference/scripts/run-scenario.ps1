@@ -696,6 +696,19 @@ $evidence = [ordered]@{
 # Desktop scenarios carry a "launch" block: a fixture app started fresh for every trial and
 # found by its window title. Browser scenarios open the fixture page once and reload it.
 $launch = $scenario.launch
+# The fixture process a trial started: closed by its id as well as by its title, since a fixture
+# whose title changes (a click that renames it, 1005) is not found by the title it started with,
+# and three were left open after round 283.
+$script:fixtureProcess = $null
+
+function Stop-DesktopFixture {
+    $old = Find-WindowByTitle $launch.window_title
+    if ($old) { Stop-Process -Id $old.Id -Force -ErrorAction SilentlyContinue }
+    if ($script:fixtureProcess -and -not $script:fixtureProcess.HasExited) {
+        Stop-Process -Id $script:fixtureProcess.Id -Force -ErrorAction SilentlyContinue
+    }
+    $script:fixtureProcess = $null
+}
 if ($launch) { $expectedTitle = $launch.window_title }
 
 function Find-WindowByTitle([string]$title) {
@@ -779,14 +792,14 @@ function Clear-LabState {
 
 function Start-DesktopFixture {
     $old = Find-WindowByTitle $launch.window_title
-    if ($old) { Stop-Process -Id $old.Id -Force; Start-Sleep -Milliseconds 500 }
+    if ($old -or $script:fixtureProcess) { Stop-DesktopFixture; Start-Sleep -Milliseconds 500 }
     # Browser windows left by web scenarios are minimized: one that came forward in the middle
     # of a desktop trial took its keys, and Insert+Shift+Down twice spelled a whole web page
     # for minutes, so every step after it timed out (504 and 505 on old-pc, 2026-10-19).
     # A browser of another profile is closed: its titles carry the profile's name.
     [void](Stop-OtherChrome)
     [void][SrKeyInput]::MinimizeClass('Chrome_WidgetWin_1')
-    Start-Process powershell -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $fixturePath) | Out-Null
+    $script:fixtureProcess = Start-Process powershell -PassThru -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $fixturePath)
     for ($i = 0; $i -lt 100; $i++) {
         $p = Find-WindowByTitle $launch.window_title
         if ($p) {
@@ -1085,8 +1098,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
 
 # Close what this run opened: the desktop fixture app, or the browser tab.
 if ($launch) {
-    $p = Find-WindowByTitle $launch.window_title
-    if ($p) { Stop-Process -Id $p.Id -Force }
+    Stop-DesktopFixture
 } else {
     Focus-Target $targetProc
     [void](Send-Chord "Ctrl+W")

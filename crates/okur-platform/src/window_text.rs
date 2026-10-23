@@ -338,10 +338,20 @@ mod reader {
     }
 
     /// The lines a field or document shows, each where it is drawn: its visible text, a range
-    /// for each line. None when it gives no text by range.
+    /// for each line. None when it gives no text by range, or places a line outside the
+    /// element: a WPF text box at 125% placed its line 40 pixels above itself, over the button
+    /// before it (old-pc, 2026-10-24), and the element's own place is then the better one.
     fn visible_lines(element: &IUIAutomationElement) -> Option<Vec<ScreenItem>> {
         // SAFETY: UIA client calls on valid objects.
         unsafe {
+            let place = element.CachedBoundingRectangle().ok()?;
+            let inside = |item: &ScreenItem| {
+                let (x, y) = (
+                    item.left + (item.right - item.left) / 2,
+                    item.top + (item.bottom - item.top) / 2,
+                );
+                (place.left..=place.right).contains(&x) && (place.top..=place.bottom).contains(&y)
+            };
             let pattern: IUIAutomationTextPattern =
                 element.GetCurrentPatternAs(UIA_TextPatternId).ok()?;
             let ranges = pattern.GetVisibleRanges().ok()?;
@@ -378,7 +388,11 @@ mod reader {
                         .copied()
                         .reduce(|a, b| (a.0.min(b.0), a.1.min(b.1), a.2.max(b.2), a.3.max(b.3)));
                     if let Some(rect) = bounds.filter(|_| !text.trim().is_empty()) {
-                        lines.push(ScreenItem::new(Role::Text, text, rect));
+                        let item = ScreenItem::new(Role::Text, text, rect);
+                        if !inside(&item) {
+                            return None;
+                        }
+                        lines.push(item);
                     }
                     if start.Move(TextUnit_Line, 1).ok()? == 0 {
                         break;

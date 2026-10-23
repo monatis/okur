@@ -46,11 +46,12 @@ pub fn virtual_key(name: &str) -> Option<u16> {
         "semicolon" | ";" => 0xBA,
         "apostrophe" | "'" => 0xDE,
         "minus" | "-" => 0xBD,
-        // The numeric keypad's operators, the same on every layout (Calculator).
-        "numpadadd" => 0x6B,
-        "numpadsubtract" => 0x6D,
-        "numpadmultiply" => 0x6A,
-        "numpaddivide" => 0x6F,
+        // The numeric keypad's operators, the same on every layout (Calculator), also by the
+        // names scenarios give them as the cursor keys ("NumpadMinus", "NumpadSlash").
+        "numpadadd" | "numpadplus" => 0x6B,
+        "numpadsubtract" | "numpadminus" => 0x6D,
+        "numpadmultiply" | "numpadstar" => 0x6A,
+        "numpaddivide" | "numpadslash" => 0x6F,
         other if other.len() == 7 && other.starts_with("numpad") => {
             return other
                 .get(6..)
@@ -589,6 +590,11 @@ mod tests {
         // The right Ctrl and Alt are extended keys; releasing a stuck one needs the flag.
         assert!(is_extended(0xA3) && is_extended(0xA5) && !is_extended(0xA2));
         assert_eq!(parse_step("NumpadAdd"), Ok(KeyStep::Chord(vec![0x6B])));
+        assert_eq!(
+            parse_step("Insert+NumpadMinus"),
+            Ok(KeyStep::Chord(vec![0x2D, 0x6D]))
+        );
+        assert_eq!(parse_step("NumpadSlash"), Ok(KeyStep::Chord(vec![0x6F])));
         assert_eq!(parse_step("Numpad7"), Ok(KeyStep::Chord(vec![0x67])));
         assert!(parse_step("NumpadX").is_err());
     }

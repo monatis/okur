@@ -10,7 +10,7 @@ ocr-started = OCR started using { $engine }.
 ocr-engine-windows = Microsoft OCR
 # Recognition is done; the Okur cursor is then active [obs, 996/s3].
 ocr-finished = finished.
-# Q while recognizing. JAWS's words for it were not recorded.
-ocr-canceled = Recognition canceled.
+# Q while recognizing [obs, 1006/s3].
+ocr-canceled = OCR cancelled.
 # Insert+Space, O while the experimental setting is off: Okur's own words.
 ocr-experimental-off = Recognizing the screen is experimental: turn it on in Okur Settings, in the Experimental group.
