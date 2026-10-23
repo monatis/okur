@@ -7213,3 +7213,33 @@ fn a_ribbon_is_entered_and_left_as_menus_are() {
         .unwrap_or_default();
     assert!(!said.contains(&msg::menus_left().to_string()), "{said}");
 }
+
+/// A Win32 edit reports a selection by its ends, the start for the caret; the caret is the
+/// end that moved: after Shift+Right three times from the fourth character, the seventh, and
+/// back past where it began, the start [obs, 975/s14, s21].
+#[test]
+fn a_selections_caret_is_the_end_that_moved() {
+    let blank = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(blank, Box::new(MockSpeechOutput::new()));
+    let read = |caret: usize, selection: Option<(usize, usize)>| {
+        AccessibilityEvent::TextContext(crate::TextContext {
+            text: "fn main() {".to_owned(),
+            caret,
+            selection,
+            font: None,
+            word: None,
+            misspelled: Vec::new(),
+        })
+    };
+    let caret = |engine: &ScreenReaderEngine| engine.last_text.as_ref().map(|t| t.caret);
+    engine.handle_accessibility_event(&read(3, None));
+    engine.handle_accessibility_event(&read(3, Some((3, 4))));
+    assert_eq!(caret(&engine), Some(4));
+    engine.handle_accessibility_event(&read(3, Some((3, 6))));
+    engine.handle_accessibility_event(&read(3, Some((3, 6))));
+    assert_eq!(caret(&engine), Some(6));
+    engine.handle_accessibility_event(&read(3, None));
+    engine.handle_accessibility_event(&read(2, Some((2, 3))));
+    engine.handle_accessibility_event(&read(1, Some((1, 3))));
+    assert_eq!(caret(&engine), Some(1));
+}

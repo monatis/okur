@@ -430,13 +430,20 @@ fn word_at(context: &TextContext) -> String {
         .collect()
 }
 
-/// The word around the caret, whole (Say Word reads it wherever in the word the caret is):
-/// as JAWS splits words, letters and digits apart from punctuation ("println" in
-/// "println!(" [obs, 756/s9]); else the field's word, or the run between spaces.
+/// The word around the caret, whole (Say Word reads it wherever in the word the caret is): in
+/// a field that reports words (UI Automation's, a page's), as JAWS splits words, letters and
+/// digits apart from punctuation ("println" in "println!(" [obs, 756/s9]), else the field's
+/// word; in one that reports none (a WinForms edit, read by window messages) the run between
+/// spaces, "Hello," [obs, 974/s22]; nothing on a space [obs, 974/s15].
 pub fn word_around(context: &TextContext) -> String {
     let text = chars(&context.text);
-    if let Some((start, end)) = web_word_at(&context.text, context.caret) {
-        return text.get(start..end).unwrap_or_default().iter().collect();
+    if text.get(context.caret).is_some_and(|c| c.is_whitespace()) {
+        return String::new();
+    }
+    if context.word.is_some() {
+        if let Some((start, end)) = web_word_at(&context.text, context.caret) {
+            return text.get(start..end).unwrap_or_default().iter().collect();
+        }
     }
     if let Some((start, end)) = field_word(context) {
         let word: String = text.get(start..end).unwrap_or_default().iter().collect();
@@ -768,6 +775,19 @@ mod tests {
             word: None,
             misspelled: Vec::new(),
         }
+    }
+
+    /// Say Word: a field that reports no words (a WinForms edit) reads the run between spaces,
+    /// "Hello,", one that does splits off punctuation, and a caret on a space reads nothing
+    /// [obs, 974/s15, s22; 756/s9].
+    #[test]
+    fn say_word_follows_the_fields_words() {
+        let mut field = ctx("Hello, world.", 1, None);
+        assert_eq!(word_around(&field), "Hello,");
+        field.word = Some((0, 5));
+        assert_eq!(word_around(&field), "Hello");
+        field.caret = 6;
+        assert_eq!(word_around(&field), "");
     }
 
     /// The caret's line, its range and its character, found within the line, are what the

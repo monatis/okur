@@ -161,6 +161,30 @@ impl ScreenReaderEngine {
                 context.misspelled = last.misspelled.clone();
             }
         }
+        // A selection's caret is its end that moved, where the platform gives a selection by
+        // its ends alone (a Win32 edit's, the start for the caret): Say Character after Shift+
+        // Right three times reads the character after the third, "n", and after Shift+Left
+        // back past where it began, the selection's start [obs, 975/s14, s21; 974/s21].
+        if let (Some((start, end)), Some(last)) = (
+            context.selection,
+            self.last_text.as_ref().filter(|l| l.text == context.text),
+        ) {
+            let (last_start, last_end) = last.selection.unwrap_or((last.caret, last.caret));
+            context.caret = if last.selection == Some((start, end)) {
+                // The same selection read again keeps its caret.
+                last.caret
+            } else if start == last_start && end != last_end {
+                end
+            } else if end == last_end && start != last_start {
+                start
+            } else if start == last.caret {
+                end
+            } else if end == last.caret {
+                start
+            } else {
+                context.caret
+            };
+        }
         let context = &context;
         let before = self.last_text.replace(context.clone());
         let key = self.pending_edit.take()?;

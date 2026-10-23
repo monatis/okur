@@ -43,6 +43,10 @@ cursor-restriction-application-short = Application
 cursor-restriction-real = Real window restriction
 cursor-restriction-current = Current window restriction
 cursor-restriction-focus = Focus window restriction
+# The same with short messages [obs, 976/s3, s7, s11].
+cursor-restriction-real-short = Real
+cursor-restriction-current-short = Current
+cursor-restriction-focus-short = Focus
 cursor-restriction-frame = Frame restriction
 cursor-unrestricted = Unrestricted
 
