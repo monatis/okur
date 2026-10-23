@@ -4,7 +4,7 @@
 //! screen rows for classic windows, one element per line for modern apps.
 
 #[cfg(windows)]
-pub use reader::{control_lines, window_lines};
+pub use reader::{control_lines, window_lines, window_runs};
 
 #[cfg(windows)]
 mod reader {
@@ -13,6 +13,7 @@ mod reader {
     };
     use crate::uia_snapshot::capture::{boolean, int, string};
     use okur_core::aom::Role;
+    use okur_core::screen_model::ScreenRun;
     use okur_core::viewer_text::{lines, ScreenItem, ViewerLayout};
     use windows::Win32::Foundation::HWND;
     use windows::Win32::UI::Accessibility::*;
@@ -21,6 +22,10 @@ mod reader {
     const MAX_ELEMENTS: usize = 2000;
     /// Pixels a check box's or radio button's box takes beside its text.
     const BOX_INSET: i32 = 24;
+    /// A field's or document's lines read at most, of what it shows.
+    const MAX_FIELD_LINES: usize = 500;
+    /// Characters read of one line at most.
+    const MAX_LINE_CHARS: i32 = 2000;
 
     const BUTTON: i32 = 50000;
     const CHECKBOX: i32 = 50002;
@@ -78,6 +83,9 @@ mod reader {
         layout: ViewerLayout,
         budget: usize,
         items: Vec<ScreenItem>,
+        /// A field or document gives the lines it shows, each where it is drawn (the Okur
+        /// cursor's model), not its whole value spread over its height (the viewer's).
+        fields_by_line: bool,
     }
 
     fn request(uia: &IUIAutomation) -> Option<IUIAutomationCacheRequest> {
@@ -180,6 +188,22 @@ mod reader {
         /// Rows: the text each control draws, at its place.
         fn read_row_element(&mut self, element: &IUIAutomationElement, control_type: i32) {
             match control_type {
+                EDIT | DOCUMENT if self.fields_by_line => {
+                    // SAFETY: cached property of a valid element.
+                    let password = unsafe { element.CachedIsPassword() }.is_ok_and(|b| b.as_bool());
+                    if password {
+                        return;
+                    }
+                    match visible_lines(element) {
+                        Some(lines) => self.items.extend(lines),
+                        None if control_type == EDIT => {
+                            if let Some(value) = string(element, UIA_ValueValuePropertyId) {
+                                self.push(element, control_type, value);
+                            }
+                        }
+                        None => self.children(element),
+                    }
+                }
                 EDIT | COMBOBOX | SPINNER => {
                     // SAFETY: cached property of a valid element.
                     let password = unsafe { element.CachedIsPassword() }.is_ok_and(|b| b.as_bool());
@@ -313,25 +337,101 @@ mod reader {
         }
     }
 
-    fn read_lines(
+    /// The lines a field or document shows, each where it is drawn: its visible text, a range
+    /// for each line. None when it gives no text by range.
+    fn visible_lines(element: &IUIAutomationElement) -> Option<Vec<ScreenItem>> {
+        // SAFETY: UIA client calls on valid objects.
+        unsafe {
+            let pattern: IUIAutomationTextPattern =
+                element.GetCurrentPatternAs(UIA_TextPatternId).ok()?;
+            let ranges = pattern.GetVisibleRanges().ok()?;
+            let mut lines = Vec::new();
+            for i in 0..ranges.Length().ok()? {
+                let visible = ranges.GetElement(i).ok()?;
+                let start = visible.Clone().ok()?;
+                start
+                    .MoveEndpointByRange(
+                        TextPatternRangeEndpoint_End,
+                        &start,
+                        TextPatternRangeEndpoint_Start,
+                    )
+                    .ok()?;
+                while lines.len() < MAX_FIELD_LINES {
+                    let line = start.Clone().ok()?;
+                    line.ExpandToEnclosingUnit(TextUnit_Line).ok()?;
+                    // The line starts past what the field shows: done.
+                    let past = line
+                        .CompareEndpoints(
+                            TextPatternRangeEndpoint_Start,
+                            &visible,
+                            TextPatternRangeEndpoint_End,
+                        )
+                        .ok()?;
+                    if past >= 0 {
+                        break;
+                    }
+                    let text = line.GetText(MAX_LINE_CHARS).ok()?.to_string();
+                    let text = text.trim_end_matches(['\r', '\n']).to_owned();
+                    let rects = xa11y_windows::uia_element::text_range_rectangles(&line);
+                    let bounds = rects
+                        .iter()
+                        .copied()
+                        .reduce(|a, b| (a.0.min(b.0), a.1.min(b.1), a.2.max(b.2), a.3.max(b.3)));
+                    if let Some(rect) = bounds.filter(|_| !text.trim().is_empty()) {
+                        lines.push(ScreenItem::new(Role::Text, text, rect));
+                    }
+                    if start.Move(TextUnit_Line, 1).ok()? == 0 {
+                        break;
+                    }
+                }
+            }
+            Some(lines)
+        }
+    }
+
+    /// The items `root` shows, laid out as `layout` or as its kind of window lays them out.
+    fn read_items(
         uia: &IUIAutomation,
         root: &IUIAutomationElement,
-        title: Option<String>,
-    ) -> Option<Vec<String>> {
+        layout: Option<ViewerLayout>,
+        fields_by_line: bool,
+    ) -> Option<(ViewerLayout, Vec<ScreenItem>)> {
         let request = request(uia)?;
         // SAFETY: plain UIA calls on a valid client.
         let walker = unsafe { uia.ControlViewWalker() }.ok()?;
         let root = unsafe { root.BuildUpdatedCache(&request) }.ok()?;
-        let layout = layout_of(&root);
+        let layout = layout.unwrap_or_else(|| layout_of(&root));
         let mut reader = Reader {
             walker: &walker,
             request: &request,
             layout,
             budget: MAX_ELEMENTS,
             items: Vec::new(),
+            fields_by_line,
         };
         reader.read(&root, true);
-        Some(lines(title.as_deref(), layout, &reader.items))
+        Some((layout, reader.items))
+    }
+
+    fn read_lines(
+        uia: &IUIAutomation,
+        root: &IUIAutomationElement,
+        title: Option<String>,
+    ) -> Option<Vec<String>> {
+        let (layout, items) = read_items(uia, root, None, false)?;
+        Some(lines(title.as_deref(), layout, &items))
+    }
+
+    /// The text window `hwnd` shows, each piece where it is drawn, for the Okur cursor's model
+    /// (the experimental screen text): its controls by rows, whatever kind of window it is, a
+    /// field's and a document's lines as they show them. Its title bar is not among them.
+    pub fn window_runs(uia: &IUIAutomation, hwnd: HWND) -> Option<Vec<ScreenRun>> {
+        dpi_aware(|| {
+            // SAFETY: a UIA element for a window handle.
+            let root = unsafe { uia.ElementFromHandle(hwnd) }.ok()?;
+            let (_, items) = read_items(uia, &root, Some(ViewerLayout::Rows), true)?;
+            Some(okur_core::viewer_text::runs(&items))
+        })
     }
 
     /// Runs `read` with this thread aware of each monitor's DPI, so rectangles and fonts are

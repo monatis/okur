@@ -681,6 +681,14 @@ pub enum AccessibilityEvent {
     /// The Virtual Viewer's lines for the window or control in front, read for Virtualize
     /// Window or Virtualize Current Control; empty when nothing could be read.
     ViewerText(Vec<String>),
+    /// The text the accessibility interfaces place on the window in front, each piece where
+    /// it is drawn, read for the Okur cursor's model; empty when nothing could be read
+    /// ([`crate::actions::ApplicationActions::read_screen`]).
+    ScreenText(Vec<crate::screen_model::ScreenRun>),
+    /// The words recognized from the screen's pixels where they are drawn, asked for by
+    /// Insert+Space, O; empty when none was recognized or recognition failed
+    /// ([`crate::actions::ApplicationActions::recognize`]).
+    Recognized(Vec<crate::screen_model::ScreenRun>),
     /// The applications' windows, front to back, asked for by the Window List (Insert+F10;
     /// [`crate::actions::ApplicationActions::list_windows`]).
     TopWindows(Vec<TopWindow>),

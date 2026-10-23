@@ -122,6 +122,11 @@ mod windows_actions {
         /// A drag with the left button. Not done in the keyboard hook: it moves the pointer in
         /// steps a hand would take, 120 ms in all (performance review 2026-10-23, T3).
         Drag((i32, i32), (i32, i32)),
+        /// The text the window in front shows, each piece where it is drawn (the Okur cursor's
+        /// model), answered even when nothing could be read.
+        Screen,
+        /// The words recognized in an area of the screen, answered even when none was.
+        Recognize(okur_core::actions::RecognitionArea),
     }
 
     /// The virtual key of a key the screen reader sends for a reading command.
@@ -292,6 +297,45 @@ mod windows_actions {
                                 let _ = events.send(AccessibilityEvent::PageElements(elements));
                             }
                             Request::Drag(from, to) => super::drag(from, to),
+                            Request::Screen => {
+                                let Some(events) = events.as_ref() else {
+                                    tracing::warn!("screen read impossible: no event channel");
+                                    continue;
+                                };
+                                let started = Instant::now();
+                                // SAFETY: plain Win32 call with no preconditions.
+                                let hwnd = unsafe { GetForegroundWindow() };
+                                let runs = uia
+                                    .as_ref()
+                                    .and_then(|uia| crate::window_text::window_runs(uia, hwnd))
+                                    .unwrap_or_default();
+                                tracing::debug!(
+                                    runs = runs.len(),
+                                    ms = started.elapsed().as_millis(),
+                                    "screen text read"
+                                );
+                                // Answered even when empty: the engine keeps the window's model.
+                                let _ = events.send(AccessibilityEvent::ScreenText(runs));
+                            }
+                            Request::Recognize(area) => {
+                                let Some(events) = events.as_ref() else {
+                                    tracing::warn!("recognition impossible: no event channel");
+                                    continue;
+                                };
+                                let started = Instant::now();
+                                let words = crate::ocr::recognize(area).unwrap_or_else(|e| {
+                                    tracing::warn!("recognition failed: {e}");
+                                    Vec::new()
+                                });
+                                tracing::debug!(
+                                    ?area,
+                                    words = words.len(),
+                                    ms = started.elapsed().as_millis(),
+                                    "screen recognized"
+                                );
+                                // Answered even when none: the engine waits for it.
+                                let _ = events.send(AccessibilityEvent::Recognized(words));
+                            }
                             Request::Copy(text) => {
                                 if let Err(e) = super::set_clipboard_text(&text) {
                                     tracing::warn!("copy to the clipboard failed: {e}");
@@ -616,6 +660,14 @@ mod windows_actions {
 
         fn read_at_point(&self, x: i32, y: i32) -> bool {
             self.send(Request::Point(x, y))
+        }
+
+        fn read_screen(&self) -> bool {
+            self.send(Request::Screen)
+        }
+
+        fn recognize(&self, area: okur_core::actions::RecognitionArea) -> bool {
+            self.send(Request::Recognize(area))
         }
 
         /// On a thread of its own, once Okur's dialog has had time to close: a click while it

@@ -41,6 +41,7 @@ mod quit;
 mod reading;
 mod routing;
 mod say_all;
+mod screen_text;
 mod skim;
 mod speech_mode;
 mod state;
@@ -378,6 +379,12 @@ pub struct ScreenReaderEngine {
     table_layer: bool,
     /// The mouse echo layer (Insert+Space, E): the next key is its.
     mouse_echo_layer: bool,
+    /// The OCR layer (Insert+Space, O): the next key is its.
+    ocr_layer: bool,
+    /// A recognition is under way; its words come as [`AccessibilityEvent::Recognized`].
+    recognizing: bool,
+    /// The Okur cursor's model of the window in front (the experimental `screen_text`).
+    screen_model: Option<crate::screen_model::ScreenModel>,
     /// When the mouse last moved, until mouse echo reads what it rests on.
     mouse_moved_at: Option<std::time::Instant>,
     /// Until when the mouse's moves are Okur's own, not echoed.
@@ -554,6 +561,9 @@ impl ScreenReaderEngine {
             toasts_unsaid: false,
             table_layer: false,
             mouse_echo_layer: false,
+            ocr_layer: false,
+            recognizing: false,
+            screen_model: None,
             mouse_moved_at: None,
             own_mouse_move_until: None,
             last_mouse_echo: None,
@@ -823,6 +833,9 @@ impl ScreenReaderEngine {
             return action;
         }
         if let Some(action) = self.mouse_echo_layer_key(event) {
+            return action;
+        }
+        if let Some(action) = self.ocr_layer_key(event) {
             return action;
         }
         if let Some(action) = self.table_layer_key(event) {
@@ -1352,7 +1365,11 @@ impl ScreenReaderEngine {
                 self.speech = speech;
                 None
             }
-            AccessibilityEvent::Focus(focus) => self.handle_focus_event(focus),
+            AccessibilityEvent::Focus(focus) => {
+                let spoken = self.handle_focus_event(focus);
+                self.forget_other_windows_screen();
+                spoken
+            }
             AccessibilityEvent::Menu(menu) => self.handle_menu_event(menu.clone()),
             AccessibilityEvent::Change { kind, control } => self.handle_change(*kind, control),
             AccessibilityEvent::TextContext(context) => self.handle_text_context(context),
@@ -1360,6 +1377,8 @@ impl ScreenReaderEngine {
             AccessibilityEvent::Selected(item) => self.handle_selected(item),
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
             AccessibilityEvent::ViewerText(lines) => self.open_screen_viewer(lines),
+            AccessibilityEvent::ScreenText(runs) => self.screen_text(runs),
+            AccessibilityEvent::Recognized(words) => self.recognized(words),
             AccessibilityEvent::TopWindows(windows) => self.open_window_list(windows),
             AccessibilityEvent::TrayIcons(icons) => self.open_tray_list(icons),
             AccessibilityEvent::PageElements(elements) => self.say_page_font(elements),

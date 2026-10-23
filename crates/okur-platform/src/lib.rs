@@ -15,6 +15,7 @@ pub mod instance;
 pub mod lowered_process;
 pub mod mouse_point;
 pub mod notification_listener;
+pub mod ocr;
 pub mod privacy;
 pub mod process;
 pub mod registry;

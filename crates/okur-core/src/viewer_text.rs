@@ -16,6 +16,7 @@
 //! left to right, accelerator marks are not shown, and unnamed groups are not listed.
 
 use crate::aom::Role;
+use crate::screen_model::{ScreenRun, Source};
 
 /// How a window's elements become the viewer's lines.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -67,15 +68,6 @@ impl ScreenItem {
     }
 }
 
-/// One line of text at its place: what a row is made of.
-#[derive(Debug, Clone)]
-struct Run {
-    left: i32,
-    top: i32,
-    bottom: i32,
-    text: String,
-}
-
 /// `text` without the invisible marks that steer its direction or joins (Explorer wraps
 /// dates in left-to-right marks), which a viewer line would show as stray characters.
 fn visible(text: &str) -> String {
@@ -109,23 +101,30 @@ fn line_height(items: &[ScreenItem]) -> i32 {
 }
 
 /// The window's text by screen rows: each item's lines placed where they are drawn, rows
-/// top to bottom, each row's text left to right. A row's band is its first line's: a tall
-/// item (a group box, a wrapped text) never pulls the rows beside it into one.
+/// top to bottom, each row's text left to right ([`crate::screen_model::lines`]).
 pub fn rows(items: &[ScreenItem]) -> Vec<String> {
+    crate::screen_model::lines(&runs(items))
+        .into_iter()
+        .map(|line| line.text)
+        .collect()
+}
+
+/// Each item's lines where they are drawn: a group box's caption at its top, a wrapped text
+/// or a multi-line field's lines one under another, a label's line at its top.
+pub fn runs(items: &[ScreenItem]) -> Vec<ScreenRun> {
     let line = line_height(items);
-    let mut runs: Vec<Run> = Vec::new();
+    let mut runs: Vec<ScreenRun> = Vec::new();
     for item in items {
         let text = visible(&item.text);
         if text.is_empty() {
             continue;
         }
         if item.caption {
-            runs.push(Run {
-                left: item.left,
-                top: item.top,
-                bottom: item.top + line,
+            runs.push(ScreenRun::new(
                 text,
-            });
+                (item.left, item.top, item.right, item.top + line),
+                Source::Accessible,
+            ));
             continue;
         }
         // Wrapped as the control wraps it, or a multi-line field's lines.
@@ -149,38 +148,14 @@ pub fn rows(items: &[ScreenItem]) -> Vec<String> {
         };
         for (i, part) in lines.into_iter().enumerate() {
             let top = item.top + each * i32::try_from(i).unwrap_or(0);
-            runs.push(Run {
-                left: item.left,
-                top,
-                bottom: top + each,
-                text: part,
-            });
+            runs.push(ScreenRun::new(
+                part,
+                (item.left, top, item.right, top + each),
+                Source::Accessible,
+            ));
         }
     }
-    runs.sort_by_key(|r| (r.top, r.left));
-    let mut grouped: Vec<(i32, i32, Vec<Run>)> = Vec::new();
-    for run in runs {
-        let middle = run.top + (run.bottom - run.top) / 2;
-        match grouped
-            .iter_mut()
-            .find(|(top, bottom, _)| (*top..*bottom).contains(&middle))
-        {
-            Some((_, _, row)) => row.push(run),
-            None => grouped.push((run.top, run.bottom.max(run.top + 1), vec![run])),
-        }
-    }
-    grouped
-        .into_iter()
-        .map(|(_, _, mut row)| {
-            row.sort_by_key(|r| r.left);
-            row.iter()
-                .map(|r| r.text.as_str())
-                .filter(|t| !t.is_empty())
-                .collect::<Vec<_>>()
-                .join(" ")
-        })
-        .filter(|r| !r.is_empty())
-        .collect()
+    runs
 }
 
 /// The word an element list gives an element's role ("Button", "group"); text has none.

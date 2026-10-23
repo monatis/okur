@@ -58,14 +58,16 @@ pub enum Group {
     Keyboard,
     Reading,
     MouseEcho,
+    Experimental,
 }
 
 impl Group {
-    pub const ALL: [Group; 4] = [
+    pub const ALL: [Group; 5] = [
         Group::Speech,
         Group::Keyboard,
         Group::Reading,
         Group::MouseEcho,
+        Group::Experimental,
     ];
 
     /// The group's control id in a dialog.
@@ -75,6 +77,7 @@ impl Group {
             Self::Keyboard => "keyboard",
             Self::Reading => "reading",
             Self::MouseEcho => "mouse_echo",
+            Self::Experimental => "experimental",
         }
     }
 
@@ -84,6 +87,7 @@ impl Group {
             Self::Keyboard => msg::settings_group_keyboard(),
             Self::Reading => msg::settings_group_reading(),
             Self::MouseEcho => msg::settings_group_mouse_echo(),
+            Self::Experimental => msg::settings_group_experimental(),
         }
     }
 }
@@ -538,6 +542,13 @@ pub static SETTINGS: &[SettingSpec] = &[
             CHECK,
         )
     },
+    // Okur's own, with no JAWS setting.
+    spec(
+        "experimental.screen_text",
+        Group::Experimental,
+        Some(msg::settings_experimental_screen_text),
+        CHECK,
+    ),
 ];
 
 /// The setting with `id`.

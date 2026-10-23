@@ -161,6 +161,19 @@ impl MouseEchoUnit {
     }
 }
 
+/// Okur's own features still being proven, each off until it is (Okur Settings' Experimental
+/// group).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default)]
+pub struct Experimental {
+    /// The Okur cursor reads a window's text where the accessibility interfaces place it, where
+    /// JAWS's cursor reads only what its screen capture catches [obs, 994, 995], and Insert+
+    /// Space, O recognizes the screen's text into it, as JAWS's Convenient OCR puts its
+    /// recognized words among its cursor's lines [obs, 996, 997]
+    /// (`docs/plans/2026-10-23-okur-cursor-screen-text.md`).
+    pub screen_text: bool,
+}
+
 /// Mouse echo: what the mouse points to said as it moves, as JAWS's Mouse Echo group sets it
 /// (Settings Center help; `DEFAULT.JCF`'s Options, JAWS's defaults here).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -923,6 +936,7 @@ pub struct Settings {
     /// use any of the commands to exit the program including INSERT+F4" (JAWS 2025 help).
     pub confirm_exit: bool,
     pub mouse_echo: MouseEcho,
+    pub experimental: Experimental,
 }
 
 impl Default for Settings {
@@ -948,6 +962,7 @@ impl Default for Settings {
             reading_interrupt: true,
             confirm_exit: true,
             mouse_echo: MouseEcho::default(),
+            experimental: Experimental::default(),
         }
     }
 }
@@ -1019,6 +1034,7 @@ impl Settings {
             confirm_exit: true,
             // Not in old-pc's user JCF: the shared one's, JAWS's defaults.
             mouse_echo: MouseEcho::default(),
+            experimental: Experimental::default(),
         }
     }
 }

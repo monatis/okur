@@ -110,7 +110,7 @@ pub enum ActiveCursor {
 impl ScreenReaderEngine {
     /// A cursor message, its short form with short messages (Intermediate, Advanced): "JAWS",
     /// "JAWS to PC", "PC" [obs, 697, 698].
-    fn cursor_message(&self, long: impl ToString, short: impl ToString) -> String {
+    pub(super) fn cursor_message(&self, long: impl ToString, short: impl ToString) -> String {
         match self.settings.verbosity.message_length() {
             crate::settings::MessageLength::Long => long.to_string(),
             crate::settings::MessageLength::Short => short.to_string(),
@@ -120,6 +120,7 @@ impl ScreenReaderEngine {
     /// Numpad Minus: "Okur Cursor", where JAWS says "JAWS Cursor" [obs, 516/s1].
     pub(super) fn activate_okur_cursor(&mut self) -> Option<String> {
         self.active_cursor = ActiveCursor::Okur;
+        self.request_screen();
         let said = self.cursor_message(msg::cursor_okur(), msg::cursor_okur_short());
         self.say(said)
     }
@@ -127,6 +128,7 @@ impl ScreenReaderEngine {
     /// Numpad Plus with the JAWS cursor active: "PC Cursor" [obs, 516/s7].
     pub(super) fn activate_pc_cursor(&mut self) -> Option<String> {
         self.active_cursor = ActiveCursor::Pc;
+        self.forget_recognized();
         // In a page the PC cursor is the virtual one: "virtual PC Cursor" [obs, 564/s19].
         if self.app_mode == super::AppMode::VirtualBuffer {
             let said = self.virtual_pc_message();
@@ -139,6 +141,7 @@ impl ScreenReaderEngine {
     /// Insert+Numpad Minus: the mouse goes to the PC cursor, "Route Okur to PC" (JAWS: "Route
     /// JAWS to PC") [obs, 516/s3].
     pub(super) fn route_okur_to_pc(&mut self) -> Option<String> {
+        self.request_screen();
         if let Some((x, y)) = self.pc_cursor_point() {
             if let Some(actions) = &self.actions {
                 actions.move_mouse(x, y);
@@ -211,10 +214,20 @@ impl ScreenReaderEngine {
         self.active_cursor == ActiveCursor::Okur && self.okur_place.is_some()
     }
 
-    /// The lines the Okur cursor reads: a page's as its screen shows them, without the roles
-    /// and the region and list announcements ("Weekend events", "Three events open to everyone
-    /// this weekend." [obs, 753/s5-s9]); a text field's, indentation and all.
+    /// The lines the Okur cursor reads: the screen model's where it gives them (the
+    /// experimental `screen_text`), else as [`Self::known_okur_lines`].
     fn okur_lines(&self) -> Vec<String> {
+        match self.okur_screen_lines() {
+            Some(lines) => lines.into_iter().map(|line| line.text).collect(),
+            None => self.known_okur_lines(),
+        }
+    }
+
+    /// The lines the Okur cursor reads without the screen model: a page's as its screen shows
+    /// them, without the roles and the region and list announcements ("Weekend events", "Three
+    /// events open to everyone this weekend." [obs, 753/s5-s9]); a dialog box's rows; a text
+    /// field's, indentation and all.
+    fn known_okur_lines(&self) -> Vec<String> {
         if let Some(rows) = self.okur_dialog_rows() {
             return rows;
         }
@@ -238,7 +251,7 @@ impl ScreenReaderEngine {
     /// own, a field by its text, a label by its words, buttons side by side on one: "Line
     /// number:", "1", "Go To Button Cancel Button" [obs, 755/s5, s10]. The trace gives the
     /// controls without their places, so the rows follow the dialog's order.
-    fn okur_dialog_rows(&self) -> Option<Vec<String>> {
+    pub(super) fn okur_dialog_rows(&self) -> Option<Vec<String>> {
         let focus = self.last_native_focus.as_ref()?;
         if self.app_mode == super::AppMode::VirtualBuffer
             || !focus.in_dialog_box
@@ -293,6 +306,14 @@ impl ScreenReaderEngine {
     /// field, the focused control's row in a dialog box, the virtual cursor's line in a page,
     /// before its first character.
     fn routed_place(&self) -> Option<OkurPlace> {
+        // The screen model's line where the PC cursor is.
+        if let Some(lines) = self.okur_screen_lines() {
+            let at = self.pc_cursor_point();
+            let line = at
+                .and_then(|point| lines.iter().position(|line| line.holds(point)))
+                .unwrap_or(0);
+            return Some(OkurPlace::Text { line, column: None });
+        }
         if self.okur_dialog_rows().is_some() {
             return Some(OkurPlace::Text {
                 line: self.focused_dialog_row().unwrap_or(0),
@@ -383,6 +404,17 @@ impl ScreenReaderEngine {
         let Some(OkurPlace::Text { line, column }) = self.okur_place else {
             return;
         };
+        // On the screen model's character, where it is drawn.
+        if let Some(lines) = self.okur_screen_lines() {
+            let point = lines.get(line).and_then(|l| l.point(column.unwrap_or(0)));
+            if let (Some((x, y)), Some(actions)) = (point, &self.actions) {
+                if actions.move_mouse(x, y) {
+                    self.mouse = Some((x, y));
+                    self.note_own_mouse_move();
+                }
+            }
+            return;
+        }
         if self.app_mode == super::AppMode::VirtualBuffer {
             let node = self
                 .cursor

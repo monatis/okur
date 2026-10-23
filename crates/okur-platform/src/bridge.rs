@@ -21,6 +21,8 @@ pub enum PlatformError {
     AudioError(String),
     #[error("Unsupported platform: {0}")]
     Unsupported(String),
+    #[error("Recognition error: {0}")]
+    Recognition(String),
 }
 
 static NEXT_NODE_ID: AtomicUsize = AtomicUsize::new(1);

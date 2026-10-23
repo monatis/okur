@@ -20,6 +20,17 @@ pub enum MouseClick {
     RightUp,
 }
 
+/// What Insert+Space, O recognizes (JAWS's Convenient OCR layer).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum RecognitionArea {
+    /// The window in front (W, `RecognizeRealWindow`).
+    Window,
+    /// Every screen (S, `RecognizeScreen`).
+    Screen,
+    /// A rectangle in desktop pixels: the focused control's (C, `RecognizeControl`).
+    Rect(i32, i32, i32, i32),
+}
+
 /// Platform actions on the live element a buffer node was captured from.
 pub trait ApplicationActions: Send {
     /// Requests keyboard focus on the node's element. Returns false when the node has no
@@ -84,6 +95,22 @@ pub trait ApplicationActions: Send {
     /// [`crate::AccessibilityEvent::MousePoint`] (mouse echo). False when unsupported.
     fn read_at_point(&self, x: i32, y: i32) -> bool {
         let _ = (x, y);
+        false
+    }
+
+    /// Asks for the text the accessibility interfaces place on the window in front, each piece
+    /// where it is drawn, for the Okur cursor. It arrives later as
+    /// [`crate::event::AccessibilityEvent::ScreenText`], always: empty when nothing could be
+    /// read. Returns false when unsupported.
+    fn read_screen(&self) -> bool {
+        false
+    }
+
+    /// Asks for the words recognized from the screen's pixels in `area`, with the system's
+    /// recognizer. They arrive later as [`crate::event::AccessibilityEvent::Recognized`],
+    /// always: empty when none was recognized. Returns false when unsupported.
+    fn recognize(&self, area: RecognitionArea) -> bool {
+        let _ = area;
         false
     }
 
@@ -380,6 +407,20 @@ impl ApplicationActions for RecordingActions {
     fn move_mouse(&self, x: i32, y: i32) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push((format!("mouse to {x}, {y}"), 0));
+        }
+        true
+    }
+
+    fn read_screen(&self) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("read screen".to_owned(), 0));
+        }
+        true
+    }
+
+    fn recognize(&self, area: RecognitionArea) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((format!("recognize {area:?}"), 0));
         }
         true
     }

@@ -318,6 +318,8 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::Selected(_)) => "selected",
         Some(AccessibilityEvent::LiveRegion(_)) => "live region",
         Some(AccessibilityEvent::ViewerText(_)) => "viewer text",
+        Some(AccessibilityEvent::ScreenText(_)) => "screen text",
+        Some(AccessibilityEvent::Recognized(_)) => "recognized",
         Some(AccessibilityEvent::TopWindows(_)) => "top windows",
         Some(AccessibilityEvent::TrayIcons(_)) => "tray icons",
         Some(AccessibilityEvent::PageElements(_)) => "page elements",

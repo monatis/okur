@@ -90,3 +90,41 @@ pub fn do_default_action(element: &IUIAutomationElement) -> windows::core::Resul
             .DoDefaultAction()
     }
 }
+
+/// The rectangles a text range is drawn in, as `(left, top, right, bottom)` in physical
+/// desktop pixels: one per line it spans, in order. Empty if the call fails or the SAFEARRAY is
+/// not the 1-D array of `f64` quadruples (left, top, width, height) UIA documents.
+pub fn text_range_rectangles(range: &IUIAutomationTextRange) -> Vec<(i32, i32, i32, i32)> {
+    // SAFETY: GetBoundingRectangles hands over a SAFEARRAY, freed here with SafeArrayDestroy;
+    // its data is read only while locked with SafeArrayAccessData.
+    unsafe {
+        let Ok(sa) = range.GetBoundingRectangles() else {
+            return Vec::new();
+        };
+        if sa.is_null() {
+            return Vec::new();
+        }
+        let mut data: *mut core::ffi::c_void = core::ptr::null_mut();
+        if SafeArrayAccessData(sa, &mut data).is_err() {
+            let _ = SafeArrayDestroy(sa);
+            return Vec::new();
+        }
+        let count = (*(*sa).rgsabound.as_ptr()).cElements as usize;
+        let values = std::slice::from_raw_parts(data as *const f64, count).to_vec();
+        let _ = SafeArrayUnaccessData(sa);
+        let _ = SafeArrayDestroy(sa);
+        values
+            .as_chunks::<4>()
+            .0
+            .iter()
+            .map(|&[left, top, width, height]| {
+                (
+                    left.round() as i32,
+                    top.round() as i32,
+                    (left + width).round() as i32,
+                    (top + height).round() as i32,
+                )
+            })
+            .collect()
+    }
+}

@@ -23,6 +23,7 @@ pub mod placemarkers;
 pub mod pronounce;
 pub mod retire;
 pub mod screen_echo;
+pub mod screen_model;
 pub mod settings;
 pub mod settings_layers;
 pub mod sound;
