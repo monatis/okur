@@ -74,7 +74,8 @@ A step can be in more than one entry; all of its entries apply.
   `232-web-list-buttons/s1`, `226-web-element-lists/s3`,
   `224-web-headings-list/s1`, `225-web-form-fields-list/s1`, `226-web-element-lists/s1`,
   `227-web-form-fields-list-items/s1`, `228-web-form-fields-list-edit/s1`,
-  `230-web-element-lists-items/s1`, `233-web-list-combo-boxes/s1`, `234-web-list-edits/s1`,
+  `230-web-element-lists-items/s1`, `576-web-element-lists-items-intermediate/s1`,
+  `586-web-element-lists-items-advanced/s1`, `233-web-list-combo-boxes/s1`, `234-web-list-edits/s1`,
   `235-web-list-check-boxes/s1`, `236-web-list-graphics/s1`, `239-web-list-paragraphs/s1`,
   `240-web-list-block-quotes/s1`, `241-web-list-regions/s1`, `242-web-list-tables/s1`,
   `243-web-list-glance-highlights/s1`, `244-web-list-divisions/s1`, `245-web-list-tabs/s1`,
@@ -92,7 +93,8 @@ A step can be in more than one entry; all of its entries apply.
   `703-web-placemarker-none/s4`, `704-web-placemarker-two/s3`, `704-web-placemarker-two/s34`,
   `704-web-placemarker-two/s38` and `704-web-placemarker-two/s44` (its list, its version or
   its main window said before the dialog, in some trials); and the Word List,
-  `560-web-word-list/s1`, `560-web-word-list/s4`, `764-web-word-list-a-word-followed/s1`,
+  `560-web-word-list/s1`, `560-web-word-list/s4`, `900-web-word-list-advanced/s4`,
+  `764-web-word-list-a-word-followed/s1`,
   `765-web-word-list-dialog-and-case/s1` and `766-web-word-list-past-the-last/s1` (its list,
   then the browser's title, or its version, said before the dialog; one trial of 560/s4 has
   none of it); and Skim Reading, `760-web-skim-reading-dialog/s1` and
