@@ -7119,3 +7119,42 @@ fn nothing_found_is_said_at_the_levels_length() {
     );
     assert!(crate::messages::msg::blank().short().is_none());
 }
+
+/// A classic console's new rows after Enter are said: the command's output and the next
+/// prompt; what is typed at the prompt is not new [obs, 962/s1, s2]. With Screen Echo off,
+/// nothing [obs, 963/s2].
+#[test]
+fn a_consoles_new_output_is_said_while_screen_echo_is_on() {
+    let console = |text: &str| {
+        let mut focus = FocusEvent::new(Role::Document).with_name("Text Area");
+        focus.platform.top_window_class = Some("ConsoleWindowClass".to_owned());
+        focus.text = Some(crate::TextContext {
+            text: text.to_owned(),
+            caret: 0,
+            selection: None,
+            font: None,
+            word: None,
+            misspelled: Vec::new(),
+        });
+        focus
+    };
+    let blank = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(blank, Box::new(MockSpeechOutput::new()));
+    let screen = "Console echo fixture\nCommand: \n\n\n";
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(console(screen)));
+    let typed = "Console echo fixture\nCommand: a\n\n\n";
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::ConsoleText(typed.into()));
+    assert_eq!(said, None);
+    let output = "Console echo fixture\nCommand: a\nOutput line 1 for a\nSecond output line 1\nCommand: \n\n";
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::ConsoleText(output.into()));
+    assert_eq!(
+        said.as_deref(),
+        Some("Output line 1 for a\nSecond output line 1\nCommand:")
+    );
+
+    engine.settings.screen_echo = crate::settings::ScreenEcho::None;
+    let more = format!("{output}b\nOutput line 2 for b\nCommand: ");
+    let more = more.replace("Command: \n\nb", "Command: b");
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::ConsoleText(more));
+    assert_eq!(said, None);
+}

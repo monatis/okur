@@ -100,6 +100,11 @@ impl AppModule for Terminal {
         owns(field)
     }
 
+    /// A console's rows without their padding, the empty rows below its text dropped.
+    fn screen_rows(&self, _focus: &FocusEvent, text: &str) -> Option<Vec<String>> {
+        Some(viewer_lines(text, 0).0)
+    }
+
     /// Escape clears the input line (PowerShell's and Command Prompt's), and JAWS reads the
     /// line then: the prompt (Windows Terminal, JAWS on the dev box, 2026-10-17).
     fn edit_key(&self, _field: &FocusEvent, key: &KeyEvent) -> Option<EditKey> {

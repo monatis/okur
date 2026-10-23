@@ -22,6 +22,7 @@ const DOUBLE_PRESS_MS: u64 = 350;
 
 mod clipboard;
 mod commands;
+mod console;
 mod cursors;
 mod find;
 mod flexible_web;
@@ -419,6 +420,8 @@ pub struct ScreenReaderEngine {
     /// The selection was added to the clipboard (Okur key+Windows+C): Ctrl+C and Ctrl+X ask
     /// before overwriting it, until a copy or a cut does.
     clipboard_appended: bool,
+    /// The rows a console showed when last read, which its next writing is compared with.
+    screen_rows: Option<Vec<String>>,
     /// The question asked before overwriting the clipboard, while it is open.
     overwrite_dialog: Option<crate::ui::clipboard::OverwriteDialog>,
     /// How the engine asks its host to end Okur; None when headless.
@@ -567,6 +570,7 @@ impl ScreenReaderEngine {
             live_streams: std::collections::HashMap::new(),
             quit_dialog: None,
             clipboard_appended: false,
+            screen_rows: None,
             overwrite_dialog: None,
             exit: None,
         }
@@ -1329,6 +1333,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::Menu(menu) => self.handle_menu_event(menu.clone()),
             AccessibilityEvent::Change { kind, control } => self.handle_change(*kind, control),
             AccessibilityEvent::TextContext(context) => self.handle_text_context(context),
+            AccessibilityEvent::ConsoleText(text) => self.console_text(text),
             AccessibilityEvent::Selected(item) => self.handle_selected(item),
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
             AccessibilityEvent::ViewerText(lines) => self.open_screen_viewer(lines),

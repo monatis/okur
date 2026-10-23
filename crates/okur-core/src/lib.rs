@@ -22,6 +22,7 @@ pub mod native_focus;
 pub mod placemarkers;
 pub mod pronounce;
 pub mod retire;
+pub mod screen_echo;
 pub mod settings;
 pub mod settings_layers;
 pub mod sound;

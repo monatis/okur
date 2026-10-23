@@ -68,6 +68,12 @@ pub trait AppModule: Send {
         FocusResponse::Pass
     }
 
+    /// The rows of `text`, the screen `focus`'s application writes to as it runs (a console's),
+    /// for Screen Echo to find what it wrote since; `None` where its screen is not read so.
+    fn screen_rows(&self, _focus: &FocusEvent, _text: &str) -> Option<Vec<String>> {
+        None
+    }
+
     /// Whether arriving in one of the application's windows announces the window's title.
     fn names_window(&self, _focus: &FocusEvent) -> bool {
         true

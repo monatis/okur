@@ -314,6 +314,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::Menu(_)) => "menu",
         Some(AccessibilityEvent::Change { .. }) => "change",
         Some(AccessibilityEvent::TextContext(_)) => "text context",
+        Some(AccessibilityEvent::ConsoleText(_)) => "console text",
         Some(AccessibilityEvent::Selected(_)) => "selected",
         Some(AccessibilityEvent::LiveRegion(_)) => "live region",
         Some(AccessibilityEvent::ViewerText(_)) => "viewer text",

@@ -35,7 +35,8 @@ pub fn css_alignment(align: &str) -> Option<&'static str> {
 #[cfg(windows)]
 pub use reader::{
     focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
-    move_caret_in_edit, read_focused, read_focused_outside_page, with_paragraph_alignment,
+    move_caret_in_edit, read_focused, read_focused_outside_page, visible_text,
+    with_paragraph_alignment,
 };
 
 #[cfg(windows)]
@@ -99,6 +100,24 @@ mod reader {
     /// address bar), whose page still names a focus of its own, which is not the one typed in.
     pub fn read_focused_outside_page(uia: &IUIAutomation) -> Option<TextContext> {
         read_uia(uia).map(with_edit_font).or_else(read_win32_edit)
+    }
+
+    /// The text the focused element shows on the screen, through UIA's visible ranges: a
+    /// console's rows in its window, not its whole buffer (9,001 rows on Windows 10).
+    pub fn visible_text(uia: &IUIAutomation) -> Option<String> {
+        // SAFETY: UIA client calls on valid objects.
+        unsafe {
+            let focused = uia.GetFocusedElement().ok()?;
+            let pattern: IUIAutomationTextPattern =
+                focused.GetCurrentPatternAs(UIA_TextPatternId).ok()?;
+            let ranges = pattern.GetVisibleRanges().ok()?;
+            let mut text = String::new();
+            for i in 0..ranges.Length().ok()? {
+                let range = ranges.GetElement(i).ok()?;
+                text.push_str(&range.GetText(MAX_TEXT_CHARS).ok()?.to_string());
+            }
+            Some(text.replace("\r\n", "\n"))
+        }
     }
 
     /// `context` with a plain Win32 edit's own font (Notepad's on Windows 10): UIA's edit

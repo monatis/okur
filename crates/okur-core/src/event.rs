@@ -683,6 +683,9 @@ pub enum AccessibilityEvent {
         /// The program's name, its executable's without ".exe".
         app: Option<String>,
     },
+    /// The console in front wrote to its screen: the rows it shows now. Read once its writing
+    /// pauses, for what is new below what it showed ([`crate::screen_echo`]).
+    ConsoleText(String),
     /// The window in front was renamed: a console takes the title what runs in it sets
     /// ("SR Console Fixture" after PowerShell's own, 321).
     WindowRenamed(String),

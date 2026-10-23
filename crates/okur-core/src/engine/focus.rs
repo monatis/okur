@@ -162,6 +162,7 @@ impl ScreenReaderEngine {
         if focus.bounds.is_some() {
             self.focus_bounds = focus.bounds;
         }
+        self.note_screen_rows(focus);
         if let (Some(product), Some(version)) = (&focus.app_product, &focus.app_version) {
             self.focus_app_version = Some((product.clone(), version.clone()));
         }

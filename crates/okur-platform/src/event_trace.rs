@@ -1538,6 +1538,15 @@ impl EventConverter {
             self.last_live_region = Some((live.text.clone(), event.t_ms));
             return vec![okur_core::AccessibilityEvent::LiveRegion(live)];
         }
+        // A console's screen after it wrote to it, for Screen Echo.
+        if event.event == "console_update" {
+            return event
+                .text_context
+                .as_ref()
+                .map(|context| okur_core::AccessibilityEvent::ConsoleText(context.text.clone()))
+                .into_iter()
+                .collect();
+        }
         if event.event == "uia_window_opened" {
             let Some((text, sender)) = event.focus_subtree.as_ref().and_then(toast_text) else {
                 return Vec::new();
@@ -2308,6 +2317,73 @@ mod capture {
         /// The events that arrived while one was read, in order.
         static DEFERRED: RefCell<std::collections::VecDeque<Deferred>> =
             const { RefCell::new(std::collections::VecDeque::new()) };
+        /// When a console last wrote to its screen, and its window: read once its writing
+        /// pauses ([`record_console_text`]).
+        static CONSOLE_WRITTEN: std::cell::Cell<Option<(std::time::Instant, isize)>> =
+            const { std::cell::Cell::new(None) };
+    }
+
+    /// How long a console's writing pauses before its screen is read: a command's output
+    /// comes in many updates, and the screen is read once for them.
+    const CONSOLE_QUIET: std::time::Duration = std::time::Duration::from_millis(150);
+
+    /// A classic console wrote to its screen (`EVENT_CONSOLE_UPDATE_REGION`, `_SIMPLE`,
+    /// `_SCROLL`): noted, and read once it pauses. Nothing is read here: output comes in bursts.
+    unsafe extern "system" fn on_console_update(
+        _hook: HWINEVENTHOOK,
+        _win_event: u32,
+        hwnd: HWND,
+        _id_object: i32,
+        _id_child: i32,
+        _thread: u32,
+        _time: u32,
+    ) {
+        CONSOLE_WRITTEN.with(|written| {
+            written.set(Some((std::time::Instant::now(), hwnd.0 as isize)));
+        });
+    }
+
+    /// The console in front's screen, once its writing has paused for [`CONSOLE_QUIET`]: a
+    /// `console_update` with the rows it shows, which the engine compares with the rows before
+    /// for Screen Echo.
+    fn record_console_text() {
+        use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+        let Some((at, window)) = CONSOLE_WRITTEN.with(std::cell::Cell::get) else {
+            return;
+        };
+        if at.elapsed() < CONSOLE_QUIET {
+            return;
+        }
+        CONSOLE_WRITTEN.with(|written| written.set(None));
+        // SAFETY: plain Win32 call with no preconditions.
+        if unsafe { GetForegroundWindow() }.0 as isize != window {
+            return;
+        }
+        STATE.with(|state| {
+            let mut state = state.borrow_mut();
+            let Some(state) = state.as_mut() else { return };
+            let Some(text) = state
+                .uia
+                .as_ref()
+                .and_then(crate::text_context::visible_text)
+            else {
+                return;
+            };
+            let mut event = mouse_event(None);
+            event.event = "console_update".to_owned();
+            event.hwnd = window;
+            event.window_class = Some("ConsoleWindowClass".to_owned());
+            event.text_context = Some(okur_core::TextContext {
+                text,
+                caret: 0,
+                selection: None,
+                font: None,
+                word: None,
+                misspelled: Vec::new(),
+            });
+            (state.sink)(event);
+            state.count += 1;
+        });
     }
 
     /// A WinEvent that arrived while another was read, read after it.
@@ -4470,6 +4546,9 @@ mod capture {
                 // EVENT_OBJECT_SHOW to EVENT_OBJECT_REORDER: a page's changes, and a dialog's,
                 // whose controls read are used again until it changes.
                 SetWinEventHook(0x8002, 0x8004, None, Some(on_page_change), 0, 0, flags),
+                // EVENT_CONSOLE_UPDATE_REGION to EVENT_CONSOLE_UPDATE_SCROLL: a classic
+                // console's output, for Screen Echo.
+                SetWinEventHook(0x4002, 0x4004, None, Some(on_console_update), 0, 0, flags),
                 // IA2's own events: text changed in place (a React time stamp) raises no show,
                 // hide or reorder, only IA2_EVENT_TEXT_REMOVED and _INSERTED on the block holding
                 // it (old-pc, 2026-10-18). Live takes those two; a trace of page changes takes
@@ -4633,6 +4712,7 @@ mod capture {
                         record_uia_windows_opened();
                     }
                     record_mouse_move();
+                    record_console_text();
                 });
             }
         }
