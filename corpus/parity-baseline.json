@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
   "matched_steps": 6847,
-  "total_steps": 7098,
-  "accepted_divergences": 185,
+  "total_steps": 7096,
+  "accepted_divergences": 187,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -7316,7 +7316,7 @@
     "858-web-page-load-summary-tables-navigation-advanced/s1": "mismatch",
     "858-web-page-load-summary-tables-navigation-advanced/s2": "mismatch",
     "863-web-speech-history-clear-and-copy-intermediate/s1": "match",
-    "863-web-speech-history-clear-and-copy-intermediate/s10": "mismatch",
+    "863-web-speech-history-clear-and-copy-intermediate/s10": "accepted divergence",
     "863-web-speech-history-clear-and-copy-intermediate/s2": "match",
     "863-web-speech-history-clear-and-copy-intermediate/s3": "match",
     "863-web-speech-history-clear-and-copy-intermediate/s4": "match",
@@ -7326,7 +7326,7 @@
     "863-web-speech-history-clear-and-copy-intermediate/s8": "match",
     "863-web-speech-history-clear-and-copy-intermediate/s9": "match",
     "864-web-speech-history-clear-and-copy-advanced/s1": "match",
-    "864-web-speech-history-clear-and-copy-advanced/s10": "mismatch",
+    "864-web-speech-history-clear-and-copy-advanced/s10": "accepted divergence",
     "864-web-speech-history-clear-and-copy-advanced/s2": "match",
     "864-web-speech-history-clear-and-copy-advanced/s3": "match",
     "864-web-speech-history-clear-and-copy-advanced/s4": "match",

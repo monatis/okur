@@ -423,7 +423,9 @@ A step can be in more than one entry; all of its entries apply.
 ### JAWS is left outside the page after the Speech History
 
 - Steps: `517-web-speech-layer-keys/s4`, `517-web-speech-layer-keys/s10`,
-  `570-web-speech-history-clear-and-copy/s10`.
+  `570-web-speech-history-clear-and-copy/s10`, and the same step at Intermediate and Advanced,
+  `863-web-speech-history-clear-and-copy-intermediate/s10`,
+  `864-web-speech-history-clear-and-copy-advanced/s10`.
 - Difference: the whole step. JAWS says nothing (or "blank"); Okur reads the page's line on
   Escape, and the next line on Down. 570 recorded the same Escape again, silent in every
   trial.

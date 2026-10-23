@@ -488,6 +488,8 @@ divergences! {
         "517-web-speech-layer-keys/s4",
         "517-web-speech-layer-keys/s10",
         "570-web-speech-history-clear-and-copy/s10",
+        "863-web-speech-history-clear-and-copy-intermediate/s10",
+        "864-web-speech-history-clear-and-copy-advanced/s10",
     ],
     "Escape out of the Speech History left JAWS outside the page: it said \"blank\" in one trial \
      and nothing in the others, and Down later said nothing with speech on (its synthesizer \
