@@ -1,0 +1,85 @@
+{
+  "id": "985-web-smart-navigation-link-in-text-off",
+  "name": "984 at JAWS's default, Smart Navigation off, to compare",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/virtual-keys.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "End"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Ctrl+Left"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "id": "986-web-screen-layout-controls",
+  "name": "Screen Layout (DEFAULT.JCF [HTML] DocumentPresentationMode=1; Smart Navigation switches to it, the research says): Down through the controls page from the top, Up twice: which lines the page has when they are the screen's",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/activation.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "HTML": {
+        "DocumentPresentationMode": "1"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Up"
+    }
+  ]
+}

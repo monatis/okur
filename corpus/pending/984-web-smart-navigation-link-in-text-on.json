@@ -1,0 +1,92 @@
+{
+  "id": "984-web-smart-navigation-link-in-text-on",
+  "name": "Smart Navigation on controls and tables (DEFAULT.JCF [HTML] SmartNavigation=3) across a link inside a paragraph, reached by line (H, Down three times to \"Some text with\", End): Right, Left, Ctrl+Right and Ctrl+Left into and out of the link (954 used K, JAWS's PlaceMarker key)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/virtual-keys.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "HTML": {
+        "SmartNavigation": "3"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "End"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Ctrl+Left"
+    }
+  ]
+}
