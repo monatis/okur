@@ -147,7 +147,7 @@ impl ScreenReaderEngine {
         Some(
             self.cursor
                 .move_to_placemarker(&markers, forward)
-                .unwrap_or_else(|| msg::quicknav_none_placemarkers().to_string()),
+                .unwrap_or_else(|| self.said_short(msg::quicknav_none_placemarkers())),
         )
     }
 

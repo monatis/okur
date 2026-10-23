@@ -103,6 +103,21 @@ impl ReadingMarks {
     }
 }
 
+impl ScreenReaderEngine {
+    /// `message`, or with short messages (Intermediate and Advanced verbosity) its short form
+    /// where the catalog has one: "no form fields" [obs, 883/s2], "No PlaceMarkers" [obs,
+    /// 883/s4].
+    pub(crate) fn said_short(&self, message: crate::messages::StaticMessage) -> String {
+        let said =
+            if self.settings.verbosity.message_length() == crate::settings::MessageLength::Short {
+                message.short().unwrap_or(message)
+            } else {
+                message
+            };
+        said.to_string()
+    }
+}
+
 /// Primary runtime engine for screen reader execution, coordinating virtual cursor navigation,
 /// speech output, and interactive input event handling.
 pub struct ScreenReaderEngine {
@@ -1725,7 +1740,7 @@ impl ScreenReaderEngine {
                     (!fields.is_empty()).then(|| ListDialog::form_fields(id, &fields)),
                     format!(
                         "{}{}",
-                        msg::form_fields_list_none(),
+                        self.said_short(msg::form_fields_list_none()),
                         page.unwrap_or_default()
                     ),
                 )

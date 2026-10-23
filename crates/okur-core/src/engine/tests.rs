@@ -7068,3 +7068,54 @@ fn indentation_says_left_margin_before_a_line_at_the_margin() {
         }
     }
 }
+
+/// A quick key with nothing of its kind on the page says "There are no ... on this page." at
+/// Beginner and "No ..." with short messages; Insert+F5 "no form fields were found" and "no
+/// form fields" [obs, 883/s2, s4; 887/s4].
+#[test]
+fn nothing_found_is_said_at_the_levels_length() {
+    use crate::settings::VerbosityLevel;
+    for (level, buttons, placemarkers) in [
+        (
+            VerbosityLevel::Beginner,
+            "There are no clickable elements on this page.",
+            "There are no PlaceMarkers on this page.",
+        ),
+        (
+            VerbosityLevel::Intermediate,
+            "No clickable elements",
+            "No PlaceMarkers",
+        ),
+        (
+            VerbosityLevel::Advanced,
+            "No clickable elements",
+            "No PlaceMarkers",
+        ),
+    ] {
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(create_test_buffer()),
+            Box::new(MockSpeechOutput::default()),
+        );
+        let mut settings = engine.settings.clone();
+        settings.verbosity.level = level;
+        engine.set_settings(settings);
+        engine.app_mode = AppMode::VirtualBuffer;
+        assert_eq!(
+            engine.execute_command("/").as_deref(),
+            Some(buttons),
+            "{level:?}"
+        );
+        assert_eq!(
+            engine.execute_command("K").as_deref(),
+            Some(placemarkers),
+            "{level:?}"
+        );
+    }
+    assert_eq!(
+        crate::messages::msg::form_fields_list_none()
+            .short()
+            .map(|m| m.as_str()),
+        Some("no form fields")
+    );
+    assert!(crate::messages::msg::blank().short().is_none());
+}

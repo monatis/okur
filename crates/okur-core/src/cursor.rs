@@ -941,6 +941,17 @@ impl VirtualCursor {
         }
     }
 
+    /// What a key says on a page without its kind of element: `long`, or with short messages
+    /// its short form, "No PlaceMarkers" [obs, 883/s4, 887/s4, 831/s8].
+    fn none_message(&self, long: crate::messages::StaticMessage) -> String {
+        let said = if self.short_messages() {
+            long.short().unwrap_or(long)
+        } else {
+            long
+        };
+        said.to_string()
+    }
+
     /// JAWS's short messages are said (Intermediate and Advanced verbosity).
     fn short_messages(&self) -> bool {
         self.verbosity.message_length() == crate::settings::MessageLength::Short
@@ -1467,7 +1478,7 @@ impl VirtualCursor {
         self.quick_nav(
             &targets,
             true,
-            msg::quicknav_none_headings().as_str(),
+            &self.none_message(msg::quicknav_none_headings()),
             |c, o, _| c.heading_speech_at(o),
         )
     }
@@ -1478,7 +1489,7 @@ impl VirtualCursor {
         self.quick_nav(
             &targets,
             false,
-            msg::quicknav_none_headings().as_str(),
+            &self.none_message(msg::quicknav_none_headings()),
             |c, o, _| c.heading_speech_at(o),
         )
     }
@@ -1495,7 +1506,7 @@ impl VirtualCursor {
         }
         .map(|h| h.0);
         let Some(target) = target else {
-            return Some(msg::quicknav_none_headings().to_string());
+            return Some(self.none_message(msg::quicknav_none_headings()));
         };
         self.offset = target;
         self.current_node_id = self.buffer.line_at_offset(target).map(|l| l.node_id);
@@ -1532,7 +1543,7 @@ impl VirtualCursor {
         }
         .copied();
         let Some(target) = target else {
-            return Some(msg::quicknav_none_form_fields().to_string());
+            return Some(self.none_message(msg::quicknav_none_form_fields()));
         };
         let previous = self.offset;
         self.offset = target;
@@ -1860,7 +1871,7 @@ impl VirtualCursor {
         self.quick_nav(
             &targets,
             true,
-            msg::quicknav_none_links().as_str(),
+            &self.none_message(msg::quicknav_none_links()),
             |c, o, _| c.line_speech_at(o),
         )
     }
@@ -1871,7 +1882,7 @@ impl VirtualCursor {
         self.quick_nav(
             &targets,
             false,
-            msg::quicknav_none_links().as_str(),
+            &self.none_message(msg::quicknav_none_links()),
             |c, o, _| c.line_speech_at(o),
         )
     }
@@ -1976,7 +1987,7 @@ impl VirtualCursor {
     pub fn move_next_frame(&mut self) -> Option<String> {
         self.selection = None;
         if self.buffer.frames.is_empty() {
-            return Some(msg::quicknav_none_frames().to_string());
+            return Some(self.none_message(msg::quicknav_none_frames()));
         }
 
         if let Some(frame) = self.buffer.next_frame_from(self.offset) {
@@ -2000,7 +2011,7 @@ impl VirtualCursor {
     pub fn move_prior_frame(&mut self) -> Option<String> {
         self.selection = None;
         if self.buffer.frames.is_empty() {
-            return Some(msg::quicknav_none_frames().to_string());
+            return Some(self.none_message(msg::quicknav_none_frames()));
         }
 
         if let Some(frame) = self.buffer.prior_frame_from(self.offset) {
@@ -2034,14 +2045,22 @@ impl VirtualCursor {
     /// Divisions list holds, read as their line [obs, 292/s6-s10].
     pub fn move_division(&mut self, forward: bool) -> Option<String> {
         let targets = crate::element_lists::ElementList::Divisions.offsets(&self.buffer);
-        self.line_nav(targets, forward, msg::quicknav_none_divisions().as_str())
+        self.line_nav(
+            targets,
+            forward,
+            &self.none_message(msg::quicknav_none_divisions()),
+        )
     }
 
     /// Moves to the next or prior horizontal rule (`Minus`, `Shift+Minus`): "----- |
     /// separator" [obs, 292/s1-s4].
     pub fn move_separator(&mut self, forward: bool) -> Option<String> {
         let targets = self.buffer.separators.clone();
-        self.line_nav(targets, forward, msg::quicknav_none_separators().as_str())
+        self.line_nav(
+            targets,
+            forward,
+            &self.none_message(msg::quicknav_none_separators()),
+        )
     }
 
     /// Moves to the next or prior link that writes an e-mail (`Backslash`, `Shift+Backslash`),
@@ -2063,7 +2082,7 @@ impl VirtualCursor {
         self.quick_nav(
             &targets,
             forward,
-            msg::quicknav_none_mail_links().as_str(),
+            &self.none_message(msg::quicknav_none_mail_links()),
             |c, offset, _| {
                 let text = c
                     .buffer
@@ -2131,7 +2150,7 @@ impl VirtualCursor {
     /// Moves cursor to next list container (`L` / `MoveToNextList`).
     pub fn move_next_list(&mut self) -> Option<String> {
         let t = self.buffer.lists.clone();
-        self.line_nav(t, true, msg::quicknav_none_lists().as_str())
+        self.line_nav(t, true, &self.none_message(msg::quicknav_none_lists()))
     }
 
     /// Moves cursor to prior list container (`Shift+L`).
@@ -2153,55 +2172,59 @@ impl VirtualCursor {
             .copied()
             .filter(|&start| !inside(start))
             .collect();
-        self.line_nav(t, false, msg::quicknav_none_lists().as_str())
+        self.line_nav(t, false, &self.none_message(msg::quicknav_none_lists()))
     }
 
     /// Moves cursor to next list item (`I`).
     pub fn move_next_list_item(&mut self) -> Option<String> {
         let t = self.buffer.list_items.clone();
-        self.line_nav(t, true, msg::quicknav_none_list_items().as_str())
+        self.line_nav(t, true, &self.none_message(msg::quicknav_none_list_items()))
     }
 
     /// Moves cursor to prior list item (`Shift+I`).
     pub fn move_prior_list_item(&mut self) -> Option<String> {
         let t = self.buffer.list_items.clone();
-        self.line_nav(t, false, msg::quicknav_none_list_items().as_str())
+        self.line_nav(
+            t,
+            false,
+            &self.none_message(msg::quicknav_none_list_items()),
+        )
     }
 
     /// Moves cursor to next region (`R`, §15).
     pub fn move_next_landmark(&mut self) -> Option<String> {
         let t = self.buffer.landmarks.clone();
-        self.line_nav(t, true, msg::quicknav_none_regions().as_str())
+        self.line_nav(t, true, &self.none_message(msg::quicknav_none_regions()))
     }
 
     /// Moves cursor to prior region (`Shift+R`).
     pub fn move_prior_landmark(&mut self) -> Option<String> {
         let t = self.buffer.landmarks.clone();
-        self.line_nav(t, false, msg::quicknav_none_regions().as_str())
+        self.line_nav(t, false, &self.none_message(msg::quicknav_none_regions()))
     }
 
     /// Moves cursor to next graphic (`G`, §16).
     pub fn move_next_graphic(&mut self) -> Option<String> {
         let t = self.buffer.graphics.clone();
-        self.line_nav(t, true, msg::quicknav_none_graphics().as_str())
+        self.line_nav(t, true, &self.none_message(msg::quicknav_none_graphics()))
     }
 
     /// Moves cursor to prior graphic (`Shift+G`).
     pub fn move_prior_graphic(&mut self) -> Option<String> {
         let t = self.buffer.graphics.clone();
-        self.line_nav(t, false, msg::quicknav_none_graphics().as_str())
+        self.line_nav(t, false, &self.none_message(msg::quicknav_none_graphics()))
     }
 
     /// Moves cursor to next article (`O`).
     pub fn move_next_article(&mut self) -> Option<String> {
         let t = self.buffer.articles.clone();
-        self.line_nav(t, true, msg::quicknav_none_articles().as_str())
+        self.line_nav(t, true, &self.none_message(msg::quicknav_none_articles()))
     }
 
     /// Moves cursor to prior article (`Shift+O`).
     pub fn move_prior_article(&mut self) -> Option<String> {
         let t = self.buffer.articles.clone();
-        self.line_nav(t, false, msg::quicknav_none_articles().as_str())
+        self.line_nav(t, false, &self.none_message(msg::quicknav_none_articles()))
     }
 
     /// Moves cursor to the main region (`Q`). JAWS's message for a page without a main
@@ -2218,24 +2241,14 @@ impl VirtualCursor {
     /// event handlers, so the index stays empty until a source (IAccessible2) provides it.
     pub fn move_next_on_mouse_over(&mut self) -> Option<String> {
         let t = self.buffer.on_mouse_over.clone();
-        let none = self.no_on_mouse_over();
+        let none = self.none_message(msg::quicknav_none_on_mouse_over());
         self.line_nav(t, true, &none)
-    }
-
-    /// What `;` says on a page without onMouseOver elements; short messages say it short
-    /// [obs, 831/s8].
-    fn no_on_mouse_over(&self) -> String {
-        if self.short_messages() {
-            msg::quicknav_none_on_mouse_over_short().to_string()
-        } else {
-            msg::quicknav_none_on_mouse_over().to_string()
-        }
     }
 
     /// Moves cursor to prior onMouseOver element (`Shift+;`).
     pub fn move_prior_on_mouse_over(&mut self) -> Option<String> {
         let t = self.buffer.on_mouse_over.clone();
-        let none = self.no_on_mouse_over();
+        let none = self.none_message(msg::quicknav_none_on_mouse_over());
         self.line_nav(t, false, &none)
     }
 
@@ -2244,7 +2257,11 @@ impl VirtualCursor {
     /// elements on this page." [obs, 293/s4-s6].
     pub fn move_on_click(&mut self, forward: bool) -> Option<String> {
         let t = self.buffer.on_click.clone();
-        self.line_nav(t, forward, msg::quicknav_none_clickable().as_str())
+        self.line_nav(
+            t,
+            forward,
+            &self.none_message(msg::quicknav_none_clickable()),
+        )
     }
 
     /// Follows aria-flowto from the element at the cursor (`=`), or back to the element that
@@ -2289,73 +2306,113 @@ impl VirtualCursor {
     /// Moves cursor to next form field (`F`).
     pub fn move_next_form_control(&mut self) -> Option<String> {
         let t = self.buffer.form_controls.clone();
-        self.control_nav(t, true, msg::quicknav_none_form_fields().as_str())
+        self.control_nav(
+            t,
+            true,
+            &self.none_message(msg::quicknav_none_form_fields()),
+        )
     }
 
     /// Moves cursor to prior form field (`Shift+F`).
     pub fn move_prior_form_control(&mut self) -> Option<String> {
         let t = self.buffer.form_controls.clone();
-        self.control_nav(t, false, msg::quicknav_none_form_fields().as_str())
+        self.control_nav(
+            t,
+            false,
+            &self.none_message(msg::quicknav_none_form_fields()),
+        )
     }
 
     /// Moves cursor to next button (`B`).
     pub fn move_next_button(&mut self) -> Option<String> {
         let t = self.buffer.buttons.clone();
-        self.control_nav(t, true, msg::quicknav_none_buttons().as_str())
+        self.control_nav(t, true, &self.none_message(msg::quicknav_none_buttons()))
     }
 
     /// Moves cursor to prior button (`Shift+B`).
     pub fn move_prior_button(&mut self) -> Option<String> {
         let t = self.buffer.buttons.clone();
-        self.control_nav(t, false, msg::quicknav_none_buttons().as_str())
+        self.control_nav(t, false, &self.none_message(msg::quicknav_none_buttons()))
     }
 
     /// Moves cursor to next edit field (`E`).
     pub fn move_next_edit(&mut self) -> Option<String> {
         let t = self.buffer.edits.clone();
-        self.control_nav(t, true, msg::quicknav_none_edit_fields().as_str())
+        self.control_nav(
+            t,
+            true,
+            &self.none_message(msg::quicknav_none_edit_fields()),
+        )
     }
 
     /// Moves cursor to prior edit field (`Shift+E`).
     pub fn move_prior_edit(&mut self) -> Option<String> {
         let t = self.buffer.edits.clone();
-        self.control_nav(t, false, msg::quicknav_none_edit_fields().as_str())
+        self.control_nav(
+            t,
+            false,
+            &self.none_message(msg::quicknav_none_edit_fields()),
+        )
     }
 
     /// Moves cursor to next check box (`X`).
     pub fn move_next_checkbox(&mut self) -> Option<String> {
         let t = self.buffer.checkboxes.clone();
-        self.control_nav(t, true, msg::quicknav_none_check_boxes().as_str())
+        self.control_nav(
+            t,
+            true,
+            &self.none_message(msg::quicknav_none_check_boxes()),
+        )
     }
 
     /// Moves cursor to prior check box (`Shift+X`).
     pub fn move_prior_checkbox(&mut self) -> Option<String> {
         let t = self.buffer.checkboxes.clone();
-        self.control_nav(t, false, msg::quicknav_none_check_boxes().as_str())
+        self.control_nav(
+            t,
+            false,
+            &self.none_message(msg::quicknav_none_check_boxes()),
+        )
     }
 
     /// Moves cursor to next radio button (`A`).
     pub fn move_next_radio_button(&mut self) -> Option<String> {
         let t = self.buffer.radio_buttons.clone();
-        self.control_nav(t, true, msg::quicknav_none_radio_buttons().as_str())
+        self.control_nav(
+            t,
+            true,
+            &self.none_message(msg::quicknav_none_radio_buttons()),
+        )
     }
 
     /// Moves cursor to prior radio button (`Shift+A`).
     pub fn move_prior_radio_button(&mut self) -> Option<String> {
         let t = self.buffer.radio_buttons.clone();
-        self.control_nav(t, false, msg::quicknav_none_radio_buttons().as_str())
+        self.control_nav(
+            t,
+            false,
+            &self.none_message(msg::quicknav_none_radio_buttons()),
+        )
     }
 
     /// Moves cursor to next combo box (`C`).
     pub fn move_next_combobox(&mut self) -> Option<String> {
         let t = self.buffer.comboboxes.clone();
-        self.control_nav(t, true, msg::quicknav_none_combo_boxes().as_str())
+        self.control_nav(
+            t,
+            true,
+            &self.none_message(msg::quicknav_none_combo_boxes()),
+        )
     }
 
     /// Moves cursor to prior combo box (`Shift+C`).
     pub fn move_prior_combobox(&mut self) -> Option<String> {
         let t = self.buffer.comboboxes.clone();
-        self.control_nav(t, false, msg::quicknav_none_combo_boxes().as_str())
+        self.control_nav(
+            t,
+            false,
+            &self.none_message(msg::quicknav_none_combo_boxes()),
+        )
     }
 
     /// Enters Forms Mode (`{ENTER}` on an Edit field or `EnterFormsMode`).
@@ -2883,7 +2940,7 @@ impl VirtualCursor {
     /// Moves to the next data table (`T`).
     pub fn move_next_table(&mut self) -> Option<String> {
         if self.buffer.tables.is_empty() {
-            return Some(msg::quicknav_none_tables().to_string());
+            return Some(self.none_message(msg::quicknav_none_tables()));
         }
         let maybe_idx = self
             .buffer
@@ -2935,7 +2992,7 @@ impl VirtualCursor {
     /// Moves to the prior data table (`Shift+T`).
     pub fn move_prior_table(&mut self) -> Option<String> {
         if self.buffer.tables.is_empty() {
-            return Some(msg::quicknav_none_tables().to_string());
+            return Some(self.none_message(msg::quicknav_none_tables()));
         }
         // The prior table is the last one starting before the cursor: from inside a table, that
         // table [obs, 109/s10]; before the first, the search goes on from the bottom and says
@@ -3393,7 +3450,7 @@ impl VirtualCursor {
     /// Moves to the next math element (`O`).
     pub fn move_next_math(&mut self) -> Option<String> {
         if self.buffer.math_blocks.is_empty() {
-            return Some(msg::quicknav_none_math().to_string());
+            return Some(self.none_message(msg::quicknav_none_math()));
         }
         let maybe_target = self.buffer.next_math_from(self.offset);
         let fallback = self.buffer.math_blocks.first().copied().unwrap_or(0);
@@ -3415,7 +3472,7 @@ impl VirtualCursor {
     /// Moves to the prior math element (`Shift+O`).
     pub fn move_prior_math(&mut self) -> Option<String> {
         if self.buffer.math_blocks.is_empty() {
-            return Some(msg::quicknav_none_math().to_string());
+            return Some(self.none_message(msg::quicknav_none_math()));
         }
         let maybe_target = self.buffer.prior_math_from(self.offset);
         let fallback = self.buffer.math_blocks.last().copied().unwrap_or(0);

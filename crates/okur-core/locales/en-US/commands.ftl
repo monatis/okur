@@ -55,6 +55,8 @@ list-items-count = with { $count } items
 links-list-none = no links
 # The Form Fields list on a page without fields. JAWS's lowercase, without a period.
 form-fields-list-none = no form fields were found
+# Short messages (Intermediate and Advanced) [obs, 883/s2, 884/s2].
+form-fields-list-none-short = no form fields
 # The Regions list on a page without regions. JAWS ends it without a period.
 regions-list-none = No regions were found on the page
 

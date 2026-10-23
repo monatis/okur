@@ -17,6 +17,8 @@ okur-core/src/linearize.rs: "flows-to"
 okur-core/src/linearize.rs: "deletion"
 okur-core/src/linearize.rs: "insertion"
 okur-core/src/linearize.rs: "mark"
+# A message's short form is looked up by its name with this ending.
+okur-core/src/messages.rs: "{}-short"
 # Heading Indication's values as the page's mark holds them.
 okur-core/src/linearize.rs: "text"
 okur-core/src/linearize.rs: "heading"

@@ -501,9 +501,19 @@ fn every_message_is_used() {
             called.extend(scan.messages.iter().cloned());
         }
     }
+    // A short form (`<name>-short`) is reached through its long form's `short()`: it is used
+    // where the long form is.
+    let used = |id: &MessageId| {
+        called.contains(id.constructor())
+            || id.id().strip_suffix("-short").is_some_and(|long| {
+                MessageId::ALL
+                    .iter()
+                    .any(|m| m.id() == long && called.contains(m.constructor()))
+            })
+    };
     let unused: Vec<String> = MessageId::ALL
         .iter()
-        .filter(|id| !called.contains(id.constructor()))
+        .filter(|id| !used(id))
         .map(|id| {
             format!(
                 "{} ({}): no code calls msg::{}",

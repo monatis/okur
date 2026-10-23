@@ -116,6 +116,16 @@ impl StaticMessage {
     pub fn as_str(self) -> &'static str {
         catalog().plain(self.0)
     }
+
+    /// Its short form, the catalog's `<name>-short`: what JAWS says with short messages
+    /// (Intermediate and Advanced verbosity), where the catalog has one.
+    pub fn short(self) -> Option<StaticMessage> {
+        let name = format!("{}-short", self.0.id());
+        MessageId::ALL
+            .iter()
+            .find(|id| id.id() == name && id.variables().is_empty())
+            .map(|id| StaticMessage::new(*id))
+    }
 }
 
 impl fmt::Display for StaticMessage {
