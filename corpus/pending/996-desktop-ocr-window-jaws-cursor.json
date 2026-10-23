@@ -1,0 +1,124 @@
+{
+  "id": "996-desktop-ocr-window-jaws-cursor",
+  "name": "Convenient OCR of the window (Insert+Space, O, W, RecognizeRealWindow) with JAWS's default engine: what it says, which cursor it leaves active, the JAWS cursor's lines with the recognized text in place of the pictures; then the PC cursor, and the JAWS cursor again (the help: the recognized text goes when the PC cursor is activated)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-drawn-text.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Drawn Text Fixture"
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "W",
+      "settle_max_ms": 30000
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Alt+Delete"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "PageUp"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "NumpadPlus"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "NumpadMinus"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "PageUp"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s22",
+      "type": "key",
+      "command": "Down"
+    }
+  ]
+}

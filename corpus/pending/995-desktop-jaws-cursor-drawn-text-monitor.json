@@ -1,0 +1,95 @@
+{
+  "id": "995-desktop-jaws-cursor-drawn-text-monitor",
+  "name": "994 with the screen capture Windows 11 has by default ([OSM] HookingMode=1, the Accessibility Monitor, which hooks the drawing calls): which of the window's texts it adds or loses",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-drawn-text.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Drawn Text Fixture"
+  },
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "OSM": {
+        "HookingMode": "1"
+      }
+    }
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+NumpadMinus"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "NumpadMinus"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Alt+Delete"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "PageUp"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "NumpadPlus"
+    }
+  ]
+}

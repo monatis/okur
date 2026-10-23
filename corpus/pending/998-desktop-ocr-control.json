@@ -1,0 +1,59 @@
+{
+  "id": "998-desktop-ocr-control",
+  "name": "Convenient OCR of the focused control (Insert+Space, O, C, RecognizeControl) on a button showing only a picture of a word: what JAWS says of the button before, what recognition says and where it leaves the cursors",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-drawn-text.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Drawn Text Fixture"
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Tab"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "C",
+      "settle_max_ms": 30000
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Alt+Delete"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "NumpadPlus"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Insert+Tab"
+    }
+  ]
+}
