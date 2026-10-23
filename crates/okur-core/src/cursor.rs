@@ -993,11 +993,8 @@ impl VirtualCursor {
     /// Moves cursor to prior word (`^{LEFT}`).
     pub fn move_prior_word(&mut self) -> Option<String> {
         self.selection = None;
-        let min_offset = if let Some((min_off, _)) = self.active_modal_range() {
-            min_off
-        } else {
-            0
-        };
+        let modal = self.active_modal_range();
+        let min_offset = modal.map_or(0, |(min_off, _)| min_off);
 
         if let Some(prior_word) = self.buffer.prior_word_from(self.offset) {
             if prior_word.start_offset < min_offset {
@@ -1010,7 +1007,8 @@ impl VirtualCursor {
                     .unwrap_or_else(|| SpeechFormatter::format_word(&prior_word.text)),
             )
         } else {
-            None
+            // At the page's top the word there is said again ("Virtual" [obs, 957/s20]).
+            modal.is_none().then(|| self.current_word())
         }
     }
 
@@ -1056,17 +1054,15 @@ impl VirtualCursor {
         }
     }
 
-    /// Moves cursor to prior character (`{LEFT}`).
+    /// Moves cursor to prior character (`{LEFT}`). At the page's top the character there is
+    /// said again ("V", the title's first [obs, 957/s6-s8]).
     pub fn move_prior_char(&mut self) -> Option<String> {
         self.selection = None;
-        let min_offset = if let Some((min_off, _)) = self.active_modal_range() {
-            min_off
-        } else {
-            0
-        };
+        let modal = self.active_modal_range();
+        let min_offset = modal.map_or(0, |(min_off, _)| min_off);
 
         if self.offset <= min_offset {
-            return None;
+            return modal.is_none().then(|| self.current_char());
         }
 
         // Find preceding UTF-8 character boundary

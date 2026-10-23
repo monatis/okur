@@ -187,6 +187,20 @@ mod tests {
         assert_eq!(prior_char, "D");
     }
 
+    /// At the page's top Left says the first character again and Ctrl+Left the first word
+    /// [obs, 957/s6-s8, s20].
+    #[test]
+    fn left_and_ctrl_left_at_the_top_say_the_first_character_and_word_again() {
+        let mut cursor = VirtualCursor::new(VirtualBuffer::from_aom(&create_test_aom_tree()));
+        cursor.move_to_start();
+        assert_eq!(cursor.move_prior_char().as_deref(), Some("D"));
+        assert_eq!(cursor.move_prior_char().as_deref(), Some("D"));
+        assert_eq!(cursor.offset, 0);
+        let first_word = cursor.current_word();
+        assert_eq!(cursor.move_prior_word(), Some(first_word));
+        assert_eq!(cursor.offset, 0);
+    }
+
     #[test]
     fn test_scenario_08_say_current_line() {
         let aom = create_test_aom_tree();
