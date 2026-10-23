@@ -103,7 +103,9 @@ mod reader {
     }
 
     /// The text the focused element shows on the screen, through UIA's visible ranges: a
-    /// console's rows in its window, not its whole buffer (9,001 rows on Windows 10).
+    /// console's rows in its window, not its whole buffer (9,001 rows on Windows 10). The
+    /// classic console gives a range per row, without its line break (round 273): each range
+    /// is a line of its own.
     pub fn visible_text(uia: &IUIAutomation) -> Option<String> {
         // SAFETY: UIA client calls on valid objects.
         unsafe {
@@ -111,12 +113,13 @@ mod reader {
             let pattern: IUIAutomationTextPattern =
                 focused.GetCurrentPatternAs(UIA_TextPatternId).ok()?;
             let ranges = pattern.GetVisibleRanges().ok()?;
-            let mut text = String::new();
+            let mut rows = Vec::new();
             for i in 0..ranges.Length().ok()? {
                 let range = ranges.GetElement(i).ok()?;
-                text.push_str(&range.GetText(MAX_TEXT_CHARS).ok()?.to_string());
+                let row = range.GetText(MAX_TEXT_CHARS).ok()?.to_string();
+                rows.push(row.trim_end_matches(['\r', '\n']).replace("\r\n", "\n"));
             }
-            Some(text.replace("\r\n", "\n"))
+            Some(rows.join("\n"))
         }
     }
 
