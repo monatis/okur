@@ -347,9 +347,67 @@ pub fn utf16_offset(lines: &[String], line: usize, column: usize) -> usize {
     }
 }
 
+/// Where each of `lines` starts in them joined by one line break each, in UTF-16 units, and,
+/// last, where the text ends: made once for a text shown, so that a mark is placed without
+/// counting every line before it again, several times per key in the Virtual Viewer
+/// (performance review 2026-10-23, T15).
+pub fn utf16_line_starts(lines: &[String]) -> Vec<usize> {
+    let mut starts = Vec::with_capacity(lines.len() + 1);
+    let mut at = 0;
+    for line in lines {
+        starts.push(at);
+        at += line.encode_utf16().count() + 1;
+    }
+    starts.push(at.saturating_sub(1));
+    starts
+}
+
+/// [`utf16_offset`] with the lines' starts made by [`utf16_line_starts`].
+pub fn utf16_offset_in(lines: &[String], starts: &[usize], line: usize, column: usize) -> usize {
+    match (lines.get(line), starts.get(line)) {
+        (Some(text), Some(&start)) => {
+            start
+                + text
+                    .chars()
+                    .take(column)
+                    .map(char::len_utf16)
+                    .sum::<usize>()
+        }
+        _ => starts.last().copied().unwrap_or(0),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// Offsets by the lines' starts are the offsets counted from the text's start, for every
+    /// line and column, past a line's end and past the last line, with characters of two
+    /// UTF-16 units.
+    #[test]
+    fn offsets_by_line_starts_are_offsets_counted_from_the_start() {
+        for lines in [
+            Vec::new(),
+            vec![String::new()],
+            vec![
+                "ab".to_owned(),
+                "𝄞 cd".to_owned(),
+                String::new(),
+                "é f".to_owned(),
+            ],
+        ] {
+            let starts = utf16_line_starts(&lines);
+            for line in 0..lines.len() + 2 {
+                for column in 0..8 {
+                    assert_eq!(
+                        utf16_offset_in(&lines, &starts, line, column),
+                        utf16_offset(&lines, line, column),
+                        "{lines:?} {line} {column}"
+                    );
+                }
+            }
+        }
+    }
 
     #[test]
     fn messages_are_one_line_of_json_each_way() {

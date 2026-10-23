@@ -71,3 +71,37 @@ pub fn init() {
 
 #[cfg(test)]
 pub(crate) static TEST_AUDIO_LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
+/// Waits for `thread` to end, at most `limit`; past it the thread is left to end with the
+/// process. Stopping joined the keyboard hook's and the accessibility events' threads, and one
+/// stuck in a read of a hung application held Okur from quitting (performance review
+/// 2026-10-23, T9).
+pub(crate) fn join_within(thread: std::thread::JoinHandle<()>, limit: std::time::Duration) {
+    let until = std::time::Instant::now() + limit;
+    while !thread.is_finished() {
+        if std::time::Instant::now() >= until {
+            tracing::warn!(thread = ?thread.thread().name(), "thread not ended in time: left");
+            return;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(10));
+    }
+    let _ = thread.join();
+}
+
+#[cfg(test)]
+mod join_tests {
+    /// A thread that ends is joined; one that does not is left once the time is up.
+    #[test]
+    fn a_stuck_thread_is_left_after_the_limit() {
+        let quick = std::thread::spawn(|| {});
+        super::join_within(quick, std::time::Duration::from_secs(5));
+        let (tx, rx) = std::sync::mpsc::channel::<()>();
+        let stuck = std::thread::spawn(move || {
+            let _ = rx.recv();
+        });
+        let started = std::time::Instant::now();
+        super::join_within(stuck, std::time::Duration::from_millis(50));
+        assert!(started.elapsed() < std::time::Duration::from_secs(2));
+        drop(tx);
+    }
+}

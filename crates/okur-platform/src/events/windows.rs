@@ -218,7 +218,7 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
     fn stop(&mut self) -> Result<(), PlatformError> {
         self.stop.store(true, Ordering::Relaxed);
         if let Some(thread) = self.thread.take() {
-            let _ = thread.join();
+            crate::join_within(thread, std::time::Duration::from_secs(2));
         }
         // The worker ends with its last sender.
         if let Ok(mut requests) = PAGE_REQUESTS.lock() {

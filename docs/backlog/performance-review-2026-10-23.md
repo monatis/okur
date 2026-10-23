@@ -21,14 +21,26 @@ traces), so such changes get tests where a test can hold them and a live run on 
 | T3: a drag slept 120 ms in the keyboard hook | done: on the actions worker | `ad0be50f` |
 | P24: `EM_GETSEL`'s 16-bit words | done: the out-pointers | `ad0be50f` |
 | T8: a panic while the engine was held left the reader deaf | done: the lock recovered, a key's or an event's panic caught and logged, every panic logged | `ad0be50f` |
-| C1: skim by attributes asked each byte's formatting of every span; inline texts copied per child | done: the formatting runs made in one sweep (`formatting_runs`, tested against every offset), inline texts kept once per parent | this batch |
-| C11: skim by sentence searched all sentences per paragraph | done: halving | this batch |
-| C3: the sentence keys made every sentence of the page per press | done: the lines around the cursor (tested against the whole page at every offset) | this batch |
-| C18: a key's command looked up through all 276 bindings, up to six times | done: bindings by key | this batch |
-| C9: Z made every division's text for its offset | done: offsets alone (tested against the items) | this batch |
-| C2 (reading choices): with a reading choice not the default, every refresh was copied and built again under the engine | done: the host marks the page before building it off the engine; labels and Flexible Web rules still rebuild, only on sites that have them | this batch |
-| C21: typed field text kept by capture numbers, never dropped | done: carried to the new capture's numbers by object or DOM id | this batch |
+| C1: skim by attributes asked each byte's formatting of every span; inline texts copied per child | done: the formatting runs made in one sweep (`formatting_runs`, tested against every offset), inline texts kept once per parent | `ccf6737e` |
+| C11: skim by sentence searched all sentences per paragraph | done: halving | `ccf6737e` |
+| C3: the sentence keys made every sentence of the page per press | done: the lines around the cursor (tested against the whole page at every offset) | `ccf6737e` |
+| C18: a key's command looked up through all 276 bindings, up to six times | done: bindings by key | `ccf6737e` |
+| C9: Z made every division's text for its offset | done: offsets alone (tested against the items) | `ccf6737e` |
+| C2 (reading choices): with a reading choice not the default, every refresh was copied and built again under the engine | done: the host marks the page before building it off the engine; labels and Flexible Web rules still rebuild, only on sites that have them | `ccf6737e` |
+| C21: typed field text kept by capture numbers, never dropped | done: carried to the new capture's numbers by object or DOM id | `ccf6737e` |
 | C19, C24 | not changed: the copy is of offsets already gathered; the mute happens only on a quiet return from Okur's dialogs | |
+| P7: UIA's focus asked for a third time per change event | done: the subtree read from the element already fetched | this batch |
+| P10: the MSAA object read twice for live state and selection changes | done: the first read kept | this batch |
+| P3 (counts): a UIA text read sent the text from the document's start four more times | done: only the caret counted from the start; the selection's end and the word from the caret, over their own texts | this batch |
+| T19: two copies of every spoken event string, logged or not | done: made only for the log or the console | this batch |
+| T12: a stop waited for every part of a long text to be handed over | done: the parts stop at the next one | this batch |
+| T20: Speech History entries of any length | done: 32 KB each | this batch |
+| T15: the Virtual Viewer counted every line before the mark on each redraw | done: the lines' starts made once per text | this batch |
+| T16: Okur's lists refilled with drawing on | done: drawn once after | this batch |
+| T6: mouse moves put off the idle work | done: only other events do | this batch |
+| T9: stopping waited on stuck threads | done: 2 s, then left | this batch |
+| P17, T11, T18 | not changed: in-process calls of microseconds; files written on the user's own changes; the speech log is the harness's | |
+| P4: a full read per typed character | open: dropping the read live turns the event into a value change the engine would say; needs a trace of typing to decide | |
 
 The rest are listed below in the order they are taken.
 

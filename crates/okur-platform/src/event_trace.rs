@@ -3826,6 +3826,9 @@ mod capture {
             // MSAA object. The focus, its ancestors, siblings and text, read for a change, were
             // read in vain for 73% of the state changes recorded (performance review P5,
             // step 2).
+            // The object read here is the one recorded: read twice, it cost six more
+            // cross-process calls per change (performance review 2026-10-23, P10).
+            let mut object_read: Option<Option<TraceObject>> = None;
             if state.live && matches!(name, "state_change" | "selection") {
                 let object = msaa_object(hwnd, id_object, id_child);
                 let object_name = object.as_ref().and_then(|o| o.name.as_ref());
@@ -3835,6 +3838,7 @@ mod capture {
                 ) {
                     return;
                 }
+                object_read = Some(object);
             }
             // A live region outside a Chromium page is read from UIA's own event
             // ([`UiaLiveRegionHandler`]); this one has nothing to read, and its MSAA object took
@@ -3979,7 +3983,9 @@ mod capture {
                     Some(element) => focus_context_of(uia, element, needs_siblings),
                     None => (Vec::new(), None),
                 },
-                (_, Some(uia)) if changes_focus_context => (Vec::new(), focus_subtree_of(uia)),
+                (_, Some(uia)) if changes_focus_context => {
+                    (Vec::new(), element.and_then(|e| focus_subtree_of(uia, e)))
+                }
                 _ => (Vec::new(), None),
             };
             let column_headers = match (state.uia.as_ref(), element) {
@@ -4100,9 +4106,12 @@ mod capture {
             };
             stages.push(("text", clock.elapsed().as_millis()));
             // A UIA focus has no MSAA object: the focused item is UIA's.
-            let object = (!uia_named)
-                .then(|| msaa_object(hwnd, id_object, id_child))
-                .flatten();
+            let object = match object_read {
+                Some(object) => object,
+                None => (!uia_named)
+                    .then(|| msaa_object(hwnd, id_object, id_child))
+                    .flatten(),
+            };
             stages.push(("msaa", clock.elapsed().as_millis()));
             if clock.elapsed() > SLOW_EVENT {
                 tracing::debug!(event = name, %class, ?stages, "slow event read");

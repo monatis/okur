@@ -441,6 +441,13 @@ mod reader {
         }
     }
 
+    /// Characters in `range`'s text.
+    fn chars_of(range: &IUIAutomationTextRange) -> Option<usize> {
+        // SAFETY: a UIA text range call on a valid range.
+        let text = unsafe { range.GetText(MAX_TEXT_CHARS) }.ok()?;
+        Some(text.to_string().chars().count())
+    }
+
     fn read_uia(uia: &IUIAutomation) -> Option<TextContext> {
         // SAFETY: UIA client calls on valid objects.
         unsafe {
@@ -450,23 +457,60 @@ mod reader {
             let document = pattern.DocumentRange().ok()?;
             let text = document.GetText(MAX_TEXT_CHARS).ok()?.to_string();
             let selection = pattern.GetSelection().ok()?.GetElement(0).ok()?;
+            // Only the caret is counted from the document's start; the selection's end and the
+            // caret's word are counted from the caret, over their own short texts. Each count
+            // from the start had the text up to there sent again, four times per read and per
+            // poll after a key (performance review 2026-10-23, P3).
             let start = offset_of(&document, &selection, TextPatternRangeEndpoint_Start)?;
-            let end = offset_of(&document, &selection, TextPatternRangeEndpoint_End)?;
+            let end = start + chars_of(&selection)?;
+            // The caret, as a range of its own.
+            let caret = selection.Clone().ok()?;
+            caret
+                .MoveEndpointByRange(
+                    TextPatternRangeEndpoint_End,
+                    &selection,
+                    TextPatternRangeEndpoint_Start,
+                )
+                .ok()?;
             // The word at the caret by the field's own word unit.
-            let word = selection.Clone().ok().and_then(|range| {
+            let word = caret.Clone().ok().and_then(|range| {
                 use windows::Win32::UI::Accessibility::TextUnit_Word;
-                range
-                    .MoveEndpointByRange(
-                        TextPatternRangeEndpoint_End,
-                        &range,
+                range.ExpandToEnclosingUnit(TextUnit_Word).ok()?;
+                let word_start = match range
+                    .CompareEndpoints(
+                        TextPatternRangeEndpoint_Start,
+                        &caret,
                         TextPatternRangeEndpoint_Start,
                     )
-                    .ok()?;
-                range.ExpandToEnclosingUnit(TextUnit_Word).ok()?;
-                Some((
-                    offset_of(&document, &range, TextPatternRangeEndpoint_Start)?,
-                    offset_of(&document, &range, TextPatternRangeEndpoint_End)?,
-                ))
+                    .ok()?
+                {
+                    // Before the caret: the text from the word's start to the caret.
+                    ..0 => {
+                        let before = range.Clone().ok()?;
+                        before
+                            .MoveEndpointByRange(
+                                TextPatternRangeEndpoint_End,
+                                &caret,
+                                TextPatternRangeEndpoint_Start,
+                            )
+                            .ok()?;
+                        start.checked_sub(chars_of(&before)?)?
+                    }
+                    0 => start,
+                    // After it: the text from the caret to the word's start.
+                    _ => {
+                        let after = caret.Clone().ok()?;
+                        after
+                            .MoveEndpointByRange(
+                                TextPatternRangeEndpoint_End,
+                                &range,
+                                TextPatternRangeEndpoint_Start,
+                            )
+                            .ok()?;
+                        start + chars_of(&after)?
+                    }
+                };
+                Some((word_start, word_start + chars_of(&range)?))
             });
             Some(TextContext {
                 text,

@@ -733,6 +733,11 @@ pub async fn run(config: RunConfig) {
         let console_lines = console.then(spawn_console);
         event_task = Some(tokio::spawn(async move {
             let idle = std::time::Duration::from_millis(150);
+            // Since when no event but the mouse's has come: the mouse moving, up to 20 times
+            // a second, put off the idle work (speech deferred until no event supersedes it,
+            // a page to apply, live regions gone quiet) for as long as it moved (performance
+            // review 2026-10-23, T6).
+            let mut quiet_since = tokio::time::Instant::now();
             // Captures of the page already read are built on threads of their own
             // (an IA2 capture after the quick one, a refresh after changes: 69-275 ms
             // on a page of 25,000 nodes, during which typing echo and focus events
@@ -807,7 +812,9 @@ pub async fn run(config: RunConfig) {
                         }
                         continue;
                     }
-                    received = tokio::time::timeout(idle, event_rx.recv()) => received,
+                    received = tokio::time::timeout_at(quiet_since + idle, event_rx.recv()) => {
+                        received
+                    }
                 };
                 let event = match received {
                     Ok(Some(event)) => Some(event),
@@ -815,6 +822,9 @@ pub async fn run(config: RunConfig) {
                     // Quiet for a moment: speech JAWS defers until no event supersedes it.
                     Err(_) => None,
                 };
+                if !matches!(event, Some(AccessibilityEvent::MouseMoved { .. })) {
+                    quiet_since = tokio::time::Instant::now();
+                }
                 // A page's buffer is built before the engine is taken: on a big page
                 // that takes long, and the keyboard hook waits on the engine. The
                 // buffer keeps the page the event brought, without a copy.
@@ -927,7 +937,10 @@ pub async fn run(config: RunConfig) {
                     }
                     spoken
                 };
-                if let Some(msg) = spoken {
+                // Copied for the log and the console only when one of them takes it
+                // (performance review 2026-10-23, T19).
+                let shown = console_lines.is_some() || tracing::enabled!(tracing::Level::DEBUG);
+                if let Some(msg) = spoken.filter(|_| shown) {
                     // One line per utterance, so the debug log stays line-oriented.
                     let msg = msg
                         .replace(['\u{001d}', '\u{001e}'], "")

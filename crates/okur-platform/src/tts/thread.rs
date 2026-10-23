@@ -5,7 +5,7 @@
 //! engine's speech calls are queued, in order, to a thread that talks to the synthesizer. The
 //! speech log is still written when a call is made, so key-to-speech timings keep their meaning.
 
-use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::atomic::{AtomicU64, AtomicUsize, Ordering};
 use std::sync::mpsc::{channel, RecvTimeoutError, Sender};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
@@ -31,6 +31,10 @@ enum Request {
 
 /// How many utterances the Speech History keeps (JAWS's help gives 50 and 500 [S3, H14]).
 const HISTORY: usize = 50;
+
+/// The most of one utterance the Speech History keeps, in bytes: Say Clipboard speaks the
+/// whole clipboard, and fifty of them were kept whole (performance review 2026-10-23, T20).
+const HISTORY_ENTRY: usize = 32 * 1024;
 
 /// How often the synthesizer is asked how far a Say All has got.
 const MARK_POLL: Duration = Duration::from_millis(20);
@@ -128,6 +132,9 @@ pub struct SpeechThread {
     tts: Arc<Mutex<TtsManager>>,
     /// Requests sent and not yet carried out: speech asked for is speech going on.
     pending: Arc<AtomicUsize>,
+    /// Requests sent that cut off speech: a long text being handed over in parts stops at the
+    /// next part when one comes.
+    interruptions: Arc<AtomicU64>,
     log: Option<SpeechLog>,
     /// The synthesizer's voices, read when it starts: the settings dialog asks for them in
     /// the keyboard hook, and reading them there waited behind the synthesizer (a SAPI purge)
@@ -149,6 +156,8 @@ impl SpeechThread {
         let voices = Arc::new(Mutex::new(SpeechOutput::voices(&tts)));
         let tts = Arc::new(Mutex::new(tts));
         let pending = Arc::new(AtomicUsize::new(0));
+        let interruptions = Arc::new(AtomicU64::new(0));
+        let worker_interruptions = Arc::clone(&interruptions);
         let (requests, received) = channel::<Request>();
         let (worker_tts, worker_pending) = (Arc::clone(&tts), Arc::clone(&pending));
         let worker_voices = Arc::clone(&voices);
@@ -185,6 +194,7 @@ impl SpeechThread {
                     if let Some(first) = next {
                         carry_out(
                             Request::batch(first, &received),
+                            &worker_interruptions,
                             &worker_tts,
                             &worker_pending,
                             &worker_voices,
@@ -218,6 +228,7 @@ impl SpeechThread {
             requests,
             tts,
             pending,
+            interruptions,
             log,
             voices,
             report_to,
@@ -275,8 +286,11 @@ impl SpeechIdle {
 
 /// Carries out `batch` on the synthesizer, but for what an interruption in it supersedes.
 /// `following`: Say All parts whose start the synthesizer reports are out.
+/// `interruptions` counts the requests sent that cut off speech: one sent after the batch
+/// was taken stops a long text between its parts.
 fn carry_out(
     batch: Vec<Request>,
+    interruptions: &AtomicU64,
     worker_tts: &Mutex<TtsManager>,
     worker_pending: &AtomicUsize,
     worker_voices: &Mutex<Vec<String>>,
@@ -284,6 +298,7 @@ fn carry_out(
     following: &mut bool,
 ) {
     let count = batch.len();
+    let generation = interruptions.load(Ordering::SeqCst);
     for request in Request::superseding(batch) {
         let Ok(mut tts) = worker_tts.lock() else {
             continue;
@@ -312,6 +327,13 @@ fn carry_out(
                 // Long text (Say All) in parts, so that speech starts after the
                 // first part's pronunciation, not the whole text's.
                 for (i, part) in parts(&text).enumerate() {
+                    // A stop or speech that cuts this off, sent meanwhile: the parts were all
+                    // pronounced and handed over before it was read (performance review
+                    // 2026-10-23, T12).
+                    if i > 0 && interruptions.load(Ordering::SeqCst) != generation {
+                        tracing::debug!(part = i, "long speech cut off between its parts");
+                        break;
+                    }
                     let spoken = okur_core::pronounce::spoken_with(part, tts.punctuation, tts.text);
                     let _ = tts.engine.speak(&spoken, interrupt && i == 0);
                 }
@@ -374,6 +396,9 @@ impl SpeechThread {
         if self.unspoken && request.speaks() {
             return;
         }
+        if request.interrupts() {
+            self.interruptions.fetch_add(1, Ordering::SeqCst);
+        }
         self.pending.fetch_add(1, Ordering::SeqCst);
         if self.requests.send(request).is_err() {
             self.pending.fetch_sub(1, Ordering::SeqCst);
@@ -385,7 +410,12 @@ impl SpeechThread {
             if self.recent.len() == HISTORY {
                 self.recent.pop_front();
             }
-            self.recent.push_back(text.to_owned());
+            let mut kept = HISTORY_ENTRY.min(text.len());
+            while !text.is_char_boundary(kept) {
+                kept -= 1;
+            }
+            self.recent
+                .push_back(text.get(..kept).unwrap_or_default().to_owned());
         }
         if let Some(log) = self.log.as_mut() {
             log.record(kind, text, interrupt);
@@ -704,5 +734,116 @@ mod mark_tests {
         };
         let speech = SpeechThread::start(manager);
         assert!(!speech.reports_marks());
+    }
+
+    /// A synthesizer that counts the parts handed to it; the first one also sends a stop, as
+    /// a key pressed while a long text is handed over does.
+    struct StoppedAfterFirst {
+        parts: Arc<AtomicUsize>,
+        interruptions: Arc<AtomicU64>,
+    }
+
+    impl TtsEngine for StoppedAfterFirst {
+        fn name(&self) -> &str {
+            "stopped after the first part"
+        }
+        fn speak(&mut self, _text: &str, _interrupt: bool) -> Result<(), TtsError> {
+            if self.parts.fetch_add(1, Ordering::SeqCst) == 0 {
+                self.interruptions.fetch_add(1, Ordering::SeqCst);
+            }
+            Ok(())
+        }
+        fn stop(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn pause(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn resume(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn set_rate(&mut self, _rate: i32) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn get_rate(&self) -> i32 {
+            0
+        }
+        fn set_volume(&mut self, _volume: u16) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn get_volume(&self) -> u16 {
+            100
+        }
+        fn is_speaking(&self) -> bool {
+            false
+        }
+        fn get_voices(&self) -> Vec<VoiceInfo> {
+            Vec::new()
+        }
+        fn set_voice(&mut self, _voice_id: &str) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn wait_until_done(&mut self, _timeout_ms: u32) -> Result<(), TtsError> {
+            Ok(())
+        }
+    }
+
+    /// A long text is handed over in parts; a stop sent while it is handed over cuts it off
+    /// at the next part (performance review 2026-10-23, T12). Without one, every part goes.
+    #[test]
+    fn a_stop_cuts_a_long_text_off_between_its_parts() {
+        let long = "A line of a long clipboard.\n".repeat(1000);
+        assert!(parts(&long).count() > 3);
+        for stopped in [true, false] {
+            let parts_spoken = Arc::new(AtomicUsize::new(0));
+            let interruptions = Arc::new(AtomicU64::new(0));
+            let Ok(mut manager) = TtsManager::new(TtsEngineType::NoSpeech) else {
+                return;
+            };
+            manager.engine = Box::new(StoppedAfterFirst {
+                parts: Arc::clone(&parts_spoken),
+                // Not stopped: the synthesizer's stop goes to a counter nobody reads.
+                interruptions: if stopped {
+                    Arc::clone(&interruptions)
+                } else {
+                    Arc::new(AtomicU64::new(0))
+                },
+            });
+            let tts = Mutex::new(manager);
+            let pending = AtomicUsize::new(1);
+            carry_out(
+                vec![Request::Speak(long.clone(), true)],
+                &interruptions,
+                &tts,
+                &pending,
+                &Mutex::new(Vec::new()),
+                &Mutex::new(None),
+                &mut false,
+            );
+            let spoken = parts_spoken.load(Ordering::SeqCst);
+            if stopped {
+                assert_eq!(spoken, 1);
+            } else {
+                assert_eq!(spoken, parts(&long).count());
+            }
+            assert_eq!(pending.load(Ordering::SeqCst), 0);
+        }
+    }
+
+    /// The Speech History keeps at most [`HISTORY_ENTRY`] bytes of an utterance, cut at a
+    /// character.
+    #[test]
+    fn the_history_keeps_a_long_utterance_cut() {
+        let Some((mut speech, _rx)) = thread(None) else {
+            return;
+        };
+        let long = "ü".repeat(HISTORY_ENTRY);
+        speech.speak(&long, true);
+        let kept = speech.recent.back().map(String::len).unwrap_or_default();
+        assert!(kept <= HISTORY_ENTRY && kept + 2 > HISTORY_ENTRY, "{kept}");
+        assert!(speech
+            .recent
+            .back()
+            .is_some_and(|t| t.chars().all(|c| c == 'ü')));
     }
 }

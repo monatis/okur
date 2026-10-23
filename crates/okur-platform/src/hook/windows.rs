@@ -225,7 +225,7 @@ impl KeyboardHook for WindowsKeyboardHook {
         }
 
         if let Some(handle) = self.thread_handle.take() {
-            let _ = handle.join();
+            crate::join_within(handle, std::time::Duration::from_secs(2));
         }
 
         if let Ok(mut cb) = ACTIVE_CALLBACK.lock() {

@@ -14,12 +14,12 @@ use windows::Win32::UI::Controls::{
     BST_CHECKED, BST_UNCHECKED, EM_SETSEL, HTREEITEM, LVCF_TEXT, LVCF_WIDTH, LVCOLUMNW, LVIF_STATE,
     LVIF_TEXT, LVIS_FOCUSED, LVIS_SELECTED, LVIS_STATEIMAGEMASK, LVITEMW, LVM_DELETEALLITEMS,
     LVM_EDITLABELW, LVM_ENSUREVISIBLE, LVM_GETNEXTITEM, LVM_INSERTCOLUMNW, LVM_INSERTITEMW,
-    LVM_SETEXTENDEDLISTVIEWSTYLE, LVM_SETITEMSTATE, LVM_SETITEMTEXTW, LVNI_SELECTED,
-    LVN_ENDLABELEDITW, LVN_ITEMCHANGED, LVN_KEYDOWN, LVS_EX_CHECKBOXES, LVS_EX_FULLROWSELECT,
-    NMHDR, NMLISTVIEW, NMLVDISPINFOW, NMLVKEYDOWN, NMTREEVIEWW, NM_DBLCLK, TBM_SETPAGESIZE,
-    TBM_SETPOS, TBM_SETRANGEMAX, TBM_SETRANGEMIN, TBM_SETTICFREQ, TVE_EXPAND, TVGN_CARET,
-    TVGN_CHILD, TVGN_NEXT, TVGN_ROOT, TVIF_TEXT, TVINSERTSTRUCTW, TVINSERTSTRUCTW_0, TVITEMW,
-    TVI_LAST, TVI_ROOT, TVM_EXPAND, TVM_GETNEXTITEM, TVM_INSERTITEMW, TVM_SELECTITEM,
+    LVM_SETEXTENDEDLISTVIEWSTYLE, LVM_SETITEMCOUNT, LVM_SETITEMSTATE, LVM_SETITEMTEXTW,
+    LVNI_SELECTED, LVN_ENDLABELEDITW, LVN_ITEMCHANGED, LVN_KEYDOWN, LVS_EX_CHECKBOXES,
+    LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NMLVDISPINFOW, NMLVKEYDOWN, NMTREEVIEWW, NM_DBLCLK,
+    TBM_SETPAGESIZE, TBM_SETPOS, TBM_SETRANGEMAX, TBM_SETRANGEMIN, TBM_SETTICFREQ, TVE_EXPAND,
+    TVGN_CARET, TVGN_CHILD, TVGN_NEXT, TVGN_ROOT, TVIF_TEXT, TVINSERTSTRUCTW, TVINSERTSTRUCTW_0,
+    TVITEMW, TVI_LAST, TVI_ROOT, TVM_EXPAND, TVM_GETNEXTITEM, TVM_INSERTITEMW, TVM_SELECTITEM,
     TVN_SELCHANGEDW,
 };
 use windows::Win32::UI::Input::KeyboardAndMouse::{EnableWindow, VIRTUAL_KEY, VK_DELETE, VK_F2};
@@ -360,12 +360,37 @@ fn fill_table(list: HWND, columns: &[String], rows: &[Vec<String>], selected: Op
     fill_rows(list, rows, selected);
 }
 
+/// Runs `fill` with `list` not drawn, then draws it once: a list refilled item by item was
+/// drawn again for each, and the Links List on a big page was sorted and filled anew on each
+/// change of order (performance review 2026-10-23, T16).
+fn without_redraw(list: HWND, fill: impl FnOnce()) {
+    use windows::Win32::Graphics::Gdi::InvalidateRect;
+    use windows::Win32::UI::WindowsAndMessaging::WM_SETREDRAW;
+    // SAFETY: messages to our own control.
+    unsafe {
+        SendMessageW(list, WM_SETREDRAW, Some(WPARAM(0)), None);
+    }
+    fill();
+    // SAFETY: messages to our own control; it is drawn whole again.
+    unsafe {
+        SendMessageW(list, WM_SETREDRAW, Some(WPARAM(1)), None);
+        let _ = InvalidateRect(Some(list), None, true);
+    }
+}
+
 /// A list view's rows, each cell in its column, `selected` selected (none: the first has the
 /// focus).
 fn fill_rows(list: HWND, rows: &[Vec<String>], selected: Option<usize>) {
+    without_redraw(list, || insert_rows(list, rows));
+    select_row(list, rows, selected);
+}
+
+/// A list view's rows put in it, in place of what it had.
+fn insert_rows(list: HWND, rows: &[Vec<String>]) {
     // SAFETY: messages to our own list view; each string outlives its call.
     unsafe {
         SendMessageW(list, LVM_DELETEALLITEMS, None, None);
+        SendMessageW(list, LVM_SETITEMCOUNT, Some(WPARAM(rows.len())), None);
         for (row_index, row) in rows.iter().enumerate() {
             for (cell_index, cell) in row.iter().enumerate() {
                 let mut text = wide(cell);
@@ -389,6 +414,13 @@ fn fill_rows(list: HWND, rows: &[Vec<String>], selected: Option<usize>) {
                 );
             }
         }
+    }
+}
+
+/// `selected` selected in a list view of `rows`; none: the first has the focus.
+fn select_row(list: HWND, rows: &[Vec<String>], selected: Option<usize>) {
+    // SAFETY: messages to our own list view; the item state outlives its call.
+    unsafe {
         match selected {
             Some(index) => select_item(list, index),
             None if !rows.is_empty() => {
@@ -412,18 +444,23 @@ fn fill_rows(list: HWND, rows: &[Vec<String>], selected: Option<usize>) {
 
 /// Fills a list box with `items` and selects one.
 fn fill_list_box(list: HWND, items: &[String], selected: usize) {
-    // SAFETY: messages to our own list box; each string is copied before the call returns.
-    unsafe {
-        SendMessageW(list, LB_RESETCONTENT, None, None);
-        for text in items {
-            let text = wide(text);
-            SendMessageW(
-                list,
-                LB_ADDSTRING,
-                None,
-                Some(LPARAM(text.as_ptr() as isize)),
-            );
+    without_redraw(list, || {
+        // SAFETY: messages to our own list box; each string is copied before the call returns.
+        unsafe {
+            SendMessageW(list, LB_RESETCONTENT, None, None);
+            for text in items {
+                let text = wide(text);
+                SendMessageW(
+                    list,
+                    LB_ADDSTRING,
+                    None,
+                    Some(LPARAM(text.as_ptr() as isize)),
+                );
+            }
         }
+    });
+    // SAFETY: a message to our own list box.
+    unsafe {
         SendMessageW(list, LB_SETCURSEL, Some(WPARAM(selected)), None);
     }
 }
@@ -527,9 +564,16 @@ fn select_tree_item(tree: HWND, index: usize) {
 }
 
 fn set_items(list: HWND, items: &[String], selected: usize) {
+    without_redraw(list, || insert_items(list, items));
+    select_item(list, selected);
+}
+
+/// A list view's items put in it, in place of what it had.
+fn insert_items(list: HWND, items: &[String]) {
     // SAFETY: messages to our own list view; each text outlives its call.
     unsafe {
         SendMessageW(list, LVM_DELETEALLITEMS, None, None);
+        SendMessageW(list, LVM_SETITEMCOUNT, Some(WPARAM(items.len())), None);
         for (index, text) in items.iter().enumerate() {
             let mut text = wide(text);
             let item = LVITEMW {
@@ -545,7 +589,6 @@ fn set_items(list: HWND, items: &[String], selected: usize) {
                 Some(LPARAM(&item as *const LVITEMW as isize)),
             );
         }
-        select_item(list, selected);
     }
 }
 

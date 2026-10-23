@@ -13,7 +13,7 @@ use std::collections::VecDeque;
 use std::io::{BufRead, Write};
 use std::sync::Mutex;
 
-use okur_ui_model::{decode, encode, utf16_offset, FromUi, TextSpan, ToUi};
+use okur_ui_model::{decode, encode, utf16_line_starts, utf16_offset_in, FromUi, TextSpan, ToUi};
 use windows::core::{w, PCWSTR};
 use windows::Win32::Foundation::{
     COLORREF, HINSTANCE, HWND, LPARAM, LRESULT, POINT, POINTL, RECT, WPARAM,
@@ -83,6 +83,8 @@ struct Viewer {
     line_height: i32,
     char_width: i32,
     lines: Vec<String>,
+    /// Where each line starts in the control's text ([`utf16_line_starts`]).
+    starts: Vec<usize>,
     mark: TextSpan,
 }
 
@@ -124,8 +126,8 @@ fn mark_range() -> Option<(usize, usize)> {
             v.as_ref().map(|v| {
                 let m = v.mark;
                 (
-                    utf16_offset(&v.lines, m.line, m.column),
-                    utf16_offset(&v.lines, m.line, m.column + m.length),
+                    utf16_offset_in(&v.lines, &v.starts, m.line, m.column),
+                    utf16_offset_in(&v.lines, &v.starts, m.line, m.column + m.length),
                 )
             })
         })
@@ -412,6 +414,7 @@ fn show_viewer(title: &str, lines: Vec<String>, mark: TextSpan) {
     VIEWER.with(|v| {
         if let Ok(mut v) = v.try_borrow_mut() {
             if let Some(v) = v.as_mut() {
+                v.starts = utf16_line_starts(&lines);
                 v.lines = lines;
                 v.mark = mark;
             }
@@ -560,6 +563,7 @@ fn create_viewer() {
                     line_height: 16,
                     char_width: 8,
                     lines: Vec::new(),
+                    starts: Vec::new(),
                     mark: TextSpan::default(),
                 });
             }

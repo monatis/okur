@@ -1013,15 +1013,20 @@ pub(crate) mod capture {
         }
     }
 
-    /// The focused element with its control-view subtree, as deep as announcements use.
-    pub(crate) fn focus_subtree_of(uia: &IUIAutomation) -> Option<UiaNode> {
+    /// The focused element, already fetched with its properties ([`with_properties`]), with
+    /// its control-view subtree, as deep as announcements use. UIA's focus was asked for again
+    /// here, a third time for one event (performance review 2026-10-23, P7).
+    pub(crate) fn focus_subtree_of(
+        uia: &IUIAutomation,
+        focused: &IUIAutomationElement,
+    ) -> Option<UiaNode> {
         // SAFETY: UIA client queries on a valid automation object.
-        unsafe {
-            let request = properties_request(uia, AutomationElementMode_Full)?;
-            let focused = uia.GetFocusedElementBuildCache(&request).ok()?;
-            let depth = subtree_depth(focused.CachedControlType().map(|t| t.0).unwrap_or_default());
-            read_levels(uia, &focused, depth)
-        }
+        let depth = subtree_depth(
+            unsafe { focused.CachedControlType() }
+                .map(|t| t.0)
+                .unwrap_or_default(),
+        );
+        read_levels(uia, focused, depth)
     }
 
     /// What is read of a focused element's siblings: positions are counted among the
