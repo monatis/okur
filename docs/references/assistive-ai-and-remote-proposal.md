@@ -45,7 +45,7 @@ SDK's D1 to D18.
 |---|---|---|
 | A1 | OCR with nothing installed | The operating system's engine: Windows.Media.Ocr, Apple Vision |
 | A2 | Keys and messages | JAWS's layers exactly, with JAWS's command names; Okur's additions on letters JAWS leaves free |
-| A3 | Where results go | The Results Viewer, as JAWS; OCR laid over the window as a second step |
+| A3 | Where results go | As JAWS: the screen's recognized text in place, read with the Okur cursor (W, S, C, B); files and PDFs in the Results Viewer. Corrected 2026-10-23 by [`okur-cursor-screen-text-research.md`](okur-cursor-screen-text-research.md) §3; the OCR milestones are now [`../plans/2026-10-23-okur-cursor-screen-text.md`](../plans/2026-10-23-okur-cursor-screen-text.md) |
 | A4 | Local models | Not bundled; downloaded on request from a list Okur tests, the size said first |
 | A5 | The first local models | Describing: Qwen3.5 4B (2B on 8 GB machines), against Gemma 4 E2B/E4B in V3's evaluation; OCR: PaddleOCR-VL 1.5 |
 | A6 | The local runtime | llama.cpp's libraries in a separate process, `okur-models`; ggmlc when it runs vision models with Metal, Vulkan and a C interface |
@@ -253,6 +253,11 @@ language for this command only; **E** recognizes again with the next engine (the
 then a local model), saying which.
 
 ### 5.2 Results
+
+**Corrected 2026-10-23.** JAWS 2025 puts the text of W, S and C in place, read with the JAWS
+cursor, not in the Results Viewer (recorded: 996-998). The plan
+[`../plans/2026-10-23-okur-cursor-screen-text.md`](../plans/2026-10-23-okur-cursor-screen-text.md)
+follows JAWS and replaces V1's OCR below; the Results Viewer keeps files, PDFs and the camera.
 
 - **The Results Viewer** (Okur's Virtual Viewer window): the first line says the engine and the
   language; then the text by lines, read with the virtual cursor; Ctrl+F finds, as in JAWS

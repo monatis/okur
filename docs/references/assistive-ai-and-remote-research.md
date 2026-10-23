@@ -180,10 +180,14 @@ Smart pages through a reader service; the writer reopened the privacy statement 
 - Results open in the **Results Viewer**, read with the virtual cursor like a web page;
   Escape closes it [J10], [J11]. Since September 2025 Ctrl+F there opens JAWS Find [J9].
 - Background OCR is read in place with the JAWS or Invisible cursor [J9]. In JAWS 13 (2011)
-  screen, window and control OCR also put the JAWS cursor on the results [J12] (excerpt);
-  today's behavior for W, S and C was not confirmed.
+  screen, window and control OCR also put the JAWS cursor on the results [J12] (excerpt).
+  Confirmed for JAWS 2025 (2026-10-23): W, S and C place the text where the picture is, read
+  with the JAWS cursor, not in the Results Viewer; recorded on old-pc (996-998), with the
+  messages "OCR started using OmniPage.", "finished." and "JAWS Cursor"
+  ([`okur-cursor-screen-text-research.md`](okur-cursor-screen-text-research.md) §2.2).
 - From File Explorer's context menu, JAWS plays sounds while it works instead of speaking
-  [J4]. No documented "recognizing" or "done" message was found: old-pc can record them.
+  [J4]. No documented "recognizing" or "done" message was found; old-pc recorded them for
+  W and C (996-998, above).
 
 ### 3.3 Engines and languages
 
