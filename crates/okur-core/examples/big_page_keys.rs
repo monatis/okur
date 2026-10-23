@@ -213,6 +213,39 @@ fn main() {
         times.len(),
         rows
     );
+    // The focus to the browser's address bar (F6) and back into the page (performance review
+    // C15): each focus, and the first key after coming back.
+    let mut times = Vec::new();
+    for _ in 0..3 {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        engine.handle_accessibility_event(&AccessibilityEvent::DocumentLoaded {
+            title: "Big page".to_owned(),
+            root: root.clone(),
+        });
+        let mut link = okur_core::FocusEvent::new(Role::Link { href: None })
+            .with_name(format!("Sender {}", rows / 2));
+        link.in_document = true;
+        engine.handle_accessibility_event(&AccessibilityEvent::Focus(link.clone()));
+        let address = okur_core::FocusEvent::new(Role::Edit).with_name("Address and search bar");
+        let started = std::time::Instant::now();
+        engine.handle_accessibility_event(&AccessibilityEvent::Focus(address));
+        let away = started.elapsed();
+        let started = std::time::Instant::now();
+        engine.handle_accessibility_event(&AccessibilityEvent::Focus(link));
+        let back = started.elapsed();
+        let started = std::time::Instant::now();
+        let _ = engine.handle_key_event(&chord(Key::DownArrow, false, false, false));
+        times.push((away, back, started.elapsed()));
+    }
+    times.sort();
+    println!(
+        "{:>14}: {:?} (away, back, the next key; median of {}, {} rows)",
+        "address bar",
+        times.get(times.len() / 2).copied().unwrap_or_default(),
+        times.len(),
+        rows
+    );
     // A check box toggled (the middle row's): the page built again at once, or left to the
     // host to build off the engine, as the live screen reader does (performance review P3).
     for (name, by_host) in [("toggle, here", false), ("toggle, host", true)] {

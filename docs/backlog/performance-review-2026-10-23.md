@@ -53,6 +53,7 @@ traces), so such changes get tests where a test can hold them and a live run on 
 | C4: each edit key made the field's text a vector of characters two to four times | done for the caret's line and character (`line_bytes`, tested against the vectors at every caret); the commands that read further keep theirs | `4a56c7e8` |
 | C7, C10 | not changed: a focus's copy is microseconds beside its reads; S, D and N take 3.5-4.3 ms on 25,032 nodes (measured below) | |
 | P14: a list item's column headers named one call each | done: the names come with the headers in one cached call; live run 265 (514): speech unchanged | `4fd2617e` |
+| C15: focus between the page and the address bar rebuilt the page twice | not found in the engine: `big_page_keys` (5,000 rows, release) times the focus to the address bar at 20 µs, back to the page's link at 10 µs and the next key at 9 µs; the platform captures a page again only when its address changes (`load_page_if_new`), which leaving for the address bar does not; to confirm in a live log (F6 and back on a big page) | |
 | P3 (polls): after a key at an edge a desktop field was read every 15 ms for the whole 250 ms | done for fields outside pages: two messages sent in turn to the focus window tell that the application has taken the key, and two reads after that the same end the wait; Chromium's fields keep their 2 ms position poll (the page changes in another process); live run 266: text read p90 266 → 32 ms, speech unchanged | `16d2ede4` |
 
 The rest are listed below in the order they are taken.
