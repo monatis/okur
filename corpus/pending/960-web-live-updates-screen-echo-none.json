@@ -1,0 +1,72 @@
+{
+  "id": "960-web-live-updates-screen-echo-none",
+  "name": "206 (a chat log and a status updating after a button press) with Screen Echo none (DEFAULT.JCF [Options] ScreenEcho=0): whether live regions are still read",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/live-updates.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "ScreenEcho": "0"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "B"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Enter"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Enter"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Down"
+    }
+  ]
+}

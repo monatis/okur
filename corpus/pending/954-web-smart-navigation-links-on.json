@@ -1,0 +1,122 @@
+{
+  "id": "954-web-smart-navigation-links-on",
+  "name": "Left, Right, Ctrl+Right and Ctrl+Left across a link inside a paragraph (K five times) with Smart Navigation on controls and tables (DEFAULT.JCF [HTML] SmartNavigation=3; its comment: 1 moves character and word keys by control, 2 treats cells as units): what a unit is (the reading settings research, item 8.6)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/virtual-keys.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "HTML": {
+        "SmartNavigation": "3"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "K"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "K"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "K"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "K"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "K"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Ctrl+Left"
+    }
+  ]
+}

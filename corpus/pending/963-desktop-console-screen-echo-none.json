@@ -1,0 +1,48 @@
+{
+  "id": "963-desktop-console-screen-echo-none",
+  "name": "962 with Screen Echo none (ScreenEcho=0)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-console-echo.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Console Echo Fixture"
+  },
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "ScreenEcho": "0"
+      }
+    }
+  },
+  "reset": {
+    "keys": []
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Enter"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "B"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Enter"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}

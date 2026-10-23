@@ -1,0 +1,122 @@
+{
+  "id": "955-web-smart-navigation-controls-on",
+  "name": "954 with form controls: a label and an edit on one line (E), a combo box below it, and a button alone in its paragraph, Smart Navigation on controls and tables (SmartNavigation=3)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/activation.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "HTML": {
+        "SmartNavigation": "3"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "E"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "B"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Ctrl+Right"
+    }
+  ]
+}
