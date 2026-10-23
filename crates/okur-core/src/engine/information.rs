@@ -150,6 +150,13 @@ impl ScreenReaderEngine {
                 .chain(std::iter::once(value.trim()))
                 .map(str::to_owned)
                 .collect::<Vec<_>>(),
+            // Short messages leave out how many columns there are: "3 out of range" [obs,
+            // 851/s7, 852/s7].
+            None if self.settings.verbosity.message_length()
+                == crate::settings::MessageLength::Short =>
+            {
+                vec![msg::list_column_out_of_range(column).to_string()]
+            }
             None => vec![
                 msg::list_column_out_of_range(column).to_string(),
                 msg::list_view_columns(count).to_string(),

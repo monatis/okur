@@ -224,7 +224,8 @@ app-version = { $product } Version { $version }
 
 ## A list view's columns, Ctrl+Insert+1 to 0 [obs, 514/s5-s7]
 
-# A column past the last, then how many there are.
+# A column past the last, then how many there are (with short messages, the first alone
+# [obs, 851/s7]).
 list-column-out-of-range = { $column } out of range
 list-view-columns = this listview only contains { $count } columns.
 
