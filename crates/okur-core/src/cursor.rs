@@ -928,6 +928,19 @@ impl VirtualCursor {
         self.verbosity.is_on(crate::settings::OutputType::Select)
     }
 
+    /// A table's edge reached by a cell key, "end of row": a message of JAWS's own, which
+    /// Advanced leaves out, the key still taken [obs, 870/s4, s7].
+    fn table_edge(&self, message: String) -> Option<String> {
+        if self
+            .verbosity
+            .is_on(crate::settings::OutputType::OkurMessage)
+        {
+            Some(message)
+        } else {
+            Some(String::new())
+        }
+    }
+
     /// JAWS's short messages are said (Intermediate and Advanced verbosity).
     fn short_messages(&self) -> bool {
         self.verbosity.message_length() == crate::settings::MessageLength::Short
@@ -2989,7 +3002,7 @@ impl VirtualCursor {
                 ));
             }
         }
-        Some(msg::table_row_end().to_string())
+        self.table_edge(msg::table_row_end().to_string())
     }
 
     /// Moves to cell to the left within the active row (`Ctrl+Alt+LeftArrow`).
@@ -3023,7 +3036,7 @@ impl VirtualCursor {
             }
         }
         // Before the first column, "beginning of row" [obs, 615/s2, 616/s2].
-        Some(msg::table_row_start().to_string())
+        self.table_edge(msg::table_row_start().to_string())
     }
 
     /// Moves to cell directly below in the active column (`Ctrl+Alt+DownArrow`).
@@ -3054,7 +3067,7 @@ impl VirtualCursor {
                 ));
             }
         }
-        Some(msg::table_column_bottom().to_string())
+        self.table_edge(msg::table_column_bottom().to_string())
     }
 
     /// Moves to cell directly above in the active column (`Ctrl+Alt+UpArrow`).
@@ -3089,7 +3102,7 @@ impl VirtualCursor {
             }
         }
         // Above the first row, "top of column" [obs, 592/s8].
-        Some(msg::table_column_top().to_string())
+        self.table_edge(msg::table_column_top().to_string())
     }
 
     /// Moves to the first cell of the current table (`Ctrl+Alt+Home`).

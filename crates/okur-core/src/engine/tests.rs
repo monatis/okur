@@ -7006,3 +7006,36 @@ fn appending_to_the_clipboard_is_said_at_the_levels_length() {
         assert_eq!(speech.take(), said, "{level:?}");
     }
 }
+
+/// A cell key past a table's edge says "end of row" or "bottom of column", and nothing at
+/// Advanced, where JAWS leaves its own messages out; the key is taken at every level
+/// [obs, 869/s4, s7; 870/s4, s7].
+#[test]
+fn a_tables_edge_is_said_but_at_advanced() {
+    use crate::settings::VerbosityLevel;
+    for (level, row_end, column_bottom) in [
+        (VerbosityLevel::Beginner, "end of row", "bottom of column"),
+        (
+            VerbosityLevel::Intermediate,
+            "end of row",
+            "bottom of column",
+        ),
+        (VerbosityLevel::Advanced, "", ""),
+    ] {
+        let mut engine = files_table_engine();
+        let mut settings = engine.settings.clone();
+        settings.verbosity.level = level;
+        engine.set_settings(settings);
+        let _ = engine.cursor.find_text("second commit", true);
+        assert_eq!(
+            engine.execute_command("TableCellRight").as_deref(),
+            Some(row_end),
+            "{level:?}"
+        );
+        assert_eq!(
+            engine.execute_command("TableCellDown").as_deref(),
+            Some(column_bottom),
+            "{level:?}"
+        );
+    }
+}
