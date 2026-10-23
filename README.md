@@ -4,7 +4,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Rust 1.99.0](https://img.shields.io/badge/rust-1.99.0-orange.svg?logo=rust)](rust-toolchain.toml)
 [![Platforms: Windows; macOS in progress](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%28in%20progress%29-lightgrey.svg)](#platforms)
-[![JAWS parity: 8497 of 9052 recorded steps](https://img.shields.io/badge/JAWS%20parity-8497%2F9052%20steps-brightgreen.svg)](#where-it-stands)
+[![JAWS parity: 8521 of 9077 recorded steps](https://img.shields.io/badge/JAWS%20parity-8521%2F9077%20steps-brightgreen.svg)](#where-it-stands)
 
 **An open screen reader that keeps your JAWS muscle memory.**
 
@@ -57,14 +57,14 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `85f48830` (2026-10-24).
+Every figure is tool output, rerun for this README at commit `66827ec9` (2026-10-24).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **8497 of 9052** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **8407 of 9113** | `okur-lab parity` |
+| Steps matching JAWS's speech history, word for word | **8521 of 9077** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **8431 of 9138** | `okur-lab parity` |
 | Steps left out on purpose (accepted divergences, each a written decision) | **214** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **643, 1935** (1919 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Recorded JAWS scenarios, trials | **645, 1941** (1925 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
 | Tests | **1409 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
