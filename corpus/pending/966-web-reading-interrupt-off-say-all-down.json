@@ -1,0 +1,38 @@
+{
+  "id": "966-web-reading-interrupt-off-say-all-down",
+  "name": "965 with Down pressed 2.5 s into the Say All: whether a key that moves the cursor ends the Say All when Reading Interrupt is off",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/virtual-keys.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "ReadingInterrupt": "0"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Down",
+      "during": [
+        {
+          "after_ms": 2500,
+          "command": "Down"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}

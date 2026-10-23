@@ -1,0 +1,31 @@
+{
+  "id": "969-web-reading-interrupt-on-say-all-title",
+  "name": "965 at JAWS's default, Reading Interrupt on: Insert+T 2.5 s into a short page's Say All, to compare",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/virtual-keys.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Down",
+      "during": [
+        {
+          "after_ms": 2500,
+          "command": "Insert+T"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}
