@@ -139,7 +139,8 @@ in [accepted divergences](docs/references/accepted-divergences.md).
     a control's hot key (Shift+Numpad 5), a property sheet's page on Ctrl+Tab;
   - menus, the menu bar and context menus; lists, list views and their columns (Ctrl+Insert
     and a number), trees, combo boxes and data grids;
-  - Notepad and its dialogs, WordPad's and Paint's ribbons, File Explorer, Windows Settings,
+  - Notepad and its dialogs, WordPad's and Paint's ribbons (Alt to the tabs, their places and
+    the lower ribbon's groups, as JAWS reads them), File Explorer, Windows Settings,
     Windows Terminal, the desktop, the Alt+Tab switcher and Windows search;
   - the Window List (Insert+F10), to switch to another window, and the system tray list
     (Insert+F11), to open or click an icon.
@@ -167,6 +168,8 @@ in [accepted divergences](docs/references/accepted-divergences.md).
 - **Help** in Okur's own words: Insert+F1 for the control or the page element you are on,
   Insert+H for Okur's keys there, Insert+W for Windows' keys, and Keyboard Help (Insert+1),
   where each key is named and described instead of run.
+- **Consoles**: a command's output is read as the console writes it (Screen Echo, Insert+S,
+  as JAWS reads it).
 - **The Virtual Viewer** (Insert+Alt+W) on screen as JAWS shows it, for windows, controls and
   consoles, Windows Terminal included; the Speech History (Insert+Space, then H; Ctrl+H
   copies it and Shift+H clears it).
