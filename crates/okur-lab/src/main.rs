@@ -303,6 +303,11 @@ enum Commands {
         /// The language the window is recognized in, as Okur's default (its own language)
         #[arg(long, default_value = "en-US")]
         language: String,
+        /// With --append-to, read only a window whose title starts with this (the scenario's
+        /// fixture): another in front gets an empty snapshot, so no other window's text, which
+        /// may be private (old-pc's taskbar, 1012), is ever saved
+        #[arg(long)]
+        window_title: Option<String>,
     },
     /// Print a speech log recorded with `run --speech-log`
     History {
@@ -684,11 +689,23 @@ async fn main() {
             append_to,
             step,
             language,
+            window_title,
         }) => {
             #[cfg(windows)]
-            match okur_platform::window_text::foreground_screen(
-                recognize.then_some(language.as_str()),
-            ) {
+            let other_window = append_to.is_some()
+                && window_title.as_deref().is_some_and(|title| {
+                    !okur_platform::harness::foreground_title().starts_with(title)
+                });
+            #[cfg(windows)]
+            let screen = if other_window {
+                Ok(okur_core::screen_model::ScreenModel::default())
+            } else {
+                okur_platform::window_text::foreground_screen(
+                    recognize.then_some(language.as_str()),
+                )
+            };
+            #[cfg(windows)]
+            match screen {
                 Ok(model) if append_to.is_some() => {
                     let t_ms = std::time::SystemTime::now()
                         .duration_since(std::time::UNIX_EPOCH)
@@ -699,6 +716,7 @@ async fn main() {
                         "t_ms": t_ms,
                         "accessible": model.accessible,
                         "recognized": model.recognized,
+                        "other_window": other_window,
                     });
                     let path = append_to.unwrap_or_default();
                     let written = std::fs::OpenOptions::new()
@@ -737,7 +755,7 @@ async fn main() {
             }
             #[cfg(not(windows))]
             {
-                let _ = (recognize, pieces, append_to, step, language);
+                let _ = (recognize, pieces, append_to, step, language, window_title);
                 eprintln!("screen-text is only available on Windows");
                 std::process::exit(1);
             }

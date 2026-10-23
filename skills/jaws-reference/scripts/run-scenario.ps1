@@ -1047,6 +1047,9 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         if ($screenPath) {
             $screenArgs = @('screen-text', '--append-to', $screenPath, '--step', $step.id)
             if ($scenario.trace_ocr) { $screenArgs += '--recognize' }
+            # Only the fixture's window is read: another in front (a click that brought a
+            # console forward, 1012) gets an empty snapshot, and its text is never saved.
+            if ($launch) { $screenArgs += @('--window-title', $launch.window_title) }
             & $OkurLab @screenArgs 2>&1 | Out-Null
         }
         if ($transcript -match "unknown script call" -or $transcript -match "unhandled script call") { $dispatchOk = $false }
