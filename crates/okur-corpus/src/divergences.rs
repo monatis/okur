@@ -176,7 +176,11 @@ divergences! {
      title) on the way to its dialog. The same keys recorded again (230/s1) have none of it.",
     "the owner's ruling on JAWS's version, 2026-10-18";
 
-    Difference::JawsAlsoSays(",") => ["230-web-element-lists-items/s18"],
+    Difference::JawsAlsoSays(",") => [
+        "230-web-element-lists-items/s18",
+        "576-web-element-lists-items-intermediate/s18",
+        "586-web-element-lists-items-advanced/s18",
+    ],
     "Virtual HTML Features shows \"Radio Buttons List,\" with a stray comma, where every other \
      list is \"... List\": a typo in JAWS's text, not a name to copy.",
     "the owner's rule on JAWS's accidents, 2026-10-18";

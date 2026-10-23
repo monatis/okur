@@ -123,7 +123,8 @@ A step can be in more than one entry; all of its entries apply.
 
 ### A stray comma in Virtual HTML Features
 
-- Step: `230-web-element-lists-items/s18`.
+- Steps: `230-web-element-lists-items/s18`, and the same at Intermediate and Advanced,
+  `576-web-element-lists-items-intermediate/s18`, `586-web-element-lists-items-advanced/s18`.
 - Difference: JAWS also says "," after "Radio Buttons List".
 - Why: Virtual HTML Features (Insert+F3) shows "Radio Buttons List," where every other list is
   named "... List". It is a typo in JAWS's text; Okur shows "Radio Buttons List".
