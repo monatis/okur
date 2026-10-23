@@ -244,7 +244,7 @@ with no way to change it), **Missing** (neither). §4.13 and §4.14 list setting
 | 62 | Spell Alphanumeric Data | **Off**, spell, spell phonetically | | [R] §4 | Missing | |
 | 63 | When pausing after character navigation, speak character phonetically | **after about 1.5 s**; other delays; Never | | [F7], [S-phonetic]; [R] §4 | Missing | |
 | 64 | Spell Phonetically Always (Quick Settings: Text Spell) | **alphabetically** | | [R] §4 | Partial | Spelling and phonetic spelling exist (`pronounce.rs:44`, `speech.rs:953-962`); no setting |
-| 65 | Indentation: Say Indented Characters; Quick Settings' Indentation | **Ignore** | | [R] §8.3 | Missing | |
+| 65 | Indentation: Say Indented Characters (`[Options] Indentation`, 0 by default); Quick Settings' Indentation | **Ignore** | | [R] §8.3 | Partial (2026-10-23, `62b3ddb`): the setting `indentation`, imported from JAWS's key; "Left Margin" before a page line at the margin on Say Line and as a Say All starts (729); indented lines not recorded yet | `settings.rs`, `engine/commands.rs` (`with_margin_mark`) |
 | 66 | Indicate New Lines When | | | [R] §8.2 | Missing | |
 | 67 | Detect Spelling While Navigating | Off, play sound, **say misspelled** | all, per application | [F7], [DS-spell]; [R] §8.5 | Partial | "Misspelled" said in text fields (`editing.rs:170-188`); no setting |
 | 68 | Detect spelling while typing; grammar detection; error count; apply during Say All | sound **on**; grammar **on** except Word and Outlook; count **off**; Say All **off** | | [F5]; [R] §8.5 | Missing | |

@@ -829,7 +829,7 @@ The synthesizer was given:
   by the scheme's Indentation rules (Doc [S1]).
 - **Quick Settings' Indentation:** Ignore by default. With the Classic scheme, it is indicated
   by saying the number of spaces (Doc [H2], [S8]).
-- **Okur:** none. 315's lines begin with four spaces, and the spoken text has none (Obs).
+- **Okur** (2026-10-23): the setting `indentation` from `[Options] Indentation`. 729 (Indentation=1, Chrome's text area) says "Left Margin" before the line read by Say Line and before a Say All's first line; its indented lines (four spaces, a tab) were read at the margin in Chrome, so what JAWS says for indentation itself is still to record (315's Notepad lines begin with four spaces).
 - **Record:** CapsLock+I and Down over the indented lines (4 spaces, a tab) in
   `desktop-notepad.ps1`, with indentation indicated and ignored.
 
