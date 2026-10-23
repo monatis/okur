@@ -35,6 +35,11 @@ Scenarios 500-507 record them (old-pc round 12).
   PlaceMarkers (Ctrl+Shift+K). Virtual HTML Features says "Okur has no … yet" for them. Each
   needs its recording first. Smart Glance items were recorded (243: "9 p.m.", "most", "Branch"),
   but which text JAWS counts as highlighted is not known.
+- **Flexible Web's View or Change Where Rules are Applied** (751): Space on a rule's check box
+  says nothing in the replay, where JAWS says the item before and after ("Okur start rule Site
+  not checked 1 of 1 | checked | ... checked 1 of 1", s9): the replay's mirror of Okur's list
+  view or the live reader, to tell with a live run; the delete question names the dialog under
+  it again (s21); a tree item one level down says "level 1" where JAWS says none (s7).
 - **Space on a combo box** (229/s21): Okur names the combo box before its opened list; JAWS says
   the list only.
 - **The rest of the helper dialogs plan** ([`2026-10-17-helper-dialogs.md`](../plans/2026-10-17-helper-dialogs.md)):
@@ -164,6 +169,13 @@ Block quotes cannot be seen through UIA. Measure first how long users stay on th
   - live runs use a debug build, which multiplies all of these by 3 to 10.
 
 ## Measurement and harness
+
+- **Traces before the field colors and the selection's caret** (510/s14, s15): 510's trace has no
+  colors for its WinForms field (928's has them, and Okur says "black on white" as JAWS does);
+  the caret a selection leaves is the selection's start in every trace of a Win32 edit
+  (`EM_GETSEL` cannot tell its ends apart), where JAWS said the last selected character after
+  Shift+End ("."). Round 271 (974, 975) records Say Character and Say Word after selections both
+  ways before the caret is read from the edit's own caret.
 
 - **The signup fixture's `help@riverside-library.org`** is not at a reserved example domain, so
   the tracer would blank it out of a trace (`crates/okur-platform/src/privacy.rs`). It has never
