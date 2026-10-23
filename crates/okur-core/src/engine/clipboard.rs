@@ -49,7 +49,8 @@ impl ScreenReaderEngine {
     }
 
     /// Okur key+Windows+C: the selection added to the clipboard's text on a line of its own,
-    /// "Appended selection to clipboard" [obs, 825/s11]; Say Clipboard then reads both [obs,
+    /// "Appended selection to clipboard" [obs, 825/s11], "Appended" at Intermediate, nothing at
+    /// Advanced, as JAWS's own messages are [obs, 859/s11, 860/s11]; Say Clipboard then reads both [obs,
     /// 825/s12]. The selection is the virtual cursor's in a page, else the text field's; with
     /// none, "Nothing selected" [obs, 826/s4].
     pub(super) fn append_selection_to_clipboard(&mut self) -> Option<String> {
@@ -78,7 +79,16 @@ impl ScreenReaderEngine {
         };
         actions.copy_text(&text);
         self.clipboard_appended = true;
-        let said = msg::clipboard_appended_selection().to_string();
+        let verbosity = &self.settings.verbosity;
+        if !verbosity.is_on(crate::settings::OutputType::OkurMessage) {
+            return Some(String::new());
+        }
+        let said = if verbosity.message_length() == crate::settings::MessageLength::Short {
+            msg::clipboard_appended_selection_short()
+        } else {
+            msg::clipboard_appended_selection()
+        }
+        .to_string();
         self.speech.speak(&said, true);
         Some(said)
     }

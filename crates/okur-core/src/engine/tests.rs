@@ -6954,3 +6954,55 @@ fn the_cursor_toggle_and_refresh_say_the_levels_messages() {
         );
     }
 }
+
+/// Append Selected Text to Clipboard says "Appended selection to clipboard" at Beginner,
+/// "Appended" at Intermediate and nothing at Advanced; the clipboard is added to at every
+/// level [obs, 825/s11, 859/s11, 860/s11].
+#[test]
+fn appending_to_the_clipboard_is_said_at_the_levels_length() {
+    use crate::actions::ApplicationActions as _;
+    use crate::settings::VerbosityLevel;
+    for (level, said) in [
+        (
+            VerbosityLevel::Beginner,
+            vec!["Appended selection to clipboard"],
+        ),
+        (VerbosityLevel::Intermediate, vec!["Appended"]),
+        (VerbosityLevel::Advanced, Vec::new()),
+    ] {
+        let (mut engine, speech) = engine_with_speech();
+        let mut settings = engine.settings.clone();
+        settings.verbosity.level = level;
+        engine.set_settings(settings);
+        let actions = crate::actions::RecordingActions::default();
+        engine.set_actions(Box::new(actions.clone()));
+        let mut field = FocusEvent::new(Role::Edit).with_window_title("Notes - Notepad");
+        field.multi_line = true;
+        field.text = Some(crate::event::TextContext {
+            text: "one two".to_owned(),
+            caret: 7,
+            selection: Some((4, 7)),
+            font: None,
+            word: None,
+            misspelled: Vec::new(),
+        });
+        engine.handle_focus_event(&field);
+        actions.set_clipboard("one");
+        speech.take();
+        engine.handle_key_event(&KeyEvent::new(
+            Key::Alpha('C'),
+            Modifiers {
+                insert: true,
+                win: true,
+                ..Modifiers::none()
+            },
+            true,
+        ));
+        assert_eq!(
+            actions.clipboard_text().as_deref(),
+            Some("one\r\ntwo"),
+            "{level:?}"
+        );
+        assert_eq!(speech.take(), said, "{level:?}");
+    }
+}

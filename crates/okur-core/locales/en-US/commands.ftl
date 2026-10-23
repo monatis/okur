@@ -14,6 +14,8 @@ clipboard-cut-selection-short = cut
 clipboard-pasted = Pasted from clipboard
 # The selection added to the clipboard's text (Insert+Windows+C).
 clipboard-appended-selection = Appended selection to clipboard
+# Short messages (Intermediate); Advanced says nothing [obs, 859/s11, 860/s11].
+clipboard-appended-selection-short = Appended
 # View Clipboard Text's viewer: its title, its first line, and its last line.
 clipboard-viewer-title = Clipboard Text
 clipboard-viewer-close = Press Escape to close the clipboard text viewer.
