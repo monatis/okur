@@ -175,7 +175,8 @@ nine scenarios on old-pc, one trial each, with a debug log (`sr-harnessexperimen
 keys from the middle of the reviews' synthetic page (25,032 nodes), one after another on one
 engine, as the hook runs them. None took 5 ms; the slowest (2026-10-23, release): Insert+F5
 4.5 ms, Shift+S 4.3, D 4.2, Insert+F7 4.1, Shift+D 4.0, S 3.5, V 3.2, U 3.1, Shift+U 2.3,
-Insert+Down 1.5, Ctrl+Insert+Down 1.3; the rest under 0.2 ms. With live keys at 1.0 ms p99
+Insert+Down 1.5, Ctrl+Insert+Down 1.3; the rest under 0.2 ms. The first key after a refresh,
+which applies the page built off the engine, took 0.5 ms (median of 3). With live keys at 1.0 ms p99
 (live run 260), the hook's remaining risk is the wait for the engine while the event loop
 holds it, bounded at 150 ms. C10 (S, D, N) is left as it is at these times, and T1 below is
 no longer the next step: it is kept for when a measurement shows the wait.

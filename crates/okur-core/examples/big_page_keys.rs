@@ -154,6 +154,36 @@ fn main() {
         }
         println!("{:>16}: done", "sweep");
     }
+    // The first key after a refresh of the page applies it, in the hook: a refresh built off
+    // the engine (as the host builds it), then Down.
+    {
+        let mut times = Vec::new();
+        for _ in 0..3 {
+            let cursor =
+                VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+            let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+            engine.handle_accessibility_event(&AccessibilityEvent::DocumentLoaded {
+                title: "Big page".to_owned(),
+                root: root.clone(),
+            });
+            let _ = engine
+                .cursor
+                .find_text(&format!("Sender {}", rows / 2), true);
+            let refreshed = VirtualBuffer::from_aom_owned(root.clone());
+            engine.handle_page_refreshed("Big page", refreshed);
+            let started = std::time::Instant::now();
+            engine.handle_key_event(&chord(Key::DownArrow, false, false, false));
+            times.push(started.elapsed());
+        }
+        times.sort();
+        println!(
+            "{:>16}: {:?} (median of {}, {} rows)",
+            "key after refresh",
+            times.get(times.len() / 2).copied().unwrap_or_default(),
+            times.len(),
+            rows
+        );
+    }
     // A page focus the buffer finds by role and name only (no uniqueID or DOM id), as while
     // the page is the quick UIA read: the last row's check box.
     let mut times = Vec::new();
