@@ -372,7 +372,13 @@ fn replay_scenario(
     engine.set_actions(Box::new(actions.clone()));
     // JAWS's settings when the evidence was recorded, and what Okur saved in the scenario
     // this one continues.
-    engine.set_settings(replay_settings(&evidence));
+    let mut settings = replay_settings(&evidence);
+    for (id, value) in scenario.okur_settings.iter().flatten() {
+        if !okur_core::settings::registry::set(&mut settings, id, value.clone()) {
+            return Err(format!("okur_settings: {id} cannot be {value}"));
+        }
+    }
+    engine.set_settings(settings);
     engine.set_flexible_web_rules(saved, None);
     if desktop {
         engine.app_mode = okur_core::engine::AppMode::NativeControl;
@@ -406,6 +412,8 @@ fn replay_scenario(
     // The focused text as the trace last showed it, and the fresh reads of it answered.
     let mut last_text: Option<okur_core::TextContext> = None;
     let mut text_reads = 0;
+    // The screen reads and recognitions answered from the recorder's snapshots.
+    let mut screen_reads = ScreenReads::default();
     for event in &replay.setup {
         for converted in converter.convert(event) {
             note_text(&mut last_text, &converted);
@@ -562,6 +570,14 @@ fn replay_scenario(
                 if let Some(text) = replay.clipboard_after(&step.id) {
                     actions.set_clipboard(text);
                 }
+                // The window's text and its recognized words, as the recorder saved them after
+                // the step, for the reads Okur asked for in it.
+                screen_reads.answer(
+                    &mut engine,
+                    &actions,
+                    replay.screen_after(&step.id),
+                    &spoken,
+                );
                 // An edit key that changed nothing reports the field unchanged, as live.
                 if let Some(speech) = engine.settle_pending_edit() {
                     if spoken.is_empty() {
@@ -1149,6 +1165,68 @@ struct StepEvents {
     /// What the clipboard held after each step that captured it (`capture_clipboard`): the
     /// application's Ctrl+C, which the clipboard keys then read.
     clipboards: std::collections::HashMap<String, String>,
+    /// The window's text after each step, when the scenario traced it (`trace_screen`).
+    screens: std::collections::HashMap<String, ScreenSnapshot>,
+}
+
+/// The window in front after a step, as the recorder saved it (`okur-lab screen-text
+/// --append-to`): the text UI Automation places on it, and the words Windows' OCR read in it.
+#[derive(Debug, Clone, Default, serde::Deserialize)]
+struct ScreenSnapshot {
+    step: String,
+    #[serde(default)]
+    accessible: Vec<okur_core::screen_model::ScreenRun>,
+    #[serde(default)]
+    recognized: Vec<okur_core::screen_model::ScreenRun>,
+}
+
+/// The screen reads and recognitions the engine asked for, counted as answered.
+#[derive(Default)]
+struct ScreenReads {
+    screens: usize,
+    recognitions: usize,
+}
+
+impl ScreenReads {
+    /// Answers the engine's new requests with `snapshot`: each read of the screen with its
+    /// text, each recognition with its words, the reads first, as live, where the window is
+    /// read again when recognition starts. Without a snapshot, nothing is answered.
+    fn answer(
+        &mut self,
+        engine: &mut ScreenReaderEngine,
+        actions: &okur_core::actions::RecordingActions,
+        snapshot: Option<&ScreenSnapshot>,
+        spoken: &RecordingSpeech,
+    ) {
+        let Some(snapshot) = snapshot else {
+            return;
+        };
+        let requests = actions.requests();
+        let screens = requests.iter().filter(|(a, _)| a == "read screen").count();
+        let recognitions = requests
+            .iter()
+            .filter(|(a, _)| a.starts_with("recognize "))
+            .count();
+        let mut deliver = |event: okur_core::AccessibilityEvent| {
+            if let Some(speech) = engine.handle_accessibility_event(&event) {
+                if spoken.is_empty() {
+                    spoken.push(&speech, false);
+                }
+            }
+        };
+        while self.screens < screens {
+            self.screens += 1;
+            deliver(okur_core::AccessibilityEvent::ScreenText(
+                snapshot.accessible.clone(),
+            ));
+        }
+        while self.recognitions < recognitions {
+            self.recognitions += 1;
+            deliver(okur_core::AccessibilityEvent::Recognized(
+                snapshot.recognized.clone(),
+            ));
+        }
+    }
 }
 
 impl StepEvents {
@@ -1227,12 +1305,29 @@ impl StepEvents {
                 clipboards.insert(id.to_owned(), text.to_owned());
             }
         }
+        // The window's text after each step, saved beside the trace.
+        let mut screens = std::collections::HashMap::new();
+        if let Some(screen_file) = trial.get("screen_file").and_then(Value::as_str) {
+            let path = corpus_dir.join("traces").join(screen_file);
+            let text = fs::read_to_string(&path).map_err(|e| format!("{screen_file}: {e}"))?;
+            for line in text.lines().filter(|l| !l.trim().is_empty()) {
+                let snapshot: ScreenSnapshot =
+                    serde_json::from_str(line).map_err(|e| format!("{screen_file}: {e}"))?;
+                screens.insert(snapshot.step.clone(), snapshot);
+            }
+        }
         Ok(Self {
             by_step,
             setup,
             starts,
             clipboards,
+            screens,
         })
+    }
+
+    /// The window's text after step `step_id`, when the scenario traced it.
+    fn screen_after(&self, step_id: &str) -> Option<&ScreenSnapshot> {
+        self.screens.get(step_id)
     }
 
     fn for_step(&self, step_id: &str) -> Vec<okur_platform::event_trace::TraceEvent> {
@@ -1296,5 +1391,55 @@ mod tests {
             Some(["Title is".to_owned()].as_slice())
         );
         assert!(!variants.contains_key("s2"));
+    }
+
+    /// A step's screen snapshot answers the screen reads and recognitions the engine asked for
+    /// in it, the reads first, each once: Insert+Space, O, W then says "finished." and the
+    /// cursor, and the recognized word is the Okur cursor's.
+    #[test]
+    fn screen_snapshots_answer_the_screen_reads_of_their_step() {
+        use okur_core::{Key, KeyEvent};
+        let snapshot: ScreenSnapshot = serde_json::from_str(
+            r#"{"step":"s3","t_ms":1,
+                "accessible":[{"text":"Focus here","left":0,"top":40,"right":100,"bottom":60,"source":"Accessible"}],
+                "recognized":[{"text":"Start","left":0,"top":0,"right":50,"bottom":20,"source":"Recognized"}]}"#,
+        )
+        .unwrap_or_default();
+        assert_eq!(snapshot.step, "s3");
+        let spoken = RecordingSpeech::default();
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(VirtualBuffer::from_aom(&okur_core::AomNode::new(
+                0,
+                okur_core::Role::Document,
+            ))),
+            Box::new(spoken.clone()),
+        );
+        let mut settings = okur_core::settings::Settings::reference_machine();
+        settings.experimental.screen_text = true;
+        engine.set_settings(settings);
+        engine.app_mode = okur_core::engine::AppMode::NativeControl;
+        let actions = okur_core::actions::RecordingActions::default();
+        engine.set_actions(Box::new(actions.clone()));
+        let insert = Modifiers {
+            insert: true,
+            ..Modifiers::none()
+        };
+        for (key, modifiers) in [
+            (Key::Space, insert),
+            (Key::Alpha('O'), Modifiers::none()),
+            (Key::Alpha('W'), Modifiers::none()),
+        ] {
+            engine.handle_key_event(&KeyEvent::new(key, modifiers, true));
+        }
+        spoken.take();
+        let mut reads = ScreenReads::default();
+        reads.answer(&mut engine, &actions, Some(&snapshot), &spoken);
+        assert_eq!(spoken.take(), ["finished.", "Okur Cursor"]);
+        // Asked for nothing more, nothing more is answered.
+        reads.answer(&mut engine, &actions, Some(&snapshot), &spoken);
+        assert!(spoken.take().is_empty());
+        engine.handle_key_event(&KeyEvent::new(Key::PageUp, Modifiers::none(), true));
+        engine.handle_key_event(&KeyEvent::new(Key::DownArrow, Modifiers::none(), true));
+        assert_eq!(spoken.take(), ["Start"]);
     }
 }

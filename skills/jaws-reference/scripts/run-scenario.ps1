@@ -75,6 +75,10 @@ Notifications: a Windows notification JAWS announces in a step fails it, as a st
 spoils the transcript; a scenario about notifications sets "expects_notifications": true.
 Reset: "reset": {"keys": [...]} runs before each trial; "window_title" names the window the
 reset leaves in front when it is not the launched one (a trial fails if another is in front).
+Screen text: "trace_screen": true saves, with -TraceDir, the text UI Automation places on the
+window in front after each step (<TraceDir>\<id>-trial<N>.screen.jsonl, okur-lab screen-text),
+and "trace_ocr": true the words Windows' OCR reads in it too: replay gives them to Okur's
+experimental screen text, which "okur_settings" turns on for the replay only.
 
 Settling: after each action the default audio endpoint is metered (okur wait-silence; JAWS is
 the only audio source on the reference machine) until it has been silent for quiet_ms (default
@@ -917,6 +921,15 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         Start-Sleep -Milliseconds 400
         $trialResult.trace_file = Split-Path -Leaf $tracePath
     }
+    # "trace_screen": the window's text after each step, beside the trace, which replay gives
+    # Okur's experimental screen text when it reads the screen; with "trace_ocr", the words
+    # Windows' OCR reads in the window too (okur-lab screen-text --append-to).
+    $screenPath = $null
+    if ($TraceDir -and $scenario.trace_screen) {
+        $screenPath = Join-Path $TraceDir "$scenarioId-trial$t.screen.jsonl"
+        Remove-Item $screenPath -ErrorAction SilentlyContinue
+        $trialResult.screen_file = Split-Path -Leaf $screenPath
+    }
     # Identical setup for every trial: reload (or relaunch), let load speech finish, reset,
     # settle, clear.
     $cleared = Clear-LabState
@@ -1031,6 +1044,11 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         $transcript = $history.text
         $spokenRecords = @($history.records)
         $tEnd = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+        if ($screenPath) {
+            $screenArgs = @('screen-text', '--append-to', $screenPath, '--step', $step.id)
+            if ($scenario.trace_ocr) { $screenArgs += '--recognize' }
+            & $OkurLab @screenArgs 2>&1 | Out-Null
+        }
         if ($transcript -match "unknown script call" -or $transcript -match "unhandled script call") { $dispatchOk = $false }
         # A leaked copy confirmation, or a Windows notification JAWS announced mid-step (seen
         # in 105 v2 trial 1), means the history was contaminated: fail, never trim. A scenario
@@ -1082,6 +1100,9 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         if (-not $traceProc.WaitForExit(15000)) { Stop-Tracer $traceProc; $trialResult.trial_success = $false }
         Remove-Item $traceStop -ErrorAction SilentlyContinue
         if (Test-Path $tracePath) { $trialResult.trace_sha256 = Get-Sha256 $tracePath } else { $trialResult.trial_success = $false }
+    }
+    if ($screenPath) {
+        if (Test-Path $screenPath) { $trialResult.screen_sha256 = Get-Sha256 $screenPath } else { $trialResult.trial_success = $false }
     }
     Release-HeldKeys
     $evidence.trials += $trialResult

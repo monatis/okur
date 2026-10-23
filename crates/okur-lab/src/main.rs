@@ -292,6 +292,14 @@ enum Commands {
         /// Print each line's pieces: their source and place
         #[arg(long)]
         pieces: bool,
+        /// Append the window's text, as JSON, to this file instead of printing its lines: the
+        /// recorder's snapshot after a step of a scenario with "trace_screen" (replay gives it
+        /// to Okur's screen reads)
+        #[arg(long)]
+        append_to: Option<String>,
+        /// With --append-to, the step the snapshot is taken after
+        #[arg(long, default_value = "")]
+        step: String,
     },
     /// Print a speech log recorded with `run --speech-log`
     History {
@@ -667,9 +675,39 @@ async fn main() {
                 std::process::exit(1);
             }
         }
-        Some(Commands::ScreenText { recognize, pieces }) => {
+        Some(Commands::ScreenText {
+            recognize,
+            pieces,
+            append_to,
+            step,
+        }) => {
             #[cfg(windows)]
             match okur_platform::window_text::foreground_screen(recognize) {
+                Ok(model) if append_to.is_some() => {
+                    let t_ms = std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .map(|d| d.as_millis())
+                        .unwrap_or_default();
+                    let snapshot = serde_json::json!({
+                        "step": step,
+                        "t_ms": t_ms,
+                        "accessible": model.accessible,
+                        "recognized": model.recognized,
+                    });
+                    let path = append_to.unwrap_or_default();
+                    let written = std::fs::OpenOptions::new()
+                        .create(true)
+                        .append(true)
+                        .open(&path)
+                        .and_then(|mut file| {
+                            use std::io::Write as _;
+                            writeln!(file, "{snapshot}")
+                        });
+                    if let Err(e) = written {
+                        eprintln!("{path}: {e}");
+                        std::process::exit(1);
+                    }
+                }
                 Ok(model) => {
                     for line in model.lines() {
                         println!("{}", line.text);
@@ -693,7 +731,7 @@ async fn main() {
             }
             #[cfg(not(windows))]
             {
-                let _ = (recognize, pieces);
+                let _ = (recognize, pieces, append_to, step);
                 eprintln!("screen-text is only available on Windows");
                 std::process::exit(1);
             }
