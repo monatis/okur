@@ -23,6 +23,8 @@ table-focus-cell = column { $column } row { $row }
 table-focus-cell-short = col { $column } row { $row }
 # The table layer (Insert+Space, T) turned on: the arrows move by cell until Escape.
 table-layer = Table layer
+# With short messages [obs, 895/s5].
+table-layer-short = Table
 # Reading the next or prior row or column whole (Windows+Alt and an arrow) found none further
 # [obs, 297/s6; 615/s4, s5, s10].
 table-on-last-row = You are on the last row in the table.

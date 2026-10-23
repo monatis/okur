@@ -74,13 +74,14 @@ impl ScreenReaderEngine {
                 .cursor
                 .read_current_cell()
                 .is_some_and(|said| said != msg::table_not_in_table().as_str());
+        // "Table" with short messages [obs, 895/s5].
         let speech = if in_table {
             self.table_layer = true;
-            msg::table_layer()
+            self.said_short(msg::table_layer())
         } else {
-            msg::table_not_in_table()
+            msg::table_not_in_table().to_string()
         };
-        self.speech.speak(speech.as_str(), true);
+        self.speech.speak(&speech, true);
     }
 
     /// A key while the table layer is on: the arrows move by cell, Numpad5 says the cell,
