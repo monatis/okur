@@ -101,6 +101,18 @@ pub struct TraceObject {
     pub shortcut: Option<String>,
 }
 
+/// An MSAA object with its children, as a NetUI window gives them (WordPad's ribbon, Office's).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct MsaaNode {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub role: Option<i32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    pub states: u32,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub children: Vec<MsaaNode>,
+}
+
 /// One recorded accessibility event.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TraceEvent {
@@ -219,6 +231,16 @@ pub struct TraceEvent {
     /// by unit; the element there and its ancestors are the `focus_chain` (mouse echo).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub point: Option<TracePoint>,
+    /// For a focus in a NetUI window (`NetUIHWND`: WordPad's ribbon, Office's): the event's
+    /// MSAA object with its children, to depth 3. UI Automation stops at the ribbon's host
+    /// pane, and Alt gives the focus to the ribbon itself, whose selected tab JAWS reads
+    /// ("Ribbon tabs | Home Tab selected" [obs, 523/s1]).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub msaa_tree: Option<MsaaNode>,
+    /// For that focus: the MSAA object's siblings, itself included, without their children
+    /// (a ribbon tab's place among the tabs).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub msaa_siblings: Vec<MsaaNode>,
 }
 
 /// Where the mouse came to rest and the text there by unit ([`crate::mouse_point`]).
@@ -2807,6 +2829,136 @@ mod capture {
         }
     }
 
+    /// The window class of NetUI, the ribbon's framework (WordPad's, Paint's, Office's).
+    const NETUI_WINDOW: &str = "NetUIHWND";
+    /// How deep and how many of a NetUI focus's MSAA objects are read: its ribbon's tabs and
+    /// their groups, not every button of every group.
+    const NETUI_DEPTH: usize = 3;
+    const NETUI_BUDGET: usize = 150;
+
+    /// MSAA's roles of the objects whose children a NetUI focus reads: the ribbon itself (a
+    /// property page) and the panes and groupings around a tab row.
+    const NETUI_CONTAINERS: [i32; 4] = [0x0A, 0x10, 0x14, 0x26];
+    /// MSAA's page tab, whose siblings a NetUI focus reads.
+    const NETUI_TAB: i32 = 0x25;
+
+    /// For a NetUI focus whose MSAA object has `role`: a container's children to
+    /// [`NETUI_DEPTH`], or a tab's siblings without theirs, at most [`NETUI_BUDGET`]
+    /// objects; nothing for the buttons and boxes the arrows go through, so that they cost
+    /// no more than before.
+    fn netui_tree(
+        hwnd: HWND,
+        id_object: i32,
+        id_child: i32,
+        role: i32,
+    ) -> (Option<super::MsaaNode>, Vec<super::MsaaNode>) {
+        if !NETUI_CONTAINERS.contains(&role) && role != NETUI_TAB {
+            return (None, Vec::new());
+        }
+        use windows::Win32::UI::Accessibility::IAccessible;
+        let mut acc: Option<IAccessible> = None;
+        let mut child = VARIANT::default();
+        // SAFETY: standard MSAA event-object resolution with valid out-pointers.
+        let found = unsafe {
+            AccessibleObjectFromEvent(
+                hwnd,
+                id_object as u32,
+                id_child as u32,
+                &mut acc,
+                &mut child,
+            )
+        };
+        let Some(acc) = acc.filter(|_| found.is_ok()) else {
+            return (None, Vec::new());
+        };
+        let mut budget = NETUI_BUDGET;
+        if role != NETUI_TAB {
+            return (
+                Some(msaa_node(&acc, &child, NETUI_DEPTH, &mut budget)),
+                Vec::new(),
+            );
+        }
+        // A simple element's parent is the object that named it; a full object asks its own.
+        let parent = if is_self(&child) {
+            // SAFETY: a property read on a valid IAccessible.
+            unsafe { acc.accParent() }
+                .ok()
+                .and_then(|p| windows::core::Interface::cast::<IAccessible>(&p).ok())
+        } else {
+            Some(acc)
+        };
+        let mut budget = NETUI_BUDGET;
+        let siblings = parent
+            .map(|p| msaa_node(&p, &VARIANT::from(0i32), 1, &mut budget).children)
+            .unwrap_or_default();
+        (None, siblings)
+    }
+
+    /// Whether an MSAA child variant names the object itself (`CHILDID_SELF`).
+    fn is_self(child: &VARIANT) -> bool {
+        i32::try_from(child).map_or(true, |id| id == 0)
+    }
+
+    /// One MSAA object, and its children to `depth` while `budget` lasts.
+    fn msaa_node(
+        acc: &windows::Win32::UI::Accessibility::IAccessible,
+        child: &VARIANT,
+        depth: usize,
+        budget: &mut usize,
+    ) -> super::MsaaNode {
+        use windows::Win32::System::Variant::VT_DISPATCH;
+        use windows::Win32::UI::Accessibility::{AccessibleChildren, IAccessible};
+        *budget = budget.saturating_sub(1);
+        // SAFETY: property reads on a valid IAccessible.
+        let mut node = unsafe {
+            super::MsaaNode {
+                role: acc
+                    .get_accRole(child)
+                    .ok()
+                    .and_then(|v| i32::try_from(&v).ok()),
+                name: acc
+                    .get_accName(child)
+                    .ok()
+                    .map(|b| b.to_string())
+                    .filter(|n| !n.trim().is_empty()),
+                states: acc
+                    .get_accState(child)
+                    .ok()
+                    .and_then(|v| i32::try_from(&v).ok())
+                    .map_or(0, |s| s as u32),
+                children: Vec::new(),
+            }
+        };
+        if depth == 0 || *budget == 0 || !is_self(child) {
+            return node;
+        }
+        // SAFETY: a property read on a valid IAccessible.
+        let count = unsafe { acc.accChildCount() }.unwrap_or(0).clamp(0, 200);
+        let mut children = vec![VARIANT::default(); usize::try_from(count).unwrap_or(0)];
+        let mut obtained = 0i32;
+        // SAFETY: the slice's length is the count asked for.
+        if unsafe { AccessibleChildren(acc, 0, &mut children, &mut obtained) }.is_err() {
+            return node;
+        }
+        for item in children.iter().take(usize::try_from(obtained).unwrap_or(0)) {
+            if *budget == 0 {
+                break;
+            }
+            // SAFETY: reading the discriminant and, for VT_DISPATCH, the dispatch pointer.
+            let object = unsafe {
+                (item.Anonymous.Anonymous.vt == VT_DISPATCH)
+                    .then(|| item.Anonymous.Anonymous.Anonymous.pdispVal.as_ref())
+                    .flatten()
+                    .and_then(|d| windows::core::Interface::cast::<IAccessible>(d).ok())
+            };
+            node.children.push(match object {
+                Some(object) => msaa_node(&object, &VARIANT::from(0i32), depth - 1, budget),
+                None => msaa_node(acc, item, 0, budget),
+            });
+        }
+        node
+    }
+
     unsafe extern "system" fn on_event(
         _hook: HWINEVENTHOOK,
         win_event: u32,
@@ -2956,6 +3108,8 @@ mod capture {
                     notification: None,
                     mouse: None,
                     point: None,
+                    msaa_tree: None,
+                    msaa_siblings: Vec::new(),
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -3375,6 +3529,8 @@ mod capture {
                     notification: Some(notification),
                     mouse: None,
                     point: None,
+                    msaa_tree: None,
+                    msaa_siblings: Vec::new(),
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -3469,6 +3625,8 @@ mod capture {
             notification: None,
             mouse: at,
             point: None,
+            msaa_tree: None,
+            msaa_siblings: Vec::new(),
         }
     }
 
@@ -3584,6 +3742,8 @@ mod capture {
                     notification: None,
                     mouse: None,
                     point: None,
+                    msaa_tree: None,
+                    msaa_siblings: Vec::new(),
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -3695,6 +3855,8 @@ mod capture {
                     notification: None,
                     mouse: None,
                     point: None,
+                    msaa_tree: None,
+                    msaa_siblings: Vec::new(),
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -4112,6 +4274,13 @@ mod capture {
                     .then(|| msaa_object(hwnd, id_object, id_child))
                     .flatten(),
             };
+            // A NetUI window's focus: its MSAA objects, which UI Automation does not reach.
+            let (msaa_tree, msaa_siblings) = match object.as_ref().and_then(|o| o.role) {
+                Some(role) if focused && class == NETUI_WINDOW => {
+                    netui_tree(hwnd, id_object, id_child, role)
+                }
+                _ => (None, Vec::new()),
+            };
             stages.push(("msaa", clock.elapsed().as_millis()));
             if clock.elapsed() > SLOW_EVENT {
                 tracing::debug!(event = name, %class, ?stages, "slow event read");
@@ -4189,6 +4358,8 @@ mod capture {
                 notification: None,
                 mouse: None,
                 point: None,
+                msaa_tree,
+                msaa_siblings,
             };
             (state.sink)(event);
             state.count += 1;
@@ -5238,6 +5409,8 @@ mod tests {
             notification: None,
             mouse: None,
             point: None,
+            msaa_tree: None,
+            msaa_siblings: Vec::new(),
         }
     }
 
