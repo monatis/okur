@@ -1,0 +1,140 @@
+{
+  "id": "979-web-settings-center-verbosity",
+  "name": "JAWS's Settings Center (Insert+6) searched for \"verbosity\": the tree's results (Down ten times, Home, Right, Down four times) and the controls beside them (Tab four times), then Escape, which leaves every setting as it was: how JAWS presents the verbosity levels, their spoken items and message length, for Okur's Configure Verbosity Levels",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/virtual-keys.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+6"
+    },
+    {
+      "id": "s2",
+      "type": "jaws_function",
+      "command": "TypeString(\"verbosity\")"
+    },
+    {
+      "id": "s3",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s4",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s5",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s6",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s7",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s8",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s9",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s10",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s11",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s12",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s13",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s14",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Home\")"
+    },
+    {
+      "id": "s15",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Right\")"
+    },
+    {
+      "id": "s16",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s17",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s18",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s19",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s20",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s21",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s22",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s23",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Tab\")"
+    },
+    {
+      "id": "s24",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    },
+    {
+      "id": "s25",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}
