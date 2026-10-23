@@ -50,7 +50,8 @@ impl ScreenReaderEngine {
 
     /// Okur key+Windows+C: the selection added to the clipboard's text on a line of its own,
     /// "Appended selection to clipboard" [obs, 825/s11]; Say Clipboard then reads both [obs,
-    /// 825/s12]. The selection is the virtual cursor's in a page, else the text field's.
+    /// 825/s12]. The selection is the virtual cursor's in a page, else the text field's; with
+    /// none, "Nothing selected" [obs, 826/s4].
     pub(super) fn append_selection_to_clipboard(&mut self) -> Option<String> {
         let selection = if self.app_mode == super::AppMode::VirtualBuffer {
             self.cursor.selection_for_clipboard()
@@ -66,7 +67,9 @@ impl ScreenReaderEngine {
             selection
         };
         if selection.is_empty() {
-            return None;
+            let said = msg::selection_none().to_string();
+            self.speech.speak(&said, true);
+            return Some(said);
         }
         let actions = self.actions.as_ref()?;
         let text = match actions.clipboard_text().filter(|t| !t.is_empty()) {

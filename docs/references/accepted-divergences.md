@@ -105,7 +105,8 @@ A step can be in more than one entry; all of its entries apply.
   `811-web-skim-read-by-superscript/s1`, `812-web-skim-read-by-subscript/s1`,
   `813-web-skim-read-by-shadow/s1`, `815-web-skim-read-by-superscript-positions/s1` and
   `816-web-skim-read-by-subscript-positions/s1` (its rule type, or its rules' history, said before the
-  dialog).
+  dialog); and its Overwrite Clipboard question, `826-desktop-notepad-clipboard-edges/s8` (its
+  main window, "JAWS Professional", and the window under it said first).
 - In the recordings of 2026-10-19 (round 9, JAWS freshly started for the batch), JAWS no longer
   said its version or the list's tutor message before the Links List, the Heading List and
   Virtual HTML Features, and said nothing before some dialogs at all: those steps were taken

@@ -161,6 +161,7 @@ divergences! {
         "813-web-skim-read-by-shadow/s1",
         "815-web-skim-read-by-superscript-positions/s1",
         "816-web-skim-read-by-subscript-positions/s1",
+        "826-desktop-notepad-clipboard-edges/s8",
     ],
     "Opening one of its list dialogs, JAWS's speech passes through its own windows before it \
      names the dialog: its main window (its version, a list's tutor message) and the browser's \
@@ -797,8 +798,15 @@ pub fn check(steps: &[(&str, &str, &[String])]) -> Result<(), String> {
                 Difference::OkurAlsoSays(phrase) if !any(&|okur, _| okur.contains(phrase)) => {
                     stale.push(format!("{key}: Okur no longer says {phrase:?}"));
                 }
+                // On the spoken layer the dialog line has no role marks: "Overwrite Clipboard
+                // dialog" (826/s8, recorded without JAWS's history).
                 Difference::JawsSaysBeforeItsDialog
-                    if !any(&|_, jaws| jaws.iter().any(|v| from_its_dialog(v).is_some())) =>
+                    if !any(&|okur, jaws| {
+                        jaws.iter().any(|v| {
+                            from_its_dialog(v).is_some()
+                                || spoken_from_its_dialog(v, &comparable(okur)).is_some()
+                        })
+                    }) =>
                 {
                     stale.push(format!("{key}: JAWS says nothing before its dialog"));
                 }
