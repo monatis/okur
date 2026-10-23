@@ -1195,12 +1195,17 @@ impl<'a> Builder<'a> {
             }
             _ => name.clone(),
         };
-        // A field's line reads as its label and its text: the role and states between markers
-        // are speech only, since JAWS's virtual cursor moves by the field's own words ("lazy"
-        // after the focus lands at a text area's start; 213, old-pc, 2026-10-18).
-        let text = if node.role == Role::Edit {
+        // A control's line reads as its label and its value: the role and states between
+        // markers, and a radio button's place on the line after them, are speech only, since
+        // JAWS's virtual cursor moves by the control's own words: "Count", then the next line's
+        // "Custom button", "Subscribe", "Small", "Medium" [obs, 977/s2-s15]; a field's "lazy"
+        // after the focus lands at a text area's start (213, old-pc, 2026-10-18).
+        let text = {
             let mut inside = false;
             let words: String = speech
+                .lines()
+                .next()
+                .unwrap_or_default()
                 .chars()
                 .filter(|&c| {
                     let marker = c == RS || c == RE;
@@ -1211,8 +1216,6 @@ impl<'a> Builder<'a> {
                 })
                 .collect();
             squash(&words)
-        } else {
-            squash(&speech.replace([RS, RE], " "))
         };
         let off = self.emit(node.id, node.role.clone(), &text, speech);
         // A text area's lines after its first are lines of the page, each with the field's
@@ -1783,6 +1786,30 @@ mod tests {
     /// By word, the last mark before a word is said with it, and a mark inside it where it
     /// stands: "Deletion twelve", "Insertion ten" without the "end Deletion" between, "end
     /// Insertion dollars", "10 superscript 23" [obs, 819/s12-s14, s23].
+    /// A control's line holds its label and value as text, not its role, states or place: the
+    /// word keys go from "Count" to the next line's "Custom" [obs, 977/s7-s15].
+    #[test]
+    fn controls_lines_hold_their_words_not_their_roles() {
+        let mut checked = AomNode::new(3, Role::CheckBox).with_name("Subscribe");
+        checked.states.checked = Some(false);
+        let mut radio = AomNode::new(4, Role::RadioButton).with_name("Small");
+        radio.attributes.insert("posinset".into(), "1".into());
+        radio.attributes.insert("setsize".into(), "2".into());
+        let page = AomNode::new(0, Role::Document).with_children(vec![
+            AomNode::new(1, Role::Button).with_name("Count"),
+            AomNode::new(2, Role::Button).with_name("Custom button"),
+            checked,
+            radio,
+        ]);
+        let buffer = build(&page);
+        let texts: Vec<&str> = buffer.lines.iter().map(|l| l.text.as_str()).collect();
+        assert_eq!(texts, ["Count", "Custom button", "Subscribe", "Small"]);
+        assert!(buffer
+            .lines
+            .iter()
+            .any(|l| l.speech.contains("radio button")));
+    }
+
     #[test]
     fn a_word_says_the_mark_before_it_and_those_inside() {
         let text = |id: usize, t: &str| AomNode::new(id, Role::Text).with_text(t);

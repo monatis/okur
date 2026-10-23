@@ -123,13 +123,14 @@ fn a_page_is_built_again_by_the_host_unless_another_change_came() {
             control,
         }
     };
+    // The lines as said: a check box's state is speech, not text.
     let lines = |engine: &ScreenReaderEngine| {
         engine
             .cursor
             .buffer
             .lines
             .iter()
-            .map(|l| l.text.clone())
+            .map(|l| l.speech.clone())
             .collect::<Vec<_>>()
     };
     let build =
@@ -3132,7 +3133,8 @@ fn a_cursor_on_the_focus_stays_on_it_when_the_page_is_captured_again() {
         .buffer
         .line_at_offset(engine.cursor.offset)
         .map(|l| (l.node_id, l.text.clone()));
-    assert_eq!(line, Some((3, "Fruit edit combo collapsed".to_owned())));
+    // Its role and state are speech, not text [obs, 977].
+    assert_eq!(line, Some((3, "Fruit".to_owned())));
     assert_eq!(engine.cursor.current_node_id, Some(3));
 }
 
