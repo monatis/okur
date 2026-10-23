@@ -87,6 +87,73 @@ fn main() {
             rows
         );
     }
+    // Every everyday page key, pressed from the page's middle on one engine, as a user would
+    // press them one after another: a sweep for keys slow enough to matter in the hook
+    // (performance review 2026-10-23, T1). Printed when over 1 ms.
+    {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        engine.handle_accessibility_event(&AccessibilityEvent::DocumentLoaded {
+            title: "Big page".to_owned(),
+            root: root.clone(),
+        });
+        let plain = |key| chord(key, false, false, false);
+        let shift = |key| chord(key, true, false, false);
+        let ctrl = |key| chord(key, false, true, false);
+        let insert = |key| chord(key, false, false, true);
+        let ctrl_insert = |key| chord(key, false, true, true);
+        let mut sweep: Vec<(String, KeyEvent)> = Vec::new();
+        for c in "HKUTLIBEFXCRQGSDNMOAJWVY".chars() {
+            sweep.push((c.to_string(), plain(Key::Alpha(c))));
+            sweep.push((format!("Shift+{c}"), shift(Key::Alpha(c))));
+        }
+        for d in 1..=6u8 {
+            sweep.push((d.to_string(), plain(Key::Digit(d))));
+        }
+        for (name, key) in [
+            ("Down", plain(Key::DownArrow)),
+            ("Up", plain(Key::UpArrow)),
+            ("Ctrl+Down", ctrl(Key::DownArrow)),
+            ("Ctrl+Up", ctrl(Key::UpArrow)),
+            ("Ctrl+Right", ctrl(Key::RightArrow)),
+            ("PageDown", plain(Key::PageDown)),
+            ("Ctrl+End", ctrl(Key::End)),
+            ("Ctrl+Home", ctrl(Key::Home)),
+            ("Semicolon", plain(Key::Semicolon)),
+            ("Slash", plain(Key::Slash)),
+            ("Minus", plain(Key::Minus)),
+            ("Insert+Up", insert(Key::UpArrow)),
+            ("Insert+T", insert(Key::Alpha('T'))),
+            ("Insert+F6", insert(Key::F(6))),
+            ("Insert+F7", insert(Key::F(7))),
+            ("Insert+F5", insert(Key::F(5))),
+            ("Insert+F3", insert(Key::F(3))),
+            ("Ctrl+Insert+Down", ctrl_insert(Key::DownArrow)),
+            ("Insert+Down", insert(Key::DownArrow)),
+            ("Ctrl", plain(Key::Control)),
+            ("Insert+Enter", insert(Key::Enter)),
+            ("NumpadPlus", plain(Key::NumpadPlus)),
+            ("Ctrl+Insert+F", ctrl_insert(Key::Alpha('F'))),
+        ] {
+            sweep.push((name.to_owned(), key));
+        }
+        let middle = format!("Sender {}", rows / 2);
+        for (name, key) in sweep {
+            // Each key from the middle of the page.
+            let _ = engine.execute_command("TopOfFile");
+            let _ = engine.cursor.find_text(&middle, true);
+            if let Some(escape) = Some(plain(Key::Escape)) {
+                engine.handle_key_event(&escape);
+            }
+            let started = std::time::Instant::now();
+            engine.handle_key_event(&key);
+            let took = started.elapsed();
+            if took > std::time::Duration::from_millis(1) {
+                println!("{name:>16}: {took:?} (from the middle, {rows} rows)");
+            }
+        }
+        println!("{:>16}: done", "sweep");
+    }
     // A page focus the buffer finds by role and name only (no uniqueID or DOM id), as while
     // the page is the quick UIA read: the last row's check box.
     let mut times = Vec::new();

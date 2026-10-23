@@ -46,10 +46,11 @@ traces), so such changes get tests where a test can hold them and a live run on 
 | C8: a live region's spoken text copied per change | done: compared in place | `b76fab99` |
 | P12: the page's document searched for through the browser's whole window | done: Chromium's one page window shown is the document; the search stays for the rest | `b76fab99` |
 | P5 (client): a UIA client made for every page capture | done: one per capturing thread; moving the quick capture off the WinEvent thread is still open | `b76fab99` |
+| P5 (capture) | kept: the quick capture runs on the WinEvent thread so that a new page reaches the engine before its first focus, which is then said in the page; on the page worker the focus would come first | |
 | P6 | open: the actions worker's client keeps UIA's default timeouts; a 1 s one would cut reads of big windows | |
 | P9, P11, P20 | not changed: a plain field has one attribute run; UIA's process id comes from the window, not the application; the process name is a kernel query | |
 | C4: each edit key made the field's text a vector of characters two to four times | done for the caret's line and character (`line_bytes`, tested against the vectors at every caret); the commands that read further keep theirs | `4a56c7e8` |
-| C7, C10 | not changed: a focus's copy is microseconds beside its reads; S, D and N stay O(page) per press, a cache keyed by the buffer's version is the next step | |
+| C7, C10 | not changed: a focus's copy is microseconds beside its reads; S, D and N take 3.5-4.3 ms on 25,032 nodes (measured below) | |
 | P14: a list item's column headers named one call each | done: the names come with the headers in one cached call; live check with 514 to come | `4fd2617e` |
 | P3 (polls) | open: after a key a UIA field is read whole every 15 ms until it changes; polling the caret alone needs a "before" in the same units, which the engine's text does not give for RichEdit | |
 
@@ -166,6 +167,17 @@ nine scenarios on old-pc, one trial each, with a debug log (`sr-harnessexperimen
 22. xa11y-windows `uia.rs` and `bridge.rs` unused on Windows.
 23. `set_clipboard_text` leak: done.
 24. `EM_GETSEL`: done.
+
+## Measured after the fixes: keys on a big page
+
+`cargo run -p okur-core --release --example big_page_keys` now also presses 90 everyday page
+keys from the middle of the reviews' synthetic page (25,032 nodes), one after another on one
+engine, as the hook runs them. None took 5 ms; the slowest (2026-10-23, release): Insert+F5
+4.5 ms, Shift+S 4.3, D 4.2, Insert+F7 4.1, Shift+D 4.0, S 3.5, V 3.2, U 3.1, Shift+U 2.3,
+Insert+Down 1.5, Ctrl+Insert+Down 1.3; the rest under 0.2 ms. With live keys at 1.0 ms p99
+(live run 260), the hook's remaining risk is the wait for the engine while the event loop
+holds it, bounded at 150 ms. C10 (S, D, N) is left as it is at these times, and T1 below is
+no longer the next step: it is kept for when a measurement shows the wait.
 
 ## T1, the engine in the keyboard hook: the plan
 
