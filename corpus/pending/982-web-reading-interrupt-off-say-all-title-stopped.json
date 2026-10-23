@@ -1,0 +1,42 @@
+{
+  "id": "982-web-reading-interrupt-off-say-all-title-stopped",
+  "name": "965 with Ctrl 7 s into the Say All, so that the step ends (965's Say All read the whole page past the harness's wait): Insert+T 2.5 s in with Reading Interrupt off, then where the cursor is",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/virtual-keys.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "ReadingInterrupt": "0"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Down",
+      "during": [
+        {
+          "after_ms": 2500,
+          "command": "Insert+T"
+        },
+        {
+          "after_ms": 7000,
+          "command": "Ctrl"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}
