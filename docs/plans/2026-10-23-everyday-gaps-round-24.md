@@ -37,8 +37,9 @@ stretch is a few hours or about thirty commits, not more.
 
 ## 3. 820 and the notifications
 
-- Experiment 11's result: if the control's own provider hears the notification, register the
-  tracer's handler on the focused control's own element too; else 820 stays a known gap.
+- Experiment 11's result: done; no registration hears a .NET Framework WinForms control's
+  notification (its provider is the MSAA proxy), so 820 stays a known gap
+  (`docs/references/notifications-research.md`).
 - Toasts Focus Assist hides: done, not a gap (533 re-read: JAWS neither says nor keeps them).
 
 ## 4. Startup (M3, then M4)

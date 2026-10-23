@@ -170,3 +170,20 @@ code runs inside applications' processes, which an Okur client does not. Next: w
 `RaiseAutomationNotification` returns true in that process (the fixture discards the result),
 and whether a notification raised by a UIA provider of the window itself (`notify-host.ps1`,
 experiment 4) reaches JAWS. Until then 820's speech is a known gap, not an accepted divergence.
+
+Experiments 10 and 11 (old-pc, 2026-10-23):
+- **WinForms raises it:** `RaiseAutomationNotification` returned True in the fixture's process
+  ("raised: True, runtime: v4.0.30319", experiment 10).
+- **No registration hears it, the control's own included** (experiment 11, `okur-lab-exp11.exe`,
+  started 3 s after the window showed): the focused button's element, and the element made from
+  its own window's IAccessible (`AccessibleObjectFromWindow`, then `ElementFromIAccessible`),
+  were each registered alone and with their ancestors, besides the five registrations above;
+  every registration answered Ok and none heard the notification. Both elements' providers are
+  UI Automation's MSAA proxy ("Main: MSAA Proxy (unmanaged:UIAutomationCore.DLL)", the focused
+  one nested in the HWND and non-client proxies): .NET Framework 4.8's button gives no provider
+  of its own across processes, so its notification goes nowhere a client in another process
+  listens. Only the window's creation, state and name WinEvents came.
+- **So:** an application raising notifications from a .NET Framework WinForms control is heard
+  in its own process only (JAWS's code runs inside applications). Okur, an out-of-process client
+  as NVDA is, hears notifications from providers of their own (Calculator, Windows Settings,
+  WPF, Chromium, .NET 5+ WinForms), and 820 stays a known gap.
