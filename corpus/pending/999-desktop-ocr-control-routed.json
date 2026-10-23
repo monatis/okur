@@ -1,0 +1,64 @@
+{
+  "id": "999-desktop-ocr-control-routed",
+  "name": "998 with the JAWS cursor routed to the PC cursor after recognizing the focused button (a picture of \"Start\"): whether the recognized word is under it, whether Numpad Slash clicks it (the click adds \" - started\" to the window's title, Insert+T), and whether routing keeps the recognized text",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-drawn-text.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Drawn Text Fixture"
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "C",
+      "settle_max_ms": 30000
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+NumpadMinus"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Alt+Delete"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "NumpadSlash"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Insert+T"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "NumpadPlus"
+    }
+  ]
+}
