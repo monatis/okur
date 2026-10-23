@@ -874,6 +874,7 @@ impl ScreenReaderEngine {
     pub fn on_idle(&mut self) -> Option<String> {
         self.apply_pending_page();
         self.mouse_echo_idle();
+        self.background_ocr_idle();
         let menu = self.menus.idle();
         if let Some(speech) = &menu {
             self.speech.speak(speech, true);

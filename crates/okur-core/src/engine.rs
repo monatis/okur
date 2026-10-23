@@ -383,6 +383,9 @@ pub struct ScreenReaderEngine {
     ocr_layer: bool,
     /// A recognition is under way; its words come as [`AccessibilityEvent::Recognized`].
     recognizing: bool,
+    /// Background OCR (Insert+Space, O, B): when it last asked for the window's words, and
+    /// whether that recognition is still under way.
+    background_ocr: Option<(std::time::Instant, bool)>,
     /// The Okur cursor's model of the window in front (the experimental `screen_text`).
     screen_model: Option<crate::screen_model::ScreenModel>,
     /// When the mouse last moved, until mouse echo reads what it rests on.
@@ -563,6 +566,7 @@ impl ScreenReaderEngine {
             mouse_echo_layer: false,
             ocr_layer: false,
             recognizing: false,
+            background_ocr: None,
             screen_model: None,
             mouse_moved_at: None,
             own_mouse_move_until: None,

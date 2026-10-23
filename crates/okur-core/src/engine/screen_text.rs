@@ -83,6 +83,8 @@ impl ScreenReaderEngine {
             .is_some_and(|model| model.window != self.last_window_title)
         {
             self.screen_model = None;
+            // Background OCR stops when another window gets the focus (JAWS 2025 help).
+            self.background_ocr = None;
         }
     }
 
@@ -140,6 +142,10 @@ impl ScreenReaderEngine {
         if event.modifiers.is_empty() {
             match event.key {
                 Key::Alpha('W') => self.start_recognition(RecognitionArea::Window),
+                // OCRAllInOne, in an application without its own case: the window (JAWS 2025
+                // help, Convenient OCR).
+                Key::Enter => self.start_recognition(RecognitionArea::Window),
+                Key::Alpha('B') => self.start_background_ocr(),
                 Key::Alpha('S') => self.start_recognition(RecognitionArea::Screen),
                 Key::Alpha('C') => {
                     if let Some([left, top, right, bottom]) = self.focus_bounds {
@@ -165,10 +171,55 @@ impl ScreenReaderEngine {
         self.request_screen();
     }
 
-    /// Q: a recognition under way is dropped.
+    /// Q: Background OCR stops, "Background OCR cancelled" [obs, 1001/s14]; a recognition
+    /// under way is dropped, "OCR cancelled." [obs, 1006/s3].
     fn cancel_recognition(&mut self) {
+        if self.background_ocr.take().is_some() {
+            self.speech
+                .speak(msg::ocr_background_cancelled().as_str(), true);
+            return;
+        }
         if std::mem::take(&mut self.recognizing) {
             self.speech.speak(msg::ocr_canceled().as_str(), true);
+        }
+    }
+
+    /// B: "Background OCR started" [obs, 1001/s3], and the window is recognized again and again
+    /// ([`Self::background_ocr_idle`]), its words read with the Okur cursor as they change.
+    /// The cursors stay as they are: the PC cursor keeps the focus [obs, 1001/s4].
+    fn start_background_ocr(&mut self) {
+        if !self
+            .actions
+            .as_ref()
+            .is_some_and(|a| a.recognize(RecognitionArea::Window))
+        {
+            return;
+        }
+        self.background_ocr = Some((std::time::Instant::now(), true));
+        self.speech
+            .speak(msg::ocr_background_started().as_str(), true);
+        self.request_screen();
+    }
+
+    /// While Background OCR runs, the window is recognized again once the last recognition
+    /// came back and this long has passed. JAWS says nothing unasked as its text changes
+    /// [obs, 1001/s9, 1004/s10, s12].
+    const BACKGROUND_OCR_EVERY: std::time::Duration = std::time::Duration::from_secs(2);
+
+    /// The idle tick of Background OCR: the next recognition, when it is due.
+    pub(super) fn background_ocr_idle(&mut self) {
+        let Some((asked, false)) = self.background_ocr else {
+            return;
+        };
+        if asked.elapsed() < Self::BACKGROUND_OCR_EVERY {
+            return;
+        }
+        if self
+            .actions
+            .as_ref()
+            .is_some_and(|a| a.recognize(RecognitionArea::Window))
+        {
+            self.background_ocr = Some((std::time::Instant::now(), true));
         }
     }
 
@@ -177,6 +228,21 @@ impl ScreenReaderEngine {
     /// on the line the mouse is on, else at the window's top.
     pub(super) fn recognized(&mut self, words: &[ScreenRun]) -> Option<String> {
         if !std::mem::take(&mut self.recognizing) {
+            // Background OCR's words replace the last ones, unsaid.
+            if let Some((asked, true)) = self.background_ocr {
+                self.background_ocr = Some((asked, false));
+                let window = self.last_window_title.clone();
+                match &mut self.screen_model {
+                    Some(model) if model.window == window => model.recognized = words.to_vec(),
+                    _ => {
+                        self.screen_model = Some(ScreenModel {
+                            window,
+                            recognized: words.to_vec(),
+                            ..ScreenModel::default()
+                        })
+                    }
+                }
+            }
             return None;
         }
         let window = self.last_window_title.clone();
@@ -400,6 +466,72 @@ mod tests {
             press(&mut engine, &speech, Key::DownArrow, plain()),
             "Focus here"
         );
+    }
+
+    /// Insert+Space, O, B: "Background OCR started", the PC cursor still active; its words
+    /// come unsaid, Alt+Delete says it runs, the window is recognized again once two seconds
+    /// passed since the last, and Q stops it, "Background OCR cancelled" [obs, 1001/s3, s4,
+    /// s9, s14].
+    #[test]
+    fn background_ocr_recognizes_again_until_cancelled() {
+        let (mut engine, speech, actions) = window(true);
+        let recognitions = |actions: &RecordingActions| {
+            actions
+                .requests()
+                .iter()
+                .filter(|(a, _)| a.starts_with("recognize"))
+                .count()
+        };
+        press(&mut engine, &speech, Key::Space, insert());
+        press(&mut engine, &speech, Key::Alpha('O'), plain());
+        assert_eq!(
+            press(&mut engine, &speech, Key::Alpha('B'), plain()),
+            "Background OCR started"
+        );
+        assert_eq!(recognitions(&actions), 1);
+        engine.handle_accessibility_event(&AccessibilityEvent::Recognized(recognized()));
+        assert!(speech.take().is_empty());
+        assert_eq!(
+            engine.active_cursor,
+            crate::engine::cursors::ActiveCursor::Pc
+        );
+        let said = press(
+            &mut engine,
+            &speech,
+            Key::Delete,
+            Modifiers {
+                alt: true,
+                ..Modifiers::none()
+            },
+        );
+        assert!(said.ends_with("Background OCR is enabled"), "{said}");
+        // Not yet due: no new recognition; due: one.
+        let _ = engine.on_idle();
+        assert_eq!(recognitions(&actions), 1);
+        let long_ago = std::time::Instant::now()
+            .checked_sub(std::time::Duration::from_secs(3))
+            .unwrap_or_else(std::time::Instant::now);
+        engine.background_ocr = Some((long_ago, false));
+        let _ = engine.on_idle();
+        assert_eq!(recognitions(&actions), 2);
+        // The new words replace the old, unsaid.
+        let changed = vec![ScreenRun::new(
+            "Count 3",
+            (20, 80, 120, 108),
+            Source::Recognized,
+        )];
+        engine.handle_accessibility_event(&AccessibilityEvent::Recognized(changed.clone()));
+        assert_eq!(
+            engine.screen_model.as_ref().map(|m| m.recognized.clone()),
+            Some(changed)
+        );
+        press(&mut engine, &speech, Key::Space, insert());
+        press(&mut engine, &speech, Key::Alpha('O'), plain());
+        assert_eq!(
+            press(&mut engine, &speech, Key::Alpha('Q'), plain()),
+            "Background OCR cancelled"
+        );
+        assert!(engine.background_ocr.is_none());
     }
 
     /// Another window in front: its model, recognized words and all, is not this one's.

@@ -12,5 +12,11 @@ ocr-engine-windows = Microsoft OCR
 ocr-finished = finished.
 # Q while recognizing [obs, 1006/s3].
 ocr-canceled = OCR cancelled.
+# B: Background OCR, the window recognized again and again [obs, 1001/s3].
+ocr-background-started = Background OCR started
+# Q while Background OCR runs [obs, 1001/s14].
+ocr-background-cancelled = Background OCR cancelled
+# Alt+Delete says it after the cursor's place [obs, 1001/s4, s11].
+ocr-background-enabled = Background OCR is enabled
 # Insert+Space, O while the experimental setting is off: Okur's own words.
 ocr-experimental-off = Recognizing the screen is experimental: turn it on in Okur Settings, in the Experimental group.

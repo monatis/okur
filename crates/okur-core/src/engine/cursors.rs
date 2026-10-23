@@ -129,6 +129,7 @@ impl ScreenReaderEngine {
     pub(super) fn activate_pc_cursor(&mut self) -> Option<String> {
         self.active_cursor = ActiveCursor::Pc;
         self.forget_recognized();
+        self.background_ocr = None;
         // In a page the PC cursor is the virtual one: "virtual PC Cursor" [obs, 564/s19].
         if self.app_mode == super::AppMode::VirtualBuffer {
             let said = self.virtual_pc_message();
@@ -476,14 +477,21 @@ impl ScreenReaderEngine {
             (Key::PageUp, true, _) => self.okur_place = Some(OkurPlace::Top),
             // A page's bottom is its last line; an application's, below its text.
             (Key::PageDown, true, _) => {
-                self.okur_place = Some(if self.app_mode == super::AppMode::VirtualBuffer {
-                    OkurPlace::Text {
-                        line: self.okur_lines().len().saturating_sub(1),
-                        column: None,
-                    }
-                } else {
-                    OkurPlace::Bottom
-                });
+                // Among recognized words, the window's last line [obs, 1005/s4, s5].
+                let recognized = self
+                    .screen_model
+                    .as_ref()
+                    .is_some_and(|model| !model.recognized.is_empty());
+                self.okur_place = Some(
+                    if self.app_mode == super::AppMode::VirtualBuffer || recognized {
+                        OkurPlace::Text {
+                            line: self.okur_lines().len().saturating_sub(1),
+                            column: None,
+                        }
+                    } else {
+                        OkurPlace::Bottom
+                    },
+                );
             }
             _ => return None,
         }
@@ -690,6 +698,9 @@ impl ScreenReaderEngine {
         }));
         if self.active_cursor == ActiveCursor::Okur {
             said.push(self.said_short(self.okur_restriction.message()));
+        }
+        if self.background_ocr.is_some() {
+            said.push(msg::ocr_background_enabled().to_string());
         }
         for (i, line) in said.iter().enumerate() {
             self.speech.speak(line, i == 0);
