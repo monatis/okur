@@ -34,8 +34,8 @@ pub fn css_alignment(align: &str) -> Option<&'static str> {
 
 #[cfg(windows)]
 pub use reader::{
-    focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit, move_caret_in_edit,
-    read_focused, read_focused_outside_page, with_paragraph_alignment,
+    focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
+    move_caret_in_edit, read_focused, read_focused_outside_page, with_paragraph_alignment,
 };
 
 #[cfg(windows)]
@@ -286,6 +286,36 @@ mod reader {
     }
 
     /// The focused window of the application in front, with its class in capitals.
+    /// Whether the thread of the window with the keyboard focus has handled the input queued
+    /// for it: a message sent to it is handled when the thread next asks for one, before the
+    /// keys in its queue, so the second of two sent in turn returns once the key before them
+    /// has been taken. `false` when the window does not answer within 100 ms each.
+    pub fn focus_has_taken_its_keys() -> bool {
+        use windows::Win32::Foundation::{LPARAM, WPARAM};
+        use windows::Win32::UI::WindowsAndMessaging::{
+            SendMessageTimeoutW, SMTO_ABORTIFHUNG, WM_NULL,
+        };
+        let Some((hwnd, _)) = focused_window() else {
+            return false;
+        };
+        (0..2).all(|_| {
+            let mut result = 0usize;
+            // SAFETY: a message without arguments to another thread's window, with a timeout.
+            let sent = unsafe {
+                SendMessageTimeoutW(
+                    hwnd,
+                    WM_NULL,
+                    WPARAM(0),
+                    LPARAM(0),
+                    SMTO_ABORTIFHUNG,
+                    100,
+                    Some(&mut result),
+                )
+            };
+            sent.0 != 0
+        })
+    }
+
     fn focused_window() -> Option<(windows::Win32::Foundation::HWND, String)> {
         use windows::Win32::UI::WindowsAndMessaging::{
             GetClassNameW, GetGUIThreadInfo, GetWindowThreadProcessId, GUITHREADINFO,

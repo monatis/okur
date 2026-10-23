@@ -53,7 +53,7 @@ traces), so such changes get tests where a test can hold them and a live run on 
 | C4: each edit key made the field's text a vector of characters two to four times | done for the caret's line and character (`line_bytes`, tested against the vectors at every caret); the commands that read further keep theirs | `4a56c7e8` |
 | C7, C10 | not changed: a focus's copy is microseconds beside its reads; S, D and N take 3.5-4.3 ms on 25,032 nodes (measured below) | |
 | P14: a list item's column headers named one call each | done: the names come with the headers in one cached call; live check with 514 to come | `4fd2617e` |
-| P3 (polls) | open: after a key a UIA field is read whole every 15 ms until it changes; polling the caret alone needs a "before" in the same units, which the engine's text does not give for RichEdit | |
+| P3 (polls): after a key at an edge a desktop field was read every 15 ms for the whole 250 ms | done for fields outside pages: two messages sent in turn to the focus window tell that the application has taken the key, and two reads after that the same end the wait; Chromium's fields keep their 2 ms position poll (the page changes in another process); live check to come (504, 660) | this batch |
 
 The rest are listed below in the order they are taken.
 

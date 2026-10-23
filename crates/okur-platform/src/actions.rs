@@ -43,7 +43,7 @@ pub use windows_actions::WindowsActions;
 #[cfg(windows)]
 mod windows_actions {
     use super::{runtime_id, unique_id};
-    use crate::text_context::{read_focused, read_focused_outside_page};
+    use crate::text_context::{focus_has_taken_its_keys, read_focused, read_focused_outside_page};
     use okur_core::{AccessibilityEvent, TextContext};
     use std::sync::mpsc::{channel, Sender};
     use std::sync::Mutex;
@@ -527,7 +527,26 @@ mod windows_actions {
                 (before.clone(), before)
             }
         };
+        // A key at an edge (Home at a line's start, Down on the last line) changes nothing,
+        // and the field was read again and again for the whole settle time, 250 ms before
+        // speech (performance review 2026-10-23, P3). Once the application has taken the key
+        // and the field read after is still the same, twice over, the key changed nothing.
+        let mut unchanged_after_taken = 0;
         while super::same_place(&now, &before) && started.elapsed() < SETTLE {
+            if unchanged_after_taken < 2 && focus_has_taken_its_keys() {
+                now = read_focused_outside_page(uia);
+                if super::same_place(&now, &before) {
+                    unchanged_after_taken += 1;
+                    if unchanged_after_taken == 2 {
+                        tracing::debug!(
+                            ms = started.elapsed().as_millis(),
+                            "the key changed nothing"
+                        );
+                        break;
+                    }
+                }
+                continue;
+            }
             std::thread::sleep(POLL);
             now = read_focused_outside_page(uia);
         }
