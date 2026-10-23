@@ -114,6 +114,7 @@ Building evidence collection and verification tooling is the real engineering in
 - `okur-lab keys --allow <process>` and `okur-lab jaws-history`: quick live checks (skill Workflow H). Chords are sent only while an allowed application is in front, and JAWS's speech history is read through FSAPI with the clipboard put back. Research, never evidence. `okur-lab front <title>` brings a test window forward first.
 - `okur-lab latency <debug log>`: per-step timings of a live run, including key to speech audio per chord; `skills/jaws-reference/scripts/measure-edit-keys.sh` plays the everyday edit keys for it.
 - `skills/jaws-reference/scripts/parity-snapshot.sh <dir>`: the three parity outputs, to compare before and after a change with `diff -r`.
+- `skills/jaws-reference/scripts/preview-round.sh <fetched round dir>`: replays the scenarios a round has recorded so far, from a scratch corpus, before the round is imported (fetch what is done with `lab-fetch.sh`).
 
 ### Verification Integrity Rules (non-negotiable)
 
