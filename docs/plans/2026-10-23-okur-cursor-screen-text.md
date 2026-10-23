@@ -29,8 +29,8 @@ figures are untouched by it.
 - `fce8d727`: a field's misplaced lines; "OCR cancelled.".
 - `6e3d477f`: the Alt menu mask, found on the way.
 
-**Proven so far:**
-- 11 hermetic tests (`screen_model`, `engine::screen_text`, `ocr`);
+**Proven so far** (more in [`../handoff/2026-10-24-okur-cursor-screen-text.md`](../handoff/2026-10-24-okur-cursor-screen-text.md)):
+- 14 hermetic tests (`screen_model`, `engine::screen_text`, `ocr`, the replay's snapshots);
 - the live run on old-pc in the research's §8: recognition, the lines, and a click on a
   recognized word that reached its button where JAWS's with OmniPage missed (1000).
 
