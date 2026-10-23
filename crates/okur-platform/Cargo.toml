@@ -56,6 +56,9 @@ windows = { version = "0.62", features = [
     "Media_SpeechSynthesis",
     "Storage_Streams",
     "Foundation_Collections",
+    "ApplicationModel",
+    "UI_Notifications",
+    "UI_Notifications_Management",
 ] }
 windows-core = "0.62"
 windows-future = "0.3"

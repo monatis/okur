@@ -219,7 +219,6 @@ documentation describes and Okur lacks, most important first. Among them:
 - Microsoft Word, Outlook and Excel, not yet supported or checked;
 - reading with the Okur cursor where the screen has no text to give (images, applications that
   draw their own text);
-- toasts Focus Assist hides;
 - the rest of what the verbosity levels change, as further recordings show it (the desktop's
   window lists, the tray and toasts at Intermediate and Advanced are being recorded);
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build

@@ -39,7 +39,7 @@ stretch is a few hours or about thirty commits, not more.
 
 - Experiment 11's result: if the control's own provider hears the notification, register the
   tracer's handler on the focused control's own element too; else 820 stays a known gap.
-- Toasts Focus Assist hides: research first, leaving old-pc's notification settings alone.
+- Toasts Focus Assist hides: done, not a gap (533 re-read: JAWS neither says nor keeps them).
 
 ## 4. Startup (M3, then M4)
 

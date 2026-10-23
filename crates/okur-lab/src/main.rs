@@ -138,6 +138,14 @@ enum Commands {
         #[arg(long, default_value_t = 15000)]
         millis: u64,
     },
+    /// Print whether Windows lets this program read its list of notifications, how many toasts
+    /// it keeps, and those whose text contains `--only` (Windows; research, never evidence)
+    ListNotifications {
+        /// Text a listed toast's application or text contains for it to be printed; the
+        /// others are only counted, so that no one's own notifications are printed
+        #[arg(long)]
+        only: String,
+    },
     /// Print JAWS's speech history (through FSAPI; the clipboard's text is put back)
     JawsHistory {
         /// Empty the history after reading it
@@ -1062,6 +1070,36 @@ async fn main() {
                     eprintln!("{e}");
                     std::process::exit(1);
                 }
+            }
+        }
+        Some(Commands::ListNotifications { only }) => {
+            #[cfg(windows)]
+            {
+                use okur_platform::notification_listener as listener;
+                match listener::access() {
+                    Ok(access) => println!("access: {access}"),
+                    Err(e) => println!("access: {e}"),
+                }
+                match listener::toasts() {
+                    Ok(toasts) => {
+                        println!("toasts: {}", toasts.len());
+                        for toast in toasts.iter().filter(|t| {
+                            t.app.contains(&only) || t.texts.iter().any(|x| x.contains(&only))
+                        }) {
+                            println!("{} {}: {}", toast.id, toast.app, toast.texts.join(" | "));
+                        }
+                    }
+                    Err(e) => {
+                        eprintln!("{e}");
+                        std::process::exit(1);
+                    }
+                }
+            }
+            #[cfg(not(windows))]
+            {
+                let _ = only;
+                eprintln!("list-notifications is for Windows");
+                std::process::exit(1);
             }
         }
         Some(Commands::JawsHistory { clear }) => {

@@ -46,10 +46,15 @@ Scenario 533 (`corpus/fixtures/desktop-notifications.ps1`, round 2026-10-19) rai
 sent as Windows PowerShell, with the title "SR Fixture" and the text "Build finished in 12
 seconds":
 
-- old-pc has Focus Assist on: no banner shows. Yet in one trial of three JAWS said the toast,
-  "New notification from Windows Power Shell, SR Fixture, Build finished in 12 seconds. 1 of 1",
-  and Repeat Last Notification said it again; in the other two it said "No notification".
-- Every trial's Notification History listed it.
+- old-pc has Focus Assist on: no banner showed in two trials of three. In the third JAWS said the
+  toast, "New notification from Windows Power Shell, SR Fixture, Build finished in 12 seconds. 1
+  of 1", and Repeat Last Notification said it again; in the other two it said "No notification".
+- The Notification History listed a fixture toast in every trial, but not each trial's own
+  (re-read 2026-10-23): trials 1 and 2 (22:34 and 22:35) show 26 items, the newest at 10:11 PM,
+  from an earlier run; trial 3 (22:35:54), whose toast was said, shows 27, the newest at 10:36 PM.
+  **A toast Focus Assist hides is neither said nor kept by JAWS**: it reads the banner, as Okur
+  does. (An earlier reading of this evidence said every trial listed its own toast; it was
+  wrong.)
 - "New notification from" and "1 of 1" are not in the toast's XML: JAWS reads text Windows
   makes, not only the notification's own.
 - `okur trace` saw no event from the toast at all: it takes UIA notifications only from the
@@ -78,7 +83,11 @@ seconds":
     `NotificationChanged` fails with 0x80070490 on Windows 11 24H2 (WindowsAppSDK issue 6172);
     such programs poll, once a second (miklol/Muna PR 36), or get a sparse package identity.
   - Notifications hidden by Focus Assist or Do Not Disturb still reach Notification Center, so
-    the listener should see them; not yet tried.
+    the listener should see them.
+  - Tried (2026-10-23, `okur-lab list-notifications`, which prints only the toasts holding a
+    given text and counts the rest): an unpackaged program may list without asking, `access:
+    allowed` on the dev box (Windows 11, 13 toasts) and on old-pc (Windows 10, Focus Assist on,
+    8 toasts). JAWS does not read hidden toasts (533, above), so Okur does not use the list.
   - The `windows` crate has its bindings.
 
 ## How NVDA reads toasts
@@ -106,8 +115,9 @@ At nvaccess/nvda master (2026-10-21):
 - **Rules** (`5aee2fb`): Create Rule... with JAWS's controls (775); the first rule a toast
   matches mutes it or keeps it out of the history while Enable Rules is checked.
 - **Not yet:** the rule's name prompt, Manage Rules, rules saved to the settings folder,
-  Shorten and Play Sound, braille; applications' own UIA notifications in the history; toasts
-  Focus Assist hides (UserNotificationListener); the past 24 hours across restarts.
+  Shorten and Play Sound, braille; applications' own UIA notifications in the history;
+  the past 24 hours across restarts. Toasts Focus Assist hides are not a gap: JAWS neither says
+  nor keeps them (533, re-read 2026-10-23).
 
 ## What it means for Okur
 
@@ -118,8 +128,8 @@ At nvaccess/nvda master (2026-10-21):
 2. **The history:** Okur's own list of what it said, kept by Okur (not Windows'), the past 24
    hours, at most 500, as JAWS's: Insert+Space, N in an okur-ui dialog; Shift+N the last; Ctrl+N
    on and off. Rules later, with the settings.
-3. **Toasts Focus Assist hides:** UserNotificationListener, polled, if JAWS's 533 trial shows
-   that JAWS says them; to confirm on old-pc first.
+3. **Toasts Focus Assist hides:** not read, as JAWS does not read them (533, re-read
+   2026-10-23).
 4. **macOS later:** an `AXObserver` on the Notification Center process
    (`com.apple.notificationcenterui`), its windows' created elements with the subroles
    `AXNotificationCenterBanner` and `AXNotificationCenterAlert` (fthux/NotiShift); VoiceOver says
