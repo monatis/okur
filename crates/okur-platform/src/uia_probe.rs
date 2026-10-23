@@ -153,6 +153,47 @@ pub fn notification_registrations(title: &str, millis: u64) -> Result<Vec<String
         let added = unsafe { uia5.AddNotificationEventHandler(element, scope, cache, &handler) };
         note(format!("registered {tag}: {added:?}"));
     }
+    // The focused control's own provider, reached through its IAccessible (IAccessibleEx):
+    // WinForms raises its notifications on that provider, which the element UIA gives for the
+    // control's window (the MSAA proxy's) is not (experiment 11).
+    let described = |tag: &str, element: &IUIAutomationElement| {
+        // SAFETY: a property read on a valid element.
+        let description = unsafe {
+            element.GetCurrentPropertyValue(
+                windows::Win32::UI::Accessibility::UIA_ProviderDescriptionPropertyId,
+            )
+        }
+        .ok()
+        .and_then(|v| BSTR::try_from(&v).ok())
+        .map(|b| b.to_string())
+        .unwrap_or_default();
+        format!("{tag} provider: {description}")
+    };
+    note(described("focused element", &focused));
+    let native = native_element_of_focus(&uia, hwnd);
+    match &native {
+        Ok(native) => {
+            note(described("native element", native));
+            for (tag, scope) in [
+                ("native element", TreeScope_Element),
+                (
+                    "native element and its ancestors",
+                    TreeScope(TreeScope_Element.0 | TreeScope_Ancestors.0),
+                ),
+            ] {
+                let handler: IUIAutomationNotificationEventHandler = Heard {
+                    tag,
+                    log: log.clone(),
+                }
+                .into();
+                // SAFETY: as above.
+                let added =
+                    unsafe { uia5.AddNotificationEventHandler(native, scope, None, &handler) };
+                note(format!("registered {tag}: {added:?}"));
+            }
+        }
+        Err(e) => note(format!("no native element: {e}")),
+    }
     let handler: IUIAutomationEventHandler = HeardEvent {
         tag: "root subtree, as an automation event",
         log: log.clone(),
@@ -184,6 +225,45 @@ pub fn notification_registrations(title: &str, millis: u64) -> Result<Vec<String
     let mut lines = log.lock().map(|log| log.clone()).unwrap_or_default();
     lines.extend(win_events);
     Ok(lines)
+}
+
+/// The UI Automation element of the control with the keyboard focus in `window`'s thread,
+/// made from its IAccessible: a provider that implements IAccessibleEx gives its own element,
+/// not the MSAA proxy's.
+#[cfg(windows)]
+fn native_element_of_focus(
+    uia: &windows::Win32::UI::Accessibility::IUIAutomation,
+    window: windows::Win32::Foundation::HWND,
+) -> Result<windows::Win32::UI::Accessibility::IUIAutomationElement, String> {
+    use windows::core::Interface;
+    use windows::Win32::UI::Accessibility::{AccessibleObjectFromWindow, IAccessible};
+    use windows::Win32::UI::WindowsAndMessaging::{
+        GetGUIThreadInfo, GetWindowThreadProcessId, GUITHREADINFO,
+    };
+    const OBJID_CLIENT: i32 = -4;
+    // SAFETY: Win32 queries with valid out-structures, then COM calls on the object they give.
+    unsafe {
+        let thread = GetWindowThreadProcessId(window, None);
+        let mut info = GUITHREADINFO {
+            cbSize: u32::try_from(std::mem::size_of::<GUITHREADINFO>()).unwrap_or(0),
+            ..Default::default()
+        };
+        GetGUIThreadInfo(thread, &mut info).map_err(|e| format!("focus window: {e}"))?;
+        let mut object: *mut core::ffi::c_void = std::ptr::null_mut();
+        AccessibleObjectFromWindow(
+            info.hwndFocus,
+            OBJID_CLIENT as u32,
+            &IAccessible::IID,
+            &mut object,
+        )
+        .map_err(|e| format!("IAccessible: {e}"))?;
+        if object.is_null() {
+            return Err("IAccessible: none".to_owned());
+        }
+        let accessible = IAccessible::from_raw(object);
+        uia.ElementFromIAccessible(&accessible, 0)
+            .map_err(|e| format!("ElementFromIAccessible: {e}"))
+    }
 }
 
 /// The WinEvents process `pid` fires during `duration`, as "WinEvent 0x800C object -4 child 0"
