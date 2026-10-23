@@ -2281,6 +2281,72 @@ mod capture {
         // The out-of-context hook calls back on the installing thread, so thread-local
         // state is sufficient and needs no locking.
         static STATE: RefCell<Option<TraceState>> = const { RefCell::new(None) };
+        /// Set while an event is read (see [`in_turn`]).
+        static READING: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+        /// The events that arrived while one was read, in order.
+        static DEFERRED: RefCell<std::collections::VecDeque<Deferred>> =
+            const { RefCell::new(std::collections::VecDeque::new()) };
+    }
+
+    /// A WinEvent that arrived while another was read, read after it.
+    struct Deferred {
+        t_ms: u128,
+        name: &'static str,
+        win_event: u32,
+        hwnd: HWND,
+        id_object: i32,
+        id_child: i32,
+    }
+
+    /// The most events kept waiting: past it the newest are dropped (logged).
+    const MAX_DEFERRED: usize = 512;
+
+    /// Runs `read` with the tracer marked busy, then the events that arrived meanwhile, in
+    /// order. A cross-process read (MSAA's `WM_GETOBJECT`) waits in `SendMessage`, where
+    /// Windows delivers the next WinEvent on this thread before the read returns: read there,
+    /// it borrowed `STATE` inside the first event's borrow and aborted the reader
+    /// (performance review 2026-10-23, P1).
+    fn in_turn(read: impl FnOnce()) {
+        READING.with(|r| r.set(true));
+        read();
+        while let Some(event) = DEFERRED.with(|d| d.borrow_mut().pop_front()) {
+            record_at(
+                event.t_ms,
+                event.name,
+                event.win_event,
+                event.hwnd,
+                event.id_object,
+                event.id_child,
+                None,
+            );
+        }
+        READING.with(|r| r.set(false));
+    }
+
+    /// [`record_at`] now, or after the event being read when one is.
+    fn record_in_turn(event: Deferred) {
+        if READING.with(|r| r.get()) {
+            DEFERRED.with(|d| {
+                let mut deferred = d.borrow_mut();
+                if deferred.len() < MAX_DEFERRED {
+                    deferred.push_back(event);
+                } else {
+                    tracing::debug!(event = event.name, "event dropped: too many waiting");
+                }
+            });
+            return;
+        }
+        in_turn(|| {
+            record_at(
+                event.t_ms,
+                event.name,
+                event.win_event,
+                event.hwnd,
+                event.id_object,
+                event.id_child,
+                None,
+            )
+        });
     }
 
     fn now_ms() -> u128 {
@@ -2753,15 +2819,14 @@ mod capture {
         let Some(name) = event_name(win_event, id_object) else {
             return;
         };
-        record_at(
-            event_ms(time),
+        record_in_turn(Deferred {
+            t_ms: event_ms(time),
             name,
             win_event,
             hwnd,
             id_object,
             id_child,
-            None,
-        );
+        });
     }
 
     /// When an event happened, in Unix milliseconds, from its `dwmsEventTime` (the tick count
@@ -2815,15 +2880,14 @@ mod capture {
                 }
             };
             if front_dialog {
-                record_at(
-                    now_ms(),
-                    "dialog_shown",
+                record_in_turn(Deferred {
+                    t_ms: now_ms(),
+                    name: "dialog_shown",
                     win_event,
                     hwnd,
                     id_object,
                     id_child,
-                    None,
-                );
+                });
             }
         }
         if id_object != OBJID_CLIENT || id_child >= 0 {
@@ -4321,7 +4385,7 @@ mod capture {
             _ => false,
         };
         // Where focus is already, as JAWS reads it when it starts: no event will report it.
-        record_current_focus();
+        in_turn(record_current_focus);
 
         let mut msg = MSG::default();
         while keep_running() {
@@ -4358,22 +4422,24 @@ mod capture {
                     let _ = TranslateMessage(&msg);
                     DispatchMessageW(&msg);
                 }
-                if uia_focused {
-                    record_uia_focus();
-                }
-                if uia_selected_queued {
-                    record_uia_selected();
-                }
-                if uia_notified {
-                    record_uia_notifications();
-                }
-                if uia_live_region_queued {
-                    record_uia_live_regions();
-                }
-                if uia_window_opened_queued {
-                    record_uia_windows_opened();
-                }
-                record_mouse_move();
+                in_turn(|| {
+                    if uia_focused {
+                        record_uia_focus();
+                    }
+                    if uia_selected_queued {
+                        record_uia_selected();
+                    }
+                    if uia_notified {
+                        record_uia_notifications();
+                    }
+                    if uia_live_region_queued {
+                        record_uia_live_regions();
+                    }
+                    if uia_window_opened_queued {
+                        record_uia_windows_opened();
+                    }
+                    record_mouse_move();
+                });
             }
         }
         if let (Some(uia), Some(root), true) =

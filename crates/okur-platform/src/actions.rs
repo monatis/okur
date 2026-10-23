@@ -121,6 +121,9 @@ mod windows_actions {
         /// RuntimeId (the Okur cursor on a page).
         MouseToObject(i32),
         MouseToUiaObject(Vec<i32>),
+        /// A drag with the left button. Not done in the keyboard hook: it moves the pointer in
+        /// steps a hand would take, 120 ms in all (performance review 2026-10-23, T3).
+        Drag((i32, i32), (i32, i32)),
     }
 
     /// The virtual key of a key the screen reader sends for a reading command.
@@ -288,6 +291,7 @@ mod windows_actions {
                                 // Answered even when none was found: the engine waits for it.
                                 let _ = events.send(AccessibilityEvent::PageElements(elements));
                             }
+                            Request::Drag(from, to) => super::drag(from, to),
                             Request::Copy(text) => {
                                 if let Err(e) = super::set_clipboard_text(&text) {
                                     tracing::warn!("copy to the clipboard failed: {e}");
@@ -633,8 +637,7 @@ mod windows_actions {
         }
 
         fn drag_mouse(&self, from: (i32, i32), to: (i32, i32)) -> bool {
-            super::drag(from, to);
-            true
+            self.send(Request::Drag(from, to))
         }
 
         fn move_mouse(&self, x: i32, y: i32) -> bool {
@@ -709,28 +712,55 @@ pub fn capture_foreground_page() -> Result<okur_core::AomNode, crate::PlatformEr
     }
 }
 
-/// The clipboard's Unicode text (CF_UNICODETEXT), if it holds any.
+/// How long [`clipboard_text`] waits for the clipboard: well within the time the keyboard
+/// hook, which asks for it, may take over a key.
+#[cfg(windows)]
+const CLIPBOARD_WAIT: std::time::Duration = std::time::Duration::from_millis(150);
+
+/// The clipboard's Unicode text (CF_UNICODETEXT), if it holds any and answers within
+/// [`CLIPBOARD_WAIT`]. Read on a thread of its own: text put on the clipboard for later
+/// rendering is asked of its owner (`WM_RENDERFORMAT`), and a hung owner would hold the
+/// keyboard hook that asks (performance review 2026-10-23, P2); such a read finishes, or not,
+/// on its own thread.
 #[cfg(windows)]
 pub fn clipboard_text() -> Option<String> {
+    let (tx, rx) = std::sync::mpsc::channel();
+    std::thread::Builder::new()
+        .name("clipboard read".to_owned())
+        .spawn(move || {
+            let _ = tx.send(read_clipboard_text());
+        })
+        .ok()?;
+    match rx.recv_timeout(CLIPBOARD_WAIT) {
+        Ok(text) => text,
+        Err(_) => {
+            tracing::warn!("the clipboard did not answer in time");
+            None
+        }
+    }
+}
+
+/// The clipboard's Unicode text, read on the calling thread.
+#[cfg(windows)]
+fn read_clipboard_text() -> Option<String> {
     use windows::Win32::Foundation::HGLOBAL;
     use windows::Win32::System::DataExchange::{CloseClipboard, GetClipboardData, OpenClipboard};
-    use windows::Win32::System::Memory::{GlobalLock, GlobalUnlock};
+    use windows::Win32::System::Memory::{GlobalLock, GlobalSize, GlobalUnlock};
     const CF_UNICODETEXT: u32 = 13;
-    // SAFETY: the clipboard is opened and closed here; the data is only read while locked, up
-    // to its terminating zero.
+    // SAFETY: the clipboard is opened and closed here; the data is only read while locked,
+    // within the block's size, up to its terminating zero.
     unsafe {
         OpenClipboard(None).ok()?;
         let text = GetClipboardData(CF_UNICODETEXT).ok().and_then(|data| {
             let block = HGLOBAL(data.0);
+            let units = GlobalSize(block) / 2;
             let ptr = GlobalLock(block).cast::<u16>();
             if ptr.is_null() {
                 return None;
             }
-            let mut len = 0usize;
-            while *ptr.add(len) != 0 {
-                len += 1;
-            }
-            let text = String::from_utf16_lossy(std::slice::from_raw_parts(ptr, len));
+            let all = std::slice::from_raw_parts(ptr, units);
+            let len = all.iter().position(|&unit| unit == 0).unwrap_or(units);
+            let text = String::from_utf16_lossy(all.get(..len).unwrap_or_default());
             let _ = GlobalUnlock(block);
             Some(text)
         });
@@ -852,7 +882,7 @@ fn drag(from: (i32, i32), to: (i32, i32)) {
 /// Puts `text` on the clipboard as Unicode text (CF_UNICODETEXT).
 #[cfg(windows)]
 pub fn set_clipboard_text(text: &str) -> Result<(), String> {
-    use windows::Win32::Foundation::HANDLE;
+    use windows::Win32::Foundation::{GlobalFree, HANDLE};
     use windows::Win32::System::DataExchange::{
         CloseClipboard, EmptyClipboard, OpenClipboard, SetClipboardData,
     };
@@ -860,7 +890,7 @@ pub fn set_clipboard_text(text: &str) -> Result<(), String> {
     const CF_UNICODETEXT: u32 = 13;
     let wide: Vec<u16> = text.encode_utf16().chain(std::iter::once(0)).collect();
     // SAFETY: the clipboard is opened and closed here; the global block is sized for the
-    // text and, once set, owned by the clipboard.
+    // text and, once set, owned by the clipboard; not set, it is freed here.
     unsafe {
         OpenClipboard(None).map_err(|e| format!("OpenClipboard: {e}"))?;
         let result = (|| {
@@ -869,12 +899,15 @@ pub fn set_clipboard_text(text: &str) -> Result<(), String> {
                 .map_err(|e| format!("GlobalAlloc: {e}"))?;
             let target = GlobalLock(block).cast::<u16>();
             if target.is_null() {
+                let _ = GlobalFree(Some(block));
                 return Err("GlobalLock failed".to_owned());
             }
             std::ptr::copy_nonoverlapping(wide.as_ptr(), target, wide.len());
             let _ = GlobalUnlock(block);
-            SetClipboardData(CF_UNICODETEXT, Some(HANDLE(block.0)))
-                .map_err(|e| format!("SetClipboardData: {e}"))?;
+            if let Err(e) = SetClipboardData(CF_UNICODETEXT, Some(HANDLE(block.0))) {
+                let _ = GlobalFree(Some(block));
+                return Err(format!("SetClipboardData: {e}"));
+            }
             Ok(())
         })();
         let _ = CloseClipboard();

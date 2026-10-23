@@ -247,7 +247,53 @@ fn take_for_key<T>(
         }
         KEYS_WAITING.fetch_sub(1, std::sync::atomic::Ordering::SeqCst);
     }
-    guard.ok()
+    match guard {
+        Ok(guard) => Some(guard),
+        Err(TryLockError::Poisoned(poisoned)) => Some(recovered(engine, poisoned)),
+        Err(TryLockError::WouldBlock) => None,
+    }
+}
+
+/// The engine, also after a panic while it was held: a poisoned lock refused every later key
+/// and event, and the reader went silent while it seemed to run (performance review
+/// 2026-10-23, T8). The panic itself is logged where it happened ([`log_panics`]).
+fn lock_engine<T>(engine: &Mutex<T>) -> std::sync::MutexGuard<'_, T> {
+    engine
+        .lock()
+        .unwrap_or_else(|poisoned| recovered(engine, poisoned))
+}
+
+/// A poisoned lock's guard, the lock cleared for the next taker.
+fn recovered<'a, T>(
+    engine: &'a Mutex<T>,
+    poisoned: std::sync::PoisonError<std::sync::MutexGuard<'a, T>>,
+) -> std::sync::MutexGuard<'a, T> {
+    tracing::error!("the engine was held by a panic; it goes on");
+    engine.clear_poison();
+    poisoned.into_inner()
+}
+
+/// Logs each panic, with where it happened, before the default report (on stderr, which the
+/// installed reader has none of).
+fn log_panics() {
+    let report = std::panic::take_hook();
+    std::panic::set_hook(Box::new(move |info| {
+        tracing::error!(%info, "panic");
+        report(info);
+    }));
+}
+
+/// Runs `work`, a key's or an event's handling, logging a panic in it instead of letting it
+/// end the hook (an abort, unwinding out of the hook's callback) or the event loop (the reader
+/// deaf to events). The engine may be part-way through a change; it goes on.
+fn unless_it_panics<R>(what: &'static str, work: impl FnOnce() -> R) -> Option<R> {
+    match std::panic::catch_unwind(std::panic::AssertUnwindSafe(work)) {
+        Ok(result) => Some(result),
+        Err(_) => {
+            tracing::error!(what, "handling ended by a panic");
+            None
+        }
+    }
 }
 
 /// Waits while a key waits for the engine: at most 200 ms, in case a key never takes it.
@@ -425,6 +471,7 @@ pub async fn run(config: RunConfig) {
         start,
         console,
     } = config;
+    log_panics();
     let instance_lock = match take_desktop(start) {
         Ok(lock) => lock,
         Err(why) => {
@@ -592,7 +639,8 @@ pub async fn run(config: RunConfig) {
     }
 
     // Announce startup
-    if let Ok(mut eng) = engine.lock() {
+    {
+        let mut eng = lock_engine(&engine);
         if is_fixture {
             eng.app_mode = okur_core::engine::AppMode::VirtualBuffer;
             let doc_name = eng.cursor.buffer.document_title().unwrap_or("Document");
@@ -638,7 +686,8 @@ pub async fn run(config: RunConfig) {
         if let Some(mut eng) = guard {
             let waited = arrived.elapsed();
             let started = std::time::Instant::now();
-            let action = eng.handle_key_event(&event);
+            let action = unless_it_panics("key", || eng.handle_key_event(&event))
+                .unwrap_or(KeyAction::PassThrough);
             let held = started.elapsed();
             if waited > SLOW_ENGINE || held > SLOW_ENGINE {
                 tracing::warn!(
@@ -705,7 +754,8 @@ pub async fn run(config: RunConfig) {
                     biased;
                     Some(mark) = marks_rx.recv() => {
                         give_way_to_keys();
-                        if let Ok(mut eng) = engine_events.lock() {
+                        {
+                            let mut eng = lock_engine(&engine_events);
                             eng.speech_reached(mark);
                         }
                         continue;
@@ -714,7 +764,8 @@ pub async fn run(config: RunConfig) {
                         if number > refresh_applied {
                             refresh_applied = number;
                             give_way_to_keys();
-                            if let Ok(mut eng) = engine_events.lock() {
+                            {
+                                let mut eng = lock_engine(&engine_events);
                                 eng.handle_page_refreshed(&title, buffer);
                             }
                         }
@@ -722,7 +773,8 @@ pub async fn run(config: RunConfig) {
                     }
                     Some((generation, buffer)) = rebuilt_rx.recv() => {
                         give_way_to_keys();
-                        if let Ok(mut eng) = engine_events.lock() {
+                        {
+                            let mut eng = lock_engine(&engine_events);
                             eng.install_page_build(generation, buffer);
                         }
                         continue;
@@ -731,9 +783,7 @@ pub async fn run(config: RunConfig) {
                     // else the parts go into the page as it is now, under the lock.
                     Some(BuiltParts { base, buffer, parts, attempt }) = parts_rx.recv() => {
                         give_way_to_keys();
-                        let Ok(mut eng) = engine_events.lock() else {
-                            continue;
-                        };
+                        let mut eng = lock_engine(&engine_events);
                         let taken = match buffer {
                             Some(buffer) => eng.install_page_parts(&base, buffer),
                             None => eng.page_parts_not_found(&base),
@@ -773,10 +823,8 @@ pub async fn run(config: RunConfig) {
                     Some(AccessibilityEvent::DocumentLoaded { title, root }) => {
                         let url = root.attributes.get("url").cloned();
                         give_way_to_keys();
-                        let refresh = engine_events
-                            .lock()
-                            .ok()
-                            .is_some_and(|eng| eng.is_page_in_front(title, url.as_deref()));
+                        let refresh =
+                            lock_engine(&engine_events).is_page_in_front(title, url.as_deref());
                         let root = std::mem::replace(
                             root,
                             okur_core::AomNode::new(0, okur_core::Role::Document),
@@ -812,10 +860,7 @@ pub async fn run(config: RunConfig) {
                 // blocking pool, the engine taken only a moment to share its page.
                 if let Some(AccessibilityEvent::PagePartsLoaded(parts)) = &mut event {
                     give_way_to_keys();
-                    let base = engine_events
-                        .lock()
-                        .ok()
-                        .and_then(|eng| eng.page_for_parts());
+                    let base = lock_engine(&engine_events).page_for_parts();
                     if let Some(base) = base {
                         splice_off_engine(base, std::mem::take(parts), 1, parts_tx.clone());
                         continue;
@@ -823,15 +868,17 @@ pub async fn run(config: RunConfig) {
                 }
                 let spoken = {
                     give_way_to_keys();
-                    let Ok(mut eng) = engine_events.lock() else {
-                        continue;
-                    };
+                    let mut eng = lock_engine(&engine_events);
                     let started = std::time::Instant::now();
-                    let spoken = match (&event, page) {
-                        (_, Some((title, buffer))) => eng.handle_document_loaded(&title, buffer),
-                        (Some(event), None) => eng.handle_accessibility_event(event),
-                        (None, None) => eng.on_idle(),
-                    };
+                    let spoken =
+                        unless_it_panics(event_kind(event.as_ref()), || match (&event, page) {
+                            (_, Some((title, buffer))) => {
+                                eng.handle_document_loaded(&title, buffer)
+                            }
+                            (Some(event), None) => eng.handle_accessibility_event(event),
+                            (None, None) => eng.on_idle(),
+                        })
+                        .flatten();
                     let held = started.elapsed();
                     if held > SLOW_ENGINE {
                         tracing::warn!(
@@ -926,7 +973,8 @@ pub async fn run(config: RunConfig) {
     if let Some(task) = event_task {
         task.abort();
     }
-    if let Ok(mut eng) = engine.lock() {
+    {
+        let mut eng = lock_engine(&engine);
         if reason == ExitReason::EndSession {
             eng.speech.stop();
         } else {
@@ -954,6 +1002,33 @@ mod tests {
     use super::*;
     use std::sync::{Arc, Mutex};
     use std::time::{Duration, Instant};
+
+    /// The engine left poisoned by a panic while it was held: the next key and the next event
+    /// still take it, as they find it (performance review 2026-10-23, T8).
+    #[test]
+    fn the_engine_is_taken_after_a_panic_while_it_was_held() {
+        let engine = Arc::new(Mutex::new(7_u32));
+        let holder = Arc::clone(&engine);
+        let _ = std::thread::spawn(move || {
+            let _held = holder.lock();
+            std::panic::resume_unwind(Box::new("a bug while the engine was held"));
+        })
+        .join();
+        assert!(engine.is_poisoned());
+        assert_eq!(take_for_key(&engine, Instant::now()).map(|e| *e), Some(7));
+        assert_eq!(*lock_engine(&engine), 7);
+        assert!(!engine.is_poisoned());
+    }
+
+    /// A panic in a key's or an event's handling is caught, and nothing comes of it.
+    #[test]
+    fn a_panic_in_handling_is_caught() {
+        let handled = unless_it_panics("test", || -> u32 {
+            std::panic::resume_unwind(Box::new("a bug in a handler"))
+        });
+        assert_eq!(handled, None);
+        assert_eq!(unless_it_panics("test", || 3), Some(3));
+    }
 
     /// A key takes the engine quickly while the event loop takes it again and again, as it does
     /// for a stream of events, each held 1 ms: the loop gives way to a waiting key.

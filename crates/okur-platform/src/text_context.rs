@@ -395,10 +395,17 @@ mod reader {
             } else {
                 text
             };
-            // EM_GETSEL's result packs the selection's start and end in its low and high words.
-            let sel = ask(EM_GETSEL, 0, 0)?;
-            let start = i32::try_from(sel & 0xFFFF).ok()?;
-            let end = i32::try_from((sel >> 16) & 0xFFFF).ok()?;
+            // The selection through EM_GETSEL's out-pointers (marshalled by the system, as
+            // WM_GETTEXT's buffer is): its result packs both ends in 16-bit words, which a
+            // text past 65,535 characters overflows (performance review 2026-10-23, P24).
+            let (mut start, mut end) = (0u32, 0u32);
+            ask(
+                EM_GETSEL,
+                std::ptr::from_mut(&mut start) as usize,
+                std::ptr::from_mut(&mut end) as isize,
+            )?;
+            let start = i32::try_from(start).ok()?;
+            let end = i32::try_from(end).ok()?;
             Some(TextContext {
                 caret: utf16_to_chars(&text, start),
                 selection: (start < end)
