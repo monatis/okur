@@ -1,0 +1,43 @@
+{
+  "id": "971-desktop-wordpad-ribbon-alt-twice",
+  "name": "WordPad's ribbon: Alt to it, Alt again back to the document, Alt to it once more, Escape: what entering and leaving the ribbon say",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-wordpad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-wordpad-fixture.rtf - WordPad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Alt"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Alt"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Alt"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}

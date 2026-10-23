@@ -1,0 +1,43 @@
+{
+  "id": "972-desktop-wordpad-ribbon-f10",
+  "name": "WordPad's ribbon by F10: F10, Right, Shift+Tab, Escape: whether F10 enters it as Alt does",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-wordpad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-wordpad-fixture.rtf - WordPad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "F10"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Shift+Tab"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}

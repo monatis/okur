@@ -1,0 +1,88 @@
+{
+  "id": "970-desktop-wordpad-ribbon-lower",
+  "name": "WordPad's ribbon with the ribbon's MSAA objects traced: Alt, Right and Left along the tabs, Down into the Home tab's commands, Right and Left through them, Down again, Tab and Shift+Tab, then Escape out to the document: what each says, and where JAWS says Upper and Lower Ribbon (523 again, further)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-wordpad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-wordpad-fixture.rtf - WordPad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Alt"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Shift+Tab"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}

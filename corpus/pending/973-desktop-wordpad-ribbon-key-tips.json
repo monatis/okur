@@ -1,0 +1,48 @@
+{
+  "id": "973-desktop-wordpad-ribbon-key-tips",
+  "name": "WordPad's ribbon by its key tips: Alt, H (the Home tab's key tips), Escape, Escape, Escape: what a key tip says",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-wordpad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-wordpad-fixture.rtf - WordPad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Alt"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}
