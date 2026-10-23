@@ -1,0 +1,87 @@
+{
+  "id": "926-web-jaws-find-intermediate",
+  "name": "JAWS Find in a page: Ctrl+F, a word typed into the dialog (JAWS's own TypeKey: the dialog refuses our keys), Enter, F3 twice, Shift+F3, Insert+Up; then Insert+Ctrl+F opens it again and Escape closes it (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 506-web-jaws-find)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Ctrl+F"
+    },
+    {
+      "id": "s2",
+      "type": "jaws_function",
+      "command": "TypeKey(\"b\")"
+    },
+    {
+      "id": "s3",
+      "type": "jaws_function",
+      "command": "TypeKey(\"o\")"
+    },
+    {
+      "id": "s4",
+      "type": "jaws_function",
+      "command": "TypeKey(\"a\")"
+    },
+    {
+      "id": "s5",
+      "type": "jaws_function",
+      "command": "TypeKey(\"r\")"
+    },
+    {
+      "id": "s6",
+      "type": "jaws_function",
+      "command": "TypeKey(\"d\")"
+    },
+    {
+      "id": "s7",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "F3"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "F3"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Shift+F3"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+Insert+F"
+    },
+    {
+      "id": "s13",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}

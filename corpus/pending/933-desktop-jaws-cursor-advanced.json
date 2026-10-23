@@ -1,0 +1,68 @@
+{
+  "id": "933-desktop-jaws-cursor-advanced",
+  "name": "The JAWS cursor in a dialog: Numpad Minus to it, Alt+Delete, Insert+Up and Up with it, routing it to the PC cursor (Insert+Numpad Minus), and Numpad Plus back to the PC cursor (at JAWS's Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 516-desktop-jaws-cursor)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-dialogs.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Dialog Fixture"
+  },
+  "reset": {
+    "keys": []
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "NumpadMinus"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Alt+Delete"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Insert+NumpadMinus"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "NumpadPlus"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Alt+Delete"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "2"
+      }
+    }
+  }
+}

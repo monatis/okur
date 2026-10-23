@@ -1,0 +1,91 @@
+{
+  "id": "936-desktop-notepad-replace-dialog-intermediate",
+  "name": "Notepad's Replace dialog (Ctrl+H): Tab through Find what, Replace with, the buttons and the check boxes, Insert+E on a field and on a button, Shift+Numpad5, and Escape (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 542-desktop-notepad-replace-dialog)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Ctrl+H",
+      "settle_max_ms": 15000
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Insert+E"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Shift+Numpad5"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+E"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}

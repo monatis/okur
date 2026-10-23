@@ -1,0 +1,122 @@
+{
+  "id": "928-desktop-laptop-sentence-paragraph-and-cursor-keys-intermediate",
+  "name": "Laptop layout in a native edit: sentence (CapsLock+H, N, Y), paragraph (CapsLock+Ctrl+I, O, U), Say To and From Cursor (CapsLock+Shift+J, L), Say Selected Text (CapsLock+Shift+A), top and bottom line (CapsLock+Shift+Y, N), color (CapsLock+5), the character value (CapsLock+Comma three times) and Say All (CapsLock+A) stopped by Ctrl (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 510-desktop-laptop-sentence-paragraph-and-cursor-keys)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-reading.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Reading Fixture"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "CapsLock+H"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "CapsLock+N"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "CapsLock+Y"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "CapsLock+Ctrl+I"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "CapsLock+Ctrl+O"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "CapsLock+Ctrl+U"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "CapsLock+Shift+J"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "CapsLock+Shift+L"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Shift+End"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "CapsLock+Shift+A"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "CapsLock+Shift+Y"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "CapsLock+Shift+N"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "CapsLock+5"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "CapsLock+Comma",
+      "repeat": 3
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "CapsLock+A",
+      "during": [
+        {
+          "after_ms": 4000,
+          "command": "Ctrl"
+        }
+      ]
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}

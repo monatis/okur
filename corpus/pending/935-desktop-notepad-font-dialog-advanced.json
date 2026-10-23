@@ -1,0 +1,81 @@
+{
+  "id": "935-desktop-notepad-font-dialog-advanced",
+  "name": "Notepad's Font dialog (Alt+O, F): the font list, Down and Up in it, Tab to the style and size lists, Insert+Tab, Insert+E, and Escape (Say Window reads its 187 fonts for longer than a step waits) (at JAWS's Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 541-desktop-notepad-font-dialog)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Alt+O"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "F",
+      "settle_max_ms": 15000
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Insert+Tab"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Insert+E"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "2"
+      }
+    }
+  }
+}

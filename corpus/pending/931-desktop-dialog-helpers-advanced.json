@@ -1,0 +1,63 @@
+{
+  "id": "931-desktop-dialog-helpers-advanced",
+  "name": "Small information keys in a dialog: the default button (Insert+E), the active cursor (Alt+Delete), the color (Insert+5), the application's version (Ctrl+Insert+V), the configuration's name (Insert+Q), and the JAWS key's own help for a button (Insert+F1 closed with Escape) (at JAWS's Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 513-desktop-dialog-helpers)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-dialogs.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Dialog Fixture"
+  },
+  "reset": {
+    "keys": []
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+E"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Alt+Delete"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Insert+5"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Ctrl+Insert+V"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+Q"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+E"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Alt+Delete"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "2"
+      }
+    }
+  }
+}

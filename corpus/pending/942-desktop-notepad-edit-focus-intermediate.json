@@ -1,0 +1,86 @@
+{
+  "id": "942-desktop-notepad-edit-focus-intermediate",
+  "name": "Notepad's edit as the focus comes back to it: Say Focus at its first line, then from its third line Ctrl+F's Find dialog closed by Escape, Say Focus again, and the menu bar entered and left with Alt, and the File menu closed by Escape twice (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 547-desktop-notepad-edit-focus)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Tab"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Ctrl+F",
+      "settle_max_ms": 15000
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+Tab"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Alt"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Alt"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Alt+F"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}

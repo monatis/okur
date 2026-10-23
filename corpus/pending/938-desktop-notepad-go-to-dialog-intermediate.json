@@ -1,0 +1,76 @@
+{
+  "id": "938-desktop-notepad-go-to-dialog-intermediate",
+  "name": "Notepad's Go To Line dialog (Ctrl+G): the line number field, Insert+Tab, Insert+E, Tab to its buttons, Shift+Tab back, then 3 typed and Enter, and Insert+Up on the line reached (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 543-desktop-notepad-go-to-dialog)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Ctrl+G",
+      "settle_max_ms": 15000
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Tab"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Insert+E"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Shift+Tab"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Shift+Tab"
+    },
+    {
+      "id": "s8",
+      "type": "text",
+      "command": "3"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Enter"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}

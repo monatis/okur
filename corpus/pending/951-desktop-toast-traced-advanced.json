@@ -1,0 +1,62 @@
+{
+  "id": "951-desktop-toast-traced-advanced",
+  "name": "A Windows toast traced as it arrives (UIA WindowOpened of the shell's windows): Space on Show notification, Insert+Up, Repeat Last Notification (Insert+Space, Shift+N), Notification History (Insert+Space, N) closed with Escape typed by JAWS (at JAWS's Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 770-desktop-toast-traced)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notifications.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Notification Fixture"
+  },
+  "expects_notifications": true,
+  "reset": {
+    "keys": []
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Space",
+      "settle_max_ms": 20000
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Shift+N",
+      "settle_max_ms": 10000
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "N",
+      "settle_max_ms": 15000
+    },
+    {
+      "id": "s7",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Escape\")"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "2"
+      }
+    }
+  }
+}

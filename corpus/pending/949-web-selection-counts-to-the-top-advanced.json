@@ -1,0 +1,137 @@
+{
+  "id": "949-web-selection-counts-to-the-top-advanced",
+  "name": "Where JAWS's text of the news article holds a character Okur's does not: Ctrl+Shift+Home from six places (the table, the third-level heading, Related stories, the footer's region, Contact us and the page's end), each selection over 1000 characters, so JAWS says its size. To the end of the page from three places JAWS counts one more than Okur (562/s13, s17, s20), on plain pages none (617, 620) (at JAWS's Advanced verbosity, DEFAULT.JCF Options Verbosity=2; otherwise as 643-web-selection-counts-to-the-top)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "2"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "2"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Ctrl+Shift+Home"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "3"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Ctrl+Shift+Home"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "2"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "2"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "2"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+Shift+Home"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Ctrl+End"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Ctrl+Shift+Home"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Ctrl+End"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Ctrl+Shift+Home"
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "Ctrl+End"
+    },
+    {
+      "id": "s22",
+      "type": "key",
+      "command": "Ctrl+Shift+Home"
+    },
+    {
+      "id": "s23",
+      "type": "key",
+      "command": "Ctrl+Home"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "2"
+      }
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "id": "924-web-home-end-page-keys-intermediate",
+  "name": "Home, End, PageDown and PageUp with the virtual cursor (at JAWS's Intermediate verbosity, DEFAULT.JCF Options Verbosity=1; otherwise as 502-web-home-end-page-keys)",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "End"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Home"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "PageDown"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "PageDown"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "PageUp"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Ctrl+End"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "PageUp"
+    }
+  ],
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "Verbosity": "1"
+      }
+    }
+  }
+}
