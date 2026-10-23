@@ -1,5 +1,5 @@
 //! Text recognized from the screen's pixels with Windows' own recognizer (Windows.Media.Ocr),
-//! for the Okur cursor's experimental screen text (Insert+Space, O;
+//! for the Okur cursor's screen text (Insert+Space, O;
 //! `docs/plans/2026-10-23-okur-cursor-screen-text.md`). The pixels come from xa11y's GDI
 //! capture of the area, in the physical desktop pixels UI Automation and the mouse use, so a
 //! recognized word's place is where the Okur cursor moves the mouse to click it.

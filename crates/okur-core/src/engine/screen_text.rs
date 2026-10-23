@@ -1,6 +1,6 @@
 //! The Okur cursor's model of the window in front, and recognizing the screen's text into it
-//! (Insert+Space, O): Okur's experimental feature, off until it is proven (Okur Settings'
-//! `experimental.screen_text`; `docs/plans/2026-10-23-okur-cursor-screen-text.md`).
+//! (Insert+Space, O; `docs/plans/2026-10-23-okur-cursor-screen-text.md`). Built as an
+//! experiment, and Okur's way since the owner counted it proven (2026-10-24).
 //!
 //! JAWS's cursor reads only what its screen capture catches: with Windows 10's driver neither a
 //! WinForms label nor GDI+ text, with either method no picture [obs, 994, 995]. Its Convenient
@@ -18,14 +18,9 @@ use crate::messages::msg;
 use crate::screen_model::{ScreenLine, ScreenModel, ScreenRun};
 
 impl ScreenReaderEngine {
-    /// Whether the experimental feature is on.
-    pub(super) fn screen_text_on(&self) -> bool {
-        self.settings.experimental.screen_text
-    }
-
     /// The language the screen is recognized in: the setting's, else Okur's own.
     fn ocr_language(&self) -> String {
-        match self.settings.experimental.ocr_language.trim() {
+        match self.settings.ocr_language.trim() {
             "" => crate::messages::SOURCE_LOCALE.to_owned(),
             tag => tag.to_owned(),
         }
@@ -34,7 +29,7 @@ impl ScreenReaderEngine {
     /// Asks for the window's text for the Okur cursor's model, outside pages, whose lines the
     /// Okur cursor already reads from the page.
     pub(super) fn request_screen(&mut self) {
-        if !self.screen_text_on() || self.app_mode == super::AppMode::VirtualBuffer {
+        if self.app_mode == super::AppMode::VirtualBuffer {
             return;
         }
         if let Some(actions) = &self.actions {
@@ -45,9 +40,6 @@ impl ScreenReaderEngine {
     /// The window's text arrived: the model's accessible text, its recognized words kept while
     /// the window is the same.
     pub(super) fn screen_text(&mut self, runs: &[ScreenRun]) -> Option<String> {
-        if !self.screen_text_on() {
-            return None;
-        }
         let window = self.last_window_title.clone();
         let recognized = self
             .screen_model
@@ -111,7 +103,7 @@ impl ScreenReaderEngine {
     /// it reads with their controls' roles as JAWS's cursor does ("Go To Button Cancel Button"
     /// [obs, 755/s10]), unless words were recognized there.
     pub(super) fn okur_screen_lines(&self) -> Option<Vec<ScreenLine>> {
-        if !self.screen_text_on() || self.app_mode == super::AppMode::VirtualBuffer {
+        if self.app_mode == super::AppMode::VirtualBuffer {
             return None;
         }
         let model = self
@@ -125,14 +117,8 @@ impl ScreenReaderEngine {
         (!lines.is_empty()).then_some(lines)
     }
 
-    /// Insert+Space, O: "OCR", and the next key is the layer's [obs, 996/s2]. With the
-    /// experimental feature off, Okur says how to turn it on.
+    /// Insert+Space, O: "OCR", and the next key is the layer's [obs, 996/s2].
     pub(super) fn start_ocr_layer(&mut self) {
-        if !self.screen_text_on() {
-            self.speech
-                .speak(msg::ocr_experimental_off().as_str(), true);
-            return;
-        }
         self.ocr_layer = true;
         self.speech.speak(msg::ocr_layer().as_str(), true);
     }
@@ -305,21 +291,18 @@ mod tests {
     use crate::engine::ScreenReaderEngine;
     use crate::event::{AccessibilityEvent, FocusEvent};
     use crate::input::{Key, KeyEvent, Modifiers};
-    use crate::messages::msg;
     use crate::screen_model::{ScreenRun, Source};
 
     const TITLE: &str = "Drawn Text";
 
-    /// A desktop window with its edit focused, the Okur cursor's screen text on or off.
-    fn window(on: bool) -> (ScreenReaderEngine, SharedSpeech, RecordingActions) {
+    /// A desktop window with its edit focused.
+    fn window() -> (ScreenReaderEngine, SharedSpeech, RecordingActions) {
         let speech = SharedSpeech::default();
         let mut engine = ScreenReaderEngine::new(
             VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document))),
             Box::new(speech.clone()),
         );
-        let mut settings = crate::settings::Settings::reference_machine();
-        settings.experimental.screen_text = on;
-        engine.set_settings(settings);
+        engine.set_settings(crate::settings::Settings::reference_machine());
         let actions = RecordingActions::default();
         engine.set_actions(Box::new(actions.clone()));
         let mut edit = FocusEvent::new(Role::Edit)
@@ -383,19 +366,17 @@ mod tests {
         ]
     }
 
-    /// Off, as Okur starts: no screen is read, the window's text is not the Okur cursor's,
-    /// and Insert+Space, O says how to turn the feature on.
+    /// Until the window's text comes, the Okur cursor reads the field as without it: routed to
+    /// it, the field's line [obs, 690/s3].
     #[test]
-    fn off_the_okur_cursor_is_as_before() {
-        let (mut engine, speech, actions) = window(false);
+    fn without_the_windows_text_the_field_is_read() {
+        let (mut engine, speech, actions) = window();
+        press(&mut engine, &speech, Key::NumpadMinus, insert());
         press(&mut engine, &speech, Key::NumpadMinus, plain());
-        engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(accessible()));
-        assert!(engine.screen_model.is_none());
-        assert!(actions.requests().iter().all(|(a, _)| a != "read screen"));
-        press(&mut engine, &speech, Key::Space, insert());
+        assert!(actions.requests().iter().any(|(a, _)| a == "read screen"));
         assert_eq!(
-            press(&mut engine, &speech, Key::Alpha('O'), plain()),
-            msg::ocr_experimental_off().to_string()
+            press(&mut engine, &speech, Key::UpArrow, insert()),
+            "Focus here"
         );
     }
 
@@ -403,7 +384,7 @@ mod tests {
     /// the label the field's lines never had; the mouse follows each line.
     #[test]
     fn on_the_okur_cursor_reads_the_windows_lines() {
-        let (mut engine, speech, actions) = window(true);
+        let (mut engine, speech, actions) = window();
         press(&mut engine, &speech, Key::NumpadMinus, plain());
         assert!(actions.requests().iter().any(|(a, _)| a == "read screen"));
         engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(accessible()));
@@ -437,7 +418,7 @@ mod tests {
     /// [obs, 996/s2-s4, s15-s19; 997/s3].
     #[test]
     fn recognized_words_join_the_okur_cursors_lines_until_the_pc_cursor() {
-        let (mut engine, speech, actions) = window(true);
+        let (mut engine, speech, actions) = window();
         press(&mut engine, &speech, Key::Space, insert());
         assert_eq!(press(&mut engine, &speech, Key::Alpha('O'), plain()), "OCR");
         assert_eq!(
@@ -492,7 +473,7 @@ mod tests {
     /// s9, s14].
     #[test]
     fn background_ocr_recognizes_again_until_cancelled() {
-        let (mut engine, speech, actions) = window(true);
+        let (mut engine, speech, actions) = window();
         let recognitions = |actions: &RecordingActions| {
             actions
                 .requests()
@@ -557,7 +538,7 @@ mod tests {
     /// 1010/s1-s3].
     #[test]
     fn a_route_before_the_windows_text_is_routed_again_by_it() {
-        let (mut engine, speech, _) = window(true);
+        let (mut engine, speech, _) = window();
         press(&mut engine, &speech, Key::NumpadMinus, insert());
         press(&mut engine, &speech, Key::NumpadMinus, plain());
         engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(accessible()));
@@ -570,7 +551,7 @@ mod tests {
     /// Another window in front: its model, recognized words and all, is not this one's.
     #[test]
     fn another_window_forgets_the_model() {
-        let (mut engine, speech, _) = window(true);
+        let (mut engine, speech, _) = window();
         press(&mut engine, &speech, Key::Space, insert());
         press(&mut engine, &speech, Key::Alpha('O'), plain());
         press(&mut engine, &speech, Key::Alpha('W'), plain());

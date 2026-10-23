@@ -437,7 +437,7 @@ mod reader {
     }
 
     /// The text window `hwnd` shows, each piece where it is drawn, for the Okur cursor's model
-    /// (the experimental screen text): its controls by rows, whatever kind of window it is, a
+    /// (its screen text): its controls by rows, whatever kind of window it is, a
     /// field's and a document's lines as they show them. Its title bar is not among them.
     pub fn window_runs(uia: &IUIAutomation, hwnd: HWND) -> Option<Vec<ScreenRun>> {
         dpi_aware(|| {
@@ -519,8 +519,7 @@ mod reader {
 }
 
 /// The Okur cursor's model of the window in front, with the words recognized in it in the
-/// language `recognize` names: `okur-lab screen-text`, to see what the experimental screen
-/// text reads.
+/// language `recognize` names: `okur-lab screen-text`, to see what the screen text reads.
 #[cfg(windows)]
 pub fn foreground_screen(
     recognize: Option<&str>,

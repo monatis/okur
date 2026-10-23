@@ -54,7 +54,7 @@ impl ScreenReaderEngine {
                 let _ = self.view_clipboard_text();
             }
             Key::Alpha('E') if plain => self.start_mouse_echo_layer(),
-            // Convenient OCR's layer (Okur's experimental screen text).
+            // Convenient OCR's layer.
             Key::Alpha('O') if plain => self.start_ocr_layer(),
             Key::Alpha('N') if plain => self.open_notification_history(),
             Key::Alpha('N') if shift_only => self.repeat_last_notification(),

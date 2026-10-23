@@ -22,7 +22,7 @@ pub struct Scenario {
     pub continues: Option<String>,
     /// The recorder saves the text UI Automation places on the window in front after each
     /// step (`okur-lab screen-text`, `<trace>.screen.jsonl`), which replay gives Okur when it
-    /// reads the screen: for Okur's experimental screen text.
+    /// reads the screen: for the Okur cursor's screen text.
     #[serde(default)]
     pub trace_screen: bool,
     /// With `trace_screen`, the words Windows' OCR reads in the window too, which replay gives
@@ -30,8 +30,8 @@ pub struct Scenario {
     #[serde(default)]
     pub trace_ocr: bool,
     /// Okur's own settings for the replay, by their names in the settings file
-    /// (`"experimental.screen_text": true`): what an experiment needs that JAWS has no setting
-    /// for. JAWS's are `jaws_settings`, read from the evidence.
+    /// (`"ocr_language": "tr-TR"`): what a scenario needs that JAWS has no setting for. JAWS's
+    /// are `jaws_settings`, read from the evidence.
     #[serde(default)]
     pub okur_settings: Option<serde_json::Map<String, serde_json::Value>>,
     pub steps: Vec<ScenarioStep>,

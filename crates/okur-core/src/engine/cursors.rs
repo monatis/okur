@@ -169,7 +169,8 @@ impl ScreenReaderEngine {
         }
         // The Okur cursor is now on the caret's line, or the virtual cursor's.
         self.okur_place = self.routed_place();
-        self.route_awaits_screen = self.screen_text_on() && self.okur_screen_lines().is_none();
+        self.route_awaits_screen =
+            self.app_mode != super::AppMode::VirtualBuffer && self.okur_screen_lines().is_none();
         let said = self.cursor_message(
             msg::cursor_route_okur_to_pc(),
             msg::cursor_route_okur_to_pc_short(),
@@ -216,8 +217,8 @@ impl ScreenReaderEngine {
         self.active_cursor == ActiveCursor::Okur && self.okur_place.is_some()
     }
 
-    /// The lines the Okur cursor reads: the screen model's where it gives them (the
-    /// experimental `screen_text`), else as [`Self::known_okur_lines`].
+    /// The lines the Okur cursor reads: the screen model's where it gives them
+    /// ([`Self::okur_screen_lines`]), else as [`Self::known_okur_lines`].
     fn okur_lines(&self) -> Vec<String> {
         match self.okur_screen_lines() {
             Some(lines) => lines.into_iter().map(|line| line.text).collect(),

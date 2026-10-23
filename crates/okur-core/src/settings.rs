@@ -161,24 +161,6 @@ impl MouseEchoUnit {
     }
 }
 
-/// Okur's own features still being proven, each off until it is (Okur Settings' Experimental
-/// group).
-#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(default)]
-pub struct Experimental {
-    /// The Okur cursor reads a window's text where the accessibility interfaces place it, where
-    /// JAWS's cursor reads only what its screen capture catches [obs, 994, 995], and Insert+
-    /// Space, O recognizes the screen's text into it, as JAWS's Convenient OCR puts its
-    /// recognized words among its cursor's lines [obs, 996, 997]
-    /// (`docs/plans/2026-10-23-okur-cursor-screen-text.md`).
-    pub screen_text: bool,
-    /// The language the screen is recognized in, a BCP 47 tag ("tr-TR"); empty, Okur's own
-    /// language, as JAWS's Microsoft OCR Language is English by default
-    /// (`[OCR] MicrosoftOcrLanguage=1033`). Windows falls back to the user's languages where
-    /// it has no recognizer for it.
-    pub ocr_language: String,
-}
-
 /// Mouse echo: what the mouse points to said as it moves, as JAWS's Mouse Echo group sets it
 /// (Settings Center help; `DEFAULT.JCF`'s Options, JAWS's defaults here).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -941,7 +923,11 @@ pub struct Settings {
     /// use any of the commands to exit the program including INSERT+F4" (JAWS 2025 help).
     pub confirm_exit: bool,
     pub mouse_echo: MouseEcho,
-    pub experimental: Experimental,
+    /// The language Insert+Space, O recognizes the screen in, a BCP 47 tag ("tr-TR"): JAWS's
+    /// Microsoft OCR Language (`[OCR] MicrosoftOcrLanguage`, a locale number, 1033 by
+    /// default). Empty, Okur's own language. Windows' recognizer for the user's languages is
+    /// the fallback where Windows has none for it.
+    pub ocr_language: String,
 }
 
 impl Default for Settings {
@@ -967,7 +953,7 @@ impl Default for Settings {
             reading_interrupt: true,
             confirm_exit: true,
             mouse_echo: MouseEcho::default(),
-            experimental: Experimental::default(),
+            ocr_language: String::new(),
         }
     }
 }
@@ -1039,7 +1025,7 @@ impl Settings {
             confirm_exit: true,
             // Not in old-pc's user JCF: the shared one's, JAWS's defaults.
             mouse_echo: MouseEcho::default(),
-            experimental: Experimental::default(),
+            ocr_language: String::new(),
         }
     }
 }

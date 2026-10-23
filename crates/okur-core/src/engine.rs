@@ -386,7 +386,7 @@ pub struct ScreenReaderEngine {
     /// Background OCR (Insert+Space, O, B): when it last asked for the window's words, and
     /// whether that recognition is still under way.
     background_ocr: Option<(std::time::Instant, bool)>,
-    /// The Okur cursor's model of the window in front (the experimental `screen_text`).
+    /// The Okur cursor's model of the window in front.
     screen_model: Option<crate::screen_model::ScreenModel>,
     /// The Okur cursor was routed to the PC cursor before the window's text arrived: it is
     /// routed again by it when it comes, unless the cursor moved meanwhile.

@@ -1,6 +1,6 @@
 //! The screen's text where it is drawn, as lines from the places of its pieces: the Virtual
 //! Viewer's rows of a classic window ([`crate::viewer_text`]), and the Okur cursor's model of a
-//! window, Okur's own experimental feature
+//! window, Okur's own feature
 //! (`docs/plans/2026-10-23-okur-cursor-screen-text.md`).
 //!
 //! JAWS's cursor reads a model of what applications draw, and reads nothing where they draw

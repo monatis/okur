@@ -1,6 +1,5 @@
 ## Recognizing the screen's text: Insert+Space, O, JAWS's Convenient OCR layer, with its
-## results among the Okur cursor's lines. Okur's experimental feature, off until it is proven
-## (docs/plans/2026-10-23-okur-cursor-screen-text.md).
+## results among the Okur cursor's lines (docs/plans/2026-10-23-okur-cursor-screen-text.md).
 
 # The layer key O [obs, 996/s2].
 ocr-layer = OCR
@@ -18,5 +17,3 @@ ocr-background-started = Background OCR started
 ocr-background-cancelled = Background OCR cancelled
 # Alt+Delete says it after the cursor's place [obs, 1001/s4, s11].
 ocr-background-enabled = Background OCR is enabled
-# Insert+Space, O while the experimental setting is off: Okur's own words.
-ocr-experimental-off = Recognizing the screen is experimental: turn it on in Okur Settings, in the Experimental group.

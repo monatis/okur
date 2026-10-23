@@ -374,6 +374,9 @@ fn replay_scenario(
     // this one continues.
     let mut settings = replay_settings(&evidence);
     for (id, value) in scenario.okur_settings.iter().flatten() {
+        if RETIRED_OKUR_SETTINGS.contains(&id.as_str()) {
+            continue;
+        }
         if !okur_core::settings::registry::set(&mut settings, id, value.clone()) {
             return Err(format!("okur_settings: {id} cannot be {value}"));
         }
@@ -1169,6 +1172,11 @@ struct StepEvents {
     screens: std::collections::HashMap<String, ScreenSnapshot>,
 }
 
+/// Okur settings recorded scenarios name that Okur no longer has: what they turned on is how
+/// Okur always works now. `experimental.screen_text` switched on the screen text, Okur's way
+/// since 2026-10-24 (1010-1015).
+const RETIRED_OKUR_SETTINGS: &[&str] = &["experimental.screen_text"];
+
 /// The window in front after a step, as the recorder saved it (`okur-lab screen-text
 /// --append-to`): the text UI Automation places on it, and the words Windows' OCR read in it.
 #[derive(Debug, Clone, Default, serde::Deserialize)]
@@ -1414,9 +1422,7 @@ mod tests {
             ))),
             Box::new(spoken.clone()),
         );
-        let mut settings = okur_core::settings::Settings::reference_machine();
-        settings.experimental.screen_text = true;
-        engine.set_settings(settings);
+        engine.set_settings(okur_core::settings::Settings::reference_machine());
         engine.app_mode = okur_core::engine::AppMode::NativeControl;
         let actions = okur_core::actions::RecordingActions::default();
         engine.set_actions(Box::new(actions.clone()));

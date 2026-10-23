@@ -58,16 +58,14 @@ pub enum Group {
     Keyboard,
     Reading,
     MouseEcho,
-    Experimental,
 }
 
 impl Group {
-    pub const ALL: [Group; 5] = [
+    pub const ALL: [Group; 4] = [
         Group::Speech,
         Group::Keyboard,
         Group::Reading,
         Group::MouseEcho,
-        Group::Experimental,
     ];
 
     /// The group's control id in a dialog.
@@ -77,7 +75,6 @@ impl Group {
             Self::Keyboard => "keyboard",
             Self::Reading => "reading",
             Self::MouseEcho => "mouse_echo",
-            Self::Experimental => "experimental",
         }
     }
 
@@ -87,7 +84,6 @@ impl Group {
             Self::Keyboard => msg::settings_group_keyboard(),
             Self::Reading => msg::settings_group_reading(),
             Self::MouseEcho => msg::settings_group_mouse_echo(),
-            Self::Experimental => msg::settings_group_experimental(),
         }
     }
 }
@@ -542,21 +538,47 @@ pub static SETTINGS: &[SettingSpec] = &[
             CHECK,
         )
     },
-    // Okur's own, with no JAWS setting.
-    spec(
-        "experimental.screen_text",
-        Group::Experimental,
-        Some(msg::settings_experimental_screen_text),
-        CHECK,
-    ),
-    // The settings file and the command line only, while it is experimental.
-    spec(
-        "experimental.ocr_language",
-        Group::Experimental,
-        None,
-        Kind::Structured,
-    ),
+    // Settings Center's Convenient OCR group: the settings file and the command line, until
+    // Okur's settings have the group.
+    SettingSpec {
+        jaws: default_jcf("OCR", "MicrosoftOcrLanguage", |v| {
+            locale_tag(v).map_or(Value::Null, |tag| Value::String(tag.to_owned()))
+        }),
+        ..spec("ocr_language", Group::Reading, None, Kind::Structured)
+    },
 ];
+
+/// The BCP 47 tag of a Windows locale number, as JAWS keeps its Microsoft OCR Language
+/// ("1033"); `None` for a number not listed here, whose recognizer is then the user's.
+fn locale_tag(number: &str) -> Option<&'static str> {
+    Some(match number.trim().parse::<u32>().ok()? {
+        1025 => "ar-SA",
+        1028 => "zh-TW",
+        1029 => "cs-CZ",
+        1030 => "da-DK",
+        1031 => "de-DE",
+        1032 => "el-GR",
+        1033 => "en-US",
+        1034 | 3082 => "es-ES",
+        1035 => "fi-FI",
+        1036 => "fr-FR",
+        1038 => "hu-HU",
+        1040 => "it-IT",
+        1041 => "ja-JP",
+        1042 => "ko-KR",
+        1043 => "nl-NL",
+        1044 => "nb-NO",
+        1045 => "pl-PL",
+        1046 => "pt-BR",
+        1049 => "ru-RU",
+        1053 => "sv-SE",
+        1055 => "tr-TR",
+        2052 => "zh-CN",
+        2057 => "en-GB",
+        2070 => "pt-PT",
+        _ => return None,
+    })
+}
 
 /// The setting with `id`.
 pub fn find(id: &str) -> Option<&'static SettingSpec> {

@@ -282,7 +282,7 @@ enum Commands {
         #[arg(long)]
         control: bool,
     },
-    /// Print the Okur cursor's lines for the window in front, as its experimental screen text
+    /// Print the Okur cursor's lines for the window in front, as its screen text
     /// reads them (Windows): the text UI Automation places on it, with --recognize the words
     /// Windows' OCR reads in it too. Research, never evidence
     ScreenText {

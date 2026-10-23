@@ -97,9 +97,6 @@ settings-mouse-echo-unit-character = Character
 settings-mouse-echo-unit-word = Word
 settings-mouse-echo-unit-line = Line
 settings-mouse-echo-unit-paragraph = Paragraph
-# Okur's own features still being proven, each off until it is.
-settings-group-experimental = Experimental
-settings-experimental-screen-text = Okur Cursor Reads the Screen's Text and Reco&gnizes Pictures (OCR)
 settings-ok = OK
 settings-cancel = Cancel
 settings-apply = &Apply
