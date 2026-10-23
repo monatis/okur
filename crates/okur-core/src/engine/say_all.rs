@@ -533,6 +533,16 @@ impl ScreenReaderEngine {
                 self.configure_voice();
                 return Some(KeyAction::Consume);
             }
+            // In an application's field a quick key has nothing to move to: JAWS says so and
+            // reads on from the start of the line it was reading [obs, 988/s1, 989/s1].
+            Key::Alpha(_) | Key::Digit(_)
+                if !in_page && crate::command::command_for(event).is_some() =>
+            {
+                self.speech
+                    .speak(crate::messages::msg::quicknav_not_virtual().as_str(), true);
+                self.read_on(current, false);
+                return Some(KeyAction::Consume);
+            }
             Key::Alpha(_) | Key::Digit(_) if in_page && !self.quick_key_passes(event) => {
                 let command = crate::command::command_for(event)?;
                 self.speech.stop();
@@ -552,13 +562,16 @@ impl ScreenReaderEngine {
             }
             _ => return None,
         };
-        self.read_on_from(from);
+        self.read_on(from, true);
         Some(KeyAction::Consume)
     }
 
-    /// Reading starts again on line `from`, the earlier part of the Say All kept for rewinding.
-    fn read_on_from(&mut self, from: usize) {
-        self.speech.stop();
+    /// Reading starts again on line `from`, the earlier part of the Say All kept for rewinding;
+    /// after what is being said unless `interrupt`.
+    fn read_on(&mut self, from: usize, interrupt: bool) {
+        if interrupt {
+            self.speech.stop();
+        }
         let Some(old) = self.say_all.take() else {
             return;
         };
@@ -575,7 +588,7 @@ impl ScreenReaderEngine {
             return;
         }
         self.follow_reading(&reading, from);
-        let _ = self.hand_over(&mut reading, AHEAD + 1, true);
+        let _ = self.hand_over(&mut reading, AHEAD + 1, interrupt);
         self.say_all = Some(reading);
     }
 
@@ -786,10 +799,16 @@ mod tests {
     #[derive(Clone, Default)]
     struct Progress {
         parts: Arc<Mutex<Vec<(String, u64, bool)>>>,
+        /// What is said outside the reading, unmarked.
+        said: Arc<Mutex<Vec<String>>>,
     }
 
     impl SpeechOutput for Progress {
-        fn speak(&mut self, _text: &str, _interrupt: bool) {}
+        fn speak(&mut self, text: &str, _interrupt: bool) {
+            if let Ok(mut said) = self.said.lock() {
+                said.push(text.to_owned());
+            }
+        }
         fn stop(&mut self) {}
         fn speak_marked(&mut self, text: &str, mark: u64, interrupt: bool) {
             if let Ok(mut parts) = self.parts.lock() {
@@ -986,6 +1005,44 @@ mod tests {
             .collect();
         assert_eq!(carets, [5, 12, 5]);
         assert_eq!(engine.last_text.as_ref().map(|t| t.caret), Some(5));
+    }
+
+    /// A quick key in a field's Say All has nothing to move to: JAWS's message, then the line
+    /// being read starts again [obs, 988/s1, 989/s1].
+    #[test]
+    fn a_quick_key_in_a_fields_say_all_reads_on() {
+        let speech = Progress::default();
+        let mut engine = engine(1, speech.clone());
+        engine.last_text = Some(crate::event::TextContext {
+            text: "one
+two
+three
+four
+five"
+                .to_owned(),
+            caret: 0,
+            selection: None,
+            font: None,
+            word: None,
+            misspelled: Vec::new(),
+        });
+        let _ = engine.start_field_say_all();
+        engine.speech_reached(mark_of(&speech, "two"));
+        let handed = marks(&speech).len();
+        press(&mut engine, Key::Alpha('X'));
+        assert!(engine.say_all.is_some());
+        assert_eq!(
+            speech.said.lock().map(|s| s.clone()).unwrap_or_default(),
+            [crate::messages::msg::quicknav_not_virtual().to_string()]
+        );
+        assert_eq!(
+            marks(&speech)
+                .iter()
+                .skip(handed)
+                .map(|(t, _)| t.as_str())
+                .collect::<Vec<_>>(),
+            ["two", "three", "four", "five"]
+        );
     }
 
     #[test]

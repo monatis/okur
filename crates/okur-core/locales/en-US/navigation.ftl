@@ -62,6 +62,10 @@ quicknav-none-regions-short = No regions
 quicknav-none-tables = There are no tables on this page.
 quicknav-none-tables-short = No tables
 
+# A quick key during a Say All in an application's field, which has no elements to move to: the
+# reading goes on [obs, 988/s1, 989/s1].
+quicknav-not-virtual = This feature is only available from within a virtual document, such as a page on the Internet.
+
 # The next element of the kind is above the cursor: the search went on from the top.
 quicknav-wrap-top = wrapping to top
 # The previous element of the kind is below the cursor: the search went on from the bottom.
