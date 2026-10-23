@@ -999,6 +999,31 @@ mod tests {
         assert_eq!(engine.cursor.current_line(), "Line 1");
     }
 
+    /// With Reading Interrupt off a Say All reads on through Insert+T and Down; with it on,
+    /// Insert+T ends it [obs, 982, 983; 969].
+    #[test]
+    fn reading_interrupt_off_keeps_a_say_all_through_bound_keys() {
+        use crate::input::Modifiers;
+        let insert = Modifiers {
+            insert: true,
+            ..Modifiers::none()
+        };
+        let title = KeyEvent::new(Key::Alpha('T'), insert, true);
+        let mut off = engine(4, Progress::default());
+        off.settings.reading_interrupt = false;
+        let _ = off.start_say_all();
+        let _ = off.handle_key_event(&title);
+        assert!(off.say_all.is_some());
+        press(&mut off, Key::DownArrow);
+        assert!(off.say_all.is_some());
+        assert_eq!(off.cursor.current_line(), "Line 1");
+
+        let mut on = engine(4, Progress::default());
+        let _ = on.start_say_all();
+        let _ = on.handle_key_event(&title);
+        assert!(on.say_all.is_none());
+    }
+
     #[test]
     fn without_progress_every_line_is_read_and_the_cursor_ends_on_the_last() {
         let mut engine = ScreenReaderEngine::new(

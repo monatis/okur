@@ -419,6 +419,12 @@ pub static SETTINGS: &[SettingSpec] = &[
         )
     },
     SettingSpec {
+        jaws: default_jcf("Options", "ReadingInterrupt", |v| {
+            Value::Bool(v.trim() != "0")
+        }),
+        ..spec("reading_interrupt", Group::Reading, None, CHECK)
+    },
+    SettingSpec {
         jaws: default_jcf("HTML", "SmartNavigation", |v| {
             json(SmartNavigation::from_jcf(v))
         }),

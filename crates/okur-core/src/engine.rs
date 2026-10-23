@@ -784,6 +784,26 @@ impl ScreenReaderEngine {
             return action;
         }
 
+        // With Reading Interrupt off, a key bound to a command reads on through a Say All: one
+        // that only reports is answered after what is being said, any other changes nothing
+        // [obs, 982, 983].
+        if self.say_all.is_some() && !self.settings.reading_interrupt && event.is_down {
+            if let Some(command) = crate::command::command_for(event) {
+                if command.only_reports() {
+                    let speech = std::mem::replace(
+                        &mut self.speech,
+                        Box::new(crate::speech::MockSpeechOutput::new()),
+                    );
+                    let said = self.execute(command);
+                    self.speech = speech;
+                    if let Some(said) = said.filter(|s| !s.trim().is_empty()) {
+                        self.speech.speak(&said, false);
+                    }
+                }
+                return KeyAction::Consume;
+            }
+        }
+
         // 1. Any key press interrupts speech immediately (NVDA & JAWS standard behavior)
         self.speech.stop();
         // It ends a Say All, whose cursor stays on the line last heard.

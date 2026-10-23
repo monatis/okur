@@ -438,6 +438,30 @@ impl Command {
         )
     }
 
+    /// Whether the command only reports, moving nothing: answered in the middle of a Say All
+    /// with Reading Interrupt off, "Title is ..." [obs, 982/s1].
+    pub fn only_reports(&self) -> bool {
+        use Command::*;
+        matches!(
+            self,
+            SayWindowTitle
+                | SaySystemTime
+                | SaySystemTimeWithSeconds
+                | SaySystemDate
+                | SayWeekNumber
+                | SayFont
+                | SayColor
+                | SayConfiguration
+                | SayAppVersion
+                | SayDefaultButton
+                | SayActiveCursor
+                | SayTopLineOfWindow
+                | SayBottomLineOfWindow
+                | SayCurrentFocus
+                | SayClipboard
+        )
+    }
+
     /// The command a name calls: a JAWS script name or the key notation of JAWS's key maps.
     pub fn from_name(name: &str) -> Option<Command> {
         use Command::*;

@@ -879,6 +879,11 @@ pub struct Settings {
     pub indentation: bool,
     /// What is read of the text an application writes to the screen.
     pub screen_echo: ScreenEcho,
+    /// A key bound to a command stops what is being read: JAWS's Reading Interrupt
+    /// (`[Options] ReadingInterrupt`, 1 by default). Off, a Say All reads on through such a
+    /// key, which is answered after what is being said when it only reports (Insert+T), and
+    /// changes nothing otherwise (Down) [obs, 982, 983].
+    pub reading_interrupt: bool,
     /// What the virtual cursor's character and word keys treat as one unit.
     pub smart_navigation: SmartNavigation,
     /// Insert+F4 asks before Okur exits, as JAWS's "Prompt to Confirm When Exiting JAWS"
@@ -908,6 +913,7 @@ impl Default for Settings {
             indentation: false,
             screen_echo: ScreenEcho::default(),
             smart_navigation: SmartNavigation::default(),
+            reading_interrupt: true,
             confirm_exit: true,
             mouse_echo: MouseEcho::default(),
         }
@@ -977,6 +983,7 @@ impl Settings {
             indentation: false,
             screen_echo: ScreenEcho::default(),
             smart_navigation: SmartNavigation::default(),
+            reading_interrupt: true,
             confirm_exit: true,
             // Not in old-pc's user JCF: the shared one's, JAWS's defaults.
             mouse_echo: MouseEcho::default(),
