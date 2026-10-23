@@ -47,7 +47,8 @@ traces), so such changes get tests where a test can hold them and a live run on 
 | P12: the page's document searched for through the browser's whole window | done: Chromium's one page window shown is the document; the search stays for the rest | `b76fab99` |
 | P5 (client): a UIA client made for every page capture | done: one per capturing thread; moving the quick capture off the WinEvent thread is still open | `b76fab99` |
 | P5 (capture) | kept: the quick capture runs on the WinEvent thread so that a new page reaches the engine before its first focus, which is then said in the page; on the page worker the focus would come first | |
-| P6 | open: the actions worker's client keeps UIA's default timeouts; a 1 s one would cut reads of big windows | |
+| P6: the actions worker's UIA client kept UIA's default timeouts (20 s for an answer) | done: 2 s to connect, 5 s for an answer (the page captures keep theirs: a big page's tree takes seconds); IA2 and MSAA calls have none still; live check to come | this batch |
+| T13, T14: OneCore's synthesis and audio polled every 2-4 ms; Say All's progress every 20 ms | not changed: each poll costs microseconds and delays speech by at most its interval; an event-driven player is a rewrite for no audible gain | |
 | P9, P11, P20 | not changed: a plain field has one attribute run; UIA's process id comes from the window, not the application; the process name is a kernel query | |
 | C4: each edit key made the field's text a vector of characters two to four times | done for the caret's line and character (`line_bytes`, tested against the vectors at every caret); the commands that read further keep theirs | `4a56c7e8` |
 | C7, C10 | not changed: a focus's copy is microseconds beside its reads; S, D and N take 3.5-4.3 ms on 25,032 nodes (measured below) | |

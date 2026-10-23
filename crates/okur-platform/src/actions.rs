@@ -50,10 +50,8 @@ mod windows_actions {
     use std::time::{Duration, Instant};
     use tokio::sync::mpsc::UnboundedSender;
     use windows::Win32::Foundation::HWND;
-    use windows::Win32::System::Com::{
-        CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
-    };
-    use windows::Win32::UI::Accessibility::{CUIAutomation8, IUIAutomation};
+    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+    use windows::Win32::UI::Accessibility::IUIAutomation;
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
     use xa11y_windows::ia2::{has_chromium_document, perform_chromium_action, Ia2Action};
 
@@ -157,9 +155,11 @@ mod windows_actions {
             std::thread::spawn(move || {
                 // SAFETY: COM initialization for this worker thread.
                 let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-                // SAFETY: in-process COM activation.
+                // UI Automation's default lets an application take 20 s over an answer, and
+                // every read and injected key queued behind it waited (performance review
+                // 2026-10-23, P6); 5 s is long enough for a big window's whole tree.
                 let uia: Option<IUIAutomation> =
-                    unsafe { CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER) }.ok();
+                    crate::uia_snapshot::capture::automation_within(2000, 5000).ok();
                 while let Ok(first) = rx.recv() {
                     // Keys arrive faster than a read settles (key repeat): of the text reads
                     // queued meanwhile only the newest matters, since the engine speaks for

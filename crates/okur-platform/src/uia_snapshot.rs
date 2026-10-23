@@ -656,6 +656,16 @@ pub(crate) mod capture {
     /// application fails its calls after a second instead of UIA's long defaults, so one
     /// application cannot stall the reader's event thread.
     pub(crate) fn automation() -> Result<IUIAutomation, PlatformError> {
+        automation_within(1000, 1000)
+    }
+
+    /// A UIA client whose calls give up after `connection_ms` connecting to an application and
+    /// `transaction_ms` waiting for its answer, in place of UIA's defaults (seconds, and 20 s
+    /// for an answer).
+    pub(crate) fn automation_within(
+        connection_ms: u32,
+        transaction_ms: u32,
+    ) -> Result<IUIAutomation, PlatformError> {
         use windows::core::Interface;
         use windows::Win32::UI::Accessibility::IUIAutomation2;
         // SAFETY: standard in-process COM activation.
@@ -665,8 +675,8 @@ pub(crate) mod capture {
         if let Ok(uia2) = uia.cast::<IUIAutomation2>() {
             // SAFETY: plain setters on a valid client.
             unsafe {
-                let _ = uia2.SetConnectionTimeout(1000);
-                let _ = uia2.SetTransactionTimeout(1000);
+                let _ = uia2.SetConnectionTimeout(connection_ms);
+                let _ = uia2.SetTransactionTimeout(transaction_ms);
             }
         }
         Ok(uia)
