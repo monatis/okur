@@ -168,8 +168,8 @@ in [accepted divergences](docs/references/accepted-divergences.md).
 - **Help** in Okur's own words: Insert+F1 for the control or the page element you are on,
   Insert+H for Okur's keys there, Insert+W for Windows' keys, and Keyboard Help (Insert+1),
   where each key is named and described instead of run.
-- **Consoles**: a command's output is read as the console writes it (Screen Echo, Insert+S,
-  as JAWS reads it).
+- **The classic console** (Command Prompt, PowerShell): a command's output is read as the
+  console writes it (Screen Echo, Insert+S, as JAWS reads it); Windows Terminal's not yet.
 - **The Virtual Viewer** (Insert+Alt+W) on screen as JAWS shows it, for windows, controls and
   consoles, Windows Terminal included; the Speech History (Insert+Space, then H; Ctrl+H
   copies it and Shift+H clears it).
