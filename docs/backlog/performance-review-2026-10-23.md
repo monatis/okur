@@ -41,13 +41,16 @@ traces), so such changes get tests where a test can hold them and a live run on 
 | T9: stopping waited on stuck threads | done: 2 s, then left | `609b381f` |
 | P17, T11, T18 | not changed: in-process calls of microseconds; files written on the user's own changes; the speech log is the harness's | |
 | P4: a full read per typed character | open: dropping the read live turns the event into a value change the engine would say; needs a trace of typing to decide | |
-| C5: a state or value changed through the buffer dropped the page's indexes | done: `node_state_mut` changes states and values in place, the indexes kept | this batch |
-| C6: a page focus walked the whole page for a node's ancestors up to four times | done: through the buffer's slots where the page has one node of the id | this batch |
-| C8: a live region's spoken text copied per change | done: compared in place | this batch |
-| P12: the page's document searched for through the browser's whole window | done: Chromium's one page window shown is the document; the search stays for the rest | this batch |
-| P5 (client): a UIA client made for every page capture | done: one per capturing thread; moving the quick capture off the WinEvent thread is still open | this batch |
+| C5: a state or value changed through the buffer dropped the page's indexes | done: `node_state_mut` changes states and values in place, the indexes kept | `b76fab99` |
+| C6: a page focus walked the whole page for a node's ancestors up to four times | done: through the buffer's slots where the page has one node of the id | `b76fab99` |
+| C8: a live region's spoken text copied per change | done: compared in place | `b76fab99` |
+| P12: the page's document searched for through the browser's whole window | done: Chromium's one page window shown is the document; the search stays for the rest | `b76fab99` |
+| P5 (client): a UIA client made for every page capture | done: one per capturing thread; moving the quick capture off the WinEvent thread is still open | `b76fab99` |
 | P6 | open: the actions worker's client keeps UIA's default timeouts; a 1 s one would cut reads of big windows | |
 | P9, P11, P20 | not changed: a plain field has one attribute run; UIA's process id comes from the window, not the application; the process name is a kernel query | |
+| C4: each edit key made the field's text a vector of characters two to four times | done for the caret's line and character (`line_bytes`, tested against the vectors at every caret); the commands that read further keep theirs | this batch |
+| C7, C10 | not changed: a focus's copy is microseconds beside its reads; S, D and N stay O(page) per press, a cache keyed by the buffer's version is the next step | |
+| P3 (polls) | open: after a key a UIA field is read whole every 15 ms until it changes; polling the caret alone needs a "before" in the same units, which the engine's text does not give for RichEdit | |
 
 The rest are listed below in the order they are taken.
 

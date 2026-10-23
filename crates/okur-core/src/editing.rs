@@ -141,29 +141,56 @@ pub fn text_lines(text: &str) -> Vec<String> {
 /// The character at `caret` (a line break too, which JAWS's history records as an empty
 /// entry and speaks as "blank" [obs, 307/s36]), or `None` at the end of the text.
 pub(crate) fn char_at(context: &TextContext) -> Option<char> {
-    chars(&context.text).get(context.caret).copied()
+    context.text.chars().nth(context.caret)
 }
 
 /// The line containing the caret, without its line break.
 pub fn line_at(context: &TextContext) -> String {
-    let text = chars(&context.text);
-    let (start, end) = line_range(context);
-    text.get(start..end).unwrap_or_default().iter().collect()
+    let (start, _, end) = line_bytes(context);
+    context.text.get(start..end).unwrap_or_default().to_owned()
+}
+
+/// Where the caret's line starts, where the caret is and where the line ends, as byte offsets
+/// into the text, without the line's break; the caret past the text is at its end. Found
+/// within the line: each edit key made the field's whole text a vector of characters two to
+/// four times for these (performance review 2026-10-23, C4).
+fn line_bytes(context: &TextContext) -> (usize, usize, usize) {
+    let text = &context.text;
+    let caret = text
+        .char_indices()
+        .nth(context.caret)
+        .map_or(text.len(), |(at, _)| at);
+    let start = text
+        .get(..caret)
+        .and_then(|before| {
+            before
+                .char_indices()
+                .rev()
+                .find(|&(_, c)| is_line_break(c))
+                .map(|(at, c)| at + c.len_utf8())
+        })
+        .unwrap_or(0);
+    let end = text
+        .get(caret..)
+        .and_then(|after| after.find(is_line_break))
+        .map_or(text.len(), |at| caret + at);
+    (start, caret, end)
 }
 
 /// Where the caret's line starts and ends, in characters, without its line break.
 fn line_range(context: &TextContext) -> (usize, usize) {
-    let text = chars(&context.text);
-    let caret = context.caret.min(text.len());
-    let start = text
-        .get(..caret)
-        .and_then(|before| before.iter().rposition(|c| is_line_break(*c)))
-        .map_or(0, |i| i + 1);
-    let end = text
-        .get(caret..)
-        .and_then(|after| after.iter().position(|c| is_line_break(*c)))
-        .map_or(text.len(), |i| caret + i);
-    (start, end)
+    let (start, caret, end) = line_bytes(context);
+    let text = &context.text;
+    let count = |from: usize, to: usize| text.get(from..to).map_or(0, |s| s.chars().count());
+    let caret_chars = if caret < text.len() {
+        context.caret
+    } else {
+        text.chars().count()
+    };
+    (
+        caret_chars - count(start, caret),
+        caret_chars + count(caret, end),
+    )
 }
 
 /// JAWS's mark before a field's line that holds a word the field marks misspelled, "
@@ -740,6 +767,42 @@ mod tests {
             font: None,
             word: None,
             misspelled: Vec::new(),
+        }
+    }
+
+    /// The caret's line, its range and its character, found within the line, are what the
+    /// whole text as characters gave: every caret of texts with `\r\n`, bare `\r` and `\n`
+    /// breaks, empty lines, letters of several bytes, and a caret past the end.
+    #[test]
+    fn the_carets_line_is_found_within_it() {
+        let oracle = |context: &TextContext| {
+            let text: Vec<char> = context.text.chars().collect();
+            let caret = context.caret.min(text.len());
+            let start = text
+                .get(..caret)
+                .and_then(|before| before.iter().rposition(|c| is_line_break(*c)))
+                .map_or(0, |i| i + 1);
+            let end = text
+                .get(caret..)
+                .and_then(|after| after.iter().position(|c| is_line_break(*c)))
+                .map_or(text.len(), |i| caret + i);
+            let line: String = text.get(start..end).unwrap_or_default().iter().collect();
+            ((start, end), line, text.get(context.caret).copied())
+        };
+        for text in [
+            "",
+            "one line",
+            "first\r\nsecond\r\n\r\nfourth",
+            "Türkçe ğüş\rikinci\r",
+            "a\nb\u{2028}c 𝄞 d\n",
+        ] {
+            for caret in 0..text.chars().count() + 3 {
+                let context = ctx(text, caret, None);
+                let ((start, end), line, at) = oracle(&context);
+                assert_eq!(line_range(&context), (start, end), "{text:?} {caret}");
+                assert_eq!(line_at(&context), line, "{text:?} {caret}");
+                assert_eq!(char_at(&context), at, "{text:?} {caret}");
+            }
         }
     }
 
