@@ -174,6 +174,18 @@ A step can be in more than one entry; all of its entries apply.
   whole.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### A ribbon's places a key behind
+
+- Steps: `523-desktop-wordpad-ribbon/s2`, `523-desktop-wordpad-ribbon/s3`,
+  `970-desktop-wordpad-ribbon-lower/s2`, `970-desktop-wordpad-ribbon-lower/s3`,
+  `970-desktop-wordpad-ribbon-lower/s5`, `972-desktop-wordpad-ribbon-f10/s2`.
+- Difference: JAWS says the place of the tab or command the focus left: "View Tab selected 1
+  of 2" after Right from Home, "Home 2 of 2" after Left, "Copy 1 of 3" after Right from Paste.
+  Okur says the place of the one it reached, "2 of 2", "1 of 2", "3 of 3".
+- Why: in every trial of rounds 270, 276 and 277; the ribbon's MSAA objects put View second
+  of the two tabs shown and Copy third of its group's three.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-23.
+
 ### A radio button's place after JAWS's mouse click
 
 - Step: `534-web-numpad-slash-check-box/s10`.
@@ -520,7 +532,10 @@ A step can be in more than one entry; all of its entries apply.
   `522-desktop-wordpad-reading/s10`, `522-desktop-wordpad-reading/s11`,
   `522-desktop-wordpad-reading/s12`, `522-desktop-wordpad-reading/s13`,
   `522-desktop-wordpad-reading/s14`, `522-desktop-wordpad-reading/s16`,
-  `522-desktop-wordpad-reading/s17`, `522-desktop-wordpad-reading/s18`).
+  `522-desktop-wordpad-reading/s17`, `522-desktop-wordpad-reading/s18`), and Say Line after
+  the ribbon (rounds 276, 277): `523-desktop-wordpad-ribbon/s9`,
+  `970-desktop-wordpad-ribbon-lower/s14`, `971-desktop-wordpad-ribbon-alt-twice/s5`,
+  `972-desktop-wordpad-ribbon-f10/s5`, `973-desktop-wordpad-ribbon-key-tips/s6`.
 - Difference: JAWS says nothing, a list item's bullet alone, "Nothing selected", or "top of
   file" and "Bottom of file" without the line; Okur reads the document's text.
 - Why: on old-pc JAWS reads none of WordPad's document text, in every trial: the arrows, the

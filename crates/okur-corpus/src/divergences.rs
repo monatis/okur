@@ -602,6 +602,11 @@ divergences! {
         "522-desktop-wordpad-reading/s16",
         "522-desktop-wordpad-reading/s17",
         "522-desktop-wordpad-reading/s18",
+        "523-desktop-wordpad-ribbon/s9",
+        "970-desktop-wordpad-ribbon-lower/s14",
+        "971-desktop-wordpad-ribbon-alt-twice/s5",
+        "972-desktop-wordpad-ribbon-f10/s5",
+        "973-desktop-wordpad-ribbon-key-tips/s6",
     ],
     "JAWS reads nothing of WordPad's document text on old-pc: the arrows, the word keys, Say \
      Line and Say All are silent or say a list item's bullet alone, Say Selected Text says \
@@ -609,6 +614,17 @@ divergences! {
      and \"Bottom of file\" without the line, in every trial, though it reads the font there \
      (s15). Okur reads the text.",
     "the owner's rule on JAWS's accidents, 2026-10-18";
+
+    Difference::Step => [
+        "523-desktop-wordpad-ribbon/s2",
+        "523-desktop-wordpad-ribbon/s3",
+        "970-desktop-wordpad-ribbon-lower/s2",
+        "970-desktop-wordpad-ribbon-lower/s3",
+        "970-desktop-wordpad-ribbon-lower/s5",
+        "972-desktop-wordpad-ribbon-f10/s2",
+    ],
+    "In WordPad's ribbon JAWS gives each tab's and command's place a key behind, the place of      the one the focus left: Right from Home says \"View Tab selected 1 of 2\", Left back      \"Home 2 of 2\", Right from Paste \"Copy 1 of 3\", in every trial. The ribbon's MSAA      objects put View second of the two tabs shown and Copy third of its group's three. Okur      says those places.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-23";
 
     Difference::Step => ["688-web-custom-label/s15"],
     "After a custom label is given, JAWS's virtual cursor is at the page's top: Say Line says \
