@@ -51,6 +51,12 @@ static SCROLL_LOCK_HELD: AtomicBool = AtomicBool::new(false);
 static CONSUMED_MODIFIERS: AtomicU32 = AtomicU32::new(0);
 /// `dwExtraInfo` of the keys the screen reader sends itself ("OKUR").
 pub const INJECTED_MARK: usize = 0x4F4B_5552;
+/// A key no keyboard has (vkE8, unassigned), tapped to the application when the engine takes a
+/// key pressed with Alt or Windows held, whose press the application saw: it has then seen
+/// another key with it, so letting it go opens neither the menu bar nor the Start menu.
+/// Alt+Delete opened a WinForms window's system menu, which took the keys after it (old-pc,
+/// 2026-10-24). AutoHotkey's menu mask key is the same key.
+const MENU_MASK_KEY: u16 = 0xE8;
 /// The last keys pressed that the engine saw, as `(virtual key, hook time in ms)`. JAWS,
 /// running alongside, takes navigation keys and sends its own copies (injected, marked)
 /// after the whole chord (Ctrl, Right, then Ctrl's and Right's copies).
@@ -310,6 +316,11 @@ unsafe extern "system" fn low_level_keyboard_proc(
     // Keys other tools inject (an on-screen keyboard, voice control) carry no mark, so a
     // letter they type twice is never taken for a copy.
     let marked = kbd.dwExtraInfo == INJECTED_MARK;
+    // The menu mask key goes to the application only: the engine would take it for a key
+    // pressed, and stop what it just began to say.
+    if marked && vk_code == u32::from(MENU_MASK_KEY) {
+        return CallNextHookEx(None, ncode, wparam, lparam);
+    }
     let foreign_mark = kbd.dwExtraInfo != 0 && !marked;
     if foreign_mark && kbd.flags.0 & LLKHF_INJECTED != 0 {
         let jaws_mark = JAWS_MARK.load(Ordering::Relaxed);
@@ -386,6 +397,17 @@ unsafe extern "system" fn low_level_keyboard_proc(
     }
 
     if action == KeyAction::Consume {
+        if modifier_bit(vk_code) == 0 {
+            let consumed = CONSUMED_MODIFIERS.load(Ordering::Relaxed);
+            let seen = |vk: i32, bit: u32| {
+                (GetAsyncKeyState(vk) as u16 & 0x8000) != 0 && consumed & bit == 0
+            };
+            // VK_MENU, VK_LWIN, VK_RWIN.
+            if seen(0x12, ALT_BIT) || seen(0x5B, WIN_BIT) || seen(0x5C, WIN_BIT) {
+                crate::harness::send_key(MENU_MASK_KEY, false, INJECTED_MARK);
+                crate::harness::send_key(MENU_MASK_KEY, true, INJECTED_MARK);
+            }
+        }
         CONSUMED_MODIFIERS.fetch_or(modifier_bit(vk_code), Ordering::Relaxed);
         if let Ok(mut consumed_guard) = CONSUMED_KEYS.lock() {
             if let Some(ref mut set) = *consumed_guard {
