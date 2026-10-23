@@ -4452,7 +4452,21 @@ mod capture {
         let hooks = unsafe {
             [
                 SetWinEventHook(0x0002, 0x0011, None, Some(on_event), 0, 0, flags),
-                SetWinEventHook(0x8005, 0x8019, None, Some(on_event), 0, 0, flags),
+                // EVENT_OBJECT_FOCUS to EVENT_OBJECT_LIVEREGIONCHANGED. Live, without
+                // EVENT_OBJECT_LOCATIONCHANGE: its caret moves are read by the actions worker
+                // after a key, and the event cost an MSAA object read for nothing each time the
+                // caret moved (performance review 2026-10-23, P18). A trace reads the field on
+                // them.
+                if live {
+                    SetWinEventHook(0x8005, 0x800A, None, Some(on_event), 0, 0, flags)
+                } else {
+                    SetWinEventHook(0x8005, 0x8019, None, Some(on_event), 0, 0, flags)
+                },
+                if live {
+                    SetWinEventHook(0x800C, 0x8019, None, Some(on_event), 0, 0, flags)
+                } else {
+                    HWINEVENTHOOK::default()
+                },
                 // EVENT_OBJECT_SHOW to EVENT_OBJECT_REORDER: a page's changes, and a dialog's,
                 // whose controls read are used again until it changes.
                 SetWinEventHook(0x8002, 0x8004, None, Some(on_page_change), 0, 0, flags),
