@@ -53,6 +53,23 @@ settings-verbosity = Ver&bosity Level:
 settings-verbosity-beginner = Beginner
 settings-verbosity-intermediate = Intermediate
 settings-verbosity-advanced = Advanced
+# Each level's spoken items and message length, as JAWS's Settings Center customizes them
+# ("Customize Verbosity Level": a level, then its check boxes).
+settings-group-verbosity-levels = Verbosity Levels
+settings-verbosity-customize = Customize Verbosity Level:
+settings-verbosity-length = Message Length:
+settings-verbosity-length-long = Long
+settings-verbosity-length-short = Short
+settings-output-access-key = Access Key
+settings-output-hint = Tutor Messages
+settings-output-list-position = Announce Position and Count When Navigating in Lists
+settings-output-description = Control Description
+settings-output-control-group-name = Control Group Name
+settings-output-select = Select
+settings-output-okur-message = Okur Messages
+settings-output-control-type = Control Type
+settings-output-item-state = Item State
+settings-output-position = Position Information
 # JAWS's Speech Mode: Full Speech or Less Speech, and Less Speech's kind, Speech On Demand or
 # Mute (Settings Center help).
 settings-speech-mode-full = Full Speech

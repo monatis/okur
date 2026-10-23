@@ -208,7 +208,9 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   page's summary without "Page has"); at Advanced it leaves out what JAWS leaves out, such as a
   list's positions, a field's description, a group box's name and JAWS's own messages
   ("Copied", "Screen updated"). Recorded at both levels on the web, in desktop dialogs, with
-  the Okur cursor, in Notepad and in the Notification History.
+  the Okur cursor, in Notepad and in the Notification History. Each level's spoken items and
+  message length are chosen in Okur Settings' Verbosity Levels, as JAWS's Settings Center
+  customizes a level.
 - **Quitting with Insert+F4,** after asking first, as JAWS does (Enter quits, Escape stays).
 - **Both keyboard layouts,** desktop and laptop, with Insert or CapsLock as the Okur key
   (JAWS's JAWS key).
@@ -223,8 +225,6 @@ documentation describes and Okur lacks, most important first. Among them:
 - Microsoft Word, Outlook and Excel, not yet supported or checked;
 - reading with the Okur cursor where the screen has no text to give (images, applications that
   draw their own text);
-- JAWS's Configure Verbosity Levels dialog, to choose what each level says (the levels
-  themselves are built, as JAWS ships them);
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;

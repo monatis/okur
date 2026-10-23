@@ -728,6 +728,24 @@ impl OutputType {
         }
     }
 
+    /// Its label in the settings dialog, as JAWS's verbosity items name it where the help does
+    /// (its JAWS Messages are Okur's).
+    pub fn label(self) -> crate::messages::StaticMessage {
+        use crate::messages::msg;
+        match self {
+            Self::AccessKey => msg::settings_output_access_key(),
+            Self::Hint => msg::settings_output_hint(),
+            Self::ListPosition => msg::settings_output_list_position(),
+            Self::Description => msg::settings_output_description(),
+            Self::ControlGroupName => msg::settings_output_control_group_name(),
+            Self::Select => msg::settings_output_select(),
+            Self::OkurMessage => msg::settings_output_okur_message(),
+            Self::ControlType => msg::settings_output_control_type(),
+            Self::ItemState => msg::settings_output_item_state(),
+            Self::Position => msg::settings_output_position(),
+        }
+    }
+
     /// The type's modes, Beginner first, where the user's settings name none: JAWS's shipped
     /// `DEFAULT.JCF` (`ANNOUNCE_POSITION_AND_COUNT=1|2|0`, `CONTROL_GROUP_NAME=1|2|0`,
     /// `SELECT=1|2|0`, `JAWS_MESSAGE=1|2|0`, `TUTOR=1|1|1`, `ACCESS_KEY=1|1|1`,
@@ -800,12 +818,26 @@ impl Verbosity {
 
     /// `output`'s mode at the current level.
     pub fn mode(&self, output: OutputType) -> OutputMode {
+        self.mode_at(output, self.level.index())
+    }
+
+    /// `output`'s mode at the level of index `level`, Beginner's 0.
+    pub fn mode_at(&self, output: OutputType, level: usize) -> OutputMode {
         self.output_modes
             .get(&output)
-            .and_then(|modes| modes.get(self.level.index()))
+            .and_then(|modes| modes.get(level))
             .copied()
-            .or_else(|| output.default_modes().get(self.level.index()).copied())
+            .or_else(|| output.default_modes().get(level).copied())
             .unwrap_or(OutputMode::On)
+    }
+
+    /// Sets `output`'s mode at the level of index `level`, the others' kept.
+    pub fn set_mode_at(&mut self, output: OutputType, level: usize, mode: OutputMode) {
+        let mut modes = [0, 1, 2].map(|i| self.mode_at(output, i));
+        if let Some(m) = modes.get_mut(level) {
+            *m = mode;
+        }
+        self.set_modes(output, modes);
     }
 
     /// Sets `output`'s mode at each level, Beginner first.

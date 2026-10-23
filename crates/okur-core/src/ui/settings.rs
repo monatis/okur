@@ -8,8 +8,23 @@ use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
 
 use crate::messages::{msg, StaticMessage};
 use crate::settings::registry::{self, Group, Kind, SettingSpec, SETTINGS};
-use crate::settings::Settings;
+use crate::settings::{MessageLength, OutputMode, OutputType, Settings};
 use crate::settings_layers::Scope;
+
+/// The verbosity level whose items the dialog customizes, its spoken items and its message
+/// length, as JAWS's Settings Center customizes a level.
+const CUSTOMIZE: &str = "verbosity.customize";
+const LENGTH: &str = "verbosity.length";
+/// A spoken item's control: this, then the output type's id ("verbosity.output.hint").
+const OUTPUT: &str = "verbosity.output.";
+
+/// An output type's id in its control's.
+fn output_id(output: OutputType) -> String {
+    serde_json::to_value(output)
+        .ok()
+        .and_then(|v| v.as_str().map(str::to_owned))
+        .unwrap_or_default()
+}
 
 /// A setting's value, as the settings file writes it.
 type Json = serde_json::Value;
@@ -54,6 +69,8 @@ pub struct SettingsDialog {
     place: usize,
     draft: Settings,
     voices: Vec<String>,
+    /// The verbosity level customized, Beginner's 0.
+    customized: usize,
 }
 
 fn control(id: &str, label: StaticMessage, kind: ControlKind) -> Control {
@@ -81,12 +98,14 @@ impl SettingsDialog {
             .get(place)
             .map(|p| p.settings.clone())
             .unwrap_or_default();
+        let customized = draft.verbosity.level.index();
         Self {
             id,
             places,
             place,
             draft,
             voices,
+            customized,
         }
     }
 
@@ -214,6 +233,7 @@ impl SettingsDialog {
                     .filter_map(|(spec, label)| self.setting_control(spec, label, &scope)),
             );
         }
+        controls.extend(self.verbosity_controls());
         controls.extend([
             control(
                 "ok",
@@ -235,6 +255,108 @@ impl SettingsDialog {
             id: self.id,
             title: msg::settings_dialog_title().to_string(),
             controls,
+        }
+    }
+
+    /// The verbosity levels' group: the level customized, its spoken items, its message
+    /// length.
+    fn verbosity_controls(&self) -> Vec<Control> {
+        let verbosity = &self.draft.verbosity;
+        let level = self.customized;
+        let mut controls = vec![
+            control(
+                "verbosity_levels",
+                msg::settings_group_verbosity_levels(),
+                ControlKind::Group,
+            ),
+            control(
+                CUSTOMIZE,
+                msg::settings_verbosity_customize(),
+                ControlKind::Choice {
+                    options: [
+                        msg::settings_verbosity_beginner(),
+                        msg::settings_verbosity_intermediate(),
+                        msg::settings_verbosity_advanced(),
+                    ]
+                    .iter()
+                    .map(ToString::to_string)
+                    .collect(),
+                    selected: level,
+                },
+            ),
+        ];
+        controls.extend(OutputType::ALL.iter().map(|&output| Control {
+            id: format!("{OUTPUT}{}", output_id(output)),
+            label: output.label().to_string(),
+            kind: ControlKind::CheckBox {
+                checked: verbosity.mode_at(output, level) == OutputMode::On,
+            },
+            enabled: true,
+        }));
+        let short = verbosity.message_length.get(level) == Some(&MessageLength::Short);
+        controls.push(control(
+            LENGTH,
+            msg::settings_verbosity_length(),
+            ControlKind::Choice {
+                options: vec![
+                    msg::settings_verbosity_length_long().to_string(),
+                    msg::settings_verbosity_length_short().to_string(),
+                ],
+                selected: usize::from(short),
+            },
+        ));
+        controls
+    }
+
+    /// A change to the verbosity levels' group; `None` for any other control.
+    fn change_verbosity(&mut self, control: &str, value: &Value) -> Option<Outcome> {
+        match (control, value) {
+            (CUSTOMIZE, Value::Selected(level)) => {
+                // Another level: its items and length are shown.
+                self.customized = (*level).min(2);
+                let shown: Vec<String> = self
+                    .verbosity_controls()
+                    .into_iter()
+                    .map(|c| c.id)
+                    .filter(|id| id != CUSTOMIZE)
+                    .collect();
+                let sent = self
+                    .values()
+                    .into_iter()
+                    .filter(
+                        |v| matches!(v, ToUi::DialogSet { control, .. } if shown.contains(control)),
+                    )
+                    .collect();
+                Some(Outcome::Send(sent))
+            }
+            (LENGTH, Value::Selected(i)) => {
+                let length = if *i == 1 {
+                    MessageLength::Short
+                } else {
+                    MessageLength::Long
+                };
+                if let Some(l) = self.draft.verbosity.message_length.get_mut(self.customized) {
+                    *l = length;
+                }
+                Some(Outcome::Nothing)
+            }
+            (_, Value::Checked(checked)) => {
+                let id = control.strip_prefix(OUTPUT)?;
+                let output = OutputType::ALL
+                    .iter()
+                    .copied()
+                    .find(|&o| output_id(o) == id)?;
+                let mode = if *checked {
+                    OutputMode::On
+                } else {
+                    OutputMode::Off
+                };
+                self.draft
+                    .verbosity
+                    .set_mode_at(output, self.customized, mode);
+                Some(Outcome::Nothing)
+            }
+            _ => None,
         }
     }
 
@@ -277,6 +399,9 @@ impl SettingsDialog {
                 return Outcome::Send(sent);
             }
             return Outcome::Nothing;
+        }
+        if let Some(outcome) = self.change_verbosity(control, &value) {
+            return outcome;
         }
         let Some(spec) = registry::find(control)
             .filter(|spec| spec.label.is_some() && spec.scopes.allows(&self.scope()))
@@ -328,6 +453,51 @@ mod tests {
     use crate::settings::{
         KeyboardLayout, KeyboardSettings, OkurKey, SayAllUnit, TypingEcho, ViewerDisplay,
     };
+
+    /// A verbosity level is customized as JAWS's Settings Center does: the level, then its
+    /// spoken items and message length, each kept for that level alone.
+    #[test]
+    fn a_verbosity_levels_items_and_length_are_customized() {
+        let settings = Settings::default();
+        let mut dialog = SettingsDialog::new(1, everywhere(&settings), 0, Vec::new());
+        let changed = |control: &str, value: Value| FromUi::DialogChanged {
+            id: 1,
+            control: control.to_owned(),
+            value,
+        };
+        // Advanced: positions in lists off by default, as JAWS ships it.
+        let shown = dialog.handle(&changed(CUSTOMIZE, Value::Selected(2)));
+        let list_position = format!("{OUTPUT}list_position");
+        assert!(matches!(
+            &shown,
+            Outcome::Send(sent) if sent.contains(&ToUi::DialogSet {
+                id: 1,
+                control: list_position.clone(),
+                value: Value::Checked(false),
+            })
+        ));
+        dialog.handle(&changed(&list_position, Value::Checked(true)));
+        dialog.handle(&changed(LENGTH, Value::Selected(0)));
+        let verbosity = &dialog.draft().verbosity;
+        assert_eq!(
+            verbosity.mode_at(OutputType::ListPosition, 2),
+            OutputMode::On
+        );
+        assert_eq!(
+            verbosity.mode_at(OutputType::ListPosition, 1),
+            OutputMode::On
+        );
+        assert_eq!(
+            verbosity.message_length,
+            [
+                MessageLength::Long,
+                MessageLength::Short,
+                MessageLength::Long
+            ]
+        );
+        // The level in force is another setting.
+        assert_eq!(verbosity.level, settings.verbosity.level);
+    }
 
     /// The dialog's one place, all applications, with `settings`.
     fn everywhere(settings: &Settings) -> Vec<Place> {
