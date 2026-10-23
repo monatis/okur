@@ -156,6 +156,14 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   active cursor is. The Okur cursor reads a text field, a page as its screen shows it, or a
   dialog's rows, by line, word and character, with Page Up and Page Down to the window's top
   and bottom; in a text field or on a page, the mouse goes with it.
+- **Experimental: the screen's text and pictures** (off until it is proven; on in Okur
+  Settings' Experimental group). The Okur cursor reads a whole window by its screen rows,
+  where UI Automation places its text: WPF and other windows whose text JAWS's cursor cannot
+  catch. Insert+Space, O, then W, S or C recognizes the window, the screen or the focused
+  control with Windows' own OCR, as JAWS's Convenient OCR does. It says "OCR started using
+  Microsoft OCR.", "finished." and "Okur Cursor". The recognized words then stand among the
+  window's lines where they are drawn. Numpad Slash clicks them. They go when the PC cursor
+  comes back.
 - **The mouse:** Numpad Slash and Numpad Star click the left and right buttons, with Ctrl,
   Shift or Alt for a click with that key held; Insert+Numpad Slash and Star hold a button down
   and let it go; Ctrl+Insert+Numpad Slash drags and drops; Alt+Shift and the arrows move the
@@ -224,13 +232,14 @@ The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what 
 documentation describes and Okur lacks, most important first. Among them:
 - Microsoft Word, Outlook and Excel, not yet supported or checked;
 - reading with the Okur cursor where the screen has no text to give (images, applications that
-  draw their own text);
+  draw their own text): built as an experiment (above), with JAWS's Background OCR still to
+  come;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;
 - on macOS, the keyboard and speech.
 
-Braille, OCR and Picture Smart come later.
+Braille, OCR of files and PDFs, and Picture Smart come later.
 
 ### Trying it
 

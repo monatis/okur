@@ -359,24 +359,85 @@ Files: `source/contentRecog/uwpOcr.py`, `recogUi.py`, `_wgcCapture.py`, `screenB
 - **No screen reader documents hooking DirectWrite.** Chromium's glyph runs carry no strings,
   so text would have to be rebuilt from glyph indices [inf].
 
-## 7. Open, to record
+## 7. Rounds 282 and 283
 
-1. **C on a control**: 998 said "OCR started using OmniPage.", "finished." and "JAWS
-   Cursor", but left the JAWS cursor on the edit's line, where it was, so what C recognized was
-   not heard. 999 (round 282) routes the cursor to the button after C.
-2. **Clicking recognized text:** Numpad Slash on "Start" (the fixture's button changes its
-   window title when clicked).
-3. **The OCR voice:** whether the recorder's per-utterance parameters show it.
-4. **Background OCR** on a picture whose text changes every two seconds:
-   - whether new text is spoken by itself, and how soon;
-   - what Alt+Delete adds;
-   - the sound with Ctrl+B;
-   - what stops it.
-5. **The Scan Cursor:** which applications get it (Calculator, Settings, Windows 10 Notepad,
-   Chrome, a WPF window), what it says and how its keys move.
-6. **Graphics:** the JAWS cursor over a picture button at each `IncludeGraphics` value;
-   "graphic" and its number.
-7. **OCR under Screen Shade** (Insert+Space, F11): a message, or nothing recognized.
-8. **Title bars:** the JAWS cursor read the fixture's title (994/s6), which JAWS 14 said it
+Recorded on old-pc, three trials each.
+
+- **WPF gets the Scan Cursor** (1002, 1003):
+  - Numpad Minus says "JAWS scan cursor", and Insert+Numpad Minus says "Route JAWS scan to
+    PC", with either capture method.
+  - Each element is a line, in the window's order: "System" (the title bar's menu), "WPF
+    text block", "Left words", "Right words" (two lines, though side by side), "WPF
+    ‹Button›".
+  - Right moves by character in an element ("i", "g"), and Ctrl+Right by word ("words").
+- **C on a control** (998, 999):
+  - It says the same three messages as W.
+  - It leaves the JAWS cursor where it was. Routed to the PC cursor afterwards, the cursor's
+    line said nothing.
+- **Clicking recognized text** (1000, 1005):
+  - With OmniPage, Numpad Slash on the recognized "Start" said "left mouse button", and a
+    PowerShell window came to the front: the click missed the fixture's button.
+  - With Microsoft's engine, the same click reached the button: "SR Drawn Text Fixture -
+    started | Button".
+  - OmniPage's miss is an accident, not a behavior: Okur's clicks follow the recognized
+    word's physical pixels.
+- **Background OCR** (1001, 1004):
+  - B says "Background OCR started".
+  - Alt+Delete adds "Background OCR is enabled" after the cursor's place, here "edit cursor
+    | 1, 1 | 9% | Background OCR is enabled" for the PC cursor in an edit.
+  - Nothing is said unasked while the picture changes.
+  - The counter's recognized line stayed "Count 9" (or "Count 11") over ten seconds while
+    the picture counted on every two: JAWS's refresh is much slower than the picture, or
+    keeps the line the cursor is on.
+  - Q says "Background OCR cancelled".
+- **Cancelling** (1006): S, then Insert+Space, O, Q while it works, says "OCR started using
+  OmniPage.", "OCR", "OCR cancelled.".
+
+## 8. Okur's experiment on old-pc
+
+Built behind Okur Settings' Experimental group (`experimental.screen_text`, off by default),
+then run on old-pc with `okur-lab screen-text` and the lab Okur (research, never evidence;
+the probe `screen-probe.ps1` in the lab's Dropbox, 2026-10-24).
+
+- **`okur-lab screen-text`** over the drawn-text fixture:
+  - UI Automation's text alone gives "Label drawn by GDI" and "Focus here", in 61 to 80 ms.
+  - With the window recognized (101 to 133 ms), the lines are those of JAWS's Microsoft OCR
+    (997):
+    - "SR Drawn Text Fixture x";
+    - "Label drawn by GDI";
+    - "Painted with GDI Plus";
+    - "Painted with GDI text out";
+    - "Picture of text forty two";
+    - "Start";
+    - "Focus here".
+  - Each word kept its place, and nothing was read twice.
+- **WPF:** UI Automation placed the text box's line 40 pixels above the text box, over the
+  button, so a field's lines placed outside it are now read at the field's own place. The
+  window then reads "WPF text block", "Left words Right words", "WPF button", "Focus here".
+  The first read, a second after the window appeared, came back empty; the next was whole.
+- **The lab Okur, with the feature on**, keys sent by `okur-lab keys`, JAWS stopped:
+  - Before recognition: "Route Okur to PC", "Okur Cursor", then the title, "Label drawn by
+    GDI" and "Focus here" by Page Up, Insert+Up and Down, and "F", "o" by Right.
+  - Recognition: "OCR", "OCR started using Microsoft OCR.", "finished.", "Okur Cursor". Then
+    the seven lines above by Down, and "Okur Cursor active | 604, 714 | Unrestricted" for
+    Alt+Delete.
+  - Numpad Slash on "Start" clicked the button: "left mouse button", and the fixture's title
+    became "SR Drawn Text Fixture - started".
+  - After Numpad Plus and Numpad Minus, the window's own lines came back without the
+    recognized words.
+- **A bug found on the way:** Alt+Delete opened the fixture's system menu. Okur's hook took
+  Delete after the application had seen Alt's press. The hook now taps an unassigned key
+  (vkE8) to the application when it takes a key with Alt or Windows held (`6e3d477f`).
+
+## 9. Open, to record
+
+1. **The OCR voice:** whether the recorder's per-utterance parameters show it.
+2. **The Scan Cursor elsewhere:** Calculator, Settings, Windows 11 Notepad, Chrome; what it says
+   and how its keys move.
+3. **Graphics:** the JAWS cursor over small picture buttons at each `IncludeGraphics` value,
+   "graphic" and its number (1007-1009, round 284).
+4. **OCR under Screen Shade** (Insert+Space, F11): a message, or nothing recognized.
+5. **Title bars:** the JAWS cursor read the fixture's title (994/s6), which JAWS 14 said it
    cannot. Restriction and window kinds to check.
-9. **Time** from W to the first recognized line, on a full-screen window.
+6. **Background OCR's refresh:** how often, and whether the line the cursor is on is kept.
+7. **Time** from W to the first recognized line, on a full-screen window.

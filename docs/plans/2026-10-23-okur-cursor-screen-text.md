@@ -9,6 +9,41 @@ the OCR feature of
 (cited as "proposal §n"). This plan replaces that proposal's V1 OCR milestone and corrects its
 §5.2: JAWS puts the screen's recognized text in place, not in the Results Viewer.
 
+## 0. Status (2026-10-24)
+
+**The owner's decision (2026-10-23):** build it, but keep it experimental until it is proven, as
+a feature of Okur's own. It is behind Okur Settings' Experimental group
+(`experimental.screen_text`, off by default), and the replay runs with it off, so the parity
+figures are untouched by it.
+
+**Built:**
+- `82d401e1`:
+  - the line builder (`screen_model`), shared with the Virtual Viewer's rows;
+  - the window's text from UI Automation, a field's lines with their places;
+  - the Okur cursor's lines, routing and mouse over the model;
+  - Insert+Space, O with W, S, C and Q in place, with Windows.Media.Ocr over xa11y's GDI
+    capture;
+  - the messages "OCR", "OCR started using Microsoft OCR.", "finished." and "Okur Cursor";
+  - removal on the PC cursor and on another window.
+- `b1ffeef7`: `okur-lab screen-text`.
+- `fce8d727`: a field's misplaced lines; "OCR cancelled.".
+- `6e3d477f`: the Alt menu mask, found on the way.
+
+**Proven so far:**
+- 11 hermetic tests (`screen_model`, `engine::screen_text`, `ocr`);
+- the live run on old-pc in the research's §8: recognition, the lines, and a click on a
+  recognized word that reached its button where JAWS's with OmniPage missed (1000).
+
+**Not yet:**
+- the replay's screen snapshots and recognized text (§3), which would make the proof a
+  ratchet;
+- Background OCR (S3), the layer's ? help, the OCR voice, `ocr.language`;
+- files to the Results Viewer (S4).
+
+Where JAWS uses its Scan Cursor (WPF, 1002), Okur's experiment reads the window by rows instead
+("Left words Right words" on one line, where JAWS reads two). This is the experiment's own
+choice, kept while it is experimental.
+
 ## 1. What JAWS does, in short
 
 - **The JAWS cursor reads JAWS's model of what applications draw.** It is fed by a display
