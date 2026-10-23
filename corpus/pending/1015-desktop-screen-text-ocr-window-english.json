@@ -1,0 +1,101 @@
+{
+  "id": "1015-desktop-screen-text-ocr-window-english",
+  "name": "1011 recorded again with the window recognized in English for Okur's snapshots, as JAWS's Microsoft OCR Language is (1033): 1011's were in old-pc's first profile language, Turkish",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-drawn-text.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Drawn Text Fixture"
+  },
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "OCR": {
+        "UseMicrosoftOcrForScreenRecognitions": "1"
+      }
+    }
+  },
+  "trace_screen": true,
+  "trace_ocr": true,
+  "okur_settings": {
+    "experimental.screen_text": true
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "W",
+      "settle_max_ms": 30000
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Alt+Delete"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "PageUp"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "NumpadPlus"
+    }
+  ]
+}
