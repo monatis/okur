@@ -28,7 +28,10 @@ A stretch is a few hours or about thirty commits, not more.
   - the Scan Cursor in Calculator and Settings;
   - the OCR voice in the recorder's fragments.
 
-## 1. The experimental screen text
+## 1. The screen text
+
+Out of experimental since `85f48830`: the owner counted it proven (2026-10-24), and it is
+how the Okur cursor always works.
 
 From [`2026-10-23-okur-cursor-screen-text.md`](2026-10-23-okur-cursor-screen-text.md) §0, in
 order:
@@ -41,14 +44,18 @@ order:
    - Re-measure with 1013.
 2. **The layer's ? help and the OCR voice:** an alias of the Okur cursor's voice, its pitch
    lower, until voice aliases exist.
-3. **Graphics:** nothing is said of unlabeled pictures, as JAWS's default (1007). With
-   `[OSM] IncludeGraphics=2` JAWS says "graphic" and a checksum (1008). Whether Okur offers it
-   is the owner's choice, since the number is JAWS's own.
+3. **Graphics: decided, no numbers** (the owner and the agent, 2026-10-24).
+   - Nothing is said of unlabeled pictures, as JAWS's default (1007).
+   - JAWS's "graphic 545" (`[OSM] IncludeGraphics=2`, 1008) is a checksum of the picture's
+     pixels, a key for its Graphics Labeler, and changes when the picture does (a hover look:
+     "graphic 105").
+   - Okur does not copy it. An unlabeled control is named from what can name it: its tooltip
+     (what JAWS's Auto Graphics Labeler uses), the recognized text in it (C), and later a
+     label of the user's own kept by the element's identity, or the AI Labeler (research §10).
 4. **Files and PDFs to the Results Viewer** (S4; the assistive proposal's V2).
 5. **The replay's clock for Background OCR:** a refresh due by the replay's time, not the
    machine's, so 1014 measures the refresh rather than passing by chance.
 
-The feature stays experimental, off by default, until the owner decides it is proven.
 
 ## 2. Smart Navigation and Screen Layout
 
@@ -75,4 +82,3 @@ Smart Navigation's lines (991) and its units by part (992, 993).
 - Code signing for releases, when the owner chooses.
 - The OCR plan's decisions O1-O3, taken as defaults: no drawing hooks, no automatic OCR,
   Windows' engine only.
-- When the experimental screen text counts as proven, and goes from Experimental to Reading.

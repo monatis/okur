@@ -4,7 +4,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Rust 1.99.0](https://img.shields.io/badge/rust-1.99.0-orange.svg?logo=rust)](rust-toolchain.toml)
 [![Platforms: Windows; macOS in progress](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%28in%20progress%29-lightgrey.svg)](#platforms)
-[![JAWS parity: 4805 of 4978 recorded steps](https://img.shields.io/badge/JAWS%20parity-4805%2F4978%20steps-brightgreen.svg)](#where-it-stands)
+[![JAWS parity: 8497 of 9052 recorded steps](https://img.shields.io/badge/JAWS%20parity-8497%2F9052%20steps-brightgreen.svg)](#where-it-stands)
 
 **An open screen reader that keeps your JAWS muscle memory.**
 
@@ -47,9 +47,9 @@ Where to go from here:
 > **Status (October 2026): a preview on Windows.** Web pages in Chrome (the Virtual PC
 > Cursor, the lists of links, headings and other elements, tables, selecting and copying),
 > dialog boxes and menus, Notepad, File Explorer, Windows Settings, Windows Terminal, the
-> desktop, Alt+Tab and Windows search are read as JAWS reads them. It is not yet a
-> replacement for your screen reader: Microsoft Office and reading the screen with the Okur
-> cursor are among what is still missing (see
+> desktop, Alt+Tab and Windows search are read as JAWS reads them, and the Okur cursor reads
+> any window's screen, pictures included, recognized with Windows' own OCR. It is not yet a
+> replacement for your screen reader: Microsoft Office is the largest part still missing (see
 > [Not yet](#not-yet)). Those everyday gaps on Windows are being closed first; macOS, whose
 > accessibility layer is in place, comes after them.
 >
@@ -57,19 +57,19 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `a09021c` (2026-10-22).
+Every figure is tool output, rerun for this README at commit `85f48830` (2026-10-24).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **6540 of 6776** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **6403 of 6738** | `okur-lab parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **181** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **459, 1383** (1377 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1357 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **8497 of 9052** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **8407 of 9113** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **214** | `okur-lab parity` |
+| Recorded JAWS scenarios, trials | **643, 1935** (1919 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1409 passed, 0 failed** (199 ignored: they need a live desktop) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
-The 181 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
+The 214 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
 accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
 place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
 Okur says its help in its own words. Each one is listed, with the reason and who decided it,
@@ -153,17 +153,16 @@ in [accepted divergences](docs/references/accepted-divergences.md).
 - **The cursors:** Numpad Minus to the Okur cursor at the mouse, Numpad Plus back to the PC
   cursor, Insert+Numpad Minus to bring the Okur cursor to the PC cursor, Insert+Numpad Plus
   the other way, Insert+R for where the Okur cursor may go, and Alt+Delete for where the
-  active cursor is. The Okur cursor reads a text field, a page as its screen shows it, or a
-  dialog's rows, by line, word and character, with Page Up and Page Down to the window's top
-  and bottom; in a text field or on a page, the mouse goes with it.
-- **Experimental: the screen's text and pictures** (off until it is proven; on in Okur
-  Settings' Experimental group). The Okur cursor reads a whole window by its screen rows,
-  where UI Automation places its text: WPF and other windows whose text JAWS's cursor cannot
-  catch. Insert+Space, O, then W, S or C recognizes the window, the screen or the focused
-  control with Windows' own OCR, as JAWS's Convenient OCR does. It says "OCR started using
-  Microsoft OCR.", "finished." and "Okur Cursor". The recognized words then stand among the
-  window's lines where they are drawn. Numpad Slash clicks them. They go when the PC cursor
-  comes back.
+  active cursor is. The Okur cursor reads a page as its screen shows it, a dialog's rows, and
+  any other window by its screen rows, where UI Automation places its text, including WPF and
+  other windows whose text JAWS's cursor cannot catch. It moves by line, word and character,
+  with Page Up and Page Down to the window's top and bottom, and the mouse goes with it.
+- **The screen's pictures, recognized** (Convenient OCR): Insert+Space, O, then W, S or C
+  recognizes the window, the screen or the focused control with Windows' own OCR. Okur says
+  "OCR started using Microsoft OCR.", "finished." and "Okur Cursor". The recognized words then
+  stand among the window's lines where they are drawn, Numpad Slash clicks them, and they go
+  when the PC cursor comes back. B keeps recognizing the window as it changes (Background
+  OCR), and Q stops it.
 - **The mouse:** Numpad Slash and Numpad Star click the left and right buttons, with Ctrl,
   Shift or Alt for a click with that key held; Insert+Numpad Slash and Star hold a button down
   and let it go; Ctrl+Insert+Numpad Slash drags and drops; Alt+Shift and the arrows move the
@@ -231,9 +230,6 @@ The [reference documentation](docs/references/) describes these behaviors in det
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
 - Microsoft Word, Outlook and Excel, not yet supported or checked;
-- reading with the Okur cursor where the screen has no text to give (images, applications that
-  draw their own text): built as an experiment (above), with JAWS's Background OCR still to
-  come;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;

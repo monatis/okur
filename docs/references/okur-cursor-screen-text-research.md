@@ -429,6 +429,36 @@ the probe `screen-probe.ps1` in the lab's Dropbox, 2026-10-24).
   Delete after the application had seen Alt's press. The hook now taps an unassigned key
   (vkE8) to the application when it takes a key with Alt or Windows held (`6e3d477f`).
 
+## 10. Graphic numbers, decided
+
+The owner found JAWS's "graphic 545" annoying, and asked whether it helps anyone (2026-10-24).
+
+- **What the number is:** an identifier JAWS computes for an unlabeled picture, a checksum of
+  its pixels (`[OSM] GraphicsMode`, research §1.2). The Graphics Labeler attaches a label to
+  it, kept in the application's settings.
+  - It is said only with Graphics Verbosity at All (`IncludeGraphics=2`).
+  - The default has been labeled graphics only since JAWS 2021 [wn 2021].
+- **It is not stable:** the circle button's number changed from 610 to 105 once the mouse
+  rested on it and the button's hover look changed its pixels (1008/s5, s16).
+- **Users:**
+  - Testers on the W3C and WebAIM lists call it disorienting ("graphic" after each piece of
+    text; numbered placeholders in PDFs that match no image).
+  - A Mozilla bug's reporter heard only "some numbers and the word graphic" with the JAWS
+    cursor.
+  - The advice in all of them is to set Graphics Verbosity to labeled only, and to label
+    images at their source.
+  - Sources: [W3C wai-xtech, 2007](https://lists.w3.org/Archives/Public/wai-xtech/2007Sep/0073.html),
+    [WebAIM list](https://webaim.org/discussion/mail_message?id=18183),
+    [WebAIM list](https://webaim.org/discussion/mail_message?id=31794),
+    [Mozilla bug 1181156](https://bugzil.la/1181156).
+- **Its one use is the labeler's:** to tell which picture a label belongs to. Okur can know a
+  control by its element (its automation id, its class, its place among its siblings) instead
+  of its pixels.
+- **Decision:** no numbers. An unlabeled control is named from what can name it:
+  - its tooltip, which JAWS's Auto Graphics Labeler reads;
+  - the text recognized in it (Insert+Space, O, C);
+  - later a custom label kept by the element's identity, or an AI label (proposal §6.4).
+
 ## 9. Open, to record
 
 1. **The OCR voice:** whether the recorder's per-utterance parameters show it.

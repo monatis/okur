@@ -11,10 +11,13 @@ the OCR feature of
 
 ## 0. Status (2026-10-24)
 
-**The owner's decision (2026-10-23):** build it, but keep it experimental until it is proven, as
-a feature of Okur's own. It is behind Okur Settings' Experimental group
-(`experimental.screen_text`, off by default), and the replay runs with it off, so the parity
-figures are untouched by it.
+**The owner's decisions:**
+- 2026-10-23: build it, but keep it experimental until it is proven, as a feature of Okur's own.
+- 2026-10-24: proven: out of experimental (`85f48830`). It is how the Okur cursor works, with
+  no switch, and the OCR language is `ocr_language`, read from JAWS's `[OCR]
+  MicrosoftOcrLanguage`.
+
+Unlabeled pictures get no "graphic" numbers (plan 27 §1, research §10).
 
 **Built:**
 - `82d401e1`:
