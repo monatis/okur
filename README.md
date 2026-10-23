@@ -201,8 +201,10 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   rules. Starting the reading at an element, and renaming a rule, are not done yet.
 - **Verbosity levels:** Beginner, Intermediate and Advanced, as JAWS has them. Above
   Beginner Okur says the short messages JAWS says there ("Last row", "3 columns and 3 rows",
-  "virtual PC"); at Advanced it leaves out what JAWS leaves out, such as a list's positions, a
-  field's description and a group box's name.
+  "virtual PC", "Copied", "Appended", "Off", "No more headings at level2 in section", the
+  page's summary without "Page has"); at Advanced it leaves out what JAWS leaves out, such as a
+  list's positions, a field's description, a group box's name and JAWS's own messages
+  ("Copied", "Screen updated").
 - **Quitting with Insert+F4,** after asking first, as JAWS does (Enter quits, Escape stays).
 - **Both keyboard layouts,** desktop and laptop, with Insert or CapsLock as the Okur key
   (JAWS's JAWS key).
@@ -218,7 +220,8 @@ documentation describes and Okur lacks, most important first. Among them:
 - reading with the Okur cursor where the screen has no text to give (images, applications that
   draw their own text);
 - toasts Focus Assist hides;
-- the rest of what the verbosity levels change, as further recordings show it;
+- the rest of what the verbosity levels change, as further recordings show it (the desktop's
+  window lists, the tray and toasts at Intermediate and Advanced are being recorded);
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;

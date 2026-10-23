@@ -50,10 +50,36 @@ traces), so such changes get tests where a test can hold them and a live run on 
 | P9, P11, P20 | not changed: a plain field has one attribute run; UIA's process id comes from the window, not the application; the process name is a kernel query | |
 | C4: each edit key made the field's text a vector of characters two to four times | done for the caret's line and character (`line_bytes`, tested against the vectors at every caret); the commands that read further keep theirs | `4a56c7e8` |
 | C7, C10 | not changed: a focus's copy is microseconds beside its reads; S, D and N stay O(page) per press, a cache keyed by the buffer's version is the next step | |
-| P14: a list item's column headers named one call each | done: the names come with the headers in one cached call; live check with 514 to come | this batch |
+| P14: a list item's column headers named one call each | done: the names come with the headers in one cached call; live check with 514 to come | `4fd2617e` |
 | P3 (polls) | open: after a key a UIA field is read whole every 15 ms until it changes; polling the caret alone needs a "before" in the same units, which the engine's text does not give for RichEdit | |
 
 The rest are listed below in the order they are taken.
+
+## Live check (old-pc, live run 260)
+
+Okur built before the review (`a0628bf4`) and after its first four batches (`b76fab99`) read
+nine scenarios on old-pc, one trial each, with a debug log (`sr-harnessexperimentslive260.ps1`):
+103, 205, 222, 304, 322, 504, 554, 660 and 825.
+
+- **What it says**: in eight of the nine the two builds sent the synthesizer the same text at
+  every step (a step-by-step comparison of the two runs' speech logs). In 103 the build before
+  was the first run after a recording round and was off by one heading from its first key;
+  `okur-lab live-parity` on each run: before "Okur live, spoken: 0/8 steps send the
+  synthesizer what JAWS sent its own", after "8/8". The others' live-parity lines are the same
+  for both builds (205 11/11, 222 11/11, 304 17/17, 322 12/18, 504 17/23, 554 13/14, 660
+  10/11; 825's steps read no history and are compared between the builds only).
+- **How fast** (`okur-lab latency` over each build's nine logs, ms, p50 / p90 / p99):
+
+| Stage | Before | After |
+|---|---|---|
+| event read: state_change (22) | 30.0 / 41.5 / 50.7 | 16.9 / 27.0 / 40.8 |
+| text context read (26) | 29.0 / 261.0 / 268.0 | 19.0 / 263.0 / 265.0 |
+| event read: focus (89) | 50.8 / 108.5 / 208.1 | 51.2 / 107.3 / 202.6 |
+| event read: value_change | 35.9 / 89.8 / 121.6 (32) | 30.6 / 88.0 / 134.9 (31) |
+| key: wait + engine (218) | 0.0 / 0.1 / 1.0 | 0.0 / 0.1 / 1.0 |
+
+  The state change's read is P10 and P7; the text read's median is P3's fewer transfers; its
+  90th percentile is the polling after a key at a text boundary (the settle time), still open.
 
 ## Threading and latency (T)
 
