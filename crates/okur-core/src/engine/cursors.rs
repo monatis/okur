@@ -169,6 +169,7 @@ impl ScreenReaderEngine {
         }
         // The Okur cursor is now on the caret's line, or the virtual cursor's.
         self.okur_place = self.routed_place();
+        self.route_awaits_screen = self.screen_text_on() && self.okur_screen_lines().is_none();
         let said = self.cursor_message(
             msg::cursor_route_okur_to_pc(),
             msg::cursor_route_okur_to_pc_short(),
@@ -306,7 +307,7 @@ impl ScreenReaderEngine {
     /// Where the Okur cursor goes as it is routed to the PC cursor: the caret's line in a text
     /// field, the focused control's row in a dialog box, the virtual cursor's line in a page,
     /// before its first character.
-    fn routed_place(&self) -> Option<OkurPlace> {
+    pub(super) fn routed_place(&self) -> Option<OkurPlace> {
         // The screen model's line where the PC cursor is.
         if let Some(lines) = self.okur_screen_lines() {
             let at = self.pc_cursor_point();
@@ -452,6 +453,7 @@ impl ScreenReaderEngine {
     /// The Okur cursor's movement for `event`, without the mouse.
     fn move_okur_cursor(&mut self, event: &crate::input::KeyEvent) -> Option<()> {
         use crate::input::Key;
+        self.route_awaits_screen = false;
         let ctrl = event.modifiers.ctrl
             && !event.modifiers.alt
             && !event.modifiers.shift

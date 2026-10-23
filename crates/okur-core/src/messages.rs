@@ -243,6 +243,9 @@ struct Catalog {
     plain_pseudo: Vec<String>,
 }
 
+/// The language of Okur's own catalog, which its messages are in.
+pub const SOURCE_LOCALE: &str = "en-US";
+
 fn catalog() -> &'static Catalog {
     static ENGLISH: OnceLock<Catalog> = OnceLock::new();
     ENGLISH.get_or_init(Catalog::english)
@@ -250,7 +253,7 @@ fn catalog() -> &'static Catalog {
 
 impl Catalog {
     fn english() -> Self {
-        let language = "en-US"
+        let language = SOURCE_LOCALE
             .parse::<unic_langid::LanguageIdentifier>()
             .unwrap_or_default();
         let mut bundle = FluentBundle::new_concurrent(vec![language]);

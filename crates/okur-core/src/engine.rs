@@ -388,6 +388,9 @@ pub struct ScreenReaderEngine {
     background_ocr: Option<(std::time::Instant, bool)>,
     /// The Okur cursor's model of the window in front (the experimental `screen_text`).
     screen_model: Option<crate::screen_model::ScreenModel>,
+    /// The Okur cursor was routed to the PC cursor before the window's text arrived: it is
+    /// routed again by it when it comes, unless the cursor moved meanwhile.
+    route_awaits_screen: bool,
     /// When the mouse last moved, until mouse echo reads what it rests on.
     mouse_moved_at: Option<std::time::Instant>,
     /// Until when the mouse's moves are Okur's own, not echoed.
@@ -568,6 +571,7 @@ impl ScreenReaderEngine {
             recognizing: false,
             background_ocr: None,
             screen_model: None,
+            route_awaits_screen: false,
             mouse_moved_at: None,
             own_mouse_move_until: None,
             last_mouse_echo: None,

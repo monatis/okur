@@ -73,6 +73,7 @@ mod recognizer {
     use crate::PlatformError;
     use okur_core::actions::RecognitionArea;
     use okur_core::screen_model::ScreenRun;
+    use windows::Globalization::Language;
     use windows::Graphics::Imaging::{BitmapAlphaMode, BitmapPixelFormat, SoftwareBitmap};
     use windows::Media::Ocr::OcrEngine;
     use windows::Storage::Streams::DataWriter;
@@ -123,10 +124,24 @@ mod recognizer {
         }
     }
 
-    /// The words Windows' recognizer reads in `area`, each where it is on the desktop, in the
-    /// order it reads them. The recognizer is the first of the user's languages Windows has
-    /// one for.
-    pub fn recognize(area: RecognitionArea) -> Result<Vec<ScreenRun>, PlatformError> {
+    /// The recognizer for `language` (a BCP 47 tag), else for the first of the user's
+    /// languages Windows has one for.
+    fn engine_for(language: &str) -> Result<OcrEngine, PlatformError> {
+        let wanted = Language::CreateLanguage(&windows::core::HSTRING::from(language))
+            .and_then(|language| OcrEngine::TryCreateFromLanguage(&language));
+        match wanted {
+            Ok(engine) => Ok(engine),
+            Err(_) => OcrEngine::TryCreateFromUserProfileLanguages()
+                .map_err(|_| failed("no recognizer for the user's languages")),
+        }
+    }
+
+    /// The words Windows' recognizer for `language` reads in `area`, each where it is on the
+    /// desktop, in the order it reads them.
+    pub fn recognize(
+        area: RecognitionArea,
+        language: &str,
+    ) -> Result<Vec<ScreenRun>, PlatformError> {
         let (left, top, right, bottom) = match area {
             RecognitionArea::Window => window_rect().ok_or_else(|| failed("no window in front"))?,
             RecognitionArea::Screen => screen_rect(),
@@ -134,8 +149,7 @@ mod recognizer {
         };
         let width = u32::try_from(right - left).map_err(failed)?;
         let height = u32::try_from(bottom - top).map_err(failed)?;
-        let engine = OcrEngine::TryCreateFromUserProfileLanguages()
-            .map_err(|_| failed("no recognizer for the user's languages"))?;
+        let engine = engine_for(language)?;
         let largest = OcrEngine::MaxImageDimension().map_err(failed)?;
         let capture = xa11y_windows::WindowsScreenshot::new()?.capture_region(xa11y::Rect {
             x: left,

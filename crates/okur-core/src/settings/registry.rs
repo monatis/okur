@@ -549,6 +549,13 @@ pub static SETTINGS: &[SettingSpec] = &[
         Some(msg::settings_experimental_screen_text),
         CHECK,
     ),
+    // The settings file and the command line only, while it is experimental.
+    spec(
+        "experimental.ocr_language",
+        Group::Experimental,
+        None,
+        Kind::Structured,
+    ),
 ];
 
 /// The setting with `id`.

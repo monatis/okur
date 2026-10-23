@@ -125,8 +125,9 @@ mod windows_actions {
         /// The text the window in front shows, each piece where it is drawn (the Okur cursor's
         /// model), answered even when nothing could be read.
         Screen,
-        /// The words recognized in an area of the screen, answered even when none was.
-        Recognize(okur_core::actions::RecognitionArea),
+        /// The words recognized in an area of the screen, in a language, answered even when
+        /// none was.
+        Recognize(okur_core::actions::RecognitionArea, String),
     }
 
     /// The virtual key of a key the screen reader sends for a reading command.
@@ -317,16 +318,17 @@ mod windows_actions {
                                 // Answered even when empty: the engine keeps the window's model.
                                 let _ = events.send(AccessibilityEvent::ScreenText(runs));
                             }
-                            Request::Recognize(area) => {
+                            Request::Recognize(area, language) => {
                                 let Some(events) = events.as_ref() else {
                                     tracing::warn!("recognition impossible: no event channel");
                                     continue;
                                 };
                                 let started = Instant::now();
-                                let words = crate::ocr::recognize(area).unwrap_or_else(|e| {
-                                    tracing::warn!("recognition failed: {e}");
-                                    Vec::new()
-                                });
+                                let words =
+                                    crate::ocr::recognize(area, &language).unwrap_or_else(|e| {
+                                        tracing::warn!("recognition failed: {e}");
+                                        Vec::new()
+                                    });
                                 tracing::debug!(
                                     ?area,
                                     words = words.len(),
@@ -666,8 +668,8 @@ mod windows_actions {
             self.send(Request::Screen)
         }
 
-        fn recognize(&self, area: okur_core::actions::RecognitionArea) -> bool {
-            self.send(Request::Recognize(area))
+        fn recognize(&self, area: okur_core::actions::RecognitionArea, language: &str) -> bool {
+            self.send(Request::Recognize(area, language.to_owned()))
         }
 
         /// On a thread of its own, once Okur's dialog has had time to close: a click while it

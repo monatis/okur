@@ -107,10 +107,11 @@ pub trait ApplicationActions: Send {
     }
 
     /// Asks for the words recognized from the screen's pixels in `area`, with the system's
-    /// recognizer. They arrive later as [`crate::event::AccessibilityEvent::Recognized`],
-    /// always: empty when none was recognized. Returns false when unsupported.
-    fn recognize(&self, area: RecognitionArea) -> bool {
-        let _ = area;
+    /// recognizer for `language` (a BCP 47 tag, "en-US"), else for the user's languages. They
+    /// arrive later as [`crate::event::AccessibilityEvent::Recognized`], always: empty when
+    /// none was recognized. Returns false when unsupported.
+    fn recognize(&self, area: RecognitionArea, language: &str) -> bool {
+        let _ = (area, language);
         false
     }
 
@@ -418,7 +419,7 @@ impl ApplicationActions for RecordingActions {
         true
     }
 
-    fn recognize(&self, area: RecognitionArea) -> bool {
+    fn recognize(&self, area: RecognitionArea, _language: &str) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push((format!("recognize {area:?}"), 0));
         }

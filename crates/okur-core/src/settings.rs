@@ -163,7 +163,7 @@ impl MouseEchoUnit {
 
 /// Okur's own features still being proven, each off until it is (Okur Settings' Experimental
 /// group).
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(default)]
 pub struct Experimental {
     /// The Okur cursor reads a window's text where the accessibility interfaces place it, where
@@ -172,6 +172,11 @@ pub struct Experimental {
     /// recognized words among its cursor's lines [obs, 996, 997]
     /// (`docs/plans/2026-10-23-okur-cursor-screen-text.md`).
     pub screen_text: bool,
+    /// The language the screen is recognized in, a BCP 47 tag ("tr-TR"); empty, Okur's own
+    /// language, as JAWS's Microsoft OCR Language is English by default
+    /// (`[OCR] MicrosoftOcrLanguage=1033`). Windows falls back to the user's languages where
+    /// it has no recognizer for it.
+    pub ocr_language: String,
 }
 
 /// Mouse echo: what the mouse points to said as it moves, as JAWS's Mouse Echo group sets it

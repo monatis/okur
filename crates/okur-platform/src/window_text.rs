@@ -518,11 +518,12 @@ mod reader {
     }
 }
 
-/// The Okur cursor's model of the window in front, with the words recognized in it when
-/// `recognize`: `okur-lab screen-text`, to see what the experimental screen text reads.
+/// The Okur cursor's model of the window in front, with the words recognized in it in the
+/// language `recognize` names: `okur-lab screen-text`, to see what the experimental screen
+/// text reads.
 #[cfg(windows)]
 pub fn foreground_screen(
-    recognize: bool,
+    recognize: Option<&str>,
 ) -> Result<okur_core::screen_model::ScreenModel, crate::PlatformError> {
     use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
@@ -533,10 +534,11 @@ pub fn foreground_screen(
     let accessible = window_runs(&uia, unsafe { GetForegroundWindow() }).ok_or_else(|| {
         crate::PlatformError::EventListenerError("the window could not be read".to_owned())
     })?;
-    let recognized = if recognize {
-        crate::ocr::recognize(okur_core::actions::RecognitionArea::Window)?
-    } else {
-        Vec::new()
+    let recognized = match recognize {
+        Some(language) => {
+            crate::ocr::recognize(okur_core::actions::RecognitionArea::Window, language)?
+        }
+        None => Vec::new(),
     };
     Ok(okur_core::screen_model::ScreenModel {
         window: None,

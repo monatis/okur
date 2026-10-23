@@ -23,6 +23,14 @@ impl ScreenReaderEngine {
         self.settings.experimental.screen_text
     }
 
+    /// The language the screen is recognized in: the setting's, else Okur's own.
+    fn ocr_language(&self) -> String {
+        match self.settings.experimental.ocr_language.trim() {
+            "" => crate::messages::SOURCE_LOCALE.to_owned(),
+            tag => tag.to_owned(),
+        }
+    }
+
     /// Asks for the window's text for the Okur cursor's model, outside pages, whose lines the
     /// Okur cursor already reads from the page.
     pub(super) fn request_screen(&mut self) {
@@ -52,8 +60,11 @@ impl ScreenReaderEngine {
             accessible: runs.to_vec(),
             recognized,
         });
-        // The Okur cursor, made active where nothing placed it, is where the mouse is.
-        if self.active_cursor == ActiveCursor::Okur && self.okur_place.is_none() {
+        // Routed before the window's text came, it is routed again by it [obs, 1010/s3]; made
+        // active where nothing placed it, it is where the mouse is.
+        if std::mem::take(&mut self.route_awaits_screen) {
+            self.okur_place = self.routed_place();
+        } else if self.active_cursor == ActiveCursor::Okur && self.okur_place.is_none() {
             self.okur_place = Some(self.place_at_mouse());
         }
         None
@@ -162,7 +173,12 @@ impl ScreenReaderEngine {
     /// W, S or C: recognition starts, "OCR started using Microsoft OCR." [obs, 997/s3], and
     /// the window's accessible text is read again to lie beside the recognized words.
     fn start_recognition(&mut self, area: RecognitionArea) {
-        if !self.actions.as_ref().is_some_and(|a| a.recognize(area)) {
+        let language = self.ocr_language();
+        if !self
+            .actions
+            .as_ref()
+            .is_some_and(|a| a.recognize(area, &language))
+        {
             return;
         }
         self.recognizing = true;
@@ -188,10 +204,11 @@ impl ScreenReaderEngine {
     /// ([`Self::background_ocr_idle`]), its words read with the Okur cursor as they change.
     /// The cursors stay as they are: the PC cursor keeps the focus [obs, 1001/s4].
     fn start_background_ocr(&mut self) {
+        let language = self.ocr_language();
         if !self
             .actions
             .as_ref()
-            .is_some_and(|a| a.recognize(RecognitionArea::Window))
+            .is_some_and(|a| a.recognize(RecognitionArea::Window, &language))
         {
             return;
         }
@@ -214,10 +231,11 @@ impl ScreenReaderEngine {
         if asked.elapsed() < Self::BACKGROUND_OCR_EVERY {
             return;
         }
+        let language = self.ocr_language();
         if self
             .actions
             .as_ref()
-            .is_some_and(|a| a.recognize(RecognitionArea::Window))
+            .is_some_and(|a| a.recognize(RecognitionArea::Window, &language))
         {
             self.background_ocr = Some((std::time::Instant::now(), true));
         }
@@ -532,6 +550,21 @@ mod tests {
             "Background OCR cancelled"
         );
         assert!(engine.background_ocr.is_none());
+    }
+
+    /// Routed to the PC cursor before the window's text came, the Okur cursor is routed again
+    /// once it comes: on the field's line, as JAWS's is, not on the window's first [obs,
+    /// 1010/s1-s3].
+    #[test]
+    fn a_route_before_the_windows_text_is_routed_again_by_it() {
+        let (mut engine, speech, _) = window(true);
+        press(&mut engine, &speech, Key::NumpadMinus, insert());
+        press(&mut engine, &speech, Key::NumpadMinus, plain());
+        engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(accessible()));
+        assert_eq!(
+            press(&mut engine, &speech, Key::UpArrow, insert()),
+            "Focus here"
+        );
     }
 
     /// Another window in front: its model, recognized words and all, is not this one's.

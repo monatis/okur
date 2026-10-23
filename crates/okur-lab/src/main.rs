@@ -300,6 +300,9 @@ enum Commands {
         /// With --append-to, the step the snapshot is taken after
         #[arg(long, default_value = "")]
         step: String,
+        /// The language the window is recognized in, as Okur's default (its own language)
+        #[arg(long, default_value = "en-US")]
+        language: String,
     },
     /// Print a speech log recorded with `run --speech-log`
     History {
@@ -680,9 +683,12 @@ async fn main() {
             pieces,
             append_to,
             step,
+            language,
         }) => {
             #[cfg(windows)]
-            match okur_platform::window_text::foreground_screen(recognize) {
+            match okur_platform::window_text::foreground_screen(
+                recognize.then_some(language.as_str()),
+            ) {
                 Ok(model) if append_to.is_some() => {
                     let t_ms = std::time::SystemTime::now()
                         .duration_since(std::time::UNIX_EPOCH)
@@ -731,7 +737,7 @@ async fn main() {
             }
             #[cfg(not(windows))]
             {
-                let _ = (recognize, pieces, append_to, step);
+                let _ = (recognize, pieces, append_to, step, language);
                 eprintln!("screen-text is only available on Windows");
                 std::process::exit(1);
             }
