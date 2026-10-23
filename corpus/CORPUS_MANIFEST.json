@@ -7066,13 +7066,685 @@
         "deterministic": false,
         "summary_consistent": true
       }
+    },
+    {
+      "scenario_id": "865-article-links-intermediate",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "e562429f65fb18dda55e72f085dadab3daab57cab5f0cb4b171f2ecfef43af2d",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "866-article-links-advanced",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "a638300a45930816fe2138f23ae9aa7b39be0500ca3d1096ef94ae825c0ffc8b",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "867-article-lists-intermediate",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "597606a34aaf4eba96bd157e7376e93b7fba6e918ee543b61a035e9d13271a63",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "868-article-lists-advanced",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "9af74f285416759fb4612c71554b38a22f19acfa3d1354f8f27a3449e6518b1a",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "869-article-table-intermediate",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "52d2a3e2370e101d85b6bb60d516568cc415579f0725fcef304805fcc8a391b2",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "870-article-table-advanced",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "6aa70f4c849a0469ddf22a2176074563c8334e081fa94487cb272caec71a99d1",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "871-article-list-items-intermediate",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "b2881a7f1bcf1cc164337f012828face8f76d06a341510c5ebcceff964ce5083",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "872-article-list-items-advanced",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "a6944e49c543c249b4337e4609611147611c512188e8b7c0c2bfa80bee41f628",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "873-form-fields-intermediate",
+      "fixture": "signup-form.html",
+      "evidence": {
+        "sha256": "237436c20520dede5a1be2bbca9611c5bbe42ad9327fd29974cb7f353eb0f031",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "874-form-fields-advanced",
+      "fixture": "signup-form.html",
+      "evidence": {
+        "sha256": "f78e8807a348062e34ee8a65429e8840d8ba911c327f473893bdbe36687204ec",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "875-web-current-and-described-intermediate",
+      "fixture": "web-app-patterns.html",
+      "evidence": {
+        "sha256": "6c0ffec0cd6d16e4d3864d4699b4b022f2c97e784d2791da6d14202ad0c954cf",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "876-web-current-and-described-advanced",
+      "fixture": "web-app-patterns.html",
+      "evidence": {
+        "sha256": "c75eb1e299ef08afe2b2b02919784a265fe35b0aac5344ba6b67b2d7592f9838",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "877-web-autocomplete-intermediate",
+      "fixture": "web-app-patterns.html",
+      "evidence": {
+        "sha256": "12d15ade5caa63a6a1bc0eb4dce4be34e149c6c6709fc75c5e892cd34e0b484e",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "878-web-autocomplete-advanced",
+      "fixture": "web-app-patterns.html",
+      "evidence": {
+        "sha256": "5c4c048bc33c073fe178b828285a577dca50f180da5c8567e068ac1859a4029d",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "879-web-focus-containers-intermediate",
+      "fixture": "web-app-patterns.html",
+      "evidence": {
+        "sha256": "63efe5328b721c42cbf0ed4882e450c3229613dd35e6304fe6b562263cde9aca",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "880-web-focus-containers-advanced",
+      "fixture": "web-app-patterns.html",
+      "evidence": {
+        "sha256": "f92c6a42907f6e5252aaffb021ad819b851e8680171b96bc18bdd87acf29500c",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "881-web-application-region-intermediate",
+      "fixture": "web-app-patterns.html",
+      "evidence": {
+        "sha256": "cd1678022478cc0476ffd30e3503d7fcb48626d49f8364898b85bb503f25fa72",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "882-web-application-region-advanced",
+      "fixture": "web-app-patterns.html",
+      "evidence": {
+        "sha256": "8815c64ecc0d42c9060e3dc115cef8e8330871661eb2bf05989adc0b9b42418b",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "883-web-empty-element-lists-intermediate",
+      "fixture": "doc-reading.html",
+      "evidence": {
+        "sha256": "aaa0be9c4fb99b9284f12ccb75b09332f332d51f894787a666806f2bd81306be",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "884-web-empty-element-lists-advanced",
+      "fixture": "doc-reading.html",
+      "evidence": {
+        "sha256": "cae461b8ca5e7bb097e611b1a09f4fc4dd60c4ea44a0b52f0f4b91c975e8892e",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "885-web-same-different-element-intermediate",
+      "fixture": "virtual-keys.html",
+      "evidence": {
+        "sha256": "0a9b4f4a8055fa4b2d5d44ce4259c7391f811157eca9940fe7489a18f0dcdf7f",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "886-web-same-different-element-advanced",
+      "fixture": "virtual-keys.html",
+      "evidence": {
+        "sha256": "c04ae65a61aac437c5d2ce8b92dd0f3e2e69b34062426f02578dadeb587921c6",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "887-web-mailto-clickable-flowto-intermediate",
+      "fixture": "virtual-keys.html",
+      "evidence": {
+        "sha256": "1d8badb901f457c6cbf84dc969aa526cb20ea6382eb6c67856aad1740f4bc4b4",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "888-web-mailto-clickable-flowto-advanced",
+      "fixture": "virtual-keys.html",
+      "evidence": {
+        "sha256": "1fec6d5665d22c8198e155d452b13978df8f142ee20fd45207edc2f245bf6132",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "889-web-step-past-elements-intermediate",
+      "fixture": "virtual-keys.html",
+      "evidence": {
+        "sha256": "e40101da18e422818b3e3eaec9eedd14ecdaa00cf3d0fdc141d063ad459be1f9",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "890-web-step-past-elements-advanced",
+      "fixture": "virtual-keys.html",
+      "evidence": {
+        "sha256": "d3184ad1c115f9041ece3a8a2369173ad0ce7d15d162d28052efa87f9da7ca6e",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "891-web-first-last-headings-fields-intermediate",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "83b6d902d83d61f90e08d75639612bcd9e424ac517e1435c0cf90f52d1b5da4f",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "892-web-first-last-headings-fields-advanced",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "3b213db29681a596c7be5983bd0c08bb8ebe3d3cf614ef789de6d05f9e3d4459",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "893-web-rate-on-the-fly-intermediate",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "408bcd1693739333593c7fad40d232995a34fd4a6dcf3940482137cdf4de73d4",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "894-web-rate-on-the-fly-advanced",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "fad3c5f6a21f1ae32192eacfe3c63216cce58789bdbef17524b3873caf876e5c",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "895-web-table-layer-intermediate",
+      "fixture": "tables-navigation.html",
+      "evidence": {
+        "sha256": "0e16761540e944ea3217f858b6b0588d66a47cc48da29b3c52a4732d119e7ab5",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "896-web-table-layer-advanced",
+      "fixture": "tables-navigation.html",
+      "evidence": {
+        "sha256": "b2047d80f87a27ffc2b66d9cd593092a69fe61c7a2af2dd5d5350acd5a25e243",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "897-web-element-edges-news-article-intermediate",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "033320796731bf950a9bf89469ca7ef945d3a0f63569f44a98b1831565030aed",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "898-web-element-edges-news-article-advanced",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "8ec8e256b60c27e7f724c79c015d615d271c4a7caa324b6ae9958322453ee229",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "899-web-word-list-intermediate",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "0f07df6792399cbe9257b1547a54d44d66b54d789fadb29550ea24280e1c9e8b",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "900-web-word-list-advanced",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "bcf1741d53561e0a741b05410eebaad90baa7066f1ead906cbd92e566e8720d0",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "901-web-flow-to-intermediate",
+      "fixture": "virtual-keys.html",
+      "evidence": {
+        "sha256": "d0df15d53f055acdaea10f061c13a399018f6dbf1ff1300c60463d8b295e5efb",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "902-web-flow-to-advanced",
+      "fixture": "virtual-keys.html",
+      "evidence": {
+        "sha256": "e33d85d6eca4a408816a4f4a5faea397d006b4f48969bf091d26553e0ec02d1a",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "903-web-speech-on-demand-intermediate",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "068b752ce7e176229d2a07657405accfbb7090dca4b510b60029bdaf55d9d4ca",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "904-web-speech-on-demand-advanced",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "45316c139df16d10f0dfa9aff8855f65d28cc4d8b83aab111387b15d76334239",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "905-web-route-pc-to-elements-intermediate",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "f12ad04e1016a0119fc458c70a77f0691987f9c8a293175cccb6e987296ab06b",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "906-web-route-pc-to-elements-advanced",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "523433da3585f3ee7bbbcf1b8405f37be89e516a8d86d02d190454c5ff727620",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "907-web-visited-links-intermediate",
+      "fixture": "visited-links.html",
+      "evidence": {
+        "sha256": "4c6c2b709799fc522fe197039847bddaadfdc61fc321361d71870b177c2a78f6",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "908-web-visited-links-advanced",
+      "fixture": "visited-links.html",
+      "evidence": {
+        "sha256": "23b2233ef47a299cf4d3a64e368556e230758863ecb08517e3c51387766305b0",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "909-web-placemarker-list-intermediate",
+      "fixture": "placemarkers.html",
+      "evidence": {
+        "sha256": "244cdd34eff4c23b7e9022876b1ac7d77282e7d8bd9b70c2fac8094a9881e66a",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "910-web-placemarker-list-advanced",
+      "fixture": "placemarkers.html",
+      "evidence": {
+        "sha256": "16ed3ceaa17dd10083aa05329755d9f96e76d77f063f8da0564592a4427ca117",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "911-web-skim-reading-dialog-intermediate",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "846d9f71cd9ecc02da786f5e1087794efc35903694835644b3feaf22e19f2096",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "912-web-skim-reading-dialog-advanced",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "8c1d05e5d55acbdbe775e469d2f68d4444cc4451437603eac00b43cc1a136eb2",
+        "capture_script_sha256": "62dff73fa481e95a4dcc020ca9e48222c812b94f12c0bd951ee7cdd3bed95769",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
     }
   ],
   "statistics": {
-    "scenarios": 490,
-    "scenarios_with_evidence": 490,
-    "total_trials": 1476,
-    "successful_trials": 1467,
-    "deterministic_scenarios": 317
+    "scenarios": 538,
+    "scenarios_with_evidence": 538,
+    "total_trials": 1620,
+    "successful_trials": 1611,
+    "deterministic_scenarios": 342
   }
 }
