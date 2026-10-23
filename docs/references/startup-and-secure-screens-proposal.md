@@ -3,6 +3,14 @@
 **Status:** approved by the owner, 2026-10-20. M0 to M3 are built as code (M3 never run);
 nothing of M4 to M7. See [Status](#status) for what is done and what waits for old-pc.
 
+**2026-10-23:** the development certificate is trusted on old-pc (the owner, 2026-10-22), and
+the release programs of `c72ab7c` (`okur-sr.exe`, `okur-sr-no-uiaccess.exe`, `okur-ui.exe`,
+`okur-setup.exe`) are signed with it (`signtool`, thumbprint `7E6D5DC0...7DEAF`) in
+`sr-harnesssigningokur-install`; on old-pc each signature is Valid. M3's install waits for
+the owner: `sr-harnesssigninginstall-okur.ps1`, elevated, checks each program's SHA-256 and
+signer and runs `okur-setup.exe install --no-start --no-start-after-sign-in`. M3's checks
+below follow it.
+
 ## Status
 
 As of 2026-10-20, branch `worktree-agent-a941eac1fa29ee91b`, rebased on `main` at `c719d58`.
