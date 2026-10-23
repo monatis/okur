@@ -354,7 +354,11 @@ A step can be in more than one entry; all of its entries apply.
   `506-web-jaws-find/s11`, `633-web-jaws-find-next-board/s9`,
   `633-web-jaws-find-next-board/s10`, `633-web-jaws-find-next-board/s11`,
   `633-web-jaws-find-next-board/s12`, `633-web-jaws-find-next-board/s13`,
-  `633-web-jaws-find-next-board/s14`.
+  `633-web-jaws-find-next-board/s14`, and at Intermediate and Advanced in round 267,
+  `926-web-jaws-find-intermediate/s8`, `926-web-jaws-find-intermediate/s9`,
+  `926-web-jaws-find-intermediate/s10`, `926-web-jaws-find-intermediate/s11`,
+  `927-web-jaws-find-advanced/s8`, `927-web-jaws-find-advanced/s9`,
+  `927-web-jaws-find-advanced/s10`, `927-web-jaws-find-advanced/s11`.
 - Difference: the whole step. JAWS says nothing on F3 and Shift+F3, and Say Line then reads
   the match's line or a line above it; Okur says the next or previous match's line.
 - Why: right after JAWS Find found "board", F3 and Shift+F3 said nothing in every trial of 506
@@ -477,7 +481,8 @@ A step can be in more than one entry; all of its entries apply.
 
 - Steps: `541-desktop-notepad-font-dialog/s2`, and the same opening in 665 (rounds 115 and 119),
   `665-desktop-font-dialog-say-window/s2`, and at Advanced in round 123,
-  `673-desktop-font-dialog-say-window-advanced/s2`.
+  `673-desktop-font-dialog-say-window-advanced/s2`, and in round 267,
+  `934-desktop-notepad-font-dialog-intermediate/s2` and `935-desktop-notepad-font-dialog-advanced/s2`.
 - Difference: the whole step. JAWS says "Consolas" between the Notepad edit it leaves and
   "Font dialog", then again in the Font field; Okur says the dialog, then the field with its
   font once.
@@ -490,7 +495,10 @@ A step can be in more than one entry; all of its entries apply.
 ### JAWS's PC cursor coordinates at 125%
 
 - Steps: `513-desktop-dialog-helpers/s2`, `513-desktop-dialog-helpers/s8`,
-  `516-desktop-jaws-cursor/s8`.
+  `516-desktop-jaws-cursor/s8`, and in round 267 at Intermediate and Advanced,
+  `930-desktop-dialog-helpers-intermediate/s2`, `930-desktop-dialog-helpers-intermediate/s8`,
+  `931-desktop-dialog-helpers-advanced/s2`, `931-desktop-dialog-helpers-advanced/s8`,
+  `932-desktop-jaws-cursor-intermediate/s8` and `933-desktop-jaws-cursor-advanced/s8`.
 - Difference: JAWS says "PC Cursor active | 1045, 544"; Okur says "PC Cursor active | 836,
   435".
 - Why: old-pc's screen is 1920 by 1080 pixels at 120 DPI (125%). The tracer, aware of each

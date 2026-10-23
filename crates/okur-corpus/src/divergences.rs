@@ -401,6 +401,12 @@ divergences! {
         "513-desktop-dialog-helpers/s2",
         "513-desktop-dialog-helpers/s8",
         "516-desktop-jaws-cursor/s8",
+        "930-desktop-dialog-helpers-intermediate/s2",
+        "930-desktop-dialog-helpers-intermediate/s8",
+        "931-desktop-dialog-helpers-advanced/s2",
+        "931-desktop-dialog-helpers-advanced/s8",
+        "932-desktop-jaws-cursor-intermediate/s8",
+        "933-desktop-jaws-cursor-advanced/s8",
     ],
     "At 125% (old-pc: 1920 by 1080 pixels, 120 DPI) JAWS gives the PC cursor's place 1.25 times \
      the screen's pixels: \"1045, 544\" for a button whose middle is at 836, 435, read from its \
@@ -431,6 +437,14 @@ divergences! {
         "633-web-jaws-find-next-board/s12",
         "633-web-jaws-find-next-board/s13",
         "633-web-jaws-find-next-board/s14",
+        "926-web-jaws-find-intermediate/s8",
+        "926-web-jaws-find-intermediate/s9",
+        "926-web-jaws-find-intermediate/s10",
+        "926-web-jaws-find-intermediate/s11",
+        "927-web-jaws-find-advanced/s8",
+        "927-web-jaws-find-advanced/s9",
+        "927-web-jaws-find-advanced/s10",
+        "927-web-jaws-find-advanced/s11",
     ],
     "Right after JAWS Find found \"board\", F3 and Shift+F3 say nothing, in every trial of 506 \
      and 633, and the virtual cursor lands on no match: it stays on the match's line, or ends \
@@ -545,6 +559,8 @@ divergences! {
         "541-desktop-notepad-font-dialog/s2",
         "665-desktop-font-dialog-say-window/s2",
         "673-desktop-font-dialog-say-window-advanced/s2",
+        "934-desktop-notepad-font-dialog-intermediate/s2",
+        "935-desktop-notepad-font-dialog-advanced/s2",
     ],
     "Opening Notepad's Font dialog, JAWS says the font, \"Consolas\", before the dialog, then \
      again in the field (in 3 of 3 trials of round 56, 2 of 3 earlier): the dialog fills its \
