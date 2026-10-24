@@ -306,17 +306,18 @@ mod windows_actions {
                                 let started = Instant::now();
                                 // SAFETY: plain Win32 call with no preconditions.
                                 let hwnd = unsafe { GetForegroundWindow() };
-                                let runs = uia
+                                let text = uia
                                     .as_ref()
                                     .and_then(|uia| crate::window_text::window_runs(uia, hwnd))
                                     .unwrap_or_default();
                                 tracing::debug!(
-                                    runs = runs.len(),
+                                    runs = text.runs.len(),
+                                    layout = ?text.layout,
                                     ms = started.elapsed().as_millis(),
                                     "screen text read"
                                 );
                                 // Answered even when empty: the engine keeps the window's model.
-                                let _ = events.send(AccessibilityEvent::ScreenText(runs));
+                                let _ = events.send(AccessibilityEvent::ScreenText(text));
                             }
                             Request::Recognize(area, language) => {
                                 let Some(events) = events.as_ref() else {

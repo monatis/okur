@@ -15,7 +15,7 @@ use super::ScreenReaderEngine;
 use crate::actions::RecognitionArea;
 use crate::input::{Key, KeyAction, KeyEvent};
 use crate::messages::msg;
-use crate::screen_model::{ScreenLine, ScreenModel, ScreenRun};
+use crate::screen_model::{ScreenLine, ScreenModel, ScreenRun, WindowText};
 
 impl ScreenReaderEngine {
     /// The language the screen is recognized in: the setting's, else Okur's own.
@@ -37,9 +37,25 @@ impl ScreenReaderEngine {
         }
     }
 
+    /// Whether the Okur cursor reads the window element by element, as JAWS's Scan Cursor reads
+    /// an application its screen capture cannot: "JAWS scan cursor" in a WPF window [obs,
+    /// 1002/s2]. Words recognized there are read where they are drawn, by the Okur cursor.
+    pub(super) fn okur_scans(&self) -> bool {
+        self.app_mode != super::AppMode::VirtualBuffer
+            && self
+                .last_native_focus
+                .as_ref()
+                .is_some_and(|focus| focus.read_by_elements)
+            && !self
+                .screen_model
+                .as_ref()
+                .is_some_and(|model| !model.recognized.is_empty())
+    }
+
     /// The window's text arrived: the model's accessible text, its recognized words kept while
     /// the window is the same.
-    pub(super) fn screen_text(&mut self, runs: &[ScreenRun]) -> Option<String> {
+    pub(super) fn screen_text(&mut self, text: &WindowText) -> Option<String> {
+        let runs = &text.runs;
         let window = self.last_window_title.clone();
         let recognized = self
             .screen_model
@@ -51,6 +67,7 @@ impl ScreenReaderEngine {
             window,
             accessible: runs.to_vec(),
             recognized,
+            layout: text.layout,
         });
         // Routed before the window's text came, it is routed again by it [obs, 1010/s3]; made
         // active where nothing placed it, it is where the mouse is.
@@ -291,7 +308,7 @@ mod tests {
     use crate::engine::ScreenReaderEngine;
     use crate::event::{AccessibilityEvent, FocusEvent};
     use crate::input::{Key, KeyEvent, Modifiers};
-    use crate::screen_model::{ScreenRun, Source};
+    use crate::screen_model::{ScreenRun, Source, WindowText};
 
     const TITLE: &str = "Drawn Text";
 
@@ -387,7 +404,9 @@ mod tests {
         let (mut engine, speech, actions) = window();
         press(&mut engine, &speech, Key::NumpadMinus, plain());
         assert!(actions.requests().iter().any(|(a, _)| a == "read screen"));
-        engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(accessible()));
+        engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(WindowText::rows(
+            accessible(),
+        )));
         press(&mut engine, &speech, Key::PageUp, plain());
         assert_eq!(press(&mut engine, &speech, Key::UpArrow, insert()), TITLE);
         assert_eq!(
@@ -429,7 +448,9 @@ mod tests {
             .requests()
             .iter()
             .any(|(a, _)| a == "recognize Window"));
-        engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(accessible()));
+        engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(WindowText::rows(
+            accessible(),
+        )));
         let _ = speech.take();
         engine.handle_accessibility_event(&AccessibilityEvent::Recognized(recognized()));
         assert_eq!(speech.take().join("\n"), "finished.\nOkur Cursor");
@@ -455,7 +476,9 @@ mod tests {
         // The PC cursor, then the Okur cursor again: the window's own lines.
         press(&mut engine, &speech, Key::NumpadPlus, plain());
         press(&mut engine, &speech, Key::NumpadMinus, plain());
-        engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(accessible()));
+        engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(WindowText::rows(
+            accessible(),
+        )));
         press(&mut engine, &speech, Key::PageUp, plain());
         assert_eq!(
             press(&mut engine, &speech, Key::DownArrow, plain()),
@@ -541,11 +564,86 @@ mod tests {
         let (mut engine, speech, _) = window();
         press(&mut engine, &speech, Key::NumpadMinus, insert());
         press(&mut engine, &speech, Key::NumpadMinus, plain());
-        engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(accessible()));
+        engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(WindowText::rows(
+            accessible(),
+        )));
         assert_eq!(
             press(&mut engine, &speech, Key::UpArrow, insert()),
             "Focus here"
         );
+    }
+
+    /// A WPF window, read element by element as JAWS's Scan Cursor reads it: "Route Okur scan
+    /// to PC", "Okur scan cursor", the focused edit with its role, each element a line, a name
+    /// ending with its role without it, Up landing on the first character so Right says the
+    /// second, and Alt+Delete without "active" [obs, 1002/s1-s13].
+    #[test]
+    fn a_modern_window_is_read_by_the_scan_cursor() {
+        use crate::aom::Role as R;
+        let speech = SharedSpeech::default();
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document))),
+            Box::new(speech.clone()),
+        );
+        engine.set_settings(crate::settings::Settings::reference_machine());
+        engine.set_actions(Box::new(RecordingActions::default()));
+        let mut edit = FocusEvent::new(Role::Edit).with_window_title("WPF Text");
+        edit.bounds = Some([594, 515, 969, 553]);
+        edit.read_by_elements = true;
+        engine.handle_accessibility_event(&AccessibilityEvent::Focus(edit));
+        let _ = speech.take();
+        let run = |text: &str, rect: (i32, i32, i32, i32), role: R| {
+            ScreenRun::new(text, rect, Source::Accessible).with_role(role)
+        };
+        let elements = WindowText::elements(vec![
+            run("WPF text block", (594, 353, 1326, 388), R::Text),
+            run("Left words", (594, 403, 714, 438), R::Text),
+            run("Right words", (764, 403, 903, 438), R::Text),
+            run("WPF button", (594, 453, 764, 500), R::Button),
+            run("Focus here", (594, 515, 969, 553), R::Edit),
+        ]);
+        assert_eq!(
+            press(&mut engine, &speech, Key::NumpadMinus, insert()),
+            "Route Okur scan to PC"
+        );
+        assert_eq!(
+            press(&mut engine, &speech, Key::NumpadMinus, plain()),
+            "Okur scan cursor"
+        );
+        engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(elements));
+        assert_eq!(
+            press(&mut engine, &speech, Key::UpArrow, insert()),
+            "Focus here \u{1d} Edit \u{1e}"
+        );
+        let said = press(
+            &mut engine,
+            &speech,
+            Key::Delete,
+            Modifiers {
+                alt: true,
+                ..Modifiers::none()
+            },
+        );
+        assert!(said.starts_with("Okur scan cursor\n"), "{said}");
+        press(&mut engine, &speech, Key::PageUp, plain());
+        let lines: Vec<String> = (0..4)
+            .map(|_| press(&mut engine, &speech, Key::DownArrow, plain()))
+            .collect();
+        assert_eq!(
+            lines,
+            [
+                "WPF text block",
+                "Left words",
+                "Right words",
+                "WPF \u{1d} Button \u{1e}"
+            ]
+        );
+        assert_eq!(
+            press(&mut engine, &speech, Key::UpArrow, plain()),
+            "Right words"
+        );
+        assert_eq!(press(&mut engine, &speech, Key::RightArrow, plain()), "i");
+        assert_eq!(press(&mut engine, &speech, Key::RightArrow, plain()), "g");
     }
 
     /// Another window in front: its model, recognized words and all, is not this one's.

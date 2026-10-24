@@ -18,10 +18,11 @@
 use crate::aom::Role;
 use crate::screen_model::{ScreenRun, Source};
 
-/// How a window's elements become the viewer's lines.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+/// How a window's elements become the viewer's lines, and the Okur cursor's.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum ViewerLayout {
     /// As drawn on screen, by rows (classic windows).
+    #[default]
     Rows,
     /// One element per line in tree order, with role and state (modern apps).
     Elements,
@@ -159,7 +160,7 @@ pub fn runs(items: &[ScreenItem]) -> Vec<ScreenRun> {
 }
 
 /// The word an element list gives an element's role ("Button", "group"); text has none.
-fn role_word(role: &Role) -> Option<&'static str> {
+pub(crate) fn role_word(role: &Role) -> Option<&'static str> {
     use crate::messages::msg;
     Some(
         match role {
@@ -183,6 +184,26 @@ fn role_word(role: &Role) -> Option<&'static str> {
         }
         .as_str(),
     )
+}
+
+/// Each item with text as a run of its own, in the window's order, with its role: a modern
+/// app's elements for the Okur cursor, which reads them one a line as JAWS's Scan Cursor does
+/// [obs, 1002/s7-s11].
+pub fn element_runs(items: &[ScreenItem]) -> Vec<ScreenRun> {
+    items
+        .iter()
+        .filter_map(|item| {
+            let text = visible(&item.text);
+            (!text.is_empty()).then(|| {
+                ScreenRun::new(
+                    text,
+                    (item.left, item.top, item.right, item.bottom),
+                    Source::Accessible,
+                )
+                .with_role(item.role.clone())
+            })
+        })
+        .collect()
 }
 
 /// The window's elements one per line in tree order, as JAWS lists a modern app's: its name,

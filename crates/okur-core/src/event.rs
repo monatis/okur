@@ -343,6 +343,11 @@ pub struct FocusEvent {
     /// window's own text ("Rich Text Window"), not a label.
     #[serde(default)]
     pub rich_edit: bool,
+    /// The window is read element by element, as JAWS's Scan Cursor reads an application its
+    /// screen capture cannot (WPF, UWP, WinUI): the platform decides it from the window's kind
+    /// [obs, 1002/s1, s2].
+    #[serde(default)]
+    pub read_by_elements: bool,
     /// An edit with an up-down control attached (a spin box): "Number of copies: edit spin
     /// box" [obs, 546/s8].
     #[serde(default)]
@@ -514,6 +519,7 @@ impl FocusEvent {
             multi_line: false,
             plain_edit: false,
             rich_edit: false,
+            read_by_elements: false,
             spin_box: false,
             outer_dialogs: Vec::new(),
             outer_windows: Vec::new(),
@@ -684,7 +690,7 @@ pub enum AccessibilityEvent {
     /// The text the accessibility interfaces place on the window in front, each piece where
     /// it is drawn, read for the Okur cursor's model; empty when nothing could be read
     /// ([`crate::actions::ApplicationActions::read_screen`]).
-    ScreenText(Vec<crate::screen_model::ScreenRun>),
+    ScreenText(crate::screen_model::WindowText),
     /// The words recognized from the screen's pixels where they are drawn, asked for by
     /// Insert+Space, O; empty when none was recognized or recognition failed
     /// ([`crate::actions::ApplicationActions::recognize`]).

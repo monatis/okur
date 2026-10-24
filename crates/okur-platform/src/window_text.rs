@@ -6,6 +6,18 @@
 #[cfg(windows)]
 pub use reader::{control_lines, window_lines, window_runs};
 
+/// Whether a window of class `class` (its top-level window's), drawn by `framework` (UI
+/// Automation's FrameworkId, empty when unknown), is read element by element: a modern app's
+/// (UWP, WinUI, WPF), as JAWS's viewer lists its elements and its Scan Cursor walks them
+/// [obs, 1002/s2]; a classic window by its screen rows.
+pub fn reads_by_elements(class: &str, framework: &str) -> bool {
+    matches!(
+        class,
+        "ApplicationFrameWindow" | "Windows.UI.Core.CoreWindow" | "WinUIDesktopWin32WindowClass"
+    ) || class.starts_with("HwndWrapper[")
+        || matches!(framework, "XAML" | "WPF" | "WinUI")
+}
+
 #[cfg(windows)]
 mod reader {
     use crate::screen_lines::{
@@ -13,7 +25,7 @@ mod reader {
     };
     use crate::uia_snapshot::capture::{boolean, int, string};
     use okur_core::aom::Role;
-    use okur_core::screen_model::ScreenRun;
+    use okur_core::screen_model::WindowText;
     use okur_core::viewer_text::{lines, ScreenItem, ViewerLayout};
     use windows::Win32::Foundation::HWND;
     use windows::Win32::UI::Accessibility::*;
@@ -105,13 +117,7 @@ mod reader {
     fn layout_of(root: &IUIAutomationElement) -> ViewerLayout {
         let class = string(root, UIA_ClassNamePropertyId).unwrap_or_default();
         let framework = string(root, UIA_FrameworkIdPropertyId).unwrap_or_default();
-        let modern = matches!(
-            class.as_str(),
-            "ApplicationFrameWindow"
-                | "Windows.UI.Core.CoreWindow"
-                | "WinUIDesktopWin32WindowClass"
-        ) || matches!(framework.as_str(), "XAML" | "WPF" | "WinUI");
-        if modern {
+        if super::reads_by_elements(&class, &framework) {
             ViewerLayout::Elements
         } else {
             ViewerLayout::Rows
@@ -439,12 +445,17 @@ mod reader {
     /// The text window `hwnd` shows, each piece where it is drawn, for the Okur cursor's model
     /// (its screen text): its controls by rows, whatever kind of window it is, a
     /// field's and a document's lines as they show them. Its title bar is not among them.
-    pub fn window_runs(uia: &IUIAutomation, hwnd: HWND) -> Option<Vec<ScreenRun>> {
+    pub fn window_runs(uia: &IUIAutomation, hwnd: HWND) -> Option<WindowText> {
         dpi_aware(|| {
             // SAFETY: a UIA element for a window handle.
             let root = unsafe { uia.ElementFromHandle(hwnd) }.ok()?;
-            let (_, items) = read_items(uia, &root, Some(ViewerLayout::Rows), true)?;
-            Some(okur_core::viewer_text::runs(&items))
+            let (layout, items) = read_items(uia, &root, None, true)?;
+            Some(match layout {
+                ViewerLayout::Elements => {
+                    WindowText::elements(okur_core::viewer_text::element_runs(&items))
+                }
+                ViewerLayout::Rows => WindowText::rows(okur_core::viewer_text::runs(&items)),
+            })
         })
     }
 
@@ -541,8 +552,9 @@ pub fn foreground_screen(
     };
     Ok(okur_core::screen_model::ScreenModel {
         window: None,
-        accessible,
+        accessible: accessible.runs,
         recognized,
+        layout: accessible.layout,
     })
 }
 

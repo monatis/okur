@@ -714,6 +714,7 @@ async fn main() {
                     let snapshot = serde_json::json!({
                         "step": step,
                         "t_ms": t_ms,
+                        "layout": model.layout,
                         "accessible": model.accessible,
                         "recognized": model.recognized,
                         "other_window": other_window,

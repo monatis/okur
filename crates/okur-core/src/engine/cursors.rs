@@ -121,7 +121,12 @@ impl ScreenReaderEngine {
     pub(super) fn activate_okur_cursor(&mut self) -> Option<String> {
         self.active_cursor = ActiveCursor::Okur;
         self.request_screen();
-        let said = self.cursor_message(msg::cursor_okur(), msg::cursor_okur_short());
+        // In a window read element by element: "Okur scan cursor" [obs, 1002/s2].
+        let said = if self.okur_scans() {
+            msg::cursor_okur_scan().to_string()
+        } else {
+            self.cursor_message(msg::cursor_okur(), msg::cursor_okur_short())
+        };
         self.say(said)
     }
 
@@ -171,10 +176,15 @@ impl ScreenReaderEngine {
         self.okur_place = self.routed_place();
         self.route_awaits_screen =
             self.app_mode != super::AppMode::VirtualBuffer && self.okur_screen_lines().is_none();
-        let said = self.cursor_message(
-            msg::cursor_route_okur_to_pc(),
-            msg::cursor_route_okur_to_pc_short(),
-        );
+        // "Route Okur scan to PC" in a window read element by element [obs, 1002/s1].
+        let said = if self.okur_scans() {
+            msg::cursor_route_okur_scan_to_pc().to_string()
+        } else {
+            self.cursor_message(
+                msg::cursor_route_okur_to_pc(),
+                msg::cursor_route_okur_to_pc_short(),
+            )
+        };
         self.say(said)
     }
 
@@ -349,7 +359,11 @@ impl ScreenReaderEngine {
         Some(match self.okur_place? {
             OkurPlace::Top => self.okur_top_line()?,
             OkurPlace::Bottom | OkurPlace::AboveBottom => String::new(),
-            OkurPlace::Text { line, .. } => self.okur_lines().get(line)?.trim().to_owned(),
+            // An element's line with its role: "WPF ‹Button›" [obs, 1002/s11].
+            OkurPlace::Text { line, .. } => match self.okur_screen_lines() {
+                Some(lines) => lines.get(line)?.spoken().trim().to_owned(),
+                None => self.okur_lines().get(line)?.trim().to_owned(),
+            },
         })
     }
 
@@ -505,10 +519,13 @@ impl ScreenReaderEngine {
     /// From the window's top, Down goes to the first line.
     fn move_okur_line(&mut self, down: bool) {
         let last = self.okur_lines().len().saturating_sub(1);
+        // The Scan Cursor lands on an element's first character: Right then says its second
+        // ("i" of "Right words" [obs, 1002/s12, s13]).
+        let first = self.okur_scans().then_some(0);
         let next = match (self.okur_place, down) {
             (Some(OkurPlace::Top), true) => OkurPlace::Text {
                 line: 0,
-                column: None,
+                column: first,
             },
             (Some(OkurPlace::Top), false) => OkurPlace::Top,
             // From the bottom, Up says the empty line above it, then the text's last line.
@@ -516,15 +533,15 @@ impl ScreenReaderEngine {
             (Some(OkurPlace::Bottom | OkurPlace::AboveBottom), true) => OkurPlace::Bottom,
             (Some(OkurPlace::AboveBottom), false) => OkurPlace::Text {
                 line: last,
-                column: None,
+                column: first,
             },
             (Some(OkurPlace::Text { line, .. }), true) => OkurPlace::Text {
                 line: (line + 1).min(last),
-                column: None,
+                column: first,
             },
             (Some(OkurPlace::Text { line, .. }), false) => OkurPlace::Text {
                 line: line.saturating_sub(1),
-                column: None,
+                column: first,
             },
             (None, _) => return,
         };
@@ -693,6 +710,8 @@ impl ScreenReaderEngine {
     pub(super) fn say_active_cursor(&mut self) -> Option<String> {
         let (name, at) = match self.active_cursor {
             ActiveCursor::Pc => (msg::cursor_pc_active(), self.pc_cursor_point()),
+            // "JAWS scan cursor | 594, 507 | ..." without "active" [obs, 1002/s4].
+            ActiveCursor::Okur if self.okur_scans() => (msg::cursor_okur_scan(), self.mouse),
             ActiveCursor::Okur => (msg::cursor_okur_active(), self.mouse),
         };
         let mut said = vec![name.to_string()];

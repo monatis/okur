@@ -35,6 +35,11 @@ cursor-okur-short = Okur
 cursor-pc-short = PC
 cursor-route-okur-to-pc-short = Okur to PC
 cursor-okur-active = Okur Cursor active
+# The Okur cursor in a window read element by element, where JAWS says "JAWS scan cursor"
+# (Numpad Minus, and Alt+Delete, without "active") and "Route JAWS scan to PC" (Insert+Numpad
+# Minus) [obs, 1002/s1, s2, s4].
+cursor-okur-scan = Okur scan cursor
+cursor-route-okur-scan-to-pc = Route Okur scan to PC
 cursor-pc-active = PC Cursor active
 cursor-position = { $x }, { $y }
 cursor-restriction-application = Application window restriction

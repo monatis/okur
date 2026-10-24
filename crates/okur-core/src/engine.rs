@@ -1385,7 +1385,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::Selected(item) => self.handle_selected(item),
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
             AccessibilityEvent::ViewerText(lines) => self.open_screen_viewer(lines),
-            AccessibilityEvent::ScreenText(runs) => self.screen_text(runs),
+            AccessibilityEvent::ScreenText(text) => self.screen_text(text),
             AccessibilityEvent::Recognized(words) => self.recognized(words),
             AccessibilityEvent::TopWindows(windows) => self.open_window_list(windows),
             AccessibilityEvent::TrayIcons(icons) => self.open_tray_list(icons),

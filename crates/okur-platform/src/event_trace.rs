@@ -1000,6 +1000,12 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .or_else(|| event.top_window_class.clone())
             .or_else(|| active_window.and_then(|w| w.class_name.clone()))
     };
+    // A modern app's window is read element by element, as JAWS's Scan Cursor walks it.
+    focus.read_by_elements = focus
+        .platform
+        .top_window_class
+        .as_deref()
+        .is_some_and(|class| crate::window_text::reads_by_elements(class, ""));
     // A window UI Automation calls a dialog is one too, whatever draws it: JAWS's WPF windows,
     // "Name Your Rule dialog" [obs, 783/s7].
     focus.in_dialog_box =

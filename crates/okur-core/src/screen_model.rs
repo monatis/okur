@@ -9,6 +9,8 @@
 //! screen's pixels (OCR) where no accessible text lies, as JAWS's Convenient OCR puts its
 //! recognized words among its model's lines without saying any twice [obs, 996, 997].
 
+use crate::aom::Role;
+use crate::viewer_text::ViewerLayout;
 use serde::{Deserialize, Serialize};
 
 /// Where a piece of the screen's text came from.
@@ -29,6 +31,9 @@ pub struct ScreenRun {
     pub right: i32,
     pub bottom: i32,
     pub source: Source,
+    /// The element's role, for a window read element by element.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub role: Option<Role>,
 }
 
 impl ScreenRun {
@@ -41,7 +46,14 @@ impl ScreenRun {
             right,
             bottom,
             source,
+            role: None,
         }
+    }
+
+    /// This run, an element with `role`.
+    pub fn with_role(mut self, role: Role) -> Self {
+        self.role = Some(role);
+        self
     }
 
     fn middle(&self) -> (i32, i32) {
@@ -77,9 +89,24 @@ pub struct Piece {
 pub struct ScreenLine {
     pub text: String,
     pub pieces: Vec<Piece>,
+    /// An element's line: its role's word, said after its text.
+    pub role: Option<&'static str>,
 }
 
 impl ScreenLine {
+    /// The line as the Okur cursor says it: its text, then an element's role ("WPF ‹Button›"
+    /// [obs, 1002/s11]).
+    pub fn spoken(&self) -> String {
+        match self.role {
+            Some(role) => format!(
+                "{}{}",
+                self.text.trim(),
+                crate::linearize::role_marker(role)
+            ),
+            None => self.text.clone(),
+        }
+    }
+
     /// The piece character `column` is in; a space between two pieces is the earlier one's.
     fn piece_at(&self, column: usize) -> Option<&Piece> {
         self.pieces
@@ -141,6 +168,7 @@ pub fn lines(runs: &[ScreenRun]) -> Vec<ScreenLine> {
             let mut line = ScreenLine {
                 text: String::new(),
                 pieces: Vec::with_capacity(row.len()),
+                role: None,
             };
             for run in row.into_iter().filter(|r| !r.text.is_empty()) {
                 if !line.text.is_empty() {
@@ -164,6 +192,66 @@ pub fn lines(runs: &[ScreenRun]) -> Vec<ScreenLine> {
         .collect()
 }
 
+/// Each element its own line, in the window's order: its name, without its role's word where
+/// the name ends with it ("WPF button" is "WPF", said with the role: "WPF ‹Button›" [obs,
+/// 1002/s11]), and the role.
+pub fn element_lines(runs: &[ScreenRun]) -> Vec<ScreenLine> {
+    runs.iter()
+        .filter(|run| !run.text.trim().is_empty())
+        .map(|run| {
+            let role = run.role.as_ref().and_then(crate::viewer_text::role_word);
+            let mut text = run.text.trim().to_owned();
+            if let Some(word) = role {
+                if let Some((name, last)) = text.rsplit_once(' ') {
+                    if last.eq_ignore_ascii_case(word) && !name.trim().is_empty() {
+                        text = name.trim_end().to_owned();
+                    }
+                }
+            }
+            ScreenLine {
+                pieces: vec![Piece {
+                    start: 0,
+                    chars: text.chars().count(),
+                    left: run.left,
+                    top: run.top,
+                    right: run.right,
+                    bottom: run.bottom,
+                    source: run.source,
+                }],
+                text,
+                role,
+            }
+        })
+        .collect()
+}
+
+/// The text the accessibility interfaces place on a window, and how it is read: by screen rows,
+/// or element by element in a modern app's window, as JAWS's Scan Cursor reads it.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct WindowText {
+    #[serde(default)]
+    pub layout: ViewerLayout,
+    pub runs: Vec<ScreenRun>,
+}
+
+impl WindowText {
+    /// A window read by rows.
+    pub fn rows(runs: Vec<ScreenRun>) -> Self {
+        Self {
+            layout: ViewerLayout::Rows,
+            runs,
+        }
+    }
+
+    /// A window read element by element.
+    pub fn elements(runs: Vec<ScreenRun>) -> Self {
+        Self {
+            layout: ViewerLayout::Elements,
+            runs,
+        }
+    }
+}
+
 /// A window's model: what the accessibility interfaces place on it, and what was recognized
 /// from its pixels.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
@@ -172,6 +260,8 @@ pub struct ScreenModel {
     pub window: Option<String>,
     pub accessible: Vec<ScreenRun>,
     pub recognized: Vec<ScreenRun>,
+    /// How its accessible text is read.
+    pub layout: ViewerLayout,
 }
 
 impl ScreenModel {
@@ -188,8 +278,12 @@ impl ScreenModel {
         runs
     }
 
-    /// The model's lines.
+    /// The model's lines: its elements one a line in a window read element by element; by
+    /// rows otherwise, and wherever words were recognized, which lie where they are drawn.
     pub fn lines(&self) -> Vec<ScreenLine> {
+        if self.layout == ViewerLayout::Elements && self.recognized.is_empty() {
+            return element_lines(&self.accessible);
+        }
         lines(&self.runs())
     }
 }
@@ -237,6 +331,7 @@ mod tests {
     #[test]
     fn recognized_words_fill_what_no_accessible_text_covers() {
         let model = ScreenModel {
+            layout: ViewerLayout::Rows,
             window: Some("SR Drawn Text Fixture".to_owned()),
             accessible: vec![
                 accessible("Label drawn by GDI", 20, 16, 240, 48),
@@ -263,6 +358,33 @@ mod tests {
         let lines = model.lines();
         assert!(lines.get(1).is_some_and(|l| l.recognized_at(0)));
         assert!(lines.first().is_some_and(|l| !l.recognized_at(0)));
+    }
+
+    /// A modern app's window, element by element: each its own line in the window's order,
+    /// though two lie side by side, each with its role, a name ending with its role's word
+    /// without it [obs, 1002/s8-s11].
+    #[test]
+    fn elements_are_lines_of_their_own_with_their_roles() {
+        let model = ScreenModel {
+            layout: ViewerLayout::Elements,
+            accessible: vec![
+                accessible("WPF text block", 594, 353, 1326, 388).with_role(Role::Text),
+                accessible("Left words", 594, 403, 714, 438).with_role(Role::Text),
+                accessible("Right words", 764, 403, 903, 438).with_role(Role::Text),
+                accessible("WPF button", 594, 453, 764, 500).with_role(Role::Button),
+            ],
+            ..ScreenModel::default()
+        };
+        let spoken: Vec<String> = model.lines().iter().map(ScreenLine::spoken).collect();
+        assert_eq!(
+            spoken,
+            [
+                "WPF text block",
+                "Left words",
+                "Right words",
+                "WPF \u{1d} Button \u{1e} "
+            ]
+        );
     }
 
     #[test]

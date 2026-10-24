@@ -1182,6 +1182,9 @@ const RETIRED_OKUR_SETTINGS: &[&str] = &["experimental.screen_text"];
 #[derive(Debug, Clone, Default, serde::Deserialize)]
 struct ScreenSnapshot {
     step: String,
+    /// How the window's text is read; snapshots before 1016 were all by rows.
+    #[serde(default)]
+    layout: okur_core::viewer_text::ViewerLayout,
     #[serde(default)]
     accessible: Vec<okur_core::screen_model::ScreenRun>,
     #[serde(default)]
@@ -1225,7 +1228,10 @@ impl ScreenReads {
         while self.screens < screens {
             self.screens += 1;
             deliver(okur_core::AccessibilityEvent::ScreenText(
-                snapshot.accessible.clone(),
+                okur_core::screen_model::WindowText {
+                    layout: snapshot.layout,
+                    runs: snapshot.accessible.clone(),
+                },
             ));
         }
         while self.recognitions < recognitions {
