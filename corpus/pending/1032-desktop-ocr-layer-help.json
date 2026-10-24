@@ -1,0 +1,129 @@
+{
+  "id": "1032-desktop-ocr-layer-help",
+  "name": "Convenient OCR's ? (OCRLayerHelp): where JAWS shows the layer's keys, their lines read from the top with UI Access keys, and Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-wpf-text.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR WPF Text Fixture",
+    "hide_console": true
+  },
+  "reset": {
+    "keys": []
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Shift+Slash",
+      "settle_max_ms": 30000
+    },
+    {
+      "id": "s4",
+      "type": "key_ui_access",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s5",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s13",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s14",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s15",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s16",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s17",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s18",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s19",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s20",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s21",
+      "type": "key_ui_access",
+      "command": "Insert+T"
+    },
+    {
+      "id": "s22",
+      "type": "key_ui_access",
+      "command": "Escape",
+      "settle_max_ms": 20000
+    }
+  ]
+}
