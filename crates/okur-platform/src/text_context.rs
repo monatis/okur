@@ -35,8 +35,8 @@ pub fn css_alignment(align: &str) -> Option<&'static str> {
 #[cfg(windows)]
 pub use reader::{
     focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
-    move_caret_in_edit, move_to_cell, read_focused, read_focused_outside_page, visible_text,
-    with_paragraph_alignment,
+    move_caret_in_edit, move_to_cell, move_to_paragraph, read_focused, read_focused_outside_page,
+    visible_text, with_paragraph_alignment, word_document_headings,
 };
 
 #[cfg(windows)]
@@ -745,6 +745,119 @@ mod reader {
                     )
                     .ok()?;
                 range.Select().ok()
+            }
+        };
+        moved().is_some()
+    }
+
+    /// The most paragraphs of a document read for its headings: a long book's, at about four
+    /// UI Automation calls each.
+    const MAX_PARAGRAPHS: usize = 20_000;
+    /// The most of a heading's text read.
+    const MAX_HEADING_CHARS: i32 = 500;
+
+    /// The headings of Word's document: the focused one, or with `window`, the one in that
+    /// top-level window, wherever the focus is (the recorder's, after JAWS's Heading List took
+    /// it). Read paragraph by paragraph, by their styles. `None` without Word's document.
+    pub fn word_document_headings(
+        uia: &IUIAutomation,
+        window: Option<windows::Win32::Foundation::HWND>,
+    ) -> Option<Vec<okur_core::DocumentHeading>> {
+        use windows::core::BSTR;
+        use windows::Win32::System::Variant::VARIANT;
+        use windows::Win32::UI::Accessibility::{
+            TextUnit_Paragraph, TreeScope_Descendants, UIA_ClassNamePropertyId,
+            UIA_StyleIdAttributeId,
+        };
+        // SAFETY: UIA client calls on valid objects.
+        unsafe {
+            let document = match window {
+                Some(window) => {
+                    let condition = uia
+                        .CreatePropertyCondition(
+                            UIA_ClassNamePropertyId,
+                            &VARIANT::from(BSTR::from(WORD_DOCUMENT_CLASS)),
+                        )
+                        .ok()?;
+                    uia.ElementFromHandle(window)
+                        .ok()?
+                        .FindFirst(TreeScope_Descendants, &condition)
+                        .ok()?
+                }
+                None => {
+                    let focused = uia.GetFocusedElement().ok()?;
+                    if focused.CurrentClassName().ok()? != WORD_DOCUMENT_CLASS {
+                        return None;
+                    }
+                    focused
+                }
+            };
+            let pattern: IUIAutomationTextPattern =
+                document.GetCurrentPatternAs(UIA_TextPatternId).ok()?;
+            let at = pattern.DocumentRange().ok()?;
+            at.MoveEndpointByRange(
+                TextPatternRangeEndpoint_End,
+                &at,
+                TextPatternRangeEndpoint_Start,
+            )
+            .ok()?;
+            let mut headings = Vec::new();
+            for paragraph in 0..MAX_PARAGRAPHS {
+                let range = at.Clone().ok()?;
+                range.ExpandToEnclosingUnit(TextUnit_Paragraph).ok()?;
+                let level = range
+                    .GetAttributeValue(UIA_StyleIdAttributeId)
+                    .ok()
+                    .and_then(|v| i32::try_from(&v).ok())
+                    .filter(|id| (STYLE_HEADING_1..=STYLE_HEADING_9).contains(id))
+                    .and_then(|id| u8::try_from(id - STYLE_HEADING_1 + 1).ok());
+                if let Some(level) = level {
+                    let text = range.GetText(MAX_HEADING_CHARS).ok()?.to_string();
+                    let text = cell_text(&text);
+                    if !text.is_empty() {
+                        headings.push(okur_core::DocumentHeading {
+                            text,
+                            level,
+                            paragraph,
+                        });
+                    }
+                }
+                if at.Move(TextUnit_Paragraph, 1).ok()? < 1 {
+                    break;
+                }
+            }
+            Some(headings)
+        }
+    }
+
+    /// The caret of Word's focused document to the start of its `paragraph` (from 0, as
+    /// [`word_document_headings`] counts them). False when the focus is not in Word's document
+    /// or it has no such paragraph.
+    pub fn move_to_paragraph(uia: &IUIAutomation, paragraph: usize) -> bool {
+        use windows::Win32::UI::Accessibility::TextUnit_Paragraph;
+        let Ok(count) = i32::try_from(paragraph) else {
+            return false;
+        };
+        // SAFETY: UIA client calls on valid objects.
+        let moved = || -> Option<()> {
+            unsafe {
+                let focused = uia.GetFocusedElement().ok()?;
+                if focused.CurrentClassName().ok()? != WORD_DOCUMENT_CLASS {
+                    return None;
+                }
+                let pattern: IUIAutomationTextPattern =
+                    focused.GetCurrentPatternAs(UIA_TextPatternId).ok()?;
+                let at = pattern.DocumentRange().ok()?;
+                at.MoveEndpointByRange(
+                    TextPatternRangeEndpoint_End,
+                    &at,
+                    TextPatternRangeEndpoint_Start,
+                )
+                .ok()?;
+                if count > 0 && at.Move(TextUnit_Paragraph, count).ok()? != count {
+                    return None;
+                }
+                at.Select().ok()
             }
         };
         moved().is_some()

@@ -93,6 +93,10 @@ mod windows_actions {
         /// The caret to a cell of the focused document's table (row, column, from 1), then
         /// the field's text, compared with the field as the engine last knew it.
         Cell(Option<Box<TextContext>>, usize, usize),
+        /// The focused document's headings, answered even when there are none.
+        DocumentHeadings,
+        /// The caret to a paragraph of the focused document (from 0), then the field's text.
+        Paragraph(Option<Box<TextContext>>, usize),
         /// A chord of virtual keys, sent marked as the screen reader's own.
         Keys(Vec<u16>),
         /// The Virtual Viewer's lines for the window in front (`true`) or the focused
@@ -159,6 +163,8 @@ mod windows_actions {
                 Request::Object(..) | Request::UiaObject(..) => "page action",
                 Request::Text(..) | Request::TextNow => "text read",
                 Request::Cell(..) => "table cell",
+                Request::DocumentHeadings => "document headings",
+                Request::Paragraph(..) => "paragraph",
                 Request::Keys(_) => "keys",
                 Request::Window(_) => "viewer read",
                 Request::PageElements(_) => "page elements",
@@ -316,6 +322,39 @@ mod windows_actions {
                                 };
                                 if !crate::text_context::move_to_cell(uia, row, column) {
                                     tracing::debug!(row, column, "caret not moved to the cell");
+                                    return;
+                                }
+                                if let Some(context) =
+                                    read_after_key(uia, before.map(|b| *b), false)
+                                {
+                                    let _ = events.send(AccessibilityEvent::TextContext(context));
+                                }
+                            }
+                            Request::DocumentHeadings => {
+                                let Some(events) = events.as_ref() else {
+                                    return;
+                                };
+                                let started = Instant::now();
+                                let headings = uia
+                                    .as_ref()
+                                    .and_then(|uia| {
+                                        crate::text_context::word_document_headings(uia, None)
+                                    })
+                                    .unwrap_or_default();
+                                tracing::debug!(
+                                    headings = headings.len(),
+                                    ms = started.elapsed().as_millis(),
+                                    "document headings read"
+                                );
+                                let _ = events.send(AccessibilityEvent::DocumentHeadings(headings));
+                            }
+                            Request::Paragraph(before, paragraph) => {
+                                let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
+                                else {
+                                    return;
+                                };
+                                if !crate::text_context::move_to_paragraph(uia, paragraph) {
+                                    tracing::debug!(paragraph, "caret not moved to the paragraph");
                                     return;
                                 }
                                 if let Some(context) =
@@ -756,6 +795,14 @@ mod windows_actions {
             self.send(Request::Cell(before.cloned().map(Box::new), row, column))
         }
 
+        fn read_document_headings(&self) -> bool {
+            self.send(Request::DocumentHeadings)
+        }
+
+        fn move_to_paragraph(&self, before: Option<&TextContext>, paragraph: usize) -> bool {
+            self.send(Request::Paragraph(before.cloned().map(Box::new), paragraph))
+        }
+
         fn move_caret(&self, context: &TextContext, offset: usize) -> bool {
             self.send(Request::Caret(context.text.clone(), offset))
         }
@@ -877,6 +924,30 @@ pub fn read_text_now() -> Option<okur_core::TextContext> {
         crate::text_context::read_focused_outside_page(&uia)
     }
 }
+/// The headings of Word's document, read right away on the calling thread: the focused one,
+/// or the one in the top-level window titled `window_title`. For harness checks and the
+/// recorder; the engine goes through `WindowsActions`. `None` without Word's document.
+#[cfg(windows)]
+pub fn document_headings_now(
+    window_title: Option<&str>,
+) -> Option<Vec<okur_core::DocumentHeading>> {
+    use windows::Win32::System::Com::{
+        CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
+    };
+    use windows::Win32::UI::Accessibility::{CUIAutomation8, IUIAutomation};
+    let window = match window_title {
+        Some(title) => Some(crate::harness::window_titled(title)?),
+        None => None,
+    };
+    // SAFETY: COM initialization and in-process activation.
+    let uia: IUIAutomation = unsafe {
+        let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
+        CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
+    }
+    .ok()?;
+    crate::text_context::word_document_headings(&uia, window)
+}
+
 /// Performs an action on a node's live object right away, on the calling thread, reporting
 /// why it failed. For harness checks; the engine goes through `WindowsActions`.
 #[cfg(windows)]

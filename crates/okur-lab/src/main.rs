@@ -71,6 +71,22 @@ enum Commands {
         #[arg(long)]
         dump: bool,
     },
+    /// Print the headings of Word's document, as its Heading List (Insert+F6) lists them
+    /// (Windows). Research, never evidence
+    DocumentHeadings {
+        /// The window holding the document, by its whole title (a scenario's fixture), wherever
+        /// the focus is; without it, the focused document
+        #[arg(long)]
+        window_title: Option<String>,
+        /// Append the headings, as JSON, to this file instead of printing them: the recorder's
+        /// snapshot after a step of a scenario with "trace_headings" (replay gives them to the
+        /// Heading List)
+        #[arg(long)]
+        append_to: Option<String>,
+        /// With --append-to, the step the snapshot is taken after
+        #[arg(long, default_value = "")]
+        step: String,
+    },
     /// Read the focused edit's text at its caret, as caret keys do in an edit (Windows)
     Caret {
         /// char, word or line
@@ -1157,6 +1173,59 @@ async fn main() {
             {
                 let _ = (name, action);
                 eprintln!("act is only available on Windows");
+                std::process::exit(1);
+            }
+        }
+        Some(Commands::DocumentHeadings {
+            window_title,
+            append_to,
+            step,
+        }) => {
+            #[cfg(windows)]
+            {
+                let headings =
+                    okur_platform::actions::document_headings_now(window_title.as_deref());
+                if let Some(path) = append_to {
+                    let t_ms = std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .map(|d| d.as_millis())
+                        .unwrap_or_default();
+                    // Without the document (the window gone), no headings are saved, and replay
+                    // answers the Heading List with none.
+                    let snapshot = serde_json::json!({
+                        "step": step,
+                        "t_ms": t_ms,
+                        "headings": headings.unwrap_or_default(),
+                    });
+                    let written = std::fs::OpenOptions::new()
+                        .create(true)
+                        .append(true)
+                        .open(&path)
+                        .and_then(|mut file| {
+                            use std::io::Write as _;
+                            writeln!(file, "{snapshot}")
+                        });
+                    if let Err(e) = written {
+                        eprintln!("{path}: {e}");
+                        std::process::exit(1);
+                    }
+                    return;
+                }
+                let Some(headings) = headings else {
+                    eprintln!("no document of Word's to read");
+                    std::process::exit(1);
+                };
+                for heading in headings {
+                    println!(
+                        "{} : {} (paragraph {})",
+                        heading.text, heading.level, heading.paragraph
+                    );
+                }
+            }
+            #[cfg(not(windows))]
+            {
+                let _ = (window_title, append_to, step);
+                eprintln!("document-headings is only available on Windows");
                 std::process::exit(1);
             }
         }

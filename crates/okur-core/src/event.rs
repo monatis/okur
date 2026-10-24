@@ -120,6 +120,16 @@ pub struct LineStructure {
     pub cell: Option<TableCell>,
 }
 
+/// A heading of a document the platform reads by paragraphs (Word's), for its Heading List
+/// (Insert+F6): its text, its level, and the paragraph it is, from the document's first (0),
+/// by which the caret is moved to it.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct DocumentHeading {
+    pub text: String,
+    pub level: u8,
+    pub paragraph: usize,
+}
+
 /// A cell of a word processor's table, where the caret is.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct TableCell {
@@ -764,6 +774,10 @@ pub enum AccessibilityEvent {
     /// Page elements asked for by DOM id, each with its subtree, as they are now; empty when
     /// none was found ([`crate::actions::ApplicationActions::read_page_elements`]).
     PageElements(Vec<crate::aom::AomNode>),
+    /// The focused document's headings, in order, asked for by its Heading List (Insert+F6
+    /// in Word; [`crate::actions::ApplicationActions::read_document_headings`]); empty when it
+    /// has none or could not be read.
+    DocumentHeadings(Vec<DocumentHeading>),
     /// What the user did to one of Okur's own windows (`okur-ui`).
     Ui(crate::ui::FromUi),
     /// The page in front changed outside its live regions: a web application added or

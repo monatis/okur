@@ -69,6 +69,9 @@ remote=$(opendesk exec --peer "$PEER" --timeout 120 --file "$query" | tr -d '\r'
 
 sent=0
 same=0
+failed=0
+# Seconds one file may take: okur.exe (10 MB) takes about a minute.
+PUSH_TIMEOUT=${PUSH_TIMEOUT:-300}
 while IFS=$'\t' read -r local target; do
     want=$(sha256sum "$local" | cut -d' ' -f1)
     have=$(printf '%s\n' "$remote" | awk -v t="$target" '{ p = substr($0, index($0, " ") + 1); if (p == t) print $1 }')
@@ -76,8 +79,15 @@ while IFS=$'\t' read -r local target; do
         same=$((same + 1))
         continue
     fi
-    opendesk push --peer "$PEER" "$local" "$target" > /dev/null
+    # A push that stalls (it hung for ten minutes with okur.exe on 2026-10-24) is given up and
+    # reported; the destination is replaced only once a whole file arrived, so a rerun sends it.
+    if ! timeout "$PUSH_TIMEOUT" opendesk push --peer "$PEER" "$local" "$target" > /dev/null; then
+        echo "NOT sent (push failed or took over ${PUSH_TIMEOUT}s): $local" >&2
+        failed=$((failed + 1))
+        continue
+    fi
     echo "sent $local -> $target"
     sent=$((sent + 1))
 done < "$list"
-echo "lab-deploy: $sent file(s) sent, $same already installed (peer $PEER)"
+echo "lab-deploy: $sent file(s) sent, $same already installed, $failed failed (peer $PEER)"
+[ "$failed" -eq 0 ]

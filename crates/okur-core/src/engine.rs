@@ -293,6 +293,12 @@ pub struct ScreenReaderEngine {
     settings_dialog: Option<crate::ui::settings::SettingsDialog>,
     /// The list dialog open (the Links List, the Heading List).
     list_dialog: Option<crate::ui::lists::ListDialog>,
+    /// The mode the list dialog gives the keys back to: a document's Heading List (Word's)
+    /// returns to its application, any other list to the page.
+    list_return_mode: AppMode,
+    /// The focused document's headings were asked for its Heading List, which opens when they
+    /// come.
+    document_headings_asked: bool,
     /// The word chosen in the Word List, which W and Shift+W move to.
     word_from_list: Option<String>,
     /// Skim Reading while it is open, and its choices, which Ctrl+Insert+Down reads by.
@@ -532,6 +538,8 @@ impl ScreenReaderEngine {
             settings_dialog_application: None,
             settings_dialog: None,
             list_dialog: None,
+            list_return_mode: AppMode::VirtualBuffer,
+            document_headings_asked: false,
             word_from_list: None,
             skim_dialog: None,
             skim_options: crate::ui::skim::SkimOptions::default(),
@@ -1408,6 +1416,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::TopWindows(windows) => self.open_window_list(windows),
             AccessibilityEvent::TrayIcons(icons) => self.open_tray_list(icons),
             AccessibilityEvent::PageElements(elements) => self.say_page_font(elements),
+            AccessibilityEvent::DocumentHeadings(headings) => self.document_headings(headings),
             AccessibilityEvent::Ui(message) => self.handle_ui_event(message),
             AccessibilityEvent::PageChanged => {
                 self.page_changed();
@@ -1794,6 +1803,23 @@ impl ScreenReaderEngine {
     /// so, as JAWS does.
     pub(crate) fn open_list(&mut self, kind: crate::ui::lists::ListKind) -> Option<String> {
         use crate::ui::lists::{ListDialog, ListKind};
+        // A document whose structure the platform reads (Word's) lists its own headings,
+        // which the platform reads first [obs, 519/s2].
+        if kind == ListKind::Headings
+            && self.app_mode != AppMode::VirtualBuffer
+            && self.editing_document()
+            && self
+                .last_text
+                .as_ref()
+                .is_some_and(|t| t.structure.is_some())
+            && self
+                .actions
+                .as_ref()
+                .is_some_and(|actions| actions.read_document_headings())
+        {
+            self.document_headings_asked = true;
+            return None;
+        }
         let id = self.dialog_count + 1;
         let (dialog, none) = match kind {
             ListKind::Links => {
@@ -1850,16 +1876,51 @@ impl ScreenReaderEngine {
             self.speech.speak(&none, true);
             return Some(none);
         };
+        self.show_list(dialog, AppMode::VirtualBuffer)
+    }
+
+    /// Shows a list dialog, which gives the keys back to `return_mode` when it closes.
+    fn show_list(
+        &mut self,
+        dialog: crate::ui::lists::ListDialog,
+        return_mode: AppMode,
+    ) -> Option<String> {
         let ui = self.ui.as_ref()?;
-        self.dialog_count = id;
+        self.dialog_count = dialog.id;
         ui.send(crate::ui::ToUi::DialogShow {
             dialog: dialog.spec(),
         });
         self.list_dialog = Some(dialog);
+        self.list_return_mode = return_mode;
         // The keys are the dialog's now, before its window reports the focus: a Down the
         // window has yet to take must not move the virtual cursor [obs, 242/s2].
         self.app_mode = AppMode::NativeControl;
         None
+    }
+
+    /// The focused document's headings, asked for its Heading List: the list, as a page's
+    /// is, "Library Hours : 1" [obs, 519/s2]; with none, said so.
+    fn document_headings(&mut self, headings: &[crate::event::DocumentHeading]) -> Option<String> {
+        if !std::mem::take(&mut self.document_headings_asked) {
+            return None;
+        }
+        if headings.is_empty() {
+            let none = msg::quicknav_none_headings().to_string();
+            self.speech.speak(&none, true);
+            return Some(none);
+        }
+        let items: Vec<crate::buffer::HeadingListItem> = headings
+            .iter()
+            .map(|heading| crate::buffer::HeadingListItem {
+                node_id: heading.paragraph,
+                text: heading.text.clone(),
+                level: u32::from(heading.level),
+                offset: heading.paragraph,
+            })
+            .collect();
+        let dialog = crate::ui::lists::ListDialog::headings(self.dialog_count + 1, &items);
+        let mode = self.app_mode;
+        self.show_list(dialog, mode)
     }
 
     /// What the user did to the open list dialog.
@@ -1871,11 +1932,21 @@ impl ScreenReaderEngine {
             if let (Some(dialog), Some(ui)) = (engine.list_dialog.take(), &engine.ui) {
                 ui.send(crate::ui::ToUi::DialogClose { id: dialog.id });
             }
-            engine.app_mode = AppMode::VirtualBuffer;
+            engine.app_mode = engine.list_return_mode;
             engine.returning_from_dialog();
         };
+        // A document's list moves its caret, by the heading's paragraph.
+        let in_document = self.list_return_mode != AppMode::VirtualBuffer;
         match outcome {
             Outcome::Nothing => None,
+            Outcome::MoveTo(entry) if in_document => {
+                close(self);
+                self.pending_edit = Some(crate::editing::EditKey::Line);
+                if let Some(actions) = &self.actions {
+                    actions.move_to_paragraph(self.last_text.as_ref(), entry.node_id);
+                }
+                None
+            }
             Outcome::Send(messages) => {
                 if let Some(ui) = &self.ui {
                     messages.into_iter().for_each(|m| ui.send(m));
@@ -2051,8 +2122,14 @@ impl ScreenReaderEngine {
             // that line; the Links List quietly [obs, 227/s11, 688/s19, 223/s3].
             Outcome::Closed => {
                 self.list_dialog = None;
-                self.app_mode = AppMode::VirtualBuffer;
+                self.app_mode = self.list_return_mode;
                 self.returning_from_dialog();
+                // Word's document is named as the focus comes back to it: "Edit" [obs, 519/s4].
+                if in_document {
+                    let edit = crate::linearize::role_marker(msg::role_edit().as_str());
+                    self.speech.speak(&edit, true);
+                    return Some(edit);
+                }
                 if kind != ListKind::FormFields {
                     return None;
                 }

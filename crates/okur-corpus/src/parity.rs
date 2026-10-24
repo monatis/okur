@@ -1209,6 +1209,9 @@ struct ScreenSnapshot {
     recognized: Vec<okur_core::screen_model::ScreenRun>,
     #[serde(default)]
     file: Option<okur_core::recognized_file::FileRecognition>,
+    /// Word's document's headings, for its Heading List.
+    #[serde(default)]
+    headings: Option<Vec<okur_core::DocumentHeading>>,
 }
 
 impl ScreenSnapshot {
@@ -1222,6 +1225,9 @@ impl ScreenSnapshot {
         if other.file.is_some() {
             self.file = other.file;
         }
+        if other.headings.is_some() {
+            self.headings = other.headings;
+        }
     }
 }
 
@@ -1231,6 +1237,7 @@ struct ScreenReads {
     screens: usize,
     recognitions: usize,
     files: usize,
+    headings: usize,
 }
 
 impl ScreenReads {
@@ -1256,6 +1263,10 @@ impl ScreenReads {
         let files = requests
             .iter()
             .filter(|(a, _)| a == "recognize selected file")
+            .count();
+        let headings = requests
+            .iter()
+            .filter(|(a, _)| a == "document headings")
             .count();
         let mut deliver = |event: okur_core::AccessibilityEvent| {
             if let Some(speech) = engine.handle_accessibility_event(&event) {
@@ -1295,6 +1306,14 @@ impl ScreenReads {
                     deliver(okur_core::AccessibilityEvent::FileRecognitionStarted);
                 }
                 deliver(okur_core::AccessibilityEvent::FileRecognized(file.clone()));
+            }
+        }
+        if let Some(found) = &snapshot.headings {
+            while self.headings < headings {
+                self.headings += 1;
+                deliver(okur_core::AccessibilityEvent::DocumentHeadings(
+                    found.clone(),
+                ));
             }
         }
     }

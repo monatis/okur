@@ -7264,3 +7264,140 @@ fn a_selections_caret_is_the_end_that_moved() {
     engine.handle_accessibility_event(&read(1, Some((1, 3))));
     assert_eq!(caret(&engine), Some(1));
 }
+
+/// A focused document of Word's, its caret on `line` of `text` with `structure`.
+fn word_document(
+    text: &str,
+    caret: usize,
+    structure: crate::event::LineStructure,
+) -> (ScreenReaderEngine, SharedSpeech) {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let mut document = FocusEvent::new(Role::Document)
+        .with_name("sr-word-fixture.docx")
+        .with_window_title("sr-word-fixture.docx - Word");
+    document.text = Some(crate::event::TextContext {
+        text: text.to_owned(),
+        caret,
+        selection: None,
+        font: None,
+        word: None,
+        misspelled: Vec::new(),
+        structure: Some(structure),
+    });
+    engine.handle_focus_event(&document);
+    speech.take();
+    (engine, speech)
+}
+
+/// Insert+F6 in Word lists the document's headings, which the platform reads, in the Heading
+/// List a page has ("Library Hours : 1" [obs, 519/s2]); Move To Heading moves the caret by
+/// the heading's paragraph, and Escape gives the document back as "Edit" [obs, 519/s4].
+#[test]
+fn words_heading_list_lists_the_documents_headings() {
+    use crate::ui::{ControlKind, FromUi, ToUi};
+    let (mut engine, _speech) = word_document(
+        "Library Hours\rThe library opens.\rWhat changes\r",
+        0,
+        crate::event::LineStructure {
+            line: (0, 14),
+            heading: Some(1),
+            ..Default::default()
+        },
+    );
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut f6 = KeyEvent::new(Key::F(6), Modifiers::none(), true);
+    f6.modifiers.insert = true;
+    engine.handle_key_event(&f6);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "document headings"));
+    let heading = |text: &str, level, paragraph| crate::event::DocumentHeading {
+        text: text.to_owned(),
+        level,
+        paragraph,
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentHeadings(vec![
+        heading("Library Hours", 1, 0),
+        heading("What changes", 2, 2),
+    ]));
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "Heading List");
+    assert!(dialog.controls.iter().any(|c| c.kind
+        == ControlKind::List {
+            items: vec!["Library Hours : 1".into(), "What changes : 2".into()],
+            selected: 0
+        }));
+    let id = dialog.id;
+    // Escape: the document comes back, named.
+    let closed =
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogClosed { id }));
+    assert_eq!(closed.as_deref().map(str::trim), Some("\u{1d} Edit \u{1e}"));
+    assert_eq!(engine.app_mode, AppMode::NativeControl);
+}
+
+/// Ctrl+Alt+Right in a table of Word's moves the caret to the next cell through the platform;
+/// at the row's end it says so, as in a page's table.
+#[test]
+fn words_table_keys_move_to_the_next_cell() {
+    let cell = |row, column| crate::event::TableCell {
+        table: 1,
+        row,
+        column,
+        rows: 2,
+        columns: 2,
+        column_header: ["Branch", "Hours"].get(column - 1).map(|t| t.to_string()),
+        row_header: ["Branch", "Central"].get(row - 1).map(|t| t.to_string()),
+    };
+    let (mut engine, speech) = word_document(
+        "Central\r\u{7}9 to 9\r\u{7}",
+        0,
+        crate::event::LineStructure {
+            line: (0, 7),
+            cell: Some(cell(2, 1)),
+            ..Default::default()
+        },
+    );
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut right = KeyEvent::new(Key::RightArrow, Modifiers::none(), true);
+    right.modifiers.ctrl = true;
+    right.modifiers.alt = true;
+    assert_eq!(engine.handle_key_event(&right), KeyAction::Consume);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "cell 2 2"));
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::TextContext(
+        crate::event::TextContext {
+            text: "Central\r\u{7}9 to 9\r\u{7}".to_owned(),
+            caret: 9,
+            selection: None,
+            font: None,
+            word: None,
+            misspelled: Vec::new(),
+            structure: Some(crate::event::LineStructure {
+                line: (9, 16),
+                cell: Some(cell(2, 2)),
+                ..Default::default()
+            }),
+        },
+    ));
+    assert_eq!(
+        said.as_deref(),
+        Some("Hours\n9 to 9\nlast cell in table\nWarning! Pressing tab here adds an extra row.")
+    );
+    speech.take();
+    // At the row's end: the edge, and the caret stays.
+    assert_eq!(engine.handle_key_event(&right), KeyAction::Consume);
+    assert_eq!(speech.take(), ["You are on the last column in the row."]);
+}

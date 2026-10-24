@@ -67,6 +67,25 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for the focused document's headings (Word's), which arrive later as
+    /// [`crate::event::AccessibilityEvent::DocumentHeadings`], always. Returns false when
+    /// unsupported.
+    fn read_document_headings(&self) -> bool {
+        false
+    }
+
+    /// Moves the caret of the focused document to the start of its `paragraph` (from 0, as
+    /// [`crate::event::DocumentHeading`] counts), then reads the field as
+    /// [`Self::read_at_caret`] does, compared with `before`. Returns false when unsupported.
+    fn move_to_paragraph(
+        &self,
+        before: Option<&crate::event::TextContext>,
+        paragraph: usize,
+    ) -> bool {
+        let _ = (before, paragraph);
+        false
+    }
+
     /// Asks for the focused element's text, caret and selection as they are now (a
     /// console's buffer, for the Virtual Viewer). It arrives later as
     /// [`crate::event::AccessibilityEvent::TextContext`], always: with empty text when the
@@ -338,6 +357,24 @@ impl ApplicationActions for RecordingActions {
     ) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push((format!("cell {row} {column}"), 0));
+        }
+        true
+    }
+
+    fn read_document_headings(&self) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("document headings".to_owned(), 0));
+        }
+        true
+    }
+
+    fn move_to_paragraph(
+        &self,
+        _before: Option<&crate::event::TextContext>,
+        paragraph: usize,
+    ) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((format!("paragraph {paragraph}"), 0));
         }
         true
     }

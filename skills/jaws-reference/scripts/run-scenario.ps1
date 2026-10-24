@@ -79,6 +79,9 @@ Screen text: "trace_screen": true saves, with -TraceDir, the text UI Automation 
 window in front after each step (<TraceDir>\<id>-trial<N>.screen.jsonl, okur-lab screen-text),
 and "trace_ocr": true the words Windows' OCR reads in it too: replay gives them to Okur's
 experimental screen text, which "okur_settings" turns on for the replay only.
+Headings: "trace_headings": true saves, with -TraceDir, the headings of Word's document in the
+fixture's window after each step (okur-lab document-headings), to the same file: replay gives
+them to Okur's Heading List in Word.
 Files: "trace_file": true saves, with -TraceDir, what Okur's recognizer reads in the file
 selected in the fixture's File Explorer window after each step (okur-lab file-text), to the same
 file: replay gives it to Okur's Insert+Space, O, F. Such a fixture's launch has "shell_window":
@@ -990,7 +993,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     # Okur's experimental screen text when it reads the screen; with "trace_ocr", the words
     # Windows' OCR reads in the window too (okur-lab screen-text --append-to).
     $screenPath = $null
-    if ($TraceDir -and ($scenario.trace_screen -or $scenario.trace_file)) {
+    if ($TraceDir -and ($scenario.trace_screen -or $scenario.trace_file -or $scenario.trace_headings)) {
         $screenPath = Join-Path $TraceDir "$scenarioId-trial$t.screen.jsonl"
         Remove-Item $screenPath -ErrorAction SilentlyContinue
         $trialResult.screen_file = Split-Path -Leaf $screenPath
@@ -1111,6 +1114,11 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         $tEnd = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
         if ($screenPath -and $scenario.trace_file) {
             & $OkurLab @('file-text', '--append-to', $screenPath, '--step', $step.id, '--window-title', $launch.window_title) 2>&1 | Out-Null
+        }
+        # "trace_headings": the headings of Word's document in the fixture's window, which
+        # replay gives Okur's Heading List (read wherever the focus is: JAWS's list has it).
+        if ($screenPath -and $scenario.trace_headings) {
+            & $OkurLab @('document-headings', '--append-to', $screenPath, '--step', $step.id, '--window-title', $launch.window_title) 2>&1 | Out-Null
         }
         if ($screenPath -and $scenario.trace_screen) {
             $screenArgs = @('screen-text', '--append-to', $screenPath, '--step', $step.id)

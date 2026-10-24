@@ -139,7 +139,7 @@ pub fn parse_step(text: &str) -> Result<KeyStep, String> {
 #[cfg(windows)]
 pub use windows_harness::{
     bring_to_front, foreground_process, foreground_title, jaws_history, send_key, send_steps,
-    shell_window,
+    shell_window, window_titled,
 };
 
 #[cfg(windows)]
@@ -370,6 +370,15 @@ mod windows_harness {
         } else {
             Err(format!("{text:?} did not come to the front"))
         }
+    }
+
+    /// The top-level window titled exactly `title` (a scenario's fixture), wherever the focus
+    /// is.
+    pub fn window_titled(title: &str) -> Option<windows::Win32::Foundation::HWND> {
+        use windows::core::{HSTRING, PCWSTR};
+        use windows::Win32::UI::WindowsAndMessaging::FindWindowW;
+        // SAFETY: a plain Win32 lookup by title.
+        unsafe { FindWindowW(PCWSTR::null(), &HSTRING::from(title)) }.ok()
     }
 
     /// The File Explorer window titled `title` (a folder's name), wherever the focus is.
