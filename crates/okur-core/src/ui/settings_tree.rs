@@ -414,15 +414,20 @@ impl SettingsTree {
                     }
                     _ => None,
                 };
-                let text = match self.value_text(spec) {
-                    Some(value) => format!("{label} {value}"),
-                    None => label,
+                // A setting the place cannot keep is unavailable here, as JAWS says of one kept
+                // only for all applications: "Insert Key ModeUnavailable" [obs, the walk of
+                // Settings Center].
+                let available = spec.scopes.allows(&self.scope());
+                let text = match (available, self.value_text(spec)) {
+                    (false, _) => format!("{label} {}", msg::settings_tree_unavailable()),
+                    (true, Some(value)) => format!("{label} {value}"),
+                    (true, None) => label,
                 };
                 TreeItem {
                     text,
                     level,
                     open: true,
-                    checked,
+                    checked: checked.filter(|_| available),
                 }
             }
         }
@@ -435,6 +440,10 @@ impl SettingsTree {
     /// The selected item's description: a group's, or a setting's.
     fn description(&self) -> String {
         match self.rows.get(self.selected) {
+            // Why it is unavailable, and the key that shows where it is kept.
+            Some(Row::Setting(spec)) if !spec.scopes.allows(&self.scope()) => {
+                msg::settings_tree_default_only().to_string()
+            }
             Some(Row::Setting(spec)) => spec
                 .label
                 .or(spec.tree_label)
@@ -907,6 +916,46 @@ mod tests {
 
     fn panic_free_fail(message: &str) {
         assert!(message.is_empty(), "{message}");
+    }
+
+    /// A setting kept only for all applications is unavailable in an application's settings,
+    /// with JAWS's reason, and available again on the Default settings.
+    #[test]
+    fn a_default_only_setting_is_unavailable_for_an_application() {
+        let mut dialog = tree(Flavor::Center);
+        let key = |dialog: &SettingsTree| {
+            tree_items(&dialog.spec())
+                .into_iter()
+                .find(|i| i.text.starts_with("Okur Key"))
+                .map(|i| i.text)
+        };
+        assert_eq!(key(&dialog).as_deref(), Some("Okur Key Unavailable"));
+        let index = dialog
+            .rows
+            .iter()
+            .position(|r| matches!(r, Row::Setting(spec) if spec.id == "keyboard.okur_key"))
+            .unwrap_or_default();
+        dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: TREE.into(),
+            value: Value::Selected(index),
+        });
+        assert!(dialog
+            .description()
+            .starts_with("Only available when modifying the Default"));
+        assert_eq!(
+            dialog.handle(&FromUi::DialogKey {
+                id: 7,
+                control: TREE.into(),
+                key: DialogKey::Change,
+            }),
+            Outcome::Nothing
+        );
+        dialog.handle(&FromUi::DialogPressed {
+            id: 7,
+            control: DEFAULT_PLACE.into(),
+        });
+        assert_eq!(key(&dialog).as_deref(), Some("Okur Key Insert"));
     }
 
     /// Ctrl+E goes to the search box from anywhere; in Settings Center, Ctrl+Shift+D shows the

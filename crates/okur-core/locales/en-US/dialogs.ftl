@@ -456,3 +456,8 @@ settings-tree-mouse-echo-description = Speak description of item
 settings-tree-mouse-echo-description-description = Whether the mouse's item is read with its description.
 settings-tree-mouse-echo-control = Speak control type and state of item
 settings-tree-mouse-echo-control-description = Whether the mouse's item is read with its kind and state, "button" or "checked".
+# A setting kept only for all applications, in an application's settings [obs, the walk of
+# Settings Center: "Insert Key ModeUnavailable | Only available when modifying the Default
+# setting. Press Control Shift D to switch to Default."].
+settings-tree-unavailable = Unavailable
+settings-tree-default-only = Only available when modifying the Default setting. Press Control Shift D to switch to Default.
