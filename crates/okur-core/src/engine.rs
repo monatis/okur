@@ -386,6 +386,8 @@ pub struct ScreenReaderEngine {
     /// A file's recognition is under way (Insert+Space, O, F): its text opens in the Results
     /// Viewer when it comes, unless Q cancelled it.
     recognizing_file: bool,
+    /// The kind of window F was pressed in, which the focus returns to from Okur's message box.
+    file_window_kind: Option<String>,
     /// Background OCR (Insert+Space, O, B): when it last asked for the window's words, and
     /// whether that recognition is still under way.
     background_ocr: Option<(std::time::Instant, bool)>,
@@ -577,6 +579,7 @@ impl ScreenReaderEngine {
             ocr_layer: false,
             recognizing: false,
             recognizing_file: false,
+            file_window_kind: None,
             background_ocr: None,
             recognition_window: None,
             screen_model: None,

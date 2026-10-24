@@ -545,8 +545,10 @@ pub fn reports_position(chain: &[UiaNode]) -> bool {
 
 /// Win32 list-view controls (`SysListView32`, also as WinForms `WindowsForms10.SysListView32...`):
 /// JAWS calls their lists "List view".
+/// A list view: Win32's, or File Explorer's items view, whose unselected item JAWS reads as
+/// "Not Selected SR OCR Sign.png" [obs, 1026/s5].
 fn is_list_view(class: Option<&str>) -> bool {
-    class.is_some_and(|c| c.contains("SysListView32"))
+    class.is_some_and(|c| c.contains("SysListView32") || c == "UIItemsView")
 }
 
 pub fn focus_event_from_chain(
@@ -1396,6 +1398,11 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             {
                 focus.name = Some(focus.columns.remove(0));
             }
+        }
+        // A shell item's columns are its cells' values, not their headers' names: "SR OCR
+        // Sign.png | 1/2/2026 3:04 AM PNG File 11 KB | 3 of 3" [obs, 1029/s4].
+        if !focus.item_details.is_empty() {
+            focus.columns.clone_from(&focus.item_details);
         }
         // A combo box's position is its selected item's, among its list items. A closed WinUI
         // combo box holds only its selected item, which is its value, and no position:

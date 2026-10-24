@@ -11,11 +11,18 @@ use crate::messages::msg;
 pub struct MessageBox {
     pub id: u32,
     pub text: String,
+    /// The kind of window it was shown over, which the focus returns to: back from Okur's own
+    /// box, the window is the same application's, its hint said [obs, 1026/s4].
+    pub window_kind: Option<String>,
 }
 
 impl MessageBox {
     pub fn new(id: u32, text: String) -> Self {
-        Self { id, text }
+        Self {
+            id,
+            text,
+            window_kind: None,
+        }
     }
 
     pub fn spec(&self) -> DialogSpec {

@@ -251,6 +251,7 @@ impl ScreenReaderEngine {
             .is_some_and(|a| a.recognize_selected_file(&language))
         {
             self.recognizing_file = true;
+            self.file_window_kind.clone_from(&self.last_window_kind);
         }
     }
 
@@ -309,7 +310,8 @@ impl ScreenReaderEngine {
             return;
         };
         self.dialog_count += 1;
-        let dialog = crate::ui::message_box::MessageBox::new(self.dialog_count, text);
+        let mut dialog = crate::ui::message_box::MessageBox::new(self.dialog_count, text);
+        dialog.window_kind.clone_from(&self.file_window_kind);
         ui.send(crate::ui::ToUi::DialogShow {
             dialog: dialog.spec(),
         });
@@ -335,6 +337,7 @@ impl ScreenReaderEngine {
         if let Some(ui) = &self.ui {
             ui.send(crate::ui::ToUi::DialogClose { id: dialog.id });
         }
+        self.last_window_kind = dialog.window_kind;
         None
     }
 
