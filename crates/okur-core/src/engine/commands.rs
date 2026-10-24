@@ -131,6 +131,24 @@ impl ScreenReaderEngine {
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }
+            // In a table of Word's, the cell and where it is: "Branch | column 1 of 2 | row 1
+            // of 2 | table 1" [obs, 522/s13].
+            Command::SayCurrentFocus
+                if self.app_mode == AppMode::NativeControl
+                    && self.editing_text()
+                    && self
+                        .last_text
+                        .as_ref()
+                        .and_then(crate::apps::windows::word::cell_focus)
+                        .is_some() =>
+            {
+                let speech = self
+                    .last_text
+                    .as_ref()
+                    .and_then(crate::apps::windows::word::cell_focus)?;
+                self.speech.speak(&speech, true);
+                return Some(speech);
+            }
             Command::SayCurrentFocus => {
                 // Native controls.
                 let speech = self
@@ -1016,11 +1034,13 @@ impl ScreenReaderEngine {
             match self.last_text.clone() {
                 Some(context) => {
                     let speech = if document {
-                        Some(
+                        // A heading of Word's with its level [obs, 518/s1].
+                        Some(crate::apps::windows::word::spoken_line(
+                            &context,
                             crate::editing::line_at(&context)
                                 .trim_matches(|c: char| c.is_whitespace() || c == '﻿')
                                 .to_owned(),
-                        )
+                        ))
                     } else {
                         crate::editing::speech_in(
                             key,

@@ -1129,6 +1129,9 @@ impl ScreenReaderEngine {
                     .as_ref()
                     .is_some_and(|f| f.role == crate::aom::Role::TableCell))
             .then_some(event.key == Key::Home);
+            if let Some(action) = self.document_table_key(event) {
+                return action;
+            }
             if self.editing_text() {
                 self.edit_key_feedback(event);
             } else {

@@ -20,6 +20,73 @@ pub(crate) fn spoken_line(context: &TextContext, line: String) -> String {
     }
 }
 
+/// What JAWS says on moving to another cell of Word's table with its table keys or Tab
+/// (`across` a row, or along a column): the title for the way the cell was entered (the
+/// column's header across, the row's first cell along), the cell, else its column or row
+/// ("Hours | 9 to 9", "Branch | Hours", "Branch | column 1 of 2" [obs, 522/s10-s12]);
+/// "Selected" where Tab selected its text, and at the table's last cell, that Tab adds a row
+/// [obs, 518/s15]. `None` when the caret is in no other cell.
+pub(crate) fn cell_speech(
+    before: Option<&TextContext>,
+    after: &TextContext,
+    across: bool,
+) -> Option<String> {
+    let now = after.structure.as_ref()?.cell.as_ref()?;
+    let was = before
+        .and_then(|b| b.structure.as_ref())
+        .and_then(|s| s.cell.as_ref());
+    if was.is_some_and(|w| (w.table, w.row, w.column) == (now.table, now.row, now.column)) {
+        return None;
+    }
+    // A cell of the first row is its column's title, of the first column its row's.
+    let title = if across {
+        now.column_header.as_ref().filter(|_| now.row > 1)
+    } else {
+        now.row_header.as_ref().filter(|_| now.column > 1)
+    };
+    let mut said: Vec<String> = title.cloned().into_iter().collect();
+    said.push(cell_line(after));
+    if title.is_none() {
+        said.push(if across {
+            msg::word_column_of(now.column, now.columns).render()
+        } else {
+            msg::word_row_of(now.row, now.rows).render()
+        });
+    }
+    if after.selection.is_some_and(|(start, end)| start < end) {
+        said.push(msg::word_cell_selected().to_string());
+    }
+    if (now.row, now.column) == (now.rows, now.columns) {
+        said.push(msg::word_last_cell().to_string());
+        said.push(msg::word_tab_adds_row().to_string());
+    }
+    Some(said.join("\n"))
+}
+
+/// Say Current Focus in a cell of Word's table: the cell, its column, row and table, "Branch
+/// | column 1 of 2 | row 1 of 2 | table 1" [obs, 522/s13]. `None` outside a table.
+pub(crate) fn cell_focus(context: &TextContext) -> Option<String> {
+    let cell = context.structure.as_ref()?.cell.as_ref()?;
+    Some(
+        [
+            cell_line(context),
+            msg::word_column_of(cell.column, cell.columns).render(),
+            msg::word_row_of(cell.row, cell.rows).render(),
+            msg::word_table(cell.table).render(),
+        ]
+        .join("\n"),
+    )
+}
+
+/// The caret's line in a cell, "blank" when it has no text.
+fn cell_line(context: &TextContext) -> String {
+    let line = crate::editing::line_at(context);
+    match line.trim() {
+        "" => msg::blank().to_string(),
+        text => text.to_owned(),
+    }
+}
+
 /// `speech` for a key that moved the caret to `after`'s line, with what JAWS says around a
 /// line of Word's ([`line_change`]); `None` when JAWS says nothing. Outside Word's documents
 /// (no structure) and for other keys, `speech` as it is.
@@ -119,6 +186,7 @@ mod tests {
                     rows: 2,
                     columns: 2,
                     column_header: None,
+                    row_header: None,
                 }),
             }),
         }
@@ -181,6 +249,52 @@ mod tests {
                 "Bottom of file".into()
             ),
             None
+        );
+    }
+
+    /// The fixture's table: "Branch | Hours" over "Central | 9 to 9".
+    fn cell(row: usize, column: usize, text: &str) -> TextContext {
+        let mut context = at((0, text.len()), None, false, Some((row, column)));
+        context.text = text.to_owned();
+        context.caret = 0;
+        if let Some(cell) = context.structure.as_mut().and_then(|s| s.cell.as_mut()) {
+            cell.column_header = ["Branch", "Hours"].get(column - 1).map(|t| t.to_string());
+            cell.row_header = ["Branch", "Central"].get(row - 1).map(|t| t.to_string());
+        }
+        context
+    }
+
+    /// The table keys and Tab say the title for the way the cell was entered, or its place
+    /// [obs, 522/s10-s13, 518/s15].
+    #[test]
+    fn a_cell_is_said_with_its_title_or_place() {
+        let central = cell(2, 1, "Central");
+        let last = cell(2, 2, "9 to 9");
+        let hours = cell(1, 2, "Hours");
+        let branch = cell(1, 1, "Branch ");
+        let warning = "last cell in table\nWarning! Pressing tab here adds an extra row.";
+        assert_eq!(
+            cell_speech(Some(&central), &last, true),
+            Some(format!("Hours\n9 to 9\n{warning}"))
+        );
+        assert_eq!(
+            cell_speech(Some(&last), &hours, false).as_deref(),
+            Some("Branch\nHours")
+        );
+        assert_eq!(
+            cell_speech(Some(&hours), &branch, true).as_deref(),
+            Some("Branch\ncolumn 1 of 2")
+        );
+        let mut selected = last.clone();
+        selected.selection = Some((0, 6));
+        assert_eq!(
+            cell_speech(Some(&central), &selected, true),
+            Some(format!("Hours\n9 to 9\nSelected\n{warning}"))
+        );
+        assert_eq!(cell_speech(Some(&last), &last, true), None);
+        assert_eq!(
+            cell_focus(&branch).as_deref(),
+            Some("Branch\ncolumn 1 of 2\nrow 1 of 2\ntable 1")
         );
     }
 }

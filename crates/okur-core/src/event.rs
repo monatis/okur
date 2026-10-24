@@ -135,6 +135,10 @@ pub struct TableCell {
     /// column: "Hours 9 to 9" [obs, 518/s15].
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub column_header: Option<String>,
+    /// Its row's title, the row's first cell, which JAWS says on entering the row: "Branch
+    /// Hours" [obs, 522/s11].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub row_header: Option<String>,
 }
 
 /// The font at a text field's caret, as UIA text attributes or a rich edit report it.

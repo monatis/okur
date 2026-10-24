@@ -50,3 +50,13 @@ word-out-of-table = out of table
 # A list entered and left, after the line [obs, 518/s10, s12].
 word-entering-list = Entering List
 word-exit-list = exit list
+# JAWS's table keys and Tab in Word's table: a cell without a title for the way it was
+# entered is placed by its column or row [obs, 522/s12]; Say Current Focus places it fully
+# [obs, 522/s13].
+word-column-of = column { $column } of { $columns }
+word-row-of = row { $row } of { $rows }
+# Tab selects the cell's text [obs, 518/s15].
+word-cell-selected = Selected
+# The table's last cell, where Tab adds a row [obs, 518/s15, 522/s10].
+word-last-cell = last cell in table
+word-tab-adds-row = Warning! Pressing tab here adds an extra row.

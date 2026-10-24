@@ -56,6 +56,9 @@ pub enum EditKey {
     /// Ctrl+End in a multi-line document: "Bottom of file", then the line when it has text
     /// (dev box, onto an empty last line: "Bottom of file"; the line after it is assumed).
     BottomOfFile,
+    /// Tab, or JAWS's table keys (Ctrl+Alt+arrows), in a table of Word's: the cell moved to,
+    /// with its title for moving `across` a row or along a column [obs, 522/s10-s12; 518/s15].
+    TableCell { across: bool },
 }
 
 impl EditKey {
@@ -654,6 +657,7 @@ pub fn speech_in(
 ) -> Option<String> {
     let said = match key {
         EditKey::Silent => return None,
+        EditKey::TableCell { across } => return word::cell_speech(before, after, across),
         EditKey::Character | EditKey::DeleteForward => {
             char_at(after).map_or_else(|| msg::blank().to_string(), |c| c.to_string())
         }
@@ -764,7 +768,8 @@ pub fn speech_in(
             wording.message(msg::edit_undo().to_string(), msg::edit_undo().to_string())?
         }
         EditKey::SayLine => {
-            let line = line_at(after);
+            // A heading of Word's with its level [obs, 518/s1].
+            let line = word::spoken_line(after, line_at(after).trim().to_owned());
             if line.trim().is_empty() {
                 field.to_owned()
             } else {

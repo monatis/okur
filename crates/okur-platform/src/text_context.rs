@@ -35,7 +35,7 @@ pub fn css_alignment(align: &str) -> Option<&'static str> {
 #[cfg(windows)]
 pub use reader::{
     focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
-    move_caret_in_edit, read_focused, read_focused_outside_page, visible_text,
+    move_caret_in_edit, move_to_cell, read_focused, read_focused_outside_page, visible_text,
     with_paragraph_alignment,
 };
 
@@ -44,7 +44,7 @@ mod reader {
     use super::{utf16_to_chars, MAX_TEXT_CHARS};
     use okur_core::TextContext;
     use windows::Win32::UI::Accessibility::{
-        IUIAutomation, IUIAutomationTextPattern, IUIAutomationTextRange,
+        IUIAutomation, IUIAutomationElement, IUIAutomationTextPattern, IUIAutomationTextRange,
         TextPatternRangeEndpoint_End, TextPatternRangeEndpoint_Start, UIA_TextPatternId,
     };
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
@@ -564,7 +564,7 @@ mod reader {
     /// document.
     fn word_structure(
         uia: &IUIAutomation,
-        focused: &windows::Win32::UI::Accessibility::IUIAutomationElement,
+        focused: &IUIAutomationElement,
         pattern: &IUIAutomationTextPattern,
         caret: &IUIAutomationTextRange,
         start: usize,
@@ -601,40 +601,73 @@ mod reader {
         }
     }
 
-    /// The table cell holding `caret` in `document`: the first element around it with a
-    /// grid item, its table's number among the document's tables, and its column's header text.
-    fn table_cell(
+    /// The cell holding `caret` in `document`, and its grid item: the first element around
+    /// the caret with one (Word's cell is the caret's own).
+    fn caret_cell(
         uia: &IUIAutomation,
-        document: &windows::Win32::UI::Accessibility::IUIAutomationElement,
-        pattern: &IUIAutomationTextPattern,
+        document: &IUIAutomationElement,
         caret: &IUIAutomationTextRange,
-    ) -> Option<okur_core::TableCell> {
-        use windows::Win32::System::Variant::VARIANT;
+    ) -> Option<(
+        IUIAutomationElement,
+        windows::Win32::UI::Accessibility::IUIAutomationGridItemPattern,
+    )> {
         use windows::Win32::UI::Accessibility::{
-            IUIAutomationGridItemPattern, IUIAutomationGridPattern, IUIAutomationTableItemPattern,
-            TreeScope_Descendants, UIA_ControlTypePropertyId, UIA_GridItemPatternId,
-            UIA_GridPatternId, UIA_TableControlTypeId, UIA_TableItemPatternId,
+            IUIAutomationGridItemPattern, UIA_GridItemPatternId,
         };
-        /// Elements walked up from the caret to its cell: Word's cell is the caret's own.
+        /// Elements walked up from the caret to its cell.
         const MAX_DEPTH: usize = 8;
         // SAFETY: UIA client calls on valid objects.
         unsafe {
             let walker = uia.ControlViewWalker().ok()?;
             let mut element = caret.GetEnclosingElement().ok()?;
-            let mut item = None;
             for _ in 0..MAX_DEPTH {
-                if let Ok(found) = element
+                if let Ok(item) = element
                     .GetCurrentPatternAs::<IUIAutomationGridItemPattern>(UIA_GridItemPatternId)
                 {
-                    item = Some(found);
-                    break;
+                    return Some((element, item));
                 }
                 if uia.CompareElements(&element, document).ok()?.as_bool() {
                     return None;
                 }
                 element = walker.GetParentElement(&element).ok()?;
             }
-            let item = item?;
+            None
+        }
+    }
+
+    /// A cell's text, read through the document's text: `None` when empty.
+    fn element_text(
+        pattern: &IUIAutomationTextPattern,
+        cell: &IUIAutomationElement,
+    ) -> Option<String> {
+        // SAFETY: UIA client calls on valid objects.
+        unsafe {
+            pattern
+                .RangeFromChild(cell)
+                .and_then(|range| range.GetText(MAX_CELL_CHARS))
+                .ok()
+                .map(|text| cell_text(&text.to_string()))
+                .filter(|text| !text.is_empty())
+        }
+    }
+
+    /// The table cell holding `caret` in `document`: its place, its table's number among the
+    /// document's tables, its column's header text, and its row's title, the row's first cell.
+    fn table_cell(
+        uia: &IUIAutomation,
+        document: &IUIAutomationElement,
+        pattern: &IUIAutomationTextPattern,
+        caret: &IUIAutomationTextRange,
+    ) -> Option<okur_core::TableCell> {
+        use windows::Win32::System::Variant::VARIANT;
+        use windows::Win32::UI::Accessibility::{
+            IUIAutomationGridPattern, IUIAutomationTableItemPattern, TreeScope_Descendants,
+            UIA_ControlTypePropertyId, UIA_GridPatternId, UIA_TableControlTypeId,
+            UIA_TableItemPatternId,
+        };
+        // SAFETY: UIA client calls on valid objects.
+        unsafe {
+            let (element, item) = caret_cell(uia, document, caret)?;
             let index = |v: i32| usize::try_from(v).ok().map(|v| v + 1);
             let grid = item.CurrentContainingGrid().ok()?;
             let size: IUIAutomationGridPattern =
@@ -658,20 +691,63 @@ mod reader {
                 .GetCurrentPatternAs::<IUIAutomationTableItemPattern>(UIA_TableItemPatternId)
                 .and_then(|cell| cell.GetCurrentColumnHeaderItems())
                 .and_then(|headers| headers.GetElement(0))
-                .and_then(|header| pattern.RangeFromChild(&header))
-                .and_then(|range| range.GetText(MAX_CELL_CHARS))
                 .ok()
-                .map(|text| cell_text(&text.to_string()))
-                .filter(|text| !text.is_empty());
+                .and_then(|header| element_text(pattern, &header));
+            let row = item.CurrentRow().ok()?;
+            let row_header = size
+                .GetItem(row, 0)
+                .ok()
+                .and_then(|first| element_text(pattern, &first));
             Some(okur_core::TableCell {
                 table,
-                row: index(item.CurrentRow().ok()?)?,
+                row: index(row)?,
                 column: index(item.CurrentColumn().ok()?)?,
                 rows: usize::try_from(size.CurrentRowCount().ok()?).ok()?,
                 columns: usize::try_from(size.CurrentColumnCount().ok()?).ok()?,
                 column_header,
+                row_header,
             })
         }
+    }
+
+    /// The caret of Word's focused document to the start of its table's cell at `row` and
+    /// `column` (from 1), in the table holding the caret: JAWS's table keys in Word. False
+    /// when the focus is not in a table of Word's or there is no such cell.
+    pub fn move_to_cell(uia: &IUIAutomation, row: usize, column: usize) -> bool {
+        use windows::Win32::UI::Accessibility::{IUIAutomationGridPattern, UIA_GridPatternId};
+        let index = |n: usize| n.checked_sub(1).and_then(|n| i32::try_from(n).ok());
+        let (Some(row), Some(column)) = (index(row), index(column)) else {
+            return false;
+        };
+        // SAFETY: UIA client calls on valid objects.
+        let moved = || -> Option<()> {
+            unsafe {
+                let focused = uia.GetFocusedElement().ok()?;
+                if focused.CurrentClassName().ok()? != WORD_DOCUMENT_CLASS {
+                    return None;
+                }
+                let pattern: IUIAutomationTextPattern =
+                    focused.GetCurrentPatternAs(UIA_TextPatternId).ok()?;
+                let caret = pattern.GetSelection().ok()?.GetElement(0).ok()?;
+                let (_, item) = caret_cell(uia, &focused, &caret)?;
+                let grid: IUIAutomationGridPattern = item
+                    .CurrentContainingGrid()
+                    .ok()?
+                    .GetCurrentPatternAs(UIA_GridPatternId)
+                    .ok()?;
+                let cell = grid.GetItem(row, column).ok()?;
+                let range = pattern.RangeFromChild(&cell).ok()?;
+                range
+                    .MoveEndpointByRange(
+                        TextPatternRangeEndpoint_End,
+                        &range,
+                        TextPatternRangeEndpoint_Start,
+                    )
+                    .ok()?;
+                range.Select().ok()
+            }
+        };
+        moved().is_some()
     }
 
     /// The most of a header cell's text read.

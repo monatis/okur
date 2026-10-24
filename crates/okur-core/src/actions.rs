@@ -53,6 +53,20 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Moves the caret of the focused document to the start of the cell at `row` and
+    /// `column` (from 1) of the table holding it (JAWS's table keys in Word), then reads the
+    /// field as [`Self::read_at_caret`] does, compared with `before`. Returns false when
+    /// unsupported.
+    fn move_to_cell(
+        &self,
+        before: Option<&crate::event::TextContext>,
+        row: usize,
+        column: usize,
+    ) -> bool {
+        let _ = (before, row, column);
+        false
+    }
+
     /// Asks for the focused element's text, caret and selection as they are now (a
     /// console's buffer, for the Virtual Viewer). It arrives later as
     /// [`crate::event::AccessibilityEvent::TextContext`], always: with empty text when the
@@ -312,6 +326,18 @@ impl ApplicationActions for RecordingActions {
     fn read_at_caret(&self, _before: Option<&crate::event::TextContext>, _in_page: bool) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push(("caret".to_owned(), 0));
+        }
+        true
+    }
+
+    fn move_to_cell(
+        &self,
+        _before: Option<&crate::event::TextContext>,
+        row: usize,
+        column: usize,
+    ) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((format!("cell {row} {column}"), 0));
         }
         true
     }

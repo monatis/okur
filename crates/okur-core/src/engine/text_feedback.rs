@@ -30,7 +30,16 @@ impl ScreenReaderEngine {
             self.app_for(field)
                 .and_then(|app| app.edit_key(field, event))
         });
-        if let Some(key) = crate::editing::EditKey::of(event).or(own_key) {
+        // Tab in a table of Word's moves to the next cell and selects it [obs, 518/s15].
+        let m = &event.modifiers;
+        let cell_key = (event.key == crate::Key::Tab
+            && !m.ctrl
+            && !m.alt
+            && !m.insert
+            && !m.win
+            && self.in_document_table())
+        .then_some(crate::editing::EditKey::TableCell { across: true });
+        if let Some(key) = crate::editing::EditKey::of(event).or(own_key).or(cell_key) {
             // The word being typed ends where the caret moves; Backspace takes back its last
             // character.
             if key == crate::editing::EditKey::DeleteBackward {
@@ -81,6 +90,71 @@ impl ScreenReaderEngine {
                 );
             }
         }
+    }
+
+    /// Whether the caret is in a table of a document whose structure the platform reads
+    /// (Word's).
+    fn in_document_table(&self) -> bool {
+        self.last_text
+            .as_ref()
+            .and_then(|t| t.structure.as_ref())
+            .is_some_and(|s| s.cell.is_some())
+    }
+
+    /// JAWS's table keys (Ctrl+Alt+arrows) in a document whose structure the platform reads
+    /// (Word's): the caret to the next cell that way, read as JAWS reads it [obs, 522/s10-s12];
+    /// at the table's edge, the edge, as in a page's table; outside a table, "Not in a
+    /// table." `None` for other keys and fields, which go on as before.
+    pub(super) fn document_table_key(
+        &mut self,
+        event: &KeyEvent,
+    ) -> Option<crate::input::KeyAction> {
+        use crate::command::Command;
+        let (rows, columns): (isize, isize) = match crate::command::command_for(event)? {
+            Command::TableCellRight => (0, 1),
+            Command::TableCellLeft => (0, -1),
+            Command::TableCellDown => (1, 0),
+            Command::TableCellUp => (-1, 0),
+            _ => return None,
+        };
+        if !self.editing_text() {
+            return None;
+        }
+        let structure = self.last_text.as_ref()?.structure.as_ref()?;
+        let Some(cell) = structure.cell.as_ref() else {
+            self.speech.speak(msg::table_not_in_table().as_str(), true);
+            return Some(crate::input::KeyAction::Consume);
+        };
+        let row = cell
+            .row
+            .checked_add_signed(rows)
+            .filter(|r| (1..=cell.rows).contains(r));
+        let column = cell
+            .column
+            .checked_add_signed(columns)
+            .filter(|c| (1..=cell.columns).contains(c));
+        let (Some(row), Some(column)) = (row, column) else {
+            let short =
+                self.settings.verbosity.message_length() == crate::settings::MessageLength::Short;
+            let edge = match (rows, columns, short) {
+                (1, _, true) => msg::table_on_last_row_short(),
+                (1, _, false) => msg::table_on_last_row(),
+                (-1, _, true) => msg::table_on_first_row_short(),
+                (-1, _, false) => msg::table_on_first_row(),
+                (_, 1, true) => msg::table_on_last_column_short(),
+                (_, 1, false) => msg::table_on_last_column(),
+                (_, _, true) => msg::table_on_first_column_short(),
+                (_, _, false) => msg::table_on_first_column(),
+            };
+            self.speech.speak(edge.as_str(), true);
+            return Some(crate::input::KeyAction::Consume);
+        };
+        tracing::debug!(row, column, "table key; moving to the cell");
+        self.pending_edit = Some(crate::editing::EditKey::TableCell { across: rows == 0 });
+        if let Some(actions) = &self.actions {
+            actions.move_to_cell(self.last_text.as_ref(), row, column);
+        }
+        Some(crate::input::KeyAction::Consume)
     }
 
     /// Says a typed character, as the typing echo setting has it: the character, and with

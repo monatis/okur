@@ -90,6 +90,9 @@ mod windows_actions {
         Text(Option<Box<TextContext>>, bool),
         /// The focused text as it is now, answered even when there is none.
         TextNow,
+        /// The caret to a cell of the focused document's table (row, column, from 1), then
+        /// the field's text, compared with the field as the engine last knew it.
+        Cell(Option<Box<TextContext>>, usize, usize),
         /// A chord of virtual keys, sent marked as the screen reader's own.
         Keys(Vec<u16>),
         /// The Virtual Viewer's lines for the window in front (`true`) or the focused
@@ -155,6 +158,7 @@ mod windows_actions {
             match self {
                 Request::Object(..) | Request::UiaObject(..) => "page action",
                 Request::Text(..) | Request::TextNow => "text read",
+                Request::Cell(..) => "table cell",
                 Request::Keys(_) => "keys",
                 Request::Window(_) => "viewer read",
                 Request::PageElements(_) => "page elements",
@@ -302,6 +306,21 @@ mod windows_actions {
                                     "text context read"
                                 );
                                 if let Some(context) = context {
+                                    let _ = events.send(AccessibilityEvent::TextContext(context));
+                                }
+                            }
+                            Request::Cell(before, row, column) => {
+                                let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
+                                else {
+                                    return;
+                                };
+                                if !crate::text_context::move_to_cell(uia, row, column) {
+                                    tracing::debug!(row, column, "caret not moved to the cell");
+                                    return;
+                                }
+                                if let Some(context) =
+                                    read_after_key(uia, before.map(|b| *b), false)
+                                {
                                     let _ = events.send(AccessibilityEvent::TextContext(context));
                                 }
                             }
@@ -731,6 +750,10 @@ mod windows_actions {
 
         fn read_text(&self) -> bool {
             self.send(Request::TextNow)
+        }
+
+        fn move_to_cell(&self, before: Option<&TextContext>, row: usize, column: usize) -> bool {
+            self.send(Request::Cell(before.cloned().map(Box::new), row, column))
         }
 
         fn move_caret(&self, context: &TextContext, offset: usize) -> bool {
