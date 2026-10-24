@@ -334,6 +334,23 @@ what JAWS says there: "blank" at a line's end in 320/s11); Ctrl+Left three times
 - a path field that breaks words at `\` [W4] (File Explorer's address bar or the Run dialog):
   the owner's stops; it needs a fixture the harness can launch. **Open.**
 
+## What 1037 recorded (2026-10-24, `e4e88597`)
+
+Old-pc's Notepad is Windows 10's classic one (an Edit control), not the owner's Windows 11
+Notepad (RichEdit), so its word stops differ from the owner's report. In the speech history, the
+same at Most, None and Some:
+- Ctrl+Right stops three times inside `C:\Users\Ada\Downloads`, and JAWS says the whole token at
+  each stop: "C:\Users\Ada\Downloads". Okur says from the caret on: "\Users\Ada\Downloads",
+  "\Ada\Downloads", "\Downloads".
+- A hyphen ends JAWS's word: "https://example.org/a", then "b". Okur says
+  "https://example.org/a-b".
+- Say Word on the first stop says "\"; Okur says ":\".
+- At the line's end, Ctrl+Right says nothing.
+
+`okur-lab parity --only 1037`: 85 of 100 steps match; the other 15 are these three. What the
+synthesizer was given at each level (the spoken layer) is still to read. The owner's Notepad
+needs the same line in `desktop-richedit.ps1`'s family, recorded next.
+
 ## What Okur should do, once recorded
 
 Not decided before the recordings. If None and Some show what Most shows:
