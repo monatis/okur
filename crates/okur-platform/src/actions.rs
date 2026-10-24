@@ -904,6 +904,58 @@ mod windows_actions {
     }
 }
 
+/// Every UI Automation text attribute of the focused text at its caret, by `unit` around it
+/// (0 character, 1 format, 2 word, 3 line, 4 paragraph): "id name: value" lines, for research
+/// (`okur-lab text-attributes`). Empty without a text pattern.
+#[cfg(windows)]
+pub fn text_attributes_now(unit: i32) -> Vec<String> {
+    use windows::Win32::System::Com::{
+        CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
+    };
+    use windows::Win32::System::Variant::VARIANT;
+    use windows::Win32::UI::Accessibility::{
+        CUIAutomation8, IUIAutomation, IUIAutomationTextPattern, TextUnit, UIA_TextPatternId,
+        UIA_TEXTATTRIBUTE_ID,
+    };
+    /// UI Automation's text attribute ids run from 40000 (AnimationStyle) to 40042
+    /// (AfterParagraphSpacing) as of Windows 10.
+    const FIRST: i32 = 40_000;
+    const LAST: i32 = 40_042;
+    let read = || -> Option<Vec<String>> {
+        // SAFETY: COM initialization, in-process activation and UIA client calls on valid
+        // objects.
+        unsafe {
+            let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
+            let uia: IUIAutomation =
+                CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER).ok()?;
+            let pattern: IUIAutomationTextPattern = uia
+                .GetFocusedElement()
+                .ok()?
+                .GetCurrentPatternAs(UIA_TextPatternId)
+                .ok()?;
+            let range = pattern.GetSelection().ok()?.GetElement(0).ok()?;
+            range.ExpandToEnclosingUnit(TextUnit(unit)).ok()?;
+            let mixed = uia.ReservedMixedAttributeValue().ok();
+            let unsupported = uia.ReservedNotSupportedValue().ok();
+            Some(
+                (FIRST..=LAST)
+                    .filter_map(|id| {
+                        let value: VARIANT =
+                            range.GetAttributeValue(UIA_TEXTATTRIBUTE_ID(id)).ok()?;
+                        let shown = match windows::core::IUnknown::try_from(&value) {
+                            Ok(object) if Some(&object) == unsupported.as_ref() => return None,
+                            Ok(object) if Some(&object) == mixed.as_ref() => "(mixed)".to_owned(),
+                            _ => value.to_string(),
+                        };
+                        Some(format!("{id}: {shown}"))
+                    })
+                    .collect(),
+            )
+        }
+    };
+    read().unwrap_or_default()
+}
+
 /// The focused text field's text context right now, for harness checks (`okur-lab caret`).
 #[cfg(windows)]
 pub fn read_text_now() -> Option<okur_core::TextContext> {

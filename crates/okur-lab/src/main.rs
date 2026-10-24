@@ -87,6 +87,13 @@ enum Commands {
         #[arg(long, default_value = "")]
         step: String,
     },
+    /// Print every UI Automation text attribute of the focused text at its caret (Windows):
+    /// what an application reports of its fonts, styles and paragraphs. Research, never evidence
+    TextAttributes {
+        /// The unit read around the caret: 0 character, 1 format, 2 word, 3 line, 4 paragraph
+        #[arg(long, default_value_t = 0)]
+        unit: i32,
+    },
     /// Read the focused edit's text at its caret, as caret keys do in an edit (Windows)
     Caret {
         /// char, word or line
@@ -1227,6 +1234,17 @@ async fn main() {
                 let _ = (window_title, append_to, step);
                 eprintln!("document-headings is only available on Windows");
                 std::process::exit(1);
+            }
+        }
+        Some(Commands::TextAttributes { unit }) => {
+            #[cfg(windows)]
+            for line in okur_platform::actions::text_attributes_now(unit) {
+                println!("{line}");
+            }
+            #[cfg(not(windows))]
+            {
+                let _ = unit;
+                eprintln!("text-attributes is only available on Windows");
             }
         }
         Some(Commands::Caret { unit }) => {
