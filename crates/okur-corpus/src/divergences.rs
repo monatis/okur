@@ -885,6 +885,28 @@ divergences! {
     ],
     "In JAWS's Results Viewer, which skim reading started from its dialog opens at its end,      the recordings got nothing for Say Line, the arrows or Escape, by our keys or JAWS's      TypeKey (762, 767, 768, 769, 771), while Tab got its links (780). Okur's viewer reads      its lines as the Virtual Viewer does, and Escape closes it and reads the page's line.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-22";
+
+    Difference::JawsSaysBeforeItsDialog => [
+        "1036-desktop-word-heading-list-move/s5",
+        "519-desktop-word-lists-and-spelling/s2",
+        "519-desktop-word-lists-and-spelling/s5",
+    ],
+    "Before its Heading List and Spelling Errors lists in Word, JAWS says what it said or \
+     showed before them in most trials: its main window's version, \"JAWS Version \
+     2025.2505.43\", the document's name, \"Microsoft Word Document\", a button's hint, or \
+     \"Please wait processing 1 items\" while it gathers the errors. Okur's lists open without \
+     them, as JAWS's do in the other trials.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
+
+    Difference::Step => [
+        "519-desktop-word-lists-and-spelling/s6",
+        "519-desktop-word-lists-and-spelling/s7",
+    ],
+    "In JAWS's Spelling Errors list, Say Line and Insert+Shift+R got nothing in every trial: \
+     the recorder's keys do not reach JAWS's own dialogs, which run elevated (the Results \
+     Viewer's entry above). Okur's list reads its selected error, \"teh 1 of 1\", and \
+     Insert+Shift+R says there are no regions, as in any window.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
 }
 
 /// The divergence covering `step`, if any.

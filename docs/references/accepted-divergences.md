@@ -870,6 +870,29 @@ A step can be in more than one entry; all of its entries apply.
 - Why: an internal name said in place of the words; the place and the restriction are the same.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
 
+### JAWS says what came before its lists in Word
+
+- Steps:
+  - `1036-desktop-word-heading-list-move/s5`
+  - `519-desktop-word-lists-and-spelling/s2`
+  - `519-desktop-word-lists-and-spelling/s5`
+- Difference: `JawsSaysBeforeItsDialog`. Before its Heading List and Spelling Errors lists in
+  Word, JAWS says what it said or showed before them in most trials: its main window's version,
+  "JAWS Version 2025.2505.43", the document's name, "Microsoft Word Document", a button's hint,
+  or "Please wait processing 1 items" while it gathers the errors.
+- Why: Okur's lists open without them, as JAWS's do in the other trials.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
+
+### Our keys in JAWS's Spelling Errors list
+
+- Steps: `519-desktop-word-lists-and-spelling/s6`, `519-desktop-word-lists-and-spelling/s7`.
+- Difference: the whole step. In JAWS's Spelling Errors list, Say Line and Insert+Shift+R got
+  nothing in every trial.
+- Why: the recorder's keys do not reach JAWS's own dialogs, which run elevated, as with the
+  Results Viewer above. Okur's list reads its selected error, "teh 1 of 1", and Insert+Shift+R
+  says there are no regions, as in any window.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row
