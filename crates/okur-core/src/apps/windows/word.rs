@@ -27,10 +27,11 @@ fn with_heading(heading: Option<u8>, line: String) -> String {
 
 /// What Say All reads of Word's document from the caret's paragraph to the end, paragraph by
 /// paragraph (a table's cell is one), each with where it starts: the caret's paragraph as it is,
-/// then each with its heading level before it and what JAWS says on moving to it
-/// ([`line_change`]): "Library Hours | ... | heading level 2 What changes | Weekday hours are
-/// longer. | Entering List", "exit list" after the list [obs, 518/s20]. Paragraphs without text
-/// are left out.
+/// then each with its heading level and, before it, what changed on reaching it
+/// ([`say_all_change`]): "What changes | Entering List | Weekday hours are longer. | ... | exit
+/// list | heading level 2 Branches | table 1 | uniform Table | Branch | Hours | Row 2 | Central |
+/// 9 to 9 | out of table | The page ends here." [obs, 1038/s4, s12]. Paragraphs without text are
+/// left out.
 pub(crate) fn say_all_pieces(
     context: &TextContext,
     paragraphs: &[DocumentParagraph],
@@ -66,16 +67,13 @@ pub(crate) fn say_all_pieces(
             list_item: paragraph.list_item,
             cell: paragraph.cell.clone(),
         };
-        let said = if pieces.is_empty() {
-            line
-        } else {
-            let (first, last) = line_change(was.as_ref(), &now);
-            first
+        let said = match was.as_ref() {
+            None => line,
+            Some(was) => say_all_change(was, &now)
                 .into_iter()
                 .chain(std::iter::once(with_heading(now.heading, line)))
-                .chain(last)
                 .collect::<Vec<_>>()
-                .join("\n")
+                .join("\n"),
         };
         pieces.push((start, said));
         was = Some(now);
@@ -316,6 +314,37 @@ pub(crate) fn around_line(
             .collect::<Vec<_>>()
             .join("\n"),
     )
+}
+
+/// What Say All says before a paragraph of Word's it reads after `was`, where line reading says
+/// some of it after the line ([`line_change`]): first what was left, "exit list", "out of
+/// table"; then what is entered, "Entering List", "table 1 | uniform Table", and a table's next
+/// row, "Row 2", with no "new cell" [obs, 1038/s4, s12: the order of two trials of three; JAWS's
+/// own order varies, "Row 2" said after the row's first cell in s4's].
+fn say_all_change(was: &LineStructure, now: &LineStructure) -> Vec<String> {
+    let mut said = Vec::new();
+    if was.list_item && !now.list_item {
+        said.push(msg::word_exit_list().to_string());
+    }
+    if was.cell.is_some() && now.cell.is_none() {
+        said.push(msg::word_out_of_table().to_string());
+    }
+    if !was.list_item && now.list_item {
+        said.push(msg::word_entering_list().to_string());
+    }
+    match (was.cell.as_ref(), now.cell.as_ref()) {
+        (Some(w), Some(n)) if w.table == n.table => {
+            if w.row != n.row {
+                said.push(msg::word_row(n.row).render());
+            }
+        }
+        (_, Some(n)) => {
+            said.push(msg::word_table(n.table).render());
+            said.push(msg::word_table_uniform().to_string());
+        }
+        _ => {}
+    }
+    said
 }
 
 /// What JAWS says before and after a line of Word's it moved to from `was`:
@@ -565,8 +594,8 @@ Outline level: 1"
     }
 
     /// Say All reads Word's document by its paragraphs from the caret's: the caret's as it is,
-    /// a heading with its level, the list entered and left, the table's cells apart with its
-    /// entry, "out of table" after it [obs, 518/s20 and the line keys' 518/s9-s16].
+    /// a heading with its level, and before a paragraph what changed: the list entered and left,
+    /// the table entered, its next row, "out of table" [obs, 1038/s4, s12].
     #[test]
     fn say_all_reads_the_paragraphs_with_their_structure() {
         // Word's text: paragraphs end in \r, a cell in \u{7}.
@@ -579,6 +608,7 @@ Outline level: 1"
             ("Branches\r", Some(2), false, None),
             ("Branch\u{7}", None, false, Some((1, 1))),
             ("Hours\u{7}", None, false, Some((1, 2))),
+            ("Central\u{7}", None, false, Some((2, 1))),
             ("The page ends here.\r", None, false, None),
         ];
         let mut text = String::new();
@@ -615,11 +645,12 @@ Outline level: 1"
                 "Library Hours",
                 "The library opens.",
                 "\u{1d} heading level 2 \u{1e} What changes",
-                "Weekday hours are longer. | Entering List",
+                "Entering List | Weekday hours are longer.",
                 "Weekend hours stay the same.",
-                "\u{1d} heading level 2 \u{1e} Branches | exit list",
-                "table 1 | uniform Table | new cell | Branch",
-                "new cell | Hours",
+                "exit list | \u{1d} heading level 2 \u{1e} Branches",
+                "table 1 | uniform Table | Branch",
+                "Hours",
+                "Row 2 | Central",
                 "out of table | The page ends here.",
             ]
         );
