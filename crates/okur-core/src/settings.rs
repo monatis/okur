@@ -590,6 +590,9 @@ pub struct VoiceSettings {
     /// The voice contexts' own voices, where they differ from the one above (JAWS's All
     /// Contexts).
     pub contexts: VoiceContexts,
+    /// The voice profile this voice was chosen from, by name (Select a Voice Profile); none,
+    /// the synthesizer's own.
+    pub profile: Option<String>,
 }
 
 impl Default for VoiceSettings {
@@ -603,11 +606,35 @@ impl Default for VoiceSettings {
             indicate_caps: true,
             text: TextProcessing::default(),
             contexts: VoiceContexts::default(),
+            profile: None,
         }
     }
 }
 
 impl VoiceSettings {
+    /// This voice made `other`'s: its synthesizer, person, rate, volume, punctuation,
+    /// contexts and profile; Caps Indicate and the text processing stay as they are.
+    pub fn with_voice_of(&self, other: &VoiceSettings) -> VoiceSettings {
+        VoiceSettings {
+            synthesizer: other.synthesizer,
+            voice: other.voice.clone(),
+            rate: other.rate,
+            volume: other.volume,
+            punctuation: other.punctuation,
+            contexts: other.contexts.clone(),
+            profile: other.profile.clone(),
+            ..self.clone()
+        }
+    }
+
+    /// This voice made profile `name`'s, `profile`, as [`VoiceSettings::with_voice_of`].
+    pub fn with_profile(&self, name: &str, profile: &VoiceSettings) -> VoiceSettings {
+        VoiceSettings {
+            profile: Some(name.to_owned()),
+            ..self.with_voice_of(profile)
+        }
+    }
+
     /// The voice `context` speaks with: All Contexts' with the context's own parts.
     pub fn in_context(&self, context: VoiceContext) -> VoiceSettings {
         let own = self.contexts.get(context);
@@ -1013,6 +1040,9 @@ pub struct Settings {
     /// default). Empty, Okur's own language. Windows' recognizer for the user's languages is
     /// the fallback where Windows has none for it.
     pub ocr_language: String,
+    /// The voice profiles saved by name (Voice Adjustment's Save As), for all applications;
+    /// the synthesizers' own are not kept here.
+    pub voice_profiles: std::collections::BTreeMap<String, VoiceSettings>,
 }
 
 impl Default for Settings {
@@ -1039,6 +1069,7 @@ impl Default for Settings {
             confirm_exit: true,
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),
+            voice_profiles: std::collections::BTreeMap::new(),
         }
     }
 }
@@ -1111,6 +1142,7 @@ impl Settings {
             // Not in old-pc's user JCF: the shared one's, JAWS's defaults.
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),
+            voice_profiles: std::collections::BTreeMap::new(),
         }
     }
 }

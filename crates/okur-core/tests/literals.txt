@@ -498,3 +498,10 @@ okur-core/src/ui/settings_tree.rs: "no"
 okur-core/src/ui/settings_tree.rs: "question"
 okur-core/src/ui/settings_tree.rs: "expand"
 okur-ui/src/dialog.rs: "Escape"
+# Select a Voice Profile's controls, by id; the settings file's names an application's own
+# profile is read by.
+okur-core/src/ui/voice_profile.rs: "default"
+okur-core/src/ui/voice_profile.rs: "application"
+okur-core/src/ui/voice_profile.rs: "ok"
+okur-core/src/ui/voice_profile.rs: "cancel"
+okur-core/src/engine.rs: "profile"

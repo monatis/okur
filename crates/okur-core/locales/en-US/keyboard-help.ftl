@@ -622,3 +622,4 @@ command-shut-down = Exits Okur.
 # The same, the longer description.
 command-shut-down-long = { command-shut-down } When the setting to confirm is on, Okur asks first.
 command-okur-window = Opens Okur's window, whose menus lead to its settings.
+command-select-voice-profile = Chooses the voice profile for all applications, and for the application in front.

@@ -409,6 +409,7 @@ fn descriptions(command: &Command) -> Descriptions {
         // Okur's settings, and Okur itself.
         QuickSettings | SettingsCenter => one(msg::command_open_settings()),
         OkurWindow => one(msg::command_okur_window()),
+        SelectVoiceProfile => one(msg::command_select_voice_profile()),
         SetPunctuationLevel => one(msg::command_set_punctuation_level()),
         NextTypingEcho => one(msg::command_next_typing_echo()),
         NextScreenEcho => one(msg::command_next_screen_echo()),

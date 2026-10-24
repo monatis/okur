@@ -310,7 +310,14 @@ spoken form is a parity target.
      the message voice, and all else in the cursor's, the Okur cursor's while it is active;
    - Voice Adjustment's Adjust box offers the five as JAWS's, a context showing its own values
      and no Volume, and a change in All Contexts is every context's.
+   **Select a Voice Profile built 2026-10-24**: Insert+Ctrl+S (Default.JKM's
+   SelectAVoiceProfile) and Options, Voices, Select a Voice Profile...: Default, "For <application>"
+   with Use Default first, OK, Cancel. A profile is a synthesizer's own (Automatic, OneCore,
+   SAPI 5) or one saved by name (`voice_profiles`, for all applications); choosing one copies its
+   voice into the place's settings with its name (`voice.profile`); Use Default leaves the
+   application nothing of its own.
    Still to do: tutor hints in the message voice (they are part of the focus speech today); a
-   context's Pitch (the synthesizers take no base pitch yet); profiles; Select a Voice Profile;
-   the Language menu.
+   context's Pitch (the synthesizers take no base pitch yet); Voice Adjustment's Profile Name,
+   Delete Profile, Speak Sample, Save As and Apply (a walk of its Profile Name box and buttons
+   first); the Language menu's Voice Profiles.
 5. **Startup Wizard**, Manage Application Settings, Restore to Factory Settings.

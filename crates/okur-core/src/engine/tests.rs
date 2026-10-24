@@ -7603,3 +7603,40 @@ fn insert_j_shows_okurs_window_and_its_menus() {
         Some(ToUi::DialogShow { dialog }) if dialog.title.ends_with("Okur Settings Center")
     ));
 }
+
+/// Select a Voice Profile: a profile chosen for all applications becomes their voice, its name
+/// kept; one chosen for Notepad is Notepad's own; "Use Default" gives Notepad the voice for all
+/// applications again, and nothing of its own is left in its settings.
+#[test]
+fn voice_profiles_are_chosen_for_all_applications_and_one() {
+    use crate::settings::{Synthesizer, VoiceSettings};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let mut layers = crate::settings_layers::SettingsLayers::default();
+    let mut saved = crate::settings::Settings::default();
+    saved.voice_profiles.insert(
+        "Fast".to_owned(),
+        VoiceSettings {
+            rate: 6,
+            ..VoiceSettings::default()
+        },
+    );
+    layers.global = crate::settings_layers::changes(&saved, &crate::settings::Settings::default());
+    engine.set_settings_layers(layers);
+    engine.settings_place(Some("notepad.exe"), None);
+    engine.choose_voice_profiles(Some("SAPI 5".to_owned()), None);
+    let global = engine.settings_layers.resolve(None, None);
+    assert_eq!(global.voice.synthesizer, Synthesizer::Sapi5);
+    assert_eq!(global.voice.profile.as_deref(), Some("SAPI 5"));
+    engine.choose_voice_profiles(None, Some(("notepad".to_owned(), Some("Fast".to_owned()))));
+    assert_eq!(engine.settings.voice.rate, 6);
+    assert_eq!(engine.settings.voice.profile.as_deref(), Some("Fast"));
+    engine.choose_voice_profiles(None, Some(("notepad".to_owned(), None)));
+    assert_eq!(engine.settings.voice.rate, 0);
+    assert_eq!(engine.settings.voice.synthesizer, Synthesizer::Sapi5);
+    assert!(engine
+        .settings_layers
+        .applications
+        .get("notepad")
+        .is_none_or(|values| !values.contains_key("voice")));
+}

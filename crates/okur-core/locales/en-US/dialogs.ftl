@@ -515,6 +515,7 @@ okur-menu-exit-key = Alt+F4
 okur-menu-notification-history-key = INSERT+SPACE, N
 okur-menu-voices = &Voices
 okur-menu-voice-adjustment = Voice Adjustment...
+okur-menu-voice-profile = Select a Voice Profile...
 
 ## Voice Adjustment, JAWS's "Voice" group [obs, the walk of Voice Adjustment].
 
@@ -532,3 +533,11 @@ voice-adjustment-person = Person:
 voice-adjustment-rate = Rate:
 voice-adjustment-punctuation = Punctuation:
 voice-adjustment-volume = Volume:
+
+## Select a Voice Profile (Insert+Ctrl+S): "Select a Voice Profile dialog | Default: Combo box",
+## "For notepad: Combo box | Use Default | 1 of 6" [obs, the walk of Select a Voice Profile].
+
+voice-profile-title = Select a Voice Profile
+voice-profile-default = Default:
+voice-profile-for = For { $application }:
+voice-profile-use-default = Use Default

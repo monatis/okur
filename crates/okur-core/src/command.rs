@@ -367,6 +367,8 @@ pub enum Command {
     /// Okur's main window, its menus' way to Basics and the other settings (JAWS's JAWS
     /// Window, Insert+J).
     OkurWindow,
+    /// Select a Voice Profile (Insert+Ctrl+S, JAWS's SelectAVoiceProfile).
+    SelectVoiceProfile,
     /// The next punctuation level, until Okur exits (JAWS's SetPunctuationLevel).
     SetPunctuationLevel,
     /// The next typing echo, until Okur exits (Insert+2).
@@ -735,6 +737,7 @@ impl Command {
             "SayFontInViewer" => SayFontInViewer,
             "QuickSettings" => QuickSettings,
             "JAWSWindow" | "OkurWindow" => OkurWindow,
+            "SelectAVoiceProfile" => SelectVoiceProfile,
             "SettingsCenter" => SettingsCenter,
             "SetPunctuationLevel" | "Insert+Shift+2" | "JAWSKey+Shift+2" => SetPunctuationLevel,
             "Insert+2" | "JAWSKey+2" => NextTypingEcho,
@@ -1100,6 +1103,8 @@ static BINDINGS: &[Binding] = &{
         // Settings.
         bind(Alpha('V'), OKUR, QuickSettings),
         bind(Alpha('J'), OKUR, OkurWindow),
+        // Default.JKM: Control+JAWSKey+S=SelectAVoiceProfile.
+        bind(Alpha('S'), OKUR_CTRL, SelectVoiceProfile),
         bind(Digit(6), OKUR, SettingsCenter),
         // The dialog box's default button, and the settings in use (JAWS 2025 help) [obs, 513].
         bind(Alpha('E'), OKUR, SayDefaultButton),

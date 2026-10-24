@@ -20,6 +20,7 @@ pub mod settings_tree;
 pub mod skim;
 pub mod tray;
 pub mod voice_adjustment;
+pub mod voice_profile;
 pub mod windows;
 
 pub use okur_ui_model::{

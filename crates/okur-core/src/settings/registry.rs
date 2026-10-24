@@ -257,6 +257,13 @@ pub static SETTINGS: &[SettingSpec] = &[
     ),
     // The voice contexts' own voices: Voice Adjustment's Adjust box and the settings file.
     spec("voice.contexts", Group::Speech, None, Kind::Structured),
+    // The voice profile chosen (Select a Voice Profile), for all applications or one.
+    spec("voice.profile", Group::Speech, None, Kind::Structured),
+    // The voice profiles saved by name, kept once for all applications.
+    SettingSpec {
+        scopes: Scopes::AllApplications,
+        ..spec("voice_profiles", Group::Speech, None, Kind::Structured)
+    },
     SettingSpec {
         jaws: default_jcf("Options", "IndicateCaps", |v| Value::Bool(v.trim() != "0")),
         ..spec(

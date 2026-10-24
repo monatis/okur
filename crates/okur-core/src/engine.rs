@@ -298,6 +298,8 @@ pub struct ScreenReaderEngine {
     basics_dialog: Option<crate::ui::basics::BasicsDialog>,
     /// Voice Adjustment, while it is open.
     voice_adjustment: Option<crate::ui::voice_adjustment::VoiceAdjustment>,
+    /// Select a Voice Profile, while it is open.
+    voice_profile_dialog: Option<crate::ui::voice_profile::VoiceProfileDialog>,
     /// The application the until-the-focus-moves settings were changed for: the focus moving
     /// to another clears them.
     until_focus_moves_for: Option<String>,
@@ -558,6 +560,7 @@ impl ScreenReaderEngine {
             settings_tree: None,
             basics_dialog: None,
             voice_adjustment: None,
+            voice_profile_dialog: None,
             until_focus_moves_for: None,
             settings_history: Vec::new(),
             list_dialog: None,
@@ -1831,11 +1834,14 @@ impl ScreenReaderEngine {
                         vec![
                             item(MENU_BASICS, msg::okur_menu_basics(), None),
                             MenuItemSpec {
-                                items: vec![item(
-                                    MENU_VOICE_ADJUSTMENT,
-                                    msg::okur_menu_voice_adjustment(),
-                                    None,
-                                )],
+                                items: vec![
+                                    item(
+                                        MENU_VOICE_ADJUSTMENT,
+                                        msg::okur_menu_voice_adjustment(),
+                                        None,
+                                    ),
+                                    item(MENU_VOICE_PROFILE, msg::okur_menu_voice_profile(), None),
+                                ],
                                 ..item("voices", msg::okur_menu_voices(), None)
                             },
                             item(
@@ -1871,6 +1877,9 @@ impl ScreenReaderEngine {
         match id {
             MENU_BASICS => self.open_basics(),
             MENU_VOICE_ADJUSTMENT => self.open_voice_adjustment(),
+            MENU_VOICE_PROFILE => {
+                let _ = self.open_voice_profile();
+            }
             MENU_NOTIFICATIONS => self.open_notification_history(),
             MENU_SETTINGS_CENTER => {
                 return self.open_settings(crate::ui::settings_tree::Flavor::Center);
@@ -1882,6 +1891,91 @@ impl ScreenReaderEngine {
             _ => {}
         }
         None
+    }
+
+    /// Select a Voice Profile (Insert+Ctrl+S), or brings it to the front: the profile for all
+    /// applications and for the application in front.
+    pub(crate) fn open_voice_profile(&mut self) -> Option<String> {
+        if self.ui.is_none() {
+            let speech = msg::settings_dialog_unavailable().to_string();
+            self.speech.speak(&speech, true);
+            return Some(speech);
+        }
+        let dialog = match self.voice_profile_dialog.take() {
+            Some(dialog) => dialog,
+            None => {
+                self.dialog_count += 1;
+                let global = self.settings_layers.resolve(None, None);
+                let application = self.settings_place.0.clone().map(|app| {
+                    let own = self
+                        .settings_layers
+                        .applications
+                        .get(&app)
+                        .and_then(|values| values.get("voice"))
+                        .and_then(|voice| voice.get("profile"))
+                        .and_then(|profile| profile.as_str())
+                        .map(str::to_owned);
+                    (app, own)
+                });
+                crate::ui::voice_profile::VoiceProfileDialog::new(
+                    self.dialog_count,
+                    &crate::ui::voice_profile::profiles(&global.voice_profiles),
+                    &global.voice,
+                    application,
+                )
+            }
+        };
+        if let Some(ui) = &self.ui {
+            ui.send(crate::ui::ToUi::DialogShow {
+                dialog: dialog.spec(),
+            });
+        }
+        self.voice_profile_dialog = Some(dialog);
+        None
+    }
+
+    /// The profiles chosen in Select a Voice Profile: `default` for all applications, then the
+    /// application's, a profile or none to follow the default.
+    fn choose_voice_profiles(
+        &mut self,
+        default: Option<String>,
+        application: Option<(String, Option<String>)>,
+    ) {
+        use crate::settings_layers::Scope;
+        let global = self.settings_layers.resolve(None, None);
+        let profiles = crate::ui::voice_profile::profiles(&global.voice_profiles);
+        let profile = |name: &str| {
+            profiles
+                .iter()
+                .find(|(n, _)| n == name)
+                .map(|(_, voice)| voice.clone())
+        };
+        if let Some((name, voice)) = default.and_then(|name| Some((name.clone(), profile(&name)?)))
+        {
+            let mut after = global.clone();
+            after.voice = global.voice.with_profile(&name, &voice);
+            self.apply_settings(&Scope::Global, &global, &after, &[]);
+        }
+        if let Some((app, choice)) = application {
+            let before = self.settings_layers.resolve(Some(&app), None);
+            let voice = match choice {
+                Some(name) => profile(&name).map(|voice| before.voice.with_profile(&name, &voice)),
+                // "Use Default": the voice for all applications.
+                None => Some(
+                    before
+                        .voice
+                        .with_voice_of(&self.settings_layers.resolve(None, None).voice),
+                ),
+            };
+            if let Some(voice) = voice {
+                let after = crate::settings::Settings {
+                    voice,
+                    ..before.clone()
+                };
+                self.settings_dialog_application = Some(app.clone());
+                self.apply_settings(&Scope::Application(app), &before, &after, &[]);
+            }
+        }
     }
 
     /// Opens Voice Adjustment, or brings it to the front: the voice for all applications.
@@ -2027,6 +2121,33 @@ impl ScreenReaderEngine {
             _ if self.is_message_box_event(message) => self.handle_message_box_event(message),
             _ if self.is_overwrite_event(message) => self.handle_overwrite_event(message),
             crate::ui::FromUi::MainMenuCommand { id } => self.main_menu_command(id),
+            _ if self
+                .voice_profile_dialog
+                .as_ref()
+                .is_some_and(|d| Some(d.id) == dialog_of(message)) =>
+            {
+                use crate::ui::voice_profile::Outcome;
+                match self.voice_profile_dialog.as_mut()?.handle(message) {
+                    Outcome::Choose {
+                        default,
+                        application,
+                    } => {
+                        if let (Some(dialog), Some(ui)) =
+                            (self.voice_profile_dialog.take(), &self.ui)
+                        {
+                            ui.send(crate::ui::ToUi::DialogClose { id: dialog.id });
+                        }
+                        self.choose_voice_profiles(default, application);
+                        self.returning_from_dialog();
+                    }
+                    Outcome::Closed => {
+                        self.voice_profile_dialog = None;
+                        self.returning_from_dialog();
+                    }
+                    Outcome::Nothing => {}
+                }
+                None
+            }
             _ if self
                 .voice_adjustment
                 .as_ref()
@@ -2553,6 +2674,7 @@ impl ScreenReaderEngine {
 /// The main window's menu items' ids.
 const MENU_BASICS: &str = "basics";
 const MENU_VOICE_ADJUSTMENT: &str = "voice_adjustment";
+const MENU_VOICE_PROFILE: &str = "voice_profile";
 const MENU_NOTIFICATIONS: &str = "notification_history";
 const MENU_SETTINGS_CENTER: &str = "settings_center";
 const MENU_ABOUT: &str = "about";
