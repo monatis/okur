@@ -125,13 +125,14 @@ settings-apply = &Apply
 
 ## The question when Settings Center is cancelled with changes not applied, JAWS's words with
 ## Okur's name: "JAWS Settings Center dialog | You have made changes to NotePad's settings. Do
-## you want to save them? | Yes Button", Tab to "No Button" [obs, the walk of Settings Center's
-## questions].
+## you want to save them? | Yes Button", Tab to "No Button", "Cancel Button" [obs, the walks of
+## Settings Center's questions].
 
 settings-save-title = Okur Settings Center
 settings-save-question = You have made changes to { $place }'s settings. Do you want to save them?
 settings-save-yes = &Yes
 settings-save-no = &No
+settings-save-cancel = Cancel
 
 ## The question before Okur exits (Insert+F4, JAWS's ShutDownJAWS), JAWS's words with Okur's name:
 ## "Quit JAWS dialog | Are you sure you want to quit JAWS?  Press Enter to quit now, or Escape
@@ -416,6 +417,7 @@ skim-results-title = Skim Reading Results
 settings-center-title = { $place } - Okur Settings Center
 # "QuickSettings - Chrome", as JAWS writes its own.
 quick-settings-title = QuickSettings - { $place }
+quick-settings-expand = Expand Tree View
 settings-tree-search = SearchBox
 settings-tree-application = Application:
 settings-tree-group-description = A group of settings: Right Arrow opens it, and Space on a setting in it changes its value.
@@ -475,11 +477,12 @@ settings-tree-default-only = Only available when modifying the Default setting. 
 # Settings and Settings Center].
 settings-tree-last-changed = Last Changed Settings
 settings-tree-last-changed-description = The 25 settings changed last for this place, newest first. Each can be changed here as in its own group.
-# Quick Settings' lifetimes, Shift+F10 on a setting or a group (JAWS's help: restore it when
-# JAWS exits, when the focus changes, or save it; JAWS's own words to record).
-settings-lifetime-until-exit = Restore When Okur Exits
-settings-lifetime-until-focus-moves = Restore When Focus Changes
-settings-lifetime-saved = Save
+# Quick Settings' lifetimes, Shift+F10 on a setting or a group, JAWS's words with Okur's name:
+# "Context Menu | Restore setting when JAWS exits", "Restore setting when focus changes", "Save
+# the setting checked" [obs, the second walk of Settings Center's questions].
+settings-lifetime-until-exit = Restore setting when Okur exits
+settings-lifetime-until-focus-moves = Restore setting when focus changes
+settings-lifetime-saved = Save the setting
 
 ## Okur's main window (Insert+J) and its menus: JAWS's window and its items, those Okur has
 ## (old-pc's walk, docs/references/okur-settings-redesign.md §1.1). Access keys from JAWS's book.

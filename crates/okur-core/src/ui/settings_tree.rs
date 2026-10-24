@@ -25,6 +25,8 @@ const TREE: &str = "tree";
 const SEARCH: &str = "search";
 const DESCRIPTION: &str = "description";
 const PLACE: &str = "application";
+/// Quick Settings' "Expand Tree View" check box.
+const EXPAND: &str = "expand";
 /// Ctrl+Shift+D's press: Settings Center on the Default settings.
 const DEFAULT_PLACE: &str = "default_place";
 /// Enter and Escape in the tree, which Okur decides: on a search's results, the whole tree
@@ -267,6 +269,8 @@ pub struct SettingsTree {
     changed: bool,
     /// The question whether to save the changes, while it is open, by its dialog's id.
     question: Option<u32>,
+    /// Quick Settings' "Expand Tree View": every group open.
+    expand: bool,
 }
 
 impl SettingsTree {
@@ -303,9 +307,37 @@ impl SettingsTree {
             selected: 0,
             changed: false,
             question: None,
+            expand: flavor == Flavor::Quick,
         };
+        if tree.expand {
+            tree.expand_all(true);
+        }
         tree.rows = tree.rows_for_search();
         tree
+    }
+
+    /// Every group opened, or closed (Quick Settings' "Expand Tree View" checked or cleared);
+    /// closed, a setting selected gives its place to its group at the top.
+    fn expand_all(&mut self, open: bool) {
+        self.open = if open {
+            match self.flavor {
+                Flavor::Center => TreeGroup::CENTER.to_vec(),
+                Flavor::Quick => TreeGroup::QUICK.to_vec(),
+            }
+        } else {
+            Vec::new()
+        };
+        self.recent_open = open;
+        if !open {
+            let top = self.rows.get(..=self.selected).and_then(|rows| {
+                rows.iter().rposition(|r| match r {
+                    Row::Group(group) => group.depth() == 0,
+                    Row::LastChanged => true,
+                    _ => false,
+                })
+            });
+            self.selected = top.unwrap_or(0);
+        }
     }
 
     /// Whether dialog `id` is this one or its question.
@@ -320,8 +352,8 @@ impl SettingsTree {
 
     /// The question asked when Settings Center is cancelled with changes not applied, as
     /// dialog `id`: JAWS's "JAWS Settings Center dialog | You have made changes to NotePad's
-    /// settings. Do you want to save them? | Yes Button", then No; Escape goes back to Settings
-    /// Center [obs, the walk of Settings Center's questions].
+    /// settings. Do you want to save them? | Yes Button", then No and Cancel; Cancel or Escape
+    /// goes back to Settings Center [obs, the walks of Settings Center's questions].
     pub fn save_question(&mut self, id: u32) -> DialogSpec {
         self.question = Some(id);
         let place = self
@@ -354,6 +386,13 @@ impl SettingsTree {
                 control(
                     "no",
                     msg::settings_save_no().to_string(),
+                    ControlKind::Button { default: false },
+                ),
+                // Escape's: back to Settings Center [obs, the second walk of Settings
+                // Center's questions].
+                control(
+                    "cancel",
+                    msg::settings_save_cancel().to_string(),
                     ControlKind::Button { default: false },
                 ),
             ],
@@ -670,36 +709,51 @@ impl SettingsTree {
                     text: self.description(),
                 },
             ),
-            // Apply, available once something changed, comes before OK and Cancel [obs, the
-            // walk of Settings Center's questions].
-            Control {
-                enabled: self.changed,
-                ..control(
-                    "apply",
-                    msg::settings_apply().to_string(),
-                    ControlKind::Button { default: false },
-                )
-            },
-            control(
-                "ok",
-                msg::settings_ok().to_string(),
-                ControlKind::Button { default: true },
-            ),
-            control(
-                "cancel",
-                msg::settings_cancel().to_string(),
-                ControlKind::Button { default: false },
-            ),
         ];
-        if self.flavor == Flavor::Center {
-            controls.push(control(
-                PLACE,
-                msg::settings_tree_application().to_string(),
-                ControlKind::Choice {
-                    options: self.places.iter().map(|p| p.name.clone()).collect(),
-                    selected: self.place,
+        let ok = control(
+            "ok",
+            msg::settings_ok().to_string(),
+            ControlKind::Button { default: true },
+        );
+        match self.flavor {
+            // Apply, available once something changed, comes before OK and Cancel; the place
+            // last [obs, the walk of Settings Center's questions].
+            Flavor::Center => controls.extend([
+                Control {
+                    enabled: self.changed,
+                    ..control(
+                        "apply",
+                        msg::settings_apply().to_string(),
+                        ControlKind::Button { default: false },
+                    )
                 },
-            ));
+                ok,
+                control(
+                    "cancel",
+                    msg::settings_cancel().to_string(),
+                    ControlKind::Button { default: false },
+                ),
+                control(
+                    PLACE,
+                    msg::settings_tree_application().to_string(),
+                    ControlKind::Choice {
+                        options: self.places.iter().map(|p| p.name.clone()).collect(),
+                        selected: self.place,
+                    },
+                ),
+            ]),
+            // "Expand Tree View check box checked", then OK: no Apply and no Cancel [obs, the
+            // second walk of Settings Center's questions].
+            Flavor::Quick => controls.extend([
+                control(
+                    EXPAND,
+                    msg::quick_settings_expand().to_string(),
+                    ControlKind::CheckBox {
+                        checked: self.expand,
+                    },
+                ),
+                ok,
+            ]),
         }
         // Ctrl+E to the search box from anywhere; Ctrl+Shift+D to the Default settings, in
         // Settings Center (JAWS's help, the redesign's §1).
@@ -1008,6 +1062,11 @@ impl SettingsTree {
                                 .position(|r| matches!(r, Row::Setting(_)))
                                 .unwrap_or(0)
                         };
+                        Outcome::Send(self.refill())
+                    }
+                    (EXPAND, Value::Checked(on)) => {
+                        self.expand = *on;
+                        self.expand_all(*on);
                         Outcome::Send(self.refill())
                     }
                     (PLACE, Value::Selected(place)) if *place < self.places.len() => {
@@ -1335,7 +1394,8 @@ mod tests {
             [
                 "You have made changes to Notepad's settings. Do you want to save them?",
                 "Yes",
-                "No"
+                "No",
+                "Cancel"
             ]
         );
         // Escape: back to Settings Center, the change kept.
@@ -1382,6 +1442,44 @@ mod tests {
             .iter()
             .any(|i| i.text == "General Options" && i.level == 0));
         assert!(items.iter().any(|i| i.text == "User Verbosity Beginner"));
+    }
+
+    /// Quick Settings' Tab order: the search box, the tree, the description, "Expand Tree View"
+    /// checked, OK; no Apply and no Cancel. Its groups start open; clearing the check box
+    /// closes them, the setting selected giving its place to its group [obs, the second walk of
+    /// Settings Center's questions].
+    #[test]
+    fn quick_settings_expands_its_tree() {
+        let mut dialog = tree(Flavor::Quick);
+        let spec = dialog.spec();
+        let ids: Vec<&str> = spec.controls.iter().map(|c| c.id.as_str()).collect();
+        assert_eq!(ids, [SEARCH, TREE, DESCRIPTION, EXPAND, "ok"]);
+        assert!(spec
+            .controls
+            .iter()
+            .any(|c| c.label == "Expand Tree View"
+                && c.kind == ControlKind::CheckBox { checked: true }));
+        assert!(tree_items(&spec)
+            .iter()
+            .filter(|i| i.level == 0)
+            .all(|i| i.open));
+        let setting = dialog
+            .rows
+            .iter()
+            .position(|r| matches!(r, Row::Setting(spec) if spec.id == "typing_echo"))
+            .unwrap_or_default();
+        dialog.selected = setting;
+        dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: EXPAND.into(),
+            value: Value::Checked(false),
+        });
+        let items = tree_items(&dialog.spec());
+        assert!(items.iter().filter(|i| i.level == 0).all(|i| !i.open));
+        assert_eq!(
+            items.get(dialog.selected).map(|i| i.text.as_str()),
+            Some("Editing Options")
+        );
     }
 
     /// Settings Center's subgroups, as JAWS's: Reading in Web / HTML / PDFs, with the

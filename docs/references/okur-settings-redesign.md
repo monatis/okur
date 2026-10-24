@@ -98,6 +98,17 @@ kept it (research, not evidence):
     old-pc with JAWS reading it, says the same with Okur's name: "Okur Settings Center dialog |
     You have made changes to Notepad's settings. Do you want to save them? | Yes Button", then
     "No Button"; Escape goes back to the dialog (`okur-ui-tree-probe.ps1 -Question`).
+  - The second walk: the question's buttons are Yes, No, Cancel (Tab after Cancel returns to
+    Yes), and Escape is its Cancel. Enter on a setting with nothing changed and no search is
+    OK: Settings Center closes. Okur's question has the three buttons, and Enter is OK.
+  - Quick Settings over Notepad (Settings Center closed): "QuickSettings - notepad dialog |
+    SearchBox Edit"; by Tab: the tree with its groups open ("Touch Cursor Options | open | 4
+    items"), the description, "Expand Tree View check box checked | To clear checkmark press
+    Spacebar.", "OK Button", and back to the search box. It has no Apply and no Cancel; Escape
+    closes it. Shift+F10 on a setting: "Context Menu | To navigate press Up or Down Arrow. |
+    Restore setting when JAWS exits", "Restore setting when focus changes", "Save the setting
+    checked". Okur's Quick Settings has this Tab order, the check box (clearing it closes every
+    group), and these words with Okur's name.
   - Open: JAWS reads its description edit's first line on Tab. okur-ui's note says only "read
     only edit | Use your reading keys to read the text.", and Up or Down read its lines. Keeping
     the dialog manager from selecting the note's text did not change this (probe, 2026-10-24).
@@ -238,10 +249,9 @@ top ten (§8 there) then fill the tree, one table row each.
   none: old-pc's Access Key setting is Off).
 - Done (§1.1): Voice Adjustment's Tab order and labels. Still: what changes after a change (OK,
   Apply), and Pitch with a voice that has it.
-- Done (§1.1): Shift+Space, the Tab order once changed, F6 and Escape's question. Still:
-  Settings Center's tree in Default, each group opened; Enter on a setting with no search;
-  whether the question has a third button after No; Quick Settings' whole Tab order and its
-  Shift+F10 lifetime words (the walk ran with Settings Center still open: redo it from Notepad).
+- Done (§1.1): Shift+Space, the Tab order once changed, F6, Escape's question and its buttons,
+  Enter on a setting, Quick Settings' Tab order and its lifetime words. Still: Settings Center's
+  tree in Default, each group opened; what Quick Settings' Escape does after a change.
 - Select a Voice Profile's speech.
 These are research walks of JAWS's own windows (JAWS's dialogs refuse injected keys: walks use
 `TypeKey` through FSAPI or `okur-lab keys` with the process allowed), then scenarios where a
