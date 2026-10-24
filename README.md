@@ -57,15 +57,15 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `cea468f6` (2026-10-24).
+Every figure is tool output, rerun for this README at commit `323266cc` (2026-10-24).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **8675 of 9239** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **8578 of 9300** | `okur-lab parity` |
+| Steps matching JAWS's speech history, word for word | **8790 of 9378** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **8702 of 9439** | `okur-lab parity` |
 | Steps left out on purpose (accepted divergences, each a written decision) | **251** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **662, 1992** (1976 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1440 passed, 0 failed** (201 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
+| Recorded JAWS scenarios, trials | **666, 2004** (1988 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1476 passed, 0 failed** (201 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
@@ -155,9 +155,14 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   List", "exit list"), a table entered, its cells and left ("table 1, uniform Table, new
   cell"). In a table, JAWS's table keys (Ctrl+Alt+arrows, Home and End) go from cell to cell
   and say its column's or row's title, Tab moves and selects as Word does, and Ctrl+Alt+Numpad
-  5 and Insert+Tab say the cell and where it is. Insert+F6 lists the document's headings to
-  move to; Say Font gives the size, colors, font, style, alignment and outline level, and
-  Insert+T the title and the view ("Print View").
+  5 and Insert+Tab say the cell and where it is. A table's column titles come from its first
+  row, its row titles from its first column where the table marks it ("Row 1 no title" where
+  not). Say All (Insert+Down) reads the document paragraph by paragraph and says what changes
+  as it goes: a heading's level, "Entering List", "exit list", "table 1, uniform Table", "Row
+  2", "out of table". Insert+F6 lists the document's headings to move to; Say Font gives bold,
+  italic and underline ("bolded", "italicized"), the size, colors, font, style, alignment and
+  outline level; Ctrl+Alt+N, O and P say the view they switch to ("Draft View"), and Insert+T
+  the title and the view.
 - **The cursors:** Numpad Minus to the Okur cursor at the mouse, Numpad Plus back to the PC
   cursor, Insert+Numpad Minus to bring the Okur cursor to the PC cursor, Insert+Numpad Plus
   the other way, Insert+R for where the Okur cursor may go, and Alt+Delete for where the
@@ -203,8 +208,16 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   notification, say a shorter text or play a sound in its place, or leave it out of the
   history (Create Rule..., Manage Rules...).
 - **Okur's own dialogs** are real Windows dialogs: the lists above, Okur Find and the Window
-  List, with the same controls and labels as JAWS's, and Okur Settings (Insert+6 or Insert+V),
-  whose changes are kept for all applications, the application in front or the page's site.
+  List, with the same controls and labels as JAWS's, and Okur's settings, below.
+- **Settings, as JAWS's:**
+  - Settings Center (Insert+6) and Quick Settings (Insert+V) are trees of JAWS's groups with a
+    search box (Ctrl+E). Space changes a setting and says its new value. Changes are kept for
+    all applications, the application in front or the page's site. Settings Center asks
+    before Cancel drops a change; Quick Settings can keep one only until Okur exits or the
+    focus moves (Shift+F10).
+  - Okur's window (Insert+J) has JAWS's menus: Options for Basics, Voices, Manage Application
+    Settings (an application's settings turned off or removed) and Restore to Factory
+    Settings; Utilities for Settings Center and the Notification History.
 - **Speech:** punctuation levels and symbol names as JAWS has them (Insert+Shift+2); typing
   echo by characters, words, both or none (Insert+2); a reading key pressed twice quickly
   spells, with capitals at a higher pitch; the rate on the fly (Ctrl+Alt+PageUp and
@@ -234,7 +247,10 @@ in [accepted divergences](docs/references/accepted-divergences.md).
 - **Quitting with Insert+F4,** after asking first, as JAWS does (Enter quits, Escape stays).
 - **Both keyboard layouts,** desktop and laptop, with Insert or CapsLock as the Okur key
   (JAWS's JAWS key).
-- **OneCore and SAPI 5 voices.**
+- **OneCore and SAPI 5 voices,** with JAWS's voice contexts and profiles: the PC cursor, the
+  Okur cursor, the keyboard and Okur's own messages each speak with their own person, rate,
+  punctuation and pitch (Voice Adjustment); a voice is saved as a profile by name, and Select a
+  Voice Profile (Insert+Ctrl+S) chooses one for all applications or for the one in front.
 
 The [reference documentation](docs/references/) describes these behaviors in detail.
 
@@ -242,8 +258,9 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- Outlook and Excel, not yet supported or checked; in Word, Say All does not yet announce
-  headings, lists and tables as it reads, and Say Font leaves out the line spacing;
+- Outlook and Excel, not yet supported or checked (Excel's recording waits on the lab
+  machine's Office activation); in Word, Say Font leaves out the line spacing, which Word's UI
+  Automation does not report, and Web Layout and Read Mode are not named yet;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;
@@ -294,11 +311,10 @@ or if you keep it running, give Okur another key as its Okur key so the two do n
 on the same command: `--okur-key scrolllock` (then ScrollLock+T says the window title, and so
 on).
 
-Okur's settings dialog, opened with Insert+6 or Insert+V, sets the voice, its rate and
-volume, the punctuation level, the verbosity level, the keyboard layout and Okur key, typing
-echo, live regions, whether the Virtual Viewer shows on screen, and whether Insert+F4 asks
-before quitting. OK or Apply uses the change at once and saves it in
-`%APPDATA%\Okur\settings.toml`.
+Okur's settings are in Settings Center (Insert+6) and Quick Settings (Insert+V), and in Okur's
+window (Insert+J): Basics, Voice Adjustment and Select a Voice Profile (Insert+Ctrl+S) among
+them. OK or Apply uses a change at once and saves it in `%APPDATA%\Okur\settings.toml`, or for
+one application or site in `applications\` and `sites\` beside it.
 
 Options of `okur run` change a setting for that run only:
 
