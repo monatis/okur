@@ -15,6 +15,7 @@ pub mod notifications;
 pub mod placemarkers;
 pub mod quit;
 pub mod settings;
+pub mod settings_tree;
 pub mod skim;
 pub mod tray;
 pub mod windows;

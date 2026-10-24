@@ -398,3 +398,25 @@ skim-help = &Help
 skim-matches-found = { $count } matches found
 # The viewer Create Summary opens [obs, 763/s23].
 skim-results-title = Skim Reading Results
+
+## Settings Center and Quick Settings: a search box over a tree of groups and settings, as JAWS's
+## (old-pc's walk, docs/references/okur-settings-redesign.md §1.1).
+
+# "NotePad - JAWS Settings Center", with Okur's name.
+settings-center-title = { $place } - Okur Settings Center
+# "QuickSettings - Chrome", as JAWS writes its own.
+quick-settings-title = QuickSettings - { $place }
+settings-tree-search = SearchBox
+settings-tree-application = Application:
+settings-tree-group-description = A group of settings: Right Arrow opens it, and Space on a setting in it changes its value.
+# JAWS's group names, in its order.
+settings-tree-web = Web / HTML / PDFs
+settings-tree-forms-mode = Forms Mode
+settings-tree-speech-verbosity = Speech Verbosity
+settings-tree-speech-options = Speech Options
+settings-tree-say-all = Say All
+settings-tree-synthesizer = Synthesizer
+settings-tree-punctuation = Punctuation
+settings-tree-keyboard = Keyboard
+settings-tree-mouse-echo = Mouse Echo
+settings-tree-miscellaneous = Miscellaneous
