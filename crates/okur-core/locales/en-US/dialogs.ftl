@@ -409,11 +409,14 @@ quick-settings-title = QuickSettings - { $place }
 settings-tree-search = SearchBox
 settings-tree-application = Application:
 settings-tree-group-description = A group of settings: Right Arrow opens it, and Space on a setting in it changes its value.
-# JAWS's group names, in its order.
+# JAWS's group names, in its order; Quick Settings' own after them.
+settings-tree-user = User
 settings-tree-web = Web / HTML / PDFs
+settings-tree-reading = Reading
+settings-tree-text-processing = Text Processing
+settings-tree-general = General
 settings-tree-forms-mode = Forms Mode
 settings-tree-speech-verbosity = Speech Verbosity
-settings-tree-speech-options = Speech Options
 settings-tree-say-all = Say All
 settings-tree-synthesizer = Synthesizer
 settings-tree-punctuation = Punctuation
@@ -423,3 +426,11 @@ settings-tree-miscellaneous = Miscellaneous
 # Speech Verbosity's item that opens the verbosity levels' own dialog, as JAWS's.
 settings-tree-configure-verbosity = Configure Verbosity Levels
 settings-tree-configure-verbosity-description = Space opens a dialog to choose, for each verbosity level, what is spoken and whether messages are long or short.
+settings-tree-general-options = General Options
+settings-tree-say-all-options = Say All Options
+settings-tree-editing-options = Editing Options
+# Settings named in the tree as JAWS's tree names them, where its dialogs' labels differ.
+settings-forms-mode-tree = Select Forms Mode
+settings-punctuation-tree = Punctuation Level
+settings-verbosity-quick = User Verbosity
+settings-say-all-unit-quick = Say All Reads By

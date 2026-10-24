@@ -506,13 +506,15 @@ fn every_message_is_used() {
     // form is.
     let used = |id: &MessageId| {
         called.contains(id.constructor())
-            || ["-short", "-description"].iter().any(|suffix| {
-                id.id().strip_suffix(suffix).is_some_and(|long| {
-                    MessageId::ALL
-                        .iter()
-                        .any(|m| m.id() == long && called.contains(m.constructor()))
+            || ["-short", "-description", "-tree", "-quick"]
+                .iter()
+                .any(|suffix| {
+                    id.id().strip_suffix(suffix).is_some_and(|long| {
+                        MessageId::ALL
+                            .iter()
+                            .any(|m| m.id() == long && called.contains(m.constructor()))
+                    })
                 })
-            })
     };
     let unused: Vec<String> = MessageId::ALL
         .iter()

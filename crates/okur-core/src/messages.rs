@@ -129,8 +129,9 @@ impl StaticMessage {
         self.suffixed("description")
     }
 
-    /// The catalog's `<name>-<suffix>`, without variables, where it has one.
-    fn suffixed(self, suffix: &str) -> Option<StaticMessage> {
+    /// The catalog's `<name>-<suffix>`, without variables, where it has one: its short form
+    /// and description, and a setting's name in the settings tree (`-tree`, `-quick`).
+    pub fn suffixed(self, suffix: &str) -> Option<StaticMessage> {
         let name = format!("{}-{suffix}", self.0.id());
         MessageId::ALL
             .iter()

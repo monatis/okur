@@ -34,69 +34,126 @@ pub enum Flavor {
     Quick,
 }
 
-/// One of Settings Center's groups that holds Okur's settings, in JAWS's order and by JAWS's
-/// names (old-pc's walk, the redesign's §1.1).
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+/// A group of the tree, by JAWS's name: Settings Center's groups and subgroups that hold
+/// Okur's settings, and Quick Settings' own groups (old-pc's walks, the redesign's §1.1).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum TreeGroup {
-    WebHtmlPdfs,
+    User,
+    Web,
+    WebReading,
     FormsMode,
+    TextProcessing,
+    TextGeneral,
     SpeechVerbosity,
-    SpeechOptions,
     SayAll,
     Synthesizer,
     Punctuation,
     Keyboard,
+    KeyboardGeneral,
     MouseEcho,
     Miscellaneous,
+    GeneralOptions,
+    SayAllOptions,
+    EditingOptions,
 }
 
 impl TreeGroup {
-    const ALL: [TreeGroup; 10] = [
-        Self::WebHtmlPdfs,
+    /// Settings Center's, in JAWS's order, each group right before its subgroups.
+    const CENTER: [TreeGroup; 14] = [
+        Self::User,
+        Self::Web,
+        Self::WebReading,
         Self::FormsMode,
+        Self::TextProcessing,
+        Self::TextGeneral,
         Self::SpeechVerbosity,
-        Self::SpeechOptions,
         Self::SayAll,
         Self::Synthesizer,
         Self::Punctuation,
         Self::Keyboard,
+        Self::KeyboardGeneral,
         Self::MouseEcho,
         Self::Miscellaneous,
     ];
+    /// Quick Settings', in its order in Notepad.
+    const QUICK: [TreeGroup; 3] = [
+        Self::GeneralOptions,
+        Self::SayAllOptions,
+        Self::EditingOptions,
+    ];
+
+    /// The group a subgroup is in.
+    fn parent(self) -> Option<TreeGroup> {
+        match self {
+            Self::WebReading => Some(Self::Web),
+            Self::TextGeneral => Some(Self::TextProcessing),
+            Self::KeyboardGeneral => Some(Self::Keyboard),
+            _ => None,
+        }
+    }
+
+    /// Its level in the tree: 0 at the top.
+    fn depth(self) -> usize {
+        self.parent().map_or(0, |parent| parent.depth() + 1)
+    }
+
+    /// Whether it is `group` or one of its subgroups.
+    fn within(self, group: TreeGroup) -> bool {
+        self == group || self.parent().is_some_and(|parent| parent.within(group))
+    }
 
     fn label(self) -> StaticMessage {
         match self {
-            Self::WebHtmlPdfs => msg::settings_tree_web(),
+            Self::User => msg::settings_tree_user(),
+            Self::Web => msg::settings_tree_web(),
+            Self::WebReading => msg::settings_tree_reading(),
             Self::FormsMode => msg::settings_tree_forms_mode(),
+            Self::TextProcessing => msg::settings_tree_text_processing(),
+            Self::TextGeneral | Self::KeyboardGeneral => msg::settings_tree_general(),
             Self::SpeechVerbosity => msg::settings_tree_speech_verbosity(),
-            Self::SpeechOptions => msg::settings_tree_speech_options(),
             Self::SayAll => msg::settings_tree_say_all(),
             Self::Synthesizer => msg::settings_tree_synthesizer(),
             Self::Punctuation => msg::settings_tree_punctuation(),
             Self::Keyboard => msg::settings_tree_keyboard(),
             Self::MouseEcho => msg::settings_tree_mouse_echo(),
             Self::Miscellaneous => msg::settings_tree_miscellaneous(),
+            Self::GeneralOptions => msg::settings_tree_general_options(),
+            Self::SayAllOptions => msg::settings_tree_say_all_options(),
+            Self::EditingOptions => msg::settings_tree_editing_options(),
         }
     }
 }
 
-/// The group each setting the dialog shows is in, and whether Quick Settings offers it.
-fn place_of(id: &str) -> Option<(TreeGroup, bool)> {
+/// Where Settings Center keeps a setting: JAWS's place for it, as old-pc's walk found it
+/// ("Typing Echo" in User, "Document and Web Pages Automatically Read When Loaded" in Web /
+/// HTML / PDFs, Reading). Okur's voice settings are in Synthesizer until Voice Adjustment has
+/// them. `None`: not shown.
+fn center_group(id: &str) -> Option<TreeGroup> {
     Some(match id {
-        "read_page_on_load" | "live_region_append" => (TreeGroup::WebHtmlPdfs, true),
-        "forms_mode" => (TreeGroup::FormsMode, true),
-        "verbosity.level" => (TreeGroup::SpeechVerbosity, true),
-        "typing_echo" | "voice.indicate_caps" => (TreeGroup::SpeechOptions, true),
-        "say_all_unit" => (TreeGroup::SayAll, true),
+        "typing_echo" | "viewer_display" => TreeGroup::User,
+        "read_page_on_load" => TreeGroup::WebReading,
+        "forms_mode" => TreeGroup::FormsMode,
+        "voice.indicate_caps" | "live_region_append" => TreeGroup::TextGeneral,
+        "verbosity.level" => TreeGroup::SpeechVerbosity,
+        "say_all_unit" => TreeGroup::SayAll,
         "voice.synthesizer" | "voice.voice" | "voice.rate" | "voice.volume" => {
-            (TreeGroup::Synthesizer, false)
+            TreeGroup::Synthesizer
         }
-        "voice.punctuation" => (TreeGroup::Punctuation, true),
-        "keyboard.layout" | "keyboard.okur_key" => (TreeGroup::Keyboard, false),
-        "mouse_echo.enabled" | "mouse_echo.instant" | "mouse_echo.unit" => {
-            (TreeGroup::MouseEcho, false)
-        }
-        "viewer_display" | "confirm_exit" => (TreeGroup::Miscellaneous, false),
+        "voice.punctuation" => TreeGroup::Punctuation,
+        "keyboard.layout" | "keyboard.okur_key" => TreeGroup::KeyboardGeneral,
+        "mouse_echo.enabled" | "mouse_echo.instant" | "mouse_echo.unit" => TreeGroup::MouseEcho,
+        "confirm_exit" => TreeGroup::Miscellaneous,
+        _ => return None,
+    })
+}
+
+/// Where Quick Settings offers a setting, as it did in Notepad ("User Verbosity" in General
+/// Options, "Typing Echo" in Editing Options). `None`: not offered.
+fn quick_group(id: &str) -> Option<TreeGroup> {
+    Some(match id {
+        "verbosity.level" => TreeGroup::GeneralOptions,
+        "say_all_unit" => TreeGroup::SayAllOptions,
+        "typing_echo" | "voice.indicate_caps" | "voice.punctuation" => TreeGroup::EditingOptions,
         _ => return None,
     })
 }
@@ -201,14 +258,35 @@ impl SettingsTree {
             .map_or(Scope::Global, |p| p.scope.clone())
     }
 
+    /// A setting's group in this dialog; `None` for one it does not show.
+    fn group_of(&self, spec: &SettingSpec) -> Option<TreeGroup> {
+        spec.label?;
+        match self.flavor {
+            Flavor::Center => center_group(spec.id),
+            Flavor::Quick => quick_group(spec.id),
+        }
+    }
+
     /// The settings this dialog shows, each with its group, in the table's order.
     fn shown(&self) -> impl Iterator<Item = (TreeGroup, &'static SettingSpec)> + '_ {
-        let quick = self.flavor == Flavor::Quick;
-        SETTINGS.iter().filter_map(move |spec| {
-            spec.label?;
-            let (group, offered) = place_of(spec.id)?;
-            (!quick || offered).then_some((group, spec))
-        })
+        SETTINGS
+            .iter()
+            .filter_map(move |spec| Some((self.group_of(spec)?, spec)))
+    }
+
+    /// A setting's name in the tree: JAWS's there where it differs from the dialog's label
+    /// (`<label>-tree`, and Quick Settings' `<label>-quick`: "Select Forms Mode", "User
+    /// Verbosity"), else the label.
+    fn tree_label(&self, spec: &SettingSpec) -> String {
+        let Some(label) = spec.label.map(|label| label()) else {
+            return String::new();
+        };
+        let quick = (self.flavor == Flavor::Quick)
+            .then(|| label.suffixed("quick"))
+            .flatten();
+        quick
+            .or_else(|| label.suffixed("tree"))
+            .map_or_else(|| plain(label), |named| named.to_string())
     }
 
     /// The rows for the words searched for: every group and its settings, or only the settings
@@ -220,7 +298,7 @@ impl SettingsTree {
             .map(str::to_lowercase)
             .collect();
         let matches = |spec: &SettingSpec| {
-            let label = spec.label.map(|label| plain(label())).unwrap_or_default();
+            let label = self.tree_label(spec);
             let description = spec
                 .label
                 .and_then(|l| l().description())
@@ -229,30 +307,42 @@ impl SettingsTree {
             let text = format!("{label} {description}").to_lowercase();
             words.iter().all(|w| text.contains(w))
         };
-        let mut rows = Vec::new();
-        for group in TreeGroup::ALL {
-            let settings: Vec<&'static SettingSpec> = self
+        let levels = self.flavor == Flavor::Center
+            && words.iter().all(|w| {
+                msg::settings_tree_configure_verbosity()
+                    .as_str()
+                    .to_lowercase()
+                    .contains(w)
+            });
+        let order: &[TreeGroup] = match self.flavor {
+            Flavor::Center => &TreeGroup::CENTER,
+            Flavor::Quick => &TreeGroup::QUICK,
+        };
+        // Each group's own rows: its settings found, and Configure Verbosity Levels.
+        let own = |group: TreeGroup| -> Vec<Row> {
+            let mut rows: Vec<Row> = self
                 .shown()
                 .filter(|(g, spec)| *g == group && matches(spec))
-                .map(|(_, spec)| spec)
+                .map(|(_, spec)| Row::Setting(spec))
                 .collect();
-            let levels = group == TreeGroup::SpeechVerbosity
-                && self.flavor == Flavor::Center
-                && (words.is_empty()
-                    || words.iter().all(|w| {
-                        msg::settings_tree_configure_verbosity()
-                            .as_str()
-                            .to_lowercase()
-                            .contains(w)
-                    }));
-            if settings.is_empty() && !levels {
+            if levels && group == TreeGroup::SpeechVerbosity {
+                rows.push(Row::VerbosityLevels);
+            }
+            rows
+        };
+        // A group is shown when it or one of its subgroups has something to show.
+        let filled: Vec<TreeGroup> = order
+            .iter()
+            .copied()
+            .filter(|&g| !own(g).is_empty())
+            .collect();
+        let mut rows = Vec::new();
+        for &group in order {
+            if !filled.iter().any(|f| f.within(group)) {
                 continue;
             }
             rows.push(Row::Group(group));
-            rows.extend(settings.into_iter().map(Row::Setting));
-            if levels {
-                rows.push(Row::VerbosityLevels);
-            }
+            rows.extend(own(group));
         }
         rows
     }
@@ -280,18 +370,19 @@ impl SettingsTree {
         match row {
             Row::VerbosityLevels => TreeItem {
                 text: msg::settings_tree_configure_verbosity().to_string(),
-                level: 1,
+                level: TreeGroup::SpeechVerbosity.depth() + 1,
                 open: true,
                 checked: None,
             },
             Row::Group(group) => TreeItem {
                 text: group.label().to_string(),
-                level: 0,
+                level: group.depth(),
                 open: !self.search.is_empty() || self.open.contains(group),
                 checked: None,
             },
             Row::Setting(spec) => {
-                let label = spec.label.map(|label| plain(label())).unwrap_or_default();
+                let label = self.tree_label(spec);
+                let level = self.group_of(spec).map_or(1, |g| g.depth() + 1);
                 let checked = match spec.kind {
                     Kind::Check { on, .. } => {
                         Some(registry::get(&self.draft, spec.id) == Some(on.value()))
@@ -304,7 +395,7 @@ impl SettingsTree {
                 };
                 TreeItem {
                     text,
-                    level: 1,
+                    level,
                     open: true,
                     checked,
                 }
@@ -636,7 +727,7 @@ mod tests {
         let first = items.first().cloned();
         assert_eq!(
             first.map(|i| (i.text, i.level, i.open)),
-            Some(("Web / HTML / PDFs".to_owned(), 0, false))
+            Some(("User".to_owned(), 0, false))
         );
         assert!(items
             .iter()
@@ -730,7 +821,31 @@ mod tests {
         let spec = tree(Flavor::Quick).spec();
         assert_eq!(spec.title, "QuickSettings - Notepad");
         assert!(!spec.controls.iter().any(|c| c.id == PLACE));
-        assert!(!tree_items(&spec).iter().any(|i| i.text.starts_with("Rate")));
+        let items = tree_items(&spec);
+        assert!(!items.iter().any(|i| i.text.starts_with("Rate")));
+        // Quick Settings' own groups and names, as in Notepad.
+        assert!(items
+            .iter()
+            .any(|i| i.text == "General Options" && i.level == 0));
+        assert!(items.iter().any(|i| i.text == "User Verbosity Beginner"));
+    }
+
+    /// Settings Center's subgroups, as JAWS's: Reading in Web / HTML / PDFs, with the
+    /// setting a level below, and JAWS's names for settings where they differ.
+    #[test]
+    fn settings_center_nests_jaws_subgroups() {
+        let items = tree_items(&tree(Flavor::Center).spec());
+        let at = |text: &str| items.iter().find(|i| i.text == text).map(|i| i.level);
+        assert_eq!(at("Web / HTML / PDFs"), Some(0));
+        assert_eq!(at("Reading"), Some(1));
+        assert_eq!(
+            at("Document and Web Pages Automatically Read When Loaded"),
+            Some(2)
+        );
+        assert_eq!(at("Select Forms Mode Auto"), Some(1));
+        assert!(items
+            .iter()
+            .any(|i| i.text.starts_with("Punctuation Level ")));
     }
 
     fn panic_free_fail(message: &str) {
