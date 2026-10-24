@@ -363,6 +363,8 @@ mod com {
         /// `OBJID_CLIENT`.
         const OBJID_CLIENT: u32 = 0xFFFF_FFFC;
         /// Bounds recursion and text size on pathological documents.
+        /// Children read of one object at most.
+        const MAX_CHILDREN: i32 = 100_000;
         const MAX_DEPTH: usize = 256;
         const MAX_TEXT_CHARS: i32 = 1_000_000;
         /// Formatting runs read per object at most.
@@ -586,8 +588,12 @@ mod com {
             }
 
             if depth < MAX_DEPTH {
-                // SAFETY: valid IAccessible.
-                let count = unsafe { acc.accChildCount() }.unwrap_or(0).max(0);
+                // SAFETY: valid IAccessible. The count is the remote object's word: clamped,
+                // so a wrong one cannot size a vector of billions (performance review
+                // 2026-10-24, 5); no page's object has this many children.
+                let count = unsafe { acc.accChildCount() }
+                    .unwrap_or(0)
+                    .clamp(0, MAX_CHILDREN);
                 if count > 0 {
                     let mut children = vec![VARIANT::default(); count as usize];
                     let mut obtained = 0i32;

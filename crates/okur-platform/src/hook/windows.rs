@@ -175,6 +175,7 @@ impl KeyboardHook for WindowsKeyboardHook {
                     // A key took the screen reader too long: the hook goes in again, the
                     // old one out first, in case Windows removed it.
                     if msg.message == WM_REINSTALL_HOOK {
+                        reset_held_state();
                         let _ = UnhookWindowsHookEx(hook_handle);
                         match SetWindowsHookExW(
                             WH_KEYBOARD_LL,
@@ -420,6 +421,23 @@ unsafe extern "system" fn low_level_keyboard_proc(
     }
 }
 
+/// Forgets the keys thought held and the keys taken. While a slow key kept the hook from
+/// answering, Windows may have removed it and passed a key-up on without it: an Okur key
+/// thought held would make every later key its chord, and a key thought taken would swallow
+/// its next key-up from the application (performance review 2026-10-24, 7). A chord still held
+/// then loses its Okur key once; it is pressed again.
+fn reset_held_state() {
+    INSERT_HELD.store(false, Ordering::Relaxed);
+    CAPS_LOCK_HELD.store(false, Ordering::Relaxed);
+    SCROLL_LOCK_HELD.store(false, Ordering::Relaxed);
+    CONSUMED_MODIFIERS.store(0, Ordering::Relaxed);
+    if let Ok(mut consumed) = CONSUMED_KEYS.lock() {
+        if let Some(set) = consumed.as_mut() {
+            set.clear();
+        }
+    }
+}
+
 /// The character a key press types in the foreground window's keyboard layout, for typing
 /// echo. Flag 0x4 keeps `ToUnicodeEx` from changing the keyboard state, so dead keys still
 /// compose in the application.
@@ -520,6 +538,24 @@ fn translate_vk_code(vk: u32, scan: u32, extended: bool) -> Key {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// Installing the hook again forgets the keys thought held and taken.
+    #[test]
+    fn installing_again_forgets_held_keys() {
+        INSERT_HELD.store(true, Ordering::Relaxed);
+        CONSUMED_MODIFIERS.store(ALT_BIT, Ordering::Relaxed);
+        if let Ok(mut consumed) = CONSUMED_KEYS.lock() {
+            *consumed = Some(HashSet::from([0x44]));
+        }
+        reset_held_state();
+        assert!(!INSERT_HELD.load(Ordering::Relaxed));
+        assert_eq!(CONSUMED_MODIFIERS.load(Ordering::Relaxed), 0);
+        let empty = CONSUMED_KEYS
+            .lock()
+            .map(|c| c.as_ref().is_some_and(HashSet::is_empty))
+            .unwrap_or(false);
+        assert!(empty);
+    }
 
     /// A key that took the screen reader 200 ms or more installs the hook again; a quick one
     /// does not.

@@ -192,15 +192,27 @@ impl SpeechThread {
                         }
                     };
                     if let Some(first) = next {
-                        carry_out(
-                            Request::batch(first, &received),
-                            &worker_interruptions,
-                            &worker_tts,
-                            &worker_pending,
-                            &worker_voices,
-                            &worker_report,
-                            &mut following,
-                        );
+                        // A panic in the synthesizer's work is logged and speech goes on: a dead
+                        // speech thread would leave Okur running and silent for the session
+                        // (performance review 2026-10-24, 5). Its locks are freed of the panic.
+                        let batch = Request::batch(first, &received);
+                        let spoke = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                            carry_out(
+                                batch,
+                                &worker_interruptions,
+                                &worker_tts,
+                                &worker_pending,
+                                &worker_voices,
+                                &worker_report,
+                                &mut following,
+                            )
+                        }));
+                        if spoke.is_err() {
+                            tracing::error!("speech work panicked; speech goes on");
+                            worker_tts.clear_poison();
+                            worker_voices.clear_poison();
+                            worker_report.clear_poison();
+                        }
                         idle = 0;
                     }
                     if following {

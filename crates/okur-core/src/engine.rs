@@ -386,6 +386,8 @@ pub struct ScreenReaderEngine {
     /// Background OCR (Insert+Space, O, B): when it last asked for the window's words, and
     /// whether that recognition is still under way.
     background_ocr: Option<(std::time::Instant, bool)>,
+    /// The window a recognition was asked for, by its title: its words are filed under it.
+    recognition_window: Option<String>,
     /// The Okur cursor's model of the window in front.
     screen_model: Option<crate::screen_model::ScreenModel>,
     /// The Okur cursor was routed to the PC cursor before the window's text arrived: it is
@@ -570,6 +572,7 @@ impl ScreenReaderEngine {
             ocr_layer: false,
             recognizing: false,
             background_ocr: None,
+            recognition_window: None,
             screen_model: None,
             route_awaits_screen: false,
             mouse_moved_at: None,

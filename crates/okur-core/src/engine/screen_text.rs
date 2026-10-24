@@ -49,26 +49,23 @@ impl ScreenReaderEngine {
             && !self
                 .screen_model
                 .as_ref()
-                .is_some_and(|model| !model.recognized.is_empty())
+                .is_some_and(|model| !model.recognized().is_empty())
     }
 
     /// The window's text arrived: the model's accessible text, its recognized words kept while
     /// the window is the same.
     pub(super) fn screen_text(&mut self, text: &WindowText) -> Option<String> {
-        let runs = &text.runs;
         let window = self.last_window_title.clone();
-        let recognized = self
-            .screen_model
-            .take()
-            .filter(|model| model.window == window)
-            .map(|model| model.recognized)
-            .unwrap_or_default();
-        self.screen_model = Some(ScreenModel {
-            window,
-            accessible: runs.to_vec(),
-            recognized,
-            layout: text.layout,
-        });
+        self.screen_model = Some(
+            match self
+                .screen_model
+                .take()
+                .filter(|model| model.window == window)
+            {
+                Some(model) => model.with_text(text.clone()),
+                None => ScreenModel::new(window, text.clone()),
+            },
+        );
         // Routed before the window's text came, it is routed again by it [obs, 1010/s3]; made
         // active where nothing placed it, it is where the mouse is.
         if std::mem::take(&mut self.route_awaits_screen) {
@@ -110,8 +107,12 @@ impl ScreenReaderEngine {
 
     /// The PC cursor is back: the recognized words go [obs, 996/s15-s19].
     pub(super) fn forget_recognized(&mut self) {
-        if let Some(model) = &mut self.screen_model {
-            model.recognized.clear();
+        if let Some(model) = self
+            .screen_model
+            .as_mut()
+            .filter(|model| !model.recognized().is_empty())
+        {
+            model.set_recognized(Vec::new());
         }
     }
 
@@ -119,7 +120,7 @@ impl ScreenReaderEngine {
     /// outside pages, whose lines it reads from the page, and outside dialog boxes, whose rows
     /// it reads with their controls' roles as JAWS's cursor does ("Go To Button Cancel Button"
     /// [obs, 755/s10]), unless words were recognized there.
-    pub(super) fn okur_screen_lines(&self) -> Option<Vec<ScreenLine>> {
+    pub(super) fn okur_screen_lines(&self) -> Option<std::sync::Arc<[ScreenLine]>> {
         if self.app_mode == super::AppMode::VirtualBuffer {
             return None;
         }
@@ -127,7 +128,7 @@ impl ScreenReaderEngine {
             .screen_model
             .as_ref()
             .filter(|model| model.window == self.last_window_title)?;
-        if model.recognized.is_empty() && self.okur_dialog_rows().is_some() {
+        if model.recognized().is_empty() && self.okur_dialog_rows().is_some() {
             return None;
         }
         let lines = model.lines();
@@ -185,6 +186,7 @@ impl ScreenReaderEngine {
             return;
         }
         self.recognizing = true;
+        self.recognition_window = self.last_window_title.clone();
         let started = msg::ocr_started(msg::ocr_engine_windows().to_string()).render();
         self.speech.speak(&started, true);
         self.request_screen();
@@ -216,6 +218,7 @@ impl ScreenReaderEngine {
             return;
         }
         self.background_ocr = Some((std::time::Instant::now(), true));
+        self.recognition_window = self.last_window_title.clone();
         self.speech
             .speak(msg::ocr_background_started().as_str(), true);
         self.request_screen();
@@ -231,7 +234,9 @@ impl ScreenReaderEngine {
         let Some((asked, false)) = self.background_ocr else {
             return;
         };
-        if asked.elapsed() < Self::BACKGROUND_OCR_EVERY {
+        // Nor while an edit key's read is pending, which the same worker answers (performance
+        // review 2026-10-24, 2).
+        if asked.elapsed() < Self::BACKGROUND_OCR_EVERY || self.pending_edit.is_some() {
             return;
         }
         let language = self.ocr_language();
@@ -248,39 +253,43 @@ impl ScreenReaderEngine {
     /// unrestricted on them, "Okur Cursor", where JAWS says "JAWS Cursor" [obs, 996/s3, s4],
     /// on the line the mouse is on, else at the window's top.
     pub(super) fn recognized(&mut self, words: &[ScreenRun]) -> Option<String> {
+        let window = self.last_window_title.clone();
+        // Words of a window no longer in front are not this one's: a recognition queued behind
+        // a long read can come back after another window took the focus (performance review
+        // 2026-10-24, 9d).
+        let same_window = self.recognition_window == window;
         if !std::mem::take(&mut self.recognizing) {
-            // Background OCR's words replace the last ones, unsaid.
-            if let Some((asked, true)) = self.background_ocr {
-                self.background_ocr = Some((asked, false));
-                let window = self.last_window_title.clone();
-                match &mut self.screen_model {
-                    Some(model) if model.window == window => model.recognized = words.to_vec(),
-                    _ => {
-                        self.screen_model = Some(ScreenModel {
-                            window,
-                            recognized: words.to_vec(),
-                            ..ScreenModel::default()
-                        })
+            // Background OCR's words replace the last ones, unsaid; its next recognition is due
+            // two seconds from now.
+            if let Some((_, true)) = self.background_ocr {
+                self.background_ocr = Some((std::time::Instant::now(), false));
+                if same_window {
+                    match &mut self.screen_model {
+                        Some(model) if model.window == window => {
+                            model.set_recognized(words.to_vec())
+                        }
+                        _ => {
+                            self.screen_model = Some(
+                                ScreenModel::new(window, WindowText::default())
+                                    .with_recognized(words.to_vec()),
+                            )
+                        }
                     }
                 }
             }
             return None;
         }
-        let window = self.last_window_title.clone();
+        let finished = msg::ocr_finished().to_string();
+        self.speech.speak(&finished, false);
+        if !same_window {
+            return Some(finished);
+        }
         let model = self
             .screen_model
             .take()
             .filter(|model| model.window == window)
-            .unwrap_or_else(|| ScreenModel {
-                window,
-                ..ScreenModel::default()
-            });
-        self.screen_model = Some(ScreenModel {
-            recognized: words.to_vec(),
-            ..model
-        });
-        let finished = msg::ocr_finished().to_string();
-        self.speech.speak(&finished, false);
+            .unwrap_or_else(|| ScreenModel::new(window, WindowText::default()));
+        self.screen_model = Some(model.with_recognized(words.to_vec()));
         self.active_cursor = ActiveCursor::Okur;
         self.okur_restriction = Restriction::Unrestricted;
         let line = self.mouse.and_then(|point| {
@@ -544,7 +553,10 @@ mod tests {
         )];
         engine.handle_accessibility_event(&AccessibilityEvent::Recognized(changed.clone()));
         assert_eq!(
-            engine.screen_model.as_ref().map(|m| m.recognized.clone()),
+            engine
+                .screen_model
+                .as_ref()
+                .map(|m| m.recognized().to_vec()),
             Some(changed)
         );
         press(&mut engine, &speech, Key::Space, insert());

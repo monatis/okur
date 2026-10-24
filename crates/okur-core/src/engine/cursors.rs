@@ -231,7 +231,7 @@ impl ScreenReaderEngine {
     /// ([`Self::okur_screen_lines`]), else as [`Self::known_okur_lines`].
     fn okur_lines(&self) -> Vec<String> {
         match self.okur_screen_lines() {
-            Some(lines) => lines.into_iter().map(|line| line.text).collect(),
+            Some(lines) => lines.iter().map(|line| line.text.clone()).collect(),
             None => self.known_okur_lines(),
         }
     }
@@ -505,7 +505,7 @@ impl ScreenReaderEngine {
                 let recognized = self
                     .screen_model
                     .as_ref()
-                    .is_some_and(|model| !model.recognized.is_empty());
+                    .is_some_and(|model| !model.recognized().is_empty());
                 self.okur_place = Some(
                     if self.app_mode == super::AppMode::VirtualBuffer || recognized {
                         OkurPlace::Text {

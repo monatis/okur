@@ -336,54 +336,67 @@ fn start_page_worker(
                 | PageRequest::Refine(window)
                 | PageRequest::Focus(window)
                 | PageRequest::Changes(window)) = request;
-                if ForegroundWindow::now() != window {
-                    tracing::debug!(?request, "page request skipped: its window left the front");
-                    continue;
-                }
-                // After changes, only the changed parts when they are known; a whole-page read
-                // covers every change noted so far. A focus the buffer lacks is in a part that
-                // changed (WhatsApp's options button, shown with its message's focus): reading
-                // that part takes tens of milliseconds, the whole chat 2 s.
-                let changed = take_changed_parts();
-                if matches!(
-                    request,
-                    PageRequest::Refresh(_) | PageRequest::Changes(_) | PageRequest::Focus(_)
-                ) {
-                    if let Some(objects) = changed {
-                        if read_changed_parts(window, &objects, &sender) {
-                            continue;
+                // Each request in a panic guard: a dead page worker would leave pages unread
+                // for the session (performance review 2026-10-24, 5).
+                let served = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                    if ForegroundWindow::now() != window {
+                        tracing::debug!(
+                            ?request,
+                            "page request skipped: its window left the front"
+                        );
+                        return;
+                    }
+                    // After changes, only the changed parts when they are known; a whole-page read
+                    // covers every change noted so far. A focus the buffer lacks is in a part that
+                    // changed (WhatsApp's options button, shown with its message's focus): reading
+                    // that part takes tens of milliseconds, the whole chat 2 s.
+                    let changed = take_changed_parts();
+                    if matches!(
+                        request,
+                        PageRequest::Refresh(_) | PageRequest::Changes(_) | PageRequest::Focus(_)
+                    ) {
+                        if let Some(objects) = changed {
+                            if read_changed_parts(window, &objects, &sender) {
+                                return;
+                            }
                         }
                     }
-                }
-                let started = std::time::Instant::now();
-                if matches!(request, PageRequest::Focus(_)) {
-                    // The full capture below serves every request queued meanwhile.
-                    rx.try_iter().for_each(drop);
-                    match crate::actions::capture_foreground_page_quick() {
+                    let started = std::time::Instant::now();
+                    if matches!(request, PageRequest::Focus(_)) {
+                        // The full capture below serves every request queued meanwhile.
+                        rx.try_iter().for_each(drop);
+                        match crate::actions::capture_foreground_page_quick() {
+                            Ok(root) => {
+                                let title = root.name.clone().unwrap_or_default();
+                                let ms = started.elapsed().as_millis();
+                                tracing::debug!(%title, ms, "page read again for the focus");
+                                let _ =
+                                    sender.send(AccessibilityEvent::DocumentLoaded { title, root });
+                            }
+                            Err(e) => {
+                                tracing::debug!("quick page capture for the focus failed: {e}")
+                            }
+                        }
+                    }
+                    match crate::actions::capture_foreground_page() {
                         Ok(root) => {
                             let title = root.name.clone().unwrap_or_default();
                             let ms = started.elapsed().as_millis();
-                            tracing::debug!(%title, ms, "page read again for the focus");
+                            match request {
+                                PageRequest::Refresh(_) | PageRequest::Changes(_) => {
+                                    tracing::debug!(%title, ms, "page refreshed")
+                                }
+                                PageRequest::Refine(_) | PageRequest::Focus(_) => {
+                                    tracing::debug!(%title, ms, "page refined")
+                                }
+                            }
                             let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
                         }
-                        Err(e) => tracing::debug!("quick page capture for the focus failed: {e}"),
+                        Err(e) => tracing::warn!("page refresh failed: {e}"),
                     }
-                }
-                match crate::actions::capture_foreground_page() {
-                    Ok(root) => {
-                        let title = root.name.clone().unwrap_or_default();
-                        let ms = started.elapsed().as_millis();
-                        match request {
-                            PageRequest::Refresh(_) | PageRequest::Changes(_) => {
-                                tracing::debug!(%title, ms, "page refreshed")
-                            }
-                            PageRequest::Refine(_) | PageRequest::Focus(_) => {
-                                tracing::debug!(%title, ms, "page refined")
-                            }
-                        }
-                        let _ = sender.send(AccessibilityEvent::DocumentLoaded { title, root });
-                    }
-                    Err(e) => tracing::warn!("page refresh failed: {e}"),
+                }));
+                if served.is_err() {
+                    tracing::error!(?request, "a page read panicked; the next goes on");
                 }
             }
         })

@@ -61,16 +61,26 @@ impl ScreenRun {
     }
 
     fn middle(&self) -> (i32, i32) {
-        (
-            self.left + (self.right - self.left) / 2,
-            self.top + (self.bottom - self.top) / 2,
-        )
+        (middle(self.left, self.right), middle(self.top, self.bottom))
     }
 
     fn contains(&self, (x, y): (i32, i32)) -> bool {
-        (self.left..self.right.max(self.left + 1)).contains(&x)
-            && (self.top..self.bottom.max(self.top + 1)).contains(&y)
+        spans(self.left, self.right, x) && spans(self.top, self.bottom, y)
     }
+}
+
+// The places are an application's word: odd ones must not overflow the arithmetic, which the
+// dev build checks (performance review 2026-10-24, 5).
+
+/// The middle of `from` to `to`.
+fn middle(from: i32, to: i32) -> i32 {
+    let middle = (i64::from(from) + i64::from(to)) / 2;
+    i32::try_from(middle).unwrap_or(from)
+}
+
+/// Whether `at` lies from `from` to `to`, which takes one pixel at least.
+fn spans(from: i32, to: i32, at: i32) -> bool {
+    (from..to.max(from.saturating_add(1))).contains(&at)
 }
 
 /// A run's part of a line: its characters and its place.
@@ -133,9 +143,16 @@ impl ScreenLine {
         let index = i32::try_from(column.saturating_sub(piece.start))
             .unwrap_or(i32::MAX)
             .min(chars - 1);
-        let width = piece.right - piece.left;
-        let x = piece.left + width * index / chars + width / chars / 2;
-        Some((x, piece.top + (piece.bottom - piece.top) / 2))
+        let (left, width) = (
+            i64::from(piece.left),
+            i64::from(piece.right) - i64::from(piece.left),
+        );
+        let (index, chars) = (i64::from(index), i64::from(chars));
+        let x = left + width * index / chars + width / chars / 2;
+        Some((
+            i32::try_from(x).unwrap_or(piece.left),
+            middle(piece.top, piece.bottom),
+        ))
     }
 
     /// Whether character `column` was recognized from the screen's pixels.
@@ -146,10 +163,9 @@ impl ScreenLine {
 
     /// Whether the line has a piece where `point` is.
     pub fn holds(&self, (x, y): (i32, i32)) -> bool {
-        self.pieces.iter().any(|piece| {
-            (piece.left..piece.right.max(piece.left + 1)).contains(&x)
-                && (piece.top..piece.bottom.max(piece.top + 1)).contains(&y)
-        })
+        self.pieces
+            .iter()
+            .any(|piece| spans(piece.left, piece.right, x) && spans(piece.top, piece.bottom, y))
     }
 }
 
@@ -168,7 +184,11 @@ pub fn lines(runs: &[ScreenRun]) -> Vec<ScreenLine> {
             .find(|(top, bottom, _)| (*top..*bottom).contains(&middle))
         {
             Some((_, _, row)) => row.push(run),
-            None => rows.push((run.top, run.bottom.max(run.top + 1), vec![run])),
+            None => rows.push((
+                run.top,
+                run.bottom.max(run.top.saturating_add(1)),
+                vec![run],
+            )),
         }
     }
     rows.into_iter()
@@ -286,18 +306,69 @@ impl WindowText {
 }
 
 /// A window's model: what the accessibility interfaces place on it, and what was recognized
-/// from its pixels.
+/// from its pixels, with the lines they make, built when either changes: the Okur cursor reads
+/// them several times a key, and building them took 5 ms with 2,000 runs and 3,000 words
+/// (performance review 2026-10-24, 8).
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct ScreenModel {
     /// The window it is of, by its title, as the engine knows the window in front.
     pub window: Option<String>,
-    pub accessible: Vec<ScreenRun>,
-    pub recognized: Vec<ScreenRun>,
+    accessible: Vec<ScreenRun>,
+    recognized: Vec<ScreenRun>,
     /// How its accessible text is read.
-    pub layout: ViewerLayout,
+    layout: ViewerLayout,
+    lines: std::sync::Arc<[ScreenLine]>,
 }
 
 impl ScreenModel {
+    /// The model of `window` with its accessible `text`, nothing recognized.
+    pub fn new(window: Option<String>, text: WindowText) -> Self {
+        let mut model = Self {
+            window,
+            accessible: text.runs,
+            layout: text.layout,
+            ..Self::default()
+        };
+        model.build();
+        model
+    }
+
+    /// The same window's model with `words` recognized in it, in place of any before.
+    pub fn with_recognized(mut self, words: Vec<ScreenRun>) -> Self {
+        self.set_recognized(words);
+        self
+    }
+
+    /// The same window's model with new accessible `text`, its recognized words kept.
+    pub fn with_text(mut self, text: WindowText) -> Self {
+        self.accessible = text.runs;
+        self.layout = text.layout;
+        self.build();
+        self
+    }
+
+    /// `words` recognized in the window, in place of any before.
+    pub fn set_recognized(&mut self, words: Vec<ScreenRun>) {
+        self.recognized = words;
+        self.build();
+    }
+
+    pub fn accessible(&self) -> &[ScreenRun] {
+        &self.accessible
+    }
+
+    pub fn recognized(&self) -> &[ScreenRun] {
+        &self.recognized
+    }
+
+    pub fn layout(&self) -> ViewerLayout {
+        self.layout
+    }
+
+    fn build(&mut self) {
+        self.lines = self.make_lines().into();
+    }
+
     /// The model's runs: every accessible one, and each recognized one whose middle lies on
     /// no accessible run's place, which the accessibility interfaces already read.
     pub fn runs(&self) -> Vec<ScreenRun> {
@@ -311,9 +382,14 @@ impl ScreenModel {
         runs
     }
 
-    /// The model's lines: its elements one a line in a window read element by element; by
-    /// rows otherwise, and wherever words were recognized, which lie where they are drawn.
-    pub fn lines(&self) -> Vec<ScreenLine> {
+    /// The model's lines, shared.
+    pub fn lines(&self) -> std::sync::Arc<[ScreenLine]> {
+        self.lines.clone()
+    }
+
+    /// Its elements one a line in a window read element by element; by rows otherwise, and
+    /// wherever words were recognized, which lie where they are drawn.
+    fn make_lines(&self) -> Vec<ScreenLine> {
         if self.layout == ViewerLayout::Elements && self.recognized.is_empty() {
             return element_lines(&self.accessible);
         }
@@ -363,22 +439,21 @@ mod tests {
     /// text; recognition adds them among the rest, and says nothing the edit already says.
     #[test]
     fn recognized_words_fill_what_no_accessible_text_covers() {
-        let model = ScreenModel {
-            layout: ViewerLayout::Rows,
-            window: Some("SR Drawn Text Fixture".to_owned()),
-            accessible: vec![
+        let model = ScreenModel::new(
+            Some("SR Drawn Text Fixture".to_owned()),
+            WindowText::rows(vec![
                 accessible("Label drawn by GDI", 20, 16, 240, 48),
                 accessible("Focus here", 20, 340, 320, 380),
-            ],
-            recognized: vec![
-                recognized("Label", 22, 20, 80, 44),
-                recognized("Painted", 20, 80, 110, 108),
-                recognized("text", 120, 80, 170, 108),
-                recognized("Picture", 24, 200, 110, 230),
-                recognized("Focus", 24, 346, 90, 372),
-                recognized("here", 96, 346, 150, 372),
-            ],
-        };
+            ]),
+        )
+        .with_recognized(vec![
+            recognized("Label", 22, 20, 80, 44),
+            recognized("Painted", 20, 80, 110, 108),
+            recognized("text", 120, 80, 170, 108),
+            recognized("Picture", 24, 200, 110, 230),
+            recognized("Focus", 24, 346, 90, 372),
+            recognized("here", 96, 346, 150, 372),
+        ]);
         assert_eq!(
             texts(&model.lines()),
             [
@@ -398,16 +473,15 @@ mod tests {
     /// without it [obs, 1002/s8-s11].
     #[test]
     fn elements_are_lines_of_their_own_with_their_roles() {
-        let model = ScreenModel {
-            layout: ViewerLayout::Elements,
-            accessible: vec![
+        let model = ScreenModel::new(
+            None,
+            WindowText::elements(vec![
                 accessible("WPF text block", 594, 353, 1326, 388).with_role(Role::Text),
                 accessible("Left words", 594, 403, 714, 438).with_role(Role::Text),
                 accessible("Right words", 764, 403, 903, 438).with_role(Role::Text),
                 accessible("WPF button", 594, 453, 764, 500).with_role(Role::Button),
-            ],
-            ..ScreenModel::default()
-        };
+            ]),
+        );
         let spoken: Vec<String> = model.lines().iter().map(ScreenLine::spoken).collect();
         assert_eq!(
             spoken,

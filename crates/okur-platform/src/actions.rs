@@ -45,7 +45,7 @@ mod windows_actions {
     use super::{runtime_id, unique_id};
     use crate::text_context::{focus_has_taken_its_keys, read_focused, read_focused_outside_page};
     use okur_core::{AccessibilityEvent, TextContext};
-    use std::sync::mpsc::{channel, Sender};
+    use std::sync::mpsc::{channel, Receiver, Sender};
     use std::sync::Mutex;
     use std::time::{Duration, Instant};
     use tokio::sync::mpsc::UnboundedSender;
@@ -130,6 +130,46 @@ mod windows_actions {
         Recognize(okur_core::actions::RecognitionArea, String),
     }
 
+    impl Request {
+        /// Whether the request is a long read for the bulk lane.
+        fn is_bulk(&self) -> bool {
+            matches!(
+                self,
+                Request::Screen
+                    | Request::Recognize(..)
+                    | Request::Window(_)
+                    | Request::PageElements(_)
+                    | Request::Point(..)
+                    | Request::ListWindows
+                    | Request::ListTray
+                    | Request::Drag(..)
+            )
+        }
+
+        /// The request's kind, for the log.
+        fn kind(&self) -> &'static str {
+            match self {
+                Request::Object(..) | Request::UiaObject(..) => "page action",
+                Request::Text(..) | Request::TextNow => "text read",
+                Request::Keys(_) => "keys",
+                Request::Window(_) => "viewer read",
+                Request::PageElements(_) => "page elements",
+                Request::Copy(_) => "copy",
+                Request::Caret(..) => "caret",
+                Request::ListWindows => "window list",
+                Request::SwitchTo(_) => "switch",
+                Request::ListTray => "tray list",
+                Request::Point(..) => "mouse point",
+                Request::MouseToText(..)
+                | Request::MouseToObject(_)
+                | Request::MouseToUiaObject(_) => "mouse move",
+                Request::Drag(..) => "drag",
+                Request::Screen => "screen read",
+                Request::Recognize(..) => "recognition",
+            }
+        }
+    }
+
     /// The virtual key of a key the screen reader sends for a reading command.
     fn virtual_key(key: &okur_core::Key) -> Option<u16> {
         use okur_core::Key;
@@ -151,32 +191,67 @@ mod windows_actions {
     /// Acts on the foreground application from a COM worker thread: page objects by IA2
     /// uniqueID, and the focused text field's text, caret and selection after edit keys.
     pub struct WindowsActions {
+        /// The keys, the text reads after them, the caret and page actions: what a key waits
+        /// for.
         requests: Mutex<Sender<Request>>,
+        /// The long reads (the window's text, recognition, the viewer's, the mouse's point,
+        /// window and tray lists, drags), on a lane of their own, so that none of them comes
+        /// before an edit key's text read (performance review 2026-10-24, 2).
+        bulk: Mutex<Sender<Request>>,
     }
 
     impl WindowsActions {
         /// `events` receives the text contexts read after edit keys.
         pub fn start(events: Option<UnboundedSender<AccessibilityEvent>>) -> Self {
             let (tx, rx) = channel::<Request>();
-            std::thread::spawn(move || {
-                // SAFETY: COM initialization for this worker thread.
-                let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-                // UI Automation's default lets an application take 20 s over an answer, and
-                // every read and injected key queued behind it waited (performance review
-                // 2026-10-23, P6); 5 s is long enough for a big window's whole tree.
-                let uia: Option<IUIAutomation> =
-                    crate::uia_snapshot::capture::automation_within(2000, 5000).ok();
-                while let Ok(first) = rx.recv() {
-                    // Keys arrive faster than a read settles (key repeat): of the text reads
-                    // queued meanwhile only the newest matters, since the engine speaks for
-                    // the latest key. Page actions still run, in order.
-                    let mut batch = vec![first];
-                    batch.extend(rx.try_iter());
-                    let last_text = batch.iter().rposition(|r| matches!(r, Request::Text(..)));
-                    let batch = batch.into_iter().enumerate().filter_map(|(i, r)| {
-                        (!matches!(r, Request::Text(..)) || Some(i) == last_text).then_some(r)
-                    });
-                    for request in batch {
+            let (bulk_tx, bulk_rx) = channel::<Request>();
+            let bulk_events = events.clone();
+            std::thread::spawn(move || Self::serve(&bulk_rx, bulk_events.as_ref()));
+            std::thread::spawn(move || Self::serve(&rx, events.as_ref()));
+            Self {
+                requests: Mutex::new(tx),
+                bulk: Mutex::new(bulk_tx),
+            }
+        }
+
+        /// One lane of the worker: its requests in order, each in a panic guard, so one that
+        /// panics is logged and the lane goes on (performance review 2026-10-24, 5).
+        fn serve(rx: &Receiver<Request>, events: Option<&UnboundedSender<AccessibilityEvent>>) {
+            // SAFETY: COM initialization for this worker thread.
+            let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+            // UI Automation's default lets an application take 20 s over an answer, and
+            // every read and injected key queued behind it waited (performance review
+            // 2026-10-23, P6); 5 s is long enough for a big window's whole tree.
+            let uia: Option<IUIAutomation> =
+                crate::uia_snapshot::capture::automation_within(2000, 5000).ok();
+            while let Ok(first) = rx.recv() {
+                // Keys arrive faster than a read settles (key repeat): of the text reads
+                // queued meanwhile only the newest matters, since the engine speaks for
+                // the latest key. Page actions still run, in order.
+                let mut batch = vec![first];
+                batch.extend(rx.try_iter());
+                // The same for the mouse's point, the window's text and a recognition: the
+                // newest answers for all (performance review 2026-10-24, 2).
+                let last = |kind: fn(&Request) -> bool| batch.iter().rposition(kind);
+                let newest = [
+                    last(|r| matches!(r, Request::Text(..))),
+                    last(|r| matches!(r, Request::Point(..))),
+                    last(|r| matches!(r, Request::Screen)),
+                    last(|r| matches!(r, Request::Recognize(..))),
+                ];
+                let batch = batch.into_iter().enumerate().filter_map(|(i, r)| {
+                    let coalesced = matches!(
+                        r,
+                        Request::Text(..)
+                            | Request::Point(..)
+                            | Request::Screen
+                            | Request::Recognize(..)
+                    );
+                    (!coalesced || newest.contains(&Some(i))).then_some(r)
+                });
+                for request in batch {
+                    let kind = request.kind();
+                    let served = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                         match request {
                             Request::Keys(keys) => {
                                 use crate::hook::windows::INJECTED_MARK;
@@ -195,7 +270,7 @@ mod windows_actions {
                             }
                             Request::UiaObject(id, action) => {
                                 let Some(uia) = uia.as_ref() else {
-                                    continue;
+                                    return;
                                 };
                                 if let Err(e) = perform_uia_action(uia, &id, action) {
                                     tracing::warn!("{action:?} on UIA object {id:?} failed: {e}");
@@ -207,7 +282,7 @@ mod windows_actions {
                                     tracing::warn!(
                                         "text read impossible: no UIA client or channel"
                                     );
-                                    continue;
+                                    return;
                                 };
                                 let started = Instant::now();
                                 let context = read_after_key(uia, before, in_page);
@@ -228,7 +303,7 @@ mod windows_actions {
                             Request::TextNow => {
                                 let Some(events) = events.as_ref() else {
                                     tracing::warn!("text read impossible: no event channel");
-                                    continue;
+                                    return;
                                 };
                                 let started = Instant::now();
                                 let context = uia.as_ref().and_then(read_focused);
@@ -251,7 +326,7 @@ mod windows_actions {
                             Request::Window(window) => {
                                 let Some(events) = events.as_ref() else {
                                     tracing::warn!("window read impossible: no event channel");
-                                    continue;
+                                    return;
                                 };
                                 let started = Instant::now();
                                 let lines = uia.as_ref().and_then(|uia| {
@@ -276,7 +351,7 @@ mod windows_actions {
                             Request::PageElements(ids) => {
                                 let Some(events) = events.as_ref() else {
                                     tracing::warn!("page read impossible: no event channel");
-                                    continue;
+                                    return;
                                 };
                                 let started = Instant::now();
                                 let elements: Vec<okur_core::AomNode> = uia
@@ -301,7 +376,7 @@ mod windows_actions {
                             Request::Screen => {
                                 let Some(events) = events.as_ref() else {
                                     tracing::warn!("screen read impossible: no event channel");
-                                    continue;
+                                    return;
                                 };
                                 let started = Instant::now();
                                 // SAFETY: plain Win32 call with no preconditions.
@@ -322,7 +397,7 @@ mod windows_actions {
                             Request::Recognize(area, language) => {
                                 let Some(events) = events.as_ref() else {
                                     tracing::warn!("recognition impossible: no event channel");
-                                    continue;
+                                    return;
                                 };
                                 let started = Instant::now();
                                 let words =
@@ -358,7 +433,7 @@ mod windows_actions {
                             }
                             Request::MouseToUiaObject(id) => {
                                 let Some(uia) = uia.as_ref() else {
-                                    continue;
+                                    return;
                                 };
                                 match uia_object_location(uia, &id) {
                                     Ok(place) => mouse_onto(place),
@@ -375,7 +450,7 @@ mod windows_actions {
                             Request::ListWindows => {
                                 let Some(events) = events.as_ref() else {
                                     tracing::warn!("window list impossible: no event channel");
-                                    continue;
+                                    return;
                                 };
                                 let windows = crate::top_windows::list();
                                 tracing::debug!(windows = windows.len(), "windows listed");
@@ -385,12 +460,12 @@ mod windows_actions {
                             Request::Point(x, y) => {
                                 let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
                                 else {
-                                    continue;
+                                    return;
                                 };
                                 let started = Instant::now();
                                 let Some((chain, texts)) = crate::mouse_point::read(uia, x, y)
                                 else {
-                                    continue;
+                                    return;
                                 };
                                 tracing::debug!(
                                     ms = started.elapsed().as_millis(),
@@ -403,7 +478,7 @@ mod windows_actions {
                             Request::ListTray => {
                                 let Some(events) = events.as_ref() else {
                                     tracing::warn!("tray list impossible: no event channel");
-                                    continue;
+                                    return;
                                 };
                                 let icons = uia
                                     .as_ref()
@@ -413,18 +488,21 @@ mod windows_actions {
                                 let _ = events.send(AccessibilityEvent::TrayIcons(icons));
                             }
                         }
+                    }));
+                    if served.is_err() {
+                        tracing::error!(kind, "an action's work panicked; the next goes on");
                     }
                 }
-            });
-            Self {
-                requests: Mutex::new(tx),
             }
         }
 
         fn send(&self, request: Request) -> bool {
-            self.requests
-                .lock()
-                .is_ok_and(|tx| tx.send(request).is_ok())
+            let lane = if request.is_bulk() {
+                &self.bulk
+            } else {
+                &self.requests
+            };
+            lane.lock().is_ok_and(|tx| tx.send(request).is_ok())
         }
 
         /// Acts on a page node's live object: by its IA2 uniqueID, or, for a page read through

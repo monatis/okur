@@ -3287,7 +3287,34 @@ mod capture {
         node
     }
 
+    /// A panic unwinding out of a WinEvent callback, an `extern "system"` function, aborts the
+    /// process: each callback's work runs under this guard, and a panic is logged instead
+    /// (performance review 2026-10-24, 5).
+    fn guarded(callback: &'static str, work: impl FnOnce()) {
+        if std::panic::catch_unwind(std::panic::AssertUnwindSafe(work)).is_err() {
+            tracing::error!(
+                callback,
+                "a WinEvent callback panicked; the event is dropped"
+            );
+        }
+    }
+
     unsafe extern "system" fn on_event(
+        hook: HWINEVENTHOOK,
+        win_event: u32,
+        hwnd: HWND,
+        id_object: i32,
+        id_child: i32,
+        thread: u32,
+        time: u32,
+    ) {
+        // SAFETY: the same call with the same arguments Windows passed.
+        guarded("on_event", || unsafe {
+            on_event_guarded(hook, win_event, hwnd, id_object, id_child, thread, time)
+        });
+    }
+
+    unsafe fn on_event_guarded(
         _hook: HWINEVENTHOOK,
         win_event: u32,
         hwnd: HWND,
@@ -3324,6 +3351,21 @@ mod capture {
     /// "Chrome Legacy Window" by their negative uniqueIDs. Nothing is read across processes:
     /// a page being built sends these by the hundred.
     unsafe extern "system" fn on_page_change(
+        hook: HWINEVENTHOOK,
+        win_event: u32,
+        hwnd: HWND,
+        id_object: i32,
+        id_child: i32,
+        thread: u32,
+        time: u32,
+    ) {
+        // SAFETY: the same call with the same arguments Windows passed.
+        guarded("on_page_change", || unsafe {
+            on_page_change_guarded(hook, win_event, hwnd, id_object, id_child, thread, time)
+        });
+    }
+
+    unsafe fn on_page_change_guarded(
         _hook: HWINEVENTHOOK,
         win_event: u32,
         hwnd: HWND,

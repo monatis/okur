@@ -626,12 +626,7 @@ pub fn foreground_screen(
         }
         None => Vec::new(),
     };
-    Ok(okur_core::screen_model::ScreenModel {
-        window: None,
-        accessible: accessible.runs,
-        recognized,
-        layout: accessible.layout,
-    })
+    Ok(okur_core::screen_model::ScreenModel::new(None, accessible).with_recognized(recognized))
 }
 
 /// The Virtual Viewer's lines for the window in front, or with `control`, its focused
