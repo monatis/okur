@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 8609,
-  "total_steps": 9168,
+  "matched_steps": 8612,
+  "total_steps": 9174,
   "accepted_divergences": 249,
   "errors": [],
   "steps": {
@@ -553,6 +553,12 @@
     "1032-desktop-ocr-layer-help/s7": "accepted divergence",
     "1032-desktop-ocr-layer-help/s8": "accepted divergence",
     "1032-desktop-ocr-layer-help/s9": "accepted divergence",
+    "1033-desktop-ocr-file-two-selected/s1": "match",
+    "1033-desktop-ocr-file-two-selected/s2": "match",
+    "1033-desktop-ocr-file-two-selected/s3": "mismatch",
+    "1033-desktop-ocr-file-two-selected/s4": "mismatch",
+    "1033-desktop-ocr-file-two-selected/s5": "mismatch",
+    "1033-desktop-ocr-file-two-selected/s6": "match",
     "104-article-heading-levels/s1": "match",
     "104-article-heading-levels/s2": "match",
     "104-article-heading-levels/s3": "match",
