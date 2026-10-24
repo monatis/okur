@@ -69,6 +69,14 @@ pub enum Outcome {
     /// Open the dialog that customizes the verbosity levels, from Settings Center's
     /// "Configure Verbosity Levels" (JAWS's opens its own dialog over Settings Center).
     OpenVerbosityLevels,
+    /// Forget Last Changed Settings' entry for `setting` in `scope`, or all of the place's
+    /// with none (Remove, Remove All), then send these. Done at once, with no Apply [obs, the
+    /// walk of Last Changed Settings].
+    Forget {
+        scope: Scope,
+        setting: Option<&'static str>,
+        send: Vec<ToUi>,
+    },
 }
 
 /// Where the dialog's settings are kept, as its "Settings for" box offers it: all

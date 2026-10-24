@@ -211,6 +211,62 @@ pub type History = Vec<(Scope, &'static str)>;
 /// The most Last Changed Settings holds, as JAWS's: the oldest go first.
 pub const HISTORY_LENGTH: usize = 25;
 
+/// Last Changed Settings as kept between runs: each change's place and setting, newest first.
+#[derive(Debug, Clone, Default, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub struct SavedHistory {
+    #[serde(default)]
+    pub changed: Vec<SavedChange>,
+}
+
+/// A change kept: for one application, one site, or (neither) all applications.
+#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+pub struct SavedChange {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub application: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub site: Option<String>,
+    pub setting: String,
+}
+
+impl SavedHistory {
+    /// The history to keep: the session's changes are not kept, as its settings are not.
+    pub fn of(history: &History) -> Self {
+        let changed = history
+            .iter()
+            .filter_map(|(place, id)| {
+                let (application, site) = match place {
+                    Scope::Global => (None, None),
+                    Scope::Application(name) => (Some(name.clone()), None),
+                    Scope::Site(host) => (None, Some(host.clone())),
+                    Scope::Session => return None,
+                };
+                Some(SavedChange {
+                    application,
+                    site,
+                    setting: (*id).to_owned(),
+                })
+            })
+            .collect();
+        Self { changed }
+    }
+
+    /// The history kept, without the settings Okur no longer has.
+    pub fn history(&self) -> History {
+        self.changed
+            .iter()
+            .filter_map(|change| {
+                let spec = SETTINGS.iter().find(|s| s.id == change.setting)?;
+                let place = match (&change.application, &change.site) {
+                    (_, Some(host)) => Scope::Site(host.clone()),
+                    (Some(name), None) => Scope::Application(name.clone()),
+                    (None, None) => Scope::Global,
+                };
+                Some((place, spec.id))
+            })
+            .collect()
+    }
+}
+
 /// A row of the tree: a group, a setting in the group above it, or an item that opens a
 /// dialog of its own.
 #[derive(Debug, Clone, Copy)]
@@ -627,9 +683,13 @@ impl SettingsTree {
             // "Medium... (Web / HTML / PDFs ,Reading,Configure Web Verbosity Levels)" [obs, 1st
             // walk of Quick Settings, the redesign's §3.1].
             Row::Recent(spec) => {
+                // The label, its group's path, then the value: "Typing Echo (User) Characters"
+                // [obs, the walk of Last Changed Settings].
                 let mut item = self.item(&Row::Setting(spec));
                 if let Some(group) = self.group_of(spec) {
-                    item.text = format!("{} ({})", item.text, Self::path_of(group));
+                    let label = self.tree_label(spec);
+                    let value = item.text.strip_prefix(label.as_str()).unwrap_or_default();
+                    item.text = format!("{label} ({}){value}", Self::path_of(group));
                 }
                 item.level = 1;
                 item
@@ -814,11 +874,11 @@ impl SettingsTree {
             // Escape, Cancel and the close box are Okur's to decide: the question first when
             // something changed.
             keys.push(shortcut("Escape", "cancel"));
-        } else {
-            // A setting's or group's lifetime (JAWS's Quick Settings help).
-            keys.push(from("Shift+F10", LIFETIME, TREE));
-            keys.push(from("Apps", LIFETIME, TREE));
         }
+        // The item's context menu: Last Changed Settings' Remove and Remove All in both, and
+        // in Quick Settings a setting's or group's lifetime (JAWS's Quick Settings help).
+        keys.push(from("Shift+F10", LIFETIME, TREE));
+        keys.push(from("Apps", LIFETIME, TREE));
         DialogSpec {
             id: self.id,
             title: self.title(),
@@ -1003,6 +1063,59 @@ impl SettingsTree {
             .map_or(Lifetime::Saved, |(_, lifetime)| *lifetime)
     }
 
+    /// Shift+F10 on the selected item: Last Changed Settings' Remove All, unavailable while it
+    /// is empty, and an entry's Remove [obs, the walk of Last Changed Settings]; in Quick
+    /// Settings a setting's or group's lifetime.
+    fn context_menu(&mut self) -> Outcome {
+        let row = self.rows.get(self.selected).copied();
+        let entry = |text: StaticMessage, enabled: bool| okur_ui_model::MenuEntry {
+            text: text.to_string(),
+            checked: false,
+            enabled,
+        };
+        let items = match row {
+            Some(Row::LastChanged) => vec![entry(
+                msg::settings_last_changed_remove_all(),
+                !self.recent().is_empty(),
+            )],
+            Some(Row::Recent(_)) => vec![entry(msg::settings_last_changed_remove(), true)],
+            _ if self.flavor == Flavor::Quick => return self.lifetime_menu(),
+            _ => return Outcome::Nothing,
+        };
+        self.menu_for = row;
+        Outcome::Send(vec![ToUi::DialogMenu {
+            id: self.id,
+            control: TREE.to_owned(),
+            items,
+        }])
+    }
+
+    /// Remove (an entry's `setting`) or Remove All (none) in Last Changed Settings: forgotten
+    /// at once for the place. After Remove All the group keeps the focus, as JAWS's ("Last
+    /// Changed Settings | open"); after Remove, the entry that took its place, else the group.
+    fn forget(&mut self, setting: Option<&'static str>) -> Outcome {
+        let scope = self.scope();
+        self.history.retain(|(place, id)| {
+            !(*place == scope && setting.is_none_or(|setting| setting == *id))
+        });
+        let at = self.selected;
+        self.rows = self.rows_for_search();
+        let group = self
+            .rows
+            .iter()
+            .position(|row| *row == Row::LastChanged)
+            .unwrap_or_default();
+        self.selected = match (setting, self.rows.get(at)) {
+            (Some(_), Some(Row::Recent(_))) => at,
+            _ => group,
+        };
+        Outcome::Forget {
+            scope,
+            setting,
+            send: self.refill(),
+        }
+    }
+
     /// The lifetime menu on the selected setting or group, its lifetime checked (a group's
     /// when all its settings share one).
     fn lifetime_menu(&mut self) -> Outcome {
@@ -1032,6 +1145,7 @@ impl SettingsTree {
                 .map(|&lifetime| okur_ui_model::MenuEntry {
                     text: label(lifetime).to_string(),
                     checked: checked == Some(lifetime),
+                    enabled: true,
                 })
                 .collect(),
         }])
@@ -1120,10 +1234,15 @@ impl SettingsTree {
                     _ => Outcome::Nothing,
                 }
             }
-            // A lifetime chosen for the menu's setting or group.
+            // Remove, Remove All, or a lifetime chosen for the menu's setting or group.
             FromUi::DialogMenuChosen { id, index, .. } if *id == self.id => {
-                let (Some(row), Some(&lifetime)) =
-                    (self.menu_for.take(), index.and_then(|i| LIFETIMES.get(i)))
+                let row = self.menu_for.take();
+                match (row, index) {
+                    (Some(Row::LastChanged), Some(0)) => return self.forget(None),
+                    (Some(Row::Recent(spec)), Some(0)) => return self.forget(Some(spec.id)),
+                    _ => {}
+                }
+                let (Some(row), Some(&lifetime)) = (row, index.and_then(|i| LIFETIMES.get(i)))
                 else {
                     return Outcome::Nothing;
                 };
@@ -1172,7 +1291,7 @@ impl SettingsTree {
                     self.end_search(at)
                 }
                 TREE_ESCAPE => self.cancel(),
-                LIFETIME if self.flavor == Flavor::Quick => self.lifetime_menu(),
+                LIFETIME => self.context_menu(),
                 DEFAULT_PLACE if self.flavor == Flavor::Center => {
                     self.place = 0;
                     self.draft = self
@@ -1607,7 +1726,7 @@ mod tests {
         let last = items.iter().position(|i| i.text == "Last Changed Settings");
         assert_eq!(
             last.and_then(|i| items.get(i + 1)).map(|i| i.text.as_str()),
-            Some("Typing Echo Characters (User)")
+            Some("Typing Echo (User) Characters")
         );
         // Notepad's history only: the rate was changed for all applications.
         assert!(!items
@@ -1627,6 +1746,96 @@ mod tests {
         assert_eq!(
             registry::get(dialog.draft(), "typing_echo"),
             Some(Json::String("words".into()))
+        );
+    }
+
+    /// Shift+F10 in Last Changed Settings: an entry's menu is Remove, the group's Remove All,
+    /// unavailable once it is empty; each forgets at once, for the place only [obs, the walk of
+    /// Last Changed Settings].
+    #[test]
+    fn last_changed_settings_entries_can_be_removed() {
+        let mut dialog = tree(Flavor::Center);
+        let menu = |dialog: &mut SettingsTree, row: Row| {
+            let index = dialog
+                .rows
+                .iter()
+                .position(|r| *r == row)
+                .unwrap_or_default();
+            dialog.handle(&FromUi::DialogChanged {
+                id: 7,
+                control: TREE.into(),
+                value: Value::Selected(index),
+            });
+            match dialog.handle(&FromUi::DialogPressed {
+                id: 7,
+                control: LIFETIME.into(),
+            }) {
+                Outcome::Send(sent) => match sent.first() {
+                    Some(ToUi::DialogMenu { items, .. }) => items
+                        .iter()
+                        .map(|i| (i.text.clone(), i.enabled))
+                        .collect::<Vec<_>>(),
+                    _ => Vec::new(),
+                },
+                _ => Vec::new(),
+            }
+        };
+        let typing = SETTINGS.iter().find(|s| s.id == "typing_echo");
+        let Some(typing) = typing else {
+            panic_free_fail("no typing echo");
+            return;
+        };
+        assert_eq!(
+            menu(&mut dialog, Row::Recent(typing)),
+            [("Remove".to_owned(), true)]
+        );
+        let chosen = FromUi::DialogMenuChosen {
+            id: 7,
+            control: TREE.into(),
+            index: Some(0),
+        };
+        let Outcome::Forget { scope, setting, .. } = dialog.handle(&chosen) else {
+            panic_free_fail("not forgotten");
+            return;
+        };
+        assert_eq!(scope, Scope::Application("notepad".into()));
+        assert_eq!(setting, Some("typing_echo"));
+        assert!(!dialog.rows.iter().any(|r| matches!(r, Row::Recent(_))));
+        assert_eq!(dialog.rows.get(dialog.selected), Some(&Row::LastChanged));
+        // All applications' history stays.
+        assert!(dialog.history.contains(&(Scope::Global, "voice.rate")));
+        assert_eq!(
+            menu(&mut dialog, Row::LastChanged),
+            [("Remove All".to_owned(), false)]
+        );
+        // A setting's Shift+F10 in Settings Center has no menu: lifetimes are Quick Settings'.
+        assert!(menu(&mut dialog, Row::Setting(typing)).is_empty());
+    }
+
+    /// Last Changed Settings kept between runs: each change's place, never the session's, and
+    /// back without settings Okur no longer has.
+    #[test]
+    fn the_history_is_kept_with_its_places() {
+        let history: History = vec![
+            (Scope::Application("notepad".into()), "typing_echo"),
+            (Scope::Session, "voice.rate"),
+            (Scope::Site("example.org".into()), "smart_navigation"),
+            (Scope::Global, "voice.rate"),
+        ];
+        let mut saved = SavedHistory::of(&history);
+        assert_eq!(saved.changed.len(), 3);
+        saved.changed.push(SavedChange {
+            application: None,
+            site: None,
+            setting: "no_such_setting".into(),
+        });
+        assert_eq!(
+            saved.history(),
+            [
+                (Scope::Application("notepad".into()), "typing_echo"),
+                (Scope::Site("example.org".into()), "smart_navigation"),
+                (Scope::Global, "voice.rate"),
+            ]
         );
     }
 

@@ -112,6 +112,23 @@ kept it (research, not evidence):
     Links, Headings and Frames, Tables, Miscellaneous.
   - Okur's search filters the tree to the results in their groups instead. JAWS's results
     list is the shape to follow (an open item).
+- **Last Changed Settings' menus** (Settings Center and Quick Settings over Notepad;
+  `settings-questions-walk.ps1`, two walks; Notepad's Typing Echo moved on, applied, moved
+  back and applied, so it ended as it began):
+  - Empty, End on it: "level 0 | Last Changed Settings | closed | 28 of 28"; Shift+F10:
+    "Context Menu | To navigate press Up or Down Arrow. | Remove All Unavailable", one item, in
+    both dialogs.
+  - With Typing Echo applied (Alt+A): "Last Changed Settings | open | 1 item", then the entry
+    "level 1 | Typing Echo (User) Characters | 1 of 1 | Last Changed Settings": the label, the
+    group's path in parentheses, then the value. Its Shift+F10: "Context Menu | ... | Remove",
+    one item. Space on the entry moves its value as in its own group ("Words | 3 of 4").
+  - The entry applied again, the focus went to the group; its Shift+F10 then offered "Remove
+    All", and Enter: "Leaving menus | Tree view | Last Changed Settings | open | 1 item", the
+    entry gone (Down said nothing). Escape then closed Settings Center at once: Remove All is
+    done without Apply or a question.
+  - Okur has the same since the commit after `018cc0d1`: the entry's words, Remove and Remove
+    All in both dialogs (Shift+F10 on a setting in Settings Center opens nothing, as JAWS's has
+    no lifetimes), and the history kept in `last-changed.toml` beside the settings.
 - **Settings Center** (Insert+6 over Notepad; `settings-center-walk.ps1`): "NotePad - JAWS
   Settings Center dialog | SearchBox Edit | Type in text."; by Tab: " | Tree view | | User |
   closed | 1 of 28 | To move through or expand items use the Arrow keys.", " read only edit |
@@ -319,9 +336,9 @@ spoken form is a parity target.
 2. **Lifetimes and Last Changed Settings** in Quick Settings; the until-the-focus-moves layer.
    **Built 2026-10-24**: the lifetime menu (Shift+F10, Applications key) on a setting or a
    group, the session's and the until-the-focus-moves layers; Last Changed Settings in both
-   dialogs. Still to do: the lifetimes' icons beside items, JAWS's own words for the three
-   lifetimes (recorded), Remove and Remove All in Last Changed Settings, its history kept
-   across restarts.
+   dialogs; JAWS's words for the three lifetimes; Remove and Remove All in Last Changed
+   Settings, and its history kept across restarts (`last-changed.toml`). Still to do: the
+   lifetimes' icons beside items.
 3. **The Okur window and its menus** (Insert+J), Basics with its new settings, the quit
    confirmation from Basics' check box.
    **Built 2026-10-24** (`4194cb88`): Insert+J shows the window, "Okur" and its version, with

@@ -1556,6 +1556,20 @@ impl ScreenReaderEngine {
     }
 
     /// Gives the engine where changed settings are kept.
+    /// Last Changed Settings as it was kept the last time Okur ran.
+    pub fn set_settings_history(&mut self, saved: &crate::ui::settings_tree::SavedHistory) {
+        self.settings_history = saved.history();
+    }
+
+    /// Keeps Last Changed Settings for the next run.
+    fn save_settings_history(&self) {
+        if let Some(store) = &self.settings_store {
+            store.save_history(&crate::ui::settings_tree::SavedHistory::of(
+                &self.settings_history,
+            ));
+        }
+    }
+
     pub fn set_settings_store(&mut self, store: Box<dyn crate::settings::SettingsStore>) {
         self.settings_store = Some(store);
     }
@@ -1680,6 +1694,7 @@ impl ScreenReaderEngine {
         if let Some(store) = &self.settings_store {
             store.save(&self.settings_layers);
         }
+        self.save_settings_history();
         self.resolve_settings();
     }
 
@@ -2071,6 +2086,7 @@ impl ScreenReaderEngine {
         if let Some(store) = &self.settings_store {
             store.save(&self.settings_layers);
         }
+        self.save_settings_history();
         self.resolve_settings();
     }
 
@@ -2212,6 +2228,19 @@ impl ScreenReaderEngine {
                 self.returning_from_dialog();
             }
             Outcome::OpenVerbosityLevels => self.open_verbosity_levels(),
+            Outcome::Forget {
+                scope,
+                setting,
+                send,
+            } => {
+                self.settings_history.retain(|(place, id)| {
+                    !(*place == scope && setting.is_none_or(|setting| setting == *id))
+                });
+                self.save_settings_history();
+                if let Some(ui) = &self.ui {
+                    send.into_iter().for_each(|m| ui.send(m));
+                }
+            }
             Outcome::Close => self.close_settings_dialog(tree),
             Outcome::AskToSave => {
                 self.dialog_count += 1;

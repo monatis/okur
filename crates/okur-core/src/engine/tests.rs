@@ -2542,6 +2542,61 @@ fn tree_item_index(dialog: &crate::ui::DialogSpec, starting: &str) -> Option<usi
     })
 }
 
+/// Last Changed Settings as kept from the last run, and Remove on its entry: forgotten at once
+/// and in the file [obs, the walk of Last Changed Settings].
+#[test]
+fn last_changed_settings_is_kept_and_its_entries_removed() {
+    use crate::ui::settings_tree::{SavedChange, SavedHistory};
+    use crate::ui::{FromUi, ToUi, Value};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let kept = |setting: &str| SavedChange {
+        application: None,
+        site: None,
+        setting: setting.into(),
+    };
+    engine.set_settings_history(&SavedHistory {
+        changed: vec![kept("typing_echo"), kept("voice.rate")],
+    });
+    let store = crate::settings::RecordingSettingsStore::default();
+    engine.set_settings_store(Box::new(store.clone()));
+    engine.execute_command("SettingsCenter");
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    let id = dialog.id;
+    let Some(entry) = tree_item_index(dialog, "Typing Echo (") else {
+        panic_free_fail("no Last Changed entry");
+        return;
+    };
+    for message in [
+        FromUi::DialogChanged {
+            id,
+            control: "tree".into(),
+            value: Value::Selected(entry),
+        },
+        FromUi::DialogPressed {
+            id,
+            control: "lifetime".into(),
+        },
+        FromUi::DialogMenuChosen {
+            id,
+            control: "tree".into(),
+            index: Some(0),
+        },
+    ] {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(message));
+    }
+    assert_eq!(
+        store.history().map(|h| h.changed),
+        Some(vec![kept("voice.rate")])
+    );
+}
+
 /// Insert+6 opens Settings Center, Insert+V Quick Settings in its place; Space changes the
 /// selected setting and OK applies it, keeps it in the settings store, and closes the dialog.
 /// Okur says nothing itself: it reads the dialog when the dialog takes the focus.
@@ -2614,6 +2669,15 @@ fn settings_center_applies_and_keeps_changes() {
         [crate::settings_layers::SettingsLayers::with_global(
             &engine.settings
         )]
+    );
+    // Last Changed Settings is kept for the next run too.
+    assert_eq!(
+        store.history().map(|h| h.changed),
+        Some(vec![crate::ui::settings_tree::SavedChange {
+            application: None,
+            site: None,
+            setting: "typing_echo".into(),
+        }])
     );
     assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
     // Cancelled, a new dialog changes nothing.

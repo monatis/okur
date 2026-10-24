@@ -1050,8 +1050,8 @@ pub fn show_menu(id: u32, control: &str, items: &[okur_ui_model::MenuEntry]) {
     use windows::Win32::Graphics::Gdi::ClientToScreen;
     use windows::Win32::UI::Controls::{TVGN_CARET, TVM_GETITEMRECT};
     use windows::Win32::UI::WindowsAndMessaging::{
-        AppendMenuW, CreatePopupMenu, DestroyMenu, TrackPopupMenu, MF_CHECKED, MF_STRING,
-        TPM_LEFTALIGN, TPM_RETURNCMD,
+        AppendMenuW, CreatePopupMenu, DestroyMenu, TrackPopupMenu, MF_CHECKED, MF_GRAYED,
+        MF_STRING, TPM_LEFTALIGN, TPM_RETURNCMD,
     };
     let Some((window, window_id, _, kind)) = find(id, control) else {
         return;
@@ -1094,11 +1094,13 @@ pub fn show_menu(id: u32, control: &str, items: &[okur_ui_model::MenuEntry]) {
         };
         for (index, entry) in items.iter().enumerate() {
             let text = wide(&entry.text);
-            let flags = if entry.checked {
-                MF_STRING | MF_CHECKED
-            } else {
-                MF_STRING
-            };
+            let mut flags = MF_STRING;
+            if entry.checked {
+                flags |= MF_CHECKED;
+            }
+            if !entry.enabled {
+                flags |= MF_GRAYED;
+            }
             let _ = AppendMenuW(menu, flags, index + 1, windows::core::PCWSTR(text.as_ptr()));
         }
         let command = TrackPopupMenu(

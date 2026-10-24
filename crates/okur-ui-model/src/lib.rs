@@ -396,6 +396,14 @@ pub struct MenuEntry {
     pub text: String,
     #[serde(default)]
     pub checked: bool,
+    /// Whether it can be chosen; one that cannot is said "Unavailable" [obs, the walk of Last
+    /// Changed Settings: "Remove All  Unavailable"].
+    #[serde(default = "available")]
+    pub enabled: bool,
+}
+
+fn available() -> bool {
+    true
 }
 
 /// A key on a list's item ([`FromUi::DialogKey`]).

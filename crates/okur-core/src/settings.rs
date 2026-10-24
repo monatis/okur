@@ -1080,12 +1080,15 @@ impl Default for Settings {
 /// layers (all applications, each application, each site), never the session's.
 pub trait SettingsStore: Send {
     fn save(&self, layers: &crate::settings_layers::SettingsLayers);
+    /// Last Changed Settings, kept so that it holds the next time Okur starts, as JAWS's.
+    fn save_history(&self, history: &crate::ui::settings_tree::SavedHistory);
 }
 
 /// A store that keeps what it was given, for tests.
 #[derive(Debug, Clone, Default)]
 pub struct RecordingSettingsStore {
     saved: std::sync::Arc<std::sync::Mutex<Vec<crate::settings_layers::SettingsLayers>>>,
+    history: std::sync::Arc<std::sync::Mutex<Option<crate::ui::settings_tree::SavedHistory>>>,
 }
 
 impl RecordingSettingsStore {
@@ -1096,12 +1099,23 @@ impl RecordingSettingsStore {
             .map(|mut saved| std::mem::take(&mut *saved))
             .unwrap_or_default()
     }
+
+    /// The history saved last, if any.
+    pub fn history(&self) -> Option<crate::ui::settings_tree::SavedHistory> {
+        self.history.lock().ok().and_then(|history| history.clone())
+    }
 }
 
 impl SettingsStore for RecordingSettingsStore {
     fn save(&self, layers: &crate::settings_layers::SettingsLayers) {
         if let Ok(mut saved) = self.saved.lock() {
             saved.push(layers.clone());
+        }
+    }
+
+    fn save_history(&self, history: &crate::ui::settings_tree::SavedHistory) {
+        if let Ok(mut kept) = self.history.lock() {
+            *kept = Some(history.clone());
         }
     }
 }

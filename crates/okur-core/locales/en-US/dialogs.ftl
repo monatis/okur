@@ -509,6 +509,10 @@ settings-tree-last-changed-description = The 25 settings changed last for this p
 settings-lifetime-until-exit = Restore setting when Okur exits
 settings-lifetime-until-focus-moves = Restore setting when focus changes
 settings-lifetime-saved = Save the setting
+# Shift+F10 in Last Changed Settings: an entry's menu, then the group's [obs, the walk of Last
+# Changed Settings].
+settings-last-changed-remove = Remove
+settings-last-changed-remove-all = Remove All
 
 ## Okur's main window (Insert+J) and its menus: JAWS's window and its items, those Okur has
 ## (old-pc's walk, docs/references/okur-settings-redesign.md §1.1). Access keys from JAWS's book.

@@ -145,6 +145,14 @@ impl SettingsStore for SettingsFolder {
             }
         }
     }
+
+    fn save_history(&self, history: &okur_core::ui::settings_tree::SavedHistory) {
+        self.save_own(
+            LAST_CHANGED,
+            "Okur's Last Changed Settings: each change's place and setting, newest first.",
+            history,
+        );
+    }
 }
 
 /// The custom labels' file: a table per site (or page), each element's label in it.
@@ -155,6 +163,8 @@ const PLACEMARKERS: &str = "placemarkers.toml";
 /// customizations.
 const FLEXIBLE_WEB: &str = "flexible-web.toml";
 const NOTIFICATION_RULES: &str = "notification-rules.toml";
+/// Last Changed Settings' file: each change's place and setting, newest first.
+const LAST_CHANGED: &str = "last-changed.toml";
 
 impl SettingsFolder {
     /// The custom labels kept (Insert+Ctrl+Tab). A missing or unreadable file is none, the
@@ -177,6 +187,11 @@ impl SettingsFolder {
     /// [`Self::load_labels`].
     pub fn load_notification_rules(&self) -> okur_core::ui::notifications::NotificationRules {
         self.load_own(NOTIFICATION_RULES)
+    }
+
+    /// Last Changed Settings as kept, as [`Self::load_labels`].
+    pub fn load_settings_history(&self) -> okur_core::ui::settings_tree::SavedHistory {
+        self.load_own(LAST_CHANGED)
     }
 
     /// One of the files Okur writes itself; none when missing or unreadable (logged).
@@ -598,6 +613,32 @@ mod tests {
         files.save(&layers);
         let text = std::fs::read_to_string(root.join("settings.toml")).unwrap_or_default();
         assert_eq!(text, "# mine\n\n[voice]\n# fast\nrate = 8\n");
+        let _ = std::fs::remove_dir_all(&root);
+    }
+
+    /// Last Changed Settings is read back as it was written, newest first.
+    #[test]
+    fn the_settings_history_is_kept() {
+        use okur_core::ui::settings_tree::{SavedChange, SavedHistory};
+        let root = folder("history");
+        let files = SettingsFolder::at(&root);
+        assert_eq!(files.load_settings_history(), SavedHistory::default());
+        let history = SavedHistory {
+            changed: vec![
+                SavedChange {
+                    application: Some("notepad".into()),
+                    site: None,
+                    setting: "typing_echo".into(),
+                },
+                SavedChange {
+                    application: None,
+                    site: None,
+                    setting: "voice.rate".into(),
+                },
+            ],
+        };
+        files.save_history(&history);
+        assert_eq!(files.load_settings_history(), history);
         let _ = std::fs::remove_dir_all(&root);
     }
 
