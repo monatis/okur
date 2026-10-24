@@ -25,7 +25,7 @@ Statuses are this session's: **fixed** with the commit, **open**, or **kept** wi
 | 9b | Memory | The okur-ui writer queue is unbounded: a hung okur-ui piles up viewer texts. | open |
 | 9c | Performance | Okur cursor keys in a text field clone the field's whole text for each mouse or caret move. | open |
 | 9d | Quality | A queued recognition takes the window in front when it runs, the engine files the words under the window it knows when they arrive: behind a long read the two can differ. | fixed (below) |
-| 9e | Layering | The production hook and actions worker send keys through `crate::harness::send_key`, a module that also holds harness-only code (AGENTS.md keeps key-sending tools out of `okur.exe`). | open |
+| 9e | Layering | The production hook and actions worker send keys through `crate::harness::send_key`, a module that also holds harness-only code (AGENTS.md keeps key-sending tools out of `okur.exe`). | fixed: `crate::key_input` holds the key sending, which the harness uses |
 
 ## The earlier reviews' open items
 

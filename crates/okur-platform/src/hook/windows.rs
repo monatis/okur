@@ -405,8 +405,8 @@ unsafe extern "system" fn low_level_keyboard_proc(
             };
             // VK_MENU, VK_LWIN, VK_RWIN.
             if seen(0x12, ALT_BIT) || seen(0x5B, WIN_BIT) || seen(0x5C, WIN_BIT) {
-                crate::harness::send_key(MENU_MASK_KEY, false, INJECTED_MARK);
-                crate::harness::send_key(MENU_MASK_KEY, true, INJECTED_MARK);
+                crate::key_input::send_key(MENU_MASK_KEY, false, INJECTED_MARK);
+                crate::key_input::send_key(MENU_MASK_KEY, true, INJECTED_MARK);
             }
         }
         CONSUMED_MODIFIERS.fetch_or(modifier_bit(vk_code), Ordering::Relaxed);

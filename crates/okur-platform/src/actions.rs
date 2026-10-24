@@ -271,10 +271,10 @@ mod windows_actions {
                             Request::Keys(keys) => {
                                 use crate::hook::windows::INJECTED_MARK;
                                 for &vk in &keys {
-                                    crate::harness::send_key(vk, false, INJECTED_MARK);
+                                    crate::key_input::send_key(vk, false, INJECTED_MARK);
                                 }
                                 for &vk in keys.iter().rev() {
-                                    crate::harness::send_key(vk, true, INJECTED_MARK);
+                                    crate::key_input::send_key(vk, true, INJECTED_MARK);
                                 }
                             }
                             Request::Object(id, action) => {

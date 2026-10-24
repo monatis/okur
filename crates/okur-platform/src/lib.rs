@@ -12,6 +12,7 @@ pub mod harness;
 pub mod hook;
 pub mod ia2_snapshot;
 pub mod instance;
+pub mod key_input;
 #[cfg(windows)]
 pub mod lowered_process;
 pub mod mouse_point;
