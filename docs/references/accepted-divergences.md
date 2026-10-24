@@ -769,6 +769,7 @@ A step can be in more than one entry; all of its entries apply.
 - Steps:
   - `1026-desktop-ocr-file-none-selected/s3`
   - `1027-desktop-ocr-file-not-a-picture/s3`
+  - `1033-desktop-ocr-file-two-selected/s3`
 - Difference: `JawsSaysBeforeItsDialog`. Before its message box ("OCR Failed to start. No
   file currently selected."), JAWS says its own main window, "JAWS Professional | JAWS Version
   2025.2505.43" and the folder, or the tutor message of a button, in most trials, and nothing in
