@@ -514,6 +514,7 @@ impl RulesDialog {
                                 level,
                                 // The site closed, as JAWS's opens [obs, 748/s9].
                                 open: level != 1,
+                                checked: None,
                             })
                             .collect(),
                         selected: self.area,

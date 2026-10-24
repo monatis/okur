@@ -16,13 +16,16 @@ use windows::Win32::UI::Controls::{
     LVM_EDITLABELW, LVM_ENSUREVISIBLE, LVM_GETNEXTITEM, LVM_INSERTCOLUMNW, LVM_INSERTITEMW,
     LVM_SETEXTENDEDLISTVIEWSTYLE, LVM_SETITEMCOUNT, LVM_SETITEMSTATE, LVM_SETITEMTEXTW,
     LVNI_SELECTED, LVN_ENDLABELEDITW, LVN_ITEMCHANGED, LVN_KEYDOWN, LVS_EX_CHECKBOXES,
-    LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NMLVDISPINFOW, NMLVKEYDOWN, NMTREEVIEWW, NM_DBLCLK,
-    TBM_SETPAGESIZE, TBM_SETPOS, TBM_SETRANGEMAX, TBM_SETRANGEMIN, TBM_SETTICFREQ, TVE_EXPAND,
-    TVGN_CARET, TVGN_CHILD, TVGN_NEXT, TVGN_ROOT, TVIF_TEXT, TVINSERTSTRUCTW, TVINSERTSTRUCTW_0,
-    TVITEMW, TVI_LAST, TVI_ROOT, TVM_EXPAND, TVM_GETNEXTITEM, TVM_INSERTITEMW, TVM_SELECTITEM,
-    TVN_SELCHANGEDW,
+    LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NMLVDISPINFOW, NMLVKEYDOWN, NMTREEVIEWW, NMTVKEYDOWN,
+    NM_DBLCLK, TBM_SETPAGESIZE, TBM_SETPOS, TBM_SETRANGEMAX, TBM_SETRANGEMIN, TBM_SETTICFREQ,
+    TREE_VIEW_ITEM_STATE_FLAGS, TVE_EXPAND, TVGN_CARET, TVGN_CHILD, TVGN_NEXT, TVGN_ROOT,
+    TVIF_STATE, TVIF_TEXT, TVINSERTSTRUCTW, TVINSERTSTRUCTW_0, TVIS_EXPANDED, TVIS_STATEIMAGEMASK,
+    TVITEMW, TVI_LAST, TVI_ROOT, TVM_DELETEITEM, TVM_EXPAND, TVM_GETNEXTITEM, TVM_INSERTITEMW,
+    TVM_SELECTITEM, TVM_SETITEMW, TVN_ITEMEXPANDEDW, TVN_KEYDOWN, TVN_SELCHANGEDW, TVS_CHECKBOXES,
 };
-use windows::Win32::UI::Input::KeyboardAndMouse::{EnableWindow, VIRTUAL_KEY, VK_DELETE, VK_F2};
+use windows::Win32::UI::Input::KeyboardAndMouse::{
+    EnableWindow, GetKeyState, VIRTUAL_KEY, VK_DELETE, VK_F2, VK_SHIFT, VK_SPACE,
+};
 use windows::Win32::UI::WindowsAndMessaging::{
     BringWindowToTop, CreateDialogIndirectParamW, DestroyWindow, GetClientRect, GetDlgCtrlID,
     GetDlgItem, GetForegroundWindow, GetWindowTextLengthW, GetWindowTextW,
@@ -34,6 +37,21 @@ use windows::Win32::UI::WindowsAndMessaging::{
 };
 
 use crate::template::{self, IDCANCEL};
+
+/// NM_TVSTATEIMAGECHANGING (NM_FIRST - 24): a tree view's item's state image about to change.
+const NM_TVSTATEIMAGECHANGING: u32 = 0u32.wrapping_sub(24);
+/// DWLP_MSGRESULT: a dialog procedure's answer to a notification.
+const DWLP_MSGRESULT: windows::Win32::UI::WindowsAndMessaging::WINDOW_LONG_PTR_INDEX =
+    windows::Win32::UI::WindowsAndMessaging::WINDOW_LONG_PTR_INDEX(0);
+
+/// A dialog's answer to a notification that reads its result.
+fn answer(window: HWND, result: isize) -> isize {
+    // SAFETY: our own dialog's message result.
+    unsafe {
+        windows::Win32::UI::WindowsAndMessaging::SetWindowLongPtrW(window, DWLP_MSGRESULT, result);
+    }
+    1
+}
 
 /// TBM_GETPOS: a slider's position.
 const TBM_GETPOS: u32 = 0x0400;
@@ -465,10 +483,69 @@ fn fill_list_box(list: HWND, items: &[String], selected: usize) {
     }
 }
 
+/// A tree item's check box as a tree view's state image: none, not checked (1), checked (2).
+fn state_image(checked: Option<bool>) -> TREE_VIEW_ITEM_STATE_FLAGS {
+    let index: u32 = match checked {
+        None => 0,
+        Some(false) => 1,
+        Some(true) => 2,
+    };
+    TREE_VIEW_ITEM_STATE_FLAGS(index << 12)
+}
+
+/// Sets a tree view item's text and check box.
+fn set_tree_item(tree: HWND, handle: HTREEITEM, item: &TreeItem) {
+    let mut text = wide(&item.text);
+    let update = TVITEMW {
+        mask: TVIF_TEXT | TVIF_STATE,
+        hItem: handle,
+        state: state_image(item.checked),
+        stateMask: TVIS_STATEIMAGEMASK,
+        pszText: PWSTR(text.as_mut_ptr()),
+        ..Default::default()
+    };
+    // SAFETY: a message to our own tree view about its own item; the text outlives the call.
+    unsafe {
+        SendMessageW(
+            tree,
+            TVM_SETITEMW,
+            None,
+            Some(LPARAM(&update as *const TVITEMW as isize)),
+        );
+    }
+}
+
+/// Gives a tree view check boxes, which Windows asks to be set after the tree is made and before
+/// it is filled; its items without one get none.
+fn allow_check_boxes(tree: HWND) {
+    use windows::Win32::UI::WindowsAndMessaging::{
+        GetWindowLongPtrW, SetWindowLongPtrW, GWL_STYLE,
+    };
+    // SAFETY: our own tree view's style.
+    unsafe {
+        let style = GetWindowLongPtrW(tree, GWL_STYLE);
+        let checks = TVS_CHECKBOXES as isize;
+        if style & checks == 0 {
+            SetWindowLongPtrW(tree, GWL_STYLE, style | checks);
+        }
+    }
+}
+
+/// Empties a tree view.
+fn clear_tree(tree: HWND) {
+    // SAFETY: a message to our own tree view.
+    unsafe {
+        SendMessageW(tree, TVM_DELETEITEM, None, Some(LPARAM(TVI_ROOT.0)));
+    }
+}
+
 /// A list's items, `selected` selected, focused and in view.
-/// Fills a tree view with `items`, each under the last item one level up, every item open, and
-/// selects one.
+/// Fills a tree view with `items`, each under the last item one level up, the open ones open,
+/// with their check boxes, and selects one.
 fn fill_tree(tree: HWND, items: &[TreeItem], selected: usize) {
+    if items.iter().any(|item| item.checked.is_some()) {
+        allow_check_boxes(tree);
+    }
     let mut parents: Vec<HTREEITEM> = Vec::new();
     let mut inserted = Vec::new();
     for item in items {
@@ -502,6 +579,7 @@ fn fill_tree(tree: HWND, items: &[TreeItem], selected: usize) {
             .0
         });
         parents.push(handle);
+        set_tree_item(tree, handle, item);
         if item.open {
             inserted.push(handle);
         }
@@ -671,6 +749,11 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
                 check_item(item, *i, *checked)
             }
             (ControlKind::Tree { .. }, Value::Selected(i)) => select_tree_item(item, *i),
+            (ControlKind::Tree { .. }, Value::TreeItem(i, changed)) => {
+                if let Some(handle) = tree_order(item).get(*i) {
+                    set_tree_item(item, *handle, changed);
+                }
+            }
             (ControlKind::ListBox { .. }, Value::Selected(i)) => {
                 SendMessageW(item, LB_SETCURSEL, Some(WPARAM(*i)), None);
             }
@@ -906,6 +989,20 @@ pub fn set_list(id: u32, control: &str, items: &[String], selected: usize) {
             }
             set_items(list, items, selected);
         }
+    }
+}
+
+/// Replaces tree `control` of dialog `id` with `items`, `selected` selected: the settings a
+/// search found.
+pub fn set_tree(id: u32, control: &str, items: &[TreeItem], selected: usize) {
+    let Some((window, window_id, _, ControlKind::Tree { .. })) = find(id, control) else {
+        return;
+    };
+    // SAFETY: a child of our own dialog.
+    if let Ok(tree) = unsafe { GetDlgItem(Some(window), i32::from(window_id)) } {
+        remember(window, window_id, Value::Selected(selected));
+        clear_tree(tree);
+        fill_tree(tree, items, selected);
     }
 }
 
@@ -1221,6 +1318,40 @@ pub(crate) unsafe extern "system" fn dialog_proc(
                         }
                     }
                     NM_DBLCLK => press_default(window),
+                    // Space changes the selected item's value, Shift+Space back (JAWS's
+                    // Settings Center): Okur changes it, and the tree view's own check box turn
+                    // and incremental search are kept out.
+                    TVN_KEYDOWN => {
+                        // SAFETY: a tree view's key notification sends an NMTVKEYDOWN.
+                        let key = unsafe { &*(lparam.0 as *const NMTVKEYDOWN) };
+                        if VIRTUAL_KEY(key.wVKey) != VK_SPACE {
+                            return 0;
+                        }
+                        // SAFETY: the key state of this thread's input.
+                        let back = unsafe { GetKeyState(i32::from(VK_SHIFT.0)) } < 0;
+                        crate::win32::tell(&FromUi::DialogKey {
+                            id: hit.dialog,
+                            control: hit.name.clone(),
+                            key: if back {
+                                DialogKey::ChangeBack
+                            } else {
+                                DialogKey::Change
+                            },
+                        });
+                        return answer(window, 1);
+                    }
+                    // A check box turned by the tree view itself (Space, a click): refused,
+                    // Okur turns it.
+                    NM_TVSTATEIMAGECHANGING => return answer(window, 1),
+                    TVN_ITEMEXPANDEDW => {
+                        // SAFETY: a tree view's expansion sends an NMTREEVIEWW.
+                        let change = unsafe { &*(lparam.0 as *const NMTREEVIEWW) };
+                        let open = change.itemNew.state.0 & TVIS_EXPANDED.0 != 0;
+                        let order = tree_order(header.hwndFrom);
+                        if let Some(index) = order.iter().position(|i| *i == change.itemNew.hItem) {
+                            changed(window, &hit, Value::ItemOpened(index, open));
+                        }
+                    }
                     _ => return 0,
                 }
                 return 1;

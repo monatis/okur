@@ -621,6 +621,7 @@ impl ListDialog {
                                         .and_then(|l| usize::try_from(l).ok())
                                         .unwrap_or(0),
                                     open: true,
+                                    checked: None,
                                 })
                                 .collect(),
                             selected: self.selected,

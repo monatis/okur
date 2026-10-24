@@ -161,6 +161,10 @@ pub struct TreeItem {
     /// localhost Closed" [obs, 748/s9, s10].
     #[serde(default = "opened")]
     pub open: bool,
+    /// A check box's state, for an item that is one (a setting turned on or off: JAWS's Quick
+    /// Settings, "Automatic Activation not checked"); `None` for any other item.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub checked: Option<bool>,
 }
 
 fn opened() -> bool {
@@ -177,6 +181,10 @@ pub enum Value {
     ItemChecked(usize, bool),
     /// A check list's item renamed in place (F2), by its index.
     ItemRenamed(usize, String),
+    /// A tree's item opened (`true`) or closed, by its index; and from Okur, a tree item's
+    /// text and check box changed in place, by its index, the tree otherwise as it is.
+    ItemOpened(usize, bool),
+    TreeItem(usize, TreeItem),
     Number(i32),
     Text(String),
 }
@@ -222,6 +230,13 @@ pub enum ToUi {
         id: u32,
         control: String,
         items: Vec<String>,
+        selected: usize,
+    },
+    /// Replace a tree's items, and select one: the settings a search found.
+    DialogTree {
+        id: u32,
+        control: String,
+        items: Vec<TreeItem>,
         selected: usize,
     },
     /// Replace a check list's rows and their checks, and select one: the rules of the area
@@ -300,7 +315,8 @@ pub enum FromUi {
     DialogPressed { id: u32, control: String },
     /// The dialog was cancelled (its Cancel button, Escape, its close box) and is gone.
     DialogClosed { id: u32 },
-    /// A key pressed on a list that does something to its selected item: Delete, F2.
+    /// A key pressed on a list or tree that does something to its selected item: Delete, F2,
+    /// Space.
     DialogKey {
         id: u32,
         control: String,
@@ -316,6 +332,10 @@ pub enum DialogKey {
     Delete,
     /// F2: rename it.
     Rename,
+    /// Space on a tree's item: change its value to the next one (JAWS's Settings Center).
+    Change,
+    /// Shift+Space: to the one before.
+    ChangeBack,
 }
 
 /// One message as a line of JSON, without the line break.
