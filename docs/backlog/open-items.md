@@ -47,6 +47,31 @@ places where Okur contradicts JAWS's documentation, and the order of work. P0:
 
 - **Punctuation per voice context** (reading, typing, messages): JAWS sets it per context in
   Voice Adjustment; Okur has one level.
+- **Punctuation by word** (the owner, 2026-10-24): JAWS names the punctuation when reading word
+  by word, whatever the level: `C:\users\gigabyte\Downloads` by Ctrl+Right is "C:", "\",
+  "users", "\"... Okur, at Some (the owner's level), says "C", nothing, "Users", nothing.
+  Research and sources: [`jaws-punctuation-by-unit-research.md`](../references/jaws-punctuation-by-unit-research.md).
+  - **JAWS:** no document says how the level applies by unit. The help reads a colon alone as
+    "colon" under Say Word and takes the word from the application (Smart Word Reading,
+    Settings Center help). Recorded at Most only: a word names All's symbols, which a line at
+    Most does not ("month comma,", "period.", "em dash" 106; "dog comma," 213; "world period."
+    510), and numbers keep the line's rules ("2.5", "10:30" 407). None and Some by word are not
+    recorded.
+  - **Okur:** Ctrl+Left/Right in a native edit or a page field names every symbol
+    (`text_feedback.rs:355-363`, `speak_symbols`). The virtual cursor's words
+    (`commands.rs:338-339`, spoken at `687-688`), Say Word (`commands.rs:581`, `1142-1157`), the
+    Okur cursor's (`cursors.rs:485-486`, `637`) and the Virtual Viewer's (`engine.rs:974-976`) go
+    through `speak`, at the level: below Most a colon stays a pause mark and `\` becomes a space
+    (`pronounce.rs:252-257`), hence "C" and silence. At Most this already misses 9 spoken steps
+    (`okur-lab parity --spoken --only 106-article-words --only 213-web-textarea-words`: "43/52
+    steps match exactly"). Okur's own word splitting (`web_word_at`, the viewer's `class`) makes
+    `:\` one word where JAWS keeps the colon with "C"; the virtual buffer keeps a path whole
+    (`segment_words`).
+  - **Record first:** the Notepad line `C:\Users\Ada\Downloads or https://example.org/a-b or
+    ada@example.org` (a new fixture, `desktop-notepad-paths.ps1`): the line, Right onto `:` and
+    `\`, Ctrl+Right along it, Insert+Numpad5, Ctrl+Left back, at Most, then None and Some by
+    Insert+Shift+2 (the scenario JSON is in the research file). Then the same in the virtual
+    cursor, the Virtual Viewer and Windows 11's RichEdit Notepad.
 
 ## Virtual cursor keys not built
 
