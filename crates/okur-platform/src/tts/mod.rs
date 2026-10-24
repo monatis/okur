@@ -46,11 +46,18 @@ pub trait TtsEngine: Send + Sync {
         self.speak(text, interrupt)
     }
 
-    /// Speaks one part of a continuous reading (Say All) behind what is speaking;
-    /// [`TtsEngine::reached`] gives `mark` back once the synthesizer starts it.
-    fn speak_marked(&mut self, text: &str, mark: u64, interrupt: bool) -> Result<(), TtsError> {
+    /// Speaks one part of a continuous reading (Say All) behind what is speaking, at the voice
+    /// context's `pitch`; [`TtsEngine::reached`] gives `mark` back once the synthesizer starts
+    /// it.
+    fn speak_marked(
+        &mut self,
+        text: &str,
+        mark: u64,
+        pitch: i32,
+        interrupt: bool,
+    ) -> Result<(), TtsError> {
         let _ = mark;
-        self.speak(text, interrupt)
+        self.speak_pitched(text, pitch, interrupt)
     }
 
     /// The mark of the latest part the synthesizer has started since the last call, for a

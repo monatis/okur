@@ -424,8 +424,8 @@ spoken form is a parity target.
    voice into the place's settings with its name (`voice.profile`); Use Default leaves the
    application nothing of its own.
    **A context's Pitch** (Voice Adjustment shows it in Volume's place for a context): the
-   synthesizers say everything at the context's pitch, a capital's raise on top; a Say All's
-   parts are not pitched yet.
+   synthesizers say everything at the context's pitch, a capital's raise on top, a Say All's
+   parts too (SAPI's pitch element, OneCore's prosody).
    **Voice Adjustment's profiles built 2026-10-24**: Profile Name first (choosing one shows its
    voice), Delete Profile for a saved one, Save As... asking "Voice Profile Name:" in Save Voice
    Profile, and OK once something changed: not for a synthesizer's own profile changed, which is

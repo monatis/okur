@@ -117,23 +117,7 @@ impl TtsEngine for Sapi5Engine {
             if pitch == 0 {
                 return self.speak(text, interrupt);
             }
-            // SAPI XML: the pitch element changes the voice's middle pitch, as JAWS's own
-            // fragments carry it (SPVPITCH::MiddleAdj).
-            let mut escaped = String::new();
-            for c in text.replace(['\u{001d}', '\u{001e}'], "").chars() {
-                match c {
-                    '&' => escaped.push_str("&amp;"),
-                    '<' => escaped.push_str("&lt;"),
-                    '>' => escaped.push_str("&gt;"),
-                    '"' => escaped.push_str("&quot;"),
-                    '\'' => escaped.push_str("&apos;"),
-                    c => escaped.push(c),
-                }
-            }
-            let xml = format!(
-                "<pitch middle=\"{}\">{escaped}</pitch>",
-                pitch.clamp(-10, 10)
-            );
+            let xml = pitched_xml(text, pitch);
             let mut flags = SPF_ASYNC.0 | SPF_IS_XML.0;
             if interrupt {
                 flags |= SPF_PURGEBEFORESPEAK.0;
@@ -158,15 +142,25 @@ impl TtsEngine for Sapi5Engine {
     }
 
     /// SAPI numbers every asynchronous Speak call's stream; the part's stream number is kept
-    /// with its mark.
-    fn speak_marked(&mut self, text: &str, mark: u64, interrupt: bool) -> Result<(), TtsError> {
+    /// with its mark. At a pitch of its own, the part is the pitch element's.
+    fn speak_marked(
+        &mut self,
+        text: &str,
+        mark: u64,
+        pitch: i32,
+        interrupt: bool,
+    ) -> Result<(), TtsError> {
         #[cfg(windows)]
         {
             if interrupt {
                 self.marks.clear();
             }
-            let clean = text.replace(['\u{001d}', '\u{001e}'], "");
-            let mut flags = SPF_ASYNC.0 | SPF_IS_NOT_XML.0;
+            let (clean, kind) = if pitch == 0 {
+                (text.replace(['\u{001d}', '\u{001e}'], ""), SPF_IS_NOT_XML.0)
+            } else {
+                (pitched_xml(text, pitch), SPF_IS_XML.0)
+            };
+            let mut flags = SPF_ASYNC.0 | kind;
             if interrupt {
                 flags |= SPF_PURGEBEFORESPEAK.0;
             }
@@ -186,7 +180,7 @@ impl TtsEngine for Sapi5Engine {
 
         #[cfg(not(windows))]
         {
-            let _ = mark;
+            let _ = (mark, pitch);
             self.speak(text, interrupt)
         }
     }
@@ -484,4 +478,25 @@ fn voice_tokens() -> Vec<(
         }
     }
     voices
+}
+
+/// `text` in SAPI's pitch element, which changes the voice's middle pitch, as JAWS's own
+/// fragments carry it (SPVPITCH::MiddleAdj); the text escaped for XML.
+#[cfg(windows)]
+fn pitched_xml(text: &str, pitch: i32) -> String {
+    let mut escaped = String::new();
+    for c in text.replace(['\u{001d}', '\u{001e}'], "").chars() {
+        match c {
+            '&' => escaped.push_str("&amp;"),
+            '<' => escaped.push_str("&lt;"),
+            '>' => escaped.push_str("&gt;"),
+            '"' => escaped.push_str("&quot;"),
+            '\'' => escaped.push_str("&apos;"),
+            c => escaped.push(c),
+        }
+    }
+    format!(
+        "<pitch middle=\"{}\">{escaped}</pitch>",
+        pitch.clamp(-10, 10)
+    )
 }

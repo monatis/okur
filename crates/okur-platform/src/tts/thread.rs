@@ -349,7 +349,7 @@ fn carry_out(
         match request {
             Request::Marked(text, mark, interrupt) => {
                 let spoken = okur_core::pronounce::spoken_with(&text, tts.punctuation, tts.text);
-                let _ = tts.engine.speak_marked(&spoken, mark, interrupt);
+                let _ = tts.engine.speak_marked(&spoken, mark, pitch, interrupt);
                 tracing::debug!(
                     mark,
                     follows = tts.engine.follows_marks(),
@@ -700,6 +700,7 @@ mod mark_tests {
             &mut self,
             _text: &str,
             mark: u64,
+            _pitch: i32,
             interrupt: bool,
         ) -> Result<(), TtsError> {
             if interrupt {

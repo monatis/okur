@@ -597,8 +597,14 @@ mod engine {
             self.queue(text, pitch, interrupt, None)
         }
 
-        fn speak_marked(&mut self, text: &str, mark: u64, interrupt: bool) -> Result<(), TtsError> {
-            self.queue(text, 0, interrupt, Some(mark))
+        fn speak_marked(
+            &mut self,
+            text: &str,
+            mark: u64,
+            pitch: i32,
+            interrupt: bool,
+        ) -> Result<(), TtsError> {
+            self.queue(text, pitch, interrupt, Some(mark))
         }
 
         fn reached(&mut self) -> Option<u64> {
