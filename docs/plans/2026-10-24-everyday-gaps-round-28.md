@@ -20,9 +20,10 @@ A stretch is a few hours or about thirty commits, not more.
 
 ## 0. old-pc
 
-- **Round 298** records 1033 (F with two files selected) with the tracer at `d63882d7`.
-  - Check every text in its traces and file snapshots before import (the privacy check).
-  - Expect "OCR Failed to start. Multiple files currently selected." in Okur's message box.
+- **1033** (F with two files selected) is imported from round 299 (`2039037c`). Round 298's
+  recording of it held the taskbar news feed's headlines and a link, and was not imported; the
+  tracer now leaves a web view out of focus out of traces (`4a640045`).
+- okur-lab parity at `7d542d9e`: "8613/9174 steps match exactly; 249 accepted divergences".
 - **Queue next:** the recordings §1 needs, one round at a time.
 
 ## 1. Convenient OCR, what is left
@@ -32,8 +33,11 @@ handoff's open steps, in order:
 
 1. **The Results Viewer's "Open in Word..." link** (known gap,
    `the_results_viewer_ends_with_open_in_word`; 1024/s7-s9, 1025/s6-s12).
-   - Record first what JAWS does on Enter there: whether Word opens with the text, and what JAWS
-     says. Word 2016 is on old-pc; check its first-run state before a round.
+   - Probed live (research, 2026-10-24): Enter on the link saves the text as "<first line>.docx"
+     in the user's Documents ("Opening hours.docx") and opens it in Word, elevated as the viewer
+     is; JAWS says the link again, "To activate press Enter.", then Word's "Close Button". Old-pc's
+     Word 2016 is not activated ("Product Activation Failed"), so a recording of Word's side is
+     not representative. Closing the elevated Word needs the elevated helper.
    - Then the viewer's last line, a same page link. Okur opens the text in Word when Word is
      installed. Without Word, the line is left out rather than promise what Okur cannot do.
 2. **D in a PDF reader.** Okur recognizes the PDF open in front.
