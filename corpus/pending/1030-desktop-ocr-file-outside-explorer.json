@@ -1,0 +1,38 @@
+{
+  "id": "1030-desktop-ocr-file-outside-explorer",
+  "name": "Convenient OCR's F (OCRSelectedFile) in a window that is not File Explorer's (a WPF window): JAWS's message",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-wpf-text.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR WPF Text Fixture",
+    "hide_console": true
+  },
+  "reset": {
+    "keys": []
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "F",
+      "settle_max_ms": 20000
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}

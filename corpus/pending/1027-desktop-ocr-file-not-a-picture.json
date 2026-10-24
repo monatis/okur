@@ -2,11 +2,11 @@
   "id": "1027-desktop-ocr-file-not-a-picture",
   "name": "Convenient OCR's F on a text file selected in File Explorer, neither a picture nor a PDF: JAWS's message, and where the focus is after it",
   "category": "desktop",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-ocr-files.ps1",
   "target_app": "desktop",
   "launch": {
-    "window_title": "C:UsersailabsAppDataLocalTempSR OCR Files",
+    "window_title": "C:\\Users\\ailabs\\AppData\\Local\\Temp\\SR OCR Files",
     "shell_window": true,
     "hide_console": true
   },
@@ -37,6 +37,12 @@
     },
     {
       "id": "s4",
+      "type": "key_ui_access",
+      "command": "Enter",
+      "settle_max_ms": 30000
+    },
+    {
+      "id": "s5",
       "type": "key",
       "command": "Insert+Up"
     }

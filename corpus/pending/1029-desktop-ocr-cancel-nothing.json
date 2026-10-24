@@ -1,0 +1,40 @@
+{
+  "id": "1029-desktop-ocr-cancel-nothing",
+  "name": "Convenient OCR's Q (CancelRecognition) with no recognition under way, in File Explorer: JAWS's message",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-ocr-files.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "C:\\Users\\ailabs\\AppData\\Local\\Temp\\SR OCR Files",
+    "shell_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "End"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Q"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}

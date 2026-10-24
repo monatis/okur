@@ -2,11 +2,11 @@
   "id": "1024-desktop-ocr-file-picture",
   "name": "Convenient OCR's F (OCRSelectedFile) on a picture selected in File Explorer: what JAWS says while it recognizes it, the Results Viewer's lines, title and end, and Escape back to File Explorer",
   "category": "desktop",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-ocr-files.ps1",
   "target_app": "desktop",
   "launch": {
-    "window_title": "C:UsersailabsAppDataLocalTempSR OCR Files",
+    "window_title": "C:\\Users\\ailabs\\AppData\\Local\\Temp\\SR OCR Files",
     "shell_window": true,
     "hide_console": true
   },
