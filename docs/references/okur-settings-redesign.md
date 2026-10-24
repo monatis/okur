@@ -233,7 +233,21 @@ spoken form is a parity target.
    generated from the table with JAWS's groups, search, Space cycling, descriptions, Apply/OK/
    Cancel, the Application box. Replaces today's dialog. Tests on the dialog model: key in,
    focus, item names and values out; the speech of §3.1 against a recording.
+   **Built 2026-10-24** (`ui/settings_tree.rs`; Insert+6 and Insert+V since `ef67221c`): JAWS's
+   groups and subgroups and Quick Settings' own, check boxes, Space and Shift+Space, the
+   description, Apply once changed, the Application box, Ctrl+E, Ctrl+Shift+D, Down from the
+   search box, Enter and Escape on a search's results, "Unavailable" for a setting kept for
+   all applications only, settings no dialog showed under JAWS's tree names, and Configure
+   Verbosity Levels opening the verbosity levels' dialog. okur-ui's tree, keys and menu probed
+   on old-pc (`okur-ui-tree-probe.ps1`). Still to do: a scenario comparing Okur's speech of its
+   tree with JAWS's (Okur run on old-pc reads its own window); Screen Echo, Smart Navigation
+   and Indicate Headings once their value names are recorded; F6 to an edit for numbers.
 2. **Lifetimes and Last Changed Settings** in Quick Settings; the until-the-focus-moves layer.
+   **Built 2026-10-24**: the lifetime menu (Shift+F10, Applications key) on a setting or a
+   group, the session's and the until-the-focus-moves layers; Last Changed Settings in both
+   dialogs. Still to do: the lifetimes' icons beside items, JAWS's own words for the three
+   lifetimes (recorded), Remove and Remove All in Last Changed Settings, its history kept
+   across restarts.
 3. **The Okur window and its menus** (Insert+J), Basics with its new settings, the quit
    confirmation from Basics' check box.
 4. **Voices**: voice contexts, profiles, Voice Adjustment, Select a Voice Profile, the Language

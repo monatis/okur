@@ -6,7 +6,10 @@
 param([string]$Out = (Join-Path $env:USERPROFILE 'sr-harness\probe\okur-ui-tree.txt'),
       [string[]]$Keys = @('Tab', 'Right', 'Down', 'Space', 'Shift+Space', 'Down', 'Space', 'Up', 'Left', 'Ctrl+E', 'Down', 'Enter', 'Escape', 'Ctrl+Shift+D', 'Tab', 'Escape'),
       # Also an outline of the dialog's UI Automation tree before the keys (uia-outline.ps1).
-      [switch]$Outline)
+      [switch]$Outline,
+      # The lifetime menu instead: Tab to the tree, okur-ui asked for a context menu on it
+      # ("menu"), Down and Enter to choose, then Escape.
+      [switch]$Menu)
 $bin = Join-Path $env:USERPROFILE 'sr-harness\bin'
 $lab = Join-Path $bin 'okur-lab.exe'
 $start = New-Object System.Diagnostics.ProcessStartInfo
@@ -46,7 +49,15 @@ if ($Outline) {
     & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'uia-outline.ps1') -Title 'Notepad - Okur Settings Center' -Out $outlineFile | Out-Null
     $lines += Get-Content $outlineFile
 }
+if ($Menu) { $Keys = @('Tab', 'menu', 'Down', 'Enter', 'Tab', 'Escape') }
 foreach ($key in $Keys) {
+    if ($key -eq 'menu') {
+        $ui.StandardInput.WriteLine('{"type":"dialog_menu","id":1,"control":"tree","items":[{"text":"Restore When Okur Exits"},{"text":"Restore When Focus Changes"},{"text":"Save","checked":true}]}')
+        $ui.StandardInput.Flush()
+        Start-Sleep -Milliseconds 1500
+        $lines += "== menu => " + ((& $lab jaws-history --clear) -join ' | ')
+        continue
+    }
     & $lab keys --allow okur-ui $key 'wait:900' 2>&1 | Out-Null
     $said = (& $lab jaws-history --clear) -join ' | '
     $told = @()
