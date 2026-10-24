@@ -26,6 +26,39 @@ A stretch is a few hours or about thirty commits, not more.
 - okur-lab parity at `7d542d9e`: "8613/9174 steps match exactly; 249 accepted divergences".
 - **Queue next:** the recordings §1 needs, one round at a time.
 
+## 0a. Microsoft Word first (the owner's decision, 2026-10-24)
+
+The owner, after using Okur: "it feels quite smooth and genuinely usable"; Word is the next
+"Not yet" item. Old-pc's Office is not activated, which is no blocker: its notice has a Close
+button, and Word then works.
+- **Round 300** records 518 (reading a Word document) and 519 (JAWS's Word lists and spelling)
+  with the fixture that writes its document itself () and the recorder's
+   launch, which never ends Word: its process holds the owner's own document.
+- Then Okur in Word, against them: Say Line, Say Word, words, the misspelled word, the
+  bulleted list, the table, Say All, Say Font (JAWS's Word Say Font reads the style, line
+  spacing, alignment and outline level, probed live), and JAWS's Word lists (Insert+F6).
+- Then Excel (521, its fixture to rewrite without automation as Word's was) and Outlook.
+
+## 0b. Okur's customization, redesigned as JAWS's (the owner's request, 2026-10-24), after Word
+
+The owner: the biggest gap now is settings. JAWS has a window (Insert+J) with a menu bar
+(Options: Basics..., Voices ▸ Voice Adjustment..., Select a Voice Profile..., Add/Remove
+Voices...; Utilities: Settings Center...; Language; Help), Quick Settings (Insert+V) and Settings
+Center (Insert+6) as a search box over a tree of groups and settings (arrows to move, open and
+close; Space changes a value) with each setting's description. Okur has one flat dialog.
+- Research from JAWS's documentation:
+  [](../references/jaws-settings-ui-research.md); the
+  settings themselves: [](../references/jaws-customization-map.md).
+- Probed on old-pc (research, not evidence): Quick Settings is a dialog with a search box, a
+  custom tree ("level 1 | Automatic Activation not checked | 1 of 4 | Touch Cursor Options"),
+  a pane of the selected group's controls, a description, "Expand Tree View" and OK; a full
+  walk of its tree in Notepad is kept for the design.
+- To do: record the open questions (the research's §8.8: menus' 2025 order and access keys,
+  Basics' and Voice Adjustment's Tab order, how tree items are spoken, Shift+Space), write the
+  redesign (the Okur window and its menus, Basics, Voices with profiles, Quick Settings and
+  Settings Center generated from the settings table, lifetimes, Last Changed Settings), then
+  build it in milestones.
+
 ## 1. Convenient OCR, what is left
 
 From [`2026-10-23-okur-cursor-screen-text.md`](2026-10-23-okur-cursor-screen-text.md) S4 and the
