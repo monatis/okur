@@ -29,6 +29,34 @@ const PDF_UNIT_DPI: f32 = 96.0;
 /// recognizer for an hour).
 pub const MAX_PAGES: u32 = 500;
 
+/// The pictures Windows' imaging component decodes, by extension, and PDFs: the files F
+/// recognizes. Any other is refused before recognition starts, as JAWS refuses it ("OCR
+/// Failed to start. Unsupported file currently selected." [obs, 1027/s3]).
+const RECOGNIZED: &[&str] = &[
+    "pdf", "png", "jpg", "jpeg", "jpe", "jfif", "bmp", "dib", "gif", "tif", "tiff", "heic", "heif",
+    "webp", "jxr", "wdp",
+];
+
+/// Whether `path` is a file F recognizes: a picture or a PDF.
+pub fn recognizes(path: &Path) -> bool {
+    path.extension()
+        .and_then(|extension| extension.to_str())
+        .is_some_and(|extension| {
+            RECOGNIZED
+                .iter()
+                .any(|known| known.eq_ignore_ascii_case(extension))
+        })
+}
+
+/// Whether a window of class `class` shows files to select: File Explorer's, or the desktop's
+/// (its icons are the shell's `Progman` or `WorkerW`).
+pub fn is_file_view(class: &str) -> bool {
+    matches!(
+        class,
+        "CabinetWClass" | "ExploreWClass" | "Progman" | "WorkerW"
+    )
+}
+
 /// Whether `path` is read as a PDF; any other file is tried as a picture.
 pub fn is_pdf(path: &Path) -> bool {
     path.extension()
@@ -67,10 +95,29 @@ fn file_name(path: &Path) -> String {
 pub use recognizer::{recognize_file, selected_file};
 
 /// What recognizing the file selected in the window in front comes to; [`cancel`] stops it.
+/// `started` is called once a picture or PDF is found and its recognition begins.
 #[cfg(windows)]
-pub fn recognize_selected_file(language: &str) -> FileRecognition {
+pub fn recognize_selected_file(language: &str, started: impl FnOnce()) -> FileRecognition {
     CANCEL.store(false, Ordering::Relaxed);
-    recognizer::recognize_selected_file(language, &CANCEL)
+    recognizer::recognize_selected_file(language, &CANCEL, started)
+}
+
+/// What recognizing the file at `path`, found selected, comes to: refused when it is no
+/// picture or PDF, else recognized, `started` called first.
+#[cfg(windows)]
+pub fn recognize_found(
+    path: &Path,
+    language: &str,
+    cancel: &AtomicBool,
+    started: impl FnOnce(),
+) -> FileRecognition {
+    if !recognizes(path) {
+        return FileRecognition::Unsupported {
+            name: file_name(path),
+        };
+    }
+    started();
+    recognizer::recognize_file(path, language, cancel)
 }
 
 #[cfg(windows)]
@@ -100,6 +147,12 @@ mod recognizer {
         SWFO_NEEDDISPATCH,
     };
     use windows::Win32::UI::WindowsAndMessaging::{GetClassNameW, GetForegroundWindow};
+
+    /// An error of the shell's at `stage`, for the log: the selection is read through several
+    /// calls into File Explorer.
+    fn at(stage: &'static str) -> impl Fn(windows::core::Error) -> PlatformError {
+        move |e| failed(format!("{stage}: {e}"))
+    }
 
     /// The recognizer's lines, in its order.
     fn lines(result: &OcrResult) -> Result<Vec<String>, PlatformError> {
@@ -240,24 +293,33 @@ mod recognizer {
         // SAFETY: COM for this thread's shell calls; a thread already in COM keeps its own.
         let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
         // SAFETY: the shell's window list, an out-of-process COM server.
-        let windows: IShellWindows =
-            unsafe { CoCreateInstance(&ShellWindows, None, CLSCTX_ALL) }.map_err(failed)?;
+        let windows: IShellWindows = unsafe { CoCreateInstance(&ShellWindows, None, CLSCTX_ALL) }
+            .map_err(at("window list"))?;
         let Some(browser) = shell_browser(&windows, window)? else {
+            tracing::debug!(
+                ?window,
+                "no File Explorer window of the shell's is this one"
+            );
             return Ok(None);
         };
         // SAFETY: COM calls on interfaces the shell gave; results are owned by the wrappers.
         unsafe {
-            let view = browser.QueryActiveShellView().map_err(failed)?;
-            let folder: IFolderView = view.cast().map_err(failed)?;
-            let Ok(items) = folder.Items::<IShellItemArray>(SVGIO_SELECTION) else {
-                return Ok(None);
+            let view = browser.QueryActiveShellView().map_err(at("active view"))?;
+            let folder: IFolderView = view.cast().map_err(at("folder view"))?;
+            let items = match folder.Items::<IShellItemArray>(SVGIO_SELECTION) {
+                Ok(items) => items,
+                Err(e) => {
+                    tracing::debug!(%e, "no selection");
+                    return Ok(None);
+                }
             };
-            if items.GetCount().map_err(failed)? == 0 {
+            if items.GetCount().map_err(at("selection count"))? == 0 {
                 return Ok(None);
             }
-            let item = items.GetItemAt(0).map_err(failed)?;
+            let item = items.GetItemAt(0).map_err(at("selected item"))?;
             let Ok(path) = item.GetDisplayName(SIGDN_FILESYSPATH) else {
                 // A selected item with no file behind it (a library, a phone's folder).
+                tracing::debug!("the selected item is no file");
                 return Ok(None);
             };
             let text = path.to_string().map_err(failed);
@@ -272,9 +334,10 @@ mod recognizer {
         window: HWND,
     ) -> Result<Option<IShellBrowser>, PlatformError> {
         let top_level = |dispatch: windows::Win32::System::Com::IDispatch| {
-            let provider: IServiceProvider = dispatch.cast().map_err(failed)?;
+            let provider: IServiceProvider = dispatch.cast().map_err(at("service provider"))?;
             // SAFETY: a COM call on the shell's own service provider.
-            unsafe { provider.QueryService::<IShellBrowser>(&SID_STopLevelBrowser) }.map_err(failed)
+            unsafe { provider.QueryService::<IShellBrowser>(&SID_STopLevelBrowser) }
+                .map_err(at("top-level browser"))
         };
         if is_desktop(window) {
             let empty = VARIANT::default();
@@ -286,7 +349,8 @@ mod recognizer {
             return found.map_or(Ok(None), |dispatch| top_level(dispatch).map(Some));
         }
         // SAFETY: COM calls on the shell's window list.
-        let count = unsafe { windows.Count() }.map_err(failed)?;
+        let count = unsafe { windows.Count() }.map_err(at("window count"))?;
+        tracing::debug!(count, "the shell's windows");
         for index in 0..count {
             // SAFETY: as above; an index past a window just closed fails and is skipped.
             let Ok(dispatch) = (unsafe { windows.Item(&VARIANT::from(index)) }) else {
@@ -299,6 +363,12 @@ mod recognizer {
             let Ok(hwnd) = (unsafe { app.HWND() }) else {
                 continue;
             };
+            tracing::debug!(
+                index,
+                hwnd = hwnd.0,
+                wanted = window.0 as isize,
+                "a shell window"
+            );
             if hwnd.0 == window.0 as isize {
                 return top_level(dispatch).map(Some);
             }
@@ -316,11 +386,15 @@ mod recognizer {
     }
 
     /// What recognizing the file selected in the window in front comes to.
-    pub fn recognize_selected_file(language: &str, cancel: &AtomicBool) -> FileRecognition {
+    pub fn recognize_selected_file(
+        language: &str,
+        cancel: &AtomicBool,
+        started: impl FnOnce(),
+    ) -> FileRecognition {
         // SAFETY: plain Win32 call with no preconditions.
         let window = unsafe { GetForegroundWindow() };
         match selected_file(window) {
-            Ok(Some(path)) => recognize_file(&path, language, cancel),
+            Ok(Some(path)) => super::recognize_found(&path, language, cancel, started),
             Ok(None) => FileRecognition::NoFile,
             Err(e) => {
                 tracing::warn!(%e, "the selected file could not be found");

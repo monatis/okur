@@ -1269,8 +1269,18 @@ impl ScreenReads {
             ));
         }
         if let Some(file) = &snapshot.file {
+            use okur_core::recognized_file::FileRecognition;
             while self.files < files {
                 self.files += 1;
+                // A picture or PDF found selected starts recognizing first, as live.
+                if matches!(
+                    file,
+                    FileRecognition::Read { .. }
+                        | FileRecognition::Failed { .. }
+                        | FileRecognition::Cancelled
+                ) {
+                    deliver(okur_core::AccessibilityEvent::FileRecognitionStarted);
+                }
                 deliver(okur_core::AccessibilityEvent::FileRecognized(file.clone()));
             }
         }
@@ -1524,6 +1534,10 @@ mod tests {
         engine.app_mode = okur_core::engine::AppMode::NativeControl;
         let actions = okur_core::actions::RecordingActions::default();
         engine.set_actions(Box::new(actions.clone()));
+        // File Explorer's list of files has the focus.
+        let mut item = okur_core::FocusEvent::new(okur_core::Role::ListItem).with_name("Sign.png");
+        item.in_file_view = true;
+        engine.handle_accessibility_event(&okur_core::AccessibilityEvent::Focus(item));
         let insert = Modifiers {
             insert: true,
             ..Modifiers::none()
@@ -1538,7 +1552,15 @@ mod tests {
         spoken.take();
         let mut reads = ScreenReads::default();
         reads.answer(&mut engine, &actions, Some(&snapshot), &spoken);
-        assert_eq!(spoken.take(), ["Opening hours"]);
+        assert_eq!(
+            spoken.take(),
+            [
+                "Document OCR started.",
+                "finished.
+Opening hours
+Monday to Friday"
+            ]
+        );
         engine.handle_key_event(&KeyEvent::new(Key::DownArrow, Modifiers::none(), true));
         assert_eq!(spoken.take(), ["Monday to Friday"]);
     }

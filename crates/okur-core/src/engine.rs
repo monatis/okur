@@ -435,6 +435,8 @@ pub struct ScreenReaderEngine {
     live_streams: std::collections::HashMap<String, page::LiveStream>,
     /// The question before Okur exits, while it is open (Insert+F4).
     quit_dialog: Option<crate::ui::quit::QuitDialog>,
+    /// Okur's message box while it is open (Convenient OCR's refusals).
+    message_box: Option<crate::ui::message_box::MessageBox>,
     /// The selection was added to the clipboard (Okur key+Windows+C): Ctrl+C and Ctrl+X ask
     /// before overwriting it, until a copy or a cut does.
     clipboard_appended: bool,
@@ -596,6 +598,7 @@ impl ScreenReaderEngine {
             last_live_text: std::collections::HashMap::new(),
             live_streams: std::collections::HashMap::new(),
             quit_dialog: None,
+            message_box: None,
             clipboard_appended: false,
             screen_rows: None,
             in_ribbon_menu: false,
@@ -1395,6 +1398,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::ScreenText(text) => self.screen_text(text),
             AccessibilityEvent::Recognized(words) => self.recognized(words),
             AccessibilityEvent::FileRecognized(recognition) => self.file_recognized(recognition),
+            AccessibilityEvent::FileRecognitionStarted => self.file_recognition_started(),
             AccessibilityEvent::TopWindows(windows) => self.open_window_list(windows),
             AccessibilityEvent::TrayIcons(icons) => self.open_tray_list(icons),
             AccessibilityEvent::PageElements(elements) => self.say_page_font(elements),
@@ -1689,6 +1693,7 @@ impl ScreenReaderEngine {
             _ if self.is_placemarker_event(message) => self.handle_placemarker_event(message),
             _ if self.is_flexible_web_event(message) => self.handle_flexible_web_event(message),
             _ if self.is_quit_event(message) => self.handle_quit_event(message),
+            _ if self.is_message_box_event(message) => self.handle_message_box_event(message),
             _ if self.is_overwrite_event(message) => self.handle_overwrite_event(message),
             _ => {
                 let outcome = self.settings_dialog.as_mut()?.handle(message);

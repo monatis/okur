@@ -348,6 +348,10 @@ pub struct FocusEvent {
     /// [obs, 1002/s1, s2].
     #[serde(default)]
     pub read_by_elements: bool,
+    /// The window shows files to select (File Explorer, the desktop): Convenient OCR's F and
+    /// Enter recognize the selected file there. The platform decides it from the window's kind.
+    #[serde(default)]
+    pub in_file_view: bool,
     /// An edit with an up-down control attached (a spin box): "Number of copies: edit spin
     /// box" [obs, 546/s8].
     #[serde(default)]
@@ -520,6 +524,7 @@ impl FocusEvent {
             plain_edit: false,
             rich_edit: false,
             read_by_elements: false,
+            in_file_view: false,
             spin_box: false,
             outer_dialogs: Vec::new(),
             outer_windows: Vec::new(),
@@ -698,6 +703,9 @@ pub enum AccessibilityEvent {
     /// The text recognized in the file selected in File Explorer, asked for by Insert+Space,
     /// O, F ([`crate::actions::ApplicationActions::recognize_selected_file`]).
     FileRecognized(crate::recognized_file::FileRecognition),
+    /// The selected file is being recognized: it is a picture or a PDF, and its text comes
+    /// later as [`AccessibilityEvent::FileRecognized`].
+    FileRecognitionStarted,
     /// The applications' windows, front to back, asked for by the Window List (Insert+F10;
     /// [`crate::actions::ApplicationActions::list_windows`]).
     TopWindows(Vec<TopWindow>),

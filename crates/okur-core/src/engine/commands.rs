@@ -179,8 +179,13 @@ impl ScreenReaderEngine {
                 // The Virtual Viewer is a window of its own: JAWS names it, whatever it shows
                 // ("Virtual Viewer", without "Title is"; dev box, Windows Terminal and Notepad,
                 // 2026-10-15).
-                if self.viewer.is_some() {
-                    let speech = msg::viewer_title().to_string();
+                // A viewer of its own title says it as a window's: "Title is | SR OCR Sign - OCR
+                // Results" [obs, 1024/s10].
+                if let Some(viewer) = &self.viewer {
+                    let speech = match viewer.title() {
+                        Some(title) => format!("{}\n{title}", msg::window_title_is()),
+                        None => msg::viewer_title().to_string(),
+                    };
                     self.speech.speak(&speech, true);
                     return Some(speech);
                 }

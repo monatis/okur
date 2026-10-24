@@ -1011,6 +1011,14 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     .into_iter()
     .flatten()
     .any(|class| crate::window_text::reads_by_elements(class, ""));
+    // A window of files: Convenient OCR's F reads the file selected in it.
+    focus.in_file_view = [
+        focus.platform.top_window_class.as_deref(),
+        event.top_window_class.as_deref(),
+    ]
+    .into_iter()
+    .flatten()
+    .any(crate::file_text::is_file_view);
     // A window UI Automation calls a dialog is one too, whatever draws it: JAWS's WPF windows,
     // "Name Your Rule dialog" [obs, 783/s7].
     focus.in_dialog_box =

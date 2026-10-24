@@ -110,6 +110,12 @@ quit-question = Are you sure you want to quit Okur?  Press Enter to quit now, or
 quit-ok = OK
 quit-cancel = Cancel
 
+## Okur's message box, JAWS's words with Okur's name: "JAWS for Windows Message Box dialog | OCR
+## Failed to start. No file currently selected. | OK Button" [obs, 1026/s3].
+
+message-box-title = Okur for Windows Message Box
+message-box-ok = OK
+
 ## The Links List (Insert+F7), as JAWS's. Its title and its list's name are list-dialog-links
 ## and list-dialog-links-list.
 

@@ -158,8 +158,10 @@ impl ScreenReaderEngine {
         if event.modifiers.is_empty() {
             match event.key {
                 Key::Alpha('W') => self.start_recognition(RecognitionArea::Window),
-                // OCRAllInOne, in an application without its own case: the window (JAWS 2025
-                // help, Convenient OCR).
+                // OCRAllInOne: the selected file in a window of files, as F [obs, 1028/s3];
+                // the window in an application without its own case (JAWS 2025 help,
+                // Convenient OCR).
+                Key::Enter if self.in_file_view() => self.start_file_recognition(),
                 Key::Enter => self.start_recognition(RecognitionArea::Window),
                 Key::Alpha('B') => self.start_background_ocr(),
                 Key::Alpha('S') => self.start_recognition(RecognitionArea::Screen),
@@ -211,40 +213,124 @@ impl ScreenReaderEngine {
         }
         if std::mem::take(&mut self.recognizing) {
             self.speech.speak(msg::ocr_canceled().as_str(), true);
+            return;
         }
+        // Nothing to cancel [obs, 1029/s3].
+        self.speech.speak(msg::ocr_cancel_nothing().as_str(), true);
+    }
+
+    /// Whether the focus is in a window of files (File Explorer, the desktop).
+    fn in_file_view(&self) -> bool {
+        self.last_native_focus
+            .as_ref()
+            .is_some_and(|focus| focus.in_file_view)
     }
 
     /// F: the picture or PDF selected in File Explorer is recognized, its text to the Results
-    /// Viewer (JAWS 2025 help, Convenient OCR).
+    /// Viewer (JAWS 2025 help, Convenient OCR). In a window that shows no files, JAWS's
+    /// message, said [obs, 1030/s3].
     fn start_file_recognition(&mut self) {
+        if !self.in_file_view() {
+            let said = format!(
+                "{}\n{}",
+                msg::ocr_failed_to_start(),
+                msg::ocr_file_explorer_needed()
+            );
+            self.speech.speak(&said, true);
+            return;
+        }
         let language = self.ocr_language();
-        if !self
+        if self
             .actions
             .as_ref()
             .is_some_and(|a| a.recognize_selected_file(&language))
         {
-            return;
+            self.recognizing_file = true;
         }
-        self.recognizing_file = true;
-        let started = msg::ocr_started(msg::ocr_engine_windows().to_string()).render();
-        self.speech.speak(&started, true);
     }
 
-    /// The selected file's text arrived: it opens in the Results Viewer, at its first line.
+    /// A picture or PDF is selected, and its recognition started: "Document OCR started."
+    /// [obs, 1024/s3].
+    pub(super) fn file_recognition_started(&mut self) -> Option<String> {
+        if !self.recognizing_file {
+            return None;
+        }
+        let said = msg::ocr_document_started().to_string();
+        self.speech.speak(&said, true);
+        Some(said)
+    }
+
+    /// The selected file's recognition came to an end. Its text opens in the Results Viewer,
+    /// titled by the file, "finished." and the text read through [obs, 1024/s3, s10]; nothing
+    /// selected, or no picture or PDF, a message box [obs, 1026/s3, 1027/s3].
     pub(super) fn file_recognized(&mut self, recognition: &FileRecognition) -> Option<String> {
         if !std::mem::take(&mut self.recognizing_file) {
             return None;
         }
-        let FileRecognition::Read { .. } = recognition else {
-            return None;
+        let name = match recognition {
+            FileRecognition::Read { name, .. } => name,
+            FileRecognition::NoFile => {
+                self.show_message_box(msg::ocr_failed_no_file().to_string());
+                return None;
+            }
+            // A file Windows cannot read as a picture is no picture to it.
+            FileRecognition::Unsupported { .. } | FileRecognition::Failed { .. } => {
+                self.show_message_box(msg::ocr_failed_unsupported().to_string());
+                return None;
+            }
+            FileRecognition::Cancelled => return None,
         };
-        let viewer =
-            crate::viewer::VirtualViewer::new(recognition.lines().map(str::to_owned).collect());
-        let speech = viewer.line_text();
+        let lines: Vec<String> = recognition.lines().map(str::to_owned).collect();
+        let stem = std::path::Path::new(name)
+            .file_stem()
+            .map_or_else(|| name.clone(), |stem| stem.to_string_lossy().into_owned());
+        let viewer = crate::viewer::VirtualViewer::new(lines.clone())
+            .with_title(msg::ocr_results_title(stem).render())
+            .in_own_window();
         self.viewer = Some(viewer);
         self.show_viewer_window();
-        self.speech.speak(&speech, true);
-        Some(speech)
+        let said = std::iter::once(msg::ocr_finished().to_string())
+            .chain(lines)
+            .collect::<Vec<_>>()
+            .join("\n");
+        self.speech.speak(&said, true);
+        Some(said)
+    }
+
+    /// Okur's message box with `text`; without a window to show it in, the text is said.
+    fn show_message_box(&mut self, text: String) {
+        let Some(ui) = &self.ui else {
+            self.speech.speak(&text, true);
+            return;
+        };
+        self.dialog_count += 1;
+        let dialog = crate::ui::message_box::MessageBox::new(self.dialog_count, text);
+        ui.send(crate::ui::ToUi::DialogShow {
+            dialog: dialog.spec(),
+        });
+        self.message_box = Some(dialog);
+    }
+
+    /// Whether `message` is the message box's.
+    pub(super) fn is_message_box_event(&self, message: &crate::ui::FromUi) -> bool {
+        self.message_box
+            .as_ref()
+            .is_some_and(|d| Some(d.id) == super::dialog_of(message))
+    }
+
+    /// OK or Escape closes the message box; the focus goes back to the window.
+    pub(super) fn handle_message_box_event(
+        &mut self,
+        message: &crate::ui::FromUi,
+    ) -> Option<String> {
+        if !self.message_box.as_ref()?.closes(message) {
+            return None;
+        }
+        let dialog = self.message_box.take()?;
+        if let Some(ui) = &self.ui {
+            ui.send(crate::ui::ToUi::DialogClose { id: dialog.id });
+        }
+        None
     }
 
     /// B: "Background OCR started" [obs, 1001/s3], and the window is recognized again and again
@@ -359,6 +445,7 @@ mod tests {
     use crate::engine::ScreenReaderEngine;
     use crate::event::{AccessibilityEvent, FocusEvent};
     use crate::input::{Key, KeyEvent, Modifiers};
+    use crate::recognized_file::FileRecognition;
     use crate::screen_model::{ScreenRun, Source, WindowText};
 
     const TITLE: &str = "Drawn Text";
@@ -738,6 +825,135 @@ mod tests {
         assert_eq!(
             press(&mut engine, &speech, Key::DownArrow, plain()),
             "Colors  list view "
+        );
+    }
+
+    /// File Explorer with a file selected: the focus is in a window of files.
+    fn file_explorer() -> (ScreenReaderEngine, SharedSpeech, RecordingActions) {
+        let speech = SharedSpeech::default();
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document))),
+            Box::new(speech.clone()),
+        );
+        engine.set_settings(crate::settings::Settings::reference_machine());
+        let actions = RecordingActions::default();
+        engine.set_actions(Box::new(actions.clone()));
+        let mut item = FocusEvent::new(Role::ListItem)
+            .with_name("SR OCR Sign.png")
+            .with_window_title("SR OCR Files");
+        item.in_file_view = true;
+        engine.handle_accessibility_event(&AccessibilityEvent::Focus(item));
+        let _ = speech.take();
+        (engine, speech, actions)
+    }
+
+    fn ocr_layer_key(engine: &mut ScreenReaderEngine, speech: &SharedSpeech, key: Key) -> String {
+        press(engine, speech, Key::Space, insert());
+        press(engine, speech, Key::Alpha('O'), plain());
+        press(engine, speech, key, plain())
+    }
+
+    /// F on a picture selected in File Explorer: "Document OCR started." as it starts, then
+    /// "finished." and its text, read through, in the Results Viewer titled by the file
+    /// [obs, 1024/s3, s4, s10].
+    #[test]
+    fn a_selected_picture_is_read_into_the_results_viewer() {
+        let (mut engine, speech, actions) = file_explorer();
+        assert_eq!(ocr_layer_key(&mut engine, &speech, Key::Alpha('F')), "");
+        assert!(actions
+            .requests()
+            .iter()
+            .any(|(request, _)| request == "recognize selected file"));
+        engine.handle_accessibility_event(&AccessibilityEvent::FileRecognitionStarted);
+        assert_eq!(speech.take().join("\n"), "Document OCR started.");
+        engine.handle_accessibility_event(&AccessibilityEvent::FileRecognized(
+            FileRecognition::Read {
+                name: "SR OCR Sign.png".into(),
+                pages: vec![vec![
+                    "Opening hours".into(),
+                    "Monday to Friday 9 to 5".into(),
+                ]],
+            },
+        ));
+        assert_eq!(
+            speech.take().join("\n"),
+            "finished.\nOpening hours\nMonday to Friday 9 to 5"
+        );
+        assert_eq!(
+            press(
+                &mut engine,
+                &speech,
+                Key::Home,
+                Modifiers {
+                    ctrl: true,
+                    ..Modifiers::none()
+                }
+            ),
+            "Opening hours"
+        );
+        assert_eq!(
+            press(&mut engine, &speech, Key::DownArrow, plain()),
+            "Monday to Friday 9 to 5"
+        );
+        assert_eq!(
+            press(&mut engine, &speech, Key::Alpha('T'), insert()),
+            "Title is\nSR OCR Sign - OCR Results"
+        );
+    }
+
+    /// Enter in a window of files does what F does [obs, 1028/s3].
+    #[test]
+    fn enter_in_file_explorer_recognizes_the_selected_file() {
+        let (mut engine, speech, actions) = file_explorer();
+        ocr_layer_key(&mut engine, &speech, Key::Enter);
+        assert!(actions
+            .requests()
+            .iter()
+            .any(|(request, _)| request == "recognize selected file"));
+    }
+
+    /// Nothing selected, or a file that is no picture: JAWS's message, in a message box, said
+    /// here as there is no window to show it in [obs, 1026/s3, 1027/s3]. Elsewhere than in a
+    /// window of files F says why, at once [obs, 1030/s3].
+    #[test]
+    fn a_file_f_cannot_read_is_refused() {
+        let (mut engine, speech, _) = file_explorer();
+        ocr_layer_key(&mut engine, &speech, Key::Alpha('F'));
+        engine.handle_accessibility_event(&AccessibilityEvent::FileRecognized(
+            FileRecognition::NoFile,
+        ));
+        assert_eq!(
+            speech.take().join("\n"),
+            "OCR Failed to start. No file currently selected."
+        );
+        ocr_layer_key(&mut engine, &speech, Key::Alpha('F'));
+        engine.handle_accessibility_event(&AccessibilityEvent::FileRecognized(
+            FileRecognition::Unsupported {
+                name: "SR OCR Notes.txt".into(),
+            },
+        ));
+        assert_eq!(
+            speech.take().join("\n"),
+            "OCR Failed to start. Unsupported file currently selected."
+        );
+        let (mut engine, speech, actions) = window();
+        assert_eq!(
+            ocr_layer_key(&mut engine, &speech, Key::Alpha('F')),
+            "OCR Failed to start.\nTo OCR a file, you must open Windows Explorer and select a file to be recognized."
+        );
+        assert!(!actions
+            .requests()
+            .iter()
+            .any(|(request, _)| request == "recognize selected file"));
+    }
+
+    /// Q with nothing being recognized says so [obs, 1029/s3].
+    #[test]
+    fn q_with_nothing_to_cancel_says_so() {
+        let (mut engine, speech, _) = window();
+        assert_eq!(
+            ocr_layer_key(&mut engine, &speech, Key::Alpha('Q')),
+            "You can not cancel a Recognition job that does not exist."
         );
     }
 

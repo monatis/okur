@@ -426,7 +426,10 @@ mod windows_actions {
                                 };
                                 let started = Instant::now();
                                 let recognition =
-                                    crate::file_text::recognize_selected_file(&language);
+                                    crate::file_text::recognize_selected_file(&language, || {
+                                        let _ =
+                                            events.send(AccessibilityEvent::FileRecognitionStarted);
+                                    });
                                 tracing::debug!(
                                     lines = recognition.lines().count(),
                                     ms = started.elapsed().as_millis(),
