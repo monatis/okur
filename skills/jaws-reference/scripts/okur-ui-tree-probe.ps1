@@ -9,7 +9,10 @@ param([string]$Out = (Join-Path $env:USERPROFILE 'sr-harness\probe\okur-ui-tree.
       [switch]$Outline,
       # The lifetime menu instead: Tab to the tree, okur-ui asked for a context menu on it
       # ("menu"), Down and Enter to choose, then Escape.
-      [switch]$Menu)
+      [switch]$Menu,
+      # Okur's main window instead of the dialog: its menu bar walked with Alt and the arrows,
+      # then Alt+F4.
+      [switch]$Window)
 $bin = Join-Path $env:USERPROFILE 'sr-harness\bin'
 $lab = Join-Path $bin 'okur-lab.exe'
 $start = New-Object System.Diagnostics.ProcessStartInfo
@@ -39,11 +42,15 @@ $dialog = @'
   {"key":"Down","control":"tree","from":"search"},{"key":"Enter","control":"tree_enter","from":"tree"},
   {"key":"Escape","control":"tree_escape","from":"tree"}]}}
 '@ -replace "`r?`n", ''
+if ($Window) {
+    $dialog = '{"type":"main_window_show","window":{"title":"Okur","lines":["Okur version 0.1.0"],"menus":[{"label":"&Options","items":[{"id":"basics","label":"&Basics..."},{"id":"exit","label":"E&xit","key":"Alt+F4"}]},{"label":"&Utilities","items":[{"id":"notification_history","label":"Notification History","key":"INSERT+SPACE, N"},{"id":"settings_center","label":"Settings Center"}]},{"label":"&Help","items":[{"id":"about","label":"&About Okur..."}]}]}}'
+    $Keys = @('Alt', 'Down', 'Down', 'Right', 'Down', 'Escape', 'Escape', 'Alt', 'Down', 'Enter', 'Alt+F4')
+}
 $ui.StandardInput.WriteLine($dialog)
 $ui.StandardInput.Flush()
 Start-Sleep -Seconds 3
 & $lab jaws-history --clear | Out-Null
-$lines = @("--- shown: " + (& $lab front 'Okur Settings Center'))
+$lines = @("--- shown: " + (& $lab front ($(if ($Window) { 'Okur' } else { 'Okur Settings Center' }))))
 if ($Outline) {
     $outlineFile = [System.IO.Path]::ChangeExtension($Out, '.outline.txt')
     & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'uia-outline.ps1') -Title 'Notepad - Okur Settings Center' -Out $outlineFile | Out-Null

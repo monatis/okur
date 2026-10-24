@@ -250,6 +250,17 @@ spoken form is a parity target.
    across restarts.
 3. **The Okur window and its menus** (Insert+J), Basics with its new settings, the quit
    confirmation from Basics' check box.
+   **Built 2026-10-24** (`4194cb88`): Insert+J shows the window, "Okur" and its version, with
+   Options (Basics..., Exit Alt+F4), Utilities (Notification History INSERT+SPACE, N; Settings
+   Center), Help (About Okur...); Alt+F4 asks to exit. Probed on old-pc with okur-ui alone:
+   JAWS reads it as its own ("Menu bar | Options | To navigate press Left or Right Arrow.",
+   "Options menu | Basics... | To move through items press up or down arrow.", "leaving menu
+   bar"). Basics: Tutor Messages, Access Key, Prompt to confirm when exiting Okur, Show Virtual
+   Viewer on screen, Use Keyboard Layout, OK, Cancel. Still to do: Automatically Start Okur...
+   and Run Okur from System Tray (with setup's start entries), Tutor Messages' "Announce Custom
+   Messages Only" and Access Key's "Speak Menus Only" and "Speak Dialogs Only", the window when
+   Okur starts (minimized or not, to record), the Language menu with voice profiles (milestone
+   4), Commands Search in Help once Okur has it.
 4. **Voices**: voice contexts, profiles, Voice Adjustment, Select a Voice Profile, the Language
    menu's profiles.
 5. **Startup Wizard**, Manage Application Settings, Restore to Factory Settings.
