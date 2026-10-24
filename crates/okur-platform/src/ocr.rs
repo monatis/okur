@@ -66,6 +66,8 @@ fn desktop_word(
 
 #[cfg(windows)]
 pub use recognizer::recognize;
+#[cfg(windows)]
+pub(crate) use recognizer::{engine_for, failed};
 
 #[cfg(windows)]
 mod recognizer {
@@ -85,7 +87,7 @@ mod recognizer {
     };
     use xa11y::ScreenshotProvider;
 
-    fn failed(what: impl std::fmt::Display) -> PlatformError {
+    pub(crate) fn failed(what: impl std::fmt::Display) -> PlatformError {
         PlatformError::Recognition(what.to_string())
     }
 
@@ -126,7 +128,7 @@ mod recognizer {
 
     /// The recognizer for `language` (a BCP 47 tag), else for the first of the user's
     /// languages Windows has one for.
-    fn engine_for(language: &str) -> Result<OcrEngine, PlatformError> {
+    pub(crate) fn engine_for(language: &str) -> Result<OcrEngine, PlatformError> {
         let wanted = Language::CreateLanguage(&windows::core::HSTRING::from(language))
             .and_then(|language| OcrEngine::TryCreateFromLanguage(&language));
         match wanted {

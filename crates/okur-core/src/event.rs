@@ -695,6 +695,9 @@ pub enum AccessibilityEvent {
     /// Insert+Space, O; empty when none was recognized or recognition failed
     /// ([`crate::actions::ApplicationActions::recognize`]).
     Recognized(Vec<crate::screen_model::ScreenRun>),
+    /// The text recognized in the file selected in File Explorer, asked for by Insert+Space,
+    /// O, F ([`crate::actions::ApplicationActions::recognize_selected_file`]).
+    FileRecognized(crate::recognized_file::FileRecognition),
     /// The applications' windows, front to back, asked for by the Window List (Insert+F10;
     /// [`crate::actions::ApplicationActions::list_windows`]).
     TopWindows(Vec<TopWindow>),

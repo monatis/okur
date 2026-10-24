@@ -1178,17 +1178,37 @@ struct StepEvents {
 const RETIRED_OKUR_SETTINGS: &[&str] = &["experimental.screen_text"];
 
 /// The window in front after a step, as the recorder saved it (`okur-lab screen-text
-/// --append-to`): the text UI Automation places on it, and the words Windows' OCR read in it.
+/// --append-to`): the text UI Automation places on it, and the words Windows' OCR read in it;
+/// and what Okur's recognizer read in the file selected in the fixture's File Explorer window
+/// (`okur-lab file-text --append-to`), on a line of its own for the same step.
 #[derive(Debug, Clone, Default, serde::Deserialize)]
 struct ScreenSnapshot {
     step: String,
     /// How the window's text is read; snapshots before 1016 were all by rows.
     #[serde(default)]
     layout: okur_core::viewer_text::ViewerLayout,
+    /// None on a line of the selected file alone, which reads no window: its navigation pane
+    /// lists the machine's folders.
     #[serde(default)]
-    accessible: Vec<okur_core::screen_model::ScreenRun>,
+    accessible: Option<Vec<okur_core::screen_model::ScreenRun>>,
     #[serde(default)]
     recognized: Vec<okur_core::screen_model::ScreenRun>,
+    #[serde(default)]
+    file: Option<okur_core::recognized_file::FileRecognition>,
+}
+
+impl ScreenSnapshot {
+    /// Another line saved for the same step: the window's text or the selected file's.
+    fn merge(&mut self, other: Self) {
+        if other.accessible.is_some() {
+            self.layout = other.layout;
+            self.accessible = other.accessible;
+            self.recognized = other.recognized;
+        }
+        if other.file.is_some() {
+            self.file = other.file;
+        }
+    }
 }
 
 /// The screen reads and recognitions the engine asked for, counted as answered.
@@ -1196,6 +1216,7 @@ struct ScreenSnapshot {
 struct ScreenReads {
     screens: usize,
     recognitions: usize,
+    files: usize,
 }
 
 impl ScreenReads {
@@ -1216,7 +1237,11 @@ impl ScreenReads {
         let screens = requests.iter().filter(|(a, _)| a == "read screen").count();
         let recognitions = requests
             .iter()
-            .filter(|(a, _)| a.starts_with("recognize "))
+            .filter(|(a, _)| a.starts_with("recognize ") && a != "recognize selected file")
+            .count();
+        let files = requests
+            .iter()
+            .filter(|(a, _)| a == "recognize selected file")
             .count();
         let mut deliver = |event: okur_core::AccessibilityEvent| {
             if let Some(speech) = engine.handle_accessibility_event(&event) {
@@ -1225,20 +1250,28 @@ impl ScreenReads {
                 }
             }
         };
-        while self.screens < screens {
-            self.screens += 1;
-            deliver(okur_core::AccessibilityEvent::ScreenText(
-                okur_core::screen_model::WindowText {
-                    layout: snapshot.layout,
-                    runs: snapshot.accessible.clone(),
-                },
-            ));
+        if let Some(runs) = &snapshot.accessible {
+            while self.screens < screens {
+                self.screens += 1;
+                deliver(okur_core::AccessibilityEvent::ScreenText(
+                    okur_core::screen_model::WindowText {
+                        layout: snapshot.layout,
+                        runs: runs.clone(),
+                    },
+                ));
+            }
         }
         while self.recognitions < recognitions {
             self.recognitions += 1;
             deliver(okur_core::AccessibilityEvent::Recognized(
                 snapshot.recognized.clone(),
             ));
+        }
+        if let Some(file) = &snapshot.file {
+            while self.files < files {
+                self.files += 1;
+                deliver(okur_core::AccessibilityEvent::FileRecognized(file.clone()));
+            }
         }
     }
 }
@@ -1327,7 +1360,14 @@ impl StepEvents {
             for line in text.lines().filter(|l| !l.trim().is_empty()) {
                 let snapshot: ScreenSnapshot =
                     serde_json::from_str(line).map_err(|e| format!("{screen_file}: {e}"))?;
-                screens.insert(snapshot.step.clone(), snapshot);
+                match screens.entry(snapshot.step.clone()) {
+                    std::collections::hash_map::Entry::Occupied(mut saved) => {
+                        ScreenSnapshot::merge(saved.get_mut(), snapshot);
+                    }
+                    std::collections::hash_map::Entry::Vacant(step) => {
+                        step.insert(snapshot);
+                    }
+                }
             }
         }
         Ok(Self {
@@ -1453,5 +1493,52 @@ mod tests {
         engine.handle_key_event(&KeyEvent::new(Key::PageUp, Modifiers::none(), true));
         engine.handle_key_event(&KeyEvent::new(Key::DownArrow, Modifiers::none(), true));
         assert_eq!(spoken.take(), ["Start"]);
+    }
+
+    /// A line of the selected file saved for a step answers Insert+Space, O, F in it, merged
+    /// with the window's line of the same step; the window's screen reads are not answered
+    /// by a file's line alone.
+    #[test]
+    fn a_files_snapshot_answers_its_recognition() {
+        use okur_core::{Key, KeyEvent};
+        let mut snapshot: ScreenSnapshot = serde_json::from_str(
+            r#"{"step":"s3","t_ms":1,"file":{"outcome":"read","name":"Sign.png","pages":[["Opening hours","Monday to Friday"]]}}"#,
+        )
+        .unwrap_or_default();
+        assert!(snapshot.accessible.is_none());
+        snapshot.merge(
+            serde_json::from_str(r#"{"step":"s3","t_ms":2,"accessible":[]}"#).unwrap_or_default(),
+        );
+        assert_eq!(snapshot.accessible.as_deref().map(<[_]>::len), Some(0));
+        assert!(snapshot.file.is_some());
+        let spoken = RecordingSpeech::default();
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(VirtualBuffer::from_aom(&okur_core::AomNode::new(
+                0,
+                okur_core::Role::Document,
+            ))),
+            Box::new(spoken.clone()),
+        );
+        engine.set_settings(okur_core::settings::Settings::reference_machine());
+        engine.app_mode = okur_core::engine::AppMode::NativeControl;
+        let actions = okur_core::actions::RecordingActions::default();
+        engine.set_actions(Box::new(actions.clone()));
+        let insert = Modifiers {
+            insert: true,
+            ..Modifiers::none()
+        };
+        for (key, modifiers) in [
+            (Key::Space, insert),
+            (Key::Alpha('O'), Modifiers::none()),
+            (Key::Alpha('F'), Modifiers::none()),
+        ] {
+            engine.handle_key_event(&KeyEvent::new(key, modifiers, true));
+        }
+        spoken.take();
+        let mut reads = ScreenReads::default();
+        reads.answer(&mut engine, &actions, Some(&snapshot), &spoken);
+        assert_eq!(spoken.take(), ["Opening hours"]);
+        engine.handle_key_event(&KeyEvent::new(Key::DownArrow, Modifiers::none(), true));
+        assert_eq!(spoken.take(), ["Monday to Friday"]);
     }
 }

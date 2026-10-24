@@ -15,6 +15,7 @@ use super::ScreenReaderEngine;
 use crate::actions::RecognitionArea;
 use crate::input::{Key, KeyAction, KeyEvent};
 use crate::messages::msg;
+use crate::recognized_file::FileRecognition;
 use crate::screen_model::{ScreenLine, ScreenModel, ScreenRun, WindowText};
 
 impl ScreenReaderEngine {
@@ -168,6 +169,7 @@ impl ScreenReaderEngine {
                     }
                 }
                 Key::Alpha('Q') => self.cancel_recognition(),
+                Key::Alpha('F') => self.start_file_recognition(),
                 _ => {}
             }
         }
@@ -200,9 +202,49 @@ impl ScreenReaderEngine {
                 .speak(msg::ocr_background_cancelled().as_str(), true);
             return;
         }
+        if std::mem::take(&mut self.recognizing_file) {
+            if let Some(actions) = self.actions.as_ref() {
+                actions.cancel_file_recognition();
+            }
+            self.speech.speak(msg::ocr_canceled().as_str(), true);
+            return;
+        }
         if std::mem::take(&mut self.recognizing) {
             self.speech.speak(msg::ocr_canceled().as_str(), true);
         }
+    }
+
+    /// F: the picture or PDF selected in File Explorer is recognized, its text to the Results
+    /// Viewer (JAWS 2025 help, Convenient OCR).
+    fn start_file_recognition(&mut self) {
+        let language = self.ocr_language();
+        if !self
+            .actions
+            .as_ref()
+            .is_some_and(|a| a.recognize_selected_file(&language))
+        {
+            return;
+        }
+        self.recognizing_file = true;
+        let started = msg::ocr_started(msg::ocr_engine_windows().to_string()).render();
+        self.speech.speak(&started, true);
+    }
+
+    /// The selected file's text arrived: it opens in the Results Viewer, at its first line.
+    pub(super) fn file_recognized(&mut self, recognition: &FileRecognition) -> Option<String> {
+        if !std::mem::take(&mut self.recognizing_file) {
+            return None;
+        }
+        let FileRecognition::Read { .. } = recognition else {
+            return None;
+        };
+        let viewer =
+            crate::viewer::VirtualViewer::new(recognition.lines().map(str::to_owned).collect());
+        let speech = viewer.line_text();
+        self.viewer = Some(viewer);
+        self.show_viewer_window();
+        self.speech.speak(&speech, true);
+        Some(speech)
     }
 
     /// B: "Background OCR started" [obs, 1001/s3], and the window is recognized again and again

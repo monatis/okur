@@ -320,6 +320,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::ViewerText(_)) => "viewer text",
         Some(AccessibilityEvent::ScreenText(_)) => "screen text",
         Some(AccessibilityEvent::Recognized(_)) => "recognized",
+        Some(AccessibilityEvent::FileRecognized(_)) => "file recognized",
         Some(AccessibilityEvent::TopWindows(_)) => "top windows",
         Some(AccessibilityEvent::TrayIcons(_)) => "tray icons",
         Some(AccessibilityEvent::PageElements(_)) => "page elements",

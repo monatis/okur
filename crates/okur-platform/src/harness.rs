@@ -124,6 +124,7 @@ pub fn parse_step(text: &str) -> Result<KeyStep, String> {
 #[cfg(windows)]
 pub use windows_harness::{
     bring_to_front, foreground_process, foreground_title, jaws_history, send_key, send_steps,
+    shell_window,
 };
 
 #[cfg(windows)]
@@ -353,6 +354,14 @@ mod windows_harness {
         } else {
             Err(format!("{text:?} did not come to the front"))
         }
+    }
+
+    /// The File Explorer window titled `title` (a folder's name), wherever the focus is.
+    pub fn shell_window(title: &str) -> Option<windows::Win32::Foundation::HWND> {
+        use windows::core::{w, HSTRING};
+        use windows::Win32::UI::WindowsAndMessaging::FindWindowW;
+        // SAFETY: a plain Win32 lookup by class and title.
+        unsafe { FindWindowW(w!("CabinetWClass"), &HSTRING::from(title)) }.ok()
     }
 
     /// The foreground window's title.

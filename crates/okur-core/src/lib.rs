@@ -21,6 +21,7 @@ pub mod messages;
 pub mod native_focus;
 pub mod placemarkers;
 pub mod pronounce;
+pub mod recognized_file;
 pub mod retire;
 pub mod screen_echo;
 pub mod screen_model;

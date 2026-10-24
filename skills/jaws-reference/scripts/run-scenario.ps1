@@ -79,6 +79,10 @@ Screen text: "trace_screen": true saves, with -TraceDir, the text UI Automation 
 window in front after each step (<TraceDir>\<id>-trial<N>.screen.jsonl, okur-lab screen-text),
 and "trace_ocr": true the words Windows' OCR reads in it too: replay gives them to Okur's
 experimental screen text, which "okur_settings" turns on for the replay only.
+Files: "trace_file": true saves, with -TraceDir, what Okur's recognizer reads in the file
+selected in the fixture's File Explorer window after each step (okur-lab file-text), to the same
+file: replay gives it to Okur's Insert+Space, O, F. Such a fixture's launch has "shell_window":
+its window is File Explorer's, found by its class and title and closed, never killed.
 
 Settling: after each action the default audio endpoint is metered (okur wait-silence; JAWS is
 the only audio source on the reference machine) until it has been silent for quiet_ms (default
@@ -123,6 +127,7 @@ public static class SrKeyInput {
     [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern IntPtr FindWindow(string cls, string name);
     [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr hWnd);
+    [DllImport("user32.dll")] public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr w, IntPtr l);
     [DllImport("user32.dll")] public static extern short GetAsyncKeyState(int vk);
     [DllImport("user32.dll")] static extern IntPtr GetTopWindow(IntPtr hWnd);
     [DllImport("user32.dll")] static extern IntPtr GetWindow(IntPtr hWnd, uint cmd);
@@ -706,8 +711,18 @@ $launch = $scenario.launch
 $script:fixtureProcess = $null
 
 function Stop-DesktopFixture {
-    $old = Find-WindowByTitle $launch.window_title
-    if ($old) { Stop-Process -Id $old.Id -Force -ErrorAction SilentlyContinue }
+    if ($launch.shell_window) {
+        # File Explorer's windows are the shell's process, the taskbar's too: closed, not killed.
+        for ($i = 0; $i -lt 20; $i++) {
+            $window = [SrKeyInput]::FindWindow('CabinetWClass', $launch.window_title)
+            if ($window -eq [IntPtr]::Zero) { break }
+            [void][SrKeyInput]::PostMessage($window, 0x10, [IntPtr]::Zero, [IntPtr]::Zero)
+            Start-Sleep -Milliseconds 200
+        }
+    } else {
+        $old = Find-WindowByTitle $launch.window_title
+        if ($old) { Stop-Process -Id $old.Id -Force -ErrorAction SilentlyContinue }
+    }
     if ($script:fixtureProcess -and -not $script:fixtureProcess.HasExited) {
         Stop-Process -Id $script:fixtureProcess.Id -Force -ErrorAction SilentlyContinue
     }
@@ -716,6 +731,11 @@ function Stop-DesktopFixture {
 if ($launch) { $expectedTitle = $launch.window_title }
 
 function Find-WindowByTitle([string]$title) {
+    if ($launch.shell_window) {
+        $window = [SrKeyInput]::FindWindow('CabinetWClass', $title)
+        if ($window -eq [IntPtr]::Zero) { return $null }
+        return [pscustomobject]@{ Id = 0; MainWindowHandle = $window }
+    }
     $p = Get-Process -ErrorAction SilentlyContinue |
         Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero -and $_.MainWindowTitle -eq $title } |
         Select-Object -First 1
@@ -929,7 +949,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     # Okur's experimental screen text when it reads the screen; with "trace_ocr", the words
     # Windows' OCR reads in the window too (okur-lab screen-text --append-to).
     $screenPath = $null
-    if ($TraceDir -and $scenario.trace_screen) {
+    if ($TraceDir -and ($scenario.trace_screen -or $scenario.trace_file)) {
         $screenPath = Join-Path $TraceDir "$scenarioId-trial$t.screen.jsonl"
         Remove-Item $screenPath -ErrorAction SilentlyContinue
         $trialResult.screen_file = Split-Path -Leaf $screenPath
@@ -1048,7 +1068,10 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         $transcript = $history.text
         $spokenRecords = @($history.records)
         $tEnd = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
-        if ($screenPath) {
+        if ($screenPath -and $scenario.trace_file) {
+            & $OkurLab @('file-text', '--append-to', $screenPath, '--step', $step.id, '--window-title', $launch.window_title) 2>&1 | Out-Null
+        }
+        if ($screenPath -and $scenario.trace_screen) {
             $screenArgs = @('screen-text', '--append-to', $screenPath, '--step', $step.id)
             if ($scenario.trace_ocr) { $screenArgs += '--recognize' }
             # Only the fixture's window is read: another in front (a click that brought a

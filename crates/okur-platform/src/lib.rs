@@ -7,6 +7,7 @@ pub mod ease_of_access;
 pub mod elevation;
 pub mod event_trace;
 pub mod events;
+pub mod file_text;
 pub mod harness;
 pub mod hook;
 pub mod ia2_snapshot;

@@ -383,6 +383,9 @@ pub struct ScreenReaderEngine {
     ocr_layer: bool,
     /// A recognition is under way; its words come as [`AccessibilityEvent::Recognized`].
     recognizing: bool,
+    /// A file's recognition is under way (Insert+Space, O, F): its text opens in the Results
+    /// Viewer when it comes, unless Q cancelled it.
+    recognizing_file: bool,
     /// Background OCR (Insert+Space, O, B): when it last asked for the window's words, and
     /// whether that recognition is still under way.
     background_ocr: Option<(std::time::Instant, bool)>,
@@ -571,6 +574,7 @@ impl ScreenReaderEngine {
             mouse_echo_layer: false,
             ocr_layer: false,
             recognizing: false,
+            recognizing_file: false,
             background_ocr: None,
             recognition_window: None,
             screen_model: None,
@@ -1390,6 +1394,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::ViewerText(lines) => self.open_screen_viewer(lines),
             AccessibilityEvent::ScreenText(text) => self.screen_text(text),
             AccessibilityEvent::Recognized(words) => self.recognized(words),
+            AccessibilityEvent::FileRecognized(recognition) => self.file_recognized(recognition),
             AccessibilityEvent::TopWindows(windows) => self.open_window_list(windows),
             AccessibilityEvent::TrayIcons(icons) => self.open_tray_list(icons),
             AccessibilityEvent::PageElements(elements) => self.say_page_font(elements),

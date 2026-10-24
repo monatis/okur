@@ -128,6 +128,9 @@ mod windows_actions {
         /// The words recognized in an area of the screen, in a language, answered even when
         /// none was.
         Recognize(okur_core::actions::RecognitionArea, String),
+        /// The text recognized in the file selected in the window in front, in a language,
+        /// answered always.
+        RecognizeFile(String),
     }
 
     impl Request {
@@ -137,6 +140,7 @@ mod windows_actions {
                 self,
                 Request::Screen
                     | Request::Recognize(..)
+                    | Request::RecognizeFile(_)
                     | Request::Window(_)
                     | Request::PageElements(_)
                     | Request::Point(..)
@@ -166,6 +170,7 @@ mod windows_actions {
                 Request::Drag(..) => "drag",
                 Request::Screen => "screen read",
                 Request::Recognize(..) => "recognition",
+                Request::RecognizeFile(_) => "file recognition",
             }
         }
     }
@@ -413,6 +418,22 @@ mod windows_actions {
                                 );
                                 // Answered even when none: the engine waits for it.
                                 let _ = events.send(AccessibilityEvent::Recognized(words));
+                            }
+                            Request::RecognizeFile(language) => {
+                                let Some(events) = events.as_ref() else {
+                                    tracing::warn!("recognition impossible: no event channel");
+                                    return;
+                                };
+                                let started = Instant::now();
+                                let recognition =
+                                    crate::file_text::recognize_selected_file(&language);
+                                tracing::debug!(
+                                    lines = recognition.lines().count(),
+                                    ms = started.elapsed().as_millis(),
+                                    "file recognized"
+                                );
+                                let _ =
+                                    events.send(AccessibilityEvent::FileRecognized(recognition));
                             }
                             Request::Copy(text) => {
                                 if let Err(e) = super::set_clipboard_text(&text) {
@@ -749,6 +770,15 @@ mod windows_actions {
 
         fn recognize(&self, area: okur_core::actions::RecognitionArea, language: &str) -> bool {
             self.send(Request::Recognize(area, language.to_owned()))
+        }
+
+        fn recognize_selected_file(&self, language: &str) -> bool {
+            self.send(Request::RecognizeFile(language.to_owned()))
+        }
+
+        /// At once, not queued: the bulk lane is busy with the file.
+        fn cancel_file_recognition(&self) {
+            crate::file_text::cancel();
         }
 
         /// On a thread of its own, once Okur's dialog has had time to close: a click while it

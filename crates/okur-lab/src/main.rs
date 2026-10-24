@@ -309,6 +309,29 @@ enum Commands {
         #[arg(long)]
         window_title: Option<String>,
     },
+    /// Print the text Windows' recognizer reads in a picture or PDF, page by page (Windows;
+    /// Insert+Space, O, F). Research, never evidence
+    FileText {
+        /// The file; without it, the file selected in the File Explorer window in front, or
+        /// with --window-title in that one
+        path: Option<String>,
+        /// The language the file is recognized in
+        #[arg(long, default_value = "en-US")]
+        language: String,
+        /// The File Explorer window whose selected file is read, by its title, wherever the
+        /// focus is (Insert+Space, O, F's Results Viewer is in front after it)
+        #[arg(long)]
+        window_title: Option<String>,
+        /// Append the recognition, as JSON, to this file instead of printing it: the
+        /// recorder's snapshot after a step of a scenario with "trace_file" (replay gives it to
+        /// Okur's file recognition). Only the file's text is saved, never the window's: its
+        /// navigation pane lists the machine's folders
+        #[arg(long)]
+        append_to: Option<String>,
+        /// With --append-to, the step the snapshot is taken after
+        #[arg(long, default_value = "")]
+        step: String,
+    },
     /// Print a speech log recorded with `run --speech-log`
     History {
         /// Path of the speech log file
@@ -758,6 +781,81 @@ async fn main() {
             {
                 let _ = (recognize, pieces, append_to, step, language, window_title);
                 eprintln!("screen-text is only available on Windows");
+                std::process::exit(1);
+            }
+        }
+        Some(Commands::FileText {
+            path,
+            language,
+            window_title,
+            append_to,
+            step,
+        }) => {
+            #[cfg(windows)]
+            {
+                use okur_core::recognized_file::FileRecognition;
+                let cancel = std::sync::atomic::AtomicBool::new(false);
+                let recognition = match (path, window_title) {
+                    (Some(path), _) => okur_platform::file_text::recognize_file(
+                        std::path::Path::new(&path),
+                        &language,
+                        &cancel,
+                    ),
+                    (None, Some(title)) => okur_platform::harness::shell_window(&title)
+                        .and_then(|window| {
+                            okur_platform::file_text::selected_file(window)
+                                .ok()
+                                .flatten()
+                        })
+                        .map_or(FileRecognition::NoFile, |path| {
+                            okur_platform::file_text::recognize_file(&path, &language, &cancel)
+                        }),
+                    (None, None) => okur_platform::file_text::recognize_selected_file(&language),
+                };
+                if let Some(path) = append_to {
+                    let t_ms = std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .map(|d| d.as_millis())
+                        .unwrap_or_default();
+                    let snapshot = serde_json::json!({
+                        "step": step,
+                        "t_ms": t_ms,
+                        "file": recognition,
+                    });
+                    let written = std::fs::OpenOptions::new()
+                        .create(true)
+                        .append(true)
+                        .open(&path)
+                        .and_then(|mut file| {
+                            use std::io::Write as _;
+                            writeln!(file, "{snapshot}")
+                        });
+                    if let Err(e) = written {
+                        eprintln!("{path}: {e}");
+                        std::process::exit(1);
+                    }
+                    return;
+                }
+                match recognition {
+                    okur_core::recognized_file::FileRecognition::Read { name, pages } => {
+                        println!("{name}");
+                        for (number, page) in pages.iter().enumerate() {
+                            println!("-- page {}", number + 1);
+                            for line in page {
+                                println!("{line}");
+                            }
+                        }
+                    }
+                    other => {
+                        eprintln!("{other:?}");
+                        std::process::exit(1);
+                    }
+                }
+            }
+            #[cfg(not(windows))]
+            {
+                let _ = (path, language, window_title, append_to, step);
+                eprintln!("file-text is only available on Windows");
                 std::process::exit(1);
             }
         }

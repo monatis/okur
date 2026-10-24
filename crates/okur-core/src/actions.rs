@@ -115,6 +115,18 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for the text recognized in the picture or PDF selected in the window in front (File
+    /// Explorer's), with the system's recognizer for `language`. It arrives later as
+    /// [`crate::event::AccessibilityEvent::FileRecognized`], always. Returns false when
+    /// unsupported.
+    fn recognize_selected_file(&self, language: &str) -> bool {
+        let _ = language;
+        false
+    }
+
+    /// Stops a file's recognition under way at its next page.
+    fn cancel_file_recognition(&self) {}
+
     /// Drags with the left button from `from` to `to`, in screen pixels (drag and drop).
     /// False when unsupported.
     fn drag_mouse(&self, from: (i32, i32), to: (i32, i32)) -> bool {
@@ -424,6 +436,19 @@ impl ApplicationActions for RecordingActions {
             log.push((format!("recognize {area:?}"), 0));
         }
         true
+    }
+
+    fn recognize_selected_file(&self, _language: &str) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("recognize selected file".to_owned(), 0));
+        }
+        true
+    }
+
+    fn cancel_file_recognition(&self) {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("cancel file recognition".to_owned(), 0));
+        }
     }
 
     fn press(&self, chord: &[crate::input::Key]) -> bool {
