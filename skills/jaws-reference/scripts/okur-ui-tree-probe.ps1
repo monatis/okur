@@ -4,7 +4,7 @@
 # only while okur-ui is in front); after each key, what okur-ui reported on its standard output
 # and what JAWS said of it are written. Run on old-pc with no batch recording.
 param([string]$Out = (Join-Path $env:USERPROFILE 'sr-harness\probe\okur-ui-tree.txt'),
-      [string[]]$Keys = @('Tab', 'Right', 'Down', 'Space', 'Shift+Space', 'Down', 'Space', 'Up', 'Left', 'Ctrl+E', 'Tab', 'Ctrl+Shift+D', 'Tab', 'Escape'),
+      [string[]]$Keys = @('Tab', 'Right', 'Down', 'Space', 'Shift+Space', 'Down', 'Space', 'Up', 'Left', 'Ctrl+E', 'Down', 'Enter', 'Escape', 'Ctrl+Shift+D', 'Tab', 'Escape'),
       # Also an outline of the dialog's UI Automation tree before the keys (uia-outline.ps1).
       [switch]$Outline)
 $bin = Join-Path $env:USERPROFILE 'sr-harness\bin'
@@ -32,7 +32,9 @@ $dialog = @'
  {"id":"description","label":"","kind":{"kind":"note","text":"A group of settings: Right Arrow opens it, and Space on a setting in it changes its value."}},
  {"id":"ok","label":"OK","kind":{"kind":"button","default":true}},
  {"id":"cancel","label":"Cancel","kind":{"kind":"button","default":false}}],
- "keys":[{"key":"Ctrl+E","control":"search"},{"key":"Ctrl+Shift+D","control":"default_place"}]}}
+ "keys":[{"key":"Ctrl+E","control":"search"},{"key":"Ctrl+Shift+D","control":"default_place"},
+  {"key":"Down","control":"tree","from":"search"},{"key":"Enter","control":"tree_enter","from":"tree"},
+  {"key":"Escape","control":"tree_escape","from":"tree"}]}}
 '@ -replace "`r?`n", ''
 $ui.StandardInput.WriteLine($dialog)
 $ui.StandardInput.Flush()

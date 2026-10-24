@@ -26,6 +26,10 @@ const DESCRIPTION: &str = "description";
 const PLACE: &str = "application";
 /// Ctrl+Shift+D's press: Settings Center on the Default settings.
 const DEFAULT_PLACE: &str = "default_place";
+/// Enter and Escape in the tree, which Okur decides: on a search's results, the whole tree
+/// again; else OK, and the dialog closed.
+const TREE_ENTER: &str = "tree_enter";
+const TREE_ESCAPE: &str = "tree_escape";
 
 /// Which of JAWS's two dialogs this is.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -223,6 +227,8 @@ pub struct SettingsTree {
     voices: Vec<String>,
     /// The words searched for; empty, every group.
     search: String,
+    /// The tree's item selected when the search began, Escape's place to go back to.
+    before_search: Option<Row>,
     /// The groups open.
     open: Vec<TreeGroup>,
     rows: Vec<Row>,
@@ -254,6 +260,7 @@ impl SettingsTree {
             draft,
             voices,
             search: String::new(),
+            before_search: None,
             open: Vec::new(),
             rows: Vec::new(),
             selected: 0,
@@ -536,8 +543,20 @@ impl SettingsTree {
         let shortcut = |key: &str, control: &str| okur_ui_model::DialogShortcut {
             key: key.to_owned(),
             control: control.to_owned(),
+            from: None,
         };
-        let mut keys = vec![shortcut("Ctrl+E", SEARCH)];
+        let from = |key: &str, control: &str, from: &str| okur_ui_model::DialogShortcut {
+            from: Some(from.to_owned()),
+            ..shortcut(key, control)
+        };
+        // Down from the search box into the tree; Enter and Escape in the tree for a search's
+        // results (JAWS's Settings Center help).
+        let mut keys = vec![
+            shortcut("Ctrl+E", SEARCH),
+            from("Down", TREE, SEARCH),
+            from("Enter", TREE_ENTER, TREE),
+            from("Escape", TREE_ESCAPE, TREE),
+        ];
         if self.flavor == Flavor::Center {
             keys.push(shortcut("Ctrl+Shift+D", DEFAULT_PLACE));
         }
@@ -624,6 +643,31 @@ impl SettingsTree {
         Outcome::Send(sent)
     }
 
+    /// Ends a search: the whole tree, the search box empty, at `at` with its groups open.
+    fn end_search(&mut self, at: Option<Row>) -> Outcome {
+        self.search.clear();
+        self.rows = self.rows_for_search();
+        if let Some(Row::Setting(spec)) = at {
+            let mut group = self.group_of(spec);
+            while let Some(g) = group {
+                if !self.open.contains(&g) {
+                    self.open.push(g);
+                }
+                group = g.parent();
+            }
+        }
+        self.selected = at
+            .and_then(|at| self.rows.iter().position(|r| *r == at))
+            .unwrap_or(0);
+        let mut sent = vec![ToUi::DialogSet {
+            id: self.id,
+            control: SEARCH.to_owned(),
+            value: Value::Text(String::new()),
+        }];
+        sent.extend(self.refill());
+        Outcome::Send(sent)
+    }
+
     /// The whole tree again, after a search or another place.
     fn refill(&self) -> Vec<ToUi> {
         vec![
@@ -682,6 +726,9 @@ impl SettingsTree {
                         Outcome::Nothing
                     }
                     (SEARCH, Value::Text(text)) => {
+                        if self.search.is_empty() {
+                            self.before_search = self.rows.get(self.selected).copied();
+                        }
                         self.search = text.trim().to_owned();
                         self.rows = self.rows_for_search();
                         // The first setting found, or the first group.
@@ -717,6 +764,18 @@ impl SettingsTree {
             FromUi::DialogPressed { id, control } if *id == self.id => match control.as_str() {
                 "ok" => self.apply(true),
                 "apply" => self.apply(false),
+                // On a search's results Enter shows the whole tree at the setting found, Escape
+                // at the item before the search; elsewhere they are OK and Cancel.
+                TREE_ENTER if !self.search.is_empty() => {
+                    let at = self.rows.get(self.selected).copied();
+                    self.end_search(at)
+                }
+                TREE_ENTER => self.apply(true),
+                TREE_ESCAPE if !self.search.is_empty() => {
+                    let at = self.before_search;
+                    self.end_search(at)
+                }
+                TREE_ESCAPE => Outcome::Close,
                 DEFAULT_PLACE if self.flavor == Flavor::Center => {
                     self.place = 0;
                     self.draft = self
@@ -876,6 +935,48 @@ mod tests {
         assert!(items.iter().filter(|i| i.level == 0).all(|i| i.open));
     }
 
+    /// Enter on a search's result shows the whole tree at it, its groups open; Escape on the
+    /// results goes back to the item before the search (JAWS's Settings Center help).
+    #[test]
+    fn enter_and_escape_end_a_search() {
+        let mut dialog = tree(Flavor::Center);
+        dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: SEARCH.into(),
+            value: Value::Text("dollars".into()),
+        });
+        let found = dialog.rows.get(dialog.selected).copied();
+        assert!(matches!(found, Some(Row::Setting(spec)) if spec.id == "voice.text.say_dollars"));
+        dialog.handle(&FromUi::DialogPressed {
+            id: 7,
+            control: TREE_ENTER.into(),
+        });
+        assert!(dialog.search.is_empty());
+        assert_eq!(dialog.rows.get(dialog.selected).copied(), found);
+        let items = dialog.items();
+        let open = |text: &str| items.iter().any(|i| i.text == text && i.open);
+        assert!(open("Text Processing") && open("Number And Date Processing"));
+        // Escape on a search's results: back where it began.
+        dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: SEARCH.into(),
+            value: Value::Text("echo".into()),
+        });
+        dialog.handle(&FromUi::DialogPressed {
+            id: 7,
+            control: TREE_ESCAPE.into(),
+        });
+        assert_eq!(dialog.rows.get(dialog.selected).copied(), found);
+        // Without a search, Escape closes and Enter is OK.
+        assert_eq!(
+            dialog.handle(&FromUi::DialogPressed {
+                id: 7,
+                control: TREE_ESCAPE.into(),
+            }),
+            Outcome::Close
+        );
+    }
+
     /// Quick Settings offers the settings for the application in front, without the place.
     #[test]
     fn quick_settings_has_no_place_box() {
@@ -969,13 +1070,8 @@ mod tests {
             .into_iter()
             .map(|k| (k.key, k.control))
             .collect();
-        assert_eq!(
-            keys,
-            [
-                ("Ctrl+E".to_owned(), SEARCH.to_owned()),
-                ("Ctrl+Shift+D".to_owned(), DEFAULT_PLACE.to_owned())
-            ]
-        );
+        assert!(keys.contains(&("Ctrl+E".to_owned(), SEARCH.to_owned())));
+        assert!(keys.contains(&("Ctrl+Shift+D".to_owned(), DEFAULT_PLACE.to_owned())));
         let Outcome::Send(sent) = dialog.handle(&FromUi::DialogPressed {
             id: 7,
             control: DEFAULT_PLACE.into(),
@@ -989,7 +1085,11 @@ mod tests {
             value: Value::Selected(0),
         }));
         assert_eq!(dialog.scope(), Scope::Global);
-        // Quick Settings has no Default: only Ctrl+E.
-        assert_eq!(tree(Flavor::Quick).spec().keys.len(), 1);
+        // Quick Settings has no Default.
+        assert!(!tree(Flavor::Quick)
+            .spec()
+            .keys
+            .iter()
+            .any(|k| k.control == DEFAULT_PLACE));
     }
 }

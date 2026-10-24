@@ -85,8 +85,8 @@ struct OpenDialog {
     /// A wizard's page: a child of its sheet, whose keys the sheet's dialog manager runs.
     page: bool,
     /// The dialog's own keys ([`okur_ui_model::DialogShortcut`]), as virtual key and
-    /// modifiers, with the control each goes to.
-    keys: Vec<(Chord, String)>,
+    /// modifiers, with the control each goes to and the one the focus must be in.
+    keys: Vec<(Chord, String, Option<String>)>,
 }
 
 /// A key with its modifiers held: virtual key, Ctrl, Shift, Alt.
@@ -101,6 +101,10 @@ fn chord(text: &str) -> Option<Chord> {
             "ctrl" | "control" => ctrl = true,
             "shift" => shift = true,
             "alt" => alt = true,
+            "enter" => key = Some(0x0D),
+            "escape" => key = Some(0x1B),
+            "up" => key = Some(0x26),
+            "down" => key = Some(0x28),
             name => {
                 let upper = name.to_ascii_uppercase();
                 key = match upper.as_bytes() {
@@ -212,7 +216,7 @@ pub fn show(spec: &DialogSpec) {
                 keys: spec
                     .keys
                     .iter()
-                    .filter_map(|k| Some((chord(&k.key)?, k.control.clone())))
+                    .filter_map(|k| Some((chord(&k.key)?, k.control.clone(), k.from.clone())))
                     .collect(),
             });
         }
@@ -1097,6 +1101,9 @@ fn dialog_key(msg: &MSG) -> bool {
     // SAFETY: the key state of this thread's input.
     let held = |key: VIRTUAL_KEY| unsafe { GetKeyState(i32::from(key.0)) } < 0;
     let pressed: Chord = (vk, held(VK_CONTROL), held(VK_SHIFT), held(VK_MENU));
+    // SAFETY: the focus of this thread's input, and its control's id.
+    let focused = unsafe { windows::Win32::UI::Input::KeyboardAndMouse::GetFocus() };
+    let focused_id = unsafe { GetDlgCtrlID(focused) };
     let found = DIALOGS.with(|d| {
         d.try_borrow().ok().and_then(|d| {
             d.iter()
@@ -1105,7 +1112,17 @@ fn dialog_key(msg: &MSG) -> bool {
                     o.window == msg.hwnd || unsafe { IsChild(o.window, msg.hwnd) }.as_bool()
                 })
                 .find_map(|o| {
-                    let (_, control) = o.keys.iter().find(|(chord, _)| *chord == pressed)?;
+                    let in_control = |from: &Option<String>| {
+                        from.as_ref().is_none_or(|from| {
+                            o.controls
+                                .iter()
+                                .any(|c| &c.name == from && i32::from(c.window_id) == focused_id)
+                        })
+                    };
+                    let (_, control, _) = o
+                        .keys
+                        .iter()
+                        .find(|(chord, _, from)| *chord == pressed && in_control(from))?;
                     let button = o
                         .controls
                         .iter()

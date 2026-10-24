@@ -1774,6 +1774,17 @@ impl ScreenReaderEngine {
                 self.returning_from_dialog();
             }
             Outcome::OpenVerbosityLevels => self.open_verbosity_levels(),
+            Outcome::Close => {
+                let id = if tree {
+                    self.settings_tree.take().map(|t| t.id)
+                } else {
+                    self.settings_dialog.take().map(|d| d.id)
+                };
+                if let (Some(id), Some(ui)) = (id, &self.ui) {
+                    ui.send(crate::ui::ToUi::DialogClose { id });
+                }
+                self.returning_from_dialog();
+            }
         }
     }
 

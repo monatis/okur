@@ -45,6 +45,8 @@ pub enum Outcome {
     },
     /// The dialog is gone; nothing more is applied.
     Closed,
+    /// Close the dialog, applying nothing (Escape where its window lets Okur decide).
+    Close,
     /// Open the dialog that customizes the verbosity levels, from Settings Center's
     /// "Configure Verbosity Levels" (JAWS's opens its own dialog over Settings Center).
     OpenVerbosityLevels,
