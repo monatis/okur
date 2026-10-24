@@ -34,6 +34,9 @@ pub struct ScreenRun {
     /// The element's role, for a window read element by element.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub role: Option<Role>,
+    /// A check box's or radio button's state.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub checked: Option<bool>,
 }
 
 impl ScreenRun {
@@ -47,6 +50,7 @@ impl ScreenRun {
             bottom,
             source,
             role: None,
+            checked: None,
         }
     }
 
@@ -91,20 +95,25 @@ pub struct ScreenLine {
     pub pieces: Vec<Piece>,
     /// An element's line: its role's word, said after its text.
     pub role: Option<&'static str>,
+    /// An element's state, said after its role ("not checked").
+    pub state: Option<&'static str>,
 }
 
 impl ScreenLine {
     /// The line as the Okur cursor says it: its text, then an element's role ("WPF ‹Button›"
     /// [obs, 1002/s11]).
     pub fn spoken(&self) -> String {
-        match self.role {
-            Some(role) => format!(
-                "{}{}",
-                self.text.trim(),
-                crate::linearize::role_marker(role)
-            ),
+        let text = self.text.trim();
+        let mut said = match self.role {
+            // An unnamed element is its role, said as text: "combo box" [obs, 1016/s13].
+            Some(role) if text.is_empty() => role.to_owned(),
+            Some(role) => format!("{text}{}", crate::linearize::role_marker(role)),
             None => self.text.clone(),
+        };
+        if let Some(state) = self.state {
+            said.push_str(&crate::linearize::state_marker(state));
         }
+        said
     }
 
     /// The piece character `column` is in; a space between two pieces is the earlier one's.
@@ -169,6 +178,7 @@ pub fn lines(runs: &[ScreenRun]) -> Vec<ScreenLine> {
                 text: String::new(),
                 pieces: Vec::with_capacity(row.len()),
                 role: None,
+                state: None,
             };
             for run in row.into_iter().filter(|r| !r.text.is_empty()) {
                 if !line.text.is_empty() {
@@ -192,14 +202,35 @@ pub fn lines(runs: &[ScreenRun]) -> Vec<ScreenLine> {
         .collect()
 }
 
+/// The word JAWS's Scan Cursor says after an element of `role`: none after text, a list's
+/// items and a menu item ("System", "First item"), "list view" after a list [obs, 1016/s6-s17].
+fn element_role_word(role: &Role) -> Option<&'static str> {
+    use crate::messages::msg;
+    match role {
+        Role::Text | Role::ListItem | Role::MenuItem => None,
+        Role::List => Some(msg::role_list_view_element().as_str()),
+        Role::ComboBox => Some(msg::role_combo_box().as_str()),
+        Role::Edit => Some(msg::role_edit().as_str()),
+        other => crate::viewer_text::role_word(other),
+    }
+}
+
 /// Each element its own line, in the window's order: its name, without its role's word where
 /// the name ends with it ("WPF button" is "WPF", said with the role: "WPF ‹Button›" [obs,
-/// 1002/s11]), and the role.
+/// 1002/s11]), its role and its state; an element without a name is its role alone.
 pub fn element_lines(runs: &[ScreenRun]) -> Vec<ScreenLine> {
+    use crate::messages::msg;
     runs.iter()
-        .filter(|run| !run.text.trim().is_empty())
+        .filter(|run| !run.text.trim().is_empty() || run.role.is_some())
         .map(|run| {
-            let role = run.role.as_ref().and_then(crate::viewer_text::role_word);
+            let role = run.role.as_ref().and_then(element_role_word);
+            let state = run.checked.map(|checked| {
+                if checked {
+                    msg::state_checked().as_str()
+                } else {
+                    msg::state_not_checked().as_str()
+                }
+            });
             let mut text = run.text.trim().to_owned();
             if let Some(word) = role {
                 if let Some((name, last)) = text.rsplit_once(' ') {
@@ -220,8 +251,10 @@ pub fn element_lines(runs: &[ScreenRun]) -> Vec<ScreenLine> {
                 }],
                 text,
                 role,
+                state,
             }
         })
+        .filter(|line| !line.text.is_empty() || line.role.is_some())
         .collect()
 }
 
@@ -383,6 +416,35 @@ mod tests {
                 "Left words",
                 "Right words",
                 "WPF \u{1d} Button \u{1e} "
+            ]
+        );
+    }
+
+    /// The Scan Cursor's other elements: a check box with its state, an unnamed combo box and
+    /// list by their roles, a list's items and the title bar's menu without one [obs,
+    /// 1016/s6, s10, s13-s16].
+    #[test]
+    fn elements_say_their_states_and_unnamed_ones_their_roles() {
+        let mut check = accessible("Remember me", 0, 0, 10, 10).with_role(Role::CheckBox);
+        check.checked = Some(false);
+        let spoken: Vec<String> = element_lines(&[
+            accessible("System", 0, 0, 10, 10).with_role(Role::MenuItem),
+            check,
+            accessible("", 0, 0, 10, 10).with_role(Role::ComboBox),
+            accessible("", 0, 0, 10, 10).with_role(Role::List),
+            accessible("First item", 0, 0, 10, 10).with_role(Role::ListItem),
+        ])
+        .iter()
+        .map(ScreenLine::spoken)
+        .collect();
+        assert_eq!(
+            spoken,
+            [
+                "System",
+                "Remember me \u{1d} check box \u{1e}  \u{1d}not checked\u{1e} ",
+                "combo box",
+                "list view",
+                "First item"
             ]
         );
     }

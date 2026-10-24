@@ -156,6 +156,15 @@ mod reader {
             // A modern app's frame draws its title bar as a window of its own.
             let title_bar = string(element, UIA_ClassNamePropertyId)
                 .is_some_and(|class| class == "ApplicationFrameTitleBarWindow");
+            // The Okur cursor's elements begin with the title bar's menu, "System", as JAWS's
+            // Scan Cursor's do; its buttons are not among them [obs, 1016/s6, 1017/s4].
+            if control_type == TITLEBAR
+                && self.fields_by_line
+                && self.layout == ViewerLayout::Elements
+            {
+                self.title_bar_menu(element);
+                return;
+            }
             if matches!(
                 control_type,
                 TITLEBAR | SCROLLBAR | THUMB | TOOLTIP | SEPARATOR | IMAGE
@@ -167,6 +176,52 @@ mod reader {
             match self.layout {
                 ViewerLayout::Rows => self.read_row_element(element, control_type),
                 ViewerLayout::Elements => self.read_listed_element(element, control_type, root),
+            }
+        }
+
+        /// The menu items of a title bar's menu bar.
+        fn title_bar_menu(&mut self, title_bar: &IUIAutomationElement) {
+            let mut menus = Vec::new();
+            self.each_child(title_bar, |child| menus.push(child.clone()));
+            for menu in menus {
+                let mut items = Vec::new();
+                self.each_child(&menu, |item| {
+                    if int(item, UIA_ControlTypePropertyId) == Some(MENUITEM) {
+                        items.push(item.clone());
+                    }
+                });
+                for item in items {
+                    if let Some(name) = string(&item, UIA_NamePropertyId) {
+                        self.push(&item, MENUITEM, name);
+                    }
+                }
+            }
+        }
+
+        /// Calls `each` on `element`'s children, fetched with the request.
+        fn each_child(
+            &mut self,
+            element: &IUIAutomationElement,
+            mut each: impl FnMut(&IUIAutomationElement),
+        ) {
+            // SAFETY: tree walking with a cache request, on valid elements.
+            let mut child = unsafe {
+                self.walker
+                    .GetFirstChildElementBuildCache(element, self.request)
+            }
+            .ok();
+            while let Some(current) = child {
+                let Some(left) = self.budget.checked_sub(1) else {
+                    return;
+                };
+                self.budget = left;
+                each(&current);
+                // SAFETY: as above.
+                child = unsafe {
+                    self.walker
+                        .GetNextSiblingElementBuildCache(&current, self.request)
+                }
+                .ok();
             }
         }
 
@@ -269,6 +324,27 @@ mod reader {
                 return;
             }
             match control_type {
+                // For the Okur cursor: an edit by its text when it has no name ("Focus here
+                // ‹Edit›"), an unnamed combo box and list by their roles ("combo box", "list
+                // view"), a list's items after it, as JAWS's Scan Cursor reads them [obs,
+                // 1016/s13-s17].
+                EDIT | COMBOBOX if self.fields_by_line => {
+                    // SAFETY: cached property of a valid element.
+                    let password = unsafe { element.CachedIsPassword() }.is_ok_and(|b| b.as_bool());
+                    let text = string(element, UIA_NamePropertyId)
+                        .or_else(|| {
+                            (control_type == EDIT && !password)
+                                .then(|| string(element, UIA_ValueValuePropertyId))
+                                .flatten()
+                        })
+                        .unwrap_or_default();
+                    self.push(element, control_type, text);
+                }
+                LIST if self.fields_by_line => {
+                    let name = string(element, UIA_NamePropertyId).unwrap_or_default();
+                    self.push(element, control_type, name);
+                    self.children(element);
+                }
                 BUTTON | CHECKBOX | RADIOBUTTON | HYPERLINK | MENUITEM | TABITEM | LISTITEM
                 | TREEITEM | DATAITEM | SPLITBUTTON | COMBOBOX | EDIT | SLIDER | SPINNER | TEXT
                 | HEADERITEM | PROGRESSBAR => {

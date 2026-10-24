@@ -483,6 +483,13 @@ impl ScreenReaderEngine {
             (Key::LeftArrow | Key::RightArrow, _, true) => {
                 self.move_okur_word(event.key == Key::RightArrow);
             }
+            // The Scan Cursor's first and last element: "top of file" and the window's title
+            // [obs, 1016/s22, 1017/s16]; "Bottom of file" and the last element, where JAWS's,
+            // walking on into another window of the application, said the title [obs,
+            // 1016/s24].
+            (Key::Home | Key::End, _, true) if self.okur_scans() => {
+                self.okur_scan_end(event.key == Key::End)
+            }
             (Key::Home | Key::End, true, _) => self.okur_line_end(event.key == Key::End),
             // Restricted to the focused control, its first line [obs, 757/s14].
             (Key::PageUp, true, _) if self.okur_restriction == Restriction::Focus => {
@@ -626,6 +633,28 @@ impl ScreenReaderEngine {
             column: Some(start),
         });
         let _ = self.say(word_at(&words_of, start));
+    }
+
+    /// Ctrl+Home or Ctrl+End with the Scan Cursor: "top of file" and the window's top, or
+    /// "Bottom of file" and the last element, each said.
+    fn okur_scan_end(&mut self, end: bool) {
+        let message = if end {
+            msg::text_bottom_of_file()
+        } else {
+            msg::text_top_of_file()
+        };
+        self.speech.speak(message.as_str(), true);
+        let last = self.okur_lines().len().checked_sub(1);
+        self.okur_place = Some(match (end, last) {
+            (true, Some(line)) => OkurPlace::Text {
+                line,
+                column: Some(0),
+            },
+            _ => OkurPlace::Top,
+        });
+        if let Some(line) = self.okur_cursor_line().filter(|l| !l.is_empty()) {
+            self.speech.speak(&line, false);
+        }
     }
 
     /// Home or End: the line's first or last character, quietly [obs, 752/s13, s14].

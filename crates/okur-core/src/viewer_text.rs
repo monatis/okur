@@ -194,13 +194,17 @@ pub fn element_runs(items: &[ScreenItem]) -> Vec<ScreenRun> {
         .iter()
         .filter_map(|item| {
             let text = visible(&item.text);
-            (!text.is_empty()).then(|| {
-                ScreenRun::new(
+            // An unnamed combo box or list is said by its role [obs, 1016/s13, s14].
+            let unnamed = matches!(item.role, Role::ComboBox | Role::List);
+            (!text.is_empty() || unnamed).then(|| {
+                let mut run = ScreenRun::new(
                     text,
                     (item.left, item.top, item.right, item.bottom),
                     Source::Accessible,
                 )
-                .with_role(item.role.clone())
+                .with_role(item.role.clone());
+                run.checked = item.checked;
+                run
             })
         })
         .collect()

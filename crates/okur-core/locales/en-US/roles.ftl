@@ -63,6 +63,8 @@ role-list-box = List box
 role-list-box-multi-select = MultiSelect ListBox
 role-list-item = list item
 role-list-view = List view
+# A list as JAWS's Scan Cursor says it, before its items [obs, 1016/s14].
+role-list-view-element = list view
 role-menu = menu
 role-menu-bar = Menu bar
 role-menu-item = menu item
