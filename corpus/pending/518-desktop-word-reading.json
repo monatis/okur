@@ -2,10 +2,10 @@
   "id": "518-desktop-word-reading",
   "name": "Reading a Word document: Down through a heading, paragraphs, a misspelled word, a bulleted list and into a table; Say Line, Say Word on the misspelled word, Ctrl+Right over it, Say All stopped by Ctrl, Ctrl+End and Up",
   "category": "desktop",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
   "target_app": "desktop",
-  "launch": { "window_title": "sr-word-fixture.docx - Word" },
+  "launch": { "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)", "close_window": true, "hide_console": true },
   "reset": { "keys": ["Ctrl+Home"] },
   "steps": [
     { "id": "s1", "type": "key", "command": "Insert+Up" },

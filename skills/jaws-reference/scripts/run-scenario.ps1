@@ -719,6 +719,15 @@ function Stop-DesktopFixture {
             [void][SrKeyInput]::PostMessage($window, 0x10, [IntPtr]::Zero, [IntPtr]::Zero)
             Start-Sleep -Milliseconds 200
         }
+    } elseif ($launch.close_window) {
+        # The application's process can hold the user's own documents (Word's windows are one
+        # process): the fixture's window is closed, as its Close button does, never the process.
+        for ($i = 0; $i -lt 20; $i++) {
+            $old = Find-WindowByTitle $launch.window_title
+            if (-not $old) { break }
+            [void][SrKeyInput]::PostMessage($old.MainWindowHandle, 0x10, [IntPtr]::Zero, [IntPtr]::Zero)
+            Start-Sleep -Milliseconds 300
+        }
     } else {
         $old = Find-WindowByTitle $launch.window_title
         if ($old) { Stop-Process -Id $old.Id -Force -ErrorAction SilentlyContinue }
