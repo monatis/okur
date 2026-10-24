@@ -2627,6 +2627,7 @@ mod capture {
                 font: None,
                 word: None,
                 misspelled: Vec::new(),
+                structure: None,
             });
             (state.sink)(event);
             state.count += 1;
@@ -6660,6 +6661,7 @@ mod tests {
                 font: None,
                 word: None,
                 misspelled: Vec::new(),
+                structure: None,
             }),
             ..focus_event(Vec::new())
         };

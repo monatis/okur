@@ -524,6 +524,7 @@ mod tests {
             font: None,
             word: None,
             misspelled: Vec::new(),
+            structure: None,
         });
         engine.handle_accessibility_event(&AccessibilityEvent::Focus(edit));
         let _ = speech.take();

@@ -391,6 +391,7 @@ mod reader {
                 .collect(),
             text: state.text,
             font,
+            structure: None,
         }
     }
 
@@ -466,6 +467,7 @@ mod reader {
                 font: win32_font(hwnd),
                 word: None,
                 misspelled: Vec::new(),
+                structure: None,
             })
         }
     }
@@ -500,6 +502,187 @@ mod reader {
         Some(text.to_string().chars().count())
     }
 
+    /// The range of `unit` around `caret` (at offset `start`) as `(start, end)`, by the
+    /// field's own unit, counted from the caret over the short texts between them.
+    fn unit_at(
+        caret: &IUIAutomationTextRange,
+        start: usize,
+        unit: windows::Win32::UI::Accessibility::TextUnit,
+    ) -> Option<(usize, usize)> {
+        // SAFETY: UIA text range calls on valid ranges of one provider.
+        unsafe {
+            let range = caret.Clone().ok()?;
+            range.ExpandToEnclosingUnit(unit).ok()?;
+            let unit_start = match range
+                .CompareEndpoints(
+                    TextPatternRangeEndpoint_Start,
+                    caret,
+                    TextPatternRangeEndpoint_Start,
+                )
+                .ok()?
+            {
+                // Before the caret: the text from the unit's start to the caret.
+                ..0 => {
+                    let before = range.Clone().ok()?;
+                    before
+                        .MoveEndpointByRange(
+                            TextPatternRangeEndpoint_End,
+                            caret,
+                            TextPatternRangeEndpoint_Start,
+                        )
+                        .ok()?;
+                    start.checked_sub(chars_of(&before)?)?
+                }
+                0 => start,
+                // After it: the text from the caret to the unit's start.
+                _ => {
+                    let after = caret.Clone().ok()?;
+                    after
+                        .MoveEndpointByRange(
+                            TextPatternRangeEndpoint_End,
+                            &range,
+                            TextPatternRangeEndpoint_Start,
+                        )
+                        .ok()?;
+                    start + chars_of(&after)?
+                }
+            };
+            Some((unit_start, unit_start + chars_of(&range)?))
+        }
+    }
+
+    /// Word's document window, whose text tells its headings, lists and tables.
+    const WORD_DOCUMENT_CLASS: &str = "_WwG";
+    /// UI Automation's style ids: Heading 1 to 9, and the bulleted and numbered lists.
+    const STYLE_HEADING_1: i32 = 70001;
+    const STYLE_HEADING_9: i32 = 70009;
+    const STYLE_BULLETED_LIST: i32 = 70015;
+    const STYLE_NUMBERED_LIST: i32 = 70016;
+
+    /// What Word's text says of the caret's line: its own line (a table cell's end ends one),
+    /// the paragraph's heading level and list, and the table cell. `None` outside Word's
+    /// document.
+    fn word_structure(
+        uia: &IUIAutomation,
+        focused: &windows::Win32::UI::Accessibility::IUIAutomationElement,
+        pattern: &IUIAutomationTextPattern,
+        caret: &IUIAutomationTextRange,
+        start: usize,
+    ) -> Option<okur_core::LineStructure> {
+        use windows::Win32::UI::Accessibility::{
+            TextUnit_Line, TextUnit_Paragraph, UIA_BulletStyleAttributeId, UIA_StyleIdAttributeId,
+        };
+        // SAFETY: UIA client calls on valid objects.
+        unsafe {
+            if focused.CurrentClassName().ok()? != WORD_DOCUMENT_CLASS {
+                return None;
+            }
+            let line = unit_at(caret, start, TextUnit_Line)?;
+            let paragraph = caret.Clone().ok()?;
+            paragraph.ExpandToEnclosingUnit(TextUnit_Paragraph).ok()?;
+            let attribute = |id| {
+                paragraph
+                    .GetAttributeValue(id)
+                    .ok()
+                    .and_then(|v| i32::try_from(&v).ok())
+            };
+            let style = attribute(UIA_StyleIdAttributeId);
+            let heading = style
+                .filter(|id| (STYLE_HEADING_1..=STYLE_HEADING_9).contains(id))
+                .and_then(|id| u8::try_from(id - STYLE_HEADING_1 + 1).ok());
+            let list_item = attribute(UIA_BulletStyleAttributeId).is_some_and(|b| b != 0)
+                || matches!(style, Some(STYLE_BULLETED_LIST | STYLE_NUMBERED_LIST));
+            Some(okur_core::LineStructure {
+                line,
+                heading,
+                list_item,
+                cell: table_cell(uia, focused, pattern, caret),
+            })
+        }
+    }
+
+    /// The table cell holding `caret` in `document`: the first element around it with a
+    /// grid item, its table's number among the document's tables, and its column's header text.
+    fn table_cell(
+        uia: &IUIAutomation,
+        document: &windows::Win32::UI::Accessibility::IUIAutomationElement,
+        pattern: &IUIAutomationTextPattern,
+        caret: &IUIAutomationTextRange,
+    ) -> Option<okur_core::TableCell> {
+        use windows::Win32::System::Variant::VARIANT;
+        use windows::Win32::UI::Accessibility::{
+            IUIAutomationGridItemPattern, IUIAutomationGridPattern, IUIAutomationTableItemPattern,
+            TreeScope_Descendants, UIA_ControlTypePropertyId, UIA_GridItemPatternId,
+            UIA_GridPatternId, UIA_TableControlTypeId, UIA_TableItemPatternId,
+        };
+        /// Elements walked up from the caret to its cell: Word's cell is the caret's own.
+        const MAX_DEPTH: usize = 8;
+        // SAFETY: UIA client calls on valid objects.
+        unsafe {
+            let walker = uia.ControlViewWalker().ok()?;
+            let mut element = caret.GetEnclosingElement().ok()?;
+            let mut item = None;
+            for _ in 0..MAX_DEPTH {
+                if let Ok(found) = element
+                    .GetCurrentPatternAs::<IUIAutomationGridItemPattern>(UIA_GridItemPatternId)
+                {
+                    item = Some(found);
+                    break;
+                }
+                if uia.CompareElements(&element, document).ok()?.as_bool() {
+                    return None;
+                }
+                element = walker.GetParentElement(&element).ok()?;
+            }
+            let item = item?;
+            let index = |v: i32| usize::try_from(v).ok().map(|v| v + 1);
+            let grid = item.CurrentContainingGrid().ok()?;
+            let size: IUIAutomationGridPattern =
+                grid.GetCurrentPatternAs(UIA_GridPatternId).ok()?;
+            let condition = uia
+                .CreatePropertyCondition(
+                    UIA_ControlTypePropertyId,
+                    &VARIANT::from(UIA_TableControlTypeId.0),
+                )
+                .ok()?;
+            let tables = document.FindAll(TreeScope_Descendants, &condition).ok()?;
+            let table = (0..tables.Length().ok()?)
+                .position(|i| {
+                    tables
+                        .GetElement(i)
+                        .and_then(|t| uia.CompareElements(&t, &grid))
+                        .is_ok_and(|same| same.as_bool())
+                })
+                .map_or(1, |i| i + 1);
+            let column_header = element
+                .GetCurrentPatternAs::<IUIAutomationTableItemPattern>(UIA_TableItemPatternId)
+                .and_then(|cell| cell.GetCurrentColumnHeaderItems())
+                .and_then(|headers| headers.GetElement(0))
+                .and_then(|header| pattern.RangeFromChild(&header))
+                .and_then(|range| range.GetText(MAX_CELL_CHARS))
+                .ok()
+                .map(|text| cell_text(&text.to_string()))
+                .filter(|text| !text.is_empty());
+            Some(okur_core::TableCell {
+                table,
+                row: index(item.CurrentRow().ok()?)?,
+                column: index(item.CurrentColumn().ok()?)?,
+                rows: usize::try_from(size.CurrentRowCount().ok()?).ok()?,
+                columns: usize::try_from(size.CurrentColumnCount().ok()?).ok()?,
+                column_header,
+            })
+        }
+    }
+
+    /// The most of a header cell's text read.
+    const MAX_CELL_CHARS: i32 = 200;
+
+    /// A cell's text without Word's end-of-cell and paragraph marks.
+    fn cell_text(text: &str) -> String {
+        text.trim_matches(|c: char| c.is_control() || c.is_whitespace())
+            .to_owned()
+    }
+
     fn read_uia(uia: &IUIAutomation) -> Option<TextContext> {
         // SAFETY: UIA client calls on valid objects.
         unsafe {
@@ -525,45 +708,12 @@ mod reader {
                 )
                 .ok()?;
             // The word at the caret by the field's own word unit.
-            let word = caret.Clone().ok().and_then(|range| {
-                use windows::Win32::UI::Accessibility::TextUnit_Word;
-                range.ExpandToEnclosingUnit(TextUnit_Word).ok()?;
-                let word_start = match range
-                    .CompareEndpoints(
-                        TextPatternRangeEndpoint_Start,
-                        &caret,
-                        TextPatternRangeEndpoint_Start,
-                    )
-                    .ok()?
-                {
-                    // Before the caret: the text from the word's start to the caret.
-                    ..0 => {
-                        let before = range.Clone().ok()?;
-                        before
-                            .MoveEndpointByRange(
-                                TextPatternRangeEndpoint_End,
-                                &caret,
-                                TextPatternRangeEndpoint_Start,
-                            )
-                            .ok()?;
-                        start.checked_sub(chars_of(&before)?)?
-                    }
-                    0 => start,
-                    // After it: the text from the caret to the word's start.
-                    _ => {
-                        let after = caret.Clone().ok()?;
-                        after
-                            .MoveEndpointByRange(
-                                TextPatternRangeEndpoint_End,
-                                &range,
-                                TextPatternRangeEndpoint_Start,
-                            )
-                            .ok()?;
-                        start + chars_of(&after)?
-                    }
-                };
-                Some((word_start, word_start + chars_of(&range)?))
-            });
+            let word = unit_at(
+                &caret,
+                start,
+                windows::Win32::UI::Accessibility::TextUnit_Word,
+            );
+            let structure = word_structure(uia, &focused, &pattern, &caret, start);
             Some(TextContext {
                 text,
                 caret: start,
@@ -571,6 +721,7 @@ mod reader {
                 font: uia_font(&selection),
                 word,
                 misspelled: Vec::new(),
+                structure,
             })
         }
     }
@@ -795,6 +946,7 @@ mod tests {
             font: None,
             word: None,
             misspelled: Vec::new(),
+            structure: None,
         };
         assert_eq!(
             ia2_position(&context),

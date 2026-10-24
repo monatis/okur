@@ -985,6 +985,7 @@ mod tests {
             font: None,
             word: None,
             misspelled: Vec::new(),
+            structure: None,
         });
         let _ = engine.start_field_say_all();
         assert_eq!(
@@ -1025,6 +1026,7 @@ five"
             font: None,
             word: None,
             misspelled: Vec::new(),
+            structure: None,
         });
         let _ = engine.start_field_say_all();
         engine.speech_reached(mark_of(&speech, "two"));

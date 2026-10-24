@@ -24,10 +24,18 @@ pub const BASELINE_FILE: &str = "parity-baseline.json";
 
 /// The documented normalizer: unify line endings, collapse whitespace runs (including
 /// newlines) to one space, and trim. The `\u{1d}`/`\u{1e}` role markers are kept, because
-/// they encode JAWS speech structure.
+/// they encode JAWS speech structure. Word's list bullet is one character: JAWS reads it from
+/// Word as the Symbol font's private U+F0B7, UI Automation gives it as U+2022 [obs, 518/s10].
 pub fn normalize(speech: &str) -> String {
-    speech.split_whitespace().collect::<Vec<_>>().join(" ")
+    speech
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
+        .replace(SYMBOL_FONT_BULLET, "\u{2022}")
 }
+
+/// Word's bullet in the Symbol font, as JAWS reads it.
+const SYMBOL_FONT_BULLET: char = '\u{f0b7}';
 
 /// JAWS's name for itself, and Okur's name for itself in the same place.
 pub const JAWS_NAME: &str = "JAWS";
@@ -1438,6 +1446,16 @@ fn with_held(mut modifiers: Modifiers, held: Modifiers) -> Modifiers {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// Whitespace runs are one space; Word's bullet compares equal in either code point.
+    #[test]
+    fn normalizing_collapses_space_and_unifies_words_bullet() {
+        assert_eq!(normalize(" a\r\n  b\t"), "a b");
+        assert_eq!(
+            normalize("\u{f0b7} Weekday hours"),
+            normalize("\u{2022} Weekday hours")
+        );
+    }
 
     /// A step the capture did not read JAWS's history for (`"history": false`, Keyboard Help)
     /// has no history transcript; the other steps keep theirs.

@@ -87,7 +87,7 @@ mod windows_actions {
         UiaObject(Vec<i32>, Ia2Action),
         /// The field's text once the application has acted on a key, compared with the
         /// field as the engine last knew it.
-        Text(Option<TextContext>, bool),
+        Text(Option<Box<TextContext>>, bool),
         /// The focused text as it is now, answered even when there is none.
         TextNow,
         /// A chord of virtual keys, sent marked as the screen reader's own.
@@ -290,7 +290,7 @@ mod windows_actions {
                                     return;
                                 };
                                 let started = Instant::now();
-                                let context = read_after_key(uia, before, in_page);
+                                let context = read_after_key(uia, before.map(|b| *b), in_page);
                                 // Offsets, not the text: a document's whole text on every key
                                 // made the debug log huge.
                                 tracing::debug!(
@@ -325,6 +325,7 @@ mod windows_actions {
                                     font: None,
                                     word: None,
                                     misspelled: Vec::new(),
+                                    structure: None,
                                 });
                                 let _ = events.send(AccessibilityEvent::TextContext(context));
                             }
@@ -725,7 +726,7 @@ mod windows_actions {
         }
 
         fn read_at_caret(&self, before: Option<&TextContext>, in_page: bool) -> bool {
-            self.send(Request::Text(before.cloned(), in_page))
+            self.send(Request::Text(before.cloned().map(Box::new), in_page))
         }
 
         fn read_text(&self) -> bool {
@@ -1127,6 +1128,7 @@ mod tests {
             }),
             word: None,
             misspelled: Vec::new(),
+            structure: None,
         })
     }
 

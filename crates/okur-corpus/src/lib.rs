@@ -405,6 +405,7 @@ mod tests {
                 font: None,
                 word: None,
                 misspelled: Vec::new(),
+                structure: None,
             }))
         };
         report(&mut engine, "Zed", 3);

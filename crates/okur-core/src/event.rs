@@ -95,6 +95,46 @@ pub struct TextContext {
     /// `invalid:spelling` text attribute): JAWS says "Misspelled" with them [obs, 284/s6, s9].
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub misspelled: Vec<(usize, usize)>,
+    /// What a word processor says of the caret's line, where it marks its structure (Word).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub structure: Option<LineStructure>,
+}
+
+/// What a word processor says of the line at the caret through its text's attributes and
+/// elements (Word's UI Automation): its own line, the paragraph's heading level and list, and
+/// the table cell. JAWS reads Word by them: "heading level 1 Library Hours", "Entering List",
+/// "table 1 uniform Table new cell Branch" [obs, 518].
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LineStructure {
+    /// The caret's line as `(start, end)` by the field's own line unit: Word's ends at a
+    /// table cell's end, where its text runs the cells together [obs, 518/s13].
+    pub line: (usize, usize),
+    /// The paragraph's heading level, 1 to 9, from its style.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub heading: Option<u8>,
+    /// The paragraph is an item of a bulleted or numbered list.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub list_item: bool,
+    /// The table cell holding the caret.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cell: Option<TableCell>,
+}
+
+/// A cell of a word processor's table, where the caret is.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct TableCell {
+    /// The table's number in the document, from 1: "table 1".
+    pub table: usize,
+    /// The cell's row and column, from 1.
+    pub row: usize,
+    pub column: usize,
+    /// The table's rows and columns.
+    pub rows: usize,
+    pub columns: usize,
+    /// Its column's header text, from the table's first row, which JAWS says on entering the
+    /// column: "Hours 9 to 9" [obs, 518/s15].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub column_header: Option<String>,
 }
 
 /// The font at a text field's caret, as UIA text attributes or a rich edit report it.

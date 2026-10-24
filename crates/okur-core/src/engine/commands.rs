@@ -761,6 +761,7 @@ impl ScreenReaderEngine {
             font: None,
             word: None,
             misspelled: Vec::new(),
+            structure: None,
         });
         self.forms_mode = true;
         self.cursor.forms_mode_active = true;
