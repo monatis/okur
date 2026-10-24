@@ -1029,6 +1029,15 @@ pub fn set_list(id: u32, control: &str, items: &[String], selected: usize) {
                 fill_list_box(list, items, selected);
                 return;
             }
+            // A drop-down list's choices (Voice Adjustment's Profile Name after Save As).
+            if matches!(kind, ControlKind::Choice { .. }) {
+                let refilled = ControlKind::Choice {
+                    options: items.to_vec(),
+                    selected,
+                };
+                fill(window, index, list, &refilled);
+                return;
+            }
             set_items(list, items, selected);
         }
     }

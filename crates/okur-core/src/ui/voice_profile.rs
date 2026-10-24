@@ -3,7 +3,8 @@
 //! notepad: Combo box | Use Default | 1 of 6", "OK Button", "Cancel Button" [obs, the walk of
 //! Select a Voice Profile]. Default chooses the profile for all applications; "For
 //! <application>" the application's, its first item "Use Default" following Default. A profile is
-//! a synthesizer's own (Okur's factory profiles, by the synthesizer's name) or one saved by name.
+//! a synthesizer's own, "<synthesizer> - (factory)", or one saved by name, all in alphabetical
+//! order [obs, the walk of Voice Adjustment's profiles].
 
 use std::collections::BTreeMap;
 
@@ -16,26 +17,49 @@ use crate::settings::{Synthesizer, VoiceSettings};
 const DEFAULT: &str = "default";
 const APPLICATION: &str = "application";
 
-/// The profiles offered: each synthesizer's own, then those saved by name.
-pub fn profiles(saved: &BTreeMap<String, VoiceSettings>) -> Vec<(String, VoiceSettings)> {
-    Synthesizer::ALL
+/// A voice profile offered: a synthesizer's own (`factory`), or one saved by name.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Profile {
+    pub name: String,
+    pub voice: VoiceSettings,
+    pub factory: bool,
+}
+
+/// The profiles offered, in alphabetical order: each synthesizer's own and those saved by name.
+pub fn profiles(saved: &BTreeMap<String, VoiceSettings>) -> Vec<Profile> {
+    let mut profiles: Vec<Profile> = Synthesizer::ALL
         .iter()
         .filter(|&&synthesizer| synthesizer != Synthesizer::NoSpeech)
-        .map(|&synthesizer| {
-            (
-                synthesizer.label().to_string(),
-                VoiceSettings {
-                    synthesizer,
-                    ..VoiceSettings::default()
-                },
-            )
+        .map(|&synthesizer| Profile {
+            name: msg::voice_profile_factory(synthesizer.label().as_str()).render(),
+            voice: VoiceSettings {
+                synthesizer,
+                ..VoiceSettings::default()
+            },
+            factory: true,
         })
-        .chain(
-            saved
+        .chain(saved.iter().map(|(name, voice)| Profile {
+            name: name.clone(),
+            voice: voice.clone(),
+            factory: false,
+        }))
+        .collect();
+    profiles.sort_by_key(|profile| profile.name.to_lowercase());
+    profiles
+}
+
+/// Which of `profiles` `voice` is: the one it was chosen from, else its synthesizer's own.
+pub fn current(profiles: &[Profile], voice: &VoiceSettings) -> usize {
+    voice
+        .profile
+        .as_ref()
+        .and_then(|name| profiles.iter().position(|p| &p.name == name))
+        .or_else(|| {
+            profiles
                 .iter()
-                .map(|(name, voice)| (name.clone(), voice.clone())),
-        )
-        .collect()
+                .position(|p| p.factory && p.voice.synthesizer == voice.synthesizer)
+        })
+        .unwrap_or(0)
 }
 
 /// What the engine does after a message from the dialog.
@@ -71,23 +95,16 @@ impl VoiceProfileDialog {
     /// `application`'s own profile if it has one.
     pub fn new(
         id: u32,
-        profiles: &[(String, VoiceSettings)],
+        profiles: &[Profile],
         global: &VoiceSettings,
         application: Option<(String, Option<String>)>,
     ) -> Self {
-        let names: Vec<String> = profiles.iter().map(|(name, _)| name.clone()).collect();
+        let names: Vec<String> = profiles.iter().map(|p| p.name.clone()).collect();
         let named = |name: &Option<String>| {
             name.as_ref()
                 .and_then(|name| names.iter().position(|n| n == name))
         };
-        // The profile chosen, else the synthesizer's own.
-        let default = named(&global.profile)
-            .or_else(|| {
-                profiles
-                    .iter()
-                    .position(|(_, p)| p.synthesizer == global.synthesizer)
-            })
-            .unwrap_or(0);
+        let default = current(profiles, global);
         let for_application = application
             .as_ref()
             .and_then(|(_, own)| named(own))
@@ -239,12 +256,12 @@ mod tests {
             Some((
                 "Default:".to_owned(),
                 vec![
-                    "Automatic".to_owned(),
-                    "OneCore".to_owned(),
-                    "SAPI 5".to_owned(),
-                    "Fast".to_owned()
+                    "Automatic - (factory)".to_owned(),
+                    "Fast".to_owned(),
+                    "OneCore - (factory)".to_owned(),
+                    "SAPI 5 - (factory)".to_owned()
                 ],
-                2
+                3
             ))
         );
         assert_eq!(
@@ -276,7 +293,7 @@ mod tests {
         chosen.handle(&FromUi::DialogChanged {
             id: 4,
             control: DEFAULT.into(),
-            value: Value::Selected(1),
+            value: Value::Selected(2),
         });
         chosen.handle(&FromUi::DialogChanged {
             id: 4,
@@ -286,7 +303,7 @@ mod tests {
         assert_eq!(
             chosen.handle(&ok),
             Outcome::Choose {
-                default: Some("OneCore".to_owned()),
+                default: Some("OneCore - (factory)".to_owned()),
                 application: Some(("notepad".to_owned(), None))
             }
         );

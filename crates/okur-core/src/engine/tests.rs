@@ -7624,10 +7624,10 @@ fn voice_profiles_are_chosen_for_all_applications_and_one() {
     layers.global = crate::settings_layers::changes(&saved, &crate::settings::Settings::default());
     engine.set_settings_layers(layers);
     engine.settings_place(Some("notepad.exe"), None);
-    engine.choose_voice_profiles(Some("SAPI 5".to_owned()), None);
+    engine.choose_voice_profiles(Some("SAPI 5 - (factory)".to_owned()), None);
     let global = engine.settings_layers.resolve(None, None);
     assert_eq!(global.voice.synthesizer, Synthesizer::Sapi5);
-    assert_eq!(global.voice.profile.as_deref(), Some("SAPI 5"));
+    assert_eq!(global.voice.profile.as_deref(), Some("SAPI 5 - (factory)"));
     engine.choose_voice_profiles(None, Some(("notepad".to_owned(), Some("Fast".to_owned()))));
     assert_eq!(engine.settings.voice.rate, 6);
     assert_eq!(engine.settings.voice.profile.as_deref(), Some("Fast"));

@@ -242,8 +242,8 @@ pub enum ToUi {
         control: String,
         value: Value,
     },
-    /// Replace a list's items, and select one; an editable combo box's history, its text the
-    /// item selected (none past the end).
+    /// Replace a list's items, or a drop-down list's choices, and select one; an editable combo
+    /// box's history, its text the item selected (none past the end).
     DialogItems {
         id: u32,
         control: String,

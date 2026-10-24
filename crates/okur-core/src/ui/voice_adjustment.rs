@@ -1,26 +1,65 @@
-//! Voice Adjustment (the Okur window's Options, Voices, Voice Adjustment...), as JAWS's: a
-//! "Voice" group of Adjust (the voice context), Person, Rate, Punctuation and Volume, then OK
-//! and Cancel (old-pc's walk, the redesign's §1.1), for all applications. Adjust chooses All
-//! Contexts or one of the voice contexts ([`VoiceContext`]): a context shows its own Person,
-//! Rate, Punctuation and Pitch, and no Volume, which is All Contexts' alone [obs, the walk of
-//! Voice Adjustment's contexts]; a change in All Contexts is every context's. Profile Name,
-//! Synthesizer Language, Speak Sample and Save As come with voice profiles (the redesign's
-//! milestone 4).
+//! Voice Adjustment (the Okur window's Options, Voices, Voice Adjustment...), as JAWS's, for all
+//! applications (old-pc's walks, the redesign's §1.1):
+//! - Profile Name, the focus on opening: the voice profiles, the synthesizers' own ("SAPI 5 -
+//!   (factory)") and those saved by name, in alphabetical order; choosing one shows its voice;
+//! - Delete Profile, for a saved profile;
+//! - a "Voice" group of Adjust (the voice context), Person, Rate, Punctuation and Volume. Adjust
+//!   chooses All Contexts or one of the voice contexts ([`VoiceContext`]): a context shows its own
+//!   Person, Rate, Punctuation and Pitch, and no Volume, which is All Contexts' alone; a change in
+//!   All Contexts is every context's;
+//! - Save As..., which asks for the profile's name ("Save Voice Profile dialog | Voice Profile
+//!   Name: edit combo"), then OK and Cancel. OK is there once something changed, and not for a
+//!   synthesizer's own profile changed, which is kept only by Save As (JAWS's help).
+//!
+//! JAWS's Synthesizer Language, Speak Sample, Spell Rate Change and Upper Case Pitch Change have
+//! nothing in Okur yet.
 
 use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
 
-use super::settings::Outcome;
+use super::voice_profile::{self, Profile};
 use crate::messages::{msg, StaticMessage};
 use crate::settings::registry::choices;
 use crate::settings::{Punctuation, Settings, VoiceContext, VoiceSettings};
-use crate::settings_layers::Scope;
 
+const PROFILE: &str = "profile";
+const DELETE: &str = "delete_profile";
 const ADJUST: &str = "adjust";
 const PERSON: &str = "person";
 const RATE: &str = "rate";
 const PUNCTUATION: &str = "punctuation";
-const VOLUME: &str = "volume";
 const PITCH: &str = "pitch";
+const VOLUME: &str = "volume";
+const SAVE_AS: &str = "save_as";
+/// Save Voice Profile's name box.
+const PROFILE_NAME: &str = "profile_name";
+
+/// What the engine does after a message from the dialog or its Save Voice Profile dialog.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Outcome {
+    Nothing,
+    Send(Vec<ToUi>),
+    /// OK: `settings` for all applications, where they were `before`: the voice chosen or
+    /// changed, and a saved profile changed kept under its name.
+    Apply {
+        before: Box<Settings>,
+        settings: Box<Settings>,
+    },
+    /// Save As... pressed: the engine shows [`VoiceAdjustment::save_as`] under a new id.
+    AskName,
+    /// Save Voice Profile's OK: keep `voice` as profile `name`, then send these to the dialogs.
+    Save {
+        name: String,
+        voice: Box<VoiceSettings>,
+        send: Vec<ToUi>,
+    },
+    /// Delete Profile: the saved profile `name` goes, then send these to the dialog.
+    Delete {
+        name: String,
+        send: Vec<ToUi>,
+    },
+    /// Cancel, Escape: nothing changes.
+    Closed,
+}
 
 /// The dialog's state: the settings for all applications as it opened, and as changed.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -32,17 +71,43 @@ pub struct VoiceAdjustment {
     voices: Vec<String>,
     /// The context Adjust shows; none, All Contexts.
     context: Option<VoiceContext>,
+    profiles: Vec<Profile>,
+    /// The profile Profile Name shows.
+    profile: usize,
+    /// Another profile was chosen.
+    chosen: bool,
+    /// The voice was changed since the profile was chosen or saved.
+    modified: bool,
+    /// Save Voice Profile, while it is open, and the name typed in it.
+    save_as: Option<(u32, String)>,
 }
 
 impl VoiceAdjustment {
     pub fn new(id: u32, settings: Settings, voices: Vec<String>) -> Self {
+        let profiles = voice_profile::profiles(&settings.voice_profiles);
+        let profile = voice_profile::current(&profiles, &settings.voice);
         Self {
             id,
             before: settings.clone(),
             draft: settings,
             voices,
             context: None,
+            profiles,
+            profile,
+            chosen: false,
+            modified: false,
+            save_as: None,
         }
+    }
+
+    /// Whether dialog `id` is this one or its Save Voice Profile.
+    pub fn owns(&self, id: u32) -> bool {
+        id == self.id || self.save_as.as_ref().is_some_and(|(open, _)| *open == id)
+    }
+
+    /// Save Voice Profile, while it is open.
+    pub fn save_as_id(&self) -> Option<u32> {
+        self.save_as.as_ref().map(|(id, _)| *id)
     }
 
     /// The voices offered, the synthesizer's default first.
@@ -64,6 +129,24 @@ impl VoiceAdjustment {
             }))
             .map(|label| label.to_string())
             .collect()
+    }
+
+    fn names(&self) -> Vec<String> {
+        self.profiles.iter().map(|p| p.name.clone()).collect()
+    }
+
+    /// The profile shown is a synthesizer's own.
+    fn factory(&self) -> bool {
+        self.profiles.get(self.profile).is_none_or(|p| p.factory)
+    }
+
+    /// OK is there once another profile was chosen, or the voice changed in a saved one.
+    fn ok_enabled(&self) -> bool {
+        if self.modified {
+            !self.factory()
+        } else {
+            self.chosen
+        }
     }
 
     /// The voice the controls show: All Contexts', or the context's.
@@ -96,11 +179,24 @@ impl VoiceAdjustment {
             kind,
             enabled: true,
         };
+        let button = |id: &str, label: StaticMessage, enabled: bool| Control {
+            enabled,
+            ..control(id, label, ControlKind::Button { default: false })
+        };
         let voice = self.shown();
         DialogSpec {
             id: self.id,
             title: msg::voice_adjustment_title().to_string(),
             controls: vec![
+                control(
+                    PROFILE,
+                    msg::voice_adjustment_profile(),
+                    ControlKind::Choice {
+                        options: self.names(),
+                        selected: self.profile,
+                    },
+                ),
+                button(DELETE, msg::voice_adjustment_delete(), !self.factory()),
                 control("voice", msg::voice_adjustment_group(), ControlKind::Group),
                 control(
                     ADJUST,
@@ -164,6 +260,59 @@ impl VoiceAdjustment {
                         },
                     )
                 },
+                button(SAVE_AS, msg::voice_adjustment_save_as(), true),
+                Control {
+                    enabled: self.ok_enabled(),
+                    ..control(
+                        "ok",
+                        msg::settings_ok(),
+                        ControlKind::Button { default: true },
+                    )
+                },
+                control(
+                    "cancel",
+                    msg::settings_cancel(),
+                    ControlKind::Button { default: false },
+                ),
+            ],
+            keys: Vec::new(),
+        }
+    }
+
+    /// Save Voice Profile as dialog `id`: "Voice Profile Name:", an editable combo box of the
+    /// profiles' names with the one shown typed in, then OK and Cancel [obs, the walk of Voice
+    /// Adjustment's profiles].
+    pub fn save_as(&mut self, id: u32) -> DialogSpec {
+        let name = self
+            .profiles
+            .get(self.profile)
+            .filter(|p| !p.factory)
+            .map(|p| p.name.clone())
+            .unwrap_or_default();
+        self.save_as = Some((id, name.clone()));
+        let control = |id: &str, label: StaticMessage, kind: ControlKind| Control {
+            id: id.to_owned(),
+            label: label.to_string(),
+            kind,
+            enabled: true,
+        };
+        DialogSpec {
+            id,
+            title: msg::voice_adjustment_save_title().to_string(),
+            controls: vec![
+                control(
+                    PROFILE_NAME,
+                    msg::voice_adjustment_save_name(),
+                    ControlKind::ComboEdit {
+                        text: name,
+                        history: self
+                            .profiles
+                            .iter()
+                            .filter(|p| !p.factory)
+                            .map(|p| p.name.clone())
+                            .collect(),
+                    },
+                ),
                 control(
                     "ok",
                     msg::settings_ok(),
@@ -185,105 +334,258 @@ impl VoiceAdjustment {
             .map_or(0, |i| i + 1)
     }
 
-    /// The controls set to the context chosen: its values, Pitch for a context, Volume for All
+    /// The controls set to the voice shown: its values, Pitch for a context, Volume for All
     /// Contexts.
-    fn show_context(&self) -> Vec<ToUi> {
+    fn show_voice(&self) -> Vec<ToUi> {
         let voice = self.shown();
         let set = |control: &str, value: Value| ToUi::DialogSet {
             id: self.id,
             control: control.to_owned(),
             value,
         };
+        let enable = |control: &str, enabled: bool| ToUi::DialogEnable {
+            id: self.id,
+            control: control.to_owned(),
+            enabled,
+        };
         vec![
             set(PERSON, Value::Selected(self.person(&voice))),
             set(RATE, Value::Number(voice.rate)),
             set(PUNCTUATION, Value::Selected(Self::punctuation(&voice))),
             set(PITCH, Value::Number(voice.pitch)),
-            ToUi::DialogEnable {
-                id: self.id,
-                control: PITCH.to_owned(),
-                enabled: self.context.is_some(),
-            },
-            ToUi::DialogEnable {
-                id: self.id,
-                control: VOLUME.to_owned(),
-                enabled: self.context.is_none(),
-            },
+            set(VOLUME, Value::Number(i32::from(voice.volume))),
+            enable(PITCH, self.context.is_some()),
+            enable(VOLUME, self.context.is_none()),
         ]
     }
 
-    /// What the dialog's window reported.
-    pub fn handle(&mut self, message: &FromUi) -> Outcome {
-        match message {
-            FromUi::DialogChanged { id, control, value } if *id == self.id => {
-                if let (ADJUST, Value::Selected(i)) = (control.as_str(), value) {
-                    self.context = i
-                        .checked_sub(1)
-                        .and_then(|i| VoiceContext::ALL.get(i))
-                        .copied();
-                    return Outcome::Send(self.show_context());
+    /// Delete Profile and OK as the profile shown and the changes allow.
+    fn show_buttons(&self) -> Vec<ToUi> {
+        let enable = |control: &str, enabled: bool| ToUi::DialogEnable {
+            id: self.id,
+            control: control.to_owned(),
+            enabled,
+        };
+        vec![
+            enable(DELETE, !self.factory()),
+            enable("ok", self.ok_enabled()),
+        ]
+    }
+
+    /// Profile `name` shown, its voice the draft's.
+    fn choose(&mut self, index: usize) -> Vec<ToUi> {
+        let Some(profile) = self.profiles.get(index).cloned() else {
+            return Vec::new();
+        };
+        self.profile = index;
+        self.draft.voice = self.draft.voice.with_profile(&profile.name, &profile.voice);
+        self.chosen = true;
+        self.modified = false;
+        let mut sent = self.show_voice();
+        sent.extend(self.show_buttons());
+        sent
+    }
+
+    /// A value changed in the voice shown.
+    fn change(&mut self, control: &str, value: &Value) -> Outcome {
+        let person = |i: &usize| i.checked_sub(1).and_then(|i| self.voices.get(i)).cloned();
+        let punctuation = |i: &usize| {
+            choices::<Punctuation>()
+                .into_iter()
+                .nth(*i)
+                .and_then(|c| serde_json::from_value::<Punctuation>(c.value).ok())
+        };
+        let voice = &mut self.draft.voice;
+        match (self.context, control, value) {
+            // A context's own value.
+            (Some(context), PERSON, Value::Selected(i)) => {
+                voice.contexts.get_mut(context).voice = person(i);
+            }
+            (Some(context), RATE, Value::Number(n)) => {
+                voice.contexts.get_mut(context).rate = Some((*n).clamp(-10, 10));
+            }
+            (Some(context), PITCH, Value::Number(n)) => {
+                voice.contexts.get_mut(context).pitch = Some((*n).clamp(-10, 10));
+            }
+            (Some(context), PUNCTUATION, Value::Selected(i)) => {
+                if let Some(level) = punctuation(i) {
+                    voice.contexts.get_mut(context).punctuation = Some(level);
                 }
-                let person = |i: &usize| i.checked_sub(1).and_then(|i| self.voices.get(i)).cloned();
-                let punctuation = |i: &usize| {
-                    choices::<Punctuation>()
-                        .into_iter()
-                        .nth(*i)
-                        .and_then(|c| serde_json::from_value::<Punctuation>(c.value).ok())
-                };
-                let voice = &mut self.draft.voice;
-                match (self.context, control.as_str(), value) {
-                    // A context's own value.
-                    (Some(context), PERSON, Value::Selected(i)) => {
-                        voice.contexts.get_mut(context).voice = person(i);
-                    }
-                    (Some(context), RATE, Value::Number(n)) => {
-                        voice.contexts.get_mut(context).rate = Some((*n).clamp(-10, 10));
-                    }
-                    (Some(context), PITCH, Value::Number(n)) => {
-                        voice.contexts.get_mut(context).pitch = Some((*n).clamp(-10, 10));
-                    }
-                    (Some(context), PUNCTUATION, Value::Selected(i)) => {
-                        if let Some(level) = punctuation(i) {
-                            voice.contexts.get_mut(context).punctuation = Some(level);
-                        }
-                    }
-                    // All Contexts': every context's, each context's own value given up.
-                    (None, PERSON, Value::Selected(i)) => {
-                        voice.voice = person(i);
-                        VoiceContext::ALL
-                            .iter()
-                            .for_each(|&c| voice.contexts.get_mut(c).voice = None);
-                    }
-                    (None, RATE, Value::Number(n)) => {
-                        voice.rate = (*n).clamp(-10, 10);
-                        VoiceContext::ALL
-                            .iter()
-                            .for_each(|&c| voice.contexts.get_mut(c).rate = None);
-                    }
-                    (None, PUNCTUATION, Value::Selected(i)) => {
-                        if let Some(level) = punctuation(i) {
-                            voice.punctuation = level;
-                            VoiceContext::ALL
-                                .iter()
-                                .for_each(|&c| voice.contexts.get_mut(c).punctuation = None);
-                        }
-                    }
-                    (None, VOLUME, Value::Number(n)) => {
-                        voice.volume = u16::try_from((*n).clamp(0, 100)).unwrap_or(100);
-                    }
-                    _ => {}
+            }
+            // All Contexts': every context's, each context's own value given up.
+            (None, PERSON, Value::Selected(i)) => {
+                voice.voice = person(i);
+                VoiceContext::ALL
+                    .iter()
+                    .for_each(|&c| voice.contexts.get_mut(c).voice = None);
+            }
+            (None, RATE, Value::Number(n)) => {
+                voice.rate = (*n).clamp(-10, 10);
+                VoiceContext::ALL
+                    .iter()
+                    .for_each(|&c| voice.contexts.get_mut(c).rate = None);
+            }
+            (None, PUNCTUATION, Value::Selected(i)) => {
+                if let Some(level) = punctuation(i) {
+                    voice.punctuation = level;
+                    VoiceContext::ALL
+                        .iter()
+                        .for_each(|&c| voice.contexts.get_mut(c).punctuation = None);
+                }
+            }
+            (None, VOLUME, Value::Number(n)) => {
+                voice.volume = u16::try_from((*n).clamp(0, 100)).unwrap_or(100);
+            }
+            _ => return Outcome::Nothing,
+        }
+        self.modified = true;
+        Outcome::Send(self.show_buttons())
+    }
+
+    /// Save Voice Profile's OK: the voice kept under the name typed, the profile shown.
+    fn save(&mut self) -> Outcome {
+        let Some((id, name)) = self.save_as.take() else {
+            return Outcome::Nothing;
+        };
+        let name = name.trim().to_owned();
+        // A synthesizer's own name is not a saved profile's.
+        if name.is_empty() || self.profiles.iter().any(|p| p.factory && p.name == name) {
+            self.save_as = Some((id, name));
+            return Outcome::Nothing;
+        }
+        let voice = VoiceSettings {
+            profile: None,
+            ..self.draft.voice.clone()
+        };
+        self.profiles.retain(|p| p.name != name);
+        self.profiles.push(Profile {
+            name: name.clone(),
+            voice: voice.clone(),
+            factory: false,
+        });
+        self.profiles.sort_by_key(|p| p.name.to_lowercase());
+        self.profile = self
+            .profiles
+            .iter()
+            .position(|p| p.name == name)
+            .unwrap_or(0);
+        self.draft.voice.profile = Some(name.clone());
+        self.draft
+            .voice_profiles
+            .insert(name.clone(), voice.clone());
+        self.before
+            .voice_profiles
+            .insert(name.clone(), voice.clone());
+        self.chosen = true;
+        self.modified = false;
+        let mut send = vec![
+            ToUi::DialogClose { id },
+            ToUi::DialogItems {
+                id: self.id,
+                control: PROFILE.to_owned(),
+                items: self.names(),
+                selected: self.profile,
+            },
+        ];
+        send.extend(self.show_buttons());
+        Outcome::Save {
+            name,
+            voice: Box::new(voice),
+            send,
+        }
+    }
+
+    /// Delete Profile: the saved profile shown goes; its synthesizer's own is shown.
+    fn delete(&mut self) -> Outcome {
+        let Some(gone) = self
+            .profiles
+            .get(self.profile)
+            .filter(|p| !p.factory)
+            .cloned()
+        else {
+            return Outcome::Nothing;
+        };
+        self.profiles.retain(|p| p.name != gone.name);
+        self.draft.voice_profiles.remove(&gone.name);
+        self.before.voice_profiles.remove(&gone.name);
+        let own = self
+            .profiles
+            .iter()
+            .position(|p| p.factory && p.voice.synthesizer == gone.voice.synthesizer)
+            .unwrap_or(0);
+        let mut send = vec![ToUi::DialogItems {
+            id: self.id,
+            control: PROFILE.to_owned(),
+            items: self.names(),
+            selected: own,
+        }];
+        send.extend(self.choose(own));
+        Outcome::Delete {
+            name: gone.name,
+            send,
+        }
+    }
+
+    /// What the dialog's window, or its Save Voice Profile's, reported.
+    pub fn handle(&mut self, message: &FromUi) -> Outcome {
+        let save_as = self.save_as_id();
+        match message {
+            // Save Voice Profile: the name typed, OK, Cancel.
+            FromUi::DialogChanged {
+                id,
+                value: Value::Text(text),
+                ..
+            } if Some(*id) == save_as => {
+                if let Some((_, name)) = self.save_as.as_mut() {
+                    *name = text.clone();
                 }
                 Outcome::Nothing
             }
-            FromUi::DialogPressed { id, control } if *id == self.id && control == "ok" => {
-                Outcome::Apply {
-                    scope: Scope::Global,
-                    before: Box::new(self.before.clone()),
-                    settings: Box::new(self.draft.clone()),
-                    close: true,
-                    temporary: Vec::new(),
+            FromUi::DialogPressed { id, control } if Some(*id) == save_as && control == "ok" => {
+                self.save()
+            }
+            FromUi::DialogClosed { id } if Some(*id) == save_as => {
+                self.save_as = None;
+                Outcome::Nothing
+            }
+            FromUi::DialogChanged { id, control, value } if *id == self.id => {
+                match (control.as_str(), value) {
+                    (PROFILE, Value::Selected(i)) => Outcome::Send(self.choose(*i)),
+                    (ADJUST, Value::Selected(i)) => {
+                        self.context = i
+                            .checked_sub(1)
+                            .and_then(|i| VoiceContext::ALL.get(i))
+                            .copied();
+                        Outcome::Send(self.show_voice())
+                    }
+                    (control, value) => self.change(control, value),
                 }
             }
+            FromUi::DialogPressed { id, control } if *id == self.id => match control.as_str() {
+                SAVE_AS => Outcome::AskName,
+                DELETE => self.delete(),
+                "ok" if self.ok_enabled() => {
+                    let mut settings = self.draft.clone();
+                    if let Some(profile) = self.profiles.get(self.profile) {
+                        settings.voice.profile = Some(profile.name.clone());
+                        // A saved profile changed keeps its change.
+                        if !profile.factory {
+                            settings.voice_profiles.insert(
+                                profile.name.clone(),
+                                VoiceSettings {
+                                    profile: None,
+                                    ..settings.voice.clone()
+                                },
+                            );
+                        }
+                    }
+                    Outcome::Apply {
+                        before: Box::new(self.before.clone()),
+                        settings: Box::new(settings),
+                    }
+                }
+                _ => Outcome::Nothing,
+            },
             FromUi::DialogClosed { id } if *id == self.id => Outcome::Closed,
             _ => Outcome::Nothing,
         }
@@ -302,11 +604,23 @@ mod tests {
         })
     }
 
-    /// JAWS's Voice Adjustment's "Voice" group: Adjust, Person, Rate, Punctuation, Volume, in
-    /// its Tab order [obs, the walk of Voice Adjustment]; Adjust offers All Contexts and the
-    /// four contexts, with JAWS's names in Okur's [obs, the walk of its contexts].
+    fn pressed(dialog: &mut VoiceAdjustment, id: u32, control: &str) -> Outcome {
+        dialog.handle(&FromUi::DialogPressed {
+            id,
+            control: control.into(),
+        })
+    }
+
+    fn panic_free_fail(message: &str) {
+        assert!(message.is_empty(), "{message}");
+    }
+
+    /// JAWS's Voice Adjustment: Profile Name, Delete Profile, the "Voice" group of Adjust,
+    /// Person, Rate, Punctuation, Pitch or Volume, Save As..., OK, Cancel, in its Tab order [obs,
+    /// the walks of Voice Adjustment]; Adjust offers All Contexts and the four contexts, with
+    /// JAWS's names in Okur's [obs, the walk of its contexts].
     #[test]
-    fn voice_adjustment_is_jaws_voice_group() {
+    fn voice_adjustment_is_jaws_dialog() {
         let dialog = VoiceAdjustment::new(5, Settings::default(), vec!["Zira".into()]);
         let spec = dialog.spec();
         assert_eq!(spec.title, "Voice Adjustment");
@@ -314,6 +628,8 @@ mod tests {
         assert_eq!(
             labels,
             [
+                "Profile Name:",
+                "Delete Profile",
                 "Voice",
                 "Adjust:",
                 "Person:",
@@ -321,6 +637,7 @@ mod tests {
                 "Punctuation:",
                 "Pitch:",
                 "Volume:",
+                "Save As...",
                 "OK",
                 "Cancel"
             ]
@@ -337,34 +654,94 @@ mod tests {
                     ],
                     selected: 0
                 }));
+        // The synthesizer's own profile shown: Delete Profile and OK unavailable.
+        let enabled = |id: &str| spec.controls.iter().find(|c| c.id == id).map(|c| c.enabled);
+        assert_eq!(enabled(DELETE), Some(false));
+        assert_eq!(enabled("ok"), Some(false));
+        assert!(spec.controls.iter().any(|c| c.id == PROFILE
+            && matches!(&c.kind, ControlKind::Choice { options, selected }
+                if options.get(*selected).map(String::as_str) == Some("Automatic - (factory)"))));
     }
 
-    /// The rate, the voice and the punctuation changed apply for all applications with OK.
+    /// A synthesizer's own profile changed is kept only by Save As: OK stays unavailable. Saved
+    /// as "Fast", the profile is shown, OK applies it for all applications, with its voice kept
+    /// under its name.
     #[test]
-    fn voice_adjustment_applies_for_all_applications() {
+    fn a_profile_is_saved_as_a_name() {
         let mut dialog = VoiceAdjustment::new(5, Settings::default(), vec!["Zira".into()]);
-        for (control, value) in [
-            (RATE, Value::Number(4)),
-            (PERSON, Value::Selected(1)),
-            (PUNCTUATION, Value::Selected(0)),
-        ] {
-            changed(&mut dialog, control, value);
-        }
-        let applied = dialog.handle(&FromUi::DialogPressed {
+        let Outcome::Send(sent) = changed(&mut dialog, RATE, Value::Number(4)) else {
+            panic_free_fail("no update");
+            return;
+        };
+        assert!(sent.contains(&ToUi::DialogEnable {
             id: 5,
             control: "ok".into(),
+            enabled: false,
+        }));
+        assert_eq!(pressed(&mut dialog, 5, SAVE_AS), Outcome::AskName);
+        let asked = dialog.save_as(9);
+        assert_eq!(asked.title, "Save Voice Profile");
+        assert!(dialog.owns(9));
+        dialog.handle(&FromUi::DialogChanged {
+            id: 9,
+            control: PROFILE_NAME.into(),
+            value: Value::Text("Fast".into()),
         });
-        assert!(matches!(
-            applied,
-            Outcome::Apply { scope: Scope::Global, ref settings, .. }
-                if settings.voice.rate == 4
-                    && settings.voice.voice.as_deref() == Some("Zira")
-                    && settings.voice.punctuation == Punctuation::None
-        ));
+        let Outcome::Save { name, voice, send } = pressed(&mut dialog, 9, "ok") else {
+            panic_free_fail("not saved");
+            return;
+        };
+        assert_eq!((name.as_str(), voice.rate), ("Fast", 4));
+        assert!(send.contains(&ToUi::DialogClose { id: 9 }));
+        assert!(send
+            .iter()
+            .any(|m| matches!(m, ToUi::DialogItems { items, selected, .. }
+            if items.get(*selected).map(String::as_str) == Some("Fast"))));
+        assert!(!dialog.owns(9));
+        let Outcome::Apply { settings, .. } = pressed(&mut dialog, 5, "ok") else {
+            panic_free_fail("not applied");
+            return;
+        };
+        assert_eq!(settings.voice.rate, 4);
+        assert_eq!(settings.voice.profile.as_deref(), Some("Fast"));
+        assert_eq!(settings.voice_profiles.get("Fast").map(|v| v.rate), Some(4));
     }
 
-    /// A context's rate is its own; Volume is All Contexts' alone; a rate set in All Contexts
-    /// again is every context's.
+    /// A saved profile changed keeps its change with OK; Delete Profile removes it, and its
+    /// synthesizer's own is shown.
+    #[test]
+    fn a_saved_profile_is_changed_and_deleted() {
+        let mut settings = Settings::default();
+        settings.voice_profiles.insert(
+            "Fast".into(),
+            VoiceSettings {
+                rate: 6,
+                ..VoiceSettings::default()
+            },
+        );
+        settings.voice.profile = Some("Fast".into());
+        settings.voice.rate = 6;
+        let mut dialog = VoiceAdjustment::new(5, settings, Vec::new());
+        changed(&mut dialog, RATE, Value::Number(8));
+        let Outcome::Apply { settings, .. } = pressed(&mut dialog.clone(), 5, "ok") else {
+            panic_free_fail("not applied");
+            return;
+        };
+        assert_eq!(settings.voice_profiles.get("Fast").map(|v| v.rate), Some(8));
+        let Outcome::Delete { name, send } = pressed(&mut dialog, 5, DELETE) else {
+            panic_free_fail("not deleted");
+            return;
+        };
+        assert_eq!(name, "Fast");
+        assert!(send
+            .iter()
+            .any(|m| matches!(m, ToUi::DialogItems { items, selected, .. }
+            if items.get(*selected).map(String::as_str) == Some("Automatic - (factory)")
+                && !items.iter().any(|i| i == "Fast"))));
+    }
+
+    /// A context's rate and pitch are its own; Volume is All Contexts' alone; a rate set in All
+    /// Contexts again is every context's.
     #[test]
     fn a_context_has_its_own_voice() {
         let mut dialog = VoiceAdjustment::new(5, Settings::default(), vec!["Zira".into()]);
@@ -388,8 +765,8 @@ mod tests {
         let voice = &dialog.draft.voice;
         assert_eq!(voice.in_context(VoiceContext::OkurCursor).rate, -3);
         assert_eq!(voice.in_context(VoiceContext::OkurCursor).pitch, 4);
-        assert_eq!(voice.in_context(VoiceContext::PcCursor).pitch, 0);
         assert_eq!(voice.in_context(VoiceContext::PcCursor).rate, 0);
+        assert_eq!(voice.in_context(VoiceContext::PcCursor).pitch, 0);
         // Back to All Contexts: its rate shown, and a new one for every context.
         let Outcome::Send(shown) = changed(&mut dialog, ADJUST, Value::Selected(0)) else {
             panic_free_fail("no update");
@@ -405,9 +782,5 @@ mod tests {
         assert!(VoiceContext::ALL
             .iter()
             .all(|&c| voice.in_context(c).rate == 5));
-    }
-
-    fn panic_free_fail(message: &str) {
-        assert!(message.is_empty(), "{message}");
     }
 }

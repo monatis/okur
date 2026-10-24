@@ -520,6 +520,13 @@ okur-menu-voice-profile = Select a Voice Profile...
 ## Voice Adjustment, JAWS's "Voice" group [obs, the walk of Voice Adjustment].
 
 voice-adjustment-title = Voice Adjustment
+voice-adjustment-profile = Profile Name:
+voice-adjustment-delete = Delete Profile
+voice-adjustment-save-as = Save As...
+# Save As's question: "Save Voice Profile dialog | Voice Profile Name: edit combo" [obs, the walk
+# of Voice Adjustment's profiles].
+voice-adjustment-save-title = Save Voice Profile
+voice-adjustment-save-name = Voice Profile Name:
 voice-adjustment-group = Voice
 voice-adjustment-adjust = Adjust:
 voice-adjustment-all-contexts = All Contexts
@@ -542,3 +549,6 @@ voice-profile-title = Select a Voice Profile
 voice-profile-default = Default:
 voice-profile-for = For { $application }:
 voice-profile-use-default = Use Default
+# A synthesizer's own profile: "SAPI 5X - (factory)" [obs, the walk of Voice Adjustment's
+# profiles].
+voice-profile-factory = { $synthesizer } - (factory)

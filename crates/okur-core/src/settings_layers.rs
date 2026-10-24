@@ -138,6 +138,17 @@ impl SettingsLayers {
         }
     }
 
+    /// Forgets the voice profile saved as `name` (Voice Adjustment's Delete Profile): a map's
+    /// entry, which a change of the settings cannot remove.
+    pub fn remove_voice_profile(&mut self, name: &str) {
+        if let Some(Value::Object(profiles)) = self.global.get_mut("voice_profiles") {
+            profiles.remove(name);
+            if profiles.is_empty() {
+                self.global.remove("voice_profiles");
+            }
+        }
+    }
+
     /// Sets one value in the session layer, by its path in [`Settings`]
     /// (`["voice", "punctuation"]`).
     pub fn set_for_session(&mut self, path: &[&str], value: Value) {
@@ -396,5 +407,27 @@ mod tests {
         );
         assert_eq!(site_of("file:///C:/fixtures/page.html"), None);
         assert_eq!(site_of("about:blank"), None);
+    }
+
+    /// Delete Profile: a saved profile goes from the settings for all applications, the others
+    /// stay; with the last one, the table goes too.
+    #[test]
+    fn a_saved_voice_profile_is_removed() {
+        let mut saved = Settings::default();
+        for (name, rate) in [("Fast", 6), ("Slow", -4)] {
+            saved.voice_profiles.insert(
+                name.to_owned(),
+                crate::settings::VoiceSettings {
+                    rate,
+                    ..crate::settings::VoiceSettings::default()
+                },
+            );
+        }
+        let mut layers = SettingsLayers::with_global(&saved);
+        layers.remove_voice_profile("Fast");
+        let profiles = layers.resolve(None, None).voice_profiles;
+        assert_eq!(profiles.keys().collect::<Vec<_>>(), ["Slow"]);
+        layers.remove_voice_profile("Slow");
+        assert!(!layers.global.contains_key("voice_profiles"));
     }
 }

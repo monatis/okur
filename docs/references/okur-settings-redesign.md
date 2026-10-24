@@ -327,15 +327,24 @@ spoken form is a parity target.
      and no Volume, and a change in All Contexts is every context's.
    **Select a Voice Profile built 2026-10-24**: Insert+Ctrl+S (Default.JKM's
    SelectAVoiceProfile) and Options, Voices, Select a Voice Profile...: Default, "For <application>"
-   with Use Default first, OK, Cancel. A profile is a synthesizer's own (Automatic, OneCore,
-   SAPI 5) or one saved by name (`voice_profiles`, for all applications); choosing one copies its
+   with Use Default first, OK, Cancel. A profile is a synthesizer's own ("Automatic -
+   (factory)", "OneCore - (factory)", "SAPI 5 - (factory)") or one saved by name
+   (`voice_profiles`, for all applications), all in alphabetical order; choosing one copies its
    voice into the place's settings with its name (`voice.profile`); Use Default leaves the
    application nothing of its own.
    **A context's Pitch** (Voice Adjustment shows it in Volume's place for a context): the
    synthesizers say everything at the context's pitch, a capital's raise on top; a Say All's
    parts are not pitched yet.
+   **Voice Adjustment's profiles built 2026-10-24**: Profile Name first (choosing one shows its
+   voice), Delete Profile for a saved one, Save As... asking "Voice Profile Name:" in Save Voice
+   Profile, and OK once something changed: not for a synthesizer's own profile changed, which is
+   kept only by Save As. Probed on old-pc with okur-ui alone (`okur-ui-tree-probe.ps1 -Voice`):
+   "Profile Name: Combo box | Automatic - (factory) | 1 of 3", "Voice Adjust: Combo box | All
+   Contexts | 1 of 5", "Voice Person: Combo box", Delete Profile and OK skipped by Tab while
+   unavailable, and the profiles replaced after Save As ("Fast | 2 of 4").
    Still to do: tutor hints in the message voice (they are part of the focus speech today);
-   Voice Adjustment's Profile Name,
-   Delete Profile, Speak Sample, Save As and Apply (a walk of its Profile Name box and buttons
-   first); the Language menu's Voice Profiles.
+   the Rate slider's number (JAWS: "Voice | Rate: 20 | left right slider | 100 percent";
+   okur-ui's: "Voice Rate: left right slider | 50 percent"); Speak Sample and Synthesizer
+   Language; Apply's question whether to make a saved profile the default; the Language menu's
+   Voice Profiles.
 5. **Startup Wizard**, Manage Application Settings, Restore to Factory Settings.

@@ -1947,8 +1947,8 @@ impl ScreenReaderEngine {
         let profile = |name: &str| {
             profiles
                 .iter()
-                .find(|(n, _)| n == name)
-                .map(|(_, voice)| voice.clone())
+                .find(|p| p.name == name)
+                .map(|p| p.voice.clone())
         };
         if let Some((name, voice)) = default.and_then(|name| Some((name.clone(), profile(&name)?)))
         {
@@ -1976,6 +1976,66 @@ impl ScreenReaderEngine {
                 self.apply_settings(&Scope::Application(app), &before, &after, &[]);
             }
         }
+    }
+
+    /// What Voice Adjustment, or its Save Voice Profile, decided.
+    fn voice_adjustment_outcome(&mut self, outcome: crate::ui::voice_adjustment::Outcome) {
+        use crate::settings_layers::Scope;
+        use crate::ui::voice_adjustment::Outcome;
+        let send = |engine: &Self, messages: Vec<crate::ui::ToUi>| {
+            if let Some(ui) = &engine.ui {
+                messages.into_iter().for_each(|m| ui.send(m));
+            }
+        };
+        match outcome {
+            Outcome::Nothing => {}
+            Outcome::Send(messages) => send(self, messages),
+            Outcome::Apply { before, settings } => {
+                self.apply_settings(&Scope::Global, &before, &settings, &[]);
+                self.close_voice_adjustment();
+            }
+            Outcome::AskName => {
+                self.dialog_count += 1;
+                let id = self.dialog_count;
+                if let Some(dialog) = self.voice_adjustment.as_mut() {
+                    let spec = dialog.save_as(id);
+                    send(self, vec![crate::ui::ToUi::DialogShow { dialog: spec }]);
+                }
+            }
+            Outcome::Save {
+                name,
+                voice,
+                send: messages,
+            } => {
+                let before = self.settings_layers.resolve(None, None);
+                let mut after = before.clone();
+                after.voice_profiles.insert(name, *voice);
+                self.apply_settings(&Scope::Global, &before, &after, &[]);
+                send(self, messages);
+            }
+            Outcome::Delete {
+                name,
+                send: messages,
+            } => {
+                self.settings_layers.remove_voice_profile(&name);
+                if let Some(store) = &self.settings_store {
+                    store.save(&self.settings_layers);
+                }
+                self.resolve_settings();
+                send(self, messages);
+            }
+            Outcome::Closed => self.close_voice_adjustment(),
+        }
+    }
+
+    /// Voice Adjustment closed, and its Save Voice Profile if it is open.
+    fn close_voice_adjustment(&mut self) {
+        if let (Some(dialog), Some(ui)) = (self.voice_adjustment.take(), &self.ui) {
+            for id in dialog.save_as_id().into_iter().chain([dialog.id]) {
+                ui.send(crate::ui::ToUi::DialogClose { id });
+            }
+        }
+        self.returning_from_dialog();
     }
 
     /// Opens Voice Adjustment, or brings it to the front: the voice for all applications.
@@ -2151,29 +2211,10 @@ impl ScreenReaderEngine {
             _ if self
                 .voice_adjustment
                 .as_ref()
-                .is_some_and(|d| Some(d.id) == dialog_of(message)) =>
+                .is_some_and(|d| dialog_of(message).is_some_and(|id| d.owns(id))) =>
             {
-                use crate::ui::settings::Outcome;
-                match self.voice_adjustment.as_mut()?.handle(message) {
-                    Outcome::Apply {
-                        scope,
-                        before,
-                        settings,
-                        temporary,
-                        ..
-                    } => {
-                        self.apply_settings(&scope, &before, &settings, &temporary);
-                        if let (Some(dialog), Some(ui)) = (self.voice_adjustment.take(), &self.ui) {
-                            ui.send(crate::ui::ToUi::DialogClose { id: dialog.id });
-                        }
-                        self.returning_from_dialog();
-                    }
-                    Outcome::Closed => {
-                        self.voice_adjustment = None;
-                        self.returning_from_dialog();
-                    }
-                    _ => {}
-                }
+                let outcome = self.voice_adjustment.as_mut()?.handle(message);
+                self.voice_adjustment_outcome(outcome);
                 None
             }
             _ if self

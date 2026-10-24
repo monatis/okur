@@ -15,7 +15,11 @@ param([string]$Out = (Join-Path $env:USERPROFILE 'sr-harness\probe\okur-ui-tree.
       [switch]$Window,
       # Cancel's question instead: Escape and the Cancel button reported as pressed with the
       # dialog left open, the question shown over it ("question"), Tab, and Escape back.
-      [switch]$Question)
+      [switch]$Question,
+      # Voice Adjustment's shape instead: Profile Name, Delete Profile, the Voice group's Adjust,
+      # Person and Rate, Save As..., OK, Cancel; Tab around, then Profile Name's choices
+      # replaced ("items", as after Save As) and read with Down and Up.
+      [switch]$Voice)
 $bin = Join-Path $env:USERPROFILE 'sr-harness\bin'
 $lab = Join-Path $bin 'okur-lab.exe'
 $start = New-Object System.Diagnostics.ProcessStartInfo
@@ -49,11 +53,15 @@ if ($Window) {
     $dialog = '{"type":"main_window_show","window":{"title":"Okur","lines":["Okur version 0.1.0"],"menus":[{"label":"&Options","items":[{"id":"basics","label":"&Basics..."},{"id":"exit","label":"E&xit","key":"Alt+F4"}]},{"label":"&Utilities","items":[{"id":"notification_history","label":"Notification History","key":"INSERT+SPACE, N"},{"id":"settings_center","label":"Settings Center"}]},{"label":"&Help","items":[{"id":"about","label":"&About Okur..."}]}]}}'
     $Keys = @('Alt', 'Down', 'Down', 'Right', 'Down', 'Escape', 'Escape', 'Alt', 'Down', 'Enter', 'Alt+F4')
 }
+if ($Voice) {
+    $dialog = '{"type":"dialog_show","dialog":{"id":1,"title":"Voice Adjustment","controls":[{"id":"profile","label":"Profile Name:","kind":{"kind":"choice","options":["Automatic - (factory)","OneCore - (factory)","SAPI 5 - (factory)"],"selected":0}},{"id":"delete_profile","label":"Delete Profile","kind":{"kind":"button","default":false},"enabled":false},{"id":"voice","label":"Voice","kind":{"kind":"group"}},{"id":"adjust","label":"Adjust:","kind":{"kind":"choice","options":["All Contexts","PC Cursor Voice","Okur Cursor Voice","Keyboard Voice","Tutor and Message Voice"],"selected":0}},{"id":"person","label":"Person:","kind":{"kind":"choice","options":["Default"],"selected":0}},{"id":"rate","label":"Rate:","kind":{"kind":"slider","min":-10,"max":10,"value":0}},{"id":"save_as","label":"Save As...","kind":{"kind":"button","default":false}},{"id":"ok","label":"OK","kind":{"kind":"button","default":true},"enabled":false},{"id":"cancel","label":"Cancel","kind":{"kind":"button","default":false}}]}}'
+    $Keys = @('Tab', 'Tab', 'Tab', 'Tab', 'Tab', 'Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'items', 'Down', 'Up', 'Escape')
+}
 $ui.StandardInput.WriteLine($dialog)
 $ui.StandardInput.Flush()
 Start-Sleep -Seconds 3
 & $lab jaws-history --clear | Out-Null
-$lines = @("--- shown: " + (& $lab front ($(if ($Window) { 'Okur' } else { 'Okur Settings Center' }))))
+$lines = @("--- shown: " + (& $lab front ($(if ($Window) { 'Okur' } elseif ($Voice) { 'Voice Adjustment' } else { 'Okur Settings Center' }))))
 if ($Outline) {
     $outlineFile = [System.IO.Path]::ChangeExtension($Out, '.outline.txt')
     & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'uia-outline.ps1') -Title 'Notepad - Okur Settings Center' -Out $outlineFile | Out-Null
@@ -67,6 +75,13 @@ foreach ($key in $Keys) {
         $ui.StandardInput.Flush()
         Start-Sleep -Milliseconds 1500
         $lines += "== menu => " + ((& $lab jaws-history --clear) -join ' | ')
+        continue
+    }
+    if ($key -eq 'items') {
+        $ui.StandardInput.WriteLine('{"type":"dialog_items","id":1,"control":"profile","items":["Automatic - (factory)","Fast","OneCore - (factory)","SAPI 5 - (factory)"],"selected":1}')
+        $ui.StandardInput.Flush()
+        Start-Sleep -Milliseconds 1500
+        $lines += "== items => " + ((& $lab jaws-history --clear) -join ' | ')
         continue
     }
     if ($key -eq 'question') {
