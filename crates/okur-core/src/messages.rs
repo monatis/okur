@@ -120,7 +120,18 @@ impl StaticMessage {
     /// Its short form, the catalog's `<name>-short`: what JAWS says with short messages
     /// (Intermediate and Advanced verbosity), where the catalog has one.
     pub fn short(self) -> Option<StaticMessage> {
-        let name = format!("{}-short", self.0.id());
+        self.suffixed("short")
+    }
+
+    /// Its description, the catalog's `<name>-description`: what a setting labelled by it does,
+    /// as the settings tree shows it below the tree (JAWS's Settings Center's description).
+    pub fn description(self) -> Option<StaticMessage> {
+        self.suffixed("description")
+    }
+
+    /// The catalog's `<name>-<suffix>`, without variables, where it has one.
+    fn suffixed(self, suffix: &str) -> Option<StaticMessage> {
+        let name = format!("{}-{suffix}", self.0.id());
         MessageId::ALL
             .iter()
             .find(|id| id.id() == name && id.variables().is_empty())

@@ -5,6 +5,28 @@
 ## Okur Settings (Insert+6, Insert+V)
 
 settings-dialog-title = Okur Settings
+## What each setting does, as the settings tree shows it below the tree: `<label>-description`.
+
+settings-synthesizer-description = The speech engine Okur speaks with. Automatic takes the system's OneCore voices, and SAPI 5 where there are none. No speech keeps Okur silent.
+settings-voice-description = The voice Okur speaks with, among the synthesizer's. Default is the one the system chose.
+settings-rate-description = How fast Okur speaks. Control+Alt+Page Up and Page Down change it while you work.
+settings-volume-description = How loud Okur speaks, apart from the system's volume.
+settings-punctuation-description = How many punctuation marks and symbols are spoken while reading: none, some, most or all. Spelling and a selection name every one.
+settings-indicate-caps-description = Capital letters spoken with a higher pitch as you read by character.
+settings-layout-description = The keyboard layout of Okur's keys: Desktop with the numeric keypad, or Laptop, where Caps Lock is the Okur key.
+settings-okur-key-description = The key held for Okur's own commands, for this keyboard layout.
+settings-typing-echo-description = What is spoken as you type: nothing, each character, each word as it ends, or both. Okur key and 2 goes through them.
+settings-say-all-unit-description = Whether Say All reads by line, by sentence or by paragraph, which decides where it pauses.
+settings-verbosity-description = How much Okur says of what it reads, from Beginner, which says the most, to Advanced, which says the least. Each level can be customized.
+settings-forms-mode-description = Whether forms mode turns on by itself on a page: as the arrows reach a field (Auto), as Tab reaches one (Semi-Auto), or only with Enter (Manual).
+settings-live-region-whole-text-description = Whether a live region that grows is read whole, or only what was added to it.
+settings-viewer-on-screen-description = Whether the Virtual Viewer is drawn on the screen, for someone looking, or kept to speech.
+settings-read-page-on-load-description = Whether a page or document is read from its start when it loads.
+settings-confirm-exit-description = Whether Okur asks before it quits with Okur key and F4.
+settings-mouse-echo-enabled-description = Whether Okur reads what the mouse rests on.
+settings-mouse-echo-instant-description = Whether the mouse's text is read at once, or after the mouse rests a moment.
+settings-mouse-echo-unit-description = How much of the mouse's text is read: the character, word, line or paragraph under it.
+
 settings-group-speech = Speech
 settings-synthesizer = S&ynthesizer:
 # Okur picks OneCore, else SAPI 5, else none.

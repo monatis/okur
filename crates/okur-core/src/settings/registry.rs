@@ -949,6 +949,21 @@ mod tests {
         assert_eq!(settings, Settings::default());
     }
 
+    /// Every setting a dialog shows has a description, which the settings tree shows below
+    /// the tree, as JAWS's Settings Center does.
+    #[test]
+    fn every_shown_setting_is_described() {
+        let undescribed: Vec<&str> = SETTINGS
+            .iter()
+            .filter(|spec| {
+                spec.label
+                    .is_some_and(|label| label().description().is_none())
+            })
+            .map(|spec| spec.id)
+            .collect();
+        assert!(undescribed.is_empty(), "no description: {undescribed:?}");
+    }
+
     /// Every enum setting offers all of its values: typing echo's four, not two.
     #[test]
     fn choices_offer_every_value() {
