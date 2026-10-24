@@ -83,6 +83,24 @@ kept it (research, not evidence):
   Tracking, Face in View, Math, Miscellaneous, Last Changed Settings. F6 on Last Changed Settings
   says "There is nothing visible at the configuration display pane at the moment." The groups'
   settings: the walk with each group opened (to come).
+- **Settings Center's questions** (Insert+6 over Notepad; `settings-questions-walk.ps1`):
+  - Space on "Typing Echo Off" says the new value and its place, "Characters | 2 of 4", then
+    "Words | 3 of 4"; Shift+Space goes on the same way: "Characters and Words | 4 of 4".
+  - Once something changed, Tab from the tree goes: the description, "Apply Button", "OK
+    Button", "Cancel Button", the Application box, the search box, the tree.
+  - F6 from the tree goes to the setting's control in the pane: "Typing Echo Characters and
+    Words radio button checked | 4 of 4 | To change the selection press Up or Down Arrow."
+    F6 again returns to the tree item.
+  - Escape with a change not applied asks: "JAWS Settings Center dialog | You have made changes
+    to NotePad's settings. Do you want to save them? | Yes Button". Tab gives "No Button".
+    Escape on the question goes back to Settings Center, at the tree item.
+  - Okur has all but F6 since `11497973` and the commit after it. okur-ui's question, probed on
+    old-pc with JAWS reading it, says the same with Okur's name: "Okur Settings Center dialog |
+    You have made changes to Notepad's settings. Do you want to save them? | Yes Button", then
+    "No Button"; Escape goes back to the dialog (`okur-ui-tree-probe.ps1 -Question`).
+  - Open: JAWS reads its description edit's first line on Tab. okur-ui's note says only "read
+    only edit | Use your reading keys to read the text.", and Up or Down read its lines. Keeping
+    the dialog manager from selecting the note's text did not change this (probe, 2026-10-24).
 
 ## 2. Okur today
 
@@ -220,8 +238,10 @@ top ten (§8 there) then fill the tree, one table row each.
   none: old-pc's Access Key setting is Off).
 - Done (§1.1): Voice Adjustment's Tab order and labels. Still: what changes after a change (OK,
   Apply), and Pitch with a voice that has it.
-- Settings Center's tree in Default and in Notepad: groups and settings; Shift+Space; Enter on a
-  setting; F6; the Application box; Quick Settings' whole Tab order (Apply? Cancel?).
+- Done (§1.1): Shift+Space, the Tab order once changed, F6 and Escape's question. Still:
+  Settings Center's tree in Default, each group opened; Enter on a setting with no search;
+  whether the question has a third button after No; Quick Settings' whole Tab order and its
+  Shift+F10 lifetime words (the walk ran with Settings Center still open: redo it from Notepad).
 - Select a Voice Profile's speech.
 These are research walks of JAWS's own windows (JAWS's dialogs refuse injected keys: walks use
 `TypeKey` through FSAPI or `okur-lab keys` with the process allowed), then scenarios where a

@@ -123,6 +123,16 @@ settings-ok = OK
 settings-cancel = Cancel
 settings-apply = &Apply
 
+## The question when Settings Center is cancelled with changes not applied, JAWS's words with
+## Okur's name: "JAWS Settings Center dialog | You have made changes to NotePad's settings. Do
+## you want to save them? | Yes Button", Tab to "No Button" [obs, the walk of Settings Center's
+## questions].
+
+settings-save-title = Okur Settings Center
+settings-save-question = You have made changes to { $place }'s settings. Do you want to save them?
+settings-save-yes = &Yes
+settings-save-no = &No
+
 ## The question before Okur exits (Insert+F4, JAWS's ShutDownJAWS), JAWS's words with Okur's name:
 ## "Quit JAWS dialog | Are you sure you want to quit JAWS?  Press Enter to quit now, or Escape
 ## to cancel. | OK Button", and Tab to "Cancel Button" [obs, 571/s1, s2].

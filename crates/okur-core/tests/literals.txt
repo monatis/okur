@@ -492,3 +492,8 @@ okur-core/src/engine/say_all.rs: "th"
 # Select Sound...'s file pattern, and the system's sounds folder it opens in.
 okur-core/src/ui/notifications.rs: "*.wav"
 okur-ui/src/dialog.rs: "{windows}\\Media"
+# Settings Center's question's buttons, by id; okur-ui's name for the Escape key.
+okur-core/src/ui/settings_tree.rs: "yes"
+okur-core/src/ui/settings_tree.rs: "no"
+okur-core/src/ui/settings_tree.rs: "question"
+okur-ui/src/dialog.rs: "Escape"

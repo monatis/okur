@@ -1950,15 +1950,7 @@ impl ScreenReaderEngine {
             } => {
                 self.apply_settings(&scope, &before, &settings, &temporary);
                 if close {
-                    let id = if tree {
-                        self.settings_tree.take().map(|t| t.id)
-                    } else {
-                        self.settings_dialog.take().map(|d| d.id)
-                    };
-                    if let (Some(id), Some(ui)) = (id, &self.ui) {
-                        ui.send(crate::ui::ToUi::DialogClose { id });
-                    }
-                    self.returning_from_dialog();
+                    self.close_settings_dialog(tree);
                 }
             }
             Outcome::Closed => {
@@ -1970,18 +1962,39 @@ impl ScreenReaderEngine {
                 self.returning_from_dialog();
             }
             Outcome::OpenVerbosityLevels => self.open_verbosity_levels(),
-            Outcome::Close => {
-                let id = if tree {
-                    self.settings_tree.take().map(|t| t.id)
-                } else {
-                    self.settings_dialog.take().map(|d| d.id)
-                };
-                if let (Some(id), Some(ui)) = (id, &self.ui) {
-                    ui.send(crate::ui::ToUi::DialogClose { id });
+            Outcome::Close => self.close_settings_dialog(tree),
+            Outcome::AskToSave => {
+                self.dialog_count += 1;
+                let id = self.dialog_count;
+                if let (Some(dialog), Some(ui)) = (self.settings_tree.as_mut(), &self.ui) {
+                    ui.send(crate::ui::ToUi::DialogShow {
+                        dialog: dialog.save_question(id),
+                    });
                 }
-                self.returning_from_dialog();
             }
         }
+    }
+
+    /// Closes the settings dialog (`tree`: Settings Center or Quick Settings), and the question
+    /// it asked if it is open.
+    fn close_settings_dialog(&mut self, tree: bool) {
+        let ids: Vec<u32> = if tree {
+            self.settings_tree
+                .take()
+                .map(|t| t.question().into_iter().chain([t.id]).collect())
+                .unwrap_or_default()
+        } else {
+            self.settings_dialog
+                .take()
+                .map(|d| d.id)
+                .into_iter()
+                .collect()
+        };
+        if let Some(ui) = &self.ui {
+            ids.into_iter()
+                .for_each(|id| ui.send(crate::ui::ToUi::DialogClose { id }));
+        }
+        self.returning_from_dialog();
     }
 
     /// What the user did to one of Okur's windows.
@@ -2073,7 +2086,7 @@ impl ScreenReaderEngine {
             _ if self
                 .settings_tree
                 .as_ref()
-                .is_some_and(|t| Some(t.id) == dialog_of(message)) =>
+                .is_some_and(|t| dialog_of(message).is_some_and(|id| t.owns(id))) =>
             {
                 let outcome = self.settings_tree.as_mut()?.handle(message);
                 self.settings_outcome(outcome, true);

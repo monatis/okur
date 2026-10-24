@@ -12,7 +12,10 @@ param([string]$Out = (Join-Path $env:USERPROFILE 'sr-harness\probe\okur-ui-tree.
       [switch]$Menu,
       # Okur's main window instead of the dialog: its menu bar walked with Alt and the arrows,
       # then Alt+F4.
-      [switch]$Window)
+      [switch]$Window,
+      # Cancel's question instead: Escape and the Cancel button reported as pressed with the
+      # dialog left open, the question shown over it ("question"), Tab, and Escape back.
+      [switch]$Question)
 $bin = Join-Path $env:USERPROFILE 'sr-harness\bin'
 $lab = Join-Path $bin 'okur-lab.exe'
 $start = New-Object System.Diagnostics.ProcessStartInfo
@@ -40,7 +43,7 @@ $dialog = @'
  {"id":"cancel","label":"Cancel","kind":{"kind":"button","default":false}}],
  "keys":[{"key":"Ctrl+E","control":"search"},{"key":"Ctrl+Shift+D","control":"default_place"},
   {"key":"Down","control":"tree","from":"search"},{"key":"Enter","control":"tree_enter","from":"tree"},
-  {"key":"Escape","control":"tree_escape","from":"tree"}]}}
+  {"key":"Escape","control":"tree_escape","from":"tree"},{"key":"Escape","control":"cancel"}]}}
 '@ -replace "`r?`n", ''
 if ($Window) {
     $dialog = '{"type":"main_window_show","window":{"title":"Okur","lines":["Okur version 0.1.0"],"menus":[{"label":"&Options","items":[{"id":"basics","label":"&Basics..."},{"id":"exit","label":"E&xit","key":"Alt+F4"}]},{"label":"&Utilities","items":[{"id":"notification_history","label":"Notification History","key":"INSERT+SPACE, N"},{"id":"settings_center","label":"Settings Center"}]},{"label":"&Help","items":[{"id":"about","label":"&About Okur..."}]}]}}'
@@ -57,12 +60,20 @@ if ($Outline) {
     $lines += Get-Content $outlineFile
 }
 if ($Menu) { $Keys = @('Tab', 'menu', 'Down', 'Enter', 'Tab', 'Escape') }
+if ($Question) { $Keys = @('Escape', 'question', 'Tab', 'Escape', 'Tab', 'Tab', 'Tab', 'Tab', 'Space', 'question', 'Tab', 'Space') }
 foreach ($key in $Keys) {
     if ($key -eq 'menu') {
         $ui.StandardInput.WriteLine('{"type":"dialog_menu","id":1,"control":"tree","items":[{"text":"Restore When Okur Exits"},{"text":"Restore When Focus Changes"},{"text":"Save","checked":true}]}')
         $ui.StandardInput.Flush()
         Start-Sleep -Milliseconds 1500
         $lines += "== menu => " + ((& $lab jaws-history --clear) -join ' | ')
+        continue
+    }
+    if ($key -eq 'question') {
+        $ui.StandardInput.WriteLine('{"type":"dialog_show","dialog":{"id":2,"title":"Okur Settings Center","controls":[{"id":"question","label":"","kind":{"kind":"message","text":"You have made changes to Notepad''s settings. Do you want to save them?"}},{"id":"yes","label":"&Yes","kind":{"kind":"button","default":true}},{"id":"no","label":"&No","kind":{"kind":"button","default":false}}]}}')
+        $ui.StandardInput.Flush()
+        Start-Sleep -Milliseconds 1500
+        $lines += "== question => " + ((& $lab jaws-history --clear) -join ' | ')
         continue
     }
     & $lab keys --allow okur-ui $key 'wait:900' 2>&1 | Out-Null
@@ -73,6 +84,7 @@ foreach ($key in $Keys) {
     $lines += "== $key => $said"
     $lines += $told | ForEach-Object { "   okur-ui: $_" }
 }
+$ui.StandardInput.WriteLine('{"type":"dialog_close","id":2}')
 $ui.StandardInput.WriteLine('{"type":"dialog_close","id":1}')
 $ui.StandardInput.Close()
 [void]$ui.WaitForExit(5000)

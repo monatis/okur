@@ -63,6 +63,9 @@ pub enum Outcome {
     Closed,
     /// Close the dialog, applying nothing (Escape where its window lets Okur decide).
     Close,
+    /// Ask whether to save the changes not applied before the dialog closes (Settings
+    /// Center's Cancel [obs, the walk of Settings Center's questions]).
+    AskToSave,
     /// Open the dialog that customizes the verbosity levels, from Settings Center's
     /// "Configure Verbosity Levels" (JAWS's opens its own dialog over Settings Center).
     OpenVerbosityLevels,

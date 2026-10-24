@@ -6,7 +6,8 @@
 //! ([`crate::settings::registry`]): a setting added there with a label is here too.
 //!
 //! The dialog keeps a draft of the settings, as [`super::settings::SettingsDialog`] does; Apply
-//! and OK make it Okur's settings, Cancel drops what was not applied.
+//! and OK make it Okur's settings, Cancel drops what was not applied; Settings Center's asks
+//! first whether to save it.
 
 use okur_ui_model::{Control, ControlKind, DialogKey, DialogSpec, FromUi, ToUi, TreeItem, Value};
 
@@ -264,6 +265,8 @@ pub struct SettingsTree {
     selected: usize,
     /// Something changed since the dialog opened or was applied: Apply is available.
     changed: bool,
+    /// The question whether to save the changes, while it is open, by its dialog's id.
+    question: Option<u32>,
 }
 
 impl SettingsTree {
@@ -299,9 +302,72 @@ impl SettingsTree {
             rows: Vec::new(),
             selected: 0,
             changed: false,
+            question: None,
         };
         tree.rows = tree.rows_for_search();
         tree
+    }
+
+    /// Whether dialog `id` is this one or its question.
+    pub fn owns(&self, id: u32) -> bool {
+        id == self.id || self.question == Some(id)
+    }
+
+    /// The question whether to save the changes, while it is open.
+    pub fn question(&self) -> Option<u32> {
+        self.question
+    }
+
+    /// The question asked when Settings Center is cancelled with changes not applied, as
+    /// dialog `id`: JAWS's "JAWS Settings Center dialog | You have made changes to NotePad's
+    /// settings. Do you want to save them? | Yes Button", then No; Escape goes back to Settings
+    /// Center [obs, the walk of Settings Center's questions].
+    pub fn save_question(&mut self, id: u32) -> DialogSpec {
+        self.question = Some(id);
+        let place = self
+            .places
+            .get(self.place)
+            .map(|p| p.name.clone())
+            .unwrap_or_default();
+        let control = |id: &str, label: String, kind: ControlKind| Control {
+            id: id.to_owned(),
+            label,
+            kind,
+            enabled: true,
+        };
+        DialogSpec {
+            id,
+            title: msg::settings_save_title().to_string(),
+            controls: vec![
+                control(
+                    "question",
+                    String::new(),
+                    ControlKind::Message {
+                        text: msg::settings_save_question(place.as_str()).render(),
+                    },
+                ),
+                control(
+                    "yes",
+                    msg::settings_save_yes().to_string(),
+                    ControlKind::Button { default: true },
+                ),
+                control(
+                    "no",
+                    msg::settings_save_no().to_string(),
+                    ControlKind::Button { default: false },
+                ),
+            ],
+            keys: Vec::new(),
+        }
+    }
+
+    /// Cancel: the dialog closes, or Settings Center asks first whether to save what changed.
+    fn cancel(&self) -> Outcome {
+        if self.changed && self.flavor == Flavor::Center {
+            Outcome::AskToSave
+        } else {
+            Outcome::Close
+        }
     }
 
     /// Settings Center or Quick Settings.
@@ -656,6 +722,9 @@ impl SettingsTree {
         ];
         if self.flavor == Flavor::Center {
             keys.push(shortcut("Ctrl+Shift+D", DEFAULT_PLACE));
+            // Escape, Cancel and the close box are Okur's to decide: the question first when
+            // something changed.
+            keys.push(shortcut("Escape", "cancel"));
         } else {
             // A setting's or group's lifetime (JAWS's Quick Settings help).
             keys.push(from("Shift+F10", LIFETIME, TREE));
@@ -977,9 +1046,22 @@ impl SettingsTree {
                     DialogKey::Delete | DialogKey::Rename => Outcome::Nothing,
                 }
             }
+            // The question: Yes saves and closes, No closes, Escape goes back to the dialog.
+            FromUi::DialogPressed { id, control } if Some(*id) == self.question => {
+                match control.as_str() {
+                    "yes" => self.apply(true),
+                    "no" => Outcome::Close,
+                    _ => Outcome::Nothing,
+                }
+            }
+            FromUi::DialogClosed { id } if Some(*id) == self.question => {
+                self.question = None;
+                Outcome::Nothing
+            }
             FromUi::DialogPressed { id, control } if *id == self.id => match control.as_str() {
                 "ok" => self.apply(true),
                 "apply" => self.apply(false),
+                "cancel" => self.cancel(),
                 // On a search's results Enter shows the whole tree at the setting found, Escape
                 // at the item before the search; elsewhere they are OK and Cancel.
                 TREE_ENTER if !self.search.is_empty() => {
@@ -991,7 +1073,7 @@ impl SettingsTree {
                     let at = self.before_search;
                     self.end_search(at)
                 }
-                TREE_ESCAPE => Outcome::Close,
+                TREE_ESCAPE => self.cancel(),
                 LIFETIME if self.flavor == Flavor::Quick => self.lifetime_menu(),
                 DEFAULT_PLACE if self.flavor == Flavor::Center => {
                     self.place = 0;
@@ -1203,6 +1285,88 @@ mod tests {
             }),
             Outcome::Close
         );
+    }
+
+    /// Settings Center cancelled with a change not applied asks whether to save it: Escape goes
+    /// back to the dialog, Yes saves and closes, No closes [obs, the walk of Settings Center's
+    /// questions]. Nothing changed, it closes.
+    #[test]
+    fn settings_center_asks_to_save_on_cancel() {
+        let mut dialog = tree(Flavor::Center);
+        let cancel = FromUi::DialogPressed {
+            id: 7,
+            control: "cancel".into(),
+        };
+        assert_eq!(dialog.handle(&cancel), Outcome::Close);
+        assert!(dialog
+            .spec()
+            .keys
+            .iter()
+            .any(|k| k.key == "Escape" && k.control == "cancel" && k.from.is_none()));
+        let index = dialog
+            .rows
+            .iter()
+            .position(|r| matches!(r, Row::Setting(spec) if spec.id == "typing_echo"))
+            .unwrap_or_default();
+        dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: TREE.into(),
+            value: Value::Selected(index),
+        });
+        dialog.handle(&FromUi::DialogKey {
+            id: 7,
+            control: TREE.into(),
+            key: DialogKey::Change,
+        });
+        assert_eq!(dialog.handle(&cancel), Outcome::AskToSave);
+        let question = dialog.save_question(9);
+        assert!(dialog.owns(9) && dialog.owns(7) && !dialog.owns(8));
+        assert_eq!(question.title, "Okur Settings Center");
+        let texts: Vec<String> = question
+            .controls
+            .iter()
+            .map(|c| match &c.kind {
+                ControlKind::Message { text } => text.clone(),
+                _ => c.label.replace('&', ""),
+            })
+            .collect();
+        assert_eq!(
+            texts,
+            [
+                "You have made changes to Notepad's settings. Do you want to save them?",
+                "Yes",
+                "No"
+            ]
+        );
+        // Escape: back to Settings Center, the change kept.
+        assert_eq!(
+            dialog.handle(&FromUi::DialogClosed { id: 9 }),
+            Outcome::Nothing
+        );
+        assert_eq!(dialog.question(), None);
+        // Escape in the tree asks again; No closes, Yes saves.
+        assert_eq!(
+            dialog.handle(&FromUi::DialogPressed {
+                id: 7,
+                control: TREE_ESCAPE.into(),
+            }),
+            Outcome::AskToSave
+        );
+        dialog.save_question(10);
+        assert_eq!(
+            dialog.clone().handle(&FromUi::DialogPressed {
+                id: 10,
+                control: "no".into(),
+            }),
+            Outcome::Close
+        );
+        assert!(matches!(
+            dialog.handle(&FromUi::DialogPressed {
+                id: 10,
+                control: "yes".into(),
+            }),
+            Outcome::Apply { close: true, .. }
+        ));
     }
 
     /// Quick Settings offers the settings for the application in front, without the place.

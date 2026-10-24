@@ -1167,6 +1167,22 @@ pub fn close(id: u32) {
     }
 }
 
+/// The control dialog `window`'s own Escape presses, anywhere in it: its Cancel and close box's
+/// too.
+fn escape_key(window: HWND) -> Option<String> {
+    let escape = chord("Escape")?;
+    DIALOGS.with(|d| {
+        d.try_borrow().ok().and_then(|d| {
+            d.iter().find(|o| o.window == window).and_then(|o| {
+                o.keys
+                    .iter()
+                    .find(|(chord, _, from)| *chord == escape && from.is_none())
+                    .map(|(_, control, _)| control.clone())
+            })
+        })
+    })
+}
+
 /// A key down in one of our dialogs that is one of its own keys: the focus to its control,
 /// or its press told to Okur. True when it was one.
 fn dialog_key(msg: &MSG) -> bool {
@@ -1407,10 +1423,19 @@ pub(crate) unsafe extern "system" fn dialog_proc(
             let code = ((wparam.0 >> 16) & 0xFFFF) as u32;
             let item = HWND(lparam.0 as *mut _);
             if control_id == IDCANCEL {
-                // Cancel, Escape, the close box: the dialog goes, and Okur hears of it.
+                // Cancel, Escape, the close box: the dialog goes, and Okur hears of it. A dialog
+                // whose Escape is its own key stays, and Okur hears that key's press (Settings
+                // Center asks first whether to save its changes).
                 if let Some(id) = dialog_id(window) {
-                    close(id);
-                    crate::win32::tell(&FromUi::DialogClosed { id });
+                    match escape_key(window) {
+                        Some(control) => {
+                            crate::win32::tell(&FromUi::DialogPressed { id, control });
+                        }
+                        None => {
+                            close(id);
+                            crate::win32::tell(&FromUi::DialogClosed { id });
+                        }
+                    }
                 }
                 return 1;
             }

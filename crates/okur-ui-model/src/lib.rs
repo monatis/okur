@@ -39,7 +39,8 @@ pub struct DialogShortcut {
     pub key: String,
     pub control: String,
     /// Only while the focus is in this control (Settings Center's Down from its search box);
-    /// none, anywhere in the dialog.
+    /// none, anywhere in the dialog. Escape from anywhere is the dialog's Cancel and close box
+    /// too: the dialog stays until Okur closes it.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub from: Option<String>,
 }
