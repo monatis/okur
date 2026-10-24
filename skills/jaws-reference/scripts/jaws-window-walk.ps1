@@ -91,6 +91,8 @@ if ($chosen -contains 'language') {
     # Language (Alt+L), Voice Profiles (its second item) opened and read down, then out:
     # arrows and Escape only, nothing chosen.
     Walk 'Alt+L,Down,Right,Down*8,Escape,Escape,Escape' 'jw-language.txt'
+    # Then its Default and For <application> submenus read down.
+    Walk 'Alt+L,Down,Right,Right,Down*6,Escape,Down,Right,Down*6,Escape,Escape,Escape,Escape' 'jw-language-profiles.txt'
 }
 # Restore to Factory Settings... is not walked: it is a Yes/No question with Yes focused, which
 # ignores Escape, so a walk left it open with Yes focused (2026-10-24; answered No by
