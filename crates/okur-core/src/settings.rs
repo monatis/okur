@@ -288,8 +288,6 @@ pub enum HeadingIndication {
 }
 
 impl HeadingIndication {
-    pub const ALL: [Self; 3] = [Self::Text, Self::Heading, Self::Level];
-
     /// The indication a `DEFAULT.JCF` `HeadingIndication` value sets: 0 the text alone, 1
     /// "heading"; any other value the level, JAWS's default.
     pub fn from_jcf(value: &str) -> Self {
@@ -324,8 +322,6 @@ pub enum ScreenEcho {
 }
 
 impl ScreenEcho {
-    pub const ALL: [Self; 3] = [Self::None, Self::Highlighted, Self::All];
-
     /// The echo a `DEFAULT.JCF` `ScreenEcho` value sets: 0 none, 2 all; any other value
     /// highlighted text, JAWS's default.
     pub fn from_jcf(value: &str) -> Self {
@@ -372,13 +368,6 @@ pub enum SmartNavigation {
 }
 
 impl SmartNavigation {
-    pub const ALL: [Self; 4] = [
-        Self::Off,
-        Self::Controls,
-        Self::Tables,
-        Self::ControlsAndTables,
-    ];
-
     /// The navigation a `DEFAULT.JCF` `SmartNavigation` value sets; any value but 1, 2 and
     /// 3 is off, JAWS's default.
     pub fn from_jcf(value: &str) -> Self {

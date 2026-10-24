@@ -610,7 +610,7 @@ impl SettingsTree {
                     .as_str()
                     .map_or_else(|| msg::settings_voice_default().to_string(), str::to_owned),
             ),
-            Kind::Check { .. } | Kind::Values(_) | Kind::Structured => None,
+            Kind::Check { .. } | Kind::Structured => None,
         }
     }
 
@@ -865,7 +865,7 @@ impl SettingsTree {
                 };
                 Some(Json::from(next))
             }
-            Kind::Values(_) | Kind::Structured => None,
+            Kind::Structured => None,
         }
     }
 
@@ -928,7 +928,7 @@ impl SettingsTree {
                     msg::state_not_checked().to_string()
                 };
             }
-            Kind::Range { .. } | Kind::Values(_) | Kind::Structured => None,
+            Kind::Range { .. } | Kind::Structured => None,
         };
         match position {
             Some(position) => format!(

@@ -313,8 +313,9 @@ spoken form is a parity target.
    all applications only, settings no dialog showed under JAWS's tree names, and Configure
    Verbosity Levels opening the verbosity levels' dialog. okur-ui's tree, keys and menu probed
    on old-pc (`okur-ui-tree-probe.ps1`). Still to do: a scenario comparing Okur's speech of its
-   tree with JAWS's (Okur run on old-pc reads its own window); Screen Echo, Smart Navigation
-   and Indicate Headings once their value names are recorded; F6 to an edit for numbers.
+   tree with JAWS's (Okur run on old-pc reads its own window); F6 to the setting's control;
+   the search's results as JAWS's list box. Screen Echo, Smart Navigation Mode and Indicate
+   Headings are in the tree since `50dde786`, so every setting with values has its names.
 2. **Lifetimes and Last Changed Settings** in Quick Settings; the until-the-focus-moves layer.
    **Built 2026-10-24**: the lifetime menu (Shift+F10, Applications key) on a setting or a
    group, the session's and the until-the-focus-moves layers; Last Changed Settings in both

@@ -115,9 +115,6 @@ pub enum Kind {
     Range { min: i32, max: i32 },
     /// One of the synthesizer's voices by name, or none for its default.
     Voice,
-    /// One of a few values that have no label yet: set in the settings file and on the command
-    /// line until JAWS's names for them are found (Heading Indication's three).
-    Values(fn() -> Vec<Value>),
     /// A table of values (per output type, per verbosity level), set in the settings file until
     /// its own dialog comes (JAWS's Configure Verbosity Levels).
     Structured,
@@ -690,14 +687,6 @@ pub fn parse(spec: &SettingSpec, text: &str) -> Result<Value, String> {
                 .cloned()
                 .ok_or_else(|| offered(&values))
         }
-        Kind::Values(values) => {
-            let values = values();
-            values
-                .iter()
-                .find(|v| named(v))
-                .cloned()
-                .ok_or_else(|| offered(&values))
-        }
         Kind::Check { on, off } => {
             let values = [on.value(), off.value()];
             values
@@ -1015,7 +1004,6 @@ mod tests {
         for spec in SETTINGS {
             let values: Vec<Value> = match spec.kind {
                 Kind::Choice(choices) => choices().into_iter().map(|c| c.value).collect(),
-                Kind::Values(values) => values(),
                 Kind::Check { on, off } => vec![on.value(), off.value()],
                 Kind::Range { min, max } => vec![json(min), json(max)],
                 Kind::Voice => vec![json("Microsoft Zira"), Value::Null],
