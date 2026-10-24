@@ -8,6 +8,7 @@ pub mod task_switcher;
 pub mod taskbar;
 pub mod terminal;
 pub mod widgets;
+pub mod word;
 
 use super::AppModule;
 

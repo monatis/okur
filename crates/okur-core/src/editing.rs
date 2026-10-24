@@ -5,6 +5,7 @@
 //! and pairs the next one with the key that was pressed. Observations are from
 //! `305-desktop-edit-review` (a WinForms edit, 5 trials), cited as `305/sN`.
 
+use crate::apps::windows::word;
 use crate::event::TextContext;
 use crate::input::{Key, KeyEvent};
 use crate::messages::msg;
@@ -144,8 +145,24 @@ pub(crate) fn char_at(context: &TextContext) -> Option<char> {
     context.text.chars().nth(context.caret)
 }
 
-/// The line containing the caret, without its line break.
+/// The line containing the caret, without its line break: the field's own line where the
+/// platform read it (Word's lines, wrapped or ended by a table cell [obs, 518]), else the text
+/// between line breaks.
 pub fn line_at(context: &TextContext) -> String {
+    if let Some((start, end)) = context
+        .structure
+        .as_ref()
+        .map(|s| s.line)
+        .filter(|&(start, _)| start <= context.text.chars().count())
+    {
+        let line: String = context
+            .text
+            .chars()
+            .skip(start)
+            .take(end.saturating_sub(start))
+            .collect();
+        return line.trim_matches(char::is_control).to_owned();
+    }
     let (start, _, end) = line_bytes(context);
     context.text.get(start..end).unwrap_or_default().to_owned()
 }
@@ -635,7 +652,7 @@ pub fn speech_in(
     plain_edit: bool,
     wording: Wording,
 ) -> Option<String> {
-    Some(match key {
+    let said = match key {
         EditKey::Silent => return None,
         EditKey::Character | EditKey::DeleteForward => {
             char_at(after).map_or_else(|| msg::blank().to_string(), |c| c.to_string())
@@ -650,7 +667,7 @@ pub fn speech_in(
         EditKey::Line => format!(
             "{}{}",
             misspelled_mark(after).unwrap_or_default(),
-            or_line_break(line_at(after))
+            or_line_break(word::spoken_line(after, line_at(after)))
         ),
         EditKey::SelectCharacter | EditKey::SelectWord => {
             // The text, then the word: "Hello, selected", "world. Unselected" [obs, 529/s12,
@@ -689,14 +706,14 @@ pub fn speech_in(
                 msg::text_top_of_file().to_string(),
                 msg::text_top_of_file_short().to_string(),
             ),
-            &line_at(after),
+            &word::spoken_line(after, line_at(after)),
         )?,
         EditKey::BottomOfFile => edge_of_file(
             wording.message(
                 msg::text_bottom_of_file().to_string(),
                 msg::text_bottom_of_file_short().to_string(),
             ),
-            &line_at(after),
+            &word::spoken_line(after, line_at(after)),
         )?,
         EditKey::DeleteBackward => {
             let deleted = deleted_before_caret(before, after);
@@ -759,7 +776,8 @@ pub fn speech_in(
                 )
             }
         }
-    })
+    };
+    word::around_line(key, before, after, said)
 }
 
 #[cfg(test)]

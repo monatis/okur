@@ -36,3 +36,17 @@ table-on-last-column = You are on the last column in the row.
 table-on-last-column-short = Last column
 table-on-first-column = You are on the first column of the row.
 table-on-first-column-short = First column
+
+## Microsoft Word's documents, as JAWS reads them [obs, 518].
+
+# A table entered: its number in the document, that its rows are alike, then the cell
+# [obs, 518/s13, s18].
+word-table = table { $number }
+word-table-uniform = uniform Table
+# Another cell of the table [obs, 518/s14].
+word-new-cell = new cell
+# The table left [obs, 518/s16, s19].
+word-out-of-table = out of table
+# A list entered and left, after the line [obs, 518/s10, s12].
+word-entering-list = Entering List
+word-exit-list = exit list
