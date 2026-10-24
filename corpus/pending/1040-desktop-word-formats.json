@@ -1,0 +1,40 @@
+{
+  "id": "1040-desktop-word-formats",
+  "name": "Word: Say Font (Insert+F) on a plain, a bold, an italic and an underlined word; a table without a header row by Down, Tab and JAWS's table keys; Say Font on paragraphs at 1.5 and double line spacing",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-formats.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-word-formats.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "trace_headings": true,
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+F" },
+    { "id": "s2", "type": "key", "command": "Ctrl+Right" },
+    { "id": "s3", "type": "key", "command": "Insert+F" },
+    { "id": "s4", "type": "key", "command": "Ctrl+Right" },
+    { "id": "s5", "type": "key", "command": "Insert+F" },
+    { "id": "s6", "type": "key", "command": "Ctrl+Right" },
+    { "id": "s7", "type": "key", "command": "Insert+F" },
+    { "id": "s8", "type": "key", "command": "Down" },
+    { "id": "s9", "type": "key", "command": "Down" },
+    { "id": "s10", "type": "key", "command": "Tab" },
+    { "id": "s11", "type": "key", "command": "Tab" },
+    { "id": "s12", "type": "key", "command": "Ctrl+Alt+Right" },
+    { "id": "s13", "type": "key", "command": "Ctrl+Alt+Up" },
+    { "id": "s14", "type": "key", "command": "Ctrl+Alt+Numpad5" },
+    { "id": "s15", "type": "key", "command": "Ctrl+End" },
+    { "id": "s16", "type": "key", "command": "Up" },
+    { "id": "s17", "type": "key", "command": "Insert+F" },
+    { "id": "s18", "type": "key", "command": "Up" },
+    { "id": "s19", "type": "key", "command": "Insert+F" }
+  ]
+}

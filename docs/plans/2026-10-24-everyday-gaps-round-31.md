@@ -33,7 +33,12 @@ it ends with a handoff and the next plan, and the README follows a finished area
 ## 1. Settings, the rest ([`../references/okur-settings-redesign.md`](../references/okur-settings-redesign.md) §6)
 
 In this order, then Word:
-1. **The Startup Wizard**, as walked.
+1. **The Startup Wizard**: its first page is walked ("JAWS Startup Wizard dialog | Help Us Improve
+   Freedom Scientific Products ... | Participate check box not checked", two policy links, Next >,
+   Cancel), and its pages 2 to 5 are in JAWS's help (`jaws-settings-ui-research.md` §6). It is a
+   first-run flow, so it is built with setup's start entries (item 6), on okur-ui's wizard: Speech
+   Settings, Run Okur Settings, Common Options, Verbosity Settings. Okur collects no usage data,
+   so the first page is left out.
 2. **F6 to the setting's control** in Settings Center: JAWS's pane ("Typing Echo Characters and
    Words radio button checked | 4 of 4"), F6 back to the tree. This needs okur-ui to show a
    control in place of another.

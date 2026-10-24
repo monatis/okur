@@ -1,0 +1,28 @@
+{
+  "id": "1039-desktop-word-views",
+  "name": "Word: Say Window Title (Insert+T) in Print Layout, then in Draft (Ctrl+Alt+N) and Outline (Ctrl+Alt+O), and back in Print Layout (Ctrl+Alt+P)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "trace_headings": true,
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+T" },
+    { "id": "s2", "type": "key", "command": "Ctrl+Alt+N" },
+    { "id": "s3", "type": "key", "command": "Insert+T" },
+    { "id": "s4", "type": "key", "command": "Ctrl+Alt+O" },
+    { "id": "s5", "type": "key", "command": "Insert+T" },
+    { "id": "s6", "type": "key", "command": "Ctrl+Alt+P" },
+    { "id": "s7", "type": "key", "command": "Insert+T" }
+  ]
+}
