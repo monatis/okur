@@ -604,6 +604,16 @@ impl SettingsTree {
                     text: self.description(),
                 },
             ),
+            // Apply, available once something changed, comes before OK and Cancel [obs, the
+            // walk of Settings Center's questions].
+            Control {
+                enabled: self.changed,
+                ..control(
+                    "apply",
+                    msg::settings_apply().to_string(),
+                    ControlKind::Button { default: false },
+                )
+            },
             control(
                 "ok",
                 msg::settings_ok().to_string(),
@@ -614,14 +624,6 @@ impl SettingsTree {
                 msg::settings_cancel().to_string(),
                 ControlKind::Button { default: false },
             ),
-            Control {
-                enabled: self.changed,
-                ..control(
-                    "apply",
-                    msg::settings_apply().to_string(),
-                    ControlKind::Button { default: false },
-                )
-            },
         ];
         if self.flavor == Flavor::Center {
             controls.push(control(
@@ -739,7 +741,44 @@ impl SettingsTree {
             control: "apply".to_owned(),
             enabled: true,
         });
-        Outcome::Send(sent)
+        Outcome::Changed(sent, self.value_said(spec))
+    }
+
+    /// A setting's value as Space says it: the value and its place among the values,
+    /// "Characters | 2 of 4" [obs, the walk of Settings Center's questions]; a check box's
+    /// state.
+    fn value_said(&self, spec: &SettingSpec) -> String {
+        let value = registry::get(&self.draft, spec.id).unwrap_or(Json::Null);
+        let place = |values: Vec<Json>| {
+            values
+                .iter()
+                .position(|v| *v == value)
+                .map(|i| msg::position(i + 1, values.len()).render())
+        };
+        let text = self.value_text(spec).unwrap_or_default();
+        let position = match spec.kind {
+            Kind::Choice(choices) => place(choices().into_iter().map(|c| c.value).collect()),
+            Kind::Voice => place(
+                std::iter::once(Json::Null)
+                    .chain(self.voices.iter().map(|v| Json::String(v.clone())))
+                    .collect(),
+            ),
+            Kind::Check { on, .. } => {
+                return if value == on.value() {
+                    msg::state_checked().to_string()
+                } else {
+                    msg::state_not_checked().to_string()
+                };
+            }
+            Kind::Range { .. } | Kind::Values(_) | Kind::Structured => None,
+        };
+        match position {
+            Some(position) => format!(
+                "{text}
+{position}"
+            ),
+            None => text,
+        }
     }
 
     /// Ends a search: the whole tree, the search box empty, at `at` with its groups open.
@@ -932,7 +971,9 @@ impl SettingsTree {
             FromUi::DialogKey { id, control, key } if *id == self.id && control == TREE => {
                 match key {
                     DialogKey::Change => self.change(false),
-                    DialogKey::ChangeBack => self.change(true),
+                    // Shift+Space goes on as Space does: "Words", then "Characters and Words |
+                    // 4 of 4" [obs, the walk of Settings Center's questions].
+                    DialogKey::ChangeBack => self.change(false),
                     DialogKey::Delete | DialogKey::Rename => Outcome::Nothing,
                 }
             }
@@ -1026,7 +1067,7 @@ mod tests {
         let ids: Vec<&str> = spec.controls.iter().map(|c| c.id.as_str()).collect();
         assert_eq!(
             ids,
-            [SEARCH, TREE, DESCRIPTION, "ok", "cancel", "apply", PLACE]
+            [SEARCH, TREE, DESCRIPTION, "apply", "ok", "cancel", PLACE]
         );
         assert!(spec.controls.iter().any(|c| c.id == "apply" && !c.enabled));
         let items = tree_items(&spec);
@@ -1058,7 +1099,7 @@ mod tests {
             control: TREE.into(),
             value: Value::Selected(index),
         });
-        let Outcome::Send(sent) = dialog.handle(&FromUi::DialogKey {
+        let Outcome::Changed(sent, said) = dialog.handle(&FromUi::DialogKey {
             id: 7,
             control: TREE.into(),
             key: DialogKey::Change,
@@ -1066,6 +1107,7 @@ mod tests {
             panic_free_fail("no update");
             return;
         };
+        assert_eq!(said, "Words\n3 of 4");
         assert!(sent.iter().any(|m| matches!(
             m,
             ToUi::DialogSet { value: Value::TreeItem(i, item), .. }

@@ -1935,6 +1935,12 @@ impl ScreenReaderEngine {
                     messages.into_iter().for_each(|m| ui.send(m));
                 }
             }
+            Outcome::Changed(messages, said) => {
+                if let Some(ui) = &self.ui {
+                    messages.into_iter().for_each(|m| ui.send(m));
+                }
+                self.speech.speak(&said, true);
+            }
             Outcome::Apply {
                 scope,
                 before,

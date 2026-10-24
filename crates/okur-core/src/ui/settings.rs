@@ -46,6 +46,9 @@ pub enum Outcome {
     Nothing,
     /// Send these to the dialog.
     Send(Vec<ToUi>),
+    /// Send these, and say what changed: a setting's new value in the settings tree,
+    /// "Characters | 2 of 4" [obs, the walk of Settings Center's questions].
+    Changed(Vec<ToUi>, String),
     /// Make these Okur's settings for `scope`, where they were `before`; with `close`, close
     /// the dialog too.
     Apply {
