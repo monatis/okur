@@ -800,6 +800,33 @@ A step can be in more than one entry; all of its entries apply.
   once.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
 
+### D: Okur points to F, as it reads no PDF open in Acrobat
+
+- Steps:
+  - `1031-desktop-ocr-document-not-open/s3`
+- Difference: the whole step. D where no PDF is open in Adobe Acrobat: JAWS says "OCR document
+  is only available inside of Adobe Acrobat." and how to open one there.
+- Why: Okur recognizes no document open in a reader yet, so those sentences would be false of
+  it. After "OCR Failed to start." it points to F, which recognizes a PDF selected in File
+  Explorer. When Okur reads a PDF open in a reader, it says JAWS's sentences.
+- Decided by the agent, 2026-10-24.
+
+### The OCR layer's help lists only Okur's keys
+
+- Steps:
+  - `1032-desktop-ocr-layer-help/s5`
+  - `1032-desktop-ocr-layer-help/s6`
+  - `1032-desktop-ocr-layer-help/s7`
+  - `1032-desktop-ocr-layer-help/s8`
+  - `1032-desktop-ocr-layer-help/s9`
+  - `1032-desktop-ocr-layer-help/s10`
+  - `1032-desktop-ocr-layer-help/s11`
+- Difference: the whole step. Okur's help leaves out JAWS's lines for A (a scanner or camera),
+  D (a document open in Acrobat), R (a file into Word) and Ctrl+B's sound, so the lines after
+  them come earlier. The first line and the last (Q) are JAWS's.
+- Why: Okur has none of those keys; its help says what it does.
+- Decided by the agent, 2026-10-24.
+
 ### JAWS's Scan Cursor is stuck past a window's last element
 
 - Steps:

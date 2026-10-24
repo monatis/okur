@@ -708,6 +708,30 @@ divergences! {
      list's focus arrives before the window's. Okur says the window with the file once.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
 
+    Difference::Step => [
+        "1031-desktop-ocr-document-not-open/s3",
+    ],
+    "D where no PDF is open in Adobe Acrobat: JAWS says \"OCR document is only available \
+     inside of Adobe Acrobat.\" and how to open one there. Okur recognizes no document open in \
+     a reader yet, so those sentences would be false of it: after \"OCR Failed to start.\" it \
+     points to F, which recognizes a PDF selected in File Explorer.",
+    "the agent, 2026-10-24";
+
+    Difference::Step => [
+        "1032-desktop-ocr-layer-help/s5",
+        "1032-desktop-ocr-layer-help/s6",
+        "1032-desktop-ocr-layer-help/s7",
+        "1032-desktop-ocr-layer-help/s8",
+        "1032-desktop-ocr-layer-help/s9",
+        "1032-desktop-ocr-layer-help/s10",
+        "1032-desktop-ocr-layer-help/s11",
+    ],
+    "The OCR layer's help lists Okur's keys: JAWS's lines for A (a scanner or camera), D \
+     (a document open in Acrobat), R (a file into Word) and Ctrl+B's sound are left out, as \
+     Okur has none of them, and the lines after them come earlier. The first line and the last \
+     (Q) are JAWS's.",
+    "the agent, 2026-10-24";
+
     Difference::Step => ["688-web-custom-label/s15"],
     "After a custom label is given, JAWS's virtual cursor is at the page's top: Say Line says \
      the page's title, in every trial, as JAWS builds the page again with the label. The user \
