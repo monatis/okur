@@ -87,11 +87,16 @@ impl AppModule for Explorer {
                 let folder = focus.folder_name.as_deref().or(self.folder_name.as_deref());
                 (title, folder)
             });
-            let kind = [focus.item_type.as_deref(), focus.item_size.as_deref()]
-                .into_iter()
-                .flatten()
-                .collect::<Vec<_>>()
-                .join(" ");
+            // The item's row after its name, else its type and size.
+            let kind = if focus.item_details.is_empty() {
+                [focus.item_type.as_deref(), focus.item_size.as_deref()]
+                    .into_iter()
+                    .flatten()
+                    .collect::<Vec<_>>()
+                    .join(" ")
+            } else {
+                focus.item_details.join(" ")
+            };
             entry(&Entry {
                 window,
                 selected: focus.states.selected,

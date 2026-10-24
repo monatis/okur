@@ -1119,6 +1119,11 @@ fn replayable(event: &TraceEvent) -> bool {
     if event.process.as_deref() == Some("ResultsViewer.exe") {
         return false;
     }
+    // JAWS's hidden window (class JFW, "JFW Hidden") takes the focus for a moment as JAWS
+    // opens its Results Viewer [obs, 1024/s3]; Okur has no such window.
+    if event.process.as_deref() == Some("jfw.exe") && event.window_class.as_deref() == Some("JFW") {
+        return false;
+    }
     // A focus inside the main window itself, not in one of its dialogs (its "JAWS Version"
     // text, 242/s1), is JAWS's alone.
     let in_main_window = event

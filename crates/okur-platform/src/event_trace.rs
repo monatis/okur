@@ -1365,6 +1365,19 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             focus.item_type = cell(SHELL_ITEM_TYPE);
         }
         focus.item_size = cell(SHELL_ITEM_SIZE);
+        // A shell item's whole row, its date as well: "SR OCR Sign.png | 1/2/2026 3:04 AM PNG
+        // File 11 KB" [obs, 1024/s11].
+        focus.item_details = subtree
+            .children
+            .iter()
+            .filter(|c| {
+                c.automation_id
+                    .as_deref()
+                    .is_some_and(|id| id.starts_with(SHELL_PROPERTY) && id != SHELL_ITEM_NAME)
+            })
+            .filter_map(|c| c.value.clone())
+            .filter(|v| !v.trim().is_empty())
+            .collect();
         // A list-view item's further columns are its text children after the name.
         if focus.role == okur_core::Role::ListItem {
             focus.columns = subtree
@@ -1574,6 +1587,9 @@ const EXPLORER_WINDOW_CLASS: &str = "CabinetWClass";
 const SHELL_ITEM_TYPE: &str = "System.ItemTypeText";
 /// The Windows Shell property of an item's size ("1 KB"), likewise.
 const SHELL_ITEM_SIZE: &str = "System.Size";
+/// The Windows Shell properties a shell item's cells are named by, and its name's own.
+const SHELL_PROPERTY: &str = "System.";
+const SHELL_ITEM_NAME: &str = "System.ItemNameDisplay";
 
 /// What the mouse points to, as the engine takes it: the control there described as a focus on
 /// it would be, and its text there by unit. Shared by the converter and the live worker.

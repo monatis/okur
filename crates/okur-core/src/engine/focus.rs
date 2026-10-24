@@ -307,6 +307,9 @@ impl ScreenReaderEngine {
                     // button").
                     if !focus.in_document {
                         let _ = self.native_focus.focus(focus);
+                        // And the focus an application read is the one Say Line and
+                        // Convenient OCR's F know: File Explorer's item [obs, 1029/s4].
+                        self.last_native_focus = Some(focus.clone());
                     }
                     return Some(speech);
                 }

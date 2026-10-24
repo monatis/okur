@@ -230,6 +230,11 @@ impl ScreenReaderEngine {
     /// Viewer (JAWS 2025 help, Convenient OCR). In a window that shows no files, JAWS's
     /// message, said [obs, 1030/s3].
     fn start_file_recognition(&mut self) {
+        tracing::debug!(
+            in_file_view = self.in_file_view(),
+            focus = ?self.last_native_focus.as_ref().map(|f| (&f.name, &f.platform.top_window_class)),
+            "the selected file asked for"
+        );
         if !self.in_file_view() {
             let said = format!(
                 "{}\n{}",
