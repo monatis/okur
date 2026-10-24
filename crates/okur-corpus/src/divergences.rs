@@ -626,6 +626,16 @@ divergences! {
     "In WordPad's ribbon JAWS gives each tab's and command's place a key behind, the place of      the one the focus left: Right from Home says \"View Tab selected 1 of 2\", Left back      \"Home 2 of 2\", Right from Paste \"Copy 1 of 3\", in every trial. The ribbon's MSAA      objects put View second of the two tabs shown and Copy third of its group's three. Okur      says those places.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-23";
 
+    Difference::Step => [
+        "1011-desktop-screen-text-ocr-window/s4",
+        "1015-desktop-screen-text-ocr-window-english/s4",
+    ],
+    "After Convenient OCR's W, JAWS's Alt+Delete says \"JAWSCursor\", its name and the cursor's \
+     run together and without \"active\" (\"JAWSCursor | 590, 722 | Unrestricted\"), in every \
+     trial, where its JAWS cursor's own is \"JAWS Cursor active\" (994/s4): an internal name \
+     said for the words. Okur says \"Okur Cursor active | 590, 722 | Unrestricted\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
+
     Difference::Step => ["688-web-custom-label/s15"],
     "After a custom label is given, JAWS's virtual cursor is at the page's top: Say Line says \
      the page's title, in every trial, as JAWS builds the page again with the label. The user \

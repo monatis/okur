@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
   "matched_steps": 8542,
-  "total_steps": 9128,
-  "accepted_divergences": 214,
+  "total_steps": 9126,
+  "accepted_divergences": 216,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -261,7 +261,7 @@
     "1011-desktop-screen-text-ocr-window/s15": "match",
     "1011-desktop-screen-text-ocr-window/s2": "match",
     "1011-desktop-screen-text-ocr-window/s3": "match",
-    "1011-desktop-screen-text-ocr-window/s4": "mismatch",
+    "1011-desktop-screen-text-ocr-window/s4": "accepted divergence",
     "1011-desktop-screen-text-ocr-window/s5": "match",
     "1011-desktop-screen-text-ocr-window/s6": "match",
     "1011-desktop-screen-text-ocr-window/s7": "match",
@@ -339,7 +339,7 @@
     "1015-desktop-screen-text-ocr-window-english/s15": "match",
     "1015-desktop-screen-text-ocr-window-english/s2": "match",
     "1015-desktop-screen-text-ocr-window-english/s3": "match",
-    "1015-desktop-screen-text-ocr-window-english/s4": "mismatch",
+    "1015-desktop-screen-text-ocr-window-english/s4": "accepted divergence",
     "1015-desktop-screen-text-ocr-window-english/s5": "match",
     "1015-desktop-screen-text-ocr-window-english/s6": "match",
     "1015-desktop-screen-text-ocr-window-english/s7": "match",

@@ -737,6 +737,17 @@ A step can be in more than one entry; all of its entries apply.
 - Why: the recording is of the harness's injected chord, not of JAWS's key.
 - Decided by the agent, 2026-10-22.
 
+### JAWS says "JAWSCursor" after recognizing a window
+
+- Steps: `1011-desktop-screen-text-ocr-window/s4`,
+  `1015-desktop-screen-text-ocr-window-english/s4`.
+- Difference: the whole step. After Convenient OCR's W, JAWS's Alt+Delete says "JAWSCursor |
+  590, 722 | Unrestricted": its name and the cursor's run together, without "active", in every
+  trial. The JAWS cursor's own Alt+Delete is "JAWS Cursor active | 590, 722 | Application window
+  restriction" (994/s4). Okur says "Okur Cursor active | 590, 722 | Unrestricted".
+- Why: an internal name said in place of the words; the place and the restriction are the same.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row
