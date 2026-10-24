@@ -58,7 +58,9 @@ pub enum TreeGroup {
     User,
     Web,
     WebReading,
+    WebNavigation,
     WebLinks,
+    WebHeadings,
     FormsMode,
     TextProcessing,
     TextGeneral,
@@ -79,11 +81,13 @@ pub enum TreeGroup {
 
 impl TreeGroup {
     /// Settings Center's, in JAWS's order, each group right before its subgroups.
-    const CENTER: [TreeGroup; 17] = [
+    const CENTER: [TreeGroup; 19] = [
         Self::User,
         Self::Web,
         Self::WebReading,
+        Self::WebNavigation,
         Self::WebLinks,
+        Self::WebHeadings,
         Self::FormsMode,
         Self::TextProcessing,
         Self::TextGeneral,
@@ -108,7 +112,9 @@ impl TreeGroup {
     /// The group a subgroup is in.
     fn parent(self) -> Option<TreeGroup> {
         match self {
-            Self::WebReading | Self::WebLinks => Some(Self::Web),
+            Self::WebReading | Self::WebNavigation | Self::WebLinks | Self::WebHeadings => {
+                Some(Self::Web)
+            }
             Self::TextGeneral | Self::TextNumbers => Some(Self::TextProcessing),
             Self::KeyboardGeneral => Some(Self::Keyboard),
             _ => None,
@@ -131,6 +137,8 @@ impl TreeGroup {
             Self::Web => msg::settings_tree_web(),
             Self::WebReading => msg::settings_tree_reading(),
             Self::WebLinks => msg::settings_tree_links(),
+            Self::WebNavigation => msg::settings_tree_navigation(),
+            Self::WebHeadings => msg::settings_tree_headings_and_frames(),
             Self::TextNumbers => msg::settings_tree_numbers(),
             Self::SpeechOptions => msg::settings_tree_speech_options(),
             Self::FormsMode => msg::settings_tree_forms_mode(),
@@ -156,7 +164,9 @@ impl TreeGroup {
 /// them. `None`: not shown.
 fn center_group(id: &str) -> Option<TreeGroup> {
     Some(match id {
-        "typing_echo" | "viewer_display" => TreeGroup::User,
+        "typing_echo" | "viewer_display" | "screen_echo" => TreeGroup::User,
+        "smart_navigation" => TreeGroup::WebNavigation,
+        "heading_indication" => TreeGroup::WebHeadings,
         "read_page_on_load" => TreeGroup::WebReading,
         "forms_mode" => TreeGroup::FormsMode,
         "identify_same_page_links" => TreeGroup::WebLinks,
@@ -407,6 +417,31 @@ impl SettingsTree {
         } else {
             Outcome::Close
         }
+    }
+
+    /// What a search says as each key is typed: the first setting found and how many there
+    /// are, "Screen Echo | 1 of 6 Search Results", or "No matches found." [obs, the walk of
+    /// Settings Center's search]. Nothing once the search box is empty.
+    fn search_said(&self) -> Option<String> {
+        if self.search.is_empty() {
+            return None;
+        }
+        let found: Vec<&SettingSpec> = self
+            .rows
+            .iter()
+            .filter_map(|row| match row {
+                Row::Setting(spec) => Some(*spec),
+                _ => None,
+            })
+            .collect();
+        Some(match found.first() {
+            Some(first) => format!(
+                "{}\n{}",
+                self.tree_label(first),
+                msg::settings_search_results(found.len()).render()
+            ),
+            None => msg::settings_search_none().to_string(),
+        })
     }
 
     /// Settings Center or Quick Settings.
@@ -1062,7 +1097,11 @@ impl SettingsTree {
                                 .position(|r| matches!(r, Row::Setting(_)))
                                 .unwrap_or(0)
                         };
-                        Outcome::Send(self.refill())
+                        let sent = self.refill();
+                        match self.search_said() {
+                            Some(said) => Outcome::Changed(sent, said),
+                            None => Outcome::Send(sent),
+                        }
                     }
                     (EXPAND, Value::Checked(on)) => {
                         self.expand = *on;
@@ -1285,7 +1324,7 @@ mod tests {
     #[test]
     fn a_search_finds_settings_by_their_label_and_description() {
         let mut dialog = tree(Flavor::Center);
-        let Outcome::Send(sent) = dialog.handle(&FromUi::DialogChanged {
+        let Outcome::Changed(sent, said) = dialog.handle(&FromUi::DialogChanged {
             id: 7,
             control: SEARCH.into(),
             value: Value::Text("echo".into()),
@@ -1293,6 +1332,20 @@ mod tests {
             panic_free_fail("no tree");
             return;
         };
+        // The first setting found and the count, as each key typed says [obs, the walk of
+        // Settings Center's search].
+        assert!(
+            said.starts_with("Typing Echo\n1 of ") && said.ends_with(" Search Results"),
+            "{said}"
+        );
+        assert_eq!(
+            dialog.handle(&FromUi::DialogChanged {
+                id: 7,
+                control: SEARCH.into(),
+                value: Value::Text("zzzz".into()),
+            }),
+            Outcome::Changed(dialog.refill(), "No matches found.".into())
+        );
         let Some(ToUi::DialogTree { items, .. }) = sent.first() else {
             panic_free_fail("no tree");
             return;
@@ -1302,6 +1355,42 @@ mod tests {
         assert!(texts.contains(&"Enable Mouse Echo"), "{texts:?}");
         assert!(!texts.iter().any(|t| t.starts_with("Rate")), "{texts:?}");
         assert!(items.iter().filter(|i| i.level == 0).all(|i| i.open));
+    }
+
+    /// Screen Echo in User, Smart Navigation Mode and Indicate Headings in their Web groups, each
+    /// with its value as Settings Center names it [obs, the walk of Settings Center's search].
+    #[test]
+    fn the_echo_navigation_and_heading_settings_are_in_their_groups() {
+        let mut dialog = tree(Flavor::Center);
+        for (search, item, group) in [
+            ("screen echo", "Screen Echo Echo Highlighted Text", "User"),
+            (
+                "smart navigation",
+                "Smart Navigation Mode Off",
+                "Navigation",
+            ),
+            (
+                "indicate",
+                "Indicate Headings Headings with Level",
+                "Headings and Frames",
+            ),
+        ] {
+            let Outcome::Changed(sent, _) = dialog.handle(&FromUi::DialogChanged {
+                id: 7,
+                control: SEARCH.into(),
+                value: Value::Text(search.into()),
+            }) else {
+                panic_free_fail("no tree");
+                return;
+            };
+            let Some(ToUi::DialogTree { items, .. }) = sent.first() else {
+                panic_free_fail("no tree");
+                return;
+            };
+            let texts: Vec<&str> = items.iter().map(|i| i.text.as_str()).collect();
+            assert!(texts.contains(&item), "{texts:?}");
+            assert!(texts.contains(&group), "{texts:?}");
+        }
     }
 
     /// Enter on a search's result shows the whole tree at it, its groups open; Escape on the

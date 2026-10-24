@@ -447,11 +447,12 @@ pub static SETTINGS: &[SettingSpec] = &[
     },
     SettingSpec {
         jaws: default_jcf("Options", "ScreenEcho", |v| json(ScreenEcho::from_jcf(v))),
+        tree_label: Some(msg::settings_tree_screen_echo),
         ..spec(
             "screen_echo",
             Group::Reading,
             None,
-            Kind::Values(|| ScreenEcho::ALL.iter().map(|e| json(*e)).collect()),
+            Kind::Choice(choices::<ScreenEcho>),
         )
     },
     SettingSpec {
@@ -464,22 +465,24 @@ pub static SETTINGS: &[SettingSpec] = &[
         jaws: default_jcf("HTML", "SmartNavigation", |v| {
             json(SmartNavigation::from_jcf(v))
         }),
+        tree_label: Some(msg::settings_tree_smart_navigation),
         ..spec(
             "smart_navigation",
             Group::Reading,
             None,
-            Kind::Values(|| SmartNavigation::ALL.iter().map(|n| json(*n)).collect()),
+            Kind::Choice(choices::<SmartNavigation>),
         )
     },
     SettingSpec {
         jaws: default_jcf("HTML", "HeadingIndication", |v| {
             json(HeadingIndication::from_jcf(v))
         }),
+        tree_label: Some(msg::settings_tree_indicate_headings),
         ..spec(
             "heading_indication",
             Group::Reading,
             None,
-            Kind::Values(|| HeadingIndication::ALL.iter().map(|h| json(*h)).collect()),
+            Kind::Choice(choices::<HeadingIndication>),
         )
     },
     SettingSpec {
@@ -811,6 +814,52 @@ impl Choices for Punctuation {
             Self::Some => msg::punctuation_some(),
             Self::Most => msg::punctuation_most(),
             Self::All => msg::punctuation_all(),
+        }
+    }
+}
+
+/// Settings Center's names for Screen Echo's values [obs, the walk of Settings Center's
+/// search].
+impl Choices for ScreenEcho {
+    const ALL: &'static [Self] = &[Self::None, Self::Highlighted, Self::All];
+    fn label(self) -> StaticMessage {
+        match self {
+            Self::None => msg::settings_screen_echo_none(),
+            Self::Highlighted => msg::settings_screen_echo_highlighted(),
+            Self::All => msg::settings_screen_echo_all(),
+        }
+    }
+}
+
+/// Settings Center's names for Smart Navigation Mode's values [obs, the walk of Settings
+/// Center's search].
+impl Choices for SmartNavigation {
+    const ALL: &'static [Self] = &[
+        Self::Off,
+        Self::Controls,
+        Self::Tables,
+        Self::ControlsAndTables,
+    ];
+    fn label(self) -> StaticMessage {
+        match self {
+            Self::Off => msg::settings_smart_navigation_off(),
+            Self::Controls => msg::settings_smart_navigation_controls(),
+            Self::Tables => msg::settings_smart_navigation_tables(),
+            Self::ControlsAndTables => msg::settings_smart_navigation_controls_and_tables(),
+        }
+    }
+}
+
+/// Settings Center's names for Indicate Headings' values [obs, the walk of Settings Center's
+/// search: "No Headings", "Headings with Level"; doc, its help: "Headings Only"]. JAWS's
+/// last two, Play Sound and Speak Heading with Headings Voice, are not built.
+impl Choices for HeadingIndication {
+    const ALL: &'static [Self] = &[Self::Text, Self::Heading, Self::Level];
+    fn label(self) -> StaticMessage {
+        match self {
+            Self::Text => msg::settings_indicate_headings_none(),
+            Self::Heading => msg::settings_indicate_headings_only(),
+            Self::Level => msg::settings_indicate_headings_level(),
         }
     }
 }

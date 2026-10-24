@@ -419,6 +419,10 @@ settings-center-title = { $place } - Okur Settings Center
 quick-settings-title = QuickSettings - { $place }
 quick-settings-expand = Expand Tree View
 settings-tree-search = SearchBox
+# What each key typed in the search box says: the first setting found, then this; or "No matches
+# found." [obs, the walk of Settings Center's search].
+settings-search-results = 1 of { $count } Search Results
+settings-search-none = No matches found.
 settings-tree-application = Application:
 settings-tree-group-description = A group of settings: Right Arrow opens it, and Space on a setting in it changes its value.
 # JAWS's group names, in its order; Quick Settings' own after them.
@@ -455,6 +459,28 @@ settings-tree-mixed-case-description = Whether a word written in mixed case is s
 settings-tree-say-dollars = Speak Dollars
 settings-tree-say-dollars-description = Whether amounts of money are left to the synthesizer as written, rather than read by Okur.
 settings-tree-speech-mode = Speech Mode
+# Screen Echo, in User, and Smart Navigation Mode, in Web / HTML / PDFs > Navigation, with their
+# values as Settings Center names them [obs, the walk of Settings Center's search].
+settings-tree-screen-echo = Screen Echo
+settings-tree-screen-echo-description = How much of the text that changes on screen Okur reads by itself: none, the highlighted text, or all of it. Okur key and S changes it while you work.
+settings-screen-echo-none = Echo No Text
+settings-screen-echo-highlighted = Echo Highlighted Text
+settings-screen-echo-all = Echo All Text
+settings-tree-navigation = Navigation
+settings-tree-smart-navigation = Smart Navigation Mode
+settings-tree-smart-navigation-description = Whether the virtual cursor's arrow keys move through form controls and tables as their own units. Okur key and X turns it on and off while you work.
+settings-smart-navigation-off = Off
+settings-smart-navigation-controls = Controls
+settings-smart-navigation-tables = Tables
+settings-smart-navigation-controls-and-tables = Controls and Tables
+# Indicate Headings, in Web / HTML / PDFs > Headings and Frames [obs, the walk of Settings
+# Center's search; "Headings Only" from its help].
+settings-tree-headings-and-frames = Headings and Frames
+settings-tree-indicate-headings = Indicate Headings
+settings-tree-indicate-headings-description = How a heading is said when you move to it: its text alone, with the word heading, or with the word heading and its level.
+settings-indicate-headings-none = No Headings
+settings-indicate-headings-only = Headings Only
+settings-indicate-headings-level = Headings with Level
 settings-tree-speech-mode-description = Full Speech, or less speech, as Okur starts. Okur key and Space, then S, changes it while you work.
 settings-tree-less-speech = Less Speech Options
 settings-tree-less-speech-description = What less speech does: speak only when asked (on demand), or say nothing.

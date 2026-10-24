@@ -93,6 +93,25 @@ kept it (research, not evidence):
   option will delete all your current settings and restart JAWS. Are you sure you want to
   continue? | Yes Button", Tab "No Button". Escape does nothing there: it was answered No
   (troubleshooting §7 of the skill). Never walk it again.
+- **Settings Center's search** (typed into its search box; `settings-questions-walk.ps1` with
+  `-Center` keys):
+  - Each key typed says the search box, its text, the first result and the count: "SearchBox
+    Edit | scr | Screen Echo | 1 of 7 Search Results".
+  - Down goes into a list of results, not into a filtered tree: "6 Search Results List box |
+    Screen Echo Echo Highlighted Text | User | Use the arrow keys to select an item. | Press the
+    space bar to toggle between the choices". Each result is the setting with its value and
+    then its group's path ("Smart Navigation Mode Off | NavigationWeb / HTML / PDFs").
+  - Escape in the results: "Search edit box cleared.", and the tree again at its first item.
+  - The names: "Screen Echo", in User, value "Echo Highlighted Text"; "Smart Navigation Mode",
+    in Web / HTML / PDFs > Navigation, value "Off"; "Indicate Headings", in Web / HTML / PDFs >
+    Headings and Frames, value "Headings with Level". Space on a result moves its value on and
+    says it with its place: "Play Sound | 4 of 5", "Speak Heading with Headings Voice | 5 of 5",
+    "No Headings | 1 of 5". The second, "Headings Only", is from the help, not walked. Okur
+    has the first three; the sound and the headings voice are not built.
+  - Web / HTML / PDFs' subgroups, in the help's order: Reading, Navigation, Images / Graphics,
+    Links, Headings and Frames, Tables, Miscellaneous.
+  - Okur's search filters the tree to the results in their groups instead. JAWS's results
+    list is the shape to follow (an open item).
 - **Settings Center** (Insert+6 over Notepad; `settings-center-walk.ps1`): "NotePad - JAWS
   Settings Center dialog | SearchBox Edit | Type in text."; by Tab: " | Tree view | | User |
   closed | 1 of 28 | To move through or expand items use the Arrow keys.", " read only edit |
