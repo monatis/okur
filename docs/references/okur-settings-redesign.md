@@ -78,6 +78,21 @@ kept it (research, not evidence):
   Voice Profile dialog | Default: Combo box | SAPI 5X 64 | 5 of 5"; by Tab: "For notepad: Combo
   box | Use Default | 1 of 6", "OK Button", "Cancel Button". JAWS's version before the dialog is
   its accident (as before its other dialogs: accepted divergence `JawsSaysBeforeItsDialog`).
+- **Voice Adjustment's profiles** (`-Parts profiles,saveas`): Profile Name by Up: "SAPI 5X -
+  (factory) | 4 of 5", "Persian | 3 of 5", "Microsoft Mobile - (factory) | 2 of 5", "Eloquence |
+  1 of 5", nothing more at the top. The names are in alphabetical order; a factory profile is named
+  "<synthesizer> - (factory)", a saved one by its name (old-pc's own is "SAPI 5X 64"). Save As...
+  (after Upper Case Pitch Change Percent): "Save Voice Profile dialog | Voice Profile Name: edit
+  combo | SAPI 5X 64 | 5 of 5 | To set the value use the Arrow keys or type the value."; by Tab,
+  "OK Button", "Cancel Button"; Escape goes back to "Save As... Button".
+- **Manage Application Settings...** (Options, fifth): "Manage Application Settings dialog |
+  Application Settings List box | Chrome checked | 1 of 5 | To move to an item press the Arrow
+  keys."; by Tab: "Enable All Button", "Disable All Button", "Remove Selected Button", "OK
+  Button", "Cancel Button". Escape closes it.
+- **Restore to Factory Settings...** (Options, sixth): "Restore to Factory Settings dialog | This
+  option will delete all your current settings and restart JAWS. Are you sure you want to
+  continue? | Yes Button", Tab "No Button". Escape does nothing there: it was answered No
+  (troubleshooting §7 of the skill). Never walk it again.
 - **Settings Center** (Insert+6 over Notepad; `settings-center-walk.ps1`): "NotePad - JAWS
   Settings Center dialog | SearchBox Edit | Type in text."; by Tab: " | Tree view | | User |
   closed | 1 of 28 | To move through or expand items use the Arrow keys.", " read only edit |

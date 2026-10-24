@@ -6,8 +6,7 @@
 # Adjustment), contexts (Voice Adjustment's Adjust box walked, each context's controls heard),
 # profile (Select a Voice Profile, Insert+Ctrl+S from Notepad), profiles (Voice Adjustment's
 # Profile Name box walked), saveas (its Save As... dialog), manage (Manage Application
-# Settings...), restore (Restore to Factory Settings..., never confirmed), wizard (the Startup
-# Wizard's first page). Run on old-pc with no batch recording.
+# Settings...), wizard (the Startup Wizard's first page). Run on old-pc with no batch recording.
 param([string]$OutDir = (Join-Path $env:USERPROFILE 'sr-harness\probe'),
       [string]$Parts = 'options,menus,basics,voice')
 $chosen = $Parts -split ',' | ForEach-Object { $_.Trim() }
@@ -68,11 +67,10 @@ if ($chosen -contains 'manage') {
     # Options, Manage Application Settings... (fifth): toured by Tab, then Escape.
     Walk 'Alt,Down,Down*4,Enter,Tab*8,Escape,Escape' 'jw-manage-applications.txt'
 }
-if ($chosen -contains 'restore') {
-    Open-JawsWindow
-    # Options, Restore to Factory Settings... (sixth): toured by Tab, then Escape. Never Enter.
-    Walk 'Alt,Down,Down*5,Enter,Tab*8,Escape,Escape' 'jw-restore-factory.txt'
-}
+# Restore to Factory Settings... is not walked: it is a Yes/No question with Yes focused, which
+# ignores Escape, so a walk left it open with Yes focused (2026-10-24; answered No by
+# okur-lab-keys after UI Automation showed the focus on No). Its words are in the redesign's
+# §1.1.
 if ($chosen -contains 'wizard') {
     Open-JawsWindow
     # Help (Left from Options), Startup Wizard... (tenth): its first page toured, then Escape.

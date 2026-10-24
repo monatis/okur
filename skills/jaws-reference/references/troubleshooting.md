@@ -40,3 +40,18 @@
 ## 6. Wrap-to-Top and Boundary Behavior
 - **Symptom**: Transcript contains `"wrapping to top"` unexpectedly.
 - **Behavior**: JAWS loops to the beginning of the document when navigation reaches the final matching element. This is expected JAWS behavior, not a harness bug.
+
+---
+
+## 7. A JAWS Yes/No Question Left Open by a Walk
+- **Symptom**: after a walk of JAWS's window, keys go nowhere and JAWS's speech history reads
+  empty; the foreground window is one of JAWS's questions ("Restore to Factory Settings").
+- **Cause**: a Yes/No question box ignores Escape, so a walk that tours it with Tab and leaves
+  with Escape leaves it open, and the walk's next Alt opens its system menu. JAWS's dialogs are
+  elevated: plain `okur-lab keys` cannot reach them, only `okur-lab-keys.exe` (UI Access, in
+  `C:\Program Files\Okur Lab`).
+- **Fix**: read the focus with UI Automation (it reads elevated windows); send Tab through
+  `okur-lab-keys.exe --allow jfw`; read the focus again, and press Space only when it is on
+  **No**. Then Alt+Tab the same way if JAWS's window keeps the foreground. Never walk a
+  confirmation whose Yes is irreversible: record its words once, by Enter and Tab only, and
+  answer it No by the procedure above (2026-10-24, Restore to Factory Settings).
