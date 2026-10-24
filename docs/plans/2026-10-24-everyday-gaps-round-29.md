@@ -62,7 +62,12 @@ Research: [`../references/jaws-settings-ui-research.md`](../references/jaws-sett
 4. **Voices**: voice contexts, profiles, Voice Adjustment, Select a Voice Profile.
 5. **Startup Wizard**, Manage Application Settings, Restore to Factory Settings.
 
-## 2. Word, what is left
+## 2. Word, what is left: next after §1 (the owner, 2026-10-24)
+
+The owner: "why didn't we implement the rest of Microsoft Word listed in README.md (e.g.,
+announcement of headings / lists during say all etc.)? let's schedule it after you're done with
+settings thing." So these come right after §1's milestones, before anything else, and Word is
+finished with them, the README's Word entry then without a "Not yet".
 
 - **Say All with the structure** (518/s20): JAWS announces headings, lists and tables while
   reading. The platform gives the caret line's structure only; Say All needs the document's
