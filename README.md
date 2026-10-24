@@ -46,30 +46,30 @@ Where to go from here:
 
 > **Status (October 2026): a preview on Windows.** Web pages in Chrome (the Virtual PC
 > Cursor, the lists of links, headings and other elements, tables, selecting and copying),
-> dialog boxes and menus, Notepad, File Explorer, Windows Settings, Windows Terminal, the
-> desktop, Alt+Tab and Windows search are read as JAWS reads them, and the Okur cursor reads
-> any window's screen, pictures included, recognized with Windows' own OCR. It is not yet a
-> replacement for your screen reader: Microsoft Office is the largest part still missing (see
-> [Not yet](#not-yet)). Those everyday gaps on Windows are being closed first; macOS, whose
+> Microsoft Word's documents, dialog boxes and menus, Notepad, File Explorer, Windows
+> Settings, Windows Terminal, the desktop, Alt+Tab and Windows search are read as JAWS reads
+> them, and the Okur cursor reads any window's screen, pictures included, recognized with
+> Windows' own OCR. It is not yet a replacement for your screen reader: Outlook and Excel are
+> the largest part still missing (see [Not yet](#not-yet)). Those everyday gaps on Windows are being closed first; macOS, whose
 > accessibility layer is in place, comes after them.
 >
 > **Okur speaks in its own name.** Where JAWS names itself, Okur says Okur: the Okur key
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `68bf3b4d` (2026-10-24).
+Every figure is tool output, rerun for this README at commit `cea468f6` (2026-10-24).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **8609 of 9168** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **8513 of 9229** | `okur-lab parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **249** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **656, 1974** (1958 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1429 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **8675 of 9239** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **8578 of 9300** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **251** | `okur-lab parity` |
+| Recorded JAWS scenarios, trials | **662, 1992** (1976 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1440 passed, 0 failed** (201 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
-The 249 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
+The 251 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
 accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
 place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
 Okur says its help in its own words. Each one is listed, with the reason and who decided it,
@@ -150,6 +150,14 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   Insert+PageDown); Say Font; misspelled words marked; and text analysis on Insert+Tab, as
   JAWS does it (runs of spaces, stray or unspaced punctuation, a missing capital, brackets and
   quotes left open, each with its column).
+- **Microsoft Word:** a document read as JAWS reads it: each line as Word lays it out, a
+  heading with its level ("heading level 1 Library Hours"), a list entered and left ("Entering
+  List", "exit list"), a table entered, its cells and left ("table 1, uniform Table, new
+  cell"). In a table, JAWS's table keys (Ctrl+Alt+arrows, Home and End) go from cell to cell
+  and say its column's or row's title, Tab moves and selects as Word does, and Ctrl+Alt+Numpad
+  5 and Insert+Tab say the cell and where it is. Insert+F6 lists the document's headings to
+  move to; Say Font gives the size, colors, font, style, alignment and outline level, and
+  Insert+T the title and the view ("Print View").
 - **The cursors:** Numpad Minus to the Okur cursor at the mouse, Numpad Plus back to the PC
   cursor, Insert+Numpad Minus to bring the Okur cursor to the PC cursor, Insert+Numpad Plus
   the other way, Insert+R for where the Okur cursor may go, and Alt+Delete for where the
@@ -234,7 +242,8 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- Microsoft Word, Outlook and Excel, not yet supported or checked;
+- Outlook and Excel, not yet supported or checked; in Word, Say All does not yet announce
+  headings, lists and tables as it reads, and Say Font leaves out the line spacing;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;
