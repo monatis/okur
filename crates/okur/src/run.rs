@@ -491,6 +491,12 @@ pub async fn run(config: RunConfig) {
     };
     okur_platform::process::shut_down_last();
 
+    // The first start for this user, before Okur has a settings folder of theirs, opens the
+    // Startup Wizard, as JAWS's runs once it is installed; the folder is made then, so the
+    // wizard opens once. A folder given with --settings-folder (the lab's runs) never opens it.
+    let first_start = settings_folder.is_none()
+        && okur_platform::settings_file::SettingsFolder::user()
+            .is_some_and(|folder| !folder.folder().exists());
     // The saved settings, then this run's options over them, for this run only.
     let settings_folder = match settings_folder {
         Some(path) => Some(okur_platform::settings_file::SettingsFolder::at(path)),
@@ -612,6 +618,12 @@ pub async fn run(config: RunConfig) {
             Some(Box::new(folder.clone())),
         );
         engine.set_settings_history(&folder.load_settings_history());
+        if first_start {
+            if let Err(e) = std::fs::create_dir_all(folder.folder()) {
+                tracing::warn!(folder = ?folder.folder(), error = %e, "settings folder not made");
+            }
+            engine.open_startup_wizard();
+        }
         engine.set_settings_store(Box::new(folder));
     }
     // Say System Time (Insert+F12) in the user's locale formats.

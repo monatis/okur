@@ -7,7 +7,8 @@
 # profile (Select a Voice Profile, Insert+Ctrl+S from Notepad), profiles (Voice Adjustment's
 # Profile Name box walked), saveas (its Save As... dialog), manage (Manage Application
 # Settings...), wizard (the Startup Wizard's first page), wizardpages (with wizard: its pages 2
-# to 5, by Next). Run on old-pc with no batch recording.
+# to 5, by Next), wizardvalues (with wizard: its radio buttons' names, each put back, and the
+# last page's Finish). Run on old-pc with no batch recording.
 param([string]$OutDir = (Join-Path $env:USERPROFILE 'sr-harness\probe'),
       [string]$Parts = 'options,menus,basics,voice')
 $chosen = $Parts -split ',' | ForEach-Object { $_.Trim() }
@@ -17,11 +18,16 @@ New-Item -ItemType Directory -Force $OutDir | Out-Null
 function Walk([string]$chords, [string]$out) {
     & powershell -NoProfile -ExecutionPolicy Bypass -File $walk -Process jfw -Chords $chords -WaitMs 1000 -Out (Join-Path $OutDir $out) | Out-Null
 }
-Add-Type -Namespace JWW -Name W -MemberDefinition '[DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow(); [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr h, out uint p);'
+Add-Type -Namespace JWW -Name W -MemberDefinition '[DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow(); [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr h, out uint p); [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetWindowText(IntPtr h, System.Text.StringBuilder s, int n);'
 function Front-Process {
     $id = 0
     [void][JWW.W]::GetWindowThreadProcessId([JWW.W]::GetForegroundWindow(), [ref]$id)
     (Get-Process -Id $id -ErrorAction SilentlyContinue).ProcessName
+}
+function Front-Title {
+    $text = New-Object System.Text.StringBuilder 512
+    [void][JWW.W]::GetWindowText([JWW.W]::GetForegroundWindow(), $text, 512)
+    $text.ToString()
 }
 # JAWS's window in front. With it already open behind Notepad, Insert+J leaves Notepad in front
 # (2026-10-24), and Alt+Tab, through the UI Access keys, brings it.
@@ -85,17 +91,24 @@ if ($chosen -contains 'manage') {
 # §1.1.
 if ($chosen -contains 'wizard') {
     Open-JawsWindow
-    # Help (three Rights from Options; Left is the System menu), Startup Wizard... (tenth);
-    # then its first page toured in the wizard's own process, and Escape (Cancel). Never
-    # Finish.
-    Walk 'Alt,Right,Right,Right,Down,Down*9,Enter' 'jw-startup-wizard-open.txt'
+    # Help, Startup Wizard... by their access keys (Alt+H, Z: JAWS's help), as counting Downs
+    # once walked JAWS's window with its menu bar closed; then its first page toured in the
+    # wizard's own process, and Escape (Cancel). Never Finish. Keys go to the wizard only when
+    # the window in front is titled as it.
+    Walk 'Alt+H,Z' 'jw-startup-wizard-open.txt'
     Start-Sleep -Seconds 3
     $process = Front-Process
-    "wizard process: $process" | Add-Content (Join-Path $OutDir 'jw-startup-wizard-open.txt')
-    if ($process -and $process -ne 'notepad') {
+    $title = Front-Title
+    "wizard process: $process, title: $title" | Add-Content (Join-Path $OutDir 'jw-startup-wizard-open.txt')
+    if ($process -and $title -like '*Startup Wizard*') {
         # With -Parts wizardpages, pages 2 to 5 too: Next (Alt+N) and each page toured by Tab;
         # nothing is changed, and Escape saves nothing (JAWS's help: only Finish saves).
-        $chords = if ($chosen -contains 'wizardpages') {
+        # With -Parts wizardvalues, the radio buttons of Common Options and Verbosity Settings
+        # walked each way and put back as found (a change takes effect at once in the wizard),
+        # then Next to the last page for its Finish; Escape saves nothing.
+        $chords = if ($chosen -contains 'wizardvalues') {
+            'Alt+N,Alt+N,Alt+N,Down*3,Up*3,Tab,Up*2,Down*2,Alt+N,Down,Up,Tab,Down*3,Up*3,Tab,Down*2,Up*2,Alt+N,Alt+N,Tab*12,Escape,Escape'
+        } elseif ($chosen -contains 'wizardpages') {
             'Alt+N,Tab*9,Alt+N,Tab*7,Alt+N,Tab*11,Alt+N,Tab*7,Escape,Escape'
         } else { 'Tab*10,Escape,Escape' }
         & powershell -NoProfile -ExecutionPolicy Bypass -File $walk -Process $process -Chords $chords -WaitMs 1000 -Out (Join-Path $OutDir 'jw-startup-wizard.txt') | Out-Null

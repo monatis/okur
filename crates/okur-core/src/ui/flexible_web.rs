@@ -146,6 +146,7 @@ impl FlexibleWebWizard {
         let (page, buttons) = self.page_spec();
         WizardSpec {
             id: self.id,
+            title: None,
             page,
             buttons,
         }

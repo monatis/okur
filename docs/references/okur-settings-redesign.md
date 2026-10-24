@@ -112,6 +112,33 @@ kept it (research, not evidence):
     Links, Headings and Frames, Tables, Miscellaneous.
   - Okur's search filters the tree to the results in their groups instead. JAWS's results
     list is the shape to follow (an open item).
+- **The Startup Wizard** (JAWS's window, Alt+H, Z; `jaws-window-walk.ps1 -Parts
+  wizard,wizardpages` and `wizard,wizardvalues`; each radio group moved and put back as
+  found, and Escape, which saves nothing):
+  - "JAWS Startup Wizard dialog | Help Us Improve Freedom Scientific Products ... | Participate
+    check box not checked". The window keeps that title; each page is said by its own title
+    before its first control, and the buttons are "< Back", "Next >" or "Finish", "Cancel".
+  - Speech Settings: "Rate: 20 | left right slider | 100 percent", "Punctuation: Combo box |
+    Most | 3 of 4", "Typing Echo Off radio button checked | 1 of 4". No Voice Assistant on
+    old-pc.
+  - Run JAWS Settings, after a paragraph on the start options: "Start JAWS at the logon screen
+    check box checked", "Start JAWS after logon for all users check box checked", "Start JAWS
+    after logon for this user: Combo box | Always | 1 of 3", "Run JAWS from System Tray check
+    box not checked", "Prompt to confirm when exiting JAWS check box checked".
+  - Common Options: Smart Navigation "Off", "Controls Only", "Tables", "Controls and Tables";
+    Forms Mode "Auto", "Semi Auto", "Manual"; "Use Keyboard Layout: Combo box | Laptop | 2 of
+    3"; "Use Virtual Ribbon Menus check box"; "Initial state of NumLock key Turn off at
+    startup radio button checked | 1 of 3".
+  - Verbosity Settings: Tutor Messages "Announce Menu and Control Help" (2 of 3), "Announce
+    Custom Messages Only" (3 of 3); Access Key "Off", "Speak all", "Speak Menus Only", "Speak
+    Dialogs Only"; Verbosity Level "Beginner, Highest", "Intermediate", "Advanced, Lowest".
+  - Then Braille Translation Settings and Braille Settings, the last with "Finish Button".
+  - Okur's, since the commit after `1b6b74ac`: "Okur Startup Wizard", with Speech Settings,
+    Run Okur Settings (Prompt to confirm when exiting Okur), Common Options and Verbosity
+    Settings, each with Okur's settings of it under the wizard's names; a change heard at once
+    (the session layer), Finish keeping them for all applications, Cancel nothing. From Help,
+    Startup Wizard... (after About Okur..., access key Z), and on the first start for a user
+    who has no settings folder yet (never with `--settings`).
 - **Last Changed Settings' menus** (Settings Center and Quick Settings over Notepad;
   `settings-questions-walk.ps1`, two walks; Notepad's Typing Echo moved on, applied, moved
   back and applied, so it ended as it began):
@@ -379,9 +406,10 @@ spoken form is a parity target.
    "Profile Name: Combo box | Automatic - (factory) | 1 of 3", "Voice Adjust: Combo box | All
    Contexts | 1 of 5", "Voice Person: Combo box", Delete Profile and OK skipped by Tab while
    unavailable, and the profiles replaced after Save As ("Fast | 2 of 4").
+   A slider's label now shows its number, "Rate: 0", as JAWS's "Rate: 20" (in Okur's own
+   units, -10 to 10; JAWS's SAPI voice shows 0 to 20, its scale per synthesizer).
    Still to do: tutor hints in the message voice (they are part of the focus speech today);
-   the Rate slider's number (JAWS: "Voice | Rate: 20 | left right slider | 100 percent";
-   okur-ui's: "Voice Rate: left right slider | 50 percent"); Speak Sample and Synthesizer
+   Speak Sample and Synthesizer
    Language; Apply's question whether to make a saved profile the default; the Language menu's
    Voice Profiles.
 5. **Startup Wizard**, Manage Application Settings, Restore to Factory Settings.
@@ -393,5 +421,7 @@ spoken form is a parity target.
      settings), OK, Cancel;
    - Restore to Factory Settings asks first, in JAWS's words but for "and restart JAWS", since
      Okur's defaults apply at once; Yes forgets every saved setting and Last Changed Settings.
-   Still to do: the Startup Wizard (its walk was cut short); whether JAWS reads okur-ui's check
-   list as JAWS's "List box" (a probe).
+   **The Startup Wizard built 2026-10-25** (§1.1's walk). Still to do: its start options
+   with setup's start entries (Run Okur Settings), Run Okur from System Tray, Tutor Messages'
+   and Access Key's other choices; whether JAWS reads okur-ui's check list as JAWS's "List
+   box" (a probe).

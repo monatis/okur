@@ -19,6 +19,7 @@ pub mod quit;
 pub mod settings;
 pub mod settings_tree;
 pub mod skim;
+pub mod startup_wizard;
 pub mod tray;
 pub mod voice_adjustment;
 pub mod voice_profile;

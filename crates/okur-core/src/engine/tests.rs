@@ -7677,6 +7677,67 @@ fn insert_j_shows_okurs_window_and_its_menus() {
     ));
 }
 
+/// The Startup Wizard from Help: a change is in force at once and kept nowhere; Escape gives
+/// the settings back, Finish keeps them for all applications (JAWS's help).
+#[test]
+fn the_startup_wizard_tries_then_keeps_its_changes() {
+    use crate::settings::TypingEcho;
+    use crate::ui::{FromUi, ToUi, Value};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let store = crate::settings::RecordingSettingsStore::default();
+    engine.set_settings_store(Box::new(store.clone()));
+    let echo = engine.settings.typing_echo;
+    let open = |engine: &mut ScreenReaderEngine| {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::MainMenuCommand {
+            id: "startup_wizard".into(),
+        }));
+        match ui.take().first() {
+            Some(ToUi::WizardShow { wizard }) => {
+                assert_eq!(wizard.title.as_deref(), Some("Okur Startup Wizard"));
+                wizard.id
+            }
+            other => {
+                panic_free_fail(&format!("no wizard: {other:?}"));
+                0
+            }
+        }
+    };
+    let words = |id| {
+        AccessibilityEvent::Ui(FromUi::DialogChanged {
+            id,
+            control: "typing_echo".into(),
+            value: Value::Selected(2),
+        })
+    };
+    let id = open(&mut engine);
+    engine.handle_accessibility_event(&words(id));
+    assert_eq!(engine.settings.typing_echo, TypingEcho::Words);
+    assert!(store.take().is_empty());
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogClosed { id }));
+    assert_eq!(engine.settings.typing_echo, echo);
+    assert!(engine.settings_layers.session.is_empty());
+    // Again, then Finish.
+    let id = open(&mut engine);
+    engine.handle_accessibility_event(&words(id));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "finish".into(),
+    }));
+    assert_eq!(engine.settings.typing_echo, TypingEcho::Words);
+    assert!(engine.settings_layers.session.is_empty());
+    assert_eq!(
+        store
+            .take()
+            .last()
+            .map(|layers| layers.resolve(None, None).typing_echo),
+        Some(TypingEcho::Words)
+    );
+    assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
+}
+
 /// Select a Voice Profile: a profile chosen for all applications becomes their voice, its name
 /// kept; one chosen for Notepad is Notepad's own; "Use Default" gives Notepad the voice for all
 /// applications again, and nothing of its own is left in its settings.

@@ -780,6 +780,7 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
                     Some(WPARAM(1)),
                     Some(LPARAM(*number as isize)),
                 );
+                show_slider_value(item, *number);
             }
             (
                 ControlKind::List { .. }
@@ -1677,6 +1678,7 @@ pub(crate) unsafe extern "system" fn dialog_proc(
             if let (Ok(control_id), Ok(position)) =
                 (u16::try_from(control_id), i32::try_from(position.0))
             {
+                show_slider_value(item, position);
                 if let Some(hit) = lookup(window, control_id) {
                     changed(window, &hit, Value::Number(position));
                 }
@@ -1684,6 +1686,26 @@ pub(crate) unsafe extern "system" fn dialog_proc(
             1
         }
         _ => 0,
+    }
+}
+
+/// A slider's value in its label, after the label's colon: "Rate: 0", as JAWS's Voice
+/// Adjustment shows "Rate: 20" [obs, the walk of Voice Adjustment]. The label is the static
+/// made just before the slider (`template::push_labelled`).
+fn show_slider_value(slider: HWND, value: i32) {
+    use windows::Win32::UI::WindowsAndMessaging::{GetWindow, GW_HWNDPREV};
+    // SAFETY: our own dialog's static before our own slider.
+    let Ok(label) = (unsafe { GetWindow(slider, GW_HWNDPREV) }) else {
+        return;
+    };
+    let text = window_text(label);
+    let Some((name, _)) = text.rsplit_once(':') else {
+        return;
+    };
+    let shown = wide(&format!("{name}: {value}"));
+    // SAFETY: our own static, and a string that outlives the call.
+    unsafe {
+        let _ = SetWindowTextW(label, windows::core::PCWSTR(shown.as_ptr()));
     }
 }
 

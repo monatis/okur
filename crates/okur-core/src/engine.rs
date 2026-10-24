@@ -44,6 +44,7 @@ mod say_all;
 mod screen_text;
 mod skim;
 mod speech_mode;
+mod startup_wizard;
 mod state;
 #[cfg(test)]
 mod tests;
@@ -296,6 +297,10 @@ pub struct ScreenReaderEngine {
     settings_tree: Option<crate::ui::settings_tree::SettingsTree>,
     /// Basics, while it is open.
     basics_dialog: Option<crate::ui::basics::BasicsDialog>,
+    /// The Startup Wizard while it is open, and the session layer as it was before it, given
+    /// back when it closes.
+    startup_wizard: Option<crate::ui::startup_wizard::StartupWizard>,
+    startup_wizard_session: crate::settings_layers::Values,
     /// Voice Adjustment, while it is open.
     voice_adjustment: Option<crate::ui::voice_adjustment::VoiceAdjustment>,
     /// Select a Voice Profile, while it is open.
@@ -568,6 +573,8 @@ impl ScreenReaderEngine {
             settings_dialog: None,
             settings_tree: None,
             basics_dialog: None,
+            startup_wizard: None,
+            startup_wizard_session: crate::settings_layers::Values::new(),
             voice_adjustment: None,
             voice_profile_dialog: None,
             applications_dialog: None,
@@ -1911,7 +1918,10 @@ impl ScreenReaderEngine {
                     ),
                     menu(
                         msg::okur_menu_help(),
-                        vec![item(MENU_ABOUT, msg::okur_menu_about(), None)],
+                        vec![
+                            item(MENU_ABOUT, msg::okur_menu_about(), None),
+                            item(MENU_STARTUP_WIZARD, msg::okur_menu_startup_wizard(), None),
+                        ],
                     ),
                 ],
             },
@@ -1936,6 +1946,7 @@ impl ScreenReaderEngine {
             MENU_ABOUT => {
                 self.show_message_box(msg::okur_window_version(env!("CARGO_PKG_VERSION")).render())
             }
+            MENU_STARTUP_WIZARD => return self.open_startup_wizard(),
             crate::ui::MAIN_WINDOW_EXIT => return self.execute(crate::command::Command::ShutDown),
             _ => {}
         }
@@ -2302,6 +2313,7 @@ impl ScreenReaderEngine {
             _ if self.is_label_event(message) => self.handle_label_event(message),
             _ if self.is_placemarker_event(message) => self.handle_placemarker_event(message),
             _ if self.is_flexible_web_event(message) => self.handle_flexible_web_event(message),
+            _ if self.is_startup_wizard_event(message) => self.handle_startup_wizard_event(message),
             _ if self.is_quit_event(message) => self.handle_quit_event(message),
             _ if self.is_message_box_event(message) => self.handle_message_box_event(message),
             _ if self.is_overwrite_event(message) => self.handle_overwrite_event(message),
@@ -2893,6 +2905,7 @@ const MENU_RESTORE: &str = "restore_factory";
 const MENU_NOTIFICATIONS: &str = "notification_history";
 const MENU_SETTINGS_CENTER: &str = "settings_center";
 const MENU_ABOUT: &str = "about";
+const MENU_STARTUP_WIZARD: &str = "startup_wizard";
 
 /// The application Okur's own windows are in (okur-ui's process), as the settings name it.
 const OKUR_WINDOWS: &str = "okur-ui";

@@ -527,6 +527,7 @@ okur-menu-notification-history = Notification History
 okur-menu-settings-center = Settings Center
 okur-menu-help = &Help
 okur-menu-about = &About Okur...
+okur-menu-startup-wizard = Startup Wi&zard...
 
 ## Basics, JAWS's "Basic Settings" [obs, the walk of Basics].
 
@@ -540,6 +541,30 @@ basics-access-key-all = Speak All
 basics-confirm-exit = Prompt to confirm when exiting Okur
 basics-viewer = Show Virtual Viewer on screen
 basics-layout = Use Keyboard Layout:
+# The Startup Wizard (Help, Startup Wizard..., and Okur's first start): its title, its pages'
+# titles and their settings, as JAWS's [obs, the walk of the Startup Wizard].
+startup-wizard-title = Okur Startup Wizard
+startup-wizard-speech = Speech Settings
+startup-wizard-rate = Rate:
+startup-wizard-punctuation = Punctuation:
+startup-wizard-typing-echo = Typing Echo
+startup-wizard-run = Run Okur Settings
+startup-wizard-common = Common Options
+startup-wizard-smart-navigation = Smart Navigation
+startup-wizard-navigation-off = Off
+startup-wizard-navigation-controls = Controls Only
+startup-wizard-navigation-tables = Tables
+startup-wizard-navigation-both = Controls and Tables
+startup-wizard-forms-mode = Forms Mode
+startup-wizard-forms-auto = Auto
+startup-wizard-forms-semi-auto = Semi Auto
+startup-wizard-forms-manual = Manual
+startup-wizard-access-key-all = Speak all
+startup-wizard-verbosity = Verbosity Settings
+startup-wizard-verbosity-level = Verbosity Level
+startup-wizard-beginner = Beginner, Highest
+startup-wizard-intermediate = Intermediate
+startup-wizard-advanced = Advanced, Lowest
 # The keys the menus show after their items, as JAWS's show theirs.
 okur-menu-exit-key = Alt+F4
 okur-menu-notification-history-key = INSERT+SPACE, N

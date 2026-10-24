@@ -225,6 +225,11 @@ pub struct WizardButtons {
 pub struct WizardSpec {
     /// Okur's number for the wizard; events carry it back, as a dialog's.
     pub id: u32,
+    /// The wizard's own title on every page, each page then named by its own title only:
+    /// "JAWS Startup Wizard", its page "Speech Settings" [obs, the walk of the Startup
+    /// Wizard]. None: the window takes each page's title, as Flexible Web's.
+    #[serde(default)]
+    pub title: Option<String>,
     pub page: DialogSpec,
     pub buttons: WizardButtons,
 }

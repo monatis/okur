@@ -14,7 +14,9 @@
       M1c  --sign-in with both Shift keys held: no process
     Every Okur process started from -Dir is ended afterwards, and <OutputDir>\batch.done is
     written last, so a queued batch can follow (queue-batch.ps1 -After). It changes nothing
-    on the machine: no registry, certificate or install.
+    on the machine (no registry, certificate or install) but Okur's own settings folder: the
+    first Okur start for a user without %APPDATA%\Okur makes it and opens the Startup Wizard,
+    which ending the processes closes, saving nothing.
 #>
 param(
     [Parameter(Mandatory = $true)][string]$After,
