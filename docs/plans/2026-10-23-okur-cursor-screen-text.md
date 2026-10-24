@@ -250,6 +250,10 @@ The layer, as JAWS's key map has it (research §2.1).
 - **S4, files to the Results Viewer:**
   - F, D and Enter's file cases;
   - Windows.Data.Pdf for a PDF's pages (proposal V2).
+  - **Done (2026-10-24):** F and Enter's file case, the refusals, ? and Q's message, proven against
+    1024-1032 ([`../handoff/2026-10-24-scan-cursor-and-file-ocr.md`](../handoff/2026-10-24-scan-cursor-and-file-ocr.md)).
+    Left: D in a reader, the Results Viewer's Open in Word link
+    ([`2026-10-24-everyday-gaps-round-28.md`](2026-10-24-everyday-gaps-round-28.md) §1).
 - **Later:**
   - Picture Smart and the local models (proposal V3 onward);
   - labels for small graphics by checksum, with the Graphics Labeler;
