@@ -379,7 +379,7 @@ fn carry_out(
                 }
             }
             Request::Symbols(text, interrupt) => {
-                let spoken = okur_core::pronounce::spoken_symbols(&text);
+                let spoken = okur_core::pronounce::spoken_symbols_with(&text, tts.text);
                 let _ = tts.engine.speak_pitched(&spoken, pitch, interrupt);
             }
             Request::Character(text, interrupt) => {

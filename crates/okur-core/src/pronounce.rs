@@ -156,7 +156,20 @@ pub fn spoken_with(text: &str, level: Punctuation, processing: TextProcessing) -
 /// [obs, 213/s11]). Numbers stay as at the lower levels: "photo dot jpg 1.2 MB" after Ctrl+A
 /// [obs, 322/s16].
 pub fn spoken_symbols(text: &str) -> String {
-    render(text, Punctuation::All, false, TextProcessing::default())
+    spoken_symbols_with(text, TextProcessing::default())
+}
+
+/// [`spoken_symbols`] with the voice's text processing: mixed case, numbers as digits and
+/// dollar amounts as the settings have them, as for any text [obs, 721, 722, 723: words read
+/// by Ctrl+Right].
+pub fn spoken_symbols_with(text: &str, processing: TextProcessing) -> String {
+    // Numbers digit by digit say a decimal point as "point": "2 point 5" [obs, 722/s20].
+    render(
+        text,
+        Punctuation::All,
+        processing.numbers_as_digits,
+        processing,
+    )
 }
 
 /// `spoken`'s work; `point_digits`: a decimal point is "point" and the digits after it are
@@ -703,6 +716,19 @@ mod tests {
         );
         assert_eq!(spoken_symbols("photo.jpg 1.2 MB"), "photo dot jpg 1.2 MB");
         assert_eq!(spoken_symbols("dog,"), "dog comma,");
+    }
+
+    /// A word read on its own names every symbol with the voice's text processing kept: numbers
+    /// digit by digit with "point" [obs, 722/s20, s26].
+    #[test]
+    fn a_word_keeps_the_text_processing() {
+        let digits = TextProcessing {
+            numbers_as_digits: true,
+            ..TextProcessing::default()
+        };
+        assert_eq!(spoken_symbols_with("2.5", digits), "2 point 5");
+        assert_eq!(spoken_symbols_with("$0.02", digits), "dollar 0 point 0 2");
+        assert_eq!(spoken_symbols("2.5"), "2.5");
     }
 
     /// Text Processing set otherwise than JAWS's defaults: mixed case whole, numbers digit by

@@ -834,14 +834,11 @@ impl RecordingSpeech {
         if self.unspoken() {
             return;
         }
+        let processing = self.text.lock().map(|t| *t).unwrap_or_default();
         let spoken = if symbols {
-            okur_core::pronounce::spoken_symbols(text)
+            okur_core::pronounce::spoken_symbols_with(text, processing)
         } else {
-            okur_core::pronounce::spoken_with(
-                text,
-                level,
-                self.text.lock().map(|t| *t).unwrap_or_default(),
-            )
+            okur_core::pronounce::spoken_with(text, level, processing)
         };
         append(&self.spoken, spoken);
     }

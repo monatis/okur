@@ -248,8 +248,10 @@ impl TtsManager {
         if let Some(log) = self.speech_log.as_mut() {
             log.record(SpeechLogKind::Speak, text, interrupt);
         }
-        self.engine
-            .speak(&okur_core::pronounce::spoken_symbols(text), interrupt)
+        self.engine.speak(
+            &okur_core::pronounce::spoken_symbols_with(text, self.text),
+            interrupt,
+        )
     }
 
     fn speak_at(

@@ -665,10 +665,25 @@ impl ScreenReaderEngine {
                     | Command::SelectPriorPage
                     | Command::SelectAll
                     | Command::SelectHtmlElement
-            );
+            )
+                // A word read on its own too, whatever the punctuation level: "month comma,",
+                // "period.", "em dash —" [obs, 106/s4, s6, s23].
+                || matches!(
+                    command,
+                    Command::SayNextWord | Command::SayPriorWord | Command::SayWord
+                );
+            // A word that is one symbol is read as that character alone: "em dash —" [obs,
+            // 106/s23].
+            let lone_symbol = matches!(
+                command,
+                Command::SayNextWord | Command::SayPriorWord | Command::SayWord
+            ) && {
+                let mut chars = text.chars();
+                matches!((chars.next(), chars.next()), (Some(c), None) if !c.is_alphanumeric())
+            };
             if command == Command::SayCharacterPhonetic && text.chars().count() == 1 {
                 self.speech.speak_phonetic(text, true);
-            } else if character {
+            } else if character || lone_symbol {
                 self.speech.speak_character(text, true);
             } else if let Some((before, character, after)) = selected_character {
                 self.speech
