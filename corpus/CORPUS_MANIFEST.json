@@ -77,6 +77,10 @@
       "sha256": "ef979475560f1362859fb45123177759328c87b026725bb1741fa3716b9167ca",
       "size_bytes": 2054
     },
+    "desktop-notepad-paths.ps1": {
+      "sha256": "10dc3a46cf677fe6e3940bf4996731b68144301623dace4b5698223b23f67a51",
+      "size_bytes": 889
+    },
     "desktop-notepad.ps1": {
       "sha256": "7251969f618fc1cd11ab31e5f8a61bdbde2ee05504c78ebad69f23658dcdfe8e",
       "size_bytes": 827
@@ -852,6 +856,20 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1037-desktop-notepad-words-with-punctuation",
+      "fixture": "desktop-notepad-paths.ps1",
+      "evidence": {
+        "sha256": "0dfeaa9fc552559ace53acdaf7be449653063782d07260023246acb41020cfb0",
+        "capture_script_sha256": "2f07646b53583e3a245d42790d0225b810dc4a43a65b9ea0f42626f10e064ae9",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -9509,10 +9527,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 662,
-    "scenarios_with_evidence": 662,
-    "total_trials": 1992,
-    "successful_trials": 1976,
-    "deterministic_scenarios": 426
+    "scenarios": 663,
+    "scenarios_with_evidence": 663,
+    "total_trials": 1995,
+    "successful_trials": 1979,
+    "deterministic_scenarios": 427
   }
 }
