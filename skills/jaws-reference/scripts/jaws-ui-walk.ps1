@@ -23,7 +23,9 @@ $lines = foreach ($chord in $expanded) {
     if ($p.ExitCode -ne 0) { "== $chord => (refused: $($p.ExitCode))"; break }
     $said = (& $lab jaws-history --clear) -join ' | '
     "== $chord => $said"
-    if ($AutoExpand -and $said -match '(^| )closed( |$)') {
+    # A state is said between JAWS's state marks (U+001D, U+001E) in Settings Center's tree,
+    # " <1D>closed<1E> ", or between spaces in Quick Settings'.
+    if ($AutoExpand -and $said -match '(^|[ \x1d])closed([ \x1e]|$)') {
         $p = Start-Process -FilePath $keys -ArgumentList @('--allow', $Process, '"Right"', "`"wait:$WaitMs`"") -WindowStyle Hidden -Wait -PassThru
         "== Right => " + ((& $lab jaws-history --clear) -join ' | ')
     }

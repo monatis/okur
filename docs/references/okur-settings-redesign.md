@@ -69,6 +69,20 @@ kept it (research, not evidence):
   "Cancel Button". No Pitch with this SAPI voice, and no OK or Apply on a factory profile
   unchanged (the help: OK is unavailable after changing one; Apply appears once something
   changed).
+- **Settings Center** (Insert+6 over Notepad; `settings-center-walk.ps1`): "NotePad - JAWS
+  Settings Center dialog | SearchBox Edit | Type in text."; by Tab: " | Tree view | | User |
+  closed | 1 of 28 | To move through or expand items use the Arrow keys.", " read only edit |
+  <the group's description> | Use your reading keys to read the text.", "OK Button", "Cancel
+  Button", "Application: Combo box | NotePad | 74 of 182 | To change the selection use the Arrow
+  keys.", back to the search box. No Apply until something changed. A group is said with its
+  state between JAWS's state marks, "Web / HTML / PDFs | ‹closed›". Its 28 groups, in order:
+  User, Web / HTML / PDFs, Forms Mode, Text Processing, Speech Verbosity, Speech Options, Speech
+  And Sounds Schemes, Say All, Graphics and Symbols, Braille, Braille and Text Viewers, Caret And
+  Cursor, Synthesizer, Punctuation, Voice Aliases, Window Classes, Keyboard, Custom Highlight,
+  Research It, Text Analyzer, Convenient OCR and Picture Smart, Gestures, Mouse Echo, Visual
+  Tracking, Face in View, Math, Miscellaneous, Last Changed Settings. F6 on Last Changed Settings
+  says "There is nothing visible at the configuration display pane at the moment." The groups'
+  settings: the walk with each group opened (to come).
 
 ## 2. Okur today
 
