@@ -351,6 +351,16 @@ same at Most, None and Some:
 synthesizer was given at each level (the spoken layer) is still to read. The owner's Notepad
 needs the same line in `desktop-richedit.ps1`'s family, recorded next.
 
+**Built since (2026-10-24):**
+- A plain edit's word is the whole run around the caret, between spaces and hyphens, and
+  nothing at the text's end (`f54c4539`). 1037's word steps match, all but Say Word on the
+  first stop ("\" where Okur says ":\").
+- In pages and web fields, a word read on its own names every symbol, as desktop fields' did,
+  and a word that is one symbol is that character alone, "em dash —" (`f1e3307a`). 106/s4, s6,
+  s23 and 213/s11 match in the spoken layer.
+- 1041 records the same line in a RichEdit control (`desktop-richedit-paths.ps1`), the family
+  of the owner's Windows 11 Notepad, whose own word unit stops at punctuation.
+
 ## What Okur should do, once recorded
 
 Not decided before the recordings. If None and Some show what Most shows:
