@@ -19,6 +19,7 @@ To record one:
 | 613 | A Turkish page (`lang="tr"`, ç ğ ı İ ö ş ü) read by character, word and line, spelled, and with Say All, in JAWS's English voice (old-pc's language detection is off). Recorded in round 114, its 3 trials passed once run-scenario read the fixture's title as UTF-8 (`f78ec7b`); waits for its page's snapshots (snap116) | `turkish-text.html` (here) |
 | 627 | The clipboard keys in their key map's order. Round 91 was inconclusive: Windows+Insert+X reached Windows' own Win+X menu from the harness's keys. Sent with UI Access by `okur-lab-keys` it does too, Windows key first or Insert first (old-pc, 2026-10-22): an injected Windows-key chord is Windows', so these keys are recorded by script name (825) | `desktop-editor.ps1` |
 | 628 | The layer's help and Command Search. Round 91 was inconclusive on old-pc's Turkish keyboard layout | `desktop-editor.ps1` |
+| 1042 | Word's Web Layout and Read Mode by the View tab's keys (Alt, W, L; Alt, W, F), Say Window Title in each, and Escape out of Read Mode. Being recorded (2026-10-25) | `desktop-word.ps1` |
 | 665 | Say Window in Notepad's Font dialog, waited for long enough to read its 187 fonts (round 115) | `desktop-notepad.ps1` |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation

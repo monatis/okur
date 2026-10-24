@@ -8,8 +8,8 @@
 # Profile Name box walked), saveas (its Save As... dialog), manage (Manage Application
 # Settings...), wizard (the Startup Wizard's first page), wizardpages (with wizard: its pages 2
 # to 5, by Next), wizardvalues (with wizard: its radio buttons' names, each put back, and the
-# last page's Finish), language (Language, Voice Profiles read down). Run on old-pc with no
-# batch recording.
+# last page's Finish), language (Language, Voice Profiles read down), samplecheck and sample
+# (Voice Adjustment's Speak Sample heard, then pressed). Run on old-pc with no batch recording.
 param([string]$OutDir = (Join-Path $env:USERPROFILE 'sr-harness\probe'),
       [string]$Parts = 'options,menus,basics,voice')
 $chosen = $Parts -split ',' | ForEach-Object { $_.Trim() }
@@ -85,6 +85,18 @@ if ($chosen -contains 'manage') {
     Open-JawsWindow
     # Options, Manage Application Settings... (fifth): toured by Tab, then Escape.
     Walk 'Alt,Down,Down*4,Enter,Tab*8,Escape,Escape' 'jw-manage-applications.txt'
+}
+if ($chosen -contains 'samplecheck') {
+    Open-JawsWindow
+    # Voice Adjustment's fourth Tab stop, which should be Speak Sample, heard, then Escape
+    # (Cancel); before 'sample' presses it.
+    Walk 'Alt,Down,Down,Right,Enter,Tab,Tab,Tab,Tab,Escape' 'jw-sample-check.txt'
+}
+if ($chosen -contains 'sample') {
+    Open-JawsWindow
+    # Speak Sample pressed (Space on the fourth Tab stop, as 'samplecheck' heard it), its speech
+    # waited for, then Escape (Cancel).
+    Walk 'Alt,Down,Down,Right,Enter,Tab,Tab,Tab,Tab,Space,Escape' 'jw-sample.txt'
 }
 if ($chosen -contains 'language') {
     Open-JawsWindow

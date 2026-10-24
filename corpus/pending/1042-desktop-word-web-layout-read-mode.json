@@ -1,0 +1,32 @@
+{
+  "id": "1042-desktop-word-web-layout-read-mode",
+  "name": "Word: Say Window Title (Insert+T) in Print Layout, then in Web Layout (Alt, W, L) and Read Mode (Alt, W, F) by the View tab's keys, and after Escape leaves Read Mode",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "trace_headings": true,
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+T" },
+    { "id": "s2", "type": "key", "command": "Alt" },
+    { "id": "s3", "type": "key", "command": "W" },
+    { "id": "s4", "type": "key", "command": "L" },
+    { "id": "s5", "type": "key", "command": "Insert+T" },
+    { "id": "s6", "type": "key", "command": "Alt" },
+    { "id": "s7", "type": "key", "command": "W" },
+    { "id": "s8", "type": "key", "command": "F" },
+    { "id": "s9", "type": "key", "command": "Insert+T" },
+    { "id": "s10", "type": "key", "command": "Escape" },
+    { "id": "s11", "type": "key", "command": "Insert+T" }
+  ]
+}
