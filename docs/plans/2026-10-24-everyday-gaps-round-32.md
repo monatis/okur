@@ -51,8 +51,11 @@ From the research's "What 1037 recorded":
 - **Line spacing** in Say Font: Word's UI Automation has no line spacing. Find another source
   that is not Word's object model (its automation hung on old-pc's unactivated Office), or
   leave it as a documented gap.
-- **1038's replay start:** trial 1's trace has the caret moved twice before s1. Find out why in
-  the recorder or tracer, and whether replay should take another trial's trace.
+- **1038's replay start:** every trial's trace has the caret moving down Word's document about
+  eight seconds before s1, carried on status bar and ribbon events, as a reading of the newly
+  opened document would move it. The reset's Ctrl+Home leaves no caret event before s1, so
+  replay starts from the last caret seen. The recorder should take a text read after the reset
+  (or the tracer a caret event), then 1038 is recorded again.
 
 ## 4. Settings, the long tail (plan 31 §1)
 
