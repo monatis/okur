@@ -17,9 +17,11 @@ commit or handoff is copied from the tool's own line, never typed.
 - Idle. okur-lab parity at `323266cc`: "8790/9378 steps match exactly; 251 accepted
   divergences".
 - **Queue next:**
-  - **Excel (521):** close the lab's Excel and its Office Activation Wizard (started by the
-    fixture, no workbook open), then record 521 again. If the wizard comes back with every
-    Excel start, the scenario's setup has to close it first.
+  - **Excel (521): the owner's.** 521's three trials each started an Excel (pids 9104, 10728,
+    12680, 20:02-20:05) that its Office Activation Wizard holds modal; the fixture's window could
+    not close. Closing the wizards by Alt+F4 opened more windows, and ending the processes was
+    refused (it interferes with workloads): the owner ends them, and Office's activation decides
+    whether 521 can record at all.
   - **1037 in the owner's Notepad:** the same line in `desktop-richedit.ps1`'s family (Windows
     11 Notepad, RichEdit), for punctuation by word (§2).
   - **Word's other views:** Web Layout and Read Mode, by the ribbon's View tab or the status
