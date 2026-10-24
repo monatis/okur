@@ -349,7 +349,7 @@ impl ScreenReaderEngine {
     }
 
     /// Okur's message box with `text`; without a window to show it in, the text is said.
-    fn show_message_box(&mut self, text: String) {
+    pub(super) fn show_message_box(&mut self, text: String) {
         let Some(ui) = &self.ui else {
             self.speech.speak(&text, true);
             return;

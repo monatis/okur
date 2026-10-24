@@ -298,7 +298,7 @@ fn register_classes() -> Option<HINSTANCE> {
         let instance: HINSTANCE = GetModuleHandleW(None).ok()?.into();
         let cursor = LoadCursorW(None, IDC_ARROW).ok()?;
         let size = u32::try_from(std::mem::size_of::<WNDCLASSEXW>()).unwrap_or(0);
-        let classes: [(PCWSTR, WindowProc, HBRUSH); 3] = [
+        let classes: [(PCWSTR, WindowProc, HBRUSH); 4] = [
             (w!("OkurUiControl"), control_proc, HBRUSH::default()),
             (
                 w!("OkurVirtualViewer"),
@@ -306,6 +306,11 @@ fn register_classes() -> Option<HINSTANCE> {
                 HBRUSH((COLOR_WINDOW.0 + 1) as isize as *mut _),
             ),
             (w!("OkurHighlight"), highlight_proc, HBRUSH::default()),
+            (
+                crate::main_window::CLASS,
+                crate::main_window::main_window_proc,
+                HBRUSH((COLOR_WINDOW.0 + 1) as isize as *mut _),
+            ),
         ];
         for (name, proc, background) in classes {
             let class = WNDCLASSEXW {
@@ -395,6 +400,7 @@ fn handle(message: ToUi) {
             items,
             selected,
         } => crate::dialog::set_list(id, &control, &items, selected),
+        ToUi::MainWindowShow { window } => crate::main_window::show(&window),
         ToUi::DialogMenu { id, control, items } => crate::dialog::show_menu(id, &control, &items),
         ToUi::DialogTree {
             id,

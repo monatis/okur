@@ -265,6 +265,7 @@ impl ScreenReaderEngine {
             Command::SettingsCenter => {
                 return self.open_settings(crate::ui::settings_tree::Flavor::Center)
             }
+            Command::OkurWindow => return self.open_okur_window(),
             Command::SetPunctuationLevel => return self.next_punctuation_level(),
             Command::NextTypingEcho => return self.next_typing_echo(),
             Command::NextScreenEcho => return self.next_screen_echo(),

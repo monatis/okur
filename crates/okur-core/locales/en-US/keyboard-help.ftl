@@ -621,3 +621,4 @@ command-toggle-smart-navigation = Turns Smart Navigation on or off, until Okur e
 command-shut-down = Exits Okur.
 # The same, the longer description.
 command-shut-down-long = { command-shut-down } When the setting to confirm is on, Okur asks first.
+command-okur-window = Opens Okur's window, whose menus lead to its settings.

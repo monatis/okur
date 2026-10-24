@@ -294,6 +294,8 @@ pub struct ScreenReaderEngine {
     settings_dialog: Option<crate::ui::settings::SettingsDialog>,
     /// Settings Center or Quick Settings, while it is open.
     settings_tree: Option<crate::ui::settings_tree::SettingsTree>,
+    /// Basics, while it is open.
+    basics_dialog: Option<crate::ui::basics::BasicsDialog>,
     /// The application the until-the-focus-moves settings were changed for: the focus moving
     /// to another clears them.
     until_focus_moves_for: Option<String>,
@@ -552,6 +554,7 @@ impl ScreenReaderEngine {
             settings_dialog_application: None,
             settings_dialog: None,
             settings_tree: None,
+            basics_dialog: None,
             until_focus_moves_for: None,
             settings_history: Vec::new(),
             list_dialog: None,
@@ -1794,6 +1797,99 @@ impl ScreenReaderEngine {
         self.settings_dialog = Some(dialog);
     }
 
+    /// Okur's main window (Insert+J), as JAWS's: "Okur" and its version, and its menus, of
+    /// JAWS's items those Okur has, in JAWS's order (the redesign's §3.2). Okur says nothing
+    /// itself: the window is read when it takes the focus.
+    pub(crate) fn open_okur_window(&mut self) -> Option<String> {
+        use crate::ui::{MainWindowSpec, MenuItemSpec, MenuSpec};
+        let Some(ui) = &self.ui else {
+            let speech = msg::settings_dialog_unavailable().to_string();
+            self.speech.speak(&speech, true);
+            return Some(speech);
+        };
+        let item =
+            |id: &str, label: crate::messages::StaticMessage, key: Option<&str>| MenuItemSpec {
+                id: id.to_owned(),
+                label: label.to_string(),
+                key: key.map(str::to_owned),
+                items: Vec::new(),
+            };
+        let menu = |label: crate::messages::StaticMessage, items: Vec<MenuItemSpec>| MenuSpec {
+            label: label.to_string(),
+            items,
+        };
+        ui.send(crate::ui::ToUi::MainWindowShow {
+            window: MainWindowSpec {
+                title: msg::okur_window_title().to_string(),
+                lines: vec![msg::okur_window_version(env!("CARGO_PKG_VERSION")).render()],
+                menus: vec![
+                    menu(
+                        msg::okur_menu_options(),
+                        vec![
+                            item(MENU_BASICS, msg::okur_menu_basics(), None),
+                            item(
+                                crate::ui::MAIN_WINDOW_EXIT,
+                                msg::okur_menu_exit(),
+                                Some(msg::okur_menu_exit_key().as_str()),
+                            ),
+                        ],
+                    ),
+                    menu(
+                        msg::okur_menu_utilities(),
+                        vec![
+                            item(
+                                MENU_NOTIFICATIONS,
+                                msg::okur_menu_notification_history(),
+                                Some(msg::okur_menu_notification_history_key().as_str()),
+                            ),
+                            item(MENU_SETTINGS_CENTER, msg::okur_menu_settings_center(), None),
+                        ],
+                    ),
+                    menu(
+                        msg::okur_menu_help(),
+                        vec![item(MENU_ABOUT, msg::okur_menu_about(), None)],
+                    ),
+                ],
+            },
+        });
+        None
+    }
+
+    /// One of the main window's menu items, by its id.
+    fn main_menu_command(&mut self, id: &str) -> Option<String> {
+        match id {
+            MENU_BASICS => self.open_basics(),
+            MENU_NOTIFICATIONS => self.open_notification_history(),
+            MENU_SETTINGS_CENTER => {
+                return self.open_settings(crate::ui::settings_tree::Flavor::Center);
+            }
+            MENU_ABOUT => {
+                self.show_message_box(msg::okur_window_version(env!("CARGO_PKG_VERSION")).render())
+            }
+            crate::ui::MAIN_WINDOW_EXIT => return self.execute(crate::command::Command::ShutDown),
+            _ => {}
+        }
+        None
+    }
+
+    /// Opens Basics, or brings it to the front: the settings for all applications.
+    fn open_basics(&mut self) {
+        let dialog = match self.basics_dialog.take() {
+            Some(dialog) => dialog,
+            None => {
+                self.dialog_count += 1;
+                let global = self.settings_layers.resolve(None, None);
+                crate::ui::basics::BasicsDialog::new(self.dialog_count, global)
+            }
+        };
+        if let Some(ui) = &self.ui {
+            ui.send(crate::ui::ToUi::DialogShow {
+                dialog: dialog.spec(),
+            });
+        }
+        self.basics_dialog = Some(dialog);
+    }
+
     /// What a settings dialog decided: Settings Center's or Quick Settings' (`tree`), or the
     /// verbosity levels'.
     fn settings_outcome(&mut self, outcome: crate::ui::settings::Outcome, tree: bool) {
@@ -1877,6 +1973,35 @@ impl ScreenReaderEngine {
             _ if self.is_quit_event(message) => self.handle_quit_event(message),
             _ if self.is_message_box_event(message) => self.handle_message_box_event(message),
             _ if self.is_overwrite_event(message) => self.handle_overwrite_event(message),
+            crate::ui::FromUi::MainMenuCommand { id } => self.main_menu_command(id),
+            _ if self
+                .basics_dialog
+                .as_ref()
+                .is_some_and(|d| Some(d.id) == dialog_of(message)) =>
+            {
+                use crate::ui::settings::Outcome;
+                match self.basics_dialog.as_mut()?.handle(message) {
+                    Outcome::Apply {
+                        scope,
+                        before,
+                        settings,
+                        temporary,
+                        ..
+                    } => {
+                        self.apply_settings(&scope, &before, &settings, &temporary);
+                        if let (Some(dialog), Some(ui)) = (self.basics_dialog.take(), &self.ui) {
+                            ui.send(crate::ui::ToUi::DialogClose { id: dialog.id });
+                        }
+                        self.returning_from_dialog();
+                    }
+                    Outcome::Closed => {
+                        self.basics_dialog = None;
+                        self.returning_from_dialog();
+                    }
+                    _ => {}
+                }
+                None
+            }
             _ if self
                 .settings_tree
                 .as_ref()
@@ -2344,6 +2469,12 @@ impl ScreenReaderEngine {
     }
 }
 
+/// The main window's menu items' ids.
+const MENU_BASICS: &str = "basics";
+const MENU_NOTIFICATIONS: &str = "notification_history";
+const MENU_SETTINGS_CENTER: &str = "settings_center";
+const MENU_ABOUT: &str = "about";
+
 /// The application Okur's own windows are in (okur-ui's process), as the settings name it.
 const OKUR_WINDOWS: &str = "okur-ui";
 
@@ -2356,6 +2487,6 @@ fn dialog_of(message: &crate::ui::FromUi) -> Option<u32> {
         | FromUi::DialogKey { id, .. }
         | FromUi::DialogMenuChosen { id, .. }
         | FromUi::DialogClosed { id } => Some(*id),
-        FromUi::ViewerDismissed => None,
+        FromUi::ViewerDismissed | FromUi::MainMenuCommand { .. } => None,
     }
 }

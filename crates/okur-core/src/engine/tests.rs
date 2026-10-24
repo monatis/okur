@@ -7561,3 +7561,45 @@ fn quick_settings_changes_last_as_their_lifetimes() {
     );
     assert_eq!(engine.settings.typing_echo, TypingEcho::Words);
 }
+
+/// Insert+J shows Okur's window with JAWS's menus, of their items those Okur has; Options,
+/// Basics... opens "Basic Settings", and Utilities, Settings Center opens Settings Center.
+#[test]
+fn insert_j_shows_okurs_window_and_its_menus() {
+    use crate::ui::{FromUi, ToUi};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut j = KeyEvent::new(Key::Alpha('J'), Modifiers::none(), true);
+    j.modifiers.insert = true;
+    assert_eq!(engine.handle_key_event(&j), KeyAction::Consume);
+    let sent = ui.take();
+    let Some(ToUi::MainWindowShow { window }) = sent.first() else {
+        panic_free_fail(&format!("no window shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(window.title, "Okur");
+    let menus: Vec<&str> = window.menus.iter().map(|m| m.label.as_str()).collect();
+    assert_eq!(menus, ["&Options", "&Utilities", "&Help"]);
+    let options: Vec<&str> = window
+        .menus
+        .first()
+        .map(|m| m.items.iter().map(|i| i.label.as_str()).collect())
+        .unwrap_or_default();
+    assert_eq!(options, ["&Basics...", "E&xit"]);
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::MainMenuCommand {
+        id: "basics".into(),
+    }));
+    assert!(matches!(
+        ui.take().first(),
+        Some(ToUi::DialogShow { dialog }) if dialog.title == "Basic Settings"
+    ));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::MainMenuCommand {
+        id: "settings_center".into(),
+    }));
+    assert!(matches!(
+        ui.take().first(),
+        Some(ToUi::DialogShow { dialog }) if dialog.title.ends_with("Okur Settings Center")
+    ));
+}

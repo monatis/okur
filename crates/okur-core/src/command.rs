@@ -364,6 +364,9 @@ pub enum Command {
     // Okur's settings: one dialog for both, until there are enough settings for two.
     QuickSettings,
     SettingsCenter,
+    /// Okur's main window, its menus' way to Basics and the other settings (JAWS's JAWS
+    /// Window, Insert+J).
+    OkurWindow,
     /// The next punctuation level, until Okur exits (JAWS's SetPunctuationLevel).
     SetPunctuationLevel,
     /// The next typing echo, until Okur exits (Insert+2).
@@ -731,6 +734,7 @@ impl Command {
             "Insert+1" | "KeyboardHelp" => KeyboardHelp,
             "SayFontInViewer" => SayFontInViewer,
             "QuickSettings" => QuickSettings,
+            "JAWSWindow" | "OkurWindow" => OkurWindow,
             "SettingsCenter" => SettingsCenter,
             "SetPunctuationLevel" | "Insert+Shift+2" | "JAWSKey+Shift+2" => SetPunctuationLevel,
             "Insert+2" | "JAWSKey+2" => NextTypingEcho,
@@ -1095,6 +1099,7 @@ static BINDINGS: &[Binding] = &{
         bind(Digit(1), OKUR, KeyboardHelp),
         // Settings.
         bind(Alpha('V'), OKUR, QuickSettings),
+        bind(Alpha('J'), OKUR, OkurWindow),
         bind(Digit(6), OKUR, SettingsCenter),
         // The dialog box's default button, and the settings in use (JAWS 2025 help) [obs, 513].
         bind(Alpha('E'), OKUR, SayDefaultButton),

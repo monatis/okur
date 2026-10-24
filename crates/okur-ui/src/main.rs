@@ -7,6 +7,8 @@
 
 #[cfg(windows)]
 mod dialog;
+#[cfg(windows)]
+mod main_window;
 #[cfg(any(windows, test))]
 mod template;
 #[cfg(windows)]

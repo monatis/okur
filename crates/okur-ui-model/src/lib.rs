@@ -249,6 +249,8 @@ pub enum ToUi {
         items: Vec<String>,
         selected: usize,
     },
+    /// Show Okur's main window in front, made or remade as described.
+    MainWindowShow { window: MainWindowSpec },
     /// Show a context menu on a control's selected item (Shift+F10 on a tree's): its items,
     /// one checked. The choice comes back as [`FromUi::DialogMenuChosen`].
     DialogMenu {
@@ -339,6 +341,8 @@ pub enum FromUi {
     DialogPressed { id: u32, control: String },
     /// The dialog was cancelled (its Cancel button, Escape, its close box) and is gone.
     DialogClosed { id: u32 },
+    /// One of the main window's menu items chosen, by its id; its closing, "exit".
+    MainMenuCommand { id: String },
     /// A context menu's item chosen, by its index; none when it was closed without a choice.
     DialogMenuChosen {
         id: u32,
@@ -353,6 +357,37 @@ pub enum FromUi {
         key: DialogKey,
     },
 }
+
+/// Okur's main window (Insert+J), as JAWS's: its title, its text (Okur's version), and its
+/// menu bar.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct MainWindowSpec {
+    pub title: String,
+    pub lines: Vec<String>,
+    pub menus: Vec<MenuSpec>,
+}
+
+/// A menu of the menu bar: its label, an "&" before its access key, and its items.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct MenuSpec {
+    pub label: String,
+    pub items: Vec<MenuItemSpec>,
+}
+
+/// A menu's item: a command told back by its id, or with items of its own, a submenu. Its
+/// key, shown after it, as JAWS's menus show theirs ("Notification History INSERT+SPACE, N").
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct MenuItemSpec {
+    pub id: String,
+    pub label: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub items: Vec<MenuItemSpec>,
+}
+
+/// The command the main window's closing asks for (Alt+F4, its close box).
+pub const MAIN_WINDOW_EXIT: &str = "exit";
 
 /// An item of a context menu ([`ToUi::DialogMenu`]).
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

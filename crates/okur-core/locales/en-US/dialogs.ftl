@@ -470,3 +470,33 @@ settings-tree-last-changed-description = The 25 settings changed last for this p
 settings-lifetime-until-exit = Restore When Okur Exits
 settings-lifetime-until-focus-moves = Restore When Focus Changes
 settings-lifetime-saved = Save
+
+## Okur's main window (Insert+J) and its menus: JAWS's window and its items, those Okur has
+## (old-pc's walk, docs/references/okur-settings-redesign.md §1.1). Access keys from JAWS's book.
+
+okur-window-title = Okur
+okur-window-version = Okur version { $version }
+okur-menu-options = &Options
+okur-menu-basics = &Basics...
+okur-menu-exit = E&xit
+okur-menu-utilities = &Utilities
+okur-menu-notification-history = Notification History
+okur-menu-settings-center = Settings Center
+okur-menu-help = &Help
+okur-menu-about = &About Okur...
+
+## Basics, JAWS's "Basic Settings" [obs, the walk of Basics].
+
+basics-title = Basic Settings
+basics-tutor = Tutor Messages
+basics-tutor-off = Turn Off Menu and Control Help
+basics-tutor-on = Announce Menu and Control Help
+basics-access-key = Access Key
+basics-access-key-off = Off
+basics-access-key-all = Speak All
+basics-confirm-exit = Prompt to confirm when exiting Okur
+basics-viewer = Show Virtual Viewer on screen
+basics-layout = Use Keyboard Layout:
+# The keys the menus show after their items, as JAWS's show theirs.
+okur-menu-exit-key = Alt+F4
+okur-menu-notification-history-key = INSERT+SPACE, N
