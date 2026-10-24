@@ -289,8 +289,11 @@ pub struct ScreenReaderEngine {
     settings_place: (Option<String>, Option<String>),
     /// The application in front when the settings dialog opened, whose site settings it keeps.
     settings_dialog_application: Option<String>,
-    /// The settings dialog, while it is open.
+    /// The verbosity levels' dialog (Settings Center's Configure Verbosity Levels), while it
+    /// is open.
     settings_dialog: Option<crate::ui::settings::SettingsDialog>,
+    /// Settings Center or Quick Settings, while it is open.
+    settings_tree: Option<crate::ui::settings_tree::SettingsTree>,
     /// The list dialog open (the Links List, the Heading List).
     list_dialog: Option<crate::ui::lists::ListDialog>,
     /// The mode the list dialog gives the keys back to: a document's Heading List (Word's)
@@ -542,6 +545,7 @@ impl ScreenReaderEngine {
             settings_place: (None, None),
             settings_dialog_application: None,
             settings_dialog: None,
+            settings_tree: None,
             list_dialog: None,
             list_return_mode: AppMode::VirtualBuffer,
             document_headings_asked: false,
@@ -1669,14 +1673,47 @@ impl ScreenReaderEngine {
         (places, opened_on)
     }
 
-    /// Opens the settings dialog, or brings it to the front. Okur speaks nothing itself: it
-    /// reads the dialog when the dialog takes the focus, as any application's.
-    pub(crate) fn open_settings(&mut self) -> Option<String> {
+    /// Opens Settings Center (Insert+6) or Quick Settings (Insert+V), or brings it to the
+    /// front; the other one gives way to it. Okur speaks nothing itself: it reads the dialog
+    /// when the dialog takes the focus, as any application's.
+    pub(crate) fn open_settings(
+        &mut self,
+        flavor: crate::ui::settings_tree::Flavor,
+    ) -> Option<String> {
         if self.ui.is_none() {
             let speech = msg::settings_dialog_unavailable().to_string();
             self.speech.speak(&speech, true);
             return Some(speech);
         }
+        let tree = match self.settings_tree.take() {
+            Some(tree) if tree.flavor() == flavor => tree,
+            other => {
+                if let (Some(other), Some(ui)) = (other, &self.ui) {
+                    ui.send(crate::ui::ToUi::DialogClose { id: other.id });
+                }
+                self.dialog_count += 1;
+                let (places, place) = self.settings_places();
+                crate::ui::settings_tree::SettingsTree::new(
+                    self.dialog_count,
+                    flavor,
+                    places,
+                    place,
+                    self.speech.voices(),
+                )
+            }
+        };
+        if let Some(ui) = &self.ui {
+            ui.send(crate::ui::ToUi::DialogShow {
+                dialog: tree.spec(),
+            });
+        }
+        self.settings_tree = Some(tree);
+        None
+    }
+
+    /// Opens the verbosity levels' dialog over Settings Center (Configure Verbosity Levels),
+    /// or brings it to the front.
+    fn open_verbosity_levels(&mut self) {
         let dialog = match self.settings_dialog.take() {
             Some(dialog) => dialog,
             None => {
@@ -1696,12 +1733,52 @@ impl ScreenReaderEngine {
             });
         }
         self.settings_dialog = Some(dialog);
-        None
+    }
+
+    /// What a settings dialog decided: Settings Center's or Quick Settings' (`tree`), or the
+    /// verbosity levels'.
+    fn settings_outcome(&mut self, outcome: crate::ui::settings::Outcome, tree: bool) {
+        use crate::ui::settings::Outcome;
+        match outcome {
+            Outcome::Nothing => {}
+            Outcome::Send(messages) => {
+                if let Some(ui) = &self.ui {
+                    messages.into_iter().for_each(|m| ui.send(m));
+                }
+            }
+            Outcome::Apply {
+                scope,
+                before,
+                settings,
+                close,
+            } => {
+                self.apply_settings(&scope, &before, &settings);
+                if close {
+                    let id = if tree {
+                        self.settings_tree.take().map(|t| t.id)
+                    } else {
+                        self.settings_dialog.take().map(|d| d.id)
+                    };
+                    if let (Some(id), Some(ui)) = (id, &self.ui) {
+                        ui.send(crate::ui::ToUi::DialogClose { id });
+                    }
+                    self.returning_from_dialog();
+                }
+            }
+            Outcome::Closed => {
+                if tree {
+                    self.settings_tree = None;
+                } else {
+                    self.settings_dialog = None;
+                }
+                self.returning_from_dialog();
+            }
+            Outcome::OpenVerbosityLevels => self.open_verbosity_levels(),
+        }
     }
 
     /// What the user did to one of Okur's windows.
     fn handle_ui_event(&mut self, message: &crate::ui::FromUi) -> Option<String> {
-        use crate::ui::settings::Outcome;
         match message {
             // The viewer's window took the focus or was closed: the viewer ends silently, and
             // the focus says where the user is (JAWS on the dev box, 2026-10-17: Alt+Tab to
@@ -1729,36 +1806,18 @@ impl ScreenReaderEngine {
             _ if self.is_quit_event(message) => self.handle_quit_event(message),
             _ if self.is_message_box_event(message) => self.handle_message_box_event(message),
             _ if self.is_overwrite_event(message) => self.handle_overwrite_event(message),
+            _ if self
+                .settings_tree
+                .as_ref()
+                .is_some_and(|t| Some(t.id) == dialog_of(message)) =>
+            {
+                let outcome = self.settings_tree.as_mut()?.handle(message);
+                self.settings_outcome(outcome, true);
+                None
+            }
             _ => {
                 let outcome = self.settings_dialog.as_mut()?.handle(message);
-                match outcome {
-                    Outcome::Nothing => {}
-                    Outcome::Send(messages) => {
-                        if let Some(ui) = &self.ui {
-                            messages.into_iter().for_each(|m| ui.send(m));
-                        }
-                    }
-                    Outcome::Apply {
-                        scope,
-                        before,
-                        settings,
-                        close,
-                    } => {
-                        self.apply_settings(&scope, &before, &settings);
-                        if close {
-                            if let Some(dialog) = self.settings_dialog.take() {
-                                if let Some(ui) = &self.ui {
-                                    ui.send(crate::ui::ToUi::DialogClose { id: dialog.id });
-                                }
-                            }
-                            self.returning_from_dialog();
-                        }
-                    }
-                    Outcome::Closed => {
-                        self.settings_dialog = None;
-                        self.returning_from_dialog();
-                    }
-                }
+                self.settings_outcome(outcome, false);
                 None
             }
         }

@@ -420,3 +420,6 @@ settings-tree-punctuation = Punctuation
 settings-tree-keyboard = Keyboard
 settings-tree-mouse-echo = Mouse Echo
 settings-tree-miscellaneous = Miscellaneous
+# Speech Verbosity's item that opens the verbosity levels' own dialog, as JAWS's.
+settings-tree-configure-verbosity = Configure Verbosity Levels
+settings-tree-configure-verbosity-description = Space opens a dialog to choose, for each verbosity level, what is spoken and whether messages are long or short.

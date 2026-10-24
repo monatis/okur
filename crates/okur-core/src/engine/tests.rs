@@ -2532,12 +2532,22 @@ fn a_speech_only_viewer_opens_no_window() {
         .all(|m| !matches!(m, crate::ui::ToUi::ViewerShow { .. })));
 }
 
-/// Insert+6 and Insert+V open the settings dialog; OK applies what was changed, keeps it in
-/// the settings store, and closes the dialog. Okur says nothing itself: it reads the dialog
-/// when the dialog takes the focus.
+/// The index of the first item of a dialog's tree whose text starts with `starting`.
+fn tree_item_index(dialog: &crate::ui::DialogSpec, starting: &str) -> Option<usize> {
+    dialog.controls.iter().find_map(|c| match &c.kind {
+        crate::ui::ControlKind::Tree { items, .. } => {
+            items.iter().position(|i| i.text.starts_with(starting))
+        }
+        _ => None,
+    })
+}
+
+/// Insert+6 opens Settings Center, Insert+V Quick Settings in its place; Space changes the
+/// selected setting and OK applies it, keeps it in the settings store, and closes the dialog.
+/// Okur says nothing itself: it reads the dialog when the dialog takes the focus.
 #[test]
-fn the_settings_dialog_applies_and_keeps_changes() {
-    use crate::ui::{FromUi, ToUi, Value};
+fn settings_center_applies_and_keeps_changes() {
+    use crate::ui::{DialogKey, FromUi, ToUi, Value};
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
     let ui = crate::ui::RecordingUiHost::default();
@@ -2552,27 +2562,51 @@ fn the_settings_dialog_applies_and_keeps_changes() {
         panic_free_fail(&format!("no dialog shown: {sent:?}"));
         return;
     };
-    assert_eq!(dialog.title, "Okur Settings");
+    assert_eq!(
+        dialog.title,
+        "Default (All Applications) - Okur Settings Center"
+    );
     let id = dialog.id;
-    // Insert+V brings the same dialog forward.
+    let typing = tree_item_index(dialog, "Typing Echo").unwrap_or_default();
+    // Insert+V: Quick Settings in its place.
     assert_eq!(engine.execute_command("QuickSettings"), None);
-    assert!(matches!(ui.take().first(), Some(ToUi::DialogShow { dialog }) if dialog.id == id));
-    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
-        id,
-        control: "typing_echo".into(),
-        value: Value::Selected(0),
-    }));
+    let sent = ui.take();
+    assert_eq!(sent.first(), Some(&ToUi::DialogClose { id }));
+    assert!(
+        matches!(sent.get(1), Some(ToUi::DialogShow { dialog }) if dialog.title.starts_with("QuickSettings - "))
+    );
+    // Back to Settings Center: Typing Echo's next value, then OK.
+    engine.execute_command("SettingsCenter");
+    let id = match ui.take().last() {
+        Some(ToUi::DialogShow { dialog }) => dialog.id,
+        _ => 0,
+    };
+    for message in [
+        FromUi::DialogChanged {
+            id,
+            control: "tree".into(),
+            value: Value::Selected(typing),
+        },
+        FromUi::DialogKey {
+            id,
+            control: "tree".into(),
+            key: DialogKey::Change,
+        },
+    ] {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(message));
+    }
     assert_eq!(
         engine.settings.typing_echo,
         crate::settings::TypingEcho::Characters
     );
+    ui.take();
     engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
         id,
         control: "ok".into(),
     }));
     assert_eq!(
         engine.settings.typing_echo,
-        crate::settings::TypingEcho::None
+        crate::settings::TypingEcho::Words
     );
     // Kept for all applications: only what the dialog changed.
     assert_eq!(
@@ -2588,17 +2622,60 @@ fn the_settings_dialog_applies_and_keeps_changes() {
         Some(ToUi::DialogShow { dialog }) => dialog.id,
         _ => 0,
     };
-    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
-        id,
-        control: "typing_echo".into(),
-        value: Value::Selected(1),
-    }));
-    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogClosed { id }));
+    for message in [
+        FromUi::DialogChanged {
+            id,
+            control: "tree".into(),
+            value: Value::Selected(typing),
+        },
+        FromUi::DialogKey {
+            id,
+            control: "tree".into(),
+            key: DialogKey::Change,
+        },
+        FromUi::DialogClosed { id },
+    ] {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(message));
+    }
     assert_eq!(
         engine.settings.typing_echo,
-        crate::settings::TypingEcho::None
+        crate::settings::TypingEcho::Words
     );
     assert!(store.take().is_empty());
+}
+
+/// Settings Center's Configure Verbosity Levels opens the verbosity levels' dialog over it.
+#[test]
+fn configure_verbosity_levels_opens_its_dialog() {
+    use crate::ui::{DialogKey, FromUi, ToUi, Value};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    engine.execute_command("SettingsCenter");
+    let Some(ToUi::DialogShow { dialog }) = ui.take().first().cloned() else {
+        panic_free_fail("no dialog shown");
+        return;
+    };
+    let levels = tree_item_index(&dialog, "Configure Verbosity Levels").unwrap_or_default();
+    for message in [
+        FromUi::DialogChanged {
+            id: dialog.id,
+            control: "tree".into(),
+            value: Value::Selected(levels),
+        },
+        FromUi::DialogKey {
+            id: dialog.id,
+            control: "tree".into(),
+            key: DialogKey::Change,
+        },
+    ] {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(message));
+    }
+    assert!(ui
+        .take()
+        .iter()
+        .any(|m| matches!(m, ToUi::DialogShow { dialog } if dialog.title == "Okur Settings")));
 }
 
 /// Fails a test without the panic macros the commit gate refuses.

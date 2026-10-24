@@ -45,6 +45,9 @@ pub enum Outcome {
     },
     /// The dialog is gone; nothing more is applied.
     Closed,
+    /// Open the dialog that customizes the verbosity levels, from Settings Center's
+    /// "Configure Verbosity Levels" (JAWS's opens its own dialog over Settings Center).
+    OpenVerbosityLevels,
 }
 
 /// Where the dialog's settings are kept, as its "Settings for" box offers it: all

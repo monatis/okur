@@ -101,11 +101,14 @@ fn place_of(id: &str) -> Option<(TreeGroup, bool)> {
     })
 }
 
-/// A row of the tree: a group, or a setting in the group above it.
+/// A row of the tree: a group, a setting in the group above it, or an item that opens a
+/// dialog of its own.
 #[derive(Debug, Clone, Copy)]
 enum Row {
     Group(TreeGroup),
     Setting(&'static SettingSpec),
+    /// Speech Verbosity's "Configure Verbosity Levels": Space opens its dialog.
+    VerbosityLevels,
 }
 
 impl PartialEq for Row {
@@ -113,6 +116,7 @@ impl PartialEq for Row {
         match (self, other) {
             (Self::Group(a), Self::Group(b)) => a == b,
             (Self::Setting(a), Self::Setting(b)) => a.id == b.id,
+            (Self::VerbosityLevels, Self::VerbosityLevels) => true,
             _ => false,
         }
     }
@@ -181,6 +185,11 @@ impl SettingsTree {
         tree
     }
 
+    /// Settings Center or Quick Settings.
+    pub fn flavor(&self) -> Flavor {
+        self.flavor
+    }
+
     /// The settings as the dialog shows them now.
     pub fn draft(&self) -> &Settings {
         &self.draft
@@ -227,11 +236,23 @@ impl SettingsTree {
                 .filter(|(g, spec)| *g == group && matches(spec))
                 .map(|(_, spec)| spec)
                 .collect();
-            if settings.is_empty() {
+            let levels = group == TreeGroup::SpeechVerbosity
+                && self.flavor == Flavor::Center
+                && (words.is_empty()
+                    || words.iter().all(|w| {
+                        msg::settings_tree_configure_verbosity()
+                            .as_str()
+                            .to_lowercase()
+                            .contains(w)
+                    }));
+            if settings.is_empty() && !levels {
                 continue;
             }
             rows.push(Row::Group(group));
             rows.extend(settings.into_iter().map(Row::Setting));
+            if levels {
+                rows.push(Row::VerbosityLevels);
+            }
         }
         rows
     }
@@ -257,6 +278,12 @@ impl SettingsTree {
     /// A row as the tree shows it.
     fn item(&self, row: &Row) -> TreeItem {
         match row {
+            Row::VerbosityLevels => TreeItem {
+                text: msg::settings_tree_configure_verbosity().to_string(),
+                level: 1,
+                open: true,
+                checked: None,
+            },
             Row::Group(group) => TreeItem {
                 text: group.label().to_string(),
                 level: 0,
@@ -297,6 +324,9 @@ impl SettingsTree {
                 .and_then(|l| l().description())
                 .map(|d| d.to_string())
                 .unwrap_or_default(),
+            Some(Row::VerbosityLevels) => {
+                msg::settings_tree_configure_verbosity_description().to_string()
+            }
             Some(Row::Group(_)) | None => msg::settings_tree_group_description().to_string(),
         }
     }
@@ -426,8 +456,10 @@ impl SettingsTree {
 
     /// Changes the selected setting's value: its item and the Apply button are updated.
     fn change(&mut self, back: bool) -> Outcome {
-        let Some(Row::Setting(spec)) = self.rows.get(self.selected).copied() else {
-            return Outcome::Nothing;
+        let spec = match self.rows.get(self.selected).copied() {
+            Some(Row::Setting(spec)) => spec,
+            Some(Row::VerbosityLevels) => return Outcome::OpenVerbosityLevels,
+            Some(Row::Group(_)) | None => return Outcome::Nothing,
         };
         let Some(value) = self.next_value(spec, back) else {
             return Outcome::Nothing;
