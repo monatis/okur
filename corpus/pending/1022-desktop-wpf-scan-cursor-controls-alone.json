@@ -1,0 +1,180 @@
+{
+  "id": "1022-desktop-wpf-scan-cursor-controls-alone",
+  "name": "1020 with the fixture's console hidden, its window the application's only one: in 1018 and 1019 JAWS's Scan Cursor walked past the last element into the console",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-wpf-controls.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR WPF Controls Fixture",
+    "hide_console": true
+  },
+  "trace_screen": true,
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+NumpadMinus"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "NumpadMinus"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "PageUp"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s22",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s23",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s24",
+      "type": "key",
+      "command": "Ctrl+End"
+    },
+    {
+      "id": "s25",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s26",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s27",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s28",
+      "type": "key",
+      "command": "Home"
+    },
+    {
+      "id": "s29",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s30",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s31",
+      "type": "key",
+      "command": "End"
+    },
+    {
+      "id": "s32",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s33",
+      "type": "key",
+      "command": "NumpadPlus"
+    }
+  ]
+}

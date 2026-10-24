@@ -803,7 +803,11 @@ function Start-DesktopFixture {
     # A browser of another profile is closed: its titles carry the profile's name.
     [void](Stop-OtherChrome)
     [void][SrKeyInput]::MinimizeClass('Chrome_WidgetWin_1')
-    $script:fixtureProcess = Start-Process powershell -PassThru -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $fixturePath)
+    # "hide_console" makes the fixture's window its application's only one: JAWS's Scan Cursor,
+    # kept to the application's windows, walked past a WPF window's last element into the
+    # PowerShell console that runs it, the same process (1018, 1019).
+    $style = if ($launch.hide_console) { 'Hidden' } else { 'Normal' }
+    $script:fixtureProcess = Start-Process powershell -WindowStyle $style -PassThru -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $fixturePath)
     for ($i = 0; $i -lt 100; $i++) {
         $p = Find-WindowByTitle $launch.window_title
         if ($p) {
