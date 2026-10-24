@@ -1,0 +1,60 @@
+{
+  "id": "1029-desktop-ocr-file-cancelled",
+  "name": "Convenient OCR's Q (CancelRecognition) as soon as F has started on the two-page PDF: whether recognition stops, JAWS's message, and whether a Results Viewer opens",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-ocr-files.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "C:UsersailabsAppDataLocalTempSR OCR Files",
+    "shell_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Home"
+    ]
+  },
+  "trace_file": true,
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "F",
+      "quiet_ms": 300,
+      "settle_max_ms": 3000
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Q",
+      "settle_max_ms": 20000,
+      "quiet_ms": 3000
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+T"
+    }
+  ]
+}

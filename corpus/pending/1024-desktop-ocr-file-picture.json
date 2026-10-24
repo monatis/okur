@@ -1,0 +1,78 @@
+{
+  "id": "1024-desktop-ocr-file-picture",
+  "name": "Convenient OCR's F (OCRSelectedFile) on a picture selected in File Explorer: what JAWS says while it recognizes it, the Results Viewer's lines, title and end, and Escape back to File Explorer",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-ocr-files.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "C:UsersailabsAppDataLocalTempSR OCR Files",
+    "shell_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "End"
+    ]
+  },
+  "trace_file": true,
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "F",
+      "settle_max_ms": 60000,
+      "quiet_ms": 3000
+    },
+    {
+      "id": "s4",
+      "type": "key_ui_access",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s5",
+      "type": "key_ui_access",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s6",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s7",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key_ui_access",
+      "command": "Up"
+    },
+    {
+      "id": "s10",
+      "type": "key_ui_access",
+      "command": "Insert+T"
+    },
+    {
+      "id": "s11",
+      "type": "key_ui_access",
+      "command": "Escape"
+    }
+  ]
+}

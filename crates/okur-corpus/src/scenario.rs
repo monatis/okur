@@ -29,6 +29,10 @@ pub struct Scenario {
     /// Okur when it recognizes the window.
     #[serde(default)]
     pub trace_ocr: bool,
+    /// What Okur's recognizer reads in the file selected in the fixture's File Explorer window
+    /// after each step, which replay gives Okur's Insert+Space, O, F.
+    #[serde(default)]
+    pub trace_file: bool,
     /// Okur's own settings for the replay, by their names in the settings file
     /// (`"ocr_language": "tr-TR"`): what a scenario needs that JAWS has no setting for. JAWS's
     /// are `jaws_settings`, read from the evidence.

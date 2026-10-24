@@ -101,6 +101,15 @@ Write-Ascii "trailer`n<< /Size $($offsets.Count + 1) /Root 1 0 R >>`nstartxref`n
 
 Set-Content -Path (Join-Path $folder 'SR OCR Notes.txt') -Value 'A text file, not a picture.' -Encoding ascii
 
+# Fixed times: File Explorer says a file's date when it is selected (after the Results
+# Viewer closes), the same in every trial.
+$date = Get-Date -Year 2026 -Month 1 -Day 2 -Hour 3 -Minute 4 -Second 5 -Millisecond 0
+foreach ($file in Get-ChildItem $folder) {
+    $file.CreationTime = $date
+    $file.LastWriteTime = $date
+    $file.LastAccessTime = $date
+}
+
 if ($FilesOnly) { return }
 Start-Process explorer.exe -ArgumentList "/select,`"$(Join-Path $folder 'SR OCR Sign.png')`""
 Start-Sleep -Seconds $ExitAfterSeconds

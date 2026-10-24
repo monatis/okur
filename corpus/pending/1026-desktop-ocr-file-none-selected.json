@@ -1,0 +1,44 @@
+{
+  "id": "1026-desktop-ocr-file-none-selected",
+  "name": "Convenient OCR's F in File Explorer with nothing selected: JAWS's message, and where the focus is after it",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-ocr-files.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "C:UsersailabsAppDataLocalTempSR OCR Files",
+    "shell_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "End",
+      "Ctrl+Space"
+    ]
+  },
+  "trace_file": true,
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "F",
+      "settle_max_ms": 20000,
+      "quiet_ms": 1500
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}

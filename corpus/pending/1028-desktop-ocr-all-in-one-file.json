@@ -1,0 +1,53 @@
+{
+  "id": "1028-desktop-ocr-all-in-one-file",
+  "name": "Convenient OCR's Enter (OCRAllInOne) on a picture selected in File Explorer: whether it recognizes the file as F does, the Results Viewer's title, and Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-ocr-files.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "C:UsersailabsAppDataLocalTempSR OCR Files",
+    "shell_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "End"
+    ]
+  },
+  "trace_file": true,
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Enter",
+      "settle_max_ms": 60000,
+      "quiet_ms": 3000
+    },
+    {
+      "id": "s4",
+      "type": "key_ui_access",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s5",
+      "type": "key_ui_access",
+      "command": "Insert+T"
+    },
+    {
+      "id": "s6",
+      "type": "key_ui_access",
+      "command": "Escape"
+    }
+  ]
+}
