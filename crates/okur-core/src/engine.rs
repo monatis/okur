@@ -302,6 +302,8 @@ pub struct ScreenReaderEngine {
     /// Say Window Title in Word asked for the document's view, said with this title when it
     /// comes.
     document_view_title: Option<String>,
+    /// A document's Heading List moved the caret: the next read of the field says its line.
+    moved_by_document_list: bool,
     /// The word chosen in the Word List, which W and Shift+W move to.
     word_from_list: Option<String>,
     /// Skim Reading while it is open, and its choices, which Ctrl+Insert+Down reads by.
@@ -544,6 +546,7 @@ impl ScreenReaderEngine {
             list_return_mode: AppMode::VirtualBuffer,
             document_headings_asked: false,
             document_view_title: None,
+            moved_by_document_list: false,
             word_from_list: None,
             skim_dialog: None,
             skim_options: crate::ui::skim::SkimOptions::default(),
@@ -1833,6 +1836,7 @@ impl ScreenReaderEngine {
                 .as_ref()
                 .is_some_and(|actions| actions.read_document_headings())
         {
+            tracing::debug!("heading list: the document's headings asked for");
             self.document_headings_asked = true;
             return None;
         }
@@ -1920,6 +1924,10 @@ impl ScreenReaderEngine {
         if !std::mem::take(&mut self.document_headings_asked) {
             return None;
         }
+        tracing::debug!(
+            headings = headings.len(),
+            "heading list: the document's headings came"
+        );
         if headings.is_empty() {
             let none = msg::quicknav_none_headings().to_string();
             self.speech.speak(&none, true);
@@ -1955,9 +1963,12 @@ impl ScreenReaderEngine {
         let in_document = self.list_return_mode != AppMode::VirtualBuffer;
         match outcome {
             Outcome::Nothing => None,
+            // The heading's line is said when the caret is read there, then "Edit": "heading
+            // level 1 Library Hours | Edit" [obs, 1036/s3, s7]. The document's focus comes back
+            // first, which drops a pending edit key: the move is kept apart.
             Outcome::MoveTo(entry) if in_document => {
                 close(self);
-                self.pending_edit = Some(crate::editing::EditKey::Line);
+                self.moved_by_document_list = true;
                 if let Some(actions) = &self.actions {
                     actions.move_to_paragraph(self.last_text.as_ref(), entry.node_id);
                 }

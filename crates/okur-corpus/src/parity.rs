@@ -493,6 +493,13 @@ fn replay_scenario(
                                 start + u64::from(press_index) * REPEAT_GAP_MS,
                                 held,
                             )?;
+                            // Word's document read at once, as live.
+                            screen_reads.answer_document(
+                                &mut engine,
+                                &actions,
+                                replay.screen_after(&step.id),
+                                &spoken,
+                            );
                             // A key in Okur's dialog: what its window reports.
                             mirror.sync(&ui);
                             let pressed = crate::keys::parse_chord(command)?;
@@ -1269,14 +1276,6 @@ impl ScreenReads {
             .iter()
             .filter(|(a, _)| a == "recognize selected file")
             .count();
-        let headings = requests
-            .iter()
-            .filter(|(a, _)| a == "document headings")
-            .count();
-        let views = requests
-            .iter()
-            .filter(|(a, _)| a == "document view")
-            .count();
         let mut deliver = |event: okur_core::AccessibilityEvent| {
             if let Some(speech) = engine.handle_accessibility_event(&event) {
                 if spoken.is_empty() {
@@ -1317,6 +1316,33 @@ impl ScreenReads {
                 deliver(okur_core::AccessibilityEvent::FileRecognized(file.clone()));
             }
         }
+        self.answer_document(engine, actions, Some(snapshot), spoken);
+    }
+
+    /// Answers the engine's new reads of Word's document, its headings and its view, with
+    /// `snapshot`'s (saved after the step; neither changes in it). Live the platform answers
+    /// them within milliseconds of the key, before the windows they open report anything, so
+    /// replay answers them right after the key too.
+    fn answer_document(
+        &mut self,
+        engine: &mut ScreenReaderEngine,
+        actions: &okur_core::actions::RecordingActions,
+        snapshot: Option<&ScreenSnapshot>,
+        spoken: &RecordingSpeech,
+    ) {
+        let Some(snapshot) = snapshot else {
+            return;
+        };
+        let requests = actions.requests();
+        let count = |name: &str| requests.iter().filter(|(a, _)| a == name).count();
+        let (headings, views) = (count("document headings"), count("document view"));
+        let mut deliver = |event: okur_core::AccessibilityEvent| {
+            if let Some(speech) = engine.handle_accessibility_event(&event) {
+                if spoken.is_empty() {
+                    spoken.push(&speech, false);
+                }
+            }
+        };
         // A snapshot with headings saved the view beside them, none when it could not read it.
         if snapshot.headings.is_some() {
             while self.views < views {

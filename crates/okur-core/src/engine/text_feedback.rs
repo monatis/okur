@@ -278,7 +278,15 @@ impl ScreenReaderEngine {
         }
         let context = &context;
         let before = self.last_text.replace(context.clone());
-        let key = self.pending_edit.take()?;
+        // A move by a document's Heading List reads the line it reached, then names the
+        // document its focus came back to: "heading level 1 Library Hours | Edit" [obs,
+        // 1036/s3, s7].
+        let from_list = std::mem::take(&mut self.moved_by_document_list);
+        let key = match self.pending_edit.take() {
+            Some(key) => key,
+            None if from_list => crate::editing::EditKey::Line,
+            None => return None,
+        };
         // What Ctrl+C or Ctrl+X took from the field is the clipboard's now (a replay keeps it,
         // for the clipboard keys [obs, 825/s3]).
         let copied = match key {
@@ -302,6 +310,12 @@ impl ScreenReaderEngine {
             self.in_plain_edit(),
             crate::editing::Wording::of(&self.settings.verbosity),
         )?;
+        if from_list {
+            speech = format!(
+                "{speech}\n{}",
+                crate::linearize::role_marker(msg::role_edit().as_str())
+            );
+        }
         // An edit combo's line is the item its list selected: said with its position
         // ("Constantia | 39 of 187" [obs, 541/s3]), a list's, which Advanced verbosity leaves
         // out ("Constantia" [obs, 935/s3, s4]).
