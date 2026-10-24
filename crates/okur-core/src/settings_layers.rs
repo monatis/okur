@@ -38,6 +38,9 @@ pub struct SettingsLayers {
     pub global: Values,
     pub applications: BTreeMap<String, Values>,
     pub sites: BTreeMap<String, Values>,
+    /// Until the focus moves to another application (Quick Settings' "restore when the focus
+    /// changes"), above the site, under the session.
+    pub until_focus_moves: Values,
     pub session: Values,
 }
 
@@ -61,6 +64,7 @@ impl SettingsLayers {
         if let Some(values) = site.and_then(|s| self.sites.get(s)) {
             merge(&mut merged, values);
         }
+        merge(&mut merged, &self.until_focus_moves);
         merge(&mut merged, &self.session);
         serde_json::from_value(Value::Object(merged)).unwrap_or_else(|e| {
             tracing::warn!(error = %e, "settings layers not read; Okur's defaults apply");
@@ -137,24 +141,34 @@ impl SettingsLayers {
     /// Sets one value in the session layer, by its path in [`Settings`]
     /// (`["voice", "punctuation"]`).
     pub fn set_for_session(&mut self, path: &[&str], value: Value) {
-        let Some((last, parents)) = path.split_last() else {
+        set_in(&mut self.session, path, value);
+    }
+
+    /// Sets one value until the focus moves to another application, by its path.
+    pub fn set_until_focus_moves(&mut self, path: &[&str], value: Value) {
+        set_in(&mut self.until_focus_moves, path, value);
+    }
+}
+
+/// Sets the value at `path` in `values`, making the tables on the way.
+fn set_in(values: &mut Values, path: &[&str], value: Value) {
+    let Some((last, parents)) = path.split_last() else {
+        return;
+    };
+    let mut table = values;
+    for name in parents {
+        let entry = table
+            .entry((*name).to_owned())
+            .or_insert_with(|| Value::Object(Map::new()));
+        if !entry.is_object() {
+            *entry = Value::Object(Map::new());
+        }
+        let Value::Object(next) = entry else {
             return;
         };
-        let mut table = &mut self.session;
-        for name in parents {
-            let entry = table
-                .entry((*name).to_owned())
-                .or_insert_with(|| Value::Object(Map::new()));
-            if !entry.is_object() {
-                *entry = Value::Object(Map::new());
-            }
-            let Value::Object(next) = entry else {
-                return;
-            };
-            table = next;
-        }
-        table.insert((*last).to_owned(), value);
+        table = next;
     }
+    table.insert((*last).to_owned(), value);
 }
 
 /// Removes the value at `path` ("keyboard.okur_key"), and the tables it leaves empty.

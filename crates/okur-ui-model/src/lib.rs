@@ -249,6 +249,13 @@ pub enum ToUi {
         items: Vec<String>,
         selected: usize,
     },
+    /// Show a context menu on a control's selected item (Shift+F10 on a tree's): its items,
+    /// one checked. The choice comes back as [`FromUi::DialogMenuChosen`].
+    DialogMenu {
+        id: u32,
+        control: String,
+        items: Vec<MenuEntry>,
+    },
     /// Replace a tree's items, and select one: the settings a search found.
     DialogTree {
         id: u32,
@@ -332,6 +339,12 @@ pub enum FromUi {
     DialogPressed { id: u32, control: String },
     /// The dialog was cancelled (its Cancel button, Escape, its close box) and is gone.
     DialogClosed { id: u32 },
+    /// A context menu's item chosen, by its index; none when it was closed without a choice.
+    DialogMenuChosen {
+        id: u32,
+        control: String,
+        index: Option<usize>,
+    },
     /// A key pressed on a list or tree that does something to its selected item: Delete, F2,
     /// Space.
     DialogKey {
@@ -339,6 +352,14 @@ pub enum FromUi {
         control: String,
         key: DialogKey,
     },
+}
+
+/// An item of a context menu ([`ToUi::DialogMenu`]).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct MenuEntry {
+    pub text: String,
+    #[serde(default)]
+    pub checked: bool,
 }
 
 /// A key on a list's item ([`FromUi::DialogKey`]).

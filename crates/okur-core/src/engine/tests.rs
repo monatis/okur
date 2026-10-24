@@ -7507,3 +7507,57 @@ fn words_title_says_the_view() {
         Some("Title is\nsr-word-fixture.docx - Word\nPrint View")
     );
 }
+
+/// Quick Settings' lifetimes: a change to last until Okur exits goes to the session's layer
+/// and is not saved; one to last until the focus moves is cleared when another application
+/// takes the focus, not when Okur's own window does.
+#[test]
+fn quick_settings_changes_last_as_their_lifetimes() {
+    use crate::settings::TypingEcho;
+    use crate::settings_layers::Scope;
+    use crate::ui::settings::Lifetime;
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let store = crate::settings::RecordingSettingsStore::default();
+    engine.set_settings_store(Box::new(store.clone()));
+    engine.settings_place(Some("notepad.exe"), None);
+    engine.settings_dialog_application = Some("notepad".to_owned());
+    let before = engine.settings.clone();
+    let mut after = before.clone();
+    after.typing_echo = TypingEcho::Words;
+    after.say_all_unit = crate::settings::SayAllUnit::Sentence;
+    engine.apply_settings(
+        &Scope::Application("notepad".to_owned()),
+        &before,
+        &after,
+        &[
+            ("typing_echo", Lifetime::UntilExit),
+            ("say_all_unit", Lifetime::UntilFocusMoves),
+        ],
+    );
+    assert_eq!(engine.settings.typing_echo, TypingEcho::Words);
+    assert_eq!(
+        engine.settings.say_all_unit,
+        crate::settings::SayAllUnit::Sentence
+    );
+    // Neither is kept for Notepad.
+    let saved = store.take();
+    assert!(saved.iter().all(|layers| layers
+        .applications
+        .get("notepad")
+        .is_none_or(|v| v.is_empty())));
+    // Okur's own window takes the focus and gives it back: both stay.
+    engine.settings_place(Some("okur-ui.exe"), None);
+    engine.settings_place(Some("notepad.exe"), None);
+    assert_eq!(
+        engine.settings.say_all_unit,
+        crate::settings::SayAllUnit::Sentence
+    );
+    // Another application: the until-the-focus-moves change ends, the session's stays.
+    engine.settings_place(Some("chrome.exe"), None);
+    assert_eq!(
+        engine.settings.say_all_unit,
+        crate::settings::SayAllUnit::Line
+    );
+    assert_eq!(engine.settings.typing_echo, TypingEcho::Words);
+}

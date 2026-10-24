@@ -294,6 +294,9 @@ pub struct ScreenReaderEngine {
     settings_dialog: Option<crate::ui::settings::SettingsDialog>,
     /// Settings Center or Quick Settings, while it is open.
     settings_tree: Option<crate::ui::settings_tree::SettingsTree>,
+    /// The application the until-the-focus-moves settings were changed for: the focus moving
+    /// to another clears them.
+    until_focus_moves_for: Option<String>,
     /// The settings changed lately, newest first, for the dialogs' Last Changed Settings. Kept
     /// while Okur runs.
     settings_history: crate::ui::settings_tree::History,
@@ -549,6 +552,7 @@ impl ScreenReaderEngine {
             settings_dialog_application: None,
             settings_dialog: None,
             settings_tree: None,
+            until_focus_moves_for: None,
             settings_history: Vec::new(),
             list_dialog: None,
             list_return_mode: AppMode::VirtualBuffer,
@@ -1563,6 +1567,16 @@ impl ScreenReaderEngine {
         );
         if place != self.settings_place {
             tracing::debug!(?place, "settings looked up for another place");
+            // Another application than the one the until-the-focus-moves settings were changed
+            // for, and not Okur's own windows (its dialogs come and go over the application),
+            // ends them.
+            let other = place.0.as_deref().is_some_and(|app| {
+                app != OKUR_WINDOWS && self.until_focus_moves_for.as_deref() != Some(app)
+            });
+            if other && !self.settings_layers.until_focus_moves.is_empty() {
+                self.settings_layers.until_focus_moves.clear();
+                self.until_focus_moves_for = None;
+            }
             self.settings_place = place;
             self.resolve_settings();
         }
@@ -1577,7 +1591,34 @@ impl ScreenReaderEngine {
         scope: &crate::settings_layers::Scope,
         before: &crate::settings::Settings,
         settings: &crate::settings::Settings,
+        temporary: &[(&'static str, crate::ui::settings::Lifetime)],
     ) {
+        use crate::settings::registry;
+        use crate::ui::settings::Lifetime;
+        // A change that is to last a while only goes to the session's layer or the one cleared
+        // when the focus moves to another application (Quick Settings' lifetimes), not to
+        // `scope`.
+        let mut kept = settings.clone();
+        for &(id, lifetime) in temporary {
+            let (Some(was), Some(now)) = (registry::get(before, id), registry::get(settings, id))
+            else {
+                continue;
+            };
+            if was == now {
+                continue;
+            }
+            registry::set(&mut kept, id, was);
+            let path: Vec<&str> = id.split('.').collect();
+            match lifetime {
+                Lifetime::UntilExit => self.settings_layers.set_for_session(&path, now),
+                Lifetime::UntilFocusMoves => {
+                    self.settings_layers.set_until_focus_moves(&path, now);
+                    self.until_focus_moves_for = self.settings_dialog_application.clone();
+                }
+                Lifetime::Saved => {}
+            }
+        }
+        let settings = &kept;
         if settings.viewer_display != crate::settings::ViewerDisplay::OnScreen {
             self.close_viewer_window();
         }
@@ -1769,8 +1810,9 @@ impl ScreenReaderEngine {
                 before,
                 settings,
                 close,
+                temporary,
             } => {
-                self.apply_settings(&scope, &before, &settings);
+                self.apply_settings(&scope, &before, &settings, &temporary);
                 if close {
                     let id = if tree {
                         self.settings_tree.take().map(|t| t.id)
@@ -2302,6 +2344,9 @@ impl ScreenReaderEngine {
     }
 }
 
+/// The application Okur's own windows are in (okur-ui's process), as the settings name it.
+const OKUR_WINDOWS: &str = "okur-ui";
+
 /// The dialog an event from one of Okur's windows is about.
 fn dialog_of(message: &crate::ui::FromUi) -> Option<u32> {
     use crate::ui::FromUi;
@@ -2309,6 +2354,7 @@ fn dialog_of(message: &crate::ui::FromUi) -> Option<u32> {
         FromUi::DialogChanged { id, .. }
         | FromUi::DialogPressed { id, .. }
         | FromUi::DialogKey { id, .. }
+        | FromUi::DialogMenuChosen { id, .. }
         | FromUi::DialogClosed { id } => Some(*id),
         FromUi::ViewerDismissed => None,
     }

@@ -465,3 +465,8 @@ settings-tree-default-only = Only available when modifying the Default setting. 
 # Settings and Settings Center].
 settings-tree-last-changed = Last Changed Settings
 settings-tree-last-changed-description = The 25 settings changed last for this place, newest first. Each can be changed here as in its own group.
+# Quick Settings' lifetimes, Shift+F10 on a setting or a group (JAWS's help: restore it when
+# JAWS exits, when the focus changes, or save it; JAWS's own words to record).
+settings-lifetime-until-exit = Restore When Okur Exits
+settings-lifetime-until-focus-moves = Restore When Focus Changes
+settings-lifetime-saved = Save

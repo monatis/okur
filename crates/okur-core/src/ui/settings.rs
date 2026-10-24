@@ -29,6 +29,17 @@ fn output_id(output: OutputType) -> String {
 /// A setting's value, as the settings file writes it.
 type Json = serde_json::Value;
 
+/// How long a change made in Quick Settings lasts (Shift+F10 on a setting).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Lifetime {
+    /// Until Okur exits.
+    UntilExit,
+    /// Until the focus moves to another application.
+    UntilFocusMoves,
+    /// Kept, as any other change (the default).
+    Saved,
+}
+
 /// What the engine does after the dialog handled an event.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Outcome {
@@ -42,6 +53,8 @@ pub enum Outcome {
         before: Box<Settings>,
         settings: Box<Settings>,
         close: bool,
+        /// Settings changed for a while only, not kept in `scope` (Quick Settings' lifetimes).
+        temporary: Vec<(&'static str, Lifetime)>,
     },
     /// The dialog is gone; nothing more is applied.
     Closed,
@@ -385,6 +398,7 @@ impl SettingsDialog {
                         before: Box::new(before),
                         settings: Box::new(self.draft.clone()),
                         close: control == "ok",
+                        temporary: Vec::new(),
                     }
                 }
                 _ => Outcome::Nothing,
@@ -651,7 +665,8 @@ mod tests {
                 scope: Scope::Global,
                 before: Box::default(),
                 settings: Box::new(expected.clone()),
-                close: false
+                close: false,
+                temporary: Vec::new(),
             }
         );
         assert_eq!(
@@ -663,7 +678,8 @@ mod tests {
                 scope: Scope::Global,
                 before: Box::new(expected.clone()),
                 settings: Box::new(expected),
-                close: true
+                close: true,
+                temporary: Vec::new(),
             }
         );
         assert_eq!(

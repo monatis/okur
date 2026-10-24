@@ -395,6 +395,7 @@ fn handle(message: ToUi) {
             items,
             selected,
         } => crate::dialog::set_list(id, &control, &items, selected),
+        ToUi::DialogMenu { id, control, items } => crate::dialog::show_menu(id, &control, &items),
         ToUi::DialogTree {
             id,
             control,

@@ -10,7 +10,7 @@
 
 use okur_ui_model::{Control, ControlKind, DialogKey, DialogSpec, FromUi, ToUi, TreeItem, Value};
 
-use super::settings::{Outcome, Place};
+use super::settings::{Lifetime, Outcome, Place};
 use crate::messages::{msg, StaticMessage};
 use crate::settings::registry::{self, Kind, SettingSpec, SETTINGS};
 use crate::settings::Settings;
@@ -30,6 +30,14 @@ const DEFAULT_PLACE: &str = "default_place";
 /// again; else OK, and the dialog closed.
 const TREE_ENTER: &str = "tree_enter";
 const TREE_ESCAPE: &str = "tree_escape";
+/// Quick Settings' Shift+F10 and Applications key on a setting or group: its lifetime.
+const LIFETIME: &str = "lifetime";
+/// The lifetimes, as the menu lists them.
+const LIFETIMES: [Lifetime; 3] = [
+    Lifetime::UntilExit,
+    Lifetime::UntilFocusMoves,
+    Lifetime::Saved,
+];
 
 /// Which of JAWS's two dialogs this is.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -246,6 +254,10 @@ pub struct SettingsTree {
     history: History,
     /// Last Changed Settings is open.
     recent_open: bool,
+    /// Quick Settings' settings that are to last a while only; the others are saved.
+    lifetimes: Vec<(&'static str, Lifetime)>,
+    /// The row whose lifetime menu is open.
+    menu_for: Option<Row>,
     /// The groups open.
     open: Vec<TreeGroup>,
     rows: Vec<Row>,
@@ -281,6 +293,8 @@ impl SettingsTree {
             before_search: None,
             history,
             recent_open: false,
+            lifetimes: Vec::new(),
+            menu_for: None,
             open: Vec::new(),
             rows: Vec::new(),
             selected: 0,
@@ -640,6 +654,10 @@ impl SettingsTree {
         ];
         if self.flavor == Flavor::Center {
             keys.push(shortcut("Ctrl+Shift+D", DEFAULT_PLACE));
+        } else {
+            // A setting's or group's lifetime (JAWS's Quick Settings help).
+            keys.push(from("Shift+F10", LIFETIME, TREE));
+            keys.push(from("Apps", LIFETIME, TREE));
         }
         DialogSpec {
             id: self.id,
@@ -766,6 +784,62 @@ impl SettingsTree {
         ]
     }
 
+    /// The settings a row stands for: a setting, or a group's settings in it and its
+    /// subgroups.
+    fn settings_of(&self, row: Row) -> Vec<&'static SettingSpec> {
+        match row {
+            Row::Setting(spec) | Row::Recent(spec) => vec![spec],
+            Row::Group(group) => self
+                .shown()
+                .filter(|(g, _)| g.within(group))
+                .map(|(_, spec)| spec)
+                .collect(),
+            Row::VerbosityLevels | Row::LastChanged => Vec::new(),
+        }
+    }
+
+    /// How long a setting's change is to last.
+    fn lifetime(&self, spec: &SettingSpec) -> Lifetime {
+        self.lifetimes
+            .iter()
+            .find(|(id, _)| *id == spec.id)
+            .map_or(Lifetime::Saved, |(_, lifetime)| *lifetime)
+    }
+
+    /// The lifetime menu on the selected setting or group, its lifetime checked (a group's
+    /// when all its settings share one).
+    fn lifetime_menu(&mut self) -> Outcome {
+        let Some(row) = self.rows.get(self.selected).copied() else {
+            return Outcome::Nothing;
+        };
+        let settings = self.settings_of(row);
+        let Some(first) = settings.first() else {
+            return Outcome::Nothing;
+        };
+        let shared = self.lifetime(first);
+        let checked = settings
+            .iter()
+            .all(|spec| self.lifetime(spec) == shared)
+            .then_some(shared);
+        self.menu_for = Some(row);
+        let label = |lifetime: Lifetime| match lifetime {
+            Lifetime::UntilExit => msg::settings_lifetime_until_exit(),
+            Lifetime::UntilFocusMoves => msg::settings_lifetime_until_focus_moves(),
+            Lifetime::Saved => msg::settings_lifetime_saved(),
+        };
+        Outcome::Send(vec![ToUi::DialogMenu {
+            id: self.id,
+            control: TREE.to_owned(),
+            items: LIFETIMES
+                .iter()
+                .map(|&lifetime| okur_ui_model::MenuEntry {
+                    text: label(lifetime).to_string(),
+                    checked: checked == Some(lifetime),
+                })
+                .collect(),
+        }])
+    }
+
     fn apply(&mut self, close: bool) -> Outcome {
         let before = self
             .places
@@ -781,6 +855,7 @@ impl SettingsTree {
             before: Box::new(before),
             settings: Box::new(self.draft.clone()),
             close,
+            temporary: self.lifetimes.clone(),
         }
     }
 
@@ -839,6 +914,21 @@ impl SettingsTree {
                     _ => Outcome::Nothing,
                 }
             }
+            // A lifetime chosen for the menu's setting or group.
+            FromUi::DialogMenuChosen { id, index, .. } if *id == self.id => {
+                let (Some(row), Some(&lifetime)) =
+                    (self.menu_for.take(), index.and_then(|i| LIFETIMES.get(i)))
+                else {
+                    return Outcome::Nothing;
+                };
+                for spec in self.settings_of(row) {
+                    self.lifetimes.retain(|(id, _)| *id != spec.id);
+                    if lifetime != Lifetime::Saved {
+                        self.lifetimes.push((spec.id, lifetime));
+                    }
+                }
+                Outcome::Nothing
+            }
             FromUi::DialogKey { id, control, key } if *id == self.id && control == TREE => {
                 match key {
                     DialogKey::Change => self.change(false),
@@ -861,6 +951,7 @@ impl SettingsTree {
                     self.end_search(at)
                 }
                 TREE_ESCAPE => Outcome::Close,
+                LIFETIME if self.flavor == Flavor::Quick => self.lifetime_menu(),
                 DEFAULT_PLACE if self.flavor == Flavor::Center => {
                     self.place = 0;
                     self.draft = self
@@ -1144,6 +1235,55 @@ mod tests {
             registry::get(dialog.draft(), "typing_echo"),
             Some(Json::String("words".into()))
         );
+    }
+
+    /// Quick Settings' Shift+F10 on a setting offers its lifetime, Saved checked at first; a
+    /// change made with another is applied as temporary.
+    #[test]
+    fn a_quick_setting_can_last_until_okur_exits() {
+        let mut dialog = tree(Flavor::Quick);
+        let typing = dialog
+            .rows
+            .iter()
+            .position(|r| matches!(r, Row::Setting(spec) if spec.id == "typing_echo"))
+            .unwrap_or_default();
+        dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: TREE.into(),
+            value: Value::Selected(typing),
+        });
+        let Outcome::Send(sent) = dialog.handle(&FromUi::DialogPressed {
+            id: 7,
+            control: LIFETIME.into(),
+        }) else {
+            panic_free_fail("no menu");
+            return;
+        };
+        let Some(ToUi::DialogMenu { items, .. }) = sent.first() else {
+            panic_free_fail("no menu");
+            return;
+        };
+        let checked: Vec<bool> = items.iter().map(|i| i.checked).collect();
+        assert_eq!(checked, [false, false, true]);
+        dialog.handle(&FromUi::DialogMenuChosen {
+            id: 7,
+            control: TREE.into(),
+            index: Some(0),
+        });
+        dialog.handle(&FromUi::DialogKey {
+            id: 7,
+            control: TREE.into(),
+            key: DialogKey::Change,
+        });
+        let applied = dialog.handle(&FromUi::DialogPressed {
+            id: 7,
+            control: "ok".into(),
+        });
+        assert!(matches!(
+            applied,
+            Outcome::Apply { ref temporary, .. }
+                if temporary == &[("typing_echo", Lifetime::UntilExit)]
+        ));
     }
 
     /// A setting kept only for all applications is unavailable in an application's settings,

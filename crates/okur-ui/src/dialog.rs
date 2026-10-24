@@ -102,6 +102,7 @@ fn chord(text: &str) -> Option<Chord> {
             "shift" => shift = true,
             "alt" => alt = true,
             "enter" => key = Some(0x0D),
+            "apps" => key = Some(0x5D),
             "escape" => key = Some(0x1B),
             "up" => key = Some(0x26),
             "down" => key = Some(0x28),
@@ -1031,6 +1032,85 @@ pub fn set_list(id: u32, control: &str, items: &[String], selected: usize) {
             set_items(list, items, selected);
         }
     }
+}
+
+/// Shows a context menu of `items` on `control` of dialog `id` (at a tree's selected item),
+/// and tells Okur what was chosen.
+pub fn show_menu(id: u32, control: &str, items: &[okur_ui_model::MenuEntry]) {
+    use windows::Win32::Foundation::{POINT, RECT};
+    use windows::Win32::Graphics::Gdi::ClientToScreen;
+    use windows::Win32::UI::Controls::{TVGN_CARET, TVM_GETITEMRECT};
+    use windows::Win32::UI::WindowsAndMessaging::{
+        AppendMenuW, CreatePopupMenu, DestroyMenu, TrackPopupMenu, MF_CHECKED, MF_STRING,
+        TPM_LEFTALIGN, TPM_RETURNCMD,
+    };
+    let Some((window, window_id, _, kind)) = find(id, control) else {
+        return;
+    };
+    // SAFETY: our own dialog's child, a menu of our own made and destroyed here, and its
+    // modal loop on this thread.
+    let chosen = unsafe {
+        let Ok(item) = GetDlgItem(Some(window), i32::from(window_id)) else {
+            return;
+        };
+        // Where: the tree's selected item, else the control's corner.
+        let mut corner = POINT { x: 8, y: 8 };
+        if matches!(kind, ControlKind::Tree { .. }) {
+            let selected = SendMessageW(
+                item,
+                TVM_GETNEXTITEM,
+                Some(WPARAM(TVGN_CARET as usize)),
+                None,
+            );
+            let mut rect = RECT::default();
+            // TVM_GETITEMRECT takes the item in the rectangle's place.
+            *(&mut rect as *mut RECT as *mut isize) = selected.0;
+            if SendMessageW(
+                item,
+                TVM_GETITEMRECT,
+                Some(WPARAM(1)),
+                Some(LPARAM(&mut rect as *mut RECT as isize)),
+            )
+            .0 != 0
+            {
+                corner = POINT {
+                    x: rect.left,
+                    y: rect.bottom,
+                };
+            }
+        }
+        let _ = ClientToScreen(item, &mut corner);
+        let Ok(menu) = CreatePopupMenu() else {
+            return;
+        };
+        for (index, entry) in items.iter().enumerate() {
+            let text = wide(&entry.text);
+            let flags = if entry.checked {
+                MF_STRING | MF_CHECKED
+            } else {
+                MF_STRING
+            };
+            let _ = AppendMenuW(menu, flags, index + 1, windows::core::PCWSTR(text.as_ptr()));
+        }
+        let command = TrackPopupMenu(
+            menu,
+            TPM_LEFTALIGN | TPM_RETURNCMD,
+            corner.x,
+            corner.y,
+            None,
+            window,
+            None,
+        );
+        let _ = DestroyMenu(menu);
+        usize::try_from(command.0)
+            .ok()
+            .and_then(|c| c.checked_sub(1))
+    };
+    crate::win32::tell(&FromUi::DialogMenuChosen {
+        id,
+        control: control.to_owned(),
+        index: chosen,
+    });
 }
 
 /// Replaces tree `control` of dialog `id` with `items`, `selected` selected: the settings a
