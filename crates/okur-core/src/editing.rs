@@ -431,11 +431,12 @@ fn field_word(context: &TextContext) -> Option<(usize, usize)> {
         .filter(|&(start, end)| start <= context.caret && context.caret < end)
 }
 
-/// The word starting at the caret (where Ctrl+Left/Right leave it): to the end of the
-/// field's word, or to the next space.
-fn word_at(context: &TextContext) -> String {
+/// The word at the caret (where Ctrl+Left/Right leave it): to the end of the field's word; in a
+/// plain Win32 edit (`plain_edit`), or a field that reports no words, the whole run around the
+/// caret between spaces and hyphens.
+fn word_at(context: &TextContext, plain_edit: bool) -> String {
     let text = chars(&context.text);
-    if let Some((_, end)) = field_word(context) {
+    if let Some((_, end)) = field_word(context).filter(|_| !plain_edit) {
         let word: String = text
             .get(context.caret..end)
             .unwrap_or_default()
@@ -443,10 +444,23 @@ fn word_at(context: &TextContext) -> String {
             .collect();
         return word.trim().to_owned();
     }
-    text.get(context.caret..)
+    // JAWS says the whole run around the caret, between spaces and hyphens, wherever in it a
+    // plain edit stopped: "C:\Users\Ada\Downloads" at each of classic Notepad's three stops in
+    // it, "https://example.org/a", then "b" [obs, 1037/s5-s11].
+    // At the end of the text, or on a space or line break, nothing [obs, 1037/s14-s28].
+    let caret = context.caret.min(text.len());
+    let apart = |c: &char| c.is_whitespace() || *c == '-';
+    if text.get(caret).is_none_or(apart) {
+        return String::new();
+    }
+    let start = text
+        .get(..caret)
+        .and_then(|before| before.iter().rposition(apart))
+        .map_or(0, |i| i + 1);
+    text.get(start..)
         .unwrap_or_default()
         .iter()
-        .take_while(|c| !c.is_whitespace())
+        .take_while(|c| !apart(c))
         .collect()
 }
 
@@ -666,7 +680,7 @@ pub fn speech_in(
         EditKey::Word => format!(
             "{}{}",
             misspelled_word_mark(after).unwrap_or_default(),
-            or_line_break(word_at(after))
+            or_line_break(word_at(after, plain_edit))
         ),
         EditKey::Line => format!(
             "{}{}",
@@ -1028,11 +1042,28 @@ mod tests {
             misspelled: Vec::new(),
             ..ctx(text, caret, None)
         };
-        assert_eq!(word_at(&at(7, (7, 11))), "line");
-        assert_eq!(word_at(&at(11, (11, 13))), ",");
+        assert_eq!(word_at(&at(7, (7, 11)), false), "line");
+        assert_eq!(word_at(&at(11, (11, 13)), false), ",");
         assert_eq!(word_around(&at(9, (7, 11))), "line");
         // Without a word unit, a word runs to the next space.
-        assert_eq!(word_at(&ctx(text, 7, None)), "line,");
+        assert_eq!(word_at(&ctx(text, 7, None), false), "line,");
+    }
+
+    /// A plain Win32 edit's word is the whole run around the caret between spaces and hyphens,
+    /// wherever in it the edit stopped; nothing at the text's end [obs, 1037/s5-s14].
+    #[test]
+    fn a_plain_edits_word_is_the_run_around_the_caret() {
+        let text = "C:\\Users\\Ada\\Downloads or https://example.org/a-b";
+        let at = |caret: usize| TextContext {
+            word: Some((caret, caret + 1)),
+            misspelled: Vec::new(),
+            ..ctx(text, caret, None)
+        };
+        assert_eq!(word_at(&at(1), true), "C:\\Users\\Ada\\Downloads");
+        assert_eq!(word_at(&at(9), true), "C:\\Users\\Ada\\Downloads");
+        assert_eq!(word_at(&at(26), true), "https://example.org/a");
+        assert_eq!(word_at(&at(48), true), "b");
+        assert_eq!(word_at(&ctx(text, 49, None), true), "");
     }
 
     // The 305 sequence on the field "Ada" (caret at the end after the reset End key).
@@ -1111,7 +1142,7 @@ mod tests {
                 misspelled: Vec::new(),
                 ..ctx(text, c, None)
             };
-            word_at(&at(caret))
+            word_at(&at(caret), false)
         };
         let prose = "the lazy dog, then";
         assert_eq!(word(prose, 9), "dog");
@@ -1138,7 +1169,7 @@ mod tests {
         let text = "first line\r\nsecond line";
         assert_eq!(line_at(&ctx(text, 3, None)), "first line");
         assert_eq!(line_at(&ctx(text, 14, None)), "second line");
-        assert_eq!(word_at(&ctx(text, 12, None)), "second");
+        assert_eq!(word_at(&ctx(text, 12, None), false), "second");
         // A line break is a character: an empty history entry, spoken "blank" [obs, 307/s36].
         let at_break = speech(EditKey::Character, None, &ctx(text, 10, None), "");
         assert_eq!(at_break.as_deref(), Some("\r"));
