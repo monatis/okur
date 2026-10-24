@@ -901,6 +901,27 @@ mod tests {
         );
     }
 
+    /// JAWS's Results Viewer ends with a link that opens the text in Word: Down past the
+    /// text says it [obs, 1024/s7, s8].
+    #[test]
+    #[ignore = "known gap: the Results Viewer's Open in Word... link (1024/s7)"]
+    fn the_results_viewer_ends_with_open_in_word() {
+        let (mut engine, speech, _) = file_explorer();
+        ocr_layer_key(&mut engine, &speech, Key::Alpha('F'));
+        engine.handle_accessibility_event(&AccessibilityEvent::FileRecognitionStarted);
+        engine.handle_accessibility_event(&AccessibilityEvent::FileRecognized(
+            FileRecognition::Read {
+                name: "SR OCR Sign.png".into(),
+                pages: vec![vec!["Opening hours".into()]],
+            },
+        ));
+        let _ = speech.take();
+        assert_eq!(
+            press(&mut engine, &speech, Key::DownArrow, plain()),
+            " same page link  Open in Word..."
+        );
+    }
+
     /// Enter in a window of files does what F does [obs, 1028/s3].
     #[test]
     fn enter_in_file_explorer_recognizes_the_selected_file() {
