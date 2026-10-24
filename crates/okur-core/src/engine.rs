@@ -296,6 +296,8 @@ pub struct ScreenReaderEngine {
     settings_tree: Option<crate::ui::settings_tree::SettingsTree>,
     /// Basics, while it is open.
     basics_dialog: Option<crate::ui::basics::BasicsDialog>,
+    /// Voice Adjustment, while it is open.
+    voice_adjustment: Option<crate::ui::voice_adjustment::VoiceAdjustment>,
     /// The application the until-the-focus-moves settings were changed for: the focus moving
     /// to another clears them.
     until_focus_moves_for: Option<String>,
@@ -555,6 +557,7 @@ impl ScreenReaderEngine {
             settings_dialog: None,
             settings_tree: None,
             basics_dialog: None,
+            voice_adjustment: None,
             until_focus_moves_for: None,
             settings_history: Vec::new(),
             list_dialog: None,
@@ -1827,6 +1830,14 @@ impl ScreenReaderEngine {
                         msg::okur_menu_options(),
                         vec![
                             item(MENU_BASICS, msg::okur_menu_basics(), None),
+                            MenuItemSpec {
+                                items: vec![item(
+                                    MENU_VOICE_ADJUSTMENT,
+                                    msg::okur_menu_voice_adjustment(),
+                                    None,
+                                )],
+                                ..item("voices", msg::okur_menu_voices(), None)
+                            },
                             item(
                                 crate::ui::MAIN_WINDOW_EXIT,
                                 msg::okur_menu_exit(),
@@ -1859,6 +1870,7 @@ impl ScreenReaderEngine {
     fn main_menu_command(&mut self, id: &str) -> Option<String> {
         match id {
             MENU_BASICS => self.open_basics(),
+            MENU_VOICE_ADJUSTMENT => self.open_voice_adjustment(),
             MENU_NOTIFICATIONS => self.open_notification_history(),
             MENU_SETTINGS_CENTER => {
                 return self.open_settings(crate::ui::settings_tree::Flavor::Center);
@@ -1870,6 +1882,28 @@ impl ScreenReaderEngine {
             _ => {}
         }
         None
+    }
+
+    /// Opens Voice Adjustment, or brings it to the front: the voice for all applications.
+    fn open_voice_adjustment(&mut self) {
+        let dialog = match self.voice_adjustment.take() {
+            Some(dialog) => dialog,
+            None => {
+                self.dialog_count += 1;
+                let global = self.settings_layers.resolve(None, None);
+                crate::ui::voice_adjustment::VoiceAdjustment::new(
+                    self.dialog_count,
+                    global,
+                    self.speech.voices(),
+                )
+            }
+        };
+        if let Some(ui) = &self.ui {
+            ui.send(crate::ui::ToUi::DialogShow {
+                dialog: dialog.spec(),
+            });
+        }
+        self.voice_adjustment = Some(dialog);
     }
 
     /// Opens Basics, or brings it to the front: the settings for all applications.
@@ -1974,6 +2008,34 @@ impl ScreenReaderEngine {
             _ if self.is_message_box_event(message) => self.handle_message_box_event(message),
             _ if self.is_overwrite_event(message) => self.handle_overwrite_event(message),
             crate::ui::FromUi::MainMenuCommand { id } => self.main_menu_command(id),
+            _ if self
+                .voice_adjustment
+                .as_ref()
+                .is_some_and(|d| Some(d.id) == dialog_of(message)) =>
+            {
+                use crate::ui::settings::Outcome;
+                match self.voice_adjustment.as_mut()?.handle(message) {
+                    Outcome::Apply {
+                        scope,
+                        before,
+                        settings,
+                        temporary,
+                        ..
+                    } => {
+                        self.apply_settings(&scope, &before, &settings, &temporary);
+                        if let (Some(dialog), Some(ui)) = (self.voice_adjustment.take(), &self.ui) {
+                            ui.send(crate::ui::ToUi::DialogClose { id: dialog.id });
+                        }
+                        self.returning_from_dialog();
+                    }
+                    Outcome::Closed => {
+                        self.voice_adjustment = None;
+                        self.returning_from_dialog();
+                    }
+                    _ => {}
+                }
+                None
+            }
             _ if self
                 .basics_dialog
                 .as_ref()
@@ -2471,6 +2533,7 @@ impl ScreenReaderEngine {
 
 /// The main window's menu items' ids.
 const MENU_BASICS: &str = "basics";
+const MENU_VOICE_ADJUSTMENT: &str = "voice_adjustment";
 const MENU_NOTIFICATIONS: &str = "notification_history";
 const MENU_SETTINGS_CENTER: &str = "settings_center";
 const MENU_ABOUT: &str = "about";

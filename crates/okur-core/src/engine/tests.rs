@@ -7587,7 +7587,7 @@ fn insert_j_shows_okurs_window_and_its_menus() {
         .first()
         .map(|m| m.items.iter().map(|i| i.label.as_str()).collect())
         .unwrap_or_default();
-    assert_eq!(options, ["&Basics...", "E&xit"]);
+    assert_eq!(options, ["&Basics...", "&Voices", "E&xit"]);
     engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::MainMenuCommand {
         id: "basics".into(),
     }));

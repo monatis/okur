@@ -500,3 +500,16 @@ basics-layout = Use Keyboard Layout:
 # The keys the menus show after their items, as JAWS's show theirs.
 okur-menu-exit-key = Alt+F4
 okur-menu-notification-history-key = INSERT+SPACE, N
+okur-menu-voices = &Voices
+okur-menu-voice-adjustment = Voice Adjustment...
+
+## Voice Adjustment, JAWS's "Voice" group [obs, the walk of Voice Adjustment].
+
+voice-adjustment-title = Voice Adjustment
+voice-adjustment-group = Voice
+voice-adjustment-adjust = Adjust:
+voice-adjustment-all-contexts = All Contexts
+voice-adjustment-person = Person:
+voice-adjustment-rate = Rate:
+voice-adjustment-punctuation = Punctuation:
+voice-adjustment-volume = Volume:
