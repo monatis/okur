@@ -656,11 +656,109 @@
       }
     },
     {
+      "scenario_id": "1024-desktop-ocr-file-picture",
+      "fixture": "desktop-ocr-files.ps1",
+      "evidence": {
+        "sha256": "66964adacc45d9fe901c4bc23992bd9c827be8136e0f1029a038c4ed670800a2",
+        "capture_script_sha256": "9242cdff92014893539dc618f659c176ab24e78898fdf1c4be6fec38265e7664",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1025-desktop-ocr-file-pdf",
+      "fixture": "desktop-ocr-files.ps1",
+      "evidence": {
+        "sha256": "5ac1218bff02d4669bed3f546ede4c1816f14bd01d16e5598d2a5de3c444034a",
+        "capture_script_sha256": "9242cdff92014893539dc618f659c176ab24e78898fdf1c4be6fec38265e7664",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1026-desktop-ocr-file-none-selected",
+      "fixture": "desktop-ocr-files.ps1",
+      "evidence": {
+        "sha256": "ca3b938af356e118713c0b73b0390bfa9ca95d4d7c11acc861bb49fd1f4060c4",
+        "capture_script_sha256": "9242cdff92014893539dc618f659c176ab24e78898fdf1c4be6fec38265e7664",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1027-desktop-ocr-file-not-a-picture",
+      "fixture": "desktop-ocr-files.ps1",
+      "evidence": {
+        "sha256": "2c0d60c8487a2f7f808321cc03237b9fbe0ffac2bae35a817ec9ec742226fd35",
+        "capture_script_sha256": "9242cdff92014893539dc618f659c176ab24e78898fdf1c4be6fec38265e7664",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1028-desktop-ocr-all-in-one-file",
+      "fixture": "desktop-ocr-files.ps1",
+      "evidence": {
+        "sha256": "c486ac7fdce917201f6918fd060adfece38bdb59c897bce6a9d7fb8faa5154a3",
+        "capture_script_sha256": "9242cdff92014893539dc618f659c176ab24e78898fdf1c4be6fec38265e7664",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1029-desktop-ocr-cancel-nothing",
+      "fixture": "desktop-ocr-files.ps1",
+      "evidence": {
+        "sha256": "87ca9ac2d6b9e9722b0f647543c847fe331a57fd22bc596f8752909445b3ce8d",
+        "capture_script_sha256": "31e62ff1666db4fffff87713bcced74cd28cff6af09c66e41088722d74792ec0",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "103-article-headings",
       "fixture": "news-article.html",
       "evidence": {
         "sha256": "ecadc67e363cf8708ba96ff19ca8d8f00edcdc0674097226a661c72e3b1175b6",
         "capture_script_sha256": "52497c30fa69eac8937bd79b2cff9c5b387ad9246d0a3d1333fdf43c76994e11",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1030-desktop-ocr-file-outside-explorer",
+      "fixture": "desktop-wpf-text.ps1",
+      "evidence": {
+        "sha256": "4f962997b1ff1f7a190a242f59c53777613badac18c63e597692c151cde9c1c7",
+        "capture_script_sha256": "31e62ff1666db4fffff87713bcced74cd28cff6af09c66e41088722d74792ec0",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -9295,10 +9393,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 647,
-    "scenarios_with_evidence": 647,
-    "total_trials": 1947,
-    "successful_trials": 1931,
-    "deterministic_scenarios": 417
+    "scenarios": 654,
+    "scenarios_with_evidence": 654,
+    "total_trials": 1968,
+    "successful_trials": 1952,
+    "deterministic_scenarios": 423
   }
 }
