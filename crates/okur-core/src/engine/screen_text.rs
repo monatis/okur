@@ -320,6 +320,10 @@ impl ScreenReaderEngine {
                 self.show_message_box(msg::ocr_failed_no_file().to_string());
                 return None;
             }
+            FileRecognition::MultipleFiles => {
+                self.show_message_box(msg::ocr_failed_multiple_files().to_string());
+                return None;
+            }
             // A file Windows cannot read as a picture is no picture to it.
             FileRecognition::Unsupported { .. } | FileRecognition::Failed { .. } => {
                 self.show_message_box(msg::ocr_failed_unsupported().to_string());
@@ -1005,6 +1009,17 @@ mod tests {
         assert_eq!(
             speech.take().join("\n"),
             "OCR Failed to start. Unsupported file currently selected."
+        );
+        ocr_layer_key(&mut engine, &speech, Key::Alpha('F'));
+        engine.handle_accessibility_event(&AccessibilityEvent::FileRecognized(
+            FileRecognition::MultipleFiles,
+        ));
+        assert_eq!(
+            speech.take().join(
+                "
+"
+            ),
+            "OCR Failed to start. Multiple files currently selected."
         );
         let (mut engine, speech, actions) = window();
         assert_eq!(

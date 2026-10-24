@@ -52,3 +52,5 @@ ocr-help-screen = From the computer screen itself, you can OCR a Control with C,
 ocr-help-background = From any window, you can start Background OCR using the letter B.
 ocr-help-enter = By simply pressing Enter, Okur will choose the most appropriate command based on the current application and its state.
 ocr-help-quit = You can press Q to quit or cancel an OCR job.
+# Its message box when more than one item is selected [obs, 1033/s3].
+ocr-failed-multiple-files = OCR Failed to start. Multiple files currently selected.

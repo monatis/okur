@@ -57,6 +57,16 @@ pub fn is_file_view(class: &str) -> bool {
     )
 }
 
+/// What is selected in a window of files.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Selection {
+    /// Nothing, or an item with no file behind it.
+    Nothing,
+    File(std::path::PathBuf),
+    /// More than one item.
+    Files,
+}
+
 /// Whether `path` is read as a PDF; any other file is tried as a picture.
 pub fn is_pdf(path: &Path) -> bool {
     path.extension()
@@ -286,10 +296,10 @@ mod recognizer {
         Ok(Some(pages))
     }
 
-    /// The file selected in the File Explorer window `window`, or on the desktop when `window`
-    /// is the desktop's: the first of the selection, as JAWS reads one file. `Ok(None)` when
-    /// nothing is selected or `window` is no window of files.
-    pub fn selected_file(window: HWND) -> Result<Option<PathBuf>, PlatformError> {
+    /// What is selected in the File Explorer window `window`, or on the desktop when `window`
+    /// is the desktop's: nothing as well when `window` is no window of files.
+    pub fn selected_file(window: HWND) -> Result<super::Selection, PlatformError> {
+        use super::Selection;
         // SAFETY: COM for this thread's shell calls; a thread already in COM keeps its own.
         let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
         // SAFETY: the shell's window list, an out-of-process COM server.
@@ -300,7 +310,7 @@ mod recognizer {
                 ?window,
                 "no File Explorer window of the shell's is this one"
             );
-            return Ok(None);
+            return Ok(Selection::Nothing);
         };
         // SAFETY: COM calls on interfaces the shell gave; results are owned by the wrappers.
         unsafe {
@@ -310,21 +320,23 @@ mod recognizer {
                 Ok(items) => items,
                 Err(e) => {
                     tracing::debug!(%e, "no selection");
-                    return Ok(None);
+                    return Ok(Selection::Nothing);
                 }
             };
-            if items.GetCount().map_err(at("selection count"))? == 0 {
-                return Ok(None);
+            match items.GetCount().map_err(at("selection count"))? {
+                0 => return Ok(Selection::Nothing),
+                1 => {}
+                _ => return Ok(Selection::Files),
             }
             let item = items.GetItemAt(0).map_err(at("selected item"))?;
             let Ok(path) = item.GetDisplayName(SIGDN_FILESYSPATH) else {
                 // A selected item with no file behind it (a library, a phone's folder).
                 tracing::debug!("the selected item is no file");
-                return Ok(None);
+                return Ok(Selection::Nothing);
             };
             let text = path.to_string().map_err(failed);
             windows::Win32::System::Com::CoTaskMemFree(Some(path.0.cast()));
-            Ok(Some(PathBuf::from(text?)))
+            Ok(Selection::File(PathBuf::from(text?)))
         }
     }
 
@@ -394,8 +406,11 @@ mod recognizer {
         // SAFETY: plain Win32 call with no preconditions.
         let window = unsafe { GetForegroundWindow() };
         match selected_file(window) {
-            Ok(Some(path)) => super::recognize_found(&path, language, cancel, started),
-            Ok(None) => FileRecognition::NoFile,
+            Ok(super::Selection::File(path)) => {
+                super::recognize_found(&path, language, cancel, started)
+            }
+            Ok(super::Selection::Files) => FileRecognition::MultipleFiles,
+            Ok(super::Selection::Nothing) => FileRecognition::NoFile,
             Err(e) => {
                 tracing::warn!(%e, "the selected file could not be found");
                 FileRecognition::NoFile

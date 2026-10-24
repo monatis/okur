@@ -801,21 +801,26 @@ async fn main() {
                         &language,
                         &cancel,
                     ),
-                    (None, Some(title)) => okur_platform::harness::shell_window(&title)
-                        .and_then(|window| {
-                            okur_platform::file_text::selected_file(window)
-                                .inspect_err(|e| eprintln!("the selected file: {e}"))
-                                .ok()
-                                .flatten()
-                        })
-                        .map_or(FileRecognition::NoFile, |path| {
-                            okur_platform::file_text::recognize_found(
+                    (None, Some(title)) => {
+                        use okur_platform::file_text::Selection;
+                        let selection = okur_platform::harness::shell_window(&title)
+                            .and_then(|window| {
+                                okur_platform::file_text::selected_file(window)
+                                    .inspect_err(|e| eprintln!("the selected file: {e}"))
+                                    .ok()
+                            })
+                            .unwrap_or(Selection::Nothing);
+                        match selection {
+                            Selection::File(path) => okur_platform::file_text::recognize_found(
                                 &path,
                                 &language,
                                 &cancel,
                                 || {},
-                            )
-                        }),
+                            ),
+                            Selection::Files => FileRecognition::MultipleFiles,
+                            Selection::Nothing => FileRecognition::NoFile,
+                        }
+                    }
                     (None, None) => {
                         okur_platform::file_text::recognize_selected_file(&language, || {})
                     }

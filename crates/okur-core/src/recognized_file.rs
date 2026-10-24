@@ -17,6 +17,8 @@ pub enum FileRecognition {
     },
     /// No file is selected in the window in front, or it is not a window of files.
     NoFile,
+    /// More than one item is selected: JAWS recognizes one file at a time [obs, 1033/s3].
+    MultipleFiles,
     /// The selected item is neither a picture Windows decodes nor a PDF.
     Unsupported { name: String },
     /// The recognizer could not read the file (no recognizer for the language, a damaged
