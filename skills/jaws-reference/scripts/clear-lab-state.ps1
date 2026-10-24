@@ -130,6 +130,15 @@ public static class SrLabState {
 "@
 [void][SrLabState]::ReleaseModifiers()
 if ($KeysOnly) { return }
+# JAWS's Results Viewer windows left open by a trial (Convenient OCR's results) are closed as
+# Escape closes them; the process stays, and JAWS shows its next results in it.
+foreach ($viewer in @(Get-Process ResultsViewer -ErrorAction SilentlyContinue)) {
+    if ($viewer.MainWindowHandle -ne [IntPtr]::Zero) {
+        # WM_CLOSE
+        [void][SrLabState]::PostMessage($viewer.MainWindowHandle, 0x10, [IntPtr]::Zero, [IntPtr]::Zero)
+        Start-Sleep -Milliseconds 500
+    }
+}
 # JAWS's dialogs left open by a scenario before (its regions list, its Research It prompt)
 # take the foreground at every trial's start (old-pc, 2026-10-18).
 $jaws = Get-Process jfw -ErrorAction SilentlyContinue | Select-Object -First 1

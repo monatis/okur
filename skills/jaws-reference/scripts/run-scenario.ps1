@@ -792,14 +792,19 @@ function Clear-LabState {
     $viewers = @(Get-Process ResultsViewer, NotificationViewer -ErrorAction SilentlyContinue)
     foreach ($v in $viewers) { Stop-Process -Id $v.Id -Force -ErrorAction SilentlyContinue }
     if ($viewers.Count -gt 0) { Start-Sleep -Milliseconds 500 }
-    $viewersClosed = @($viewers | ForEach-Object { $_.ProcessName })
+    $viewersClosed = @($viewers | Where-Object { $_.HasExited } | ForEach-Object { $_.ProcessName })
+    # The Results Viewer of Convenient OCR runs elevated and outlives Stop-Process: its window,
+    # left open by a trial, kept the foreground from the next scenario's fixture (1030 trial 1,
+    # round 293). The elevated helper closes the window; JAWS reuses the process.
+    $viewerWindows = @(Get-Process ResultsViewer -ErrorAction SilentlyContinue |
+        Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero })
     $held = Get-HeldModifiers
     $window = [SrKeyInput]::FindWindow('JFWUI2', [NullString]::Value)
     $jawsInWay = $window -ne [IntPtr]::Zero -and (
         [SrKeyInput]::GetForegroundWindow() -eq $window -or [SrKeyInput]::IsWindowVisible($window))
     $jawsProcess = Get-Process jfw -ErrorAction SilentlyContinue | Select-Object -First 1
     $dialogs = if ($jawsProcess) { [SrKeyInput]::JawsDialogs([uint32]$jawsProcess.Id).Count } else { 0 }
-    if ($held.Count -eq 0 -and -not $jawsInWay -and $dialogs -eq 0) {
+    if ($held.Count -eq 0 -and -not $jawsInWay -and $dialogs -eq 0 -and $viewerWindows.Count -eq 0) {
         if ($shellClosed.Count -eq 0 -and $viewersClosed.Count -eq 0) { return $null }
         return [ordered]@{ shell_windows_closed = $shellClosed; jaws_viewers_closed = $viewersClosed }
     }
@@ -807,6 +812,7 @@ function Clear-LabState {
     [ordered]@{
         shell_windows_closed = $shellClosed
         jaws_viewers_closed = $viewersClosed
+        jaws_viewer_windows_closed = @($viewerWindows | ForEach-Object { $_.MainWindowTitle })
         modifiers_held = @($held | ForEach-Object { '0x{0:X2}' -f $_ })
         jaws_window_in_front = $jawsInWay
         jaws_dialogs_closed = $dialogs
