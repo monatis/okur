@@ -86,8 +86,14 @@ Decisions made on the way, for the owner to confirm or reverse:
 - **No copy starts on the secure desktop** (`Winlogon`) until M6's secure mode: one there runs
   as SYSTEM and would have files, dialogs and logs within reach (R3). It exits silently.
   Confirmed by the owner, 2026-10-20.
-- **`--sign-in` starts Okur as JAWS's default, Always, does,** until M4's resolver reads the
-  user's choice. `/hardwarebuttonlaunch` counts as `--ease-of-access`.
+- **M4's Run-key resolver is built** (2026-10-25): `--sign-in` reads the user's choice in
+  `HKCU\SOFTWARE\Okur\StartAfterSignIn` (none is Always) and the machine's
+  `StartAfterSignInAllUsers`, and ends silently where they say not to start
+  (`okur_platform::start_options`; `SilentExit::NotAfterSignIn`). The Startup Wizard's Run
+  Okur Settings sets the user's choice, "Start Okur after logon for this user: Always, Never,
+  Using the All Users Setting". Not built yet: Always's Ease of Access start (Okur's name in
+  HKCU `Configuration`, waiting for E6), and the administrators' options.
+  `/hardwarebuttonlaunch` counts as `--ease-of-access`.
 - Ease of Access's start and exit notification (AccessibilityTemp and Win+U) is M4's, and
   `SetDefaultDllDirectories` is in §5.7's table (M6): neither is built.
 - If `CreateProcessAsUserW` with the lowered token fails, `okur-ui` is started the plain way,

@@ -22,13 +22,14 @@ use crate::messages::{msg, StaticMessage};
 use crate::settings::registry::{self, choices, Choice};
 use crate::settings::{
     FormsMode, KeyboardLayout, OutputMode, OutputType, Punctuation, Settings, SmartNavigation,
-    TypingEcho, VerbosityLevel,
+    TypingEcho, UserStart, VerbosityLevel,
 };
 
 const RATE: &str = "rate";
 const PUNCTUATION: &str = "punctuation";
 const TYPING_ECHO: &str = "typing_echo";
 const CONFIRM_EXIT: &str = "confirm_exit";
+const START: &str = "start_after_sign_in";
 const SMART_NAVIGATION: &str = "smart_navigation";
 const FORMS_MODE: &str = "forms_mode";
 const LAYOUT: &str = "layout";
@@ -59,10 +60,12 @@ pub enum Outcome {
         before: Box<Settings>,
         settings: Box<Settings>,
     },
-    /// Finish: keep `settings` for all applications, where they were `before`.
+    /// Finish: keep `settings` for all applications, where they were `before`; the user's
+    /// start after sign-in, when the wizard offered it.
     Finish {
         before: Box<Settings>,
         settings: Box<Settings>,
+        start: Option<UserStart>,
     },
     /// Cancel, Escape: nothing is kept.
     Closed,
@@ -75,6 +78,8 @@ pub struct StartupWizard {
     page: usize,
     before: Settings,
     draft: Settings,
+    /// The user's start after sign-in, offered where Okur can keep it.
+    start: Option<UserStart>,
 }
 
 impl StartupWizard {
@@ -85,6 +90,15 @@ impl StartupWizard {
             page: 0,
             before: settings.clone(),
             draft: settings,
+            start: None,
+        }
+    }
+
+    /// The wizard offering the user's start after sign-in, now `start`.
+    pub fn with_start(self, start: UserStart) -> Self {
+        Self {
+            start: Some(start),
+            ..self
         }
     }
 
@@ -163,15 +177,38 @@ impl StartupWizard {
                     ],
                 )
             }
+            // JAWS's start options before it: of them Okur has this user's start after
+            // sign-in ("Start JAWS after logon for this user: Combo box | Always | 1 of 3" [obs,
+            // the walk of the Startup Wizard]). The sign-in screen's comes with its secure mode,
+            // and "for all users" is setup's.
             Page::Run => (
                 msg::startup_wizard_run(),
-                vec![control(
-                    CONFIRM_EXIT,
-                    msg::basics_confirm_exit(),
-                    ControlKind::CheckBox {
-                        checked: self.draft.confirm_exit,
-                    },
-                )],
+                self.start
+                    .map(|start| {
+                        control(
+                            START,
+                            msg::startup_wizard_start(),
+                            ControlKind::Choice {
+                                options: UserStart::ALL
+                                    .iter()
+                                    .map(|s| Self::start_label(*s).to_string())
+                                    .collect(),
+                                selected: UserStart::ALL
+                                    .iter()
+                                    .position(|s| *s == start)
+                                    .unwrap_or(0),
+                            },
+                        )
+                    })
+                    .into_iter()
+                    .chain([control(
+                        CONFIRM_EXIT,
+                        msg::basics_confirm_exit(),
+                        ControlKind::CheckBox {
+                            checked: self.draft.confirm_exit,
+                        },
+                    )])
+                    .collect(),
             ),
             Page::Common => {
                 let layouts = choices::<KeyboardLayout>();
@@ -303,6 +340,16 @@ impl StartupWizard {
         )
     }
 
+    /// A start choice's name, as JAWS's help gives them: "Always, Never, and Using the All
+    /// Users Setting".
+    fn start_label(start: UserStart) -> StaticMessage {
+        match start {
+            UserStart::Always => msg::startup_wizard_start_always(),
+            UserStart::Never => msg::startup_wizard_start_never(),
+            UserStart::AllUsers => msg::startup_wizard_start_all_users(),
+        }
+    }
+
     /// The settings as the wizard shows them now.
     pub fn draft(&self) -> &Settings {
         &self.draft
@@ -340,6 +387,15 @@ impl StartupWizard {
                         pick(draft, "typing_echo", choices::<TypingEcho>(), *i);
                     }
                     (CONFIRM_EXIT, Value::Checked(on)) => draft.confirm_exit = *on,
+                    // Kept at Finish; nothing to hear at once.
+                    (START, Value::Selected(i)) => {
+                        if let (Some(start), Some(chosen)) =
+                            (&mut self.start, UserStart::ALL.get(*i))
+                        {
+                            *start = *chosen;
+                        }
+                        return Outcome::Nothing;
+                    }
                     (SMART_NAVIGATION, Value::Selected(i)) => {
                         pick(draft, "smart_navigation", choices::<SmartNavigation>(), *i);
                     }
@@ -371,6 +427,7 @@ impl StartupWizard {
                 "finish" => Outcome::Finish {
                     before: Box::new(self.before.clone()),
                     settings: Box::new(self.draft.clone()),
+                    start: self.start,
                 },
                 _ => Outcome::Nothing,
             },
@@ -441,6 +498,44 @@ mod tests {
         );
     }
 
+    /// Where Okur can keep it, Run Okur Settings offers this user's start after sign-in, as
+    /// JAWS's, before Prompt to confirm; Finish carries the choice.
+    #[test]
+    fn the_run_page_offers_the_start_after_sign_in() {
+        let mut wizard = StartupWizard::new(4, Settings::default()).with_start(UserStart::AllUsers);
+        let Outcome::Turn(run, _) = wizard.handle(&pressed("next")) else {
+            panic_free_fail("no Run Okur Settings");
+            return;
+        };
+        let start = run.controls.first();
+        assert_eq!(
+            start.map(|c| c.label.as_str()),
+            Some("Start Okur after logon for this user:")
+        );
+        assert!(matches!(start.map(|c| &c.kind),
+            Some(ControlKind::Choice { options, selected: 2 })
+                if options == &["Always", "Never", "Using the All Users Setting"]));
+        wizard.handle(&FromUi::DialogChanged {
+            id: 4,
+            control: START.into(),
+            value: Value::Selected(1),
+        });
+        assert!(matches!(
+            wizard.handle(&pressed("finish")),
+            Outcome::Finish {
+                start: Some(UserStart::Never),
+                ..
+            }
+        ));
+        // Without a place to keep it, only Prompt to confirm.
+        let mut plain = StartupWizard::new(4, Settings::default());
+        let Outcome::Turn(run, _) = plain.handle(&pressed("next")) else {
+            panic_free_fail("no Run Okur Settings");
+            return;
+        };
+        assert_eq!(run.controls.len(), 1);
+    }
+
     /// The radio buttons' names are the wizard's own [obs, the walk of the Startup Wizard].
     #[test]
     fn the_wizard_names_its_values() {
@@ -499,7 +594,7 @@ mod tests {
         });
         let finished = wizard.handle(&pressed("finish"));
         assert!(
-            matches!(&finished, Outcome::Finish { before, settings }
+            matches!(&finished, Outcome::Finish { before, settings, .. }
                 if settings.voice.rate == 4 && before.voice.rate == Settings::default().voice.rate),
             "{finished:?}"
         );

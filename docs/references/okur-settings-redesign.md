@@ -465,7 +465,8 @@ spoken form is a parity target.
      settings), OK, Cancel;
    - Restore to Factory Settings asks first, in JAWS's words but for "and restart JAWS", since
      Okur's defaults apply at once; Yes forgets every saved setting and Last Changed Settings.
-   **The Startup Wizard built 2026-10-25** (§1.1's walk). Still to do: its start options
-   with setup's start entries (Run Okur Settings), Run Okur from System Tray, Tutor Messages'
-   and Access Key's other choices; whether JAWS reads okur-ui's check list as JAWS's "List
-   box" (a probe).
+   **The Startup Wizard built 2026-10-25** (§1.1's walk), with this user's start after
+   sign-in on Run Okur Settings (the startup proposal's M4 resolver reads it). Still to do:
+   the sign-in screen's and all users' start (administrators'), Run Okur from System Tray,
+   Tutor Messages' and Access Key's other choices; Basics' "Automatically Start Okur..."
+   button; whether JAWS reads okur-ui's check list as JAWS's "List box" (a probe).

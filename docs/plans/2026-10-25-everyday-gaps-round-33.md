@@ -44,10 +44,10 @@ From [`../references/okur-settings-redesign.md`](../references/okur-settings-red
 3. **Voices:** Speak Sample and Synthesizer Language in Voice Adjustment; Apply's question
    whether to make a saved profile the default. Done: the Language menu's Voice Profiles
    (`166c3be3`), a Say All's parts at the context's pitch (`eedcea21`).
-4. **The Startup Wizard's rest:** its start options with setup's start entries (Run Okur
-   Settings), Run Okur from System Tray, Tutor Messages' "Announce Custom Messages Only" and
-   Access Key's "Speak Menus Only" and "Speak Dialogs Only" (in Basics too), each with its
-   behavior.
+4. **The Startup Wizard's rest:** this user's start after sign-in is done (the startup
+   proposal's M4 resolver); left are Run Okur from System Tray, Tutor Messages' "Announce
+   Custom Messages Only" and Access Key's "Speak Menus Only" and "Speak Dialogs Only" (in
+   Basics too), each with its behavior, and Basics' "Automatically Start Okur..." button.
 5. **Smaller:** the lifetimes' icons beside Quick Settings' items; whether JAWS reads okur-ui's
    check list as JAWS's "List box" (a probe).
 

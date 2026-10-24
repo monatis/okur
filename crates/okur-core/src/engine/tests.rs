@@ -7799,6 +7799,72 @@ fn the_startup_wizard_tries_then_keeps_its_changes() {
     assert_eq!(ui.take(), [ToUi::DialogClose { id }]);
 }
 
+/// The user's start after sign-in, kept apart from the settings.
+#[derive(Clone, Default)]
+struct KeptStart(std::sync::Arc<std::sync::Mutex<Option<crate::settings::UserStart>>>);
+
+impl crate::settings::StartOptions for KeptStart {
+    fn user_start(&self) -> Option<crate::settings::UserStart> {
+        self.0.lock().ok().and_then(|s| *s)
+    }
+    fn set_user_start(&self, start: crate::settings::UserStart) {
+        if let Ok(mut kept) = self.0.lock() {
+            *kept = Some(start);
+        }
+    }
+}
+
+/// The Startup Wizard's Run Okur Settings offers this user's start after sign-in, JAWS's
+/// Always when they chose nothing; Finish keeps the choice where the sign-in start reads it.
+#[test]
+fn the_startup_wizard_keeps_the_start_after_sign_in() {
+    use crate::settings::UserStart;
+    use crate::ui::{ControlKind, FromUi, ToUi, Value};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let kept = KeptStart::default();
+    engine.set_start_options(Box::new(kept.clone()));
+    engine.open_startup_wizard();
+    let id = match ui.take().first() {
+        Some(ToUi::WizardShow { wizard }) => wizard.id,
+        _ => 0,
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "next".into(),
+    }));
+    let start = ui.take().into_iter().find_map(|m| match m {
+        ToUi::WizardPage { page, .. } => page.controls.into_iter().next(),
+        _ => None,
+    });
+    assert!(
+        matches!(
+            start.as_ref().map(|c| &c.kind),
+            Some(ControlKind::Choice { selected: 0, .. })
+        ),
+        "{start:?}"
+    );
+    for message in [
+        FromUi::DialogChanged {
+            id,
+            control: "start_after_sign_in".into(),
+            value: Value::Selected(1),
+        },
+        FromUi::DialogPressed {
+            id,
+            control: "finish".into(),
+        },
+    ] {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(message));
+    }
+    assert_eq!(
+        crate::settings::StartOptions::user_start(&kept),
+        Some(UserStart::Never)
+    );
+}
+
 /// Select a Voice Profile: a profile chosen for all applications becomes their voice, its name
 /// kept; one chosen for Notepad is Notepad's own; "Use Default" gives Notepad the voice for all
 /// applications again, and nothing of its own is left in its settings.

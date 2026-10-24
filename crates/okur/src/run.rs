@@ -480,6 +480,16 @@ pub async fn run(config: RunConfig) {
         console,
     } = config;
     log_panics();
+    // The sign-in start goes on only as the user, or the machine, chose.
+    let start_options = okur_platform::start_options::RegistryStartOptions::system();
+    if start == crate::startup::StartKind::SignIn && !start_options.starts_after_sign_in() {
+        let why = crate::startup::SilentExit::NotAfterSignIn;
+        tracing::info!(reason = why.describe(), "not started");
+        if console {
+            eprintln!("Okur does not start: {}.", why.describe());
+        }
+        return;
+    }
     let instance_lock = match take_desktop(start) {
         Ok(lock) => lock,
         Err(why) => {
@@ -618,6 +628,7 @@ pub async fn run(config: RunConfig) {
             Some(Box::new(folder.clone())),
         );
         engine.set_settings_history(&folder.load_settings_history());
+        engine.set_start_options(Box::new(start_options));
         if first_start {
             if let Err(e) = std::fs::create_dir_all(folder.folder()) {
                 tracing::warn!(folder = ?folder.folder(), error = %e, "settings folder not made");

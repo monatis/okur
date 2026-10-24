@@ -52,6 +52,9 @@ pub enum SilentExit {
     SystemOffSecureDesktop,
     /// An automatic start found a copy already running on its desktop.
     AlreadyRunning,
+    /// The sign-in start, where this user's choice (or the machine's, which it follows) is
+    /// not to start (the proposal's Run-key resolver).
+    NotAfterSignIn,
     /// The copy running would not let the desktop go.
     NotReplaced,
 }
@@ -66,6 +69,7 @@ impl SilentExit {
                 "started as SYSTEM by Ease of Access off the secure desktop"
             }
             SilentExit::AlreadyRunning => "a copy already runs on this desktop",
+            SilentExit::NotAfterSignIn => "this user's start after sign-in is off",
             SilentExit::NotReplaced => "the copy running on this desktop did not quit",
         }
     }

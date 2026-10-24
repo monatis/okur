@@ -13,8 +13,9 @@
 //! ```
 //!
 //! Windows adds `/hardwarebuttonlaunch` when a hardware button started the assistive
-//! technology; it is taken as `--ease-of-access`. Until the sign-in start's choices are
-//! built (the proposal's M4), `--sign-in` starts Okur as JAWS's default, Always, does.
+//! technology; it is taken as `--ease-of-access`. `--sign-in` starts Okur as this user chose
+//! in the Startup Wizard (Always, Never, Using the All Users Setting), Always when they chose
+//! nothing ([`okur_platform::start_options`]).
 
 use crate::run::{RunConfig, RunOptions};
 use crate::startup::StartKind;

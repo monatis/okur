@@ -1076,6 +1076,57 @@ impl Default for Settings {
     }
 }
 
+/// Whether Okur starts after this user signs in to Windows: JAWS's "Start JAWS after logon for
+/// this user" (Always, Never, Using the All Users Setting), which overrides the machine's "for
+/// all users" (`docs/references/startup-and-secure-screens-proposal.md` §5.5). Kept in the
+/// user's registry, where the sign-in start reads it before any setting is loaded.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum UserStart {
+    #[default]
+    Always,
+    Never,
+    AllUsers,
+}
+
+impl UserStart {
+    pub const ALL: [UserStart; 3] = [Self::Always, Self::Never, Self::AllUsers];
+
+    /// The registry's word for it: `always`, `never`, `all-users`.
+    pub fn word(self) -> &'static str {
+        match self {
+            Self::Always => "always",
+            Self::Never => "never",
+            Self::AllUsers => "all-users",
+        }
+    }
+
+    /// The choice a registry word names; none for another.
+    pub fn from_word(word: &str) -> Option<Self> {
+        Self::ALL
+            .into_iter()
+            .find(|start| start.word() == word.trim())
+    }
+
+    /// Whether a start at sign-in goes on: Always does, Never does not, and "all users"
+    /// follows the machine's choice. No choice is JAWS's default, Always (the proposal's
+    /// Run-key resolver).
+    pub fn starts_after_sign_in(user: Option<Self>, all_users: bool) -> bool {
+        match user.unwrap_or_default() {
+            Self::Always => true,
+            Self::Never => false,
+            Self::AllUsers => all_users,
+        }
+    }
+}
+
+/// Where the user's choice of [`UserStart`] is kept: the user's registry on Windows.
+pub trait StartOptions: Send {
+    /// The user's choice; none when they made none.
+    fn user_start(&self) -> Option<UserStart>;
+    fn set_user_start(&self, start: UserStart);
+}
+
 /// Where changed settings are kept, so that they hold the next time Okur starts: the saved
 /// layers (all applications, each application, each site), never the session's.
 pub trait SettingsStore: Send {

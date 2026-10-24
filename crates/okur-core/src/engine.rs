@@ -302,6 +302,8 @@ pub struct ScreenReaderEngine {
     startup_wizard: Option<crate::ui::startup_wizard::StartupWizard>,
     /// The application in front as Okur's window opened, which its Voice Profiles menu offers.
     okur_window_application: Option<String>,
+    /// Where the user's start after sign-in is kept (the Startup Wizard's).
+    start_options: Option<Box<dyn crate::settings::StartOptions>>,
     startup_wizard_session: crate::settings_layers::Values,
     /// Voice Adjustment, while it is open.
     voice_adjustment: Option<crate::ui::voice_adjustment::VoiceAdjustment>,
@@ -577,6 +579,7 @@ impl ScreenReaderEngine {
             basics_dialog: None,
             startup_wizard: None,
             okur_window_application: None,
+            start_options: None,
             startup_wizard_session: crate::settings_layers::Values::new(),
             voice_adjustment: None,
             voice_profile_dialog: None,
@@ -1566,6 +1569,11 @@ impl ScreenReaderEngine {
     }
 
     /// Gives the engine where changed settings are kept.
+    /// Where the user's start after sign-in is kept.
+    pub fn set_start_options(&mut self, options: Box<dyn crate::settings::StartOptions>) {
+        self.start_options = Some(options);
+    }
+
     /// Last Changed Settings as it was kept the last time Okur ran.
     pub fn set_settings_history(&mut self, saved: &crate::ui::settings_tree::SavedHistory) {
         self.settings_history = saved.history();

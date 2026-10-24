@@ -23,7 +23,12 @@ impl ScreenReaderEngine {
             None => {
                 self.dialog_count += 1;
                 self.startup_wizard_session = self.settings_layers.session.clone();
-                StartupWizard::new(self.dialog_count, self.settings_layers.resolve(None, None))
+                let wizard =
+                    StartupWizard::new(self.dialog_count, self.settings_layers.resolve(None, None));
+                match &self.start_options {
+                    Some(options) => wizard.with_start(options.user_start().unwrap_or_default()),
+                    None => wizard,
+                }
             }
         };
         ui.send(ToUi::WizardShow {
@@ -59,9 +64,18 @@ impl ScreenReaderEngine {
                     .change(&Scope::Session, &before, &settings, None);
                 self.resolve_settings();
             }
-            Outcome::Finish { before, settings } => {
+            Outcome::Finish {
+                before,
+                settings,
+                start,
+            } => {
                 self.settings_layers.session = std::mem::take(&mut self.startup_wizard_session);
                 self.apply_settings(&Scope::Global, &before, &settings, &[]);
+                if let (Some(options), Some(start)) = (&self.start_options, start) {
+                    if options.user_start() != Some(start) {
+                        options.set_user_start(start);
+                    }
+                }
                 if let (Some(wizard), Some(ui)) = (self.startup_wizard.take(), &self.ui) {
                     ui.send(ToUi::DialogClose { id: wizard.id });
                 }
