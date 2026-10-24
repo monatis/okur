@@ -146,7 +146,7 @@ pub struct TableCell {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub column_header: Option<String>,
     /// Its row's title, the row's first cell, which JAWS says on entering the row: "Branch
-    /// Hours" [obs, 522/s11].
+    /// Hours" [obs, 1034/s11].
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub row_header: Option<String>,
 }

@@ -105,9 +105,9 @@ impl ScreenReaderEngine {
 
     /// JAWS's table keys in a document whose structure the platform reads (Word's):
     /// Ctrl+Alt+arrows move the caret to the next cell that way, Ctrl+Alt+Home and End to the
-    /// first and last, each read as JAWS reads it [obs, 522/s10-s12, 523/s12, s13]; at the
-    /// table's edge, its edge, "end of row" [obs, 523/s3, s4, s6, s8]; Say Cell (Ctrl+Alt+Numpad
-    /// 5) reads the cell [obs, 523/s11]; outside a table, "Not in a Table" [obs, 523/s15].
+    /// first and last, each read as JAWS reads it [obs, 1034/s10-s12, 1035/s12, s13]; at the
+    /// table's edge, its edge, "end of row" [obs, 1035/s3, s4, s6, s8]; Say Cell (Ctrl+Alt+Numpad
+    /// 5) reads the cell [obs, 1035/s11]; outside a table, "Not in a Table" [obs, 1035/s15].
     /// `None` for other keys and fields, which go on as before.
     pub(super) fn document_table_key(
         &mut self,

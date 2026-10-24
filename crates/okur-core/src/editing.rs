@@ -57,7 +57,7 @@ pub enum EditKey {
     /// (dev box, onto an empty last line: "Bottom of file"; the line after it is assumed).
     BottomOfFile,
     /// Tab, or JAWS's table keys (Ctrl+Alt+arrows, Home, End), in a table of Word's: the cell
-    /// moved to, said for the way it was reached [obs, 522/s10-s12; 518/s15; 523].
+    /// moved to, said for the way it was reached [obs, 1034/s10-s12; 518/s15; 1035].
     TableCell(word::CellMove),
 }
 

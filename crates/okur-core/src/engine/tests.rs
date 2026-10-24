@@ -7397,7 +7397,7 @@ fn words_table_keys_move_to_the_next_cell() {
         Some("Hours\n9 to 9\nlast cell in table\nWarning! Pressing tab here adds an extra row.")
     );
     speech.take();
-    // At the row's end: the edge, and the caret stays [obs, 523/s8].
+    // At the row's end: the edge, and the caret stays [obs, 1035/s8].
     assert_eq!(engine.handle_key_event(&right), KeyAction::Consume);
     assert_eq!(speech.take(), ["end of row"]);
 }

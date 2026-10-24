@@ -132,7 +132,7 @@ impl ScreenReaderEngine {
                 return Some(speech);
             }
             // In Word's document, its line, or in a table the cell and where it is: "Branch |
-            // column 1 of 2 | row 1 of 2 | table 1" [obs, 522/s13, 523/s10, s16].
+            // column 1 of 2 | row 1 of 2 | table 1" [obs, 1034/s13, 1035/s10, s16].
             Command::SayCurrentFocus
                 if self.app_mode == AppMode::NativeControl
                     && self.editing_text()

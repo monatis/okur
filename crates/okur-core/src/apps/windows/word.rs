@@ -49,14 +49,14 @@ fn titles(cell: &TableCell) -> (Option<&String>, Option<&String>) {
 
 /// What JAWS says on moving to a cell of Word's table with its table keys or Tab:
 /// - across a row, the column's title, the cell, else its column ("Hours | 9 to 9", "Branch |
-///   column 1 of 2" [obs, 522/s10, s12]); along a column, the row's title, else its row
-///   ("Branch | Hours", "Branch | row 1 of 2" [obs, 522/s11, 523/s5]);
+///   column 1 of 2" [obs, 1034/s10, s12]); along a column, the row's title, else its row
+///   ("Branch | Hours", "Branch | row 1 of 2" [obs, 1034/s11, 1035/s5]);
 /// - to the first or last cell, "beginning of table" or "last cell in table", then the row's
 ///   and the column's titles, the cell, else its row and column ("beginning of table | Branch |
 ///   row 1 of 2 | column 1 of 2", "last cell in table | Central | Hours | 9 to 9" [obs,
-///   523/s12, s13]);
+///   1035/s12, s13]);
 /// - "Selected" where Tab selected its text, and at the table's last cell, that Tab adds a row
-///   [obs, 518/s15, 523/s9].
+///   [obs, 518/s15, 1035/s9].
 ///
 /// `None` when a move across or along left the caret in its cell.
 pub(crate) fn cell_speech(
@@ -123,7 +123,7 @@ pub(crate) fn cell_speech(
 /// column's and the row's titles, the cell, its column and row, at the last cell that Tab adds a
 /// row, and for the focus the table ("Hours | Central | 9 to 9 | column 2 of 2 | row 2 of 2 |
 /// Last cell in table. | Warning! ... | table 1", "Branch | column 1 of 2 | row 1 of 2 | table
-/// 1" [obs, 523/s10, s11; 522/s13]). `None` outside a table.
+/// 1" [obs, 1035/s10, s11; 1034/s13]). `None` outside a table.
 pub(crate) fn cell_focus(context: &TextContext, table: bool) -> Option<String> {
     let cell = cell_of(context)?;
     let (column_title, row_title) = titles(cell);
@@ -142,7 +142,7 @@ pub(crate) fn cell_focus(context: &TextContext, table: bool) -> Option<String> {
 }
 
 /// Say Current Focus in Word's document: in a table, the cell ([`cell_focus`]); elsewhere the
-/// caret's line as Say Line reads it, " heading level 1 Library Hours" [obs, 523/s16].
+/// caret's line as Say Line reads it, " heading level 1 Library Hours" [obs, 1035/s16].
 /// `None` outside a document whose structure the platform reads.
 pub(crate) fn document_focus(context: &TextContext) -> Option<String> {
     context.structure.as_ref()?;
@@ -341,7 +341,7 @@ mod tests {
     }
 
     /// The table keys and Tab say the title for the way the cell was entered, or its place
-    /// [obs, 522/s10-s13, 518/s15].
+    /// [obs, 1034/s10-s13, 518/s15].
     #[test]
     fn a_cell_is_said_with_its_title_or_place() {
         let central = cell(2, 1, "Central");
@@ -373,7 +373,7 @@ mod tests {
             Some(format!("Hours\n9 to 9\nSelected\n{warning}"))
         );
         assert_eq!(cell_speech(Some(&last), &last, CellMove::Across), None);
-        // The first and last cells [obs, 523/s12, s13].
+        // The first and last cells [obs, 1035/s12, s13].
         assert_eq!(
             cell_speech(Some(&last), &branch, CellMove::First).as_deref(),
             Some("beginning of table\nBranch\nrow 1 of 2\ncolumn 1 of 2")
@@ -384,7 +384,7 @@ mod tests {
                 "last cell in table\nCentral\nHours\n9 to 9\n{tab_adds_row}"
             ))
         );
-        // Say Current Focus and Say Cell [obs, 522/s13, 523/s10, s11].
+        // Say Current Focus and Say Cell [obs, 1034/s13, 1035/s10, s11].
         assert_eq!(
             cell_focus(&branch, true).as_deref(),
             Some("Branch\ncolumn 1 of 2\nrow 1 of 2\ntable 1")

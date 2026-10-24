@@ -24,6 +24,35 @@ mod tests {
         Path::new(env!("CARGO_MANIFEST_DIR")).join("../../corpus")
     }
 
+    /// Every scenario, recorded or pending, has a number of its own: observations cite a
+    /// scenario by its number alone ("[obs, 523/s2]"), so two with one number make every such
+    /// citation ambiguous (three Word scenarios took WordPad's and the Save As dialog's numbers
+    /// once, 2026-10-24).
+    #[test]
+    fn scenario_numbers_are_unique() {
+        let mut seen: std::collections::BTreeMap<String, String> = Default::default();
+        let mut shared = Vec::new();
+        for folder in ["scenarios", "pending"] {
+            let Ok(entries) = std::fs::read_dir(corpus_dir().join(folder)) else {
+                continue;
+            };
+            for entry in entries.flatten() {
+                let name = entry.file_name().to_string_lossy().into_owned();
+                let Some(stem) = name.strip_suffix(".json") else {
+                    continue;
+                };
+                let number: String = stem.chars().take_while(char::is_ascii_digit).collect();
+                if number.is_empty() {
+                    continue;
+                }
+                if let Some(other) = seen.insert(number, stem.to_owned()) {
+                    shared.push(format!("{other} and {stem}"));
+                }
+            }
+        }
+        assert!(shared.is_empty(), "scenarios sharing a number: {shared:?}");
+    }
+
     /// Engine speech vs. recorded JAWS speech, over UIA snapshots captured from Chrome on
     /// the reference machine. Fails on any regression and whenever the generated baseline
     /// is stale; run `cargo run --bin okur-lab -- parity` for the per-step diff.
