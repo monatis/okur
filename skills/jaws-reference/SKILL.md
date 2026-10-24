@@ -137,6 +137,12 @@ For a quick look at what JAWS says, and what ours says, on a machine where that 
 - `okur run --engine no-speech --speech-log <file> --debug-log <file>` gives ours. Stop it
   when done: it reads whatever is in front.
 
+- JAWS's own dialogs run elevated: `scripts/jaws-ui-walk.ps1 -Process QuickSettings -Chords
+  'Tab,Down*40' -AutoExpand` sends navigation keys through `okur-lab-keys` (UI Access) and
+  writes JAWS's speech after each; `scripts/uia-outline.ps1`, run elevated, outlines a window's
+  UI Automation tree (classes, names, states). Navigation keys and Escape only: Space or Enter
+  would change JAWS's settings.
+
 These are research, never evidence. Evidence comes only from `run-scenario.ps1` on old-pc.
 
 ## 4. Quick Command Reference Table
