@@ -814,6 +814,29 @@ function Clear-LabState {
     }
 }
 
+# A new File Explorer window shows its home first and can keep the focus there once it shows
+# the folder: JAWS's Convenient OCR then said "you must open Windows Explorer" in some trials
+# and not others (1024-1027, round 293). The selected file gets the focus, as a click gives it.
+function Set-ShellItemFocus([IntPtr]$handle) {
+    Add-Type -AssemblyName UIAutomationClient, UIAutomationTypes
+    $A = [System.Windows.Automation.AutomationElement]
+    $items = New-Object System.Windows.Automation.PropertyCondition($A::ClassNameProperty, 'UIItem')
+    for ($i = 0; $i -lt 30; $i++) {
+        $found = $A::FromHandle($handle).FindAll([System.Windows.Automation.TreeScope]::Descendants, $items)
+        $selected = @($found | Where-Object {
+            $pattern = $null
+            $_.TryGetCurrentPattern([System.Windows.Automation.SelectionItemPattern]::Pattern, [ref]$pattern) -and $pattern.Current.IsSelected
+        })
+        if ($selected.Count -gt 0) {
+            $selected[0].SetFocus()
+            Start-Sleep -Milliseconds 500
+            return $true
+        }
+        Start-Sleep -Milliseconds 200
+    }
+    return $false
+}
+
 function Start-DesktopFixture {
     $old = Find-WindowByTitle $launch.window_title
     if ($old -or $script:fixtureProcess) { Stop-DesktopFixture; Start-Sleep -Milliseconds 500 }
@@ -841,7 +864,10 @@ function Start-DesktopFixture {
                 [void][SrKeyInput]::ShowWindow($handle, 9)
                 [void][SrKeyInput]::SetForegroundWindow($handle)
                 Start-Sleep -Milliseconds 100
-                if ([SrKeyInput]::GetForegroundWindow() -eq $handle) { return $true }
+                if ([SrKeyInput]::GetForegroundWindow() -eq $handle) {
+                    if ($launch.shell_window) { return (Set-ShellItemFocus $handle) }
+                    return $true
+                }
             }
             return $false
         }
