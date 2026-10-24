@@ -155,6 +155,17 @@ impl ScreenReaderEngine {
             return None;
         }
         self.ocr_layer = false;
+        // ? is Shift+Slash.
+        if event.key == Key::Slash
+            && event.modifiers
+                == (crate::input::Modifiers {
+                    shift: true,
+                    ..crate::input::Modifiers::none()
+                })
+        {
+            self.show_ocr_help();
+            return Some(KeyAction::Consume);
+        }
         if event.modifiers.is_empty() {
             match event.key {
                 Key::Alpha('W') => self.start_recognition(RecognitionArea::Window),
@@ -172,6 +183,14 @@ impl ScreenReaderEngine {
                 }
                 Key::Alpha('Q') => self.cancel_recognition(),
                 Key::Alpha('F') => self.start_file_recognition(),
+                Key::Alpha('D') => {
+                    let said = format!(
+                        "{}\n{}",
+                        msg::ocr_failed_to_start(),
+                        msg::ocr_document_use_file()
+                    );
+                    self.speech.speak(&said, true);
+                }
                 _ => {}
             }
         }
@@ -217,6 +236,28 @@ impl ScreenReaderEngine {
         }
         // Nothing to cancel [obs, 1029/s3].
         self.speech.speak(msg::ocr_cancel_nothing().as_str(), true);
+    }
+
+    /// ?: the layer's keys in their own viewer, "OCR Layer Help Screen", opened without a word;
+    /// Escape returns to the window [obs, 1032/s3, s21, s22].
+    fn show_ocr_help(&mut self) {
+        let lines = [
+            msg::ocr_help_intro(),
+            msg::ocr_help_file(),
+            msg::ocr_help_screen(),
+            msg::ocr_help_background(),
+            msg::ocr_help_enter(),
+            msg::ocr_help_quit(),
+        ]
+        .iter()
+        .map(ToString::to_string)
+        .collect();
+        self.viewer = Some(
+            crate::viewer::VirtualViewer::new(lines)
+                .with_title(msg::ocr_help_title().to_string())
+                .in_own_window(),
+        );
+        self.show_viewer_window();
     }
 
     /// Whether the focus is in a window of files (File Explorer, the desktop).
@@ -974,6 +1015,46 @@ mod tests {
             .requests()
             .iter()
             .any(|(request, _)| request == "recognize selected file"));
+    }
+
+    /// ? opens the layer's keys in their own viewer without a word; its lines are Okur's keys,
+    /// its title "OCR Layer Help Screen" [obs, 1032/s3, s4, s7, s21].
+    #[test]
+    fn the_layers_help_lists_its_keys() {
+        let (mut engine, speech, _) = window();
+        press(&mut engine, &speech, Key::Space, insert());
+        press(&mut engine, &speech, Key::Alpha('O'), plain());
+        let shift = Modifiers {
+            shift: true,
+            ..Modifiers::none()
+        };
+        assert_eq!(press(&mut engine, &speech, Key::Slash, shift), "");
+        let ctrl = Modifiers {
+            ctrl: true,
+            ..Modifiers::none()
+        };
+        assert_eq!(
+            press(&mut engine, &speech, Key::Home, ctrl),
+            "The following commands are available in the OCR layer."
+        );
+        assert_eq!(
+            press(&mut engine, &speech, Key::DownArrow, plain()),
+            "From Windows Explorer, you can OCR any Image File or PDF using the letter F."
+        );
+        assert_eq!(
+            press(&mut engine, &speech, Key::Alpha('T'), insert()),
+            "Title is\nOCR Layer Help Screen"
+        );
+    }
+
+    /// D: no document open in a reader is recognized; F is offered [obs, 1031/s3].
+    #[test]
+    fn d_points_to_f() {
+        let (mut engine, speech, _) = file_explorer();
+        assert_eq!(
+            ocr_layer_key(&mut engine, &speech, Key::Alpha('D')),
+            "OCR Failed to start.\nTo OCR a PDF document, select it in Windows Explorer and use the letter F."
+        );
     }
 
     /// Q with nothing being recognized says so [obs, 1029/s3].

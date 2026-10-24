@@ -35,3 +35,20 @@ ocr-failed-to-start = OCR Failed to start.
 ocr-file-explorer-needed = To OCR a file, you must open Windows Explorer and select a file to be recognized.
 # Q with nothing being recognized [obs, 1029/s3].
 ocr-cancel-nothing = You can not cancel a Recognition job that does not exist.
+
+# D (OCRDocument): JAWS recognizes a PDF open in Adobe Acrobat, and elsewhere says so [obs,
+# 1031/s3]. Okur recognizes no document open in a reader yet; it says JAWS's first sentence and
+# points to F, never that it would in Acrobat (an accepted divergence).
+ocr-document-use-file = To OCR a PDF document, select it in Windows Explorer and use the letter F.
+
+## ? (OCRLayerHelp): the layer's keys in a viewer of their own, opened without a word, as
+## JAWS's [obs, 1032/s3-s21]. Only the keys Okur has: JAWS's lines for A (a scanner or camera),
+## D (a document open in Acrobat), R (a file into Word) and Ctrl+B are left out.
+
+ocr-help-title = OCR Layer Help Screen
+ocr-help-intro = The following commands are available in the OCR layer.
+ocr-help-file = From Windows Explorer, you can OCR any Image File or PDF using the letter F.
+ocr-help-screen = From the computer screen itself, you can OCR a Control with C, Window with W, or the entire Screen with S.
+ocr-help-background = From any window, you can start Background OCR using the letter B.
+ocr-help-enter = By simply pressing Enter, Okur will choose the most appropriate command based on the current application and its state.
+ocr-help-quit = You can press Q to quit or cancel an OCR job.
