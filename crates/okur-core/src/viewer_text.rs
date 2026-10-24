@@ -45,6 +45,8 @@ pub struct ScreenItem {
     pub unavailable: bool,
     /// For a check box or radio button.
     pub checked: Option<bool>,
+    /// It has the keyboard focus.
+    pub focused: bool,
 }
 
 impl ScreenItem {
@@ -61,6 +63,7 @@ impl ScreenItem {
             caption: false,
             unavailable: false,
             checked: None,
+            focused: false,
         }
     }
 
@@ -128,6 +131,7 @@ pub fn runs(items: &[ScreenItem]) -> Vec<ScreenRun> {
             ));
             continue;
         }
+        let first = runs.len();
         // Wrapped as the control wraps it, or a multi-line field's lines.
         let lines: Vec<String> = if item.lines.len() > 1 {
             item.lines.iter().map(|l| visible(l)).collect()
@@ -154,6 +158,9 @@ pub fn runs(items: &[ScreenItem]) -> Vec<ScreenRun> {
                 (item.left, top, item.right, top + each),
                 Source::Accessible,
             ));
+        }
+        if let Some(run) = runs.get_mut(first).filter(|_| item.focused) {
+            run.focused = true;
         }
     }
     runs
@@ -204,6 +211,7 @@ pub fn element_runs(items: &[ScreenItem]) -> Vec<ScreenRun> {
                 )
                 .with_role(item.role.clone());
                 run.checked = item.checked;
+                run.focused = item.focused;
                 run
             })
         })

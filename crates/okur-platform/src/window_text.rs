@@ -87,6 +87,7 @@ mod reader {
         UIA_FrameworkIdPropertyId,
         UIA_ToggleToggleStatePropertyId,
         UIA_SelectionItemIsSelectedPropertyId,
+        UIA_HasKeyboardFocusPropertyId,
     ];
 
     struct Reader<'a> {
@@ -137,6 +138,7 @@ mod reader {
             TABITEM => Role::Tab,
             TREEITEM => Role::TreeItem,
             GROUP => Role::Group,
+            LIST => Role::List,
             SLIDER => Role::Slider,
             PROGRESSBAR => Role::ProgressBar,
             _ => Role::Text,
@@ -377,6 +379,7 @@ mod reader {
             );
             // SAFETY: as above.
             item.unavailable = unsafe { element.CachedIsEnabled() }.is_ok_and(|b| !b.as_bool());
+            item.focused = boolean(element, UIA_HasKeyboardFocusPropertyId).unwrap_or(false);
             item.checked = match control_type {
                 CHECKBOX => int(element, UIA_ToggleToggleStatePropertyId).map(|s| s == 1),
                 RADIOBUTTON => boolean(element, UIA_SelectionItemIsSelectedPropertyId),

@@ -37,6 +37,11 @@ pub struct ScreenRun {
     /// A check box's or radio button's state.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub checked: Option<bool>,
+    /// The element with the keyboard focus, where routing the Okur cursor to the PC cursor
+    /// takes it: a trace can lack the field's own focus event, and the PC cursor's point is
+    /// then the window's middle (1018/s3).
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub focused: bool,
 }
 
 impl ScreenRun {
@@ -51,6 +56,7 @@ impl ScreenRun {
             source,
             role: None,
             checked: None,
+            focused: false,
         }
     }
 
@@ -107,6 +113,8 @@ pub struct ScreenLine {
     pub role: Option<&'static str>,
     /// An element's state, said after its role ("not checked").
     pub state: Option<&'static str>,
+    /// It holds the element with the keyboard focus.
+    pub focused: bool,
 }
 
 impl ScreenLine {
@@ -199,8 +207,10 @@ pub fn lines(runs: &[ScreenRun]) -> Vec<ScreenLine> {
                 pieces: Vec::with_capacity(row.len()),
                 role: None,
                 state: None,
+                focused: false,
             };
             for run in row.into_iter().filter(|r| !r.text.is_empty()) {
+                line.focused |= run.focused;
                 if !line.text.is_empty() {
                     line.text.push(' ');
                 }
@@ -272,6 +282,7 @@ pub fn element_lines(runs: &[ScreenRun]) -> Vec<ScreenLine> {
                 text,
                 role,
                 state,
+                focused: run.focused,
             }
         })
         .filter(|line| !line.text.is_empty() || line.role.is_some())

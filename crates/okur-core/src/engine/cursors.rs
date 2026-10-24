@@ -319,11 +319,13 @@ impl ScreenReaderEngine {
     /// field, the focused control's row in a dialog box, the virtual cursor's line in a page,
     /// before its first character.
     pub(super) fn routed_place(&self) -> Option<OkurPlace> {
-        // The screen model's line where the PC cursor is.
+        // The screen model's line with the focus, else where the PC cursor is.
         if let Some(lines) = self.okur_screen_lines() {
             let at = self.pc_cursor_point();
-            let line = at
-                .and_then(|point| lines.iter().position(|line| line.holds(point)))
+            let line = lines
+                .iter()
+                .position(|line| line.focused)
+                .or_else(|| at.and_then(|point| lines.iter().position(|line| line.holds(point))))
                 .unwrap_or(0);
             return Some(OkurPlace::Text { line, column: None });
         }

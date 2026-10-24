@@ -658,6 +658,47 @@ mod tests {
         assert_eq!(press(&mut engine, &speech, Key::RightArrow, plain()), "g");
     }
 
+    /// The route takes the Scan Cursor to the element with the focus, though the focus event
+    /// is the window's and its middle lies on another line; a list says "list view"
+    /// [obs, 1016/s3, s14].
+    #[test]
+    fn the_scan_cursor_is_routed_to_the_focused_element() {
+        use crate::aom::Role as R;
+        let speech = SharedSpeech::default();
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document))),
+            Box::new(speech.clone()),
+        );
+        engine.set_settings(crate::settings::Settings::reference_machine());
+        engine.set_actions(Box::new(RecordingActions::default()));
+        let mut window = FocusEvent::new(Role::Window).with_window_title("WPF Controls");
+        window.bounds = Some([560, 128, 1360, 903]);
+        window.read_by_elements = true;
+        engine.handle_accessibility_event(&AccessibilityEvent::Focus(window));
+        let run = |text: &str, rect: (i32, i32, i32, i32), role: R| {
+            ScreenRun::new(text, rect, Source::Accessible).with_role(role)
+        };
+        let mut edit = run("Focus here", (594, 215, 969, 253), R::Edit);
+        edit.focused = true;
+        engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(WindowText::elements(
+            vec![
+                run("System", (560, 128, 600, 160), R::MenuItem),
+                edit,
+                run("Colors", (594, 500, 900, 540), R::List),
+            ],
+        )));
+        press(&mut engine, &speech, Key::NumpadMinus, insert());
+        press(&mut engine, &speech, Key::NumpadMinus, plain());
+        assert_eq!(
+            press(&mut engine, &speech, Key::UpArrow, insert()),
+            "Focus here  Edit "
+        );
+        assert_eq!(
+            press(&mut engine, &speech, Key::DownArrow, plain()),
+            "Colors  list view "
+        );
+    }
+
     /// Another window in front: its model, recognized words and all, is not this one's.
     #[test]
     fn another_window_forgets_the_model() {
