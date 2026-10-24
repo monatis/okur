@@ -1,0 +1,56 @@
+{
+  "id": "1033-desktop-ocr-file-two-selected",
+  "name": "Convenient OCR's F with two files selected in File Explorer (the PDF and the text file): which JAWS recognizes, or its message",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-ocr-files.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "C:\\Users\\ailabs\\AppData\\Local\\Temp\\SR OCR Files",
+    "shell_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "End",
+      "Home",
+      "Shift+Down"
+    ]
+  },
+  "trace_file": true,
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Space"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "O"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "F",
+      "settle_max_ms": 60000,
+      "quiet_ms": 3000
+    },
+    {
+      "id": "s4",
+      "type": "key_ui_access",
+      "command": "Insert+T"
+    },
+    {
+      "id": "s5",
+      "type": "key_ui_access",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s6",
+      "type": "key_ui_access",
+      "command": "Escape",
+      "settle_max_ms": 30000
+    }
+  ]
+}
