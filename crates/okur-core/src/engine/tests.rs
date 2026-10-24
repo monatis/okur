@@ -7696,7 +7696,7 @@ fn the_startup_wizard_tries_then_keeps_its_changes() {
         }));
         match ui.take().first() {
             Some(ToUi::WizardShow { wizard }) => {
-                assert_eq!(wizard.title.as_deref(), Some("Okur Startup Wizard"));
+                assert_eq!(wizard.page.title, "Speech Settings - Okur Startup Wizard");
                 wizard.id
             }
             other => {

@@ -43,8 +43,6 @@ struct Kept {
 /// A wizard on screen.
 struct OpenWizard {
     id: u32,
-    /// The wizard has a title of its own, which its pages leave as it is.
-    titled: bool,
     sheet: HWND,
     /// The page shown.
     page: HWND,
@@ -80,9 +78,8 @@ fn flags(buttons: WizardButtons) -> u32 {
     flags
 }
 
-/// A property page for `page`, its template and title kept in `kept`; its title the
-/// sheet's too, unless the wizard is `titled`.
-fn create_page(page: &DialogSpec, titled: bool, kept: &mut Vec<Kept>) -> Option<HPROPSHEETPAGE> {
+/// A property page for `page`, its template and title kept in `kept`.
+fn create_page(page: &DialogSpec, kept: &mut Vec<Kept>) -> Option<HPROPSHEETPAGE> {
     let layout = template::page_layout(page);
     let template = template::encode_page(&page.title, &layout);
     let title = wide(&page.title);
@@ -100,11 +97,7 @@ fn create_page(page: &DialogSpec, titled: bool, kept: &mut Vec<Kept>) -> Option<
             .unwrap_or_default();
         let mut sheet_page = PROPSHEETPAGEW {
             dwSize: u32::try_from(std::mem::size_of::<PROPSHEETPAGEW>()).unwrap_or(0),
-            dwFlags: if titled {
-                PSP_DLGINDIRECT
-            } else {
-                PSP_DLGINDIRECT | PSP_USETITLE
-            },
+            dwFlags: PSP_DLGINDIRECT | PSP_USETITLE,
             hInstance: instance,
             Anonymous1: PROPSHEETPAGEW_0 {
                 pResource: template.as_ptr() as *mut DLGTEMPLATE,
@@ -132,8 +125,7 @@ pub fn show(spec: &WizardSpec) {
     // SAFETY: a plain query.
     let previous = unsafe { GetForegroundWindow() };
     let mut kept = Vec::new();
-    let titled = spec.title.is_some();
-    let Some(page) = create_page(&spec.page, titled, &mut kept) else {
+    let Some(page) = create_page(&spec.page, &mut kept) else {
         eprintln!("okur-ui: wizard {:?} could not be created", spec.page.title);
         return;
     };
@@ -141,7 +133,6 @@ pub fn show(spec: &WizardSpec) {
         if let Ok(mut w) = w.try_borrow_mut() {
             w.push(OpenWizard {
                 id: spec.id,
-                titled,
                 sheet: HWND::default(),
                 page: HWND::default(),
                 buttons: spec.buttons,
@@ -151,7 +142,7 @@ pub fn show(spec: &WizardSpec) {
         }
     });
     let mut pages = [page];
-    let caption = wide(spec.title.as_deref().unwrap_or(&spec.page.title));
+    let caption = wide(&spec.page.title);
     // SAFETY: the header points at the page handle and caption above, alive for the call; a
     // modeless sheet returns its window.
     let sheet = unsafe {
@@ -193,17 +184,17 @@ pub fn show(spec: &WizardSpec) {
 /// sheet sent Next to the page it had chosen before, not to the one shown, and Okur heard
 /// nothing of it (old-pc, 2026-10-21).
 pub fn turn(id: u32, page: &DialogSpec, buttons: WizardButtons) {
-    let Some((sheet, old, titled)) = WIZARDS.with(|w| {
+    let Some((sheet, old)) = WIZARDS.with(|w| {
         w.try_borrow_mut().ok().and_then(|mut w| {
             let open = w.iter_mut().find(|o| o.id == id)?;
             open.buttons = buttons;
-            Some((open.sheet, open.page, open.titled))
+            Some((open.sheet, open.page))
         })
     }) else {
         return;
     };
     let mut kept = Vec::new();
-    let Some(handle) = create_page(page, titled, &mut kept) else {
+    let Some(handle) = create_page(page, &mut kept) else {
         return;
     };
     // SAFETY: messages to our own sheet with a page handle it now holds, which chooses the

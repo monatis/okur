@@ -133,12 +133,18 @@ kept it (research, not evidence):
     Custom Messages Only" (3 of 3); Access Key "Off", "Speak all", "Speak Menus Only", "Speak
     Dialogs Only"; Verbosity Level "Beginner, Highest", "Intermediate", "Advanced, Lowest".
   - Then Braille Translation Settings and Braille Settings, the last with "Finish Button".
-  - Okur's, since the commit after `1b6b74ac`: "Okur Startup Wizard", with Speech Settings,
-    Run Okur Settings (Prompt to confirm when exiting Okur), Common Options and Verbosity
-    Settings, each with Okur's settings of it under the wizard's names; a change heard at once
-    (the session layer), Finish keeping them for all applications, Cancel nothing. From Help,
-    Startup Wizard... (after About Okur..., access key Z), and on the first start for a user
-    who has no settings folder yet (never with `--settings`).
+  - Okur's, since `4f435cfa`: Speech Settings, Run Okur Settings (Prompt to confirm when
+    exiting Okur), Common Options and Verbosity Settings, each with Okur's settings of it under
+    the wizard's names; a change heard at once (the session layer), Finish keeping them for
+    all applications, Cancel nothing. From Help, Startup Wizard... (after About Okur..., access
+    key Z), and on the first start for a user who has no settings folder yet (never with
+    `--settings`).
+  - Its window is a Windows property-sheet wizard, which takes each page's title; a window
+    keeping one title had its pages turn unannounced (JAWS reading okur-ui on old-pc). So each
+    page is titled "Speech Settings - Okur Startup Wizard", and a turn reads "Common Options -
+    Okur Startup Wizard dialog | Smart Navigation Off radio button checked | 1 of 4" where
+    JAWS's reads "Common Options | Smart Navigation Off ..." (`okur-ui-tree-probe.ps1
+    -Wizard`). Its slider: "Rate: 2 left right slider | 60 percent".
 - **Last Changed Settings' menus** (Settings Center and Quick Settings over Notepad;
   `settings-questions-walk.ps1`, two walks; Notepad's Typing Echo moved on, applied, moved
   back and applied, so it ended as it began):

@@ -1,8 +1,13 @@
 //! The Startup Wizard (the Okur window's Help, Startup Wizard..., and Okur's first start), as
-//! JAWS's: the most common settings a page at a time under Back, Next or Finish, and Cancel,
-//! the window titled "Okur Startup Wizard" and each page named by its own title (old-pc's walk,
-//! the redesign's §1.1). A change is heard at once; Finish keeps the changes for all
-//! applications, Cancel and Escape keep nothing (JAWS's help).
+//! JAWS's: the most common settings a page at a time under Back, Next or Finish, and Cancel
+//! (old-pc's walk, the redesign's §1.1). A change is heard at once; Finish keeps the changes
+//! for all applications, Cancel and Escape keep nothing (JAWS's help).
+//!
+//! JAWS's window keeps its title, "JAWS Startup Wizard", and says each page's own as the page
+//! comes ("Speech Settings | Rate: 20"). Okur's wizard is a Windows property-sheet wizard, whose
+//! window takes each page's title, and no screen reader says a page's name otherwise (probed on
+//! old-pc with JAWS reading okur-ui): so each page is titled with the page's name, then the
+//! wizard's, "Speech Settings - Okur Startup Wizard", which says both.
 //!
 //! Of JAWS's pages only those with settings Okur has, and on them only Okur's settings, in
 //! JAWS's order: Speech Settings (Rate, Punctuation, Typing Echo), Run Okur Settings (Prompt to
@@ -88,7 +93,6 @@ impl StartupWizard {
         let (page, buttons) = self.page_spec();
         WizardSpec {
             id: self.id,
-            title: Some(msg::startup_wizard_title().to_string()),
             page,
             buttons,
         }
@@ -243,7 +247,7 @@ impl StartupWizard {
         (
             DialogSpec {
                 id: self.id,
-                title: title.to_string(),
+                title: msg::startup_wizard_page(title.to_string()).render(),
                 controls,
                 keys: Vec::new(),
             },
@@ -397,8 +401,7 @@ mod tests {
     fn the_pages_are_jaws_with_okurs_settings() {
         let mut wizard = StartupWizard::new(4, Settings::default());
         let spec = wizard.spec();
-        assert_eq!(spec.title.as_deref(), Some("Okur Startup Wizard"));
-        assert_eq!(spec.page.title, "Speech Settings");
+        assert_eq!(spec.page.title, "Speech Settings - Okur Startup Wizard");
         assert!(!spec.buttons.back && spec.buttons.next && !spec.buttons.finish);
         let labels = |page: &DialogSpec| -> Vec<String> {
             page.controls.iter().map(|c| c.label.clone()).collect()
@@ -411,7 +414,11 @@ mod tests {
         let titles: Vec<&str> = pages.iter().map(|(t, ..)| t.as_str()).collect();
         assert_eq!(
             titles,
-            ["Run Okur Settings", "Common Options", "Verbosity Settings"]
+            [
+                "Run Okur Settings - Okur Startup Wizard",
+                "Common Options - Okur Startup Wizard",
+                "Verbosity Settings - Okur Startup Wizard"
+            ]
         );
         assert_eq!(
             pages.get(1).map(|(_, l, _)| l.clone()),
@@ -430,7 +437,7 @@ mod tests {
             })
         );
         assert!(
-            matches!(wizard.handle(&pressed("back")), Outcome::Turn(page, _) if page.title == "Common Options")
+            matches!(wizard.handle(&pressed("back")), Outcome::Turn(page, _) if page.title.starts_with("Common Options"))
         );
     }
 

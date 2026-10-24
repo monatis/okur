@@ -945,6 +945,32 @@ pub fn page_layout(page: &DialogSpec) -> Layout {
                 });
                 y += 12 + ROW_GAP;
             }
+            // A slider under the label that names it, which shows its number: "Rate: 20 |
+            // left right slider | 100 percent" [obs, the walk of the Startup Wizard].
+            ControlKind::Slider { .. } => {
+                items.push(Item {
+                    class: Class::Static,
+                    style: WS_CHILD | WS_VISIBLE,
+                    x: left,
+                    y,
+                    cx: width,
+                    cy: 8,
+                    id: LABEL_ID,
+                    text: control.label.clone(),
+                });
+                y += 10;
+                items.push(Item {
+                    class: Class::Named("msctls_trackbar32"),
+                    style: WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_GROUP | TBS_AUTOTICKS,
+                    x: left,
+                    y,
+                    cx: width,
+                    cy: 16,
+                    id,
+                    text: String::new(),
+                });
+                y += 16 + ROW_GAP;
+            }
             // A list view with check boxes, named by its label, which is not shown: JAWS's
             // " List view" [obs, 742/s18].
             ControlKind::CheckList { .. } => {

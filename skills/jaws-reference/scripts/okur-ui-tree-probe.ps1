@@ -19,7 +19,11 @@ param([string]$Out = (Join-Path $env:USERPROFILE 'sr-harness\probe\okur-ui-tree.
       # Voice Adjustment's shape instead: Profile Name, Delete Profile, the Voice group's Adjust,
       # Person and Rate, Save As..., OK, Cancel; Tab around, then Profile Name's choices
       # replaced ("items", as after Save As) and read with Down and Up.
-      [switch]$Voice)
+      [switch]$Voice,
+      # The Startup Wizard's shape instead: "Okur Startup Wizard" on its Speech Settings page
+      # (Rate, Punctuation, Typing Echo), the slider moved and Tab around; then turned to Common
+      # Options ("page", as Okur answers Next), Tab around, and Escape (Cancel).
+      [switch]$Wizard)
 $bin = Join-Path $env:USERPROFILE 'sr-harness\bin'
 $lab = Join-Path $bin 'okur-lab.exe'
 $start = New-Object System.Diagnostics.ProcessStartInfo
@@ -57,11 +61,15 @@ if ($Voice) {
     $dialog = '{"type":"dialog_show","dialog":{"id":1,"title":"Voice Adjustment","controls":[{"id":"profile","label":"Profile Name:","kind":{"kind":"choice","options":["Automatic - (factory)","OneCore - (factory)","SAPI 5 - (factory)"],"selected":0}},{"id":"delete_profile","label":"Delete Profile","kind":{"kind":"button","default":false},"enabled":false},{"id":"voice","label":"Voice","kind":{"kind":"group"}},{"id":"adjust","label":"Adjust:","kind":{"kind":"choice","options":["All Contexts","PC Cursor Voice","Okur Cursor Voice","Keyboard Voice","Tutor and Message Voice"],"selected":0}},{"id":"person","label":"Person:","kind":{"kind":"choice","options":["Default"],"selected":0}},{"id":"rate","label":"Rate:","kind":{"kind":"slider","min":-10,"max":10,"value":0}},{"id":"save_as","label":"Save As...","kind":{"kind":"button","default":false}},{"id":"ok","label":"OK","kind":{"kind":"button","default":true},"enabled":false},{"id":"cancel","label":"Cancel","kind":{"kind":"button","default":false}}]}}'
     $Keys = @('Tab', 'Tab', 'Tab', 'Tab', 'Tab', 'Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'items', 'Down', 'Up', 'Escape')
 }
+if ($Wizard) {
+    $dialog = '{"type":"wizard_show","wizard":{"id":1,"page":{"id":1,"title":"Speech Settings - Okur Startup Wizard","controls":[{"id":"rate","label":"Rate:","kind":{"kind":"slider","min":-10,"max":10,"value":0}},{"id":"punctuation","label":"Punctuation:","kind":{"kind":"choice","options":["None","Some","Most","All"],"selected":2}},{"id":"typing_echo","label":"Typing Echo","kind":{"kind":"radios","options":["Off","Characters","Words","Characters and Words"],"selected":1}}],"keys":[]},"buttons":{"back":false,"next":true,"finish":false}}}'
+    $Keys = @('Right', 'Right', 'Tab', 'Tab', 'Down', 'Tab', 'Tab', 'Tab', 'page', 'Tab', 'Tab', 'Tab', 'Tab', 'Tab', 'Escape')
+}
 $ui.StandardInput.WriteLine($dialog)
 $ui.StandardInput.Flush()
 Start-Sleep -Seconds 3
 & $lab jaws-history --clear | Out-Null
-$lines = @("--- shown: " + (& $lab front ($(if ($Window) { 'Okur' } elseif ($Voice) { 'Voice Adjustment' } else { 'Okur Settings Center' }))))
+$lines = @("--- shown: " + (& $lab front ($(if ($Window) { 'Okur' } elseif ($Voice) { 'Voice Adjustment' } elseif ($Wizard) { 'Okur Startup Wizard' } else { 'Okur Settings Center' }))))
 if ($Outline) {
     $outlineFile = [System.IO.Path]::ChangeExtension($Out, '.outline.txt')
     & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'uia-outline.ps1') -Title 'Notepad - Okur Settings Center' -Out $outlineFile | Out-Null
@@ -75,6 +83,13 @@ foreach ($key in $Keys) {
         $ui.StandardInput.Flush()
         Start-Sleep -Milliseconds 1500
         $lines += "== menu => " + ((& $lab jaws-history --clear) -join ' | ')
+        continue
+    }
+    if ($key -eq 'page') {
+        $ui.StandardInput.WriteLine('{"type":"wizard_page","id":1,"page":{"id":1,"title":"Common Options - Okur Startup Wizard","controls":[{"id":"smart_navigation","label":"Smart Navigation","kind":{"kind":"radios","options":["Off","Controls Only","Tables","Controls and Tables"],"selected":0}},{"id":"forms_mode","label":"Forms Mode","kind":{"kind":"radios","options":["Auto","Semi Auto","Manual"],"selected":2}},{"id":"layout","label":"Use Keyboard Layout:","kind":{"kind":"choice","options":["Desktop","Laptop"],"selected":1}}],"keys":[]},"buttons":{"back":true,"next":true,"finish":false}}')
+        $ui.StandardInput.Flush()
+        Start-Sleep -Milliseconds 1500
+        $lines += "== page => " + ((& $lab jaws-history --clear) -join ' | ')
         continue
     }
     if ($key -eq 'items') {

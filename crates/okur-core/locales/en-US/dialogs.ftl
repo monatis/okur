@@ -543,7 +543,8 @@ basics-viewer = Show Virtual Viewer on screen
 basics-layout = Use Keyboard Layout:
 # The Startup Wizard (Help, Startup Wizard..., and Okur's first start): its title, its pages'
 # titles and their settings, as JAWS's [obs, the walk of the Startup Wizard].
-startup-wizard-title = Okur Startup Wizard
+# A page's window title: the page's name, then the wizard's.
+startup-wizard-page = { $page } - Okur Startup Wizard
 startup-wizard-speech = Speech Settings
 startup-wizard-rate = Rate:
 startup-wizard-punctuation = Punctuation:
