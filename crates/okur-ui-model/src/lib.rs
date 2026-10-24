@@ -383,6 +383,10 @@ pub struct MenuItemSpec {
     pub label: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
+    /// Checked: the voice profile in use, "SAPI 5X 64 checked" [obs, the walk of Language's
+    /// Voice Profiles].
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub checked: bool,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub items: Vec<MenuItemSpec>,
 }

@@ -528,6 +528,13 @@ okur-menu-settings-center = Settings Center
 okur-menu-help = &Help
 okur-menu-about = &About Okur...
 okur-menu-startup-wizard = Startup Wi&zard...
+# Language's Voice Profiles [obs, the walk of Language's Voice Profiles].
+okur-menu-language = &Language
+okur-menu-voice-profiles = Voice Profiles
+okur-menu-profile-default = Default
+okur-menu-profile-for = For { $application }
+okur-menu-no-speech = No Speech
+okur-menu-create-profile = Create New...
 
 ## Basics, JAWS's "Basic Settings" [obs, the walk of Basics].
 

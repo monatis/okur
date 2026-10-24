@@ -181,9 +181,32 @@ impl SettingsLayers {
         set_in(&mut self.session, path, value);
     }
 
+    /// Takes one value out of the session layer, by its path, and the tables it leaves empty.
+    pub fn clear_for_session(&mut self, path: &[&str]) {
+        remove_in(&mut self.session, path);
+    }
+
     /// Sets one value until the focus moves to another application, by its path.
     pub fn set_until_focus_moves(&mut self, path: &[&str], value: Value) {
         set_in(&mut self.until_focus_moves, path, value);
+    }
+}
+
+/// Removes the value at `path` in `values`, and the tables it leaves empty.
+fn remove_in(values: &mut Values, path: &[&str]) {
+    match path {
+        [] => {}
+        [last] => {
+            values.remove(*last);
+        }
+        [first, rest @ ..] => {
+            if let Some(Value::Object(table)) = values.get_mut(*first) {
+                remove_in(table, rest);
+                if table.is_empty() {
+                    values.remove(*first);
+                }
+            }
+        }
     }
 }
 

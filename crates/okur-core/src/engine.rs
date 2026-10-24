@@ -300,6 +300,8 @@ pub struct ScreenReaderEngine {
     /// The Startup Wizard while it is open, and the session layer as it was before it, given
     /// back when it closes.
     startup_wizard: Option<crate::ui::startup_wizard::StartupWizard>,
+    /// The application in front as Okur's window opened, which its Voice Profiles menu offers.
+    okur_window_application: Option<String>,
     startup_wizard_session: crate::settings_layers::Values,
     /// Voice Adjustment, while it is open.
     voice_adjustment: Option<crate::ui::voice_adjustment::VoiceAdjustment>,
@@ -574,6 +576,7 @@ impl ScreenReaderEngine {
             settings_tree: None,
             basics_dialog: None,
             startup_wizard: None,
+            okur_window_application: None,
             startup_wizard_session: crate::settings_layers::Values::new(),
             voice_adjustment: None,
             voice_profile_dialog: None,
@@ -1860,6 +1863,7 @@ impl ScreenReaderEngine {
     /// itself: the window is read when it takes the focus.
     pub(crate) fn open_okur_window(&mut self) -> Option<String> {
         use crate::ui::{MainWindowSpec, MenuItemSpec, MenuSpec};
+        let profiles_menu = self.voice_profiles_menu();
         let Some(ui) = &self.ui else {
             let speech = msg::settings_dialog_unavailable().to_string();
             self.speech.speak(&speech, true);
@@ -1870,6 +1874,7 @@ impl ScreenReaderEngine {
                 id: id.to_owned(),
                 label: label.to_string(),
                 key: key.map(str::to_owned),
+                checked: false,
                 items: Vec::new(),
             };
         let menu = |label: crate::messages::StaticMessage, items: Vec<MenuItemSpec>| MenuSpec {
@@ -1916,6 +1921,7 @@ impl ScreenReaderEngine {
                             item(MENU_SETTINGS_CENTER, msg::okur_menu_settings_center(), None),
                         ],
                     ),
+                    menu(msg::okur_menu_language(), vec![profiles_menu]),
                     menu(
                         msg::okur_menu_help(),
                         vec![
@@ -1927,6 +1933,102 @@ impl ScreenReaderEngine {
             },
         });
         None
+    }
+
+    /// Language's Voice Profiles, as JAWS's: Default with the profiles, the one in use checked;
+    /// For <application> with Use Default first; No Speech; Create New... [obs, the walk of
+    /// Language's Voice Profiles]. The application is the one in front as the window opens,
+    /// as JAWS's menus from the tray offer it; JAWS's window offers itself, "For JAWS Window".
+    fn voice_profiles_menu(&mut self) -> crate::ui::MenuItemSpec {
+        use crate::ui::voice_profile::{current, profiles};
+        use crate::ui::MenuItemSpec;
+        let entry = |id: String, label: String, checked: bool| MenuItemSpec {
+            id,
+            label,
+            key: None,
+            checked,
+            items: Vec::new(),
+        };
+        let global = self.settings_layers.resolve(None, None);
+        let offered = profiles(&global.voice_profiles);
+        let in_use = current(&offered, &global.voice);
+        let mut items = vec![MenuItemSpec {
+            items: offered
+                .iter()
+                .enumerate()
+                .map(|(i, p)| {
+                    entry(
+                        format!("{MENU_PROFILE_DEFAULT}{}", p.name),
+                        p.name.clone(),
+                        i == in_use,
+                    )
+                })
+                .collect(),
+            ..entry(
+                "profile_default".into(),
+                msg::okur_menu_profile_default().to_string(),
+                false,
+            )
+        }];
+        self.okur_window_application = self.settings_place.0.clone();
+        if let Some(app) = &self.okur_window_application {
+            let own = self
+                .settings_layers
+                .applications
+                .get(app)
+                .and_then(|values| values.get("voice"))
+                .and_then(|voice| voice.get("profile"))
+                .and_then(|profile| profile.as_str());
+            let use_default = entry(
+                MENU_PROFILE_USE_DEFAULT.into(),
+                msg::voice_profile_use_default().to_string(),
+                own.is_none(),
+            );
+            items.push(MenuItemSpec {
+                items: std::iter::once(use_default)
+                    .chain(offered.iter().map(|p| {
+                        entry(
+                            format!("{MENU_PROFILE_APPLICATION}{}", p.name),
+                            p.name.clone(),
+                            own == Some(p.name.as_str()),
+                        )
+                    }))
+                    .collect(),
+                ..entry(
+                    "profile_application".into(),
+                    msg::okur_menu_profile_for(app.as_str()).render(),
+                    false,
+                )
+            });
+        }
+        items.push(entry(
+            MENU_NO_SPEECH.into(),
+            msg::okur_menu_no_speech().to_string(),
+            false,
+        ));
+        items.push(entry(
+            MENU_VOICE_ADJUSTMENT.into(),
+            msg::okur_menu_create_profile().to_string(),
+            false,
+        ));
+        MenuItemSpec {
+            items,
+            ..entry(
+                "voice_profiles".into(),
+                msg::okur_menu_voice_profiles().to_string(),
+                false,
+            )
+        }
+    }
+
+    /// Language's No Speech: the synthesizer silent until a voice profile is chosen, or Okur
+    /// starts again (JAWS's help, Language Menu Overview).
+    fn no_speech(&mut self) {
+        if let Ok(value) = serde_json::to_value(crate::settings::Synthesizer::NoSpeech) {
+            self.settings_layers
+                .set_for_session(&["voice", "synthesizer"], value);
+            self.resolve_settings();
+        }
     }
 
     /// One of the main window's menu items, by its id.
@@ -1947,6 +2049,20 @@ impl ScreenReaderEngine {
                 self.show_message_box(msg::okur_window_version(env!("CARGO_PKG_VERSION")).render())
             }
             MENU_STARTUP_WIZARD => return self.open_startup_wizard(),
+            MENU_NO_SPEECH => self.no_speech(),
+            MENU_PROFILE_USE_DEFAULT => {
+                let app = self.okur_window_application.clone();
+                self.choose_voice_profiles(None, app.map(|app| (app, None)));
+            }
+            _ if id.starts_with(MENU_PROFILE_DEFAULT) => {
+                let name = id.trim_start_matches(MENU_PROFILE_DEFAULT).to_owned();
+                self.choose_voice_profiles(Some(name), None);
+            }
+            _ if id.starts_with(MENU_PROFILE_APPLICATION) => {
+                let name = id.trim_start_matches(MENU_PROFILE_APPLICATION).to_owned();
+                let app = self.okur_window_application.clone();
+                self.choose_voice_profiles(None, app.map(|app| (app, Some(name))));
+            }
             crate::ui::MAIN_WINDOW_EXIT => return self.execute(crate::command::Command::ShutDown),
             _ => {}
         }
@@ -2002,6 +2118,9 @@ impl ScreenReaderEngine {
         application: Option<(String, Option<String>)>,
     ) {
         use crate::settings_layers::Scope;
+        // A profile chosen ends No Speech.
+        self.settings_layers
+            .clear_for_session(&["voice", "synthesizer"]);
         let global = self.settings_layers.resolve(None, None);
         let profiles = crate::ui::voice_profile::profiles(&global.voice_profiles);
         let profile = |name: &str| {
@@ -2906,6 +3025,11 @@ const MENU_NOTIFICATIONS: &str = "notification_history";
 const MENU_SETTINGS_CENTER: &str = "settings_center";
 const MENU_ABOUT: &str = "about";
 const MENU_STARTUP_WIZARD: &str = "startup_wizard";
+const MENU_NO_SPEECH: &str = "no_speech";
+const MENU_PROFILE_USE_DEFAULT: &str = "profile_use_default";
+/// A profile's item in Default and in For <application>: the prefix, then its name.
+const MENU_PROFILE_DEFAULT: &str = "profile_default:";
+const MENU_PROFILE_APPLICATION: &str = "profile_application:";
 
 /// The application Okur's own windows are in (okur-ui's process), as the settings name it.
 const OKUR_WINDOWS: &str = "okur-ui";

@@ -10,9 +10,9 @@ use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, RECT, WPARAM};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::UI::WindowsAndMessaging::{
     AppendMenuW, CreateMenu, CreatePopupMenu, CreateWindowExW, DefWindowProcW, DestroyMenu,
-    GetClientRect, GetMenu, MoveWindow, SetMenu, SetWindowTextW, ShowWindow, HMENU, MF_POPUP,
-    MF_STRING, SW_SHOW, WINDOW_EX_STYLE, WINDOW_STYLE, WM_CLOSE, WM_COMMAND, WM_SETFOCUS, WM_SIZE,
-    WS_CHILD, WS_OVERLAPPEDWINDOW, WS_VISIBLE, WS_VSCROLL,
+    GetClientRect, GetMenu, MoveWindow, SetMenu, SetWindowTextW, ShowWindow, HMENU, MF_CHECKED,
+    MF_POPUP, MF_STRING, SW_SHOW, WINDOW_EX_STYLE, WINDOW_STYLE, WM_CLOSE, WM_COMMAND, WM_SETFOCUS,
+    WM_SIZE, WS_CHILD, WS_OVERLAPPEDWINDOW, WS_VISIBLE, WS_VSCROLL,
 };
 
 /// The window, its text, and the ids of its menu items by command number (from 1).
@@ -88,7 +88,12 @@ fn popup(items: &[MenuItemSpec], ids: &mut Vec<String>) -> Option<HMENU> {
             let text = wide(&text);
             if item.items.is_empty() {
                 ids.push(item.id.clone());
-                let _ = AppendMenuW(menu, MF_STRING, ids.len(), PCWSTR(text.as_ptr()));
+                let flags = if item.checked {
+                    MF_STRING | MF_CHECKED
+                } else {
+                    MF_STRING
+                };
+                let _ = AppendMenuW(menu, flags, ids.len(), PCWSTR(text.as_ptr()));
             } else if let Some(submenu) = popup(&item.items, ids) {
                 let _ = AppendMenuW(menu, MF_POPUP, submenu.0 as usize, PCWSTR(text.as_ptr()));
             }

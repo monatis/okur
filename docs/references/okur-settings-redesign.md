@@ -45,6 +45,10 @@ kept it (research, not evidence):
   OCR (INSERT+SPACE,O layer) ▸, Picture Smart (INSERT+SPACE,P layer) ▸, Braille and Text Viewer
   ▸.
 - **Language**: JAWS Language ▸ (Unavailable: no other language installed), Voice Profiles ▸.
+  Voice Profiles (`jaws-window-walk.ps1 -Parts language`): "Default sub menu", "For JAWS
+  Window sub menu", "No Speech", "Create New...". Default holds the profiles in alphabetical
+  order, the one in use checked ("SAPI 5X 64 checked"); For JAWS Window has "Use Default
+  checked" first, then the profiles. JAWS's window offers itself as the application.
 - **Help**: Commands Search (INSERT+SPACE, J), Message Center (35), Training, JAWS Help Topics
   (F1), Keyboard Commands, What's New, Web Resources ▸, Technical Support, About JAWS..., Startup
   Wizard..., Support Tool..., License ▸, Check for Updates...
@@ -112,6 +116,23 @@ kept it (research, not evidence):
     Links, Headings and Frames, Tables, Miscellaneous.
   - Okur's search filters the tree to the results in their groups instead. JAWS's results
     list is the shape to follow (an open item).
+  - The results list, walked (`settings-questions-walk.ps1`, "echo"): "11 Search Results List
+    box | Typing Echo Off | User | Use the arrow keys to select an item. | Press the space bar
+    to toggle between the choices"; Down: "Screen Echo Echo Highlighted Text | User", "Allow
+    Mouse Echo not checked | Speech On Demand OptionsSpeech Options": each result its label and
+    value, then its group's path. Escape: "Search edit box cleared. | Tree view | level 0 |
+    User | closed | 1 of 28". Enter on a result: "Search edit box cleared. | Tree view |
+    Navigation Quick Key DelayUnavailable | Only available when SemiAuto or Auto Forms Mode is
+    selected. | 1 of 1 | Auto Forms Mode SettingsForms Mode".
+- **The configuration display pane** (F6, the same walk): F6 on "Typing Echo Off" says "User
+  page | Typing Echo Off radio button checked | 1 of 4"; Tab there goes through the group's
+  controls in the pane's own order, "Screen Echo Echo Highlighted Text radio button checked |
+  2 of 3", "Typing Interrupt check box checked", "Key Repeat check box checked", "Show Virtual
+  Viewer on Screen check box checked", "Enable Virtual Cursor for Windows Universal Apps check
+  box not checked", "Progress Bar Updates Announcement Combo box | 5 Second Intervals | 3 of
+  7"; F6 goes back to the tree item it left, "Typing Echo Off | 2 of 11". F6 on an unavailable
+  setting says "Unavailable | Only available when SemiAuto or Auto Forms Mode is selected.",
+  and Tab goes on to the description, OK and Cancel. Okur has no pane yet.
 - **The Startup Wizard** (JAWS's window, Alt+H, Z; `jaws-window-walk.ps1 -Parts
   wizard,wizardpages` and `wizard,wizardvalues`; each radio group moved and put back as
   found, and Escape, which saves nothing):
@@ -418,8 +439,13 @@ spoken form is a parity target.
    in the Tutor and Message voice, the rest in the cursor's (`split_tutor_message`, the speech
    thread); the speech log keeps the utterance whole.
    Still to do: Speak Sample and Synthesizer
-   Language; Apply's question whether to make a saved profile the default; the Language menu's
-   Voice Profiles.
+   Language; Apply's question whether to make a saved profile the default.
+   **The Language menu's Voice Profiles built 2026-10-25:** Default, For <application> (the
+   application in front as Okur's window opens) with Use Default, No Speech (the No Speech
+   synthesizer for the session, until a profile is chosen), Create New... (Voice Adjustment).
+   JAWS reading okur-ui (`okur-ui-tree-probe.ps1 -Window`): "Language menu | Voice Profiles
+   sub menu", "Default sub menu", "Automatic - (factory) checked", "No Speech", "Create
+   New...".
 5. **Startup Wizard**, Manage Application Settings, Restore to Factory Settings.
    **Manage Application Settings and Restore to Factory Settings built 2026-10-24**, both in
    Options:

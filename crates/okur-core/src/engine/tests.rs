@@ -7626,6 +7626,62 @@ fn quick_settings_changes_last_as_their_lifetimes() {
     assert_eq!(engine.settings.typing_echo, TypingEcho::Words);
 }
 
+/// Language's Voice Profiles, as JAWS's: Default with the profile in use checked, For the
+/// application in front with Use Default checked, No Speech, Create New...; a profile chosen
+/// there is the voice, No Speech silences the synthesizer until one is chosen [obs, the walk of
+/// Language's Voice Profiles].
+#[test]
+fn the_language_menu_chooses_voice_profiles() {
+    use crate::settings::Synthesizer;
+    use crate::ui::{FromUi, MenuItemSpec, ToUi};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    engine.settings_place(Some("notepad.exe"), None);
+    engine.execute_command("JAWSWindow");
+    let sent = ui.take();
+    let Some(ToUi::MainWindowShow { window }) = sent.first() else {
+        panic_free_fail(&format!("no window shown: {sent:?}"));
+        return;
+    };
+    let language = window.menus.iter().find(|m| m.label == "&Language");
+    let profiles = language.and_then(|m| m.items.first());
+    let labels = |item: Option<&MenuItemSpec>| -> Vec<String> {
+        item.map(|i| {
+            i.items
+                .iter()
+                .map(|i| format!("{}{}", i.label, if i.checked { " checked" } else { "" }))
+                .collect()
+        })
+        .unwrap_or_default()
+    };
+    assert_eq!(profiles.map(|p| p.label.as_str()), Some("Voice Profiles"));
+    assert_eq!(
+        labels(profiles),
+        ["Default", "For notepad", "No Speech", "Create New..."]
+    );
+    let default = profiles.and_then(|p| p.items.first());
+    assert!(labels(default).contains(&"Automatic - (factory) checked".to_owned()));
+    let for_notepad = profiles.and_then(|p| p.items.get(1));
+    assert_eq!(
+        labels(for_notepad).first().map(String::as_str),
+        Some("Use Default checked")
+    );
+    let command = |engine: &mut ScreenReaderEngine, id: &str| {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::MainMenuCommand {
+            id: id.into(),
+        }));
+    };
+    command(&mut engine, "profile_default:OneCore - (factory)");
+    assert_eq!(engine.settings.voice.synthesizer, Synthesizer::OneCore);
+    command(&mut engine, "no_speech");
+    assert_eq!(engine.settings.voice.synthesizer, Synthesizer::NoSpeech);
+    command(&mut engine, "profile_application:SAPI 5 - (factory)");
+    assert_eq!(engine.settings.voice.synthesizer, Synthesizer::Sapi5);
+    assert!(engine.settings_layers.session.is_empty());
+}
+
 /// Insert+J shows Okur's window with JAWS's menus, of their items those Okur has; Options,
 /// Basics... opens "Basic Settings", and Utilities, Settings Center opens Settings Center.
 #[test]
@@ -7645,7 +7701,7 @@ fn insert_j_shows_okurs_window_and_its_menus() {
     };
     assert_eq!(window.title, "Okur");
     let menus: Vec<&str> = window.menus.iter().map(|m| m.label.as_str()).collect();
-    assert_eq!(menus, ["&Options", "&Utilities", "&Help"]);
+    assert_eq!(menus, ["&Options", "&Utilities", "&Language", "&Help"]);
     let options: Vec<&str> = window
         .menus
         .first()
