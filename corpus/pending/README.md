@@ -22,8 +22,12 @@ To record one:
 | 665 | Say Window in Notepad's Font dialog, waited for long enough to read its 187 fonts (round 115) | `desktop-notepad.ps1` |
 
 Office on old-pc is not activated (2026-10-19): Word and Excel open Microsoft's Office Activation
-Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17.
-518, 519 and 521 wait for the owner to activate Office there.
+Wizard and say "Product Activation Failed", which held the fixtures' automation in round 17. The
+fixtures now write their files without automation, and Word's scenarios (518, 519, 1034-1040)
+are recorded. 521 (Excel) was recorded on 2026-10-24 with Excel newly started: its Activation
+Wizard took the focus and the keys went to its buttons, so all three trials failed and the
+evidence was not imported. With the wizard closed and Excel left running, the fixture opens in
+the running Excel; record it again then.
 
 A Windows key chord (Win+Insert+X, Insert+Win+C) goes to Windows on old-pc: Win+X opens
 Windows' own menu (520/s3), and the Windows key released alone opens the Start menu, which
