@@ -814,6 +814,48 @@
       }
     },
     {
+      "scenario_id": "1034-desktop-word-font-paragraphs-table-keys",
+      "fixture": "desktop-word.ps1",
+      "evidence": {
+        "sha256": "65a3863f74cbfa1dc1f53a4b484fffe996afb0838135f8573d39f877eab8ad74",
+        "capture_script_sha256": "2f07646b53583e3a245d42790d0225b810dc4a43a65b9ea0f42626f10e064ae9",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1035-desktop-word-table-edges",
+      "fixture": "desktop-word.ps1",
+      "evidence": {
+        "sha256": "c47fcdfd6e84c69878177dc7d55c60bdc3f5dc903ff4755073819ac46c837d62",
+        "capture_script_sha256": "2f07646b53583e3a245d42790d0225b810dc4a43a65b9ea0f42626f10e064ae9",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1036-desktop-word-heading-list-move",
+      "fixture": "desktop-word.ps1",
+      "evidence": {
+        "sha256": "022fd092b001755365d6112c0caf4f6323965fa2d85a9808d7713fcb9228f150",
+        "capture_script_sha256": "2f07646b53583e3a245d42790d0225b810dc4a43a65b9ea0f42626f10e064ae9",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "104-article-heading-levels",
       "fixture": "news-article.html",
       "evidence": {
@@ -3311,6 +3353,20 @@
       "evidence": {
         "sha256": "2246320e8dfb3a1fc0944671f81bf9ad93c39cb46b078a2a3987e66f790817ba",
         "capture_script_sha256": "8d2916a7e5b60ee5cd9570f052e1f725a942ad25a681dea1201856b0e1b4fd63",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "519-desktop-word-lists-and-spelling",
+      "fixture": "desktop-word.ps1",
+      "evidence": {
+        "sha256": "06052fbb4caf18a4450e0f63369b5723fbca67c7173c319d31673ced19eef197",
+        "capture_script_sha256": "2f07646b53583e3a245d42790d0225b810dc4a43a65b9ea0f42626f10e064ae9",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -9453,10 +9509,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 658,
-    "scenarios_with_evidence": 658,
-    "total_trials": 1980,
-    "successful_trials": 1964,
-    "deterministic_scenarios": 424
+    "scenarios": 662,
+    "scenarios_with_evidence": 662,
+    "total_trials": 1992,
+    "successful_trials": 1976,
+    "deterministic_scenarios": 426
   }
 }
