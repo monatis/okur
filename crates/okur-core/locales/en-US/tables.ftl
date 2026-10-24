@@ -57,6 +57,10 @@ word-column-of = column { $column } of { $columns }
 word-row-of = row { $row } of { $rows }
 # A table's next row as Say All reaches it: "Hours | Row 2 | Central" [obs, 1038/s12].
 word-row = Row { $row }
+# A row of a table without row titles, on moving along a column and in Say Cell; the first row,
+# in Say Cell [obs, 1040/s13, s14].
+word-row-no-title = Row { $row } no title
+word-title-row = This is the title row, containing column titles.
 # Tab selects the cell's text [obs, 518/s15].
 word-cell-selected = Selected
 # The table's last cell, where Tab adds a row [obs, 518/s15, 1034/s10].

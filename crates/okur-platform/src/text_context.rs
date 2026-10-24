@@ -688,21 +688,29 @@ mod reader {
                         .is_ok_and(|same| same.as_bool())
                 })
                 .map_or(1, |i| i + 1);
-            let column_header = element
-                .GetCurrentPatternAs::<IUIAutomationTableItemPattern>(UIA_TableItemPatternId)
-                .and_then(|cell| cell.GetCurrentColumnHeaderItems())
-                .and_then(|headers| headers.GetElement(0))
-                .ok()
-                .and_then(|header| element_text(pattern, &header));
+            // JAWS takes a column's title from the first row, header row or not, and a row's
+            // from the first column only where the table has one, which Word reports as row
+            // header items [obs, 1040/s12, s13; word-probe.ps1 on 1034's and 1040's tables].
             let row = item.CurrentRow().ok()?;
+            let column = item.CurrentColumn().ok()?;
+            let column_header = size
+                .GetItem(0, column)
+                .ok()
+                .and_then(|first| element_text(pattern, &first));
+            let row_titles = element
+                .GetCurrentPatternAs::<IUIAutomationTableItemPattern>(UIA_TableItemPatternId)
+                .and_then(|cell| cell.GetCurrentRowHeaderItems())
+                .and_then(|headers| headers.Length())
+                .is_ok_and(|count| count > 0);
             let row_header = size
                 .GetItem(row, 0)
                 .ok()
+                .filter(|_| row_titles)
                 .and_then(|first| element_text(pattern, &first));
             Some(okur_core::TableCell {
                 table,
                 row: index(row)?,
-                column: index(item.CurrentColumn().ok()?)?,
+                column: index(column)?,
                 rows: usize::try_from(size.CurrentRowCount().ok()?).ok()?,
                 columns: usize::try_from(size.CurrentColumnCount().ok()?).ok()?,
                 column_header,

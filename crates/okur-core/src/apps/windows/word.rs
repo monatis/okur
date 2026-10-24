@@ -159,8 +159,10 @@ pub(crate) fn view_key(event: &crate::input::KeyEvent) -> Option<String> {
 /// How the caret came to a cell of Word's table, which decides what JAWS says of it.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CellMove {
-    /// Across a row: Ctrl+Alt+Left or Right, Tab.
+    /// Across a row: Ctrl+Alt+Left or Right.
     Across,
+    /// To the next cell: Tab, across the row or on to the next row's first.
+    Next,
     /// Along a column: Ctrl+Alt+Up or Down.
     Along,
     /// To the table's first cell: Ctrl+Alt+Home.
@@ -210,19 +212,39 @@ pub(crate) fn cell_speech(
     let (column_title, row_title) = titles(now);
     let column_place = || msg::word_column_of(now.column, now.columns).render();
     let row_place = || msg::word_row_of(now.row, now.rows).render();
+    // "Selected" right after the cell, before its place [obs, 1040/s10, s11].
+    let selected = after.selection.is_some_and(|(start, end)| start < end);
+    let cell_said = |said: &mut Vec<String>| {
+        said.push(cell_line(after));
+        if selected {
+            said.push(msg::word_cell_selected().to_string());
+        }
+    };
     let mut said = Vec::new();
+    let next_row = how == CellMove::Next && was.is_some_and(|w| w.row != now.row);
     match how {
-        CellMove::Across => {
+        // On to the next row's first cell: its row's place and its column's [obs, 1040/s11].
+        CellMove::Next if next_row => {
+            cell_said(&mut said);
+            said.push(row_place());
+            said.push(column_place());
+        }
+        CellMove::Across | CellMove::Next => {
             said.extend(column_title.cloned());
-            said.push(cell_line(after));
+            cell_said(&mut said);
             if column_title.is_none() {
                 said.push(column_place());
             }
         }
         CellMove::Along => {
-            said.extend(row_title.cloned());
-            said.push(cell_line(after));
-            if row_title.is_none() {
+            match (row_title, now.row_header.is_none()) {
+                (Some(title), _) => said.push(title.clone()),
+                // A table without row titles [obs, 1040/s13].
+                (None, true) => said.push(msg::word_row_no_title(now.row).render()),
+                (None, false) => {}
+            }
+            cell_said(&mut said);
+            if row_title.is_none() && now.row_header.is_some() {
                 said.push(row_place());
             }
         }
@@ -234,7 +256,7 @@ pub(crate) fn cell_speech(
             });
             said.extend(row_title.cloned());
             said.extend(column_title.cloned());
-            said.push(cell_line(after));
+            cell_said(&mut said);
             if row_title.is_none() {
                 said.push(row_place());
             }
@@ -242,9 +264,6 @@ pub(crate) fn cell_speech(
                 said.push(column_place());
             }
         }
-    }
-    if after.selection.is_some_and(|(start, end)| start < end) {
-        said.push(msg::word_cell_selected().to_string());
     }
     if (now.row, now.column) == (now.rows, now.columns) {
         if how != CellMove::Last {
@@ -263,7 +282,18 @@ pub(crate) fn cell_speech(
 pub(crate) fn cell_focus(context: &TextContext, table: bool) -> Option<String> {
     let cell = cell_of(context)?;
     let (column_title, row_title) = titles(cell);
-    let mut said: Vec<String> = column_title.into_iter().chain(row_title).cloned().collect();
+    let mut said = Vec::new();
+    // The first row holds the column titles; a table without row titles says so [obs,
+    // 1040/s14].
+    if cell.row == 1 && cell.column > 1 {
+        said.push(msg::word_title_row().to_string());
+    }
+    said.extend(column_title.cloned());
+    match row_title {
+        Some(title) => said.push(title.clone()),
+        None if cell.row_header.is_none() => said.push(msg::word_row_no_title(cell.row).render()),
+        None => {}
+    }
     said.push(cell_line(context));
     said.push(msg::word_column_of(cell.column, cell.columns).render());
     said.push(msg::word_row_of(cell.row, cell.rows).render());

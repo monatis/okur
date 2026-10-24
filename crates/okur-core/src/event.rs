@@ -160,7 +160,8 @@ pub struct TableCell {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub column_header: Option<String>,
     /// Its row's title, the row's first cell, which JAWS says on entering the row: "Branch
-    /// Hours" [obs, 1034/s11].
+    /// Hours" [obs, 1034/s11]; none in a table without row titles, where JAWS says "Row 1 no
+    /// title" [obs, 1040/s13].
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub row_header: Option<String>,
 }

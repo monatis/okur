@@ -39,7 +39,7 @@ impl ScreenReaderEngine {
             && !m.win
             && self.in_document_table())
         .then_some(crate::editing::EditKey::TableCell(
-            crate::apps::windows::word::CellMove::Across,
+            crate::apps::windows::word::CellMove::Next,
         ));
         if let Some(key) = crate::editing::EditKey::of(event).or(own_key).or(cell_key) {
             // The word being typed ends where the caret moves; Backspace takes back its last
