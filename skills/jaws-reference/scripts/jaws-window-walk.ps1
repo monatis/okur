@@ -4,8 +4,10 @@
 # keys and Escape: no setting changes. Each part is written to its own file in -OutDir. -Parts
 # chooses the parts, by name, comma separated: options, menus, basics, voice (Tab around Voice
 # Adjustment), contexts (Voice Adjustment's Adjust box walked, each context's controls heard),
-# profile (Select a Voice Profile, Insert+Ctrl+S from Notepad). Run on old-pc with no batch
-# recording.
+# profile (Select a Voice Profile, Insert+Ctrl+S from Notepad), profiles (Voice Adjustment's
+# Profile Name box walked), saveas (its Save As... dialog), manage (Manage Application
+# Settings...), restore (Restore to Factory Settings..., never confirmed), wizard (the Startup
+# Wizard's first page). Run on old-pc with no batch recording.
 param([string]$OutDir = (Join-Path $env:USERPROFILE 'sr-harness\probe'),
       [string]$Parts = 'options,menus,basics,voice')
 $chosen = $Parts -split ',' | ForEach-Object { $_.Trim() }
@@ -49,6 +51,32 @@ if ($chosen -contains 'contexts') {
     # Punctuation and Volume heard by Tab and back, then Escape (Cancel).
     $context = 'Tab*4,Shift+Tab*4'
     Walk "Alt,Down,Down,Right,Enter,Tab*5,$context,Down,$context,Down,$context,Down,$context,Down,$context,Down,Escape" 'jw-voice-contexts.txt'
+}
+if ($chosen -contains 'profiles') {
+    Open-JawsWindow
+    # Voice Adjustment's Profile Name box, every profile by Up and back by Down, then Escape
+    # (Cancel), and Escape again in case it asks.
+    Walk 'Alt,Down,Down,Right,Enter,Up,Up,Up,Up,Up,Down,Down,Down,Down,Down,Escape,Escape' 'jw-voice-profiles.txt'
+}
+if ($chosen -contains 'saveas') {
+    Open-JawsWindow
+    # Voice Adjustment's Save As... (twelfth Tab): its dialog toured by Tab, then Escape twice.
+    Walk 'Alt,Down,Down,Right,Enter,Tab*12,Space,Tab,Tab,Tab,Tab,Escape,Escape' 'jw-voice-save-as.txt'
+}
+if ($chosen -contains 'manage') {
+    Open-JawsWindow
+    # Options, Manage Application Settings... (fifth): toured by Tab, then Escape.
+    Walk 'Alt,Down,Down*4,Enter,Tab*8,Escape,Escape' 'jw-manage-applications.txt'
+}
+if ($chosen -contains 'restore') {
+    Open-JawsWindow
+    # Options, Restore to Factory Settings... (sixth): toured by Tab, then Escape. Never Enter.
+    Walk 'Alt,Down,Down*5,Enter,Tab*8,Escape,Escape' 'jw-restore-factory.txt'
+}
+if ($chosen -contains 'wizard') {
+    Open-JawsWindow
+    # Help (Left from Options), Startup Wizard... (tenth): its first page toured, then Escape.
+    Walk 'Alt,Left,Down,Down*9,Enter,Tab*10,Escape,Escape' 'jw-startup-wizard.txt'
 }
 if ($chosen -contains 'profile') {
     # Select a Voice Profile over Notepad: Tab around, then Escape.

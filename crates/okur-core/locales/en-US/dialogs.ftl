@@ -532,6 +532,7 @@ voice-adjustment-message = Tutor and Message Voice
 voice-adjustment-person = Person:
 voice-adjustment-rate = Rate:
 voice-adjustment-punctuation = Punctuation:
+voice-adjustment-pitch = Pitch:
 voice-adjustment-volume = Volume:
 
 ## Select a Voice Profile (Insert+Ctrl+S): "Select a Voice Profile dialog | Default: Combo box",

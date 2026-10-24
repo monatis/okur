@@ -255,6 +255,13 @@ pub static SETTINGS: &[SettingSpec] = &[
         Some(msg::settings_punctuation),
         Kind::Choice(choices::<Punctuation>),
     ),
+    // The voice's pitch: Voice Adjustment's per context, and the settings file.
+    spec(
+        "voice.pitch",
+        Group::Speech,
+        None,
+        Kind::Range { min: -10, max: 10 },
+    ),
     // The voice contexts' own voices: Voice Adjustment's Adjust box and the settings file.
     spec("voice.contexts", Group::Speech, None, Kind::Structured),
     // The voice profile chosen (Select a Voice Profile), for all applications or one.

@@ -32,7 +32,7 @@ enum Request {
     /// A part of a Say All, whose mark goes back to the engine as the synthesizer starts it.
     Marked(String, u64, bool),
     Stop,
-    Configure(okur_core::settings::VoiceSettings),
+    Configure(Box<okur_core::settings::VoiceSettings>),
 }
 
 /// How many utterances the Speech History keeps (JAWS's help gives 50 and 500 [S3, H14]).
@@ -341,6 +341,11 @@ fn carry_out(
             tts.use_context(context);
         }
         let indicate_caps = tts.indicate_caps;
+        let pitch = tts.pitch;
+        // A capital's raise on the context's pitch.
+        let raised = |text: &str| {
+            (pitch + okur_core::pronounce::character_pitch(text, indicate_caps)).clamp(-10, 10)
+        };
         match request {
             Request::Marked(text, mark, interrupt) => {
                 let spoken = okur_core::pronounce::spoken_with(&text, tts.punctuation, tts.text);
@@ -368,24 +373,26 @@ fn carry_out(
                         break;
                     }
                     let spoken = okur_core::pronounce::spoken_with(part, tts.punctuation, tts.text);
-                    let _ = tts.engine.speak(&spoken, interrupt && i == 0);
+                    let _ = tts
+                        .engine
+                        .speak_pitched(&spoken, pitch, interrupt && i == 0);
                 }
             }
             Request::Symbols(text, interrupt) => {
                 let spoken = okur_core::pronounce::spoken_symbols(&text);
-                let _ = tts.engine.speak(&spoken, interrupt);
+                let _ = tts.engine.speak_pitched(&spoken, pitch, interrupt);
             }
             Request::Character(text, interrupt) => {
                 let _ = tts.engine.speak_pitched(
                     &okur_core::pronounce::character(&text),
-                    okur_core::pronounce::character_pitch(&text, indicate_caps),
+                    raised(&text),
                     interrupt,
                 );
             }
             Request::Echo(text) => {
                 let _ = tts.engine.speak_pitched(
                     &okur_core::pronounce::character(&text),
-                    okur_core::pronounce::character_pitch(&text, indicate_caps),
+                    raised(&text),
                     true,
                 );
             }
@@ -395,15 +402,17 @@ fn carry_out(
             Request::Phonetic(text, interrupt) => {
                 let _ = tts.engine.speak_pitched(
                     &okur_core::pronounce::phonetic(&text),
-                    okur_core::pronounce::character_pitch(&text, indicate_caps),
+                    raised(&text),
                     interrupt,
                 );
             }
             Request::Spelled(text, interrupt) => {
                 let parts = okur_core::pronounce::spelled_parts(&text, indicate_caps);
-                for (i, (part, pitch)) in parts.into_iter().enumerate() {
+                for (i, (part, raise)) in parts.into_iter().enumerate() {
                     let first = interrupt && i == 0;
-                    let _ = tts.engine.speak_pitched(&part, pitch, first);
+                    let _ = tts
+                        .engine
+                        .speak_pitched(&part, (pitch + raise).clamp(-10, 10), first);
                 }
             }
             Request::Stop => {
@@ -563,7 +572,7 @@ impl SpeechOutput for SpeechThread {
     }
 
     fn configure(&mut self, voice: &okur_core::settings::VoiceSettings) {
-        self.send(Request::Configure(voice.clone()));
+        self.send(Request::Configure(Box::new(voice.clone())));
     }
 }
 
@@ -617,7 +626,7 @@ mod tests {
         };
         let batch = vec![
             Request::Speak("Line one".into(), true),
-            Request::Configure(okur_core::settings::VoiceSettings::default()),
+            Request::Configure(Box::default()),
             Request::Speak("queued".into(), false),
             Request::Stop,
             Request::Speak("Line two".into(), true),

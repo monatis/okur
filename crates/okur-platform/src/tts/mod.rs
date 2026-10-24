@@ -149,6 +149,8 @@ pub struct TtsManager {
     punctuation: okur_core::settings::Punctuation,
     /// Capitals read alone or spelled at a raised pitch (the voice settings' Caps Indicate).
     pub(crate) indicate_caps: bool,
+    /// The pitch everything is said at (the voice context's), a capital's raise added to it.
+    pub(crate) pitch: i32,
     /// How running text is given to the voice (the voice settings' Text Processing).
     pub(crate) text: okur_core::settings::TextProcessing,
     /// The voice settings last applied, so that a change applies only what differs.
@@ -170,6 +172,7 @@ impl TtsManager {
             speech_log: None,
             punctuation: okur_core::settings::Punctuation::default(),
             indicate_caps: true,
+            pitch: 0,
             text: okur_core::settings::TextProcessing::default(),
             applied: None,
             settings: None,
@@ -441,6 +444,7 @@ impl okur_core::speech::SpeechOutput for TtsManager {
 impl TtsManager {
     /// Sets the voice of one context: what differs from the voice last applied.
     fn apply(&mut self, voice: &okur_core::settings::VoiceSettings) {
+        self.pitch = voice.pitch;
         self.punctuation = voice.punctuation;
         self.indicate_caps = voice.indicate_caps;
         self.text = voice.text;

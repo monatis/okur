@@ -585,6 +585,10 @@ pub struct VoiceSettings {
     /// A capital read alone or spelled is said at a raised pitch: JAWS's Caps Indicate
     /// (`IndicateCaps` in `DEFAULT.JCF`'s Options, on by default) [obs, 408, 717].
     pub indicate_caps: bool,
+    /// The voice's pitch, -10 to 10 on SAPI's scale around the voice's own (0). Voice
+    /// Adjustment sets it per voice context, as JAWS's shows Pitch for a context only [obs, the
+    /// walk of Voice Adjustment's contexts].
+    pub pitch: i32,
     /// How running text is given to the voice.
     pub text: TextProcessing,
     /// The voice contexts' own voices, where they differ from the one above (JAWS's All
@@ -604,6 +608,7 @@ impl Default for VoiceSettings {
             volume: 100,
             punctuation: Punctuation::default(),
             indicate_caps: true,
+            pitch: 0,
             text: TextProcessing::default(),
             contexts: VoiceContexts::default(),
             profile: None,
@@ -621,6 +626,7 @@ impl VoiceSettings {
             rate: other.rate,
             volume: other.volume,
             punctuation: other.punctuation,
+            pitch: other.pitch,
             contexts: other.contexts.clone(),
             profile: other.profile.clone(),
             ..self.clone()
@@ -642,6 +648,7 @@ impl VoiceSettings {
             voice: own.voice.clone().or_else(|| self.voice.clone()),
             rate: own.rate.unwrap_or(self.rate),
             punctuation: own.punctuation.unwrap_or(self.punctuation),
+            pitch: own.pitch.unwrap_or(self.pitch),
             ..self.clone()
         }
     }
@@ -683,6 +690,8 @@ pub struct ContextVoice {
     pub rate: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub punctuation: Option<Punctuation>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pitch: Option<i32>,
 }
 
 /// The voice contexts' own voices.

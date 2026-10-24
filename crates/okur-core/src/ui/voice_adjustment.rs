@@ -2,10 +2,10 @@
 //! "Voice" group of Adjust (the voice context), Person, Rate, Punctuation and Volume, then OK
 //! and Cancel (old-pc's walk, the redesign's §1.1), for all applications. Adjust chooses All
 //! Contexts or one of the voice contexts ([`VoiceContext`]): a context shows its own Person,
-//! Rate and Punctuation, and no Volume, which is All Contexts' alone [obs, the walk of Voice
-//! Adjustment's contexts]; a change in All Contexts is every context's. Profile Name, Synthesizer
-//! Language, Speak Sample, Save As and a context's Pitch come with voice profiles (the
-//! redesign's milestone 4).
+//! Rate, Punctuation and Pitch, and no Volume, which is All Contexts' alone [obs, the walk of
+//! Voice Adjustment's contexts]; a change in All Contexts is every context's. Profile Name,
+//! Synthesizer Language, Speak Sample and Save As come with voice profiles (the redesign's
+//! milestone 4).
 
 use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, Value};
 
@@ -20,6 +20,7 @@ const PERSON: &str = "person";
 const RATE: &str = "rate";
 const PUNCTUATION: &str = "punctuation";
 const VOLUME: &str = "volume";
+const PITCH: &str = "pitch";
 
 /// The dialog's state: the settings for all applications as it opened, and as changed.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -137,6 +138,20 @@ impl VoiceAdjustment {
                             .collect(),
                     },
                 ),
+                // A context's Pitch, in Volume's place [obs, the walk of Voice Adjustment's
+                // contexts].
+                Control {
+                    enabled: self.context.is_some(),
+                    ..control(
+                        PITCH,
+                        msg::voice_adjustment_pitch(),
+                        ControlKind::Slider {
+                            min: -10,
+                            max: 10,
+                            value: voice.pitch,
+                        },
+                    )
+                },
                 Control {
                     enabled: self.context.is_none(),
                     ..control(
@@ -170,7 +185,8 @@ impl VoiceAdjustment {
             .map_or(0, |i| i + 1)
     }
 
-    /// The controls set to the context chosen: its values, and Volume for All Contexts only.
+    /// The controls set to the context chosen: its values, Pitch for a context, Volume for All
+    /// Contexts.
     fn show_context(&self) -> Vec<ToUi> {
         let voice = self.shown();
         let set = |control: &str, value: Value| ToUi::DialogSet {
@@ -182,6 +198,12 @@ impl VoiceAdjustment {
             set(PERSON, Value::Selected(self.person(&voice))),
             set(RATE, Value::Number(voice.rate)),
             set(PUNCTUATION, Value::Selected(Self::punctuation(&voice))),
+            set(PITCH, Value::Number(voice.pitch)),
+            ToUi::DialogEnable {
+                id: self.id,
+                control: PITCH.to_owned(),
+                enabled: self.context.is_some(),
+            },
             ToUi::DialogEnable {
                 id: self.id,
                 control: VOLUME.to_owned(),
@@ -216,6 +238,9 @@ impl VoiceAdjustment {
                     }
                     (Some(context), RATE, Value::Number(n)) => {
                         voice.contexts.get_mut(context).rate = Some((*n).clamp(-10, 10));
+                    }
+                    (Some(context), PITCH, Value::Number(n)) => {
+                        voice.contexts.get_mut(context).pitch = Some((*n).clamp(-10, 10));
                     }
                     (Some(context), PUNCTUATION, Value::Selected(i)) => {
                         if let Some(level) = punctuation(i) {
@@ -294,6 +319,7 @@ mod tests {
                 "Person:",
                 "Rate:",
                 "Punctuation:",
+                "Pitch:",
                 "Volume:",
                 "OK",
                 "Cancel"
@@ -352,9 +378,17 @@ mod tests {
             control: VOLUME.into(),
             enabled: false,
         }));
+        assert!(shown.contains(&ToUi::DialogEnable {
+            id: 5,
+            control: PITCH.into(),
+            enabled: true,
+        }));
         changed(&mut dialog, RATE, Value::Number(-3));
+        changed(&mut dialog, PITCH, Value::Number(4));
         let voice = &dialog.draft.voice;
         assert_eq!(voice.in_context(VoiceContext::OkurCursor).rate, -3);
+        assert_eq!(voice.in_context(VoiceContext::OkurCursor).pitch, 4);
+        assert_eq!(voice.in_context(VoiceContext::PcCursor).pitch, 0);
         assert_eq!(voice.in_context(VoiceContext::PcCursor).rate, 0);
         // Back to All Contexts: its rate shown, and a new one for every context.
         let Outcome::Send(shown) = changed(&mut dialog, ADJUST, Value::Selected(0)) else {

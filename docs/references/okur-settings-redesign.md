@@ -316,8 +316,11 @@ spoken form is a parity target.
    SAPI 5) or one saved by name (`voice_profiles`, for all applications); choosing one copies its
    voice into the place's settings with its name (`voice.profile`); Use Default leaves the
    application nothing of its own.
-   Still to do: tutor hints in the message voice (they are part of the focus speech today); a
-   context's Pitch (the synthesizers take no base pitch yet); Voice Adjustment's Profile Name,
+   **A context's Pitch** (Voice Adjustment shows it in Volume's place for a context): the
+   synthesizers say everything at the context's pitch, a capital's raise on top; a Say All's
+   parts are not pitched yet.
+   Still to do: tutor hints in the message voice (they are part of the focus speech today);
+   Voice Adjustment's Profile Name,
    Delete Profile, Speak Sample, Save As and Apply (a walk of its Profile Name box and buttons
    first); the Language menu's Voice Profiles.
 5. **Startup Wizard**, Manage Application Settings, Restore to Factory Settings.
