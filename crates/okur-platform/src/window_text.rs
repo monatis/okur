@@ -159,7 +159,7 @@ mod reader {
             let title_bar = string(element, UIA_ClassNamePropertyId)
                 .is_some_and(|class| class == "ApplicationFrameTitleBarWindow");
             // The Okur cursor's elements begin with the title bar's menu, "System", as JAWS's
-            // Scan Cursor's do; its buttons are not among them [obs, 1016/s6, 1017/s4].
+            // Scan Cursor's do; its buttons are not among them [obs, 1022/s6, 1023/s4].
             if control_type == TITLEBAR
                 && self.fields_by_line
                 && self.layout == ViewerLayout::Elements
@@ -329,7 +329,7 @@ mod reader {
                 // For the Okur cursor: an edit by its text when it has no name ("Focus here
                 // ‹Edit›"), an unnamed combo box and list by their roles ("combo box", "list
                 // view"), a list's items after it, as JAWS's Scan Cursor reads them [obs,
-                // 1016/s13-s17].
+                // 1022/s13-s17].
                 EDIT | COMBOBOX if self.fields_by_line => {
                     // SAFETY: cached property of a valid element.
                     let password = unsafe { element.CachedIsPassword() }.is_ok_and(|b| b.as_bool());

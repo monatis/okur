@@ -737,6 +737,37 @@ A step can be in more than one entry; all of its entries apply.
 - Why: the recording is of the harness's injected chord, not of JAWS's key.
 - Decided by the agent, 2026-10-22.
 
+### JAWS's Scan Cursor is stuck past a window's last element
+
+- Steps:
+  - `1022-desktop-wpf-scan-cursor-controls-alone/s18`
+  - `1022-desktop-wpf-scan-cursor-controls-alone/s19`
+  - `1022-desktop-wpf-scan-cursor-controls-alone/s20`
+  - `1022-desktop-wpf-scan-cursor-controls-alone/s21`
+  - `1022-desktop-wpf-scan-cursor-controls-alone/s24`
+  - `1022-desktop-wpf-scan-cursor-controls-alone/s25`
+  - `1022-desktop-wpf-scan-cursor-controls-alone/s26`
+  - `1022-desktop-wpf-scan-cursor-controls-alone/s27`
+  - `1022-desktop-wpf-scan-cursor-controls-alone/s29`
+  - `1022-desktop-wpf-scan-cursor-controls-alone/s30`
+  - `1022-desktop-wpf-scan-cursor-controls-alone/s32`
+  - `1023-desktop-wpf-scan-cursor-end-alone/s10`
+  - `1023-desktop-wpf-scan-cursor-end-alone/s11`
+  - `1023-desktop-wpf-scan-cursor-end-alone/s12`
+  - `1023-desktop-wpf-scan-cursor-end-alone/s13`
+  - `1023-desktop-wpf-scan-cursor-end-alone/s14`
+  - `1023-desktop-wpf-scan-cursor-end-alone/s15`
+- Difference: the whole step. JAWS's Scan Cursor goes past a WPF window's last element onto the
+  window itself, in every trial: Down from the last element says it again and the window's
+  title ("Focus here Edit | SR WPF Controls Fixture"). There it is stuck: Down, Up, Home and
+  End say nothing, and Right says the title's first letter again and again. Ctrl+End lands
+  there too, its line the title; only Ctrl+Home brings it back. Okur's Scan Cursor stays on the
+  last element, Down saying it again, and Ctrl+End goes to it.
+- Why: a cursor that Up cannot move is an accident. Recorded with the fixture's console hidden:
+  with it shown (rounds 288-290), JAWS walked on into that console, a window of the same
+  process.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
+
 ### JAWS says "JAWSCursor" after recognizing a window
 
 - Steps: `1011-desktop-screen-text-ocr-window/s4`,

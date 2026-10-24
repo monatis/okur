@@ -702,7 +702,7 @@ mod tests {
 
     /// The route takes the Scan Cursor to the element with the focus, though the focus event
     /// is the window's and its middle lies on another line; a list says "list view"
-    /// [obs, 1016/s3, s14].
+    /// [obs, 1022/s3, s14].
     #[test]
     fn the_scan_cursor_is_routed_to_the_focused_element() {
         use crate::aom::Role as R;

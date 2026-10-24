@@ -123,7 +123,7 @@ impl ScreenLine {
     pub fn spoken(&self) -> String {
         let text = self.text.trim();
         let mut said = match self.role {
-            // An unnamed element is its role, said as text: "combo box" [obs, 1016/s13].
+            // An unnamed element is its role, said as text: "combo box" [obs, 1022/s13].
             Some(role) if text.is_empty() => role.to_owned(),
             Some(role) => format!("{text}{}", crate::linearize::role_marker(role)),
             None => self.text.clone(),
@@ -233,7 +233,7 @@ pub fn lines(runs: &[ScreenRun]) -> Vec<ScreenLine> {
 }
 
 /// The word JAWS's Scan Cursor says after an element of `role`: none after text, a list's
-/// items and a menu item ("System", "First item"), "list view" after a list [obs, 1016/s6-s17].
+/// items and a menu item ("System", "First item"), "list view" after a list [obs, 1022/s6-s17].
 fn element_role_word(role: &Role) -> Option<&'static str> {
     use crate::messages::msg;
     match role {
@@ -507,7 +507,7 @@ mod tests {
 
     /// The Scan Cursor's other elements: a check box with its state, an unnamed combo box and
     /// list by their roles, a list's items and the title bar's menu without one [obs,
-    /// 1016/s6, s10, s13-s16].
+    /// 1022/s6, s10, s13-s16].
     #[test]
     fn elements_say_their_states_and_unnamed_ones_their_roles() {
         let mut check = accessible("Remember me", 0, 0, 10, 10).with_role(Role::CheckBox);

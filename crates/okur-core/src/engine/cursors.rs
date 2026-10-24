@@ -486,9 +486,9 @@ impl ScreenReaderEngine {
                 self.move_okur_word(event.key == Key::RightArrow);
             }
             // The Scan Cursor's first and last element: "top of file" and the window's title
-            // [obs, 1016/s22, 1017/s16]; "Bottom of file" and the last element, where JAWS's,
-            // walking on into another window of the application, said the title [obs,
-            // 1016/s24].
+            // [obs, 1022/s22, 1023/s16]; "Bottom of file" and the last element, where JAWS's
+            // lands on the window itself, its line the title, and stays stuck there (an accepted
+            // divergence, 1022/s24, 1023/s14).
             (Key::Home | Key::End, _, true) if self.okur_scans() => {
                 self.okur_scan_end(event.key == Key::End)
             }

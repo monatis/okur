@@ -636,6 +636,28 @@ divergences! {
      said for the words. Okur says \"Okur Cursor active | 590, 722 | Unrestricted\".",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
 
+    Difference::Step => [
+        "1022-desktop-wpf-scan-cursor-controls-alone/s18",
+        "1022-desktop-wpf-scan-cursor-controls-alone/s19",
+        "1022-desktop-wpf-scan-cursor-controls-alone/s20",
+        "1022-desktop-wpf-scan-cursor-controls-alone/s21",
+        "1022-desktop-wpf-scan-cursor-controls-alone/s24",
+        "1022-desktop-wpf-scan-cursor-controls-alone/s25",
+        "1022-desktop-wpf-scan-cursor-controls-alone/s26",
+        "1022-desktop-wpf-scan-cursor-controls-alone/s27",
+        "1022-desktop-wpf-scan-cursor-controls-alone/s29",
+        "1022-desktop-wpf-scan-cursor-controls-alone/s30",
+        "1022-desktop-wpf-scan-cursor-controls-alone/s32",
+        "1023-desktop-wpf-scan-cursor-end-alone/s10",
+        "1023-desktop-wpf-scan-cursor-end-alone/s11",
+        "1023-desktop-wpf-scan-cursor-end-alone/s12",
+        "1023-desktop-wpf-scan-cursor-end-alone/s13",
+        "1023-desktop-wpf-scan-cursor-end-alone/s14",
+        "1023-desktop-wpf-scan-cursor-end-alone/s15",
+    ],
+    "JAWS's Scan Cursor goes past a WPF window's last element onto the window itself and is      stuck there, in every trial: Down from the last element says it again and the window's      title (\"Focus here Edit | SR WPF Controls Fixture\"), then Down, Up, Home and End say      nothing and Right says the title's first letter again and again; Ctrl+End lands there      too, its line the title. Only Ctrl+Home brings it back. Okur's Scan Cursor stays on the      last element, Down saying it again, and Ctrl+End goes to it.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
+
     Difference::Step => ["688-web-custom-label/s15"],
     "After a custom label is given, JAWS's virtual cursor is at the page's top: Say Line says \
      the page's title, in every trial, as JAWS builds the page again with the label. The user \

@@ -1184,7 +1184,8 @@ const RETIRED_OKUR_SETTINGS: &[&str] = &["experimental.screen_text"];
 #[derive(Debug, Clone, Default, serde::Deserialize)]
 struct ScreenSnapshot {
     step: String,
-    /// How the window's text is read; snapshots before 1016 were all by rows.
+    /// How the window's text is read; snapshots made before the tracer saved it (1010-1015)
+    /// are by rows.
     #[serde(default)]
     layout: okur_core::viewer_text::ViewerLayout,
     /// None on a line of the selected file alone, which reads no window: its navigation pane
