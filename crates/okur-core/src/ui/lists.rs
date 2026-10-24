@@ -645,6 +645,7 @@ impl ListDialog {
             id: self.id,
             title: title.to_string(),
             controls,
+            keys: Vec::new(),
         }
     }
 

@@ -1102,6 +1102,7 @@ mod tests {
                 control("ok", "OK", ControlKind::Button { default: true }),
                 control("cancel", "Cancel", ControlKind::Button { default: false }),
             ],
+            keys: Vec::new(),
         }
     }
 
@@ -1159,6 +1160,7 @@ mod tests {
                 control("ok", "OK", ControlKind::Button { default: true }),
                 control("cancel", "Cancel", ControlKind::Button { default: false }),
             ],
+            keys: Vec::new(),
         };
         let layout = layout(&question);
         let message = layout.items.first().cloned();
@@ -1206,6 +1208,7 @@ mod tests {
                     ControlKind::CheckBox { checked: true },
                 ),
             ],
+            keys: Vec::new(),
         };
         let layout = page_layout(&page);
         let styles: Vec<(Class, u32, String)> = layout
@@ -1247,6 +1250,7 @@ mod tests {
                 ),
                 control("cancel", "&Cancel", ControlKind::Button { default: false }),
             ],
+            keys: Vec::new(),
         };
         let layout = layout(&spec);
         let list = layout

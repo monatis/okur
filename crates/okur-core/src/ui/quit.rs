@@ -59,6 +59,7 @@ impl QuitDialog {
                     ControlKind::Button { default: false },
                 ),
             ],
+            keys: Vec::new(),
         }
     }
 

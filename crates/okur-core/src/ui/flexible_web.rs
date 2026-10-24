@@ -300,6 +300,7 @@ impl FlexibleWebWizard {
                 id: self.id,
                 title: title.to_string(),
                 controls,
+                keys: Vec::new(),
             },
             buttons,
         )
@@ -547,6 +548,7 @@ impl RulesDialog {
                     },
                 ),
             ],
+            keys: Vec::new(),
         }
     }
 
@@ -595,6 +597,7 @@ impl RulesDialog {
                     ControlKind::Button { default: false },
                 ),
             ],
+            keys: Vec::new(),
         }
     }
 
@@ -713,6 +716,7 @@ impl UnsavedQuestion {
                     ControlKind::Button { default: false },
                 ),
             ],
+            keys: Vec::new(),
         }
     }
 

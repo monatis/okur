@@ -674,6 +674,7 @@ mod tests {
                 id: 7,
                 title: "Okur Find".to_owned(),
                 controls: Vec::new(),
+                keys: Vec::new(),
             },
         });
         host.send(ToUi::DialogClose { id: 7 });
@@ -696,6 +697,7 @@ mod tests {
                 id: 3,
                 title: "Okur Find".to_owned(),
                 controls: Vec::new(),
+                keys: Vec::new(),
             },
         });
         mirror.sync(&host);
@@ -729,6 +731,7 @@ mod tests {
                     },
                     enabled: true,
                 }],
+                keys: Vec::new(),
             },
         });
         mirror.sync(&host);
@@ -760,6 +763,7 @@ mod tests {
         host.send(ToUi::DialogShow {
             dialog: DialogSpec {
                 id: 1,
+                keys: Vec::new(),
                 title: "PlaceMarker List".to_owned(),
                 controls: vec![
                     Control {
@@ -808,6 +812,7 @@ mod tests {
                 id: 2,
                 title: "PlaceMarker RemoveAll Warning".to_owned(),
                 controls: vec![button("yes", "&Yes", true), button("cancel", "&No", false)],
+                keys: Vec::new(),
             },
         });
         mirror.sync(&host);

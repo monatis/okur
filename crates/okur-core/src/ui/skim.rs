@@ -364,6 +364,7 @@ impl SkimDialog {
             id: self.id,
             title: msg::skim_dialog().to_string(),
             controls,
+            keys: Vec::new(),
         }
     }
 

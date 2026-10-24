@@ -62,6 +62,7 @@ impl OverwriteDialog {
                     ControlKind::Button { default: false },
                 ),
             ],
+            keys: Vec::new(),
         }
     }
 

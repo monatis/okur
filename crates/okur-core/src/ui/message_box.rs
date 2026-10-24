@@ -45,6 +45,7 @@ impl MessageBox {
                     enabled: true,
                 },
             ],
+            keys: Vec::new(),
         }
     }
 

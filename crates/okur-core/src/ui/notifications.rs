@@ -103,6 +103,7 @@ impl HistoryDialog {
         };
         DialogSpec {
             id: self.id,
+            keys: Vec::new(),
             title: msg::notification_history_title().to_string(),
             controls: vec![
                 control(
@@ -427,6 +428,7 @@ impl NameRuleDialog {
                     ControlKind::Button { default: false },
                 ),
             ],
+            keys: Vec::new(),
         }
     }
 
@@ -515,6 +517,7 @@ impl CreateRuleDialog {
         };
         DialogSpec {
             id: self.id,
+            keys: Vec::new(),
             title: if self.modifying {
                 msg::notification_rule_modify_title().to_string()
             } else {
@@ -796,6 +799,7 @@ impl ManageRulesDialog {
                     ControlKind::Button { default: false },
                 ),
             ],
+            keys: Vec::new(),
         }
     }
 
@@ -873,6 +877,7 @@ pub fn confirm_delete(id: u32) -> DialogSpec {
                 ControlKind::Button { default: false },
             ),
         ],
+        keys: Vec::new(),
     }
 }
 
@@ -889,6 +894,7 @@ pub fn details(id: u32, text: &str) -> DialogSpec {
                 text: text.to_owned(),
             },
         )],
+        keys: Vec::new(),
     }
 }
 

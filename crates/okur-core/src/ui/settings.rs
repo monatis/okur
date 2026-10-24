@@ -258,6 +258,7 @@ impl SettingsDialog {
             id: self.id,
             title: msg::settings_dialog_title().to_string(),
             controls,
+            keys: Vec::new(),
         }
     }
 

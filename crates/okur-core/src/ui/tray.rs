@@ -65,6 +65,7 @@ impl TrayDialog {
                 button("double", msg::tray_left_double_click().to_string(), false),
                 button("cancel", msg::tray_cancel().to_string(), false),
             ],
+            keys: Vec::new(),
         }
     }
 

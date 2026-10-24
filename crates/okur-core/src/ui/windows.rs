@@ -100,6 +100,7 @@ impl WindowListDialog {
                     ControlKind::Button { default: false },
                 ),
             ],
+            keys: Vec::new(),
         }
     }
 

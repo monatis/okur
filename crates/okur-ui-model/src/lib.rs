@@ -25,6 +25,19 @@ pub struct DialogSpec {
     pub id: u32,
     pub title: String,
     pub controls: Vec<Control>,
+    /// Keys of the whole dialog, wherever its focus is: JAWS's Settings Center's Ctrl+E to its
+    /// search box, Ctrl+Shift+D to the Default settings.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub keys: Vec<DialogShortcut>,
+}
+
+/// A key of a whole dialog ("Ctrl+E", "Ctrl+Shift+D"): it moves the focus to `control`, or,
+/// where no control has that id, or it is a button, reports it pressed
+/// ([`FromUi::DialogPressed`]).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct DialogShortcut {
+    pub key: String,
+    pub control: String,
 }
 
 /// One control of a dialog.
@@ -473,6 +486,7 @@ mod tests {
                     enabled: true,
                 },
             ],
+            keys: Vec::new(),
         };
         let show = ToUi::DialogShow { dialog };
         let line = encode(&show).unwrap_or_default();

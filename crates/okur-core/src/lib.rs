@@ -862,6 +862,7 @@ mod tests {
             id: 0,
             title: String::new(),
             controls: Vec::new(),
+            keys: Vec::new(),
         });
         (engine, host, dialog)
     }

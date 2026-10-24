@@ -150,6 +150,7 @@ impl ListDialog {
                     true,
                 ),
             ],
+            keys: Vec::new(),
         }
     }
 
@@ -298,6 +299,7 @@ impl NameDialog {
                     true,
                 ),
             ],
+            keys: Vec::new(),
         }
     }
 
@@ -375,6 +377,7 @@ impl RemoveAllDialog {
                     true,
                 ),
             ],
+            keys: Vec::new(),
         }
     }
 

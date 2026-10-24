@@ -140,6 +140,7 @@ impl FindDialog {
                 button("clear", msg::find_clear_history(), false, remembered),
                 button("cancel", msg::find_cancel(), false, true),
             ],
+            keys: Vec::new(),
         }
     }
 

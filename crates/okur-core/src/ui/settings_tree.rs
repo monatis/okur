@@ -24,6 +24,8 @@ const TREE: &str = "tree";
 const SEARCH: &str = "search";
 const DESCRIPTION: &str = "description";
 const PLACE: &str = "application";
+/// Ctrl+Shift+D's press: Settings Center on the Default settings.
+const DEFAULT_PLACE: &str = "default_place";
 
 /// Which of JAWS's two dialogs this is.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -520,10 +522,21 @@ impl SettingsTree {
                 },
             ));
         }
+        // Ctrl+E to the search box from anywhere; Ctrl+Shift+D to the Default settings, in
+        // Settings Center (JAWS's help, the redesign's §1).
+        let shortcut = |key: &str, control: &str| okur_ui_model::DialogShortcut {
+            key: key.to_owned(),
+            control: control.to_owned(),
+        };
+        let mut keys = vec![shortcut("Ctrl+E", SEARCH)];
+        if self.flavor == Flavor::Center {
+            keys.push(shortcut("Ctrl+Shift+D", DEFAULT_PLACE));
+        }
         DialogSpec {
             id: self.id,
             title: self.title(),
             controls,
+            keys,
         }
     }
 
@@ -695,6 +708,21 @@ impl SettingsTree {
             FromUi::DialogPressed { id, control } if *id == self.id => match control.as_str() {
                 "ok" => self.apply(true),
                 "apply" => self.apply(false),
+                DEFAULT_PLACE if self.flavor == Flavor::Center => {
+                    self.place = 0;
+                    self.draft = self
+                        .places
+                        .first()
+                        .map(|p| p.settings.clone())
+                        .unwrap_or_default();
+                    let mut sent = self.refill();
+                    sent.push(ToUi::DialogSet {
+                        id: self.id,
+                        control: PLACE.to_owned(),
+                        value: Value::Selected(0),
+                    });
+                    Outcome::Send(sent)
+                }
                 _ => Outcome::Nothing,
             },
             FromUi::DialogClosed { id } if *id == self.id => Outcome::Closed,
@@ -879,5 +907,40 @@ mod tests {
 
     fn panic_free_fail(message: &str) {
         assert!(message.is_empty(), "{message}");
+    }
+
+    /// Ctrl+E goes to the search box from anywhere; in Settings Center, Ctrl+Shift+D shows the
+    /// Default settings, its Application box on them.
+    #[test]
+    fn ctrl_shift_d_goes_to_the_default_settings() {
+        let mut dialog = tree(Flavor::Center);
+        let keys: Vec<(String, String)> = dialog
+            .spec()
+            .keys
+            .into_iter()
+            .map(|k| (k.key, k.control))
+            .collect();
+        assert_eq!(
+            keys,
+            [
+                ("Ctrl+E".to_owned(), SEARCH.to_owned()),
+                ("Ctrl+Shift+D".to_owned(), DEFAULT_PLACE.to_owned())
+            ]
+        );
+        let Outcome::Send(sent) = dialog.handle(&FromUi::DialogPressed {
+            id: 7,
+            control: DEFAULT_PLACE.into(),
+        }) else {
+            panic_free_fail("no change");
+            return;
+        };
+        assert!(sent.contains(&ToUi::DialogSet {
+            id: 7,
+            control: PLACE.into(),
+            value: Value::Selected(0),
+        }));
+        assert_eq!(dialog.scope(), Scope::Global);
+        // Quick Settings has no Default: only Ctrl+E.
+        assert_eq!(tree(Flavor::Quick).spec().keys.len(), 1);
     }
 }

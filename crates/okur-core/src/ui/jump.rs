@@ -65,6 +65,7 @@ impl JumpDialog {
                     ControlKind::Button { default: false },
                 ),
             ],
+            keys: Vec::new(),
         }
     }
 

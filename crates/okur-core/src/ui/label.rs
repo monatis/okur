@@ -70,6 +70,7 @@ impl LabelDialog {
                     ControlKind::Button { default: false },
                 ),
             ],
+            keys: Vec::new(),
         }
     }
 

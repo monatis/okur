@@ -84,6 +84,38 @@ struct OpenDialog {
     controls: Vec<OpenControl>,
     /// A wizard's page: a child of its sheet, whose keys the sheet's dialog manager runs.
     page: bool,
+    /// The dialog's own keys ([`okur_ui_model::DialogShortcut`]), as virtual key and
+    /// modifiers, with the control each goes to.
+    keys: Vec<(Chord, String)>,
+}
+
+/// A key with its modifiers held: virtual key, Ctrl, Shift, Alt.
+type Chord = (u16, bool, bool, bool);
+
+/// A dialog key's text ("Ctrl+Shift+D", "F6") as a chord; `None` for one it cannot name.
+fn chord(text: &str) -> Option<Chord> {
+    let (mut ctrl, mut shift, mut alt) = (false, false, false);
+    let mut key = None;
+    for part in text.split('+').map(str::trim) {
+        match part.to_ascii_lowercase().as_str() {
+            "ctrl" | "control" => ctrl = true,
+            "shift" => shift = true,
+            "alt" => alt = true,
+            name => {
+                let upper = name.to_ascii_uppercase();
+                key = match upper.as_bytes() {
+                    [c] if c.is_ascii_alphanumeric() => Some(u16::from(*c)),
+                    [b'F', rest @ ..] => std::str::from_utf8(rest)
+                        .ok()
+                        .and_then(|n| n.parse::<u16>().ok())
+                        .filter(|n| (1..=24).contains(n))
+                        .map(|n| 0x6F + n),
+                    _ => None,
+                };
+            }
+        }
+    }
+    Some((key?, ctrl, shift, alt))
 }
 
 thread_local! {
@@ -177,6 +209,11 @@ pub fn show(spec: &DialogSpec) {
                 previous,
                 controls,
                 page: false,
+                keys: spec
+                    .keys
+                    .iter()
+                    .filter_map(|k| Some((chord(&k.key)?, k.control.clone())))
+                    .collect(),
             });
         }
     });
@@ -1046,9 +1083,55 @@ pub fn close(id: u32) {
     }
 }
 
+/// A key down in one of our dialogs that is one of its own keys: the focus to its control,
+/// or its press told to Okur. True when it was one.
+fn dialog_key(msg: &MSG) -> bool {
+    use windows::Win32::UI::Input::KeyboardAndMouse::{VK_CONTROL, VK_MENU};
+    use windows::Win32::UI::WindowsAndMessaging::{IsChild, WM_KEYDOWN, WM_SYSKEYDOWN};
+    if msg.message != WM_KEYDOWN && msg.message != WM_SYSKEYDOWN {
+        return false;
+    }
+    let Ok(vk) = u16::try_from(msg.wParam.0) else {
+        return false;
+    };
+    // SAFETY: the key state of this thread's input.
+    let held = |key: VIRTUAL_KEY| unsafe { GetKeyState(i32::from(key.0)) } < 0;
+    let pressed: Chord = (vk, held(VK_CONTROL), held(VK_SHIFT), held(VK_MENU));
+    let found = DIALOGS.with(|d| {
+        d.try_borrow().ok().and_then(|d| {
+            d.iter()
+                // SAFETY: our own dialog and the window the message is for.
+                .filter(|o| {
+                    o.window == msg.hwnd || unsafe { IsChild(o.window, msg.hwnd) }.as_bool()
+                })
+                .find_map(|o| {
+                    let (_, control) = o.keys.iter().find(|(chord, _)| *chord == pressed)?;
+                    let button = o
+                        .controls
+                        .iter()
+                        .find(|c| &c.name == control)
+                        .map(|c| matches!(c.kind, ControlKind::Button { .. }));
+                    Some((o.id, control.clone(), button))
+                })
+        })
+    });
+    let Some((id, control, button)) = found else {
+        return false;
+    };
+    match button {
+        Some(false) => focus(id, &control),
+        Some(true) | None => crate::win32::tell(&FromUi::DialogPressed { id, control }),
+    }
+    true
+}
+
 /// Lets the dialog manager handle `msg` (Tab, access keys, Enter, Escape); true when it did.
-/// A wizard's pages are left to their sheet's ([`crate::wizard::is_dialog_message`]).
+/// A dialog's own keys come first ([`dialog_key`]). A wizard's pages are left to their sheet's
+/// ([`crate::wizard::is_dialog_message`]).
 pub fn is_dialog_message(msg: &MSG) -> bool {
+    if dialog_key(msg) {
+        return true;
+    }
     let windows: Vec<HWND> = DIALOGS.with(|d| {
         d.try_borrow()
             .map(|d| d.iter().filter(|o| !o.page).map(|o| o.window).collect())
@@ -1197,6 +1280,7 @@ pub(crate) fn adopt_page(window: HWND, spec: &DialogSpec, ids: &[u16]) {
                 previous: HWND::default(),
                 controls,
                 page: true,
+                keys: Vec::new(),
             });
         }
     });
