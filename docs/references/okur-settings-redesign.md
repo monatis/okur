@@ -351,7 +351,7 @@ spoken form is a parity target.
    **Manage Application Settings and Restore to Factory Settings built 2026-10-24**, both in
    Options:
    - Manage Application Settings lists the applications with settings of their own, checked
-     while they are used (\`disabled_applications\`, for all applications, makes resolving skip
+     while they are used (`disabled_applications`, for all applications, makes resolving skip
      an application's layer), with Enable All, Disable All, Remove Selected (forgets its
      settings), OK, Cancel;
    - Restore to Factory Settings asks first, in JAWS's words but for "and restart JAWS", since
