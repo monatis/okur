@@ -614,39 +614,39 @@
       }
     },
     {
-      "scenario_id": "1016-desktop-wpf-scan-cursor-controls",
-      "fixture": "desktop-wpf-controls.ps1",
-      "evidence": {
-        "sha256": "772ea7658da4b240e6273c5eb824a5347c83ccead823a3643f98285a3b678ee4",
-        "capture_script_sha256": "1d23a87edd9ad08e799e337eb20b404605971eec5d95349a4d89ccd32e695f89",
-        "os_version": "Microsoft Windows NT 10.0.19045.0",
-        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
-        "trials": 3,
-        "successful_trials": 3,
-        "deterministic": true,
-        "summary_consistent": true
-      }
-    },
-    {
-      "scenario_id": "1017-desktop-wpf-scan-cursor-end",
-      "fixture": "desktop-wpf-text.ps1",
-      "evidence": {
-        "sha256": "bad2ce427dcb6617df2651f4e765615bc58a7aa227d59ad0e561048ec182cb6e",
-        "capture_script_sha256": "1d23a87edd9ad08e799e337eb20b404605971eec5d95349a4d89ccd32e695f89",
-        "os_version": "Microsoft Windows NT 10.0.19045.0",
-        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
-        "trials": 3,
-        "successful_trials": 3,
-        "deterministic": true,
-        "summary_consistent": true
-      }
-    },
-    {
       "scenario_id": "102-article-read-up",
       "fixture": "news-article.html",
       "evidence": {
         "sha256": "06c9adb858c96fef8ecf925c8b319b0272634d29aa94ad26f570122e2cc93011",
         "capture_script_sha256": "52497c30fa69eac8937bd79b2cff9c5b387ad9246d0a3d1333fdf43c76994e11",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1022-desktop-wpf-scan-cursor-controls-alone",
+      "fixture": "desktop-wpf-controls.ps1",
+      "evidence": {
+        "sha256": "60231c4f9fb27f33ec403c8c73bd039a11c811ebb7c0cb4522a250530c61c696",
+        "capture_script_sha256": "de74acaa0d688fb93280b42b96663b448c44ff75a7aae233ec1270172c758e34",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1023-desktop-wpf-scan-cursor-end-alone",
+      "fixture": "desktop-wpf-text.ps1",
+      "evidence": {
+        "sha256": "3b08054494022d03a169d2fdf9fda95bb45b4be7d126b803e514904ffd23c3da",
+        "capture_script_sha256": "de74acaa0d688fb93280b42b96663b448c44ff75a7aae233ec1270172c758e34",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
