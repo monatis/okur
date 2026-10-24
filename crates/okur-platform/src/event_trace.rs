@@ -1000,12 +1000,17 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .or_else(|| event.top_window_class.clone())
             .or_else(|| active_window.and_then(|w| w.class_name.clone()))
     };
-    // A modern app's window is read element by element, as JAWS's Scan Cursor walks it.
-    focus.read_by_elements = focus
-        .platform
-        .top_window_class
-        .as_deref()
-        .is_some_and(|class| crate::window_text::reads_by_elements(class, ""));
+    // A modern app's window is read element by element, as JAWS's Scan Cursor walks it. Its
+    // window's class tells, not a dialog's UI Automation class: a WPF window is a dialog of
+    // class "Window" when the focus is inside it (1022).
+    focus.read_by_elements = [
+        focus.platform.top_window_class.as_deref(),
+        event.top_window_class.as_deref(),
+        event.window_class.as_deref(),
+    ]
+    .into_iter()
+    .flatten()
+    .any(|class| crate::window_text::reads_by_elements(class, ""));
     // A window UI Automation calls a dialog is one too, whatever draws it: JAWS's WPF windows,
     // "Name Your Rule dialog" [obs, 783/s7].
     focus.in_dialog_box =
@@ -5855,6 +5860,20 @@ mod tests {
         event.focus_chain = vec![manage, name_rule, node(UIA_BUTTON, "OK", true)];
         let focus = focus_event_from_trace(&event);
         assert_eq!(focus.map(|f| f.outer_windows), Some(Vec::new()));
+    }
+
+    /// A WPF window is read element by element by its window's class, also when the focus is
+    /// inside it and UI Automation makes the window a dialog of class "Window" (1022/s1).
+    #[test]
+    fn a_wpf_window_with_the_focus_inside_is_read_by_elements() {
+        let mut window = node(UIA_WINDOW, "SR WPF Controls Fixture", false);
+        window.is_dialog = Some(true);
+        window.class_name = Some("Window".to_owned());
+        let mut event = focus_event(Vec::new());
+        event.window_class = Some("HwndWrapper[DefaultDomain;;1]".to_owned());
+        event.focus_chain = vec![window, node(UIA_BUTTON, "Save", true)];
+        let focus = focus_event_from_trace(&event);
+        assert_eq!(focus.map(|f| f.read_by_elements), Some(true));
     }
 
     /// A field in a WPF group box: named by the text before it, and its group's line is the
