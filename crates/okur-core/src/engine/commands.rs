@@ -1170,8 +1170,13 @@ impl ScreenReaderEngine {
                     }
                 })
                 .unwrap_or_default();
-            if !word.is_empty() {
-                self.speech.speak(&word, true);
+            // Every symbol named, whatever the punctuation level: "colon back slash" [obs,
+            // 1041/s40]; a word that is one symbol, the character alone.
+            let mut chars = word.chars();
+            match (chars.next(), chars.next()) {
+                (None, _) => {}
+                (Some(c), None) if !c.is_alphanumeric() => self.speech.speak_character(&word, true),
+                _ => self.speech.speak_symbols(&word, true),
             }
             return;
         }
