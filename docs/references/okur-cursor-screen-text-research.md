@@ -471,3 +471,38 @@ The owner found JAWS's "graphic 545" annoying, and asked whether it helps anyone
    cannot. Restriction and window kinds to check.
 6. **Background OCR's refresh:** how often, and whether the line the cursor is on is kept.
 7. **Time** from W to the first recognized line, on a full-screen window.
+
+## 11. Files and PDFs, recorded (rounds 292-299)
+
+JAWS 2025 on old-pc, OmniPage its engine for documents. Each item is the speech of every trial
+unless said; the scenarios are in `corpus/scenarios/`.
+
+- **F on a selected picture** (1024): "OCR", then "Document OCR started.", "Page is right side
+  up.", "finished." Its Results Viewer is a window of its own, titled "SR OCR Sign - OCR
+  Results", running elevated. JAWS reads the text there, the first line three times, and ends
+  with a same page link, "Open in Word...". Escape returns to File Explorer, the file said
+  twice.
+- **F on a two-page PDF with no text layer** (1025): no orientation report. Each page is one
+  line, its two lines joined; no page marks.
+- **Enter** (OCRAllInOne) in File Explorer does what F does (1028).
+- **Refusals**, each in "JAWS for Windows Message Box" with OK, JAWS's main window sometimes
+  said first:
+  - nothing selected: "OCR Failed to start. No file currently selected." (1026);
+  - a text file: "OCR Failed to start. Unsupported file currently selected." (1027);
+  - two files: "OCR Failed to start. Multiple files currently selected." (1033).
+- **Spoken refusals:**
+  - F outside File Explorer: "OCR Failed to start." and two sentences on File Explorer and its
+    context menu item (1030);
+  - D with no PDF open in Acrobat: "OCR Failed to start." and two sentences on Acrobat (1031).
+- **Q with nothing to cancel:** "You can not cancel a Recognition job that does not exist."
+  (1029).
+- **?** (1032) opens "OCR Layer Help Screen" without a word: nine lines, one per key, the last
+  "You can press Q to quit or cancel an OCR job."
+- **Recording pitfalls:**
+  - File Explorer's window title is the folder's full path on old-pc.
+  - A new File Explorer window can keep the focus in its home view.
+  - The Results Viewer outlives the recorder's Stop-Process.
+  - The taskbar's news feed changes in the background.
+  - The handoff
+    [`../handoff/2026-10-24-scan-cursor-and-file-ocr.md`](../handoff/2026-10-24-scan-cursor-and-file-ocr.md)
+    says what the harness does about each.
