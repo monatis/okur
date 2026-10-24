@@ -160,7 +160,7 @@ impl ScreenReaderEngine {
         }
         let index = usize::from(number).checked_sub(1)?;
         let Some(&offset) = self.placemarker_offsets().get(index) else {
-            return self.say(msg::placemarker_none_numbered(number).render());
+            return self.say_message(msg::placemarker_none_numbered(number).render());
         };
         let said = if moves {
             self.cursor.move_to(offset);

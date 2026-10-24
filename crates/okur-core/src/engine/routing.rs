@@ -80,7 +80,7 @@ impl ScreenReaderEngine {
         {
             return Some(String::new());
         }
-        self.say(self.said_short(msg::route_pc_to_virtual()))
+        self.say_message(self.said_short(msg::route_pc_to_virtual()))
     }
 
     /// Insert+F9: on a page without frames, "No frames found in page" [obs, 536/s12]. A page
@@ -97,7 +97,7 @@ impl ScreenReaderEngine {
         if frames {
             return None;
         }
-        self.say(msg::no_frames_in_page().to_string())
+        self.say_message(msg::no_frames_in_page().to_string())
     }
 
     /// The radio button at the virtual cursor, when checking it unchecks another of its group:
@@ -127,14 +127,14 @@ impl ScreenReaderEngine {
         // Outside a page, at the mouse: "left mouse button", the caret going where it clicks
         // [obs, 756/s6, s9].
         if self.app_mode != AppMode::VirtualBuffer {
-            let said = self.say(msg::left_mouse_button().to_string());
+            let said = self.say_message(msg::left_mouse_button().to_string());
             self.click_at_mouse(crate::actions::MouseClick::LeftSingle);
             return said;
         }
         if self.forms_mode {
             return None;
         }
-        let said = self.say(msg::left_mouse_button().to_string());
+        let said = self.say_message(msg::left_mouse_button().to_string());
         self.clicked = self.node_under_cursor().map(|node| node.id);
         self.radio_switched = self.radio_switching_here();
         if let (Some(actions), Some(node)) = (&self.actions, self.node_under_cursor()) {
@@ -146,7 +146,7 @@ impl ScreenReaderEngine {
     /// Numpad Star: "right mouse button", clicked at the mouse; the application's context
     /// menu opens there [obs, 756/s15].
     pub(super) fn right_mouse_click(&mut self) -> Option<String> {
-        let said = self.say(msg::right_mouse_button().to_string());
+        let said = self.say_message(msg::right_mouse_button().to_string());
         self.click_at_mouse(crate::actions::MouseClick::RightSingle);
         said
     }
@@ -168,7 +168,7 @@ impl ScreenReaderEngine {
             (true, true) => (MouseClick::RightDown, msg::right_button_locked()),
             (true, false) => (MouseClick::RightUp, msg::right_button_unlocked()),
         };
-        let said = self.say(said.to_string());
+        let said = self.say_message(said.to_string());
         self.click_at_mouse(click);
         said
     }
@@ -186,7 +186,7 @@ impl ScreenReaderEngine {
             ClickModifier::Shift => msg::shift_mouse_click(),
             ClickModifier::Alt => msg::alt_mouse_click(),
         };
-        let said = self.say(said.to_string());
+        let said = self.say_message(said.to_string());
         self.click_at_mouse(crate::actions::MouseClick::LeftSingle);
         said
     }
@@ -210,7 +210,7 @@ impl ScreenReaderEngine {
             self.mouse = Some((x, y));
             self.note_own_mouse_move();
         }
-        self.say(said.to_string())
+        self.say_message(said.to_string())
     }
 
     /// Ctrl+Insert+Numpad Slash: pressed where the drag starts, the mouse's place is kept and
@@ -223,7 +223,7 @@ impl ScreenReaderEngine {
         match self.drag_from.take() {
             None => {
                 self.drag_from = here;
-                self.say(msg::drag_and_drop_start().to_string())
+                self.say_message(msg::drag_and_drop_start().to_string())
             }
             Some(from) => {
                 if let (Some(to), Some(actions)) = (here, &self.actions) {

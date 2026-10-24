@@ -81,7 +81,7 @@ impl ScreenReaderEngine {
     /// Outside a page: "You must be in the web page area to activate Flexible Web."
     pub(super) fn open_flexible_web(&mut self) -> Option<String> {
         if self.app_mode != AppMode::VirtualBuffer || self.cursor.buffer.page().is_none() {
-            return self.say(msg::flexible_web_not_in_page().to_string());
+            return self.say_message(msg::flexible_web_not_in_page().to_string());
         }
         self.ui.as_ref()?;
         let at = self.cursor.current_node_id.or_else(|| {
@@ -169,7 +169,7 @@ impl ScreenReaderEngine {
             }
             Outcome::NoElements => {
                 self.flexible_web = Some(wizard);
-                return self.say(msg::flexible_web_no_elements().to_string());
+                return self.say_message(msg::flexible_web_no_elements().to_string());
             }
             Outcome::Apply(customization) => {
                 self.close_wizard(id);

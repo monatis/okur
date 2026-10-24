@@ -522,6 +522,12 @@ voice-adjustment-title = Voice Adjustment
 voice-adjustment-group = Voice
 voice-adjustment-adjust = Adjust:
 voice-adjustment-all-contexts = All Contexts
+# The voice contexts, JAWS's names with Okur's: "PC Cursor Voice | 2 of 5", "JAWS Cursor Voice",
+# "Keyboard Voice", "Tutor and Message Voice" [obs, the walk of Voice Adjustment's contexts].
+voice-adjustment-pc-cursor = PC Cursor Voice
+voice-adjustment-okur-cursor = Okur Cursor Voice
+voice-adjustment-keyboard = Keyboard Voice
+voice-adjustment-message = Tutor and Message Voice
 voice-adjustment-person = Person:
 voice-adjustment-rate = Rate:
 voice-adjustment-punctuation = Punctuation:

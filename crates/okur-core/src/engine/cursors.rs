@@ -117,9 +117,19 @@ impl ScreenReaderEngine {
         }
     }
 
+    /// The cursor that reads from now on, and its voice (Voice Adjustment's PC Cursor or Okur
+    /// Cursor context).
+    pub(super) fn set_active_cursor(&mut self, cursor: ActiveCursor) {
+        self.active_cursor = cursor;
+        self.speech.set_cursor_voice(match cursor {
+            ActiveCursor::Pc => crate::settings::VoiceContext::PcCursor,
+            ActiveCursor::Okur => crate::settings::VoiceContext::OkurCursor,
+        });
+    }
+
     /// Numpad Minus: "Okur Cursor", where JAWS says "JAWS Cursor" [obs, 516/s1].
     pub(super) fn activate_okur_cursor(&mut self) -> Option<String> {
-        self.active_cursor = ActiveCursor::Okur;
+        self.set_active_cursor(ActiveCursor::Okur);
         self.request_screen();
         // In a window read element by element: "Okur scan cursor" [obs, 1002/s2].
         let said = if self.okur_scans() {
@@ -127,21 +137,21 @@ impl ScreenReaderEngine {
         } else {
             self.cursor_message(msg::cursor_okur(), msg::cursor_okur_short())
         };
-        self.say(said)
+        self.say_message(said)
     }
 
     /// Numpad Plus with the JAWS cursor active: "PC Cursor" [obs, 516/s7].
     pub(super) fn activate_pc_cursor(&mut self) -> Option<String> {
-        self.active_cursor = ActiveCursor::Pc;
+        self.set_active_cursor(ActiveCursor::Pc);
         self.forget_recognized();
         self.background_ocr = None;
         // In a page the PC cursor is the virtual one: "virtual PC Cursor" [obs, 564/s19].
         if self.app_mode == super::AppMode::VirtualBuffer {
             let said = self.virtual_pc_message();
-            return self.say(said);
+            return self.say_message(said);
         }
         let said = self.cursor_message(msg::cursor_pc(), msg::cursor_pc_short());
-        self.say(said)
+        self.say_message(said)
     }
 
     /// Insert+Numpad Minus: the mouse goes to the PC cursor, "Route Okur to PC" (JAWS: "Route
@@ -185,7 +195,7 @@ impl ScreenReaderEngine {
                 msg::cursor_route_okur_to_pc_short(),
             )
         };
-        self.say(said)
+        self.say_message(said)
     }
 
     /// Insert+R: the next restriction, said: "Real window restriction" after the application
@@ -193,7 +203,7 @@ impl ScreenReaderEngine {
     pub(super) fn restrict_okur_cursor(&mut self) -> Option<String> {
         self.okur_restriction = self.okur_restriction.next();
         let said = self.said_short(self.okur_restriction.message());
-        self.say(said)
+        self.say_message(said)
     }
 
     /// Insert+Numpad Plus: the PC cursor to the Okur cursor, "Route PC to Okur" (JAWS: "Route
@@ -218,7 +228,7 @@ impl ScreenReaderEngine {
             actions.click_mouse(x, y, crate::actions::MouseClick::LeftSingle);
         }
         let said = msg::cursor_route_pc_to_okur().to_string();
-        self.say(said)
+        self.say_message(said)
     }
 
     /// Whether the reading keys read where the Okur cursor is: it is active, and on a text it

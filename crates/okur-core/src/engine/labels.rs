@@ -58,7 +58,7 @@ impl ScreenReaderEngine {
             return None;
         }
         let Some(target) = self.label_target() else {
-            return self.say(crate::messages::msg::custom_label_not_here().to_string());
+            return self.say_message(crate::messages::msg::custom_label_not_here().to_string());
         };
         let place = place_of(self.cursor.buffer.document_url()?);
         let current = self

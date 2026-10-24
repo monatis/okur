@@ -16,9 +16,15 @@ use super::{SpeechLog, SpeechLogKind, TtsManager};
 
 enum Request {
     Speak(String, bool),
+    /// One of Okur's own messages, in the Tutor and Message voice.
+    Message(String, bool),
     /// Text with every symbol named: a selection, a word read on its own.
     Symbols(String, bool),
     Character(String, bool),
+    /// Typing echo: a character, or a word, in the keyboard's voice.
+    Echo(String),
+    /// The cursor whose voice reads from now on.
+    Cursor(okur_core::settings::VoiceContext),
     /// A character spelled phonetically (Say Character twice).
     Phonetic(String, bool),
     /// A text spelled (Say Word or Say Line twice).
@@ -82,19 +88,23 @@ impl Request {
     /// Whether the request cuts off all speech before it.
     /// Whether the request says something (muted speech leaves it out).
     fn speaks(&self) -> bool {
-        !matches!(self, Request::Stop | Request::Configure(_))
+        !matches!(
+            self,
+            Request::Stop | Request::Configure(_) | Request::Cursor(_)
+        )
     }
 
     fn interrupts(&self) -> bool {
         match self {
-            Request::Stop => true,
+            Request::Stop | Request::Echo(_) => true,
             Request::Speak(_, interrupt)
+            | Request::Message(_, interrupt)
             | Request::Symbols(_, interrupt)
             | Request::Character(_, interrupt)
             | Request::Phonetic(_, interrupt)
             | Request::Spelled(_, interrupt)
             | Request::Marked(_, _, interrupt) => *interrupt,
-            Request::Configure(_) => false,
+            Request::Configure(_) | Request::Cursor(_) => false,
         }
     }
 
@@ -121,7 +131,9 @@ impl Request {
         batch
             .into_iter()
             .enumerate()
-            .filter(move |(i, request)| *i >= cut || matches!(request, Request::Configure(_)))
+            .filter(move |(i, request)| {
+                *i >= cut || matches!(request, Request::Configure(_) | Request::Cursor(_))
+            })
             .map(|(_, request)| request)
     }
 }
@@ -319,6 +331,15 @@ fn carry_out(
         if request.interrupts() {
             *following = false;
         }
+        // Typing echo in the keyboard's voice, all else in the cursor's.
+        if request.speaks() {
+            let context = match request {
+                Request::Echo(_) => okur_core::settings::VoiceContext::Keyboard,
+                Request::Message(..) => okur_core::settings::VoiceContext::Message,
+                _ => tts.cursor,
+            };
+            tts.use_context(context);
+        }
         let indicate_caps = tts.indicate_caps;
         match request {
             Request::Marked(text, mark, interrupt) => {
@@ -335,7 +356,7 @@ fn carry_out(
                     report(worker_report, mark);
                 }
             }
-            Request::Speak(text, interrupt) => {
+            Request::Speak(text, interrupt) | Request::Message(text, interrupt) => {
                 // Long text (Say All) in parts, so that speech starts after the
                 // first part's pronunciation, not the whole text's.
                 for (i, part) in parts(&text).enumerate() {
@@ -360,6 +381,16 @@ fn carry_out(
                     okur_core::pronounce::character_pitch(&text, indicate_caps),
                     interrupt,
                 );
+            }
+            Request::Echo(text) => {
+                let _ = tts.engine.speak_pitched(
+                    &okur_core::pronounce::character(&text),
+                    okur_core::pronounce::character_pitch(&text, indicate_caps),
+                    true,
+                );
+            }
+            Request::Cursor(context) => {
+                tts.cursor = context;
             }
             Request::Phonetic(text, interrupt) => {
                 let _ = tts.engine.speak_pitched(
@@ -439,12 +470,21 @@ impl SpeechOutput for SpeechThread {
     /// Typing echo: kept out of the speech log, as JAWS keeps it out of its history; a capital
     /// at a raised pitch [obs, 406/s13].
     fn speak_echo(&mut self, text: &str) {
-        self.send(Request::Character(text.to_owned(), true));
+        self.send(Request::Echo(text.to_owned()));
+    }
+
+    fn set_cursor_voice(&mut self, context: okur_core::settings::VoiceContext) {
+        self.send(Request::Cursor(context));
     }
 
     fn speak(&mut self, text: &str, interrupt: bool) {
         self.record(SpeechLogKind::Speak, text, interrupt);
         self.send(Request::Speak(text.to_owned(), interrupt));
+    }
+
+    fn speak_message(&mut self, text: &str, interrupt: bool) {
+        self.record(SpeechLogKind::Speak, text, interrupt);
+        self.send(Request::Message(text.to_owned(), interrupt));
     }
 
     fn speak_marked(&mut self, text: &str, mark: u64, interrupt: bool) {
@@ -857,5 +897,88 @@ mod mark_tests {
             .recent
             .back()
             .is_some_and(|t| t.chars().all(|c| c == 'ü')));
+    }
+}
+
+#[cfg(test)]
+mod context_tests {
+    use super::*;
+    use crate::tts::{TtsEngine, TtsEngineType, TtsError, VoiceInfo};
+    use okur_core::settings::{Synthesizer, VoiceContext, VoiceSettings};
+
+    /// A synthesizer that keeps the rates it was set to.
+    struct Rates(std::sync::Arc<Mutex<Vec<i32>>>);
+
+    impl TtsEngine for Rates {
+        fn name(&self) -> &str {
+            "rates"
+        }
+        fn speak(&mut self, _text: &str, _interrupt: bool) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn stop(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn pause(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn resume(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn set_rate(&mut self, rate: i32) -> Result<(), TtsError> {
+            if let Ok(mut rates) = self.0.lock() {
+                rates.push(rate);
+            }
+            Ok(())
+        }
+        fn get_rate(&self) -> i32 {
+            0
+        }
+        fn set_volume(&mut self, _volume: u16) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn get_volume(&self) -> u16 {
+            100
+        }
+        fn is_speaking(&self) -> bool {
+            false
+        }
+        fn get_voices(&self) -> Vec<VoiceInfo> {
+            Vec::new()
+        }
+        fn set_voice(&mut self, _voice_id: &str) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn wait_until_done(&mut self, _timeout_ms: u32) -> Result<(), TtsError> {
+            Ok(())
+        }
+    }
+
+    /// Each voice context speaks with its own voice, set as it starts speaking and only then:
+    /// the keyboard's rate for typing echo, the cursor's after it, the Okur cursor's once it
+    /// reads.
+    #[test]
+    fn a_voice_context_speaks_with_its_own_rate() {
+        let rates = std::sync::Arc::new(Mutex::new(Vec::new()));
+        let Ok(mut manager) = TtsManager::new(TtsEngineType::NoSpeech) else {
+            return;
+        };
+        manager.engine = Box::new(Rates(rates.clone()));
+        let mut voice = VoiceSettings {
+            synthesizer: Synthesizer::NoSpeech,
+            rate: 2,
+            ..VoiceSettings::default()
+        };
+        voice.contexts.keyboard.rate = Some(7);
+        voice.contexts.okur_cursor.rate = Some(-4);
+        SpeechOutput::configure(&mut manager, &voice);
+        manager.use_context(VoiceContext::Keyboard);
+        manager.use_context(VoiceContext::Keyboard);
+        manager.use_context(VoiceContext::PcCursor);
+        SpeechOutput::set_cursor_voice(&mut manager, VoiceContext::OkurCursor);
+        // The message voice has no rate of its own: All Contexts'.
+        manager.use_context(VoiceContext::Message);
+        let rates = rates.lock().map(|r| r.clone()).unwrap_or_default();
+        assert_eq!(rates, [2, 7, 2, -4, 2]);
     }
 }

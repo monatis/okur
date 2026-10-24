@@ -25,7 +25,7 @@ impl ScreenReaderEngine {
             QuickKeys::SayAllOnly => (QuickKeys::On, msg::quick_keys_on()),
         };
         self.quick_keys = mode;
-        self.say(format!("{}\n{word}", msg::quick_keys_navigation()))
+        self.say_message(format!("{}\n{word}", msg::quick_keys_navigation()))
     }
 
     /// Insert+Shift+Z: "Quick Keys Suspended", and "Resuming Quick Keys", which turns them on
@@ -33,10 +33,10 @@ impl ScreenReaderEngine {
     pub(super) fn suspend_or_resume_quick_keys(&mut self) -> Option<String> {
         self.quick_keys_suspended = !self.quick_keys_suspended;
         if self.quick_keys_suspended {
-            self.say(msg::quick_keys_suspended().to_string())
+            self.say_message(msg::quick_keys_suspended().to_string())
         } else {
             self.quick_keys = QuickKeys::On;
-            self.say(msg::quick_keys_resumed().to_string())
+            self.say_message(msg::quick_keys_resumed().to_string())
         }
     }
 
@@ -56,7 +56,7 @@ impl ScreenReaderEngine {
             } else {
                 msg::virtual_cursor_off()
             };
-            self.say(said.to_string())
+            self.say_message(said.to_string())
         } else {
             let _ = self.cursor.move_to_start();
             let said = if short {
@@ -64,7 +64,7 @@ impl ScreenReaderEngine {
             } else {
                 msg::virtual_cursor_on()
             };
-            self.say(said.to_string())
+            self.say_message(said.to_string())
         }
     }
 
@@ -88,7 +88,7 @@ impl ScreenReaderEngine {
         {
             return None;
         }
-        self.say(msg::screen_updated().to_string())
+        self.say_message(msg::screen_updated().to_string())
     }
 
     /// Ctrl+Alt+PageUp and PageDown: the rate one step faster or slower, said at the new rate,
@@ -103,7 +103,7 @@ impl ScreenReaderEngine {
         } else {
             msg::rate_slower()
         };
-        self.say(word.to_string())
+        self.say_message(word.to_string())
     }
 
     /// The synthesizer set to the settings' voice with the rate changed for now.
@@ -139,6 +139,13 @@ impl ScreenReaderEngine {
 
     pub(super) fn say(&mut self, speech: String) -> Option<String> {
         self.speech.speak(&speech, true);
+        Some(speech)
+    }
+
+    /// Says one of Okur's own messages about what a key did ("Okur Cursor", "Faster"), in the
+    /// Tutor and Message voice, as JAWS says its messages.
+    pub(super) fn say_message(&mut self, speech: String) -> Option<String> {
+        self.speech.speak_message(&speech, true);
         Some(speech)
     }
 }

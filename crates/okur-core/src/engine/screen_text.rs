@@ -471,7 +471,7 @@ impl ScreenReaderEngine {
             .filter(|model| model.window == window)
             .unwrap_or_else(|| ScreenModel::new(window, WindowText::default()));
         self.screen_model = Some(model.with_recognized(words.to_vec()));
-        self.active_cursor = ActiveCursor::Okur;
+        self.set_active_cursor(ActiveCursor::Okur);
         self.okur_restriction = Restriction::Unrestricted;
         let line = self.mouse.and_then(|point| {
             self.okur_screen_lines()?

@@ -937,6 +937,11 @@ pub trait SpeechOutput: Send + Sync {
         self.speak(text, true);
     }
 
+    /// Speaks one of Okur's own messages, in the Tutor and Message voice context.
+    fn speak_message(&mut self, text: &str, interrupt: bool) {
+        self.speak(text, interrupt);
+    }
+
     /// Speaks text with every symbol in it named, whatever the punctuation level: a selection
     /// and a word read on its own, as JAWS reads them ("Friday comma, January 2 comma," after
     /// Ctrl+A [obs, 323/s7]; "dog comma," by word [obs, 213/s11]).
@@ -1017,6 +1022,10 @@ pub trait SpeechOutput: Send + Sync {
     fn voices(&self) -> Vec<String> {
         Vec::new()
     }
+
+    /// Reads from now on in the voice of `context`'s cursor: the PC cursor's, or the Okur
+    /// cursor's while it is active (JAWS's JAWS Cursor voice). Typing echo keeps the keyboard's.
+    fn set_cursor_voice(&mut self, _context: crate::settings::VoiceContext) {}
 
     /// Speaks from now on with `voice`: its synthesizer, voice, rate and volume.
     fn configure(&mut self, voice: &crate::settings::VoiceSettings) {

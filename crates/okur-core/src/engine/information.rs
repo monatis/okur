@@ -18,7 +18,7 @@ impl ScreenReaderEngine {
             .as_ref()
             .filter(|f| self.app_mode != AppMode::VirtualBuffer && f.in_dialog_box);
         let Some(focus) = focus else {
-            return self.say(self.said_short(msg::not_in_dialog_box()));
+            return self.say_message(self.said_short(msg::not_in_dialog_box()));
         };
         let name = if focus.role == crate::aom::Role::Button {
             focus.name.clone().unwrap_or_default()
@@ -49,7 +49,7 @@ impl ScreenReaderEngine {
             .map(str::trim)
             .filter(|k| !k.is_empty())
         else {
-            return self.say(msg::no_hot_key().to_string());
+            return self.say_message(msg::no_hot_key().to_string());
         };
         let name = focus.name.as_deref().unwrap_or_default().trim();
         let letter = key.rsplit('+').next().and_then(|k| {

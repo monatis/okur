@@ -255,6 +255,8 @@ pub static SETTINGS: &[SettingSpec] = &[
         Some(msg::settings_punctuation),
         Kind::Choice(choices::<Punctuation>),
     ),
+    // The voice contexts' own voices: Voice Adjustment's Adjust box and the settings file.
+    spec("voice.contexts", Group::Speech, None, Kind::Structured),
     SettingSpec {
         jaws: default_jcf("Options", "IndicateCaps", |v| Value::Bool(v.trim() != "0")),
         ..spec(

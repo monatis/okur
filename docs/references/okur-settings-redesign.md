@@ -69,6 +69,15 @@ kept it (research, not evidence):
   "Cancel Button". No Pitch with this SAPI voice, and no OK or Apply on a factory profile
   unchanged (the help: OK is unavailable after changing one; Apply appears once something
   changed).
+- **Voice Adjustment's contexts** (`jaws-window-walk.ps1 -Parts contexts`): Adjust's five, by
+  Down: "All Contexts | 1 of 5", "PC Cursor Voice | 2 of 5", "JAWS Cursor Voice | 3 of 5",
+  "Keyboard Voice | 4 of 5", "Tutor and Message Voice | 5 of 5". All Contexts shows Person, Rate,
+  Punctuation and Volume; a context shows Person, Rate, Punctuation and "Voice | Pitch: 10 | left
+  right slider | 50 percent", and no Volume. On old-pc every context has All Contexts' values.
+- **Select a Voice Profile** (Insert+Ctrl+S over Notepad): "JAWS Version 2025.2505.43 | Select a
+  Voice Profile dialog | Default: Combo box | SAPI 5X 64 | 5 of 5"; by Tab: "For notepad: Combo
+  box | Use Default | 1 of 6", "OK Button", "Cancel Button". JAWS's version before the dialog is
+  its accident (as before its other dialogs: accepted divergence `JawsSaysBeforeItsDialog`).
 - **Settings Center** (Insert+6 over Notepad; `settings-center-walk.ps1`): "NotePad - JAWS
   Settings Center dialog | SearchBox Edit | Type in text."; by Tab: " | Tree view | | User |
   closed | 1 of 28 | To move through or expand items use the Arrow keys.", " read only edit |
@@ -252,7 +261,7 @@ top ten (§8 there) then fill the tree, one table row each.
 - Done (§1.1): Shift+Space, the Tab order once changed, F6, Escape's question and its buttons,
   Enter on a setting, Quick Settings' Tab order and its lifetime words. Still: Settings Center's
   tree in Default, each group opened; what Quick Settings' Escape does after a change.
-- Select a Voice Profile's speech.
+- Done (§1.1): Voice Adjustment's contexts and Select a Voice Profile's Tab order.
 These are research walks of JAWS's own windows (JAWS's dialogs refuse injected keys: walks use
 `TypeKey` through FSAPI or `okur-lab keys` with the process allowed), then scenarios where a
 spoken form is a parity target.
@@ -293,4 +302,15 @@ spoken form is a parity target.
    4), Commands Search in Help once Okur has it.
 4. **Voices**: voice contexts, profiles, Voice Adjustment, Select a Voice Profile, the Language
    menu's profiles.
+   **Voice contexts built 2026-10-24**:
+   - `voice.contexts` holds the PC Cursor, Okur Cursor, Keyboard and Tutor and Message voices
+     (person, rate, punctuation), each part it leaves out All Contexts';
+   - the speech thread speaks typing echo in the keyboard's voice, Okur's own messages
+     (`say_message`: "Okur Cursor", "Faster", "left mouse button", "Not in a dialog box"...) in
+     the message voice, and all else in the cursor's, the Okur cursor's while it is active;
+   - Voice Adjustment's Adjust box offers the five as JAWS's, a context showing its own values
+     and no Volume, and a change in All Contexts is every context's.
+   Still to do: tutor hints in the message voice (they are part of the focus speech today); a
+   context's Pitch (the synthesizers take no base pitch yet); profiles; Select a Voice Profile;
+   the Language menu.
 5. **Startup Wizard**, Manage Application Settings, Restore to Factory Settings.

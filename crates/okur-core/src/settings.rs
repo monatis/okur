@@ -587,6 +587,9 @@ pub struct VoiceSettings {
     pub indicate_caps: bool,
     /// How running text is given to the voice.
     pub text: TextProcessing,
+    /// The voice contexts' own voices, where they differ from the one above (JAWS's All
+    /// Contexts).
+    pub contexts: VoiceContexts,
 }
 
 impl Default for VoiceSettings {
@@ -599,6 +602,88 @@ impl Default for VoiceSettings {
             punctuation: Punctuation::default(),
             indicate_caps: true,
             text: TextProcessing::default(),
+            contexts: VoiceContexts::default(),
+        }
+    }
+}
+
+impl VoiceSettings {
+    /// The voice `context` speaks with: All Contexts' with the context's own parts.
+    pub fn in_context(&self, context: VoiceContext) -> VoiceSettings {
+        let own = self.contexts.get(context);
+        VoiceSettings {
+            voice: own.voice.clone().or_else(|| self.voice.clone()),
+            rate: own.rate.unwrap_or(self.rate),
+            punctuation: own.punctuation.unwrap_or(self.punctuation),
+            ..self.clone()
+        }
+    }
+}
+
+/// Who is speaking, as JAWS's voice contexts (Voice Adjustment's Adjust box) tell them apart:
+/// each can have its own voice, so that the voice says which cursor is reading.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum VoiceContext {
+    /// The focus, and what the PC cursor reads.
+    PcCursor,
+    /// What is read while the Okur cursor is active (JAWS's JAWS Cursor voice).
+    OkurCursor,
+    /// Typing echo.
+    Keyboard,
+    /// Tutor messages and Okur's own messages.
+    Message,
+}
+
+impl VoiceContext {
+    /// In Voice Adjustment's order, after All Contexts.
+    pub const ALL: [VoiceContext; 4] = [
+        VoiceContext::PcCursor,
+        VoiceContext::OkurCursor,
+        VoiceContext::Keyboard,
+        VoiceContext::Message,
+    ];
+}
+
+/// A voice context's own voice: each part it leaves out is All Contexts'. The volume is All
+/// Contexts' alone, as Voice Adjustment shows it [obs, the walk of Voice Adjustment's contexts].
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default)]
+pub struct ContextVoice {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub voice: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rate: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub punctuation: Option<Punctuation>,
+}
+
+/// The voice contexts' own voices.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default)]
+pub struct VoiceContexts {
+    pub pc_cursor: ContextVoice,
+    pub okur_cursor: ContextVoice,
+    pub keyboard: ContextVoice,
+    pub message: ContextVoice,
+}
+
+impl VoiceContexts {
+    pub fn get(&self, context: VoiceContext) -> &ContextVoice {
+        match context {
+            VoiceContext::PcCursor => &self.pc_cursor,
+            VoiceContext::OkurCursor => &self.okur_cursor,
+            VoiceContext::Keyboard => &self.keyboard,
+            VoiceContext::Message => &self.message,
+        }
+    }
+
+    pub fn get_mut(&mut self, context: VoiceContext) -> &mut ContextVoice {
+        match context {
+            VoiceContext::PcCursor => &mut self.pc_cursor,
+            VoiceContext::OkurCursor => &mut self.okur_cursor,
+            VoiceContext::Keyboard => &mut self.keyboard,
+            VoiceContext::Message => &mut self.message,
         }
     }
 }

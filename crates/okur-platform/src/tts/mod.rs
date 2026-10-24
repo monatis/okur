@@ -153,6 +153,11 @@ pub struct TtsManager {
     pub(crate) text: okur_core::settings::TextProcessing,
     /// The voice settings last applied, so that a change applies only what differs.
     applied: Option<okur_core::settings::VoiceSettings>,
+    /// The voice settings as configured, every voice context's.
+    settings: Option<okur_core::settings::VoiceSettings>,
+    /// The voice context speaking now, and the cursor's, which speaks all but typing echo.
+    context: okur_core::settings::VoiceContext,
+    pub(crate) cursor: okur_core::settings::VoiceContext,
 }
 
 impl TtsManager {
@@ -167,7 +172,21 @@ impl TtsManager {
             indicate_caps: true,
             text: okur_core::settings::TextProcessing::default(),
             applied: None,
+            settings: None,
+            context: okur_core::settings::VoiceContext::PcCursor,
+            cursor: okur_core::settings::VoiceContext::PcCursor,
         })
+    }
+
+    /// Speaks from now on in `context`'s voice, set if it is not the one speaking.
+    pub(crate) fn use_context(&mut self, context: okur_core::settings::VoiceContext) {
+        if context == self.context {
+            return;
+        }
+        self.context = context;
+        if let Some(settings) = self.settings.clone() {
+            self.apply(&settings.in_context(context));
+        }
     }
 
     /// A synthesizer of the given type.
@@ -409,6 +428,19 @@ impl okur_core::speech::SpeechOutput for TtsManager {
     /// the voice; only another synthesizer or voice starts or chooses it, which on SAPI
     /// enumerates its voices and can reload one (responsiveness review, 2026-10-19).
     fn configure(&mut self, voice: &okur_core::settings::VoiceSettings) {
+        self.settings = Some(voice.clone());
+        self.apply(&voice.in_context(self.context));
+    }
+
+    fn set_cursor_voice(&mut self, context: okur_core::settings::VoiceContext) {
+        self.cursor = context;
+        self.use_context(context);
+    }
+}
+
+impl TtsManager {
+    /// Sets the voice of one context: what differs from the voice last applied.
+    fn apply(&mut self, voice: &okur_core::settings::VoiceSettings) {
         self.punctuation = voice.punctuation;
         self.indicate_caps = voice.indicate_caps;
         self.text = voice.text;
