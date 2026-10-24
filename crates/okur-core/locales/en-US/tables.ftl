@@ -60,3 +60,9 @@ word-cell-selected = Selected
 # The table's last cell, where Tab adds a row [obs, 518/s15, 522/s10].
 word-last-cell = last cell in table
 word-tab-adds-row = Warning! Pressing tab here adds an extra row.
+# Ctrl+Alt+Home to the table's first cell [obs, 523/s12].
+word-table-start = beginning of table
+# Say Cell and Say Current Focus at the last cell [obs, 523/s10, s11].
+word-last-cell-said = Last cell in table.
+# A table key outside a table [obs, 523/s15].
+word-not-in-table = Not in a Table

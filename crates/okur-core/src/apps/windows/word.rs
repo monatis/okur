@@ -5,7 +5,7 @@
 //! before it [obs, 518].
 
 use crate::editing::EditKey;
-use crate::event::{LineStructure, TextContext};
+use crate::event::{LineStructure, TableCell, TextContext};
 use crate::messages::msg;
 
 /// `line` spoken as JAWS speaks a line of Word's: a heading with its level before it,
@@ -20,62 +20,138 @@ pub(crate) fn spoken_line(context: &TextContext, line: String) -> String {
     }
 }
 
-/// What JAWS says on moving to another cell of Word's table with its table keys or Tab
-/// (`across` a row, or along a column): the title for the way the cell was entered (the
-/// column's header across, the row's first cell along), the cell, else its column or row
-/// ("Hours | 9 to 9", "Branch | Hours", "Branch | column 1 of 2" [obs, 522/s10-s12]);
-/// "Selected" where Tab selected its text, and at the table's last cell, that Tab adds a row
-/// [obs, 518/s15]. `None` when the caret is in no other cell.
+/// How the caret came to a cell of Word's table, which decides what JAWS says of it.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum CellMove {
+    /// Across a row: Ctrl+Alt+Left or Right, Tab.
+    Across,
+    /// Along a column: Ctrl+Alt+Up or Down.
+    Along,
+    /// To the table's first cell: Ctrl+Alt+Home.
+    First,
+    /// To its last: Ctrl+Alt+End.
+    Last,
+}
+
+/// The cell of Word's table that holds the caret of `context`.
+fn cell_of(context: &TextContext) -> Option<&TableCell> {
+    context.structure.as_ref()?.cell.as_ref()
+}
+
+/// A cell's titles: its column's header unless it is in the first row, and its row's first
+/// cell unless it is in the first column, where it is its own title.
+fn titles(cell: &TableCell) -> (Option<&String>, Option<&String>) {
+    (
+        cell.column_header.as_ref().filter(|_| cell.row > 1),
+        cell.row_header.as_ref().filter(|_| cell.column > 1),
+    )
+}
+
+/// What JAWS says on moving to a cell of Word's table with its table keys or Tab:
+/// - across a row, the column's title, the cell, else its column ("Hours | 9 to 9", "Branch |
+///   column 1 of 2" [obs, 522/s10, s12]); along a column, the row's title, else its row
+///   ("Branch | Hours", "Branch | row 1 of 2" [obs, 522/s11, 523/s5]);
+/// - to the first or last cell, "beginning of table" or "last cell in table", then the row's
+///   and the column's titles, the cell, else its row and column ("beginning of table | Branch |
+///   row 1 of 2 | column 1 of 2", "last cell in table | Central | Hours | 9 to 9" [obs,
+///   523/s12, s13]);
+/// - "Selected" where Tab selected its text, and at the table's last cell, that Tab adds a row
+///   [obs, 518/s15, 523/s9].
+///
+/// `None` when a move across or along left the caret in its cell.
 pub(crate) fn cell_speech(
     before: Option<&TextContext>,
     after: &TextContext,
-    across: bool,
+    how: CellMove,
 ) -> Option<String> {
-    let now = after.structure.as_ref()?.cell.as_ref()?;
-    let was = before
-        .and_then(|b| b.structure.as_ref())
-        .and_then(|s| s.cell.as_ref());
-    if was.is_some_and(|w| (w.table, w.row, w.column) == (now.table, now.row, now.column)) {
+    let now = cell_of(after)?;
+    let was = before.and_then(cell_of);
+    if matches!(how, CellMove::Across | CellMove::Along)
+        && was.is_some_and(|w| (w.table, w.row, w.column) == (now.table, now.row, now.column))
+    {
         return None;
     }
-    // A cell of the first row is its column's title, of the first column its row's.
-    let title = if across {
-        now.column_header.as_ref().filter(|_| now.row > 1)
-    } else {
-        now.row_header.as_ref().filter(|_| now.column > 1)
-    };
-    let mut said: Vec<String> = title.cloned().into_iter().collect();
-    said.push(cell_line(after));
-    if title.is_none() {
-        said.push(if across {
-            msg::word_column_of(now.column, now.columns).render()
-        } else {
-            msg::word_row_of(now.row, now.rows).render()
-        });
+    let (column_title, row_title) = titles(now);
+    let column_place = || msg::word_column_of(now.column, now.columns).render();
+    let row_place = || msg::word_row_of(now.row, now.rows).render();
+    let mut said = Vec::new();
+    match how {
+        CellMove::Across => {
+            said.extend(column_title.cloned());
+            said.push(cell_line(after));
+            if column_title.is_none() {
+                said.push(column_place());
+            }
+        }
+        CellMove::Along => {
+            said.extend(row_title.cloned());
+            said.push(cell_line(after));
+            if row_title.is_none() {
+                said.push(row_place());
+            }
+        }
+        CellMove::First | CellMove::Last => {
+            said.push(if how == CellMove::First {
+                msg::word_table_start().to_string()
+            } else {
+                msg::word_last_cell().to_string()
+            });
+            said.extend(row_title.cloned());
+            said.extend(column_title.cloned());
+            said.push(cell_line(after));
+            if row_title.is_none() {
+                said.push(row_place());
+            }
+            if column_title.is_none() {
+                said.push(column_place());
+            }
+        }
     }
     if after.selection.is_some_and(|(start, end)| start < end) {
         said.push(msg::word_cell_selected().to_string());
     }
     if (now.row, now.column) == (now.rows, now.columns) {
-        said.push(msg::word_last_cell().to_string());
+        if how != CellMove::Last {
+            said.push(msg::word_last_cell().to_string());
+        }
         said.push(msg::word_tab_adds_row().to_string());
     }
     Some(said.join("\n"))
 }
 
-/// Say Current Focus in a cell of Word's table: the cell, its column, row and table, "Branch
-/// | column 1 of 2 | row 1 of 2 | table 1" [obs, 522/s13]. `None` outside a table.
-pub(crate) fn cell_focus(context: &TextContext) -> Option<String> {
-    let cell = context.structure.as_ref()?.cell.as_ref()?;
-    Some(
-        [
-            cell_line(context),
-            msg::word_column_of(cell.column, cell.columns).render(),
-            msg::word_row_of(cell.row, cell.rows).render(),
-            msg::word_table(cell.table).render(),
-        ]
-        .join("\n"),
-    )
+/// Say Cell (Ctrl+Alt+Numpad 5) in Word's table, and with `table` Say Current Focus: the
+/// column's and the row's titles, the cell, its column and row, at the last cell that Tab adds a
+/// row, and for the focus the table ("Hours | Central | 9 to 9 | column 2 of 2 | row 2 of 2 |
+/// Last cell in table. | Warning! ... | table 1", "Branch | column 1 of 2 | row 1 of 2 | table
+/// 1" [obs, 523/s10, s11; 522/s13]). `None` outside a table.
+pub(crate) fn cell_focus(context: &TextContext, table: bool) -> Option<String> {
+    let cell = cell_of(context)?;
+    let (column_title, row_title) = titles(cell);
+    let mut said: Vec<String> = column_title.into_iter().chain(row_title).cloned().collect();
+    said.push(cell_line(context));
+    said.push(msg::word_column_of(cell.column, cell.columns).render());
+    said.push(msg::word_row_of(cell.row, cell.rows).render());
+    if (cell.row, cell.column) == (cell.rows, cell.columns) {
+        said.push(msg::word_last_cell_said().to_string());
+        said.push(msg::word_tab_adds_row().to_string());
+    }
+    if table {
+        said.push(msg::word_table(cell.table).render());
+    }
+    Some(said.join("\n"))
+}
+
+/// Say Current Focus in Word's document: in a table, the cell ([`cell_focus`]); elsewhere the
+/// caret's line as Say Line reads it, " heading level 1 Library Hours" [obs, 523/s16].
+/// `None` outside a document whose structure the platform reads.
+pub(crate) fn document_focus(context: &TextContext) -> Option<String> {
+    context.structure.as_ref()?;
+    cell_focus(context, true).or_else(|| {
+        Some(spoken_line(
+            context,
+            crate::editing::line_at(context).trim().to_owned(),
+        ))
+    })
 }
 
 /// The caret's line in a cell, "blank" when it has no text.
@@ -272,29 +348,52 @@ mod tests {
         let last = cell(2, 2, "9 to 9");
         let hours = cell(1, 2, "Hours");
         let branch = cell(1, 1, "Branch ");
-        let warning = "last cell in table\nWarning! Pressing tab here adds an extra row.";
+        let tab_adds_row = "Warning! Pressing tab here adds an extra row.";
+        let warning = format!("last cell in table\n{tab_adds_row}");
         assert_eq!(
-            cell_speech(Some(&central), &last, true),
+            cell_speech(Some(&central), &last, CellMove::Across),
             Some(format!("Hours\n9 to 9\n{warning}"))
         );
         assert_eq!(
-            cell_speech(Some(&last), &hours, false).as_deref(),
+            cell_speech(Some(&last), &hours, CellMove::Along).as_deref(),
             Some("Branch\nHours")
         );
         assert_eq!(
-            cell_speech(Some(&hours), &branch, true).as_deref(),
+            cell_speech(Some(&hours), &branch, CellMove::Across).as_deref(),
             Some("Branch\ncolumn 1 of 2")
+        );
+        assert_eq!(
+            cell_speech(Some(&central), &branch, CellMove::Along).as_deref(),
+            Some("Branch\nrow 1 of 2")
         );
         let mut selected = last.clone();
         selected.selection = Some((0, 6));
         assert_eq!(
-            cell_speech(Some(&central), &selected, true),
+            cell_speech(Some(&central), &selected, CellMove::Across),
             Some(format!("Hours\n9 to 9\nSelected\n{warning}"))
         );
-        assert_eq!(cell_speech(Some(&last), &last, true), None);
+        assert_eq!(cell_speech(Some(&last), &last, CellMove::Across), None);
+        // The first and last cells [obs, 523/s12, s13].
         assert_eq!(
-            cell_focus(&branch).as_deref(),
+            cell_speech(Some(&last), &branch, CellMove::First).as_deref(),
+            Some("beginning of table\nBranch\nrow 1 of 2\ncolumn 1 of 2")
+        );
+        assert_eq!(
+            cell_speech(Some(&branch), &last, CellMove::Last),
+            Some(format!(
+                "last cell in table\nCentral\nHours\n9 to 9\n{tab_adds_row}"
+            ))
+        );
+        // Say Current Focus and Say Cell [obs, 522/s13, 523/s10, s11].
+        assert_eq!(
+            cell_focus(&branch, true).as_deref(),
             Some("Branch\ncolumn 1 of 2\nrow 1 of 2\ntable 1")
+        );
+        assert_eq!(
+            cell_focus(&last, false),
+            Some(format!(
+                "Hours\nCentral\n9 to 9\ncolumn 2 of 2\nrow 2 of 2\nLast cell in table.\n{tab_adds_row}"
+            ))
         );
     }
 }

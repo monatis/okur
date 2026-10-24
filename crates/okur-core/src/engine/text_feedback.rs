@@ -38,7 +38,9 @@ impl ScreenReaderEngine {
             && !m.insert
             && !m.win
             && self.in_document_table())
-        .then_some(crate::editing::EditKey::TableCell { across: true });
+        .then_some(crate::editing::EditKey::TableCell(
+            crate::apps::windows::word::CellMove::Across,
+        ));
         if let Some(key) = crate::editing::EditKey::of(event).or(own_key).or(cell_key) {
             // The word being typed ends where the caret moves; Backspace takes back its last
             // character.
@@ -101,56 +103,71 @@ impl ScreenReaderEngine {
             .is_some_and(|s| s.cell.is_some())
     }
 
-    /// JAWS's table keys (Ctrl+Alt+arrows) in a document whose structure the platform reads
-    /// (Word's): the caret to the next cell that way, read as JAWS reads it [obs, 522/s10-s12];
-    /// at the table's edge, the edge, as in a page's table; outside a table, "Not in a
-    /// table." `None` for other keys and fields, which go on as before.
+    /// JAWS's table keys in a document whose structure the platform reads (Word's):
+    /// Ctrl+Alt+arrows move the caret to the next cell that way, Ctrl+Alt+Home and End to the
+    /// first and last, each read as JAWS reads it [obs, 522/s10-s12, 523/s12, s13]; at the
+    /// table's edge, its edge, "end of row" [obs, 523/s3, s4, s6, s8]; Say Cell (Ctrl+Alt+Numpad
+    /// 5) reads the cell [obs, 523/s11]; outside a table, "Not in a Table" [obs, 523/s15].
+    /// `None` for other keys and fields, which go on as before.
     pub(super) fn document_table_key(
         &mut self,
         event: &KeyEvent,
     ) -> Option<crate::input::KeyAction> {
+        use crate::apps::windows::word::CellMove;
         use crate::command::Command;
-        let (rows, columns): (isize, isize) = match crate::command::command_for(event)? {
+        let command = crate::command::command_for(event)?;
+        let (rows, columns): (isize, isize) = match command {
             Command::TableCellRight => (0, 1),
             Command::TableCellLeft => (0, -1),
             Command::TableCellDown => (1, 0),
             Command::TableCellUp => (-1, 0),
+            Command::TableFirstCell | Command::TableLastCell | Command::SayCurrentCell => (0, 0),
             _ => return None,
         };
         if !self.editing_text() {
             return None;
         }
-        let structure = self.last_text.as_ref()?.structure.as_ref()?;
+        let context = self.last_text.as_ref()?;
+        let structure = context.structure.as_ref()?;
         let Some(cell) = structure.cell.as_ref() else {
-            self.speech.speak(msg::table_not_in_table().as_str(), true);
+            self.speech.speak(msg::word_not_in_table().as_str(), true);
             return Some(crate::input::KeyAction::Consume);
         };
-        let row = cell
-            .row
-            .checked_add_signed(rows)
-            .filter(|r| (1..=cell.rows).contains(r));
-        let column = cell
-            .column
-            .checked_add_signed(columns)
-            .filter(|c| (1..=cell.columns).contains(c));
+        let (row, column, how) = match command {
+            Command::SayCurrentCell => {
+                if let Some(said) = crate::apps::windows::word::cell_focus(context, false) {
+                    self.speech.speak(&said, true);
+                }
+                return Some(crate::input::KeyAction::Consume);
+            }
+            Command::TableFirstCell => (Some(1), Some(1), CellMove::First),
+            Command::TableLastCell => (Some(cell.rows), Some(cell.columns), CellMove::Last),
+            _ => (
+                cell.row
+                    .checked_add_signed(rows)
+                    .filter(|r| (1..=cell.rows).contains(r)),
+                cell.column
+                    .checked_add_signed(columns)
+                    .filter(|c| (1..=cell.columns).contains(c)),
+                if rows == 0 {
+                    CellMove::Across
+                } else {
+                    CellMove::Along
+                },
+            ),
+        };
         let (Some(row), Some(column)) = (row, column) else {
-            let short =
-                self.settings.verbosity.message_length() == crate::settings::MessageLength::Short;
-            let edge = match (rows, columns, short) {
-                (1, _, true) => msg::table_on_last_row_short(),
-                (1, _, false) => msg::table_on_last_row(),
-                (-1, _, true) => msg::table_on_first_row_short(),
-                (-1, _, false) => msg::table_on_first_row(),
-                (_, 1, true) => msg::table_on_last_column_short(),
-                (_, 1, false) => msg::table_on_last_column(),
-                (_, _, true) => msg::table_on_first_column_short(),
-                (_, _, false) => msg::table_on_first_column(),
+            let edge = match (rows, columns) {
+                (1, _) => msg::table_column_bottom(),
+                (-1, _) => msg::table_column_top(),
+                (_, 1) => msg::table_row_end(),
+                _ => msg::table_row_start(),
             };
             self.speech.speak(edge.as_str(), true);
             return Some(crate::input::KeyAction::Consume);
         };
         tracing::debug!(row, column, "table key; moving to the cell");
-        self.pending_edit = Some(crate::editing::EditKey::TableCell { across: rows == 0 });
+        self.pending_edit = Some(crate::editing::EditKey::TableCell(how));
         if let Some(actions) = &self.actions {
             actions.move_to_cell(self.last_text.as_ref(), row, column);
         }

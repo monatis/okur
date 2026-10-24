@@ -7346,7 +7346,7 @@ fn words_heading_list_lists_the_documents_headings() {
 }
 
 /// Ctrl+Alt+Right in a table of Word's moves the caret to the next cell through the platform;
-/// at the row's end it says so, as in a page's table.
+/// at the row's end it says so.
 #[test]
 fn words_table_keys_move_to_the_next_cell() {
     let cell = |row, column| crate::event::TableCell {
@@ -7397,7 +7397,7 @@ fn words_table_keys_move_to_the_next_cell() {
         Some("Hours\n9 to 9\nlast cell in table\nWarning! Pressing tab here adds an extra row.")
     );
     speech.take();
-    // At the row's end: the edge, and the caret stays.
+    // At the row's end: the edge, and the caret stays [obs, 523/s8].
     assert_eq!(engine.handle_key_event(&right), KeyAction::Consume);
-    assert_eq!(speech.take(), ["You are on the last column in the row."]);
+    assert_eq!(speech.take(), ["end of row"]);
 }
