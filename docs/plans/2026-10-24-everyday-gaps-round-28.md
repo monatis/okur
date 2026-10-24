@@ -32,8 +32,8 @@ The owner, after using Okur: "it feels quite smooth and genuinely usable"; Word 
 "Not yet" item. Old-pc's Office is not activated, which is no blocker: its notice has a Close
 button, and Word then works.
 - **Round 300** records 518 (reading a Word document) and 519 (JAWS's Word lists and spelling)
-  with the fixture that writes its document itself () and the recorder's
-   launch, which never ends Word: its process holds the owner's own document.
+  with the fixture that writes its document itself (`28b5eab0`) and the recorder's
+  `close_window` launch, which never ends Word: its process holds the owner's own document.
 - Then Okur in Word, against them: Say Line, Say Word, words, the misspelled word, the
   bulleted list, the table, Say All, Say Font (JAWS's Word Say Font reads the style, line
   spacing, alignment and outline level, probed live), and JAWS's Word lists (Insert+F6).
@@ -47,12 +47,13 @@ Voices...; Utilities: Settings Center...; Language; Help), Quick Settings (Inser
 Center (Insert+6) as a search box over a tree of groups and settings (arrows to move, open and
 close; Space changes a value) with each setting's description. Okur has one flat dialog.
 - Research from JAWS's documentation:
-  [](../references/jaws-settings-ui-research.md); the
-  settings themselves: [](../references/jaws-customization-map.md).
+  [`../references/jaws-settings-ui-research.md`](../references/jaws-settings-ui-research.md); the
+  settings themselves: [`../references/jaws-customization-map.md`](../references/jaws-customization-map.md).
 - Probed on old-pc (research, not evidence): Quick Settings is a dialog with a search box, a
   custom tree ("level 1 | Automatic Activation not checked | 1 of 4 | Touch Cursor Options"),
-  a pane of the selected group's controls, a description, "Expand Tree View" and OK; a full
-  walk of its tree in Notepad is kept for the design.
+  a pane of the selected group's controls, a description, "Expand Tree View" and OK. A full
+  walk of its tree in Notepad (260 Down presses) waits in the session's scratch folder, to be
+  turned into the design's group list; the probe scripts are to join `skills/jaws-reference/`.
 - To do: record the open questions (the research's §8.8: menus' 2025 order and access keys,
   Basics' and Voice Adjustment's Tab order, how tree items are spoken, Shift+Space), write the
   redesign (the Okur window and its menus, Basics, Voices with profiles, Quick Settings and
