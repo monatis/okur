@@ -1,0 +1,85 @@
+{
+  "id": "522-desktop-word-font-paragraphs-table-keys",
+  "name": "Word: Say Font on a heading and a paragraph, Ctrl+Down by paragraphs into the bulleted list, Say Line on a list item, then into the table from below and JAWS's table keys (Ctrl+Alt+Right, Up, Left) and Say Focus",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+F"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Ctrl+Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Insert+F"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Ctrl+Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Ctrl+Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Ctrl+Down"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Ctrl+End"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Ctrl+Alt+Right"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Ctrl+Alt+Up"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+Alt+Left"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Insert+Tab"
+    }
+  ]
+}
