@@ -921,6 +921,45 @@ impl SpeechFormatter {
     }
 }
 
+/// The tutor messages: what a key does on the control that has the focus (`hints.ftl`).
+fn tutor_messages() -> [crate::messages::StaticMessage; 21] {
+    [
+        msg::hint_activate_enter(),
+        msg::hint_activate_spacebar(),
+        msg::hint_change_selection_arrows(),
+        msg::hint_check_spacebar(),
+        msg::hint_clear_checkmark_spacebar(),
+        msg::hint_context_menu_up_down(),
+        msg::hint_menu_button(),
+        msg::hint_menu_bar_left_right(),
+        msg::hint_menu_bar_items_left_right(),
+        msg::hint_menu_items_up_down(),
+        msg::hint_move_to_an_item_arrows(),
+        msg::hint_move_to_items_arrows(),
+        msg::hint_radio_up_down(),
+        msg::hint_set_value_arrows_or_type(),
+        msg::hint_set_value_arrows(),
+        msg::hint_slider_arrows(),
+        msg::hint_switch_pages(),
+        msg::hint_toggle_spacebar(),
+        msg::hint_tree_arrows(),
+        msg::hint_type_in_text(),
+        msg::hint_read_only_text(),
+    ]
+}
+
+/// A tutor message ending `text` on a line of its own, apart from what comes before it (empty
+/// when the message is all of it): ("Punctuation: Combo box\nMost\n3 of 4", "To change the
+/// selection use the Arrow keys."). JAWS says its tutor messages in the Tutor and Message voice,
+/// as Voice Adjustment's Adjust box names it.
+pub fn split_tutor_message(text: &str) -> Option<(&str, &str)> {
+    let (said, last) = text.rsplit_once('\n').unwrap_or(("", text));
+    tutor_messages()
+        .iter()
+        .any(|message| message.as_str() == last)
+        .then_some((said, last))
+}
+
 /// Trait for routing spoken utterances from the screen reader engine to audio output.
 pub trait SpeechOutput: Send + Sync {
     /// Speaks the given text utterance.
@@ -1076,6 +1115,33 @@ impl SpeechOutput for MockSpeechOutput {
     }
 
     fn stop(&mut self) {}
+}
+
+#[cfg(test)]
+mod tutor_tests {
+    use super::*;
+
+    /// Every message of `hints.ftl` is a tutor message, and only the last line is taken.
+    #[test]
+    fn a_tutor_message_ending_an_utterance_is_split_off() {
+        let catalog = include_str!("../locales/en-US/hints.ftl");
+        let defined = catalog.lines().filter(|l| l.starts_with("hint-")).count();
+        assert_eq!(tutor_messages().len(), defined);
+        assert_eq!(
+            split_tutor_message(
+                "Punctuation: Combo box\nMost\n3 of 4\nTo change the selection use the Arrow keys."
+            ),
+            Some((
+                "Punctuation: Combo box\nMost\n3 of 4",
+                "To change the selection use the Arrow keys."
+            ))
+        );
+        assert_eq!(
+            split_tutor_message("Type in text."),
+            Some(("", "Type in text."))
+        );
+        assert_eq!(split_tutor_message("Type in text.\nMost"), None);
+    }
 }
 
 #[cfg(test)]

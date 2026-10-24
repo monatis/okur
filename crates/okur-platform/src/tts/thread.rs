@@ -486,9 +486,18 @@ impl SpeechOutput for SpeechThread {
         self.send(Request::Cursor(context));
     }
 
+    /// A tutor message ending the utterance is said in the Tutor and Message voice, after the
+    /// rest in the cursor's; the speech log keeps the utterance whole.
     fn speak(&mut self, text: &str, interrupt: bool) {
         self.record(SpeechLogKind::Speak, text, interrupt);
-        self.send(Request::Speak(text.to_owned(), interrupt));
+        match okur_core::speech::split_tutor_message(text) {
+            Some(("", tutor)) => self.send(Request::Message(tutor.to_owned(), interrupt)),
+            Some((said, tutor)) => {
+                self.send(Request::Speak(said.to_owned(), interrupt));
+                self.send(Request::Message(tutor.to_owned(), false));
+            }
+            None => self.send(Request::Speak(text.to_owned(), interrupt)),
+        }
     }
 
     fn speak_message(&mut self, text: &str, interrupt: bool) {

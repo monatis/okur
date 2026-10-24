@@ -414,8 +414,10 @@ spoken form is a parity target.
    unavailable, and the profiles replaced after Save As ("Fast | 2 of 4").
    A slider's label now shows its number, "Rate: 0", as JAWS's "Rate: 20" (in Okur's own
    units, -10 to 10; JAWS's SAPI voice shows 0 to 20, its scale per synthesizer).
-   Still to do: tutor hints in the message voice (they are part of the focus speech today);
-   Speak Sample and Synthesizer
+   A tutor message ending an utterance ("To change the selection use the Arrow keys.") is said
+   in the Tutor and Message voice, the rest in the cursor's (`split_tutor_message`, the speech
+   thread); the speech log keeps the utterance whole.
+   Still to do: Speak Sample and Synthesizer
    Language; Apply's question whether to make a saved profile the default; the Language menu's
    Voice Profiles.
 5. **Startup Wizard**, Manage Application Settings, Restore to Factory Settings.
