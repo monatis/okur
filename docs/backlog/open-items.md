@@ -148,6 +148,36 @@ Order of work, most used first:
 - **Not covered yet:** Save As and Open dialogs, Task Manager, Word and WordPad, a desktop mail
   client, consoles with output arriving while a command runs.
 
+## Installer
+
+- **A desktop icon that opens Okur's window** (the owner, 2026-10-24): okur-setup creates a
+  desktop shortcut, as JAWS's installer does, that starts Okur or, with Okur running, brings its
+  main window forward (Insert+J's window, [`../references/okur-settings-redesign.md`](../references/okur-settings-redesign.md)
+  §3.2). A choice in setup, on by default (`--no-desktop-icon` for an unattended install);
+  uninstall removes it. Today setup creates no shortcut at all, nor a Start menu entry: find
+  what JAWS's installer creates (its documentation, then the installed shortcuts on old-pc)
+  and do the same with Okur's name.
+
+## Feedback sounds
+
+- **JAWS plays a sound for some actions** (the owner, 2026-10-24): forms mode turned on and off,
+  a layered key's first key (Insert+Space, before the key that follows), and more, for example
+  the "Top And Bottom Edge Alert with Sound" that Quick Settings lists (General Options), and
+  the speech and sounds schemes (customization map rows 117, 124). Okur plays only a
+  notification rule's sound file (`crates/okur-core/src/sound.rs`).
+  - Find from JAWS's documentation which actions sound and with which setting, then record
+    on old-pc when JAWS plays each: the recorder captures speech only, so this needs the
+    system's audio output captured beside it (the `wait-silence` loopback) or JAWS's sound
+    calls seen another way.
+  - JAWS's own sound files are JAWS's: never copied or read (AGENTS.md §1.4). Okur ships its
+    own, royalty-free UI effects, for example from
+    [Uppbeat's UI sounds](https://uppbeat.io/sfx/category/digital-and-ui/ui) or
+    [Pixabay's UI notification sounds](https://pixabay.com/sound-effects/search/ui%20notification/),
+    each file's license checked for redistribution in an Apache-2.0 repository (and its
+    attribution kept in `NOTICE` where asked) before it is added.
+  - A setting per sound (on, off), as JAWS's schemes allow, and the sounds' volume with the
+    voice's or on their own.
+
 ## A page's first read (UIA, before the IA2 read)
 
 From the audit §4:
