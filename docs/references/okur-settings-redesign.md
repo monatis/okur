@@ -27,6 +27,49 @@ Notepad on old-pc (2026-10-24, research, not evidence; §3.1). Okur names itself
 | Quick Settings | Insert+V | the same for the application in front, its own groups first; lifetimes on Shift+F10; Last Changed Settings [R-SUI-18], [R-SUI-37] |
 | Startup Wizard | Help, Startup Wizard | seven pages of the most common settings [R-SUI-12] |
 
+### 1.1 Observed on old-pc (research walk, 2026-10-24; `jaws-window-walk.ps1`)
+
+JAWS 2025.2505.43's window, walked with navigation keys from Notepad; speech as JAWS's history
+kept it (research, not evidence):
+- **Alt**: "Menu bar | Options | To navigate press Left or Right Arrow."; Right: "Utilities",
+  "Language", "Help"; Escape twice: "leaving menu bar". Down opens a menu: "Options menu |
+  Basics... | To move through items press up or down arrow."; a submenu item is "Voices sub
+  menu"; an item with a key says it after a tab, "Notification History INSERT+SPACE, N".
+- **Options**: Basics..., Voices ▸ (Voice Adjustment..., Select a Voice Profile..., Add/Remove
+  Voices...), Braille..., Early Adopter Program..., Manage Application Settings..., Restore to
+  Factory Settings..., Remote Desktop..., Exit (Alt+F4). Menus wrap.
+- **Utilities**: JAWS Tandem ▸, Voice Assistant ▸, Notification History (INSERT+SPACE, N), Screen
+  Shade (INSERT+SPACE, F11), Synthesizer and Braille Manager, Sound Cards ▸, Settings Center,
+  Keyboard Manager, Dictionary Manager, Frame Viewer, Script Manager, Navigation Quick Key Manager
+  ▸, Re-Initialize Authorization, Import/Export Settings ▸, Explore Utilities Folder, Convenient
+  OCR (INSERT+SPACE,O layer) ▸, Picture Smart (INSERT+SPACE,P layer) ▸, Braille and Text Viewer
+  ▸.
+- **Language**: JAWS Language ▸ (Unavailable: no other language installed), Voice Profiles ▸.
+- **Help**: Commands Search (INSERT+SPACE, J), Message Center (35), Training, JAWS Help Topics
+  (F1), Keyboard Commands, What's New, Web Resources ▸, Technical Support, About JAWS..., Startup
+  Wizard..., Support Tool..., License ▸, Check for Updates...
+- **Basics** (Enter on Basics...): "Leaving menus | Basic Settings dialog | Tutor Messages
+  Announce menu and control help radio button checked | 2 of 3 | To change the selection press Up
+  or Down Arrow."; then, by Tab: "Access Key Off radio button checked | 1 of 4", "Automatically
+  Start JAWS... Button", "Prompt to confirm when exiting JAWS check box checked", "Automatic
+  notification of updates check box not checked", "Seamless Updates for Scripts | (Requires Admin
+  Privileges) check box checked", "Run JAWS from System Tray check box not checked", "Show Virtual
+  Viewer on screen check box checked", "Use Keyboard Layout: Combo box | Laptop | 2 of 3",
+  "Windows System Parameters... Button", "OK Button", "Cancel Button", and around again. Escape
+  closed the dialog and JAWS's window with it: Notepad came back.
+- **Voice Adjustment** (Options, Voices, Voice Adjustment...): "Leaving menus | Voice Adjustment
+  dialog | Profile Name: Combo box | SAPI 5X 64 | 5 of 5 | To change the selection use the Arrow
+  keys."; then, by Tab: "Delete Profile Button", "Enable Additional Voice Profiles for installed
+  Vocalizer Expressive 2 voices check box not checked", "Synthesizer Language: Combo box | Match
+  JAWS UI Language (Primary) | 1 of 2", "Speak Sample Button", "Voice Adjust: Combo box | All
+  Contexts | 1 of 5", "Voice Person: Combo box | SR Speech Recorder - United States | 2 of 3",
+  "Voice | Rate: 20 | left right slider | 100 percent", "Voice Punctuation: Combo box | Most | 3
+  of 4", "Voice | Volume: 100 | left right slider | 100 percent", "Voice Spell Rate Change
+  Percent: Edit | -2", "Voice Upper Case Pitch Change Percent: Edit | 20", "Save As... Button",
+  "Cancel Button". No Pitch with this SAPI voice, and no OK or Apply on a factory profile
+  unchanged (the help: OK is unavailable after changing one; Apply appears once something
+  changed).
+
 ## 2. Okur today
 
 - One dialog for Insert+V and Insert+6 (`crates/okur-core/src/ui/settings.rs`): its controls are
@@ -97,23 +140,28 @@ application in front, Settings Center every setting, for the place its Applicati
   and Right walks them [R-SUI-35]. **Only what Okur has is listed**, in JAWS's order and with
   JAWS's access keys: a JAWS user finds each item where the hand expects it, and no item leads
   nowhere.
-- Options: Basics... (B), Voices ▸ (V: Voice Adjustment..., Select a Voice Profile...), Manage
-  Application Settings (M), Restore to Factory Settings, Exit (X, Alt+F4). Braille, Remote
-  Desktop and Early Adopter Program come with those features.
-- Utilities: Settings Center, Convenient OCR ▸ (Okur's OCR commands), and later Keyboard Manager,
-  Dictionary Manager, Import/Export Settings ▸.
+- Options, in 2025's order (§1.1): Basics..., Voices ▸ (Voice Adjustment..., Select a Voice
+  Profile...), Manage Application Settings..., Restore to Factory Settings..., Exit (Alt+F4).
+  Braille..., Early Adopter Program... and Remote Desktop... come with those features, in their
+  places.
+- Utilities, in 2025's order: Notification History (Insert+Space, N; Okur has it), Settings
+  Center, Convenient OCR ▸ (Okur's OCR commands, with its layer key), and later Screen Shade,
+  Keyboard Manager, Dictionary Manager, Import/Export Settings ▸.
 - Language: Okur Language ▸ (once Okur has another), Voice Profiles ▸ (the default, a profile for
   the application in front, No Speech, Create New) [R-SUI-04].
-- Help: Commands Search (Okur has it), Okur Help Topics, Keyboard Commands, What's New, About
-  Okur, Startup Wizard (Z).
+- Help, in 2025's order: Commands Search (Insert+Space, J; Okur has it), Okur Help Topics (F1),
+  Keyboard Commands, What's New, About Okur..., Startup Wizard..., and Check for Updates... once
+  Okur updates itself.
+- Items say their keys after the name, as JAWS's: "Notification History INSERT+SPACE, N".
 
 ### 3.3 Basics
 
-The controls of [R-SUI-06] that Okur has, in JAWS's Tab order, focus on Tutor Messages: Tutor
-Messages (radio group), Access Keys (radio group), Automatically Start Okur (button, a dialog of
-its own), Prompt to Confirm When Exiting Okur (check box; Okur's quit confirmation already
-exists), Run Okur from System Tray, Show Virtual Viewer on Screen, Use Keyboard Layout (Desktop,
-Laptop), OK, Cancel. Enter is OK and Escape Cancel. The JAWS key and Num Lock are not here: they
+"Basic Settings": of the controls JAWS's has (§1.1), those Okur has, in its Tab order, focus on
+Tutor Messages: Tutor Messages (radio buttons), Access Key (radio buttons), Automatically Start
+Okur... (button, a dialog of its own), Prompt to confirm when exiting Okur (check box; Okur's
+quit confirmation already exists), Run Okur from System Tray, Show Virtual Viewer on screen, Use
+Keyboard Layout: (combo box: Desktop, Laptop), OK, Cancel; their labels as JAWS writes them, with
+Okur's name. Enter is OK and Escape Cancel. The JAWS key and Num Lock are not here: they
 are Settings Center's (Keyboard, General) [R-SUI-06], [R-SUI-14].
 
 ### 3.4 Voices
@@ -153,10 +201,11 @@ top ten (§8 there) then fill the tree, one table row each.
 
 ## 5. To record on old-pc first (research §8.8)
 
-- The main window: whether it starts minimized; its title and first line; the 2025 order and
-  access keys of Options and Help (Remote Desktop, Early Adopter Program, Restore to Factory
-  Settings). Probe ready: `jaws-window-walk.ps1` (session scratch; to join the skill).
-- Basics' and Voice Adjustment's Tab order and spoken labels in 2025.
+- Done (§1.1): the menus' 2025 order, Basics' Tab order and labels. Still: whether the main
+  window starts minimized, its title and first line, and the menus' access keys (the walk heard
+  none: old-pc's Access Key setting is Off).
+- Done (§1.1): Voice Adjustment's Tab order and labels. Still: what changes after a change (OK,
+  Apply), and Pitch with a voice that has it.
 - Settings Center's tree in Default and in Notepad: groups and settings; Shift+Space; Enter on a
   setting; F6; the Application box; Quick Settings' whole Tab order (Apply? Cancel?).
 - Select a Voice Profile's speech.
