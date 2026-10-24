@@ -8,7 +8,8 @@
 # Profile Name box walked), saveas (its Save As... dialog), manage (Manage Application
 # Settings...), wizard (the Startup Wizard's first page), wizardpages (with wizard: its pages 2
 # to 5, by Next), wizardvalues (with wizard: its radio buttons' names, each put back, and the
-# last page's Finish). Run on old-pc with no batch recording.
+# last page's Finish), language (Language, Voice Profiles read down). Run on old-pc with no
+# batch recording.
 param([string]$OutDir = (Join-Path $env:USERPROFILE 'sr-harness\probe'),
       [string]$Parts = 'options,menus,basics,voice')
 $chosen = $Parts -split ',' | ForEach-Object { $_.Trim() }
@@ -84,6 +85,12 @@ if ($chosen -contains 'manage') {
     Open-JawsWindow
     # Options, Manage Application Settings... (fifth): toured by Tab, then Escape.
     Walk 'Alt,Down,Down*4,Enter,Tab*8,Escape,Escape' 'jw-manage-applications.txt'
+}
+if ($chosen -contains 'language') {
+    Open-JawsWindow
+    # Language (Alt+L), Voice Profiles (its second item) opened and read down, then out:
+    # arrows and Escape only, nothing chosen.
+    Walk 'Alt+L,Down,Right,Down*8,Escape,Escape,Escape' 'jw-language.txt'
 }
 # Restore to Factory Settings... is not walked: it is a Yes/No question with Yes focused, which
 # ignores Escape, so a walk left it open with Yes focused (2026-10-24; answered No by

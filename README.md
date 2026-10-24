@@ -214,10 +214,13 @@ in [accepted divergences](docs/references/accepted-divergences.md).
     search box (Ctrl+E). Space changes a setting and says its new value. Changes are kept for
     all applications, the application in front or the page's site. Settings Center asks
     before Cancel drops a change; Quick Settings can keep one only until Okur exits or the
-    focus moves (Shift+F10).
+    focus moves (Shift+F10). Their last group, Last Changed Settings, holds the latest changes
+    from one run to the next (Shift+F10: Remove, Remove All).
   - Okur's window (Insert+J) has JAWS's menus: Options for Basics, Voices, Manage Application
     Settings (an application's settings turned off or removed) and Restore to Factory
-    Settings; Utilities for Settings Center and the Notification History.
+    Settings; Utilities for Settings Center and the Notification History; Help for the Startup
+    Wizard, the most common settings a page at a time, which also opens the first time Okur
+    starts.
 - **Speech:** punctuation levels and symbol names as JAWS has them (Insert+Shift+2); typing
   echo by characters, words, both or none (Insert+2); a reading key pressed twice quickly
   spells, with capitals at a higher pitch; the rate on the fly (Ctrl+Alt+PageUp and
