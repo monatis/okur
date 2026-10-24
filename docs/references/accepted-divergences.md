@@ -737,6 +737,69 @@ A step can be in more than one entry; all of its entries apply.
 - Why: the recording is of the harness's injected chord, not of JAWS's key.
 - Decided by the agent, 2026-10-22.
 
+### JAWS reads a file's recognized text over and over as its Results Viewer opens
+
+- Steps:
+  - `1024-desktop-ocr-file-picture/s3`
+  - `1025-desktop-ocr-file-pdf/s3`
+  - `1028-desktop-ocr-all-in-one-file/s3`
+- Difference: the whole step. As F or Enter opens its Results Viewer, JAWS reads the text's
+  first line three times, then all of it with its "Open in Word..." link, then often all of it
+  again, and for the picture says its engine's "Page is right side up." before "finished.", in
+  every trial. Okur says "Document OCR started.", "finished." and the text once.
+- Why: the repeats are the viewer's window taking the focus while JAWS reads it; OmniPage's
+  orientation report has no counterpart in Windows' recognizer. The Word link is a known gap
+  (`the_results_viewer_ends_with_open_in_word`), not part of this entry's reason.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
+
+### JAWS's engine joins a scanned page's lines
+
+- Steps:
+  - `1025-desktop-ocr-file-pdf/s4`
+  - `1025-desktop-ocr-file-pdf/s5`
+- Difference: the whole step. JAWS's Results Viewer puts each page of the scanned PDF on one
+  line, its two lines joined ("A letter drawn as pictures Here is the first page"), in every
+  trial, where it keeps the picture's two lines apart (1024/s6).
+- Why: the paragraphs are its engine's (OmniPage's) analysis. Windows' recognizer gives lines,
+  and Okur shows them as it reads them.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
+
+### JAWS says its main window before its OCR message box
+
+- Steps:
+  - `1026-desktop-ocr-file-none-selected/s3`
+  - `1027-desktop-ocr-file-not-a-picture/s3`
+- Difference: `JawsSaysBeforeItsDialog`. Before its message box ("OCR Failed to start. No
+  file currently selected."), JAWS says its own main window, "JAWS Professional | JAWS Version
+  2025.2505.43" and the folder, or the tutor message of a button, in most trials, and nothing in
+  others.
+- Why: JAWS's speech passes through its own windows on the way to its box. Okur's message box
+  opens without them.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
+
+### F outside File Explorer: no context menu item to point to
+
+- Steps:
+  - `1030-desktop-ocr-file-outside-explorer/s3`
+- Difference: JAWS also says "Or, when not in Windows Explorer, you may use the context menu
+  while focus is on a file and choose Recognize With JAWS."
+- Why: the sentence sends the user to an item JAWS's installer adds to File Explorer's context
+  menu. Okur adds none to Windows, and says the first two sentences.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
+
+### JAWS says the selected file twice back from its Results Viewer
+
+- Steps:
+  - `1024-desktop-ocr-file-picture/s11`
+  - `1025-desktop-ocr-file-pdf/s14`
+  - `1028-desktop-ocr-all-in-one-file/s6`
+- Difference: the whole step. Escape out of the Results Viewer: JAWS says the selected file
+  and its place first ("SR OCR Sign.png | 3 of 3"), then the window with the file again, in
+  every trial.
+- Why: the list's focus reaches JAWS before the window's. Okur says the window with the file
+  once.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
+
 ### JAWS's Scan Cursor is stuck past a window's last element
 
 - Steps:

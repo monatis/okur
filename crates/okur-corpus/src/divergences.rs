@@ -658,6 +658,56 @@ divergences! {
     "JAWS's Scan Cursor goes past a WPF window's last element onto the window itself and is      stuck there, in every trial: Down from the last element says it again and the window's      title (\"Focus here Edit | SR WPF Controls Fixture\"), then Down, Up, Home and End say      nothing and Right says the title's first letter again and again; Ctrl+End lands there      too, its line the title. Only Ctrl+Home brings it back. Okur's Scan Cursor stays on the      last element, Down saying it again, and Ctrl+End goes to it.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
 
+    Difference::Step => [
+        "1024-desktop-ocr-file-picture/s3",
+        "1025-desktop-ocr-file-pdf/s3",
+        "1028-desktop-ocr-all-in-one-file/s3",
+    ],
+    "As F or Enter opens its Results Viewer, JAWS reads the text's first line three times, \
+     then all of it with its \"Open in Word...\" link, then often all of it again, and for the \
+     picture says its engine's \"Page is right side up.\" before \"finished.\", in every trial. \
+     Okur says \"Document OCR started.\", \"finished.\" and the text once. Windows' recognizer \
+     reports no page orientation; the Word link is a known gap of its own.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
+
+    Difference::Step => [
+        "1025-desktop-ocr-file-pdf/s4",
+        "1025-desktop-ocr-file-pdf/s5",
+    ],
+    "JAWS's Results Viewer puts each page of the scanned PDF on one line, its two lines \
+     joined (\"A letter drawn as pictures Here is the first page\"), in every trial, where it \
+     keeps the picture's two lines apart (1024/s6): its engine's (OmniPage's) paragraphs. \
+     Windows' recognizer gives lines, and Okur shows them as it reads them.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
+
+    Difference::JawsSaysBeforeItsDialog => [
+        "1026-desktop-ocr-file-none-selected/s3",
+        "1027-desktop-ocr-file-not-a-picture/s3",
+    ],
+    "Before its message box (\"OCR Failed to start. No file currently selected.\"), JAWS \
+     says its own main window, \"JAWS Professional | JAWS Version 2025.2505.43\" and the folder, \
+     or the tutor message of a button, in most trials, and nothing in others. Okur's message box \
+     opens without them.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
+
+    Difference::JawsAlsoSays("Or, when not in Windows Explorer, you may use the context menu while focus is on a file and choose Recognize With JAWS.") => [
+        "1030-desktop-ocr-file-outside-explorer/s3",
+    ],
+    "F outside File Explorer: JAWS's third sentence sends the user to \"Recognize With JAWS\" \
+     in File Explorer's context menu, an item JAWS's installer adds to Windows. Okur adds none, \
+     and says the first two.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
+
+    Difference::Step => [
+        "1024-desktop-ocr-file-picture/s11",
+        "1025-desktop-ocr-file-pdf/s14",
+        "1028-desktop-ocr-all-in-one-file/s6",
+    ],
+    "Escape out of the Results Viewer: JAWS says the selected file and its place first \
+     (\"SR OCR Sign.png | 3 of 3\"), then the window with the file again, in every trial: the \
+     list's focus arrives before the window's. Okur says the window with the file once.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
+
     Difference::Step => ["688-web-custom-label/s15"],
     "After a custom label is given, JAWS's virtual cursor is at the page's top: Say Line says \
      the page's title, in every trial, as JAWS builds the page again with the label. The user \
