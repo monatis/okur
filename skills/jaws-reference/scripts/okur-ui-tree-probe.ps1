@@ -4,7 +4,7 @@
 # only while okur-ui is in front); after each key, what okur-ui reported on its standard output
 # and what JAWS said of it are written. Run on old-pc with no batch recording.
 param([string]$Out = (Join-Path $env:USERPROFILE 'sr-harness\probe\okur-ui-tree.txt'),
-      [string[]]$Keys = @('Tab', 'Right', 'Down', 'Space', 'Shift+Space', 'Down', 'Space', 'Up', 'Left', 'Tab', 'Escape'),
+      [string[]]$Keys = @('Tab', 'Right', 'Down', 'Space', 'Shift+Space', 'Down', 'Space', 'Up', 'Left', 'Ctrl+E', 'Tab', 'Ctrl+Shift+D', 'Tab', 'Escape'),
       # Also an outline of the dialog's UI Automation tree before the keys (uia-outline.ps1).
       [switch]$Outline)
 $bin = Join-Path $env:USERPROFILE 'sr-harness\bin'
@@ -22,7 +22,7 @@ $reader = Register-ObjectEvent -InputObject $ui -EventName OutputDataReceived -M
 $ui.BeginOutputReadLine()
 $dialog = @'
 {"type":"dialog_show","dialog":{"id":1,"title":"Notepad - Okur Settings Center","controls":[
- {"id":"search","label":"SearchBox","kind":{"kind":"combo_edit","text":"","history":[]}},
+ {"id":"search","label":"SearchBox","kind":{"kind":"edit","text":""}},
  {"id":"tree","label":"","kind":{"kind":"tree","selected":0,"items":[
    {"text":"Speech Options","level":0,"open":false},
    {"text":"Typing Echo Characters","level":1},
@@ -31,7 +31,8 @@ $dialog = @'
    {"text":"Enable Mouse Echo","level":1,"checked":true}]}},
  {"id":"description","label":"","kind":{"kind":"note","text":"A group of settings: Right Arrow opens it, and Space on a setting in it changes its value."}},
  {"id":"ok","label":"OK","kind":{"kind":"button","default":true}},
- {"id":"cancel","label":"Cancel","kind":{"kind":"button","default":false}}]}}
+ {"id":"cancel","label":"Cancel","kind":{"kind":"button","default":false}}],
+ "keys":[{"key":"Ctrl+E","control":"search"},{"key":"Ctrl+Shift+D","control":"default_place"}]}}
 '@ -replace "`r?`n", ''
 $ui.StandardInput.WriteLine($dialog)
 $ui.StandardInput.Flush()

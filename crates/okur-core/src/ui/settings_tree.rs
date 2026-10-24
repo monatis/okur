@@ -473,9 +473,9 @@ impl SettingsTree {
             control(
                 SEARCH,
                 msg::settings_tree_search().to_string(),
-                ControlKind::ComboEdit {
+                // An edit, "SearchBox Edit" as JAWS's [obs, the walk of Settings Center].
+                ControlKind::Edit {
                     text: self.search.clone(),
-                    history: Vec::new(),
                 },
             ),
             control(
