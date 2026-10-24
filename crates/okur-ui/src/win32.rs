@@ -372,6 +372,7 @@ fn handle(message: ToUi) {
         }
         ToUi::ViewerClose => hide_viewer(),
         ToUi::DialogShow { dialog } => crate::dialog::show(&dialog),
+        ToUi::DialogPane { id, page } => crate::dialog::show_pane(id, &page),
         ToUi::DialogSet { id, control, value } => crate::dialog::set_value(id, &control, value),
         ToUi::DialogClose { id } => {
             if !crate::wizard::close(id) {

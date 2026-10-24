@@ -2632,10 +2632,15 @@ fn settings_center_applies_and_keeps_changes() {
     );
     // Back to Settings Center: Typing Echo's next value, then OK.
     engine.execute_command("SettingsCenter");
-    let id = match ui.take().last() {
-        Some(ToUi::DialogShow { dialog }) => dialog.id,
-        _ => 0,
-    };
+    // The dialog, then its pane.
+    let id = ui
+        .take()
+        .iter()
+        .find_map(|m| match m {
+            ToUi::DialogShow { dialog } => Some(dialog.id),
+            _ => None,
+        })
+        .unwrap_or_default();
     for message in [
         FromUi::DialogChanged {
             id,

@@ -1807,7 +1807,7 @@ impl ScreenReaderEngine {
             self.speech.speak(&speech, true);
             return Some(speech);
         }
-        let tree = match self.settings_tree.take() {
+        let mut tree = match self.settings_tree.take() {
             Some(tree) if tree.flavor() == flavor => tree,
             other => {
                 if let (Some(other), Some(ui)) = (other, &self.ui) {
@@ -1829,6 +1829,9 @@ impl ScreenReaderEngine {
             ui.send(crate::ui::ToUi::DialogShow {
                 dialog: tree.spec(),
             });
+            if let Some(pane) = tree.pane_update() {
+                ui.send(pane);
+            }
         }
         self.settings_tree = Some(tree);
         None

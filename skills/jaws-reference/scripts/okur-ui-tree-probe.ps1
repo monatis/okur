@@ -23,7 +23,11 @@ param([string]$Out = (Join-Path $env:USERPROFILE 'sr-harness\probe\okur-ui-tree.
       # The Startup Wizard's shape instead: "Okur Startup Wizard" on its Speech Settings page
       # (Rate, Punctuation, Typing Echo), the slider moved and Tab around; then turned to Common
       # Options ("page", as Okur answers Next), Tab around, and Escape (Cancel).
-      [switch]$Wizard)
+      [switch]$Wizard,
+      # Settings Center's pane instead: the tree with F6's keys, a pane of Speech Options
+      # ("pane"), F6 from the tree answered as Okur answers it ("focus", the pane's Typing Echo),
+      # Tab in the pane, F6 back to the tree, Escape.
+      [switch]$Pane)
 $bin = Join-Path $env:USERPROFILE 'sr-harness\bin'
 $lab = Join-Path $bin 'okur-lab.exe'
 $start = New-Object System.Diagnostics.ProcessStartInfo
@@ -60,7 +64,11 @@ if ($Window) {
 if ($Voice) {
     $dialog = '{"type":"dialog_show","dialog":{"id":1,"title":"Voice Adjustment","controls":[{"id":"profile","label":"Profile Name:","kind":{"kind":"choice","options":["Automatic - (factory)","OneCore - (factory)","SAPI 5 - (factory)"],"selected":0}},{"id":"delete_profile","label":"Delete Profile","kind":{"kind":"button","default":false},"enabled":false},{"id":"voice","label":"Voice","kind":{"kind":"group"}},{"id":"adjust","label":"Adjust:","kind":{"kind":"choice","options":["All Contexts","PC Cursor Voice","Okur Cursor Voice","Keyboard Voice","Tutor and Message Voice"],"selected":0}},{"id":"person","label":"Person:","kind":{"kind":"choice","options":["Default"],"selected":0}},{"id":"rate","label":"Rate:","kind":{"kind":"slider","min":-10,"max":10,"value":0}},{"id":"save_as","label":"Save As...","kind":{"kind":"button","default":false}},{"id":"ok","label":"OK","kind":{"kind":"button","default":true},"enabled":false},{"id":"cancel","label":"Cancel","kind":{"kind":"button","default":false}}]}}'
     $Keys = @('Tab', 'Tab', 'Tab', 'Tab', 'Tab', 'Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'Shift+Tab', 'items', 'Down', 'Up', 'Escape')
+}if ($Pane) {
+    $dialog = $dialog.Replace('"keys":[{"key":"Ctrl+E"', '"keys":[{"key":"F6","control":"pane","from":"tree"},{"key":"F6","control":"tree"},{"key":"Ctrl+E"')
+    $Keys = @('pane', 'Tab', 'Right', 'Down', 'F6', 'focus', 'Down', 'Tab', 'Tab', 'Right', 'F6', 'Escape')
 }
+
 if ($Wizard) {
     $dialog = '{"type":"wizard_show","wizard":{"id":1,"page":{"id":1,"title":"Speech Settings - Okur Startup Wizard","controls":[{"id":"rate","label":"Rate:","kind":{"kind":"slider","min":-10,"max":10,"value":0}},{"id":"punctuation","label":"Punctuation:","kind":{"kind":"choice","options":["None","Some","Most","All"],"selected":2}},{"id":"typing_echo","label":"Typing Echo","kind":{"kind":"radios","options":["Off","Characters","Words","Characters and Words"],"selected":1}}],"keys":[]},"buttons":{"back":false,"next":true,"finish":false}}}'
     $Keys = @('Right', 'Right', 'Tab', 'Tab', 'Down', 'Tab', 'Tab', 'Tab', 'page', 'Tab', 'Tab', 'Tab', 'Tab', 'Tab', 'Escape')
@@ -83,6 +91,20 @@ foreach ($key in $Keys) {
         $ui.StandardInput.Flush()
         Start-Sleep -Milliseconds 1500
         $lines += "== menu => " + ((& $lab jaws-history --clear) -join ' | ')
+        continue
+    }
+    if ($key -eq 'pane') {
+        $ui.StandardInput.WriteLine('{"type":"dialog_pane","id":1,"page":{"id":1,"title":"Speech Options","controls":[{"id":"pane:typing_echo","label":"Typing Echo","kind":{"kind":"radios","options":["Off","Characters","Words","Characters and Words"],"selected":1}},{"id":"pane:caps","label":"Caps Indicate","kind":{"kind":"check_box","checked":false}},{"id":"pane:rate","label":"Rate:","kind":{"kind":"slider","min":-10,"max":10,"value":0}}],"keys":[]}}')
+        $ui.StandardInput.Flush()
+        Start-Sleep -Milliseconds 1500
+        $lines += "== pane => " + ((& $lab jaws-history --clear) -join ' | ')
+        continue
+    }
+    if ($key -eq 'focus') {
+        $ui.StandardInput.WriteLine('{"type":"dialog_focus","id":1,"control":"pane:typing_echo"}')
+        $ui.StandardInput.Flush()
+        Start-Sleep -Milliseconds 1500
+        $lines += "== focus => " + ((& $lab jaws-history --clear) -join ' | ')
         continue
     }
     if ($key -eq 'page') {

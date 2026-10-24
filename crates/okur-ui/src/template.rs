@@ -21,6 +21,7 @@ const WS_SYSMENU: u32 = 0x0008_0000;
 const DS_SETFONT: u32 = 0x40;
 const DS_MODALFRAME: u32 = 0x80;
 const DS_CENTER: u32 = 0x800;
+const DS_CONTROL: u32 = 0x400;
 const WS_EX_TOPMOST: u32 = 0x8;
 const WS_EX_CONTROLPARENT: u32 = 0x0001_0000;
 const BS_PUSHBUTTON: u32 = 0;
@@ -1034,6 +1035,17 @@ pub fn encode_page(title: &str, layout: &Layout) -> Vec<u32> {
         layout,
         WS_EX_CONTROLPARENT,
         WS_CHILD | WS_DISABLED | WS_CAPTION | DS_SETFONT,
+    )
+}
+
+/// A dialog's pane as a child dialog's template: shown at once, a part of its dialog in the
+/// Tab order (`DS_CONTROL`), its title naming it.
+pub fn encode_pane(title: &str, layout: &Layout) -> Vec<u32> {
+    encode_with(
+        title,
+        layout,
+        WS_EX_CONTROLPARENT,
+        WS_CHILD | WS_VISIBLE | DS_SETFONT | DS_CONTROL,
     )
 }
 

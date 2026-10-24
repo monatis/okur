@@ -132,7 +132,16 @@ kept it (research, not evidence):
   box not checked", "Progress Bar Updates Announcement Combo box | 5 Second Intervals | 3 of
   7"; F6 goes back to the tree item it left, "Typing Echo Off | 2 of 11". F6 on an unavailable
   setting says "Unavailable | Only available when SemiAuto or Auto Forms Mode is selected.",
-  and Tab goes on to the description, OK and Cancel. Okur has no pane yet.
+  and Tab goes on to the description, OK and Cancel.
+  - Okur's, since the commit after `95158333`: Settings Center's pane holds the selected
+    setting's group, beside the tree: radio buttons for up to four values, a combo box for
+    more, check boxes, sliders whose label shows their number; one the place cannot keep is
+    unavailable. F6 in the tree goes to the setting's control, F6 elsewhere back to the tree;
+    a value set in the pane is the tree's at once. JAWS reading okur-ui
+    (`okur-ui-tree-probe.ps1 -Pane`): F6, "Typing Echo Characters radio button checked | 2
+    of 4"; Tab, "Caps Indicate check box not checked", "Rate: 0 left right slider | 50
+    percent"; F6, "Tree view | Typing Echo Characters | 1 of 2". JAWS's own says the pane's
+    name first, "User page"; okur-ui's pane is not announced.
 - **The Startup Wizard** (JAWS's window, Alt+H, Z; `jaws-window-walk.ps1 -Parts
   wizard,wizardpages` and `wizard,wizardvalues`; each radio group moved and put back as
   found, and Escape, which saves nothing):
@@ -384,8 +393,9 @@ spoken form is a parity target.
    all applications only, settings no dialog showed under JAWS's tree names, and Configure
    Verbosity Levels opening the verbosity levels' dialog. okur-ui's tree, keys and menu probed
    on old-pc (`okur-ui-tree-probe.ps1`). Still to do: a scenario comparing Okur's speech of its
-   tree with JAWS's (Okur run on old-pc reads its own window); F6 to the setting's control;
-   the search's results as JAWS's list box. Screen Echo, Smart Navigation Mode and Indicate
+   tree with JAWS's (Okur run on old-pc reads its own window); the search's results as
+   JAWS's list box; the pane's name said as the focus enters it ("User page"). F6 to the
+   setting's control in the configuration display pane is built (§1.1). Screen Echo, Smart Navigation Mode and Indicate
    Headings are in the tree since `50dde786`, so every setting with values has its names.
 2. **Lifetimes and Last Changed Settings** in Quick Settings; the until-the-focus-moves layer.
    **Built 2026-10-24**: the lifetime menu (Shift+F10, Applications key) on a setting or a

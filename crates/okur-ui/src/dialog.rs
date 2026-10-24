@@ -226,6 +226,116 @@ pub fn show(spec: &DialogSpec) {
     bring_forward(window);
 }
 
+/// The value a pane's creation passes to its first message, which leaves the focus alone.
+const PANE: isize = 0x0050_414E;
+
+/// Shows `page`'s controls in dialog `id`'s pane, right of its tree, in place of the pane
+/// shown before, the dialog widened to hold it. The focus stays where it is, as Settings
+/// Center's pane changes with the tree's item and F6 alone goes to it [obs, the walk of
+/// Settings Center's F6]. Its controls report as the dialog's (`page.id`).
+pub fn show_pane(id: u32, page: &DialogSpec) {
+    use windows::Win32::Foundation::{POINT, RECT};
+    use windows::Win32::Graphics::Gdi::MapWindowPoints;
+    use windows::Win32::UI::WindowsAndMessaging::{
+        GetWindowRect, SetWindowPos, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER,
+    };
+    let Some(parent) = DIALOGS.with(|d| {
+        d.try_borrow()
+            .ok()
+            .and_then(|d| d.iter().find(|o| o.id == id && !o.page).map(|o| o.window))
+    }) else {
+        return;
+    };
+    let old = DIALOGS.with(|d| {
+        d.try_borrow()
+            .ok()
+            .and_then(|d| d.iter().find(|o| o.id == id && o.page).map(|o| o.window))
+    });
+    let layout = template::page_layout(page);
+    let words = template::encode_pane(&page.title, &layout);
+    // SAFETY: a well-formed template alive for the call, a child of our own dialog.
+    let pane = unsafe {
+        let instance = GetModuleHandleW(None).ok().map(Into::into);
+        CreateDialogIndirectParamW(
+            instance,
+            words.as_ptr().cast::<DLGTEMPLATE>(),
+            Some(parent),
+            Some(dialog_proc),
+            LPARAM(PANE),
+        )
+    };
+    let Ok(pane) = pane else {
+        eprintln!("okur-ui: pane {:?} could not be created", page.title);
+        return;
+    };
+    if let Some(old) = old {
+        forget_page(old);
+        // SAFETY: our own pane, replaced.
+        let _ = unsafe { DestroyWindow(old) };
+    }
+    adopt_page(pane, page, &layout.ids);
+    // Right of the tree, its top level with the tree's; the dialog as wide and tall as needed.
+    let tree = find(id, "tree").and_then(|(window, window_id, _, _)| {
+        // SAFETY: a child of our own dialog.
+        unsafe { GetDlgItem(Some(window), i32::from(window_id)) }.ok()
+    });
+    // SAFETY: rectangles of our own windows, and moving them.
+    unsafe {
+        let mut at = RECT::default();
+        if let Some(tree) = tree {
+            let _ = GetWindowRect(tree, &mut at);
+            let mut corners = [
+                POINT {
+                    x: at.left,
+                    y: at.top,
+                },
+                POINT {
+                    x: at.right,
+                    y: at.bottom,
+                },
+            ];
+            MapWindowPoints(None, Some(parent), &mut corners);
+            at = RECT {
+                left: corners[0].x,
+                top: corners[0].y,
+                right: corners[1].x,
+                bottom: corners[1].y,
+            };
+        }
+        let mut size = RECT::default();
+        let _ = GetWindowRect(pane, &mut size);
+        let (x, y) = (at.right + 8, at.top);
+        let _ = SetWindowPos(
+            pane,
+            None,
+            x,
+            y,
+            0,
+            0,
+            SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE,
+        );
+        let need_right = x + (size.right - size.left) + 8;
+        let need_bottom = y + (size.bottom - size.top) + 8;
+        let mut client = RECT::default();
+        let _ = GetClientRect(parent, &mut client);
+        let wider = (need_right - client.right).max(0);
+        let taller = (need_bottom - client.bottom).max(0);
+        if wider > 0 || taller > 0 {
+            let mut outer = RECT::default();
+            let _ = GetWindowRect(parent, &mut outer);
+            let _ = SetWindowPos(
+                parent,
+                None,
+                0,
+                0,
+                outer.right - outer.left + wider,
+                outer.bottom - outer.top + taller,
+                SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE,
+            );
+        }
+    }
+}
+
 /// Gives each control of a dialog just created its value, and dims those not available. Radio
 /// buttons standing alone have no window of their own id: each of theirs is set.
 fn fill_all(window: HWND, controls: &[okur_ui_model::Control], ids: &[u16]) {
@@ -847,15 +957,17 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
 
 /// The open dialog `id`'s window, and the window id, place and kind of its `control`.
 fn find(id: u32, control: &str) -> Option<(HWND, u16, usize, ControlKind)> {
+    // The dialog's own windows, its pane's too.
     DIALOGS.with(|d| {
         d.try_borrow().ok().and_then(|d| {
-            let dialog = d.iter().find(|o| o.id == id)?;
-            let (index, c) = dialog
-                .controls
-                .iter()
-                .enumerate()
-                .find(|(_, c)| c.name == control)?;
-            Some((dialog.window, c.window_id, index, c.kind.clone()))
+            d.iter().filter(|o| o.id == id).find_map(|dialog| {
+                let (index, c) = dialog
+                    .controls
+                    .iter()
+                    .enumerate()
+                    .find(|(_, c)| c.name == control)?;
+                Some((dialog.window, c.window_id, index, c.kind.clone()))
+            })
         })
     })
 }
@@ -884,13 +996,31 @@ pub fn enable(id: u32, control: &str, enabled: bool) {
 /// Moves the focus of dialog `id` to `control`, as the dialog manager moves it
 /// (WM_NEXTDLGCTL), the default button following.
 pub fn focus(id: u32, control: &str) {
-    use windows::Win32::UI::WindowsAndMessaging::WM_NEXTDLGCTL;
-    if let Some((window, window_id, _, _)) = find(id, control) {
-        // SAFETY: a child of our own dialog, and a message to that dialog.
+    use windows::Win32::UI::WindowsAndMessaging::{GetAncestor, GA_ROOT, WM_NEXTDLGCTL};
+    if let Some((window, window_id, index, kind)) = find(id, control) {
+        // A radio group's focus is its checked button's, as Tab gives it.
+        let window_id = match &kind {
+            ControlKind::Radios { options, .. } | ControlKind::RadioButtons { options, .. } => {
+                (0..options.len())
+                    .map(|option| template::radio_id(index, option))
+                    .find(|&radio| {
+                        // SAFETY: a child of our own dialog, and a query of its state.
+                        unsafe { GetDlgItem(Some(window), i32::from(radio)) }.is_ok_and(|item| {
+                            unsafe { SendMessageW(item, BM_GETCHECK, None, None) }.0
+                                == BST_CHECKED.0 as isize
+                        })
+                    })
+                    .unwrap_or_else(|| template::radio_id(index, 0))
+            }
+            _ => window_id,
+        };
+        // SAFETY: a child of our own dialog (or of its pane), and a message to the dialog,
+        // whose dialog manager keeps the focus.
         if let Ok(item) = unsafe { GetDlgItem(Some(window), i32::from(window_id)) } {
+            let root = unsafe { GetAncestor(window, GA_ROOT) };
             let _ = unsafe {
                 SendMessageW(
-                    window,
+                    root,
                     WM_NEXTDLGCTL,
                     Some(WPARAM(item.0 as usize)),
                     Some(LPARAM(1)),
@@ -1162,6 +1292,8 @@ pub fn close(id: u32) {
         d.try_borrow_mut().ok().and_then(|mut d| {
             let index = d.iter().position(|o| o.id == id)?;
             let dialog = d.remove(index);
+            // Its pane goes with it, a child of its window.
+            d.retain(|o| o.id != id);
             for other in d.iter_mut().filter(|o| o.previous == dialog.window) {
                 other.previous = dialog.previous;
             }
@@ -1209,9 +1341,8 @@ fn dialog_key(msg: &MSG) -> bool {
     // SAFETY: the key state of this thread's input.
     let held = |key: VIRTUAL_KEY| unsafe { GetKeyState(i32::from(key.0)) } < 0;
     let pressed: Chord = (vk, held(VK_CONTROL), held(VK_SHIFT), held(VK_MENU));
-    // SAFETY: the focus of this thread's input, and its control's id.
+    // SAFETY: the focus of this thread's input.
     let focused = unsafe { windows::Win32::UI::Input::KeyboardAndMouse::GetFocus() };
-    let focused_id = unsafe { GetDlgCtrlID(focused) };
     let found = DIALOGS.with(|d| {
         d.try_borrow().ok().and_then(|d| {
             d.iter()
@@ -1220,11 +1351,15 @@ fn dialog_key(msg: &MSG) -> bool {
                     o.window == msg.hwnd || unsafe { IsChild(o.window, msg.hwnd) }.as_bool()
                 })
                 .find_map(|o| {
+                    // The focused window itself: a pane's controls have ids of the dialog's.
                     let in_control = |from: &Option<String>| {
                         from.as_ref().is_none_or(|from| {
-                            o.controls
-                                .iter()
-                                .any(|c| &c.name == from && i32::from(c.window_id) == focused_id)
+                            o.controls.iter().any(|c| {
+                                &c.name == from
+                                    // SAFETY: a child of our own dialog.
+                                    && unsafe { GetDlgItem(Some(o.window), i32::from(c.window_id)) }
+                                        .is_ok_and(|item| item == focused)
+                            })
                         })
                     };
                     let (_, control, _) = o
@@ -1429,7 +1564,8 @@ pub(crate) unsafe extern "system" fn dialog_proc(
 ) -> isize {
     match msg {
         // The dialog manager puts the focus on the first control.
-        WM_INITDIALOG => 1,
+        // A pane takes no focus as it is made: the focus stays where it is.
+        WM_INITDIALOG => isize::from(lparam.0 != PANE),
         WM_COMMAND => {
             let control_id = (wparam.0 & 0xFFFF) as u16;
             let code = ((wparam.0 >> 16) & 0xFFFF) as u32;

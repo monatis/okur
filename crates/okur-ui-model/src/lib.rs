@@ -297,6 +297,11 @@ pub enum ToUi {
         filter: Vec<(String, String)>,
         folder: Option<String>,
     },
+    /// Show `page`'s controls in dialog `id`'s configuration display pane, beside its tree, in
+    /// place of those shown before: Settings Center's, which F6 reaches, "User page | Typing
+    /// Echo Off radio button checked | 1 of 4" [obs, the walk of Settings Center's F6]. The
+    /// focus stays where it is; the pane's controls report as the dialog's.
+    DialogPane { id: u32, page: DialogSpec },
     /// Close a dialog, or a wizard.
     DialogClose { id: u32 },
     /// Show a wizard in front on its first page, the focus on the page's first control.

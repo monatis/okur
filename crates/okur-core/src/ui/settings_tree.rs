@@ -35,6 +35,10 @@ const TREE_ENTER: &str = "tree_enter";
 const TREE_ESCAPE: &str = "tree_escape";
 /// Quick Settings' Shift+F10 and Applications key on a setting or group: its lifetime.
 const LIFETIME: &str = "lifetime";
+/// F6 in the tree: the focus to the setting's control in the configuration display pane.
+const PANE_KEY: &str = "pane";
+/// A pane control's id: this, then its setting's.
+const PANE_PREFIX: &str = "pane:";
 /// The lifetimes, as the menu lists them.
 const LIFETIMES: [Lifetime; 3] = [
     Lifetime::UntilExit,
@@ -337,6 +341,9 @@ pub struct SettingsTree {
     question: Option<u32>,
     /// Quick Settings' "Expand Tree View": every group open.
     expand: bool,
+    /// The configuration display pane shown (Settings Center's): its group, and the settings
+    /// it was shown with.
+    pane: Option<(TreeGroup, Settings)>,
 }
 
 impl SettingsTree {
@@ -374,6 +381,7 @@ impl SettingsTree {
             changed: false,
             question: None,
             expand: flavor == Flavor::Quick,
+            pane: None,
         };
         if tree.expand {
             tree.expand_all(true);
@@ -863,7 +871,11 @@ impl SettingsTree {
         };
         // Down from the search box into the tree; Enter and Escape in the tree for a search's
         // results (JAWS's Settings Center help).
+        // F6 from the tree to the setting's control in the pane, and from anywhere else back
+        // to the tree (JAWS's Settings Center help).
         let mut keys = vec![
+            from("F6", PANE_KEY, TREE),
+            shortcut("F6", TREE),
             shortcut("Ctrl+E", SEARCH),
             from("Down", TREE, SEARCH),
             from("Enter", TREE_ENTER, TREE),
@@ -1170,9 +1182,217 @@ impl SettingsTree {
         }
     }
 
-    /// What the dialog's window reported.
+    /// Settings Center's configuration display pane, for the group of the item selected:
+    /// what to send when the group changed, or the settings it shows changed elsewhere than in
+    /// the pane. JAWS's pane holds the group's controls, "User page | Typing Echo Off radio
+    /// button checked | 1 of 4" [obs, the walk of Settings Center's F6].
+    pub fn pane_update(&mut self) -> Option<ToUi> {
+        let group = self.pane_group()?;
+        if self
+            .pane
+            .as_ref()
+            .is_some_and(|(shown, draft)| *shown == group && *draft == self.draft)
+        {
+            return None;
+        }
+        self.pane = Some((group, self.draft.clone()));
+        Some(ToUi::DialogPane {
+            id: self.id,
+            page: self.pane_page(group),
+        })
+    }
+
+    /// The group the pane is for: the selected setting's, or the group selected; Settings
+    /// Center's only.
+    fn pane_group(&self) -> Option<TreeGroup> {
+        if self.flavor != Flavor::Center {
+            return None;
+        }
+        match self.rows.get(self.selected).copied()? {
+            Row::Setting(spec) | Row::Recent(spec) => self.group_of(spec),
+            Row::Group(group) => Some(group),
+            Row::VerbosityLevels | Row::LastChanged => None,
+        }
+    }
+
+    /// The pane's page for `group`: its settings' controls, named by the group.
+    fn pane_page(&self, group: TreeGroup) -> DialogSpec {
+        DialogSpec {
+            id: self.id,
+            title: group.label().to_string(),
+            controls: self
+                .shown()
+                .filter(|(g, _)| *g == group)
+                .filter_map(|(_, spec)| self.pane_control(spec))
+                .collect(),
+            keys: Vec::new(),
+        }
+    }
+
+    /// A setting's control in the pane: radio buttons for a few values, a combo box for more
+    /// (JAWS's Typing Echo and Progress Bar Updates Announcement), a check box, a slider; one
+    /// the place cannot keep is unavailable.
+    fn pane_control(&self, spec: &'static SettingSpec) -> Option<Control> {
+        let value = registry::get(&self.draft, spec.id).unwrap_or(Json::Null);
+        let label = self.tree_label(spec);
+        let (label, kind) = match spec.kind {
+            Kind::Choice(choices) => {
+                let choices = choices();
+                let selected = choices.iter().position(|c| c.value == value).unwrap_or(0);
+                let options = choices.iter().map(|c| c.label.to_string()).collect();
+                let kind = if choices.len() <= 4 {
+                    ControlKind::Radios { options, selected }
+                } else {
+                    ControlKind::Choice { options, selected }
+                };
+                (label, kind)
+            }
+            Kind::Check { on, .. } => (
+                label,
+                ControlKind::CheckBox {
+                    checked: value == on.value(),
+                },
+            ),
+            // Its label shows its number after the colon.
+            Kind::Range { min, max } => (
+                format!("{label}:"),
+                ControlKind::Slider {
+                    min,
+                    max,
+                    value: value
+                        .as_i64()
+                        .and_then(|n| i32::try_from(n).ok())
+                        .unwrap_or(min),
+                },
+            ),
+            Kind::Voice => (
+                label,
+                ControlKind::Choice {
+                    selected: value
+                        .as_str()
+                        .and_then(|name| self.voices.iter().position(|v| v == name))
+                        .map_or(0, |i| i + 1),
+                    options: std::iter::once(msg::settings_voice_default().to_string())
+                        .chain(self.voices.iter().cloned())
+                        .collect(),
+                },
+            ),
+            Kind::Structured => return None,
+        };
+        Some(Control {
+            id: format!("{PANE_PREFIX}{}", spec.id),
+            label,
+            kind,
+            enabled: spec.scopes.allows(&self.scope()),
+        })
+    }
+
+    /// A value set in the pane: the draft's, and the tree's items say it.
+    fn pane_changed(&mut self, id: &str, value: &Value) -> Outcome {
+        let Some(spec) = SETTINGS.iter().find(|s| s.id == id) else {
+            return Outcome::Nothing;
+        };
+        let new = match (spec.kind, value) {
+            (Kind::Choice(choices), Value::Selected(i)) => {
+                choices().into_iter().nth(*i).map(|c| c.value)
+            }
+            (Kind::Check { on, off }, Value::Checked(checked)) => {
+                Some(if *checked { on.value() } else { off.value() })
+            }
+            (Kind::Range { min, max }, Value::Number(n)) => Some(Json::from((*n).clamp(min, max))),
+            (Kind::Voice, Value::Selected(0)) => Some(Json::Null),
+            (Kind::Voice, Value::Selected(i)) => self
+                .voices
+                .get(i - 1)
+                .map(|name| Json::String(name.clone())),
+            _ => None,
+        };
+        let Some(new) = new else {
+            return Outcome::Nothing;
+        };
+        if !registry::set(&mut self.draft, spec.id, new) {
+            return Outcome::Nothing;
+        }
+        self.changed = true;
+        // The pane already shows it.
+        if let Some((_, shown)) = self.pane.as_mut() {
+            *shown = self.draft.clone();
+        }
+        let mut sent: Vec<ToUi> = self
+            .rows
+            .iter()
+            .enumerate()
+            .map(|(index, row)| ToUi::DialogSet {
+                id: self.id,
+                control: TREE.to_owned(),
+                value: Value::TreeItem(index, self.item(row)),
+            })
+            .collect();
+        sent.push(ToUi::DialogEnable {
+            id: self.id,
+            control: "apply".to_owned(),
+            enabled: true,
+        });
+        Outcome::Send(sent)
+    }
+
+    /// F6 in the tree: the selected setting's control in the pane, else the pane's first.
+    fn to_pane(&self) -> Outcome {
+        let Some(page) = self.pane_group().map(|group| self.pane_page(group)) else {
+            return Outcome::Nothing;
+        };
+        let selected = match self.rows.get(self.selected) {
+            Some(Row::Setting(spec) | Row::Recent(spec)) => {
+                Some(format!("{PANE_PREFIX}{}", spec.id))
+            }
+            _ => None,
+        };
+        let control = selected
+            .filter(|id| page.controls.iter().any(|c| &c.id == id))
+            .or_else(|| page.controls.first().map(|c| c.id.clone()));
+        match control {
+            Some(control) => Outcome::Send(vec![ToUi::DialogFocus {
+                id: self.id,
+                control,
+            }]),
+            None => Outcome::Nothing,
+        }
+    }
+
+    /// What the dialog's window reported, and the pane brought up to date with it.
     pub fn handle(&mut self, message: &FromUi) -> Outcome {
+        let from_pane = matches!(message,
+            FromUi::DialogChanged { id, control, .. }
+                if *id == self.id && control.starts_with(PANE_PREFIX));
+        let outcome = self.handle_message(message);
+        if from_pane {
+            return outcome;
+        }
+        let Some(pane) = self.pane_update() else {
+            return outcome;
+        };
+        match outcome {
+            Outcome::Nothing => Outcome::Send(vec![pane]),
+            Outcome::Send(mut sent) => {
+                sent.push(pane);
+                Outcome::Send(sent)
+            }
+            Outcome::Changed(mut sent, said) => {
+                sent.push(pane);
+                Outcome::Changed(sent, said)
+            }
+            other => other,
+        }
+    }
+
+    fn handle_message(&mut self, message: &FromUi) -> Outcome {
         match message {
+            FromUi::DialogChanged { id, control, value }
+                if *id == self.id && control.starts_with(PANE_PREFIX) =>
+            {
+                let setting = control.trim_start_matches(PANE_PREFIX).to_owned();
+                self.pane_changed(&setting, value)
+            }
             FromUi::DialogChanged { id, control, value } if *id == self.id => {
                 match (control.as_str(), value) {
                     (TREE, Value::Selected(index)) => {
@@ -1292,6 +1512,7 @@ impl SettingsTree {
                 }
                 TREE_ESCAPE => self.cancel(),
                 LIFETIME => self.context_menu(),
+                PANE_KEY => self.to_pane(),
                 DEFAULT_PLACE if self.flavor == Flavor::Center => {
                     self.place = 0;
                     self.draft = self
@@ -1810,6 +2031,87 @@ mod tests {
         );
         // A setting's Shift+F10 in Settings Center has no menu: lifetimes are Quick Settings'.
         assert!(menu(&mut dialog, Row::Setting(typing)).is_empty());
+    }
+
+    /// Settings Center's pane holds the selected setting's group, as radio buttons, check boxes
+    /// and sliders; F6 goes to the setting's control there; a value set there is the draft's and
+    /// the tree's, and the pane comes again only when the group or a value changes elsewhere
+    /// [obs, the walk of Settings Center's F6].
+    #[test]
+    fn the_pane_holds_the_group_and_f6_reaches_it() {
+        let mut dialog = tree(Flavor::Center);
+        let typing = dialog
+            .rows
+            .iter()
+            .position(|r| matches!(r, Row::Setting(spec) if spec.id == "typing_echo"))
+            .unwrap_or_default();
+        let select = FromUi::DialogChanged {
+            id: 7,
+            control: TREE.into(),
+            value: Value::Selected(typing),
+        };
+        let Outcome::Send(sent) = dialog.handle(&select) else {
+            panic_free_fail("nothing sent");
+            return;
+        };
+        let Some(ToUi::DialogPane { page, .. }) = sent.last() else {
+            panic_free_fail(&format!("no pane: {sent:?}"));
+            return;
+        };
+        assert_eq!(page.title, "User");
+        let echo = page.controls.iter().find(|c| c.id == "pane:typing_echo");
+        assert!(
+            matches!(echo.map(|c| &c.kind), Some(ControlKind::Radios { options, selected: 1 }) if options.len() == 4),
+            "{echo:?}"
+        );
+        // The same group again: no new pane.
+        assert_eq!(
+            dialog.handle(&select),
+            Outcome::Send(vec![ToUi::DialogSet {
+                id: 7,
+                control: DESCRIPTION.into(),
+                value: Value::Text(dialog.description()),
+            }])
+        );
+        assert_eq!(
+            dialog.handle(&FromUi::DialogPressed {
+                id: 7,
+                control: PANE_KEY.into(),
+            }),
+            Outcome::Send(vec![ToUi::DialogFocus {
+                id: 7,
+                control: "pane:typing_echo".into(),
+            }])
+        );
+        // Words set in the pane: the draft's and the tree's, the pane left as it is.
+        let Outcome::Send(sent) = dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: "pane:typing_echo".into(),
+            value: Value::Selected(2),
+        }) else {
+            panic_free_fail("nothing sent");
+            return;
+        };
+        assert_eq!(
+            registry::get(dialog.draft(), "typing_echo"),
+            Some(Json::String("words".into()))
+        );
+        assert!(!sent.iter().any(|m| matches!(m, ToUi::DialogPane { .. })));
+        assert!(sent.iter().any(|m| matches!(m,
+            ToUi::DialogSet { value: Value::TreeItem(_, item), .. } if item.text == "Typing Echo Words")));
+        // Space in the tree: the pane comes again with the new value.
+        let Outcome::Changed(sent, _) = dialog.handle(&FromUi::DialogKey {
+            id: 7,
+            control: TREE.into(),
+            key: DialogKey::Change,
+        }) else {
+            panic_free_fail("not changed");
+            return;
+        };
+        assert!(matches!(sent.last(), Some(ToUi::DialogPane { .. })));
+        // Quick Settings has none.
+        let mut quick = tree(Flavor::Quick);
+        assert_eq!(quick.pane_update(), None);
     }
 
     /// Last Changed Settings kept between runs: each change's place, never the session's, and
