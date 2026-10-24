@@ -299,6 +299,9 @@ pub struct ScreenReaderEngine {
     /// The focused document's headings were asked for its Heading List, which opens when they
     /// come.
     document_headings_asked: bool,
+    /// Say Window Title in Word asked for the document's view, said with this title when it
+    /// comes.
+    document_view_title: Option<String>,
     /// The word chosen in the Word List, which W and Shift+W move to.
     word_from_list: Option<String>,
     /// Skim Reading while it is open, and its choices, which Ctrl+Insert+Down reads by.
@@ -540,6 +543,7 @@ impl ScreenReaderEngine {
             list_dialog: None,
             list_return_mode: AppMode::VirtualBuffer,
             document_headings_asked: false,
+            document_view_title: None,
             word_from_list: None,
             skim_dialog: None,
             skim_options: crate::ui::skim::SkimOptions::default(),
@@ -1417,6 +1421,18 @@ impl ScreenReaderEngine {
             AccessibilityEvent::TrayIcons(icons) => self.open_tray_list(icons),
             AccessibilityEvent::PageElements(elements) => self.say_page_font(elements),
             AccessibilityEvent::DocumentHeadings(headings) => self.document_headings(headings),
+            AccessibilityEvent::DocumentView(view) => {
+                let title = self.document_view_title.take()?;
+                let said = std::iter::once(format!("{}\n{title}", msg::window_title_is()))
+                    .chain(
+                        view.as_deref()
+                            .and_then(crate::apps::windows::word::view_name),
+                    )
+                    .collect::<Vec<_>>()
+                    .join("\n");
+                self.speech.speak(&said, true);
+                Some(said)
+            }
             AccessibilityEvent::Ui(message) => self.handle_ui_event(message),
             AccessibilityEvent::PageChanged => {
                 self.page_changed();

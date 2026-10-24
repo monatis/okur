@@ -71,16 +71,16 @@ enum Commands {
         #[arg(long)]
         dump: bool,
     },
-    /// Print the headings of Word's document, as its Heading List (Insert+F6) lists them
-    /// (Windows). Research, never evidence
+    /// Print the headings of Word's document, as its Heading List (Insert+F6) lists them, and
+    /// the view it is shown in (Windows). Research, never evidence
     DocumentHeadings {
         /// The window holding the document, by its whole title (a scenario's fixture), wherever
         /// the focus is; without it, the focused document
         #[arg(long)]
         window_title: Option<String>,
-        /// Append the headings, as JSON, to this file instead of printing them: the recorder's
-        /// snapshot after a step of a scenario with "trace_headings" (replay gives them to the
-        /// Heading List)
+        /// Append the headings and the view, as JSON, to this file instead of printing them:
+        /// the recorder's snapshot after a step of a scenario with "trace_headings" (replay
+        /// gives them to the Heading List and Say Window Title)
         #[arg(long)]
         append_to: Option<String>,
         /// With --append-to, the step the snapshot is taken after
@@ -1192,6 +1192,7 @@ async fn main() {
             {
                 let headings =
                     okur_platform::actions::document_headings_now(window_title.as_deref());
+                let view = okur_platform::actions::document_view_now(window_title.as_deref());
                 if let Some(path) = append_to {
                     let t_ms = std::time::SystemTime::now()
                         .duration_since(std::time::UNIX_EPOCH)
@@ -1203,6 +1204,7 @@ async fn main() {
                         "step": step,
                         "t_ms": t_ms,
                         "headings": headings.unwrap_or_default(),
+                        "view": view,
                     });
                     let written = std::fs::OpenOptions::new()
                         .create(true)
@@ -1218,6 +1220,7 @@ async fn main() {
                     }
                     return;
                 }
+                println!("view: {view:?}");
                 let Some(headings) = headings else {
                     eprintln!("no document of Word's to read");
                     std::process::exit(1);

@@ -207,6 +207,23 @@ impl ScreenReaderEngine {
                     self.speech.speak(&speech, true);
                     return Some(speech);
                 }
+                // Word's document adds the view it is shown in, which the platform reads first:
+                // "Title is | sr-word-fixture.docx - Word | Print View" [obs, 519/s1].
+                if let Some(title) = self.last_window_title.clone().filter(|_| {
+                    self.app_mode != AppMode::VirtualBuffer
+                        && self.editing_document()
+                        && self
+                            .last_text
+                            .as_ref()
+                            .is_some_and(|t| t.structure.is_some())
+                        && self
+                            .actions
+                            .as_ref()
+                            .is_some_and(|actions| actions.read_document_view())
+                }) {
+                    self.document_view_title = Some(title);
+                    return None;
+                }
                 // [obs, 306/s12]: "Title is | SR Dialog Fixture". In a browser it is the browser
                 // window's title, not the page's [obs, 209/s1: "... - Google Chrome - <profile>"].
                 let title = self.last_window_title.clone().or_else(|| {
@@ -1293,6 +1310,18 @@ impl ScreenReaderEngine {
                 self.pending_font = Some(in_viewer);
                 return None;
             }
+        }
+        // Word's document has a Say Font of its own [obs, 1034/s1, s3].
+        if let Some(said) = self
+            .last_text
+            .as_ref()
+            .filter(|_| {
+                !in_viewer && self.app_mode != AppMode::VirtualBuffer && self.editing_text()
+            })
+            .and_then(crate::apps::windows::word::font)
+        {
+            self.speech.speak(&said, true);
+            return Some(said);
         }
         let formatting = if self.app_mode == AppMode::VirtualBuffer && !self.forms_mode {
             self.cursor.buffer.formatting_at_offset(self.cursor.offset)

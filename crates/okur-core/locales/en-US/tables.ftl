@@ -66,3 +66,13 @@ word-table-start = beginning of table
 word-last-cell-said = Last cell in table.
 # A table key outside a table [obs, 1035/s15].
 word-not-in-table = Not in a Table
+
+## Say Font in Word's document [obs, 1034/s1, s3].
+
+word-style = { $style } style
+word-paragraph-aligned = Paragraph formatting: Aligned { $alignment }
+word-outline-level = Outline level: { $level }
+word-outline-body = Outline level: body text
+
+# Say Window Title in Word adds the view [obs, 519/s1].
+word-view-print = Print View

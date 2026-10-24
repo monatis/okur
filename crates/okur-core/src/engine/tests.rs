@@ -7401,3 +7401,32 @@ fn words_table_keys_move_to_the_next_cell() {
     assert_eq!(engine.handle_key_event(&right), KeyAction::Consume);
     assert_eq!(speech.take(), ["end of row"]);
 }
+
+/// Say Window Title in Word adds the view the document is shown in, which the platform reads
+/// from the status bar: "Title is | sr-word-fixture.docx - Word | Print View" [obs, 519/s1].
+#[test]
+fn words_title_says_the_view() {
+    let (mut engine, _speech) = word_document(
+        "Library Hours\r",
+        0,
+        crate::event::LineStructure {
+            line: (0, 14),
+            heading: Some(1),
+            ..Default::default()
+        },
+    );
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    assert_eq!(engine.execute_command("SayWindowTitle"), None);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "document view"));
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::DocumentView(Some(
+        "Print Layout".to_owned(),
+    )));
+    assert_eq!(
+        said.as_deref(),
+        Some("Title is\nsr-word-fixture.docx - Word\nPrint View")
+    );
+}

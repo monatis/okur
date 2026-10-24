@@ -1212,6 +1212,9 @@ struct ScreenSnapshot {
     /// Word's document's headings, for its Heading List.
     #[serde(default)]
     headings: Option<Vec<okur_core::DocumentHeading>>,
+    /// The view Word showed its document in, saved beside the headings.
+    #[serde(default)]
+    view: Option<String>,
 }
 
 impl ScreenSnapshot {
@@ -1227,6 +1230,7 @@ impl ScreenSnapshot {
         }
         if other.headings.is_some() {
             self.headings = other.headings;
+            self.view = other.view;
         }
     }
 }
@@ -1238,6 +1242,7 @@ struct ScreenReads {
     recognitions: usize,
     files: usize,
     headings: usize,
+    views: usize,
 }
 
 impl ScreenReads {
@@ -1267,6 +1272,10 @@ impl ScreenReads {
         let headings = requests
             .iter()
             .filter(|(a, _)| a == "document headings")
+            .count();
+        let views = requests
+            .iter()
+            .filter(|(a, _)| a == "document view")
             .count();
         let mut deliver = |event: okur_core::AccessibilityEvent| {
             if let Some(speech) = engine.handle_accessibility_event(&event) {
@@ -1306,6 +1315,15 @@ impl ScreenReads {
                     deliver(okur_core::AccessibilityEvent::FileRecognitionStarted);
                 }
                 deliver(okur_core::AccessibilityEvent::FileRecognized(file.clone()));
+            }
+        }
+        // A snapshot with headings saved the view beside them, none when it could not read it.
+        if snapshot.headings.is_some() {
+            while self.views < views {
+                self.views += 1;
+                deliver(okur_core::AccessibilityEvent::DocumentView(
+                    snapshot.view.clone(),
+                ));
             }
         }
         if let Some(found) = &snapshot.headings {

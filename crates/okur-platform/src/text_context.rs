@@ -36,7 +36,7 @@ pub fn css_alignment(align: &str) -> Option<&'static str> {
 pub use reader::{
     focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
     move_caret_in_edit, move_to_cell, move_to_paragraph, read_focused, read_focused_outside_page,
-    visible_text, with_paragraph_alignment, word_document_headings,
+    visible_text, with_paragraph_alignment, word_document_headings, word_view,
 };
 
 #[cfg(windows)]
@@ -830,6 +830,45 @@ mod reader {
         }
     }
 
+    /// The view Word's window shows its document in: the name of its status bar's view button
+    /// that is on ("Print Layout"), in `window` or the window in front. `None` when none is.
+    pub fn word_view(
+        uia: &IUIAutomation,
+        window: Option<windows::Win32::Foundation::HWND>,
+    ) -> Option<String> {
+        use windows::core::BSTR;
+        use windows::Win32::System::Variant::VARIANT;
+        use windows::Win32::UI::Accessibility::{
+            IUIAutomationTogglePattern, ToggleState_On, TreeScope_Descendants,
+            UIA_ClassNamePropertyId, UIA_TogglePatternId,
+        };
+        /// Word's status bar's view buttons (Read Mode, Print Layout, Web Layout).
+        const VIEW_BUTTON_CLASS: &str = "NetUIStickyButton";
+        // SAFETY: plain Win32 and UIA client calls on valid objects.
+        unsafe {
+            let window = window.unwrap_or_else(|| GetForegroundWindow());
+            let condition = uia
+                .CreatePropertyCondition(
+                    UIA_ClassNamePropertyId,
+                    &VARIANT::from(BSTR::from(VIEW_BUTTON_CLASS)),
+                )
+                .ok()?;
+            let buttons = uia
+                .ElementFromHandle(window)
+                .ok()?
+                .FindAll(TreeScope_Descendants, &condition)
+                .ok()?;
+            (0..buttons.Length().ok()?).find_map(|i| {
+                let button = buttons.GetElement(i).ok()?;
+                let toggle: IUIAutomationTogglePattern =
+                    button.GetCurrentPatternAs(UIA_TogglePatternId).ok()?;
+                (toggle.CurrentToggleState().ok()? == ToggleState_On)
+                    .then(|| button.CurrentName().ok().map(|n| n.to_string()))
+                    .flatten()
+            })
+        }
+    }
+
     /// The caret of Word's focused document to the start of its `paragraph` (from 0, as
     /// [`word_document_headings`] counts them). False when the focus is not in Word's document
     /// or it has no such paragraph.
@@ -923,7 +962,7 @@ mod reader {
             TextUnit_Character, UIA_BackgroundColorAttributeId, UIA_FontNameAttributeId,
             UIA_FontSizeAttributeId, UIA_FontWeightAttributeId, UIA_ForegroundColorAttributeId,
             UIA_HorizontalTextAlignmentAttributeId, UIA_IsItalicAttributeId,
-            UIA_UnderlineStyleAttributeId, UIA_TEXTATTRIBUTE_ID,
+            UIA_StyleNameAttributeId, UIA_UnderlineStyleAttributeId, UIA_TEXTATTRIBUTE_ID,
         };
         // SAFETY: UIA text range calls on a valid range.
         unsafe {
@@ -958,6 +997,10 @@ mod reader {
                 alignment: alignment.map(str::to_owned),
                 color: int(UIA_ForegroundColorAttributeId).map(colorref),
                 background: int(UIA_BackgroundColorAttributeId).map(colorref),
+                style: get(UIA_StyleNameAttributeId)
+                    .and_then(|v| windows::core::BSTR::try_from(&v).ok())
+                    .map(|b| b.to_string())
+                    .filter(|s| !s.is_empty()),
             })
         }
     }
@@ -1076,6 +1119,7 @@ mod reader {
                 alignment: None,
                 color: Some(color),
                 background: Some(background),
+                style: None,
             })
         }
     }

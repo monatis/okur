@@ -74,6 +74,13 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for the view Word's window in front shows its document in, which arrives later
+    /// as [`crate::event::AccessibilityEvent::DocumentView`], always. Returns false when
+    /// unsupported.
+    fn read_document_view(&self) -> bool {
+        false
+    }
+
     /// Moves the caret of the focused document to the start of its `paragraph` (from 0, as
     /// [`crate::event::DocumentHeading`] counts), then reads the field as
     /// [`Self::read_at_caret`] does, compared with `before`. Returns false when unsupported.
@@ -364,6 +371,13 @@ impl ApplicationActions for RecordingActions {
     fn read_document_headings(&self) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push(("document headings".to_owned(), 0));
+        }
+        true
+    }
+
+    fn read_document_view(&self) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("document view".to_owned(), 0));
         }
         true
     }

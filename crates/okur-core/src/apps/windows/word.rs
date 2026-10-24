@@ -20,6 +20,61 @@ pub(crate) fn spoken_line(context: &TextContext, line: String) -> String {
     }
 }
 
+/// Say Font in Word's document: the size, the colors, the font, the paragraph's style, its
+/// alignment and its outline level, "16 point | black on white | Calibri | Heading 1 style |
+/// Paragraph formatting: Aligned left | Outline level: 1" [obs, 1034/s1, s3]. JAWS also says the
+/// line spacing after the style ("Line spacing: 0 lines." on a heading, "1 lines." on body text),
+/// which Word's UI Automation text does not report: left out until it is understood. Bold,
+/// italic and underline are not recorded yet: said after the font, as elsewhere. `None` outside
+/// a document whose structure the platform reads.
+pub(crate) fn font(context: &TextContext) -> Option<String> {
+    let structure = context.structure.as_ref()?;
+    let font = context.font.as_ref()?;
+    let mut said = Vec::new();
+    if font.size_tenths > 0 {
+        let size = if font.size_tenths % 10 == 0 {
+            (font.size_tenths / 10).to_string()
+        } else {
+            format!("{}.{}", font.size_tenths / 10, font.size_tenths % 10)
+        };
+        said.push(msg::font_size(size).render());
+    }
+    let name = |color: Option<crate::color::Rgb>| {
+        color
+            .and_then(crate::color::name_of)
+            .map_or_else(|| msg::color_default().to_string(), str::to_owned)
+    };
+    said.push(msg::color_on(name(font.color), name(font.background)).render());
+    said.push(font.family.clone());
+    for (on, word) in [
+        (font.bold, msg::font_bold()),
+        (font.italic, msg::font_italic()),
+        (font.underline, msg::font_underline()),
+    ] {
+        if on {
+            said.push(word.to_string());
+        }
+    }
+    if let Some(style) = &font.style {
+        said.push(msg::word_style(style.as_str()).render());
+    }
+    if let Some(alignment) = &font.alignment {
+        said.push(msg::word_paragraph_aligned(alignment.as_str()).render());
+    }
+    said.push(match structure.heading {
+        Some(level) => msg::word_outline_level(u32::from(level)).render(),
+        None => msg::word_outline_body().to_string(),
+    });
+    Some(said.join("\n"))
+}
+
+/// The view Word shows its document in, as Say Window Title says it after the title, from the
+/// name of the status bar's view button that is on: "Print Layout" is "Print View" [obs,
+/// 519/s1]. Word's other views are not recorded yet: `None`, the title alone.
+pub(crate) fn view_name(button: &str) -> Option<String> {
+    (button == "Print Layout").then(|| msg::word_view_print().to_string())
+}
+
 /// How the caret came to a cell of Word's table, which decides what JAWS says of it.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CellMove {
@@ -394,6 +449,55 @@ mod tests {
             Some(format!(
                 "Hours\nCentral\n9 to 9\ncolumn 2 of 2\nrow 2 of 2\nLast cell in table.\n{tab_adds_row}"
             ))
+        );
+    }
+
+    /// The fixture's first heading as Word reports its font.
+    fn heading_font() -> TextContext {
+        let mut heading = at((0, 14), Some(1), false, None);
+        heading.font = Some(crate::event::FontInfo {
+            family: "Calibri".into(),
+            size_tenths: 160,
+            alignment: Some("left".into()),
+            color: Some(crate::color::Rgb::new(0, 0, 0)),
+            background: Some(crate::color::Rgb::new(255, 255, 255)),
+            style: Some("Heading 1".into()),
+            ..Default::default()
+        });
+        heading
+    }
+
+    /// Say Font in Word names the style and the outline level [obs, 1034/s1].
+    #[test]
+    fn say_font_names_the_style_and_the_outline_level() {
+        assert_eq!(
+            font(&heading_font()).as_deref(),
+            Some(
+                "16 point
+black on white
+Calibri
+Heading 1 style
+Paragraph formatting: Aligned left
+Outline level: 1"
+            )
+        );
+    }
+
+    /// JAWS says the line spacing after the style [obs, 1034/s1].
+    #[test]
+    #[ignore = "known gap: Word's line spacing, which its UI Automation text does not report"]
+    fn say_font_says_the_line_spacing() {
+        assert_eq!(
+            font(&heading_font()).as_deref(),
+            Some(
+                "16 point
+black on white
+Calibri
+Heading 1 style
+Line spacing: 0 lines.
+Paragraph formatting: Aligned left
+Outline level: 1"
+            )
         );
     }
 }

@@ -95,6 +95,8 @@ mod windows_actions {
         Cell(Option<Box<TextContext>>, usize, usize),
         /// The focused document's headings, answered even when there are none.
         DocumentHeadings,
+        /// The view Word's window in front shows its document in, answered always.
+        DocumentView,
         /// The caret to a paragraph of the focused document (from 0), then the field's text.
         Paragraph(Option<Box<TextContext>>, usize),
         /// A chord of virtual keys, sent marked as the screen reader's own.
@@ -164,6 +166,7 @@ mod windows_actions {
                 Request::Text(..) | Request::TextNow => "text read",
                 Request::Cell(..) => "table cell",
                 Request::DocumentHeadings => "document headings",
+                Request::DocumentView => "document view",
                 Request::Paragraph(..) => "paragraph",
                 Request::Keys(_) => "keys",
                 Request::Window(_) => "viewer read",
@@ -347,6 +350,16 @@ mod windows_actions {
                                     "document headings read"
                                 );
                                 let _ = events.send(AccessibilityEvent::DocumentHeadings(headings));
+                            }
+                            Request::DocumentView => {
+                                let Some(events) = events.as_ref() else {
+                                    return;
+                                };
+                                let view = uia
+                                    .as_ref()
+                                    .and_then(|uia| crate::text_context::word_view(uia, None));
+                                tracing::debug!(?view, "document view read");
+                                let _ = events.send(AccessibilityEvent::DocumentView(view));
                             }
                             Request::Paragraph(before, paragraph) => {
                                 let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
@@ -799,6 +812,10 @@ mod windows_actions {
             self.send(Request::DocumentHeadings)
         }
 
+        fn read_document_view(&self) -> bool {
+            self.send(Request::DocumentView)
+        }
+
         fn move_to_paragraph(&self, before: Option<&TextContext>, paragraph: usize) -> bool {
             self.send(Request::Paragraph(before.cloned().map(Box::new), paragraph))
         }
@@ -998,6 +1015,27 @@ pub fn document_headings_now(
     }
     .ok()?;
     crate::text_context::word_document_headings(&uia, window)
+}
+
+/// The view Word's window shows its document in, read right away on the calling thread: the
+/// window in front, or the top-level window titled `window_title`. For the recorder.
+#[cfg(windows)]
+pub fn document_view_now(window_title: Option<&str>) -> Option<String> {
+    use windows::Win32::System::Com::{
+        CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
+    };
+    use windows::Win32::UI::Accessibility::{CUIAutomation8, IUIAutomation};
+    let window = match window_title {
+        Some(title) => Some(crate::harness::window_titled(title)?),
+        None => None,
+    };
+    // SAFETY: COM initialization and in-process activation.
+    let uia: IUIAutomation = unsafe {
+        let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
+        CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
+    }
+    .ok()?;
+    crate::text_context::word_view(&uia, window)
 }
 
 /// Performs an action on a node's live object right away, on the calling thread, reporting

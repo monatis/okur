@@ -172,6 +172,10 @@ pub struct FontInfo {
     pub color: Option<crate::color::Rgb>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub background: Option<crate::color::Rgb>,
+    /// The paragraph's style, where the application names it (Word's "Heading 1", "Normal"):
+    /// Say Font in Word says it [obs, 1034/s1, s3].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub style: Option<String>,
 }
 
 impl FontInfo {
@@ -778,6 +782,11 @@ pub enum AccessibilityEvent {
     /// in Word; [`crate::actions::ApplicationActions::read_document_headings`]); empty when it
     /// has none or could not be read.
     DocumentHeadings(Vec<DocumentHeading>),
+    /// The view Word's window shows its document in, by the name of the status bar's view
+    /// button that is on ("Print Layout"), asked for by Say Window Title
+    /// ([`crate::actions::ApplicationActions::read_document_view`]); `None` when it could not
+    /// be read.
+    DocumentView(Option<String>),
     /// What the user did to one of Okur's own windows (`okur-ui`).
     Ui(crate::ui::FromUi),
     /// The page in front changed outside its live regions: a web application added or
