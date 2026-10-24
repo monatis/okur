@@ -1,0 +1,68 @@
+{
+  "id": "524-desktop-word-heading-list-move",
+  "name": "Word: the Heading List (Insert+F6), Down to the second heading and Move To Heading with Enter, Say Line there; again to the last heading with End, Enter, then Down into the table and Ctrl+Home",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+F6",
+      "settle_max_ms": 20000
+    },
+    {
+      "id": "s2",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Down\")"
+    },
+    {
+      "id": "s3",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+F6",
+      "settle_max_ms": 20000
+    },
+    {
+      "id": "s6",
+      "type": "jaws_function",
+      "command": "TypeKey(\"End\")"
+    },
+    {
+      "id": "s7",
+      "type": "jaws_function",
+      "command": "TypeKey(\"Enter\")"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Ctrl+Home"
+    }
+  ]
+}

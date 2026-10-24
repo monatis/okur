@@ -2,9 +2,10 @@
   "id": "519-desktop-word-lists-and-spelling",
   "name": "Word's JAWS lists: the headings list (Insert+F6), Down and Escape (JAWS's own TypeKey: its dialogs refuse our keys); the spelling error at the cursor and the next one (Alt+Shift+L); Insert+Shift+R revisions; and Insert+T",
   "category": "desktop",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
   "target_app": "desktop",
+  "trace_headings": true,
   "launch": { "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)", "close_window": true, "hide_console": true },
   "reset": { "keys": ["Ctrl+Home"] },
   "steps": [
