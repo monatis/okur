@@ -131,9 +131,16 @@ pub(crate) fn font(context: &TextContext) -> Option<String> {
 
 /// The view Word shows its document in, as Say Window Title says it after the title, from the
 /// name of the status bar's view button that is on: "Print Layout" is "Print View" [obs,
-/// 519/s1, 1039/s7]. Web Layout's and Read Mode's are not recorded yet: `None`, the title alone.
+/// 519/s1, 1039/s7], "Web Layout" "Web Layout View" and "Read Mode" "reading layout View" [obs,
+/// 1042/s5, s9].
 pub(crate) fn view_name(button: &str) -> Option<String> {
-    (button == "Print Layout").then(|| msg::word_view_print().to_string())
+    let name = match button {
+        "Print Layout" => msg::word_view_print(),
+        "Web Layout" => msg::word_view_web(),
+        "Read Mode" => msg::word_view_read(),
+        _ => return None,
+    };
+    Some(name.to_string())
 }
 
 /// Word's view keys: Ctrl+Alt+N for Draft, Ctrl+Alt+O for Outline, Ctrl+Alt+P for Print Layout,
@@ -643,6 +650,13 @@ Outline level: 1"
         assert_eq!(view_key(&key('N', true)).as_deref(), Some("Draft View"));
         assert_eq!(view_key(&key('O', true)).as_deref(), Some("Outline View"));
         assert_eq!(view_key(&key('P', true)).as_deref(), Some("Print View"));
+        // The status bar's buttons [obs, 1042/s5, s9].
+        assert_eq!(view_name("Web Layout").as_deref(), Some("Web Layout View"));
+        assert_eq!(
+            view_name("Read Mode").as_deref(),
+            Some("reading layout View")
+        );
+        assert_eq!(view_name("Focus"), None);
         assert_eq!(view_key(&key('P', false)), None);
         assert_eq!(view_key(&key('Q', true)), None);
     }
