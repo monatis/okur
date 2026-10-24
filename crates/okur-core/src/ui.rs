@@ -4,6 +4,7 @@
 
 use std::sync::{Arc, Mutex};
 
+pub mod applications;
 pub mod basics;
 pub mod clipboard;
 pub mod find;

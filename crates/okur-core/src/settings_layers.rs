@@ -55,10 +55,21 @@ impl SettingsLayers {
     }
 
     /// The settings in force for `application` and `site`, from the most specific layer down.
+    /// An application whose settings are disabled (Manage Application Settings) has those for
+    /// all applications.
     pub fn resolve(&self, application: Option<&str>, site: Option<&str>) -> Settings {
         let mut merged = to_values(&Settings::default());
         merge(&mut merged, &self.global);
-        if let Some(values) = application.and_then(|a| self.applications.get(a)) {
+        let disabled = |application: &str| {
+            merged
+                .get("disabled_applications")
+                .and_then(Value::as_array)
+                .is_some_and(|names| names.iter().any(|n| n.as_str() == Some(application)))
+        };
+        if let Some(values) = application
+            .filter(|a| !disabled(a))
+            .and_then(|a| self.applications.get(a))
+        {
             merge(&mut merged, values);
         }
         if let Some(values) = site.and_then(|s| self.sites.get(s)) {
@@ -136,6 +147,21 @@ impl SettingsLayers {
             }
             .resolve(application, None),
         }
+    }
+
+    /// Forgets `application`'s own settings (Manage Application Settings' Remove Selected).
+    pub fn remove_application(&mut self, application: &str) {
+        self.applications.remove(application);
+    }
+
+    /// Forgets every saved setting (Restore to Factory Settings): Okur's defaults again,
+    /// everywhere.
+    pub fn restore_factory(&mut self) {
+        self.global.clear();
+        self.applications.clear();
+        self.sites.clear();
+        self.until_focus_moves.clear();
+        self.session.clear();
     }
 
     /// Forgets the voice profile saved as `name` (Voice Adjustment's Delete Profile): a map's
@@ -429,5 +455,38 @@ mod tests {
         assert_eq!(profiles.keys().collect::<Vec<_>>(), ["Slow"]);
         layers.remove_voice_profile("Slow");
         assert!(!layers.global.contains_key("voice_profiles"));
+    }
+
+    /// Manage Application Settings: an application whose settings are disabled has those for
+    /// all applications, its own kept; Restore to Factory Settings forgets everything.
+    #[test]
+    fn disabled_application_settings_are_kept_but_not_used() {
+        use crate::settings::Punctuation;
+        let mut layers = SettingsLayers::default();
+        let mut notepad = Settings::default();
+        notepad.voice.punctuation = Punctuation::All;
+        layers.change(
+            &Scope::Application("notepad".into()),
+            &Settings::default(),
+            &notepad,
+            None,
+        );
+        assert_eq!(
+            layers.resolve(Some("notepad"), None).voice.punctuation,
+            Punctuation::All
+        );
+        let disabled = Settings {
+            disabled_applications: vec!["notepad".into()],
+            ..Settings::default()
+        };
+        layers.change(&Scope::Global, &Settings::default(), &disabled, None);
+        assert_eq!(
+            layers.resolve(Some("notepad"), None).voice.punctuation,
+            Punctuation::Most
+        );
+        assert!(layers.applications.contains_key("notepad"));
+        layers.restore_factory();
+        assert_eq!(layers.resolve(Some("notepad"), None), Settings::default());
+        assert!(layers.applications.is_empty());
     }
 }

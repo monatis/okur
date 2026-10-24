@@ -1052,6 +1052,9 @@ pub struct Settings {
     /// The voice profiles saved by name (Voice Adjustment's Save As), for all applications;
     /// the synthesizers' own are not kept here.
     pub voice_profiles: std::collections::BTreeMap<String, VoiceSettings>,
+    /// The applications whose own settings are kept but not used (Manage Application Settings'
+    /// check boxes cleared), by their settings names.
+    pub disabled_applications: Vec<String>,
 }
 
 impl Default for Settings {
@@ -1079,6 +1082,7 @@ impl Default for Settings {
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),
             voice_profiles: std::collections::BTreeMap::new(),
+            disabled_applications: Vec::new(),
         }
     }
 }
@@ -1152,6 +1156,7 @@ impl Settings {
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),
             voice_profiles: std::collections::BTreeMap::new(),
+            disabled_applications: Vec::new(),
         }
     }
 }

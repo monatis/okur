@@ -271,6 +271,16 @@ pub static SETTINGS: &[SettingSpec] = &[
         scopes: Scopes::AllApplications,
         ..spec("voice_profiles", Group::Speech, None, Kind::Structured)
     },
+    // The applications whose own settings are not used (Manage Application Settings).
+    SettingSpec {
+        scopes: Scopes::AllApplications,
+        ..spec(
+            "disabled_applications",
+            Group::Reading,
+            None,
+            Kind::Structured,
+        )
+    },
     SettingSpec {
         jaws: default_jcf("Options", "IndicateCaps", |v| Value::Bool(v.trim() != "0")),
         ..spec(

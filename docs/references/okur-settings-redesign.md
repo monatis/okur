@@ -348,3 +348,13 @@ spoken form is a parity target.
    Language; Apply's question whether to make a saved profile the default; the Language menu's
    Voice Profiles.
 5. **Startup Wizard**, Manage Application Settings, Restore to Factory Settings.
+   **Manage Application Settings and Restore to Factory Settings built 2026-10-24**, both in
+   Options:
+   - Manage Application Settings lists the applications with settings of their own, checked
+     while they are used (\`disabled_applications\`, for all applications, makes resolving skip
+     an application's layer), with Enable All, Disable All, Remove Selected (forgets its
+     settings), OK, Cancel;
+   - Restore to Factory Settings asks first, in JAWS's words but for "and restart JAWS", since
+     Okur's defaults apply at once; Yes forgets every saved setting and Last Changed Settings.
+   Still to do: the Startup Wizard (its walk was cut short); whether JAWS reads okur-ui's check
+   list as JAWS's "List box" (a probe).

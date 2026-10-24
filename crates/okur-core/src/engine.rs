@@ -300,6 +300,10 @@ pub struct ScreenReaderEngine {
     voice_adjustment: Option<crate::ui::voice_adjustment::VoiceAdjustment>,
     /// Select a Voice Profile, while it is open.
     voice_profile_dialog: Option<crate::ui::voice_profile::VoiceProfileDialog>,
+    /// Manage Application Settings, while it is open.
+    applications_dialog: Option<crate::ui::applications::ManageApplications>,
+    /// Restore to Factory Settings' question, while it is open, by its dialog's id.
+    restore_question: Option<u32>,
     /// The application the until-the-focus-moves settings were changed for: the focus moving
     /// to another clears them.
     until_focus_moves_for: Option<String>,
@@ -561,6 +565,8 @@ impl ScreenReaderEngine {
             basics_dialog: None,
             voice_adjustment: None,
             voice_profile_dialog: None,
+            applications_dialog: None,
+            restore_question: None,
             until_focus_moves_for: None,
             settings_history: Vec::new(),
             list_dialog: None,
@@ -1844,6 +1850,8 @@ impl ScreenReaderEngine {
                                 ],
                                 ..item("voices", msg::okur_menu_voices(), None)
                             },
+                            item(MENU_APPLICATIONS, msg::okur_menu_applications(), None),
+                            item(MENU_RESTORE, msg::okur_menu_restore(), None),
                             item(
                                 crate::ui::MAIN_WINDOW_EXIT,
                                 msg::okur_menu_exit(),
@@ -1880,6 +1888,8 @@ impl ScreenReaderEngine {
             MENU_VOICE_PROFILE => {
                 let _ = self.open_voice_profile();
             }
+            MENU_APPLICATIONS => self.open_applications(),
+            MENU_RESTORE => self.ask_restore_factory(),
             MENU_NOTIFICATIONS => self.open_notification_history(),
             MENU_SETTINGS_CENTER => {
                 return self.open_settings(crate::ui::settings_tree::Flavor::Center);
@@ -1976,6 +1986,68 @@ impl ScreenReaderEngine {
                 self.apply_settings(&Scope::Application(app), &before, &after, &[]);
             }
         }
+    }
+
+    /// Opens Manage Application Settings, or brings it to the front: the applications with
+    /// settings of their own.
+    fn open_applications(&mut self) {
+        let dialog = match self.applications_dialog.take() {
+            Some(dialog) => dialog,
+            None => {
+                self.dialog_count += 1;
+                let global = self.settings_layers.resolve(None, None);
+                crate::ui::applications::ManageApplications::new(
+                    self.dialog_count,
+                    self.settings_layers.applications.keys().cloned().collect(),
+                    &global.disabled_applications,
+                )
+            }
+        };
+        if let Some(ui) = &self.ui {
+            ui.send(crate::ui::ToUi::DialogShow {
+                dialog: dialog.spec(),
+            });
+        }
+        self.applications_dialog = Some(dialog);
+    }
+
+    /// Manage Application Settings' OK: `disabled` applications' settings unused, `removed`
+    /// ones' forgotten.
+    fn manage_applications(&mut self, disabled: Vec<String>, removed: Vec<String>) {
+        for application in &removed {
+            self.settings_layers.remove_application(application);
+        }
+        let before = self.settings_layers.resolve(None, None);
+        let after = crate::settings::Settings {
+            disabled_applications: disabled
+                .into_iter()
+                .filter(|app| !removed.contains(app))
+                .collect(),
+            ..before.clone()
+        };
+        // Saved with the applications removed, and resolved anew, even with nothing else changed.
+        self.apply_settings(&crate::settings_layers::Scope::Global, &before, &after, &[]);
+    }
+
+    /// Restore to Factory Settings: its question first.
+    fn ask_restore_factory(&mut self) {
+        self.dialog_count += 1;
+        self.restore_question = Some(self.dialog_count);
+        if let Some(ui) = &self.ui {
+            ui.send(crate::ui::ToUi::DialogShow {
+                dialog: crate::ui::applications::restore_question(self.dialog_count),
+            });
+        }
+    }
+
+    /// Restore to Factory Settings' Yes: every saved setting forgotten, Okur's defaults in force.
+    fn restore_factory(&mut self) {
+        self.settings_layers.restore_factory();
+        self.settings_history.clear();
+        if let Some(store) = &self.settings_store {
+            store.save(&self.settings_layers);
+        }
+        self.resolve_settings();
     }
 
     /// What Voice Adjustment, or its Save Voice Profile, decided.
@@ -2181,6 +2253,53 @@ impl ScreenReaderEngine {
             _ if self.is_message_box_event(message) => self.handle_message_box_event(message),
             _ if self.is_overwrite_event(message) => self.handle_overwrite_event(message),
             crate::ui::FromUi::MainMenuCommand { id } => self.main_menu_command(id),
+            _ if self.restore_question.is_some() && dialog_of(message) == self.restore_question => {
+                match message {
+                    crate::ui::FromUi::DialogPressed { id, control } if control == "yes" => {
+                        if let Some(ui) = &self.ui {
+                            ui.send(crate::ui::ToUi::DialogClose { id: *id });
+                        }
+                        self.restore_question = None;
+                        self.restore_factory();
+                        self.returning_from_dialog();
+                    }
+                    crate::ui::FromUi::DialogClosed { .. } => {
+                        self.restore_question = None;
+                        self.returning_from_dialog();
+                    }
+                    _ => {}
+                }
+                None
+            }
+            _ if self
+                .applications_dialog
+                .as_ref()
+                .is_some_and(|d| Some(d.id) == dialog_of(message)) =>
+            {
+                use crate::ui::applications::Outcome;
+                match self.applications_dialog.as_mut()?.handle(message) {
+                    Outcome::Nothing => {}
+                    Outcome::Send(messages) => {
+                        if let Some(ui) = &self.ui {
+                            messages.into_iter().for_each(|m| ui.send(m));
+                        }
+                    }
+                    Outcome::Apply { disabled, removed } => {
+                        if let (Some(dialog), Some(ui)) =
+                            (self.applications_dialog.take(), &self.ui)
+                        {
+                            ui.send(crate::ui::ToUi::DialogClose { id: dialog.id });
+                        }
+                        self.manage_applications(disabled, removed);
+                        self.returning_from_dialog();
+                    }
+                    Outcome::Closed => {
+                        self.applications_dialog = None;
+                        self.returning_from_dialog();
+                    }
+                }
+                None
+            }
             _ if self
                 .voice_profile_dialog
                 .as_ref()
@@ -2716,6 +2835,8 @@ impl ScreenReaderEngine {
 const MENU_BASICS: &str = "basics";
 const MENU_VOICE_ADJUSTMENT: &str = "voice_adjustment";
 const MENU_VOICE_PROFILE: &str = "voice_profile";
+const MENU_APPLICATIONS: &str = "manage_applications";
+const MENU_RESTORE: &str = "restore_factory";
 const MENU_NOTIFICATIONS: &str = "notification_history";
 const MENU_SETTINGS_CENTER: &str = "settings_center";
 const MENU_ABOUT: &str = "about";

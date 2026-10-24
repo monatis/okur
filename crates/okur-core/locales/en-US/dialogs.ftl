@@ -516,6 +516,8 @@ okur-menu-notification-history-key = INSERT+SPACE, N
 okur-menu-voices = &Voices
 okur-menu-voice-adjustment = Voice Adjustment...
 okur-menu-voice-profile = Select a Voice Profile...
+okur-menu-applications = Manage Application Settings...
+okur-menu-restore = Restore to Factory Settings...
 
 ## Voice Adjustment, JAWS's "Voice" group [obs, the walk of Voice Adjustment].
 
@@ -552,3 +554,21 @@ voice-profile-use-default = Use Default
 # A synthesizer's own profile: "SAPI 5X - (factory)" [obs, the walk of Voice Adjustment's
 # profiles].
 voice-profile-factory = { $synthesizer } - (factory)
+
+## Manage Application Settings: "Manage Application Settings dialog | Application Settings List
+## box | Chrome checked | 1 of 5", Enable All, Disable All, Remove Selected, OK, Cancel [obs, the
+## walk of JAWS's Options].
+
+applications-title = Manage Application Settings
+applications-list = Application Settings
+applications-enable-all = Enable All
+applications-disable-all = Disable All
+applications-remove = Remove Selected
+
+## Restore to Factory Settings' question, JAWS's words but for "and restart JAWS": Okur's
+## defaults apply at once [obs, the walk of JAWS's Options].
+
+restore-factory-title = Restore to Factory Settings
+restore-factory-question = This option will delete all your current settings. Are you sure you want to continue?
+restore-factory-yes = &Yes
+restore-factory-no = &No
