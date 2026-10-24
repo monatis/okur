@@ -179,6 +179,9 @@ pub struct SettingSpec {
     pub group: Group,
     /// Its label in the settings dialog; none while it is set in the settings file only.
     pub label: Option<Label>,
+    /// Its name in Settings Center's tree, for a setting the settings dialog does not show (it
+    /// has no access key left for it): JAWS's name there.
+    pub tree_label: Option<Label>,
     pub kind: Kind,
     pub scopes: Scopes,
     pub jaws: Jaws,
@@ -193,6 +196,7 @@ const fn spec(id: &'static str, group: Group, label: Option<Label>, kind: Kind) 
         id,
         group,
         label,
+        tree_label: None,
         kind,
         scopes: Scopes::Everywhere,
         jaws: Jaws::Unread,
@@ -265,6 +269,7 @@ pub static SETTINGS: &[SettingSpec] = &[
     },
     SettingSpec {
         jaws: default_jcf("Options", "MixedCase", |v| Value::Bool(v.trim() != "0")),
+        tree_label: Some(msg::settings_tree_mixed_case),
         ..spec("voice.text.mixed_case", Group::Speech, None, CHECK)
     },
     SettingSpec {
@@ -273,12 +278,14 @@ pub static SETTINGS: &[SettingSpec] = &[
     },
     SettingSpec {
         jaws: default_jcf("Options", "SayDollars", |v| Value::Bool(v.trim() == "1")),
+        tree_label: Some(msg::settings_tree_say_dollars),
         ..spec("voice.text.say_dollars", Group::Speech, None, CHECK)
     },
     // Full Speech or less speech, and less speech's kind (`SpeechMode`, `LessSpeechMode`;
     // 700 and 707 record them); Insert+Space, S and Shift+S change them for the session.
     SettingSpec {
         jaws: default_jcf("Options", "SpeechMode", |v| json(SpeechMode::from_jcf(v))),
+        tree_label: Some(msg::settings_tree_speech_mode),
         ..spec(
             "speech_mode",
             Group::Speech,
@@ -290,6 +297,7 @@ pub static SETTINGS: &[SettingSpec] = &[
         jaws: default_jcf("Options", "LessSpeechMode", |v| {
             json(LessSpeech::from_jcf(v))
         }),
+        tree_label: Some(msg::settings_tree_less_speech),
         ..spec(
             "less_speech",
             Group::Speech,
@@ -399,6 +407,7 @@ pub static SETTINGS: &[SettingSpec] = &[
         jaws: default_jcf("HTML", "IdentifySamePageLinks", |v| {
             Value::Bool(v.trim() != "0")
         }),
+        tree_label: Some(msg::settings_tree_same_page_links),
         ..spec("identify_same_page_links", Group::Reading, None, CHECK)
     },
     SettingSpec {
@@ -407,6 +416,7 @@ pub static SETTINGS: &[SettingSpec] = &[
     },
     SettingSpec {
         jaws: default_jcf("Options", "Indentation", |v| Value::Bool(v.trim() != "0")),
+        tree_label: Some(msg::settings_tree_indentation),
         ..spec("indentation", Group::Reading, None, CHECK)
     },
     SettingSpec {
@@ -485,6 +495,7 @@ pub static SETTINGS: &[SettingSpec] = &[
         jaws: default_jcf("Options", "MouseMovementStopsSpeech", |v| {
             Value::Bool(v.trim() != "0")
         }),
+        tree_label: Some(msg::settings_tree_mouse_echo_interrupt),
         ..spec("mouse_echo.interrupt", Group::MouseEcho, None, CHECK)
     },
     SettingSpec {
@@ -525,12 +536,14 @@ pub static SETTINGS: &[SettingSpec] = &[
         jaws: default_jcf("Options", "MouseEchoSpeaksHelpAndDescription", |v| {
             Value::Bool(v.trim() == "1")
         }),
+        tree_label: Some(msg::settings_tree_mouse_echo_description),
         ..spec("mouse_echo.description", Group::MouseEcho, None, CHECK)
     },
     SettingSpec {
         jaws: default_jcf("Options", "MouseEchoSpeaksControlTypeAndState", |v| {
             Value::Bool(v.trim() != "0")
         }),
+        tree_label: Some(msg::settings_tree_mouse_echo_control),
         ..spec(
             "mouse_echo.control_type_and_state",
             Group::MouseEcho,
@@ -957,6 +970,7 @@ mod tests {
             .iter()
             .filter(|spec| {
                 spec.label
+                    .or(spec.tree_label)
                     .is_some_and(|label| label().description().is_none())
             })
             .map(|spec| spec.id)

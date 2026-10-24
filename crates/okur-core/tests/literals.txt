@@ -19,6 +19,7 @@ okur-core/src/linearize.rs: "insertion"
 okur-core/src/linearize.rs: "mark"
 # A message's short form and description are looked up by its name with these endings.
 okur-core/src/messages.rs: "short"
+okur-core/src/ui/settings_tree.rs: "indentation"
 okur-core/src/ui/settings_tree.rs: "quick"
 okur-core/src/ui/settings_tree.rs: "apply"
 okur-core/src/ui/settings_tree.rs: "cancel"

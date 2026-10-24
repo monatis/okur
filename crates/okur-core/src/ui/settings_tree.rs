@@ -41,10 +41,13 @@ pub enum TreeGroup {
     User,
     Web,
     WebReading,
+    WebLinks,
     FormsMode,
     TextProcessing,
     TextGeneral,
+    TextNumbers,
     SpeechVerbosity,
+    SpeechOptions,
     SayAll,
     Synthesizer,
     Punctuation,
@@ -59,14 +62,17 @@ pub enum TreeGroup {
 
 impl TreeGroup {
     /// Settings Center's, in JAWS's order, each group right before its subgroups.
-    const CENTER: [TreeGroup; 14] = [
+    const CENTER: [TreeGroup; 17] = [
         Self::User,
         Self::Web,
         Self::WebReading,
+        Self::WebLinks,
         Self::FormsMode,
         Self::TextProcessing,
         Self::TextGeneral,
+        Self::TextNumbers,
         Self::SpeechVerbosity,
+        Self::SpeechOptions,
         Self::SayAll,
         Self::Synthesizer,
         Self::Punctuation,
@@ -85,8 +91,8 @@ impl TreeGroup {
     /// The group a subgroup is in.
     fn parent(self) -> Option<TreeGroup> {
         match self {
-            Self::WebReading => Some(Self::Web),
-            Self::TextGeneral => Some(Self::TextProcessing),
+            Self::WebReading | Self::WebLinks => Some(Self::Web),
+            Self::TextGeneral | Self::TextNumbers => Some(Self::TextProcessing),
             Self::KeyboardGeneral => Some(Self::Keyboard),
             _ => None,
         }
@@ -107,6 +113,9 @@ impl TreeGroup {
             Self::User => msg::settings_tree_user(),
             Self::Web => msg::settings_tree_web(),
             Self::WebReading => msg::settings_tree_reading(),
+            Self::WebLinks => msg::settings_tree_links(),
+            Self::TextNumbers => msg::settings_tree_numbers(),
+            Self::SpeechOptions => msg::settings_tree_speech_options(),
             Self::FormsMode => msg::settings_tree_forms_mode(),
             Self::TextProcessing => msg::settings_tree_text_processing(),
             Self::TextGeneral | Self::KeyboardGeneral => msg::settings_tree_general(),
@@ -133,15 +142,25 @@ fn center_group(id: &str) -> Option<TreeGroup> {
         "typing_echo" | "viewer_display" => TreeGroup::User,
         "read_page_on_load" => TreeGroup::WebReading,
         "forms_mode" => TreeGroup::FormsMode,
-        "voice.indicate_caps" | "live_region_append" => TreeGroup::TextGeneral,
+        "identify_same_page_links" => TreeGroup::WebLinks,
+        "voice.indicate_caps" | "live_region_append" | "voice.text.mixed_case" | "indentation" => {
+            TreeGroup::TextGeneral
+        }
+        "voice.text.say_dollars" => TreeGroup::TextNumbers,
         "verbosity.level" => TreeGroup::SpeechVerbosity,
+        "speech_mode" | "less_speech" => TreeGroup::SpeechOptions,
         "say_all_unit" => TreeGroup::SayAll,
         "voice.synthesizer" | "voice.voice" | "voice.rate" | "voice.volume" => {
             TreeGroup::Synthesizer
         }
         "voice.punctuation" => TreeGroup::Punctuation,
         "keyboard.layout" | "keyboard.okur_key" => TreeGroup::KeyboardGeneral,
-        "mouse_echo.enabled" | "mouse_echo.instant" | "mouse_echo.unit" => TreeGroup::MouseEcho,
+        "mouse_echo.enabled"
+        | "mouse_echo.interrupt"
+        | "mouse_echo.instant"
+        | "mouse_echo.unit"
+        | "mouse_echo.description"
+        | "mouse_echo.control_type_and_state" => TreeGroup::MouseEcho,
         "confirm_exit" => TreeGroup::Miscellaneous,
         _ => return None,
     })
@@ -260,7 +279,7 @@ impl SettingsTree {
 
     /// A setting's group in this dialog; `None` for one it does not show.
     fn group_of(&self, spec: &SettingSpec) -> Option<TreeGroup> {
-        spec.label?;
+        spec.label.or(spec.tree_label)?;
         match self.flavor {
             Flavor::Center => center_group(spec.id),
             Flavor::Quick => quick_group(spec.id),
@@ -278,6 +297,9 @@ impl SettingsTree {
     /// (`<label>-tree`, and Quick Settings' `<label>-quick`: "Select Forms Mode", "User
     /// Verbosity"), else the label.
     fn tree_label(&self, spec: &SettingSpec) -> String {
+        if let (None, Some(name)) = (spec.label, spec.tree_label) {
+            return name().to_string();
+        }
         let Some(label) = spec.label.map(|label| label()) else {
             return String::new();
         };
@@ -301,6 +323,7 @@ impl SettingsTree {
             let label = self.tree_label(spec);
             let description = spec
                 .label
+                .or(spec.tree_label)
                 .and_then(|l| l().description())
                 .map(|d| d.as_str().to_owned())
                 .unwrap_or_default();
@@ -412,6 +435,7 @@ impl SettingsTree {
         match self.rows.get(self.selected) {
             Some(Row::Setting(spec)) => spec
                 .label
+                .or(spec.tree_label)
                 .and_then(|l| l().description())
                 .map(|d| d.to_string())
                 .unwrap_or_default(),
@@ -846,6 +870,11 @@ mod tests {
         assert!(items
             .iter()
             .any(|i| i.text.starts_with("Punctuation Level ")));
+        // Settings the settings dialog does not show, by their names in JAWS's tree.
+        assert_eq!(at("Number And Date Processing"), Some(1));
+        assert_eq!(at("Speak Dollars"), Some(2));
+        assert_eq!(at("Speech Mode Full Speech"), Some(1));
+        assert_eq!(at("Identify \"Same Page\" Links"), Some(2));
     }
 
     fn panic_free_fail(message: &str) {
