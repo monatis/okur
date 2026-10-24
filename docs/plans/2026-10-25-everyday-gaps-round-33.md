@@ -37,12 +37,13 @@ From [`../references/okur-settings-redesign.md`](../references/okur-settings-red
 1. **F6 to the setting's control:** JAWS's configuration display pane, needed for a number
    ("Press F6 to switch between the tree view and this pane. This is necessary when typing in
    an edit or edit spin box", the help); okur-ui shows the selected setting's group of
-   controls, F6 there and back. Record first (§0).
+   controls, F6 there and back. Recorded (the design's §1.1, `166c3be3`).
 2. **The search's results as JAWS's list box** ("6 Search Results List box | Screen Echo Echo
-   Highlighted Text | User"), in place of the filtered tree. Record its keys first (§0).
+   Highlighted Text | User"), in place of the filtered tree. Recorded (the design's §1.1);
+   okur-ui needs to show one control in another's place first.
 3. **Voices:** Speak Sample and Synthesizer Language in Voice Adjustment; Apply's question
-   whether to make a saved profile the default; the Language menu's Voice Profiles; a Say
-   All's parts at the context's pitch.
+   whether to make a saved profile the default. Done: the Language menu's Voice Profiles
+   (`166c3be3`), a Say All's parts at the context's pitch (`eedcea21`).
 4. **The Startup Wizard's rest:** its start options with setup's start entries (Run Okur
    Settings), Run Okur from System Tray, Tutor Messages' "Announce Custom Messages Only" and
    Access Key's "Speak Menus Only" and "Speak Dialogs Only" (in Basics too), each with its
