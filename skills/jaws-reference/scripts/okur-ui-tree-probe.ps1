@@ -4,7 +4,9 @@
 # only while okur-ui is in front); after each key, what okur-ui reported on its standard output
 # and what JAWS said of it are written. Run on old-pc with no batch recording.
 param([string]$Out = (Join-Path $env:USERPROFILE 'sr-harness\probe\okur-ui-tree.txt'),
-      [string[]]$Keys = @('Tab', 'Right', 'Down', 'Space', 'Shift+Space', 'Down', 'Space', 'Up', 'Left', 'Tab', 'Escape'))
+      [string[]]$Keys = @('Tab', 'Right', 'Down', 'Space', 'Shift+Space', 'Down', 'Space', 'Up', 'Left', 'Tab', 'Escape'),
+      # Also an outline of the dialog's UI Automation tree before the keys (uia-outline.ps1).
+      [switch]$Outline)
 $bin = Join-Path $env:USERPROFILE 'sr-harness\bin'
 $lab = Join-Path $bin 'okur-lab.exe'
 $start = New-Object System.Diagnostics.ProcessStartInfo
@@ -36,6 +38,11 @@ $ui.StandardInput.Flush()
 Start-Sleep -Seconds 3
 & $lab jaws-history --clear | Out-Null
 $lines = @("--- shown: " + (& $lab front 'Okur Settings Center'))
+if ($Outline) {
+    $outlineFile = [System.IO.Path]::ChangeExtension($Out, '.outline.txt')
+    & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'uia-outline.ps1') -Title 'Notepad - Okur Settings Center' -Out $outlineFile | Out-Null
+    $lines += Get-Content $outlineFile
+}
 foreach ($key in $Keys) {
     & $lab keys --allow okur-ui $key 'wait:900' 2>&1 | Out-Null
     $said = (& $lab jaws-history --clear) -join ' | '

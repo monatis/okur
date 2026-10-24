@@ -329,7 +329,18 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
     let mut ids = Vec::new();
     let list_width = WIDTH - 2 * MARGIN - BUTTON_WIDTH - 6;
     let button_x = WIDTH - MARGIN - BUTTON_WIDTH;
-    let mut button_y = MARGIN;
+    // Labelled controls before the first list go above the lists, in their order (Settings
+    // Center's search box); later ones below them (its Application box).
+    let leading = dialog
+        .controls
+        .iter()
+        .take_while(|c| !is_list(&c.kind))
+        .filter(|c| is_labelled(&c.kind))
+        .count();
+    let top = MARGIN + i16::try_from(leading).unwrap_or(0) * (12 + ROW_GAP);
+    let mut top_y = MARGIN;
+    let mut seen_list = false;
+    let mut button_y = top;
     // The lists one under the other, sharing the height of one and a half: JAWS's rules
     // dialog has its tree of areas over its list of rules [obs, 748/s6, s7].
     let lists = dialog
@@ -343,10 +354,10 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
     } else {
         LIST_HEIGHT
     };
-    let mut list_y = MARGIN;
+    let mut list_y = top;
     // Below the lists: radio groups two to a row, then the rest.
     let column_width = (WIDTH - 2 * MARGIN - 6) / 2;
-    let mut row_top = MARGIN + (list_height + 6) * i16::try_from(lists).unwrap_or(1);
+    let mut row_top = top + (list_height + 6) * i16::try_from(lists).unwrap_or(1);
     let mut column = 0;
     let mut row_bottom = row_top;
     let mut y = row_top;
@@ -360,6 +371,7 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
         let at = list_y;
         if is_list(&control.kind) {
             list_y += list_height + 6;
+            seen_list = true;
         }
         let list_y = at;
         match &control.kind {
@@ -550,13 +562,19 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                 });
                 y += 10 + ROW_GAP;
             }
-            // Not used in list dialogs yet.
-            ControlKind::Group
-            | ControlKind::Choice { .. }
+            ControlKind::Choice { .. }
             | ControlKind::ComboEdit { .. }
             | ControlKind::Edit { .. }
-            | ControlKind::Message { .. }
-            | ControlKind::Slider { .. } => {}
+            | ControlKind::Slider { .. } => {
+                let width = (MARGIN, WIDTH - MARGIN);
+                if seen_list {
+                    y = push_labelled(&mut items, control, id, (width.0, y, width.1));
+                } else {
+                    top_y = push_labelled(&mut items, control, id, (width.0, top_y, width.1));
+                }
+            }
+            // Not used in list dialogs yet.
+            ControlKind::Group | ControlKind::Message { .. } => {}
         }
     }
     // The lists' bottom, without the gap kept under them for what follows.
@@ -567,6 +585,112 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
         items,
         ids,
     }
+}
+
+/// Whether `kind` is drawn as a control after its label on one row: a combo box, an edit, a
+/// slider.
+fn is_labelled(kind: &ControlKind) -> bool {
+    matches!(
+        kind,
+        ControlKind::Choice { .. }
+            | ControlKind::ComboEdit { .. }
+            | ControlKind::Edit { .. }
+            | ControlKind::Slider { .. }
+    )
+}
+
+/// A control after its label on one row from `left` to `right` at `y`; the row under it.
+fn push_labelled(
+    items: &mut Vec<Item>,
+    control: &okur_ui_model::Control,
+    id: u16,
+    (left, y, right): (i16, i16, i16),
+) -> i16 {
+    // The label first: in the tab order before its control, it names it and gives it its
+    // access key.
+    items.push(Item {
+        class: Class::Static,
+        style: WS_CHILD | WS_VISIBLE,
+        x: left,
+        y: y + 2,
+        cx: LABEL_WIDTH,
+        cy: 8,
+        id: LABEL_ID,
+        text: control.label.clone(),
+    });
+    let x = left + LABEL_WIDTH + 4;
+    let cx = right - left - LABEL_WIDTH - 4;
+    let height = match &control.kind {
+        ControlKind::Choice { .. } => {
+            items.push(Item {
+                class: Class::ComboBox,
+                style: WS_CHILD
+                    | WS_VISIBLE
+                    | WS_TABSTOP
+                    | WS_GROUP
+                    | CBS_DROPDOWNLIST
+                    | WS_VSCROLL,
+                x,
+                y,
+                cx,
+                // The list's height when it drops down.
+                cy: 120,
+                id,
+                text: String::new(),
+            });
+            12
+        }
+        ControlKind::ComboEdit { .. } => {
+            items.push(Item {
+                class: Class::ComboBox,
+                style: WS_CHILD
+                    | WS_VISIBLE
+                    | WS_TABSTOP
+                    | WS_GROUP
+                    | CBS_DROPDOWN
+                    | CBS_AUTOHSCROLL
+                    | WS_VSCROLL,
+                x,
+                y,
+                cx,
+                cy: 120,
+                id,
+                text: String::new(),
+            });
+            12
+        }
+        ControlKind::Edit { .. } => {
+            items.push(Item {
+                class: Class::Edit,
+                style: WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_GROUP | WS_BORDER | ES_AUTOHSCROLL,
+                x,
+                y,
+                cx,
+                cy: 12,
+                id,
+                text: String::new(),
+            });
+            12
+        }
+        ControlKind::Slider { .. } => {
+            items.push(Item {
+                class: Class::Named("msctls_trackbar32"),
+                style: WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_GROUP | TBS_AUTOTICKS,
+                x,
+                y,
+                cx,
+                cy: 16,
+                id,
+                text: String::new(),
+            });
+            16
+        }
+        _ => {
+            items.push(read_only_text(x, y, cx, id));
+            12
+        }
+    };
+    y + height + ROW_GAP
 }
 
 fn form_layout(dialog: &DialogSpec) -> Layout {
@@ -647,96 +771,7 @@ fn form_layout(dialog: &DialogSpec) -> Layout {
             | ControlKind::Edit { .. }
             | ControlKind::Slider { .. }
             | ControlKind::Text { .. } => {
-                // The label first: in the tab order before its control, it names it and
-                // gives it its access key.
-                items.push(Item {
-                    class: Class::Static,
-                    style: WS_CHILD | WS_VISIBLE,
-                    x: left,
-                    y: y + 2,
-                    cx: LABEL_WIDTH,
-                    cy: 8,
-                    id: LABEL_ID,
-                    text: control.label.clone(),
-                });
-                let x = left + LABEL_WIDTH + 4;
-                let cx = right - left - LABEL_WIDTH - 4;
-                let height = match &control.kind {
-                    ControlKind::Choice { .. } => {
-                        items.push(Item {
-                            class: Class::ComboBox,
-                            style: WS_CHILD
-                                | WS_VISIBLE
-                                | WS_TABSTOP
-                                | WS_GROUP
-                                | CBS_DROPDOWNLIST
-                                | WS_VSCROLL,
-                            x,
-                            y,
-                            cx,
-                            // The list's height when it drops down.
-                            cy: 120,
-                            id,
-                            text: String::new(),
-                        });
-                        12
-                    }
-                    ControlKind::ComboEdit { .. } => {
-                        items.push(Item {
-                            class: Class::ComboBox,
-                            style: WS_CHILD
-                                | WS_VISIBLE
-                                | WS_TABSTOP
-                                | WS_GROUP
-                                | CBS_DROPDOWN
-                                | CBS_AUTOHSCROLL
-                                | WS_VSCROLL,
-                            x,
-                            y,
-                            cx,
-                            cy: 120,
-                            id,
-                            text: String::new(),
-                        });
-                        12
-                    }
-                    ControlKind::Edit { .. } => {
-                        items.push(Item {
-                            class: Class::Edit,
-                            style: WS_CHILD
-                                | WS_VISIBLE
-                                | WS_TABSTOP
-                                | WS_GROUP
-                                | WS_BORDER
-                                | ES_AUTOHSCROLL,
-                            x,
-                            y,
-                            cx,
-                            cy: 12,
-                            id,
-                            text: String::new(),
-                        });
-                        12
-                    }
-                    ControlKind::Slider { .. } => {
-                        items.push(Item {
-                            class: Class::Named("msctls_trackbar32"),
-                            style: WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_GROUP | TBS_AUTOTICKS,
-                            x,
-                            y,
-                            cx,
-                            cy: 16,
-                            id,
-                            text: String::new(),
-                        });
-                        16
-                    }
-                    _ => {
-                        items.push(read_only_text(x, y, cx, id));
-                        12
-                    }
-                };
-                y += height + ROW_GAP;
+                y = push_labelled(&mut items, control, id, (left, y, right));
             }
             ControlKind::RadioButtons {
                 options, enabled, ..
