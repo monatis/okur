@@ -1222,6 +1222,9 @@ struct ScreenSnapshot {
     /// The view Word showed its document in, saved beside the headings.
     #[serde(default)]
     view: Option<String>,
+    /// Word's document's paragraphs, saved beside the headings (none before 1038), for Say All.
+    #[serde(default)]
+    paragraphs: Vec<okur_core::DocumentParagraph>,
 }
 
 impl ScreenSnapshot {
@@ -1238,6 +1241,7 @@ impl ScreenSnapshot {
         if other.headings.is_some() {
             self.headings = other.headings;
             self.view = other.view;
+            self.paragraphs = other.paragraphs;
         }
     }
 }
@@ -1250,6 +1254,7 @@ struct ScreenReads {
     files: usize,
     headings: usize,
     views: usize,
+    paragraphs: usize,
 }
 
 impl ScreenReads {
@@ -1330,18 +1335,31 @@ impl ScreenReads {
         snapshot: Option<&ScreenSnapshot>,
         spoken: &RecordingSpeech,
     ) {
-        let Some(snapshot) = snapshot else {
-            return;
-        };
         let requests = actions.requests();
         let count = |name: &str| requests.iter().filter(|(a, _)| a == name).count();
-        let (headings, views) = (count("document headings"), count("document view"));
+        let (headings, views, paragraphs) = (
+            count("document headings"),
+            count("document view"),
+            count("document paragraphs"),
+        );
         let mut deliver = |event: okur_core::AccessibilityEvent| {
             if let Some(speech) = engine.handle_accessibility_event(&event) {
                 if spoken.is_empty() {
                     spoken.push(&speech, false);
                 }
             }
+        };
+        // Say All's paragraphs, always answered: none where the step saved none (scenarios
+        // recorded before they were saved), and Say All then reads by lines, as live where the
+        // platform cannot read them.
+        while self.paragraphs < paragraphs {
+            self.paragraphs += 1;
+            deliver(okur_core::AccessibilityEvent::DocumentParagraphs(
+                snapshot.map(|s| s.paragraphs.clone()).unwrap_or_default(),
+            ));
+        }
+        let Some(snapshot) = snapshot else {
+            return;
         };
         // A snapshot with headings saved the view beside them, none when it could not read it.
         if snapshot.headings.is_some() {

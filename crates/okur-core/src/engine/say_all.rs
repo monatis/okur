@@ -128,9 +128,39 @@ impl ScreenReaderEngine {
     /// caret following. A field's paragraphs are its lines.
     pub(super) fn start_field_say_all(&mut self) -> Option<String> {
         let context = self.last_text.as_ref()?;
+        // Word's document is read by its paragraphs, with its headings, lists and tables, once
+        // the platform gives them.
+        if context.structure.is_some()
+            && self
+                .actions
+                .as_ref()
+                .is_some_and(|actions| actions.read_document_paragraphs())
+        {
+            tracing::debug!("say all: the document's paragraphs asked for");
+            self.say_all_paragraphs_asked = true;
+            return None;
+        }
         let pieces = match self.settings.say_all_unit {
             crate::settings::SayAllUnit::Sentence => crate::editing::sentences_from_caret(context),
             _ => crate::editing::lines_from_caret(context),
+        };
+        self.begin_say_all(0, Source::Field(pieces), true)
+    }
+
+    /// Say All in Word's document, once its paragraphs came: from the caret's paragraph to the
+    /// end, each said with its structure ([`crate::apps::windows::word::say_all_pieces`]).
+    pub(super) fn say_all_by_paragraphs(
+        &mut self,
+        paragraphs: &[crate::event::DocumentParagraph],
+    ) -> Option<String> {
+        if !std::mem::take(&mut self.say_all_paragraphs_asked) {
+            return None;
+        }
+        let context = self.last_text.as_ref()?;
+        let pieces = if paragraphs.is_empty() {
+            crate::editing::lines_from_caret(context)
+        } else {
+            crate::apps::windows::word::say_all_pieces(context, paragraphs)
         };
         self.begin_say_all(0, Source::Field(pieces), true)
     }
@@ -1006,6 +1036,58 @@ mod tests {
             .collect();
         assert_eq!(carets, [5, 12, 5]);
         assert_eq!(engine.last_text.as_ref().map(|t| t.caret), Some(5));
+    }
+
+    /// In Word's document Say All asks for the paragraphs first and reads by them once they
+    /// come: the heading said with its level. An answer nobody asked for starts nothing.
+    #[test]
+    fn say_all_in_word_reads_by_its_paragraphs() {
+        let speech = Progress::default();
+        let mut engine = engine(1, speech.clone());
+        let actions = crate::actions::RecordingActions::default();
+        engine.set_actions(Box::new(actions.clone()));
+        engine.last_text = Some(crate::event::TextContext {
+            text: "Intro\rWhat changes\rLonger.\r".to_owned(),
+            caret: 0,
+            selection: None,
+            font: None,
+            word: None,
+            misspelled: Vec::new(),
+            structure: Some(crate::event::LineStructure::default()),
+        });
+        assert_eq!(engine.start_field_say_all(), None);
+        assert!(marks(&speech).is_empty());
+        assert!(actions
+            .requests()
+            .iter()
+            .any(|(action, _)| action == "document paragraphs"));
+        let paragraph = |start, heading| crate::event::DocumentParagraph {
+            start,
+            heading,
+            list_item: false,
+            cell: None,
+        };
+        let answer = crate::event::AccessibilityEvent::DocumentParagraphs(vec![
+            paragraph(0, None),
+            paragraph(6, Some(2)),
+            paragraph(19, None),
+        ]);
+        engine.handle_accessibility_event(&answer);
+        assert_eq!(
+            marks(&speech)
+                .iter()
+                .map(|(t, _)| t.as_str())
+                .collect::<Vec<_>>(),
+            [
+                "Intro",
+                "\u{1d} heading level 2 \u{1e} What changes",
+                "Longer."
+            ]
+        );
+        let read = marks(&speech).len();
+        engine.end_say_all();
+        engine.handle_accessibility_event(&answer);
+        assert_eq!(marks(&speech).len(), read);
     }
 
     /// A quick key in a field's Say All has nothing to move to: JAWS's message, then the line

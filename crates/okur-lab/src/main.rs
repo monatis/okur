@@ -1193,6 +1193,8 @@ async fn main() {
                 let headings =
                     okur_platform::actions::document_headings_now(window_title.as_deref());
                 let view = okur_platform::actions::document_view_now(window_title.as_deref());
+                let paragraphs =
+                    okur_platform::actions::document_paragraphs_now(window_title.as_deref());
                 if let Some(path) = append_to {
                     let t_ms = std::time::SystemTime::now()
                         .duration_since(std::time::UNIX_EPOCH)
@@ -1205,6 +1207,7 @@ async fn main() {
                         "t_ms": t_ms,
                         "headings": headings.unwrap_or_default(),
                         "view": view,
+                        "paragraphs": paragraphs.unwrap_or_default(),
                     });
                     let written = std::fs::OpenOptions::new()
                         .create(true)

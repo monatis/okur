@@ -318,6 +318,8 @@ pub struct ScreenReaderEngine {
     /// The focused document's headings were asked for its Heading List, which opens when they
     /// come.
     document_headings_asked: bool,
+    /// Say All waits for Word's document's paragraphs.
+    say_all_paragraphs_asked: bool,
     /// Say Window Title in Word asked for the document's view, said with this title when it
     /// comes.
     document_view_title: Option<String>,
@@ -572,6 +574,7 @@ impl ScreenReaderEngine {
             list_dialog: None,
             list_return_mode: AppMode::VirtualBuffer,
             document_headings_asked: false,
+            say_all_paragraphs_asked: false,
             document_view_title: None,
             moved_by_document_list: false,
             word_from_list: None,
@@ -1451,6 +1454,9 @@ impl ScreenReaderEngine {
             AccessibilityEvent::TrayIcons(icons) => self.open_tray_list(icons),
             AccessibilityEvent::PageElements(elements) => self.say_page_font(elements),
             AccessibilityEvent::DocumentHeadings(headings) => self.document_headings(headings),
+            AccessibilityEvent::DocumentParagraphs(paragraphs) => {
+                self.say_all_by_paragraphs(paragraphs)
+            }
             AccessibilityEvent::DocumentView(view) => {
                 let title = self.document_view_title.take()?;
                 let said = std::iter::once(format!("{}\n{title}", msg::window_title_is()))

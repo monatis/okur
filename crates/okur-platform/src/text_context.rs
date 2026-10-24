@@ -36,7 +36,8 @@ pub fn css_alignment(align: &str) -> Option<&'static str> {
 pub use reader::{
     focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
     move_caret_in_edit, move_to_cell, move_to_paragraph, read_focused, read_focused_outside_page,
-    visible_text, with_paragraph_alignment, word_document_headings, word_view,
+    visible_text, with_paragraph_alignment, word_document_headings, word_document_paragraphs,
+    word_view,
 };
 
 #[cfg(windows)]
@@ -827,6 +828,117 @@ mod reader {
                 }
             }
             Some(headings)
+        }
+    }
+
+    /// The paragraphs of Word's document, the focused one or with `window` the one in that
+    /// top-level window, for Say All: each one's start in the document's text (the sum of the
+    /// paragraphs' lengths before it, as the document's text is theirs one after another), its
+    /// heading level and list from its style, and its table cell. `None` without Word's
+    /// document.
+    pub fn word_document_paragraphs(
+        uia: &IUIAutomation,
+        window: Option<windows::Win32::Foundation::HWND>,
+    ) -> Option<Vec<okur_core::DocumentParagraph>> {
+        use windows::core::BSTR;
+        use windows::Win32::System::Variant::VARIANT;
+        use windows::Win32::UI::Accessibility::{
+            IUIAutomationGridPattern, TextUnit_Paragraph, TreeScope_Descendants,
+            UIA_BulletStyleAttributeId, UIA_ClassNamePropertyId, UIA_ControlTypePropertyId,
+            UIA_GridPatternId, UIA_StyleIdAttributeId, UIA_TableControlTypeId,
+        };
+        // SAFETY: UIA client calls on valid objects.
+        unsafe {
+            let document = match window {
+                Some(window) => {
+                    let condition = uia
+                        .CreatePropertyCondition(
+                            UIA_ClassNamePropertyId,
+                            &VARIANT::from(BSTR::from(WORD_DOCUMENT_CLASS)),
+                        )
+                        .ok()?;
+                    uia.ElementFromHandle(window)
+                        .ok()?
+                        .FindFirst(TreeScope_Descendants, &condition)
+                        .ok()?
+                }
+                None => {
+                    let focused = uia.GetFocusedElement().ok()?;
+                    if focused.CurrentClassName().ok()? != WORD_DOCUMENT_CLASS {
+                        return None;
+                    }
+                    focused
+                }
+            };
+            let pattern: IUIAutomationTextPattern =
+                document.GetCurrentPatternAs(UIA_TextPatternId).ok()?;
+            // The document's tables, which number a cell's table.
+            let condition = uia
+                .CreatePropertyCondition(
+                    UIA_ControlTypePropertyId,
+                    &VARIANT::from(UIA_TableControlTypeId.0),
+                )
+                .ok()?;
+            let tables = document.FindAll(TreeScope_Descendants, &condition).ok()?;
+            let at = pattern.DocumentRange().ok()?;
+            at.MoveEndpointByRange(
+                TextPatternRangeEndpoint_End,
+                &at,
+                TextPatternRangeEndpoint_Start,
+            )
+            .ok()?;
+            let mut paragraphs = Vec::new();
+            let mut start = 0;
+            for _ in 0..MAX_PARAGRAPHS {
+                let range = at.Clone().ok()?;
+                range.ExpandToEnclosingUnit(TextUnit_Paragraph).ok()?;
+                let attribute = |id| {
+                    range
+                        .GetAttributeValue(id)
+                        .ok()
+                        .and_then(|v| i32::try_from(&v).ok())
+                };
+                let style = attribute(UIA_StyleIdAttributeId);
+                let heading = style
+                    .filter(|id| (STYLE_HEADING_1..=STYLE_HEADING_9).contains(id))
+                    .and_then(|id| u8::try_from(id - STYLE_HEADING_1 + 1).ok());
+                let list_item = attribute(UIA_BulletStyleAttributeId).is_some_and(|b| b != 0)
+                    || matches!(style, Some(STYLE_BULLETED_LIST | STYLE_NUMBERED_LIST));
+                let cell = caret_cell(uia, &document, &range).and_then(|(_, item)| {
+                    let grid = item.CurrentContainingGrid().ok()?;
+                    let size: IUIAutomationGridPattern =
+                        grid.GetCurrentPatternAs(UIA_GridPatternId).ok()?;
+                    let index = |v: i32| usize::try_from(v).ok().map(|v| v + 1);
+                    let table = (0..tables.Length().ok()?)
+                        .position(|i| {
+                            tables
+                                .GetElement(i)
+                                .and_then(|t| uia.CompareElements(&t, &grid))
+                                .is_ok_and(|same| same.as_bool())
+                        })
+                        .map_or(1, |i| i + 1);
+                    Some(okur_core::TableCell {
+                        table,
+                        row: index(item.CurrentRow().ok()?)?,
+                        column: index(item.CurrentColumn().ok()?)?,
+                        rows: usize::try_from(size.CurrentRowCount().ok()?).ok()?,
+                        columns: usize::try_from(size.CurrentColumnCount().ok()?).ok()?,
+                        column_header: None,
+                        row_header: None,
+                    })
+                });
+                paragraphs.push(okur_core::DocumentParagraph {
+                    start,
+                    heading,
+                    list_item,
+                    cell,
+                });
+                start += chars_of(&range)?;
+                if at.Move(TextUnit_Paragraph, 1).ok()? < 1 {
+                    break;
+                }
+            }
+            Some(paragraphs)
         }
     }
 

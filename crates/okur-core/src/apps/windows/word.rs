@@ -5,19 +5,82 @@
 //! before it [obs, 518].
 
 use crate::editing::EditKey;
-use crate::event::{LineStructure, TableCell, TextContext};
+use crate::event::{DocumentParagraph, LineStructure, TableCell, TextContext};
 use crate::messages::msg;
 
 /// `line` spoken as JAWS speaks a line of Word's: a heading with its level before it,
 /// " heading level 1 Library Hours" [obs, 518/s1, s9].
 pub(crate) fn spoken_line(context: &TextContext, line: String) -> String {
-    match context.structure.as_ref().and_then(|s| s.heading) {
+    with_heading(context.structure.as_ref().and_then(|s| s.heading), line)
+}
+
+/// `line` with its heading level before it, when it is a heading's.
+fn with_heading(heading: Option<u8>, line: String) -> String {
+    match heading {
         Some(level) if !line.trim().is_empty() => format!(
             "\u{1d} {} \u{1e} {line}",
             msg::role_heading_level(u32::from(level)).render()
         ),
         _ => line,
     }
+}
+
+/// What Say All reads of Word's document from the caret's paragraph to the end, paragraph by
+/// paragraph (a table's cell is one), each with where it starts: the caret's paragraph as it is,
+/// then each with its heading level before it and what JAWS says on moving to it
+/// ([`line_change`]): "Library Hours | ... | heading level 2 What changes | Weekday hours are
+/// longer. | Entering List", "exit list" after the list [obs, 518/s20]. Paragraphs without text
+/// are left out.
+pub(crate) fn say_all_pieces(
+    context: &TextContext,
+    paragraphs: &[DocumentParagraph],
+) -> Vec<(usize, String)> {
+    let text: Vec<char> = context.text.chars().collect();
+    let first = paragraphs
+        .iter()
+        .rposition(|p| p.start <= context.caret)
+        .unwrap_or(0);
+    let mut pieces = Vec::new();
+    let mut was: Option<LineStructure> = None;
+    for (index, paragraph) in paragraphs.iter().enumerate().skip(first) {
+        let end = paragraphs
+            .get(index + 1)
+            .map_or(text.len(), |next| next.start)
+            .min(text.len());
+        let start = paragraph.start.min(end);
+        // Word's paragraph and cell marks are spaces to the reader.
+        let line: String = text
+            .get(start..end)
+            .unwrap_or_default()
+            .iter()
+            .map(|&c| if c.is_control() { ' ' } else { c })
+            .collect::<String>()
+            .trim()
+            .to_owned();
+        if line.is_empty() {
+            continue;
+        }
+        let now = LineStructure {
+            line: (start, end),
+            heading: paragraph.heading,
+            list_item: paragraph.list_item,
+            cell: paragraph.cell.clone(),
+        };
+        let said = if pieces.is_empty() {
+            line
+        } else {
+            let (first, last) = line_change(was.as_ref(), &now);
+            first
+                .into_iter()
+                .chain(std::iter::once(with_heading(now.heading, line)))
+                .chain(last)
+                .collect::<Vec<_>>()
+                .join("\n")
+        };
+        pieces.push((start, said));
+        was = Some(now);
+    }
+    pieces
 }
 
 /// Say Font in Word's document: the size, the colors, the font, the paragraph's style, its
@@ -498,6 +561,78 @@ Line spacing: 0 lines.
 Paragraph formatting: Aligned left
 Outline level: 1"
             )
+        );
+    }
+
+    /// Say All reads Word's document by its paragraphs from the caret's: the caret's as it is,
+    /// a heading with its level, the list entered and left, the table's cells apart with its
+    /// entry, "out of table" after it [obs, 518/s20 and the line keys' 518/s9-s16].
+    #[test]
+    fn say_all_reads_the_paragraphs_with_their_structure() {
+        // Word's text: paragraphs end in \r, a cell in \u{7}.
+        let parts = [
+            ("Library Hours\r", Some(1), false, None),
+            ("The library opens.\r", None, false, None),
+            ("What changes\r", Some(2), false, None),
+            ("Weekday hours are longer.\r", None, true, None),
+            ("Weekend hours stay the same.\r", None, true, None),
+            ("Branches\r", Some(2), false, None),
+            ("Branch\u{7}", None, false, Some((1, 1))),
+            ("Hours\u{7}", None, false, Some((1, 2))),
+            ("The page ends here.\r", None, false, None),
+        ];
+        let mut text = String::new();
+        let mut paragraphs = Vec::new();
+        for (part, heading, list_item, cell) in parts {
+            paragraphs.push(DocumentParagraph {
+                start: text.chars().count(),
+                heading,
+                list_item,
+                cell: cell.map(|(row, column)| TableCell {
+                    table: 1,
+                    row,
+                    column,
+                    rows: 1,
+                    columns: 2,
+                    column_header: None,
+                    row_header: None,
+                }),
+            });
+            text.push_str(part);
+        }
+        let context = TextContext {
+            text,
+            caret: 0,
+            ..at((0, 0), Some(1), false, None)
+        };
+        let said: Vec<String> = say_all_pieces(&context, &paragraphs)
+            .into_iter()
+            .map(|(_, piece)| piece.replace('\n', " | "))
+            .collect();
+        assert_eq!(
+            said,
+            [
+                "Library Hours",
+                "The library opens.",
+                "\u{1d} heading level 2 \u{1e} What changes",
+                "Weekday hours are longer. | Entering List",
+                "Weekend hours stay the same.",
+                "\u{1d} heading level 2 \u{1e} Branches | exit list",
+                "table 1 | uniform Table | new cell | Branch",
+                "new cell | Hours",
+                "out of table | The page ends here.",
+            ]
+        );
+        // From the caret's paragraph on.
+        let from_list = TextContext {
+            caret: paragraphs.get(3).map_or(0, |p| p.start + 3),
+            ..context
+        };
+        assert_eq!(
+            say_all_pieces(&from_list, &paragraphs)
+                .first()
+                .map(|(_, p)| p.as_str()),
+            Some("Weekday hours are longer.")
         );
     }
 }

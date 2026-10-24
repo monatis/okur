@@ -74,6 +74,13 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for the focused document's paragraphs (Word's), which arrive later as
+    /// [`crate::event::AccessibilityEvent::DocumentParagraphs`], always. Returns false when
+    /// unsupported.
+    fn read_document_paragraphs(&self) -> bool {
+        false
+    }
+
     /// Asks for the view Word's window in front shows its document in, which arrives later
     /// as [`crate::event::AccessibilityEvent::DocumentView`], always. Returns false when
     /// unsupported.
@@ -371,6 +378,13 @@ impl ApplicationActions for RecordingActions {
     fn read_document_headings(&self) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push(("document headings".to_owned(), 0));
+        }
+        true
+    }
+
+    fn read_document_paragraphs(&self) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("document paragraphs".to_owned(), 0));
         }
         true
     }

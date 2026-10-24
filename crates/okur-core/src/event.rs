@@ -130,6 +130,20 @@ pub struct DocumentHeading {
     pub paragraph: usize,
 }
 
+/// A paragraph of a document the platform reads by paragraphs (Word's), as Say All reads it:
+/// where it starts in the document's text, in characters, its heading level, whether it is a
+/// list item, and the table cell holding it (its headers left out).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct DocumentParagraph {
+    pub start: usize,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub heading: Option<u8>,
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub list_item: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cell: Option<TableCell>,
+}
+
 /// A cell of a word processor's table, where the caret is.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct TableCell {
@@ -782,6 +796,10 @@ pub enum AccessibilityEvent {
     /// in Word; [`crate::actions::ApplicationActions::read_document_headings`]); empty when it
     /// has none or could not be read.
     DocumentHeadings(Vec<DocumentHeading>),
+    /// The focused document's paragraphs, in order, asked for by Say All in Word
+    /// ([`crate::actions::ApplicationActions::read_document_paragraphs`]); empty when they could
+    /// not be read.
+    DocumentParagraphs(Vec<DocumentParagraph>),
     /// The view Word's window shows its document in, by the name of the status bar's view
     /// button that is on ("Print Layout"), asked for by Say Window Title
     /// ([`crate::actions::ApplicationActions::read_document_view`]); `None` when it could not
