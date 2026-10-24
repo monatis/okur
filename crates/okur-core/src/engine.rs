@@ -294,6 +294,9 @@ pub struct ScreenReaderEngine {
     settings_dialog: Option<crate::ui::settings::SettingsDialog>,
     /// Settings Center or Quick Settings, while it is open.
     settings_tree: Option<crate::ui::settings_tree::SettingsTree>,
+    /// The settings changed lately, newest first, for the dialogs' Last Changed Settings. Kept
+    /// while Okur runs.
+    settings_history: crate::ui::settings_tree::History,
     /// The list dialog open (the Links List, the Heading List).
     list_dialog: Option<crate::ui::lists::ListDialog>,
     /// The mode the list dialog gives the keys back to: a document's Heading List (Word's)
@@ -546,6 +549,7 @@ impl ScreenReaderEngine {
             settings_dialog_application: None,
             settings_dialog: None,
             settings_tree: None,
+            settings_history: Vec::new(),
             list_dialog: None,
             list_return_mode: AppMode::VirtualBuffer,
             document_headings_asked: false,
@@ -1578,6 +1582,19 @@ impl ScreenReaderEngine {
             self.close_viewer_window();
         }
         let application = self.settings_dialog_application.clone();
+        // The settings changed, newest first, for Last Changed Settings.
+        for spec in crate::settings::registry::SETTINGS {
+            let id = spec.id;
+            if crate::settings::registry::get(before, id)
+                != crate::settings::registry::get(settings, id)
+            {
+                self.settings_history
+                    .retain(|(place, changed)| !(place == scope && *changed == id));
+                self.settings_history.insert(0, (scope.clone(), id));
+            }
+        }
+        self.settings_history
+            .truncate(crate::ui::settings_tree::HISTORY_LENGTH * 4);
         self.settings_layers
             .change(scope, before, settings, application.as_deref());
         if let Some(store) = &self.settings_store {
@@ -1699,6 +1716,7 @@ impl ScreenReaderEngine {
                     places,
                     place,
                     self.speech.voices(),
+                    self.settings_history.clone(),
                 )
             }
         };

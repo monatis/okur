@@ -461,3 +461,7 @@ settings-tree-mouse-echo-control-description = Whether the mouse's item is read 
 # setting. Press Control Shift D to switch to Default."].
 settings-tree-unavailable = Unavailable
 settings-tree-default-only = Only available when modifying the Default setting. Press Control Shift D to switch to Default.
+# The tree's last group: the settings changed lately for the place [obs, the walks of Quick
+# Settings and Settings Center].
+settings-tree-last-changed = Last Changed Settings
+settings-tree-last-changed-description = The 25 settings changed last for this place, newest first. Each can be changed here as in its own group.

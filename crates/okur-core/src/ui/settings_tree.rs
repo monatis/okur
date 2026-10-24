@@ -183,6 +183,13 @@ fn quick_group(id: &str) -> Option<TreeGroup> {
     })
 }
 
+/// Settings changed lately, newest first, each with the place it was changed for: the
+/// dialog's Last Changed Settings shows the place's 25 latest.
+pub type History = Vec<(Scope, &'static str)>;
+
+/// The most Last Changed Settings holds, as JAWS's: the oldest go first.
+pub const HISTORY_LENGTH: usize = 25;
+
 /// A row of the tree: a group, a setting in the group above it, or an item that opens a
 /// dialog of its own.
 #[derive(Debug, Clone, Copy)]
@@ -191,6 +198,10 @@ enum Row {
     Setting(&'static SettingSpec),
     /// Speech Verbosity's "Configure Verbosity Levels": Space opens its dialog.
     VerbosityLevels,
+    /// The last group, Last Changed Settings.
+    LastChanged,
+    /// A setting changed lately, in Last Changed Settings, named with its place in the tree.
+    Recent(&'static SettingSpec),
 }
 
 impl PartialEq for Row {
@@ -199,6 +210,8 @@ impl PartialEq for Row {
             (Self::Group(a), Self::Group(b)) => a == b,
             (Self::Setting(a), Self::Setting(b)) => a.id == b.id,
             (Self::VerbosityLevels, Self::VerbosityLevels) => true,
+            (Self::LastChanged, Self::LastChanged) => true,
+            (Self::Recent(a), Self::Recent(b)) => a.id == b.id,
             _ => false,
         }
     }
@@ -229,6 +242,10 @@ pub struct SettingsTree {
     search: String,
     /// The tree's item selected when the search began, Escape's place to go back to.
     before_search: Option<Row>,
+    /// The settings changed lately, for every place (Last Changed Settings).
+    history: History,
+    /// Last Changed Settings is open.
+    recent_open: bool,
     /// The groups open.
     open: Vec<TreeGroup>,
     rows: Vec<Row>,
@@ -246,6 +263,7 @@ impl SettingsTree {
         places: Vec<Place>,
         place: usize,
         voices: Vec<String>,
+        history: History,
     ) -> Self {
         let place = place.min(places.len().saturating_sub(1));
         let draft = places
@@ -261,6 +279,8 @@ impl SettingsTree {
             voices,
             search: String::new(),
             before_search: None,
+            history,
+            recent_open: false,
             open: Vec::new(),
             rows: Vec::new(),
             selected: 0,
@@ -376,7 +396,50 @@ impl SettingsTree {
             rows.push(Row::Group(group));
             rows.extend(own(group));
         }
+        // Last Changed Settings, the last group, always there; the place's latest changes in
+        // it, newest first, those found by a search.
+        let recent: Vec<Row> = self
+            .recent()
+            .into_iter()
+            .filter(|spec| matches(spec))
+            .map(Row::Recent)
+            .collect();
+        if words.is_empty() || !recent.is_empty() {
+            rows.push(Row::LastChanged);
+            rows.extend(recent);
+        }
         rows
+    }
+
+    /// The place's settings changed lately that this dialog shows, newest first, at most
+    /// [`HISTORY_LENGTH`].
+    fn recent(&self) -> Vec<&'static SettingSpec> {
+        let scope = self.scope();
+        let mut seen: Vec<&str> = Vec::new();
+        self.history
+            .iter()
+            .filter(|(place, _)| *place == scope)
+            .filter_map(|(_, id)| {
+                let spec = SETTINGS.iter().find(|s| s.id == *id)?;
+                self.group_of(spec)?;
+                (!seen.contains(id)).then(|| {
+                    seen.push(id);
+                    spec
+                })
+            })
+            .take(HISTORY_LENGTH)
+            .collect()
+    }
+
+    /// A group's path in the tree, outermost first: "Web / HTML / PDFs,Reading".
+    fn path_of(group: TreeGroup) -> String {
+        let mut names = vec![group.label().to_string()];
+        let mut up = group.parent();
+        while let Some(parent) = up {
+            names.insert(0, parent.label().to_string());
+            up = parent.parent();
+        }
+        names.join(",")
     }
 
     /// A setting's value as the tree names it: a choice's label, a number, a voice's name.
@@ -400,6 +463,23 @@ impl SettingsTree {
     /// A row as the tree shows it.
     fn item(&self, row: &Row) -> TreeItem {
         match row {
+            Row::LastChanged => TreeItem {
+                text: msg::settings_tree_last_changed().to_string(),
+                level: 0,
+                open: !self.search.is_empty() || self.recent_open,
+                checked: None,
+            },
+            // As the setting's own item, with its place: "Typing Echo Words (User)", as JAWS's
+            // "Medium... (Web / HTML / PDFs ,Reading,Configure Web Verbosity Levels)" [obs, 1st
+            // walk of Quick Settings, the redesign's §3.1].
+            Row::Recent(spec) => {
+                let mut item = self.item(&Row::Setting(spec));
+                if let Some(group) = self.group_of(spec) {
+                    item.text = format!("{} ({})", item.text, Self::path_of(group));
+                }
+                item.level = 1;
+                item
+            }
             Row::VerbosityLevels => TreeItem {
                 text: msg::settings_tree_configure_verbosity().to_string(),
                 level: TreeGroup::SpeechVerbosity.depth() + 1,
@@ -448,10 +528,11 @@ impl SettingsTree {
     fn description(&self) -> String {
         match self.rows.get(self.selected) {
             // Why it is unavailable, and the key that shows where it is kept.
-            Some(Row::Setting(spec)) if !spec.scopes.allows(&self.scope()) => {
+            Some(Row::Setting(spec) | Row::Recent(spec)) if !spec.scopes.allows(&self.scope()) => {
                 msg::settings_tree_default_only().to_string()
             }
-            Some(Row::Setting(spec)) => spec
+            Some(Row::LastChanged) => msg::settings_tree_last_changed_description().to_string(),
+            Some(Row::Setting(spec) | Row::Recent(spec)) => spec
                 .label
                 .or(spec.tree_label)
                 .and_then(|l| l().description())
@@ -613,9 +694,9 @@ impl SettingsTree {
     /// Changes the selected setting's value: its item and the Apply button are updated.
     fn change(&mut self, back: bool) -> Outcome {
         let spec = match self.rows.get(self.selected).copied() {
-            Some(Row::Setting(spec)) => spec,
+            Some(Row::Setting(spec) | Row::Recent(spec)) => spec,
             Some(Row::VerbosityLevels) => return Outcome::OpenVerbosityLevels,
-            Some(Row::Group(_)) | None => return Outcome::Nothing,
+            Some(Row::Group(_) | Row::LastChanged) | None => return Outcome::Nothing,
         };
         let Some(value) = self.next_value(spec, back) else {
             return Outcome::Nothing;
@@ -647,7 +728,7 @@ impl SettingsTree {
     fn end_search(&mut self, at: Option<Row>) -> Outcome {
         self.search.clear();
         self.rows = self.rows_for_search();
-        if let Some(Row::Setting(spec)) = at {
+        if let Some(Row::Setting(spec) | Row::Recent(spec)) = at {
             let mut group = self.group_of(spec);
             while let Some(g) = group {
                 if !self.open.contains(&g) {
@@ -717,11 +798,15 @@ impl SettingsTree {
                         }])
                     }
                     (TREE, Value::ItemOpened(index, open)) => {
-                        if let Some(Row::Group(group)) = self.rows.get(*index).copied() {
-                            self.open.retain(|g| *g != group);
-                            if *open {
-                                self.open.push(group);
+                        match self.rows.get(*index).copied() {
+                            Some(Row::Group(group)) => {
+                                self.open.retain(|g| *g != group);
+                                if *open {
+                                    self.open.push(group);
+                                }
                             }
+                            Some(Row::LastChanged) => self.recent_open = *open,
+                            _ => {}
                         }
                         Outcome::Nothing
                     }
@@ -816,7 +901,17 @@ mod tests {
                 settings: Settings::default(),
             },
         ];
-        SettingsTree::new(7, flavor, places, 1, vec!["Zira".into()])
+        SettingsTree::new(
+            7,
+            flavor,
+            places,
+            1,
+            vec!["Zira".into()],
+            vec![
+                (Scope::Application("notepad".into()), "typing_echo"),
+                (Scope::Global, "voice.rate"),
+            ],
+        )
     }
 
     fn tree_items(spec: &DialogSpec) -> Vec<TreeItem> {
@@ -1017,6 +1112,38 @@ mod tests {
 
     fn panic_free_fail(message: &str) {
         assert!(message.is_empty(), "{message}");
+    }
+
+    /// Last Changed Settings is the last group: the place's latest changes, newest first,
+    /// each named with its value and its place in the tree, changeable there.
+    #[test]
+    fn last_changed_settings_holds_the_places_latest_changes() {
+        let mut dialog = tree(Flavor::Center);
+        let items = dialog.items();
+        let last = items.iter().position(|i| i.text == "Last Changed Settings");
+        assert_eq!(
+            last.and_then(|i| items.get(i + 1)).map(|i| i.text.as_str()),
+            Some("Typing Echo Characters (User)")
+        );
+        // Notepad's history only: the rate was changed for all applications.
+        assert!(!items
+            .iter()
+            .any(|i| i.text.starts_with("Rate") && i.text.ends_with(')')));
+        let index = last.map_or(0, |i| i + 1);
+        dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: TREE.into(),
+            value: Value::Selected(index),
+        });
+        dialog.handle(&FromUi::DialogKey {
+            id: 7,
+            control: TREE.into(),
+            key: DialogKey::Change,
+        });
+        assert_eq!(
+            registry::get(dialog.draft(), "typing_echo"),
+            Some(Json::String("words".into()))
+        );
     }
 
     /// A setting kept only for all applications is unavailable in an application's settings,
