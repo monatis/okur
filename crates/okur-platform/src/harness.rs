@@ -52,11 +52,19 @@ pub fn virtual_key(name: &str) -> Option<u16> {
         "numpadsubtract" | "numpadminus" => 0x6D,
         "numpadmultiply" | "numpadstar" => 0x6A,
         "numpaddivide" | "numpadslash" => 0x6F,
+        // The keypad's digits as with Num Lock off, as JAWS's desktop layout uses them
+        // ("Insert+Numpad5" is Say Word): the gray keys' virtual keys, Numpad 5 Clear, sent
+        // without the extended flag. As digits, a key JAWS did not take typed "5" into a Word
+        // document (old-pc, 2026-10-24).
+        "numpaddelete" | "numpaddecimal" => KEYPAD | 0x2E,
         other if other.len() == 7 && other.starts_with("numpad") => {
+            const AS_CURSOR_KEYS: [u16; 10] =
+                [0x2D, 0x23, 0x28, 0x22, 0x25, 0x0C, 0x27, 0x24, 0x26, 0x21];
             return other
                 .get(6..)
-                .and_then(|d| d.parse::<u16>().ok())
-                .map(|d| 0x60 + d);
+                .and_then(|d| d.parse::<usize>().ok())
+                .and_then(|d| AS_CURSOR_KEYS.get(d))
+                .map(|vk| KEYPAD | vk);
         }
         other => {
             let mut chars = other.chars();
@@ -76,9 +84,16 @@ pub fn virtual_key(name: &str) -> Option<u16> {
     Some(named)
 }
 
+/// Marks a key of the numeric keypad that shares its virtual key with a gray key (Numpad 4 and
+/// Left): sent without the extended flag. Above every virtual key.
+pub const KEYPAD: u16 = 0x1000;
+
 /// Keys that need the extended-key flag (the navigation block, Insert, the Windows keys, the
-/// numeric keypad's divide, the right Ctrl and Alt).
+/// numeric keypad's divide, the right Ctrl and Alt); never a keypad key.
 pub fn is_extended(vk: u16) -> bool {
+    if vk & KEYPAD != 0 {
+        return false;
+    }
     matches!(
         vk,
         0x21..=0x28 | 0x2D | 0x2E | 0x5B | 0x5C | 0x6F | 0xA3 | 0xA5
@@ -201,11 +216,12 @@ mod windows_harness {
         send_inputs(&[key_input(vk, up, extra)]);
     }
 
-    fn key_input(vk: u16, up: bool, extra: usize) -> INPUT {
+    fn key_input(key: u16, up: bool, extra: usize) -> INPUT {
+        let vk = key & !super::KEYPAD;
         // SAFETY: a scan-code lookup with no preconditions.
         let scan = unsafe { MapVirtualKeyW(u32::from(vk), MAPVK_VK_TO_VSC) };
         let mut flags = KEYBD_EVENT_FLAGS(0);
-        if is_extended(vk) {
+        if is_extended(key) {
             flags |= KEYEVENTF_EXTENDEDKEY;
         }
         if up {
@@ -604,7 +620,16 @@ mod tests {
             Ok(KeyStep::Chord(vec![0x2D, 0x6D]))
         );
         assert_eq!(parse_step("NumpadSlash"), Ok(KeyStep::Chord(vec![0x6F])));
-        assert_eq!(parse_step("Numpad7"), Ok(KeyStep::Chord(vec![0x67])));
+        // As with Num Lock off: Numpad 7 is Home and Numpad 5 Clear, neither extended.
+        assert_eq!(
+            parse_step("Numpad7"),
+            Ok(KeyStep::Chord(vec![KEYPAD | 0x24]))
+        );
+        assert_eq!(
+            parse_step("Insert+Numpad5"),
+            Ok(KeyStep::Chord(vec![0x2D, KEYPAD | 0x0C]))
+        );
+        assert!(!is_extended(KEYPAD | 0x24) && is_extended(0x24));
         assert!(parse_step("NumpadX").is_err());
     }
 }
