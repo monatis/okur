@@ -6,7 +6,8 @@
 # Adjustment), contexts (Voice Adjustment's Adjust box walked, each context's controls heard),
 # profile (Select a Voice Profile, Insert+Ctrl+S from Notepad), profiles (Voice Adjustment's
 # Profile Name box walked), saveas (its Save As... dialog), manage (Manage Application
-# Settings...), wizard (the Startup Wizard's first page). Run on old-pc with no batch recording.
+# Settings...), wizard (the Startup Wizard's first page), wizardpages (with wizard: its pages 2
+# to 5, by Next). Run on old-pc with no batch recording.
 param([string]$OutDir = (Join-Path $env:USERPROFILE 'sr-harness\probe'),
       [string]$Parts = 'options,menus,basics,voice')
 $chosen = $Parts -split ',' | ForEach-Object { $_.Trim() }
@@ -16,10 +17,21 @@ New-Item -ItemType Directory -Force $OutDir | Out-Null
 function Walk([string]$chords, [string]$out) {
     & powershell -NoProfile -ExecutionPolicy Bypass -File $walk -Process jfw -Chords $chords -WaitMs 1000 -Out (Join-Path $OutDir $out) | Out-Null
 }
+Add-Type -Namespace JWW -Name W -MemberDefinition '[DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow(); [DllImport("user32.dll")] public static extern uint GetWindowThreadProcessId(IntPtr h, out uint p);'
+function Front-Process {
+    $id = 0
+    [void][JWW.W]::GetWindowThreadProcessId([JWW.W]::GetForegroundWindow(), [ref]$id)
+    (Get-Process -Id $id -ErrorAction SilentlyContinue).ProcessName
+}
+# JAWS's window in front. With it already open behind Notepad, Insert+J leaves Notepad in front
+# (2026-10-24), and Alt+Tab, through the UI Access keys, brings it.
 function Open-JawsWindow {
     & $lab front 'Notepad' | Out-Null
     Start-Sleep -Milliseconds 500
     & $lab keys --allow notepad 'Insert+J' 'wait:2500' | Out-Null
+    if ((Front-Process) -ne 'jfw') {
+        Start-Process -FilePath 'C:\Program Files\Okur Lab\okur-lab-keys.exe' -ArgumentList @('--allow', 'notepad', '"Alt+Tab"', '"wait:1500"') -WindowStyle Hidden -Wait
+    }
     "--- Insert+J: " + ((& $lab jaws-history --clear) -join ' | ')
 }
 if (-not (Get-Process notepad -ErrorAction SilentlyContinue)) { Start-Process notepad; Start-Sleep -Seconds 2 }
@@ -73,8 +85,21 @@ if ($chosen -contains 'manage') {
 # §1.1.
 if ($chosen -contains 'wizard') {
     Open-JawsWindow
-    # Help (Left from Options), Startup Wizard... (tenth): its first page toured, then Escape.
-    Walk 'Alt,Left,Down,Down*9,Enter,Tab*10,Escape,Escape' 'jw-startup-wizard.txt'
+    # Help (three Rights from Options; Left is the System menu), Startup Wizard... (tenth);
+    # then its first page toured in the wizard's own process, and Escape (Cancel). Never
+    # Finish.
+    Walk 'Alt,Right,Right,Right,Down,Down*9,Enter' 'jw-startup-wizard-open.txt'
+    Start-Sleep -Seconds 3
+    $process = Front-Process
+    "wizard process: $process" | Add-Content (Join-Path $OutDir 'jw-startup-wizard-open.txt')
+    if ($process -and $process -ne 'notepad') {
+        # With -Parts wizardpages, pages 2 to 5 too: Next (Alt+N) and each page toured by Tab;
+        # nothing is changed, and Escape saves nothing (JAWS's help: only Finish saves).
+        $chords = if ($chosen -contains 'wizardpages') {
+            'Alt+N,Tab*9,Alt+N,Tab*7,Alt+N,Tab*11,Alt+N,Tab*7,Escape,Escape'
+        } else { 'Tab*10,Escape,Escape' }
+        & powershell -NoProfile -ExecutionPolicy Bypass -File $walk -Process $process -Chords $chords -WaitMs 1000 -Out (Join-Path $OutDir 'jw-startup-wizard.txt') | Out-Null
+    }
 }
 if ($chosen -contains 'profile') {
     # Select a Voice Profile over Notepad: Tab around, then Escape.
