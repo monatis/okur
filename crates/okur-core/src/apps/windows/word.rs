@@ -81,17 +81,26 @@ pub(crate) fn say_all_pieces(
     pieces
 }
 
-/// Say Font in Word's document: the size, the colors, the font, the paragraph's style, its
-/// alignment and its outline level, "16 point | black on white | Calibri | Heading 1 style |
-/// Paragraph formatting: Aligned left | Outline level: 1" [obs, 1034/s1, s3]. JAWS also says the
-/// line spacing after the style ("Line spacing: 0 lines." on a heading, "1 lines." on body text),
-/// which Word's UI Automation text does not report: left out until it is understood. Bold,
-/// italic and underline are not recorded yet: said after the font, as elsewhere. `None` outside
-/// a document whose structure the platform reads.
+/// Say Font in Word's document: bold, italic and underline first, in JAWS's words ("bolded",
+/// "italicized", "Single  underline" [obs, 1040/s3, s5, s7]), then the size, the colors, the
+/// font, the paragraph's style, its alignment and its outline level, "16 point | black on white |
+/// Calibri | Heading 1 style | Paragraph formatting: Aligned left | Outline level: 1" [obs,
+/// 1034/s1, s3]. JAWS also says the line spacing after the style ("Line spacing: 1 lines.",
+/// "one point five lines.", "Double" [obs, 1040/s1, s17, s19]), which is not read from Word yet.
+/// `None` outside a document whose structure the platform reads.
 pub(crate) fn font(context: &TextContext) -> Option<String> {
     let structure = context.structure.as_ref()?;
     let font = context.font.as_ref()?;
     let mut said = Vec::new();
+    for (on, word) in [
+        (font.bold, msg::word_bolded()),
+        (font.italic, msg::word_italicized()),
+        (font.underline, msg::word_underline_single()),
+    ] {
+        if on {
+            said.push(word.to_string());
+        }
+    }
     if font.size_tenths > 0 {
         let size = if font.size_tenths % 10 == 0 {
             (font.size_tenths / 10).to_string()
@@ -107,15 +116,6 @@ pub(crate) fn font(context: &TextContext) -> Option<String> {
     };
     said.push(msg::color_on(name(font.color), name(font.background)).render());
     said.push(font.family.clone());
-    for (on, word) in [
-        (font.bold, msg::font_bold()),
-        (font.italic, msg::font_italic()),
-        (font.underline, msg::font_underline()),
-    ] {
-        if on {
-            said.push(word.to_string());
-        }
-    }
     if let Some(style) = &font.style {
         said.push(msg::word_style(style.as_str()).render());
     }
@@ -131,9 +131,29 @@ pub(crate) fn font(context: &TextContext) -> Option<String> {
 
 /// The view Word shows its document in, as Say Window Title says it after the title, from the
 /// name of the status bar's view button that is on: "Print Layout" is "Print View" [obs,
-/// 519/s1]. Word's other views are not recorded yet: `None`, the title alone.
+/// 519/s1, 1039/s7]. Web Layout's and Read Mode's are not recorded yet: `None`, the title alone.
 pub(crate) fn view_name(button: &str) -> Option<String> {
     (button == "Print Layout").then(|| msg::word_view_print().to_string())
+}
+
+/// Word's view keys: Ctrl+Alt+N for Draft, Ctrl+Alt+O for Outline, Ctrl+Alt+P for Print Layout,
+/// each said by its view's name, "Draft View", "Outline View", "Print View" [obs, 1039/s2, s4,
+/// s6]. Draft and Outline have no button on Word's status bar, so the name the key gave is Say
+/// Window Title's too [obs, 1039/s3, s5].
+pub(crate) fn view_key(event: &crate::input::KeyEvent) -> Option<String> {
+    let m = &event.modifiers;
+    if !(m.ctrl && m.alt) || m.shift || m.insert || m.win {
+        return None;
+    }
+    Some(
+        match event.key {
+            crate::input::Key::Alpha('N') => msg::word_view_draft(),
+            crate::input::Key::Alpha('O') => msg::word_view_outline(),
+            crate::input::Key::Alpha('P') => msg::word_view_print(),
+            _ => return None,
+        }
+        .to_string(),
+    )
 }
 
 /// How the caret came to a cell of Word's table, which decides what JAWS says of it.
@@ -573,6 +593,41 @@ Paragraph formatting: Aligned left
 Outline level: 1"
             )
         );
+    }
+
+    /// Word's view keys say their views; others say nothing [obs, 1039/s2, s4, s6].
+    #[test]
+    fn the_view_keys_say_their_views() {
+        use crate::input::{Key, KeyEvent, Modifiers};
+        let key = |letter, alt| {
+            KeyEvent::new(
+                Key::Alpha(letter),
+                Modifiers {
+                    ctrl: true,
+                    alt,
+                    ..Modifiers::none()
+                },
+                true,
+            )
+        };
+        assert_eq!(view_key(&key('N', true)).as_deref(), Some("Draft View"));
+        assert_eq!(view_key(&key('O', true)).as_deref(), Some("Outline View"));
+        assert_eq!(view_key(&key('P', true)).as_deref(), Some("Print View"));
+        assert_eq!(view_key(&key('P', false)), None);
+        assert_eq!(view_key(&key('Q', true)), None);
+    }
+
+    /// Bold, italic and underline come first, in JAWS's words [obs, 1040/s3, s5, s7].
+    #[test]
+    fn say_font_says_bold_italic_and_underline_first() {
+        let mut formatted = heading_font();
+        if let Some(font) = formatted.font.as_mut() {
+            font.bold = true;
+            font.italic = true;
+            font.underline = true;
+        }
+        let said = font(&formatted).unwrap_or_default();
+        assert!(said.starts_with("bolded\nitalicized\nSingle  underline\n16 point"));
     }
 
     /// JAWS says the line spacing after the style [obs, 1034/s1].

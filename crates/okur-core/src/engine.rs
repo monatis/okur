@@ -323,6 +323,9 @@ pub struct ScreenReaderEngine {
     /// Say Window Title in Word asked for the document's view, said with this title when it
     /// comes.
     document_view_title: Option<String>,
+    /// Word's view as its view keys last chose it ("Draft View"), for Say Window Title where
+    /// Word's status bar marks no view.
+    document_view_by_key: Option<String>,
     /// A document's Heading List moved the caret: the next read of the field says its line.
     moved_by_document_list: bool,
     /// The word chosen in the Word List, which W and Shift+W move to.
@@ -576,6 +579,7 @@ impl ScreenReaderEngine {
             document_headings_asked: false,
             say_all_paragraphs_asked: false,
             document_view_title: None,
+            document_view_by_key: None,
             moved_by_document_list: false,
             word_from_list: None,
             skim_dialog: None,
@@ -1177,6 +1181,18 @@ impl ScreenReaderEngine {
             if let Some(action) = self.document_table_key(event) {
                 return action;
             }
+            // Word's view keys say the view chosen; the key goes on to Word.
+            if self.editing_text()
+                && self
+                    .last_text
+                    .as_ref()
+                    .is_some_and(|t| t.structure.is_some())
+            {
+                if let Some(view) = crate::apps::windows::word::view_key(event) {
+                    self.speech.speak(&view, true);
+                    self.document_view_by_key = Some(view);
+                }
+            }
             if self.editing_text() {
                 self.edit_key_feedback(event);
             } else {
@@ -1459,11 +1475,13 @@ impl ScreenReaderEngine {
             }
             AccessibilityEvent::DocumentView(view) => {
                 let title = self.document_view_title.take()?;
+                // A view the status bar marks, else the one Word's view keys chose.
+                let view = match view.as_deref() {
+                    Some(button) => crate::apps::windows::word::view_name(button),
+                    None => self.document_view_by_key.clone(),
+                };
                 let said = std::iter::once(format!("{}\n{title}", msg::window_title_is()))
-                    .chain(
-                        view.as_deref()
-                            .and_then(crate::apps::windows::word::view_name),
-                    )
+                    .chain(view)
                     .collect::<Vec<_>>()
                     .join("\n");
                 self.speech.speak(&said, true);

@@ -72,9 +72,17 @@ word-not-in-table = Not in a Table
 ## Say Font in Word's document [obs, 1034/s1, s3].
 
 word-style = { $style } style
+# Say Font's first words for bold, italic and underlined text, JAWS's own, its two spaces kept
+# [obs, 1040/s3, s5, s7].
+word-bolded = bolded
+word-italicized = italicized
+word-underline-single = Single  underline
 word-paragraph-aligned = Paragraph formatting: Aligned { $alignment }
 word-outline-level = Outline level: { $level }
 word-outline-body = Outline level: body text
 
 # Say Window Title in Word adds the view [obs, 519/s1].
 word-view-print = Print View
+# Ctrl+Alt+N and Ctrl+Alt+O in Word, and Say Window Title in those views [obs, 1039].
+word-view-draft = Draft View
+word-view-outline = Outline View
