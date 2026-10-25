@@ -55,12 +55,12 @@ places where Okur contradicts JAWS's documentation, and the order of work. P0:
     - a word that is one symbol is that character alone, "em dash —";
     - a plain Win32 edit's word is the whole run around the caret, between spaces and hyphens
       (`f54c4539`); a RichEdit's is its own word unit, ":\", "Users", "\".
-    `okur-lab parity --only 1041`: "100/100 steps match exactly" in both layers; 1037 all but
-    Say Word on its first stop; 106 and 213 all.
+    - Say Word in a plain Win32 edit, on a symbol, says the symbol alone (`bd78520f`).
+    `okur-lab parity --only` 1037, 1041, 106 and 213: every step matches ("100/100",
+    "100/100", "33/33", "19/19 steps match exactly").
   - **Left:** the Okur cursor's words (`cursors.rs`) and the Virtual Viewer's still go through
-    `speak` at the level, not recorded by word yet; Say Word on classic Notepad's `:\` stop
-    (JAWS "\", Okur ":\"); a live check in Windows 11 Notepad on the dev box, with the owner's
-    leave.
+    `speak` at the level, not recorded by word yet; a live check in Windows 11 Notepad on the
+    dev box, with the owner's leave.
 
 ## Virtual cursor keys not built
 
