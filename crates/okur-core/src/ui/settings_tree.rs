@@ -931,7 +931,7 @@ impl SettingsTree {
 
     /// The setting `spec`'s next value (`back`: its previous), wrapping around; `None` for one
     /// the tree cannot change, or the place cannot keep.
-    fn next_value(&self, spec: &SettingSpec, back: bool) -> Option<Json> {
+    fn next_value(&self, spec: &SettingSpec) -> Option<Json> {
         if !spec.scopes.allows(&self.scope()) {
             return None;
         }
@@ -939,7 +939,7 @@ impl SettingsTree {
         let step = |values: Vec<Json>| -> Option<Json> {
             let count = values.len();
             let at = values.iter().position(|v| *v == value).unwrap_or(0);
-            let next = if back { at + count - 1 } else { at + 1 } % count.max(1);
+            let next = (at + 1) % count.max(1);
             values.into_iter().nth(next)
         };
         match spec.kind {
@@ -957,14 +957,8 @@ impl SettingsTree {
                     .as_i64()
                     .and_then(|n| i32::try_from(n).ok())
                     .unwrap_or(min);
-                let next = if back { now - step } else { now + step };
-                let next = if next > max {
-                    min
-                } else if next < min {
-                    max
-                } else {
-                    next
-                };
+                let next = now.saturating_add(step);
+                let next = if next > max { min } else { next };
                 Some(Json::from(next))
             }
             Kind::Structured => None,
@@ -972,13 +966,13 @@ impl SettingsTree {
     }
 
     /// Changes the selected setting's value: its item and the Apply button are updated.
-    fn change(&mut self, back: bool) -> Outcome {
+    fn change(&mut self) -> Outcome {
         let spec = match self.rows.get(self.selected).copied() {
             Some(Row::Setting(spec) | Row::Recent(spec)) => spec,
             Some(Row::VerbosityLevels) => return Outcome::OpenVerbosityLevels,
             Some(Row::Group(_) | Row::LastChanged) | None => return Outcome::Nothing,
         };
-        let Some(value) = self.next_value(spec, back) else {
+        let Some(value) = self.next_value(spec) else {
             return Outcome::Nothing;
         };
         let before = self.items();
@@ -1484,10 +1478,9 @@ impl SettingsTree {
             }
             FromUi::DialogKey { id, control, key } if *id == self.id && control == TREE => {
                 match key {
-                    DialogKey::Change => self.change(false),
                     // Shift+Space goes on as Space does: "Words", then "Characters and Words |
                     // 4 of 4" [obs, the walk of Settings Center's questions].
-                    DialogKey::ChangeBack => self.change(false),
+                    DialogKey::Change | DialogKey::ChangeBack => self.change(),
                     DialogKey::Delete | DialogKey::Rename => Outcome::Nothing,
                 }
             }
