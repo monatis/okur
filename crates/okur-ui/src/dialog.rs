@@ -127,6 +127,8 @@ fn chord(text: &str) -> Option<Chord> {
 
 thread_local! {
     static DIALOGS: RefCell<Vec<OpenDialog>> = const { RefCell::new(Vec::new()) };
+    /// Set while a tree is filled: the items it opens itself are no user's opening.
+    static FILLING: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
 }
 
 fn wide(text: &str) -> Vec<u16> {
@@ -738,7 +740,10 @@ fn fill_tree(tree: HWND, items: &[TreeItem], selected: usize) {
             inserted.push(handle);
         }
     }
-    // The open items shown open; a closed one opens with Right Arrow.
+    // The open items shown open; a closed one opens with Right Arrow. Each new item's first
+    // opening is notified as a user's would be, and was told to Okur: every group a search
+    // showed open stayed open after it (performance review 2026-10-25, finding 8).
+    FILLING.with(|f| f.set(true));
     for handle in inserted {
         // SAFETY: a message to our own tree view about its own item.
         unsafe {
@@ -750,6 +755,7 @@ fn fill_tree(tree: HWND, items: &[TreeItem], selected: usize) {
             );
         }
     }
+    FILLING.with(|f| f.set(false));
     select_tree_item(tree, selected);
 }
 
@@ -1749,6 +1755,7 @@ pub(crate) unsafe extern "system" fn dialog_proc(
                     // A check box turned by the tree view itself (Space, a click): refused,
                     // Okur turns it.
                     NM_TVSTATEIMAGECHANGING => return answer(window, 1),
+                    TVN_ITEMEXPANDEDW if FILLING.with(std::cell::Cell::get) => return 0,
                     TVN_ITEMEXPANDEDW => {
                         // SAFETY: a tree view's expansion sends an NMTREEVIEWW.
                         let change = unsafe { &*(lparam.0 as *const NMTREEVIEWW) };
