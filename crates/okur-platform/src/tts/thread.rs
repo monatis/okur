@@ -208,17 +208,21 @@ impl SpeechThread {
                         // speech thread would leave Okur running and silent for the session
                         // (performance review 2026-10-24, 5). Its locks are freed of the panic.
                         let batch = Request::batch(first, &received);
+                        let count = batch.len();
                         let spoke = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                             carry_out(
                                 batch,
                                 &worker_interruptions,
                                 &worker_tts,
-                                &worker_pending,
                                 &worker_voices,
                                 &worker_report,
                                 &mut following,
                             )
                         }));
+                        // Counted out whatever happened in it: a batch that panicked left Okur
+                        // speaking forever, its live regions and its exit waiting on it
+                        // (performance review 2026-10-25, finding 5).
+                        worker_pending.fetch_sub(count, Ordering::SeqCst);
                         if spoke.is_err() {
                             tracing::error!("speech work panicked; speech goes on");
                             worker_tts.clear_poison();
@@ -316,12 +320,10 @@ fn carry_out(
     batch: Vec<Request>,
     interruptions: &AtomicU64,
     worker_tts: &Mutex<TtsManager>,
-    worker_pending: &AtomicUsize,
     worker_voices: &Mutex<Vec<String>>,
     worker_report: &Mutex<Option<MarkReport>>,
     following: &mut bool,
 ) {
-    let count = batch.len();
     let generation = interruptions.load(Ordering::SeqCst);
     for request in Request::superseding(batch) {
         let Ok(mut tts) = worker_tts.lock() else {
@@ -344,7 +346,9 @@ fn carry_out(
         let pitch = tts.pitch;
         // A capital's raise on the context's pitch.
         let raised = |text: &str| {
-            (pitch + okur_core::pronounce::character_pitch(text, indicate_caps)).clamp(-10, 10)
+            pitch
+                .saturating_add(okur_core::pronounce::character_pitch(text, indicate_caps))
+                .clamp(-10, 10)
         };
         match request {
             Request::Marked(text, mark, interrupt) => {
@@ -410,9 +414,11 @@ fn carry_out(
                 let parts = okur_core::pronounce::spelled_parts(&text, indicate_caps);
                 for (i, (part, raise)) in parts.into_iter().enumerate() {
                     let first = interrupt && i == 0;
-                    let _ = tts
-                        .engine
-                        .speak_pitched(&part, (pitch + raise).clamp(-10, 10), first);
+                    let _ = tts.engine.speak_pitched(
+                        &part,
+                        pitch.saturating_add(raise).clamp(-10, 10),
+                        first,
+                    );
                 }
             }
             Request::Stop => {
@@ -430,7 +436,6 @@ fn carry_out(
             }
         }
     }
-    worker_pending.fetch_sub(count, Ordering::SeqCst);
 }
 
 /// Hands `mark` to the engine's side.
@@ -881,12 +886,10 @@ mod mark_tests {
                 },
             });
             let tts = Mutex::new(manager);
-            let pending = AtomicUsize::new(1);
             carry_out(
                 vec![Request::Speak(long.clone(), true)],
                 &interruptions,
                 &tts,
-                &pending,
                 &Mutex::new(Vec::new()),
                 &Mutex::new(None),
                 &mut false,
@@ -897,7 +900,6 @@ mod mark_tests {
             } else {
                 assert_eq!(spoken, parts(&long).count());
             }
-            assert_eq!(pending.load(Ordering::SeqCst), 0);
         }
     }
 
@@ -916,6 +918,75 @@ mod mark_tests {
             .recent
             .back()
             .is_some_and(|t| t.chars().all(|c| c == 'ü')));
+    }
+}
+
+#[cfg(test)]
+mod panic_tests {
+    use super::*;
+    use crate::tts::{TtsEngine, TtsEngineType, TtsError, VoiceInfo};
+    use std::time::{Duration, Instant};
+
+    /// A synthesizer whose speaking fails with a panic, as a bug in its work would.
+    struct Panicking;
+
+    impl TtsEngine for Panicking {
+        fn name(&self) -> &str {
+            "panicking"
+        }
+        fn speak(&mut self, _text: &str, _interrupt: bool) -> Result<(), TtsError> {
+            std::panic::resume_unwind(Box::new("a bug in the synthesizer's work"))
+        }
+        fn stop(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn pause(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn resume(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn set_rate(&mut self, _rate: i32) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn get_rate(&self) -> i32 {
+            0
+        }
+        fn set_volume(&mut self, _volume: u16) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn get_volume(&self) -> u16 {
+            100
+        }
+        fn is_speaking(&self) -> bool {
+            false
+        }
+        fn get_voices(&self) -> Vec<VoiceInfo> {
+            Vec::new()
+        }
+        fn set_voice(&mut self, _voice_id: &str) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn wait_until_done(&mut self, _timeout_ms: u32) -> Result<(), TtsError> {
+            Ok(())
+        }
+    }
+
+    /// Speech whose work panicked is counted out: Okur is not left speaking forever, its
+    /// live regions and its exit waiting on it (performance review 2026-10-25, finding 5).
+    #[test]
+    fn speech_that_panicked_is_not_speaking() {
+        let Ok(mut manager) = TtsManager::new(TtsEngineType::NoSpeech) else {
+            return;
+        };
+        manager.engine = Box::new(Panicking);
+        let mut speech = SpeechThread::start(manager);
+        speech.speak("Hello", true);
+        let until = Instant::now() + Duration::from_secs(5);
+        while speech.is_speaking() && Instant::now() < until {
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        assert!(!speech.is_speaking());
     }
 }
 

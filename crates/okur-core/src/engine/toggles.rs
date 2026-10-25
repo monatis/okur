@@ -109,7 +109,7 @@ impl ScreenReaderEngine {
     /// The synthesizer set to the settings' voice with the rate changed for now.
     pub(super) fn configure_voice(&mut self) {
         let mut voice = self.settings.voice.clone();
-        voice.rate = (voice.rate + self.rate_change).clamp(-10, 10);
+        voice.rate = voice.rate.saturating_add(self.rate_change).clamp(-10, 10);
         self.speech.configure(&voice);
     }
 

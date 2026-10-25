@@ -33,7 +33,8 @@ use windows::Win32::UI::WindowsAndMessaging::{
     SetWindowTextW, ShowWindow, BM_GETCHECK, BM_SETCHECK, BN_CLICKED, CBN_EDITCHANGE,
     CBN_SELCHANGE, CB_ADDSTRING, CB_GETCURSEL, CB_GETLBTEXT, CB_GETLBTEXTLEN, CB_RESETCONTENT,
     CB_SETCURSEL, DLGTEMPLATE, EN_CHANGE, LBN_SELCHANGE, LB_ADDSTRING, LB_GETCURSEL,
-    LB_RESETCONTENT, LB_SETCURSEL, MSG, SW_SHOW, WM_COMMAND, WM_HSCROLL, WM_INITDIALOG, WM_NOTIFY,
+    LB_RESETCONTENT, LB_SETCURSEL, MSG, SW_SHOW, WM_COMMAND, WM_HSCROLL, WM_INITDIALOG,
+    WM_NCDESTROY, WM_NOTIFY,
 };
 
 use crate::template::{self, IDCANCEL};
@@ -1301,12 +1302,40 @@ pub fn close(id: u32) {
         })
     });
     if let Some((window, previous)) = window {
+        hand_on_owned(window);
         // SAFETY: a query, destroying our own dialog, then a query on the window it came
         // from.
         let in_front = unsafe { GetForegroundWindow() } == window;
         let _ = unsafe { DestroyWindow(window) };
         if in_front && unsafe { IsWindow(Some(previous)) }.as_bool() {
             bring_forward(previous);
+        }
+    }
+}
+
+/// Gives the dialogs `window` owns to its own owner before it is destroyed: Windows destroys
+/// owned windows with their owner, and a list chosen in Virtual HTML Features, opened over it
+/// and so owned by it (`show`), takes its place as it closes [obs, 226/s3]. Shown and gone
+/// with it, the list had left the focus nowhere and Okur believing it open (performance
+/// review 2026-10-25, finding 1).
+fn hand_on_owned(window: HWND) {
+    use windows::Win32::UI::WindowsAndMessaging::{
+        GetWindow, SetWindowLongPtrW, GWLP_HWNDPARENT, GW_OWNER,
+    };
+    // SAFETY: a query on our own dialog.
+    let owner = unsafe { GetWindow(window, GW_OWNER) }.unwrap_or_default();
+    let owned: Vec<HWND> = DIALOGS.with(|d| {
+        d.try_borrow()
+            .map(|d| d.iter().map(|o| o.window).collect())
+            .unwrap_or_default()
+    });
+    for dialog in owned {
+        // SAFETY: queries on our own dialogs, then a change of the owner of one of them
+        // (GWLP_HWNDPARENT of a top-level window is its owner).
+        unsafe {
+            if GetWindow(dialog, GW_OWNER).is_ok_and(|o| o == window) {
+                SetWindowLongPtrW(dialog, GWLP_HWNDPARENT, owner.0 as isize);
+            }
         }
     }
 }
@@ -1821,8 +1850,38 @@ pub(crate) unsafe extern "system" fn dialog_proc(
             }
             1
         }
+        // A dialog destroyed other than by `close` (with a window that owned it): forgotten,
+        // and Okur hears it closed, which it would never hear otherwise (performance review
+        // 2026-10-25, finding 9). `close` forgets its dialog first, so it is not told twice; a
+        // pane, a child sharing its dialog's id, is not the dialog.
+        WM_NCDESTROY => {
+            use windows::Win32::UI::WindowsAndMessaging::{GetAncestor, GA_ROOT};
+            // SAFETY: a query on the window being destroyed, still valid in this message.
+            let top_level = unsafe { GetAncestor(window, GA_ROOT) } == window;
+            if top_level {
+                if let Some(id) = forget(window) {
+                    crate::win32::tell(&FromUi::DialogClosed { id });
+                }
+            }
+            0
+        }
         _ => 0,
     }
+}
+
+/// Forgets the dialog `window` and its pane, as `close` does; its id, when it was one of ours.
+fn forget(window: HWND) -> Option<u32> {
+    DIALOGS.with(|d| {
+        d.try_borrow_mut().ok().and_then(|mut d| {
+            let id = d.iter().find(|o| o.window == window)?.id;
+            let previous = d.iter().find(|o| o.window == window)?.previous;
+            d.retain(|o| o.id != id);
+            for other in d.iter_mut().filter(|o| o.previous == window) {
+                other.previous = previous;
+            }
+            Some(id)
+        })
+    })
 }
 
 /// A slider's value in its label, after the label's colon: "Rate: 0", as JAWS's Voice
