@@ -7631,6 +7631,80 @@ fn words_links_list_lists_the_documents_links() {
     );
 }
 
+/// Insert+F5 in Word lists the document's fields, which the platform reads, by their code's
+/// first word and the text they show: "List Fields dialog | List1 List view | HYPERLINK opening
+/// hours | 1 of 4" [obs, 1050/s1]; OK moves the caret to the field [obs, 1054/s3]; with none,
+/// Word's words for it [obs, 1047/s1].
+#[test]
+fn words_fields_list_lists_the_documents_fields() {
+    use crate::ui::{ControlKind, FromUi, ToUi};
+    let (mut engine, speech) = word_document(
+        "Library Card\rSee the opening hours before you come.\r",
+        0,
+        crate::event::LineStructure {
+            line: (0, 13),
+            heading: Some(1),
+            ..Default::default()
+        },
+    );
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut f5 = KeyEvent::new(Key::F(5), Modifiers::none(), true);
+    f5.modifiers.insert = true;
+    engine.handle_key_event(&f5);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "document fields"));
+    let field = |code: &str, result: &str| crate::event::DocumentField {
+        code: code.to_owned(),
+        result: result.to_owned(),
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentFields(vec![
+        field(" HYPERLINK \"https://example.org/hours\" ", "opening hours"),
+        field(" FORMTEXT ", "\u{2002}\u{2002}\u{2002}\u{2002}\u{2002}"),
+        field(" FORMCHECKBOX ", ""),
+    ]));
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "List Fields");
+    assert!(dialog.controls.iter().any(|c| matches!(
+        &c.kind,
+        ControlKind::List { items, selected: 0 }
+            if items == &["HYPERLINK opening hours", "FORMTEXT", "FORMCHECKBOX"]
+    )));
+    // OK on the second: the caret to the field.
+    let id = dialog.id;
+    let list = dialog
+        .controls
+        .first()
+        .map(|c| c.id.clone())
+        .unwrap_or_default();
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: list,
+        value: crate::ui::Value::Selected(1),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "ok".into(),
+    }));
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "field 1"));
+    // None: Word's words for it.
+    engine.open_list(crate::ui::lists::ListKind::FormFields);
+    speech.take();
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentFields(Vec::new()));
+    assert_eq!(speech.take().last().map(String::as_str), Some("no fields"));
+}
+
 /// Ctrl+Alt+Right in a table of Word's moves the caret to the next cell through the platform;
 /// at the row's end it says so.
 #[test]

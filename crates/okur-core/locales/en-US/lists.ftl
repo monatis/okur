@@ -8,6 +8,8 @@ list-dialog-headings = Heading List
 # The name of the Heading List's list of headings.
 list-dialog-headings-list = headings
 list-dialog-form-fields = Select a Form Field
+# Word's fields, Insert+F5 in a document [obs, 1050/s1].
+list-dialog-document-fields = List Fields
 # The name of the Form Fields list's list, as JAWS's dialog names it.
 list-dialog-form-fields-list = List1
 list-dialog-features = Virtual HTML Features

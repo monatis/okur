@@ -99,6 +99,10 @@ mod windows_actions {
         DocumentLinks,
         /// The line spacing at the focused document's caret, answered always.
         LineSpacing,
+        /// The focused document's fields, answered even when there are none.
+        DocumentFields,
+        /// The caret to a field of the focused document (from 0), then the field's text.
+        Field(Option<Box<TextContext>>, usize),
         /// The focused document's link (from 0, as its links are listed) followed.
         ActivateDocumentLink(usize),
         /// The focused document's paragraphs, answered even when there are none.
@@ -176,6 +180,8 @@ mod windows_actions {
                 Request::DocumentHeadings => "document headings",
                 Request::DocumentLinks => "document links",
                 Request::LineSpacing => "line spacing",
+                Request::DocumentFields => "document fields",
+                Request::Field(..) => "field",
                 Request::ActivateDocumentLink(_) => "document link",
                 Request::DocumentParagraphs => "document paragraphs",
                 Request::DocumentView => "document view",
@@ -393,6 +399,35 @@ mod windows_actions {
                                     "line spacing read"
                                 );
                                 let _ = events.send(AccessibilityEvent::LineSpacing(spacing));
+                            }
+                            Request::DocumentFields => {
+                                let Some(events) = events.as_ref() else {
+                                    return;
+                                };
+                                let started = Instant::now();
+                                let fields =
+                                    crate::text_context::word_document_fields().unwrap_or_default();
+                                tracing::debug!(
+                                    fields = fields.len(),
+                                    ms = started.elapsed().as_millis(),
+                                    "document fields read"
+                                );
+                                let _ = events.send(AccessibilityEvent::DocumentFields(fields));
+                            }
+                            Request::Field(before, index) => {
+                                let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
+                                else {
+                                    return;
+                                };
+                                if !crate::text_context::word_select_field(index) {
+                                    tracing::debug!(index, "caret not moved to the field");
+                                    return;
+                                }
+                                if let Some(context) =
+                                    read_after_key(uia, before.map(|b| *b), false)
+                                {
+                                    let _ = events.send(AccessibilityEvent::TextContext(context));
+                                }
                             }
                             Request::ActivateDocumentLink(index) => {
                                 let followed = uia.as_ref().is_some_and(|uia| {
@@ -890,6 +925,14 @@ mod windows_actions {
 
         fn activate_document_link(&self, index: usize) -> bool {
             self.send(Request::ActivateDocumentLink(index))
+        }
+
+        fn read_document_fields(&self) -> bool {
+            self.send(Request::DocumentFields)
+        }
+
+        fn move_to_document_field(&self, before: Option<&TextContext>, index: usize) -> bool {
+            self.send(Request::Field(before.cloned().map(Box::new), index))
         }
 
         fn read_document_view(&self) -> bool {

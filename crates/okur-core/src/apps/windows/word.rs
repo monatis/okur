@@ -28,9 +28,8 @@ impl AppModule for WordDocument {
                 .is_some_and(|app| app.eq_ignore_ascii_case(super::word_ribbon::WORD))
     }
 
-    /// The Links List and Select a Form Field with nothing in them: "no links | Check for link
-    /// type fields with Insert+F5." and "no fields" [obs, 1044/s1, 1047/s1]. Okur does not read
-    /// Word's fields yet, so this is said of every document.
+    /// The Links List and List Fields with nothing in them: "no links | Check for link type
+    /// fields with Insert+F5." and "no fields" [obs, 1044/s1, 1047/s1].
     fn empty_list(&self, _focus: &FocusEvent, kind: &ListKind) -> Option<String> {
         match kind {
             ListKind::Links => Some(format!(
@@ -506,7 +505,7 @@ mod tests {
     use super::*;
     use crate::event::TableCell;
 
-    /// In Word's document, the Links List and Select a Form Field with nothing in them say
+    /// In Word's document, the Links List and List Fields with nothing in them say
     /// Word's words [obs, 1044/s1, 1047/s1]; its ribbon and other applications are not this
     /// module's.
     #[test]

@@ -48,6 +48,8 @@ pub enum ListKind {
     Links,
     Headings,
     FormFields,
+    /// Word's fields (Insert+F5 in Word's document): JAWS's List Fields [obs, 1050, 1053].
+    DocumentFields,
     /// Virtual HTML Features: the lists themselves.
     Features,
     /// One of JAWS's element lists.
@@ -238,6 +240,29 @@ impl Entry {
         }
     }
 
+    /// A document's field `index`: its code's first word and the text it shows.
+    pub fn document_field(index: usize, field: &crate::event::DocumentField) -> Self {
+        let text = field
+            .code
+            .split_whitespace()
+            .next()
+            .into_iter()
+            .chain(Some(field.result.trim()).filter(|r| !r.is_empty()))
+            .collect::<Vec<_>>()
+            .join(" ");
+        Self {
+            sort_key: text.to_lowercase(),
+            text,
+            level: None,
+            address: None,
+            same_page: false,
+            visited: false,
+            node_id: index,
+            offset: index,
+            feature: None,
+        }
+    }
+
     /// An element of one of JAWS's element lists.
     pub fn element(item: &ElementItem) -> Self {
         Self {
@@ -374,6 +399,21 @@ impl ListDialog {
         )
     }
 
+    /// List Fields over a document's `fields`, in their order, the first selected: each by its
+    /// code's first word and the text it shows, "HYPERLINK opening hours", "FORMTEXT" [obs,
+    /// 1050/s1, s2]. An entry's node is the field's index.
+    pub fn document_fields(id: u32, fields: &[crate::event::DocumentField]) -> Self {
+        Self::new(
+            id,
+            ListKind::DocumentFields,
+            fields
+                .iter()
+                .enumerate()
+                .map(|(index, field)| Entry::document_field(index, field))
+                .collect(),
+        )
+    }
+
     /// One of JAWS's element lists over `items`, in page order, the first selected.
     pub fn elements(id: u32, list: ElementList, items: &[ElementItem]) -> Self {
         Self::new(
@@ -429,7 +469,7 @@ impl ListDialog {
         match self.kind {
             ListKind::Links => "links",
             ListKind::Headings => "headings",
-            ListKind::FormFields => "fields",
+            ListKind::FormFields | ListKind::DocumentFields => "fields",
             ListKind::Features => "lists",
             ListKind::Elements(_) => "elements",
             ListKind::Regions => "regions",
@@ -448,6 +488,7 @@ impl ListDialog {
                 )
                 .collect(),
             ListKind::FormFields
+            | ListKind::DocumentFields
             | ListKind::Features
             | ListKind::Elements(_)
             | ListKind::Regions
@@ -467,6 +508,7 @@ impl ListDialog {
             // Select a Form Field has no Display options.
             (
                 ListKind::FormFields
+                | ListKind::DocumentFields
                 | ListKind::Features
                 | ListKind::Elements(_)
                 | ListKind::Regions
@@ -587,6 +629,15 @@ impl ListDialog {
                     button("cancel", msg::form_field_list_cancel(), false),
                 ],
             ),
+            // JAWS's List Fields: its list, then OK and Cancel [obs, 1053/s1-s5].
+            ListKind::DocumentFields => (
+                msg::list_dialog_document_fields(),
+                vec![
+                    list(msg::list_dialog_form_fields_list()),
+                    button("ok", msg::form_field_list_ok(), true),
+                    button("cancel", msg::form_field_list_cancel(), false),
+                ],
+            ),
             ListKind::Features => (
                 msg::list_dialog_features(),
                 vec![
@@ -659,6 +710,7 @@ impl ListDialog {
             }],
             ListKind::Headings
             | ListKind::FormFields
+            | ListKind::DocumentFields
             | ListKind::Features
             | ListKind::Elements(_)
             | ListKind::Regions
@@ -712,6 +764,7 @@ impl ListDialog {
                     ("move", Some(entry), _) => Outcome::MoveTo(entry.clone()),
                     ("activate", Some(entry), ListKind::Links) => Outcome::Activate(entry.clone()),
                     ("ok", Some(entry), ListKind::FormFields) => Outcome::Focus(entry.clone()),
+                    ("ok", Some(entry), ListKind::DocumentFields) => Outcome::MoveTo(entry.clone()),
                     ("ok", Some(entry), ListKind::Elements(list)) if list.focuses() => {
                         Outcome::Focus(entry.clone())
                     }

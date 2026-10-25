@@ -38,8 +38,8 @@ pub(crate) use reader::activate_word_document_link;
 pub use reader::{
     focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
     move_caret_in_edit, move_to_cell, move_to_paragraph, read_focused, read_focused_outside_page,
-    visible_text, with_paragraph_alignment, word_document_headings, word_document_links,
-    word_document_paragraphs, word_line_spacing, word_view,
+    visible_text, with_paragraph_alignment, word_document_fields, word_document_headings,
+    word_document_links, word_document_paragraphs, word_line_spacing, word_select_field, word_view,
 };
 
 #[cfg(windows)]
@@ -353,6 +353,33 @@ mod reader {
             rule: spacing.rule,
             centipoints: (spacing.points * 100.0).round().clamp(0.0, u32::MAX as f32) as u32,
         })
+    }
+
+    /// The fields of Word's focused document, in order, from Word's own object model
+    /// (`crate::word_om`); `None` outside Word's document.
+    pub fn word_document_fields() -> Option<Vec<okur_core::DocumentField>> {
+        let (window, class) = focused_window()?;
+        if class != "_WWG" {
+            return None;
+        }
+        let fields = crate::word_om::document_fields(window)?;
+        Some(
+            fields
+                .into_iter()
+                .map(|field| okur_core::DocumentField {
+                    code: field.code,
+                    result: field.result,
+                })
+                .collect(),
+        )
+    }
+
+    /// Puts the caret of Word's focused document on its field `index` (from 0, as
+    /// [`word_document_fields`] lists them). False outside Word's document.
+    pub fn word_select_field(index: usize) -> bool {
+        focused_window()
+            .filter(|(_, class)| class == "_WWG")
+            .is_some_and(|(window, _)| crate::word_om::select_field(window, index))
     }
 
     fn focused_window() -> Option<(windows::Win32::Foundation::HWND, String)> {

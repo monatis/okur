@@ -74,6 +74,25 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for the focused document's fields (Word's), which arrive later as
+    /// [`crate::event::AccessibilityEvent::DocumentFields`], always. Returns false when
+    /// unsupported.
+    fn read_document_fields(&self) -> bool {
+        false
+    }
+
+    /// Puts the caret of the focused document on its field `index` (from 0, as
+    /// [`crate::event::AccessibilityEvent::DocumentFields`] lists them), then reads the field as
+    /// [`Self::read_at_caret`] does, compared with `before`. Returns false when unsupported.
+    fn move_to_document_field(
+        &self,
+        before: Option<&crate::event::TextContext>,
+        index: usize,
+    ) -> bool {
+        let _ = (before, index);
+        false
+    }
+
     /// Asks for the line spacing of the paragraph at the focused document's caret (Word's),
     /// which arrives later as [`crate::event::AccessibilityEvent::LineSpacing`], always.
     /// Returns false when unsupported.
@@ -421,6 +440,24 @@ impl ApplicationActions for RecordingActions {
     fn read_line_spacing(&self) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push(("line spacing".to_owned(), 0));
+        }
+        true
+    }
+
+    fn read_document_fields(&self) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("document fields".to_owned(), 0));
+        }
+        true
+    }
+
+    fn move_to_document_field(
+        &self,
+        _before: Option<&crate::event::TextContext>,
+        index: usize,
+    ) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((format!("field {index}"), 0));
         }
         true
     }

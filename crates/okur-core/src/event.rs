@@ -130,6 +130,15 @@ pub struct LineSpacing {
     pub centipoints: u32,
 }
 
+/// A field of a document the platform reads (Word's), for its list of fields (Insert+F5): its
+/// code (" HYPERLINK \"https://example.org/\" ", " FORMTEXT ") and the text it shows.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct DocumentField {
+    pub code: String,
+    #[serde(default)]
+    pub result: String,
+}
+
 /// A link of a document the platform reads by paragraphs (Word's hyperlinks), for its Links
 /// List (Insert+F7): its text, where it goes, and the paragraph it starts in, from the
 /// document's first (0), by which the caret is moved to it.
@@ -837,6 +846,10 @@ pub enum AccessibilityEvent {
     /// by Say Font ([`crate::actions::ApplicationActions::read_line_spacing`]); `None` when it
     /// could not be read.
     LineSpacing(Option<LineSpacing>),
+    /// The focused document's fields, in order, asked for by its list of fields (Insert+F5 in
+    /// Word; [`crate::actions::ApplicationActions::read_document_fields`]); empty when it has
+    /// none or could not be read.
+    DocumentFields(Vec<DocumentField>),
     /// The focused document's paragraphs, in order, asked for by Say All in Word
     /// ([`crate::actions::ApplicationActions::read_document_paragraphs`]); empty when they could
     /// not be read.

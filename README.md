@@ -160,15 +160,16 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   not). Say All (Insert+Down) reads the document paragraph by paragraph and says what changes
   as it goes: a heading's level, "Entering List", "exit list", "table 1, uniform Table", "Row
   2", "out of table". Insert+F6 lists the document's headings to move to; Say Font gives bold,
-  italic and underline ("bolded", "italicized"), the size, colors, font, style, alignment and
-  outline level; Ctrl+Alt+N, O and P say the view they switch to ("Draft View"), and Insert+T
+  italic and underline ("bolded", "italicized"), the size, colors, font, style, alignment,
+  outline level and line spacing ("Line spacing: Double"); Ctrl+Alt+N, O and P say the view they switch to ("Draft View"), and Insert+T
   the title and the view. Its ribbon is read as JAWS reads it: Alt to its tabs ("Upper Ribbon,
   Ribbon, Home Tab"), Down into a tab's commands with their group's name, each command's
   ScreenTip where it says more than the name ("Grow Font Button, Increase Font Size"), toggle
   buttons and check boxes with their state ("Format Painter Button not checked"), and Escape
   back ("Leaving ribbons, Edit"). The Links List (Insert+F7) lists the document's hyperlinks,
-  Move To Link moves to one and Activate Link follows it; with none, and Insert+F5, it says so
-  in Word's words.
+  Move To Link moves to one and Activate Link follows it; List Fields (Insert+F5) lists its
+  fields ("HYPERLINK opening hours", "FORMTEXT") and OK moves to one; with none, each says so
+  in Word's words. The line spacing and the fields come from Word's own object model.
 - **The cursors:** Numpad Minus to the Okur cursor at the mouse, Numpad Plus back to the PC
   cursor, Insert+Numpad Minus to bring the Okur cursor to the PC cursor, Insert+Numpad Plus
   the other way, Insert+R for where the Okur cursor may go, and Alt+Delete for where the
@@ -267,9 +268,8 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- Outlook and Excel, not yet supported or checked; in Word, Say Font leaves out the line
-  spacing (Word's UI Automation does not report it, and Word 2016 has no IAccessible2),
-  and Insert+F5 does not list its fields yet;
+- Outlook and Excel, not yet supported or checked; in Word, a form field is read as text, not
+  as the edit or check box JAWS reads it as ("Name: Edit");
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;

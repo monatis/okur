@@ -331,6 +331,8 @@ pub struct ScreenReaderEngine {
     document_headings_asked: bool,
     /// The focused document's links were asked for its Links List, and are awaited.
     document_links_asked: bool,
+    /// The focused document's fields were asked for its list of fields, and are awaited.
+    document_fields_asked: bool,
     /// Say All waits for Word's document's paragraphs.
     say_all_paragraphs_asked: bool,
     /// Say Window Title in Word asked for the document's view, said with this title when it
@@ -598,6 +600,7 @@ impl ScreenReaderEngine {
             list_return_mode: AppMode::VirtualBuffer,
             document_headings_asked: false,
             document_links_asked: false,
+            document_fields_asked: false,
             say_all_paragraphs_asked: false,
             document_view_title: None,
             document_view_by_key: None,
@@ -1496,6 +1499,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::DocumentHeadings(headings) => self.document_headings(headings),
             AccessibilityEvent::DocumentLinks(links) => self.document_links(links),
             AccessibilityEvent::LineSpacing(spacing) => self.word_font(*spacing),
+            AccessibilityEvent::DocumentFields(fields) => self.document_fields(fields),
             AccessibilityEvent::DocumentParagraphs(paragraphs) => {
                 self.say_all_by_paragraphs(paragraphs)
             }
@@ -2691,9 +2695,22 @@ impl ScreenReaderEngine {
             self.document_links_asked = true;
             return None;
         }
+        // Its fields too, in JAWS's List Fields [obs, 1050/s1, 1053].
+        if kind == ListKind::FormFields
+            && self.app_mode != AppMode::VirtualBuffer
+            && self.editing_document()
+            && self
+                .actions
+                .as_ref()
+                .is_some_and(|actions| actions.read_document_fields())
+        {
+            tracing::debug!("fields list: the document's fields asked for");
+            self.document_fields_asked = true;
+            return None;
+        }
         // Outside a page, a list the application words is its own, never the buffer's: the
         // buffer can still hold the last page read, whose links Word's Links List would have
-        // shown. Word's fields are not read yet, so its field list is said empty.
+        // shown.
         let application_list = self
             .last_native_focus
             .as_ref()
@@ -2741,6 +2758,8 @@ impl ScreenReaderEngine {
                     elements.none().to_string(),
                 )
             }
+            // A document's fields are only listed from the document, above.
+            ListKind::DocumentFields => (None, msg::form_fields_list_none().to_string()),
             // With none, JAWS says so and then the page [obs, 221/s2].
             ListKind::FormFields => {
                 let fields = self.cursor.buffer.get_form_fields_list();
@@ -2806,6 +2825,34 @@ impl ScreenReaderEngine {
             })
             .collect();
         let dialog = crate::ui::lists::ListDialog::headings(self.dialog_count + 1, &items);
+        let mode = self.app_mode;
+        self.show_list(dialog, mode)
+    }
+
+    /// The focused document's fields, asked for its list of fields: JAWS's List Fields, the first
+    /// selected, "List Fields dialog | List1 List view | HYPERLINK opening hours | 1 of 4"
+    /// [obs, 1050/s1]; with none, the application's words for it ("no fields" [obs, 1047/s1]).
+    fn document_fields(&mut self, fields: &[crate::event::DocumentField]) -> Option<String> {
+        if !std::mem::take(&mut self.document_fields_asked) {
+            return None;
+        }
+        tracing::debug!(
+            fields = fields.len(),
+            "fields list: the document's fields came"
+        );
+        if fields.is_empty() {
+            let none = self
+                .last_native_focus
+                .as_ref()
+                .and_then(|focus| {
+                    self.app_for(focus)?
+                        .empty_list(focus, &crate::ui::lists::ListKind::FormFields)
+                })
+                .unwrap_or_else(|| msg::form_fields_list_none().to_string());
+            self.speech.speak(&none, true);
+            return Some(none);
+        }
+        let dialog = crate::ui::lists::ListDialog::document_fields(self.dialog_count + 1, fields);
         let mode = self.app_mode;
         self.show_list(dialog, mode)
     }
@@ -2887,13 +2934,19 @@ impl ScreenReaderEngine {
             Outcome::MoveTo(entry) if in_document => {
                 close(self);
                 self.moved_by_document_list = true;
-                let paragraph = if kind == ListKind::Links {
-                    entry.offset
-                } else {
-                    entry.node_id
-                };
                 if let Some(actions) = &self.actions {
-                    actions.move_to_paragraph(self.last_text.as_ref(), paragraph);
+                    match kind {
+                        // OK in List Fields: the caret on the field [obs, 1054/s3].
+                        ListKind::DocumentFields => {
+                            actions.move_to_document_field(self.last_text.as_ref(), entry.node_id);
+                        }
+                        ListKind::Links => {
+                            actions.move_to_paragraph(self.last_text.as_ref(), entry.offset);
+                        }
+                        _ => {
+                            actions.move_to_paragraph(self.last_text.as_ref(), entry.node_id);
+                        }
+                    }
                 }
                 None
             }
@@ -2952,6 +3005,7 @@ impl ScreenReaderEngine {
                     }
                     ListKind::Headings
                     | ListKind::FormFields
+                    | ListKind::DocumentFields
                     | ListKind::Features
                     | ListKind::Words
                     | ListKind::Elements(_) => self.cursor.current_line(),

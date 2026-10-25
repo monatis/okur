@@ -1230,6 +1230,10 @@ struct ScreenSnapshot {
     /// headings (none before 1052), for Say Font.
     #[serde(default)]
     line_spacing: Option<SnapshotSpacing>,
+    /// Word's document's fields, from its object model, saved beside the headings (none before
+    /// 1050's second recording), for its List Fields.
+    #[serde(default)]
+    fields: Vec<okur_core::DocumentField>,
 }
 
 /// A line spacing as the recorder saves it: Word's rule and its points.
@@ -1265,6 +1269,7 @@ impl ScreenSnapshot {
             self.paragraphs = other.paragraphs;
             self.links = other.links;
             self.line_spacing = other.line_spacing;
+            self.fields = other.fields;
         }
     }
 }
@@ -1280,6 +1285,7 @@ struct ScreenReads {
     paragraphs: usize,
     links: usize,
     spacings: usize,
+    fields: usize,
 }
 
 impl ScreenReads {
@@ -1362,12 +1368,13 @@ impl ScreenReads {
     ) {
         let requests = actions.requests();
         let count = |name: &str| requests.iter().filter(|(a, _)| a == name).count();
-        let (headings, views, paragraphs, links, spacings) = (
+        let (headings, views, paragraphs, links, spacings, fields) = (
             count("document headings"),
             count("document view"),
             count("document paragraphs"),
             count("document links"),
             count("line spacing"),
+            count("document fields"),
         );
         let mut deliver = |event: okur_core::AccessibilityEvent| {
             if let Some(speech) = engine.handle_accessibility_event(&event) {
@@ -1401,6 +1408,14 @@ impl ScreenReads {
             self.links += 1;
             deliver(okur_core::AccessibilityEvent::DocumentLinks(
                 snapshot.map(|s| s.links.clone()).unwrap_or_default(),
+            ));
+        }
+        // List Fields' fields, always answered: none where the step saved none (scenarios
+        // recorded before they were saved, 1047's document without fields).
+        while self.fields < fields {
+            self.fields += 1;
+            deliver(okur_core::AccessibilityEvent::DocumentFields(
+                snapshot.map(|s| s.fields.clone()).unwrap_or_default(),
             ));
         }
         let Some(snapshot) = snapshot else {
