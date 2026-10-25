@@ -94,3 +94,7 @@ word-view-outline = Outline View
 # 1042/s5, s9].
 word-view-web = Web Layout View
 word-view-read = reading layout View
+# The Links List in a Word document without links, after "no links"; Select a Form Field
+# (Insert+F5), which lists Word's fields, without any [obs, 1044/s1, 1047/s1].
+word-links-list-hint = Check for link type fields with Insert+F5.
+word-fields-list-none = no fields

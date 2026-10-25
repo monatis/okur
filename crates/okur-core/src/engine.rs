@@ -2722,6 +2722,13 @@ impl ScreenReaderEngine {
             }
         };
         let Some(dialog) = dialog else {
+            // The application's own words for a list with nothing in it, where it has them.
+            let none = self
+                .last_native_focus
+                .as_ref()
+                .filter(|_| self.app_mode != AppMode::VirtualBuffer)
+                .and_then(|focus| self.app_for(focus)?.empty_list(focus, &kind))
+                .unwrap_or(none);
             self.speech.speak(&none, true);
             return Some(none);
         };

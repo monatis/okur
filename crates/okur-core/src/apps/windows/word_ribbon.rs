@@ -20,8 +20,8 @@
 //!   1042/s4], the engine's "Leaving menus", then this module's; Word's window, focused on the
 //!   way, says nothing of its own.
 //!
-//! A command this module does not word (only Word's buttons, split buttons, sub menus and
-//! edit combos are recorded) is the engine's.
+//! A command this module does not word (only Word's buttons, split buttons, sub menus, check
+//! boxes and edit combos are recorded) is the engine's.
 
 use crate::announcement::Announcement;
 use crate::aom::Role;
@@ -31,7 +31,7 @@ use crate::linearize::{role_marker, state_marker};
 use crate::messages::msg;
 
 /// Word's process.
-const WORD: &str = "WINWORD.EXE";
+pub(crate) const WORD: &str = "WINWORD.EXE";
 
 /// Where in Word's ribbon the focus last was.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
@@ -114,6 +114,9 @@ fn control_speech(focus: &FocusEvent, name: &str) -> Option<Vec<String>> {
         Role::Button => format!("{name} {}", role_marker(msg::role_button().as_str())),
         Role::SplitButton => format!("{name} {}", role_marker(msg::role_split_button().as_str())),
         Role::MenuButton => format!("{name} {}", state_marker(msg::state_sub_menu().as_str())),
+        // A check box with its state and no hint: "Show | Ruler check box not checked"
+        // [obs, 1046/s14].
+        Role::CheckBox => format!("{name} {}", role_marker(msg::role_check_box().as_str())),
         Role::Edit if focus.container_role == Some(Role::ComboBox) => {
             lines.push(format!(
                 "{name} {}",
@@ -378,6 +381,13 @@ mod tests {
         assert_eq!(
             said(&mut ribbon, &clear).as_deref(),
             Some("Clear Formatting  \u{1d} Button \u{1e} \nClear All Formatting")
+        );
+        // A check box: its state, no hint [obs, 1046/s15].
+        let mut gridlines = in_group(Role::CheckBox, "Gridlines", "Font");
+        gridlines.states.checked = Some(false);
+        assert_eq!(
+            said(&mut ribbon, &gridlines).as_deref(),
+            Some("Gridlines  \u{1d} check box \u{1e}  \u{1d}not checked\u{1e} ")
         );
         // Once the ribbon is a menu, another group is said with its role.
         let bold = in_group(Role::Button, "Bold", "Paragraph");

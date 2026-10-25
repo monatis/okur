@@ -76,6 +76,17 @@ pub trait AppModule: Send {
         None
     }
 
+    /// What the application says of a list of `kind` with nothing in it, in its own words
+    /// (Word's: "no links | Check for link type fields with Insert+F5." [obs, 1044/s1]); `None`
+    /// for the engine's.
+    fn empty_list(
+        &self,
+        _focus: &FocusEvent,
+        _kind: &crate::ui::lists::ListKind,
+    ) -> Option<String> {
+        None
+    }
+
     /// Whether arriving in one of the application's windows announces the window's title.
     fn names_window(&self, _focus: &FocusEvent) -> bool {
         true

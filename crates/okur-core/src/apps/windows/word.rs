@@ -4,9 +4,43 @@
 //! its line, a list entered or left after it, and a table's cells, entered, changed and left
 //! before it [obs, 518].
 
+use crate::aom::Role;
+use crate::apps::AppModule;
 use crate::editing::EditKey;
-use crate::event::{DocumentParagraph, LineStructure, TableCell, TextContext};
+use crate::event::{DocumentParagraph, FocusEvent, LineStructure, TableCell, TextContext};
 use crate::messages::msg;
+use crate::ui::lists::ListKind;
+
+/// Word's document, where JAWS's lists of the document's links and fields have Word's own
+/// words.
+#[derive(Debug, Default)]
+pub struct WordDocument;
+
+impl AppModule for WordDocument {
+    fn owns(&self, focus: &FocusEvent) -> bool {
+        focus.role == Role::Document
+            && !focus.in_ribbon
+            && focus
+                .app
+                .as_deref()
+                .is_some_and(|app| app.eq_ignore_ascii_case(super::word_ribbon::WORD))
+    }
+
+    /// The Links List and Select a Form Field with nothing in them: "no links | Check for link
+    /// type fields with Insert+F5." and "no fields" [obs, 1044/s1, 1047/s1]. Okur does not read
+    /// Word's fields yet, so this is said of every document.
+    fn empty_list(&self, _focus: &FocusEvent, kind: &ListKind) -> Option<String> {
+        match kind {
+            ListKind::Links => Some(format!(
+                "{}\n{}",
+                msg::links_list_none(),
+                msg::word_links_list_hint()
+            )),
+            ListKind::FormFields => Some(msg::word_fields_list_none().to_string()),
+            _ => None,
+        }
+    }
+}
 
 /// `line` spoken as JAWS speaks a line of Word's: a heading with its level before it,
 /// " heading level 1 Library Hours" [obs, 518/s1, s9].
@@ -441,6 +475,38 @@ fn line_change(was: Option<&LineStructure>, now: &LineStructure) -> (Vec<String>
 mod tests {
     use super::*;
     use crate::event::TableCell;
+
+    /// In Word's document, the Links List and Select a Form Field with nothing in them say
+    /// Word's words [obs, 1044/s1, 1047/s1]; its ribbon and other applications are not this
+    /// module's.
+    #[test]
+    fn words_empty_lists_say_words_words() {
+        let mut document = FocusEvent::new(Role::Document);
+        document.app = Some("WINWORD.EXE".into());
+        assert!(WordDocument.owns(&document));
+        assert_eq!(
+            WordDocument
+                .empty_list(&document, &ListKind::Links)
+                .as_deref(),
+            Some("no links\nCheck for link type fields with Insert+F5.")
+        );
+        assert_eq!(
+            WordDocument
+                .empty_list(&document, &ListKind::FormFields)
+                .as_deref(),
+            Some("no fields")
+        );
+        assert_eq!(
+            WordDocument.empty_list(&document, &ListKind::Headings),
+            None
+        );
+        let mut ribbon = document.clone();
+        ribbon.in_ribbon = true;
+        assert!(!WordDocument.owns(&ribbon));
+        let mut wordpad = document;
+        wordpad.app = Some("wordpad.exe".into());
+        assert!(!WordDocument.owns(&wordpad));
+    }
 
     fn at(
         line: (usize, usize),

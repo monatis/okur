@@ -28,5 +28,6 @@ pub fn modules() -> Vec<Box<dyn AppModule>> {
         Box::new(search::Search),
         Box::new(settings::Settings),
         Box::new(word_ribbon::WordRibbon::default()),
+        Box::new(word::WordDocument),
     ]
 }
