@@ -121,9 +121,13 @@ Order of work, most used first:
 - **Windows Settings** (handoff 2026-10-17): dialogs of elevated processes ("Rename this PC")
   need an elevated Okur; the search box's doubled "No results".
 - **Calculator:** JAWS's digits, expressions and operator names (handoff 2026-10-17). Not built.
-- **Word:** its fields and links are not listed (the Links List and Insert+F5 say Word's "none"
-  words for every document); the ribbon's galleries and launchers; Read Mode; line spacing (neither
-  UIA nor IA2, which Word 2016 lacks). Plan 35 §1.
+- **Word:**
+  - Insert+F5, JAWS's "List Fields" ("List1 List view | HYPERLINK opening hours | 1 of 4",
+    then "FORMTEXT", "FORMCHECKBOX" [obs, 1050]): Word's UI Automation gives its hyperlinks
+    but not its form fields, and Okur says "no fields" of every document. "List1" looks like an
+    unlabeled control of JAWS's (an accident to document, not copy).
+  - The ribbon's galleries and launchers; Read Mode; line spacing (neither UIA nor IA2, which
+    Word 2016 lacks). Plan 35 §1.
 - **Not covered yet:** Task Manager, a desktop mail client.
 
 ## Installer
