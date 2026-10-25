@@ -14,7 +14,9 @@
 # can hold the user's own documents. Run on old-pc with no batch recording.
 param([ValidateSet('word', 'formats', 'ribbon', 'view')][string]$Fixture = 'formats',
       [string]$Out = (Join-Path $env:USERPROFILE "sr-harness\probe\word-probe.txt"),
-      [switch]$Ia2)
+      [switch]$Ia2,
+      # ribbon and view: how many Tabs across the lower ribbon.
+      [int]$Tabs = 10)
 $lab = Join-Path $env:USERPROFILE 'sr-harness\bin\okur-lab.exe'
 $fixtures = Join-Path $env:USERPROFILE 'corpus\fixtures'
 $script, $title, $probes = switch ($Fixture) {
@@ -24,12 +26,12 @@ $script, $title, $probes = switch ($Fixture) {
     }
     'ribbon' {
         'desktop-word.ps1', 'sr-word-fixture.docx - Word (Product Activation Failed)',
-        (@(@('Alt'), @('Down')) + @(1..10 | ForEach-Object { , @('Tab') }) + @(, @('Escape', 'Escape', 'Escape')))
+        (@(@('Alt'), @('Down')) + @(1..$Tabs | ForEach-Object { , @('Tab') }) + @(, @('Escape', 'Escape', 'Escape')))
     }
     # The View tab (seven tabs right of Home), its lower ribbon by Tab.
     'view' {
         'desktop-word.ps1', 'sr-word-fixture.docx - Word (Product Activation Failed)',
-        (@(, @('Alt')) + @(1..7 | ForEach-Object { , @('Right') }) + @(, @('Down')) + @(1..10 | ForEach-Object { , @('Tab') }) + @(, @('Escape', 'Escape', 'Escape')))
+        (@(, @('Alt')) + @(1..7 | ForEach-Object { , @('Right') }) + @(, @('Down')) + @(1..$Tabs | ForEach-Object { , @('Tab') }) + @(, @('Escape', 'Escape', 'Escape')))
     }
     'formats' {
         'desktop-word-formats.ps1', 'sr-word-formats.docx - Word (Product Activation Failed)',
