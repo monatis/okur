@@ -57,15 +57,15 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `323266cc` (2026-10-24).
+Every figure is tool output, rerun for this README at commit `371962d3` (2026-10-25).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **8790 of 9378** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **8702 of 9439** | `okur-lab parity` |
+| Steps matching JAWS's speech history, word for word | **8972 of 9542** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **8885 of 9603** | `okur-lab parity` |
 | Steps left out on purpose (accepted divergences, each a written decision) | **251** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **666, 2004** (1988 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1476 passed, 0 failed** (201 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
+| Recorded JAWS scenarios, trials | **673, 2025** (2009 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1506 passed, 0 failed** (201 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
@@ -162,7 +162,12 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   2", "out of table". Insert+F6 lists the document's headings to move to; Say Font gives bold,
   italic and underline ("bolded", "italicized"), the size, colors, font, style, alignment and
   outline level; Ctrl+Alt+N, O and P say the view they switch to ("Draft View"), and Insert+T
-  the title and the view.
+  the title and the view. Its ribbon is read as JAWS reads it: Alt to its tabs ("Upper Ribbon,
+  Ribbon, Home Tab"), Down into a tab's commands with their group's name, each command's
+  ScreenTip where it says more than the name ("Grow Font Button, Increase Font Size"), toggle
+  buttons and check boxes with their state ("Format Painter Button not checked"), and Escape
+  back ("Leaving ribbons, Edit"). The Links List and Insert+F5 with nothing in them say so in
+  Word's words.
 - **The cursors:** Numpad Minus to the Okur cursor at the mouse, Numpad Plus back to the PC
   cursor, Insert+Numpad Minus to bring the Okur cursor to the PC cursor, Insert+Numpad Plus
   the other way, Insert+R for where the Okur cursor may go, and Alt+Delete for where the
@@ -262,7 +267,8 @@ The [reference documentation](docs/references/) describes these behaviors in det
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
 - Outlook and Excel, not yet supported or checked; in Word, Say Font leaves out the line
-  spacing, which Word's UI Automation does not report;
+  spacing (Word's UI Automation does not report it, and Word 2016 has no IAccessible2),
+  and its fields and links are not listed yet;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;

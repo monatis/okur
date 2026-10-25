@@ -121,7 +121,10 @@ Order of work, most used first:
 - **Windows Settings** (handoff 2026-10-17): dialogs of elevated processes ("Rename this PC")
   need an elevated Okur; the search box's doubled "No results".
 - **Calculator:** JAWS's digits, expressions and operator names (handoff 2026-10-17). Not built.
-- **Not covered yet:** Task Manager, Word, a desktop mail client.
+- **Word:** its fields and links are not listed (the Links List and Insert+F5 say Word's "none"
+  words for every document); the ribbon's galleries and launchers; Read Mode; line spacing (neither
+  UIA nor IA2, which Word 2016 lacks). Plan 35 §1.
+- **Not covered yet:** Task Manager, a desktop mail client.
 
 ## Installer
 
@@ -167,6 +170,8 @@ Block quotes cannot be seen through UIA. Measure first how long users stay on th
 
 - **The 2026-10-19 review** ([`responsiveness-review-2026-10-19.md`](responsiveness-review-2026-10-19.md)):
   measured where possible; its findings 13, 16 and 17 are still open.
+- **The 2026-10-25 review** ([`performance-review-2026-10-25.md`](performance-review-2026-10-25.md)):
+  findings 13, 14, 18 and 20 open, 6-9 and 19 in part; the okur-ui fixes are not checked live yet.
 
 ## Measurement and harness
 
