@@ -1156,20 +1156,30 @@ impl ScreenReaderEngine {
                 return;
             }
             // A misspelled word says so first, as the word keys do [obs, 567/s8].
-            let word = self
-                .last_text
-                .as_ref()
-                .map(|text| {
-                    let mark = crate::editing::misspelled_word_mark(text).unwrap_or_default();
-                    let word = crate::editing::word_around(text);
-                    let word = word.trim();
-                    if word.is_empty() {
-                        String::new()
-                    } else {
-                        format!("{mark}{word}")
-                    }
-                })
-                .unwrap_or_default();
+            let plain_edit = self.in_plain_edit();
+            let word =
+                self.last_text
+                    .as_ref()
+                    .map(|text| {
+                        let mark = crate::editing::misspelled_word_mark(text).unwrap_or_default();
+                        // In a plain Win32 edit, on a symbol, the symbol alone: "\" where UI
+                        // Automation's word is ":\" [obs, 1037/s6, s40, s73].
+                        let symbol =
+                            text.text.chars().nth(text.caret).filter(|c| {
+                                plain_edit && !c.is_alphanumeric() && !c.is_whitespace()
+                            });
+                        let word = match symbol {
+                            Some(symbol) => symbol.to_string(),
+                            None => crate::editing::word_around(text),
+                        };
+                        let word = word.trim();
+                        if word.is_empty() {
+                            String::new()
+                        } else {
+                            format!("{mark}{word}")
+                        }
+                    })
+                    .unwrap_or_default();
             // Every symbol named, whatever the punctuation level: "colon back slash" [obs,
             // 1041/s40]; a word that is one symbol, the character alone.
             let mut chars = word.chars();
