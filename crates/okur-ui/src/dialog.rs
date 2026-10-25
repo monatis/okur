@@ -127,7 +127,8 @@ fn chord(text: &str) -> Option<Chord> {
 
 thread_local! {
     static DIALOGS: RefCell<Vec<OpenDialog>> = const { RefCell::new(Vec::new()) };
-    /// Set while a tree is filled: the items it opens itself are no user's opening.
+    /// Set while a tree is emptied and filled: the items it opens and selects itself are no
+    /// user's doing.
     static FILLING: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
 }
 
@@ -463,7 +464,9 @@ fn fill(window: HWND, index: usize, item: HWND, kind: &ControlKind) {
                 rows,
                 selected,
             } => fill_table(item, columns, rows, *selected),
-            ControlKind::Tree { items, selected } => fill_tree(item, items, *selected),
+            ControlKind::Tree { items, selected } => {
+                filling(|| fill_tree(item, items, *selected));
+            }
             ControlKind::ListBox { items, selected } => fill_list_box(item, items, *selected),
             ControlKind::Radios { selected, .. } | ControlKind::RadioButtons { selected, .. } => {
                 set(window, index, item, kind, &Value::Selected(*selected));
@@ -740,10 +743,7 @@ fn fill_tree(tree: HWND, items: &[TreeItem], selected: usize) {
             inserted.push(handle);
         }
     }
-    // The open items shown open; a closed one opens with Right Arrow. Each new item's first
-    // opening is notified as a user's would be, and was told to Okur: every group a search
-    // showed open stayed open after it (performance review 2026-10-25, finding 8).
-    FILLING.with(|f| f.set(true));
+    // The open items shown open; a closed one opens with Right Arrow.
     for handle in inserted {
         // SAFETY: a message to our own tree view about its own item.
         unsafe {
@@ -755,8 +755,18 @@ fn fill_tree(tree: HWND, items: &[TreeItem], selected: usize) {
             );
         }
     }
-    FILLING.with(|f| f.set(false));
     select_tree_item(tree, selected);
+}
+
+/// Runs `fill`, a tree emptied, filled or selected by okur-ui itself, keeping what the tree
+/// notifies of it from Okur: a new item's first opening is notified as a user's would be, and
+/// every group a search showed open stayed open after it; emptying the tree moved its selection
+/// twice, which Okur heard as the user's (performance review 2026-10-25, finding 8; okur-ui
+/// tree probe -Search, old-pc).
+fn filling(fill: impl FnOnce()) {
+    FILLING.with(|f| f.set(true));
+    fill();
+    FILLING.with(|f| f.set(false));
 }
 
 /// A tree view's items in order, an item's items right after it, shown or not.
@@ -1274,8 +1284,10 @@ pub fn set_tree(id: u32, control: &str, items: &[TreeItem], selected: usize) {
     // SAFETY: a child of our own dialog.
     if let Ok(tree) = unsafe { GetDlgItem(Some(window), i32::from(window_id)) } {
         remember(window, window_id, Value::Selected(selected));
-        clear_tree(tree);
-        fill_tree(tree, items, selected);
+        filling(|| {
+            clear_tree(tree);
+            fill_tree(tree, items, selected);
+        });
     }
 }
 
@@ -1721,6 +1733,10 @@ pub(crate) unsafe extern "system" fn dialog_proc(
             };
             if matches!(hit.kind, ControlKind::Tree { .. }) {
                 match header.code {
+                    // What okur-ui does to the tree itself is no user's doing (`filling`).
+                    TVN_SELCHANGEDW | TVN_ITEMEXPANDEDW if FILLING.with(std::cell::Cell::get) => {
+                        return 0
+                    }
                     TVN_SELCHANGEDW => {
                         // SAFETY: a tree view's selection change sends an NMTREEVIEWW.
                         let change = unsafe { &*(lparam.0 as *const NMTREEVIEWW) };
@@ -1755,7 +1771,6 @@ pub(crate) unsafe extern "system" fn dialog_proc(
                     // A check box turned by the tree view itself (Space, a click): refused,
                     // Okur turns it.
                     NM_TVSTATEIMAGECHANGING => return answer(window, 1),
-                    TVN_ITEMEXPANDEDW if FILLING.with(std::cell::Cell::get) => return 0,
                     TVN_ITEMEXPANDEDW => {
                         // SAFETY: a tree view's expansion sends an NMTREEVIEWW.
                         let change = unsafe { &*(lparam.0 as *const NMTREEVIEWW) };

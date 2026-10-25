@@ -27,7 +27,11 @@ param([string]$Out = (Join-Path $env:USERPROFILE 'sr-harness\probe\okur-ui-tree.
       # Settings Center's pane instead: the tree with F6's keys, a pane of Speech Options
       # ("pane"), F6 from the tree answered as Okur answers it ("focus", the pane's Typing Echo),
       # Tab in the pane, F6 back to the tree, Escape.
-      [switch]$Pane)
+      [switch]$Pane,
+      # A search's tree instead: Tab to the tree, the tree filled again with every group open
+      # ("search", as Okur shows a search's results), and what okur-ui reports of it: the groups
+      # it opens itself are no user's opening (performance review 2026-10-25, finding 8).
+      [switch]$Search)
 $bin = Join-Path $env:USERPROFILE 'sr-harness\bin'
 $lab = Join-Path $bin 'okur-lab.exe'
 $start = New-Object System.Diagnostics.ProcessStartInfo
@@ -78,12 +82,17 @@ $ui.StandardInput.Flush()
 Start-Sleep -Seconds 3
 & $lab jaws-history --clear | Out-Null
 $lines = @("--- shown: " + (& $lab front ($(if ($Window) { 'Okur' } elseif ($Voice) { 'Voice Adjustment' } elseif ($Wizard) { 'Okur Startup Wizard' } else { 'Okur Settings Center' }))))
+# Where the focus is as the window shows (the main window's text, with its size).
+$lines += "--- focus: " + (& $lab focus)
+# With MSAA's rectangle of the focused control (the main window's text was 0 by 0).
+$lines += "--- msaa: " + (& $lab msaa-focus)
 if ($Outline) {
     $outlineFile = [System.IO.Path]::ChangeExtension($Out, '.outline.txt')
     & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'uia-outline.ps1') -Title 'Notepad - Okur Settings Center' -Out $outlineFile | Out-Null
     $lines += Get-Content $outlineFile
 }
 if ($Menu) { $Keys = @('Tab', 'menu', 'Down', 'Enter', 'Tab', 'Escape') }
+if ($Search) { $Keys = @('Tab', 'search', 'Down', 'Escape') }
 if ($Question) { $Keys = @('Escape', 'question', 'Tab', 'Escape', 'Tab', 'Tab', 'Tab', 'Tab', 'Space', 'question', 'Tab', 'Space') }
 foreach ($key in $Keys) {
     if ($key -eq 'menu') {
@@ -91,6 +100,15 @@ foreach ($key in $Keys) {
         $ui.StandardInput.Flush()
         Start-Sleep -Milliseconds 1500
         $lines += "== menu => " + ((& $lab jaws-history --clear) -join ' | ')
+        continue
+    }
+    if ($key -eq 'search') {
+        $ui.StandardInput.WriteLine('{"type":"dialog_tree","id":1,"control":"tree","items":[{"text":"Speech Options","level":0,"open":true},{"text":"Typing Echo Characters","level":1},{"text":"Caps Indicate","level":1,"checked":false},{"text":"Mouse Echo","level":0,"open":true},{"text":"Enable Mouse Echo","level":1,"checked":true}],"selected":1}')
+        $ui.StandardInput.Flush()
+        Start-Sleep -Milliseconds 1500
+        $lines += "== search => " + ((& $lab jaws-history --clear) -join ' | ')
+        $line = $null
+        while ($reports.TryDequeue([ref]$line)) { $lines += "   okur-ui: $line" }
         continue
     }
     if ($key -eq 'pane') {
