@@ -1,0 +1,50 @@
+{
+  "id": "1048-desktop-word-ribbon-home-font-paragraph",
+  "name": "Word: the Home tab's lower ribbon by Tab past the Clipboard group, across the Font group's toggle buttons, split buttons with their colors, menu buttons and launcher, into the Paragraph group; Escape out; nothing is activated",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Alt"},
+    {"id": "s2", "type": "key", "command": "Down"},
+    {"id": "s3", "type": "key", "command": "Tab"},
+    {"id": "s4", "type": "key", "command": "Tab"},
+    {"id": "s5", "type": "key", "command": "Tab"},
+    {"id": "s6", "type": "key", "command": "Tab"},
+    {"id": "s7", "type": "key", "command": "Tab"},
+    {"id": "s8", "type": "key", "command": "Tab"},
+    {"id": "s9", "type": "key", "command": "Tab"},
+    {"id": "s10", "type": "key", "command": "Tab"},
+    {"id": "s11", "type": "key", "command": "Tab"},
+    {"id": "s12", "type": "key", "command": "Tab"},
+    {"id": "s13", "type": "key", "command": "Tab"},
+    {"id": "s14", "type": "key", "command": "Tab"},
+    {"id": "s15", "type": "key", "command": "Tab"},
+    {"id": "s16", "type": "key", "command": "Tab"},
+    {"id": "s17", "type": "key", "command": "Tab"},
+    {"id": "s18", "type": "key", "command": "Tab"},
+    {"id": "s19", "type": "key", "command": "Tab"},
+    {"id": "s20", "type": "key", "command": "Tab"},
+    {"id": "s21", "type": "key", "command": "Tab"},
+    {"id": "s22", "type": "key", "command": "Tab"},
+    {"id": "s23", "type": "key", "command": "Tab"},
+    {"id": "s24", "type": "key", "command": "Tab"},
+    {"id": "s25", "type": "key", "command": "Tab"},
+    {"id": "s26", "type": "key", "command": "Tab"},
+    {"id": "s27", "type": "key", "command": "Escape"},
+    {"id": "s28", "type": "key", "command": "Escape"},
+    {"id": "s29", "type": "key", "command": "Escape"},
+    {"id": "s30", "type": "key", "command": "Insert+Up"}
+  ]
+}
