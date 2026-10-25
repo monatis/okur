@@ -59,7 +59,7 @@ impl SettingsLayers {
     /// all applications.
     pub fn resolve(&self, application: Option<&str>, site: Option<&str>) -> Settings {
         let mut merged = to_values(&Settings::default());
-        merge(&mut merged, &self.global);
+        merge_readable(&mut merged, &self.global);
         let disabled = |application: &str| {
             merged
                 .get("disabled_applications")
@@ -70,13 +70,13 @@ impl SettingsLayers {
             .filter(|a| !disabled(a))
             .and_then(|a| self.applications.get(a))
         {
-            merge(&mut merged, values);
+            merge_readable(&mut merged, values);
         }
         if let Some(values) = site.and_then(|s| self.sites.get(s)) {
-            merge(&mut merged, values);
+            merge_readable(&mut merged, values);
         }
-        merge(&mut merged, &self.until_focus_moves);
-        merge(&mut merged, &self.session);
+        merge_readable(&mut merged, &self.until_focus_moves);
+        merge_readable(&mut merged, &self.session);
         serde_json::from_value(Value::Object(merged)).unwrap_or_else(|e| {
             tracing::warn!(error = %e, "settings layers not read; Okur's defaults apply");
             Settings::default()
@@ -288,6 +288,53 @@ fn difference(values: &Values, base: &Values) -> Values {
 }
 
 /// `layer`'s values over `values`: tables merge, any other value replaces.
+/// Merges `layer` into `values`, the settings read so far, but for each value that would
+/// make them unreadable (a hand-edited file's unknown choice): that one is left out, with a
+/// warning naming it, and the rest of the layer kept. One such value once reset every setting
+/// to Okur's defaults (performance review 2026-10-25, finding 4).
+fn merge_readable(values: &mut Values, layer: &Values) {
+    let readable =
+        |values: &Values| serde_json::from_value::<Settings>(Value::Object(values.clone())).is_ok();
+    let mut whole = values.clone();
+    merge(&mut whole, layer);
+    if readable(&whole) {
+        *values = whole;
+        return;
+    }
+    for (path, value) in leaves(layer, Vec::new()) {
+        let Some((last, outer)) = path.split_last() else {
+            continue;
+        };
+        // The one value, nested at its path.
+        let one = outer.iter().rev().fold(
+            Values::from_iter([(last.clone(), value.clone())]),
+            |inner, name| Values::from_iter([(name.clone(), Value::Object(inner))]),
+        );
+        let mut tried = values.clone();
+        merge(&mut tried, &one);
+        if readable(&tried) {
+            *values = tried;
+        } else {
+            tracing::warn!(setting = %path.join("."), value = %value, "setting not read: Okur's value applies");
+        }
+    }
+}
+
+/// Every value of `layer` that is not an object of values, with its path.
+fn leaves(layer: &Values, path: Vec<String>) -> Vec<(Vec<String>, Value)> {
+    layer
+        .iter()
+        .flat_map(|(name, value)| {
+            let mut at = path.clone();
+            at.push(name.clone());
+            match value {
+                Value::Object(inner) => leaves(inner, at),
+                _ => vec![(at, value.clone())],
+            }
+        })
+        .collect()
+}
+
 fn merge(values: &mut Values, layer: &Values) {
     for (name, value) in layer {
         match (values.get_mut(name), value) {
@@ -381,6 +428,33 @@ mod tests {
             layers.resolve(Some("notepad"), None).voice.punctuation,
             Punctuation::None
         );
+    }
+
+    /// A value no setting takes (a hand-edited file's) is left out alone: the rest of its
+    /// layer, and the layers below, still apply. It reset every setting to Okur's defaults
+    /// (performance review 2026-10-25, finding 4).
+    #[test]
+    fn a_wrong_value_is_left_out_alone() {
+        let mut layers = SettingsLayers {
+            global: values(json!({"typing_echo": "words", "voice": {"rate": 7}})),
+            ..SettingsLayers::default()
+        };
+        layers.sites.insert(
+            "example.org".into(),
+            values(json!({"forms_mode": "bogus", "voice": {"punctuation": "all"}})),
+        );
+        let site = layers.resolve(Some("chrome"), Some("example.org"));
+        assert_eq!(site.voice.rate, 7);
+        assert_eq!(site.typing_echo, TypingEcho::Words);
+        assert_eq!(site.voice.punctuation, Punctuation::All);
+        assert_eq!(site.forms_mode, crate::settings::FormsMode::Auto);
+        // In all applications' own file, the same.
+        layers
+            .global
+            .insert("typing_echo".into(), json!("everything"));
+        let everywhere = layers.resolve(None, None);
+        assert_eq!(everywhere.voice.rate, 7);
+        assert_eq!(everywhere.typing_echo, TypingEcho::Characters);
     }
 
     /// A layer keeps only what changed, and only what differs from the layers below it; a

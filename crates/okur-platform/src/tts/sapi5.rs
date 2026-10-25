@@ -26,6 +26,8 @@ pub struct Sapi5Engine {
     rate: i32,
     volume: u16,
     is_paused: bool,
+    /// The voice it started with, the system's default, by its token's id.
+    default_voice: Option<String>,
 }
 
 // Safety: `ISpVoice` is a free-threaded COM interface that can be marshaled across threads.
@@ -53,6 +55,12 @@ impl Sapi5Engine {
                 let _ = voice.GetRate(&mut rate);
                 let mut volume = 100;
                 let _ = voice.GetVolume(&mut volume);
+                let default_voice = voice
+                    .GetVoice()
+                    .ok()
+                    .and_then(|token| token.GetId().ok())
+                    .map(owned)
+                    .filter(|id| !id.is_empty());
 
                 Ok(Self {
                     voice,
@@ -61,6 +69,7 @@ impl Sapi5Engine {
                     rate,
                     volume,
                     is_paused: false,
+                    default_voice,
                 })
             }
         }
@@ -77,6 +86,10 @@ impl Sapi5Engine {
 impl TtsEngine for Sapi5Engine {
     fn name(&self) -> &str {
         "SAPI 5"
+    }
+
+    fn default_voice(&self) -> Option<String> {
+        self.default_voice.clone()
     }
 
     fn speak(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError> {
@@ -432,16 +445,6 @@ fn voice_tokens() -> Vec<(
     use windows::Win32::Media::Speech::{
         ISpObjectToken, ISpObjectTokenCategory, SpObjectTokenCategory, SPCAT_VOICES,
     };
-    use windows::Win32::System::Com::CoTaskMemFree;
-    // A string SAPI allocated, copied and freed.
-    fn owned(value: windows::core::PWSTR) -> String {
-        // SAFETY: SAPI returns a CoTaskMemAlloc'd string, freed here after copying.
-        unsafe {
-            let text = value.to_string().unwrap_or_default();
-            CoTaskMemFree(Some(value.0 as *const std::ffi::c_void));
-            text
-        }
-    }
     let mut voices = Vec::new();
     // SAFETY: SAPI's token category and enumeration, used as documented.
     unsafe {
@@ -478,6 +481,18 @@ fn voice_tokens() -> Vec<(
         }
     }
     voices
+}
+
+/// A string SAPI allocated, copied and freed.
+#[cfg(windows)]
+fn owned(value: windows::core::PWSTR) -> String {
+    use windows::Win32::System::Com::CoTaskMemFree;
+    // SAFETY: SAPI returns a CoTaskMemAlloc'd string, freed here after copying.
+    unsafe {
+        let text = value.to_string().unwrap_or_default();
+        CoTaskMemFree(Some(value.0 as *const std::ffi::c_void));
+        text
+    }
 }
 
 /// `text` in SAPI's pitch element, which changes the voice's middle pitch, as JAWS's own

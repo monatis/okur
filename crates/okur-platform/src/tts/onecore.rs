@@ -179,11 +179,26 @@ mod engine {
         reached: AtomicU64,
     }
 
+    /// What the worker reports as it starts: the voices, and the one it started with.
+    type Started = (Vec<VoiceInfo>, Option<String>);
+
+    /// A synthesizer replaced (another synthesizer, or voice settings that start one anew)
+    /// says nothing more: its worker drops what it had queued, as an interruption's raised
+    /// generation makes it, and ends with its channel (performance review 2026-10-25,
+    /// finding 3).
+    impl Drop for OneCoreEngine {
+        fn drop(&mut self) {
+            self.shared.generation.fetch_add(1, Ordering::SeqCst);
+        }
+    }
+
     /// The OneCore speech driver: a worker thread synthesizes and plays utterances in order.
     pub struct OneCoreEngine {
         commands: Mutex<Sender<Command>>,
         shared: Arc<Shared>,
         voices: Vec<VoiceInfo>,
+        /// The voice it started with, the system's default, by id.
+        default_voice: Option<String>,
         rate: i32,
         volume: u16,
     }
@@ -192,20 +207,21 @@ mod engine {
         /// Starts the worker; fails when OneCore speech or its voices are unavailable.
         pub fn new() -> Result<Self, TtsError> {
             let (tx, rx) = channel::<Command>();
-            let (ready_tx, ready_rx) = channel::<Result<Vec<VoiceInfo>, TtsError>>();
+            let (ready_tx, ready_rx) = channel::<Result<Started, TtsError>>();
             let shared = Arc::new(Shared::default());
             let worker_shared = shared.clone();
             std::thread::Builder::new()
                 .name("onecore-speech".into())
                 .spawn(move || worker(rx, worker_shared, ready_tx))
                 .map_err(|e| TtsError::InitFailed(format!("OneCore worker: {e}")))?;
-            let voices = ready_rx
+            let (voices, default_voice) = ready_rx
                 .recv_timeout(Duration::from_secs(5))
                 .map_err(|_| TtsError::InitFailed("OneCore did not start".into()))??;
             Ok(Self {
                 commands: Mutex::new(tx),
                 shared,
                 voices,
+                default_voice,
                 rate: 0,
                 volume: 100,
             })
@@ -483,7 +499,7 @@ mod engine {
     fn worker(
         commands: Receiver<Command>,
         shared: Arc<Shared>,
-        ready: Sender<Result<Vec<VoiceInfo>, TtsError>>,
+        ready: Sender<Result<Started, TtsError>>,
     ) {
         // SAFETY: COM (and so WinRT) initialization for this worker thread.
         let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
@@ -499,7 +515,12 @@ mod engine {
                     let _ = options.SetAppendedSilence(SpeechAppendedSilence::Min);
                     let _ = options.SetPunctuationSilence(SpeechPunctuationSilence::Min);
                 }
-                let _ = ready.send(Ok(voices));
+                let default = synth
+                    .Voice()
+                    .and_then(|v| v.Id())
+                    .ok()
+                    .map(|id| id.to_string());
+                let _ = ready.send(Ok((voices, default)));
                 synth
             }
             Ok(_) => {
@@ -582,6 +603,10 @@ mod engine {
     impl TtsEngine for OneCoreEngine {
         fn name(&self) -> &str {
             "OneCore"
+        }
+
+        fn default_voice(&self) -> Option<String> {
+            self.default_voice.clone()
         }
 
         fn speak(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError> {

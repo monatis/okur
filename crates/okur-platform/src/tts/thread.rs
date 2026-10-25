@@ -1047,6 +1047,110 @@ mod context_tests {
         }
     }
 
+    /// What a synthesizer was asked: its voices listed, and the voices set.
+    #[derive(Default)]
+    struct Asked {
+        listed: usize,
+        set: Vec<String>,
+    }
+
+    /// A synthesizer with two voices that tells the one it started with.
+    struct Voices(std::sync::Arc<Mutex<Asked>>);
+
+    impl TtsEngine for Voices {
+        fn name(&self) -> &str {
+            "voices"
+        }
+        fn default_voice(&self) -> Option<String> {
+            Some("zira-id".into())
+        }
+        fn speak(&mut self, _text: &str, _interrupt: bool) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn stop(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn pause(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn resume(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn set_rate(&mut self, _rate: i32) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn get_rate(&self) -> i32 {
+            0
+        }
+        fn set_volume(&mut self, _volume: u16) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn get_volume(&self) -> u16 {
+            100
+        }
+        fn is_speaking(&self) -> bool {
+            false
+        }
+        fn get_voices(&self) -> Vec<VoiceInfo> {
+            if let Ok(mut asked) = self.0.lock() {
+                asked.listed += 1;
+            }
+            ["zira", "david"]
+                .iter()
+                .map(|name| VoiceInfo {
+                    id: format!("{name}-id"),
+                    name: (*name).into(),
+                    language: None,
+                })
+                .collect()
+        }
+        fn set_voice(&mut self, voice_id: &str) -> Result<(), TtsError> {
+            if let Ok(mut asked) = self.0.lock() {
+                asked.set.push(voice_id.into());
+            }
+            Ok(())
+        }
+        fn wait_until_done(&mut self, _timeout_ms: u32) -> Result<(), TtsError> {
+            Ok(())
+        }
+    }
+
+    /// A voice of the keyboard's own, the cursor's the synthesizer's default: each switch sets
+    /// the voice again, the synthesizer kept and its voices listed once. It started anew at
+    /// each switch back to the default (performance review 2026-10-25, finding 3).
+    #[test]
+    fn a_context_back_to_the_default_voice_keeps_the_synthesizer() {
+        let asked = std::sync::Arc::new(Mutex::new(Asked::default()));
+        let Ok(mut manager) = TtsManager::new(TtsEngineType::NoSpeech) else {
+            return;
+        };
+        manager.engine = Box::new(Voices(asked.clone()));
+        let mut voice = VoiceSettings {
+            synthesizer: Synthesizer::NoSpeech,
+            ..VoiceSettings::default()
+        };
+        voice.contexts.keyboard.voice = Some("david".into());
+        SpeechOutput::configure(&mut manager, &voice);
+        for _ in 0..2 {
+            manager.use_context(VoiceContext::Keyboard);
+            manager.use_context(VoiceContext::PcCursor);
+        }
+        assert_eq!(manager.engine.name(), "voices");
+        let asked = asked.lock().map(|a| (a.listed, a.set.clone()));
+        assert_eq!(
+            asked.ok(),
+            Some((
+                1,
+                vec![
+                    "david-id".to_owned(),
+                    "zira-id".to_owned(),
+                    "david-id".to_owned(),
+                    "zira-id".to_owned()
+                ]
+            ))
+        );
+    }
+
     /// Each voice context speaks with its own voice, set as it starts speaking and only then:
     /// the keyboard's rate for typing echo, the cursor's after it, the Okur cursor's once it
     /// reads.

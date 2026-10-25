@@ -35,6 +35,13 @@ pub trait TtsEngine: Send + Sync {
     /// The human-readable name of the synthesizer (e.g., "SAPI 5", "No Speech").
     fn name(&self) -> &str;
 
+    /// The voice the synthesizer started with, its system default, by id: a voice context
+    /// without a voice of its own goes back to it. `None` where the synthesizer cannot tell,
+    /// and it is then started anew.
+    fn default_voice(&self) -> Option<String> {
+        None
+    }
+
     /// Synthesizes and outputs speech.
     /// If `interrupt` is true, cancels any ongoing speech immediately before speaking.
     fn speak(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError>;
@@ -167,6 +174,9 @@ pub struct TtsManager {
     /// The voice context speaking now, and the cursor's, which speaks all but typing echo.
     context: okur_core::settings::VoiceContext,
     pub(crate) cursor: okur_core::settings::VoiceContext,
+    /// The synthesizer's voices, enumerated once for it: a voice context's voice is found
+    /// there at each switch, which on SAPI enumerated its voices every time.
+    voice_list: Option<Vec<VoiceInfo>>,
 }
 
 impl TtsManager {
@@ -185,6 +195,7 @@ impl TtsManager {
             settings: None,
             context: okur_core::settings::VoiceContext::PcCursor,
             cursor: okur_core::settings::VoiceContext::PcCursor,
+            voice_list: None,
         })
     }
 
@@ -470,24 +481,39 @@ impl TtsManager {
             return;
         }
         let kind = TtsEngineType::from(voice.synthesizer);
-        if kind != self.kind || (voice.voice.is_none() && self.voice.is_some()) {
+        // Back to the synthesizer's own voice: set again by its id, where the synthesizer
+        // tells it. Started anew at each such switch, a context's voice (the keyboard's)
+        // cost a new synthesizer after every echoed key, and OneCore's old one talked on
+        // (performance review 2026-10-25, finding 3).
+        let back_to_default = voice.voice.is_none() && self.voice.is_some();
+        let default = self.engine.default_voice().filter(|_| back_to_default);
+        let mut started = false;
+        if kind != self.kind || (back_to_default && default.is_none()) {
             match Self::create_engine(kind) {
                 Ok(engine) => {
                     self.engine = engine;
                     self.kind = kind;
+                    self.voice_list = None;
+                    started = true;
                 }
                 Err(e) => tracing::warn!(error = %e, ?kind, "synthesizer did not start"),
             }
         }
-        if let Some(name) = &voice.voice {
+        let wanted = voice.voice.clone().or_else(|| default.filter(|_| !started));
+        if let Some(name) = &wanted {
+            if self.voice_list.is_none() {
+                self.voice_list = Some(self.engine.get_voices());
+            }
             // By name, as the settings keep it, or by id (`okur run --voice`).
             match self
-                .get_voices()
-                .into_iter()
+                .voice_list
+                .iter()
+                .flatten()
                 .find(|v| &v.name == name || &v.id == name)
+                .map(|v| v.id.clone())
             {
                 Some(found) => {
-                    if let Err(e) = self.set_voice(&found.id) {
+                    if let Err(e) = self.set_voice(&found) {
                         tracing::warn!(error = %e, %name, "voice not set");
                     }
                 }
