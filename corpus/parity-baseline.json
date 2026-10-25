@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 8926,
-  "total_steps": 9500,
+  "matched_steps": 8928,
+  "total_steps": 9503,
   "accepted_divergences": 251,
   "errors": [],
   "steps": {
@@ -866,6 +866,9 @@
     "1043-desktop-word-ribbon-arrows/s7": "match",
     "1043-desktop-word-ribbon-arrows/s8": "match",
     "1043-desktop-word-ribbon-arrows/s9": "match",
+    "1044-desktop-word-links-list/s1": "mismatch",
+    "1044-desktop-word-links-list/s2": "match",
+    "1044-desktop-word-links-list/s3": "match",
     "105-article-links/s1": "match",
     "105-article-links/s10": "match",
     "105-article-links/s11": "match",
