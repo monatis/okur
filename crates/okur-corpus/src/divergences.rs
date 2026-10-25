@@ -888,11 +888,13 @@ divergences! {
 
     Difference::JawsSaysBeforeItsDialog => [
         "1036-desktop-word-heading-list-move/s5",
+        "1049-desktop-word-links-list-items/s1",
         "519-desktop-word-lists-and-spelling/s2",
         "519-desktop-word-lists-and-spelling/s5",
     ],
-    "Before its Heading List and Spelling Errors lists in Word, JAWS says what it said or \
-     showed before them in most trials: its main window's version, \"JAWS Version \
+    "Before its Heading List, Links List and Spelling Errors lists in Word, JAWS says what it \
+     said or showed before them in most trials, in every one before its Links List: its main \
+     window's version, \"JAWS Version \
      2025.2505.43\", the document's name, \"Microsoft Word Document\", a button's hint, or \
      \"Please wait processing 1 items\" while it gathers the errors. Okur's lists open without \
      them, as JAWS's do in the other trials.",
