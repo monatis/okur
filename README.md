@@ -166,8 +166,9 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   Ribbon, Home Tab"), Down into a tab's commands with their group's name, each command's
   ScreenTip where it says more than the name ("Grow Font Button, Increase Font Size"), toggle
   buttons and check boxes with their state ("Format Painter Button not checked"), and Escape
-  back ("Leaving ribbons, Edit"). The Links List and Insert+F5 with nothing in them say so in
-  Word's words.
+  back ("Leaving ribbons, Edit"). The Links List (Insert+F7) lists the document's hyperlinks,
+  Move To Link moves to one and Activate Link follows it; with none, and Insert+F5, it says so
+  in Word's words.
 - **The cursors:** Numpad Minus to the Okur cursor at the mouse, Numpad Plus back to the PC
   cursor, Insert+Numpad Minus to bring the Okur cursor to the PC cursor, Insert+Numpad Plus
   the other way, Insert+R for where the Okur cursor may go, and Alt+Delete for where the
@@ -268,7 +269,7 @@ The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what 
 documentation describes and Okur lacks, most important first. Among them:
 - Outlook and Excel, not yet supported or checked; in Word, Say Font leaves out the line
   spacing (Word's UI Automation does not report it, and Word 2016 has no IAccessible2),
-  and its fields and links are not listed yet;
+  and Insert+F5 does not list its fields yet;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;
