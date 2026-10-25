@@ -6,10 +6,13 @@
 #   - the paragraph's text attributes (okur-lab text-attributes --unit 4), line spacing among
 #     them (40040);
 #   - with -Ia2, what the document window and Word's window offer through IAccessible2
-#     (okur-lab ia2-probe): whether Word answers IA2 at all, and its text attributes there.
+#     (okur-lab ia2-probe): whether Word answers IA2 at all, and its text attributes there;
+#   - with -Fixture ribbon, only the ribbon's focus, from MSAA's accFocus and UI Automation's
+#     element for it (okur-lab msaa-focus): its help text, toggle and expand state; Alt, Down,
+#     then Tab across the Home tab's first commands, and Escape back to the document.
 # Then closes the fixture's window with Ctrl+W, after checking it is in front: Word's process
 # can hold the user's own documents. Run on old-pc with no batch recording.
-param([ValidateSet('word', 'formats')][string]$Fixture = 'formats',
+param([ValidateSet('word', 'formats', 'ribbon')][string]$Fixture = 'formats',
       [string]$Out = (Join-Path $env:USERPROFILE "sr-harness\probe\word-probe.txt"),
       [switch]$Ia2)
 $lab = Join-Path $env:USERPROFILE 'sr-harness\bin\okur-lab.exe'
@@ -18,6 +21,10 @@ $script, $title, $probes = switch ($Fixture) {
     'word' {
         'desktop-word.ps1', 'sr-word-fixture.docx - Word (Product Activation Failed)',
         @(@('Ctrl+Home'), @('Down', 'Down', 'Down', 'Down', 'Down', 'Down', 'Down'), @('Tab'), @('Tab'))
+    }
+    'ribbon' {
+        'desktop-word.ps1', 'sr-word-fixture.docx - Word (Product Activation Failed)',
+        (@(@('Alt'), @('Down')) + @(1..10 | ForEach-Object { , @('Tab') }) + @(, @('Escape', 'Escape', 'Escape')))
     }
     'formats' {
         'desktop-word-formats.ps1', 'sr-word-formats.docx - Word (Product Activation Failed)',
@@ -69,6 +76,7 @@ Start-Sleep -Seconds 2
 foreach ($keys in $probes) {
     & $lab keys --allow WINWORD @($keys + 'wait:1200') | Out-Null
     $lines += "== $($keys -join ',') =>"
+    if ($Fixture -eq 'ribbon') { $lines += & $lab msaa-focus | ForEach-Object { "   $_" }; continue }
     $lines += '   ' + (Cell-Report)
     $lines += & $lab text-attributes --unit 4 | ForEach-Object { "   $_" }
     if ($Ia2) { $lines += & $lab ia2-probe | ForEach-Object { "   ia2: $_" } }

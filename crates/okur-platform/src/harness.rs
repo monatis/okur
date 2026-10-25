@@ -127,7 +127,7 @@ pub use crate::key_input::send_key;
 #[cfg(windows)]
 pub use windows_harness::{
     bring_to_front, foreground_process, foreground_title, ia2_probe_focus, jaws_history,
-    send_steps, shell_window, window_titled,
+    msaa_focus_probe, send_steps, shell_window, window_titled,
 };
 
 #[cfg(windows)]
@@ -320,14 +320,31 @@ mod windows_harness {
     /// application that is not a browser (Word) implements IA2, and what it reports there.
     pub fn ia2_probe_focus() -> Vec<String> {
         use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
-        use windows::Win32::UI::WindowsAndMessaging::{
-            GetClassNameW, GetForegroundWindow, GetGUIThreadInfo, GetWindowThreadProcessId,
-            GUITHREADINFO,
-        };
         // SAFETY: COM for MSAA on this thread; repeated initialization is tolerated.
         let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+        let (front, focus) = front_and_focus_windows();
+        focus
+            .into_iter()
+            .map(|w| ("focus", w))
+            .chain(std::iter::once(("front", front)))
+            .map(|(which, window)| {
+                let probe = xa11y_windows::ia2::probe_window(window);
+                serde_json::json!({ "window": which, "class": class_of(window), "probe": probe })
+                    .to_string()
+            })
+            .collect()
+    }
+
+    /// The window in front, and the window with the keyboard focus in its thread.
+    fn front_and_focus_windows() -> (
+        windows::Win32::Foundation::HWND,
+        Option<windows::Win32::Foundation::HWND>,
+    ) {
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetForegroundWindow, GetGUIThreadInfo, GetWindowThreadProcessId, GUITHREADINFO,
+        };
         // SAFETY: plain Win32 queries; the info struct is sized as the call requires.
-        let (front, focus) = unsafe {
+        unsafe {
             let front = GetForegroundWindow();
             let thread = GetWindowThreadProcessId(front, None);
             let mut info = GUITHREADINFO {
@@ -339,27 +356,317 @@ mod windows_harness {
                 .map(|_| info.hwndFocus)
                 .filter(|h| !h.is_invalid());
             (front, focus)
+        }
+    }
+
+    /// A window's class name; empty for a window gone.
+    fn class_of(window: windows::Win32::Foundation::HWND) -> String {
+        use windows::Win32::UI::WindowsAndMessaging::GetClassNameW;
+        let mut buffer = [0u16; 256];
+        // SAFETY: the buffer outlives the call; a stale window gives 0.
+        let n = unsafe { GetClassNameW(window, &mut buffer) };
+        String::from_utf16_lossy(
+            buffer
+                .get(..usize::try_from(n).unwrap_or(0))
+                .unwrap_or_default(),
+        )
+    }
+
+    /// The first object below `acc`, depth first, whose state is focused and that is an
+    /// object of its own (not a child id), while `budget` objects last.
+    fn focused_descendant(
+        acc: &windows::Win32::UI::Accessibility::IAccessible,
+        budget: &mut usize,
+    ) -> Option<windows::Win32::UI::Accessibility::IAccessible> {
+        use windows::core::Interface;
+        use windows::Win32::System::Variant::{VARIANT, VT_DISPATCH};
+        use windows::Win32::UI::Accessibility::{AccessibleChildren, IAccessible};
+        const FOCUSED: i32 = 0x4;
+        // SAFETY: a property read on a valid IAccessible.
+        let count = unsafe { acc.accChildCount() }.unwrap_or(0).clamp(0, 500);
+        let mut children = vec![VARIANT::default(); usize::try_from(count).unwrap_or(0)];
+        let mut obtained = 0i32;
+        // SAFETY: the slice's length is the count asked for.
+        unsafe { AccessibleChildren(acc, 0, &mut children, &mut obtained) }.ok()?;
+        for item in children.iter().take(usize::try_from(obtained).unwrap_or(0)) {
+            if *budget == 0 {
+                return None;
+            }
+            *budget -= 1;
+            // SAFETY: reading the discriminant and, for VT_DISPATCH, the dispatch pointer.
+            let object = unsafe {
+                (item.Anonymous.Anonymous.vt == VT_DISPATCH)
+                    .then(|| item.Anonymous.Anonymous.Anonymous.pdispVal.as_ref())
+                    .flatten()
+                    .and_then(|d| d.cast::<IAccessible>().ok())
+            };
+            let Some(object) = object else { continue };
+            // SAFETY: a property read on a valid IAccessible.
+            let state = unsafe { object.get_accState(&VARIANT::from(0i32)) }
+                .ok()
+                .and_then(|v| i32::try_from(&v).ok())
+                .unwrap_or(0);
+            if state & FOCUSED != 0 {
+                return Some(object);
+            }
+            if let Some(found) = focused_descendant(&object, budget) {
+                return Some(found);
+            }
+        }
+        None
+    }
+
+    /// The MSAA object with the focus, followed from the focus window's client object by
+    /// `accFocus`, and the UI Automation element Windows gives for it
+    /// (`ElementFromIAccessible`), with what each says beside the name: MSAA's value,
+    /// description and help, UIA's help text, full description, item status, toggle and
+    /// expand state; and UIA's own focused element. One JSON line. Research: where a control's
+    /// tooltip and toggle state come from in a ribbon that UIA's focus does not enter (Word's
+    /// NetUI).
+    pub fn msaa_focus_probe() -> String {
+        use windows::core::Interface;
+        use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+        use windows::Win32::System::Variant::{VARIANT, VT_DISPATCH, VT_I4};
+        use windows::Win32::UI::Accessibility::{
+            AccessibleObjectFromWindow, IAccessible, TreeScope_Descendants,
+            UIA_HasKeyboardFocusPropertyId, UIA_NamePropertyId,
         };
-        let class = |window: windows::Win32::Foundation::HWND| {
-            let mut buffer = [0u16; 256];
-            // SAFETY: the buffer outlives the call; a stale window gives 0.
-            let n = unsafe { GetClassNameW(window, &mut buffer) };
-            String::from_utf16_lossy(
-                buffer
-                    .get(..usize::try_from(n).unwrap_or(0))
-                    .unwrap_or_default(),
-            )
+        const OBJID_CLIENT: u32 = 0xFFFF_FFFC;
+        // SAFETY: COM for MSAA and UIA on this thread; repeated initialization is tolerated.
+        let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+        let (front, focus) = front_and_focus_windows();
+        let window = focus.unwrap_or(front);
+        let mut raw = std::ptr::null_mut();
+        // SAFETY: requests IAccessible for the client object of a window.
+        let found = unsafe {
+            AccessibleObjectFromWindow(window, OBJID_CLIENT, &IAccessible::IID, &mut raw)
         };
-        focus
-            .into_iter()
-            .map(|w| ("focus", w))
-            .chain(std::iter::once(("front", front)))
-            .map(|(which, window)| {
-                let probe = xa11y_windows::ia2::probe_window(window);
-                serde_json::json!({ "window": which, "class": class(window), "probe": probe })
-                    .to_string()
+        let mut msaa = serde_json::Map::new();
+        msaa.insert("window_class".into(), class_of(window).into());
+        let mut object = (!raw.is_null() && found.is_ok())
+            // SAFETY: AccessibleObjectFromWindow returned an owned IAccessible pointer.
+            .then(|| unsafe { IAccessible::from_raw(raw) });
+        let mut child = VARIANT::from(0i32);
+        // accFocus down to the object that has it: an object of its own, or a child id.
+        let mut path = Vec::new();
+        for _ in 0..12 {
+            let Some(acc) = object.as_ref() else { break };
+            // SAFETY: a property read on a valid IAccessible.
+            let Ok(focus) = (unsafe { acc.accFocus() }) else {
+                break;
+            };
+            // SAFETY: reading the discriminant and the member it names.
+            let (vt, dispatch, id) = unsafe {
+                let inner = &focus.Anonymous.Anonymous;
+                (
+                    inner.vt,
+                    (inner.vt == VT_DISPATCH)
+                        .then(|| inner.Anonymous.pdispVal.as_ref().cloned())
+                        .flatten(),
+                    (inner.vt == VT_I4).then_some(inner.Anonymous.lVal),
+                )
+            };
+            if let Some(next) = dispatch.as_ref().and_then(|d| d.cast::<IAccessible>().ok()) {
+                // SAFETY: a property read on a valid IAccessible.
+                path.push(
+                    unsafe { next.get_accName(&VARIANT::from(0i32)) }
+                        .map(|b| b.to_string())
+                        .unwrap_or_default(),
+                );
+                object = Some(next);
+                continue;
+            }
+            if let Some(id) = id.filter(|&id| id != 0) {
+                child = VARIANT::from(id);
+                path.push(format!("child {id}"));
+            }
+            if dispatch.is_none() && id.is_none() {
+                path.push(format!("vt {}", vt.0));
+                // accFocus answers nothing below Word's ribbon: the object with the focused
+                // state is searched for in its tree instead.
+                if let Some(found) = focused_descendant(acc, &mut 4000) {
+                    path.push("searched".to_owned());
+                    object = Some(found);
+                }
+            }
+            break;
+        }
+        msaa.insert("focus_path".into(), path.into());
+        let text = |b: windows::core::Result<windows::core::BSTR>| {
+            b.ok()
+                .map(|b| b.to_string())
+                .filter(|t| !t.is_empty())
+                .map_or(serde_json::Value::Null, Into::into)
+        };
+        let mut uia = serde_json::Value::Null;
+        let mut msaa_center = None;
+        if let Some(acc) = object.as_ref() {
+            let (mut x, mut y, mut w, mut h) = (0, 0, 0, 0);
+            // SAFETY: out-pointers to locals on a valid IAccessible.
+            if unsafe { acc.accLocation(&mut x, &mut y, &mut w, &mut h, &child) }.is_ok() {
+                msaa.insert("location".into(), serde_json::json!([x, y, w, h]));
+                msaa_center = Some(windows::Win32::Foundation::POINT {
+                    x: x + w / 2,
+                    y: y + h / 2,
+                });
+            }
+            // SAFETY: property reads on a valid IAccessible.
+            unsafe {
+                msaa.insert("name".into(), text(acc.get_accName(&child)));
+                msaa.insert(
+                    "role".into(),
+                    acc.get_accRole(&child)
+                        .ok()
+                        .and_then(|v| i32::try_from(&v).ok())
+                        .into(),
+                );
+                msaa.insert(
+                    "states".into(),
+                    acc.get_accState(&child)
+                        .ok()
+                        .and_then(|v| i32::try_from(&v).ok())
+                        .into(),
+                );
+                msaa.insert("value".into(), text(acc.get_accValue(&child)));
+                msaa.insert("description".into(), text(acc.get_accDescription(&child)));
+                msaa.insert("help".into(), text(acc.get_accHelp(&child)));
+                msaa.insert("shortcut".into(), text(acc.get_accKeyboardShortcut(&child)));
+                msaa.insert(
+                    "default_action".into(),
+                    text(acc.get_accDefaultAction(&child)),
+                );
+            }
+            let child_id = i32::try_from(&child).unwrap_or(0);
+            uia = match crate::uia_snapshot::capture::automation() {
+                // SAFETY: a UIA read on a valid automation object.
+                Ok(automation) => match unsafe { automation.ElementFromIAccessible(acc, child_id) }
+                {
+                    Ok(element) => uia_json(&element),
+                    Err(e) => serde_json::json!({ "error": e.to_string() }),
+                },
+                Err(e) => serde_json::json!({ "error": e.to_string() }),
+            };
+        }
+        let uia_focus = crate::uia_snapshot::capture::automation()
+            .ok()
+            .map(|automation| crate::uia_snapshot::capture::focus_chain(&automation))
+            .and_then(|chain| chain.last().cloned())
+            .map(|n| serde_json::json!({ "name": n.name, "class_name": n.class_name }));
+        // Office's own UIA tree below the window: the element with the keyboard focus, or
+        // else the first one with the MSAA object's name.
+        let msaa_name = msaa.get("name").and_then(|n| n.as_str()).map(str::to_owned);
+        let uia_native = crate::uia_snapshot::capture::automation()
+            .ok()
+            .and_then(|automation| {
+                // SAFETY: UIA reads on a valid automation object and its elements.
+                unsafe {
+                    let root = automation.ElementFromHandle(window).ok()?;
+                    let focused = automation
+                        .CreatePropertyCondition(
+                            UIA_HasKeyboardFocusPropertyId,
+                            &VARIANT::from(true),
+                        )
+                        .ok()?;
+                    let clock = std::time::Instant::now();
+                    let by_focus = root.FindFirst(TreeScope_Descendants, &focused).ok();
+                    let search_ms = clock.elapsed().as_millis();
+                    let by_name = || {
+                        let name = msaa_name.as_deref()?;
+                        let condition = automation
+                            .CreatePropertyCondition(
+                                UIA_NamePropertyId,
+                                &VARIANT::from(windows::core::BSTR::from(name)),
+                            )
+                            .ok()?;
+                        root.FindFirst(TreeScope_Descendants, &condition).ok()
+                    };
+                    let (how, element) = match by_focus {
+                        Some(e) => ("keyboard focus", e),
+                        None => ("name", by_name()?),
+                    };
+                    let mut json = uia_json(&element);
+                    if let Some(map) = json.as_object_mut() {
+                        map.insert("found_by".into(), how.into());
+                        map.insert(
+                            "search_ms".into(),
+                            u64::try_from(search_ms).unwrap_or(u64::MAX).into(),
+                        );
+                        // The same element from the point at the MSAA object's center.
+                        if let Some(center) = msaa_center {
+                            let clock = std::time::Instant::now();
+                            let at = automation.ElementFromPoint(center).ok();
+                            let point_ms = clock.elapsed().as_millis();
+                            let same = at
+                                .as_ref()
+                                .and_then(|a| automation.CompareElements(a, &element).ok())
+                                .is_some_and(|b| b.as_bool());
+                            map.insert(
+                                "point_ms".into(),
+                                u64::try_from(point_ms).unwrap_or(u64::MAX).into(),
+                            );
+                            map.insert("point_same".into(), same.into());
+                        }
+                    }
+                    Some(json)
+                }
+            });
+        serde_json::json!({
+            "msaa": msaa,
+            "uia_of_msaa": uia,
+            "uia_native": uia_native,
+            "uia_focus": uia_focus,
+        })
+        .to_string()
+    }
+
+    /// What a UIA element says beside its name, for [`msaa_focus_probe`].
+    fn uia_json(
+        element: &windows::Win32::UI::Accessibility::IUIAutomationElement,
+    ) -> serde_json::Value {
+        use windows::Win32::UI::Accessibility::{
+            IUIAutomationExpandCollapsePattern, IUIAutomationTogglePattern,
+            UIA_ExpandCollapsePatternId, UIA_FullDescriptionPropertyId, UIA_TogglePatternId,
+        };
+        let text = |b: windows::core::Result<windows::core::BSTR>| {
+            b.ok()
+                .map(|b| b.to_string())
+                .filter(|t| !t.is_empty())
+                .map_or(serde_json::Value::Null, Into::into)
+        };
+        // SAFETY: UIA reads on a valid element.
+        unsafe {
+            let toggle = element
+                .GetCurrentPatternAs::<IUIAutomationTogglePattern>(UIA_TogglePatternId)
+                .ok()
+                .and_then(|p| p.CurrentToggleState().ok())
+                .map(|s| s.0);
+            let expand = element
+                .GetCurrentPatternAs::<IUIAutomationExpandCollapsePattern>(
+                    UIA_ExpandCollapsePatternId,
+                )
+                .ok()
+                .and_then(|p| p.CurrentExpandCollapseState().ok())
+                .map(|s| s.0);
+            let full = element
+                .GetCurrentPropertyValue(UIA_FullDescriptionPropertyId)
+                .ok()
+                .and_then(|v| windows::core::BSTR::try_from(&v).ok())
+                .map(|b| b.to_string())
+                .filter(|t| !t.is_empty());
+            serde_json::json!({
+                "name": text(element.CurrentName()),
+                "control_type": element.CurrentControlType().ok().map(|c| c.0),
+                "localized_control_type": text(element.CurrentLocalizedControlType()),
+                "class_name": text(element.CurrentClassName()),
+                "help_text": text(element.CurrentHelpText()),
+                "full_description": full,
+                "item_status": text(element.CurrentItemStatus()),
+                "accelerator_key": text(element.CurrentAcceleratorKey()),
+                "access_key": text(element.CurrentAccessKey()),
+                "toggle_state": toggle,
+                "expand_collapse_state": expand,
             })
-            .collect()
+        }
     }
 
     /// The top-level window titled exactly `title` (a scenario's fixture), wherever the focus

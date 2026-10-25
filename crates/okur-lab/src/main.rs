@@ -151,6 +151,10 @@ enum Commands {
     /// JSON line each, whether it answers and what its object and its text at the caret
     /// report (Windows; research, never evidence)
     Ia2Probe,
+    /// Follow MSAA's focus from the focused window down (accFocus) and ask UI Automation for
+    /// the same object (ElementFromIAccessible): one JSON line with what each says beside the
+    /// name, help and toggle state among it (Windows; research, never evidence)
+    MsaaFocus,
     /// Print the element UI Automation says has the keyboard focus, as one JSON line: its
     /// name, control type, class, and whether it is in a document (a web page's). The harness
     /// checks a web trial starts in its page (Windows)
@@ -1375,6 +1379,15 @@ async fn main() {
             #[cfg(not(windows))]
             {
                 eprintln!("IA2 is only read on Windows");
+                std::process::exit(1);
+            }
+        }
+        Some(Commands::MsaaFocus) => {
+            #[cfg(windows)]
+            println!("{}", okur_platform::harness::msaa_focus_probe());
+            #[cfg(not(windows))]
+            {
+                eprintln!("MSAA is only read on Windows");
                 std::process::exit(1);
             }
         }
