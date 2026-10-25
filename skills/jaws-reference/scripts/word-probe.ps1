@@ -12,7 +12,7 @@
 #     then Tab across the Home tab's first commands, and Escape back to the document.
 # Then closes the fixture's window with Ctrl+W, after checking it is in front: Word's process
 # can hold the user's own documents. Run on old-pc with no batch recording.
-param([ValidateSet('word', 'formats', 'ribbon')][string]$Fixture = 'formats',
+param([ValidateSet('word', 'formats', 'ribbon', 'view')][string]$Fixture = 'formats',
       [string]$Out = (Join-Path $env:USERPROFILE "sr-harness\probe\word-probe.txt"),
       [switch]$Ia2)
 $lab = Join-Path $env:USERPROFILE 'sr-harness\bin\okur-lab.exe'
@@ -25,6 +25,11 @@ $script, $title, $probes = switch ($Fixture) {
     'ribbon' {
         'desktop-word.ps1', 'sr-word-fixture.docx - Word (Product Activation Failed)',
         (@(@('Alt'), @('Down')) + @(1..10 | ForEach-Object { , @('Tab') }) + @(, @('Escape', 'Escape', 'Escape')))
+    }
+    # The View tab (seven tabs right of Home), its lower ribbon by Tab.
+    'view' {
+        'desktop-word.ps1', 'sr-word-fixture.docx - Word (Product Activation Failed)',
+        (@(, @('Alt')) + @(1..7 | ForEach-Object { , @('Right') }) + @(, @('Down')) + @(1..10 | ForEach-Object { , @('Tab') }) + @(, @('Escape', 'Escape', 'Escape')))
     }
     'formats' {
         'desktop-word-formats.ps1', 'sr-word-formats.docx - Word (Product Activation Failed)',
@@ -76,7 +81,7 @@ Start-Sleep -Seconds 2
 foreach ($keys in $probes) {
     & $lab keys --allow WINWORD @($keys + 'wait:1200') | Out-Null
     $lines += "== $($keys -join ',') =>"
-    if ($Fixture -eq 'ribbon') { $lines += & $lab msaa-focus | ForEach-Object { "   $_" }; continue }
+    if ($Fixture -in 'ribbon', 'view') { $lines += & $lab msaa-focus | ForEach-Object { "   $_" }; continue }
     $lines += '   ' + (Cell-Report)
     $lines += & $lab text-attributes --unit 4 | ForEach-Object { "   $_" }
     if ($Ia2) { $lines += & $lab ia2-probe | ForEach-Object { "   ia2: $_" } }
