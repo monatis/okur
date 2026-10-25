@@ -9,7 +9,9 @@
 //! The session's layer is never written. Okur writes only the values that changed, so the
 //! comments and order a user gives a file stay.
 
+use std::collections::HashMap;
 use std::path::{Path, PathBuf};
+use std::sync::{Arc, Mutex};
 
 use okur_core::settings::SettingsStore;
 use okur_core::settings_layers::{SettingsLayers, Values};
@@ -23,6 +25,11 @@ const SITES: &str = "sites";
 #[derive(Debug, Clone)]
 pub struct SettingsFolder {
     folder: PathBuf,
+    /// What each settings file held when it was last read or written, by path: a save writes
+    /// only the files whose values changed. It read every application's and site's file to
+    /// list them, then read and rewrote each one, on the engine's thread: 100 ms with 300 site
+    /// files (performance review 2026-10-25, finding 7).
+    known: Arc<Mutex<HashMap<PathBuf, Values>>>,
 }
 
 impl SettingsFolder {
@@ -46,7 +53,22 @@ impl SettingsFolder {
     pub fn at(folder: impl Into<PathBuf>) -> Self {
         Self {
             folder: folder.into(),
+            known: Arc::default(),
         }
+    }
+
+    /// Notes that the file at `path` holds `values`.
+    fn know(&self, path: &Path, values: &Values) {
+        if let Ok(mut known) = self.known.lock() {
+            known.insert(path.to_owned(), values.clone());
+        }
+    }
+
+    /// Whether the file at `path` is known to hold `values` already.
+    fn holds(&self, path: &Path, values: &Values) -> bool {
+        self.known
+            .lock()
+            .is_ok_and(|known| known.get(path) == Some(values))
     }
 
     pub fn folder(&self) -> &Path {
@@ -60,11 +82,16 @@ impl SettingsFolder {
             global: read_values(&self.folder.join(GLOBAL)).unwrap_or_default(),
             ..SettingsLayers::default()
         };
-        for (name, values) in read_folder(&self.folder.join(APPLICATIONS)) {
-            layers.applications.insert(name, values);
-        }
-        for (name, values) in read_folder(&self.folder.join(SITES)) {
-            layers.sites.insert(name, values);
+        self.know(&self.folder.join(GLOBAL), &layers.global);
+        for (kind, layer) in [
+            (APPLICATIONS, &mut layers.applications),
+            (SITES, &mut layers.sites),
+        ] {
+            let folder = self.folder.join(kind);
+            for (name, values) in read_folder(&folder) {
+                self.know(&folder.join(format!("{name}.toml")), &values);
+                layer.insert(name, values);
+            }
         }
         layers
     }
@@ -102,12 +129,24 @@ impl SettingsFolder {
 
 impl SettingsStore for SettingsFolder {
     fn save(&self, layers: &SettingsLayers) {
-        let mut written = vec![Self::write(
-            &self.folder.join(GLOBAL),
+        let mut written = Vec::new();
+        // A file is written only when its values changed, and is then known to hold them.
+        let mut save = |path: PathBuf, values: &Values, heading: &str| {
+            if self.holds(&path, values) {
+                return;
+            }
+            let result = Self::write(&path, values, heading);
+            if result.is_ok() {
+                self.know(&path, values);
+            }
+            written.push(result);
+        };
+        save(
+            self.folder.join(GLOBAL),
             &layers.global,
             "# Okur's settings for all applications: only what differs from Okur's defaults.\n\
              # Okur rewrites only the values it changes; comments stay.\n",
-        )];
+        );
         for (kind, layer, heading) in [
             (
                 APPLICATIONS,
@@ -122,21 +161,13 @@ impl SettingsStore for SettingsFolder {
         ] {
             let folder = self.folder.join(kind);
             // A layer that was emptied loses its values; the file and its comments stay.
-            for (name, _) in read_folder(&folder) {
+            for name in file_names(&folder) {
                 if !layer.contains_key(&name) {
-                    written.push(Self::write(
-                        &folder.join(format!("{name}.toml")),
-                        &Values::new(),
-                        heading,
-                    ));
+                    save(folder.join(format!("{name}.toml")), &Values::new(), heading);
                 }
             }
             for (name, values) in layer {
-                written.push(Self::write(
-                    &folder.join(format!("{name}.toml")),
-                    values,
-                    heading,
-                ));
+                save(folder.join(format!("{name}.toml")), values, heading);
             }
         }
         for result in written {
@@ -272,6 +303,19 @@ fn read_values(path: &Path) -> Option<Values> {
         Ok(Value::Object(values)) => Some(values),
         _ => None,
     }
+}
+
+/// The names of the `.toml` files of `folder`, without the extension, unread.
+fn file_names(folder: &Path) -> Vec<String> {
+    let Ok(entries) = std::fs::read_dir(folder) else {
+        return Vec::new();
+    };
+    entries
+        .filter_map(Result::ok)
+        .map(|entry| entry.path())
+        .filter(|path| path.extension().is_some_and(|e| e == "toml"))
+        .filter_map(|path| Some(path.file_stem()?.to_str()?.to_lowercase()))
+        .collect()
 }
 
 /// The `.toml` files of `folder`, by name without the extension.
@@ -474,6 +518,45 @@ mod tests {
             "{notepad}"
         );
         assert!(root.join("sites/example.org.toml").exists());
+        let _ = std::fs::remove_dir_all(&root);
+    }
+
+    /// A save writes only the files whose values changed: one application's file is not
+    /// written again for a change to all applications', and an emptied one is still emptied.
+    /// Every file was read and rewritten at each Apply (performance review 2026-10-25,
+    /// finding 7).
+    #[test]
+    fn a_save_writes_only_what_changed() {
+        let root = folder("only-changed");
+        let files = SettingsFolder::at(&root);
+        let mut layers = SettingsLayers::default();
+        let before = layers.resolve(Some("notepad"), None);
+        let mut after = before.clone();
+        after.voice.punctuation = Punctuation::All;
+        layers.change(&Scope::Application("notepad".into()), &before, &after, None);
+        files.save(&layers);
+        let notepad = root.join("applications/notepad.toml");
+        // Notepad's file edited by hand while Okur runs: a save for another layer leaves it as
+        // it is, where it wrote Okur's value back over the user's.
+        let mine = "# my Notepad\n[voice]\npunctuation = \"none\"\n";
+        let _ = std::fs::write(&notepad, mine);
+        let before = layers.resolve(None, None);
+        let mut after = before.clone();
+        after.voice.rate = 4;
+        layers.change(&Scope::Global, &before, &after, None);
+        files.save(&layers);
+        assert_eq!(
+            std::fs::read_to_string(&notepad).unwrap_or_default(),
+            mine,
+            "Notepad's layer did not change, and its file was written again"
+        );
+        let global = std::fs::read_to_string(root.join("settings.toml")).unwrap_or_default();
+        assert!(global.contains("rate = 4"), "{global}");
+        // Notepad's layer emptied: its file, listed without being read, loses the value.
+        layers.applications.remove("notepad");
+        files.save(&layers);
+        let emptied = std::fs::read_to_string(&notepad).unwrap_or_default();
+        assert!(!emptied.contains("punctuation"), "{emptied}");
         let _ = std::fs::remove_dir_all(&root);
     }
 
