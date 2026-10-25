@@ -909,6 +909,23 @@ divergences! {
      Viewer's entry above). Okur's list reads its selected error, \"teh 1 of 1\", and \
      Insert+Shift+R says there are no regions, as in any window.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
+
+    Difference::Step => [
+        "1034-desktop-word-font-paragraphs-table-keys/s1",
+        "1034-desktop-word-font-paragraphs-table-keys/s3",
+        "1040-desktop-word-formats/s1",
+        "1040-desktop-word-formats/s3",
+        "1040-desktop-word-formats/s5",
+        "1040-desktop-word-formats/s7",
+        "1052-desktop-word-say-font-line-spacing/s3",
+        "1052-desktop-word-say-font-line-spacing/s11",
+    ],
+    "Say Font in Word: a paragraph's line spacing as a multiple of lines. Word keeps it in \
+     points, 12 a line (1.08 lines is Word's default for Normal). JAWS divides by the font's \
+     size instead and drops the fraction: \"1 lines.\" for 1.08 and 1.15, \"2 lines.\" for \
+     2.5, \"0 lines.\" for 1.08 at 16 points. Okur says the true number, \"1.08 lines.\", \
+     \"2.5 lines.\", in JAWS's words around it.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-25";
 }
 
 /// The divergence covering `step`, if any.

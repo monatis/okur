@@ -895,6 +895,26 @@ A step can be in more than one entry; all of its entries apply.
   says there are no regions, as in any window.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
 
+### Word's line spacing as a multiple of lines, in Say Font
+
+- Steps:
+  - `1034-desktop-word-font-paragraphs-table-keys/s1`
+  - `1034-desktop-word-font-paragraphs-table-keys/s3`
+  - `1040-desktop-word-formats/s1`
+  - `1040-desktop-word-formats/s3`
+  - `1040-desktop-word-formats/s5`
+  - `1040-desktop-word-formats/s7`
+  - `1052-desktop-word-say-font-line-spacing/s3`
+  - `1052-desktop-word-say-font-line-spacing/s11`
+- Difference: the whole step. Word keeps a multiple line spacing in points, 12 a line (1.08 lines
+  is its default for Normal). JAWS divides by the font's size instead and drops the fraction:
+  "Line spacing: 1 lines." for 1.08 and 1.15, "2 lines." for 2.5, "0 lines." for 1.08 at 16
+  points [obs, 1052/s3, s11; 1034/s1].
+- Why: a wrong number. Okur says the true one, "Line spacing: 1.08 lines.", "2.5 lines.", in
+  JAWS's words around it; single, one and a half, double, at least, exactly and whole multiples
+  are said as JAWS says them.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-25.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row
