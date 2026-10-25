@@ -2096,6 +2096,8 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     const RADIOBUTTON: i32 = 0x2D;
     const COMBOBOX: i32 = 0x2E;
     const BUTTONDROPDOWN: i32 = 0x38;
+    // A drop-down that opens a grid: Word's "Cover Page", a sub menu to JAWS [obs, 1043/s5].
+    const BUTTONDROPDOWNGRID: i32 = 0x3A;
     const SPLITBUTTON: i32 = 0x3E;
     const SELECTED: u32 = 0x2;
     if event.window_class.as_deref() != Some("NetUIHWND") {
@@ -2124,7 +2126,7 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
         CHECKBUTTON => Role::CheckBox,
         RADIOBUTTON => Role::RadioButton,
         COMBOBOX => Role::ComboBox,
-        BUTTONDROPDOWN | SPLITBUTTON => Role::SplitButton,
+        BUTTONDROPDOWN | BUTTONDROPDOWNGRID | SPLITBUTTON => Role::SplitButton,
         _ => return None,
     };
     let tab = role == Role::Tab;
@@ -2170,6 +2172,12 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     focus.app_version = event.process_version.clone();
     focus.bounds = event.focus_chain.last().and_then(|n| n.bounds);
     focus.in_ribbon = true;
+    // The ribbon's own name: its outermost property page's, "Ribbon".
+    focus.ribbon_name = event
+        .msaa_ancestors
+        .iter()
+        .find(|a| a.role == Some(0x26))
+        .and_then(|a| a.name.clone());
     // On the ribbon's menus: a tab, or a command on a tab's page (a property page inside the
     // ribbon's own, the lower ribbon's "Home"), not Minimize the Ribbon or the Quick Access
     // Toolbar beside them.
@@ -2281,6 +2289,8 @@ fn ribbon_tab(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     focus.app_version = event.process_version.clone();
     focus.bounds = event.focus_chain.last().and_then(|n| n.bounds);
     focus.in_ribbon = true;
+    // The ribbon's own name: the property page that took the focus, "Ribbon".
+    focus.ribbon_name = event.object.as_ref().and_then(|o| o.name.clone());
     focus.ribbon_menu = true;
     Some(focus)
 }
@@ -2312,6 +2322,8 @@ fn toolbar_button(event: &TraceEvent, toolbar: &UiaNode, focus: &mut okur_core::
     const PUSHBUTTON: i32 = 0x2B;
     const CHECKBUTTON: i32 = 0x2C;
     const BUTTONDROPDOWN: i32 = 0x38;
+    // A drop-down that opens a grid: Word's "Cover Page", a sub menu to JAWS [obs, 1043/s5].
+    const BUTTONDROPDOWNGRID: i32 = 0x3A;
     const SPLITBUTTON: i32 = 0x3E;
     if toolbar.control_type != UIA_TOOLBAR || event.id_child <= 0 {
         return;
@@ -2330,7 +2342,7 @@ fn toolbar_button(event: &TraceEvent, toolbar: &UiaNode, focus: &mut okur_core::
     let role = match object.role {
         Some(PUSHBUTTON) => Role::Button,
         Some(CHECKBUTTON) => Role::CheckBox,
-        Some(BUTTONDROPDOWN | SPLITBUTTON) => Role::SplitButton,
+        Some(BUTTONDROPDOWN | BUTTONDROPDOWNGRID | SPLITBUTTON) => Role::SplitButton,
         _ => return,
     };
     focus.container_role = Some(Role::ToolBar);

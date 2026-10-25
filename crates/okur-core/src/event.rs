@@ -321,6 +321,10 @@ pub struct FocusEvent {
     /// leaves the menus for: "Leaving menus | Leaving ribbons" [obs, 523/s4, 972/s3].
     #[serde(default)]
     pub ribbon_menu: bool,
+    /// The ribbon's own name, as its MSAA property page gives it: Word's "Ribbon", which JAWS
+    /// says as the focus enters it [obs, 1043/s1].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ribbon_name: Option<String>,
     /// The focused element is inside a browser document (its focus chain has a document).
     pub in_document: bool,
     /// The element's DOM id, when it is in a document and has one.
@@ -570,6 +574,7 @@ impl FocusEvent {
             column_headers: Vec::new(),
             in_ribbon: false,
             ribbon_menu: false,
+            ribbon_name: None,
             in_document: false,
             dom_id: None,
             unique_id: None,

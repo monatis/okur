@@ -9,6 +9,7 @@ pub mod taskbar;
 pub mod terminal;
 pub mod widgets;
 pub mod word;
+pub mod word_ribbon;
 
 use super::AppModule;
 
@@ -26,5 +27,6 @@ pub fn modules() -> Vec<Box<dyn AppModule>> {
         Box::new(terminal::Terminal),
         Box::new(search::Search),
         Box::new(settings::Settings),
+        Box::new(word_ribbon::WordRibbon::default()),
     ]
 }
