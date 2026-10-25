@@ -1,0 +1,36 @@
+{
+  "id": "1052-desktop-word-say-font-line-spacing",
+  "name": "Word: Say Font (Insert+F) on a paragraph at each of Word's line spacings, Down from one to the next",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-spacing.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-spacing.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Insert+F"},
+    {"id": "s2", "type": "key", "command": "Down"},
+    {"id": "s3", "type": "key", "command": "Insert+F"},
+    {"id": "s4", "type": "key", "command": "Down"},
+    {"id": "s5", "type": "key", "command": "Insert+F"},
+    {"id": "s6", "type": "key", "command": "Down"},
+    {"id": "s7", "type": "key", "command": "Insert+F"},
+    {"id": "s8", "type": "key", "command": "Down"},
+    {"id": "s9", "type": "key", "command": "Insert+F"},
+    {"id": "s10", "type": "key", "command": "Down"},
+    {"id": "s11", "type": "key", "command": "Insert+F"},
+    {"id": "s12", "type": "key", "command": "Down"},
+    {"id": "s13", "type": "key", "command": "Insert+F"},
+    {"id": "s14", "type": "key", "command": "Down"},
+    {"id": "s15", "type": "key", "command": "Insert+F"}
+  ]
+}

@@ -129,6 +129,10 @@
       "sha256": "7ea4d2b8716fd99819a8aad7f00e7be6f499383bd994c52573dea7b82ef49aec",
       "size_bytes": 6894
     },
+    "desktop-word-spacing.ps1": {
+      "sha256": "9e643908b89a19b48c4bfba1cb7c717fbfec645eded2d2c9fa2776839eeb850f",
+      "size_bytes": 6624
+    },
     "desktop-word.ps1": {
       "sha256": "599fdf04f5f652361a59cac73215def3f136323aaeb2556b7b0d34f5b27dc05b",
       "size_bytes": 8433
@@ -833,8 +837,8 @@
       "scenario_id": "1034-desktop-word-font-paragraphs-table-keys",
       "fixture": "desktop-word.ps1",
       "evidence": {
-        "sha256": "65a3863f74cbfa1dc1f53a4b484fffe996afb0838135f8573d39f877eab8ad74",
-        "capture_script_sha256": "2f07646b53583e3a245d42790d0225b810dc4a43a65b9ea0f42626f10e064ae9",
+        "sha256": "945a486ca99f33abab94b4e607346f641c975fa1c635572ba7162e74577fc808",
+        "capture_script_sha256": "9de80f7aebf2b85d39c56a358ab3f8907cd95d9d4f05fc44dea2e56b5b2d7269",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -931,8 +935,8 @@
       "scenario_id": "1040-desktop-word-formats",
       "fixture": "desktop-word-formats.ps1",
       "evidence": {
-        "sha256": "2ee19c0796a1ee93e032acf34a9c013e8db00ae9ffe0117460793b9615e16eee",
-        "capture_script_sha256": "2f07646b53583e3a245d42790d0225b810dc4a43a65b9ea0f42626f10e064ae9",
+        "sha256": "433e116b4a64e52c08a195c34256c3acc55ba42b09b75ec8d602b62fdc55cc75",
+        "capture_script_sha256": "9de80f7aebf2b85d39c56a358ab3f8907cd95d9d4f05fc44dea2e56b5b2d7269",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -1106,6 +1110,20 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1052-desktop-word-say-font-line-spacing",
+      "fixture": "desktop-word-spacing.ps1",
+      "evidence": {
+        "sha256": "f560bad2ec096a56ab156954b4198066f7d89db63e164b8263a4b9b1b1c34d4f",
+        "capture_script_sha256": "9de80f7aebf2b85d39c56a358ab3f8907cd95d9d4f05fc44dea2e56b5b2d7269",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -9735,10 +9753,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 677,
-    "scenarios_with_evidence": 677,
-    "total_trials": 2037,
-    "successful_trials": 2021,
-    "deterministic_scenarios": 437
+    "scenarios": 678,
+    "scenarios_with_evidence": 678,
+    "total_trials": 2040,
+    "successful_trials": 2024,
+    "deterministic_scenarios": 438
   }
 }

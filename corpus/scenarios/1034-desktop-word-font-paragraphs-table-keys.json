@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
   "target_app": "desktop",
+  "trace_headings": true,
   "launch": {
     "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
     "close_window": true,
