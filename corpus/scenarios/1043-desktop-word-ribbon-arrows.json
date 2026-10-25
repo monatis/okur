@@ -1,0 +1,31 @@
+{
+  "id": "1043-desktop-word-ribbon-arrows",
+  "name": "Word: the ribbon by its arrows: Alt, Right and Left along the tabs, Down into the lower ribbon, Right and Tab there, then Escape out to the document; nothing is activated",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Alt" },
+    { "id": "s2", "type": "key", "command": "Right" },
+    { "id": "s3", "type": "key", "command": "Right" },
+    { "id": "s4", "type": "key", "command": "Left" },
+    { "id": "s5", "type": "key", "command": "Down" },
+    { "id": "s6", "type": "key", "command": "Right" },
+    { "id": "s7", "type": "key", "command": "Tab" },
+    { "id": "s8", "type": "key", "command": "Escape" },
+    { "id": "s9", "type": "key", "command": "Escape" },
+    { "id": "s10", "type": "key", "command": "Escape" },
+    { "id": "s11", "type": "key", "command": "Insert+Up" }
+  ]
+}
