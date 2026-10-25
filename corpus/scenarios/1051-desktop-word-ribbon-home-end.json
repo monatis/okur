@@ -1,0 +1,43 @@
+{
+  "id": "1051-desktop-word-ribbon-home-end",
+  "name": "Word: the Home tab's lower ribbon backwards from Paste by Shift+Tab, from its last controls (Tell me, Collapse the Ribbon, the Editing group, Styles) into the Paragraph group's alignment buttons, Align Left on; Escape out; nothing is activated",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Alt"},
+    {"id": "s2", "type": "key", "command": "Down"},
+    {"id": "s3", "type": "key", "command": "Shift+Tab"},
+    {"id": "s4", "type": "key", "command": "Shift+Tab"},
+    {"id": "s5", "type": "key", "command": "Shift+Tab"},
+    {"id": "s6", "type": "key", "command": "Shift+Tab"},
+    {"id": "s7", "type": "key", "command": "Shift+Tab"},
+    {"id": "s8", "type": "key", "command": "Shift+Tab"},
+    {"id": "s9", "type": "key", "command": "Shift+Tab"},
+    {"id": "s10", "type": "key", "command": "Shift+Tab"},
+    {"id": "s11", "type": "key", "command": "Shift+Tab"},
+    {"id": "s12", "type": "key", "command": "Shift+Tab"},
+    {"id": "s13", "type": "key", "command": "Shift+Tab"},
+    {"id": "s14", "type": "key", "command": "Shift+Tab"},
+    {"id": "s15", "type": "key", "command": "Shift+Tab"},
+    {"id": "s16", "type": "key", "command": "Shift+Tab"},
+    {"id": "s17", "type": "key", "command": "Shift+Tab"},
+    {"id": "s18", "type": "key", "command": "Shift+Tab"},
+    {"id": "s19", "type": "key", "command": "Shift+Tab"},
+    {"id": "s20", "type": "key", "command": "Escape"},
+    {"id": "s21", "type": "key", "command": "Escape"},
+    {"id": "s22", "type": "key", "command": "Escape"},
+    {"id": "s23", "type": "key", "command": "Insert+Up"}
+  ]
+}
