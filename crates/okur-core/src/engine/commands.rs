@@ -1348,15 +1348,25 @@ impl ScreenReaderEngine {
                 return None;
             }
         }
-        // Word's document has a Say Font of its own [obs, 1034/s1, s3].
+        // Word's document has a Say Font of its own [obs, 1034/s1, s3], with the line spacing
+        // Word's object model gives, asked for first and said when it comes (`word_font`)
+        // [obs, 1040/s1, s17, s19].
         if let Some(said) = self
             .last_text
             .as_ref()
             .filter(|_| {
                 !in_viewer && self.app_mode != AppMode::VirtualBuffer && self.editing_text()
             })
-            .and_then(crate::apps::windows::word::font)
+            .and_then(|text| crate::apps::windows::word::font(text, None))
         {
+            if self
+                .actions
+                .as_ref()
+                .is_some_and(|actions| actions.read_line_spacing())
+            {
+                self.pending_word_font = true;
+                return None;
+            }
             self.speech.speak(&said, true);
             return Some(said);
         }

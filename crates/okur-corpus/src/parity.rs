@@ -1226,6 +1226,26 @@ struct ScreenSnapshot {
     /// List.
     #[serde(default)]
     links: Vec<okur_core::DocumentLink>,
+    /// The line spacing at the caret's paragraph, from Word's object model, saved beside the
+    /// headings (none before 1052), for Say Font.
+    #[serde(default)]
+    line_spacing: Option<SnapshotSpacing>,
+}
+
+/// A line spacing as the recorder saves it: Word's rule and its points.
+#[derive(Debug, Clone, Copy, Default, serde::Deserialize)]
+struct SnapshotSpacing {
+    rule: i32,
+    points: f32,
+}
+
+impl SnapshotSpacing {
+    fn spacing(self) -> okur_core::LineSpacing {
+        okur_core::LineSpacing {
+            rule: self.rule,
+            centipoints: (self.points * 100.0).round().clamp(0.0, u32::MAX as f32) as u32,
+        }
+    }
 }
 
 impl ScreenSnapshot {
@@ -1244,6 +1264,7 @@ impl ScreenSnapshot {
             self.view = other.view;
             self.paragraphs = other.paragraphs;
             self.links = other.links;
+            self.line_spacing = other.line_spacing;
         }
     }
 }
@@ -1258,6 +1279,7 @@ struct ScreenReads {
     views: usize,
     paragraphs: usize,
     links: usize,
+    spacings: usize,
 }
 
 impl ScreenReads {
@@ -1340,11 +1362,12 @@ impl ScreenReads {
     ) {
         let requests = actions.requests();
         let count = |name: &str| requests.iter().filter(|(a, _)| a == name).count();
-        let (headings, views, paragraphs, links) = (
+        let (headings, views, paragraphs, links, spacings) = (
             count("document headings"),
             count("document view"),
             count("document paragraphs"),
             count("document links"),
+            count("line spacing"),
         );
         let mut deliver = |event: okur_core::AccessibilityEvent| {
             if let Some(speech) = engine.handle_accessibility_event(&event) {
@@ -1360,6 +1383,16 @@ impl ScreenReads {
             self.paragraphs += 1;
             deliver(okur_core::AccessibilityEvent::DocumentParagraphs(
                 snapshot.map(|s| s.paragraphs.clone()).unwrap_or_default(),
+            ));
+        }
+        // Say Font's line spacing, always answered: none where the step saved none (scenarios
+        // recorded before it was saved), and Say Font then leaves it out.
+        while self.spacings < spacings {
+            self.spacings += 1;
+            deliver(okur_core::AccessibilityEvent::LineSpacing(
+                snapshot
+                    .and_then(|s| s.line_spacing)
+                    .map(SnapshotSpacing::spacing),
             ));
         }
         // The Links List's links, always answered: none where the step saved none (scenarios

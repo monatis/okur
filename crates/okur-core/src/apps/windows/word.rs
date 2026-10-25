@@ -7,7 +7,9 @@
 use crate::aom::Role;
 use crate::apps::AppModule;
 use crate::editing::EditKey;
-use crate::event::{DocumentParagraph, FocusEvent, LineStructure, TableCell, TextContext};
+use crate::event::{
+    DocumentParagraph, FocusEvent, LineSpacing, LineStructure, TableCell, TextContext,
+};
 use crate::messages::msg;
 use crate::ui::lists::ListKind;
 
@@ -119,10 +121,9 @@ pub(crate) fn say_all_pieces(
 /// "italicized", "Single  underline" [obs, 1040/s3, s5, s7]), then the size, the colors, the
 /// font, the paragraph's style, its alignment and its outline level, "16 point | black on white |
 /// Calibri | Heading 1 style | Paragraph formatting: Aligned left | Outline level: 1" [obs,
-/// 1034/s1, s3]. JAWS also says the line spacing after the style ("Line spacing: 1 lines.",
-/// "one point five lines.", "Double" [obs, 1040/s1, s17, s19]), which is not read from Word yet.
-/// `None` outside a document whose structure the platform reads.
-pub(crate) fn font(context: &TextContext) -> Option<String> {
+/// 1034/s1, s3], with the line spacing after the style where Word's object model gave it
+/// ([`line_spacing`]). `None` outside a document whose structure the platform reads.
+pub(crate) fn font(context: &TextContext, spacing: Option<&LineSpacing>) -> Option<String> {
     let structure = context.structure.as_ref()?;
     let font = context.font.as_ref()?;
     let mut said = Vec::new();
@@ -153,6 +154,7 @@ pub(crate) fn font(context: &TextContext) -> Option<String> {
     if let Some(style) = &font.style {
         said.push(msg::word_style(style.as_str()).render());
     }
+    said.extend(spacing.map(line_spacing));
     if let Some(alignment) = &font.alignment {
         said.push(msg::word_paragraph_aligned(alignment.as_str()).render());
     }
@@ -161,6 +163,34 @@ pub(crate) fn font(context: &TextContext) -> Option<String> {
         None => msg::word_outline_body().to_string(),
     });
     Some(said.join("\n"))
+}
+
+/// A paragraph's line spacing as Say Font says it, by Word's rule: "Single", "one point five
+/// lines.", "Double", "At Least 18 points", "Exactly 20 points", "3 lines." [obs, 1052]. A
+/// multiple is its true number of lines, Word's 12 points a line, "1.08 lines.", where JAWS
+/// divides by the font's size and drops the fraction ("1 lines.", "2 lines." for 2.5, "0
+/// lines." at 16 points [obs, 1052/s3, s11; 1034/s1]): an accepted divergence.
+fn line_spacing(spacing: &LineSpacing) -> String {
+    // Hundredths, without the zeros after the point: "18", "1.08", "2.5".
+    let number = |hundredths: u32| {
+        let whole = hundredths / 100;
+        match hundredths % 100 {
+            0 => whole.to_string(),
+            part if part % 10 == 0 => format!("{whole}.{}", part / 10),
+            part => format!("{whole}.{part:02}"),
+        }
+    };
+    let points = spacing.centipoints;
+    let words = match spacing.rule {
+        0 => msg::word_line_spacing_single().to_string(),
+        1 => msg::word_line_spacing_one_and_a_half().to_string(),
+        2 => msg::word_line_spacing_double().to_string(),
+        3 => msg::word_line_spacing_at_least(number(points)).render(),
+        4 => msg::word_line_spacing_exactly(number(points)).render(),
+        // Lines of 12 points, to the hundredth.
+        _ => msg::word_line_spacing_lines(number((points + 6) / 12)).render(),
+    };
+    msg::word_line_spacing(words).render()
 }
 
 /// The view Word shows its document in, as Say Window Title says it after the title, from the
@@ -686,7 +716,7 @@ mod tests {
     #[test]
     fn say_font_names_the_style_and_the_outline_level() {
         assert_eq!(
-            font(&heading_font()).as_deref(),
+            font(&heading_font(), None).as_deref(),
             Some(
                 "16 point
 black on white
@@ -736,26 +766,43 @@ Outline level: 1"
             font.italic = true;
             font.underline = true;
         }
-        let said = font(&formatted).unwrap_or_default();
+        let said = font(&formatted, None).unwrap_or_default();
         assert!(said.starts_with("bolded\nitalicized\nSingle  underline\n16 point"));
     }
 
-    /// JAWS says the line spacing after the style [obs, 1034/s1].
+    /// The line spacing after the style, by Word's rule [obs, 1052]; a multiple as its true
+    /// number of lines, where JAWS divides by the font's size and drops the fraction ("0 lines."
+    /// at 16 points [obs, 1034/s1]; an accepted divergence).
     #[test]
-    #[ignore = "known gap: Word's line spacing, which its UI Automation text does not report"]
     fn say_font_says_the_line_spacing() {
         assert_eq!(
-            font(&heading_font()).as_deref(),
+            font(
+                &heading_font(),
+                Some(&LineSpacing {
+                    rule: 5,
+                    centipoints: 1295
+                })
+            )
+            .as_deref(),
             Some(
                 "16 point
 black on white
 Calibri
 Heading 1 style
-Line spacing: 0 lines.
+Line spacing: 1.08 lines.
 Paragraph formatting: Aligned left
 Outline level: 1"
             )
         );
+        let said = |rule, centipoints| line_spacing(&LineSpacing { rule, centipoints });
+        assert_eq!(said(0, 1200), "Line spacing: Single");
+        assert_eq!(said(5, 1380), "Line spacing: 1.15 lines.");
+        assert_eq!(said(1, 1800), "Line spacing: one point five lines.");
+        assert_eq!(said(2, 2400), "Line spacing: Double");
+        assert_eq!(said(5, 3600), "Line spacing: 3 lines.");
+        assert_eq!(said(5, 3000), "Line spacing: 2.5 lines.");
+        assert_eq!(said(3, 1800), "Line spacing: At Least 18 points");
+        assert_eq!(said(4, 2000), "Line spacing: Exactly 20 points");
     }
 
     /// Say All reads Word's document by its paragraphs from the caret's: the caret's as it is,

@@ -82,6 +82,15 @@ word-bolded = bolded
 word-italicized = italicized
 word-underline-single = Single  underline
 word-paragraph-aligned = Paragraph formatting: Aligned { $alignment }
+# Say Font's line spacing in Word, after the style, as Word keeps it [obs, 1052, 1040/s17, s19]:
+# single, one and a half, double, at least and exactly so many points, so many lines.
+word-line-spacing = Line spacing: { $spacing }
+word-line-spacing-single = Single
+word-line-spacing-one-and-a-half = one point five lines.
+word-line-spacing-double = Double
+word-line-spacing-at-least = At Least { $points } points
+word-line-spacing-exactly = Exactly { $points } points
+word-line-spacing-lines = { $lines } lines.
 word-outline-level = Outline level: { $level }
 word-outline-body = Outline level: body text
 

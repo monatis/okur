@@ -7,14 +7,17 @@
 #     them (40040);
 #   - with -Ia2, what the document window and Word's window offer through IAccessible2
 #     (okur-lab ia2-probe): whether Word answers IA2 at all, and its text attributes there;
+#   - with -LineSpacing, the paragraph's line spacing from Word's own object model
+#     (okur-lab word-line-spacing: OBJID_NATIVEOM), which its UI Automation does not give;
 #   - with -Fixture ribbon, only the ribbon's focus, from MSAA's accFocus and UI Automation's
 #     element for it (okur-lab msaa-focus): its help text, toggle and expand state; Alt, Down,
 #     then Tab across the Home tab's first commands, and Escape back to the document.
 # Then closes the fixture's window with Ctrl+W, after checking it is in front: Word's process
 # can hold the user's own documents. Run on old-pc with no batch recording.
-param([ValidateSet('word', 'formats', 'ribbon', 'view')][string]$Fixture = 'formats',
+param([ValidateSet('word', 'formats', 'ribbon', 'view', 'spacing')][string]$Fixture = 'formats',
       [string]$Out = (Join-Path $env:USERPROFILE "sr-harness\probe\word-probe.txt"),
       [switch]$Ia2,
+      [switch]$LineSpacing,
       # ribbon and view: how many Tabs across the lower ribbon.
       [int]$Tabs = 10)
 $lab = Join-Path $env:USERPROFILE 'sr-harness\bin\okur-lab.exe'
@@ -32,6 +35,11 @@ $script, $title, $probes = switch ($Fixture) {
     'view' {
         'desktop-word.ps1', 'sr-word-fixture.docx - Word (Product Activation Failed)',
         (@(, @('Alt')) + @(1..7 | ForEach-Object { , @('Right') }) + @(, @('Down')) + @(1..$Tabs | ForEach-Object { , @('Tab') }) + @(, @('Escape', 'Escape', 'Escape')))
+    }
+    # desktop-word-spacing.ps1, a paragraph at each line spacing: Ctrl+Home, then Down to each.
+    'spacing' {
+        'desktop-word-spacing.ps1', 'sr-word-spacing.docx - Word (Product Activation Failed)',
+        (@(, @('Ctrl+Home')) + @(1..7 | ForEach-Object { , @('Down') }))
     }
     'formats' {
         'desktop-word-formats.ps1', 'sr-word-formats.docx - Word (Product Activation Failed)',
@@ -87,6 +95,7 @@ foreach ($keys in $probes) {
     $lines += '   ' + (Cell-Report)
     $lines += & $lab text-attributes --unit 4 | ForEach-Object { "   $_" }
     if ($Ia2) { $lines += & $lab ia2-probe | ForEach-Object { "   ia2: $_" } }
+    if ($LineSpacing) { $lines += & $lab word-line-spacing | ForEach-Object { "   line spacing: $_" } }
 }
 # The fixture's window alone: Ctrl+W closes its document, unchanged, without a question.
 if ((Front-Title) -eq $title) { & $lab keys --allow WINWORD 'Ctrl+W' 'wait:1500' | Out-Null }

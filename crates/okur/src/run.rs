@@ -327,6 +327,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::PageElements(_)) => "page elements",
         Some(AccessibilityEvent::DocumentHeadings(_)) => "document headings",
         Some(AccessibilityEvent::DocumentLinks(_)) => "document links",
+        Some(AccessibilityEvent::LineSpacing(_)) => "line spacing",
         Some(AccessibilityEvent::DocumentParagraphs(_)) => "document paragraphs",
         Some(AccessibilityEvent::DocumentView(_)) => "document view",
         Some(AccessibilityEvent::DocumentLoaded { .. }) => "document loaded",

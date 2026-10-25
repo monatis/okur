@@ -127,7 +127,7 @@ pub use crate::key_input::send_key;
 #[cfg(windows)]
 pub use windows_harness::{
     bring_to_front, foreground_process, foreground_title, ia2_probe_focus, jaws_history,
-    msaa_focus_probe, send_steps, shell_window, window_titled,
+    msaa_focus_probe, send_steps, shell_window, window_titled, word_line_spacing_probe,
 };
 
 #[cfg(windows)]
@@ -333,6 +333,27 @@ mod windows_harness {
                     .to_string()
             })
             .collect()
+    }
+
+    /// The line spacing of the selection's paragraph in the focused Word document, from Word's
+    /// own object model (`crate::word_om`), with the time the read took. One JSON line.
+    /// Research: whether Word's object model answers on the lab's Office, and how fast.
+    pub fn word_line_spacing_probe() -> String {
+        use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+        // SAFETY: COM on this thread; repeated initialization is tolerated.
+        let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+        let (front, focus) = front_and_focus_windows();
+        let window = focus.unwrap_or(front);
+        let clock = Instant::now();
+        let spacing = crate::word_om::selection_line_spacing(window);
+        serde_json::json!({
+            "window_class": class_of(window),
+            "rule": spacing.map(|s| s.rule),
+            "points": spacing.map(|s| s.points),
+            "ms": u64::try_from(clock.elapsed().as_millis()).unwrap_or(u64::MAX),
+            "stages": spacing.is_none().then(|| crate::word_om::line_spacing_stages(window)),
+        })
+        .to_string()
     }
 
     /// The window in front, and the window with the keyboard focus in its thread.

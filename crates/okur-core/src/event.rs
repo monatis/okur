@@ -120,6 +120,16 @@ pub struct LineStructure {
     pub cell: Option<TableCell>,
 }
 
+/// A paragraph's line spacing as Word keeps it, for Say Font's "Line spacing:" [obs, 1040/s17].
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LineSpacing {
+    /// Word's rule (`WdLineSpacing`): 0 single, 1 one and a half, 2 double, 3 at least, 4
+    /// exactly, 5 multiple.
+    pub rule: i32,
+    /// The spacing in hundredths of a point; for multiple, 1200 a line.
+    pub centipoints: u32,
+}
+
 /// A link of a document the platform reads by paragraphs (Word's hyperlinks), for its Links
 /// List (Insert+F7): its text, where it goes, and the paragraph it starts in, from the
 /// document's first (0), by which the caret is moved to it.
@@ -823,6 +833,10 @@ pub enum AccessibilityEvent {
     /// Word; [`crate::actions::ApplicationActions::read_document_links`]); empty when it has
     /// none or could not be read.
     DocumentLinks(Vec<DocumentLink>),
+    /// The line spacing of the paragraph at the focused document's caret (Word's), asked for
+    /// by Say Font ([`crate::actions::ApplicationActions::read_line_spacing`]); `None` when it
+    /// could not be read.
+    LineSpacing(Option<LineSpacing>),
     /// The focused document's paragraphs, in order, asked for by Say All in Word
     /// ([`crate::actions::ApplicationActions::read_document_paragraphs`]); empty when they could
     /// not be read.

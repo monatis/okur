@@ -155,6 +155,10 @@ enum Commands {
     /// the same object (ElementFromIAccessible): one JSON line with what each says beside the
     /// name, help and toggle state among it (Windows; research, never evidence)
     MsaaFocus,
+    /// The line spacing of the selection's paragraph in the focused Word document, from Word's
+    /// own object model (OBJID_NATIVEOM), with the read's time: one JSON line (Windows;
+    /// research, never evidence)
+    WordLineSpacing,
     /// Print the element UI Automation says has the keyboard focus, as one JSON line: its
     /// name, control type, class, and whether it is in a document (a web page's). The harness
     /// checks a web trial starts in its page (Windows)
@@ -1204,6 +1208,12 @@ async fn main() {
                 let paragraphs =
                     okur_platform::actions::document_paragraphs_now(window_title.as_deref());
                 let links = okur_platform::actions::document_links_now(window_title.as_deref());
+                // The line spacing of the selection's paragraph, from Word's object model.
+                let line_spacing = window_title
+                    .as_deref()
+                    .and_then(okur_platform::harness::window_titled)
+                    .and_then(okur_platform::word_om::document_window)
+                    .and_then(okur_platform::word_om::selection_line_spacing);
                 if let Some(path) = append_to {
                     let t_ms = std::time::SystemTime::now()
                         .duration_since(std::time::UNIX_EPOCH)
@@ -1218,6 +1228,10 @@ async fn main() {
                         "view": view,
                         "paragraphs": paragraphs.unwrap_or_default(),
                         "links": links.unwrap_or_default(),
+                        "line_spacing": line_spacing.map(|s| serde_json::json!({
+                            "rule": s.rule,
+                            "points": s.points,
+                        })),
                     });
                     let written = std::fs::OpenOptions::new()
                         .create(true)
@@ -1389,6 +1403,15 @@ async fn main() {
             #[cfg(not(windows))]
             {
                 eprintln!("IA2 is only read on Windows");
+                std::process::exit(1);
+            }
+        }
+        Some(Commands::WordLineSpacing) => {
+            #[cfg(windows)]
+            println!("{}", okur_platform::harness::word_line_spacing_probe());
+            #[cfg(not(windows))]
+            {
+                eprintln!("Word is only read on Windows");
                 std::process::exit(1);
             }
         }

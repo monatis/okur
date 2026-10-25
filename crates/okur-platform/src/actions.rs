@@ -97,6 +97,8 @@ mod windows_actions {
         DocumentHeadings,
         /// The focused document's links, answered even when there are none.
         DocumentLinks,
+        /// The line spacing at the focused document's caret, answered always.
+        LineSpacing,
         /// The focused document's link (from 0, as its links are listed) followed.
         ActivateDocumentLink(usize),
         /// The focused document's paragraphs, answered even when there are none.
@@ -173,6 +175,7 @@ mod windows_actions {
                 Request::Cell(..) => "table cell",
                 Request::DocumentHeadings => "document headings",
                 Request::DocumentLinks => "document links",
+                Request::LineSpacing => "line spacing",
                 Request::ActivateDocumentLink(_) => "document link",
                 Request::DocumentParagraphs => "document paragraphs",
                 Request::DocumentView => "document view",
@@ -377,6 +380,19 @@ mod windows_actions {
                                     "document links read"
                                 );
                                 let _ = events.send(AccessibilityEvent::DocumentLinks(links));
+                            }
+                            Request::LineSpacing => {
+                                let Some(events) = events.as_ref() else {
+                                    return;
+                                };
+                                let started = Instant::now();
+                                let spacing = crate::text_context::word_line_spacing();
+                                tracing::debug!(
+                                    ?spacing,
+                                    ms = started.elapsed().as_millis(),
+                                    "line spacing read"
+                                );
+                                let _ = events.send(AccessibilityEvent::LineSpacing(spacing));
                             }
                             Request::ActivateDocumentLink(index) => {
                                 let followed = uia.as_ref().is_some_and(|uia| {
@@ -866,6 +882,10 @@ mod windows_actions {
 
         fn read_document_links(&self) -> bool {
             self.send(Request::DocumentLinks)
+        }
+
+        fn read_line_spacing(&self) -> bool {
+            self.send(Request::LineSpacing)
         }
 
         fn activate_document_link(&self, index: usize) -> bool {

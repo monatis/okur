@@ -34,6 +34,8 @@ pub mod uia_probe;
 pub mod uia_snapshot;
 pub mod virtual_desktop;
 pub mod window_text;
+#[cfg(windows)]
+pub mod word_om;
 
 pub use audio::{AudioActivityReport, AudioEndpointMeter, SilenceReport};
 

@@ -477,6 +477,8 @@ pub struct ScreenReaderEngine {
     /// Say Font waiting for the page elements that show the font (`true`: pressed twice,
     /// shown in the Virtual Viewer).
     pending_font: Option<bool>,
+    /// Say Font in Word's document waiting for the line spacing its object model gives.
+    pending_word_font: bool,
     /// Behavior for particular applications, offered every focus first ([`crate::apps`]).
     apps: Vec<Box<dyn crate::apps::AppModule>>,
     /// Each live region's lines when it last changed, by DOM id.
@@ -665,6 +667,7 @@ impl ScreenReaderEngine {
             viewer: None,
             pending_viewer: None,
             pending_font: None,
+            pending_word_font: false,
             apps: crate::apps::builtin(),
             last_live_text: std::collections::HashMap::new(),
             live_streams: std::collections::HashMap::new(),
@@ -1492,6 +1495,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::PageElements(elements) => self.say_page_font(elements),
             AccessibilityEvent::DocumentHeadings(headings) => self.document_headings(headings),
             AccessibilityEvent::DocumentLinks(links) => self.document_links(links),
+            AccessibilityEvent::LineSpacing(spacing) => self.word_font(*spacing),
             AccessibilityEvent::DocumentParagraphs(paragraphs) => {
                 self.say_all_by_paragraphs(paragraphs)
             }
@@ -2804,6 +2808,20 @@ impl ScreenReaderEngine {
         let dialog = crate::ui::lists::ListDialog::headings(self.dialog_count + 1, &items);
         let mode = self.app_mode;
         self.show_list(dialog, mode)
+    }
+
+    /// Say Font in Word's document, with the line spacing asked for it (none where it could not
+    /// be read: then left out).
+    fn word_font(&mut self, spacing: Option<crate::event::LineSpacing>) -> Option<String> {
+        if !std::mem::take(&mut self.pending_word_font) {
+            return None;
+        }
+        let said = self
+            .last_text
+            .as_ref()
+            .and_then(|text| crate::apps::windows::word::font(text, spacing.as_ref()))?;
+        self.speech.speak(&said, true);
+        Some(said)
     }
 
     /// The focused document's links, asked for its Links List: the list, as a page's is, the
