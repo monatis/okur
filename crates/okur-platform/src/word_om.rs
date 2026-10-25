@@ -10,7 +10,9 @@ use std::ptr::null_mut;
 
 use windows::core::{Interface, GUID, HSTRING, PCWSTR};
 use windows::Win32::Foundation::HWND;
-use windows::Win32::System::Com::{IDispatch, DISPATCH_PROPERTYGET, DISPPARAMS};
+use windows::Win32::System::Com::{
+    IDispatch, DISPATCH_FLAGS, DISPATCH_METHOD, DISPATCH_PROPERTYGET, DISPPARAMS,
+};
 use windows::Win32::System::Variant::{VARIANT, VT_DISPATCH};
 use windows::Win32::UI::Accessibility::AccessibleObjectFromWindow;
 
@@ -163,8 +165,92 @@ fn word_window(document: HWND) -> Option<IDispatch> {
     Some(unsafe { IDispatch::from_raw(raw) })
 }
 
+/// A field of Word's document, as Word keeps it: its type (`WdFieldType`: 88 a hyperlink, 70
+/// a text form field, 71 a check box), its code (" HYPERLINK \"https://example.org/\" ",
+/// " FORMTEXT ") and the text it shows.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct WordField {
+    pub kind: i32,
+    pub code: String,
+    pub result: String,
+}
+
+/// The fields of the document in Word's document window `document`, in the document's order;
+/// `None` where Word's object model does not answer.
+pub fn document_fields(document: HWND) -> Option<Vec<WordField>> {
+    let fields = object(&property(
+        &object(&property(&word_window(document)?, "Document")?)?,
+        "Fields",
+    )?)?;
+    let count = i32::try_from(&property(&fields, "Count")?).ok()?;
+    let mut found = Vec::new();
+    // Word's collections count from 1; a document with many fields is read in part.
+    for index in 1..=count.clamp(0, MAX_FIELDS) {
+        let Some(field) = item(&fields, index) else {
+            continue;
+        };
+        let text = |name: &str| {
+            property(&field, name)
+                .as_ref()
+                .and_then(object)
+                .and_then(|range| property(&range, "Text"))
+                .and_then(|text| windows::core::BSTR::try_from(&text).ok())
+                .map(|text| text.to_string())
+                .unwrap_or_default()
+        };
+        found.push(WordField {
+            kind: property(&field, "Type")
+                .and_then(|kind| i32::try_from(&kind).ok())
+                .unwrap_or(0),
+            code: text("Code"),
+            result: text("Result"),
+        });
+    }
+    Some(found)
+}
+
+/// Selects the document's field `index` (from 0, as [`document_fields`] lists them), which puts
+/// the caret on it. False where Word's object model does not answer.
+pub fn select_field(document: HWND, index: usize) -> bool {
+    let select = || -> Option<()> {
+        let window = word_window(document)?;
+        let fields = object(&property(
+            &object(&property(&window, "Document")?)?,
+            "Fields",
+        )?)?;
+        let field = item(&fields, i32::try_from(index).ok()?.checked_add(1)?)?;
+        invoke(&field, "Select", DISPATCH_METHOD, &mut [])?;
+        Some(())
+    };
+    select().is_some()
+}
+
+/// At most this many of a document's fields are listed.
+const MAX_FIELDS: i32 = 2000;
+
+/// The item `index` (from 1) of a Word collection.
+fn item(collection: &IDispatch, index: i32) -> Option<IDispatch> {
+    let flags = DISPATCH_FLAGS(DISPATCH_METHOD.0 | DISPATCH_PROPERTYGET.0);
+    object(&invoke(
+        collection,
+        "Item",
+        flags,
+        &mut [VARIANT::from(index)],
+    )?)
+}
+
 /// The property `name` of `object`, read by late binding.
 fn property(object: &IDispatch, name: &str) -> Option<VARIANT> {
+    invoke(object, name, DISPATCH_PROPERTYGET, &mut [])
+}
+
+/// A late-bound call of `name` on `object` with `arguments` (in order; one at most here).
+fn invoke(
+    object: &IDispatch,
+    name: &str,
+    flags: DISPATCH_FLAGS,
+    arguments: &mut [VARIANT],
+) -> Option<VARIANT> {
     let wide = HSTRING::from(name);
     let names = [PCWSTR(wide.as_ptr())];
     let mut id = 0i32;
@@ -180,14 +266,25 @@ fn property(object: &IDispatch, name: &str) -> Option<VARIANT> {
     }
     .ok()?;
     let mut result = VARIANT::default();
-    // SAFETY: a property get with no arguments into a local result.
+    // IDispatch takes its arguments last first.
+    arguments.reverse();
+    let parameters = DISPPARAMS {
+        rgvarg: if arguments.is_empty() {
+            null_mut()
+        } else {
+            arguments.as_mut_ptr()
+        },
+        cArgs: u32::try_from(arguments.len()).ok()?,
+        ..DISPPARAMS::default()
+    };
+    // SAFETY: the arguments and the result are locals alive for the call.
     unsafe {
         object.Invoke(
             id,
             &GUID::zeroed(),
             LOCALE_USER_DEFAULT,
-            DISPATCH_PROPERTYGET,
-            &DISPPARAMS::default(),
+            flags,
+            &parameters,
             Some(&mut result),
             None,
             None,

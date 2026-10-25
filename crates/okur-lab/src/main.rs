@@ -159,6 +159,10 @@ enum Commands {
     /// own object model (OBJID_NATIVEOM), with the read's time: one JSON line (Windows;
     /// research, never evidence)
     WordLineSpacing,
+    /// The fields of the focused Word document from Word's own object model (OBJID_NATIVEOM):
+    /// one JSON line each (type, code, result), then the count and the read's time (Windows;
+    /// research, never evidence)
+    WordFields,
     /// Print the element UI Automation says has the keyboard focus, as one JSON line: its
     /// name, control type, class, and whether it is in a document (a web page's). The harness
     /// checks a web trial starts in its page (Windows)
@@ -1209,11 +1213,16 @@ async fn main() {
                     okur_platform::actions::document_paragraphs_now(window_title.as_deref());
                 let links = okur_platform::actions::document_links_now(window_title.as_deref());
                 // The line spacing of the selection's paragraph, from Word's object model.
-                let line_spacing = window_title
+                let document = window_title
                     .as_deref()
                     .and_then(okur_platform::harness::window_titled)
-                    .and_then(okur_platform::word_om::document_window)
-                    .and_then(okur_platform::word_om::selection_line_spacing);
+                    .and_then(okur_platform::word_om::document_window);
+                let line_spacing =
+                    document.and_then(okur_platform::word_om::selection_line_spacing);
+                // The document's fields, for its list of fields (Insert+F5).
+                let fields = document
+                    .and_then(okur_platform::word_om::document_fields)
+                    .unwrap_or_default();
                 if let Some(path) = append_to {
                     let t_ms = std::time::SystemTime::now()
                         .duration_since(std::time::UNIX_EPOCH)
@@ -1232,6 +1241,14 @@ async fn main() {
                             "rule": s.rule,
                             "points": s.points,
                         })),
+                        "fields": fields
+                            .iter()
+                            .map(|f| serde_json::json!({
+                                "kind": f.kind,
+                                "code": f.code,
+                                "result": f.result,
+                            }))
+                            .collect::<Vec<_>>(),
                     });
                     let written = std::fs::OpenOptions::new()
                         .create(true)
@@ -1403,6 +1420,17 @@ async fn main() {
             #[cfg(not(windows))]
             {
                 eprintln!("IA2 is only read on Windows");
+                std::process::exit(1);
+            }
+        }
+        Some(Commands::WordFields) => {
+            #[cfg(windows)]
+            okur_platform::harness::word_fields_probe()
+                .iter()
+                .for_each(|line| println!("{line}"));
+            #[cfg(not(windows))]
+            {
+                eprintln!("Word is only read on Windows");
                 std::process::exit(1);
             }
         }

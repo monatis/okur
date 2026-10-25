@@ -14,10 +14,12 @@
 #     then Tab across the Home tab's first commands, and Escape back to the document.
 # Then closes the fixture's window with Ctrl+W, after checking it is in front: Word's process
 # can hold the user's own documents. Run on old-pc with no batch recording.
-param([ValidateSet('word', 'formats', 'ribbon', 'view', 'spacing')][string]$Fixture = 'formats',
+param([ValidateSet('word', 'formats', 'ribbon', 'view', 'spacing', 'fields')][string]$Fixture = 'formats',
       [string]$Out = (Join-Path $env:USERPROFILE "sr-harness\probe\word-probe.txt"),
       [switch]$Ia2,
       [switch]$LineSpacing,
+      # The document's fields from Word's own object model (okur-lab word-fields).
+      [switch]$Fields,
       # ribbon and view: how many Tabs across the lower ribbon.
       [int]$Tabs = 10)
 $lab = Join-Path $env:USERPROFILE 'sr-harness\bin\okur-lab.exe'
@@ -40,6 +42,11 @@ $script, $title, $probes = switch ($Fixture) {
     'spacing' {
         'desktop-word-spacing.ps1', 'sr-word-spacing.docx - Word (Product Activation Failed)',
         (@(, @('Ctrl+Home')) + @(1..7 | ForEach-Object { , @('Down') }))
+    }
+    # desktop-word-fields.ps1: two hyperlinks, a text and a check box form field.
+    'fields' {
+        'desktop-word-fields.ps1', 'sr-word-fields.docx - Word (Product Activation Failed)',
+        @(, @('Ctrl+Home'))
     }
     'formats' {
         'desktop-word-formats.ps1', 'sr-word-formats.docx - Word (Product Activation Failed)',
@@ -95,6 +102,7 @@ foreach ($keys in $probes) {
     $lines += '   ' + (Cell-Report)
     $lines += & $lab text-attributes --unit 4 | ForEach-Object { "   $_" }
     if ($Ia2) { $lines += & $lab ia2-probe | ForEach-Object { "   ia2: $_" } }
+    if ($Fields) { $lines += & $lab word-fields | ForEach-Object { "   field: $_" } }
     if ($LineSpacing) { $lines += & $lab word-line-spacing | ForEach-Object { "   line spacing: $_" } }
 }
 # The fixture's window alone: Ctrl+W closes its document, unchanged, without a question.

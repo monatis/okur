@@ -127,7 +127,8 @@ pub use crate::key_input::send_key;
 #[cfg(windows)]
 pub use windows_harness::{
     bring_to_front, foreground_process, foreground_title, ia2_probe_focus, jaws_history,
-    msaa_focus_probe, send_steps, shell_window, window_titled, word_line_spacing_probe,
+    msaa_focus_probe, send_steps, shell_window, window_titled, word_fields_probe,
+    word_line_spacing_probe,
 };
 
 #[cfg(windows)]
@@ -354,6 +355,29 @@ mod windows_harness {
             "stages": spacing.is_none().then(|| crate::word_om::line_spacing_stages(window)),
         })
         .to_string()
+    }
+
+    /// The fields of the focused Word document, from Word's own object model
+    /// (`crate::word_om::document_fields`): one JSON line each, then the read's time.
+    /// Research: what Insert+F5's list can be built from.
+    pub fn word_fields_probe() -> Vec<String> {
+        use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+        // SAFETY: COM on this thread; repeated initialization is tolerated.
+        let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+        let (front, focus) = front_and_focus_windows();
+        let clock = Instant::now();
+        let fields = crate::word_om::document_fields(focus.unwrap_or(front));
+        let ms = u64::try_from(clock.elapsed().as_millis()).unwrap_or(u64::MAX);
+        let mut lines: Vec<String> = fields
+            .iter()
+            .flatten()
+            .map(|f| {
+                serde_json::json!({ "type": f.kind, "code": f.code, "result": f.result })
+                    .to_string()
+            })
+            .collect();
+        lines.push(serde_json::json!({ "fields": fields.map(|f| f.len()), "ms": ms }).to_string());
+        lines
     }
 
     /// The window in front, and the window with the keyboard focus in its thread.
