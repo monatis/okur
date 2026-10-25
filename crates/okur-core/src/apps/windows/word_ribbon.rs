@@ -12,9 +12,12 @@
 //!   tip "Clipboard") [obs, 1045/s3-s12].
 //! - Another group's command says the group's name first; an edit combo, "Font: edit combo |
 //!   Calibri", only itself, and Grow Font after it no group either [obs, 1045/s7-s9].
-//! - A button that drops a list or a grid down is a sub menu, and the first one reached makes
-//!   the ribbon a menu: "menu | | Font group | Change Case sub menu", the group with its role
-//!   [obs, 1045/s11; 1043/s5, entered by Down].
+//! - A button that drops a list or a grid down is a sub menu, reached from any other command a
+//!   menu entered: "menu | | Font group | Change Case sub menu", the group with its role
+//!   [obs, 1045/s11; 1043/s5, entered by Down]. The next other command leaves it unsaid: Text
+//!   Effects after Clear Formatting and the Font group's buttons is "menu | | Font group | Text
+//!   Effects and Typography sub menu" again, and the Paragraph group after it is named alone,
+//!   "Paragraph | Bullets split button" [obs, 1048/s19, s23, s25].
 //!
 //! - Escape back to the document: "Leaving menus | Leaving ribbons | Edit" [obs, 1043/s8,
 //!   1042/s4], the engine's "Leaving menus", then this module's; Word's window, focused on the
@@ -47,8 +50,7 @@ enum Place {
 #[derive(Debug, Default)]
 pub struct WordRibbon {
     place: Place,
-    /// A sub menu of the lower ribbon was reached: its commands are a menu's from then on, a
-    /// group said with its role, until the focus leaves the lower ribbon.
+    /// The focus is on a sub menu of the lower ribbon: a menu, its group said with its role.
     menu: bool,
     /// The ribbon was just left for Word's own window, before its document takes the focus.
     leaving: bool,
@@ -217,7 +219,7 @@ impl AppModule for WordRibbon {
         // A command it does not word, or outside the ribbon's menus: the engine's.
         let speech = self.speech(focus, &now);
         if matches!(now, Place::Lower(_)) {
-            self.menu |= focus.role == Role::MenuButton;
+            self.menu = focus.role == Role::MenuButton;
         } else {
             self.menu = false;
         }
@@ -389,11 +391,22 @@ mod tests {
             said(&mut ribbon, &gridlines).as_deref(),
             Some("Gridlines  \u{1d} check box \u{1e}  \u{1d}not checked\u{1e} ")
         );
-        // Once the ribbon is a menu, another group is said with its role.
-        let bold = in_group(Role::Button, "Bold", "Paragraph");
+        // A sub menu after other commands enters the menu again; the next group after it is
+        // named alone [obs, 1048/s19, s23, s25].
+        let effects = in_group(Role::MenuButton, "Text Effects and Typography", "Font");
         assert_eq!(
-            said(&mut ribbon, &bold).as_deref(),
-            Some("Paragraph  \u{1d} group \u{1e} \nBold  \u{1d} Button \u{1e} ")
+            said(&mut ribbon, &effects).as_deref(),
+            Some(" \u{1d} menu \u{1e} \nFont  \u{1d} group \u{1e} \nText Effects and Typography  \u{1d}sub menu\u{1e} ")
+        );
+        let color = in_group(Role::SplitButton, "Font Color", "Font");
+        assert_eq!(
+            said(&mut ribbon, &color).as_deref(),
+            Some("Font Color  \u{1d} split button \u{1e} ")
+        );
+        let bullets = in_group(Role::SplitButton, "Bullets", "Paragraph");
+        assert_eq!(
+            said(&mut ribbon, &bullets).as_deref(),
+            Some("Paragraph\nBullets  \u{1d} split button \u{1e} ")
         );
     }
 }
