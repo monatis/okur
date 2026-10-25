@@ -353,7 +353,10 @@ fn carry_out(
         match request {
             Request::Marked(text, mark, interrupt) => {
                 let spoken = okur_core::pronounce::spoken_with(&text, tts.punctuation, tts.text);
-                let _ = tts.engine.speak_marked(&spoken, mark, pitch, interrupt);
+                logged(
+                    tts.engine.speak_marked(&spoken, mark, pitch, interrupt),
+                    "speak_marked",
+                );
                 tracing::debug!(
                     mark,
                     follows = tts.engine.follows_marks(),
@@ -377,52 +380,69 @@ fn carry_out(
                         break;
                     }
                     let spoken = okur_core::pronounce::spoken_with(part, tts.punctuation, tts.text);
-                    let _ = tts
-                        .engine
-                        .speak_pitched(&spoken, pitch, interrupt && i == 0);
+                    logged(
+                        tts.engine
+                            .speak_pitched(&spoken, pitch, interrupt && i == 0),
+                        "speak_pitched",
+                    );
                 }
             }
             Request::Symbols(text, interrupt) => {
                 let spoken = okur_core::pronounce::spoken_symbols_with(&text, tts.text);
-                let _ = tts.engine.speak_pitched(&spoken, pitch, interrupt);
+                logged(
+                    tts.engine.speak_pitched(&spoken, pitch, interrupt),
+                    "speak_pitched",
+                );
             }
             Request::Character(text, interrupt) => {
-                let _ = tts.engine.speak_pitched(
-                    &okur_core::pronounce::character(&text),
-                    raised(&text),
-                    interrupt,
+                logged(
+                    tts.engine.speak_pitched(
+                        &okur_core::pronounce::character(&text),
+                        raised(&text),
+                        interrupt,
+                    ),
+                    "speak_pitched",
                 );
             }
             Request::Echo(text) => {
-                let _ = tts.engine.speak_pitched(
-                    &okur_core::pronounce::character(&text),
-                    raised(&text),
-                    true,
+                logged(
+                    tts.engine.speak_pitched(
+                        &okur_core::pronounce::character(&text),
+                        raised(&text),
+                        true,
+                    ),
+                    "speak_pitched",
                 );
             }
             Request::Cursor(context) => {
                 tts.cursor = context;
             }
             Request::Phonetic(text, interrupt) => {
-                let _ = tts.engine.speak_pitched(
-                    &okur_core::pronounce::phonetic(&text),
-                    raised(&text),
-                    interrupt,
+                logged(
+                    tts.engine.speak_pitched(
+                        &okur_core::pronounce::phonetic(&text),
+                        raised(&text),
+                        interrupt,
+                    ),
+                    "speak_pitched",
                 );
             }
             Request::Spelled(text, interrupt) => {
                 let parts = okur_core::pronounce::spelled_parts(&text, indicate_caps);
                 for (i, (part, raise)) in parts.into_iter().enumerate() {
                     let first = interrupt && i == 0;
-                    let _ = tts.engine.speak_pitched(
-                        &part,
-                        pitch.saturating_add(raise).clamp(-10, 10),
-                        first,
+                    logged(
+                        tts.engine.speak_pitched(
+                            &part,
+                            pitch.saturating_add(raise).clamp(-10, 10),
+                            first,
+                        ),
+                        "speak_pitched",
                     );
                 }
             }
             Request::Stop => {
-                let _ = tts.engine.stop();
+                logged(tts.engine.stop(), "stop");
             }
             Request::Configure(voice) => {
                 let kind = tts.kind;
@@ -437,6 +457,19 @@ fn carry_out(
                     }
                 }
             }
+        }
+    }
+}
+
+/// Logs a synthesizer call that failed, the first time and then every hundredth: each was
+/// dropped unseen, so a synthesizer that died left nothing in the log (performance review
+/// 2026-10-25, finding 13).
+fn logged(result: Result<(), crate::tts::TtsError>, call: &'static str) {
+    static FAILURES: AtomicU64 = AtomicU64::new(0);
+    if let Err(error) = result {
+        let failures = FAILURES.fetch_add(1, Ordering::Relaxed) + 1;
+        if failures % 100 == 1 {
+            tracing::warn!(call, failures, %error, "synthesizer call failed");
         }
     }
 }
