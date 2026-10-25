@@ -120,6 +120,17 @@ pub struct LineStructure {
     pub cell: Option<TableCell>,
 }
 
+/// A link of a document the platform reads by paragraphs (Word's hyperlinks), for its Links
+/// List (Insert+F7): its text, where it goes, and the paragraph it starts in, from the
+/// document's first (0), by which the caret is moved to it.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct DocumentLink {
+    pub text: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    pub paragraph: usize,
+}
+
 /// A heading of a document the platform reads by paragraphs (Word's), for its Heading List
 /// (Insert+F6): its text, its level, and the paragraph it is, from the document's first (0),
 /// by which the caret is moved to it.
@@ -802,6 +813,10 @@ pub enum AccessibilityEvent {
     /// in Word; [`crate::actions::ApplicationActions::read_document_headings`]); empty when it
     /// has none or could not be read.
     DocumentHeadings(Vec<DocumentHeading>),
+    /// The focused document's links, in order, asked for by its Links List (Insert+F7 in
+    /// Word; [`crate::actions::ApplicationActions::read_document_links`]); empty when it has
+    /// none or could not be read.
+    DocumentLinks(Vec<DocumentLink>),
     /// The focused document's paragraphs, in order, asked for by Say All in Word
     /// ([`crate::actions::ApplicationActions::read_document_paragraphs`]); empty when they could
     /// not be read.

@@ -1203,6 +1203,7 @@ async fn main() {
                 let view = okur_platform::actions::document_view_now(window_title.as_deref());
                 let paragraphs =
                     okur_platform::actions::document_paragraphs_now(window_title.as_deref());
+                let links = okur_platform::actions::document_links_now(window_title.as_deref());
                 if let Some(path) = append_to {
                     let t_ms = std::time::SystemTime::now()
                         .duration_since(std::time::UNIX_EPOCH)
@@ -1216,6 +1217,7 @@ async fn main() {
                         "headings": headings.unwrap_or_default(),
                         "view": view,
                         "paragraphs": paragraphs.unwrap_or_default(),
+                        "links": links.unwrap_or_default(),
                     });
                     let written = std::fs::OpenOptions::new()
                         .create(true)
@@ -1240,6 +1242,14 @@ async fn main() {
                     println!(
                         "{} : {} (paragraph {})",
                         heading.text, heading.level, heading.paragraph
+                    );
+                }
+                for link in links.unwrap_or_default() {
+                    println!(
+                        "link {} -> {} (paragraph {})",
+                        link.text,
+                        link.url.unwrap_or_default(),
+                        link.paragraph
                     );
                 }
             }

@@ -7465,6 +7465,7 @@ fn word_document(
     let mut document = FocusEvent::new(Role::Document)
         .with_name("sr-word-fixture.docx")
         .with_window_title("sr-word-fixture.docx - Word");
+    document.app = Some("WINWORD.EXE".into());
     document.text = Some(crate::event::TextContext {
         text: text.to_owned(),
         caret,
@@ -7531,6 +7532,103 @@ fn words_heading_list_lists_the_documents_headings() {
         engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogClosed { id }));
     assert_eq!(closed.as_deref().map(str::trim), Some("\u{1d} Edit \u{1e}"));
     assert_eq!(engine.app_mode, AppMode::NativeControl);
+}
+
+/// Insert+F7 in Word lists the document's links, which the platform reads, in the Links List
+/// a page has ("Links List dialog | links List view | opening hours | 1 of 2" [obs, 1049/s1]);
+/// Move To Link moves the caret to the link's paragraph, Activate Link has the document follow
+/// it; with none, Word's words for it [obs, 1044/s1].
+#[test]
+fn words_links_list_lists_the_documents_links() {
+    use crate::ui::{ControlKind, FromUi, ToUi};
+    let (mut engine, speech) = word_document(
+        "Library Card\rSee the opening hours before you come.\r",
+        0,
+        crate::event::LineStructure {
+            line: (0, 13),
+            heading: Some(1),
+            ..Default::default()
+        },
+    );
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut f7 = KeyEvent::new(Key::F(7), Modifiers::none(), true);
+    f7.modifiers.insert = true;
+    engine.handle_key_event(&f7);
+    // Opened again without a second Insert+F7, which would be a double press.
+    let links_list = |engine: &mut ScreenReaderEngine| {
+        engine.open_list(crate::ui::lists::ListKind::Links);
+    };
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "document links"));
+    let link = |text: &str, paragraph| crate::event::DocumentLink {
+        text: text.to_owned(),
+        url: Some(format!("https://example.org/{text}")),
+        paragraph,
+    };
+    let links = vec![link("opening hours", 1), link("branches", 4)];
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentLinks(links.clone()));
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "Links List");
+    assert!(dialog.controls.iter().any(|c| matches!(
+        &c.kind,
+        ControlKind::List { items, selected: 0 } if items == &["opening hours", "branches"]
+    )));
+    // Move To Link on the second: the caret to its paragraph.
+    let id = dialog.id;
+    let list = dialog
+        .controls
+        .first()
+        .map(|c| c.id.clone())
+        .unwrap_or_default();
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: list,
+        value: crate::ui::Value::Selected(1),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "move".into(),
+    }));
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "paragraph 4"));
+    // Activate Link on the first: the document follows it.
+    links_list(&mut engine);
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentLinks(links));
+    let shown = ui.take().into_iter().find_map(|m| match m {
+        ToUi::DialogShow { dialog } => Some(dialog),
+        _ => None,
+    });
+    let Some(dialog) = shown else {
+        panic_free_fail("no second dialog shown");
+        return;
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: dialog.id,
+        control: "activate".into(),
+    }));
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "activate document link 0"));
+    // None: Word's words for it.
+    links_list(&mut engine);
+    speech.take();
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentLinks(Vec::new()));
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some("no links\nCheck for link type fields with Insert+F5.")
+    );
 }
 
 /// Ctrl+Alt+Right in a table of Word's moves the caret to the next cell through the platform;

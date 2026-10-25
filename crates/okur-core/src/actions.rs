@@ -74,6 +74,21 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for the focused document's links (Word's hyperlinks), which arrive later as
+    /// [`crate::event::AccessibilityEvent::DocumentLinks`], always. Returns false when
+    /// unsupported.
+    fn read_document_links(&self) -> bool {
+        false
+    }
+
+    /// Follows the focused document's link `index` (from 0, as
+    /// [`crate::event::AccessibilityEvent::DocumentLinks`] lists them): Word's Activate Link.
+    /// Returns false when unsupported.
+    fn activate_document_link(&self, index: usize) -> bool {
+        let _ = index;
+        false
+    }
+
     /// Asks for the focused document's paragraphs (Word's), which arrive later as
     /// [`crate::event::AccessibilityEvent::DocumentParagraphs`], always. Returns false when
     /// unsupported.
@@ -385,6 +400,20 @@ impl ApplicationActions for RecordingActions {
     fn read_document_paragraphs(&self) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push(("document paragraphs".to_owned(), 0));
+        }
+        true
+    }
+
+    fn read_document_links(&self) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("document links".to_owned(), 0));
+        }
+        true
+    }
+
+    fn activate_document_link(&self, index: usize) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((format!("activate document link {index}"), 0));
         }
         true
     }

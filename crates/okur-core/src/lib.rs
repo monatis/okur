@@ -43,9 +43,9 @@ pub use buffer::{
 pub use cursor::{SearchState, VirtualCursor};
 pub use engine::ScreenReaderEngine;
 pub use event::{
-    AccessibilityEvent, ChangeKind, DocumentHeading, DocumentParagraph, FocusEvent, FontInfo,
-    GroupEntry, LineStructure, LiveRegionEvent, MenuEvent, MousePoint, PlatformIds, Politeness,
-    TableCell, TextContext, UnitTexts, WindowItem,
+    AccessibilityEvent, ChangeKind, DocumentHeading, DocumentLink, DocumentParagraph, FocusEvent,
+    FontInfo, GroupEntry, LineStructure, LiveRegionEvent, MenuEvent, MousePoint, PlatformIds,
+    Politeness, TableCell, TextContext, UnitTexts, WindowItem,
 };
 pub use input::{Key, KeyAction, KeyEvent, Modifiers};
 pub use speech::{MockSpeechOutput, SpeechFormatter, SpeechOutput};

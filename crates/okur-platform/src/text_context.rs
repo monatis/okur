@@ -33,11 +33,13 @@ pub fn css_alignment(align: &str) -> Option<&'static str> {
 }
 
 #[cfg(windows)]
+pub(crate) use reader::activate_word_document_link;
+#[cfg(windows)]
 pub use reader::{
     focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
     move_caret_in_edit, move_to_cell, move_to_paragraph, read_focused, read_focused_outside_page,
-    visible_text, with_paragraph_alignment, word_document_headings, word_document_paragraphs,
-    word_view,
+    visible_text, with_paragraph_alignment, word_document_headings, word_document_links,
+    word_document_paragraphs, word_view,
 };
 
 #[cfg(windows)]
@@ -836,6 +838,155 @@ mod reader {
                 }
             }
             Some(headings)
+        }
+    }
+
+    /// Word's document element: the focused one, or with `window` the one in that top-level
+    /// window. `None` without Word's document.
+    fn word_document(
+        uia: &IUIAutomation,
+        window: Option<windows::Win32::Foundation::HWND>,
+    ) -> Option<IUIAutomationElement> {
+        use windows::core::BSTR;
+        use windows::Win32::System::Variant::VARIANT;
+        use windows::Win32::UI::Accessibility::{TreeScope_Descendants, UIA_ClassNamePropertyId};
+        // SAFETY: UIA client calls on valid objects.
+        unsafe {
+            match window {
+                Some(window) => {
+                    let condition = uia
+                        .CreatePropertyCondition(
+                            UIA_ClassNamePropertyId,
+                            &VARIANT::from(BSTR::from(WORD_DOCUMENT_CLASS)),
+                        )
+                        .ok()?;
+                    uia.ElementFromHandle(window)
+                        .ok()?
+                        .FindFirst(TreeScope_Descendants, &condition)
+                        .ok()
+                }
+                None => {
+                    let focused = uia.GetFocusedElement().ok()?;
+                    (focused.CurrentClassName().ok()? == WORD_DOCUMENT_CLASS).then_some(focused)
+                }
+            }
+        }
+    }
+
+    /// The hyperlinks of Word's document, the focused one or with `window` the one in that
+    /// top-level window, for its Links List: each one's text, its address, and the paragraph it
+    /// starts in, counted as [`word_document_headings`] counts them. Word gives them as the
+    /// document range's children, UI Automation hyperlinks (old-pc, `fields-uia.ps1`,
+    /// 2026-10-25). `None` without Word's document.
+    pub fn word_document_links(
+        uia: &IUIAutomation,
+        window: Option<windows::Win32::Foundation::HWND>,
+    ) -> Option<Vec<okur_core::DocumentLink>> {
+        use windows::Win32::UI::Accessibility::{
+            IUIAutomationValuePattern, TextUnit_Paragraph, UIA_HyperlinkControlTypeId,
+            UIA_ValuePatternId,
+        };
+        let document = word_document(uia, window)?;
+        // SAFETY: UIA client calls on valid objects.
+        unsafe {
+            let pattern: IUIAutomationTextPattern =
+                document.GetCurrentPatternAs(UIA_TextPatternId).ok()?;
+            let whole = pattern.DocumentRange().ok()?;
+            let children = whole.GetChildren().ok()?;
+            let mut found = Vec::new();
+            for index in 0..children.Length().unwrap_or(0) {
+                let Ok(child) = children.GetElement(index) else {
+                    continue;
+                };
+                if child.CurrentControlType().ok() != Some(UIA_HyperlinkControlTypeId) {
+                    continue;
+                }
+                let text = child
+                    .CurrentName()
+                    .map(|n| n.to_string())
+                    .unwrap_or_default()
+                    .trim()
+                    .to_owned();
+                let url = child
+                    .GetCurrentPatternAs::<IUIAutomationValuePattern>(UIA_ValuePatternId)
+                    .ok()
+                    .and_then(|v| v.CurrentValue().ok())
+                    .map(|v| v.to_string())
+                    .filter(|v| !v.is_empty());
+                let Ok(range) = pattern.RangeFromChild(&child) else {
+                    continue;
+                };
+                found.push((text, url, range));
+            }
+            // The paragraph each starts in, in one pass over the paragraphs: the first whose
+            // end is past the link's start.
+            let at = whole.Clone().ok()?;
+            at.MoveEndpointByRange(
+                TextPatternRangeEndpoint_End,
+                &at,
+                TextPatternRangeEndpoint_Start,
+            )
+            .ok()?;
+            let mut links = Vec::new();
+            let mut pending = found.into_iter().peekable();
+            for paragraph in 0..MAX_PARAGRAPHS {
+                let range = at.Clone().ok()?;
+                range.ExpandToEnclosingUnit(TextUnit_Paragraph).ok()?;
+                while let Some((_, _, link)) = pending.peek() {
+                    let starts_here = range
+                        .CompareEndpoints(
+                            TextPatternRangeEndpoint_End,
+                            link,
+                            TextPatternRangeEndpoint_Start,
+                        )
+                        .is_ok_and(|order| order > 0);
+                    if !starts_here {
+                        break;
+                    }
+                    if let Some((text, url, _)) = pending.next() {
+                        links.push(okur_core::DocumentLink {
+                            text,
+                            url,
+                            paragraph,
+                        });
+                    }
+                }
+                if pending.peek().is_none() || at.Move(TextUnit_Paragraph, 1).ok()? < 1 {
+                    break;
+                }
+            }
+            Some(links)
+        }
+    }
+
+    /// Follows the hyperlink `index` of Word's focused document, as
+    /// [`word_document_links`] lists them. False without it.
+    pub fn activate_word_document_link(uia: &IUIAutomation, index: usize) -> bool {
+        use windows::Win32::UI::Accessibility::{
+            IUIAutomationInvokePattern, UIA_HyperlinkControlTypeId, UIA_InvokePatternId,
+        };
+        let Some(document) = word_document(uia, None) else {
+            return false;
+        };
+        // SAFETY: UIA client calls on valid objects.
+        unsafe {
+            let Ok(pattern) =
+                document.GetCurrentPatternAs::<IUIAutomationTextPattern>(UIA_TextPatternId)
+            else {
+                return false;
+            };
+            let Ok(children) = pattern.DocumentRange().and_then(|r| r.GetChildren()) else {
+                return false;
+            };
+            let link = (0..children.Length().unwrap_or(0))
+                .filter_map(|i| children.GetElement(i).ok())
+                .filter(|child| child.CurrentControlType().ok() == Some(UIA_HyperlinkControlTypeId))
+                .nth(index);
+            link.and_then(|link| {
+                link.GetCurrentPatternAs::<IUIAutomationInvokePattern>(UIA_InvokePatternId)
+                    .ok()
+            })
+            .is_some_and(|invoke| invoke.Invoke().is_ok())
         }
     }
 

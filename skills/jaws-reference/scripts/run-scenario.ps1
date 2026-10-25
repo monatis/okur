@@ -80,8 +80,9 @@ window in front after each step (<TraceDir>\<id>-trial<N>.screen.jsonl, okur-lab
 and "trace_ocr": true the words Windows' OCR reads in it too: replay gives them to Okur's
 experimental screen text, which "okur_settings" turns on for the replay only.
 Headings: "trace_headings": true saves, with -TraceDir, the headings of Word's document in the
-fixture's window and the view it shows it in after each step (okur-lab document-headings), to
-the same file: replay gives them to Okur's Heading List and Say Window Title in Word.
+fixture's window, the view it shows it in, its paragraphs and its links after each step
+(okur-lab document-headings), to the same file: replay gives them to Okur's Heading List, Say
+Window Title, Say All and Links List in Word.
 Files: "trace_file": true saves, with -TraceDir, what Okur's recognizer reads in the file
 selected in the fixture's File Explorer window after each step (okur-lab file-text), to the same
 file: replay gives it to Okur's Insert+Space, O, F. Such a fixture's launch has "shell_window":

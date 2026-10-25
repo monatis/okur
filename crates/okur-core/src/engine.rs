@@ -329,6 +329,8 @@ pub struct ScreenReaderEngine {
     /// The focused document's headings were asked for its Heading List, which opens when they
     /// come.
     document_headings_asked: bool,
+    /// The focused document's links were asked for its Links List, and are awaited.
+    document_links_asked: bool,
     /// Say All waits for Word's document's paragraphs.
     say_all_paragraphs_asked: bool,
     /// Say Window Title in Word asked for the document's view, said with this title when it
@@ -593,6 +595,7 @@ impl ScreenReaderEngine {
             list_dialog: None,
             list_return_mode: AppMode::VirtualBuffer,
             document_headings_asked: false,
+            document_links_asked: false,
             say_all_paragraphs_asked: false,
             document_view_title: None,
             document_view_by_key: None,
@@ -1488,6 +1491,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::TrayIcons(icons) => self.open_tray_list(icons),
             AccessibilityEvent::PageElements(elements) => self.say_page_font(elements),
             AccessibilityEvent::DocumentHeadings(headings) => self.document_headings(headings),
+            AccessibilityEvent::DocumentLinks(links) => self.document_links(links),
             AccessibilityEvent::DocumentParagraphs(paragraphs) => {
                 self.say_all_by_paragraphs(paragraphs)
             }
@@ -2669,9 +2673,23 @@ impl ScreenReaderEngine {
             self.document_headings_asked = true;
             return None;
         }
+        // A document whose links the platform reads (Word's) lists its own links, as JAWS's
+        // Links List shows Word's hyperlinks [obs, 1049/s1].
+        if kind == ListKind::Links
+            && self.app_mode != AppMode::VirtualBuffer
+            && self.editing_document()
+            && self
+                .actions
+                .as_ref()
+                .is_some_and(|actions| actions.read_document_links())
+        {
+            tracing::debug!("links list: the document's links asked for");
+            self.document_links_asked = true;
+            return None;
+        }
         // Outside a page, a list the application words is its own, never the buffer's: the
         // buffer can still hold the last page read, whose links Word's Links List would have
-        // shown. Word's links and fields are not read yet, so its list is said empty.
+        // shown. Word's fields are not read yet, so its field list is said empty.
         let application_list = self
             .last_native_focus
             .as_ref()
@@ -2788,6 +2806,46 @@ impl ScreenReaderEngine {
         self.show_list(dialog, mode)
     }
 
+    /// The focused document's links, asked for its Links List: the list, as a page's is, the
+    /// first link selected, "Links List dialog | links List view | opening hours | 1 of 2"
+    /// [obs, 1049/s1]; with none, the application's words for it, or Okur's.
+    fn document_links(&mut self, links: &[crate::event::DocumentLink]) -> Option<String> {
+        if !std::mem::take(&mut self.document_links_asked) {
+            return None;
+        }
+        tracing::debug!(links = links.len(), "links list: the document's links came");
+        if links.is_empty() {
+            let none = self
+                .last_native_focus
+                .as_ref()
+                .and_then(|focus| {
+                    self.app_for(focus)?
+                        .empty_list(focus, &crate::ui::lists::ListKind::Links)
+                })
+                .unwrap_or_else(|| msg::links_list_none().to_string());
+            self.speech.speak(&none, true);
+            return Some(none);
+        }
+        // Each by its place in the document: the list's node is the link's index, its offset
+        // its paragraph, by which Move To Link moves the caret.
+        let items: Vec<crate::buffer::LinkListItem> = links
+            .iter()
+            .enumerate()
+            .map(|(index, link)| crate::buffer::LinkListItem {
+                node_id: index,
+                text: link.text.clone(),
+                href: link.url.clone(),
+                is_same_page: false,
+                visited: false,
+                offset: link.paragraph,
+                current: None,
+            })
+            .collect();
+        let dialog = crate::ui::lists::ListDialog::links(self.dialog_count + 1, &items);
+        let mode = self.app_mode;
+        self.show_list(dialog, mode)
+    }
+
     /// What the user did to the open list dialog.
     fn handle_list_event(&mut self, message: &crate::ui::FromUi) -> Option<String> {
         use crate::ui::lists::{ListKind, Outcome};
@@ -2807,11 +2865,26 @@ impl ScreenReaderEngine {
             // The heading's line is said when the caret is read there, then "Edit": "heading
             // level 1 Library Hours | Edit" [obs, 1036/s3, s7]. The document's focus comes back
             // first, which drops a pending edit key: the move is kept apart.
+            // A link's entry keeps its paragraph as its offset, its index as its node.
             Outcome::MoveTo(entry) if in_document => {
                 close(self);
                 self.moved_by_document_list = true;
+                let paragraph = if kind == ListKind::Links {
+                    entry.offset
+                } else {
+                    entry.node_id
+                };
                 if let Some(actions) = &self.actions {
-                    actions.move_to_paragraph(self.last_text.as_ref(), entry.node_id);
+                    actions.move_to_paragraph(self.last_text.as_ref(), paragraph);
+                }
+                None
+            }
+            // Activate Link in a document's list: the document follows the link itself, and
+            // what opens says itself.
+            Outcome::Activate(link) if in_document => {
+                close(self);
+                if let Some(actions) = &self.actions {
+                    actions.activate_document_link(link.node_id);
                 }
                 None
             }

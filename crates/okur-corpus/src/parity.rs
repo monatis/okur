@@ -1222,6 +1222,10 @@ struct ScreenSnapshot {
     /// Word's document's paragraphs, saved beside the headings (none before 1038), for Say All.
     #[serde(default)]
     paragraphs: Vec<okur_core::DocumentParagraph>,
+    /// Word's document's links, saved beside the headings (none before 1049), for its Links
+    /// List.
+    #[serde(default)]
+    links: Vec<okur_core::DocumentLink>,
 }
 
 impl ScreenSnapshot {
@@ -1239,6 +1243,7 @@ impl ScreenSnapshot {
             self.headings = other.headings;
             self.view = other.view;
             self.paragraphs = other.paragraphs;
+            self.links = other.links;
         }
     }
 }
@@ -1252,6 +1257,7 @@ struct ScreenReads {
     headings: usize,
     views: usize,
     paragraphs: usize,
+    links: usize,
 }
 
 impl ScreenReads {
@@ -1334,10 +1340,11 @@ impl ScreenReads {
     ) {
         let requests = actions.requests();
         let count = |name: &str| requests.iter().filter(|(a, _)| a == name).count();
-        let (headings, views, paragraphs) = (
+        let (headings, views, paragraphs, links) = (
             count("document headings"),
             count("document view"),
             count("document paragraphs"),
+            count("document links"),
         );
         let mut deliver = |event: okur_core::AccessibilityEvent| {
             if let Some(speech) = engine.handle_accessibility_event(&event) {
@@ -1353,6 +1360,14 @@ impl ScreenReads {
             self.paragraphs += 1;
             deliver(okur_core::AccessibilityEvent::DocumentParagraphs(
                 snapshot.map(|s| s.paragraphs.clone()).unwrap_or_default(),
+            ));
+        }
+        // The Links List's links, always answered: none where the step saved none (scenarios
+        // recorded before they were saved, 1044's document without links).
+        while self.links < links {
+            self.links += 1;
+            deliver(okur_core::AccessibilityEvent::DocumentLinks(
+                snapshot.map(|s| s.links.clone()).unwrap_or_default(),
             ));
         }
         let Some(snapshot) = snapshot else {
