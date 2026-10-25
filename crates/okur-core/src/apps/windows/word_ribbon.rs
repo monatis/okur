@@ -6,8 +6,12 @@
 //!   commands' group with its role, a split button as a sub menu; the arrows and Tab in the
 //!   group then say a command alone, "Blank Page Button", with no place and no hint.
 //!
-//! Leaving the ribbon is the engine's ("Leaving menus"); a command this module does not word
-//! (only Word's buttons and split buttons are recorded) is the engine's too.
+//! - Escape back to the document: "Leaving menus | Leaving ribbons | Edit" [obs, 1043/s8,
+//!   1042/s4], the engine's "Leaving menus", then this module's; Word's window, focused on the
+//!   way, says nothing of its own.
+//!
+//! A command this module does not word (only Word's buttons and split buttons are recorded)
+//! is the engine's.
 
 use crate::announcement::Announcement;
 use crate::aom::Role;
@@ -33,6 +37,8 @@ enum Place {
 #[derive(Debug, Default)]
 pub struct WordRibbon {
     place: Place,
+    /// The ribbon was just left for Word's own window, before its document takes the focus.
+    leaving: bool,
 }
 
 /// Whether the focus is in Word.
@@ -93,6 +99,27 @@ impl AppModule for WordRibbon {
     }
 
     fn focus(&mut self, focus: &FocusEvent, _cx: &mut AppContext<'_>) -> FocusResponse {
+        // Out of the ribbon into Word's window, then its document.
+        let left = self.place != Place::Outside || self.leaving;
+        if left && in_word(focus) && !focus.in_ribbon {
+            self.place = Place::Outside;
+            match focus.role {
+                Role::Window => {
+                    self.leaving = true;
+                    return FocusResponse::Silent;
+                }
+                Role::Document => {
+                    self.leaving = false;
+                    return FocusResponse::Speak(Announcement::from_text(&format!(
+                        "{}\n{}",
+                        msg::ribbons_left(),
+                        role_marker(msg::role_edit().as_str())
+                    )));
+                }
+                _ => {}
+            }
+        }
+        self.leaving = false;
         let now = if in_word(focus) && focus.in_ribbon && focus.ribbon_menu {
             if focus.role == Role::Tab {
                 Place::Tabs
@@ -187,9 +214,17 @@ mod tests {
             said(&mut ribbon, &blank).as_deref(),
             Some("Blank Page  \u{1d} Button \u{1e} ")
         );
-        // Out of the ribbon: the engine's, and the ribbon is entered anew after.
+        // Escape: Word's window says nothing, its document what JAWS says of it after the
+        // ribbon; the ribbon is entered anew after.
+        let mut window = FocusEvent::new(Role::Window);
+        window.app = Some("WINWORD.EXE".into());
+        assert_eq!(said(&mut ribbon, &window), None);
         let mut document = FocusEvent::new(Role::Document);
         document.app = Some("WINWORD.EXE".into());
+        assert_eq!(
+            said(&mut ribbon, &document).as_deref(),
+            Some("Leaving ribbons\n \u{1d} Edit \u{1e} ")
+        );
         assert_eq!(said(&mut ribbon, &document), None);
         assert!(said(&mut ribbon, &home).is_some_and(|s| s.starts_with(" \u{1d} Upper Ribbon")));
         // Another application's ribbon is not this module's.
