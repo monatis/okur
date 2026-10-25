@@ -2282,6 +2282,12 @@ impl ScreenReaderEngine {
                 self.resolve_settings();
                 send(self, messages);
             }
+            Outcome::Sample(voice) => {
+                self.speech.configure(&voice);
+                self.speech
+                    .speak(msg::voice_adjustment_sample_text().as_str(), true);
+                self.configure_voice();
+            }
             Outcome::Closed => self.close_voice_adjustment(),
         }
     }

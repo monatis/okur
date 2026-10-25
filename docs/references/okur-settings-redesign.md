@@ -448,8 +448,12 @@ spoken form is a parity target.
    A tutor message ending an utterance ("To change the selection use the Arrow keys.") is said
    in the Tutor and Message voice, the rest in the cursor's (`split_tutor_message`, the speech
    thread); the speech log keeps the utterance whole.
-   Still to do: Speak Sample and Synthesizer
-   Language; Apply's question whether to make a saved profile the default.
+   Speak Sample, after Delete Profile as JAWS's fourth Tab stop, says JAWS's sentence, "This is
+   a sample of the currently selected voice using the current voice settings.", in the voice
+   the dialog shows, a context's once Adjust shows it (walked: `jaws-window-walk.ps1 -Parts
+   samplecheck`, then `sample`).
+   Still to do: Synthesizer Language (one language per profile in Okur); Apply's question
+   whether to make a saved profile the default.
    **The Language menu's Voice Profiles built 2026-10-25:** Default, For <application> (the
    application in front as Okur's window opens) with Use Default, No Speech (the No Speech
    synthesizer for the session, until a profile is chosen), Create New... (Voice Adjustment).

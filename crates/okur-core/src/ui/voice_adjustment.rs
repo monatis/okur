@@ -23,6 +23,7 @@ use crate::settings::{Punctuation, Settings, VoiceContext, VoiceSettings};
 
 const PROFILE: &str = "profile";
 const DELETE: &str = "delete_profile";
+const SAMPLE: &str = "speak_sample";
 const ADJUST: &str = "adjust";
 const PERSON: &str = "person";
 const RATE: &str = "rate";
@@ -38,6 +39,9 @@ const PROFILE_NAME: &str = "profile_name";
 pub enum Outcome {
     Nothing,
     Send(Vec<ToUi>),
+    /// Speak Sample: JAWS's sentence said in `voice`, the voice the dialog shows, then the voice
+    /// in force again [obs, the walk of Voice Adjustment's Speak Sample].
+    Sample(Box<VoiceSettings>),
     /// OK: `settings` for all applications, where they were `before`: the voice chosen or
     /// changed, and a saved profile changed kept under its name.
     Apply {
@@ -197,6 +201,7 @@ impl VoiceAdjustment {
                     },
                 ),
                 button(DELETE, msg::voice_adjustment_delete(), !self.factory()),
+                button(SAMPLE, msg::voice_adjustment_sample(), true),
                 control("voice", msg::voice_adjustment_group(), ControlKind::Group),
                 control(
                     ADJUST,
@@ -564,6 +569,10 @@ impl VoiceAdjustment {
             FromUi::DialogPressed { id, control } if *id == self.id => match control.as_str() {
                 SAVE_AS => Outcome::AskName,
                 DELETE => self.delete(),
+                SAMPLE => Outcome::Sample(Box::new(VoiceSettings {
+                    contexts: Default::default(),
+                    ..self.shown()
+                })),
                 "ok" if self.ok_enabled() => {
                     let mut settings = self.draft.clone();
                     if let Some(profile) = self.profiles.get(self.profile) {
@@ -615,10 +624,35 @@ mod tests {
         assert!(message.is_empty(), "{message}");
     }
 
-    /// JAWS's Voice Adjustment: Profile Name, Delete Profile, the "Voice" group of Adjust,
-    /// Person, Rate, Punctuation, Pitch or Volume, Save As..., OK, Cancel, in its Tab order [obs,
-    /// the walks of Voice Adjustment]; Adjust offers All Contexts and the four contexts, with
-    /// JAWS's names in Okur's [obs, the walk of its contexts].
+    /// Speak Sample says JAWS's sentence in the voice the dialog shows: a context's, once
+    /// Adjust shows it [obs, the walk of Voice Adjustment's Speak Sample].
+    #[test]
+    fn speak_sample_uses_the_voice_shown() {
+        let mut settings = Settings::default();
+        settings.voice.rate = 3;
+        settings.voice.contexts.keyboard.rate = Some(-6);
+        let mut dialog = VoiceAdjustment::new(5, settings, vec!["Zira".into()]);
+        let Outcome::Sample(voice) = pressed(&mut dialog, 5, SAMPLE) else {
+            panic_free_fail("no sample");
+            return;
+        };
+        assert_eq!(voice.rate, 3);
+        dialog.handle(&FromUi::DialogChanged {
+            id: 5,
+            control: ADJUST.into(),
+            value: Value::Selected(3),
+        });
+        let Outcome::Sample(voice) = pressed(&mut dialog, 5, SAMPLE) else {
+            panic_free_fail("no sample");
+            return;
+        };
+        assert_eq!(voice.rate, -6);
+    }
+
+    /// JAWS's Voice Adjustment: Profile Name, Delete Profile, Speak Sample, the "Voice" group
+    /// of Adjust, Person, Rate, Punctuation, Pitch or Volume, Save As..., OK, Cancel, in its Tab
+    /// order [obs, the walks of Voice Adjustment]; Adjust offers All Contexts and the four
+    /// contexts, with JAWS's names in Okur's [obs, the walk of its contexts].
     #[test]
     fn voice_adjustment_is_jaws_dialog() {
         let dialog = VoiceAdjustment::new(5, Settings::default(), vec!["Zira".into()]);
@@ -630,6 +664,7 @@ mod tests {
             [
                 "Profile Name:",
                 "Delete Profile",
+                "Speak Sample",
                 "Voice",
                 "Adjust:",
                 "Person:",

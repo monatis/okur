@@ -591,6 +591,10 @@ okur-menu-restore = Restore to Factory Settings...
 voice-adjustment-title = Voice Adjustment
 voice-adjustment-profile = Profile Name:
 voice-adjustment-delete = Delete Profile
+# Speak Sample, after Delete Profile, and what it says in the voice shown [obs, the walk of
+# Voice Adjustment's Speak Sample].
+voice-adjustment-sample = Speak Sample
+voice-adjustment-sample-text = This is a sample of the currently selected voice using the current voice settings.
 voice-adjustment-save-as = Save As...
 # Save As's question: "Save Voice Profile dialog | Voice Profile Name: edit combo" [obs, the walk
 # of Voice Adjustment's profiles].
