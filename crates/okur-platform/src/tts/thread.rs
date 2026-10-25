@@ -428,9 +428,12 @@ fn carry_out(
                 let kind = tts.kind;
                 tts.configure(&voice);
                 // Another synthesizer has other voices.
+                // Enumerated before the list is locked: the engine reads the list as dialogs
+                // open (performance review 2026-10-25, finding 15).
                 if tts.kind != kind {
+                    let voices = SpeechOutput::voices(&*tts);
                     if let Ok(mut known) = worker_voices.lock() {
-                        *known = SpeechOutput::voices(&*tts);
+                        *known = voices;
                     }
                 }
             }

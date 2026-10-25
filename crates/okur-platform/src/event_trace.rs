@@ -1865,8 +1865,22 @@ impl EventConverter {
             // A select's value changed: it has no text, only the new choice as its value. It is
             // said as a value change [obs, 205/s9, s10].
             "value_change" if is_choice_without_text(event) => ChangeKind::Value,
-            // The focused text field's caret moved or its text changed.
+            // The focused text field's caret moved or its text changed. A value change of
+            // another object is not the field's: Word's ribbon and its Font boxes change as the
+            // caret crosses a style, and each was read as the document's text (performance
+            // review 2026-10-25, finding 2).
             "caret" | "text_selection_change" | "value_change" if event.text_context.is_some() => {
+                let object_name = event.object.as_ref().and_then(|o| o.name.as_ref());
+                let concerns = self.focused.as_ref().is_some_and(|focused| {
+                    concerns_focus(
+                        (focused, self.focused_control.as_ref()),
+                        (event.hwnd, event.id_object, event.id_child),
+                        object_name,
+                    )
+                });
+                if event.event == "value_change" && !concerns {
+                    return None;
+                }
                 return event
                     .text_context
                     .clone()
@@ -2765,19 +2779,25 @@ mod capture {
     /// Windows delivers the next WinEvent on this thread before the read returns: read there,
     /// it borrowed `STATE` inside the first event's borrow and aborted the reader
     /// (performance review 2026-10-23, P1).
+    ///
+    /// Each read runs under [`guarded`]: the message pump's own reads did not, and a panic in
+    /// one would have ended event speech for the session (performance review 2026-10-25,
+    /// finding 11); the tracer is never left marked busy either.
     fn in_turn(read: impl FnOnce()) {
         READING.with(|r| r.set(true));
-        read();
+        guarded("read", read);
         while let Some(event) = DEFERRED.with(|d| d.borrow_mut().pop_front()) {
-            record_at(
-                event.t_ms,
-                event.name,
-                event.win_event,
-                event.hwnd,
-                event.id_object,
-                event.id_child,
-                None,
-            );
+            guarded("deferred event", || {
+                record_at(
+                    event.t_ms,
+                    event.name,
+                    event.win_event,
+                    event.hwnd,
+                    event.id_object,
+                    event.id_child,
+                    None,
+                )
+            });
         }
         READING.with(|r| r.set(false));
     }
@@ -4598,7 +4618,7 @@ mod capture {
             // The object read here is the one recorded: read twice, it cost six more
             // cross-process calls per change (performance review 2026-10-23, P10).
             let mut object_read: Option<Option<TraceObject>> = None;
-            if state.live && matches!(name, "state_change" | "selection") {
+            if state.live && matches!(name, "state_change" | "selection" | "value_change") {
                 let object = msaa_object(hwnd, id_object, id_child);
                 let object_name = object.as_ref().and_then(|o| o.name.as_ref());
                 if !super::change_concerns_converter_focus(
@@ -7061,6 +7081,62 @@ mod tests {
         );
         assert!(matches!(
             converter.convert(&value_change("Eastgate")).as_slice(),
+            [okur_core::AccessibilityEvent::TextContext(_)]
+        ));
+    }
+
+    /// A value change with the focused field's text is the field's only when it is about the
+    /// focus: Word's ribbon changing its Font box as the caret crosses a style is not the
+    /// document's text (performance review 2026-10-25, finding 2).
+    #[test]
+    fn another_objects_value_change_is_not_the_fields_text() {
+        let text = || {
+            Some(okur_core::TextContext {
+                text: "Library Hours".to_owned(),
+                caret: 0,
+                selection: None,
+                font: None,
+                word: None,
+                misspelled: Vec::new(),
+                structure: None,
+            })
+        };
+        let document = TraceEvent {
+            hwnd: 1,
+            object: Some(TraceObject {
+                role: Some(10),
+                name: Some("Microsoft Word Document".to_owned()),
+                value: None,
+                states: 0,
+                shortcut: None,
+            }),
+            focus_chain: vec![node(UIA_DOCUMENT, "sr-word-fixture.docx", true)],
+            text_context: text(),
+            ..focus_event(Vec::new())
+        };
+        let value_change = |hwnd: isize, id_object: i32, name: &str| TraceEvent {
+            event: "value_change".to_owned(),
+            hwnd,
+            id_object,
+            object: Some(TraceObject {
+                role: Some(42),
+                name: Some(name.to_owned()),
+                value: Some("Calibri Light".to_owned()),
+                states: 0,
+                shortcut: None,
+            }),
+            text_context: text(),
+            ..focus_event(Vec::new())
+        };
+        let mut converter = EventConverter::default();
+        assert_eq!(converter.convert(&document).len(), 1);
+        assert!(converter
+            .convert(&value_change(2, 103_351_241, "Font:"))
+            .is_empty());
+        assert!(matches!(
+            converter
+                .convert(&value_change(1, -4, "Microsoft Word Document"))
+                .as_slice(),
             [okur_core::AccessibilityEvent::TextContext(_)]
         ));
     }

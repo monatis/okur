@@ -2071,11 +2071,17 @@ impl ScreenReaderEngine {
                 self.choose_voice_profiles(None, app.map(|app| (app, None)));
             }
             _ if id.starts_with(MENU_PROFILE_DEFAULT) => {
-                let name = id.trim_start_matches(MENU_PROFILE_DEFAULT).to_owned();
+                let name = id
+                    .strip_prefix(MENU_PROFILE_DEFAULT)
+                    .unwrap_or_default()
+                    .to_owned();
                 self.choose_voice_profiles(Some(name), None);
             }
             _ if id.starts_with(MENU_PROFILE_APPLICATION) => {
-                let name = id.trim_start_matches(MENU_PROFILE_APPLICATION).to_owned();
+                let name = id
+                    .strip_prefix(MENU_PROFILE_APPLICATION)
+                    .unwrap_or_default()
+                    .to_owned();
                 let app = self.okur_window_application.clone();
                 self.choose_voice_profiles(None, app.map(|app| (app, Some(name))));
             }

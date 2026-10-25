@@ -15,13 +15,14 @@ use windows::Win32::UI::Controls::{
     LVIF_TEXT, LVIS_FOCUSED, LVIS_SELECTED, LVIS_STATEIMAGEMASK, LVITEMW, LVM_DELETEALLITEMS,
     LVM_EDITLABELW, LVM_ENSUREVISIBLE, LVM_GETNEXTITEM, LVM_INSERTCOLUMNW, LVM_INSERTITEMW,
     LVM_SETEXTENDEDLISTVIEWSTYLE, LVM_SETITEMCOUNT, LVM_SETITEMSTATE, LVM_SETITEMTEXTW,
-    LVNI_SELECTED, LVN_ENDLABELEDITW, LVN_ITEMCHANGED, LVN_KEYDOWN, LVS_EX_CHECKBOXES,
-    LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NMLVDISPINFOW, NMLVKEYDOWN, NMTREEVIEWW, NMTVKEYDOWN,
-    NM_DBLCLK, TBM_SETPAGESIZE, TBM_SETPOS, TBM_SETRANGEMAX, TBM_SETRANGEMIN, TBM_SETTICFREQ,
-    TREE_VIEW_ITEM_STATE_FLAGS, TVE_EXPAND, TVGN_CARET, TVGN_CHILD, TVGN_NEXT, TVGN_ROOT,
-    TVIF_STATE, TVIF_TEXT, TVINSERTSTRUCTW, TVINSERTSTRUCTW_0, TVIS_EXPANDED, TVIS_STATEIMAGEMASK,
-    TVITEMW, TVI_LAST, TVI_ROOT, TVM_DELETEITEM, TVM_EXPAND, TVM_GETNEXTITEM, TVM_INSERTITEMW,
-    TVM_SELECTITEM, TVM_SETITEMW, TVN_ITEMEXPANDEDW, TVN_KEYDOWN, TVN_SELCHANGEDW, TVS_CHECKBOXES,
+    LVNI_SELECTED, LVN_DELETEALLITEMS, LVN_ENDLABELEDITW, LVN_ITEMCHANGED, LVN_KEYDOWN,
+    LVS_EX_CHECKBOXES, LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NMLVDISPINFOW, NMLVKEYDOWN,
+    NMTREEVIEWW, NMTVKEYDOWN, NM_DBLCLK, TBM_SETPAGESIZE, TBM_SETPOS, TBM_SETRANGEMAX,
+    TBM_SETRANGEMIN, TBM_SETTICFREQ, TREE_VIEW_ITEM_STATE_FLAGS, TVE_EXPAND, TVGN_CARET,
+    TVGN_CHILD, TVGN_NEXT, TVGN_ROOT, TVIF_STATE, TVIF_TEXT, TVINSERTSTRUCTW, TVINSERTSTRUCTW_0,
+    TVIS_EXPANDED, TVIS_STATEIMAGEMASK, TVITEMW, TVI_LAST, TVI_ROOT, TVM_DELETEITEM, TVM_EXPAND,
+    TVM_GETNEXTITEM, TVM_INSERTITEMW, TVM_SELECTITEM, TVM_SETITEMW, TVN_ITEMEXPANDEDW, TVN_KEYDOWN,
+    TVN_SELCHANGEDW, TVS_CHECKBOXES,
 };
 use windows::Win32::UI::Input::KeyboardAndMouse::{
     EnableWindow, GetKeyState, VIRTUAL_KEY, VK_DELETE, VK_F2, VK_SHIFT, VK_SPACE,
@@ -1204,8 +1205,10 @@ pub fn show_menu(id: u32, control: &str, items: &[okur_ui_model::MenuEntry]) {
                 None,
             );
             let mut rect = RECT::default();
-            // TVM_GETITEMRECT takes the item in the rectangle's place.
-            *(&mut rect as *mut RECT as *mut isize) = selected.0;
+            // TVM_GETITEMRECT takes the item in the rectangle's place: written unaligned,
+            // as a RECT's four-byte alignment is not an isize's (performance review
+            // 2026-10-25, finding 12).
+            std::ptr::write_unaligned((&mut rect as *mut RECT).cast::<isize>(), selected.0);
             if SendMessageW(
                 item,
                 TVM_GETITEMRECT,
@@ -1684,6 +1687,26 @@ pub(crate) unsafe extern "system" fn dialog_proc(
             // SAFETY: WM_NOTIFY's lparam is the sender's NMHDR, an NMLISTVIEW for a list
             // view's item change.
             let header = unsafe { &*(lparam.0 as *const NMHDR) };
+            // A list cleared all at once: no LVN_DELETEITEM for each of its rows.
+            if header.code == LVN_DELETEALLITEMS {
+                return answer(window, 1);
+            }
+            // Only what is handled below looks the control up, which copies its items: each
+            // other notification did, 0.4 s for a list of 2000 links refilled (performance
+            // review 2026-10-25, finding 6).
+            if !matches!(
+                header.code,
+                TVN_SELCHANGEDW
+                    | NM_DBLCLK
+                    | TVN_KEYDOWN
+                    | NM_TVSTATEIMAGECHANGING
+                    | TVN_ITEMEXPANDEDW
+                    | LVN_ITEMCHANGED
+                    | LVN_KEYDOWN
+                    | LVN_ENDLABELEDITW
+            ) {
+                return 0;
+            }
             let Ok(control_id) = u16::try_from(header.idFrom) else {
                 return 0;
             };

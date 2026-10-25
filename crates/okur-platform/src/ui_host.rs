@@ -76,7 +76,18 @@ impl ProcessUiHost {
                     let Ok(line) = okur_ui_model::encode(&message) else {
                         continue;
                     };
-                    let shows_dialog = matches!(message, ToUi::DialogShow { .. });
+                    // A window coming to the front: a lowered okur-ui may take the foreground
+                    // only when Okur lets it (the wizard and the main window were left to the
+                    // thread-attach trick alone: performance review 2026-10-25, finding 10).
+                    let shows_dialog = matches!(
+                        message,
+                        ToUi::DialogShow { .. }
+                            | ToUi::MainWindowShow { .. }
+                            | ToUi::WizardShow { .. }
+                            | ToUi::ViewerShow { .. }
+                            | ToUi::FileOpen { .. }
+                            | ToUi::DialogMenu { .. }
+                    );
                     // A process that exited is started again, once per message.
                     if !running
                         .as_mut()

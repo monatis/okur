@@ -560,6 +560,20 @@ impl SettingsTree {
 
     /// The rows for the words searched for: every group and its settings, or only the settings
     /// that match, in their groups.
+    /// Another place's settings (the Application box, Ctrl+Shift+D): its draft, and its rows,
+    /// Last Changed Settings among them; the previous place's stayed (performance review
+    /// 2026-10-25, finding 16).
+    fn change_place(&mut self, place: usize) {
+        self.place = place;
+        self.draft = self
+            .places
+            .get(place)
+            .map(|p| p.settings.clone())
+            .unwrap_or_default();
+        self.rows = self.rows_for_search();
+        self.selected = self.selected.min(self.rows.len().saturating_sub(1));
+    }
+
     fn rows_for_search(&self) -> Vec<Row> {
         let words: Vec<String> = self
             .search
@@ -1443,12 +1457,7 @@ impl SettingsTree {
                         Outcome::Send(self.refill())
                     }
                     (PLACE, Value::Selected(place)) if *place < self.places.len() => {
-                        self.place = *place;
-                        self.draft = self
-                            .places
-                            .get(*place)
-                            .map(|p| p.settings.clone())
-                            .unwrap_or_default();
+                        self.change_place(*place);
                         Outcome::Send(self.refill())
                     }
                     _ => Outcome::Nothing,
@@ -1514,12 +1523,7 @@ impl SettingsTree {
                 LIFETIME => self.context_menu(),
                 PANE_KEY => self.to_pane(),
                 DEFAULT_PLACE if self.flavor == Flavor::Center => {
-                    self.place = 0;
-                    self.draft = self
-                        .places
-                        .first()
-                        .map(|p| p.settings.clone())
-                        .unwrap_or_default();
+                    self.change_place(0);
                     let mut sent = self.refill();
                     sent.push(ToUi::DialogSet {
                         id: self.id,
@@ -1968,6 +1972,40 @@ mod tests {
             registry::get(dialog.draft(), "typing_echo"),
             Some(Json::String("words".into()))
         );
+    }
+
+    /// Another place chosen, by the Application box or Ctrl+Shift+D: its own Last Changed
+    /// Settings, where Notepad's stayed (performance review 2026-10-25, finding 16).
+    #[test]
+    fn another_place_has_its_own_last_changed_settings() {
+        let mut dialog = tree(Flavor::Center);
+        let recent = |dialog: &SettingsTree| {
+            let items = dialog.items();
+            let last = items
+                .iter()
+                .position(|i| i.text == "Last Changed Settings")
+                .map_or(0, |i| i + 1);
+            items.get(last).map(|i| i.text.clone()).unwrap_or_default()
+        };
+        assert_eq!(recent(&dialog), "Typing Echo (User) Characters");
+        dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: PLACE.into(),
+            value: Value::Selected(0),
+        });
+        assert!(recent(&dialog).starts_with("Rate"), "{}", recent(&dialog));
+        assert!(dialog.selected < dialog.rows.len());
+        dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: PLACE.into(),
+            value: Value::Selected(1),
+        });
+        assert_eq!(recent(&dialog), "Typing Echo (User) Characters");
+        dialog.handle(&FromUi::DialogPressed {
+            id: 7,
+            control: DEFAULT_PLACE.into(),
+        });
+        assert!(recent(&dialog).starts_with("Rate"), "{}", recent(&dialog));
     }
 
     /// Shift+F10 in Last Changed Settings: an entry's menu is Remove, the group's Remove All,

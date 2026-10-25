@@ -66,11 +66,19 @@ pub fn show(spec: &MainWindowSpec) {
                 let _ = DestroyMenu(old);
             }
         }
-        let _ = ShowWindow(window, SW_SHOW);
     }
+    // Known before it shows: its first WM_SIZE and WM_SETFOCUS size and focus the text, which
+    // stayed 0 by 0 when they came first (performance review 2026-10-25, finding 17).
     MAIN.with(|m| {
         *m.borrow_mut() = Some(Main { window, text, ids });
     });
+    // SAFETY: our own window and its text control.
+    unsafe {
+        let _ = ShowWindow(window, SW_SHOW);
+        let mut client = RECT::default();
+        let _ = GetClientRect(window, &mut client);
+        let _ = MoveWindow(text, 0, 0, client.right, client.bottom, true);
+    }
     crate::dialog::bring_forward(window);
 }
 
