@@ -988,6 +988,15 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     {
         return None;
     }
+    // A NetUI window's focus is its MSAA object's (`netui_focus`): a focus event naming none
+    // is UI Automation's own, passed on as a WinEvent, and UIA reaches only the window: it
+    // said "Leaving menus" after each of Word's ribbon commands [obs, 1045/s2-s12].
+    if event.event == "focus"
+        && event.window_class.as_deref() == Some("NetUIHWND")
+        && event.object.is_none()
+    {
+        return None;
+    }
     // The recorded window text belongs to the focused HWND (an edit's text is its content);
     // the window the user is in is the outermost element of the focus chain.
     // The active window is the innermost window in the chain (the focus itself, when a window
@@ -1818,6 +1827,16 @@ impl EventConverter {
                 let mut focus = focus_event_from_trace(event)?;
                 // UIA repeats a focus change some WinEvent may also have reported.
                 if event.event == "uia_focus" && self.last_focus.as_ref() == Some(&focus) {
+                    return None;
+                }
+                // Word names a ribbon command twice: the ribbon's own focus names its tab, then
+                // the tab's own event does; Cut's event comes twice [obs, 1045/s1, s3]. The same
+                // command again, right after, is the same focus.
+                if focus.in_ribbon
+                    && self.last_focus.as_ref().is_some_and(|last| {
+                        last.in_ribbon && last.role == focus.role && last.name == focus.name
+                    })
+                {
                     return None;
                 }
                 // The event's MSAA object can be a window around the focused control: File
@@ -4626,18 +4645,33 @@ mod capture {
             let window = hwnd.0 as isize;
             if focused && !uia_named {
                 if let (Some(uia), Some(element)) = (state.uia.as_ref(), element) {
-                    // Another MSAA object of the window is never the same focus: UIA names only
-                    // the window of Word's ribbon, whose controls are objects of their own, and
-                    // took Grow Font's focus right after the ribbon's for a repeat [obs, 1045/s9].
-                    let repeated = id_child == CHILDID_SELF
-                        && state.last_object_focus.as_ref().is_some_and(|last| {
-                            last.object == id_object && last.names(uia, element, REPEATED_FOCUS)
-                        });
+                    // Another MSAA object of the window is another focus: UIA names only the
+                    // window of Word's ribbon, whose controls are objects of their own, and took
+                    // Grow Font's focus right after the ribbon's for a repeat [obs, 1045/s9].
+                    // UIA's own focus events, passed on as WinEvents with ids of their own,
+                    // name no MSAA object: the same element again is still a repeat.
+                    let last = state
+                        .last_object_focus
+                        .as_ref()
+                        .filter(|last| {
+                            id_child == CHILDID_SELF && last.names(uia, element, REPEATED_FOCUS)
+                        })
+                        .map(|last| last.object);
+                    let repeated = last.is_some_and(|object| {
+                        object == id_object || {
+                            let read = msaa_object(hwnd, id_object, id_child);
+                            let none = read.is_none();
+                            object_read = Some(read);
+                            none
+                        }
+                    });
                     let seen = SeenFocus {
                         element: element.clone(),
                         at: std::time::Instant::now(),
                         window,
-                        object: id_object,
+                        // A repeat keeps the object it repeats: Word names Cut twice around
+                        // UIA's own focus event [obs, 1045/s3].
+                        object: last.filter(|_| repeated).unwrap_or(id_object),
                     };
                     state.last_object_focus = (id_child == CHILDID_SELF).then(|| seen.clone());
                     state.last_focus_read = Some(seen);
@@ -6379,6 +6413,49 @@ mod tests {
             ..focus_event(Vec::new())
         };
         assert!(focus_event_from_trace(&event).is_none());
+    }
+
+    /// In Word's ribbon, UI Automation's own focus events (passed on as WinEvents, naming no
+    /// MSAA object) and a command named twice by Word say nothing more: each command was said
+    /// with "Leaving menus" after it, Cut and the Home tab twice [obs, 1045/s1-s12].
+    #[test]
+    fn a_word_ribbon_command_is_one_focus() {
+        let command = |id_object: i32, name: Option<&str>| TraceEvent {
+            window_class: Some("NetUIHWND".to_owned()),
+            id_object,
+            object: name.map(|name| TraceObject {
+                role: Some(0x2B),
+                name: Some(name.to_owned()),
+                value: None,
+                states: 0x10_0005,
+                shortcut: None,
+            }),
+            focus_chain: vec![
+                node(UIA_WINDOW, "sr-word-fixture.docx - Word", false),
+                node(50033, "", false),
+            ],
+            ..focus_event(Vec::new())
+        };
+        let mut converter = EventConverter::default();
+        let focuses = |converted: Vec<okur_core::AccessibilityEvent>| {
+            converted
+                .into_iter()
+                .filter_map(|e| match e {
+                    okur_core::AccessibilityEvent::Focus(f) => f.name,
+                    _ => None,
+                })
+                .collect::<Vec<_>>()
+        };
+        assert_eq!(
+            focuses(converter.convert(&command(101_581_535, Some("Cut")))),
+            ["Cut"]
+        );
+        assert!(focuses(converter.convert(&command(11_080, None))).is_empty());
+        assert!(focuses(converter.convert(&command(101_581_535, Some("Cut")))).is_empty());
+        assert_eq!(
+            focuses(converter.convert(&command(103_350_800, Some("Copy")))),
+            ["Copy"]
+        );
     }
 
     /// Classic RichEdit windows, not Windows 11 Notepad's, which names itself, nor plain edits.
