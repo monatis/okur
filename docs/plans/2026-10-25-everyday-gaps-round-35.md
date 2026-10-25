@@ -35,8 +35,10 @@ a fetched evidence file) must read 90; `fix-rate.ps1` otherwise.
 
 ## 1. Word, then Excel and Outlook
 
-- The rest of the ribbon's kinds (round-1048, then galleries and launchers).
-- Word's links and fields listed (above).
+- Done since this plan was written: round-1048, Word's Links List (1049), Styles and the
+  ScreenTip rule (1051); see [`../handoff/2026-10-25-word-links-and-ribbon-round-2.md`](../handoff/2026-10-25-word-links-and-ribbon-round-2.md).
+- **The Quick Access Toolbar and title bar** from 1051/s4-s13's words (that handoff, "Found").
+- **Insert+F5's fields:** UIA has the hyperlinks only; a documented gap, or Word's object model.
 - **Read Mode:** what Okur reads there (a live check, with the owner's leave), then JAWS's
   warning or the view's name alone.
 - **Line spacing:** neither UIA nor IA2 (Word 2016 has none); a documented gap unless Word's
