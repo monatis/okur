@@ -1,0 +1,27 @@
+{
+  "id": "1050-desktop-word-fields-list-items",
+  "name": "Word: the list of Word's fields (Insert+F5) in a document with two links, a text form field and a check box form field, Down through it, then Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-fields.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fields.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Insert+F5"},
+    {"id": "s2", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")"},
+    {"id": "s3", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")"},
+    {"id": "s4", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")"},
+    {"id": "s5", "type": "jaws_function", "command": "TypeKey(\"Escape\")"},
+    {"id": "s6", "type": "key", "command": "Insert+Up"}
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "1049-desktop-word-links-list-items",
+  "name": "Word: the Links List (Insert+F7) in a document with two links, Down and Up through them, then Escape; no link is followed",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-fields.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fields.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Insert+F7"},
+    {"id": "s2", "type": "jaws_function", "command": "TypeKey(\"DownArrow\")"},
+    {"id": "s3", "type": "jaws_function", "command": "TypeKey(\"UpArrow\")"},
+    {"id": "s4", "type": "jaws_function", "command": "TypeKey(\"Escape\")"},
+    {"id": "s5", "type": "key", "command": "Insert+Up"}
+  ]
+}
