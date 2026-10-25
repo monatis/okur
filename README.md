@@ -4,7 +4,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Rust 1.99.0](https://img.shields.io/badge/rust-1.99.0-orange.svg?logo=rust)](rust-toolchain.toml)
 [![Platforms: Windows; macOS in progress](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%28in%20progress%29-lightgrey.svg)](#platforms)
-[![JAWS parity: 8609 of 9168 recorded steps](https://img.shields.io/badge/JAWS%20parity-8609%2F9168%20steps-brightgreen.svg)](#where-it-stands)
+[![JAWS parity: 9051 of 9625 recorded steps](https://img.shields.io/badge/JAWS%20parity-9051%2F9625%20steps-brightgreen.svg)](#where-it-stands)
 
 **An open screen reader that keeps your JAWS muscle memory.**
 
@@ -57,15 +57,15 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `371962d3` (2026-10-25).
+Every figure is tool output, rerun for this README at commit `80a78aeb` (2026-10-25).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **8972 of 9542** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **8885 of 9603** | `okur-lab parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **251** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **673, 2025** (2009 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1506 passed, 0 failed** (201 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **9051 of 9625** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **8963 of 9686** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **259** | `okur-lab parity` |
+| Recorded JAWS scenarios, trials | **680, 2046** (2029 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1510 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 

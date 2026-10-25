@@ -122,12 +122,14 @@ Order of work, most used first:
   need an elevated Okur; the search box's doubled "No results".
 - **Calculator:** JAWS's digits, expressions and operator names (handoff 2026-10-17). Not built.
 - **Word:**
-  - Insert+F5, JAWS's "List Fields" ("List1 List view | HYPERLINK opening hours | 1 of 4",
-    then "FORMTEXT", "FORMCHECKBOX" [obs, 1050]): Word's UI Automation gives its hyperlinks
-    but not its form fields, and Okur says "no fields" of every document. "List1" looks like an
-    unlabeled control of JAWS's (an accident to document, not copy).
-  - The ribbon's galleries and launchers; Read Mode; line spacing (neither UIA nor IA2, which
-    Word 2016 lacks). Plan 35 §1.
+  - A form field read as a control: at the caret JAWS says Word's text form field as an edit
+    with the text before it as its name, "Name: Edit | Type in text.", and Say Line "Name:
+    Edit" [obs, 1054/s3, s4]; Okur reads the line, "Name:". Word's object model has the field
+    at the caret (Selection.FormFields, its type, its result, a check box's value). Check boxes
+    and drop-downs not recorded yet; a protected form's Tab between fields neither.
+  - The ribbon's galleries and launchers; Read Mode. Plan 35 §1.
+  - Done: List Fields (Insert+F5, `3814d83c`) and Say Font's line spacing (`484d7f0d`), both
+    from Word's own object model (OBJID_NATIVEOM).
 - **Not covered yet:** Task Manager, a desktop mail client.
 
 ## Installer

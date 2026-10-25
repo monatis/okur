@@ -38,11 +38,14 @@ a fetched evidence file) must read 90; `fix-rate.ps1` otherwise.
 - Done since this plan was written: round-1048, Word's Links List (1049), Styles and the
   ScreenTip rule (1051); see [`../handoff/2026-10-25-word-links-and-ribbon-round-2.md`](../handoff/2026-10-25-word-links-and-ribbon-round-2.md).
 - **The Quick Access Toolbar and title bar** from 1051/s4-s13's words (that handoff, "Found").
-- **Insert+F5's fields:** UIA has the hyperlinks only; a documented gap, or Word's object model.
+- **Insert+F5's fields:** done from Word's object model (`3814d83c`, 1050, 1053, 1054).
+- **A Word form field read as a control**, "Name: Edit | Type in text." [obs, 1054/s3, s4]:
+  record a text field, a check box and a drop-down reached by arrows and by a protected form's
+  Tab, then read the field at the caret from Word's object model.
 - **Read Mode:** what Okur reads there (a live check, with the owner's leave), then JAWS's
   warning or the view's name alone.
-- **Line spacing:** neither UIA nor IA2 (Word 2016 has none); a documented gap unless Word's
-  object model answers.
+- **Line spacing:** done from Word's object model (`484d7f0d`, 1052); JAWS's multiples are an
+  accepted divergence.
 - **Excel** once 521 records; **Outlook**: whether old-pc's opens without an account.
 
 ## 2. Settings, the long tail
@@ -54,9 +57,10 @@ lifetimes' icons.
 ## 3. The review of 2026-10-25, what is open
 
 [`../backlog/performance-review-2026-10-25.md`](../backlog/performance-review-2026-10-25.md):
-- **Live checks of the okur-ui fixes** (findings 1, 6, 8, 10, 12, 17): Insert+F3, a list,
-  Enter; Settings Center's search ended; the Startup Wizard and Insert+J from a lowered
-  build. With the owner's leave on the dev box, or on old-pc with Okur beside JAWS.
+- **Live checks of the okur-ui fixes:** 1, 8, 12 and 17 checked on old-pc (226 live:
+  "Okur live: 5/5 steps match JAWS exactly"; okur-ui-tree-probe.ps1 -Search, -Menu, -Window).
+  Left: 10, the Startup Wizard and Insert+J from the installed lowered build, and 6, a large
+  list's speed, a benchmark rather than a check.
 - **8:** Settings Center sends only the rows that changed, and okur-ui finds a tree item by
   its index.
 - **13:** speech failures counted and warned, a new synthesizer after several in a row.
