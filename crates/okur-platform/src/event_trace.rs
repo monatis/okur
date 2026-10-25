@@ -2483,6 +2483,9 @@ mod capture {
         mouse_moved_at: Option<std::time::Instant>,
         /// The controls of the dialog in front as last read, for the next focus in it.
         dialog_read: Option<DialogRead>,
+        /// The object of the last focus event, by window and object id: the one NetUI state
+        /// change that is read.
+        focused_object: Option<(isize, i32)>,
     }
 
     /// A dialog's controls as read for a focus in it: its layout and the control tree of the
@@ -2646,6 +2649,11 @@ mod capture {
 
     /// The most events kept waiting: past it the newest are dropped (logged).
     const MAX_DEFERRED: usize = 512;
+    /// Office's NetUI windows: the ribbon, the status bar.
+    const NETUI_CLASS: &str = "NetUIHWND";
+    /// How long a stopping trace reads what still waits, at most, and without a message.
+    const DRAIN_MAX: std::time::Duration = std::time::Duration::from_secs(60);
+    const DRAIN_IDLE: std::time::Duration = std::time::Duration::from_secs(1);
 
     /// Runs `read` with the tracer marked busy, then the events that arrived meanwhile, in
     /// order. A cross-process read (MSAA's `WM_GETOBJECT`) waits in `SendMessage`, where
@@ -4372,6 +4380,20 @@ mod capture {
             if change && in_background_process(hwnd) {
                 return;
             }
+            // Office's NetUI (its ribbon, its status bar) changes the state of dozens of its
+            // objects at each tab or view: 423 state changes read in one trial of Word's
+            // ribbon took 35 s and put the tracer 15 s behind the keys (1043, old-pc,
+            // 2026-10-25). There only a change to the object last focused is read.
+            if name == "focus" {
+                state.focused_object = Some((hwnd.0 as isize, id_object));
+            }
+            if name == "state_change"
+                && class == NETUI_CLASS
+                && state.focused_object != Some((hwnd.0 as isize, id_object))
+            {
+                tracing::debug!(event = name, "NetUI state change not read");
+                return;
+            }
             // The taskbar's news and weather widget is never recorded, even when Explorer is
             // in front: it put the weather where the reference machine is into a trace (its
             // title "13°C ...", 504, old-pc, 2026-10-19).
@@ -4863,6 +4885,7 @@ mod capture {
                 mouse_moved_at: None,
                 last_focus_read: None,
                 dialog_read: None,
+                focused_object: None,
                 page_changed,
                 page_changed_at: None,
                 page_changes_dropped: 0,
@@ -5008,7 +5031,22 @@ mod capture {
         in_turn(record_current_focus);
 
         let mut msg = MSG::default();
-        while keep_running() {
+        // A trace keeps what happened before it was asked to stop: the events still waiting
+        // are read, until no message has come for a second (at most a minute). Stopping at
+        // once lost Word's lower ribbon and the return to the document, which the tracer had
+        // not read yet (1043, old-pc, 2026-10-25). Live, Okur stops at once.
+        let mut stop_asked: Option<std::time::Instant> = None;
+        let mut last_message = std::time::Instant::now();
+        loop {
+            if !keep_running() {
+                if live {
+                    break;
+                }
+                let asked = *stop_asked.get_or_insert_with(std::time::Instant::now);
+                if asked.elapsed() >= DRAIN_MAX || last_message.elapsed() >= DRAIN_IDLE {
+                    break;
+                }
+            }
             // SAFETY: standard message pump; waits at most 50 ms between stop checks.
             unsafe {
                 let _ = MsgWaitForMultipleObjects(None, false, 50, QS_ALLINPUT);
@@ -5018,6 +5056,7 @@ mod capture {
                 let mut uia_live_region_queued = false;
                 let mut uia_window_opened_queued = false;
                 while PeekMessageW(&mut msg, None, 0, 0, PM_REMOVE).as_bool() {
+                    last_message = std::time::Instant::now();
                     if msg.hwnd.is_invalid() && msg.message == WM_UIA_FOCUS {
                         // Several focus changes queued meanwhile: the focus now is read once.
                         uia_focused = true;
