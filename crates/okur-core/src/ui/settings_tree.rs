@@ -693,6 +693,22 @@ impl SettingsTree {
     }
 
     /// A row as the tree shows it.
+    /// The tree's items that differ from `before`, each set anew: a change can bring another
+    /// with it (a layout its Okur key). Each row was sent at every Space, and okur-ui walked
+    /// its whole tree for each (performance review 2026-10-25, finding 8).
+    fn items_changed(&self, before: &[TreeItem]) -> Vec<ToUi> {
+        self.items()
+            .into_iter()
+            .enumerate()
+            .filter(|(index, item)| before.get(*index) != Some(item))
+            .map(|(index, item)| ToUi::DialogSet {
+                id: self.id,
+                control: TREE.to_owned(),
+                value: Value::TreeItem(index, item),
+            })
+            .collect()
+    }
+
     fn item(&self, row: &Row) -> TreeItem {
         match row {
             Row::LastChanged => TreeItem {
@@ -965,21 +981,12 @@ impl SettingsTree {
         let Some(value) = self.next_value(spec, back) else {
             return Outcome::Nothing;
         };
+        let before = self.items();
         if !registry::set(&mut self.draft, spec.id, value) {
             return Outcome::Nothing;
         }
         self.changed = true;
-        // A change can bring another with it (a layout its Okur key): every item is said anew.
-        let mut sent: Vec<ToUi> = self
-            .rows
-            .iter()
-            .enumerate()
-            .map(|(index, row)| ToUi::DialogSet {
-                id: self.id,
-                control: TREE.to_owned(),
-                value: Value::TreeItem(index, self.item(row)),
-            })
-            .collect();
+        let mut sent = self.items_changed(&before);
         sent.push(ToUi::DialogEnable {
             id: self.id,
             control: "apply".to_owned(),
@@ -1324,6 +1331,7 @@ impl SettingsTree {
         let Some(new) = new else {
             return Outcome::Nothing;
         };
+        let before = self.items();
         if !registry::set(&mut self.draft, spec.id, new) {
             return Outcome::Nothing;
         }
@@ -1332,16 +1340,7 @@ impl SettingsTree {
         if let Some((_, shown)) = self.pane.as_mut() {
             *shown = self.draft.clone();
         }
-        let mut sent: Vec<ToUi> = self
-            .rows
-            .iter()
-            .enumerate()
-            .map(|(index, row)| ToUi::DialogSet {
-                id: self.id,
-                control: TREE.to_owned(),
-                value: Value::TreeItem(index, self.item(row)),
-            })
-            .collect();
+        let mut sent = self.items_changed(&before);
         sent.push(ToUi::DialogEnable {
             id: self.id,
             control: "apply".to_owned(),
@@ -1637,6 +1636,21 @@ mod tests {
             ToUi::DialogSet { value: Value::TreeItem(i, item), .. }
                 if *i == index && item.text == "Typing Echo Words"
         )));
+        // Only the items that changed: the setting's, and its entry in Last Changed Settings.
+        // Every row was set at each Space (performance review 2026-10-25, finding 8).
+        let set = sent
+            .iter()
+            .filter(|m| {
+                matches!(
+                    m,
+                    ToUi::DialogSet {
+                        value: Value::TreeItem(..),
+                        ..
+                    }
+                )
+            })
+            .count();
+        assert!((1..=2).contains(&set), "{set} items set");
         assert!(sent.iter().any(
             |m| matches!(m, ToUi::DialogEnable { control, enabled: true, .. } if control == "apply")
         ));
