@@ -332,6 +332,11 @@ pub struct FocusEvent {
     /// leaves the menus for: "Leaving menus | Leaving ribbons" [obs, 523/s4, 972/s3].
     #[serde(default)]
     pub ribbon_menu: bool,
+    /// A button that drops a menu or a gallery down without being a menu's item (Word's
+    /// Styles, More): JAWS says "sub menu" before it, "sub menu | Styles Button | More"
+    /// [obs, 1051/s17].
+    #[serde(default)]
+    pub opens_menu: bool,
     /// The ribbon's own name, as its MSAA property page gives it: Word's "Ribbon", which JAWS
     /// says as the focus enters it [obs, 1043/s1].
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -585,6 +590,7 @@ impl FocusEvent {
             column_headers: Vec::new(),
             in_ribbon: false,
             ribbon_menu: false,
+            opens_menu: false,
             ribbon_name: None,
             in_document: false,
             dom_id: None,

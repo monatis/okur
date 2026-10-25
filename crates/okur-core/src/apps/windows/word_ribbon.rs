@@ -112,6 +112,11 @@ impl WordRibbon {
 /// its value for an edit combo, then its ScreenTip's title. `None` for a kind not recorded.
 fn control_speech(focus: &FocusEvent, name: &str) -> Option<Vec<String>> {
     let mut lines = Vec::new();
+    // A button that opens a menu says so first: "sub menu | Styles Button | More" [obs,
+    // 1051/s17].
+    if focus.opens_menu {
+        lines.push(state_marker(msg::state_sub_menu().as_str()));
+    }
     let mut line = match focus.role {
         Role::Button => format!("{name} {}", role_marker(msg::role_button().as_str())),
         Role::SplitButton => format!("{name} {}", role_marker(msg::role_split_button().as_str())),
@@ -152,18 +157,18 @@ fn control_speech(focus: &FocusEvent, name: &str) -> Option<Vec<String>> {
     Some(lines)
 }
 
-/// A command's ScreenTip title (its help text), unless it has the name in it or the name has
-/// it: "Cut (Ctrl+X)" and "Clipboard" (for "Office Clipboard...") say nothing more.
+/// A command's ScreenTip title (its help text), unless it has the whole name in it, its dots
+/// too, or the name has it: "Cut (Ctrl+X)", "Add a Blank Page", "Font... (Ctrl+D)" and
+/// "Clipboard" (for "Office Clipboard...") say nothing more; "Paragraph Settings" (for
+/// "Paragraph...") and "More" (for "Styles") are said [obs, 1043, 1045, 1046, 1048, 1051/s17,
+/// s18].
 fn screen_tip(focus: &FocusEvent, name: &str) -> Option<String> {
     let tip = focus
         .help_text
         .as_deref()
         .map(str::trim)
         .filter(|t| !t.is_empty())?;
-    let (tip_words, name_words) = (
-        tip.to_lowercase(),
-        name.trim().trim_end_matches('.').to_lowercase(),
-    );
+    let (tip_words, name_words) = (tip.to_lowercase(), name.trim().to_lowercase());
     (!tip_words.contains(&name_words) && !name_words.contains(&tip_words)).then(|| tip.to_owned())
 }
 
@@ -402,6 +407,14 @@ mod tests {
         assert_eq!(
             said(&mut ribbon, &color).as_deref(),
             Some("Font Color  \u{1d} split button \u{1e} ")
+        );
+        // A button that opens a menu: "sub menu" first, no menu entered [obs, 1051/s17].
+        let mut styles = in_group(Role::Button, "Styles", "Font");
+        styles.opens_menu = true;
+        styles.help_text = Some("More".into());
+        assert_eq!(
+            said(&mut ribbon, &styles).as_deref(),
+            Some(" \u{1d}sub menu\u{1e} \nStyles  \u{1d} Button \u{1e} \nMore")
         );
         let bullets = in_group(Role::SplitButton, "Bullets", "Paragraph");
         assert_eq!(

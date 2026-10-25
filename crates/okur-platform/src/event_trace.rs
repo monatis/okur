@@ -48,7 +48,7 @@ const OBJID_CLIENT: i32 = -4;
 const NETUI_RIBBON_GROUP_CLASS: &str = "NetUIChunk";
 
 /// Bumped whenever the recorded fields or their meaning change.
-pub const TRACE_FORMAT_VERSION: u32 = 8;
+pub const TRACE_FORMAT_VERSION: u32 = 9;
 
 /// Foreground windows while focus moves only through UIA: no WinEvent reports it. The task
 /// switcher (Alt+Tab) focuses each window's item as Tab is pressed with Alt held (the same
@@ -123,6 +123,10 @@ pub struct NetuiControl {
     /// UIA's toggle state, for a button that has one: 0 off, 1 on, 2 neither.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub toggle_state: Option<i32>,
+    /// UIA's control type (from format 9): a drop-down that is a menu item (Change Case) or a
+    /// button (Styles), which MSAA calls alike [obs, 1051/s17].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub control_type: Option<i32>,
 }
 
 /// An MSAA object with its children, as a NetUI window gives them (WordPad's ribbon, Office's).
@@ -2212,6 +2216,8 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     if uia_has_it {
         return None;
     }
+    const UIA_BUTTON: i32 = 50000;
+    let uia_button = event.netui_control.as_ref().and_then(|c| c.control_type) == Some(UIA_BUTTON);
     let role = match object.role? {
         PAGETAB => Role::Tab,
         PUSHBUTTON => Role::Button,
@@ -2220,13 +2226,17 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
         COMBOBOX => Role::ComboBox,
         // A button that drops a list or a grid down opens it as a menu does: Word's Change
         // Case and Cover Page, each a "sub menu" to JAWS, where Paste, a split button, is one
-        // [obs, 1045/s2, s11; 1043/s5].
+        // [obs, 1045/s2, s11; 1043/s5]. One that UIA calls a button, not a menu's item, is a
+        // button that opens a menu: Styles, "sub menu | Styles Button" [obs, 1051/s17].
+        BUTTONDROPDOWN | BUTTONDROPDOWNGRID if uia_button => Role::Button,
         BUTTONDROPDOWN | BUTTONDROPDOWNGRID => Role::MenuButton,
         SPLITBUTTON => Role::SplitButton,
         _ => return None,
     };
     let tab = role == Role::Tab;
     let mut focus = okur_core::FocusEvent::new(role).with_name(name.to_owned());
+    focus.opens_menu =
+        uia_button && matches!(object.role, Some(BUTTONDROPDOWN | BUTTONDROPDOWNGRID));
     // Its value: a split button's "Paste (Ctrl+V)" [obs, 970/s4].
     focus.value = object.value.clone().filter(|v| !v.trim().is_empty());
     if tab {
@@ -3427,24 +3437,27 @@ mod capture {
             .ok()
             .filter(|e| unsafe { e.CurrentName() }.ok().map(|b| b.to_string()) == name);
         // SAFETY: UIA reads on a valid element.
-        let (help_text, toggle_state) = element.map_or((None, None), |element| unsafe {
-            (
-                element
-                    .CurrentHelpText()
-                    .ok()
-                    .map(|b| b.to_string())
-                    .filter(|t| !t.trim().is_empty()),
-                element
-                    .GetCurrentPatternAs::<IUIAutomationTogglePattern>(UIA_TogglePatternId)
-                    .ok()
-                    .and_then(|p| p.CurrentToggleState().ok())
-                    .map(|s| s.0),
-            )
-        });
+        let (help_text, toggle_state, control_type) =
+            element.map_or((None, None, None), |element| unsafe {
+                (
+                    element
+                        .CurrentHelpText()
+                        .ok()
+                        .map(|b| b.to_string())
+                        .filter(|t| !t.trim().is_empty()),
+                    element
+                        .GetCurrentPatternAs::<IUIAutomationTogglePattern>(UIA_TogglePatternId)
+                        .ok()
+                        .and_then(|p| p.CurrentToggleState().ok())
+                        .map(|s| s.0),
+                    element.CurrentControlType().ok().map(|c| c.0),
+                )
+            });
         Some(super::NetuiControl {
             bounds: Some([x, y, x.saturating_add(w), y.saturating_add(h)]),
             help_text,
             toggle_state,
+            control_type,
         })
     }
 
@@ -6346,6 +6359,7 @@ mod tests {
                 bounds: Some([55, 132, 184, 159]),
                 help_text: Some("Format Painter (Ctrl+Shift+C, Ctrl+Shift+V)".to_owned()),
                 toggle_state: Some(0),
+                control_type: None,
             }),
         ));
         assert!(painter.is_some());
@@ -6373,6 +6387,17 @@ mod tests {
                 Some(okur_core::Role::SplitButton)
             ]
         );
+        // A drop-down that UIA calls a button: a button that opens a menu [obs, 1051/s17].
+        let styles = netui_focus(&command(
+            0x3A,
+            "Styles",
+            Some(NetuiControl {
+                help_text: Some("More".to_owned()),
+                control_type: Some(50000),
+                ..NetuiControl::default()
+            }),
+        ));
+        assert!(styles.is_some_and(|s| s.role == okur_core::Role::Button && s.opens_menu));
     }
 
     /// Word's Font box, a RichEdit window of its own that UIA reaches inside the ribbon's
