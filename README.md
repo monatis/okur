@@ -261,9 +261,8 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- Outlook and Excel, not yet supported or checked (Excel's recording waits on the lab
-  machine's Office activation); in Word, Say Font leaves out the line spacing, which Word's UI
-  Automation does not report, and Web Layout and Read Mode are not named yet;
+- Outlook and Excel, not yet supported or checked; in Word, Say Font leaves out the line
+  spacing, which Word's UI Automation does not report;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;
