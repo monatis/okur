@@ -875,13 +875,17 @@ A step can be in more than one entry; all of its entries apply.
 - Steps:
   - `1036-desktop-word-heading-list-move/s5`
   - `1049-desktop-word-links-list-items/s1`
+  - `1050-desktop-word-fields-list-items/s1`
+  - `1053-desktop-word-fields-list-controls/s1`
+  - `1054-desktop-word-fields-list-move/s1`
   - `519-desktop-word-lists-and-spelling/s2`
   - `519-desktop-word-lists-and-spelling/s5`
-- Difference: `JawsSaysBeforeItsDialog`. Before its Heading List, Links List and Spelling Errors
-  lists in Word, JAWS says what it said or showed before them in most trials, in every one before
-  its Links List [obs, 1049/s1]: its main window's version,
-  "JAWS Version 2025.2505.43", the document's name, "Microsoft Word Document", a button's hint,
-  or "Please wait processing 1 items" while it gathers the errors.
+- Difference: `JawsSaysBeforeItsDialog`. Before its Heading List, Links List, List Fields and
+  Spelling Errors lists in Word, JAWS says what it said or showed before them in most trials, in
+  every one before its Links List and List Fields [obs, 1049/s1; 1050/s1, 1053/s1, 1054/s1]: its
+  main window's version, "JAWS Version 2025.2505.43", the document's name, "Microsoft Word
+  Document", a button's or a list's hint, or "Please wait processing 1 items" while it gathers
+  the errors; one trial of 1050 says nothing at all before the next key.
 - Why: Okur's lists open without them, as JAWS's do in the other trials.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
 
