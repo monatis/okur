@@ -4340,6 +4340,48 @@ fn the_links_list_moves_the_cursor_to_the_chosen_link() {
         .is_some_and(|line| line.contains("Beta")));
 }
 
+/// In Word's document after a page was read, Insert+F7 is Word's Links List, never the last
+/// page's links, which the buffer still held: Word's words for it without links [obs,
+/// 1044/s1], as Okur does not read Word's links yet.
+#[test]
+fn words_links_list_is_not_the_last_pages() {
+    use crate::ui::ToUi;
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Web Menus")
+        .with_children(vec![AomNode::new(
+            1,
+            Role::Link {
+                href: Some("https://example.com/a".into()),
+            },
+        )
+        .with_name("Alpha")]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    engine.handle_focus_event(&page_document());
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut word = FocusEvent::new(Role::Document).with_name("sr-word-fixture.docx");
+    word.app = Some("WINWORD.EXE".into());
+    word.window_title = Some("sr-word-fixture.docx - Word".into());
+    engine.handle_focus_event(&word);
+    speech.take();
+    ui.take();
+    let mut f7 = KeyEvent::new(Key::F(7), Modifiers::none(), true);
+    f7.modifiers.insert = true;
+    engine.handle_key_event(&f7);
+    assert!(
+        !ui.take()
+            .iter()
+            .any(|m| matches!(m, ToUi::DialogShow { .. })),
+        "the page's Links List was shown in Word"
+    );
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some("no links\nCheck for link type fields with Insert+F5.")
+    );
+}
+
 /// Insert+F6 opens a real Heading List; Move To Heading reads the heading's line as the
 /// virtual cursor does, its level first: "heading level 1 Web App Patterns" [obs, 224/s10].
 #[test]

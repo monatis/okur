@@ -2669,6 +2669,18 @@ impl ScreenReaderEngine {
             self.document_headings_asked = true;
             return None;
         }
+        // Outside a page, a list the application words is its own, never the buffer's: the
+        // buffer can still hold the last page read, whose links Word's Links List would have
+        // shown. Word's links and fields are not read yet, so its list is said empty.
+        let application_list = self
+            .last_native_focus
+            .as_ref()
+            .filter(|_| self.app_mode != AppMode::VirtualBuffer)
+            .and_then(|focus| self.app_for(focus)?.empty_list(focus, &kind));
+        if let Some(none) = application_list {
+            self.speech.speak(&none, true);
+            return Some(none);
+        }
         let id = self.dialog_count + 1;
         let (dialog, none) = match kind {
             ListKind::Links => {
@@ -2722,13 +2734,6 @@ impl ScreenReaderEngine {
             }
         };
         let Some(dialog) = dialog else {
-            // The application's own words for a list with nothing in it, where it has them.
-            let none = self
-                .last_native_focus
-                .as_ref()
-                .filter(|_| self.app_mode != AppMode::VirtualBuffer)
-                .and_then(|focus| self.app_for(focus)?.empty_list(focus, &kind))
-                .unwrap_or(none);
             self.speech.speak(&none, true);
             return Some(none);
         };
