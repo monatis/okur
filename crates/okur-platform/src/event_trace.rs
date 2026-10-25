@@ -40,9 +40,15 @@ pub const DESKTOP_KIND: &str = "Progman";
 const MSAA_MENUITEM: i32 = 0x0C;
 /// MSAA `ROLE_SYSTEM_BUTTONMENU`.
 const MSAA_BUTTONMENU: i32 = 0x39;
+/// MSAA `ROLE_SYSTEM_PROPERTYPAGE`: a NetUI ribbon itself, or one of its tabs' pages.
+const MSAA_PROPERTYPAGE: i32 = 0x26;
+/// The object id of a window's client area in a WinEvent (`OBJID_CLIENT`).
+const OBJID_CLIENT: i32 = -4;
+/// UIA's class of a group of Office's ribbon (its "chunk": Word's Font group).
+const NETUI_RIBBON_GROUP_CLASS: &str = "NetUIChunk";
 
 /// Bumped whenever the recorded fields or their meaning change.
-pub const TRACE_FORMAT_VERSION: u32 = 7;
+pub const TRACE_FORMAT_VERSION: u32 = 8;
 
 /// Foreground windows while focus moves only through UIA: no WinEvent reports it. The task
 /// switcher (Alt+Tab) focuses each window's item as Tab is pressed with Alt held (the same
@@ -99,6 +105,24 @@ pub struct TraceObject {
     /// access key here only ("Alt+r" in Notepad's Font dialog) [obs, 541/s8].
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub shortcut: Option<String>,
+}
+
+/// What Office's own UI Automation element says of a NetUI control beside its MSAA object:
+/// UIA's focus stops at the ribbon's window, and MSAA has neither the control's ScreenTip title
+/// nor its toggle state, which JAWS says: "Grow Font Button | Increase Font Size
+/// (Alt+Ctrl+!)", "Format Painter Button not checked" [obs, 1045/s9, s5].
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct NetuiControl {
+    /// Its rectangle from MSAA, `[left, top, right, bottom]` in screen pixels: the PC
+    /// cursor's place, where UIA gives only the ribbon's.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub bounds: Option<[i32; 4]>,
+    /// UIA's help text, its ScreenTip's title: "Increase Font Size (Alt+Ctrl+!)".
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub help_text: Option<String>,
+    /// UIA's toggle state, for a button that has one: 0 off, 1 on, 2 neither.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub toggle_state: Option<i32>,
 }
 
 /// An MSAA object with its children, as a NetUI window gives them (WordPad's ribbon, Office's).
@@ -255,6 +279,9 @@ pub struct TraceEvent {
     /// pasting only plain text." [obs, 970/s4]).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub msaa_description: Option<String>,
+    /// For that focus: Office's own UIA element for the control ([`NetuiControl`]).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub netui_control: Option<NetuiControl>,
 }
 
 /// Where the mouse came to rest and the text there by unit ([`crate::mouse_point`]).
@@ -668,6 +695,29 @@ pub fn focus_event_from_chain(
     if !event.in_document {
         event.groups = groups;
     }
+    // A control in a group of Office's ribbon that UIA reaches, a window of its own (Word's
+    // Font box, a RichEdit): in the ribbon's menus as its NetUI commands are, its group the
+    // ribbon's tool bar (`netui_focus`) [obs, 1045/s7].
+    if let Some(chunk) = chain
+        .iter()
+        .rev()
+        .skip(1)
+        .find(|a| a.class_name.as_deref() == Some(NETUI_RIBBON_GROUP_CLASS))
+    {
+        event.in_ribbon = true;
+        event.ribbon_menu = true;
+        if let Some(name) = chunk
+            .name
+            .as_deref()
+            .map(str::trim)
+            .filter(|n| !n.is_empty())
+        {
+            match event.groups.iter_mut().find(|g| g.name.trim() == name) {
+                Some(group) => group.tool_bar = true,
+                None => event.groups.push(okur_core::GroupEntry::tool_bar(name)),
+            }
+        }
+    }
     event.read_only = focused.value_is_read_only;
     event.platform.element_class = focused.class_name.clone().filter(|c| !c.is_empty());
     event.platform.automation_id = focused.automation_id.clone().filter(|i| !i.is_empty());
@@ -928,6 +978,15 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     }
     if let Some(focus) = netui_focus(event) {
         return Some(focus);
+    }
+    // Word's ribbon taking the focus back from a box of its own (the Font box, a RichEdit
+    // window) reports the ribbon itself, then the command that has the focus [obs, 1045/s9]:
+    // the ribbon with none of its tabs focused is no focus of its own.
+    if event.window_class.as_deref() == Some("NetUIHWND")
+        && event.id_object == OBJID_CLIENT
+        && event.object.as_ref().and_then(|o| o.role) == Some(MSAA_PROPERTYPAGE)
+    {
+        return None;
     }
     // The recorded window text belongs to the focused HWND (an edit's text is its content);
     // the window the user is in is the outermost element of the focus chain.
@@ -2126,7 +2185,11 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
         CHECKBUTTON => Role::CheckBox,
         RADIOBUTTON => Role::RadioButton,
         COMBOBOX => Role::ComboBox,
-        BUTTONDROPDOWN | BUTTONDROPDOWNGRID | SPLITBUTTON => Role::SplitButton,
+        // A button that drops a list or a grid down opens it as a menu does: Word's Change
+        // Case and Cover Page, each a "sub menu" to JAWS, where Paste, a split button, is one
+        // [obs, 1045/s2, s11; 1043/s5].
+        BUTTONDROPDOWN | BUTTONDROPDOWNGRID => Role::MenuButton,
+        SPLITBUTTON => Role::SplitButton,
         _ => return None,
     };
     let tab = role == Role::Tab;
@@ -2170,7 +2233,16 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     focus.app = event.process.clone();
     focus.app_product = event.process_product.clone();
     focus.app_version = event.process_version.clone();
-    focus.bounds = event.focus_chain.last().and_then(|n| n.bounds);
+    // Office's own UIA element: the control's rectangle, its ScreenTip's title, and its
+    // toggle state, a toggle button's "not checked" [obs, 1045/s5, s9].
+    let control = event.netui_control.as_ref();
+    focus.bounds = control
+        .and_then(|c| c.bounds)
+        .or_else(|| event.focus_chain.last().and_then(|n| n.bounds));
+    focus.help_text = control.and_then(|c| c.help_text.clone());
+    if let Some(toggle) = control.and_then(|c| c.toggle_state) {
+        focus.states.checked = Some(toggle == 1);
+    }
     focus.in_ribbon = true;
     // The ribbon's own name: its outermost property page's, "Ribbon".
     focus.ribbon_name = event
@@ -2443,12 +2515,14 @@ mod capture {
     /// A WinEvent about an object itself rather than one of its children.
     const CHILDID_SELF: i32 = 0;
 
-    /// A focus event that was read: the element it named, when, and its event's window.
+    /// A focus event that was read: the element it named, when, its event's window and MSAA
+    /// object.
     #[derive(Clone)]
     struct SeenFocus {
         element: IUIAutomationElement,
         at: std::time::Instant,
         window: isize,
+        object: i32,
     }
 
     impl SeenFocus {
@@ -3195,12 +3269,20 @@ mod capture {
         siblings: Vec<super::MsaaNode>,
         ancestors: Vec<super::MsaaNode>,
         description: Option<String>,
+        control: Option<super::NetuiControl>,
     }
 
     /// For a NetUI focus whose MSAA object has `role`: a container's children to
     /// [`NETUI_DEPTH`] (the ribbon Alt focuses), at most [`NETUI_BUDGET`] objects; a control's
-    /// siblings without theirs, its ancestors up to the window, and its description.
-    fn netui_read(hwnd: HWND, id_object: i32, id_child: i32, role: i32) -> NetuiRead {
+    /// siblings without theirs, its ancestors up to the window, its description, and what
+    /// Office's own UIA element for it says ([`netui_control`]).
+    fn netui_read(
+        uia: Option<&IUIAutomation>,
+        hwnd: HWND,
+        id_object: i32,
+        id_child: i32,
+        role: i32,
+    ) -> NetuiRead {
         use windows::Win32::UI::Accessibility::IAccessible;
         let mut acc: Option<IAccessible> = None;
         let mut child = VARIANT::default();
@@ -3229,6 +3311,7 @@ mod capture {
             .ok()
             .map(|d| d.to_string())
             .filter(|d| !d.trim().is_empty());
+        let control = uia.and_then(|uia| netui_control(uia, &acc, &child));
         // A simple element's parent is the object that named it; a full object asks its own.
         let parent_of = |object: &IAccessible| {
             // SAFETY: a property read on a valid IAccessible.
@@ -3274,7 +3357,56 @@ mod capture {
             siblings,
             ancestors,
             description,
+            control,
         }
+    }
+
+    /// What Office's own UIA element for a NetUI control says ([`super::NetuiControl`]): the
+    /// element at the MSAA object's center, when it has the object's name. 10 ms a control on
+    /// old-pc, where searching the ribbon's UIA tree for the element with the keyboard focus
+    /// took 20 to 50 (`okur-lab msaa-focus`, 2026-10-25).
+    fn netui_control(
+        uia: &IUIAutomation,
+        acc: &windows::Win32::UI::Accessibility::IAccessible,
+        child: &VARIANT,
+    ) -> Option<super::NetuiControl> {
+        use windows::Win32::Foundation::POINT;
+        use windows::Win32::UI::Accessibility::{IUIAutomationTogglePattern, UIA_TogglePatternId};
+        let (mut x, mut y, mut w, mut h) = (0, 0, 0, 0);
+        // SAFETY: out-pointers to locals on a valid IAccessible.
+        unsafe { acc.accLocation(&mut x, &mut y, &mut w, &mut h, child) }.ok()?;
+        // SAFETY: a property read on a valid IAccessible.
+        let name = unsafe { acc.get_accName(child) }
+            .ok()
+            .map(|b| b.to_string());
+        let center = POINT {
+            x: x.saturating_add(w / 2),
+            y: y.saturating_add(h / 2),
+        };
+        // SAFETY: UIA reads on a valid automation object and the element it gives.
+        let element = unsafe { uia.ElementFromPoint(center) }
+            .ok()
+            .filter(|e| unsafe { e.CurrentName() }.ok().map(|b| b.to_string()) == name);
+        // SAFETY: UIA reads on a valid element.
+        let (help_text, toggle_state) = element.map_or((None, None), |element| unsafe {
+            (
+                element
+                    .CurrentHelpText()
+                    .ok()
+                    .map(|b| b.to_string())
+                    .filter(|t| !t.trim().is_empty()),
+                element
+                    .GetCurrentPatternAs::<IUIAutomationTogglePattern>(UIA_TogglePatternId)
+                    .ok()
+                    .and_then(|p| p.CurrentToggleState().ok())
+                    .map(|s| s.0),
+            )
+        });
+        Some(super::NetuiControl {
+            bounds: Some([x, y, x.saturating_add(w), y.saturating_add(h)]),
+            help_text,
+            toggle_state,
+        })
     }
 
     /// Whether an MSAA child variant names the object itself (`CHILDID_SELF`).
@@ -3539,6 +3671,7 @@ mod capture {
                     msaa_siblings: Vec::new(),
                     msaa_ancestors: Vec::new(),
                     msaa_description: None,
+                    netui_control: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -3962,6 +4095,7 @@ mod capture {
                     msaa_siblings: Vec::new(),
                     msaa_ancestors: Vec::new(),
                     msaa_description: None,
+                    netui_control: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -4060,6 +4194,7 @@ mod capture {
             msaa_siblings: Vec::new(),
             msaa_ancestors: Vec::new(),
             msaa_description: None,
+            netui_control: None,
         }
     }
 
@@ -4179,6 +4314,7 @@ mod capture {
                     msaa_siblings: Vec::new(),
                     msaa_ancestors: Vec::new(),
                     msaa_description: None,
+                    netui_control: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -4294,6 +4430,7 @@ mod capture {
                     msaa_siblings: Vec::new(),
                     msaa_ancestors: Vec::new(),
                     msaa_description: None,
+                    netui_control: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -4489,15 +4626,18 @@ mod capture {
             let window = hwnd.0 as isize;
             if focused && !uia_named {
                 if let (Some(uia), Some(element)) = (state.uia.as_ref(), element) {
+                    // Another MSAA object of the window is never the same focus: UIA names only
+                    // the window of Word's ribbon, whose controls are objects of their own, and
+                    // took Grow Font's focus right after the ribbon's for a repeat [obs, 1045/s9].
                     let repeated = id_child == CHILDID_SELF
-                        && state
-                            .last_object_focus
-                            .as_ref()
-                            .is_some_and(|last| last.names(uia, element, REPEATED_FOCUS));
+                        && state.last_object_focus.as_ref().is_some_and(|last| {
+                            last.object == id_object && last.names(uia, element, REPEATED_FOCUS)
+                        });
                     let seen = SeenFocus {
                         element: element.clone(),
                         at: std::time::Instant::now(),
                         window,
+                        object: id_object,
                     };
                     state.last_object_focus = (id_child == CHILDID_SELF).then(|| seen.clone());
                     state.last_focus_read = Some(seen);
@@ -4728,7 +4868,7 @@ mod capture {
             // A NetUI window's focus: its MSAA objects, which UI Automation does not reach.
             let netui = match object.as_ref().and_then(|o| o.role) {
                 Some(role) if focused && class == NETUI_WINDOW => {
-                    netui_read(hwnd, id_object, id_child, role)
+                    netui_read(state.uia.as_ref(), hwnd, id_object, id_child, role)
                 }
                 _ => NetuiRead::default(),
             };
@@ -4814,6 +4954,7 @@ mod capture {
                 msaa_siblings,
                 msaa_ancestors: netui.ancestors,
                 msaa_description: netui.description,
+                netui_control: netui.control,
             };
             (state.sink)(event);
             state.count += 1;
@@ -5905,6 +6046,7 @@ mod tests {
             msaa_siblings: Vec::new(),
             msaa_ancestors: Vec::new(),
             msaa_description: None,
+            netui_control: None,
         }
     }
 
@@ -6122,6 +6264,121 @@ mod tests {
                 ),
             ]
         );
+    }
+
+    /// Word's ribbon commands, from MSAA and Office's own UIA element: a toggle button's state
+    /// and ScreenTip title and its own rectangle, a drop-down a menu button (a "sub menu" to
+    /// JAWS) where Paste is a split button [obs, 1045/s2, s5, s9, s11].
+    #[test]
+    fn a_word_ribbon_command_has_its_tip_toggle_and_kind() {
+        let command = |role: i32, name: &str, control: Option<NetuiControl>| TraceEvent {
+            window_class: Some("NetUIHWND".to_owned()),
+            id_object: 103_350_513,
+            object: Some(TraceObject {
+                role: Some(role),
+                name: Some(name.to_owned()),
+                value: None,
+                states: 0x10_0004,
+                shortcut: None,
+            }),
+            focus_chain: vec![node(UIA_WINDOW, "sr-word-fixture.docx - Word", false)],
+            netui_control: control,
+            ..focus_event(Vec::new())
+        };
+        let painter = netui_focus(&command(
+            0x2B,
+            "Format Painter",
+            Some(NetuiControl {
+                bounds: Some([55, 132, 184, 159]),
+                help_text: Some("Format Painter (Ctrl+Shift+C, Ctrl+Shift+V)".to_owned()),
+                toggle_state: Some(0),
+            }),
+        ));
+        assert!(painter.is_some());
+        let Some(painter) = painter else { return };
+        assert_eq!(painter.role, okur_core::Role::Button);
+        assert_eq!(painter.states.checked, Some(false));
+        assert_eq!(
+            painter.help_text.as_deref(),
+            Some("Format Painter (Ctrl+Shift+C, Ctrl+Shift+V)")
+        );
+        assert_eq!(painter.bounds, Some([55, 132, 184, 159]));
+        // Without Office's element (traces before format 8), no toggle state and no tip.
+        let plain = netui_focus(&command(0x2B, "Copy", None));
+        assert!(plain.is_some_and(|p| p.states.checked.is_none() && p.help_text.is_none()));
+        let roles: Vec<Option<okur_core::Role>> = [(0x38, "Change Case"), (0x3A, "Cover Page")]
+            .iter()
+            .chain(&[(0x3E, "Paste")])
+            .map(|&(role, name)| netui_focus(&command(role, name, None)).map(|f| f.role))
+            .collect();
+        assert_eq!(
+            roles,
+            [
+                Some(okur_core::Role::MenuButton),
+                Some(okur_core::Role::MenuButton),
+                Some(okur_core::Role::SplitButton)
+            ]
+        );
+    }
+
+    /// Word's Font box, a RichEdit window of its own that UIA reaches inside the ribbon's
+    /// group: on the ribbon's menus, its group the ribbon's tool bar [obs, 1045/s7].
+    #[test]
+    fn a_word_ribbon_box_is_on_the_ribbons_menus() {
+        let classed = |control_type: i32, name: &str, class: &str| UiaNode {
+            class_name: Some(class.to_owned()),
+            ..node(control_type, name, false)
+        };
+        let mut event = TraceEvent {
+            window_class: Some("RICHEDIT60W".to_owned()),
+            focus_chain: vec![
+                node(UIA_WINDOW, "sr-word-fixture.docx - Word", false),
+                classed(50033, "Lower Ribbon", "NetUIPanViewer"),
+                classed(50025, "Home", "NetUIOrderedGroup"),
+                classed(50026, "Font", NETUI_RIBBON_GROUP_CLASS),
+                classed(UIA_COMBOBOX, "Font:", "NetUIComboboxAnchor"),
+                UiaNode {
+                    value: Some("Calibri".to_owned()),
+                    ..classed(UIA_EDIT, "Font:", "NetUITextbox")
+                },
+            ],
+            ..focus_event(Vec::new())
+        };
+        let focus = focus_event_from_trace(&event);
+        assert!(focus.is_some());
+        let Some(focus) = focus else { return };
+        assert_eq!(focus.container_role, Some(okur_core::Role::ComboBox));
+        assert!(focus.in_ribbon && focus.ribbon_menu);
+        assert!(focus.groups.iter().any(|g| g.name == "Font" && g.tool_bar));
+        // Outside a ribbon's group, a combo box's field is no ribbon's.
+        if let Some(group) = event.focus_chain.get_mut(3) {
+            group.class_name = None;
+        }
+        assert!(focus_event_from_trace(&event).is_some_and(|f| !f.in_ribbon));
+    }
+
+    /// Word's ribbon taking the focus back from its Font box reports the ribbon itself, with
+    /// none of its tabs focused, then the command that has the focus: the first is no focus
+    /// of its own, where it said "Leaving menus" [obs, 1045/s9].
+    #[test]
+    fn the_ribbon_taking_the_focus_back_is_no_focus() {
+        let event = TraceEvent {
+            window_class: Some("NetUIHWND".to_owned()),
+            id_object: OBJID_CLIENT,
+            object: Some(TraceObject {
+                role: Some(MSAA_PROPERTYPAGE),
+                name: Some("Ribbon".to_owned()),
+                value: Some("Ribbon".to_owned()),
+                states: 0,
+                shortcut: None,
+            }),
+            focus_chain: vec![
+                node(UIA_WINDOW, "sr-word-fixture.docx - Word", false),
+                node(50033, "", false),
+            ],
+            ..focus_event(Vec::new())
+        };
+        assert!(focus_event_from_trace(&event).is_none());
     }
 
     /// Classic RichEdit windows, not Windows 11 Notepad's, which names itself, nor plain edits.
