@@ -4,11 +4,14 @@
 #   - for a table cell: the cell's row and column, its row and column header items, and its
 #     table's row and column headers (UI Automation's TableItem and Table patterns);
 #   - the paragraph's text attributes (okur-lab text-attributes --unit 4), line spacing among
-#     them (40040).
+#     them (40040);
+#   - with -Ia2, what the document window and Word's window offer through IAccessible2
+#     (okur-lab ia2-probe): whether Word answers IA2 at all, and its text attributes there.
 # Then closes the fixture's window with Ctrl+W, after checking it is in front: Word's process
 # can hold the user's own documents. Run on old-pc with no batch recording.
 param([ValidateSet('word', 'formats')][string]$Fixture = 'formats',
-      [string]$Out = (Join-Path $env:USERPROFILE "sr-harness\probe\word-probe.txt"))
+      [string]$Out = (Join-Path $env:USERPROFILE "sr-harness\probe\word-probe.txt"),
+      [switch]$Ia2)
 $lab = Join-Path $env:USERPROFILE 'sr-harness\bin\okur-lab.exe'
 $fixtures = Join-Path $env:USERPROFILE 'corpus\fixtures'
 $script, $title, $probes = switch ($Fixture) {
@@ -68,6 +71,7 @@ foreach ($keys in $probes) {
     $lines += "== $($keys -join ',') =>"
     $lines += '   ' + (Cell-Report)
     $lines += & $lab text-attributes --unit 4 | ForEach-Object { "   $_" }
+    if ($Ia2) { $lines += & $lab ia2-probe | ForEach-Object { "   ia2: $_" } }
 }
 # The fixture's window alone: Ctrl+W closes its document, unchanged, without a question.
 if ((Front-Title) -eq $title) { & $lab keys --allow WINWORD 'Ctrl+W' 'wait:1500' | Out-Null }

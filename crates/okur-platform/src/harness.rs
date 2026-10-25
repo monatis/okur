@@ -126,8 +126,8 @@ pub fn parse_step(text: &str) -> Result<KeyStep, String> {
 pub use crate::key_input::send_key;
 #[cfg(windows)]
 pub use windows_harness::{
-    bring_to_front, foreground_process, foreground_title, jaws_history, send_steps, shell_window,
-    window_titled,
+    bring_to_front, foreground_process, foreground_title, ia2_probe_focus, jaws_history,
+    send_steps, shell_window, window_titled,
 };
 
 #[cfg(windows)]
@@ -313,6 +313,53 @@ mod windows_harness {
         } else {
             Err(format!("{text:?} did not come to the front"))
         }
+    }
+
+    /// What the window with the keyboard focus, and the window in front, offer through
+    /// IAccessible2: one JSON line each, with the window's class. Research: whether an
+    /// application that is not a browser (Word) implements IA2, and what it reports there.
+    pub fn ia2_probe_focus() -> Vec<String> {
+        use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetClassNameW, GetForegroundWindow, GetGUIThreadInfo, GetWindowThreadProcessId,
+            GUITHREADINFO,
+        };
+        // SAFETY: COM for MSAA on this thread; repeated initialization is tolerated.
+        let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+        // SAFETY: plain Win32 queries; the info struct is sized as the call requires.
+        let (front, focus) = unsafe {
+            let front = GetForegroundWindow();
+            let thread = GetWindowThreadProcessId(front, None);
+            let mut info = GUITHREADINFO {
+                cbSize: u32::try_from(std::mem::size_of::<GUITHREADINFO>()).unwrap_or(0),
+                ..Default::default()
+            };
+            let focus = GetGUIThreadInfo(thread, &mut info)
+                .ok()
+                .map(|_| info.hwndFocus)
+                .filter(|h| !h.is_invalid());
+            (front, focus)
+        };
+        let class = |window: windows::Win32::Foundation::HWND| {
+            let mut buffer = [0u16; 256];
+            // SAFETY: the buffer outlives the call; a stale window gives 0.
+            let n = unsafe { GetClassNameW(window, &mut buffer) };
+            String::from_utf16_lossy(
+                buffer
+                    .get(..usize::try_from(n).unwrap_or(0))
+                    .unwrap_or_default(),
+            )
+        };
+        focus
+            .into_iter()
+            .map(|w| ("focus", w))
+            .chain(std::iter::once(("front", front)))
+            .map(|(which, window)| {
+                let probe = xa11y_windows::ia2::probe_window(window);
+                serde_json::json!({ "window": which, "class": class(window), "probe": probe })
+                    .to_string()
+            })
+            .collect()
     }
 
     /// The top-level window titled exactly `title` (a scenario's fixture), wherever the focus

@@ -213,11 +213,31 @@ pub fn parse_attributes(raw: &str) -> BTreeMap<String, String> {
     out
 }
 
+/// What a window's client object offers through IAccessible2: whether an application that is
+/// not a browser (Word) implements it at all, and what its object and its text at the caret
+/// report.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Ia2Probe {
+    /// MSAA's client object was found.
+    pub msaa: bool,
+    pub msaa_role: Option<i32>,
+    pub msaa_name: Option<String>,
+    /// `IServiceProvider::QueryService` gave IAccessible2.
+    pub ia2: bool,
+    /// IAccessible2's object attributes, as they come.
+    pub object_attributes: Option<String>,
+    /// The object has IAccessibleText.
+    pub text: bool,
+    pub caret: Option<i32>,
+    /// IAccessibleText's attributes at the caret, as they come.
+    pub text_attributes: Option<String>,
+}
+
 #[cfg(target_os = "windows")]
 pub use com::capture::{
     capture_chromium_document, capture_chromium_object, chromium_caret_text,
     chromium_object_location, chromium_text_state, has_chromium_document, perform_chromium_action,
-    ChromiumTextField, Ia2Action, Ia2CaptureError,
+    probe_window, ChromiumTextField, Ia2Action, Ia2CaptureError,
 };
 
 #[cfg(target_os = "windows")]
@@ -344,8 +364,9 @@ mod com {
 
     pub mod capture {
         use super::super::{
-            parse_attributes, Ia2Node, Ia2TextPosition, Ia2TextRun, Ia2TextState, TextRuns,
-            EMBEDDED_OBJECT_CHAR, FONT_ATTRIBUTES, IA2_TEXT_BOUNDARY_LINE, IA2_TEXT_OFFSET_LENGTH,
+            parse_attributes, Ia2Node, Ia2Probe, Ia2TextPosition, Ia2TextRun, Ia2TextState,
+            TextRuns, EMBEDDED_OBJECT_CHAR, FONT_ATTRIBUTES, IA2_TEXT_BOUNDARY_LINE,
+            IA2_TEXT_OFFSET_LENGTH,
         };
         use super::{IAccessible2, IAccessibleRelation, IAccessibleText};
         use windows::core::{Interface, BSTR, PCWSTR};
@@ -652,6 +673,52 @@ mod com {
             /// Its default action: click a button or link, toggle a check box
             /// (`accDoDefaultAction`).
             DefaultAction,
+        }
+
+        /// What `window`'s client object offers through IAccessible2 ([`Ia2Probe`]).
+        pub fn probe_window(window: HWND) -> Ia2Probe {
+            let mut probe = Ia2Probe::default();
+            let mut raw = std::ptr::null_mut();
+            // SAFETY: requests IAccessible for the client object of a window.
+            let found = unsafe {
+                AccessibleObjectFromWindow(window, OBJID_CLIENT, &IAccessible::IID, &mut raw)
+            };
+            if found.is_err() || raw.is_null() {
+                return probe;
+            }
+            // SAFETY: AccessibleObjectFromWindow returned an owned IAccessible pointer.
+            let acc = unsafe { IAccessible::from_raw(raw) };
+            probe.msaa = true;
+            // SAFETY: MSAA reads on a valid object.
+            probe.msaa_name = string(unsafe { acc.get_accName(&self_child()) });
+            probe.msaa_role = unsafe { acc.get_accRole(&self_child()) }
+                .ok()
+                .and_then(|v| i32::try_from(&v).ok());
+            let Some(ia2) = ia2_of(&acc) else {
+                return probe;
+            };
+            probe.ia2 = true;
+            let mut attributes = BSTR::default();
+            // SAFETY: out-pointer to a local on a valid interface; BSTR ownership transfers.
+            if unsafe { ia2.get_attributes(&mut attributes) }.is_ok() {
+                probe.object_attributes = Some(attributes.to_string());
+            }
+            let Ok(text) = ia2.cast::<IAccessibleText>() else {
+                return probe;
+            };
+            probe.text = true;
+            let mut caret = 0;
+            // SAFETY: out-pointers to locals on a valid interface.
+            if unsafe { text.get_caretOffset(&mut caret) }.is_ok() {
+                probe.caret = Some(caret);
+                let (mut start, mut end) = (0, 0);
+                let mut at = BSTR::default();
+                // SAFETY: out-pointers to locals; BSTR ownership transfers.
+                if unsafe { text.get_attributes(caret, &mut start, &mut end, &mut at) }.is_ok() {
+                    probe.text_attributes = Some(at.to_string());
+                }
+            }
+            probe
         }
 
         /// Whether a top-level window holds a Chromium page: a `Chrome_RenderWidgetHostHWND`.

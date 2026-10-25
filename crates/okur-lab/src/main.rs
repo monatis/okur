@@ -147,6 +147,10 @@ enum Commands {
         /// Text the window's title contains
         title: String,
     },
+    /// Ask the window with the keyboard focus, and the window in front, for IAccessible2: one
+    /// JSON line each, whether it answers and what its object and its text at the caret
+    /// report (Windows; research, never evidence)
+    Ia2Probe,
     /// Print the element UI Automation says has the keyboard focus, as one JSON line: its
     /// name, control type, class, and whether it is in a document (a web page's). The harness
     /// checks a web trial starts in its page (Windows)
@@ -1361,6 +1365,17 @@ async fn main() {
                     eprintln!("{e}");
                     std::process::exit(1);
                 }
+            }
+        }
+        Some(Commands::Ia2Probe) => {
+            #[cfg(windows)]
+            okur_platform::harness::ia2_probe_focus()
+                .iter()
+                .for_each(|line| println!("{line}"));
+            #[cfg(not(windows))]
+            {
+                eprintln!("IA2 is only read on Windows");
+                std::process::exit(1);
             }
         }
         Some(Commands::Focus) => {
