@@ -1,0 +1,23 @@
+{
+  "id": "1047-desktop-word-form-fields-list",
+  "name": "Word: Select a Form Field (Insert+F5) in a document without form fields, then Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Insert+F5"},
+    {"id": "s2", "type": "key", "command": "Escape"},
+    {"id": "s3", "type": "key", "command": "Insert+Up"}
+  ]
+}
