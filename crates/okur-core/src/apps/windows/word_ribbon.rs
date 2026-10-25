@@ -98,7 +98,7 @@ impl AppModule for WordRibbon {
         in_word(focus) && focus.in_ribbon
     }
 
-    fn focus(&mut self, focus: &FocusEvent, _cx: &mut AppContext<'_>) -> FocusResponse {
+    fn focus(&mut self, focus: &FocusEvent, cx: &mut AppContext<'_>) -> FocusResponse {
         // Out of the ribbon into Word's window, then its document.
         let left = self.place != Place::Outside || self.leaving;
         if left && in_word(focus) && !focus.in_ribbon {
@@ -136,6 +136,11 @@ impl AppModule for WordRibbon {
         } else {
             Place::Outside
         };
+        // A key tip's tab (Alt, then W): JAWS says nothing until a command acts [obs, 1042/s3].
+        if cx.letter_key && now == Place::Tabs && self.place != Place::Outside {
+            self.place = now;
+            return FocusResponse::Silent;
+        }
         // A command it does not word, unavailable, or outside the ribbon's menus: the engine's.
         let speech = (!focus.states.disabled)
             .then(|| self.speech(focus, &now))
@@ -163,6 +168,7 @@ mod tests {
             window_kind: &mut kind,
             selecting: false,
             alt_held: false,
+            letter_key: false,
         };
         match ribbon.focus(focus, &mut cx) {
             FocusResponse::Speak(announcement) => Some(announcement.render()),

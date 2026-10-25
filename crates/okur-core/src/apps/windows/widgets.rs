@@ -53,6 +53,7 @@ mod tests {
                     window_kind: &mut None,
                     selecting: false,
                     alt_held: false,
+                    letter_key: false,
                 }
             ),
             FocusResponse::Silent

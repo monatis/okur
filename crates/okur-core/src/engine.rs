@@ -206,6 +206,8 @@ pub struct ScreenReaderEngine {
     /// The last key was Escape alone: a dialog it closes may first move the focus to its
     /// Cancel button.
     last_key_escapes: bool,
+    /// The last key was a letter alone: a ribbon's key tip, whose tab is not said.
+    last_key_letter: bool,
     /// Each page's temporary PlaceMarker (Ctrl+Windows+K), by its address, for the session.
     temp_placemarkers: std::collections::HashMap<String, usize>,
     /// The PlaceMarkers saved (Ctrl+Shift+K), and where they are kept.
@@ -534,6 +536,7 @@ impl ScreenReaderEngine {
             last_key_selects: false,
             last_key_tabs: false,
             last_key_escapes: false,
+            last_key_letter: false,
             temp_placemarkers: std::collections::HashMap::new(),
             placemarkers: crate::placemarkers::PlaceMarkers::default(),
             placemarker_store: None,
@@ -843,6 +846,8 @@ impl ScreenReaderEngine {
         self.last_key_tabs = event.key == Key::Tab && !event.modifiers.ctrl && !event.modifiers.alt;
         self.last_key_escapes =
             event.key == Key::Escape && event.modifiers == crate::input::Modifiers::none();
+        self.last_key_letter = matches!(event.key, Key::Alpha(_))
+            && event.modifiers == crate::input::Modifiers::none();
         self.last_key_selects = event.modifiers.shift
             && !event.modifiers.alt
             && matches!(

@@ -186,6 +186,7 @@ mod tests {
             window_kind: &mut kind,
             selecting: false,
             alt_held: false,
+            letter_key: false,
         };
         match explorer.focus(focus, &mut cx) {
             FocusResponse::Speak(announcement) => announcement.render(),
@@ -241,6 +242,7 @@ mod tests {
             window_kind: &mut kind,
             selecting: false,
             alt_held: false,
+            letter_key: false,
         };
         assert!(matches!(
             explorer.focus(&view, &mut cx),
@@ -262,6 +264,7 @@ mod tests {
                 window_kind: &mut kind,
                 selecting,
                 alt_held: false,
+                letter_key: false,
             };
             match explorer.focus(focus, &mut cx) {
                 FocusResponse::Speak(announcement) => announcement.render(),

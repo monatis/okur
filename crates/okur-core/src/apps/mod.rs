@@ -42,6 +42,8 @@ pub struct AppContext<'a> {
     pub selecting: bool,
     /// The Alt key is held down (the task switcher stays up while it is).
     pub alt_held: bool,
+    /// The last key was a letter alone (a ribbon's key tip).
+    pub letter_key: bool,
 }
 
 impl AppContext<'_> {

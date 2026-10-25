@@ -206,6 +206,7 @@ mod tests {
             window_kind: &mut kind,
             selecting: false,
             alt_held: false,
+            letter_key: false,
         };
         assert!(matches!(
             switcher.focus(&item, &mut cx),
