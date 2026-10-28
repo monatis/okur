@@ -1143,12 +1143,13 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     );
     // A classic RichEdit field is known by its MSAA name (a ribbon's "Font family", "Font
     // size"), where UI Automation's proxy names every one "RichEdit Control"; the name tells
-    // two fields apart, though neither is said [obs, 970/s9, s10].
+    // two fields apart, though neither is said [obs, 970/s9, s10]. A spin button's too: Word's
+    // Paragraph dialog, "Left: edit combo" [obs, 1060/s6].
     if focus.rich_edit && focus.role == okur_core::Role::Edit {
         if let Some(name) = event
             .object
             .as_ref()
-            .filter(|o| o.role == Some(MSAA_TEXT))
+            .filter(|o| matches!(o.role, Some(MSAA_TEXT | MSAA_SPIN_BUTTON)))
             .and_then(|o| o.name.clone())
         {
             focus.name = Some(name);
@@ -2387,6 +2388,8 @@ const MSAA_INVISIBLE: u32 = 0x8000;
 const MSAA_UNAVAILABLE: u32 = 0x1;
 /// MSAA's editable text role.
 const MSAA_TEXT: i32 = 0x2A;
+/// MSAA's spin button role: a RichEdit with arrows that step its value.
+const MSAA_SPIN_BUTTON: i32 = 0x34;
 /// MSAA's tool bar role: a ribbon's group of commands.
 const TOOLBAR: i32 = 0x16;
 
@@ -4985,10 +4988,11 @@ mod capture {
             // Reading here too would race it with a half-updated state (a selection still
             // being extended), and whichever arrived first would be spoken.
             let caret_moved = matches!(name, "caret" | "text_selection_change");
-            // A value changed: a form field's too, which the text does not show (a check box
-            // toggled), so the form fields kept are read again.
+            // The document's value changed: a form field's too, which the text does not show (a
+            // check box toggled), so its form fields kept are read again; not for another
+            // window's change (Word's ribbon boxes, which put the tracer a step behind, 1061).
             if name == "value_change" {
-                crate::text_context::forget_form_fields();
+                crate::text_context::forget_form_fields_of(hwnd.0 as isize);
             }
             let text_context = if (focused || changes_focus_context || caret_moved)
                 && !uia_named

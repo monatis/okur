@@ -33,7 +33,7 @@ pub fn css_alignment(align: &str) -> Option<&'static str> {
 }
 
 #[cfg(windows)]
-pub(crate) use reader::{activate_word_document_link, forget_form_fields};
+pub(crate) use reader::{activate_word_document_link, forget_form_fields, forget_form_fields_of};
 #[cfg(windows)]
 pub use reader::{
     focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
@@ -704,6 +704,17 @@ mod reader {
     pub fn forget_form_fields() {
         if let Ok(mut read) = FORM_FIELDS_READ.lock() {
             *read = None;
+        }
+    }
+
+    /// [`forget_form_fields`] where they are the window `window's`: a value change of the
+    /// document whose fields are kept, not of Word's ribbon boxes beside it, which change as
+    /// often as the caret moves.
+    pub fn forget_form_fields_of(window: isize) {
+        if let Ok(mut read) = FORM_FIELDS_READ.lock() {
+            if read.as_ref().is_some_and(|r| r.window == window) {
+                *read = None;
+            }
         }
     }
 
