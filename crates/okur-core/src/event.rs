@@ -420,6 +420,11 @@ pub struct FocusEvent {
     /// JAWS's [obs, 748/s11, s14].
     #[serde(default)]
     pub item_parent: Option<String>,
+    /// The window in front is owned by another that stays available while it is open: a
+    /// modeless dialog, Word's Find and Replace, which Ctrl+Tab leaves for the document [obs,
+    /// 1065/s6].
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub modeless: bool,
     /// The hints an item of Okur's own dialog is entered with, in place of its role's: Settings
     /// Center's search results, "Use the arrow keys to select an item. | Press the space bar to
     /// toggle between the choices" [obs, the walk of Settings Center's search].
@@ -677,6 +682,7 @@ impl FocusEvent {
             item_status: None,
             item_parent: None,
             own_hints: Vec::new(),
+            modeless: false,
             child_count: None,
             text: None,
             dialog_text: None,

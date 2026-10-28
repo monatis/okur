@@ -49,6 +49,8 @@ pub struct AppContext<'a> {
     pub alt_held: bool,
     /// The last key was a letter alone (a ribbon's key tip).
     pub letter_key: bool,
+    /// The last key was Escape alone (a ribbon's key tips stepped back).
+    pub escape_key: bool,
     /// Set by a module that waits for the document's view before it says the focus (Word's
     /// document, back from its ribbon by a key tip, which can have changed the view): the
     /// engine asks for it, and the module's `document_view` says what the view makes of it.

@@ -6,7 +6,9 @@
 //!   the value." [obs, 1058/s2, s3, s5]; a new dialog is named first, "Font dialog";
 //! - a page's tab is selected, with Word's page key: "Advanced Tab selected | To switch pages,
 //!   press Control+Tab." [obs, 1058/s6, s7];
-//! - Escape back to the document says "Edit" alone, not the window's title [obs, 1058/s8].
+//! - Escape back to the document says "Edit" alone, not the window's title [obs, 1058/s8]; from
+//!   a modeless dialog (Find and Replace), the window's title before it, as Ctrl+Tab to the
+//!   document does: "sr-word-fixture.docx - Word | Edit" [obs, 1065/s6, s8].
 //!
 //! Its buttons, check boxes and lists are the engine's (they read as JAWS reads them:
 //! "Font Color (Automatic) Button | To activate press spacebar." [obs, 1058/s4]).
@@ -31,6 +33,8 @@ pub struct WordDialog {
     said: Option<(String, Option<String>)>,
     /// A dialog of Word's had the focus: the document taking it back is said alone.
     in_dialog: bool,
+    /// That dialog is modeless: the document taking the focus back names its window.
+    modeless: bool,
 }
 
 /// Whether the focus is in Word.
@@ -68,9 +72,15 @@ impl AppModule for WordDialog {
                     self.in_dialog = false;
                     self.said = None;
                     cx.note_window(focus);
-                    FocusResponse::Speak(Announcement::new(vec![Line::new(vec![Part::role(
-                        msg::role_edit().as_str(),
-                    )])]))
+                    let mut lines: Vec<Line> = focus
+                        .window_title
+                        .as_deref()
+                        .filter(|_| std::mem::take(&mut self.modeless))
+                        .map(Line::text)
+                        .into_iter()
+                        .collect();
+                    lines.push(Line::new(vec![Part::role(msg::role_edit().as_str())]));
+                    FocusResponse::Speak(Announcement::new(lines))
                 }
                 _ => {
                     self.in_dialog = false;
@@ -79,6 +89,7 @@ impl AppModule for WordDialog {
             };
         }
         self.in_dialog = true;
+        self.modeless = focus.modeless;
         let name = focus.name.as_deref().map(str::trim).unwrap_or_default();
         // The field's own window, nameless: the dialog names it next.
         if focus.platform.window_class.as_deref() == Some(FIELD_CLASS)
@@ -163,6 +174,7 @@ mod tests {
             selecting: false,
             alt_held: false,
             letter_key: false,
+            escape_key: false,
             ask_view: false,
         };
         match dialog.focus(focus, &mut cx) {
@@ -219,5 +231,23 @@ mod tests {
             Some(" \u{1d} Edit \u{1e} ")
         );
         assert_eq!(said(&mut dialog, &document, &mut title), None);
+    }
+
+    /// Back in the document from a modeless dialog (Find and Replace, by Ctrl+Tab or Escape),
+    /// the window's title is said before "Edit" [obs, 1065/s6, s8].
+    #[test]
+    fn the_document_after_a_modeless_dialog_names_its_window() {
+        let mut dialog = WordDialog::default();
+        let mut title = Some("sr-word-fixture.docx - Word".to_owned());
+        let mut find = field(DIALOG_CLASS, Role::Edit, "Find what:", None);
+        find.modeless = true;
+        assert!(said(&mut dialog, &find, &mut title).is_some());
+        let mut document = FocusEvent::new(Role::Document);
+        document.app = Some("WINWORD.EXE".into());
+        document.window_title = Some("sr-word-fixture.docx - Word".into());
+        assert_eq!(
+            said(&mut dialog, &document, &mut title).as_deref(),
+            Some("sr-word-fixture.docx - Word\n \u{1d} Edit \u{1e} ")
+        );
     }
 }

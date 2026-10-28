@@ -231,6 +231,11 @@ pub struct TraceEvent {
     /// The class of that window (`XamlExplorerHostIslandWindow` while the task switcher is up).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub top_window_class: Option<String>,
+    /// Whether that window's owner is available while it is open: a modal dialog keeps its
+    /// owner disabled (false), a modeless one does not (true: Word's Find and Replace, which
+    /// Ctrl+Tab leaves for the document [obs, 1065/s6]). None for a window without an owner.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub top_window_owner_enabled: Option<bool>,
     /// When the top-level window is the desktop (`Progman`, `WorkerW`): the current virtual
     /// desktop's name, which JAWS gives as the desktop's title ("Desktop 1").
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1089,6 +1094,8 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     {
         focus.unique_id = Some(event.id_child.to_string());
     }
+    // A modeless dialog in front: its owner stays available [obs, 1065/s6].
+    focus.modeless = event.top_window_owner_enabled == Some(true);
     // The window's kind is its class: the desktop's, the window in front, or (older traces)
     // the UIA window around the focus.
     focus.platform.top_window_class = if event.virtual_desktop.is_some() {
@@ -2259,6 +2266,14 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     if uia_has_it {
         return None;
     }
+    // A gallery's item: Word's Styles gallery, an MSAA list in the tool window it opens.
+    const LIST: i32 = 0x21;
+    const LISTITEM: i32 = 0x22;
+    if object.role == Some(LISTITEM)
+        && event.msaa_ancestors.first().and_then(|a| a.role) == Some(LIST)
+    {
+        return Some(gallery_item(event, object, name));
+    }
     const UIA_BUTTON: i32 = 50000;
     const UIA_MENU_ITEM: i32 = 50011;
     const LINK: i32 = 0x1E;
@@ -2355,6 +2370,45 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
         .count();
     focus.ribbon_menu = tab || pages >= 2;
     Some(focus)
+}
+
+/// A ribbon gallery's item (Word's Styles gallery): named by its description, the name without
+/// the preview mark before it ("¶ Heading 2", "Heading 2"), placed among the gallery's items,
+/// "2 of 17" [obs, 1064/s4-s7]. The gallery is the lower ribbon's, on the ribbon's menus.
+fn gallery_item(event: &TraceEvent, object: &TraceObject, name: &str) -> okur_core::FocusEvent {
+    const LISTITEM: i32 = 0x22;
+    let plain = event
+        .msaa_description
+        .as_deref()
+        .map(str::trim)
+        .filter(|d| !d.is_empty() && name.ends_with(d))
+        .unwrap_or(name);
+    let mut focus =
+        okur_core::FocusEvent::new(okur_core::Role::ListItem).with_name(plain.to_owned());
+    let items: Vec<&MsaaNode> = event
+        .msaa_siblings
+        .iter()
+        .filter(|s| s.role == Some(LISTITEM))
+        .collect();
+    focus.item_index = items
+        .iter()
+        .position(|s| s.name.as_deref() == Some(name))
+        .map(|i| i + 1);
+    focus.item_count = focus.item_index.map(|_| items.len());
+    apply_msaa_states(&mut focus, object.states);
+    focus.container_role = Some(okur_core::Role::List);
+    focus.container_name = event.msaa_ancestors.first().and_then(|a| a.name.clone());
+    focus.app = event.process.clone();
+    focus.app_product = event.process_product.clone();
+    focus.app_version = event.process_version.clone();
+    let control = event.netui_control.as_ref();
+    focus.bounds = control
+        .and_then(|c| c.bounds)
+        .or_else(|| event.focus_chain.last().and_then(|n| n.bounds));
+    focus.help_text = control.and_then(|c| c.help_text.clone());
+    focus.in_ribbon = true;
+    focus.ribbon_menu = true;
+    focus
 }
 
 /// The ribbon's own property page with the focus and no tab focused in it (`ribbon_tab` finds
@@ -3251,21 +3305,39 @@ mod capture {
 
     /// The title and class of `hwnd`'s top-level window, and the virtual desktop's name when
     /// that window is the desktop.
-    fn top_window(hwnd: HWND) -> (Option<String>, Option<String>, Option<String>) {
-        use windows::Win32::UI::WindowsAndMessaging::{GetAncestor, GA_ROOT};
+    /// The top-level window of `hwnd`: its title, its class, the virtual desktop's name when
+    /// it is the desktop, and whether its owner stays available (a modeless dialog's does).
+    fn top_window(hwnd: HWND) -> TopWindow {
+        use windows::Win32::UI::Input::KeyboardAndMouse::IsWindowEnabled;
+        use windows::Win32::UI::WindowsAndMessaging::{GetAncestor, GetWindow, GA_ROOT, GW_OWNER};
         // SAFETY: plain Win32 query on a window handle.
         let top = unsafe { GetAncestor(hwnd, GA_ROOT) };
         if top.is_invalid() {
-            return (None, None, None);
+            return TopWindow::default();
         }
         let (title, class) = window_text(top);
         let desktop = matches!(class.as_str(), "Progman" | "WorkerW")
             .then(crate::virtual_desktop::current_name);
-        (
-            Some(title).filter(|t| !t.is_empty()),
-            Some(class).filter(|c| !c.is_empty()),
+        // SAFETY: plain Win32 queries on window handles.
+        let owner_enabled = unsafe { GetWindow(top, GW_OWNER) }
+            .ok()
+            .filter(|owner| !owner.is_invalid())
+            .map(|owner| unsafe { IsWindowEnabled(owner) }.as_bool());
+        TopWindow {
+            title: Some(title).filter(|t| !t.is_empty()),
+            class: Some(class).filter(|c| !c.is_empty()),
             desktop,
-        )
+            owner_enabled,
+        }
+    }
+
+    /// The window in front, as [`top_window`] reads it.
+    #[derive(Default)]
+    struct TopWindow {
+        title: Option<String>,
+        class: Option<String>,
+        desktop: Option<String>,
+        owner_enabled: Option<bool>,
     }
 
     /// The events the live screen reader consumes ([`EventConverter`]). Not caret and text
@@ -3802,6 +3874,7 @@ mod capture {
                     page: None,
                     top_window_title: None,
                     top_window_class: None,
+                    top_window_owner_enabled: None,
                     virtual_desktop: None,
                     dialog_lines: Vec::new(),
                     dialog_text: Vec::new(),
@@ -4226,6 +4299,7 @@ mod capture {
                     page: None,
                     top_window_title: None,
                     top_window_class: None,
+                    top_window_owner_enabled: None,
                     virtual_desktop: None,
                     dialog_lines: Vec::new(),
                     dialog_text: Vec::new(),
@@ -4325,6 +4399,7 @@ mod capture {
             page: None,
             top_window_title: None,
             top_window_class: None,
+            top_window_owner_enabled: None,
             virtual_desktop: None,
             dialog_lines: Vec::new(),
             dialog_text: Vec::new(),
@@ -4445,6 +4520,7 @@ mod capture {
                     page: None,
                     top_window_title: None,
                     top_window_class: None,
+                    top_window_owner_enabled: None,
                     virtual_desktop: None,
                     dialog_lines: Vec::new(),
                     dialog_text: Vec::new(),
@@ -4561,6 +4637,7 @@ mod capture {
                     page: None,
                     top_window_title: None,
                     top_window_class: None,
+                    top_window_owner_enabled: None,
                     virtual_desktop: None,
                     dialog_lines: Vec::new(),
                     dialog_text: Vec::new(),
@@ -4911,14 +4988,18 @@ mod capture {
             // The window is the one in front now, when the focus chain was read: an event's
             // own window can have lost the foreground meanwhile (the task switcher's last
             // events arrive after the switch back, seen live on the dev box).
-            let (top_window_title, top_window_class, virtual_desktop) =
-                if focused || shown || name == "foreground" {
-                    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
-                    // SAFETY: plain Win32 call with no preconditions.
-                    top_window(unsafe { GetForegroundWindow() })
-                } else {
-                    (None, None, None)
-                };
+            let TopWindow {
+                title: top_window_title,
+                class: top_window_class,
+                desktop: virtual_desktop,
+                owner_enabled: top_window_owner_enabled,
+            } = if focused || shown || name == "foreground" {
+                use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+                // SAFETY: plain Win32 call with no preconditions.
+                top_window(unsafe { GetForegroundWindow() })
+            } else {
+                TopWindow::default()
+            };
             let (dialog, dialog_tree, dialog_page, group_box, default_button) =
                 if (focused || shown) && top_window_class.as_deref() == Some("#32770") {
                     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
@@ -5108,6 +5189,7 @@ mod capture {
                 page,
                 top_window_title,
                 top_window_class,
+                top_window_owner_enabled,
                 virtual_desktop,
                 dialog_lines: dialog.rows,
                 dialog_text: dialog.text,
@@ -6200,6 +6282,7 @@ mod tests {
             page: None,
             top_window_title: None,
             top_window_class: None,
+            top_window_owner_enabled: None,
             virtual_desktop: None,
             dialog_lines: Vec::new(),
             dialog_text: Vec::new(),
@@ -6499,6 +6582,80 @@ mod tests {
             }),
         ));
         assert!(styles.is_some_and(|s| s.role == okur_core::Role::Button && s.opens_menu));
+    }
+
+    /// Word's Styles gallery: an MSAA list item in a list, named by its description without
+    /// the preview mark, placed among the list's items, on the ribbon's menus [obs, 1064/s4].
+    #[test]
+    fn a_ribbon_gallerys_item_is_a_list_item_with_its_place() {
+        let item = |name: &str| MsaaNode {
+            role: Some(0x22),
+            name: Some(name.to_owned()),
+            states: 0,
+            value: None,
+            description: None,
+            children: Vec::new(),
+        };
+        let button = MsaaNode {
+            role: Some(0x2B),
+            ..item("More")
+        };
+        let event = TraceEvent {
+            window_class: Some("NetUIHWND".to_owned()),
+            object: Some(TraceObject {
+                role: Some(0x22),
+                name: Some("¶ Heading 2".to_owned()),
+                value: None,
+                states: 0x30_0000,
+                shortcut: None,
+            }),
+            focus_chain: vec![node(UIA_WINDOW, "sr-word-fixture.docx - Word", false)],
+            msaa_siblings: vec![
+                button,
+                item("¶ Heading 1"),
+                item("¶ Heading 2"),
+                item("Subtle Reference"),
+            ],
+            msaa_ancestors: vec![MsaaNode {
+                role: Some(0x21),
+                ..item("Styles")
+            }],
+            msaa_description: Some("Heading 2".to_owned()),
+            ..focus_event(Vec::new())
+        };
+        let focus = netui_focus(&event);
+        assert_eq!(
+            focus.as_ref().map(|f| (
+                f.role.clone(),
+                f.name.as_deref(),
+                f.item_index,
+                f.item_count,
+                f.in_ribbon && f.ribbon_menu
+            )),
+            Some((
+                okur_core::Role::ListItem,
+                Some("Heading 2"),
+                Some(2),
+                Some(3),
+                true
+            ))
+        );
+    }
+
+    /// A focus in a window whose owner stays available is in a modeless dialog (Word's Find and
+    /// Replace); one whose owner it disables, or a window without one, is not [obs, 1065/s6].
+    #[test]
+    fn a_window_that_leaves_its_owner_available_is_modeless() {
+        let modeless = |owner_enabled: Option<bool>| {
+            focus_event_from_trace(&TraceEvent {
+                top_window_owner_enabled: owner_enabled,
+                ..focus_event(Vec::new())
+            })
+            .map(|f| f.modeless)
+        };
+        assert_eq!(modeless(Some(true)), Some(true));
+        assert_eq!(modeless(Some(false)), Some(false));
+        assert_eq!(modeless(None), Some(false));
     }
 
     /// Word's Font box, a RichEdit window of its own that UIA reaches inside the ribbon's

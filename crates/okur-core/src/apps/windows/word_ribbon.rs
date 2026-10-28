@@ -19,6 +19,11 @@
 //!   Effects and Typography sub menu" again, and the Paragraph group after it is named alone,
 //!   "Paragraph | Bullets split button" [obs, 1048/s19, s23, s25].
 //!
+//! - A gallery's item is a button with its place: "Heading 2 Button | 2 of 17"; the item its key
+//!   tip opens the gallery on is not said, nor the gallery's window [obs, 1064/s3-s7].
+//! - While Word's key tips lead (a key tip moved the focus, and only Escape since), Escape
+//!   steps back through them, from a gallery to its button, then to its tab, and nothing is
+//!   said [obs, 1064/s8, s9].
 //! - Escape back to the document: "Leaving menus | Leaving ribbons | Edit" [obs, 1043/s8,
 //!   1042/s4], the engine's "Leaving menus", then this module's; Word's window, focused on the
 //!   way, says nothing of its own.
@@ -80,6 +85,8 @@ pub struct WordRibbon {
     groups: Vec<GroupEntry>,
     /// The document's view was asked for, back in it from the ribbon.
     view_wanted: bool,
+    /// Word's key tips lead the ribbon: a key tip moved the focus, and only Escape since.
+    key_tips: bool,
 }
 
 /// Back in Word's document from the ribbon: "Leaving ribbons | Edit"; in Read Mode, the view
@@ -96,6 +103,21 @@ fn back_in_document(view: Option<&str>) -> String {
         _ => role_marker(msg::role_edit().as_str()),
     };
     format!("{}\n{rest}", msg::ribbons_left())
+}
+
+/// A gallery's item as JAWS says it: its name, "Button" as a word of its own, not a role, and
+/// its place, "Heading 2 | Button | 2 of 17" [obs, 1064/s4-s7].
+fn gallery_item(focus: &FocusEvent) -> Option<String> {
+    let name = focus
+        .name
+        .as_deref()
+        .map(str::trim)
+        .filter(|n| !n.is_empty())?;
+    let mut lines = vec![name.to_owned(), msg::role_button().to_string()];
+    if let (Some(index), Some(count)) = (focus.item_index, focus.item_count) {
+        lines.push(msg::position(index, count).render());
+    }
+    Some(lines.join("\n"))
 }
 
 /// Whether the focus is in Word.
@@ -315,6 +337,7 @@ impl AppModule for WordRibbon {
         if left && in_word(focus) && !focus.in_ribbon {
             self.place = Place::Outside;
             self.menu = false;
+            self.key_tips = false;
             match focus.role {
                 Role::Window => {
                     self.leaving = true;
@@ -336,6 +359,9 @@ impl AppModule for WordRibbon {
             }
         }
         self.leaving = false;
+        if in_word(focus) && focus.in_ribbon && cx.letter_key {
+            self.key_tips = true;
+        }
         // The ribbon itself, taking the focus on the way: named on the way from its search box,
         // "Ribbon | Collapse the Ribbon Button" [obs, 1051/s12], and nothing between its menus'
         // commands [obs, 1045/s9] or on the way into its tabs.
@@ -352,6 +378,30 @@ impl AppModule for WordRibbon {
                 )])),
                 None => FocusResponse::Silent,
             };
+        }
+        let on_menus = in_word(focus) && focus.in_ribbon && focus.ribbon_menu;
+        // A gallery's item; the one its key tip opens the gallery on is not said [obs,
+        // 1064/s3-s7]. The key tips still lead below the gallery.
+        if on_menus && focus.role == Role::ListItem {
+            if cx.letter_key {
+                return FocusResponse::Silent;
+            }
+            return match gallery_item(focus) {
+                Some(speech) => FocusResponse::Speak(Announcement::from_text(&speech)),
+                None => FocusResponse::Pass,
+            };
+        }
+        // A nameless focus on the menus: a gallery's window on its way to its item.
+        if on_menus
+            && focus
+                .name
+                .as_deref()
+                .is_none_or(|name| name.trim().is_empty())
+        {
+            return FocusResponse::Silent;
+        }
+        if in_word(focus) && focus.in_ribbon && !cx.letter_key && !cx.escape_key {
+            self.key_tips = false;
         }
         // Around the menus: said whole, with the menus it leaves.
         if in_word(focus) && focus.in_ribbon && !focus.ribbon_menu {
@@ -382,6 +432,12 @@ impl AppModule for WordRibbon {
         };
         // A key tip's tab (Alt, then W): JAWS says nothing until a command acts [obs, 1042/s3].
         if cx.letter_key && now == Place::Tabs && self.place != Place::Outside {
+            self.place = now;
+            return FocusResponse::Silent;
+        }
+        // Escape while the key tips lead steps back through them: a gallery's button, then its
+        // tab, unsaid [obs, 1064/s8, s9].
+        if self.key_tips && cx.escape_key && now != Place::Outside {
             self.place = now;
             return FocusResponse::Silent;
         }
@@ -417,6 +473,7 @@ mod tests {
             selecting: false,
             alt_held: false,
             letter_key: false,
+            escape_key: false,
             ask_view: false,
         };
         match ribbon.focus(focus, &mut cx) {
@@ -702,6 +759,7 @@ mod tests {
             selecting: false,
             alt_held: false,
             letter_key: true,
+            escape_key: false,
             ask_view: false,
         };
         assert!(matches!(
@@ -715,5 +773,65 @@ mod tests {
         );
         // Answered once.
         assert_eq!(ribbon.document_view(Some("Read Mode")), None);
+    }
+
+    /// The Styles gallery opened by its key tip: its first item and window unsaid, the arrows
+    /// saying each item as a button with its place; Escape back to its button and its tab
+    /// unsaid while the key tips lead [obs, 1064/s3-s9].
+    #[test]
+    fn a_gallery_opened_by_its_key_tip_is_read_as_jaws_reads_it() {
+        let mut ribbon = WordRibbon::default();
+        let mut mode = AppMode::NativeControl;
+        let (mut title, mut kind) = (None, None);
+        let mut by = |ribbon: &mut WordRibbon, focus: &FocusEvent, letter: bool, escape: bool| {
+            let mut cx = AppContext {
+                app_mode: &mut mode,
+                window_title: &mut title,
+                window_kind: &mut kind,
+                selecting: false,
+                alt_held: false,
+                letter_key: letter,
+                escape_key: escape,
+                ask_view: false,
+            };
+            match ribbon.focus(focus, &mut cx) {
+                FocusResponse::Speak(announcement) | FocusResponse::SpeakWhole(announcement) => {
+                    Some(announcement.render())
+                }
+                FocusResponse::Silent => Some(String::new()),
+                _ => None,
+            }
+        };
+        let home = word(Role::Tab, "Home");
+        assert!(by(&mut ribbon, &home, false, false).is_some_and(|s| !s.is_empty()));
+        // L: the gallery's window, then its first item.
+        let window = word(Role::Generic, "");
+        assert_eq!(by(&mut ribbon, &window, true, false).as_deref(), Some(""));
+        let item = |name: &str, index: usize| {
+            let mut item = word(Role::ListItem, name);
+            item.item_index = Some(index);
+            item.item_count = Some(17);
+            item
+        };
+        assert_eq!(
+            by(&mut ribbon, &item("Heading 1", 1), true, false).as_deref(),
+            Some("")
+        );
+        assert_eq!(
+            by(&mut ribbon, &item("Heading 2", 2), false, false).as_deref(),
+            Some("Heading 2\nButton\n2 of 17")
+        );
+        // Escape: the gallery's button, then its tab, unsaid.
+        let mut styles = word(Role::Button, "Styles");
+        styles.opens_menu = true;
+        styles.groups = vec![
+            GroupEntry::group("Lower Ribbon"),
+            GroupEntry::tool_bar("Styles"),
+        ];
+        assert_eq!(by(&mut ribbon, &styles, false, true).as_deref(), Some(""));
+        assert_eq!(by(&mut ribbon, &home, false, true).as_deref(), Some(""));
+        // An arrow ends the key tips' lead: the tab is said again.
+        let insert = word(Role::Tab, "Insert");
+        assert!(by(&mut ribbon, &insert, false, false).is_some_and(|s| !s.is_empty()));
     }
 }

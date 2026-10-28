@@ -54,6 +54,7 @@ mod tests {
                     selecting: false,
                     alt_held: false,
                     letter_key: false,
+                    escape_key: false,
                     ask_view: false,
                 }
             ),

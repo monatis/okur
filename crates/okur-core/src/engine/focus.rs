@@ -282,8 +282,11 @@ impl ScreenReaderEngine {
         } else {
             self.leaving_menus_message()
         };
+        // A popup the ribbon's menus opened (Word's Styles gallery) is not left by the ribbon's
+        // own focus [obs, 1064/s3-s7].
         let leaving_menus =
-            (!focus.in_document && self.menus.in_menu_mode() && self.menus.end()) || ribbon_left;
+            (!focus.in_document && !in_menu && self.menus.in_menu_mode() && self.menus.end())
+                || ribbon_left;
         // The control the menus give the focus back to is said again [obs, 302/s8, 547/s8].
         if leaving_menus {
             self.native_focus.forget_last();
@@ -313,6 +316,7 @@ impl ScreenReaderEngine {
             selecting: self.last_key_selects,
             alt_held: self.alt_held,
             letter_key: self.last_key_letter,
+            escape_key: self.last_key_escapes,
             ask_view: false,
         };
         for app in &mut self.apps {

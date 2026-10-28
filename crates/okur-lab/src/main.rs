@@ -214,6 +214,11 @@ enum Commands {
         /// Also list the accessibility events traced during each step of the trial
         #[arg(long)]
         trace: bool,
+
+        /// With --trace, what replay's converter makes of each event, under it: the focus
+        /// events the engine gets (role, name, value, place, ribbon and groups)
+        #[arg(long, requires = "trace")]
+        converted: bool,
     },
     /// Wait until the default audio output is silent; prints a JSON SilenceReport
     WaitSilence {
@@ -516,7 +521,12 @@ fn trace_line(event: &okur_platform::event_trace::TraceEvent, start_ms: u128) ->
     )
 }
 
-fn print_evidence(evidence: &str, trial: usize, trace: bool) -> Result<(), String> {
+fn print_evidence(
+    evidence: &str,
+    trial: usize,
+    trace: bool,
+    converted: bool,
+) -> Result<(), String> {
     let path = if Path::new(evidence).exists() {
         Path::new(evidence).to_path_buf()
     } else {
@@ -573,6 +583,23 @@ fn print_evidence(evidence: &str, trial: usize, trace: bool) -> Result<(), Strin
     } else {
         Vec::new()
     };
+    // What replay's converter makes of each event, converted in order as replay does, its
+    // state carried from one to the next.
+    let mut converter = okur_platform::event_trace::EventConverter::default();
+    let converted: Vec<Vec<String>> = events
+        .iter()
+        .map(|event| {
+            if converted {
+                converter
+                    .convert(event)
+                    .iter()
+                    .map(converted_line)
+                    .collect()
+            } else {
+                Vec::new()
+            }
+        })
+        .collect();
     // As replay places them: from a tick before the step's key, after the step before it.
     let mut previous_end: Option<u128> = None;
     for step in chosen
@@ -610,13 +637,67 @@ fn print_evidence(evidence: &str, trial: usize, trace: bool) -> Result<(), Strin
         if let (Some(start), Some(end)) = (time("t_start_ms"), time("t_end_ms")) {
             let from = start.saturating_sub(okur_corpus::parity::TICK_MS);
             let from = previous_end.map_or(from, |e| from.max(e + 1));
-            for event in events.iter().filter(|e| (from..=end).contains(&e.t_ms)) {
+            for (event, made) in events
+                .iter()
+                .zip(&converted)
+                .filter(|(e, _)| (from..=end).contains(&e.t_ms))
+            {
                 println!("{:>21} {}", "", trace_line(event, start));
+                for line in made {
+                    println!("{:>27} => {line}", "");
+                }
             }
             previous_end = Some(end);
         }
     }
     Ok(())
+}
+
+/// An engine event as `evidence --converted` lists it: a focus by what speech is made of,
+/// the rest by their kind.
+fn converted_line(event: &okur_core::AccessibilityEvent) -> String {
+    use okur_core::AccessibilityEvent;
+    let focus = |kind: &str, f: &okur_core::FocusEvent| {
+        let mut parts = vec![format!(
+            "{kind} {:?} {:?}",
+            f.role,
+            f.name.as_deref().unwrap_or("")
+        )];
+        if let Some(value) = f.value.as_deref().filter(|v| !v.is_empty()) {
+            parts.push(format!("value={value:?}"));
+        }
+        if let (Some(i), Some(n)) = (f.item_index, f.item_count) {
+            parts.push(format!("{i} of {n}"));
+        }
+        if let Some(role) = &f.container_role {
+            parts.push(format!(
+                "in {role:?} {:?}",
+                f.container_name.as_deref().unwrap_or("")
+            ));
+        }
+        if f.in_ribbon {
+            parts.push(format!("ribbon menu={}", f.ribbon_menu));
+        }
+        if !f.groups.is_empty() {
+            let names: Vec<&str> = f.groups.iter().map(|g| g.name.as_str()).collect();
+            parts.push(format!("groups={names:?}"));
+        }
+        if let Some(help) = f.help_text.as_deref().filter(|h| !h.is_empty()) {
+            parts.push(format!("help={help:?}"));
+        }
+        if let Some(title) = f.window_title.as_deref() {
+            parts.push(format!("window={title:?}"));
+        }
+        parts.join("  ")
+    };
+    match event {
+        AccessibilityEvent::Focus(f) => focus("focus", f),
+        AccessibilityEvent::Selected(f) => focus("selected", f),
+        other => {
+            let text = format!("{other:?}");
+            text.chars().take(160).collect()
+        }
+    }
 }
 
 /// Logs to stderr at the RUST_LOG level, or, for `run --debug-log <file>` and
@@ -1579,8 +1660,9 @@ async fn main() {
             evidence,
             trial,
             trace,
+            converted,
         }) => {
-            if let Err(e) = print_evidence(&evidence, trial, trace) {
+            if let Err(e) = print_evidence(&evidence, trial, trace, converted) {
                 eprintln!("{e}");
                 std::process::exit(1);
             }
