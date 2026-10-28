@@ -23,13 +23,31 @@
 //!   1042/s4], the engine's "Leaving menus", then this module's; Word's window, focused on the
 //!   way, says nothing of its own.
 //!
+//! Around the menus, in the ribbon still (the Quick Access Toolbar, the File tab, the buttons
+//! and the search box beside the tabs, Collapse the Ribbon), commands are said as controls are,
+//! with their hints and no place [obs, 1051/s4-s12]:
+//! - leaving the menus or a sub menu for them says "Leaving menus", never "Leaving ribbons":
+//!   "menu | Leaving menus | Customize Toolbar sub menu | To move through items press up or
+//!   down arrow.", then "Leaving menus | Can't Repeat Button Unavailable";
+//! - a grouping entered is named, with its state: "Can't Undo Unavailable | Can't Undo split
+//!   button Unavailable | To move to an item, use the RIGHT ARROW, ..."; the toolbar is not;
+//! - the row of tabs is named as it is entered, and its buttons are activated by Enter: "Ribbon
+//!   Tabs Tab | Share Button | To activate press Enter.", "Sign in Link | Get to your
+//!   documents ... | To activate press Enter.";
+//! - the search box is in its menu item: "Tell me what you want to do... sub menu | Tell me
+//!   what you want to do... Edit | Type in text.";
+//! - the ribbon taking the focus itself on the way names it: "Ribbon | Collapse the Ribbon
+//!   Button not checked | To activate press spacebar.";
+//! - back on the menus: "menu | | Upper Ribbon | Editing group | Select sub menu" [obs,
+//!   1051/s13].
+//!
 //! A command this module does not word (only Word's buttons, split buttons, sub menus, check
 //! boxes and edit combos are recorded) is the engine's.
 
-use crate::announcement::Announcement;
+use crate::announcement::{Announcement, Line, Part, PartKind};
 use crate::aom::Role;
 use crate::apps::{AppContext, AppModule, FocusResponse};
-use crate::event::FocusEvent;
+use crate::event::{FocusEvent, GroupEntry};
 use crate::linearize::{role_marker, state_marker};
 use crate::messages::msg;
 
@@ -44,6 +62,9 @@ enum Place {
     Tabs,
     /// A command in the lower ribbon, in the group (its tool bar) named.
     Lower(Option<String>),
+    /// In the ribbon, around its menus: the Quick Access Toolbar, the File tab, the buttons and
+    /// the search box beside the tabs, Collapse the Ribbon.
+    Around,
 }
 
 /// Word's ribbon.
@@ -54,6 +75,9 @@ pub struct WordRibbon {
     menu: bool,
     /// The ribbon was just left for Word's own window, before its document takes the focus.
     leaving: bool,
+    /// The groups the last command around the menus was in: the next one names those it
+    /// enters.
+    groups: Vec<GroupEntry>,
 }
 
 /// Whether the focus is in Word.
@@ -87,11 +111,17 @@ impl WordRibbon {
                 let control = control_speech(focus, name)?;
                 let with_role =
                     |g: &String| format!("{g} {}", role_marker(msg::role_group().as_str()));
+                // The menus entered again from around them: "menu | | Upper Ribbon | Editing
+                // group | Select sub menu" [obs, 1051/s13].
+                let upper = (self.place == Place::Around)
+                    .then(|| role_marker(msg::ribbon_upper().as_str()));
                 if focus.role == Role::MenuButton && !self.menu {
                     // JAWS's empty part after "menu" says nothing.
                     lines.push(role_marker(msg::role_menu().as_str()));
+                    lines.extend(upper);
                     lines.extend(group.as_ref().map(with_role));
                 } else if self.place != *now && !combo {
+                    lines.extend(upper);
                     lines.extend(group.as_ref().map(|g| {
                         if self.menu {
                             with_role(g)
@@ -102,10 +132,89 @@ impl WordRibbon {
                 }
                 lines.extend(control);
             }
-            Place::Outside => return None,
+            Place::Outside | Place::Around => return None,
         }
         Some(lines.join("\n"))
     }
+
+    /// What a command around the menus says, from the place before: the menus left, the
+    /// groupings entered, then the control with its hint.
+    fn around(&self, focus: &FocusEvent) -> Option<Announcement> {
+        let name = focus
+            .name
+            .as_deref()
+            .map(str::trim)
+            .filter(|n| !n.is_empty())?;
+        let mut lines = Vec::new();
+        let sub_menu = focus.role == Role::MenuButton;
+        if sub_menu && !self.menu {
+            lines.push(Line::new(vec![Part::role(msg::role_menu().as_str())]));
+        }
+        if matches!(self.place, Place::Tabs | Place::Lower(_)) || self.menu {
+            lines.push(Line::of(PartKind::Message, msg::menus_left()));
+        }
+        // The search box, in its menu item, whose name the box's placeholder repeats.
+        if focus.role == Role::Edit {
+            if let Some(item) = focus
+                .container_name
+                .as_deref()
+                .filter(|_| focus.container_role == Some(Role::MenuItem))
+            {
+                lines.push(Line::new(vec![
+                    Part::new(PartKind::Container, item),
+                    Part::state(msg::state_sub_menu().as_str()),
+                ]));
+            }
+            lines.push(Line::new(vec![
+                Part::new(PartKind::Name, name),
+                Part::role(msg::role_edit().as_str()),
+            ]));
+            lines.extend(
+                focus
+                    .value
+                    .as_deref()
+                    .map(str::trim)
+                    .filter(|v| !v.is_empty() && *v != name)
+                    .map(|v| Line::of(PartKind::Value, v)),
+            );
+            lines.push(Line::of(PartKind::Hint, msg::hint_type_in_text()));
+            return Some(Announcement::new(lines));
+        }
+        let control = control_speech(focus, name)?;
+        // The groupings entered: not the window's panes, nor the toolbar.
+        for group in focus.groups.iter().filter(|g| !g.pane && !g.tool_bar) {
+            if self.groups.iter().any(|before| before.name == group.name) {
+                continue;
+            }
+            let mut parts = vec![Part::new(PartKind::Container, group.name.trim())];
+            if group.tab_list {
+                parts.push(Part::role(msg::role_tab().as_str()));
+            }
+            if group.disabled {
+                parts.push(Part::state(msg::state_unavailable().as_str()));
+            }
+            lines.push(Line::new(parts));
+        }
+        lines.extend(control.into_iter().map(Line::text));
+        lines.extend(around_hint(focus).map(|hint| Line::of(PartKind::Hint, hint)));
+        Some(Announcement::new(lines))
+    }
+}
+
+/// The hint of a command around the menus: a sub menu's arrows, a split button's even
+/// unavailable, Enter for a link and the row of tabs' buttons, the spacebar for the others
+/// that are available [obs, 1051/s4-s12].
+fn around_hint(focus: &FocusEvent) -> Option<String> {
+    let hint = match focus.role {
+        Role::MenuButton => msg::hint_menu_items_up_down(),
+        Role::SplitButton => msg::hint_split_button(),
+        Role::Link { .. } => msg::hint_activate_enter(),
+        Role::Button if focus.states.disabled => return None,
+        Role::Button if focus.groups.iter().any(|g| g.tab_list) => msg::hint_activate_enter(),
+        Role::Button => msg::hint_activate_spacebar(),
+        _ => return None,
+    };
+    Some(hint.to_string())
 }
 
 /// A lower ribbon's command as JAWS says it, without its group: its name and role, its states,
@@ -121,6 +230,7 @@ fn control_speech(focus: &FocusEvent, name: &str) -> Option<Vec<String>> {
         Role::Button => format!("{name} {}", role_marker(msg::role_button().as_str())),
         Role::SplitButton => format!("{name} {}", role_marker(msg::role_split_button().as_str())),
         Role::MenuButton => format!("{name} {}", state_marker(msg::state_sub_menu().as_str())),
+        Role::Link { .. } => format!("{name} {}", role_marker(msg::role_link().as_str())),
         // A check box with its state and no hint: "Show | Ruler check box not checked"
         // [obs, 1046/s14].
         Role::CheckBox => format!("{name} {}", role_marker(msg::role_check_box().as_str())),
@@ -200,6 +310,34 @@ impl AppModule for WordRibbon {
             }
         }
         self.leaving = false;
+        // The ribbon itself, taking the focus on the way: named on the way from its search box,
+        // "Ribbon | Collapse the Ribbon Button" [obs, 1051/s12], and nothing between its menus'
+        // commands [obs, 1045/s9] or on the way into its tabs.
+        if in_word(focus) && focus.in_ribbon && focus.role == Role::TabPanel {
+            let name = focus
+                .name
+                .as_deref()
+                .map(str::trim)
+                .filter(|n| !n.is_empty() && self.place == Place::Around);
+            return match name {
+                Some(name) => FocusResponse::SpeakWhole(Announcement::new(vec![Line::of(
+                    PartKind::Name,
+                    name,
+                )])),
+                None => FocusResponse::Silent,
+            };
+        }
+        // Around the menus: said whole, with the menus it leaves.
+        if in_word(focus) && focus.in_ribbon && !focus.ribbon_menu {
+            let speech = self.around(focus);
+            self.menu = focus.role == Role::MenuButton;
+            self.place = Place::Around;
+            self.groups = focus.groups.clone();
+            return match speech {
+                Some(speech) => FocusResponse::SpeakWhole(speech),
+                None => FocusResponse::Pass,
+            };
+        }
         let now = if in_word(focus) && focus.in_ribbon && focus.ribbon_menu {
             if focus.role == Role::Tab {
                 Place::Tabs
@@ -229,6 +367,7 @@ impl AppModule for WordRibbon {
             self.menu = false;
         }
         self.place = now;
+        self.groups.clear();
         match speech {
             Some(speech) => FocusResponse::Speak(Announcement::from_text(&speech)),
             None => FocusResponse::Pass,
@@ -254,7 +393,9 @@ mod tests {
             letter_key: false,
         };
         match ribbon.focus(focus, &mut cx) {
-            FocusResponse::Speak(announcement) => Some(announcement.render()),
+            FocusResponse::Speak(announcement) | FocusResponse::SpeakWhole(announcement) => {
+                Some(announcement.render())
+            }
             _ => None,
         }
     }
@@ -421,5 +562,99 @@ mod tests {
             said(&mut ribbon, &bullets).as_deref(),
             Some("Paragraph\nBullets  \u{1d} split button \u{1e} ")
         );
+    }
+
+    /// Shift+Tab from the Home tab past the Quick Access Toolbar, the File tab, the buttons and
+    /// the search box beside the tabs, Collapse the Ribbon, and back into the lower ribbon, as
+    /// JAWS reads them [obs, 1051/s4-s13].
+    #[test]
+    fn the_commands_around_the_ribbons_menus_are_read_as_jaws_reads_them() {
+        let mut ribbon = WordRibbon::default();
+        assert!(said(&mut ribbon, &word(Role::Tab, "Home")).is_some());
+        let around = |role: Role, name: &str, groups: Vec<GroupEntry>| {
+            let mut focus = word(role, name);
+            focus.ribbon_menu = false;
+            focus.item_index = None;
+            focus.item_count = None;
+            focus.groups = [GroupEntry::pane("MsoDockTop"), GroupEntry::pane("Ribbon")]
+                .into_iter()
+                .chain(groups)
+                .collect();
+            focus
+        };
+        let toolbar = || vec![GroupEntry::tool_bar("Quick Access Toolbar")];
+        let customize = around(Role::MenuButton, "Customize Toolbar", toolbar());
+        assert_eq!(
+            said(&mut ribbon, &customize).as_deref(),
+            Some(" \u{1d} menu \u{1e} \nLeaving menus\nCustomize Toolbar  \u{1d}sub menu\u{1e} \nTo move through items press up or down arrow.")
+        );
+        let mut repeat = around(Role::Button, "Can't Repeat", toolbar());
+        repeat.states.disabled = true;
+        repeat.help_text = Some("Can't Repeat (Ctrl+Y)".into());
+        assert_eq!(
+            said(&mut ribbon, &repeat).as_deref(),
+            Some("Leaving menus\nCan't Repeat  \u{1d} Button \u{1e}  \u{1d}Unavailable\u{1e} ")
+        );
+        let mut undo_group = GroupEntry::group("Can't Undo");
+        undo_group.disabled = true;
+        let mut undo = around(
+            Role::SplitButton,
+            "Can't Undo",
+            toolbar().into_iter().chain([undo_group]).collect(),
+        );
+        undo.states.disabled = true;
+        assert_eq!(
+            said(&mut ribbon, &undo).as_deref(),
+            Some("Can't Undo \u{1d}Unavailable\u{1e} \nCan't Undo  \u{1d} split button \u{1e}  \u{1d}Unavailable\u{1e} \nTo move to an item, use the RIGHT ARROW, then use UP and DOWN ARROWS to select one.")
+        );
+        let mut save = around(Role::Button, "Save", toolbar());
+        save.help_text = Some("Save (Ctrl+S)".into());
+        assert_eq!(
+            said(&mut ribbon, &save).as_deref(),
+            Some("Save  \u{1d} Button \u{1e} \nTo activate press spacebar.")
+        );
+        let tabs = || vec![GroupEntry::tab_list("Ribbon Tabs")];
+        let share = around(Role::Button, "Share", tabs());
+        assert_eq!(
+            said(&mut ribbon, &share).as_deref(),
+            Some("Ribbon Tabs \u{1d} Tab \u{1e} \nShare  \u{1d} Button \u{1e} \nTo activate press Enter.")
+        );
+        let mut sign_in = around(Role::Link { href: None }, "Sign in", tabs());
+        sign_in.help_text = Some("Get to your documents from anywhere.".into());
+        assert_eq!(
+            said(&mut ribbon, &sign_in).as_deref(),
+            Some("Sign in  \u{1d} Link \u{1e} \nGet to your documents from anywhere.\nTo activate press Enter.")
+        );
+        let mut search = around(Role::Edit, "Tell me what you want to do...", Vec::new());
+        search.value = Some("Tell me what you want to do...".into());
+        search.container_role = Some(Role::MenuItem);
+        search.container_name = Some("Tell me what you want to do...".into());
+        assert_eq!(
+            said(&mut ribbon, &search).as_deref(),
+            Some("Tell me what you want to do... \u{1d}sub menu\u{1e} \nTell me what you want to do... \u{1d} Edit \u{1e} \nType in text.")
+        );
+        // The ribbon itself on the way from the search box: its name.
+        let mut page = word(Role::TabPanel, "Ribbon");
+        page.item_index = None;
+        page.item_count = None;
+        assert_eq!(said(&mut ribbon, &page).as_deref(), Some("Ribbon"));
+        let mut collapse = around(Role::Button, "Collapse the Ribbon", Vec::new());
+        collapse.states.checked = Some(false);
+        collapse.help_text = Some("Collapse the Ribbon (Ctrl+F1)".into());
+        assert_eq!(
+            said(&mut ribbon, &collapse).as_deref(),
+            Some("Collapse the Ribbon  \u{1d} Button \u{1e}  \u{1d}not checked\u{1e} \nTo activate press spacebar.")
+        );
+        let mut select = word(Role::MenuButton, "Select");
+        select.groups = vec![
+            GroupEntry::group("Lower Ribbon"),
+            GroupEntry::tool_bar("Editing"),
+        ];
+        assert_eq!(
+            said(&mut ribbon, &select).as_deref(),
+            Some(" \u{1d} menu \u{1e} \n \u{1d} Upper Ribbon \u{1e} \nEditing  \u{1d} group \u{1e} \nSelect  \u{1d}sub menu\u{1e} ")
+        );
+        // The ribbon itself between two of its menus' commands says nothing.
+        assert_eq!(said(&mut ribbon, &page), None);
     }
 }

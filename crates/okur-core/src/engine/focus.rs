@@ -299,6 +299,15 @@ impl ScreenReaderEngine {
                     return Some(speech);
                 }
                 FocusResponse::Silent => return None,
+                FocusResponse::SpeakWhole(announcement) => {
+                    let speech = self.said(announcement).render();
+                    self.speech.speak(&speech, true);
+                    if !focus.in_document {
+                        let _ = self.native_focus.focus(focus);
+                        self.last_native_focus = Some(focus.clone());
+                    }
+                    return Some(speech);
+                }
                 FocusResponse::Speak(announcement) => {
                     let speech = with_leaving(self.said(announcement).render());
                     self.speech.speak(&speech, true);

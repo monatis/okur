@@ -5,6 +5,8 @@ hint-activate-enter = To activate press Enter.
 # A native button.
 hint-activate-spacebar = To activate press spacebar.
 hint-change-selection-arrows = To change the selection use the Arrow keys.
+# A split button of Office's Quick Access Toolbar (Undo). JAWS's capitals [obs, 1051/s6].
+hint-split-button = To move to an item, use the RIGHT ARROW, then use UP and DOWN ARROWS to select one.
 hint-check-spacebar = To check press Spacebar.
 hint-clear-checkmark-spacebar = To clear checkmark press Spacebar.
 # The first item of a context menu. JAWS's capitals.

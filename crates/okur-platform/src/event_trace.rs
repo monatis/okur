@@ -46,6 +46,9 @@ const MSAA_PROPERTYPAGE: i32 = 0x26;
 const OBJID_CLIENT: i32 = -4;
 /// UIA's class of a group of Office's ribbon (its "chunk": Word's Font group).
 const NETUI_RIBBON_GROUP_CLASS: &str = "NetUIChunk";
+/// The class of Office's panes as UI Automation reaches them: the row of ribbon tabs, where its
+/// search box is, is the one that is a tab control.
+const NETUI_RIBBON_TABS_CLASS: &str = "NetUIPanViewer";
 
 /// Bumped whenever the recorded fields or their meaning change.
 pub const TRACE_FORMAT_VERSION: u32 = 9;
@@ -720,6 +723,28 @@ pub fn focus_event_from_chain(
                 Some(group) => group.tool_bar = true,
                 None => event.groups.push(okur_core::GroupEntry::tool_bar(name)),
             }
+        }
+    }
+    // Office's search box beside the ribbon's tabs (Word's "Tell me what you want to do..."):
+    // in the ribbon, not on its menus, and in the menu item that holds it, which JAWS says
+    // first, "Tell me what you want to do... sub menu" [obs, 1051/s11].
+    const UIA_TAB: i32 = 50018;
+    if chain.iter().rev().skip(1).any(|a| {
+        a.control_type == UIA_TAB && a.class_name.as_deref() == Some(NETUI_RIBBON_TABS_CLASS)
+    }) {
+        event.in_ribbon = true;
+    }
+    const UIA_MENU_ITEM: i32 = 50011;
+    if focused.control_type == UIA_EDIT {
+        if let Some(item) = chain
+            .iter()
+            .rev()
+            .nth(1)
+            .filter(|p| p.control_type == UIA_MENU_ITEM)
+        {
+            event.container_role = Some(Role::MenuItem);
+            event.container_name = item.name.clone().filter(|n| !n.trim().is_empty());
+            return Some(event);
         }
     }
     event.read_only = focused.value_is_read_only;
@@ -2204,6 +2229,12 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     if let Some(tab) = ribbon_tab(event) {
         return Some(tab);
     }
+    // The ribbon itself, with no tab focused: Word's, on the way from its search box to
+    // Collapse the Ribbon, which JAWS names, "Ribbon | Collapse the Ribbon Button" [obs,
+    // 1051/s12].
+    if let Some(page) = ribbon_page(event) {
+        return Some(page);
+    }
     let name = object
         .name
         .as_deref()
@@ -2217,10 +2248,18 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
         return None;
     }
     const UIA_BUTTON: i32 = 50000;
-    let uia_button = event.netui_control.as_ref().and_then(|c| c.control_type) == Some(UIA_BUTTON);
+    const UIA_MENU_ITEM: i32 = 50011;
+    const LINK: i32 = 0x1E;
+    let uia_type = event.netui_control.as_ref().and_then(|c| c.control_type);
+    let uia_button = uia_type == Some(UIA_BUTTON);
     let role = match object.role? {
         PAGETAB => Role::Tab,
+        // A button that UIA calls a menu's item opens one: Word's Customize Toolbar, "Customize
+        // Toolbar sub menu" [obs, 1051/s4].
+        PUSHBUTTON if uia_type == Some(UIA_MENU_ITEM) => Role::MenuButton,
         PUSHBUTTON => Role::Button,
+        // Office's "Sign in" beside the ribbon's tabs [obs, 1051/s10].
+        LINK => Role::Link { href: None },
         CHECKBUTTON => Role::CheckBox,
         RADIOBUTTON => Role::RadioButton,
         COMBOBOX => Role::ComboBox,
@@ -2306,6 +2345,31 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     Some(focus)
 }
 
+/// The ribbon's own property page with the focus and no tab focused in it (`ribbon_tab` finds
+/// none): a tab panel named as the ribbon, "Ribbon", which the focus passes on its way between
+/// two of the ribbon's commands; the menus' own, so that passing it leaves them not.
+fn ribbon_page(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
+    const PROPERTYPAGE: i32 = 0x26;
+    let object = event.object.as_ref()?;
+    if object.role != Some(PROPERTYPAGE) || !event.msaa_ancestors.is_empty() {
+        return None;
+    }
+    let name = object
+        .name
+        .as_deref()
+        .map(str::trim)
+        .filter(|n| !n.is_empty())?;
+    let mut focus = okur_core::FocusEvent::new(okur_core::Role::TabPanel).with_name(name);
+    focus.app = event.process.clone();
+    focus.app_product = event.process_product.clone();
+    focus.app_version = event.process_version.clone();
+    focus.groups = ribbon_panes(event).collect();
+    focus.in_ribbon = true;
+    focus.ribbon_menu = true;
+    focus.ribbon_name = Some(name.to_owned());
+    Some(focus)
+}
+
 /// MSAA's invisible state: a ribbon's hidden tab ("Print preview").
 const MSAA_INVISIBLE: u32 = 0x8000;
 /// MSAA's unavailable state.
@@ -2324,7 +2388,7 @@ fn ribbon_panes(event: &TraceEvent) -> impl Iterator<Item = okur_core::GroupEntr
         .skip(1)
         .filter(|n| n.control_type == PANE)
         .filter_map(|n| n.name.as_deref().map(str::trim).filter(|n| !n.is_empty()))
-        .map(okur_core::GroupEntry::group)
+        .map(okur_core::GroupEntry::pane)
 }
 
 /// The groups a ribbon's control is in: the ribbon's panes, then its MSAA ancestors inside
@@ -2346,7 +2410,10 @@ fn ribbon_groups(event: &TraceEvent) -> Vec<okur_core::GroupEntry> {
             _ => {
                 let value = a.value.as_deref().map(str::trim).filter(|v| *v != name);
                 let detail = a.description.as_deref().or(value).map(str::to_owned);
-                GroupEntry::group(name).with_detail(detail)
+                GroupEntry {
+                    disabled: a.states & MSAA_UNAVAILABLE != 0,
+                    ..GroupEntry::group(name).with_detail(detail)
+                }
             }
         })
     });
@@ -6437,10 +6504,12 @@ mod tests {
     }
 
     /// Word's ribbon taking the focus back from its Font box reports the ribbon itself, with
-    /// none of its tabs focused, then the command that has the focus: the first is no focus
-    /// of its own, where it said "Leaving menus" [obs, 1045/s9].
+    /// none of its tabs focused, then the command that has the focus: the ribbon is a tab panel
+    /// on the ribbon's menus, so that passing it leaves them not ("Leaving menus" was said
+    /// there [obs, 1045/s9]); Word's module names it on the way from the search box only
+    /// [obs, 1051/s12].
     #[test]
-    fn the_ribbon_taking_the_focus_back_is_no_focus() {
+    fn the_ribbon_taking_the_focus_back_is_on_its_menus() {
         let event = TraceEvent {
             window_class: Some("NetUIHWND".to_owned()),
             id_object: OBJID_CLIENT,
@@ -6457,7 +6526,44 @@ mod tests {
             ],
             ..focus_event(Vec::new())
         };
-        assert!(focus_event_from_trace(&event).is_none());
+        let focus = focus_event_from_trace(&event);
+        assert!(focus.is_some_and(|f| f.role == okur_core::Role::TabPanel
+            && f.name.as_deref() == Some("Ribbon")
+            && f.in_ribbon
+            && f.ribbon_menu));
+    }
+
+    /// Word's search box beside the ribbon's tabs: in the ribbon, not on its menus, in the menu
+    /// item that holds it [obs, 1051/s11].
+    #[test]
+    fn words_search_box_is_in_its_menu_item() {
+        let classed = |control_type: i32, name: &str, class: &str| UiaNode {
+            class_name: Some(class.to_owned()),
+            ..node(control_type, name, false)
+        };
+        let event = TraceEvent {
+            window_class: Some("RICHEDIT60W".to_owned()),
+            focus_chain: vec![
+                node(UIA_WINDOW, "sr-word-fixture.docx - Word", false),
+                classed(50018, "Ribbon Tabs", NETUI_RIBBON_TABS_CLASS),
+                classed(
+                    50011,
+                    "Tell me what you want to do...",
+                    "NetUISearchBoxAnchor",
+                ),
+                classed(UIA_EDIT, "Tell me what you want to do...", "NetUITextbox"),
+            ],
+            ..focus_event(Vec::new())
+        };
+        let focus = focus_event_from_trace(&event);
+        assert!(focus.is_some());
+        let Some(focus) = focus else { return };
+        assert!(focus.in_ribbon && !focus.ribbon_menu);
+        assert_eq!(focus.container_role, Some(okur_core::Role::MenuItem));
+        assert_eq!(
+            focus.container_name.as_deref(),
+            Some("Tell me what you want to do...")
+        );
     }
 
     /// In Word's ribbon, UI Automation's own focus events (passed on as WinEvents, naming no

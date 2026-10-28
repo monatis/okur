@@ -29,6 +29,11 @@ pub enum FocusResponse {
     Silent,
     /// The module's: this is said.
     Speak(crate::announcement::Announcement),
+    /// The module's, said whole: the menus it leaves, if any, are said in it by the module, not
+    /// before it by the engine (Word's ribbon, which leaves its menus for the Quick Access
+    /// Toolbar without leaving the ribbon, "Leaving menus | Can't Repeat Button" [obs,
+    /// 1051/s5]).
+    SpeakWhole(crate::announcement::Announcement),
 }
 
 /// The engine's state a module reads and changes while it handles a focus event.

@@ -515,6 +515,14 @@ pub struct GroupEntry {
     /// description [obs, 970/s4].
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub detail: Option<String>,
+    /// A window's pane (UI Automation's), around a ribbon's own groups: WordPad's
+    /// "UIRibbonDockTop", Word's "MsoDockTop" [obs, 970/s1].
+    #[serde(default)]
+    pub pane: bool,
+    /// Unavailable, as the grouping of Word's Undo is while there is nothing to undo: "Can't
+    /// Undo Unavailable" [obs, 1051/s6].
+    #[serde(default)]
+    pub disabled: bool,
 }
 
 impl GroupEntry {
@@ -526,6 +534,15 @@ impl GroupEntry {
             tab_list: false,
             tool_bar: false,
             detail: None,
+            pane: false,
+            disabled: false,
+        }
+    }
+
+    pub fn pane(name: impl Into<String>) -> Self {
+        Self {
+            pane: true,
+            ..Self::group(name)
         }
     }
 
