@@ -9,10 +9,10 @@
     package, to %TEMP%\sr-word-form.docx on every run, with no Word automation. The document
     is protected for filling in forms (no password), so Word lets the caret into the fields
     only; Word opens it in Read Mode, as it opens a document it cannot edit freely, so scenarios
-    leave Read Mode with Escape before their steps. Scenarios that change a field set
-    "discard_changes", and the recorder marks the document saved before closing it. Then opens
-    the file in Word. ASCII only. Do not change it without re-recording every scenario that uses
-    it (the manifest pins its SHA-256).
+    leave Read Mode with Escape before their steps. The recorder marks the document saved before
+    closing it, so a field a scenario changed asks nothing. Then opens the file in Word. ASCII
+    only. Do not change it without re-recording every scenario that uses it (the manifest pins
+    its SHA-256).
 #>
 Add-Type -AssemblyName System.IO.Compression, System.IO.Compression.FileSystem
 

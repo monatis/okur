@@ -599,7 +599,15 @@ function Release-HeldKeys {
 }
 
 # --- Provenance -------------------------------------------------------------------------
-function Get-Sha256([string]$path) { (Get-FileHash -Algorithm SHA256 -Path $path).Hash.ToLowerInvariant() }
+# A file still held by its writer (a tracer that was stopped late) is tried again for a few
+# seconds, then left without a hash: one held trace once ended the run before its fixture was
+# closed, and the next run met the fixture changed and asking to be saved (round-1055d).
+function Get-Sha256([string]$path) {
+    for ($i = 0; $i -lt 10; $i++) {
+        try { return (Get-FileHash -Algorithm SHA256 -Path $path -ErrorAction Stop).Hash.ToLowerInvariant() } catch { Start-Sleep -Milliseconds 500 }
+    }
+    return $null
+}
 $fixturePath = $null
 if ($scenario.fixture -match '^file:///(.+)$') { $fixturePath = [uri]::UnescapeDataString($Matches[1]) -replace '/', '\' }
 $chromeExe = @("C:\Program Files\Google\Chrome\Application\chrome.exe", "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe") | Where-Object { Test-Path $_ } | Select-Object -First 1
@@ -726,16 +734,24 @@ function Stop-DesktopFixture {
     } elseif ($launch.close_window) {
         # The application's process can hold the user's own documents (Word's windows are one
         # process): the fixture's window is closed, as its Close button does, never the process.
-        # A Word document the scenario changed (a form filled in) is marked saved first, through
-        # Word's object model, so that closing it asks nothing.
-        if ($launch.discard_changes -and (Find-WindowByTitle $launch.window_title)) {
-            & $OkurLab word-discard --title $launch.window_title 2>&1 | Out-Null
-        }
-        for ($i = 0; $i -lt 20; $i++) {
-            $old = Find-WindowByTitle $launch.window_title
-            if (-not $old) { break }
-            [void][SrKeyInput]::PostMessage($old.MainWindowHandle, 0x10, [IntPtr]::Zero, [IntPtr]::Zero)
-            Start-Sleep -Milliseconds 300
+        # A Word document a scenario, or an earlier run cut short, left changed (a form filled
+        # in) is marked saved first, through Word's object model, so that closing it asks
+        # nothing: fixtures are written anew each run. Nothing happens to another application's
+        # window. Close is asked once more only if the window outlives a wait: each Close
+        # repeated over Word's question had Word answer it with a message box of its own, and
+        # nineteen piled up (round-1055e).
+        $old = Find-WindowByTitle $launch.window_title
+        if ($old) {
+            try { & $OkurLab word-discard --title $launch.window_title 2>&1 | Out-Null } catch { }
+            for ($attempt = 0; $attempt -lt 2 -and $old; $attempt++) {
+                [void][SrKeyInput]::PostMessage($old.MainWindowHandle, 0x10, [IntPtr]::Zero, [IntPtr]::Zero)
+                for ($i = 0; $i -lt 20; $i++) {
+                    Start-Sleep -Milliseconds 300
+                    $old = Find-WindowByTitle $launch.window_title
+                    if (-not $old) { break }
+                }
+            }
+            if ($old) { Write-Warning "the fixture window '$($launch.window_title)' did not close" }
         }
     } else {
         $old = Find-WindowByTitle $launch.window_title
