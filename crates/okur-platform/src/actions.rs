@@ -779,6 +779,8 @@ mod windows_actions {
         known: Option<TextContext>,
         in_page: bool,
     ) -> Option<TextContext> {
+        // A key can have changed a form field the text shows nothing of.
+        crate::text_context::forget_form_fields();
         if !in_page {
             return read_other_after_key(uia, known);
         }

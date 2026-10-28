@@ -33,7 +33,7 @@ pub fn css_alignment(align: &str) -> Option<&'static str> {
 }
 
 #[cfg(windows)]
-pub(crate) use reader::activate_word_document_link;
+pub(crate) use reader::{activate_word_document_link, forget_form_fields};
 #[cfg(windows)]
 pub use reader::{
     focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
@@ -650,10 +650,18 @@ mod reader {
         /// The Word document last asked whether it has form fields, when, and its answer.
         static FORM_FIELDS_SEEN: std::cell::Cell<Option<(isize, std::time::Instant, bool)>> =
             const { std::cell::Cell::new(None) };
-        /// The form fields last read: the document, the paragraph's start and the caret, when,
-        /// and the fields.
-        static FORM_FIELDS_READ: std::cell::RefCell<Option<FormFieldsRead>> =
-            const { std::cell::RefCell::new(None) };
+    }
+
+    /// The form fields last read, for whichever thread reads the text next: the reads after a
+    /// key forget them first ([`forget_form_fields`]).
+    static FORM_FIELDS_READ: std::sync::Mutex<Option<FormFieldsRead>> = std::sync::Mutex::new(None);
+
+    /// Forgets the form fields last read: a key can have changed one (Space on a check box)
+    /// where the text shows nothing of it, so the read after it asks Word again.
+    pub fn forget_form_fields() {
+        if let Ok(mut read) = FORM_FIELDS_READ.lock() {
+            *read = None;
+        }
     }
 
     /// A paragraph's form fields as last read, kept for the events a key sets off.
@@ -666,8 +674,10 @@ mod reader {
     }
 
     /// How long a paragraph's form fields are kept: the flood of events one key sets off (the
-    /// tracer reads the text for each) reads Word once; a key a second later reads it again.
-    const FORM_FIELDS_FRESH: std::time::Duration = std::time::Duration::from_millis(300);
+    /// tracer reads the text for each, twice for a caret's) reads Word once. Live, the read
+    /// after each key reads Word again; the tracer, which knows no keys, at most once a second
+    /// (with 300 ms it fell seconds behind the keys in Word's form, round-1055d).
+    const FORM_FIELDS_FRESH: std::time::Duration = std::time::Duration::from_secs(1);
 
     /// How long a document's answer to whether it has form fields is kept.
     const FORM_FIELDS_KEPT: std::time::Duration = std::time::Duration::from_secs(2);
@@ -716,9 +726,8 @@ mod reader {
                     .to_string()
             }
         };
-        let kept = FORM_FIELDS_READ.with(|read| {
-            read.borrow()
-                .as_ref()
+        let kept = FORM_FIELDS_READ.lock().ok().and_then(|read| {
+            read.as_ref()
                 .filter(|r| {
                     r.window == key
                         && r.paragraph == paragraph
@@ -763,15 +772,15 @@ mod reader {
                 })
             })
             .collect();
-        FORM_FIELDS_READ.with(|read| {
-            *read.borrow_mut() = Some(FormFieldsRead {
+        if let Ok(mut read) = FORM_FIELDS_READ.lock() {
+            *read = Some(FormFieldsRead {
                 window: key,
                 paragraph,
                 text: paragraph_text,
                 when: std::time::Instant::now(),
                 fields: fields.clone(),
             });
-        });
+        }
         Some(fields)
     }
 
