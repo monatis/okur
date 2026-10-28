@@ -328,7 +328,7 @@ impl ScreenReaderEngine {
                 self.pending_edit = None;
                 let said = format!(
                     "{}\n{}",
-                    crate::apps::windows::word::form_field_speech(context, field),
+                    crate::apps::windows::word::form_field_speech(context, field, false),
                     msg::hint_change_selection_arrows()
                 );
                 self.speech.speak(&said, true);

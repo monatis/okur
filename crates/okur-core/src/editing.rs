@@ -692,7 +692,12 @@ pub fn speech_in(
                 | EditKey::BottomOfFile
         )
     }) {
-        return word::around_line(key, before, after, word::form_field_speech(after, field));
+        return word::around_line(
+            key,
+            before,
+            after,
+            word::form_field_speech(after, field, key == EditKey::FormField),
+        );
     }
     let said = match key {
         EditKey::Silent => return None,

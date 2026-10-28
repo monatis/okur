@@ -1081,7 +1081,9 @@ impl ScreenReaderEngine {
                         // a heading of Word's with its level [obs, 518/s1].
                         crate::apps::windows::word::form_field_at(&context)
                             .map(|field| {
-                                crate::apps::windows::word::form_field_speech(&context, field)
+                                crate::apps::windows::word::form_field_speech(
+                                    &context, field, false,
+                                )
                             })
                             .or_else(|| {
                                 Some(crate::apps::windows::word::spoken_line(

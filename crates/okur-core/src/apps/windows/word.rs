@@ -69,7 +69,11 @@ pub(crate) fn form_field_at(context: &TextContext) -> Option<&DocumentFormField>
 /// A form field said as a control, its line's text before it its name: "Name: Edit", with what
 /// it holds, "ab"; "Member: check box not checked"; "Branch: Combo box | Central | 1 of 3"
 /// [obs, 1056/s1-s4; 1057/s14].
-pub(crate) fn form_field_speech(context: &TextContext, field: &DocumentFormField) -> String {
+pub(crate) fn form_field_speech(
+    context: &TextContext,
+    field: &DocumentFormField,
+    moved_to: bool,
+) -> String {
     let label = form_field_label(context, field);
     let named = |role: &str| {
         if label.is_empty() {
@@ -79,10 +83,20 @@ pub(crate) fn form_field_speech(context: &TextContext, field: &DocumentFormField
         }
     };
     match field.kind {
+        // Its text selected, as Tab back to it selects it: "Name: Edit | selected | ab" [obs,
+        // 1061/s4], by the key that moved there (`moved_to`) and not by Say Line [obs, 1061/s5];
+        // an empty one's spaces selected say nothing of it [obs, 1056/s6].
         FormFieldKind::Text => {
             let mut said = named(msg::role_edit().as_str());
             let value = field.value.trim();
             if !value.is_empty() {
+                let selected = context.selection.is_some_and(|(start, end)| {
+                    start < end && start <= field.start && end > field.start
+                });
+                if selected && moved_to {
+                    said.push('\n');
+                    said.push_str(msg::selection_added().as_str());
+                }
                 said.push('\n');
                 said.push_str(value);
             }
@@ -580,7 +594,7 @@ pub(crate) fn document_focus(context: &TextContext) -> Option<String> {
     context.structure.as_ref()?;
     // A form field at the caret, as a control [obs, 1056/s9].
     if let Some(field) = form_field_at(context) {
-        return Some(form_field_speech(context, field));
+        return Some(form_field_speech(context, field, false));
     }
     cell_focus(context, true).or_else(|| {
         Some(spoken_line(
@@ -810,7 +824,7 @@ mod tests {
         let at_name = form(51, (45, 57), vec![name.clone()]);
         assert_eq!(
             form_field_at(&at_name)
-                .map(|f| form_field_speech(&at_name, f))
+                .map(|f| form_field_speech(&at_name, f, true))
                 .as_deref(),
             Some("Name:  \u{1d} Edit \u{1e} ")
         );
@@ -826,7 +840,7 @@ mod tests {
         let typed = form(53, (45, 57), vec![name]);
         assert_eq!(
             form_field_at(&typed)
-                .map(|f| form_field_speech(&typed, f))
+                .map(|f| form_field_speech(&typed, f, true))
                 .as_deref(),
             Some("Name:  \u{1d} Edit \u{1e} \nab")
         );
@@ -835,7 +849,7 @@ mod tests {
         let at_member = form(65, (57, 66), vec![member.clone()]);
         assert_eq!(
             form_field_at(&at_member)
-                .map(|f| form_field_speech(&at_member, f))
+                .map(|f| form_field_speech(&at_member, f, true))
                 .as_deref(),
             Some("Member:  \u{1d} check box \u{1e}  \u{1d}not checked\u{1e} ")
         );
@@ -854,7 +868,7 @@ mod tests {
         let at_branch = form(87, (79, 88), vec![branch]);
         assert_eq!(
             form_field_at(&at_branch)
-                .map(|f| form_field_speech(&at_branch, f))
+                .map(|f| form_field_speech(&at_branch, f, true))
                 .as_deref(),
             Some("Branch:  \u{1d} Combo box \u{1e} \nCentral\n1 of 3")
         );
