@@ -1,0 +1,34 @@
+{
+  "id": "1061-desktop-word-protected-form-typed",
+  "name": "Word: a form protected for filling in, out of Read Mode, its text field typed into and left by Tab, Shift+Tab back, Say Line; then the drop-down's list opened and closed with Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-form.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-form.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Escape",
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "A"},
+    {"id": "s2", "type": "key", "command": "B"},
+    {"id": "s3", "type": "key", "command": "Tab"},
+    {"id": "s4", "type": "key", "command": "Shift+Tab"},
+    {"id": "s5", "type": "key", "command": "Insert+Up"},
+    {"id": "s6", "type": "key", "command": "Tab"},
+    {"id": "s7", "type": "key", "command": "Tab"},
+    {"id": "s8", "type": "key", "command": "Tab"},
+    {"id": "s9", "type": "key", "command": "Alt+Down"},
+    {"id": "s10", "type": "key", "command": "Down"},
+    {"id": "s11", "type": "key", "command": "Escape"},
+    {"id": "s12", "type": "key", "command": "Insert+Up"}
+  ]
+}

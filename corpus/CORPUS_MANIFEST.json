@@ -1188,6 +1188,20 @@
       }
     },
     {
+      "scenario_id": "1057-desktop-word-protected-form-change",
+      "fixture": "desktop-word-form.ps1",
+      "evidence": {
+        "sha256": "7c936411dbba090a6efb3ebb6d94d66b7ac9e8bfb71fca44db46c084b4c9475b",
+        "capture_script_sha256": "0175d651cd6b155da21e17c8c20872644a6c6869ea920430770ccaa9a035d75d",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "1058-desktop-word-font-dialog",
       "fixture": "desktop-word.ps1",
       "evidence": {
@@ -9841,10 +9855,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 684,
-    "scenarios_with_evidence": 684,
-    "total_trials": 2058,
-    "successful_trials": 2041,
+    "scenarios": 685,
+    "scenarios_with_evidence": 685,
+    "total_trials": 2061,
+    "successful_trials": 2044,
     "deterministic_scenarios": 442
   }
 }
