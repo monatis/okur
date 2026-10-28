@@ -952,6 +952,15 @@ divergences! {
     "the agent under the owner's rule on JAWS's accidents, 2026-10-28";
 
     Difference::Step => [
+        "1060-desktop-word-paragraph-dialog/s4",
+    ],
+    "Word's Paragraph dialog opened by the Home tab's key tips (Alt, H, P, G): JAWS says \
+     \"Leaving menus | Leaving ribbons\" and nothing of the dialog or its first field, in every \
+     trial; the next Tab reads the next field. Okur says the dialog's first field, \
+     \"Alignment: Combo box | Left | To change the selection use the Arrow keys.\"",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
+    Difference::Step => [
         "1058-desktop-word-font-dialog/s1",
     ],
     "Opening Word's Font dialog (Ctrl+D), JAWS's words vary by trial: the field's value again \

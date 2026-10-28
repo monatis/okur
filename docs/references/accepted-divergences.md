@@ -940,6 +940,16 @@ A step can be in more than one entry; all of its entries apply.
   change the selection use the Arrow keys.", "Name: Edit".
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-28.
 
+### Word's Paragraph dialog by its key tips
+
+- Steps: `1060-desktop-word-paragraph-dialog/s4`.
+- Difference: the whole step. The Paragraph dialog opened by the Home tab's key tips (Alt, H, P,
+  G): JAWS says "Leaving menus | Leaving ribbons" and nothing of the dialog or its first field,
+  in every trial; the next Tab reads the next field [obs, 1060/s5].
+- Why: a dialog opened says nothing of itself. Okur says the dialog's first field, "Alignment:
+  Combo box | Left | To change the selection use the Arrow keys."
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
+
 ### Word's Font dialog opening
 
 - Steps: `1058-desktop-word-font-dialog/s1`.

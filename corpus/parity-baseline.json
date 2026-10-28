@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
   "matched_steps": 9122,
-  "total_steps": 9687,
-  "accepted_divergences": 263,
+  "total_steps": 9686,
+  "accepted_divergences": 264,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -1105,7 +1105,7 @@
     "1060-desktop-word-paragraph-dialog/s12": "match",
     "1060-desktop-word-paragraph-dialog/s2": "match",
     "1060-desktop-word-paragraph-dialog/s3": "match",
-    "1060-desktop-word-paragraph-dialog/s4": "mismatch",
+    "1060-desktop-word-paragraph-dialog/s4": "accepted divergence",
     "1060-desktop-word-paragraph-dialog/s5": "match",
     "1060-desktop-word-paragraph-dialog/s6": "match",
     "1060-desktop-word-paragraph-dialog/s7": "match",
