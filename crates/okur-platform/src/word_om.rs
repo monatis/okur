@@ -11,7 +11,8 @@ use std::ptr::null_mut;
 use windows::core::{Interface, GUID, HSTRING, PCWSTR};
 use windows::Win32::Foundation::HWND;
 use windows::Win32::System::Com::{
-    IDispatch, DISPATCH_FLAGS, DISPATCH_METHOD, DISPATCH_PROPERTYGET, DISPPARAMS,
+    IDispatch, DISPATCH_FLAGS, DISPATCH_METHOD, DISPATCH_PROPERTYGET, DISPATCH_PROPERTYPUT,
+    DISPPARAMS,
 };
 use windows::Win32::System::Variant::{VARIANT, VT_DISPATCH};
 use windows::Win32::UI::Accessibility::AccessibleObjectFromWindow;
@@ -20,6 +21,8 @@ use windows::Win32::UI::Accessibility::AccessibleObjectFromWindow;
 const OBJID_NATIVEOM: u32 = 0xFFFF_FFF0;
 /// `LOCALE_USER_DEFAULT`, for property names, which Word takes in English whatever its locale.
 const LOCALE_USER_DEFAULT: u32 = 0x0400;
+/// `DISPID_PROPERTYPUT`: the named argument a property's new value is passed as.
+const DISPID_PROPERTYPUT: i32 = -3;
 
 /// A paragraph's line spacing as Word keeps it: its rule (`WdLineSpacing`: 0 single, 1 one
 /// and a half, 2 double, 3 at least, 4 exactly, 5 multiple) and its points (for multiple, 12
@@ -225,6 +228,109 @@ pub fn select_field(document: HWND, index: usize) -> bool {
     select().is_some()
 }
 
+/// A legacy form field of Word's, as its object model describes it: its type (`WdFieldType`: 70
+/// a text field, 71 a check box, 83 a drop-down), its bookmark name, the text it shows, a check
+/// box's value, a drop-down's entries and the one chosen (from 1), and its help and status
+/// texts.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FormField {
+    pub kind: i32,
+    pub name: String,
+    pub result: String,
+    pub checked: Option<bool>,
+    pub entries: Vec<String>,
+    pub chosen: Option<i32>,
+    pub help: String,
+    pub status: String,
+}
+
+/// The form fields in the selection of Word's document window `document` (one, where Tab put
+/// it in a protected form), then those of the selection's paragraph. `None` where Word's object
+/// model does not answer.
+pub fn selection_form_fields(document: HWND) -> Option<(Vec<FormField>, Vec<FormField>)> {
+    let selection = object(&property(&word_window(document)?, "Selection")?)?;
+    let selected = form_fields(&object(&property(&selection, "FormFields")?)?);
+    let paragraph = item(&object(&property(&selection, "Paragraphs")?)?, 1)
+        .and_then(|paragraph| object(&property(&paragraph, "Range")?))
+        .and_then(|range| object(&property(&range, "FormFields")?))
+        .map(|fields| form_fields(&fields))
+        .unwrap_or_default();
+    Some((selected, paragraph))
+}
+
+/// The form fields of a `FormFields` collection, in order.
+fn form_fields(collection: &IDispatch) -> Vec<FormField> {
+    let count = property(collection, "Count")
+        .and_then(|count| i32::try_from(&count).ok())
+        .unwrap_or(0);
+    (1..=count.clamp(0, MAX_FIELDS))
+        .filter_map(|index| item(collection, index))
+        .map(|field| {
+            let text = |object: &IDispatch, name: &str| {
+                property(object, name)
+                    .and_then(|text| windows::core::BSTR::try_from(&text).ok())
+                    .map(|text| text.to_string())
+                    .unwrap_or_default()
+            };
+            let number = |object: &IDispatch, name: &str| {
+                property(object, name).and_then(|value| i32::try_from(&value).ok())
+            };
+            let kind = number(&field, "Type").unwrap_or(0);
+            let check_box = (kind == CHECK_BOX)
+                .then(|| object(&property(&field, "CheckBox")?))
+                .flatten();
+            let drop_down = (kind == DROP_DOWN)
+                .then(|| object(&property(&field, "DropDown")?))
+                .flatten();
+            let entries = drop_down
+                .as_ref()
+                .and_then(|list| object(&property(list, "ListEntries")?))
+                .map(|entries| {
+                    let count = number(&entries, "Count").unwrap_or(0);
+                    (1..=count.clamp(0, MAX_FIELDS))
+                        .filter_map(|index| item(&entries, index))
+                        .map(|entry| text(&entry, "Name"))
+                        .collect()
+                })
+                .unwrap_or_default();
+            FormField {
+                kind,
+                name: text(&field, "Name"),
+                result: text(&field, "Result"),
+                checked: check_box
+                    .as_ref()
+                    .and_then(|check| property(check, "Value"))
+                    .and_then(|value| bool::try_from(&value).ok()),
+                entries,
+                chosen: drop_down.as_ref().and_then(|list| number(list, "Value")),
+                help: text(&field, "HelpText"),
+                status: text(&field, "StatusText"),
+            }
+        })
+        .collect()
+}
+
+/// `WdFieldType` of a check box and of a drop-down form field.
+const CHECK_BOX: i32 = 71;
+const DROP_DOWN: i32 = 83;
+
+/// Marks the document in Word's document window `document` saved (`Document.Saved = True`),
+/// so that closing its window asks nothing: the harness's, for a fixture a scenario changed
+/// (a form filled in). False where Word's object model does not answer.
+pub fn mark_saved(document: HWND) -> bool {
+    let mark = || -> Option<()> {
+        let document = object(&property(&word_window(document)?, "Document")?)?;
+        invoke(
+            &document,
+            "Saved",
+            DISPATCH_PROPERTYPUT,
+            &mut [VARIANT::from(true)],
+        )?;
+        Some(())
+    };
+    mark().is_some()
+}
+
 /// At most this many of a document's fields are listed.
 const MAX_FIELDS: i32 = 2000;
 
@@ -244,7 +350,8 @@ fn property(object: &IDispatch, name: &str) -> Option<VARIANT> {
     invoke(object, name, DISPATCH_PROPERTYGET, &mut [])
 }
 
-/// A late-bound call of `name` on `object` with `arguments` (in order; one at most here).
+/// A late-bound call of `name` on `object` with `arguments` (in order; one at most here); a
+/// property put passes its one argument as the property's new value.
 fn invoke(
     object: &IDispatch,
     name: &str,
@@ -268,6 +375,8 @@ fn invoke(
     let mut result = VARIANT::default();
     // IDispatch takes its arguments last first.
     arguments.reverse();
+    let mut named = DISPID_PROPERTYPUT;
+    let put = flags == DISPATCH_PROPERTYPUT;
     let parameters = DISPPARAMS {
         rgvarg: if arguments.is_empty() {
             null_mut()
@@ -275,9 +384,10 @@ fn invoke(
             arguments.as_mut_ptr()
         },
         cArgs: u32::try_from(arguments.len()).ok()?,
-        ..DISPPARAMS::default()
+        rgdispidNamedArgs: if put { &mut named } else { null_mut() },
+        cNamedArgs: u32::from(put),
     };
-    // SAFETY: the arguments and the result are locals alive for the call.
+    // SAFETY: the arguments, the named argument and the result are locals alive for the call.
     unsafe {
         object.Invoke(
             id,

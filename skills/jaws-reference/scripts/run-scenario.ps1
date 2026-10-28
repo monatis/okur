@@ -726,6 +726,11 @@ function Stop-DesktopFixture {
     } elseif ($launch.close_window) {
         # The application's process can hold the user's own documents (Word's windows are one
         # process): the fixture's window is closed, as its Close button does, never the process.
+        # A Word document the scenario changed (a form filled in) is marked saved first, through
+        # Word's object model, so that closing it asks nothing.
+        if ($launch.discard_changes -and (Find-WindowByTitle $launch.window_title)) {
+            & $OkurLab word-discard --title $launch.window_title 2>&1 | Out-Null
+        }
         for ($i = 0; $i -lt 20; $i++) {
             $old = Find-WindowByTitle $launch.window_title
             if (-not $old) { break }

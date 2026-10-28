@@ -1,0 +1,30 @@
+{
+  "id": "1058-desktop-word-font-dialog",
+  "name": "Word: the Font dialog (Ctrl+D), Tab through its first controls, Shift+Tab, Ctrl+Tab to its next page and back (Word opens the dialog on the page it was left on), Escape back to the document",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Ctrl+D"},
+    {"id": "s2", "type": "key", "command": "Tab"},
+    {"id": "s3", "type": "key", "command": "Tab"},
+    {"id": "s4", "type": "key", "command": "Tab"},
+    {"id": "s5", "type": "key", "command": "Shift+Tab"},
+    {"id": "s6", "type": "key", "command": "Ctrl+Tab"},
+    {"id": "s7", "type": "key", "command": "Ctrl+Tab"},
+    {"id": "s8", "type": "key", "command": "Escape"},
+    {"id": "s9", "type": "key", "command": "Insert+Up"}
+  ]
+}

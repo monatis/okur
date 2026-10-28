@@ -127,8 +127,8 @@ pub use crate::key_input::send_key;
 #[cfg(windows)]
 pub use windows_harness::{
     bring_to_front, foreground_process, foreground_title, ia2_probe_focus, jaws_history,
-    msaa_focus_probe, send_steps, shell_window, window_titled, word_fields_probe,
-    word_line_spacing_probe,
+    msaa_focus_probe, send_steps, shell_window, window_titled, word_discard_changes,
+    word_fields_probe, word_form_fields_probe, word_line_spacing_probe,
 };
 
 #[cfg(windows)]
@@ -378,6 +378,39 @@ mod windows_harness {
             .collect();
         lines.push(serde_json::json!({ "fields": fields.map(|f| f.len()), "ms": ms }).to_string());
         lines
+    }
+
+    /// The form fields at the focused Word document's selection and on its paragraph, from
+    /// Word's own object model (`crate::word_om::selection_form_fields`): one JSON line, with
+    /// the read's time. Research: what a form field read as a control can be built from.
+    pub fn word_form_fields_probe() -> String {
+        use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+        // SAFETY: COM on this thread; repeated initialization is tolerated.
+        let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+        let (front, focus) = front_and_focus_windows();
+        let clock = Instant::now();
+        let fields = crate::word_om::selection_form_fields(focus.unwrap_or(front));
+        let ms = u64::try_from(clock.elapsed().as_millis()).unwrap_or(u64::MAX);
+        let json = |fields: &[crate::word_om::FormField]| {
+            fields.iter().map(|f| format!("{f:?}")).collect::<Vec<_>>()
+        };
+        serde_json::json!({
+            "selected": fields.as_ref().map(|(s, _)| json(s)),
+            "paragraph": fields.as_ref().map(|(_, p)| json(p)),
+            "ms": ms,
+        })
+        .to_string()
+    }
+
+    /// Marks the Word document in the window titled `title` saved, so that the recorder closes
+    /// a fixture a scenario changed without Word's question (`crate::word_om::mark_saved`).
+    pub fn word_discard_changes(title: &str) -> bool {
+        use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
+        // SAFETY: COM on this thread; repeated initialization is tolerated.
+        let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+        window_titled(title)
+            .and_then(crate::word_om::document_window)
+            .is_some_and(crate::word_om::mark_saved)
     }
 
     /// The window in front, and the window with the keyboard focus in its thread.

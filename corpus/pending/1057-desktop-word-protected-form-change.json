@@ -1,0 +1,37 @@
+{
+  "id": "1057-desktop-word-protected-form-change",
+  "name": "Word: a form protected for filling in, out of the Read Mode Word opens it in (Escape), a check box toggled with Space, a drop-down opened with Alt+Down and chosen, and the text field typed in",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-form.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-form.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true,
+    "discard_changes": true
+  },
+  "reset": {
+    "keys": [
+      "Escape",
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Tab"},
+    {"id": "s2", "type": "key", "command": "Space"},
+    {"id": "s3", "type": "key", "command": "Space"},
+    {"id": "s4", "type": "key", "command": "Tab"},
+    {"id": "s5", "type": "key", "command": "Space"},
+    {"id": "s6", "type": "key", "command": "Tab"},
+    {"id": "s7", "type": "key", "command": "Alt+Down"},
+    {"id": "s8", "type": "key", "command": "Down"},
+    {"id": "s9", "type": "key", "command": "Enter"},
+    {"id": "s10", "type": "key", "command": "Insert+Up"},
+    {"id": "s11", "type": "key", "command": "Ctrl+Home"},
+    {"id": "s12", "type": "key", "command": "A"},
+    {"id": "s13", "type": "key", "command": "B"},
+    {"id": "s14", "type": "key", "command": "Insert+Up"}
+  ]
+}

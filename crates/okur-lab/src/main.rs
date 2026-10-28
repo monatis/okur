@@ -163,6 +163,17 @@ enum Commands {
     /// one JSON line each (type, code, result), then the count and the read's time (Windows;
     /// research, never evidence)
     WordFields,
+    /// The form fields at the focused Word document's selection and on its paragraph, from
+    /// Word's own object model: one JSON line with the read's time (Windows; research, never
+    /// evidence)
+    WordFormFields,
+    /// Marks the Word document in the window titled --title saved, through Word's own object
+    /// model, so that closing it asks nothing: the recorder's, for a fixture a scenario changed
+    /// (Windows)
+    WordDiscard {
+        #[arg(long)]
+        title: String,
+    },
     /// Print the element UI Automation says has the keyboard focus, as one JSON line: its
     /// name, control type, class, and whether it is in a document (a web page's). The harness
     /// checks a web trial starts in its page (Windows)
@@ -1223,6 +1234,28 @@ async fn main() {
                 let fields = document
                     .and_then(okur_platform::word_om::document_fields)
                     .unwrap_or_default();
+                // The form fields at the caret and on its paragraph, for reading them as
+                // controls.
+                let (selected_form_fields, paragraph_form_fields) = document
+                    .and_then(okur_platform::word_om::selection_form_fields)
+                    .unwrap_or_default();
+                let form_json = |fields: &[okur_platform::word_om::FormField]| {
+                    fields
+                        .iter()
+                        .map(|f| {
+                            serde_json::json!({
+                                "kind": f.kind,
+                                "name": f.name,
+                                "result": f.result,
+                                "checked": f.checked,
+                                "entries": f.entries,
+                                "chosen": f.chosen,
+                                "help": f.help,
+                                "status": f.status,
+                            })
+                        })
+                        .collect::<Vec<_>>()
+                };
                 if let Some(path) = append_to {
                     let t_ms = std::time::SystemTime::now()
                         .duration_since(std::time::UNIX_EPOCH)
@@ -1241,6 +1274,8 @@ async fn main() {
                             "rule": s.rule,
                             "points": s.points,
                         })),
+                        "selected_form_fields": form_json(&selected_form_fields),
+                        "paragraph_form_fields": form_json(&paragraph_form_fields),
                         "fields": fields
                             .iter()
                             .map(|f| serde_json::json!({
@@ -1431,6 +1466,30 @@ async fn main() {
             #[cfg(not(windows))]
             {
                 eprintln!("Word is only read on Windows");
+                std::process::exit(1);
+            }
+        }
+        Some(Commands::WordFormFields) => {
+            #[cfg(windows)]
+            println!("{}", okur_platform::harness::word_form_fields_probe());
+            #[cfg(not(windows))]
+            {
+                eprintln!("Word is only read on Windows");
+                std::process::exit(1);
+            }
+        }
+        Some(Commands::WordDiscard { title }) => {
+            #[cfg(windows)]
+            if okur_platform::harness::word_discard_changes(&title) {
+                println!("saved");
+            } else {
+                eprintln!("no Word document in a window titled {title:?}");
+                std::process::exit(1);
+            }
+            #[cfg(not(windows))]
+            {
+                let _ = title;
+                eprintln!("Word is only reached on Windows");
                 std::process::exit(1);
             }
         }

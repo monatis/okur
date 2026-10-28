@@ -1,0 +1,33 @@
+{
+  "id": "1056-desktop-word-protected-form-tab",
+  "name": "Word: a form protected for filling in, out of the Read Mode Word opens it in (Escape), Tab and Shift+Tab among its text field, check boxes and drop-down, Say Line, Insert+Tab, and the arrows",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-form.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-form.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Escape",
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Insert+Up"},
+    {"id": "s2", "type": "key", "command": "Tab"},
+    {"id": "s3", "type": "key", "command": "Tab"},
+    {"id": "s4", "type": "key", "command": "Tab"},
+    {"id": "s5", "type": "key", "command": "Insert+Up"},
+    {"id": "s6", "type": "key", "command": "Tab"},
+    {"id": "s7", "type": "key", "command": "Shift+Tab"},
+    {"id": "s8", "type": "key", "command": "Shift+Tab"},
+    {"id": "s9", "type": "key", "command": "Insert+Tab"},
+    {"id": "s10", "type": "key", "command": "Down"},
+    {"id": "s11", "type": "key", "command": "Up"}
+  ]
+}
