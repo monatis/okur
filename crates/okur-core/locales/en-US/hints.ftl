@@ -31,6 +31,8 @@ hint-set-value-arrows = To set the value use the Arrow keys.
 hint-slider-arrows = To increase or decrease use the Arrow keys.
 # A tab of a native tab control.
 hint-switch-pages = To switch pages, press Control+PageDown.
+# A page tab of Word's own dialogs [obs, 1058/s6, s7].
+hint-switch-pages-ctrl-tab = To switch pages, press Control+Tab.
 hint-toggle-spacebar = To toggle the state press spacebar.
 # A native tree view's items.
 hint-tree-arrows = To move through or expand items use the Arrow keys.

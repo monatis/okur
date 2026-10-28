@@ -1,0 +1,223 @@
+//! Microsoft Word's own dialogs (its `bosa_sdm_msword` windows: Font, Paragraph...), read as
+//! JAWS reads them [obs, 1058]. Word reports a field's focus twice: from the field's RichEdit
+//! window, nameless, and from the dialog, the field named by its label. JAWS says the second:
+//! - an edit field is an edit combo, its label on a line of its own, then its value and the
+//!   combo's hint: "Font: | edit combo | Calibri | To set the value use the Arrow keys or type
+//!   the value." [obs, 1058/s2, s3, s5]; a new dialog is named first, "Font dialog";
+//! - a page's tab is selected, with Word's page key: "Advanced Tab selected | To switch pages,
+//!   press Control+Tab." [obs, 1058/s6, s7];
+//! - Escape back to the document says "Edit" alone, not the window's title [obs, 1058/s8].
+//!
+//! Its buttons, check boxes and lists are the engine's (they read as JAWS reads them:
+//! "Font Color (Automatic) Button | To activate press spacebar." [obs, 1058/s4]).
+
+use crate::announcement::{Announcement, Line, Part, PartKind};
+use crate::aom::Role;
+use crate::apps::{AppContext, AppModule, FocusResponse};
+use crate::event::FocusEvent;
+use crate::messages::msg;
+
+/// Word's dialog window class.
+const DIALOG_CLASS: &str = "bosa_sdm_msword";
+/// The window class of a dialog's edit field.
+const FIELD_CLASS: &str = "RichEdit20W";
+/// The name UI Automation gives a RichEdit field without one of its own.
+const UNNAMED_FIELD: &str = "RichEdit Control";
+
+/// Word's dialogs.
+#[derive(Debug, Default)]
+pub struct WordDialog {
+    /// The last field said, by its name and value: Word reports it again after its RichEdit.
+    said: Option<(String, Option<String>)>,
+    /// A dialog of Word's had the focus: the document taking it back is said alone.
+    in_dialog: bool,
+}
+
+/// Whether the focus is in Word.
+fn in_word(focus: &FocusEvent) -> bool {
+    focus
+        .app
+        .as_deref()
+        .is_some_and(|app| app.eq_ignore_ascii_case(super::word_ribbon::WORD))
+}
+
+/// Whether the focus is in one of Word's dialogs.
+fn in_dialog(focus: &FocusEvent) -> bool {
+    let class = |c: &Option<String>| c.as_deref() == Some(DIALOG_CLASS);
+    in_word(focus)
+        && (class(&focus.platform.window_class) || class(&focus.platform.top_window_class))
+}
+
+impl AppModule for WordDialog {
+    fn owns(&self, focus: &FocusEvent) -> bool {
+        in_dialog(focus) || (self.in_dialog && in_word(focus))
+    }
+
+    fn focus(&mut self, focus: &FocusEvent, cx: &mut AppContext<'_>) -> FocusResponse {
+        if !in_dialog(focus) {
+            if !(self.in_dialog && in_word(focus)) {
+                return FocusResponse::Pass;
+            }
+            // Back from the dialog: Word's window on the way says nothing, its document "Edit".
+            return match focus.role {
+                Role::Window => {
+                    cx.note_window(focus);
+                    FocusResponse::Silent
+                }
+                Role::Document => {
+                    self.in_dialog = false;
+                    self.said = None;
+                    cx.note_window(focus);
+                    FocusResponse::Speak(Announcement::new(vec![Line::new(vec![Part::role(
+                        msg::role_edit().as_str(),
+                    )])]))
+                }
+                _ => {
+                    self.in_dialog = false;
+                    FocusResponse::Pass
+                }
+            };
+        }
+        self.in_dialog = true;
+        let name = focus.name.as_deref().map(str::trim).unwrap_or_default();
+        // The field's own window, nameless: the dialog names it next.
+        if focus.platform.window_class.as_deref() == Some(FIELD_CLASS)
+            || name.is_empty()
+            || name == UNNAMED_FIELD
+        {
+            return FocusResponse::Silent;
+        }
+        let entering = *cx.window_title != focus.window_title;
+        let mut lines = Vec::new();
+        if entering {
+            cx.note_window(focus);
+            self.said = None;
+            if let Some(title) = focus.window_title.as_deref() {
+                lines.push(Line::new(vec![
+                    Part::new(PartKind::Name, title),
+                    Part::role(msg::role_dialog().as_str()),
+                ]));
+            }
+        }
+        match focus.role {
+            Role::Edit => {
+                let value = focus
+                    .value
+                    .as_deref()
+                    .map(str::trim)
+                    .filter(|v| !v.is_empty())
+                    .map(str::to_owned);
+                let this = (name.to_owned(), value.clone());
+                if !entering && self.said.as_ref() == Some(&this) {
+                    return FocusResponse::Silent;
+                }
+                self.said = Some(this);
+                lines.push(Line::of(PartKind::Name, name));
+                lines.push(Line::new(vec![Part::role(msg::role_edit_combo().as_str())]));
+                lines.extend(value.map(|v| Line::of(PartKind::Value, v)));
+                lines.push(Line::of(
+                    PartKind::Hint,
+                    msg::hint_set_value_arrows_or_type(),
+                ));
+            }
+            Role::Tab => {
+                // Word reports a page's tab twice too.
+                let this = (name.to_owned(), None);
+                if !entering && self.said.as_ref() == Some(&this) {
+                    return FocusResponse::Silent;
+                }
+                self.said = Some(this);
+                lines.push(Line::new(vec![
+                    Part::new(PartKind::Name, name),
+                    Part::role(msg::role_tab().as_str()),
+                    Part::state(msg::state_selected().as_str()),
+                ]));
+                lines.push(Line::of(PartKind::Hint, msg::hint_switch_pages_ctrl_tab()));
+            }
+            _ => {
+                self.said = None;
+                // The engine names a dialog it enters with the control.
+                return FocusResponse::Pass;
+            }
+        }
+        FocusResponse::Speak(Announcement::new(lines))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::engine::AppMode;
+
+    fn said(
+        dialog: &mut WordDialog,
+        focus: &FocusEvent,
+        title: &mut Option<String>,
+    ) -> Option<String> {
+        let mut mode = AppMode::NativeControl;
+        let mut kind = None;
+        let mut cx = AppContext {
+            app_mode: &mut mode,
+            window_title: title,
+            window_kind: &mut kind,
+            selecting: false,
+            alt_held: false,
+            letter_key: false,
+            ask_view: false,
+        };
+        match dialog.focus(focus, &mut cx) {
+            FocusResponse::Speak(announcement) => Some(announcement.render()),
+            FocusResponse::Silent => Some(String::new()),
+            _ => None,
+        }
+    }
+
+    fn field(class: &str, role: Role, name: &str, value: Option<&str>) -> FocusEvent {
+        let mut focus = FocusEvent::new(role).with_name(name.to_owned());
+        focus.app = Some("WINWORD.EXE".into());
+        focus.window_title = Some("Font".into());
+        focus.platform.window_class = Some(class.into());
+        focus.platform.top_window_class = Some(DIALOG_CLASS.into());
+        focus.value = value.map(str::to_owned);
+        focus
+    }
+
+    /// Word's Font dialog as JAWS reads it: named as it opens, a field once though Word
+    /// reports it twice, as an edit combo; its pages' tabs with Word's page key; Escape back to
+    /// the document "Edit" [obs, 1058].
+    #[test]
+    fn words_font_dialog_is_read_as_jaws_reads_it() {
+        let mut dialog = WordDialog::default();
+        let mut title = Some("sr-word-fixture.docx - Word".to_owned());
+        let font = field(DIALOG_CLASS, Role::Edit, "Font:", Some("Calibri"));
+        assert_eq!(
+            said(&mut dialog, &font, &mut title).as_deref(),
+            Some("Font \u{1d} dialog \u{1e} \nFont:\n \u{1d} edit combo \u{1e} \nCalibri\nTo set the value use the Arrow keys or type the value.")
+        );
+        let rich = field(FIELD_CLASS, Role::Edit, "", Some("Calibri"));
+        assert_eq!(said(&mut dialog, &rich, &mut title).as_deref(), Some(""));
+        assert_eq!(said(&mut dialog, &font, &mut title).as_deref(), Some(""));
+        let style = field(DIALOG_CLASS, Role::Edit, "Font style:", Some("Regular"));
+        assert_eq!(
+            said(&mut dialog, &style, &mut title).as_deref(),
+            Some("Font style:\n \u{1d} edit combo \u{1e} \nRegular\nTo set the value use the Arrow keys or type the value.")
+        );
+        let advanced = field(DIALOG_CLASS, Role::Tab, "Advanced", None);
+        assert_eq!(
+            said(&mut dialog, &advanced, &mut title).as_deref(),
+            Some("Advanced \u{1d} Tab \u{1e}  \u{1d}selected\u{1e} \nTo switch pages, press Control+Tab.")
+        );
+        let button = field(DIALOG_CLASS, Role::Button, "Font Color (Automatic)", None);
+        assert_eq!(said(&mut dialog, &button, &mut title), None);
+        let mut window = FocusEvent::new(Role::Window);
+        window.app = Some("WINWORD.EXE".into());
+        assert_eq!(said(&mut dialog, &window, &mut title).as_deref(), Some(""));
+        let mut document = FocusEvent::new(Role::Document);
+        document.app = Some("WINWORD.EXE".into());
+        assert_eq!(
+            said(&mut dialog, &document, &mut title).as_deref(),
+            Some(" \u{1d} Edit \u{1e} ")
+        );
+        assert_eq!(said(&mut dialog, &document, &mut title), None);
+    }
+}
