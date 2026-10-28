@@ -580,7 +580,11 @@ impl ScreenReaderEngine {
                 Some(msg::blank().to_string())
             }
             Command::SayLine => Some(self.at_margin(self.line_here())),
-            Command::SayWord => Some(self.cursor.current_word()),
+            // The Virtual Viewer's word where it is open [obs, 1063/s9].
+            Command::SayWord => Some(match &self.viewer {
+                Some(viewer) => viewer.word(),
+                None => self.cursor.current_word(),
+            }),
             Command::SayCharacter | Command::SayCharacterPhonetic => Some(self.character_here()),
             // Its value in decimal, said digit by digit [obs, 401/s3: "Character 7 4" for J;
             // s10: 8364 for the euro sign].
@@ -1156,7 +1160,9 @@ impl ScreenReaderEngine {
         let word_command = layout_command
             .clone()
             .or_else(|| crate::command::command_for(event));
-        if self.editing_text() && word_command == Some(Command::SayWord) {
+        // In the Virtual Viewer the viewer's word is read, not the field behind it [obs,
+        // 1063/s9].
+        if self.editing_text() && self.viewer.is_none() && word_command == Some(Command::SayWord) {
             // Pressed twice quickly, the word is spelled [obs, 406/s2, s5].
             if self.presses(Press::Command(Command::SayWord), event.time_ms, 2) == 2 {
                 let _ = self.spell(false);

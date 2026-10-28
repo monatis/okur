@@ -1053,6 +1053,21 @@ impl ScreenReaderEngine {
                     self.mark_viewer_window();
                     return KeyAction::Consume;
                 }
+                // A word as the word keys say one, whatever the punctuation level: a lone
+                // symbol as that character, "period.", the others with their symbols named
+                // [obs, 1063/s7, s10].
+                ViewerAction::Word(text) => {
+                    let mut chars = text.chars();
+                    match (chars.next(), chars.next()) {
+                        (None, _) => {}
+                        (Some(c), None) if !c.is_alphanumeric() => {
+                            self.speech.speak_character(&text, true)
+                        }
+                        _ => self.speech.speak_symbols(&text, true),
+                    }
+                    self.mark_viewer_window();
+                    return KeyAction::Consume;
+                }
                 ViewerAction::Copy(text) => {
                     if let Some(actions) = &self.actions {
                         actions.copy_text(&text);

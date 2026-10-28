@@ -29,6 +29,9 @@ pub enum ViewerAction {
     Speak(Option<String>),
     /// A character was read: speak it as a character (named when it is a space or symbol).
     Character(String),
+    /// A word was read: speak it as a word read on its own, every symbol in it named, a word
+    /// that is one symbol as that character ("period.") [obs, 1063/s7, s10].
+    Word(String),
     /// Copy this text to the clipboard and speak the confirmation.
     Copy(String),
     /// Close the viewer.
@@ -330,6 +333,11 @@ impl VirtualViewer {
         text
     }
 
+    /// The word at the viewer's place, for Say Word [obs, 1063/s9].
+    pub fn word(&self) -> String {
+        self.word_text()
+    }
+
     /// The viewer's response to a key press.
     pub fn key(&mut self, event: &KeyEvent) -> ViewerAction {
         let m = event.modifiers;
@@ -375,7 +383,7 @@ impl VirtualViewer {
             }
             Key::RightArrow | Key::LeftArrow if ctrl_only => {
                 self.all_selected = false;
-                speak(self.move_word(event.key == Key::RightArrow))
+                ViewerAction::Word(self.move_word(event.key == Key::RightArrow))
             }
             Key::Home | Key::End if ctrl_only => {
                 self.all_selected = false;
@@ -428,7 +436,7 @@ mod tests {
     fn said(action: ViewerAction) -> String {
         match action {
             ViewerAction::Speak(s) => s.unwrap_or_default(),
-            ViewerAction::Character(c) => c,
+            ViewerAction::Character(c) | ViewerAction::Word(c) => c,
             other => format!("{other:?}"),
         }
     }
