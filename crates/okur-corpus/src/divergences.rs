@@ -942,6 +942,7 @@ divergences! {
     Difference::Step => [
         "1057-desktop-word-protected-form-change/s9",
         "1057-desktop-word-protected-form-change/s11",
+        "1061-desktop-word-protected-form-typed/s11",
     ],
     "A Word form field said again: after Enter in a drop-down's list JAWS says the field with \
      its new choice and its hint, then the field once more, or passes through its own menu bar \

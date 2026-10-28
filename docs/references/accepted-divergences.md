@@ -930,8 +930,9 @@ A step can be in more than one entry; all of its entries apply.
 
 ### A Word form field said again
 
-- Steps: `1057-desktop-word-protected-form-change/s9`, `1057-desktop-word-protected-form-change/s11`.
-- Difference: the whole step. After Enter in a drop-down's list JAWS says the field with its
+- Steps: `1057-desktop-word-protected-form-change/s9`, `1057-desktop-word-protected-form-change/s11`,
+  `1061-desktop-word-protected-form-typed/s11`.
+- Difference: the whole step. After Enter or Escape in a drop-down's list JAWS says the field with its
   new choice and its hint, then the field once more, or passes through its own menu bar first
   ("Context Menu | leaving menu bar"); after Ctrl+Home onto a text field it says "Name: Edit |
   top of file" three times over in every trial of round-1055h (one trial of round-1055g said it
