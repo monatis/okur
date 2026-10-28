@@ -578,6 +578,10 @@ pub(crate) fn cell_focus(context: &TextContext, table: bool) -> Option<String> {
 /// `None` outside a document whose structure the platform reads.
 pub(crate) fn document_focus(context: &TextContext) -> Option<String> {
     context.structure.as_ref()?;
+    // A form field at the caret, as a control [obs, 1056/s9].
+    if let Some(field) = form_field_at(context) {
+        return Some(form_field_speech(context, field));
+    }
     cell_focus(context, true).or_else(|| {
         Some(spoken_line(
             context,

@@ -1153,6 +1153,12 @@ fn replayable(event: &TraceEvent) -> bool {
     if event.event == "console_update" {
         return event.text_context.is_some();
     }
+    // A text's selection moved with the text read, naming no object: Word's after Tab in a
+    // protected form, the only event that tells where the caret went [1056 traces]; kept only
+    // where no caret event follows in its step (`selection_alone`).
+    if event.event == "text_selection_change" && event.text_context.is_some() {
+        return true;
+    }
     menu_event_from_trace(event).is_some()
         || (matches!(
             event.event.as_str(),
@@ -1169,6 +1175,25 @@ fn replayable(event: &TraceEvent) -> bool {
                 | "selection"
                 | "name_change"
         ) && (!event.focus_chain.is_empty() || event.object.is_some()))
+}
+
+/// Whether `event` is no selection change that names no object, or is one followed by no caret
+/// event with its text in its step: Word fires one before its caret event after Ctrl+End,
+/// read while the caret had not moved yet, and the caret event after it tells where it went
+/// [1035/s1 traces]; after Tab in a protected form it fires none [1056 traces].
+fn selection_alone(
+    event: &okur_platform::event_trace::TraceEvent,
+    step: &[&okur_platform::event_trace::TraceEvent],
+    at: usize,
+) -> bool {
+    let bare = event.event == "text_selection_change"
+        && event.object.is_none()
+        && event.focus_chain.is_empty();
+    !bare
+        || !step
+            .iter()
+            .skip(at + 1)
+            .any(|e| e.event == "caret" && e.text_context.is_some())
 }
 
 /// Replayable events recorded during each step of the first successful traced trial
@@ -1483,7 +1508,11 @@ impl StepEvents {
                             || e.event == "foreground"
                             || is_window_renamed(e)
                             || matches!(e.event.as_str(), "caret" | "text_selection_change"))
-                            && replayable(e)))
+                            && replayable(e)
+                            // A bare selection change is a step's, where nothing follows it.
+                            && !(e.event == "text_selection_change"
+                                && e.object.is_none()
+                                && e.focus_chain.is_empty())))
             })
             .cloned()
             .collect();
@@ -1502,10 +1531,15 @@ impl StepEvents {
             // step before it ended.
             let from = u128::from(start).saturating_sub(TICK_MS);
             let from = previous_end.map_or(from, |end| from.max(end + 1));
-            let window: Vec<_> = events
+            let in_step: Vec<&okur_platform::event_trace::TraceEvent> = events
                 .iter()
-                .filter(|e| replayable(e) && e.t_ms >= from && e.t_ms <= u128::from(end))
-                .cloned()
+                .filter(|e| e.t_ms >= from && e.t_ms <= u128::from(end))
+                .collect();
+            let window: Vec<_> = in_step
+                .iter()
+                .enumerate()
+                .filter(|(at, e)| replayable(e) && selection_alone(e, &in_step, *at))
+                .map(|(_, e)| (*e).clone())
                 .collect();
             previous_end = Some(u128::from(end));
             by_step.insert(id.to_owned(), window);

@@ -1073,13 +1073,20 @@ impl ScreenReaderEngine {
             match self.last_text.clone() {
                 Some(context) => {
                     let speech = if document {
-                        // A heading of Word's with its level [obs, 518/s1].
-                        Some(crate::apps::windows::word::spoken_line(
-                            &context,
-                            crate::editing::line_at(&context)
-                                .trim_matches(|c: char| c.is_whitespace() || c == '﻿')
-                                .to_owned(),
-                        ))
+                        // A form field of Word's at the caret, as a control [obs, 1056/s1];
+                        // a heading of Word's with its level [obs, 518/s1].
+                        crate::apps::windows::word::form_field_at(&context)
+                            .map(|field| {
+                                crate::apps::windows::word::form_field_speech(&context, field)
+                            })
+                            .or_else(|| {
+                                Some(crate::apps::windows::word::spoken_line(
+                                    &context,
+                                    crate::editing::line_at(&context)
+                                        .trim_matches(|c: char| c.is_whitespace() || c == '﻿')
+                                        .to_owned(),
+                                ))
+                            })
                     } else {
                         crate::editing::speech_in(
                             key,
