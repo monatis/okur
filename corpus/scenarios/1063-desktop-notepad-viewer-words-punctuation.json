@@ -1,0 +1,34 @@
+{
+  "id": "1063-desktop-notepad-viewer-words-punctuation",
+  "name": "Notepad, a path and punctuation: the window virtualized (Insert+Alt+W), its words by Ctrl+Right and Ctrl+Left, Say Word, then Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad-paths.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-paths.txt - Notepad",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Insert+Alt+W"},
+    {"id": "s2", "type": "key", "command": "Ctrl+Home"},
+    {"id": "s3", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s4", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s5", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s6", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s7", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s8", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s9", "type": "key", "command": "Insert+Numpad5"},
+    {"id": "s10", "type": "key", "command": "Ctrl+Left"},
+    {"id": "s11", "type": "key", "command": "Down"},
+    {"id": "s12", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s13", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s14", "type": "key", "command": "Escape"}
+  ]
+}

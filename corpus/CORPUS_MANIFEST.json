@@ -1258,6 +1258,20 @@
       }
     },
     {
+      "scenario_id": "1063-desktop-notepad-viewer-words-punctuation",
+      "fixture": "desktop-notepad-paths.ps1",
+      "evidence": {
+        "sha256": "45ab5d2439f135a351a4e2a0466dc0c1cd4966706d328c986a4578d97237a08e",
+        "capture_script_sha256": "0175d651cd6b155da21e17c8c20872644a6c6869ea920430770ccaa9a035d75d",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "107-article-chars",
       "fixture": "news-article.html",
       "evidence": {
@@ -9869,10 +9883,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 686,
-    "scenarios_with_evidence": 686,
-    "total_trials": 2064,
-    "successful_trials": 2047,
-    "deterministic_scenarios": 442
+    "scenarios": 687,
+    "scenarios_with_evidence": 687,
+    "total_trials": 2067,
+    "successful_trials": 2050,
+    "deterministic_scenarios": 443
   }
 }
