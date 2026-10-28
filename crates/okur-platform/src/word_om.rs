@@ -246,7 +246,9 @@ pub struct FormField {
 
 /// A form field of the selection's paragraph with its place there: the characters of the
 /// paragraph's text before it, and the characters it shows (a text field's result; a check box
-/// and a drop-down show none in the text UI Automation reads).
+/// and a drop-down show none in the text UI Automation reads). Read lean, for every line read:
+/// its type, name and result, a check box's value, a drop-down's chosen entry alone (in
+/// `entries`, at `chosen`'s place, the others empty), and no help or status text.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PlacedFormField {
     pub field: FormField,
@@ -286,7 +288,7 @@ pub fn paragraph_form_fields(document: HWND) -> Option<Vec<PlacedFormField>> {
                     &mut [VARIANT::from(start), VARIANT::from(at)],
                 )?)?;
                 let before = text(&before, "Text").chars().count();
-                let field = form_field(&field);
+                let field = lean_form_field(&field);
                 let length = if field.kind == TEXT_INPUT {
                     field.result.chars().count()
                 } else {
@@ -323,6 +325,63 @@ fn form_fields(collection: &IDispatch) -> Vec<FormField> {
         .filter_map(|index| item(collection, index))
         .map(|field| form_field(&field))
         .collect()
+}
+
+/// A `FormField` object with what a line read says of it, in as few calls into Word as can
+/// be: each is a call into another process.
+fn lean_form_field(field: &IDispatch) -> FormField {
+    let kind = number(field, "Type").unwrap_or(0);
+    let (checked, entries, chosen) = match kind {
+        CHECK_BOX => (
+            object(&property(field, "CheckBox").unwrap_or_default())
+                .and_then(|check| property(&check, "Value"))
+                .and_then(|value| bool::try_from(&value).ok()),
+            Vec::new(),
+            None,
+        ),
+        DROP_DOWN => {
+            let list = object(&property(field, "DropDown").unwrap_or_default());
+            let chosen = list.as_ref().and_then(|list| number(list, "Value"));
+            let entries = list
+                .as_ref()
+                .and_then(|list| object(&property(list, "ListEntries")?));
+            let count = entries
+                .as_ref()
+                .and_then(|entries| number(entries, "Count"))
+                .unwrap_or(0);
+            let name = entries
+                .as_ref()
+                .zip(chosen)
+                .and_then(|(entries, chosen)| item(entries, chosen))
+                .map(|entry| text(&entry, "Name"))
+                .unwrap_or_default();
+            // The chosen entry at its place, the others unread.
+            let mut all =
+                vec![String::new(); usize::try_from(count.clamp(0, MAX_FIELDS)).unwrap_or(0)];
+            if let Some(slot) = chosen
+                .and_then(|c| usize::try_from(c).ok()?.checked_sub(1))
+                .and_then(|at| all.get_mut(at))
+            {
+                *slot = name;
+            }
+            (None, all, chosen)
+        }
+        _ => (None, Vec::new(), None),
+    };
+    FormField {
+        kind,
+        name: text(field, "Name"),
+        result: if kind == TEXT_INPUT {
+            text(field, "Result")
+        } else {
+            String::new()
+        },
+        checked,
+        entries,
+        chosen,
+        help: String::new(),
+        status: String::new(),
+    }
 }
 
 /// A `FormField` object as Word describes it.

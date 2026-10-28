@@ -650,7 +650,24 @@ mod reader {
         /// The Word document last asked whether it has form fields, when, and its answer.
         static FORM_FIELDS_SEEN: std::cell::Cell<Option<(isize, std::time::Instant, bool)>> =
             const { std::cell::Cell::new(None) };
+        /// The form fields last read: the document, the paragraph's start and the caret, when,
+        /// and the fields.
+        static FORM_FIELDS_READ: std::cell::RefCell<Option<FormFieldsRead>> =
+            const { std::cell::RefCell::new(None) };
     }
+
+    /// A paragraph's form fields as last read, kept for the events a key sets off.
+    struct FormFieldsRead {
+        window: isize,
+        paragraph: usize,
+        text: String,
+        when: std::time::Instant,
+        fields: Vec<okur_core::DocumentFormField>,
+    }
+
+    /// How long a paragraph's form fields are kept: the flood of events one key sets off (the
+    /// tracer reads the text for each) reads Word once; a key a second later reads it again.
+    const FORM_FIELDS_FRESH: std::time::Duration = std::time::Duration::from_millis(300);
 
     /// How long a document's answer to whether it has form fields is kept.
     const FORM_FIELDS_KEPT: std::time::Duration = std::time::Duration::from_secs(2);
@@ -687,42 +704,75 @@ mod reader {
         if !has {
             return None;
         }
-        let placed = crate::word_om::paragraph_form_fields(window)?;
-        let (paragraph, _) = unit_at(caret, start, TextUnit_Paragraph)?;
-        Some(
-            placed
-                .into_iter()
-                .filter_map(|placed| {
-                    let field = placed.field;
-                    let kind = match field.kind {
-                        crate::word_om::TEXT_INPUT => FormFieldKind::Text,
-                        crate::word_om::CHECK_BOX => FormFieldKind::CheckBox,
-                        crate::word_om::DROP_DOWN => FormFieldKind::DropDown,
-                        _ => return None,
-                    };
-                    let chosen = field.chosen.and_then(|c| usize::try_from(c).ok());
-                    let value = match kind {
-                        FormFieldKind::Text => field.result.clone(),
-                        FormFieldKind::DropDown => chosen
-                            .and_then(|c| field.entries.get(c.checked_sub(1)?).cloned())
-                            .unwrap_or_default(),
-                        FormFieldKind::CheckBox => String::new(),
-                    };
-                    let at = paragraph + placed.before;
-                    Some(okur_core::DocumentFormField {
-                        kind,
-                        name: field.name,
-                        start: at,
-                        end: at + placed.length,
-                        value,
-                        checked: field.checked,
-                        choice: chosen
-                            .filter(|_| kind == FormFieldKind::DropDown)
-                            .map(|c| (c, field.entries.len())),
-                    })
+        let (paragraph, end) = unit_at(caret, start, TextUnit_Paragraph)?;
+        // SAFETY: UIA text range calls on a valid range.
+        let paragraph_text = unsafe {
+            let range = caret.Clone().ok()?;
+            {
+                range.ExpandToEnclosingUnit(TextUnit_Paragraph).ok()?;
+                range
+                    .GetText(i32::try_from(end - paragraph).ok()?.saturating_add(1))
+                    .ok()?
+                    .to_string()
+            }
+        };
+        let kept = FORM_FIELDS_READ.with(|read| {
+            read.borrow()
+                .as_ref()
+                .filter(|r| {
+                    r.window == key
+                        && r.paragraph == paragraph
+                        && r.text == paragraph_text
+                        && r.when.elapsed() < FORM_FIELDS_FRESH
                 })
-                .collect(),
-        )
+                .map(|r| r.fields.clone())
+        });
+        if let Some(fields) = kept {
+            return Some(fields);
+        }
+        let placed = crate::word_om::paragraph_form_fields(window)?;
+        let fields: Vec<okur_core::DocumentFormField> = placed
+            .into_iter()
+            .filter_map(|placed| {
+                let field = placed.field;
+                let kind = match field.kind {
+                    crate::word_om::TEXT_INPUT => FormFieldKind::Text,
+                    crate::word_om::CHECK_BOX => FormFieldKind::CheckBox,
+                    crate::word_om::DROP_DOWN => FormFieldKind::DropDown,
+                    _ => return None,
+                };
+                let chosen = field.chosen.and_then(|c| usize::try_from(c).ok());
+                let value = match kind {
+                    FormFieldKind::Text => field.result.clone(),
+                    FormFieldKind::DropDown => chosen
+                        .and_then(|c| field.entries.get(c.checked_sub(1)?).cloned())
+                        .unwrap_or_default(),
+                    FormFieldKind::CheckBox => String::new(),
+                };
+                let at = paragraph + placed.before;
+                Some(okur_core::DocumentFormField {
+                    kind,
+                    name: field.name,
+                    start: at,
+                    end: at + placed.length,
+                    value,
+                    checked: field.checked,
+                    choice: chosen
+                        .filter(|_| kind == FormFieldKind::DropDown)
+                        .map(|c| (c, field.entries.len())),
+                })
+            })
+            .collect();
+        FORM_FIELDS_READ.with(|read| {
+            *read.borrow_mut() = Some(FormFieldsRead {
+                window: key,
+                paragraph,
+                text: paragraph_text,
+                when: std::time::Instant::now(),
+                fields: fields.clone(),
+            });
+        });
+        Some(fields)
     }
 
     /// The cell holding `caret` in `document`, and its grid item: the first element around
