@@ -126,6 +126,7 @@ impl VoiceProfileDialog {
             label,
             kind,
             enabled: true,
+            hidden: false,
         };
         let mut controls = vec![control(
             DEFAULT,

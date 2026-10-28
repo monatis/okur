@@ -218,6 +218,7 @@ impl SkimDialog {
             label: label.to_string(),
             kind,
             enabled,
+            hidden: false,
         };
         let button = |id: &str, label: StaticMessage, default: bool| {
             control(id, label, ControlKind::Button { default }, true)

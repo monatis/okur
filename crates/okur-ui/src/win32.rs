@@ -388,6 +388,8 @@ fn handle(message: ToUi) {
             enabled,
         } => crate::dialog::enable(id, &control, enabled),
         ToUi::DialogDefault { id, control } => crate::dialog::make_default(id, &control),
+        ToUi::DialogSwap { id, show, hide } => crate::dialog::swap(id, &show, &hide),
+        ToUi::DialogLabel { id, control, label } => crate::dialog::set_label(id, &control, &label),
         ToUi::DialogFocus { id, control } => crate::dialog::focus(id, &control),
         ToUi::FileOpen {
             id,

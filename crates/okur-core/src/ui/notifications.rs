@@ -71,6 +71,7 @@ fn control(id: &str, label: StaticMessage, kind: ControlKind) -> Control {
         label: label.to_string(),
         kind,
         enabled: true,
+        hidden: false,
     }
 }
 
@@ -511,6 +512,7 @@ impl CreateRuleDialog {
             label,
             kind,
             enabled: true,
+            hidden: false,
         };
         let choice = |id: &str, label: StaticMessage, options: Vec<String>, selected: usize| {
             control(id, label, ControlKind::Choice { options, selected })

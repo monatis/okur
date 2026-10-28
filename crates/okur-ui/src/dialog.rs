@@ -33,9 +33,9 @@ use windows::Win32::UI::WindowsAndMessaging::{
     GetWindowThreadProcessId, IsDialogMessageW, IsWindow, SendMessageW, SetForegroundWindow,
     SetWindowTextW, ShowWindow, BM_GETCHECK, BM_SETCHECK, BN_CLICKED, CBN_EDITCHANGE,
     CBN_SELCHANGE, CB_ADDSTRING, CB_GETCURSEL, CB_GETLBTEXT, CB_GETLBTEXTLEN, CB_RESETCONTENT,
-    CB_SETCURSEL, DLGTEMPLATE, EN_CHANGE, LBN_SELCHANGE, LB_ADDSTRING, LB_GETCURSEL,
-    LB_RESETCONTENT, LB_SETCURSEL, MSG, SW_SHOW, WM_COMMAND, WM_HSCROLL, WM_INITDIALOG,
-    WM_NCDESTROY, WM_NOTIFY,
+    CB_SETCURSEL, DLGTEMPLATE, EN_CHANGE, LBN_SELCHANGE, LB_ADDSTRING, LB_DELETESTRING,
+    LB_GETCURSEL, LB_INSERTSTRING, LB_RESETCONTENT, LB_SETCURSEL, MSG, SW_SHOW, WM_COMMAND,
+    WM_HSCROLL, WM_INITDIALOG, WM_NCDESTROY, WM_NOTIFY,
 };
 
 use crate::template::{self, IDCANCEL};
@@ -108,6 +108,7 @@ fn chord(text: &str) -> Option<Chord> {
             "escape" => key = Some(0x1B),
             "up" => key = Some(0x26),
             "down" => key = Some(0x28),
+            "space" => key = Some(0x20),
             name => {
                 let upper = name.to_ascii_uppercase();
                 key = match upper.as_bytes() {
@@ -928,6 +929,22 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
             (ControlKind::ListBox { .. }, Value::Selected(i)) => {
                 SendMessageW(item, LB_SETCURSEL, Some(WPARAM(*i)), None);
             }
+            // An item's text changed (Settings Center's result after Space): made anew in its
+            // place, the selection kept.
+            (ControlKind::ListBox { .. }, Value::ItemRenamed(i, text)) => {
+                let selected = SendMessageW(item, LB_GETCURSEL, None, None).0;
+                let text = wide(text);
+                SendMessageW(item, LB_DELETESTRING, Some(WPARAM(*i)), None);
+                SendMessageW(
+                    item,
+                    LB_INSERTSTRING,
+                    Some(WPARAM(*i)),
+                    Some(LPARAM(text.as_ptr() as isize)),
+                );
+                if let Ok(selected) = usize::try_from(selected) {
+                    SendMessageW(item, LB_SETCURSEL, Some(WPARAM(selected)), None);
+                }
+            }
             (
                 ControlKind::Radios { options, .. } | ControlKind::RadioButtons { options, .. },
                 Value::Selected(chosen),
@@ -1007,6 +1024,54 @@ pub fn enable(id: u32, control: &str, enabled: bool) {
         // SAFETY: a child of our own dialog.
         if let Ok(item) = unsafe { GetDlgItem(Some(window), i32::from(window_id)) } {
             let _ = unsafe { EnableWindow(item, enabled) };
+        }
+    }
+}
+
+/// Control `control` of dialog `id`, and the label made just before it (`template`'s
+/// `LABEL_ID` static): a list box's or tree's name.
+fn with_label(id: u32, control: &str) -> Option<(HWND, Option<HWND>)> {
+    use windows::Win32::UI::WindowsAndMessaging::{GetDlgCtrlID, GetWindow, GW_HWNDPREV};
+    let (window, window_id, _, _) = find(id, control)?;
+    // SAFETY: a child of our own dialog, and the sibling made before it.
+    let item = unsafe { GetDlgItem(Some(window), i32::from(window_id)) }.ok()?;
+    let label = unsafe { GetWindow(item, GW_HWNDPREV) }
+        .ok()
+        // A static's id is a word, which some reads widen to -1.
+        .filter(|label| {
+            let id = unsafe { GetDlgCtrlID(*label) };
+            id == i32::from(template::LABEL_ID) || id == -1
+        });
+    Some((item, label))
+}
+
+/// Shows `show` of dialog `id` and hides `hide`, labels and all: one in the other's place
+/// (Settings Center's search results and its tree). The focus is Okur's to move.
+pub fn swap(id: u32, show: &str, hide: &str) {
+    use windows::Win32::UI::WindowsAndMessaging::{ShowWindow, SW_HIDE, SW_SHOWNA};
+    let shown = |control: &str, how| {
+        if let Some((item, label)) = with_label(id, control) {
+            // SAFETY: our own dialog's controls.
+            unsafe {
+                if let Some(label) = label {
+                    let _ = ShowWindow(label, how);
+                }
+                let _ = ShowWindow(item, how);
+            }
+        }
+    };
+    shown(show, SW_SHOWNA);
+    shown(hide, SW_HIDE);
+}
+
+/// Sets the label `control` of dialog `id` is named by: Settings Center's results list, named
+/// by their count ("11 Search Results").
+pub fn set_label(id: u32, control: &str, label: &str) {
+    if let Some((_, Some(static_label))) = with_label(id, control) {
+        let text = wide(label);
+        // SAFETY: our own static, and a string that outlives the call.
+        unsafe {
+            let _ = SetWindowTextW(static_label, windows::core::PCWSTR(text.as_ptr()));
         }
     }
 }

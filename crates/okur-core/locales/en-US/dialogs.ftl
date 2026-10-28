@@ -423,6 +423,11 @@ settings-tree-search = SearchBox
 # found." [obs, the walk of Settings Center's search].
 settings-search-results = 1 of { $count } Search Results
 settings-search-none = No matches found.
+# The search's results, a list box in the tree's place named by their count: "11 Search Results
+# List box" [obs, the walk of Settings Center's search].
+settings-search-results-list = { $count } Search Results
+# Escape or Enter on a result: the search ends and the tree is back.
+settings-search-cleared = Search edit box cleared.
 settings-tree-application = Application:
 settings-tree-group-description = A group of settings: Right Arrow opens it, and Space on a setting in it changes its value.
 # JAWS's group names, in its order; Quick Settings' own after them.

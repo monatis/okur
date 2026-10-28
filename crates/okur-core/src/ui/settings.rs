@@ -49,6 +49,9 @@ pub enum Outcome {
     /// Send these, and say what changed: a setting's new value in the settings tree,
     /// "Characters | 2 of 4" [obs, the walk of Settings Center's questions].
     Changed(Vec<ToUi>, String),
+    /// Send these, and say this before the focus they move ("Search edit box cleared. | Tree
+    /// view | ..." [obs, the walk of Settings Center's search]).
+    BeforeFocus(Vec<ToUi>, String),
     /// Make these Okur's settings for `scope`, where they were `before`; with `close`, close
     /// the dialog too.
     Apply {
@@ -111,6 +114,7 @@ fn control(id: &str, label: StaticMessage, kind: ControlKind) -> Control {
         label: label.to_string(),
         kind,
         enabled: true,
+        hidden: false,
     }
 }
 
@@ -242,6 +246,7 @@ impl SettingsDialog {
             label: label.to_string(),
             kind,
             enabled: spec.scopes.allows(scope),
+            hidden: false,
         })
     }
 
@@ -325,6 +330,7 @@ impl SettingsDialog {
                 checked: verbosity.mode_at(output, level) == OutputMode::On,
             },
             enabled: true,
+            hidden: false,
         }));
         let short = verbosity.message_length.get(level) == Some(&MessageLength::Short);
         controls.push(control(

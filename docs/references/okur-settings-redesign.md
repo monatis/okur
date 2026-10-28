@@ -114,8 +114,14 @@ kept it (research, not evidence):
     has the first three; the sound and the headings voice are not built.
   - Web / HTML / PDFs' subgroups, in the help's order: Reading, Navigation, Images / Graphics,
     Links, Headings and Frames, Tables, Miscellaneous.
-  - Okur's search filters the tree to the results in their groups instead. JAWS's results
-    list is the shape to follow (an open item).
+  - Okur's results list (2026-10-29): a list box in the tree's place while the search box has
+    words, named by the count; Down from the search box goes into it; each result is its label
+    and value ("checked" or "not checked" for a check box), then its group's path, with no
+    place in the list; Space and Shift+Space change it ("Play Sound | 4 of 5"); Enter shows the
+    tree at it, Escape the tree where it was, each after "Search edit box cleared.". The tree
+    is left as it was while searching. JAWS runs a subgroup's name into its group's
+    ("NavigationWeb / HTML / PDFs"); Okur keeps a space. Not walked yet: F6 on a result, and
+    Quick Settings' search.
   - The results list, walked (`settings-questions-walk.ps1`, "echo"): "11 Search Results List
     box | Typing Echo Off | User | Use the arrow keys to select an item. | Press the space bar
     to toggle between the choices"; Down: "Screen Echo Echo Highlighted Text | User", "Allow

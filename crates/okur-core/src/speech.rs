@@ -922,11 +922,13 @@ impl SpeechFormatter {
 }
 
 /// The tutor messages: what a key does on the control that has the focus (`hints.ftl`).
-fn tutor_messages() -> [crate::messages::StaticMessage; 23] {
+fn tutor_messages() -> [crate::messages::StaticMessage; 25] {
     [
         msg::hint_activate_enter(),
         msg::hint_activate_spacebar(),
         msg::hint_change_selection_arrows(),
+        msg::hint_select_item_arrows(),
+        msg::hint_space_toggle_choices(),
         msg::hint_split_button(),
         msg::hint_check_spacebar(),
         msg::hint_clear_checkmark_spacebar(),

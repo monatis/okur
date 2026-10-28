@@ -81,6 +81,7 @@ fn control(id: &str, label: String, kind: ControlKind) -> Control {
         label,
         kind,
         enabled: true,
+        hidden: false,
     }
 }
 

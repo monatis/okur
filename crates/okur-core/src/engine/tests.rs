@@ -2713,6 +2713,81 @@ fn settings_center_applies_and_keeps_changes() {
     assert!(store.take().is_empty());
 }
 
+/// Settings Center's search results: Down from the search box into them, each result said
+/// with its group after it and no place in the list, the list entered with its own hints;
+/// Escape says "Search edit box cleared." before the tree [obs, the walk of Settings Center's
+/// search].
+#[test]
+fn settings_centers_results_are_said_as_jaws_says_them() {
+    use crate::ui::{FromUi, ToUi, Value};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    engine.execute_command("SettingsCenter");
+    let Some((id, title)) = ui.take().iter().find_map(|m| match m {
+        ToUi::DialogShow { dialog } => Some((dialog.id, dialog.title.clone())),
+        _ => None,
+    }) else {
+        panic_free_fail("no dialog");
+        return;
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id,
+        control: "search".into(),
+        value: Value::Text("typing echo".into()),
+    }));
+    let sent = ui.take();
+    let (Some(first), Some(label)) = (
+        sent.iter().find_map(|m| match m {
+            ToUi::DialogItems { items, .. } => items.first().cloned(),
+            _ => None,
+        }),
+        sent.iter().find_map(|m| match m {
+            ToUi::DialogLabel { label, .. } => Some(label.clone()),
+            _ => None,
+        }),
+    ) else {
+        panic_free_fail(&format!("no results: {sent:?}"));
+        return;
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "search_down".into(),
+    }));
+    let mut result = FocusEvent::new(Role::ListItem).with_name(first.clone());
+    result.window_title = Some(title.clone());
+    result.container_role = Some(Role::List);
+    result.container_name = Some(label.clone());
+    result.platform.container_class = Some("LISTBOX".into());
+    result.item_index = Some(1);
+    result.item_count = Some(1);
+    // After the window's title, this being the first focus in it here.
+    let said = engine.handle_focus_event(&result).unwrap_or_default();
+    assert_eq!(
+        norm(&said).strip_prefix(&norm(&title)).map(str::trim),
+        Some(norm(&format!(
+            "{label} \u{1d} List box \u{1e} \n{first} \nUser\nUse the arrow keys to select an \
+             item.\nPress the space bar to toggle between the choices"
+        )))
+        .as_deref()
+    );
+    // Escape: the tree, after "Search edit box cleared.".
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id,
+        control: "result_escape".into(),
+    }));
+    assert!(ui
+        .take()
+        .iter()
+        .any(|m| matches!(m, ToUi::DialogFocus { control, .. } if control == "tree")));
+    let mut user = FocusEvent::new(Role::TreeItem).with_name("User");
+    user.window_title = Some(title);
+    user.tree_level = Some(0);
+    let said = engine.handle_focus_event(&user).unwrap_or_default();
+    assert!(said.starts_with("Search edit box cleared.\n"), "{said}");
+}
+
 /// Settings Center's Configure Verbosity Levels opens the verbosity levels' dialog over it.
 #[test]
 fn configure_verbosity_levels_opens_its_dialog() {

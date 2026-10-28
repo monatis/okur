@@ -420,6 +420,11 @@ pub struct FocusEvent {
     /// JAWS's [obs, 748/s11, s14].
     #[serde(default)]
     pub item_parent: Option<String>,
+    /// The hints an item of Okur's own dialog is entered with, in place of its role's: Settings
+    /// Center's search results, "Use the arrow keys to select an item. | Press the space bar to
+    /// toggle between the choices" [obs, the walk of Settings Center's search].
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub own_hints: Vec<String>,
     /// For a text field: its text, caret and selection when it got focus.
     pub text: Option<TextContext>,
     /// When the active window is a dialog box (Win32 `#32770`): its static text.
@@ -671,6 +676,7 @@ impl FocusEvent {
             tree_level: None,
             item_status: None,
             item_parent: None,
+            own_hints: Vec::new(),
             child_count: None,
             text: None,
             dialog_text: None,

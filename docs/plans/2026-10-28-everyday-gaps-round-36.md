@@ -29,7 +29,7 @@ a fetched evidence file) must read 90; `fix-rate.ps1` otherwise. old-pc's master
 
 ## 1. Settings, the long tail
 
-1. **The search's results as JAWS's list box** ("11 Search Results List box | Typing Echo Off |
+1. **Done (2026-10-29).** **The search's results as JAWS's list box** ("11 Search Results List box | Typing Echo Off |
    User | Use the arrow keys to select an item. | Press the space bar to toggle between the
    choices"; Escape "Search edit box cleared. | Tree view | ..."; Enter goes to the setting in
    the tree). okur-ui shows a list box in the tree's place: a control can start hidden and be

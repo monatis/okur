@@ -76,6 +76,7 @@ impl ManageApplications {
             label,
             kind,
             enabled: true,
+            hidden: false,
         };
         let button =
             |id: &str, label: String| control(id, label, ControlKind::Button { default: false });
@@ -169,6 +170,7 @@ pub fn restore_question(id: u32) -> DialogSpec {
         label,
         kind,
         enabled: true,
+        hidden: false,
     };
     DialogSpec {
         id,

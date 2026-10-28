@@ -424,7 +424,14 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                     Line::of(PartKind::ListPosition, line.render().trim().to_owned())
                 }
             }));
-            if entering {
+            if entering && !focus.own_hints.is_empty() {
+                lines.extend(
+                    focus
+                        .own_hints
+                        .iter()
+                        .map(|hint| Line::of(PartKind::Hint, hint.as_str())),
+                );
+            } else if entering {
                 lines.push(Line::of(
                     PartKind::Hint,
                     if focus.container_is_list_view {

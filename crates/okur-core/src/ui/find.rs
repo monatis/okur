@@ -92,6 +92,7 @@ impl FindDialog {
             label: label.to_string(),
             kind,
             enabled: true,
+            hidden: false,
         };
         let check = |id: &str, label: StaticMessage, checked: bool| {
             control(id, label, ControlKind::CheckBox { checked })

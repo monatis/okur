@@ -44,6 +44,7 @@ impl TrayDialog {
             label,
             kind,
             enabled: true,
+            hidden: false,
         };
         let button = |id: &str, label: String, default: bool| {
             control(id, label, ControlKind::Button { default })

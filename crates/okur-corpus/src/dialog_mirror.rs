@@ -59,6 +59,7 @@ fn wizard_dialog(mut page: DialogSpec, buttons: WizardButtons) -> DialogSpec {
         label: label.to_owned(),
         kind: ControlKind::Button { default },
         enabled,
+        hidden: false,
     };
     page.controls.extend([
         button("back", "< &Back", false, buttons.back),
@@ -730,6 +731,7 @@ mod tests {
                         history: vec!["library".to_owned()],
                     },
                     enabled: true,
+                    hidden: false,
                 }],
                 keys: Vec::new(),
             },
@@ -757,6 +759,7 @@ mod tests {
             label: label.to_owned(),
             kind: ControlKind::Button { default },
             enabled: true,
+            hidden: false,
         };
         let host = RecordingUiHost::default();
         let mut mirror = DialogMirror::default();
@@ -775,6 +778,7 @@ mod tests {
                             selected: None,
                         },
                         enabled: true,
+                        hidden: false,
                     },
                     button("add", "&Add...", true),
                     button("moveto", "&MoveTo", false),

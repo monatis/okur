@@ -132,6 +132,7 @@ impl StartupWizard {
             label: label.to_string(),
             kind,
             enabled: true,
+            hidden: false,
         };
         let labels = |choices: &[Choice]| choices.iter().map(|c| c.label.to_string()).collect();
         let radios = |id: &str, label: StaticMessage, setting: &str, choices: Vec<Choice>| {

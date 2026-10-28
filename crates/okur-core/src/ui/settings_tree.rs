@@ -2,7 +2,8 @@
 //! tree of groups and settings, each setting named with its value ("Typing Echo Characters"),
 //! Space changing it and Shift+Space back, the selected item's description below the tree, then
 //! OK, Cancel, Apply once something changed, and in Settings Center the place the settings are
-//! kept (`docs/references/okur-settings-redesign.md` §3.1). Generated from the settings table
+//! kept (`docs/references/okur-settings-redesign.md` §3.1). While the search box has words, a
+//! list box of the settings found is in the tree's place, as JAWS's. Generated from the settings table
 //! ([`crate::settings::registry`]): a setting added there with a label is here too.
 //!
 //! The dialog keeps a draft of the settings, as [`super::settings::SettingsDialog`] does; Apply
@@ -12,6 +13,8 @@
 use okur_ui_model::{Control, ControlKind, DialogKey, DialogSpec, FromUi, ToUi, TreeItem, Value};
 
 use super::settings::{Lifetime, Outcome, Place};
+use crate::aom::Role;
+use crate::event::FocusEvent;
 use crate::messages::{msg, StaticMessage};
 use crate::settings::registry::{self, Kind, SettingSpec, SETTINGS};
 use crate::settings::Settings;
@@ -37,6 +40,17 @@ const TREE_ESCAPE: &str = "tree_escape";
 const LIFETIME: &str = "lifetime";
 /// F6 in the tree: the focus to the setting's control in the configuration display pane.
 const PANE_KEY: &str = "pane";
+/// The search's results: a list box in the tree's place while the search box has words ("11
+/// Search Results List box" [obs, the walk of Settings Center's search]).
+const RESULTS: &str = "results";
+/// Down in the search box: into the results, or into the tree without a search.
+const SEARCH_DOWN: &str = "search_down";
+/// F6 elsewhere than the tree: back to the tree, or to the results in its place.
+const TO_LIST: &str = "to_list";
+/// Enter, Escape, and Space or Shift+Space on a result.
+const RESULT_ENTER: &str = "result_enter";
+const RESULT_ESCAPE: &str = "result_escape";
+const RESULT_CHANGE: &str = "result_change";
 /// A pane control's id: this, then its setting's.
 const PANE_PREFIX: &str = "pane:";
 /// The lifetimes, as the menu lists them.
@@ -45,6 +59,18 @@ const LIFETIMES: [Lifetime; 3] = [
     Lifetime::UntilFocusMoves,
     Lifetime::Saved,
 ];
+
+/// A focus on one of the search's results, as Okur says it.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ResultFocus {
+    /// The result with its group's path after it, without its place in the list, entered with
+    /// the list's own hints: "11 Search Results List box | Typing Echo Off | User | Use the
+    /// arrow keys to select an item. | Press the space bar to toggle between the choices" [obs,
+    /// the walk of Settings Center's search].
+    Detailed(Box<FocusEvent>),
+    /// The result whose value Space just changed, its item made anew: Space has said it.
+    Unsaid,
+}
 
 /// Which of JAWS's two dialogs this is.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -319,10 +345,15 @@ pub struct SettingsTree {
     place: usize,
     draft: Settings,
     voices: Vec<String>,
-    /// The words searched for; empty, every group.
+    /// The words searched for; empty, no search.
     search: String,
-    /// The tree's item selected when the search began, Escape's place to go back to.
-    before_search: Option<Row>,
+    /// The settings the search found, in the tree's order, while the search box has words.
+    results: Vec<Row>,
+    /// The result selected.
+    result: usize,
+    /// A result whose value Space just changed, by its new text: its list box item, made anew,
+    /// takes the focus again.
+    renamed: Option<String>,
     /// The settings changed lately, for every place (Last Changed Settings).
     history: History,
     /// Last Changed Settings is open.
@@ -370,7 +401,9 @@ impl SettingsTree {
             draft,
             voices,
             search: String::new(),
-            before_search: None,
+            results: Vec::new(),
+            result: 0,
+            renamed: None,
             history,
             recent_open: false,
             lifetimes: Vec::new(),
@@ -386,7 +419,7 @@ impl SettingsTree {
         if tree.expand {
             tree.expand_all(true);
         }
-        tree.rows = tree.rows_for_search();
+        tree.rows = tree.tree_rows();
         tree
     }
 
@@ -440,6 +473,7 @@ impl SettingsTree {
             label,
             kind,
             enabled: true,
+            hidden: false,
         };
         DialogSpec {
             id,
@@ -490,22 +524,164 @@ impl SettingsTree {
         if self.search.is_empty() {
             return None;
         }
-        let found: Vec<&SettingSpec> = self
-            .rows
-            .iter()
-            .filter_map(|row| match row {
-                Row::Setting(spec) => Some(*spec),
-                _ => None,
-            })
-            .collect();
-        Some(match found.first() {
+        let first = self.results.first().map(|row| match row {
+            Row::Setting(spec) | Row::Recent(spec) => self.tree_label(spec),
+            other => self.item(other).text,
+        });
+        Some(match first {
             Some(first) => format!(
-                "{}\n{}",
-                self.tree_label(first),
-                msg::settings_search_results(found.len()).render()
+                "{first}\n{}",
+                msg::settings_search_results(self.results.len()).render()
             ),
             None => msg::settings_search_none().to_string(),
         })
+    }
+
+    /// The settings the search finds, in the tree's order, each once (Last Changed Settings
+    /// holds some again), and Configure Verbosity Levels.
+    fn found(&self) -> Vec<Row> {
+        if self.search.is_empty() {
+            return Vec::new();
+        }
+        let mut found: Vec<Row> = Vec::new();
+        for row in self.rows_matching(&self.search) {
+            let row = match row {
+                Row::Recent(spec) => Row::Setting(spec),
+                Row::Group(_) | Row::LastChanged => continue,
+                row => row,
+            };
+            if !found.contains(&row) {
+                found.push(row);
+            }
+        }
+        found
+    }
+
+    /// A result as the list shows it: the setting and its value, a check box's state in words
+    /// ("Allow Mouse Echo not checked" [obs, the walk of Settings Center's search]).
+    fn result_text(&self, row: &Row) -> String {
+        let item = self.item(row);
+        match item.checked {
+            Some(true) => format!("{} {}", item.text, msg::state_checked()),
+            Some(false) => format!("{} {}", item.text, msg::state_not_checked()),
+            None => item.text,
+        }
+    }
+
+    fn result_texts(&self) -> Vec<String> {
+        self.results
+            .iter()
+            .map(|row| self.result_text(row))
+            .collect()
+    }
+
+    /// The group a row is in.
+    fn row_group(&self, row: &Row) -> Option<TreeGroup> {
+        match row {
+            Row::Setting(spec) | Row::Recent(spec) => self.group_of(spec),
+            Row::VerbosityLevels => Some(TreeGroup::SpeechVerbosity),
+            Row::Group(group) => group.parent(),
+            Row::LastChanged => None,
+        }
+    }
+
+    /// A result's group, then the groups that one is in: "Navigation Web / HTML / PDFs", said
+    /// after the result. JAWS runs the names together ("Smart Navigation Mode Off |
+    /// NavigationWeb / HTML / PDFs" [obs, the walk of Settings Center's search]); Okur keeps a
+    /// space between them.
+    fn result_path(&self, row: &Row) -> String {
+        let mut names = Vec::new();
+        let mut group = self.row_group(row);
+        while let Some(g) = group {
+            names.push(g.label().to_string());
+            group = g.parent();
+        }
+        names.join(" ")
+    }
+
+    /// The item selected: the result while there is a search, else the tree's.
+    fn current(&self) -> Option<Row> {
+        if self.search.is_empty() {
+            self.rows.get(self.selected).copied()
+        } else {
+            self.results.get(self.result).copied()
+        }
+    }
+
+    /// The list that stands in the tree's place: the results while there is a search.
+    fn list(&self) -> &'static str {
+        if self.search.is_empty() {
+            TREE
+        } else {
+            RESULTS
+        }
+    }
+
+    /// The results' list box filled, and named by their count.
+    fn results_shown(&self) -> Vec<ToUi> {
+        vec![
+            ToUi::DialogItems {
+                id: self.id,
+                control: RESULTS.to_owned(),
+                items: self.result_texts(),
+                selected: self.result,
+            },
+            ToUi::DialogLabel {
+                id: self.id,
+                control: RESULTS.to_owned(),
+                label: msg::settings_search_results_list(self.results.len()).render(),
+            },
+        ]
+    }
+
+    /// The results shown in the tree's place, or the tree in theirs.
+    fn swap(&self, results: bool) -> ToUi {
+        let (show, hide) = if results {
+            (RESULTS, TREE)
+        } else {
+            (TREE, RESULTS)
+        };
+        ToUi::DialogSwap {
+            id: self.id,
+            show: show.to_owned(),
+            hide: hide.to_owned(),
+        }
+    }
+
+    /// The description of the item selected, shown below the list.
+    fn description_shown(&self) -> ToUi {
+        ToUi::DialogSet {
+            id: self.id,
+            control: DESCRIPTION.to_owned(),
+            value: Value::Text(self.description()),
+        }
+    }
+
+    /// A focus on one of the search's results, as Okur says it; `None` for any other focus.
+    pub fn result_focus(&mut self, focus: &FocusEvent) -> Option<ResultFocus> {
+        if self.search.is_empty()
+            || focus.role != Role::ListItem
+            || focus.window_title.as_deref() != Some(self.title().as_str())
+        {
+            return None;
+        }
+        let name = focus.name.as_deref()?;
+        if self.renamed.take().as_deref() == Some(name) {
+            return Some(ResultFocus::Unsaid);
+        }
+        let row = self
+            .results
+            .iter()
+            .find(|row| self.result_text(row) == name)?;
+        let mut detailed = focus.clone();
+        detailed.columns = vec![self.result_path(row)];
+        detailed.item_index = None;
+        detailed.item_count = None;
+        detailed.own_hints = vec![
+            msg::hint_select_item_arrows().to_string(),
+            msg::hint_space_toggle_choices().to_string(),
+        ];
+        Some(ResultFocus::Detailed(Box::new(detailed)))
     }
 
     /// Settings Center or Quick Settings.
@@ -558,8 +734,6 @@ impl SettingsTree {
             .map_or_else(|| plain(label), |named| named.to_string())
     }
 
-    /// The rows for the words searched for: every group and its settings, or only the settings
-    /// that match, in their groups.
     /// Another place's settings (the Application box, Ctrl+Shift+D): its draft, and its rows,
     /// Last Changed Settings among them; the previous place's stayed (performance review
     /// 2026-10-25, finding 16).
@@ -570,16 +744,21 @@ impl SettingsTree {
             .get(place)
             .map(|p| p.settings.clone())
             .unwrap_or_default();
-        self.rows = self.rows_for_search();
+        self.rows = self.tree_rows();
         self.selected = self.selected.min(self.rows.len().saturating_sub(1));
+        self.results = self.found();
+        self.result = self.result.min(self.results.len().saturating_sub(1));
     }
 
-    fn rows_for_search(&self) -> Vec<Row> {
-        let words: Vec<String> = self
-            .search
-            .split_whitespace()
-            .map(str::to_lowercase)
-            .collect();
+    /// The tree's rows: every group and its settings.
+    fn tree_rows(&self) -> Vec<Row> {
+        self.rows_matching("")
+    }
+
+    /// The rows for the words `search`: every group and its settings, or only the settings
+    /// that match, in their groups.
+    fn rows_matching(&self, search: &str) -> Vec<Row> {
+        let words: Vec<String> = search.split_whitespace().map(str::to_lowercase).collect();
         let matches = |spec: &SettingSpec| {
             let label = self.tree_label(spec);
             let description = spec
@@ -714,7 +893,7 @@ impl SettingsTree {
             Row::LastChanged => TreeItem {
                 text: msg::settings_tree_last_changed().to_string(),
                 level: 0,
-                open: !self.search.is_empty() || self.recent_open,
+                open: self.recent_open,
                 checked: None,
             },
             // As the setting's own item, with its place: "Typing Echo Words (User)", as JAWS's
@@ -741,7 +920,7 @@ impl SettingsTree {
             Row::Group(group) => TreeItem {
                 text: group.label().to_string(),
                 level: group.depth(),
-                open: !self.search.is_empty() || self.open.contains(group),
+                open: self.open.contains(group),
                 checked: None,
             },
             Row::Setting(spec) => {
@@ -778,7 +957,7 @@ impl SettingsTree {
 
     /// The selected item's description: a group's, or a setting's.
     fn description(&self) -> String {
-        match self.rows.get(self.selected) {
+        match self.current().as_ref() {
             // Why it is unavailable, and the key that shows where it is kept.
             Some(Row::Setting(spec) | Row::Recent(spec)) if !spec.scopes.allows(&self.scope()) => {
                 msg::settings_tree_default_only().to_string()
@@ -817,6 +996,7 @@ impl SettingsTree {
             label,
             kind,
             enabled: true,
+            hidden: false,
         };
         let mut controls = vec![
             control(
@@ -827,14 +1007,29 @@ impl SettingsTree {
                     text: self.search.clone(),
                 },
             ),
-            control(
-                TREE,
-                String::new(),
-                ControlKind::Tree {
-                    items: self.items(),
-                    selected: self.selected,
-                },
-            ),
+            Control {
+                hidden: !self.search.is_empty(),
+                ..control(
+                    TREE,
+                    String::new(),
+                    ControlKind::Tree {
+                        items: self.items(),
+                        selected: self.selected,
+                    },
+                )
+            },
+            // The search's results, in the tree's place while there is a search.
+            Control {
+                hidden: self.search.is_empty(),
+                ..control(
+                    RESULTS,
+                    msg::settings_search_results_list(self.results.len()).render(),
+                    ControlKind::ListBox {
+                        items: self.result_texts(),
+                        selected: self.result,
+                    },
+                )
+            },
             control(
                 DESCRIPTION,
                 String::new(),
@@ -899,17 +1094,21 @@ impl SettingsTree {
             from: Some(from.to_owned()),
             ..shortcut(key, control)
         };
-        // Down from the search box into the tree; Enter and Escape in the tree for a search's
-        // results (JAWS's Settings Center help).
-        // F6 from the tree to the setting's control in the pane, and from anywhere else back
-        // to the tree (JAWS's Settings Center help).
+        // Down from the search box into the results, or the tree; Enter, Escape and Space on
+        // a result (JAWS's Settings Center help, the walk of its search). F6 from the tree to
+        // the setting's control in the pane, and from anywhere else back to the tree, or the
+        // results in its place (JAWS's Settings Center help).
         let mut keys = vec![
             from("F6", PANE_KEY, TREE),
-            shortcut("F6", TREE),
+            shortcut("F6", TO_LIST),
             shortcut("Ctrl+E", SEARCH),
-            from("Down", TREE, SEARCH),
+            from("Down", SEARCH_DOWN, SEARCH),
             from("Enter", TREE_ENTER, TREE),
             from("Escape", TREE_ESCAPE, TREE),
+            from("Enter", RESULT_ENTER, RESULTS),
+            from("Escape", RESULT_ESCAPE, RESULTS),
+            from("Space", RESULT_CHANGE, RESULTS),
+            from("Shift+Space", RESULT_CHANGE, RESULTS),
         ];
         if self.flavor == Flavor::Center {
             keys.push(shortcut("Ctrl+Shift+D", DEFAULT_PLACE));
@@ -972,6 +1171,41 @@ impl SettingsTree {
             Some(Row::VerbosityLevels) => return Outcome::OpenVerbosityLevels,
             Some(Row::Group(_) | Row::LastChanged) | None => return Outcome::Nothing,
         };
+        self.change_setting(spec)
+    }
+
+    /// Space on a result: its value changed as in the tree, the results' texts with it, and
+    /// the value said with its place ("Play Sound | 4 of 5" [obs, the walk of Settings
+    /// Center's search]).
+    fn change_result(&mut self) -> Outcome {
+        let spec = match self.results.get(self.result).copied() {
+            Some(Row::Setting(spec) | Row::Recent(spec)) => spec,
+            Some(Row::VerbosityLevels) => return Outcome::OpenVerbosityLevels,
+            Some(Row::Group(_) | Row::LastChanged) | None => return Outcome::Nothing,
+        };
+        let before = self.result_texts();
+        let Outcome::Changed(mut sent, said) = self.change_setting(spec) else {
+            return Outcome::Nothing;
+        };
+        for (index, text) in self.result_texts().into_iter().enumerate() {
+            if before.get(index) == Some(&text) {
+                continue;
+            }
+            if index == self.result {
+                self.renamed = Some(text.clone());
+            }
+            sent.push(ToUi::DialogSet {
+                id: self.id,
+                control: RESULTS.to_owned(),
+                value: Value::ItemRenamed(index, text),
+            });
+        }
+        Outcome::Changed(sent, said)
+    }
+
+    /// `spec` set to its next value: the tree's items that show it anew, Apply available, and
+    /// the value said.
+    fn change_setting(&mut self, spec: &'static SettingSpec) -> Outcome {
         let Some(value) = self.next_value(spec) else {
             return Outcome::Nothing;
         };
@@ -1026,46 +1260,57 @@ impl SettingsTree {
         }
     }
 
-    /// Ends a search: the whole tree, the search box empty, at `at` with its groups open.
+    /// Ends a search: the search box empty and the tree back in the results' place, at `at`
+    /// with its groups open (Enter on a result), or where it was (Escape); "Search edit box
+    /// cleared." said before it [obs, the walk of Settings Center's search].
     fn end_search(&mut self, at: Option<Row>) -> Outcome {
         self.search.clear();
-        self.rows = self.rows_for_search();
-        if let Some(Row::Setting(spec) | Row::Recent(spec)) = at {
-            let mut group = self.group_of(spec);
+        self.results.clear();
+        self.result = 0;
+        self.renamed = None;
+        if let Some(at) = at {
+            let mut group = self.row_group(&at);
             while let Some(g) = group {
                 if !self.open.contains(&g) {
                     self.open.push(g);
                 }
                 group = g.parent();
             }
+            self.rows = self.tree_rows();
+            self.selected = self
+                .rows
+                .iter()
+                .position(|r| *r == at)
+                .unwrap_or(self.selected);
         }
-        self.selected = at
-            .and_then(|at| self.rows.iter().position(|r| *r == at))
-            .unwrap_or(0);
         let mut sent = vec![ToUi::DialogSet {
             id: self.id,
             control: SEARCH.to_owned(),
             value: Value::Text(String::new()),
         }];
         sent.extend(self.refill());
-        Outcome::Send(sent)
+        sent.push(self.swap(false));
+        sent.push(ToUi::DialogFocus {
+            id: self.id,
+            control: TREE.to_owned(),
+        });
+        Outcome::BeforeFocus(sent, msg::settings_search_cleared().to_string())
     }
 
-    /// The whole tree again, after a search or another place.
+    /// The whole tree again, and the results while there is a search, after a search or
+    /// another place.
     fn refill(&self) -> Vec<ToUi> {
-        vec![
-            ToUi::DialogTree {
-                id: self.id,
-                control: TREE.to_owned(),
-                items: self.items(),
-                selected: self.selected,
-            },
-            ToUi::DialogSet {
-                id: self.id,
-                control: DESCRIPTION.to_owned(),
-                value: Value::Text(self.description()),
-            },
-        ]
+        let mut sent = vec![ToUi::DialogTree {
+            id: self.id,
+            control: TREE.to_owned(),
+            items: self.items(),
+            selected: self.selected,
+        }];
+        if !self.search.is_empty() {
+            sent.extend(self.results_shown());
+        }
+        sent.push(self.description_shown());
+        sent
     }
 
     /// The settings a row stands for: a setting, or a group's settings in it and its
@@ -1126,7 +1371,7 @@ impl SettingsTree {
             !(*place == scope && setting.is_none_or(|setting| setting == *id))
         });
         let at = self.selected;
-        self.rows = self.rows_for_search();
+        self.rows = self.tree_rows();
         let group = self
             .rows
             .iter()
@@ -1299,6 +1544,7 @@ impl SettingsTree {
             label,
             kind,
             enabled: spec.scopes.allows(&self.scope()),
+            hidden: false,
         })
     }
 
@@ -1404,11 +1650,12 @@ impl SettingsTree {
                 match (control.as_str(), value) {
                     (TREE, Value::Selected(index)) => {
                         self.selected = *index;
-                        Outcome::Send(vec![ToUi::DialogSet {
-                            id: self.id,
-                            control: DESCRIPTION.to_owned(),
-                            value: Value::Text(self.description()),
-                        }])
+                        Outcome::Send(vec![self.description_shown()])
+                    }
+                    (RESULTS, Value::Selected(index)) => {
+                        self.result = *index;
+                        self.renamed = None;
+                        Outcome::Send(vec![self.description_shown()])
                     }
                     (TREE, Value::ItemOpened(index, open)) => {
                         match self.rows.get(*index).copied() {
@@ -1423,22 +1670,23 @@ impl SettingsTree {
                         }
                         Outcome::Nothing
                     }
+                    // The results in the tree's place as the search box gets words, the tree
+                    // again as it is emptied; the tree is as it was.
                     (SEARCH, Value::Text(text)) => {
-                        if self.search.is_empty() {
-                            self.before_search = self.rows.get(self.selected).copied();
-                        }
+                        let searching = !self.search.is_empty();
                         self.search = text.trim().to_owned();
-                        self.rows = self.rows_for_search();
-                        // The first setting found, or the first group.
-                        self.selected = if self.search.is_empty() {
-                            0
+                        self.results = self.found();
+                        self.result = 0;
+                        self.renamed = None;
+                        let mut sent = if self.search.is_empty() {
+                            Vec::new()
                         } else {
-                            self.rows
-                                .iter()
-                                .position(|r| matches!(r, Row::Setting(_)))
-                                .unwrap_or(0)
+                            self.results_shown()
                         };
-                        let sent = self.refill();
+                        if searching == self.search.is_empty() {
+                            sent.push(self.swap(!searching));
+                        }
+                        sent.push(self.description_shown());
                         match self.search_said() {
                             Some(said) => Outcome::Changed(sent, said),
                             None => Outcome::Send(sent),
@@ -1500,18 +1748,20 @@ impl SettingsTree {
                 "ok" => self.apply(true),
                 "apply" => self.apply(false),
                 "cancel" => self.cancel(),
-                // On a search's results Enter shows the whole tree at the setting found, Escape
-                // at the item before the search; elsewhere they are OK and Cancel.
-                TREE_ENTER if !self.search.is_empty() => {
-                    let at = self.rows.get(self.selected).copied();
-                    self.end_search(at)
-                }
+                // In the tree Enter and Escape are OK and Cancel; on a result, Enter shows the
+                // tree at the setting found, Escape where it was.
                 TREE_ENTER => self.apply(true),
-                TREE_ESCAPE if !self.search.is_empty() => {
-                    let at = self.before_search;
+                TREE_ESCAPE => self.cancel(),
+                RESULT_ENTER => {
+                    let at = self.results.get(self.result).copied();
                     self.end_search(at)
                 }
-                TREE_ESCAPE => self.cancel(),
+                RESULT_ESCAPE => self.end_search(None),
+                RESULT_CHANGE => self.change_result(),
+                SEARCH_DOWN | TO_LIST => Outcome::Send(vec![ToUi::DialogFocus {
+                    id: self.id,
+                    control: self.list().to_owned(),
+                }]),
                 LIFETIME => self.context_menu(),
                 PANE_KEY => self.to_pane(),
                 DEFAULT_PLACE if self.flavor == Flavor::Center => {
@@ -1583,8 +1833,25 @@ mod tests {
         let ids: Vec<&str> = spec.controls.iter().map(|c| c.id.as_str()).collect();
         assert_eq!(
             ids,
-            [SEARCH, TREE, DESCRIPTION, "apply", "ok", "cancel", PLACE]
+            [
+                SEARCH,
+                TREE,
+                RESULTS,
+                DESCRIPTION,
+                "apply",
+                "ok",
+                "cancel",
+                PLACE
+            ]
         );
+        // The results' list box waits hidden in the tree's place.
+        let hidden: Vec<&str> = spec
+            .controls
+            .iter()
+            .filter(|c| c.hidden)
+            .map(|c| c.id.as_str())
+            .collect();
+        assert_eq!(hidden, [RESULTS]);
         assert!(spec.controls.iter().any(|c| c.id == "apply" && !c.enabled));
         let items = tree_items(&spec);
         let first = items.first().cloned();
@@ -1671,81 +1938,118 @@ mod tests {
         ));
     }
 
-    /// Typing in the search box keeps the settings that match, in their groups, open.
+    /// Typing in the search box shows the settings found in a list box in the tree's place,
+    /// named by their count, each with its value; emptied, the tree is back [obs, the walk of
+    /// Settings Center's search].
     #[test]
-    fn a_search_finds_settings_by_their_label_and_description() {
+    fn a_search_shows_its_results_in_the_trees_place() {
         let mut dialog = tree(Flavor::Center);
         let Outcome::Changed(sent, said) = dialog.handle(&FromUi::DialogChanged {
             id: 7,
             control: SEARCH.into(),
             value: Value::Text("echo".into()),
         }) else {
-            panic_free_fail("no tree");
+            panic_free_fail("nothing said");
             return;
         };
-        // The first setting found and the count, as each key typed says [obs, the walk of
-        // Settings Center's search].
+        // The first setting found and the count, as each key typed says.
         assert!(
             said.starts_with("Typing Echo\n1 of ") && said.ends_with(" Search Results"),
             "{said}"
         );
-        assert_eq!(
-            dialog.handle(&FromUi::DialogChanged {
-                id: 7,
-                control: SEARCH.into(),
-                value: Value::Text("zzzz".into()),
-            }),
-            Outcome::Changed(dialog.refill(), "No matches found.".into())
-        );
-        let Some(ToUi::DialogTree { items, .. }) = sent.first() else {
-            panic_free_fail("no tree");
+        let Some(ToUi::DialogItems { control, items, .. }) = sent.first() else {
+            panic_free_fail("no results");
             return;
         };
-        let texts: Vec<&str> = items.iter().map(|i| i.text.as_str()).collect();
-        assert!(texts.contains(&"Typing Echo Characters"), "{texts:?}");
-        assert!(texts.contains(&"Enable Mouse Echo"), "{texts:?}");
-        assert!(!texts.iter().any(|t| t.starts_with("Rate")), "{texts:?}");
-        assert!(items.iter().filter(|i| i.level == 0).all(|i| i.open));
+        assert_eq!(control, RESULTS);
+        assert!(
+            items.contains(&"Typing Echo Characters".to_owned()),
+            "{items:?}"
+        );
+        assert!(
+            items
+                .iter()
+                .any(|i| i == "Enable Mouse Echo checked" || i == "Enable Mouse Echo not checked"),
+            "{items:?}"
+        );
+        assert!(!items.iter().any(|i| i.starts_with("Rate")), "{items:?}");
+        let count = items.len();
+        assert!(sent
+            .iter()
+            .any(|m| matches!(m, ToUi::DialogLabel { label, .. }
+            if *label == format!("{count} Search Results"))));
+        assert!(sent
+            .iter()
+            .any(|m| matches!(m, ToUi::DialogSwap { show, hide, .. }
+            if show == RESULTS && hide == TREE)));
+        // The tree is as it was, its groups closed.
+        assert!(dialog
+            .items()
+            .iter()
+            .filter(|i| i.level == 0)
+            .all(|i| !i.open));
+        // Another search: no swap, the list filled anew.
+        let Outcome::Changed(sent, said) = dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: SEARCH.into(),
+            value: Value::Text("zzzz".into()),
+        }) else {
+            panic_free_fail("nothing said");
+            return;
+        };
+        assert_eq!(said, "No matches found.");
+        assert!(!sent.iter().any(|m| matches!(m, ToUi::DialogSwap { .. })));
+        // Emptied: the tree again.
+        let Outcome::Send(sent) = dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: SEARCH.into(),
+            value: Value::Text(String::new()),
+        }) else {
+            panic_free_fail("nothing sent");
+            return;
+        };
+        assert!(sent
+            .iter()
+            .any(|m| matches!(m, ToUi::DialogSwap { show, hide, .. }
+            if show == TREE && hide == RESULTS)));
     }
 
     /// Screen Echo in User, Smart Navigation Mode and Indicate Headings in their Web groups, each
-    /// with its value as Settings Center names it [obs, the walk of Settings Center's search].
+    /// with its value as Settings Center names it, then its group's path [obs, the walk of
+    /// Settings Center's search].
     #[test]
-    fn the_echo_navigation_and_heading_settings_are_in_their_groups() {
+    fn the_echo_navigation_and_heading_results_say_their_groups() {
         let mut dialog = tree(Flavor::Center);
-        for (search, item, group) in [
+        for (search, item, path) in [
             ("screen echo", "Screen Echo Echo Highlighted Text", "User"),
             (
                 "smart navigation",
                 "Smart Navigation Mode Off",
-                "Navigation",
+                "Navigation Web / HTML / PDFs",
             ),
             (
                 "indicate",
                 "Indicate Headings Headings with Level",
-                "Headings and Frames",
+                "Headings and Frames Web / HTML / PDFs",
             ),
         ] {
-            let Outcome::Changed(sent, _) = dialog.handle(&FromUi::DialogChanged {
+            dialog.handle(&FromUi::DialogChanged {
                 id: 7,
                 control: SEARCH.into(),
                 value: Value::Text(search.into()),
-            }) else {
-                panic_free_fail("no tree");
-                return;
-            };
-            let Some(ToUi::DialogTree { items, .. }) = sent.first() else {
-                panic_free_fail("no tree");
-                return;
-            };
-            let texts: Vec<&str> = items.iter().map(|i| i.text.as_str()).collect();
-            assert!(texts.contains(&item), "{texts:?}");
-            assert!(texts.contains(&group), "{texts:?}");
+            });
+            let found = dialog
+                .results
+                .iter()
+                .find(|row| dialog.result_text(row) == item)
+                .map(|row| dialog.result_path(row));
+            assert_eq!(found.as_deref(), Some(path), "{search}");
         }
     }
 
-    /// Enter on a search's result shows the whole tree at it, its groups open; Escape on the
-    /// results goes back to the item before the search (JAWS's Settings Center help).
+    /// Enter on a result shows the tree at it, its groups open; Escape on the results the tree
+    /// where it was; each says "Search edit box cleared." before the tree [obs, the walk of
+    /// Settings Center's search].
     #[test]
     fn enter_and_escape_end_a_search() {
         let mut dialog = tree(Flavor::Center);
@@ -1754,29 +2058,40 @@ mod tests {
             control: SEARCH.into(),
             value: Value::Text("dollars".into()),
         });
-        let found = dialog.rows.get(dialog.selected).copied();
+        let found = dialog.results.first().copied();
         assert!(matches!(found, Some(Row::Setting(spec)) if spec.id == "voice.text.say_dollars"));
-        dialog.handle(&FromUi::DialogPressed {
+        let Outcome::BeforeFocus(sent, said) = dialog.handle(&FromUi::DialogPressed {
             id: 7,
-            control: TREE_ENTER.into(),
-        });
+            control: RESULT_ENTER.into(),
+        }) else {
+            panic_free_fail("no tree");
+            return;
+        };
+        assert_eq!(said, "Search edit box cleared.");
+        assert!(sent
+            .iter()
+            .any(|m| matches!(m, ToUi::DialogSwap { show, .. } if show == TREE)));
+        assert!(matches!(sent.last(), Some(ToUi::DialogFocus { control, .. }) if control == TREE));
         assert!(dialog.search.is_empty());
         assert_eq!(dialog.rows.get(dialog.selected).copied(), found);
         let items = dialog.items();
         let open = |text: &str| items.iter().any(|i| i.text == text && i.open);
         assert!(open("Text Processing") && open("Number And Date Processing"));
-        // Escape on a search's results: back where it began.
+        // Escape on a search's results: the tree where it was.
         dialog.handle(&FromUi::DialogChanged {
             id: 7,
             control: SEARCH.into(),
             value: Value::Text("echo".into()),
         });
-        dialog.handle(&FromUi::DialogPressed {
-            id: 7,
-            control: TREE_ESCAPE.into(),
-        });
+        assert!(matches!(
+            dialog.handle(&FromUi::DialogPressed {
+                id: 7,
+                control: RESULT_ESCAPE.into(),
+            }),
+            Outcome::BeforeFocus(..)
+        ));
         assert_eq!(dialog.rows.get(dialog.selected).copied(), found);
-        // Without a search, Escape closes and Enter is OK.
+        // In the tree, Escape closes.
         assert_eq!(
             dialog.handle(&FromUi::DialogPressed {
                 id: 7,
@@ -1784,6 +2099,96 @@ mod tests {
             }),
             Outcome::Close
         );
+    }
+
+    /// Down from the search box goes into the results while there is a search, else into the
+    /// tree.
+    #[test]
+    fn down_from_the_search_box_goes_to_the_list_in_the_trees_place() {
+        let mut dialog = tree(Flavor::Center);
+        let down = FromUi::DialogPressed {
+            id: 7,
+            control: SEARCH_DOWN.into(),
+        };
+        // The focus moved first; the pane may follow it.
+        let focus = |outcome: Outcome| match outcome {
+            Outcome::Send(sent) => match sent.first() {
+                Some(ToUi::DialogFocus { control, .. }) => control.clone(),
+                _ => String::new(),
+            },
+            _ => String::new(),
+        };
+        assert_eq!(focus(dialog.handle(&down)), TREE);
+        dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: SEARCH.into(),
+            value: Value::Text("echo".into()),
+        });
+        assert_eq!(focus(dialog.handle(&down)), RESULTS);
+    }
+
+    /// A result's focus says its group's path after it and no place in the list, with the
+    /// list's own hints; Space changes its value, says it with its place, and the result's item
+    /// made anew is not said again [obs, the walk of Settings Center's search].
+    #[test]
+    fn a_result_is_said_with_its_group_and_changed_by_space() {
+        let mut dialog = tree(Flavor::Center);
+        dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: SEARCH.into(),
+            value: Value::Text("typing echo".into()),
+        });
+        let first = dialog.result_texts().first().cloned().unwrap_or_default();
+        let mut focus = FocusEvent::new(Role::ListItem).with_name(first.clone());
+        focus.window_title = Some(dialog.title());
+        focus.item_index = Some(1);
+        focus.item_count = Some(1);
+        let Some(ResultFocus::Detailed(detailed)) = dialog.result_focus(&focus) else {
+            panic_free_fail("no result");
+            return;
+        };
+        assert_eq!(detailed.columns, ["User"]);
+        assert_eq!((detailed.item_index, detailed.item_count), (None, None));
+        assert_eq!(
+            detailed.own_hints,
+            [
+                "Use the arrow keys to select an item.",
+                "Press the space bar to toggle between the choices"
+            ]
+        );
+        let Outcome::Changed(sent, said) = dialog.handle(&FromUi::DialogPressed {
+            id: 7,
+            control: RESULT_CHANGE.into(),
+        }) else {
+            panic_free_fail("nothing changed");
+            return;
+        };
+        assert!(said.ends_with(" of 4"), "{said}");
+        let renamed = sent.iter().find_map(|m| match m {
+            ToUi::DialogSet {
+                control,
+                value: Value::ItemRenamed(0, text),
+                ..
+            } if control == RESULTS => Some(text.clone()),
+            _ => None,
+        });
+        assert!(
+            renamed.as_ref().is_some_and(|text| *text != first),
+            "{sent:?}"
+        );
+        let again = FocusEvent::new(Role::ListItem).with_name(renamed.unwrap_or_default());
+        let again = FocusEvent {
+            window_title: Some(dialog.title()),
+            ..again
+        };
+        assert_eq!(dialog.result_focus(&again), Some(ResultFocus::Unsaid));
+        assert!(matches!(
+            dialog.result_focus(&again),
+            Some(ResultFocus::Detailed(_))
+        ));
+        // Another dialog's list item is not a result.
+        let other = FocusEvent::new(Role::ListItem).with_name(first);
+        assert_eq!(dialog.result_focus(&other), None);
     }
 
     /// Settings Center cancelled with a change not applied asks whether to save it: Escape goes
@@ -1893,7 +2298,7 @@ mod tests {
         let mut dialog = tree(Flavor::Quick);
         let spec = dialog.spec();
         let ids: Vec<&str> = spec.controls.iter().map(|c| c.id.as_str()).collect();
-        assert_eq!(ids, [SEARCH, TREE, DESCRIPTION, EXPAND, "ok"]);
+        assert_eq!(ids, [SEARCH, TREE, RESULTS, DESCRIPTION, EXPAND, "ok"]);
         assert!(spec
             .controls
             .iter()

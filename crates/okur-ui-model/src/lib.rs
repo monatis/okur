@@ -55,6 +55,10 @@ pub struct Control {
     pub kind: ControlKind,
     #[serde(default = "enabled")]
     pub enabled: bool,
+    /// Made hidden, in the place of the list before it, until [`ToUi::DialogSwap`] shows it
+    /// there: Settings Center's search results, a list box in its tree's place.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub hidden: bool,
 }
 
 fn enabled() -> bool {
@@ -280,6 +284,17 @@ pub enum ToUi {
         id: u32,
         control: String,
         enabled: bool,
+    },
+    /// Show control `show` of dialog `id` and hide `hide`, one in the other's place, labels and
+    /// all: Settings Center's search results shown in its tree's place, and the tree again
+    /// ("11 Search Results List box" [obs, the walk of Settings Center's search]).
+    DialogSwap { id: u32, show: String, hide: String },
+    /// Set the label a control is named by (the text before a list box): Settings Center's
+    /// results list, named by their count.
+    DialogLabel {
+        id: u32,
+        control: String,
+        label: String,
     },
     /// Make a button the dialog's default, which Enter presses: JAWS's PlaceMarker List
     /// makes MoveTo the default once a PlaceMarker is chosen, Add before.
@@ -552,6 +567,7 @@ mod tests {
                     label: "Speech".into(),
                     kind: ControlKind::Group,
                     enabled: true,
+                    hidden: false,
                 },
                 Control {
                     id: "rate".into(),
@@ -562,6 +578,7 @@ mod tests {
                         value: 0,
                     },
                     enabled: true,
+                    hidden: false,
                 },
             ],
             keys: Vec::new(),

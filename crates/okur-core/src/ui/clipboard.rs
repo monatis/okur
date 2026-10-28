@@ -39,6 +39,7 @@ impl OverwriteDialog {
             label,
             kind,
             enabled: true,
+            hidden: false,
         };
         DialogSpec {
             id: self.id,

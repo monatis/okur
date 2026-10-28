@@ -25,6 +25,7 @@ fn control(id: &str, label: String, kind: ControlKind, enabled: bool) -> Control
         label,
         kind,
         enabled,
+        hidden: false,
     }
 }
 

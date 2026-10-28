@@ -182,6 +182,7 @@ impl VoiceAdjustment {
             label: label.to_string(),
             kind,
             enabled: true,
+            hidden: false,
         };
         let button = |id: &str, label: StaticMessage, enabled: bool| Control {
             enabled,
@@ -300,6 +301,7 @@ impl VoiceAdjustment {
             label: label.to_string(),
             kind,
             enabled: true,
+            hidden: false,
         };
         DialogSpec {
             id,

@@ -48,6 +48,7 @@ impl BasicsDialog {
             label: label.to_string(),
             kind,
             enabled: true,
+            hidden: false,
         };
         let radios = |options: [StaticMessage; 2], on: bool| ControlKind::Radios {
             options: options.iter().map(ToString::to_string).collect(),

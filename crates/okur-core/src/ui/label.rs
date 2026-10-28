@@ -39,6 +39,7 @@ impl LabelDialog {
             label,
             kind,
             enabled: true,
+            hidden: false,
         };
         let prompt = msg::custom_label_prompt().to_string();
         DialogSpec {

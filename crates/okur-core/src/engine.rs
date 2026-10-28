@@ -297,6 +297,9 @@ pub struct ScreenReaderEngine {
     settings_dialog: Option<crate::ui::settings::SettingsDialog>,
     /// Settings Center or Quick Settings, while it is open.
     settings_tree: Option<crate::ui::settings_tree::SettingsTree>,
+    /// Said before the next focus spoken: what one of Okur's dialogs did as it moved the focus
+    /// ("Search edit box cleared.").
+    said_before_focus: Option<String>,
     /// Basics, while it is open.
     basics_dialog: Option<crate::ui::basics::BasicsDialog>,
     /// The Startup Wizard while it is open, and the session layer as it was before it, given
@@ -593,6 +596,7 @@ impl ScreenReaderEngine {
             settings_dialog_application: None,
             settings_dialog: None,
             settings_tree: None,
+            said_before_focus: None,
             basics_dialog: None,
             startup_wizard: None,
             okur_window_application: None,
@@ -2420,6 +2424,12 @@ impl ScreenReaderEngine {
                     messages.into_iter().for_each(|m| ui.send(m));
                 }
                 self.speech.speak(&said, true);
+            }
+            Outcome::BeforeFocus(messages, said) => {
+                self.said_before_focus = Some(said);
+                if let Some(ui) = &self.ui {
+                    messages.into_iter().for_each(|m| ui.send(m));
+                }
             }
             Outcome::Apply {
                 scope,

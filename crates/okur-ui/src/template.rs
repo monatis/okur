@@ -69,7 +69,7 @@ fn message_height(text: &str, width: i16) -> i16 {
 pub const IDOK: u16 = 1;
 pub const IDCANCEL: u16 = 2;
 /// Labels have no id of their own.
-const LABEL_ID: u16 = 0xFFFF;
+pub const LABEL_ID: u16 = 0xFFFF;
 /// Other controls are numbered from here, in the description's order.
 const FIRST_ID: u16 = 100;
 /// Radio buttons are numbered from here, a block of ids for each group.
@@ -344,10 +344,11 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
     let mut button_y = top;
     // The lists one under the other, sharing the height of one and a half: JAWS's rules
     // dialog has its tree of areas over its list of rules [obs, 748/s6, s7].
+    // A hidden list is not counted: it takes the place of the list before it.
     let lists = dialog
         .controls
         .iter()
-        .filter(|c| is_list(&c.kind))
+        .filter(|c| is_list(&c.kind) && !c.hidden)
         .count()
         .max(1);
     let list_height = if lists > 1 {
@@ -356,6 +357,7 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
         LIST_HEIGHT
     };
     let mut list_y = top;
+    let mut last_list_y = top;
     // Below the lists: radio groups two to a row, then the rest.
     let column_width = (WIDTH - 2 * MARGIN - 6) / 2;
     let mut row_top = top + (list_height + 6) * i16::try_from(lists).unwrap_or(1);
@@ -368,13 +370,17 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
         ids.push(id);
         let first = !after_button;
         after_button = matches!(control.kind, ControlKind::Button { .. });
-        // A list goes at the lists' place, which then moves down.
-        let at = list_y;
-        if is_list(&control.kind) {
+        // A list goes at the lists' place, which then moves down; a hidden one at the place of
+        // the list before it, shown there in its stead (Settings Center's search results in
+        // its tree's place).
+        let at = if control.hidden { last_list_y } else { list_y };
+        if is_list(&control.kind) && !control.hidden {
+            last_list_y = list_y;
             list_y += list_height + 6;
             seen_list = true;
         }
         let list_y = at;
+        let first_item = items.len();
         match &control.kind {
             // A table shows its columns' headers: JAWS's PlaceMarker List, "PlaceMarker" and
             // "Generalized to Domain".
@@ -576,6 +582,12 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
             }
             // Not used in list dialogs yet.
             ControlKind::Group | ControlKind::Message { .. } => {}
+        }
+        // A hidden control is made without showing, its label too.
+        if control.hidden {
+            for item in items.iter_mut().skip(first_item) {
+                item.style &= !WS_VISIBLE;
+            }
         }
     }
     // The lists' bottom, without the gap kept under them for what follows.
@@ -1110,6 +1122,7 @@ mod tests {
             label: label.into(),
             kind,
             enabled: true,
+            hidden: false,
         }
     }
 
@@ -1298,6 +1311,62 @@ mod tests {
         assert!(list.is_some_and(|l| l.style & LVS_REPORT != 0
             && l.style & LVS_NOCOLUMNHEADER == 0
             && l.text == "PlaceMarker"));
+    }
+
+    /// A hidden list is made in the place of the list before it, label and all, without
+    /// showing: Settings Center's search results over its tree.
+    #[test]
+    fn a_hidden_list_takes_the_place_of_the_list_before_it() {
+        let spec = DialogSpec {
+            id: 2,
+            title: "Settings".into(),
+            controls: vec![
+                control(
+                    "tree",
+                    "",
+                    ControlKind::Tree {
+                        items: Vec::new(),
+                        selected: 0,
+                    },
+                ),
+                Control {
+                    hidden: true,
+                    ..control(
+                        "results",
+                        "0 Search Results",
+                        ControlKind::ListBox {
+                            items: Vec::new(),
+                            selected: 0,
+                        },
+                    )
+                },
+                control("ok", "OK", ControlKind::Button { default: true }),
+            ],
+            keys: Vec::new(),
+        };
+        let layout = layout(&spec);
+        let place = |class: Class| {
+            layout
+                .items
+                .iter()
+                .find(|i| i.class == class)
+                .map(|i| (i.x, i.y, i.style & WS_VISIBLE != 0))
+        };
+        let tree = place(Class::Named("SysTreeView32"));
+        let results = place(Class::Named("LISTBOX"));
+        assert_eq!(
+            tree.map(|(x, y, _)| (x, y)),
+            results.map(|(x, y, _)| (x, y))
+        );
+        assert_eq!(
+            (tree.map(|t| t.2), results.map(|r| r.2)),
+            (Some(true), Some(false))
+        );
+        let label = layout
+            .items
+            .iter()
+            .find(|i| i.class == Class::Static && i.text == "0 Search Results");
+        assert!(label.is_some_and(|l| l.style & WS_VISIBLE == 0));
     }
 
     #[test]

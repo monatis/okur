@@ -368,6 +368,7 @@ fn control(id: &str, label: &str, kind: ControlKind) -> Control {
         label: label.to_owned(),
         kind,
         enabled: true,
+        hidden: false,
     }
 }
 

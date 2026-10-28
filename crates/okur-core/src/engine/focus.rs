@@ -8,6 +8,7 @@ use crate::cursor::FocusFrom;
 use crate::event::FocusEvent;
 use crate::messages::msg;
 use crate::speech::SpeechFormatter;
+use crate::ui::settings_tree::ResultFocus;
 
 /// The window class of a Win32 popup menu (a Word form field's drop-down list is one).
 const MENU_WINDOW_CLASS: &str = "#32768";
@@ -160,7 +161,18 @@ impl ScreenReaderEngine {
 
     pub fn handle_focus_event(&mut self, focus: &FocusEvent) -> Option<String> {
         // In one of Okur's own dialogs, what it knows of the control it draws.
-        let detailed = self.with_rules_details(focus);
+        let detailed = match self
+            .settings_tree
+            .as_mut()
+            .and_then(|tree| tree.result_focus(focus))
+        {
+            Some(ResultFocus::Unsaid) => {
+                self.last_native_focus = Some(focus.clone());
+                return None;
+            }
+            Some(ResultFocus::Detailed(detailed)) => Some(*detailed),
+            None => self.with_rules_details(focus),
+        };
         let focus = detailed.as_ref().unwrap_or(focus);
         if focus.bounds.is_some() {
             self.focus_bounds = focus.bounds;
@@ -986,6 +998,9 @@ impl ScreenReaderEngine {
             control
         };
         let mut speech = with_leaving(self.said(announcement).render());
+        if let Some(before) = self.said_before_focus.take() {
+            speech = format!("{before}\n{speech}");
+        }
         if ribbon_entered && focus.role == Role::Tab {
             let upper = crate::linearize::role_marker(msg::ribbon_upper().as_str());
             speech = format!(
