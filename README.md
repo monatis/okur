@@ -4,7 +4,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Rust 1.99.0](https://img.shields.io/badge/rust-1.99.0-orange.svg?logo=rust)](rust-toolchain.toml)
 [![Platforms: Windows; macOS in progress](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%28in%20progress%29-lightgrey.svg)](#platforms)
-[![JAWS parity: 9051 of 9625 recorded steps](https://img.shields.io/badge/JAWS%20parity-9051%2F9625%20steps-brightgreen.svg)](#where-it-stands)
+[![JAWS parity: 9111 of 9675 recorded steps](https://img.shields.io/badge/JAWS%20parity-9111%2F9675%20steps-brightgreen.svg)](#where-it-stands)
 
 **An open screen reader that keeps your JAWS muscle memory.**
 
@@ -57,15 +57,15 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `80a78aeb` (2026-10-25).
+Every figure is tool output, rerun for this README at commit `ee552ab3` (2026-10-28).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **9051 of 9625** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **8963 of 9686** | `okur-lab parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **259** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **680, 2046** (2029 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1510 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **9111 of 9675** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **9019 of 9736** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **263** | `okur-lab parity` |
+| Recorded JAWS scenarios, trials | **685, 2061** (2044 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1519 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
@@ -161,15 +161,23 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   as it goes: a heading's level, "Entering List", "exit list", "table 1, uniform Table", "Row
   2", "out of table". Insert+F6 lists the document's headings to move to; Say Font gives bold,
   italic and underline ("bolded", "italicized"), the size, colors, font, style, alignment,
-  outline level and line spacing ("Line spacing: Double"); Ctrl+Alt+N, O and P say the view they switch to ("Draft View"), and Insert+T
-  the title and the view. Its ribbon is read as JAWS reads it: Alt to its tabs ("Upper Ribbon,
-  Ribbon, Home Tab"), Down into a tab's commands with their group's name, each command's
-  ScreenTip where it says more than the name ("Grow Font Button, Increase Font Size"), toggle
-  buttons and check boxes with their state ("Format Painter Button not checked"), and Escape
-  back ("Leaving ribbons, Edit"). The Links List (Insert+F7) lists the document's hyperlinks,
-  Move To Link moves to one and Activate Link follows it; List Fields (Insert+F5) lists its
-  fields ("HYPERLINK opening hours", "FORMTEXT") and OK moves to one; with none, each says so
-  in Word's words. The line spacing and the fields come from Word's own object model.
+  outline level and line spacing ("Line spacing: Double"); Ctrl+Alt+N, O and P say the view
+  they switch to ("Draft View"), and Insert+T the title and the view; Read Mode is named with
+  JAWS's warning, in Okur's name, and Insert+F1 there says how to leave it. A line marks its
+  links ("See the link opening hours"). Form fields are read as controls named by the text
+  before them ("Name: Edit", "Member: check box not checked", "Branch: Combo box, Central, 1
+  of 3"), by the arrows and by Tab in a protected form; Space toggles a check box, Alt+Down
+  opens a drop-down's list. Its ribbon is read as JAWS reads it: Alt to its tabs ("Upper
+  Ribbon, Ribbon, Home Tab"), Down into a tab's commands with their group's name, each
+  command's ScreenTip where it says more than the name ("Grow Font Button, Increase Font
+  Size"), toggle buttons and check boxes with their state ("Format Painter Button not
+  checked"), the Quick Access Toolbar and the buttons beside the tabs with their hints
+  ("Leaving menus, Can't Repeat Button Unavailable"), and Escape back ("Leaving ribbons,
+  Edit"). Its own dialogs (Font) read their fields as edit combos ("Font:, edit combo,
+  Calibri"). The Links List (Insert+F7) lists the document's hyperlinks, Move To Link moves to
+  one and Activate Link follows it; List Fields (Insert+F5) lists its fields ("HYPERLINK
+  opening hours", "FORMTEXT") and OK moves to one; with none, each says so in Word's words.
+  The line spacing and the fields come from Word's own object model.
 - **The cursors:** Numpad Minus to the Okur cursor at the mouse, Numpad Plus back to the PC
   cursor, Insert+Numpad Minus to bring the Okur cursor to the PC cursor, Insert+Numpad Plus
   the other way, Insert+R for where the Okur cursor may go, and Alt+Delete for where the
@@ -268,8 +276,8 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- Outlook and Excel, not yet supported or checked; in Word, a form field is read as text, not
-  as the edit or check box JAWS reads it as ("Name: Edit");
+- Outlook and Excel, not yet supported or checked; in Word, its dialogs other than Font are
+  read through the same module but not yet checked against JAWS;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;

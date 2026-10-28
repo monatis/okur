@@ -33,7 +33,7 @@ until the next review's pass, then go to git history.
 | 10 | Behavior | A lowered okur-ui was allowed the foreground only for dialogs, not the Startup Wizard, the main window, the viewer, file dialogs and menus. | fixed `c86b6804`. Open: try SetForegroundWindow before attaching to a hung thread |
 | 11 | Robustness | The WinEvent pump's own reads ran outside the panic guard: one panic would end event speech for the session. | fixed `c86b6804` |
 | 12 | Undefined behavior | An 8-byte write through a 4-byte-aligned RECT (`dialog.rs`, TVM_GETITEMRECT). | fixed `c86b6804` |
-| 13 | Robustness | Every synthesizer call's result is discarded: a dead OneCore worker is silent forever. | open (rate-limited warnings, a failure count, a new synthesizer after N failures) |
+| 13 | Robustness | Every synthesizer call's result is discarded: a dead OneCore worker is silent forever. | fixed `bda32db1` (logged), `00290780` (a new synthesizer after five failures in a row) |
 | 14 | Behavior | OneCore's audio stays on the device it first opened. | open (needs a live check) |
 | 15 | Stall | The voices list was locked while a new synthesizer's voices were enumerated. | fixed `c86b6804` |
 | 16 | Bug | Choosing another place in Settings Center kept the previous place's rows (Last Changed Settings). | fixed `c86b6804`. Open: what JAWS does with unapplied changes then (record first) |

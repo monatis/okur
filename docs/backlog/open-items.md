@@ -122,14 +122,16 @@ Order of work, most used first:
   need an elevated Okur; the search box's doubled "No results".
 - **Calculator:** JAWS's digits, expressions and operator names (handoff 2026-10-17). Not built.
 - **Word:**
-  - A form field read as a control: at the caret JAWS says Word's text form field as an edit
-    with the text before it as its name, "Name: Edit | Type in text.", and Say Line "Name:
-    Edit" [obs, 1054/s3, s4]; Okur reads the line, "Name:". Word's object model has the field
-    at the caret (Selection.FormFields, its type, its result, a check box's value). Check boxes
-    and drop-downs not recorded yet; a protected form's Tab between fields neither.
-  - The ribbon's galleries and launchers; Read Mode. Plan 35 §1.
-  - Done: List Fields (Insert+F5, `3814d83c`) and Say Font's line spacing (`484d7f0d`), both
-    from Word's own object model (OBJID_NATIVEOM).
+  - A form field's drop-down list opened (Alt+Down: "Open List Box | Context Menu | ...") and
+    chosen (Enter: "Leaving menus | Branch: Combo box | Northside | 2 of 3 | To change the
+    selection use the Arrow keys. | ..."), and Ctrl+Home onto a field, which JAWS reads three
+    times [obs, 1057/s7, s9, s11]: not built; the field after Enter is.
+  - Word's other dialogs than Font (Paragraph, Find and Replace...): the module reads any
+    `bosa_sdm_msword` dialog, recorded on Font only. The ribbon's galleries.
+  - Done: List Fields (`3814d83c`), Say Font's line spacing (`484d7f0d`), form fields as
+    controls (`0794d517`), links marked in a line (`0936d6d8`), Read Mode's warning
+    (`3c328b76`), the Quick Access Toolbar and title bar (`a77f4ee5`), the Font dialog
+    (`6525e534`).
 - **Not covered yet:** Task Manager, a desktop mail client.
 
 ## Installer
