@@ -78,6 +78,24 @@ pub struct WordRibbon {
     /// The groups the last command around the menus was in: the next one names those it
     /// enters.
     groups: Vec<GroupEntry>,
+    /// The document's view was asked for, back in it from the ribbon.
+    view_wanted: bool,
+}
+
+/// Back in Word's document from the ribbon: "Leaving ribbons | Edit"; in Read Mode, the view
+/// and JAWS's warning in Okur's name, "Leaving ribbons | reading layout View | WARNING! Okur
+/// does not support this view. ..." [obs, 1042/s4, s8; 1059/s3]: Okur reads Read Mode as JAWS
+/// does, the document's first line wherever the arrows go [obs, 1059/s4-s6].
+fn back_in_document(view: Option<&str>) -> String {
+    let rest = match view {
+        Some(super::word::READ_MODE) => format!(
+            "{}\n{}",
+            msg::word_view_read(),
+            msg::word_read_mode_warning()
+        ),
+        _ => role_marker(msg::role_edit().as_str()),
+    };
+    format!("{}\n{rest}", msg::ribbons_left())
 }
 
 /// Whether the focus is in Word.
@@ -284,7 +302,11 @@ fn screen_tip(focus: &FocusEvent, name: &str) -> Option<String> {
 
 impl AppModule for WordRibbon {
     fn owns(&self, focus: &FocusEvent) -> bool {
-        in_word(focus) && focus.in_ribbon
+        in_word(focus) && (focus.in_ribbon || (self.view_wanted && focus.role == Role::Document))
+    }
+
+    fn document_view(&mut self, view: Option<&str>) -> Option<String> {
+        std::mem::take(&mut self.view_wanted).then(|| back_in_document(view))
     }
 
     fn focus(&mut self, focus: &FocusEvent, cx: &mut AppContext<'_>) -> FocusResponse {
@@ -298,13 +320,17 @@ impl AppModule for WordRibbon {
                     self.leaving = true;
                     return FocusResponse::Silent;
                 }
+                // A key tip can have changed the view (Alt, W, F to Read Mode): the view first
+                // [obs, 1042/s8, 1059/s3].
+                Role::Document if cx.letter_key => {
+                    self.leaving = false;
+                    self.view_wanted = true;
+                    cx.ask_view = true;
+                    return FocusResponse::Silent;
+                }
                 Role::Document => {
                     self.leaving = false;
-                    return FocusResponse::Speak(Announcement::from_text(&format!(
-                        "{}\n{}",
-                        msg::ribbons_left(),
-                        role_marker(msg::role_edit().as_str())
-                    )));
+                    return FocusResponse::Speak(Announcement::from_text(&back_in_document(None)));
                 }
                 _ => {}
             }
@@ -391,6 +417,7 @@ mod tests {
             selecting: false,
             alt_held: false,
             letter_key: false,
+            ask_view: false,
         };
         match ribbon.focus(focus, &mut cx) {
             FocusResponse::Speak(announcement) | FocusResponse::SpeakWhole(announcement) => {
@@ -656,5 +683,37 @@ mod tests {
         );
         // The ribbon itself between two of its menus' commands says nothing.
         assert_eq!(said(&mut ribbon, &page), None);
+    }
+
+    /// Back in the document by a key tip, the view is asked for first: Read Mode is said with
+    /// JAWS's warning in Okur's name, another view as "Edit" [obs, 1059/s3, 1042/s4].
+    #[test]
+    fn a_key_tip_back_into_the_document_says_read_mode() {
+        let mut ribbon = WordRibbon::default();
+        assert!(said(&mut ribbon, &word(Role::Tab, "View")).is_some());
+        let mut document = FocusEvent::new(Role::Document);
+        document.app = Some("WINWORD.EXE".into());
+        let mut mode = AppMode::NativeControl;
+        let (mut title, mut kind) = (None, None);
+        let mut cx = AppContext {
+            app_mode: &mut mode,
+            window_title: &mut title,
+            window_kind: &mut kind,
+            selecting: false,
+            alt_held: false,
+            letter_key: true,
+            ask_view: false,
+        };
+        assert!(matches!(
+            ribbon.focus(&document, &mut cx),
+            FocusResponse::Silent
+        ));
+        assert!(cx.ask_view);
+        assert_eq!(
+            ribbon.document_view(Some("Read Mode")).as_deref(),
+            Some("Leaving ribbons\nreading layout View\nWARNING! Okur does not support this view. Press Okur Key+F1 to learn how to disable Reading Layout view. To exit Reading Layout view, press ESC.")
+        );
+        // Answered once.
+        assert_eq!(ribbon.document_view(Some("Read Mode")), None);
     }
 }

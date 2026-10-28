@@ -49,6 +49,10 @@ pub struct AppContext<'a> {
     pub alt_held: bool,
     /// The last key was a letter alone (a ribbon's key tip).
     pub letter_key: bool,
+    /// Set by a module that waits for the document's view before it says the focus (Word's
+    /// document, back from its ribbon by a key tip, which can have changed the view): the
+    /// engine asks for it, and the module's `document_view` says what the view makes of it.
+    pub ask_view: bool,
 }
 
 impl AppContext<'_> {
@@ -117,6 +121,12 @@ pub trait AppModule: Send {
     /// that typed characters are echoed there as in any text field.
     fn types_into(&self, _field: &FocusEvent) -> bool {
         false
+    }
+
+    /// What the focus says once the document's view it asked for (`AppContext::ask_view`)
+    /// came: Word's view button that is on, if any.
+    fn document_view(&mut self, _view: Option<&str>) -> Option<String> {
+        None
     }
 
     /// An edit key of this application's own, where the field's text changes for a key that

@@ -289,6 +289,7 @@ impl ScreenReaderEngine {
             selecting: self.last_key_selects,
             alt_held: self.alt_held,
             letter_key: self.last_key_letter,
+            ask_view: false,
         };
         for app in &mut self.apps {
             match app.focus(focus, &mut cx) {
@@ -298,7 +299,21 @@ impl ScreenReaderEngine {
                     self.speech.speak(&speech, true);
                     return Some(speech);
                 }
-                FocusResponse::Silent => return None,
+                FocusResponse::Silent => {
+                    if cx.ask_view
+                        && self
+                            .actions
+                            .as_ref()
+                            .is_some_and(|actions| actions.read_document_view())
+                    {
+                        self.view_asked_by_app = true;
+                        // The focus the module waits to say is the current one: the same
+                        // focus reported again is no new one.
+                        let _ = self.native_focus.focus(focus);
+                        self.last_native_focus = Some(focus.clone());
+                    }
+                    return None;
+                }
                 FocusResponse::SpeakWhole(announcement) => {
                     let speech = self.said(announcement).render();
                     self.speech.speak(&speech, true);

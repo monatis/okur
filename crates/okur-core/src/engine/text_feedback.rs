@@ -19,6 +19,14 @@ impl ScreenReaderEngine {
         }) {
             return;
         }
+        // Left and Right in Word's Read Mode turn its pages, and nothing is said, as JAWS says
+        // nothing [obs, 1059/s7].
+        if self.word_read_mode
+            && event.modifiers.is_empty()
+            && matches!(event.key, crate::Key::LeftArrow | crate::Key::RightArrow)
+        {
+            return;
+        }
         // Up and Down in a field pointing at a list's option (an autocomplete) move to the
         // next option, which its focus event says; the field's text is not read.
         if self.option_list.is_some()

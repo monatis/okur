@@ -375,6 +375,9 @@ fn line_spacing(spacing: &LineSpacing) -> String {
 /// name of the status bar's view button that is on: "Print Layout" is "Print View" [obs,
 /// 519/s1, 1039/s7], "Web Layout" "Web Layout View" and "Read Mode" "reading layout View" [obs,
 /// 1042/s5, s9].
+/// The name of Word's status bar button for Read Mode.
+pub(crate) const READ_MODE: &str = "Read Mode";
+
 pub(crate) fn view_name(button: &str) -> Option<String> {
     let name = match button {
         "Print Layout" => msg::word_view_print(),

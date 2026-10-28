@@ -103,6 +103,8 @@ word-view-outline = Outline View
 # 1042/s5, s9].
 word-view-web = Web Layout View
 word-view-read = reading layout View
+# Read Mode entered: JAWS's warning, in Okur's name [obs, 1042/s8, 1059/s3].
+word-read-mode-warning = WARNING! Okur does not support this view. Press Okur Key+F1 to learn how to disable Reading Layout view. To exit Reading Layout view, press ESC.
 # The Links List in a Word document without links, after "no links"; Select a Form Field
 # (Insert+F5), which lists Word's fields, without any [obs, 1044/s1, 1047/s1].
 word-links-list-hint = Check for link type fields with Insert+F5.

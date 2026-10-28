@@ -60,6 +60,10 @@ impl ScreenReaderEngine {
     pub(super) fn screen_sensitive_help(&mut self) -> Option<String> {
         let (mut lines, hot_keys_link) = match self.page_help() {
             Some(help) => help,
+            // Word's Read Mode: how to leave it, and how to keep Word from opening it.
+            None if self.word_read_mode && self.editing_document() => {
+                (vec![msg::help_word_read_mode().to_string()], true)
+            }
             None => (vec![self.control_help().to_string()], true),
         };
         lines.push(String::new());

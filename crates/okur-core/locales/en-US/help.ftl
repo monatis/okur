@@ -18,6 +18,8 @@ help-control-slider = The arrow keys change the value, and Page Up and Page Down
 help-control-menu = Up and Down Arrow move through the menu, Enter chooses an item and Escape closes the menu.
 help-control-link = Press Enter to follow this link.
 help-control-cell = The arrow keys move between cells, and Ctrl+Home and Ctrl+End go to the first and the last cell.
+# Insert+F1 in Word's Read Mode.
+help-word-read-mode = Word shows this document in Read Mode, which Okur does not read. Press Escape to go back to the document. To have Word open documents for editing instead, choose File, Options, General, then clear the check box Open e-mail attachments and other uneditable files in reading view.
 help-control-other = Tab goes to the next control and Shift+Tab to the one before. Insert+Tab says where you are.
 help-page = This is a web page, read with the virtual cursor. The arrow keys read it, H moves by heading, K by link and F by form field. Insert+F6 lists the headings and Insert+F7 the links. Enter on a form field lets you type in it.
 

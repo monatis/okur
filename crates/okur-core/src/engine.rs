@@ -341,6 +341,11 @@ pub struct ScreenReaderEngine {
     /// Word's view as its view keys last chose it ("Draft View"), for Say Window Title where
     /// Word's status bar marks no view.
     document_view_by_key: Option<String>,
+    /// An application module waits for the document's view to say the focus.
+    view_asked_by_app: bool,
+    /// Word shows the document in Read Mode, which Okur reads no better than JAWS: its
+    /// screen-sensitive help says how to leave it.
+    word_read_mode: bool,
     /// A document's Heading List moved the caret: the next read of the field says its line.
     moved_by_document_list: bool,
     /// The word chosen in the Word List, which W and Shift+W move to.
@@ -604,6 +609,8 @@ impl ScreenReaderEngine {
             say_all_paragraphs_asked: false,
             document_view_title: None,
             document_view_by_key: None,
+            view_asked_by_app: false,
+            word_read_mode: false,
             moved_by_document_list: false,
             word_from_list: None,
             skim_dialog: None,
@@ -1220,6 +1227,10 @@ impl ScreenReaderEngine {
                     self.document_view_by_key = Some(view);
                 }
             }
+            // Escape leaves Word's Read Mode [obs, 1059/s8].
+            if event.key == Key::Escape {
+                self.word_read_mode = false;
+            }
             if self.editing_text() {
                 self.edit_key_feedback(event);
             } else {
@@ -1503,8 +1514,22 @@ impl ScreenReaderEngine {
             AccessibilityEvent::DocumentParagraphs(paragraphs) => {
                 self.say_all_by_paragraphs(paragraphs)
             }
+            AccessibilityEvent::DocumentView(view)
+                if std::mem::take(&mut self.view_asked_by_app) =>
+            {
+                self.word_read_mode =
+                    view.as_deref() == Some(crate::apps::windows::word::READ_MODE);
+                let said = self
+                    .apps
+                    .iter_mut()
+                    .find_map(|app| app.document_view(view.as_deref()))?;
+                self.speech.speak(&said, true);
+                Some(said)
+            }
             AccessibilityEvent::DocumentView(view) => {
                 let title = self.document_view_title.take()?;
+                self.word_read_mode =
+                    view.as_deref() == Some(crate::apps::windows::word::READ_MODE);
                 // A view the status bar marks, else the one Word's view keys chose.
                 let view = match view.as_deref() {
                     Some(button) => crate::apps::windows::word::view_name(button),
