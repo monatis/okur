@@ -121,6 +121,10 @@ pub struct LineStructure {
     /// The form fields on the caret's paragraph (Word's legacy ones), placed in the text.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub form_fields: Vec<DocumentFormField>,
+    /// The links on the caret's line, each as `(start, end)` in the text, which a line read
+    /// marks: "See the link opening hours" [obs, 1055/s1].
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub links: Vec<(usize, usize)>,
 }
 
 /// A legacy form field of Word's on the caret's paragraph, placed in the context's text: a

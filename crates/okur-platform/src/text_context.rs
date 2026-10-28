@@ -642,7 +642,50 @@ mod reader {
                 list_item,
                 cell: table_cell(uia, focused, pattern, caret),
                 form_fields: word_form_fields(focused, caret, start).unwrap_or_default(),
+                links: line_links(pattern, caret, line.0).unwrap_or_default(),
             })
+        }
+    }
+
+    /// The hyperlinks on the caret's line, each as `(start, end)` from `line_start`, the line's
+    /// offset in the text: the line's children UI Automation calls hyperlinks.
+    fn line_links(
+        pattern: &IUIAutomationTextPattern,
+        caret: &IUIAutomationTextRange,
+        line_start: usize,
+    ) -> Option<Vec<(usize, usize)>> {
+        use windows::Win32::UI::Accessibility::{TextUnit_Line, UIA_HyperlinkControlTypeId};
+        // SAFETY: UIA client calls on valid objects.
+        unsafe {
+            let line = caret.Clone().ok()?;
+            line.ExpandToEnclosingUnit(TextUnit_Line).ok()?;
+            let children = line.GetChildren().ok()?;
+            let mut links = Vec::new();
+            for index in 0..children.Length().unwrap_or(0) {
+                let Ok(child) = children.GetElement(index) else {
+                    continue;
+                };
+                if child.CurrentControlType().ok() != Some(UIA_HyperlinkControlTypeId) {
+                    continue;
+                }
+                let Ok(link) = pattern.RangeFromChild(&child) else {
+                    continue;
+                };
+                let before = line.Clone().ok()?;
+                if before
+                    .MoveEndpointByRange(
+                        TextPatternRangeEndpoint_End,
+                        &link,
+                        TextPatternRangeEndpoint_Start,
+                    )
+                    .is_err()
+                {
+                    continue;
+                }
+                let at = line_start + chars_of(&before).unwrap_or(0);
+                links.push((at, at + chars_of(&link).unwrap_or(0)));
+            }
+            Some(links)
         }
     }
 

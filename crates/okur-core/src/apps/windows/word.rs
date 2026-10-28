@@ -154,9 +154,10 @@ fn form_field_label(context: &TextContext, field: &DocumentFormField) -> String 
         .to_owned()
 }
 
-/// The caret's line with its form fields said in it, where it has any: a text field by what it
-/// holds or, empty, by its name, "Name: Name"; a check box as one, "Member: check box not
-/// checked" [obs, 1055/s2, s8]; a drop-down by its role and its choice [hyp].
+/// The caret's line with its form fields said in it and its links marked, where it has any: a
+/// text field by what it holds or, empty, by its name, "Name: Name"; a check box as one,
+/// "Member: check box not checked" [obs, 1055/s2, s8]; a drop-down by its role and its choice
+/// [hyp]; a link after JAWS's mark, "See the  link opening hours" [obs, 1055/s1, s11].
 fn line_with_fields(context: &TextContext) -> Option<String> {
     let structure = context.structure.as_ref()?;
     let (start, end) = structure.line;
@@ -165,17 +166,29 @@ fn line_with_fields(context: &TextContext) -> Option<String> {
         .iter()
         .filter(|f| f.start >= start && f.start <= end)
         .collect();
-    if fields.is_empty() {
+    let links: Vec<usize> = structure
+        .links
+        .iter()
+        .map(|(at, _)| *at)
+        .filter(|at| (start..end).contains(at))
+        .collect();
+    if fields.is_empty() && links.is_empty() {
         return None;
     }
     fields.sort_by_key(|f| f.start);
     let text: Vec<char> = context.text.chars().collect();
+    // A stretch of the line's text, each link in it after its mark.
     let piece = |from: usize, to: usize| -> String {
-        text.get(from..to.max(from))
-            .unwrap_or_default()
-            .iter()
-            .map(|&c| if c.is_control() { ' ' } else { c })
-            .collect()
+        let mut said = String::new();
+        for at in from..to.max(from) {
+            if links.contains(&at) {
+                said.push_str(&format!(" \u{1d}{} \u{1e} ", msg::role_link_in_line()));
+            }
+            if let Some(&c) = text.get(at) {
+                said.push(if c.is_control() { ' ' } else { c });
+            }
+        }
+        said
     };
     let mut line = String::new();
     let mut at = start;
@@ -280,6 +293,7 @@ pub(crate) fn say_all_pieces(
             list_item: paragraph.list_item,
             cell: paragraph.cell.clone(),
             form_fields: Vec::new(),
+            links: Vec::new(),
         };
         let said = match was.as_ref() {
             None => line,
@@ -746,6 +760,7 @@ mod tests {
                     row_header: None,
                 }),
                 form_fields: Vec::new(),
+                links: Vec::new(),
             }),
         }
     }
@@ -838,6 +853,21 @@ mod tests {
                 .map(|f| form_field_speech(&at_branch, f))
                 .as_deref(),
             Some("Branch:  \u{1d} Combo box \u{1e} \nCentral\n1 of 3")
+        );
+    }
+
+    /// A line's links are marked as JAWS marks them: "See the  link opening hours" [obs,
+    /// 1055/s1].
+    #[test]
+    fn a_lines_links_are_marked() {
+        let mut context = form(14, (13, 52), Vec::new());
+        context.text = "Library Card\rSee the opening hours before you come.\r".to_owned();
+        if let Some(s) = context.structure.as_mut() {
+            s.links = vec![(21, 34)];
+        }
+        assert_eq!(
+            spoken_line(&context, String::new()),
+            "See the  \u{1d}link \u{1e} opening hours before you come."
         );
     }
 

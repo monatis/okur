@@ -57,6 +57,8 @@ role-link = Link
 role-link-same-page = same page link
 # The Virtual Viewer's list of a modern application's elements uses lowercase type words.
 role-link-viewer = link
+# A link inside a line of Word's document, marked before its text [obs, 1055/s1].
+role-link-in-line = link
 role-list = list
 role-list-box = List box
 # File Explorer's file list. JAWS's spelling.
