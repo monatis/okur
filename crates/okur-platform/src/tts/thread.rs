@@ -326,9 +326,10 @@ fn carry_out(
 ) {
     let generation = interruptions.load(Ordering::SeqCst);
     for request in Request::superseding(batch) {
-        let Ok(mut tts) = worker_tts.lock() else {
+        let Ok(mut guard) = worker_tts.lock() else {
             continue;
         };
+        let tts = &mut *guard;
         // Speech that interrupts ends the Say All before it.
         if request.interrupts() {
             *following = false;
@@ -354,6 +355,7 @@ fn carry_out(
             Request::Marked(text, mark, interrupt) => {
                 let spoken = okur_core::pronounce::spoken_with(&text, tts.punctuation, tts.text);
                 logged(
+                    &mut tts.failed_in_a_row,
                     tts.engine.speak_marked(&spoken, mark, pitch, interrupt),
                     "speak_marked",
                 );
@@ -381,6 +383,7 @@ fn carry_out(
                     }
                     let spoken = okur_core::pronounce::spoken_with(part, tts.punctuation, tts.text);
                     logged(
+                        &mut tts.failed_in_a_row,
                         tts.engine
                             .speak_pitched(&spoken, pitch, interrupt && i == 0),
                         "speak_pitched",
@@ -390,12 +393,14 @@ fn carry_out(
             Request::Symbols(text, interrupt) => {
                 let spoken = okur_core::pronounce::spoken_symbols_with(&text, tts.text);
                 logged(
+                    &mut tts.failed_in_a_row,
                     tts.engine.speak_pitched(&spoken, pitch, interrupt),
                     "speak_pitched",
                 );
             }
             Request::Character(text, interrupt) => {
                 logged(
+                    &mut tts.failed_in_a_row,
                     tts.engine.speak_pitched(
                         &okur_core::pronounce::character(&text),
                         raised(&text),
@@ -406,6 +411,7 @@ fn carry_out(
             }
             Request::Echo(text) => {
                 logged(
+                    &mut tts.failed_in_a_row,
                     tts.engine.speak_pitched(
                         &okur_core::pronounce::character(&text),
                         raised(&text),
@@ -419,6 +425,7 @@ fn carry_out(
             }
             Request::Phonetic(text, interrupt) => {
                 logged(
+                    &mut tts.failed_in_a_row,
                     tts.engine.speak_pitched(
                         &okur_core::pronounce::phonetic(&text),
                         raised(&text),
@@ -432,6 +439,7 @@ fn carry_out(
                 for (i, (part, raise)) in parts.into_iter().enumerate() {
                     let first = interrupt && i == 0;
                     logged(
+                        &mut tts.failed_in_a_row,
                         tts.engine.speak_pitched(
                             &part,
                             pitch.saturating_add(raise).clamp(-10, 10),
@@ -442,7 +450,7 @@ fn carry_out(
                 }
             }
             Request::Stop => {
-                logged(tts.engine.stop(), "stop");
+                logged(&mut tts.failed_in_a_row, tts.engine.stop(), "stop");
             }
             Request::Configure(voice) => {
                 let kind = tts.kind;
@@ -458,18 +466,26 @@ fn carry_out(
                 }
             }
         }
+        if tts.failed_in_a_row >= crate::tts::RESTART_AFTER {
+            tts.restart();
+        }
     }
 }
 
-/// Logs a synthesizer call that failed, the first time and then every hundredth: each was
-/// dropped unseen, so a synthesizer that died left nothing in the log (performance review
-/// 2026-10-25, finding 13).
-fn logged(result: Result<(), crate::tts::TtsError>, call: &'static str) {
+/// Logs a synthesizer call that failed, the first time and then every hundredth, and counts it
+/// in `in_a_row` (a call that worked starts the count again): each was dropped unseen, so a
+/// synthesizer that died left nothing in the log and was never started anew (performance
+/// review 2026-10-25, finding 13).
+fn logged(in_a_row: &mut u32, result: Result<(), crate::tts::TtsError>, call: &'static str) {
     static FAILURES: AtomicU64 = AtomicU64::new(0);
-    if let Err(error) = result {
-        let failures = FAILURES.fetch_add(1, Ordering::Relaxed) + 1;
-        if failures % 100 == 1 {
-            tracing::warn!(call, failures, %error, "synthesizer call failed");
+    match result {
+        Ok(()) => *in_a_row = 0,
+        Err(error) => {
+            *in_a_row = in_a_row.saturating_add(1);
+            let failures = FAILURES.fetch_add(1, Ordering::Relaxed) + 1;
+            if failures % 100 == 1 {
+                tracing::warn!(call, failures, %error, "synthesizer call failed");
+            }
         }
     }
 }
@@ -1006,6 +1022,92 @@ mod panic_tests {
         fn wait_until_done(&mut self, _timeout_ms: u32) -> Result<(), TtsError> {
             Ok(())
         }
+    }
+
+    /// A synthesizer that fails every call.
+    struct Failing;
+
+    impl TtsEngine for Failing {
+        fn name(&self) -> &str {
+            "failing"
+        }
+        fn speak(&mut self, _text: &str, _interrupt: bool) -> Result<(), TtsError> {
+            Err(TtsError::SynthesisFailed("gone".into()))
+        }
+        fn stop(&mut self) -> Result<(), TtsError> {
+            Err(TtsError::SynthesisFailed("gone".into()))
+        }
+        fn pause(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn resume(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn set_rate(&mut self, _rate: i32) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn get_rate(&self) -> i32 {
+            0
+        }
+        fn set_volume(&mut self, _volume: u16) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn get_volume(&self) -> u16 {
+            100
+        }
+        fn is_speaking(&self) -> bool {
+            false
+        }
+        fn get_voices(&self) -> Vec<VoiceInfo> {
+            Vec::new()
+        }
+        fn set_voice(&mut self, _voice_id: &str) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn wait_until_done(&mut self, _timeout_ms: u32) -> Result<(), TtsError> {
+            Ok(())
+        }
+    }
+
+    /// A synthesizer whose calls keep failing is started anew after five in a row; one that
+    /// works again starts the count over (performance review 2026-10-25, finding 13).
+    #[test]
+    fn a_synthesizer_failing_in_a_row_is_started_anew() {
+        let Ok(mut manager) = TtsManager::new(TtsEngineType::NoSpeech) else {
+            return;
+        };
+        manager.engine = Box::new(Failing);
+        let tts = Mutex::new(manager);
+        let (voices, report) = (Mutex::new(Vec::new()), Mutex::new(None));
+        let speak = |n: usize| -> Vec<Request> {
+            (0..n)
+                .map(|_| Request::Symbols("hello".into(), false))
+                .collect()
+        };
+        let mut following = false;
+        let interruptions = AtomicU64::new(0);
+        carry_out(
+            speak(4),
+            &interruptions,
+            &tts,
+            &voices,
+            &report,
+            &mut following,
+        );
+        assert!(tts
+            .lock()
+            .is_ok_and(|t| t.engine.name() == "failing" && t.failed_in_a_row == 4));
+        carry_out(
+            speak(1),
+            &interruptions,
+            &tts,
+            &voices,
+            &report,
+            &mut following,
+        );
+        assert!(tts
+            .lock()
+            .is_ok_and(|t| t.engine.name() != "failing" && t.failed_in_a_row == 0));
     }
 
     /// Speech whose work panicked is counted out: Okur is not left speaking forever, its

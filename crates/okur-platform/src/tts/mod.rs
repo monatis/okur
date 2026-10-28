@@ -177,7 +177,15 @@ pub struct TtsManager {
     /// The synthesizer's voices, enumerated once for it: a voice context's voice is found
     /// there at each switch, which on SAPI enumerated its voices every time.
     voice_list: Option<Vec<VoiceInfo>>,
+    /// The synthesizer's calls that failed in a row: after [`RESTART_AFTER`] it is started
+    /// anew.
+    pub(crate) failed_in_a_row: u32,
 }
+
+/// A synthesizer whose calls failed this many times in a row is started anew: a dead one (a
+/// OneCore worker gone) was silent for the rest of the session (performance review
+/// 2026-10-25, finding 13).
+pub(crate) const RESTART_AFTER: u32 = 5;
 
 impl TtsManager {
     /// Creates a new TTS manager with the specified engine driver.
@@ -196,7 +204,29 @@ impl TtsManager {
             context: okur_core::settings::VoiceContext::PcCursor,
             cursor: okur_core::settings::VoiceContext::PcCursor,
             voice_list: None,
+            failed_in_a_row: 0,
         })
+    }
+
+    /// Starts the synthesizer anew, of the kind it is, with the voice the settings give the
+    /// voice context speaking: after its calls kept failing.
+    pub(crate) fn restart(&mut self) {
+        self.failed_in_a_row = 0;
+        match Self::create_engine(self.kind) {
+            Ok(engine) => {
+                tracing::warn!(kind = ?self.kind, "synthesizer started anew after its calls failed");
+                self.engine = engine;
+                self.voice_list = None;
+                self.voice = None;
+                self.applied = None;
+                if let Some(settings) = self.settings.clone() {
+                    self.apply(&settings.in_context(self.context));
+                }
+            }
+            Err(e) => {
+                tracing::warn!(error = %e, kind = ?self.kind, "synthesizer did not start again")
+            }
+        }
     }
 
     /// Speaks from now on in `context`'s voice, set if it is not the one speaking.
