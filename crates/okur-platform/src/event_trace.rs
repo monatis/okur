@@ -1907,7 +1907,18 @@ impl EventConverter {
                         object_name,
                     )
                 });
-                if event.event == "value_change" && !concerns {
+                // UI Automation's own change of the text in the window with the keyboard focus
+                // names no MSAA object: Word's document after Space on a check box form field,
+                // the only event with its new state [1057 traces]. Word's frame can have had the
+                // last focus event, so the window is told by UI Automation's focus, its class.
+                let own_window = event.object.is_none()
+                    && event.window_class.is_some()
+                    && event
+                        .focus_chain
+                        .last()
+                        .and_then(|n| n.class_name.as_deref())
+                        == event.window_class.as_deref();
+                if event.event == "value_change" && !concerns && !own_window {
                     return None;
                 }
                 return event
