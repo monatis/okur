@@ -343,6 +343,9 @@ pub struct ScreenReaderEngine {
     document_view_by_key: Option<String>,
     /// An application module waits for the document's view to say the focus.
     view_asked_by_app: bool,
+    /// A drop-down form field of Word's opened its list (Alt+Down): the document's read once
+    /// the list closes says the field with its new choice.
+    word_list_from_field: bool,
     /// Word shows the document in Read Mode, which Okur reads no better than JAWS: its
     /// screen-sensitive help says how to leave it.
     word_read_mode: bool,
@@ -610,6 +613,7 @@ impl ScreenReaderEngine {
             document_view_title: None,
             document_view_by_key: None,
             view_asked_by_app: false,
+            word_list_from_field: false,
             word_read_mode: false,
             moved_by_document_list: false,
             word_from_list: None,

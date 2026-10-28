@@ -9,6 +9,9 @@ use crate::event::FocusEvent;
 use crate::messages::msg;
 use crate::speech::SpeechFormatter;
 
+/// The window class of a Win32 popup menu (a Word form field's drop-down list is one).
+const MENU_WINDOW_CLASS: &str = "#32768";
+
 impl ScreenReaderEngine {
     /// Whether the focus landing on a field turns forms mode on by itself: always with Auto
     /// Forms Mode, when Tab or Shift+Tab brought it with Semi-Auto, never with Manual.
@@ -161,6 +164,15 @@ impl ScreenReaderEngine {
         let focus = detailed.as_ref().unwrap_or(focus);
         if focus.bounds.is_some() {
             self.focus_bounds = focus.bounds;
+        }
+        // A form field's drop-down list closing: its menu window's last focus, which is no item,
+        // says nothing; the field is said with its new choice once the document is read [obs,
+        // 1057/s9].
+        if self.word_list_from_field
+            && focus.platform.window_class.as_deref() == Some(MENU_WINDOW_CLASS)
+            && focus.role != Role::MenuItem
+        {
+            return None;
         }
         self.note_screen_rows(focus);
         if let (Some(product), Some(version)) = (&focus.app_product, &focus.app_version) {
@@ -1151,12 +1163,11 @@ impl ScreenReaderEngine {
                 }
                 let mut speech = msg::menus_left().to_string();
                 // The control focused before the menu, when it was a native one; a page's
-                // menu returns to the page, whose focus says itself.
-                if let Some(focus) = self
-                    .last_native_focus
-                    .as_ref()
-                    .filter(|_| self.app_mode != AppMode::VirtualBuffer)
-                {
+                // menu returns to the page, whose focus says itself; a form field's list, to the
+                // field, said with its new choice once the document is read [obs, 1057/s9].
+                if let Some(focus) = self.last_native_focus.as_ref().filter(|_| {
+                    self.app_mode != AppMode::VirtualBuffer && !self.word_list_from_field
+                }) {
                     speech.push('\n');
                     speech.push_str(&crate::native_focus::focus_speech(focus, None).render());
                 }

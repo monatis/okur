@@ -11,6 +11,23 @@ impl ScreenReaderEngine {
     /// before and after); typed characters are echoed, as JAWS does with its default typing
     /// echo (characters).
     pub(super) fn edit_key_feedback(&mut self, event: &KeyEvent) {
+        // Alt+Down on a drop-down form field of Word's opens its list: "Open List Box" first,
+        // then the list's own words [obs, 1057/s7].
+        let m = &event.modifiers;
+        if event.key == crate::Key::DownArrow
+            && m.alt
+            && !(m.ctrl || m.shift || m.insert || m.win)
+            && self.editing_document()
+            && self
+                .last_text
+                .as_ref()
+                .and_then(crate::apps::windows::word::form_field_at)
+                .is_some_and(|f| f.kind == crate::event::FormFieldKind::DropDown)
+        {
+            self.word_list_from_field = true;
+            self.speech.speak(msg::combo_box_opened().as_str(), true);
+            return;
+        }
         // An application that reads the key itself (Windows search: Up and Down select
         // results, read as they are selected).
         if self.last_native_focus.as_ref().is_some_and(|field| {
@@ -300,6 +317,24 @@ impl ScreenReaderEngine {
         // document its focus came back to: "heading level 1 Library Hours | Edit" [obs,
         // 1036/s3, s7].
         let from_list = std::mem::take(&mut self.moved_by_document_list);
+        // A drop-down form field's list closed: the field with its new choice and the combo
+        // box's hint, "Branch: Combo box | Northside | 2 of 3 | To change the selection use
+        // the Arrow keys." [obs, 1057/s9].
+        if self.word_list_from_field && !self.menus.in_menu_mode() {
+            if let Some(field) = crate::apps::windows::word::form_field_at(context)
+                .filter(|f| f.kind == crate::event::FormFieldKind::DropDown)
+            {
+                self.word_list_from_field = false;
+                self.pending_edit = None;
+                let said = format!(
+                    "{}\n{}",
+                    crate::apps::windows::word::form_field_speech(context, field),
+                    msg::hint_change_selection_arrows()
+                );
+                self.speech.speak(&said, true);
+                return Some(said);
+            }
+        }
         let key = match self.pending_edit.take() {
             Some(key) => key,
             None if from_list => crate::editing::EditKey::Line,

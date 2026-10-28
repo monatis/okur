@@ -686,6 +686,10 @@ pub fn speech_in(
                 | EditKey::FormField
                 // End, silent on a line, says the field it lands on [obs, 1055/s4].
                 | EditKey::Silent
+                // Ctrl+Home onto a field: the field alone, as one trial of JAWS's says it
+                // (the others three times over) [obs, 1057/s11].
+                | EditKey::TopOfFile
+                | EditKey::BottomOfFile
         )
     }) {
         return word::around_line(key, before, after, word::form_field_speech(after, field));

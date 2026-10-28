@@ -7480,6 +7480,67 @@ fn word_document(
     (engine, speech)
 }
 
+/// A drop-down form field of Word's: Alt+Down says "Open List Box" first; once its list
+/// closes, the menus are left without the document's name and the field is said with its new
+/// choice and the combo box's hint [obs, 1057/s7, s9].
+#[test]
+fn a_word_drop_down_fields_list_is_opened_and_closed() {
+    use crate::event::{DocumentFormField, FormFieldKind, MenuEvent};
+    let text = "Branch: \rThank you.";
+    let branch = |value: &str, chosen: usize| DocumentFormField {
+        kind: FormFieldKind::DropDown,
+        name: "Branch".into(),
+        start: 8,
+        end: 8,
+        value: value.into(),
+        checked: None,
+        choice: Some((chosen, 3)),
+    };
+    let structure = |value: &str, chosen: usize| crate::event::LineStructure {
+        line: (0, 9),
+        form_fields: vec![branch(value, chosen)],
+        ..Default::default()
+    };
+    let (mut engine, speech) = word_document(text, 8, structure("Central", 1));
+    let mut alt_down = KeyEvent::new(Key::DownArrow, Modifiers::none(), true);
+    alt_down.modifiers.alt = true;
+    engine.handle_key_event(&alt_down);
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some("Open List Box")
+    );
+    engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::Start {
+        window_class: None,
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::PopupStart));
+    let mut item = FocusEvent::new(Role::MenuItem).with_name("Northside");
+    item.app = Some("WINWORD.EXE".into());
+    item.platform.window_class = Some("#32768".into());
+    engine.handle_focus_event(&item);
+    speech.take();
+    engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::PopupEnd));
+    engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::End));
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some("Leaving menus")
+    );
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::TextContext(
+        crate::event::TextContext {
+            text: text.to_owned(),
+            caret: 8,
+            selection: None,
+            font: None,
+            word: None,
+            misspelled: Vec::new(),
+            structure: Some(structure("Northside", 2)),
+        },
+    ));
+    assert_eq!(
+        said.as_deref(),
+        Some("Branch:  \u{1d} Combo box \u{1e} \nNorthside\n2 of 3\nTo change the selection use the Arrow keys.")
+    );
+}
+
 /// Insert+F6 in Word lists the document's headings, which the platform reads, in the Heading
 /// List a page has ("Library Hours : 1" [obs, 519/s2]); Move To Heading moves the caret by
 /// the heading's paragraph, and Escape gives the document back as "Edit" [obs, 519/s4].

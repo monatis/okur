@@ -4974,6 +4974,11 @@ mod capture {
             // Reading here too would race it with a half-updated state (a selection still
             // being extended), and whichever arrived first would be spoken.
             let caret_moved = matches!(name, "caret" | "text_selection_change");
+            // A value changed: a form field's too, which the text does not show (a check box
+            // toggled), so the form fields kept are read again.
+            if name == "value_change" {
+                crate::text_context::forget_form_fields();
+            }
             let text_context = if (focused || changes_focus_context || caret_moved)
                 && !uia_named
                 && !(state.live && caret_moved)
