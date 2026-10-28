@@ -59,6 +59,11 @@ pub enum EditKey {
     /// Tab, or JAWS's table keys (Ctrl+Alt+arrows, Home, End), in a table of Word's: the cell
     /// moved to, said for the way it was reached [obs, 1034/s10-s12; 518/s15; 1035].
     TableCell(word::CellMove),
+    /// Tab or Shift+Tab among a document's form fields (a form of Word's protected for filling
+    /// in): the field moved to, "Member: check box not checked" [obs, 1056/s2-s4].
+    FormField,
+    /// Space on a check box form field: its new state, "checked" [obs, 1057/s2, s5].
+    FormFieldState,
 }
 
 impl EditKey {
@@ -669,9 +674,25 @@ pub fn speech_in(
     plain_edit: bool,
     wording: Wording,
 ) -> Option<String> {
+    // A form field of Word's at the caret is said as a control, "Name: Edit", whatever key
+    // brought the caret there [obs, 1055/s4, s7; 1056].
+    if let Some(field) = word::form_field_at(after).filter(|_| {
+        matches!(
+            key,
+            EditKey::Character
+                | EditKey::Word
+                | EditKey::Line
+                | EditKey::SayLine
+                | EditKey::FormField
+        )
+    }) {
+        return word::around_line(key, before, after, word::form_field_speech(after, field));
+    }
     let said = match key {
         EditKey::Silent => return None,
         EditKey::TableCell(how) => return word::cell_speech(before, after, how),
+        EditKey::FormField => return None,
+        EditKey::FormFieldState => return word::form_field_state(after),
         EditKey::Character | EditKey::DeleteForward => {
             char_at(after).map_or_else(|| msg::blank().to_string(), |c| c.to_string())
         }

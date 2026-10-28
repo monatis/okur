@@ -8,8 +8,10 @@ use crate::aom::Role;
 use crate::apps::AppModule;
 use crate::editing::EditKey;
 use crate::event::{
-    DocumentParagraph, FocusEvent, LineSpacing, LineStructure, TableCell, TextContext,
+    DocumentFormField, DocumentParagraph, FocusEvent, FormFieldKind, LineSpacing, LineStructure,
+    TableCell, TextContext,
 };
+use crate::linearize::{role_marker, state_marker};
 use crate::messages::msg;
 use crate::ui::lists::ListKind;
 
@@ -44,9 +46,185 @@ impl AppModule for WordDocument {
 }
 
 /// `line` spoken as JAWS speaks a line of Word's: a heading with its level before it,
-/// " heading level 1 Library Hours" [obs, 518/s1, s9].
+/// " heading level 1 Library Hours" [obs, 518/s1, s9]; a line with form fields says them in
+/// it ([`line_with_fields`]).
 pub(crate) fn spoken_line(context: &TextContext, line: String) -> String {
+    let line = line_with_fields(context)
+        .map(|l| l.trim().to_owned())
+        .unwrap_or(line);
     with_heading(context.structure.as_ref().and_then(|s| s.heading), line)
+}
+
+/// The form field of Word's at the caret: a text field holding it (at its end too), a check box
+/// or a drop-down where it stands [obs, 1055/s4, s7; 1056/s2-s4].
+pub(crate) fn form_field_at(context: &TextContext) -> Option<&DocumentFormField> {
+    context
+        .structure
+        .as_ref()?
+        .form_fields
+        .iter()
+        .find(|f| (f.start..=f.end).contains(&context.caret))
+}
+
+/// A form field said as a control, its line's text before it its name: "Name: Edit", with what
+/// it holds, "ab"; "Member: check box not checked"; "Branch: Combo box | Central | 1 of 3"
+/// [obs, 1056/s1-s4; 1057/s14].
+pub(crate) fn form_field_speech(context: &TextContext, field: &DocumentFormField) -> String {
+    let label = form_field_label(context, field);
+    let named = |role: &str| {
+        if label.is_empty() {
+            role_marker(role)
+        } else {
+            format!("{label} {}", role_marker(role))
+        }
+    };
+    match field.kind {
+        FormFieldKind::Text => {
+            let mut said = named(msg::role_edit().as_str());
+            let value = field.value.trim();
+            if !value.is_empty() {
+                said.push('\n');
+                said.push_str(value);
+            }
+            said
+        }
+        FormFieldKind::CheckBox => format!(
+            "{}{}",
+            named(msg::role_check_box().as_str()),
+            check_state(field)
+        ),
+        FormFieldKind::DropDown => {
+            let mut lines = vec![named(msg::role_combo_box_focus().as_str())];
+            lines.extend(
+                Some(field.value.trim())
+                    .filter(|v| !v.is_empty())
+                    .map(str::to_owned),
+            );
+            lines.extend(
+                field
+                    .choice
+                    .map(|(index, count)| msg::position(index, count).to_string()),
+            );
+            lines.join("\n")
+        }
+    }
+}
+
+/// A check box's state, as JAWS marks it: " checked", " not checked".
+fn check_state(field: &DocumentFormField) -> String {
+    state_marker(
+        if field.checked == Some(true) {
+            msg::state_checked()
+        } else {
+            msg::state_not_checked()
+        }
+        .as_str(),
+    )
+}
+
+/// Space on a check box form field: its new state alone, "checked" [obs, 1057/s2, s5].
+pub(crate) fn form_field_state(context: &TextContext) -> Option<String> {
+    form_field_at(context)
+        .filter(|f| f.kind == FormFieldKind::CheckBox)
+        .map(check_state)
+}
+
+/// A form field's name: its line's text before it, from the field before it on the line.
+fn form_field_label(context: &TextContext, field: &DocumentFormField) -> String {
+    let Some(structure) = context.structure.as_ref() else {
+        return String::new();
+    };
+    let from = structure
+        .form_fields
+        .iter()
+        .filter(|f| f.end <= field.start && f.start < field.start)
+        .map(|f| f.end)
+        .chain(std::iter::once(structure.line.0))
+        .max()
+        .unwrap_or(0)
+        .min(field.start);
+    context
+        .text
+        .chars()
+        .skip(from)
+        .take(field.start - from)
+        .map(|c| if c.is_control() { ' ' } else { c })
+        .collect::<String>()
+        .trim()
+        .to_owned()
+}
+
+/// The caret's line with its form fields said in it, where it has any: a text field by what it
+/// holds or, empty, by its name, "Name: Name"; a check box as one, "Member: check box not
+/// checked" [obs, 1055/s2, s8]; a drop-down by its role and its choice [hyp].
+fn line_with_fields(context: &TextContext) -> Option<String> {
+    let structure = context.structure.as_ref()?;
+    let (start, end) = structure.line;
+    let mut fields: Vec<&DocumentFormField> = structure
+        .form_fields
+        .iter()
+        .filter(|f| f.start >= start && f.start <= end)
+        .collect();
+    if fields.is_empty() {
+        return None;
+    }
+    fields.sort_by_key(|f| f.start);
+    let text: Vec<char> = context.text.chars().collect();
+    let piece = |from: usize, to: usize| -> String {
+        text.get(from..to.max(from))
+            .unwrap_or_default()
+            .iter()
+            .map(|&c| if c.is_control() { ' ' } else { c })
+            .collect()
+    };
+    let mut line = String::new();
+    let mut at = start;
+    for field in fields {
+        line.push_str(&piece(at, field.start));
+        match field.kind {
+            FormFieldKind::Text => match field.value.trim() {
+                "" => line.push_str(&field.name),
+                value => line.push_str(value),
+            },
+            FormFieldKind::CheckBox => {
+                line.push_str(&role_marker(msg::role_check_box().as_str()));
+                line.push_str(&check_state(field));
+            }
+            FormFieldKind::DropDown => {
+                line.push_str(&role_marker(msg::role_combo_box_focus().as_str()));
+                line.push_str(field.value.trim());
+            }
+        }
+        at = at.max(field.end);
+    }
+    line.push_str(&piece(at, end));
+    Some(line)
+}
+
+/// Tab, Shift+Tab or Space read as moving among a document's form fields or changing one: Tab
+/// with form fields on the caret's paragraph, Space on a check box [obs, 1056/s2-s8; 1057/s2].
+pub(crate) fn form_key(context: &TextContext, event: &crate::input::KeyEvent) -> Option<EditKey> {
+    let m = &event.modifiers;
+    if m.ctrl || m.alt || m.insert || m.win {
+        return None;
+    }
+    match event.key {
+        crate::input::Key::Tab
+            if context
+                .structure
+                .as_ref()
+                .is_some_and(|s| !s.form_fields.is_empty()) =>
+        {
+            Some(EditKey::FormField)
+        }
+        crate::input::Key::Space
+            if !m.shift
+                && form_field_at(context).is_some_and(|f| f.kind == FormFieldKind::CheckBox) =>
+        {
+            Some(EditKey::FormFieldState)
+        }
+        _ => None,
+    }
 }
 
 /// `line` with its heading level before it, when it is a heading's.
@@ -101,6 +279,7 @@ pub(crate) fn say_all_pieces(
             heading: paragraph.heading,
             list_item: paragraph.list_item,
             cell: paragraph.cell.clone(),
+            form_fields: Vec::new(),
         };
         let said = match was.as_ref() {
             None => line,
@@ -563,8 +742,140 @@ mod tests {
                     column_header: None,
                     row_header: None,
                 }),
+                form_fields: Vec::new(),
             }),
         }
+    }
+
+    /// The form fixture's text, the caret at `caret` on the line `line`, with the form fields
+    /// of that line.
+    fn form(caret: usize, line: (usize, usize), fields: Vec<DocumentFormField>) -> TextContext {
+        TextContext {
+            text: "Card Request\rFill in the form, then save it.\rName:      \rMember: \rNewsletter: \rBranch: \rThank you."
+                .to_owned(),
+            caret,
+            selection: None,
+            font: None,
+            word: None,
+            misspelled: Vec::new(),
+            structure: Some(LineStructure {
+                line,
+                form_fields: fields,
+                ..LineStructure::default()
+            }),
+        }
+    }
+
+    fn field(kind: FormFieldKind, name: &str, start: usize, end: usize) -> DocumentFormField {
+        DocumentFormField {
+            kind,
+            name: name.to_owned(),
+            start,
+            end,
+            value: String::new(),
+            checked: None,
+            choice: None,
+        }
+    }
+
+    /// Word's form fields at the caret are said as controls named by their line's text before
+    /// them [obs, 1056/s1-s4; 1057/s14]; a line read with them in it says a text field by its
+    /// name and a check box as one [obs, 1055/s2, s8].
+    #[test]
+    fn form_fields_are_said_as_controls() {
+        let mut name = field(FormFieldKind::Text, "Name", 51, 56);
+        name.value = "     ".into();
+        let at_name = form(51, (45, 57), vec![name.clone()]);
+        assert_eq!(
+            form_field_at(&at_name)
+                .map(|f| form_field_speech(&at_name, f))
+                .as_deref(),
+            Some("Name:  \u{1d} Edit \u{1e} ")
+        );
+        // A line read from its start: the field by its name.
+        let line_start = form(45, (45, 57), vec![name.clone()]);
+        assert_eq!(form_field_at(&line_start), None);
+        assert_eq!(
+            spoken_line(&line_start, "Name:".into()).trim(),
+            "Name: Name"
+        );
+        // Typed into: what it holds.
+        name.value = "ab     ".into();
+        let typed = form(53, (45, 57), vec![name]);
+        assert_eq!(
+            form_field_at(&typed)
+                .map(|f| form_field_speech(&typed, f))
+                .as_deref(),
+            Some("Name:  \u{1d} Edit \u{1e} \nab")
+        );
+        let mut member = field(FormFieldKind::CheckBox, "Member", 65, 65);
+        member.checked = Some(false);
+        let at_member = form(65, (57, 66), vec![member.clone()]);
+        assert_eq!(
+            form_field_at(&at_member)
+                .map(|f| form_field_speech(&at_member, f))
+                .as_deref(),
+            Some("Member:  \u{1d} check box \u{1e}  \u{1d}not checked\u{1e} ")
+        );
+        assert_eq!(
+            spoken_line(&form(57, (57, 66), vec![member.clone()]), "Member:".into()),
+            "Member:  \u{1d} check box \u{1e}  \u{1d}not checked\u{1e}"
+        );
+        member.checked = Some(true);
+        assert_eq!(
+            form_field_state(&form(65, (57, 66), vec![member])).as_deref(),
+            Some(" \u{1d}checked\u{1e} ")
+        );
+        let mut branch = field(FormFieldKind::DropDown, "Branch", 87, 87);
+        branch.value = "Central".into();
+        branch.choice = Some((1, 3));
+        let at_branch = form(87, (79, 88), vec![branch]);
+        assert_eq!(
+            form_field_at(&at_branch)
+                .map(|f| form_field_speech(&at_branch, f))
+                .as_deref(),
+            Some("Branch:  \u{1d} Combo box \u{1e} \nCentral\n1 of 3")
+        );
+    }
+
+    /// Tab with form fields on the caret's paragraph moves among them, Space on a check box
+    /// changes it; elsewhere neither is a form's key [obs, 1056, 1057].
+    #[test]
+    fn tab_and_space_are_a_forms_keys() {
+        use crate::input::{Key, KeyEvent, Modifiers};
+        let tab = KeyEvent::new(Key::Tab, Modifiers::none(), true);
+        let space = KeyEvent::new(Key::Space, Modifiers::none(), true);
+        let mut member = field(FormFieldKind::CheckBox, "Member", 65, 65);
+        member.checked = Some(false);
+        let at_member = form(65, (57, 66), vec![member]);
+        assert_eq!(form_key(&at_member, &tab), Some(EditKey::FormField));
+        assert_eq!(form_key(&at_member, &space), Some(EditKey::FormFieldState));
+        let plain = form(1, (0, 13), Vec::new());
+        assert_eq!(form_key(&plain, &tab), None);
+        assert_eq!(form_key(&plain, &space), None);
+        // A key that moves the caret onto a field says the field; one beside it, its own.
+        let mut name = field(FormFieldKind::Text, "Name", 51, 56);
+        name.value = "     ".into();
+        assert_eq!(
+            crate::editing::speech(
+                EditKey::Word,
+                None,
+                &form(51, (45, 57), vec![name.clone()]),
+                ""
+            )
+            .as_deref(),
+            Some("Name:  \u{1d} Edit \u{1e} ")
+        );
+        assert_eq!(
+            crate::editing::speech(
+                EditKey::Character,
+                None,
+                &form(45, (45, 57), vec![name]),
+                ""
+            )
+            .as_deref(),
+            Some("N")
+        );
     }
 
     #[test]

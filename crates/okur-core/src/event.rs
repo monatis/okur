@@ -118,6 +118,38 @@ pub struct LineStructure {
     /// The table cell holding the caret.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cell: Option<TableCell>,
+    /// The form fields on the caret's paragraph (Word's legacy ones), placed in the text.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub form_fields: Vec<DocumentFormField>,
+}
+
+/// A legacy form field of Word's on the caret's paragraph, placed in the context's text: a
+/// text field covers the text it shows ("     ", "ab"); a check box and a drop-down show none
+/// and sit between two characters, where Tab puts the caret [obs, 1056/s2-s4].
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct DocumentFormField {
+    pub kind: FormFieldKind,
+    /// Its bookmark name ("Name").
+    pub name: String,
+    pub start: usize,
+    pub end: usize,
+    /// A text field's text, a drop-down's choice.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub value: String,
+    /// A check box's state.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub checked: Option<bool>,
+    /// A drop-down's choice (from 1) and its number of entries.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub choice: Option<(usize, usize)>,
+}
+
+/// The kinds of Word's legacy form fields.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum FormFieldKind {
+    Text,
+    CheckBox,
+    DropDown,
 }
 
 /// A paragraph's line spacing as Word keeps it, for Say Font's "Line spacing:" [obs, 1040/s17].

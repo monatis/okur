@@ -41,7 +41,17 @@ impl ScreenReaderEngine {
         .then_some(crate::editing::EditKey::TableCell(
             crate::apps::windows::word::CellMove::Next,
         ));
-        if let Some(key) = crate::editing::EditKey::of(event).or(own_key).or(cell_key) {
+        // Tab among a form's fields, Space on its check box [obs, 1056, 1057].
+        let form_key = self
+            .last_text
+            .as_ref()
+            .filter(|_| self.editing_document())
+            .and_then(|text| crate::apps::windows::word::form_key(text, event));
+        if let Some(key) = crate::editing::EditKey::of(event)
+            .or(own_key)
+            .or(cell_key)
+            .or(form_key)
+        {
             // The word being typed ends where the caret moves; Backspace takes back its last
             // character.
             if key == crate::editing::EditKey::DeleteBackward {

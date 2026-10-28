@@ -244,6 +244,64 @@ pub struct FormField {
     pub status: String,
 }
 
+/// A form field of the selection's paragraph with its place there: the characters of the
+/// paragraph's text before it, and the characters it shows (a text field's result; a check box
+/// and a drop-down show none in the text UI Automation reads).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PlacedFormField {
+    pub field: FormField,
+    pub before: usize,
+    pub length: usize,
+}
+
+/// Whether the document in Word's document window `document` has form fields at all
+/// (`Document.FormFields.Count`): a document without them is looked through no further.
+pub fn has_form_fields(document: HWND) -> Option<bool> {
+    let document = object(&property(&word_window(document)?, "Document")?)?;
+    let fields = object(&property(&document, "FormFields")?)?;
+    Some(number(&fields, "Count")? > 0)
+}
+
+/// The form fields of the selection's paragraph in Word's document window `document`, in
+/// order, each placed in the paragraph's text; `None` where Word's object model does not
+/// answer.
+pub fn paragraph_form_fields(document: HWND) -> Option<Vec<PlacedFormField>> {
+    let window = word_window(document)?;
+    let whole = object(&property(&window, "Document")?)?;
+    let selection = object(&property(&window, "Selection")?)?;
+    let paragraph = item(&object(&property(&selection, "Paragraphs")?)?, 1)?;
+    let range = object(&property(&paragraph, "Range")?)?;
+    let start = number(&range, "Start")?;
+    let fields = object(&property(&range, "FormFields")?)?;
+    let count = number(&fields, "Count").unwrap_or(0);
+    Some(
+        (1..=count.clamp(0, MAX_FIELDS))
+            .filter_map(|index| item(&fields, index))
+            .filter_map(|field| {
+                let at = number(&object(&property(&field, "Range")?)?, "Start")?;
+                let before = object(&invoke(
+                    &whole,
+                    "Range",
+                    DISPATCH_METHOD,
+                    &mut [VARIANT::from(start), VARIANT::from(at)],
+                )?)?;
+                let before = text(&before, "Text").chars().count();
+                let field = form_field(&field);
+                let length = if field.kind == TEXT_INPUT {
+                    field.result.chars().count()
+                } else {
+                    0
+                };
+                Some(PlacedFormField {
+                    field,
+                    before,
+                    length,
+                })
+            })
+            .collect(),
+    )
+}
+
 /// The form fields in the selection of Word's document window `document` (one, where Tab put
 /// it in a protected form), then those of the selection's paragraph. `None` where Word's object
 /// model does not answer.
@@ -260,59 +318,65 @@ pub fn selection_form_fields(document: HWND) -> Option<(Vec<FormField>, Vec<Form
 
 /// The form fields of a `FormFields` collection, in order.
 fn form_fields(collection: &IDispatch) -> Vec<FormField> {
-    let count = property(collection, "Count")
-        .and_then(|count| i32::try_from(&count).ok())
-        .unwrap_or(0);
+    let count = number(collection, "Count").unwrap_or(0);
     (1..=count.clamp(0, MAX_FIELDS))
         .filter_map(|index| item(collection, index))
-        .map(|field| {
-            let text = |object: &IDispatch, name: &str| {
-                property(object, name)
-                    .and_then(|text| windows::core::BSTR::try_from(&text).ok())
-                    .map(|text| text.to_string())
-                    .unwrap_or_default()
-            };
-            let number = |object: &IDispatch, name: &str| {
-                property(object, name).and_then(|value| i32::try_from(&value).ok())
-            };
-            let kind = number(&field, "Type").unwrap_or(0);
-            let check_box = (kind == CHECK_BOX)
-                .then(|| object(&property(&field, "CheckBox")?))
-                .flatten();
-            let drop_down = (kind == DROP_DOWN)
-                .then(|| object(&property(&field, "DropDown")?))
-                .flatten();
-            let entries = drop_down
-                .as_ref()
-                .and_then(|list| object(&property(list, "ListEntries")?))
-                .map(|entries| {
-                    let count = number(&entries, "Count").unwrap_or(0);
-                    (1..=count.clamp(0, MAX_FIELDS))
-                        .filter_map(|index| item(&entries, index))
-                        .map(|entry| text(&entry, "Name"))
-                        .collect()
-                })
-                .unwrap_or_default();
-            FormField {
-                kind,
-                name: text(&field, "Name"),
-                result: text(&field, "Result"),
-                checked: check_box
-                    .as_ref()
-                    .and_then(|check| property(check, "Value"))
-                    .and_then(|value| bool::try_from(&value).ok()),
-                entries,
-                chosen: drop_down.as_ref().and_then(|list| number(list, "Value")),
-                help: text(&field, "HelpText"),
-                status: text(&field, "StatusText"),
-            }
-        })
+        .map(|field| form_field(&field))
         .collect()
 }
 
-/// `WdFieldType` of a check box and of a drop-down form field.
-const CHECK_BOX: i32 = 71;
-const DROP_DOWN: i32 = 83;
+/// A `FormField` object as Word describes it.
+fn form_field(field: &IDispatch) -> FormField {
+    let kind = number(field, "Type").unwrap_or(0);
+    let check_box = (kind == CHECK_BOX)
+        .then(|| object(&property(field, "CheckBox")?))
+        .flatten();
+    let drop_down = (kind == DROP_DOWN)
+        .then(|| object(&property(field, "DropDown")?))
+        .flatten();
+    let entries = drop_down
+        .as_ref()
+        .and_then(|list| object(&property(list, "ListEntries")?))
+        .map(|entries| {
+            let count = number(&entries, "Count").unwrap_or(0);
+            (1..=count.clamp(0, MAX_FIELDS))
+                .filter_map(|index| item(&entries, index))
+                .map(|entry| text(&entry, "Name"))
+                .collect()
+        })
+        .unwrap_or_default();
+    FormField {
+        kind,
+        name: text(field, "Name"),
+        result: text(field, "Result"),
+        checked: check_box
+            .as_ref()
+            .and_then(|check| property(check, "Value"))
+            .and_then(|value| bool::try_from(&value).ok()),
+        entries,
+        chosen: drop_down.as_ref().and_then(|list| number(list, "Value")),
+        help: text(field, "HelpText"),
+        status: text(field, "StatusText"),
+    }
+}
+
+/// The text property `name` of `object`; empty where it has none.
+fn text(object: &IDispatch, name: &str) -> String {
+    property(object, name)
+        .and_then(|text| windows::core::BSTR::try_from(&text).ok())
+        .map(|text| text.to_string())
+        .unwrap_or_default()
+}
+
+/// The number property `name` of `object`.
+fn number(object: &IDispatch, name: &str) -> Option<i32> {
+    property(object, name).and_then(|value| i32::try_from(&value).ok())
+}
+
+/// `WdFieldType` of a text, a check box and a drop-down form field.
+pub const TEXT_INPUT: i32 = 70;
+pub const CHECK_BOX: i32 = 71;
+pub const DROP_DOWN: i32 = 83;
 
 /// Marks the document in Word's document window `document` saved (`Document.Saved = True`),
 /// so that closing its window asks nothing: the harness's, for a fixture a scenario changed

@@ -641,8 +641,88 @@ mod reader {
                 heading,
                 list_item,
                 cell: table_cell(uia, focused, pattern, caret),
+                form_fields: word_form_fields(focused, caret, start).unwrap_or_default(),
             })
         }
+    }
+
+    thread_local! {
+        /// The Word document last asked whether it has form fields, when, and its answer.
+        static FORM_FIELDS_SEEN: std::cell::Cell<Option<(isize, std::time::Instant, bool)>> =
+            const { std::cell::Cell::new(None) };
+    }
+
+    /// How long a document's answer to whether it has form fields is kept.
+    const FORM_FIELDS_KEPT: std::time::Duration = std::time::Duration::from_secs(2);
+
+    /// The form fields on the caret's paragraph in Word's document, placed in the text from
+    /// `start`, the caret's offset: Word's object model knows them, its UI Automation does not
+    /// (it shows a text field's result, nothing for a check box or a drop-down). A document
+    /// without any is asked again only every few seconds.
+    fn word_form_fields(
+        focused: &IUIAutomationElement,
+        caret: &IUIAutomationTextRange,
+        start: usize,
+    ) -> Option<Vec<okur_core::DocumentFormField>> {
+        use okur_core::FormFieldKind;
+        use windows::Win32::Foundation::HWND;
+        use windows::Win32::UI::Accessibility::TextUnit_Paragraph;
+        // SAFETY: a UIA property read on a valid element.
+        let window = unsafe { focused.CurrentNativeWindowHandle() }.ok()?;
+        let window = HWND(window.0);
+        let key = window.0 as isize;
+        let known = FORM_FIELDS_SEEN.with(|seen| {
+            seen.get()
+                .filter(|(at, when, _)| *at == key && when.elapsed() < FORM_FIELDS_KEPT)
+                .map(|(_, _, has)| has)
+        });
+        let has = match known {
+            Some(has) => has,
+            None => {
+                let has = crate::word_om::has_form_fields(window).unwrap_or(false);
+                FORM_FIELDS_SEEN.with(|seen| seen.set(Some((key, std::time::Instant::now(), has))));
+                has
+            }
+        };
+        if !has {
+            return None;
+        }
+        let placed = crate::word_om::paragraph_form_fields(window)?;
+        let (paragraph, _) = unit_at(caret, start, TextUnit_Paragraph)?;
+        Some(
+            placed
+                .into_iter()
+                .filter_map(|placed| {
+                    let field = placed.field;
+                    let kind = match field.kind {
+                        crate::word_om::TEXT_INPUT => FormFieldKind::Text,
+                        crate::word_om::CHECK_BOX => FormFieldKind::CheckBox,
+                        crate::word_om::DROP_DOWN => FormFieldKind::DropDown,
+                        _ => return None,
+                    };
+                    let chosen = field.chosen.and_then(|c| usize::try_from(c).ok());
+                    let value = match kind {
+                        FormFieldKind::Text => field.result.clone(),
+                        FormFieldKind::DropDown => chosen
+                            .and_then(|c| field.entries.get(c.checked_sub(1)?).cloned())
+                            .unwrap_or_default(),
+                        FormFieldKind::CheckBox => String::new(),
+                    };
+                    let at = paragraph + placed.before;
+                    Some(okur_core::DocumentFormField {
+                        kind,
+                        name: field.name,
+                        start: at,
+                        end: at + placed.length,
+                        value,
+                        checked: field.checked,
+                        choice: chosen
+                            .filter(|_| kind == FormFieldKind::DropDown)
+                            .map(|c| (c, field.entries.len())),
+                    })
+                })
+                .collect(),
+        )
     }
 
     /// The cell holding `caret` in `document`, and its grid item: the first element around
