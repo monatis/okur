@@ -919,6 +919,38 @@ A step can be in more than one entry; all of its entries apply.
   are said as JAWS says them.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-25.
 
+### Space on a Word form's check box just checked
+
+- Steps: `1057-desktop-word-protected-form-change/s3`.
+- Difference: the whole step. Space on a check box form field JAWS has just checked: JAWS says
+  nothing, in every trial, where the same key on the next check box says its new state
+  [obs, 1057/s5].
+- Why: nothing said for a change. Okur says the state each time, "not checked".
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-28.
+
+### A Word form field said again
+
+- Steps: `1057-desktop-word-protected-form-change/s9`, `1057-desktop-word-protected-form-change/s11`.
+- Difference: the whole step. After Enter in a drop-down's list JAWS says the field with its
+  new choice and its hint, then the field once more, or passes through its own menu bar first
+  ("Context Menu | leaving menu bar"); after Ctrl+Home onto a text field it says "Name: Edit |
+  top of file" three times over in every trial of round-1055h (one trial of round-1055g said it
+  once).
+- Why: repeats. Okur says each once: "Leaving menus | Branch: Combo box | Northside | 2 of 3 | To
+  change the selection use the Arrow keys.", "Name: Edit".
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-28.
+
+### Word's Font dialog opening
+
+- Steps: `1058-desktop-word-font-dialog/s1`.
+- Difference: the whole step. Opening Word's Font dialog (Ctrl+D), JAWS's words vary by trial:
+  the field's value again after its hint in one, the page tab's role in place of the dialog's
+  name in two.
+- Why: neither is the dialog read once. Okur says the dialog's name, the field and its hint:
+  "Font dialog | Font: | edit combo | Calibri | To set the value use the Arrow keys or type the
+  value."
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-28.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row

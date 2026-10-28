@@ -930,6 +930,35 @@ divergences! {
      2.5, \"0 lines.\" for 1.08 at 16 points. Okur says the true number, \"1.08 lines.\", \
      \"2.5 lines.\", in JAWS's words around it.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-25";
+
+    Difference::Step => [
+        "1057-desktop-word-protected-form-change/s3",
+    ],
+    "Space on a Word form's check box just checked: JAWS says nothing, in every trial, where \
+     the same key on the next check box says its new state (1057/s5, \"not checked\"). Okur \
+     says the state each time: \"not checked\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-28";
+
+    Difference::Step => [
+        "1057-desktop-word-protected-form-change/s9",
+        "1057-desktop-word-protected-form-change/s11",
+    ],
+    "A Word form field said again: after Enter in a drop-down's list JAWS says the field with \
+     its new choice and its hint, then the field once more, or passes through its own menu bar \
+     first (\"Context Menu | leaving menu bar\"); after Ctrl+Home onto a text field it says \
+     \"Name: Edit | top of file\" three times over in every trial (one trial of round-1055g said \
+     it once). Okur says each once: \"Leaving menus | Branch: Combo box | Northside | 2 of 3 | To \
+     change the selection use the Arrow keys.\", \"Name: Edit\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-28";
+
+    Difference::Step => [
+        "1058-desktop-word-font-dialog/s1",
+    ],
+    "Opening Word's Font dialog (Ctrl+D), JAWS's words vary by trial: the field's value again \
+     after its hint in one, the page tab's role in place of the dialog's name in two. Okur says \
+     the dialog's name, the field and its hint once: \"Font dialog | Font: | edit combo | \
+     Calibri | To set the value use the Arrow keys or type the value.\"",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-28";
 }
 
 /// The divergence covering `step`, if any.
