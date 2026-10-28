@@ -684,6 +684,8 @@ pub fn speech_in(
                 | EditKey::Line
                 | EditKey::SayLine
                 | EditKey::FormField
+                // End, silent on a line, says the field it lands on [obs, 1055/s4].
+                | EditKey::Silent
         )
     }) {
         return word::around_line(key, before, after, word::form_field_speech(after, field));

@@ -2845,6 +2845,18 @@ mod capture {
 
     /// The most events kept waiting: past it the newest are dropped (logged).
     const MAX_DEFERRED: usize = 512;
+
+    /// Whether a newer caret or selection event of `hwnd` is already waiting: the text read
+    /// for this one would see what that one's sees, after the reads before it. Word fires dozens
+    /// of caret events a key, and reading each had the tracer seconds behind the keys in Word's
+    /// form (one trial of 1055: 117 such reads, 27 s).
+    fn newer_caret_waiting(hwnd: HWND) -> bool {
+        DEFERRED.with(|d| {
+            d.borrow()
+                .iter()
+                .any(|e| e.hwnd == hwnd && matches!(e.name, "caret" | "text_selection_change"))
+        })
+    }
     /// Office's NetUI windows: the ribbon, the status bar.
     const NETUI_CLASS: &str = "NetUIHWND";
     /// How long a stopping trace reads what still waits, at most, and without a message.
@@ -4965,6 +4977,7 @@ mod capture {
             let text_context = if (focused || changes_focus_context || caret_moved)
                 && !uia_named
                 && !(state.live && caret_moved)
+                && !(caret_moved && newer_caret_waiting(hwnd))
             {
                 // A browser's own controls (its address bar) are read as an application's: the
                 // page names a focus of its own, which is not the one typed in.
@@ -4981,8 +4994,9 @@ mod capture {
                 let first = read();
                 // Chromium fires the caret event before its IA2 caret offset moves: a trace
                 // reads the field again once it has settled (live, the actions worker polls
-                // for the change after the key instead).
-                if !state.live && matches!(name, "caret" | "text_selection_change") {
+                // for the change after the key instead). Only a page's: elsewhere (Word) the
+                // second read only doubled each caret event's cost.
+                if !state.live && in_page && matches!(name, "caret" | "text_selection_change") {
                     std::thread::sleep(std::time::Duration::from_millis(40));
                     read().or(first)
                 } else {
