@@ -1,0 +1,28 @@
+{
+  "id": "1073-desktop-word-copy-paste",
+  "name": "Word: the heading selected (End, Shift+Home) and copied (Ctrl+C), Down, End, then pasted (Ctrl+V); Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "End"},
+    {"id": "s2", "type": "key", "command": "Shift+Home"},
+    {"id": "s3", "type": "key", "command": "Ctrl+C"},
+    {"id": "s4", "type": "key", "command": "Down"},
+    {"id": "s5", "type": "key", "command": "End"},
+    {"id": "s6", "type": "key", "command": "Ctrl+V"},
+    {"id": "s7", "type": "key", "command": "Insert+Up"}
+  ]
+}
