@@ -1271,10 +1271,11 @@ struct ScreenSnapshot {
     /// beside the headings (none before 1074), for Ctrl+Shift+Period and Comma.
     #[serde(default)]
     font_size: Option<f32>,
-    /// The caret's paragraph's left indent after the step, in points, from Word's object model,
-    /// saved beside the headings (none before 1080's second recording), for Ctrl+M.
+    /// Where the caret's paragraph starts from the page's left edge after the step (margin and
+    /// indent), in points, from Word's object model, saved beside the headings (none before
+    /// 1080's third recording), for Ctrl+M.
     #[serde(default)]
-    left_indent: Option<f32>,
+    left_edge: Option<f32>,
 }
 
 impl ScreenSnapshot {
@@ -1287,7 +1288,7 @@ impl ScreenSnapshot {
             WordKey::FontSize => self
                 .font_size
                 .map(|points| WordKeyState::FontSize((points * 10.0).round() as u32)),
-            WordKey::Indent { out } => self.left_indent.map(|points| WordKeyState::Indent {
+            WordKey::Indent { out } => self.left_edge.map(|points| WordKeyState::Indent {
                 out,
                 hundredths: (points.max(0.0) / 72.0 * 100.0).round() as u32,
             }),
@@ -1332,7 +1333,7 @@ impl ScreenSnapshot {
             self.track_changes = other.track_changes;
             self.alignment = other.alignment;
             self.font_size = other.font_size;
-            self.left_indent = other.left_indent;
+            self.left_edge = other.left_edge;
         }
     }
 }

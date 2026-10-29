@@ -456,15 +456,20 @@ pub fn selection_font_size(document: HWND) -> Option<f32> {
     (size > 0.0 && size < 1639.0).then_some(size as f32)
 }
 
-/// The left indent of the selection's paragraph in Word's document window `document`, in
-/// points (`Selection.ParagraphFormat.LeftIndent`); `None` where Word's object model does not
-/// answer, or for paragraphs of several indents.
-pub fn paragraph_left_indent(document: HWND) -> Option<f32> {
+/// How far the selection's paragraph in Word's document window `document` starts from the
+/// page's left edge, in points: the page's left margin and the paragraph's left indent
+/// (`Selection.PageSetup.LeftMargin`, `Selection.ParagraphFormat.LeftIndent`), as JAWS says an
+/// indent ("indent | 1.5 inches" for 0.5 inch on a 1-inch margin [obs, 1080, round-1080c]);
+/// `None` where Word's object model does not answer, or for paragraphs of several indents.
+pub fn paragraph_left_edge(document: HWND) -> Option<f32> {
     let selection = object(&property(&word_window(document)?, "Selection")?)?;
     let format = object(&property(&selection, "ParagraphFormat")?)?;
-    let points = f64::try_from(&property(&format, "LeftIndent")?).ok()?;
-    // Word's wdUndefined (9999999) for several indents.
-    (points.abs() < 1584.0).then_some(points as f32)
+    let indent = f64::try_from(&property(&format, "LeftIndent")?).ok()?;
+    let setup = object(&property(&selection, "PageSetup")?)?;
+    let margin = f64::try_from(&property(&setup, "LeftMargin")?).ok()?;
+    // Word's wdUndefined (9999999) for several indents or margins.
+    let edge = indent + margin;
+    (indent.abs() < 1584.0 && margin.abs() < 1584.0).then_some(edge as f32)
 }
 
 /// The alignment of the selection's paragraph in Word's document window `document`

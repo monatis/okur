@@ -108,7 +108,8 @@ word-aligned-centered = Centered
 word-aligned-right = aligned right
 word-aligned-justified = justified
 word-aligned-left = Aligned left
-# Ctrl+M and Ctrl+Shift+M in Word: the way, then the paragraph's left indent: "indent | 1 inch",
+# Ctrl+M and Ctrl+Shift+M in Word: the way, then where the paragraph starts from the page's edge, its
+# margin and indent: "indent | 1 inch",
 # "out dent | 1.5 inches" [obs, 1080/s2-s4].
 word-indent = indent
 word-outdent = out dent

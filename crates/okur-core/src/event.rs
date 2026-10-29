@@ -200,7 +200,8 @@ pub enum WordKeyState {
     Alignment(i32),
     /// In tenths of a point.
     FontSize(u32),
-    /// The paragraph's left indent in hundredths of an inch, and the way the key moved it.
+    /// How far the paragraph starts from the page's left edge (margin and indent), in
+    /// hundredths of an inch, and the way the key moved it.
     Indent {
         out: bool,
         hundredths: u32,
