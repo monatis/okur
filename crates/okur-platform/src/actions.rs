@@ -99,6 +99,9 @@ mod windows_actions {
         DocumentLinks,
         /// The line spacing at the focused document's caret, answered always.
         LineSpacing,
+        /// Whether the focused document tracks its changes, read once Ctrl+Shift+E has acted,
+        /// answered always.
+        TrackChanges,
         /// The focused document's fields, answered even when there are none.
         DocumentFields,
         /// The caret to a field of the focused document (from 0), then the field's text.
@@ -180,6 +183,7 @@ mod windows_actions {
                 Request::DocumentHeadings => "document headings",
                 Request::DocumentLinks => "document links",
                 Request::LineSpacing => "line spacing",
+                Request::TrackChanges => "track changes",
                 Request::DocumentFields => "document fields",
                 Request::Field(..) => "field",
                 Request::ActivateDocumentLink(_) => "document link",
@@ -399,6 +403,26 @@ mod windows_actions {
                                     "line spacing read"
                                 );
                                 let _ = events.send(AccessibilityEvent::LineSpacing(spacing));
+                            }
+                            // Read after Ctrl+Shift+E, which Word may not have acted on yet: its
+                            // state polled until it changes, or the settle time passes.
+                            Request::TrackChanges => {
+                                let Some(events) = events.as_ref() else {
+                                    return;
+                                };
+                                let started = Instant::now();
+                                let first = crate::text_context::word_track_changes();
+                                let mut now = first;
+                                while now == first && started.elapsed() < SETTLE {
+                                    std::thread::sleep(POLL);
+                                    now = crate::text_context::word_track_changes();
+                                }
+                                tracing::debug!(
+                                    ?now,
+                                    ms = started.elapsed().as_millis(),
+                                    "track changes read"
+                                );
+                                let _ = events.send(AccessibilityEvent::TrackChanges(now));
                             }
                             Request::DocumentFields => {
                                 let Some(events) = events.as_ref() else {
@@ -939,6 +963,10 @@ mod windows_actions {
 
         fn read_document_view(&self) -> bool {
             self.send(Request::DocumentView)
+        }
+
+        fn read_track_changes(&self) -> bool {
+            self.send(Request::TrackChanges)
         }
 
         fn read_document_paragraphs(&self) -> bool {

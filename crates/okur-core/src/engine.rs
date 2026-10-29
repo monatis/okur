@@ -349,6 +349,9 @@ pub struct ScreenReaderEngine {
     /// A drop-down form field of Word's opened its list (Alt+Down): the document's read once
     /// the list closes says the field with its new choice.
     word_list_from_field: bool,
+    /// The focused edit combo's own list is open (Word's Font box, Alt+Down): a popup, but the
+    /// keys stay the field's.
+    combo_list_open: bool,
     /// Word shows the document in Read Mode, which Okur reads no better than JAWS: its
     /// screen-sensitive help says how to leave it.
     word_read_mode: bool,
@@ -618,6 +621,7 @@ impl ScreenReaderEngine {
             document_view_by_key: None,
             view_asked_by_app: false,
             word_list_from_field: false,
+            combo_list_open: false,
             word_read_mode: false,
             moved_by_document_list: false,
             word_from_list: None,
@@ -1249,6 +1253,12 @@ impl ScreenReaderEngine {
                     self.speech.speak(&view, true);
                     self.document_view_by_key = Some(view);
                 }
+                // Track Changes' key: its new state, read once Word has acted on it.
+                if crate::apps::windows::word::track_changes_key(event) {
+                    if let Some(actions) = &self.actions {
+                        actions.read_track_changes();
+                    }
+                }
             }
             // Escape leaves Word's Read Mode [obs, 1059/s8].
             if event.key == Key::Escape {
@@ -1533,6 +1543,16 @@ impl ScreenReaderEngine {
             AccessibilityEvent::DocumentHeadings(headings) => self.document_headings(headings),
             AccessibilityEvent::DocumentLinks(links) => self.document_links(links),
             AccessibilityEvent::LineSpacing(spacing) => self.word_font(*spacing),
+            AccessibilityEvent::TrackChanges(on) => {
+                let said = if (*on)? {
+                    msg::word_track_changes_on()
+                } else {
+                    msg::word_track_changes_off()
+                }
+                .to_string();
+                self.speech.speak(&said, true);
+                Some(said)
+            }
             AccessibilityEvent::DocumentFields(fields) => self.document_fields(fields),
             AccessibilityEvent::DocumentParagraphs(paragraphs) => {
                 self.say_all_by_paragraphs(paragraphs)

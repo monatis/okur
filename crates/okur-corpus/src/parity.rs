@@ -1259,6 +1259,10 @@ struct ScreenSnapshot {
     /// 1050's second recording), for its List Fields.
     #[serde(default)]
     fields: Vec<okur_core::DocumentField>,
+    /// Whether the document tracked its changes after the step, from Word's object model, saved
+    /// beside the headings (none before 1068), for Ctrl+Shift+E.
+    #[serde(default)]
+    track_changes: Option<bool>,
 }
 
 /// A line spacing as the recorder saves it: Word's rule and its points.
@@ -1295,6 +1299,7 @@ impl ScreenSnapshot {
             self.links = other.links;
             self.line_spacing = other.line_spacing;
             self.fields = other.fields;
+            self.track_changes = other.track_changes;
         }
     }
 }
@@ -1311,6 +1316,7 @@ struct ScreenReads {
     links: usize,
     spacings: usize,
     fields: usize,
+    track_changes: usize,
 }
 
 impl ScreenReads {
@@ -1401,6 +1407,7 @@ impl ScreenReads {
             count("line spacing"),
             count("document fields"),
         );
+        let track_changes = count("track changes");
         let mut deliver = |event: okur_core::AccessibilityEvent| {
             if let Some(speech) = engine.handle_accessibility_event(&event) {
                 if spoken.is_empty() {
@@ -1415,6 +1422,14 @@ impl ScreenReads {
             self.paragraphs += 1;
             deliver(okur_core::AccessibilityEvent::DocumentParagraphs(
                 snapshot.map(|s| s.paragraphs.clone()).unwrap_or_default(),
+            ));
+        }
+        // Track Changes' state after Ctrl+Shift+E, always answered: none where the step saved
+        // none (scenarios recorded before it was saved), and nothing is said.
+        while self.track_changes < track_changes {
+            self.track_changes += 1;
+            deliver(okur_core::AccessibilityEvent::TrackChanges(
+                snapshot.and_then(|s| s.track_changes),
             ));
         }
         // Say Font's line spacing, always answered: none where the step saved none (scenarios

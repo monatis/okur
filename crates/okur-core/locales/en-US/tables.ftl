@@ -99,6 +99,9 @@ word-view-print = Print View
 # Ctrl+Alt+N and Ctrl+Alt+O in Word, and Say Window Title in those views [obs, 1039].
 word-view-draft = Draft View
 word-view-outline = Outline View
+# Ctrl+Shift+E in Word: the state it leaves Track Changes in [obs, 1068/s1, s8].
+word-track-changes-on = Track Changes on
+word-track-changes-off = Track Changes off
 # Say Window Title in Web Layout and Read Mode: JAWS's lower case "reading layout" [obs,
 # 1042/s5, s9].
 word-view-web = Web Layout View

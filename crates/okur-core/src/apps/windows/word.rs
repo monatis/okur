@@ -436,6 +436,13 @@ pub(crate) fn view_key(event: &crate::input::KeyEvent) -> Option<String> {
     )
 }
 
+/// Word's Track Changes key, Ctrl+Shift+E, after which JAWS says the state it leaves: "Track
+/// Changes on", "Track Changes off" [obs, 1068/s1, s8].
+pub(crate) fn track_changes_key(event: &crate::input::KeyEvent) -> bool {
+    let m = &event.modifiers;
+    m.ctrl && m.shift && !m.alt && !m.insert && !m.win && event.key == crate::input::Key::Alpha('E')
+}
+
 /// How the caret came to a cell of Word's table, which decides what JAWS says of it.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CellMove {

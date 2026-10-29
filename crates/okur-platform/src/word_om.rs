@@ -437,6 +437,14 @@ pub const TEXT_INPUT: i32 = 70;
 pub const CHECK_BOX: i32 = 71;
 pub const DROP_DOWN: i32 = 83;
 
+/// Whether the document in Word's document window `document` tracks its changes
+/// (`Document.TrackRevisions`, Ctrl+Shift+E's); `None` where Word's object model does not
+/// answer.
+pub fn track_revisions(document: HWND) -> Option<bool> {
+    let document = object(&property(&word_window(document)?, "Document")?)?;
+    bool::try_from(&property(&document, "TrackRevisions")?).ok()
+}
+
 /// Marks the document in Word's document window `document` saved (`Document.Saved = True`),
 /// so that closing its window asks nothing: the harness's, for a fixture a scenario changed
 /// (a form filled in). False where Word's object model does not answer.

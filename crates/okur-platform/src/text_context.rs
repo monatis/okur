@@ -39,7 +39,8 @@ pub use reader::{
     focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
     move_caret_in_edit, move_to_cell, move_to_paragraph, read_focused, read_focused_outside_page,
     visible_text, with_paragraph_alignment, word_document_fields, word_document_headings,
-    word_document_links, word_document_paragraphs, word_line_spacing, word_select_field, word_view,
+    word_document_links, word_document_paragraphs, word_line_spacing, word_select_field,
+    word_track_changes, word_view,
 };
 
 #[cfg(windows)]
@@ -353,6 +354,16 @@ mod reader {
             rule: spacing.rule,
             centipoints: (spacing.points * 100.0).round().clamp(0.0, u32::MAX as f32) as u32,
         })
+    }
+
+    /// Whether Word's focused document tracks its changes, from Word's own object model
+    /// (`crate::word_om`); `None` outside Word's document.
+    pub fn word_track_changes() -> Option<bool> {
+        let (window, class) = focused_window()?;
+        if class != "_WWG" {
+            return None;
+        }
+        crate::word_om::track_revisions(window)
     }
 
     /// The fields of Word's focused document, in order, from Word's own object model

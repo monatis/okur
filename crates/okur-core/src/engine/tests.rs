@@ -7555,6 +7555,81 @@ fn word_document(
     (engine, speech)
 }
 
+/// An edit combo's own list dropping down (Word's Font box, Alt+Down) is no menu: Down stays
+/// the field's key and the field is read for the text it puts there [obs, 1066/s5-s8].
+#[test]
+fn an_edit_combos_list_keeps_the_keys_on_the_field() {
+    use crate::event::MenuEvent;
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut font = FocusEvent::new(Role::Edit)
+        .with_name("Font:")
+        .with_window_title("sr-word-fixture.docx - Word");
+    font.app = Some("WINWORD.EXE".into());
+    font.container_role = Some(Role::ComboBox);
+    font.text = Some(crate::event::TextContext {
+        text: "Calibri".into(),
+        caret: 0,
+        selection: Some((0, 7)),
+        font: None,
+        word: None,
+        misspelled: Vec::new(),
+        structure: None,
+    });
+    engine.handle_focus_event(&font);
+    engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::PopupStart));
+    let before = actions.requests().len();
+    engine.handle_key_event(&key(Key::DownArrow));
+    assert!(
+        actions.requests().len() > before,
+        "{:?}",
+        actions.requests()
+    );
+    // The list closing leaves no menu behind.
+    engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::PopupEnd));
+    assert!(!engine.menus.in_menu_mode());
+}
+
+/// Ctrl+Shift+E in Word's document asks whether Track Changes is on once Word has acted on it,
+/// and says so: "Track Changes on", "Track Changes off"; nothing when it could not be read
+/// [obs, 1068/s1, s8].
+#[test]
+fn words_track_changes_key_says_its_state() {
+    let (mut engine, speech) = word_document(
+        "Library Hours\r",
+        0,
+        crate::event::LineStructure {
+            line: (0, 14),
+            ..Default::default()
+        },
+    );
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut key = KeyEvent::new(Key::Alpha('E'), Modifiers::none(), true);
+    key.modifiers.ctrl = true;
+    key.modifiers.shift = true;
+    engine.handle_key_event(&key);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(request, _)| request == "track changes"));
+    for (state, said) in [
+        (Some(true), Some("Track Changes on")),
+        (Some(false), Some("Track Changes off")),
+        (None, None),
+    ] {
+        assert_eq!(
+            engine
+                .handle_accessibility_event(&AccessibilityEvent::TrackChanges(state))
+                .as_deref(),
+            said
+        );
+    }
+    assert_eq!(speech.take().len(), 2);
+}
+
 /// A drop-down form field of Word's: Alt+Down says "Open List Box" first; once its list
 /// closes, the menus are left without the document's name and the field is said with its new
 /// choice and the combo box's hint [obs, 1057/s7, s9].

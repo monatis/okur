@@ -911,6 +911,10 @@ pub enum AccessibilityEvent {
     /// by Say Font ([`crate::actions::ApplicationActions::read_line_spacing`]); `None` when it
     /// could not be read.
     LineSpacing(Option<LineSpacing>),
+    /// Whether the focused document tracks its changes (Word's), read after Ctrl+Shift+E
+    /// ([`crate::actions::ApplicationActions::read_track_changes`]); `None` when it could not
+    /// be read.
+    TrackChanges(Option<bool>),
     /// The focused document's fields, in order, asked for by its list of fields (Insert+F5 in
     /// Word; [`crate::actions::ApplicationActions::read_document_fields`]); empty when it has
     /// none or could not be read.
