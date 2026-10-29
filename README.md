@@ -57,15 +57,15 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `ee552ab3` (2026-10-28).
+Every figure is tool output, rerun for this README at commit `a4dc7bf6` (2026-10-29).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **9111 of 9675** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **9019 of 9736** | `okur-lab parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **263** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **685, 2061** (2044 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1519 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **9212 of 9776** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **9116 of 9837** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **270** | `okur-lab parity` |
+| Recorded JAWS scenarios, trials | **695, 2091** (2074 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1531 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
@@ -173,8 +173,12 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   Size"), toggle buttons and check boxes with their state ("Format Painter Button not
   checked"), the Quick Access Toolbar and the buttons beside the tabs with their hints
   ("Leaving menus, Can't Repeat Button Unavailable"), and Escape back ("Leaving ribbons,
-  Edit"). Its own dialogs (Font) read their fields as edit combos ("Font:, edit combo,
-  Calibri"). The Links List (Insert+F7) lists the document's hyperlinks, Move To Link moves to
+  Edit"). The Styles gallery says each style with its place ("Heading 2, Button, 2 of 17"),
+  and the Font and Font Size boxes' lists the font or size the arrows choose. Its own dialogs
+  (Font, Paragraph, Find and Replace) read their fields as edit combos ("Font:, edit combo,
+  Calibri"); back from Find and Replace, which stays open beside the document, the window is
+  named again. Ctrl+Shift+E says whether Track Changes is on, and Ctrl+E, R, J and L the
+  alignment they leave ("Centered", "Aligned left"). The Links List (Insert+F7) lists the document's hyperlinks, Move To Link moves to
   one and Activate Link follows it; List Fields (Insert+F5) lists its fields ("HYPERLINK
   opening hours", "FORMTEXT") and OK moves to one; with none, each says so in Word's words.
   The line spacing and the fields come from Word's own object model.
@@ -226,11 +230,13 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   List, with the same controls and labels as JAWS's, and Okur's settings, below.
 - **Settings, as JAWS's:**
   - Settings Center (Insert+6) and Quick Settings (Insert+V) are trees of JAWS's groups with a
-    search box (Ctrl+E). Space changes a setting and says its new value. Changes are kept for
-    all applications, the application in front or the page's site. Settings Center asks
-    before Cancel drops a change; Quick Settings can keep one only until Okur exits or the
-    focus moves (Shift+F10). Their last group, Last Changed Settings, holds the latest changes
-    from one run to the next (Shift+F10: Remove, Remove All).
+    search box (Ctrl+E); what a search finds is a list in the tree's place, each setting with
+    its value and its group ("Typing Echo Off, User"). Space changes a setting and says its new
+    value. F6 goes to the setting's control in the pane beside the tree ("User Page").
+    Changes are kept for all applications, the application in front or the page's site.
+    Settings Center asks before Cancel drops a change; Quick Settings can keep one only until
+    Okur exits or the focus moves (Shift+F10). Their last group, Last Changed Settings, holds
+    the latest changes from one run to the next (Shift+F10: Remove, Remove All).
   - Okur's window (Insert+J) has JAWS's menus: Options for Basics, Voices, Manage Application
     Settings (an application's settings turned off or removed) and Restore to Factory
     Settings; Utilities for Settings Center and the Notification History; Help for the Startup
@@ -276,8 +282,8 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- Outlook and Excel, not yet supported or checked; in Word, its dialogs other than Font are
-  read through the same module but not yet checked against JAWS;
+- Outlook and Excel, not yet supported or checked; in Word, its Spelling pane, comments and
+  footnotes are not yet checked against JAWS;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;
