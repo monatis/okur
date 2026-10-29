@@ -265,7 +265,8 @@ impl ScreenReaderEngine {
                 // A modern menu reports its items' positions; a Win32 one does not (302).
                 self.menus.modern_focus(focus)
             } else {
-                self.menus.focus(name, focus.states.disabled)
+                self.menus
+                    .focus(name, focus.states.disabled, focus.access_key.as_deref())
             }?;
             self.speech.speak(&speech, true);
             return Some(speech);

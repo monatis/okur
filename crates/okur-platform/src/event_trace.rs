@@ -1008,6 +1008,9 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         let mut item = okur_core::FocusEvent::new(okur_core::Role::MenuItem)
             .with_name(object.name.clone().unwrap_or_default());
         item.states.disabled = object.states & STATE_SYSTEM_UNAVAILABLE != 0;
+        // Its access key, MSAA's ("n", the menu bar's "Alt+f"), said last where access keys
+        // are said in menus [obs, 1084/s1-s3].
+        item.access_key = object.shortcut.clone().filter(|k| !k.trim().is_empty());
         return Some(item);
     }
     if let Some(mut focus) = netui_focus(event) {

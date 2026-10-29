@@ -1230,6 +1230,8 @@ pub struct Menus {
     /// The item whose popup just closed. If focus does not move on (switching menus with
     /// Left/Right), JAWS announces the item once speech goes idle (302/s7).
     closed: Option<String>,
+    /// That item's access key letter, said after it [obs, 1084/s3].
+    closed_key: Option<String>,
     /// A page's menus (ARIA), whose items say where they are themselves ([`Self::page_focus`]):
     /// popups opening and closing say nothing.
     page: bool,
@@ -1320,9 +1322,22 @@ impl Menus {
         self.current = None;
     }
 
-    /// Focus landed on a menu item, unavailable or not.
-    pub fn focus(&mut self, name: &str, unavailable: bool) -> Option<String> {
+    /// Focus landed on a menu item, unavailable or not, with its access key as the output
+    /// modes leave it ("n", the menu bar's "Alt+f"): its letter is said last, "New Ctrl+N |
+    /// To move through items press up or down arrow. | n", "Menu bar | File | ... | f" [obs,
+    /// 1084/s1-s3, 1085].
+    pub fn focus(
+        &mut self,
+        name: &str,
+        unavailable: bool,
+        access_key: Option<&str>,
+    ) -> Option<String> {
         let name = name.trim();
+        let letter = access_key
+            .map(str::trim)
+            .map(|key| key.strip_prefix("Alt+").unwrap_or(key))
+            .filter(|key| !key.is_empty())
+            .map(str::to_owned);
         let switching = self.closed.take().is_some() && self.open.is_empty();
         let speech = if !self.active && self.popup_pending {
             // A menu that opened before any item had the focus, with no menu bar above it, is
@@ -1391,13 +1406,17 @@ impl Menus {
             // none opens (a page's menu closed with Escape, the focus back on its bar item),
             // the item is said once the events go quiet, as a native bar item is (302/s7).
             self.closed = Some(name.to_owned());
+            self.closed_key = letter.clone();
             None
         } else {
             Some(name.to_owned())
         };
         self.current = Some(name.to_owned());
         self.on_bar_item = self.open.is_empty();
-        speech
+        match (speech, letter) {
+            (Some(speech), Some(letter)) => Some(format!("{speech}\n{letter}")),
+            (speech, _) => speech,
+        }
     }
 
     /// Focus landed on an item of a modern (WinUI) menu, which reports its position: File
@@ -1555,12 +1574,18 @@ impl Menus {
     /// Speech that waits for the event stream to go quiet.
     pub fn idle(&mut self) -> Option<String> {
         let item = self.closed.take().filter(|item| !item.is_empty())?;
-        if self.by_access_key && !self.bar_shown {
+        let letter = self.closed_key.take();
+        let said = if self.by_access_key && !self.bar_shown {
             self.bar_shown = true;
-            return Some(Self::bar_intro(&item));
-        }
-        let sub_menu = state_marker(msg::state_sub_menu().as_str());
-        Some(format!("{item}\n{sub_menu}\n{item} {sub_menu}"))
+            Self::bar_intro(&item)
+        } else {
+            let sub_menu = state_marker(msg::state_sub_menu().as_str());
+            format!("{item}\n{sub_menu}\n{item} {sub_menu}")
+        };
+        Some(match letter {
+            Some(letter) => format!("{said}\n{letter}"),
+            None => said,
+        })
     }
 }
 
@@ -1578,7 +1603,7 @@ mod tests {
         m.start(false);
         assert!(!m.end());
         m.start(false);
-        let _ = m.focus("File", false);
+        let _ = m.focus("File", false, None);
         assert!(m.end());
     }
 
@@ -1588,10 +1613,10 @@ mod tests {
     fn a_menu_opened_by_its_access_key() {
         let mut m = Menus::default();
         m.access_key(true);
-        assert_eq!(m.focus("File", false), None);
+        assert_eq!(m.focus("File", false, None), None);
         m.popup_start();
         assert_eq!(
-            m.focus("New\tCtrl+N", false).as_deref().map(norm),
+            m.focus("New\tCtrl+N", false, None).as_deref().map(norm),
             Some(norm(&format!(
                 "File menu\nNew\tCtrl+N\n{}",
                 msg::hint_menu_items_up_down()
@@ -1599,14 +1624,16 @@ mod tests {
         );
         m.end();
         m.access_key(false);
-        assert!(m.focus("File", false).is_some_and(|s| s.contains("File")));
+        assert!(m
+            .focus("File", false, None)
+            .is_some_and(|s| s.contains("File")));
     }
 
     /// 302-desktop-menu-bar, as one session: Alt, Down ×3, Right, Down, Escape, Escape.
     #[test]
     fn menu_session() {
         let mut m = Menus::default();
-        let s1 = m.focus("File", false);
+        let s1 = m.focus("File", false, None);
         assert_eq!(
             s1.as_deref().map(norm),
             Some(norm(
@@ -1615,18 +1642,21 @@ mod tests {
         );
         m.popup_start();
         assert_eq!(
-            m.focus("New", false).as_deref().map(norm),
+            m.focus("New", false, None).as_deref().map(norm),
             Some(norm("  \u{1d} menu \u{1e} \n  \nFile menu\nNew \nTo move through items press up or down arrow."))
         );
-        assert_eq!(m.focus("Open...", false).as_deref(), Some("Open..."));
-        assert_eq!(m.focus("Exit", false).as_deref(), Some("Exit"));
+        assert_eq!(m.focus("Open...", false, None).as_deref(), Some("Open..."));
+        assert_eq!(m.focus("Exit", false, None).as_deref(), Some("Exit"));
         // Right: the File popup closes, Edit gets focus silently, its popup opens.
         m.popup_end();
-        assert_eq!(m.focus("Edit", false), None);
+        assert_eq!(m.focus("Edit", false, None), None);
         m.popup_start();
-        assert_eq!(m.focus("Copy", false).as_deref(), Some("Edit menu\nCopy"));
+        assert_eq!(
+            m.focus("Copy", false, None).as_deref(),
+            Some("Edit menu\nCopy")
+        );
         assert_eq!(m.idle(), None);
-        assert_eq!(m.focus("Paste", false).as_deref(), Some("Paste"));
+        assert_eq!(m.focus("Paste", false, None).as_deref(), Some("Paste"));
         // Escape closes the popup; nothing follows, so the bar item is announced on idle.
         m.popup_end();
         assert_eq!(
@@ -1910,7 +1940,7 @@ To activate press Enter."
         m.start(false);
         m.popup_start();
         assert_eq!(
-            m.focus("Undo", true).as_deref().map(norm),
+            m.focus("Undo", true, None).as_deref().map(norm),
             Some(norm(
                 "  Context Menu  
 
@@ -1929,14 +1959,14 @@ Undo  Unavailable"
         m.start(true);
         m.popup_start();
         assert_eq!(
-            m.focus("New", false).as_deref().map(norm),
+            m.focus("New", false, None).as_deref().map(norm),
             Some(norm(
                 " \u{1d} Context Menu \u{1e} \n\nNew\nTo move through items press up or down arrow."
             ))
         );
-        assert_eq!(m.focus("Open", false).as_deref(), Some("Open"));
+        assert_eq!(m.focus("Open", false, None).as_deref(), Some("Open"));
         m.popup_end();
-        assert_eq!(m.focus("File", false), None);
+        assert_eq!(m.focus("File", false, None), None);
         assert_eq!(
             m.idle().as_deref().map(norm),
             Some(norm(
