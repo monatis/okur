@@ -1018,6 +1018,9 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         focus.platform.window_class = event.window_class.clone();
         return Some(focus);
     }
+    if let Some(focus) = command_bar_focus(event) {
+        return Some(focus);
+    }
     // Word's ribbon taking the focus back from a box of its own (the Font box, a RichEdit
     // window) reports the ribbon itself, then the command that has the focus [obs, 1045/s9]:
     // the ribbon with none of its tabs focused is no focus of its own.
@@ -2411,6 +2414,42 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
         .filter(|a| a.role == Some(PROPERTYPAGE))
         .count();
     focus.ribbon_menu = tab || pages >= 2;
+    Some(focus)
+}
+
+/// The window class of Office's classic command bars, a toolbar of buttons inside some of its
+/// dialogs (Insert Hyperlink's "Link to:").
+pub(crate) const COMMAND_BAR_CLASS: &str = "MsoCommandBar";
+
+/// A button of an Office command bar (`MsoCommandBar`), known only to MSAA: UI Automation's
+/// focus stays on the dialog around it. Read from its MSAA object, held down where MSAA says
+/// so: "Existing File or Web Page Button Pressed" [obs, 1076/s5]. The bar's own focus, a
+/// moment before (an internal name, "MSO Generic Control Container"), is no focus.
+fn command_bar_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
+    const PUSHBUTTON: i32 = 0x2B;
+    const PRESSED: u32 = 0x8;
+    if event.window_class.as_deref() != Some(COMMAND_BAR_CLASS) {
+        return None;
+    }
+    let object = event
+        .object
+        .as_ref()
+        .filter(|o| o.role == Some(PUSHBUTTON))?;
+    let name = object
+        .name
+        .as_deref()
+        .map(str::trim)
+        .filter(|n| !n.is_empty())?;
+    let mut focus = okur_core::FocusEvent::new(okur_core::Role::Button).with_name(name.to_owned());
+    focus.states.pressed = object.states & PRESSED != 0;
+    focus.states.disabled = object.states & MSAA_UNAVAILABLE != 0;
+    focus.access_key = object.shortcut.clone().filter(|k| !k.trim().is_empty());
+    focus.window_title = event.top_window_title.clone();
+    focus.app = event.process.clone();
+    focus.app_product = event.process_product.clone();
+    focus.app_version = event.process_version.clone();
+    focus.platform.window_class = event.window_class.clone();
+    focus.platform.top_window_class = event.top_window_class.clone();
     Some(focus)
 }
 
@@ -5194,9 +5233,12 @@ mod capture {
                     .then(|| msaa_object(hwnd, id_object, id_child))
                     .flatten(),
             };
-            // A NetUI window's focus: its MSAA objects, which UI Automation does not reach.
+            // A NetUI window's focus, or an Office command bar's: its MSAA objects, which UI
+            // Automation does not reach.
             let netui = match object.as_ref().and_then(|o| o.role) {
-                Some(role) if focused && class == NETUI_WINDOW => {
+                Some(role)
+                    if focused && (class == NETUI_WINDOW || class == super::COMMAND_BAR_CLASS) =>
+                {
                     netui_read(state.uia.as_ref(), hwnd, id_object, id_child, role)
                 }
                 _ => NetuiRead::default(),
@@ -6528,6 +6570,41 @@ mod tests {
             class_name: Some("#32770".to_owned()),
             ..node(control_type, name, false)
         }
+    }
+
+    /// A button of an Office command bar inside a dialog is read from MSAA, held down where
+    /// MSAA says so: Insert Hyperlink's "Existing File or Web Page" [obs, 1076/s5]; the bar's
+    /// own focus is none.
+    #[test]
+    fn a_command_bars_button_is_read_from_msaa() {
+        let object = |role: i32, name: &str, states: u32| {
+            Some(TraceObject {
+                role: Some(role),
+                name: Some(name.to_owned()),
+                value: None,
+                states,
+                shortcut: Some("x".to_owned()),
+            })
+        };
+        let button = TraceEvent {
+            window_class: Some(COMMAND_BAR_CLASS.to_owned()),
+            top_window_title: Some("Insert Hyperlink".to_owned()),
+            object: object(0x2B, "Existing File or Web Page", 0x10_000C),
+            focus_chain: vec![node(UIA_WINDOW, "Insert Hyperlink", false)],
+            ..focus_event(Vec::new())
+        };
+        let focus = command_bar_focus(&button);
+        assert!(focus.is_some());
+        let Some(focus) = focus else { return };
+        assert_eq!(focus.role, okur_core::Role::Button);
+        assert_eq!(focus.name.as_deref(), Some("Existing File or Web Page"));
+        assert!(focus.states.pressed);
+        assert_eq!(focus.window_title.as_deref(), Some("Insert Hyperlink"));
+        let bar = TraceEvent {
+            object: object(0x16, "MSO Generic Control Container", 0x1000),
+            ..button
+        };
+        assert!(command_bar_focus(&bar).is_none());
     }
 
     /// A command in the lower ribbon names what it is in, from its MSAA ancestors: "Lower

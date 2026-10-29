@@ -531,6 +531,11 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                 Some(false) => parts.push(state(msg::state_collapsed().as_str())),
                 None => {}
             }
+            // A push button held down: "Existing File or Web Page Button Pressed" [obs,
+            // 1076/s5].
+            if focus.states.pressed {
+                parts.push(state(msg::state_pressed().as_str()));
+            }
             lines.push(Line::new(parts));
             // A WinUI toggle switch is a button with a toggle state, said as its switch
             // reads: Windows Settings' "Night light Button | Off" (JAWS, dev box 2026-10-16).

@@ -348,6 +348,7 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
         hidden: has(STATE_SYSTEM_INVISIBLE),
         modal: node.ia2_states & ia2_state::MODAL != 0,
         focusable: Some(has(STATE_SYSTEM_FOCUSABLE)),
+        pressed: false,
     };
 
     let mut set_attr = |key: &str, value: String| {

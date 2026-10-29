@@ -212,6 +212,11 @@ pub struct NodeStates {
     /// buttons out (a message's time).
     #[serde(default)]
     pub focusable: Option<bool>,
+    /// A native push button held down as a toggle (MSAA's pressed state: Insert Hyperlink's
+    /// "Existing File or Web Page" in Word), which JAWS says after its role, "Button Pressed"
+    /// [obs, 1076/s5].
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub pressed: bool,
 }
 
 /// AOM attribute holding a node's IA2 `uniqueID`: the live object's identity, the same in
