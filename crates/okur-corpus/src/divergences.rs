@@ -894,14 +894,18 @@ divergences! {
         "1054-desktop-word-fields-list-move/s1",
         "519-desktop-word-lists-and-spelling/s2",
         "519-desktop-word-lists-and-spelling/s5",
+        "1082-desktop-word-comments-list/s1",
+        "1083-desktop-word-footnotes-list/s1",
+        "1087-desktop-word-comments-list-controls/s1",
+        "1088-desktop-word-footnotes-list-controls/s1",
     ],
-    "Before its Heading List, Links List, List Fields and Spelling Errors lists in Word, JAWS \
-     says what it said or showed before them in most trials, in every one before its Links List \
-     and List Fields: its main \
+    "Before its Heading List, Links List, List Fields, Spelling Errors, Reviewers' Comments and \
+     Footnotes lists in Word, JAWS says what it said or showed before them in most trials, in \
+     every one before its Links List, List Fields and the comments and footnotes: its main \
      window's version, \"JAWS Version \
      2025.2505.43\", the document's name, \"Microsoft Word Document\", a button's hint, or \
-     \"Please wait processing 1 items\" while it gathers the errors. Okur's lists open without \
-     them, as JAWS's do in the other trials.",
+     \"Please wait processing 1 items\" while it gathers the errors, comments or footnotes. \
+     Okur's lists open without them, as JAWS's do in the other trials.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
 
     Difference::Step => [
@@ -1009,6 +1013,13 @@ divergences! {
      words run together (\"LibraryHours\" where Word made it \"LIBRARY HOURS\", then \
      \"LIBRARYHOURS\", \"libraryhours\"). Okur says the selection as Word leaves it, \
      \"LIBRARY HOURS\", \"library hours\", \"Library Hours\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
+    Difference::JawsAlsoSays("blank") => ["1087-desktop-word-comments-list-controls/s6"],
+    "OK on a comment in JAWS's list of Word's comments: JAWS gives its synthesizer \"blank\" \
+     before \"Edit\", in every trial, where its speech history holds only spaces: the empty \
+     text at the comment's mark said, where a footnote's is \"footnote reference: 1 Holidays \
+     excepted.\". Okur says \"Edit\".",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
 
     Difference::Step => [
