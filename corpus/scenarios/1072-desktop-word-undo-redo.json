@@ -1,0 +1,29 @@
+{
+  "id": "1072-desktop-word-undo-redo",
+  "name": "Word: two letters typed at the end of the heading, then Ctrl+Z twice and Ctrl+Y once; Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "End"},
+    {"id": "s2", "type": "key", "command": "Space"},
+    {"id": "s3", "type": "key", "command": "a"},
+    {"id": "s4", "type": "key", "command": "b"},
+    {"id": "s5", "type": "key", "command": "Ctrl+Z"},
+    {"id": "s6", "type": "key", "command": "Ctrl+Z"},
+    {"id": "s7", "type": "key", "command": "Ctrl+Y"},
+    {"id": "s8", "type": "key", "command": "Insert+Up"}
+  ]
+}
