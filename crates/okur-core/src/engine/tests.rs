@@ -7555,6 +7555,41 @@ fn word_document(
     (engine, speech)
 }
 
+/// A dialog's page entered from outside any (Settings Center's pane, by F6 from its tree) is
+/// named first: "User Page | Typing Echo Off radio button checked"; a control of the page that
+/// reports none (Notepad's Print page has an untitled inner dialog) does not forget it [obs,
+/// the walk of Settings Center's pane; 546/s6].
+#[test]
+fn a_page_entered_from_outside_it_is_named() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let title = "Notepad - Okur Settings Center";
+    let mut tree = FocusEvent::new(Role::TreeItem)
+        .with_name("Typing Echo Off")
+        .with_window_title(title);
+    tree.tree_level = Some(1);
+    engine.handle_focus_event(&tree);
+    let mut echo = FocusEvent::new(Role::RadioButton)
+        .with_name("Off")
+        .with_window_title(title);
+    echo.dialog_page = Some("User".into());
+    echo.states.checked = Some(true);
+    let said = engine.handle_focus_event(&echo).unwrap_or_default();
+    assert!(said.starts_with("User Page\n"), "{said}");
+    // A control of the page without its name, then the page's again: not named again.
+    let mut preferences = FocusEvent::new(Role::Button)
+        .with_name("Preferences")
+        .with_window_title(title);
+    preferences.dialog_page = None;
+    engine.handle_focus_event(&preferences);
+    let mut screen = FocusEvent::new(Role::RadioButton)
+        .with_name("Echo Highlighted Text")
+        .with_window_title(title);
+    screen.dialog_page = Some("User".into());
+    let said = engine.handle_focus_event(&screen).unwrap_or_default();
+    assert!(!said.contains("User Page"), "{said}");
+}
+
 /// An edit combo's own list dropping down (Word's Font box, Alt+Down) is no menu: Down stays
 /// the field's key and the field is read for the text it puts there [obs, 1066/s5-s8].
 #[test]

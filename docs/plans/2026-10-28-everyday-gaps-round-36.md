@@ -35,7 +35,7 @@ a fetched evidence file) must read 90; `fix-rate.ps1` otherwise. old-pc's master
    the tree). okur-ui shows a list box in the tree's place: a control can start hidden and be
    shown in another's place (a `hidden` flag on `Control`, laid out where the list before it
    is; a message to show one and hide the other).
-2. **The pane's name said** as the focus enters it ("User page").
+2. **Done (2026-10-29).** **The pane's name said** as the focus enters it ("User page"): a page is named when it is not the last one the window's focus was on.
 3. **Voices:** Apply's question whether to make a saved profile the default (record first);
    Synthesizer Language.
 4. **The Startup Wizard's rest:** Run Okur from System Tray; Tutor Messages' "Announce Custom

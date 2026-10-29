@@ -352,6 +352,10 @@ pub struct ScreenReaderEngine {
     /// The focused edit combo's own list is open (Word's Font box, Alt+Down): a popup, but the
     /// keys stay the field's.
     combo_list_open: bool,
+    /// The property page the focus was last on in the window in front: a control that
+    /// reports none (one in an untitled inner dialog of Notepad's Print page) does not
+    /// forget it.
+    last_dialog_page: Option<String>,
     /// Word shows the document in Read Mode, which Okur reads no better than JAWS: its
     /// screen-sensitive help says how to leave it.
     word_read_mode: bool,
@@ -622,6 +626,7 @@ impl ScreenReaderEngine {
             view_asked_by_app: false,
             word_list_from_field: false,
             combo_list_open: false,
+            last_dialog_page: None,
             word_read_mode: false,
             moved_by_document_list: false,
             word_from_list: None,

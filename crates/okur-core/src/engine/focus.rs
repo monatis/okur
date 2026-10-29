@@ -936,16 +936,20 @@ impl ScreenReaderEngine {
             return None;
         }
         let control = self.native_focus.focus(focus);
-        // The focus moved onto another page of the dialog's property sheet (Ctrl+Tab): the
-        // page is said first, "General Page" [obs, 323/s11].
-        let page_changed = focus.dialog_page.as_deref().filter(|page| {
-            !window_changed
-                && self
-                    .last_native_focus
-                    .as_ref()
-                    .and_then(|last| last.dialog_page.as_deref())
-                    .is_some_and(|last| last != *page)
-        });
+        // The focus moved onto another page of the dialog's property sheet (Ctrl+Tab), or onto
+        // the window's first from outside it (Settings Center's pane, by F6): the page is said
+        // first, "General Page" [obs, 323/s11], "User page" [obs, the walk of Settings
+        // Center's pane].
+        if window_changed {
+            self.last_dialog_page = None;
+        }
+        let page_changed = focus
+            .dialog_page
+            .as_deref()
+            .filter(|page| !window_changed && self.last_dialog_page.as_deref() != Some(*page));
+        if focus.dialog_page.is_some() {
+            self.last_dialog_page = focus.dialog_page.clone();
+        }
         let page_line = page_changed
             .map(|page| crate::announcement::Line::text(msg::property_page_changed(page).render()));
         // The wizard went on to another page (Next, Back): its text is said first, then the
