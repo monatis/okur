@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 9235,
-  "total_steps": 9799,
+  "matched_steps": 9241,
+  "total_steps": 9805,
   "accepted_divergences": 270,
   "errors": [],
   "steps": {
@@ -1266,6 +1266,12 @@
     "1073-desktop-word-copy-paste/s5": "match",
     "1073-desktop-word-copy-paste/s6": "match",
     "1073-desktop-word-copy-paste/s7": "match",
+    "1074-desktop-word-font-size-keys/s1": "match",
+    "1074-desktop-word-font-size-keys/s2": "match",
+    "1074-desktop-word-font-size-keys/s3": "match",
+    "1074-desktop-word-font-size-keys/s4": "match",
+    "1074-desktop-word-font-size-keys/s5": "match",
+    "1074-desktop-word-font-size-keys/s6": "match",
     "1075-desktop-word-heading-style-keys/s1": "match",
     "1075-desktop-word-heading-style-keys/s2": "match",
     "1075-desktop-word-heading-style-keys/s3": "match",
