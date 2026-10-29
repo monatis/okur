@@ -8321,6 +8321,93 @@ fn words_bookmarks_and_endnotes_lists() {
     );
 }
 
+/// Windows+Semicolon in Word opens Items to Display in Virtual Viewer: "Comments", "Footnotes",
+/// "Endnotes", "Revisions" [obs, 1098/s1-s4]. OK on Footnotes says what is gathered, then the
+/// viewer's first line and "Edit"; Down reads its lines, a footnote after its link [obs,
+/// 1097/s3-s6].
+#[test]
+fn windows_semicolon_shows_words_notes_in_the_viewer() {
+    use crate::event::{DocumentNote, NoteKind};
+    use crate::ui::{ControlKind, FromUi, ToUi};
+    let (mut engine, speech) = word_document(
+        "Library Notes\rIt is open every day.\r",
+        0,
+        crate::event::LineStructure {
+            line: (0, 14),
+            heading: Some(1),
+            ..Default::default()
+        },
+    );
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut key = KeyEvent::new(Key::Semicolon, Modifiers::none(), true);
+    key.modifiers.win = true;
+    assert_eq!(engine.handle_key_event(&key), KeyAction::Consume);
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "Items to Display in Virtual Viewer");
+    assert!(dialog.controls.iter().any(|c| matches!(
+        &c.kind,
+        ControlKind::List { items, selected: 0 }
+            if items == &["Comments", "Footnotes", "Endnotes", "Revisions"]
+    )));
+    let list = dialog
+        .controls
+        .first()
+        .map(|c| c.id.clone())
+        .unwrap_or_default();
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id: dialog.id,
+        control: list,
+        value: crate::ui::Value::Selected(1),
+    }));
+    speech.take();
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: dialog.id,
+        control: "ok".into(),
+    }));
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "document footnotes"));
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some("Please wait: Processing Footnotes")
+    );
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentNotes(
+        NoteKind::Footnote,
+        vec![DocumentNote {
+            text: "Holidays excepted.".into(),
+            number: Some(1),
+            ..Default::default()
+        }],
+    ));
+    let edit = crate::linearize::role_marker("Edit");
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some(format!("There is only one Footnote to display.\n{edit}").as_str())
+    );
+    let down = |engine: &mut ScreenReaderEngine| {
+        engine.handle_key_event(&KeyEvent::new(Key::DownArrow, Modifiers::none(), true));
+    };
+    down(&mut engine);
+    down(&mut engine);
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some("\u{1d} Link \u{1e} 1")
+    );
+    down(&mut engine);
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some("1 Holidays excepted.")
+    );
+}
+
 /// Alt+Shift+Apostrophe pressed twice quickly in a comment of Word's shows it in the Virtual
 /// Viewer, read whole: the comment, its author, the text it is on and how to close it; Escape
 /// reads the document's line again, then "Edit" [obs, 1095/s6, s7, s10].

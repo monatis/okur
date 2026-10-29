@@ -128,6 +128,16 @@ word-no-comment = No comment mark at cursor.
 # Alt+Shift+Apostrophe pressed twice: the Virtual Viewer's line before the text the comment is
 # on [obs, 1095/s6].
 word-comment-document-text = Document text:
+# OK in Items to Display in Virtual Viewer: what is gathered, then the viewer's first line
+# [obs, 1096/s2, 1097/s3, 1099/s4].
+word-viewer-processing-comments = Please wait: Processing Comments
+word-viewer-processing-footnotes = Please wait: Processing Footnotes
+word-viewer-processing-endnotes = Please wait: Processing Endnotes
+word-viewer-one-comment = There is only one Comment to display.
+word-viewer-one-footnote = There is only one Footnote to display.
+word-viewer-one-endnote = There is only one Endnote to display.
+# The same with none: no viewer opens [obs, 1100/s2].
+word-viewer-none = There are no items to display.
 # OK on a footnote in JAWS's list of Word's footnotes: the footnote as the list shows it, before
 # the document's "Edit" [obs, 1088/s6].
 word-footnote-reference = footnote reference: { $footnote }

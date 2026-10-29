@@ -42,6 +42,25 @@ const HEADING_SORTS: [fn() -> StaticMessage; 2] = [
     msg::heading_list_sort_tab_order,
     msg::heading_list_sort_alphabetical,
 ];
+/// An item of Items to Display in Virtual Viewer: its name, and the notes it shows.
+pub type NoteToView = (fn() -> StaticMessage, Option<crate::event::NoteKind>);
+/// Items to Display in Virtual Viewer's items, in JAWS's order, each with the notes it shows:
+/// Revisions shows a document's tracked changes, not yet read [obs, 1098/s1-s4].
+pub const NOTES_TO_VIEW: [NoteToView; 4] = [
+    (
+        msg::notes_to_view_comments,
+        Some(crate::event::NoteKind::Comment),
+    ),
+    (
+        msg::notes_to_view_footnotes,
+        Some(crate::event::NoteKind::Footnote),
+    ),
+    (
+        msg::notes_to_view_endnotes,
+        Some(crate::event::NoteKind::Endnote),
+    ),
+    (msg::notes_to_view_revisions, None),
+];
 /// Heading levels the Display group offers after "All Headings".
 const HEADING_LEVELS: u32 = 6;
 
@@ -55,6 +74,9 @@ pub enum ListKind {
     DocumentFields,
     /// Word's comments or footnotes (Ctrl+Shift+Apostrophe, Insert+Shift+F in Word's document).
     DocumentNotes(crate::event::NoteKind),
+    /// Items to Display in Virtual Viewer (Windows+Semicolon in Word's document): the notes the
+    /// Virtual Viewer can show [obs, 1094, 1098].
+    NotesToView,
     /// Virtual HTML Features: the lists themselves.
     Features,
     /// One of JAWS's element lists.
@@ -283,6 +305,21 @@ impl Entry {
         }
     }
 
+    /// An item of a fixed list, `index` its place.
+    pub fn item(index: usize, name: String) -> Self {
+        Self {
+            sort_key: name.to_lowercase(),
+            text: name,
+            level: None,
+            address: None,
+            same_page: false,
+            visited: false,
+            node_id: index,
+            offset: index,
+            feature: None,
+        }
+    }
+
     /// A document's field `index`: its code's first word and the text it shows.
     pub fn document_field(index: usize, field: &crate::event::DocumentField) -> Self {
         let text = field
@@ -476,6 +513,21 @@ impl ListDialog {
         )
     }
 
+    /// Items to Display in Virtual Viewer: "Comments", "Footnotes", "Endnotes", "Revisions",
+    /// the first selected [obs, 1098/s1-s4]; an entry's node is its place in
+    /// [`NOTES_TO_VIEW`].
+    pub fn notes_to_view(id: u32) -> Self {
+        Self::new(
+            id,
+            ListKind::NotesToView,
+            NOTES_TO_VIEW
+                .iter()
+                .enumerate()
+                .map(|(index, (name, _))| Entry::item(index, name().to_string()))
+                .collect(),
+        )
+    }
+
     /// One of JAWS's element lists over `items`, in page order, the first selected.
     pub fn elements(id: u32, list: ElementList, items: &[ElementItem]) -> Self {
         Self::new(
@@ -533,6 +585,7 @@ impl ListDialog {
             ListKind::Headings => "headings",
             ListKind::FormFields | ListKind::DocumentFields => "fields",
             ListKind::DocumentNotes(_) => "notes",
+            ListKind::NotesToView => "items",
             ListKind::Features => "lists",
             ListKind::Elements(_) => "elements",
             ListKind::Regions => "regions",
@@ -553,6 +606,7 @@ impl ListDialog {
             ListKind::FormFields
             | ListKind::DocumentFields
             | ListKind::DocumentNotes(_)
+            | ListKind::NotesToView
             | ListKind::Features
             | ListKind::Elements(_)
             | ListKind::Regions
@@ -574,6 +628,7 @@ impl ListDialog {
                 ListKind::FormFields
                 | ListKind::DocumentFields
                 | ListKind::DocumentNotes(_)
+                | ListKind::NotesToView
                 | ListKind::Features
                 | ListKind::Elements(_)
                 | ListKind::Regions
@@ -718,6 +773,16 @@ impl ListDialog {
                     button("cancel", msg::form_field_list_cancel(), false),
                 ],
             ),
+            // Items to Display in Virtual Viewer: its list, then OK and Cancel [obs, 1094/s3,
+            // s4].
+            ListKind::NotesToView => (
+                msg::list_dialog_notes_to_view(),
+                vec![
+                    list(msg::list_dialog_form_fields_list()),
+                    button("ok", msg::form_field_list_ok(), true),
+                    button("cancel", msg::form_field_list_cancel(), false),
+                ],
+            ),
             ListKind::Features => (
                 msg::list_dialog_features(),
                 vec![
@@ -792,6 +857,7 @@ impl ListDialog {
             | ListKind::FormFields
             | ListKind::DocumentFields
             | ListKind::DocumentNotes(_)
+            | ListKind::NotesToView
             | ListKind::Features
             | ListKind::Elements(_)
             | ListKind::Regions
@@ -845,9 +911,13 @@ impl ListDialog {
                     ("move", Some(entry), _) => Outcome::MoveTo(entry.clone()),
                     ("activate", Some(entry), ListKind::Links) => Outcome::Activate(entry.clone()),
                     ("ok", Some(entry), ListKind::FormFields) => Outcome::Focus(entry.clone()),
-                    ("ok", Some(entry), ListKind::DocumentFields | ListKind::DocumentNotes(_)) => {
-                        Outcome::MoveTo(entry.clone())
-                    }
+                    (
+                        "ok",
+                        Some(entry),
+                        ListKind::DocumentFields
+                        | ListKind::DocumentNotes(_)
+                        | ListKind::NotesToView,
+                    ) => Outcome::MoveTo(entry.clone()),
                     ("ok", Some(entry), ListKind::Elements(list)) if list.focuses() => {
                         Outcome::Focus(entry.clone())
                     }

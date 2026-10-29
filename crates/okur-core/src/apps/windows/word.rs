@@ -323,6 +323,61 @@ pub(crate) fn comment_viewer(context: &TextContext) -> Option<Vec<String>> {
     Some(lines)
 }
 
+/// What JAWS says as it gathers a document's notes for the Virtual Viewer, "Please wait:
+/// Processing Comments" [obs, 1096/s2, 1097/s3]; none for a bookmark, which the viewer does
+/// not show.
+pub(crate) fn notes_processing(kind: crate::event::NoteKind) -> Option<String> {
+    use crate::event::NoteKind;
+    Some(
+        match kind {
+            NoteKind::Comment => msg::word_viewer_processing_comments(),
+            NoteKind::Footnote => msg::word_viewer_processing_footnotes(),
+            NoteKind::Endnote => msg::word_viewer_processing_endnotes(),
+            NoteKind::Bookmark => return None,
+        }
+        .to_string(),
+    )
+}
+
+/// The Virtual Viewer's lines for a document's notes: their count, "There is only one Comment
+/// to display.", then each after a link of its number, a comment on the link's line ("1  Check
+/// the summer hours. Lab Fri, Jan 02, 26"), a footnote on a line of its own with its mark ("1
+/// Holidays excepted."), and how to close it, apart by blank lines [obs, 1096/s3-s6,
+/// 1097/s4-s6, 1099/s5-s7]. `None` for a bookmark, or with no notes.
+pub(crate) fn notes_viewer_lines(
+    kind: crate::event::NoteKind,
+    notes: &[crate::event::DocumentNote],
+) -> Option<Vec<String>> {
+    use crate::event::NoteKind;
+    let count = match (kind, notes.len()) {
+        (_, 0) | (NoteKind::Bookmark, _) => return None,
+        (NoteKind::Comment, 1) => msg::word_viewer_one_comment(),
+        (NoteKind::Footnote, 1) => msg::word_viewer_one_footnote(),
+        (NoteKind::Endnote, 1) => msg::word_viewer_one_endnote(),
+        _ => return None,
+    };
+    let link = |number: usize| format!("\u{1d} {} \u{1e} {number}", msg::role_link());
+    let mut lines = vec![count.to_string(), String::new()];
+    for (index, note) in notes.iter().enumerate() {
+        let entry = crate::ui::lists::Entry::document_note(index, kind, note);
+        match kind {
+            NoteKind::Comment => lines.push(format!("{}  {}", link(index + 1), entry.text)),
+            _ => {
+                lines.push(link(index + 1));
+                // By its number, not its mark: an endnote is "1 Renewals are free." though the
+                // document marks it "i" [obs, 1099/s7].
+                let number = note
+                    .number
+                    .and_then(|n| usize::try_from(n).ok())
+                    .unwrap_or(index + 1);
+                lines.push(format!("{number} {}", note.text.trim()));
+            }
+        }
+    }
+    lines.extend([String::new(), msg::viewer_close_hint().to_string()]);
+    Some(lines)
+}
+
 /// The footnote or endnote whose reference Word's caret is on, as JAWS's Alt+Shift+E reads it:
 /// "end note reference: i Renewals are free.", "footnote reference: 1 Bring a photo ID.";
 /// elsewhere "No footnote or EndNote reference at cursor." [obs, 1092/s1, s7, s9, s14]. `None`

@@ -18,6 +18,13 @@ list-dialog-footnotes = Footnotes
 list-dialog-endnotes = End Notes
 # Word's bookmarks, Insert+Alt+B in a document [obs, 1091/s1].
 list-dialog-bookmarks = Bookmark List
+# Windows+Semicolon in a document of Word's: the notes the Virtual Viewer shows, JAWS's items in
+# its order [obs, 1094/s1, 1098/s1-s4].
+list-dialog-notes-to-view = Items to Display in Virtual Viewer
+notes-to-view-comments = Comments
+notes-to-view-footnotes = Footnotes
+notes-to-view-endnotes = Endnotes
+notes-to-view-revisions = Revisions
 # The name of the Form Fields list's list, as JAWS's dialog names it.
 list-dialog-form-fields-list = List1
 list-dialog-features = Virtual HTML Features

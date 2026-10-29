@@ -341,6 +341,8 @@ pub struct ScreenReaderEngine {
     document_fields_asked: bool,
     /// The focused document's comments or footnotes were asked for their list, and are awaited.
     document_notes_asked: Option<crate::event::NoteKind>,
+    /// The focused document's notes were asked for the Virtual Viewer, and are awaited.
+    notes_viewer_asked: Option<crate::event::NoteKind>,
     /// Say All waits for Word's document's paragraphs.
     say_all_paragraphs_asked: bool,
     /// Say Window Title in Word asked for the document's view, said with this title when it
@@ -633,6 +635,7 @@ impl ScreenReaderEngine {
             document_links_asked: false,
             document_fields_asked: false,
             document_notes_asked: None,
+            notes_viewer_asked: None,
             say_all_paragraphs_asked: false,
             document_view_title: None,
             document_view_by_key: None,
@@ -1265,6 +1268,21 @@ impl ScreenReaderEngine {
             // Word's Ctrl+Shift+Apostrophe: its comments listed [obs, 1082/s1]; the key is the
             // application's elsewhere.
             let m = event.modifiers;
+            // Windows+Semicolon in Word's document: Items to Display in Virtual Viewer [obs,
+            // 1094/s1]; elsewhere the key is Windows'.
+            if event.key == Key::Semicolon
+                && m.win
+                && !m.ctrl
+                && !m.alt
+                && !m.shift
+                && !m.insert
+                && self.in_word_document()
+            {
+                let dialog = crate::ui::lists::ListDialog::notes_to_view(self.dialog_count + 1);
+                let mode = self.app_mode;
+                self.show_list(dialog, mode);
+                return KeyAction::Consume;
+            }
             if event.key == Key::Apostrophe
                 && m.ctrl
                 && m.shift
@@ -1623,6 +1641,11 @@ impl ScreenReaderEngine {
                 Some(said)
             }
             AccessibilityEvent::DocumentFields(fields) => self.document_fields(fields),
+            AccessibilityEvent::DocumentNotes(kind, notes)
+                if self.notes_viewer_asked == Some(*kind) =>
+            {
+                self.notes_viewer(*kind, notes)
+            }
             AccessibilityEvent::DocumentNotes(kind, notes) => self.document_notes(*kind, notes),
             AccessibilityEvent::DocumentParagraphs(paragraphs) => {
                 self.say_all_by_paragraphs(paragraphs)
@@ -2911,8 +2934,9 @@ impl ScreenReaderEngine {
             }
             // A document's fields are only listed from the document, above.
             ListKind::DocumentFields => (None, msg::form_fields_list_none().to_string()),
-            // A document's notes too, by Word's keys (`Self::open_document_notes`).
-            ListKind::DocumentNotes(_) => return None,
+            // A document's notes too, by Word's keys (`Self::open_document_notes`), and what
+            // the Virtual Viewer shows of them.
+            ListKind::DocumentNotes(_) | ListKind::NotesToView => return None,
             // With none, JAWS says so and then the page [obs, 221/s2].
             ListKind::FormFields => {
                 let fields = self.cursor.buffer.get_form_fields_list();
@@ -3014,13 +3038,7 @@ impl ScreenReaderEngine {
     /// Insert+Shift+F): the notes are read from the document first, and the list opens when they
     /// come. False outside Word's document, where the key is not Word's.
     pub(crate) fn open_document_notes(&mut self, kind: crate::event::NoteKind) -> bool {
-        let in_word = self.app_mode != AppMode::VirtualBuffer
-            && self.editing_text()
-            && self
-                .last_text
-                .as_ref()
-                .is_some_and(|t| t.structure.is_some());
-        if !in_word
+        if !self.in_word_document()
             || !self
                 .actions
                 .as_ref()
@@ -3031,6 +3049,41 @@ impl ScreenReaderEngine {
         tracing::debug!(?kind, "notes list: the document's notes asked for");
         self.document_notes_asked = Some(kind);
         true
+    }
+
+    /// Whether the keys go to a document whose structure Word's object model reads.
+    fn in_word_document(&self) -> bool {
+        self.app_mode != AppMode::VirtualBuffer
+            && self.editing_text()
+            && self
+                .last_text
+                .as_ref()
+                .is_some_and(|t| t.structure.is_some())
+    }
+
+    /// The focused document's notes, asked for the Virtual Viewer: it opens on their count, "There
+    /// is only one Comment to display.", then the notes, each after its link, and how to close
+    /// it; its first line is said, then "Edit" [obs, 1096/s2-s6, 1097/s3-s6, 1099/s4-s7]. With
+    /// none, no viewer: "There are no items to display. | Edit" [obs, 1100/s2, s3].
+    fn notes_viewer(
+        &mut self,
+        kind: crate::event::NoteKind,
+        notes: &[crate::event::DocumentNote],
+    ) -> Option<String> {
+        self.notes_viewer_asked = None;
+        let edit = crate::linearize::role_marker(msg::role_edit().as_str());
+        if notes.is_empty() {
+            let speech = format!("{}\n{edit}", msg::word_viewer_none());
+            self.speech.speak(&speech, false);
+            return Some(speech);
+        }
+        let lines = crate::apps::windows::word::notes_viewer_lines(kind, notes)?;
+        let viewer = crate::viewer::VirtualViewer::new(lines);
+        let speech = format!("{}\n{edit}", viewer.line_text());
+        self.viewer = Some(viewer);
+        self.show_viewer_window();
+        self.speech.speak(&speech, false);
+        Some(speech)
     }
 
     /// The focused document's comments or footnotes, asked for their list: JAWS's Reviewers'
@@ -3155,6 +3208,24 @@ impl ScreenReaderEngine {
                         ListKind::Links => {
                             actions.move_to_paragraph(self.last_text.as_ref(), entry.offset);
                         }
+                        // OK in Items to Display in Virtual Viewer: what is gathered is said,
+                        // and the viewer opens when the notes come [obs, 1096/s2].
+                        ListKind::NotesToView => {
+                            self.moved_by_document_list = false;
+                            let kind = crate::ui::lists::NOTES_TO_VIEW
+                                .get(entry.node_id)
+                                .and_then(|(_, kind)| *kind);
+                            if let Some(kind) = kind {
+                                if let Some(processing) =
+                                    crate::apps::windows::word::notes_processing(kind)
+                                {
+                                    self.speech.speak(&processing, true);
+                                }
+                                if actions.read_document_notes(kind) {
+                                    self.notes_viewer_asked = Some(kind);
+                                }
+                            }
+                        }
                         // OK on a comment or footnote: the caret on its mark, and "Edit" said
                         // after the footnote, not the line [obs, 1087/s6, 1088/s6].
                         ListKind::DocumentNotes(note) => {
@@ -3251,6 +3322,7 @@ impl ScreenReaderEngine {
                     | ListKind::FormFields
                     | ListKind::DocumentFields
                     | ListKind::DocumentNotes(_)
+                    | ListKind::NotesToView
                     | ListKind::Features
                     | ListKind::Words
                     | ListKind::Elements(_) => self.cursor.current_line(),
