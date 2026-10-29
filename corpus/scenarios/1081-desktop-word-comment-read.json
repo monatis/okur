@@ -1,0 +1,29 @@
+{
+  "id": "1081-desktop-word-comment-read",
+  "name": "Word: Down onto the paragraph with a comment, Say Line, Alt+Shift+Apostrophe at its start, then Ctrl+Right into the commented words and Alt+Shift+Apostrophe again",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-notes.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-notes.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "Insert+Up"},
+    {"id": "s3", "type": "key", "command": "Alt+Shift+Apostrophe"},
+    {"id": "s4", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s5", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s6", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s7", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s8", "type": "key", "command": "Alt+Shift+Apostrophe"}
+  ]
+}
