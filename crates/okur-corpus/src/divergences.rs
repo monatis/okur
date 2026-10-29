@@ -1033,6 +1033,13 @@ divergences! {
      | Address: edit combo | To set the value use the Arrow keys or type the value.\"",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
 
+    Difference::Step => ["1077-desktop-word-save-as-dialog/s4"],
+    "Escape from Save As back to Word's document: JAWS says the document window's own name, \
+     \"Microsoft Word Document\", and the hint of Save As's combo box, \"To set the value use \
+     the Arrow keys or type the value.\", before \"Edit\", in every trial. Okur says \"Edit\", \
+     as back from Word's own dialogs.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
     Difference::JawsAlsoSays("blank") => ["1087-desktop-word-comments-list-controls/s6"],
     "OK on a comment in JAWS's list of Word's comments: JAWS gives its synthesizer \"blank\" \
      before \"Edit\", in every trial, where its speech history holds only spaces: the empty \

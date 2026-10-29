@@ -1039,6 +1039,17 @@ A step can be in more than one entry; all of its entries apply.
   edit combo.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
 
+### Back from Save As, the document window's name and a hint
+
+- Steps: `1077-desktop-word-save-as-dialog/s4`.
+- Difference: the whole step. Escape from Save As back to Word's document: JAWS says the
+  document window's own name, "Microsoft Word Document", and the hint of Save As's combo box,
+  "To set the value use the Arrow keys or type the value.", before "Edit" [obs, 1077/s4, every
+  trial].
+- Why: the window's own name is not the document's, and the hint is of a control no longer
+  there. Okur says "Edit", as back from Word's own dialogs.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
+
 ### "blank" before "Edit" after OK on a Word comment
 
 - Steps: `1087-desktop-word-comments-list-controls/s6`.
