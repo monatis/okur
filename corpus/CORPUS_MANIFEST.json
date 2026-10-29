@@ -1300,6 +1300,48 @@
       }
     },
     {
+      "scenario_id": "1065-desktop-word-find-replace-dialog",
+      "fixture": "desktop-word.ps1",
+      "evidence": {
+        "sha256": "a925bfea13a632afa8c3a328e434c8ebca45c5dcc47cb2781b473e31d48dd5d1",
+        "capture_script_sha256": "0175d651cd6b155da21e17c8c20872644a6c6869ea920430770ccaa9a035d75d",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1066-desktop-word-font-name-list",
+      "fixture": "desktop-word.ps1",
+      "evidence": {
+        "sha256": "ffd287c3a335071f8cd66ba01a4b073465c0302feccd0645028d23976bdd9f6e",
+        "capture_script_sha256": "0175d651cd6b155da21e17c8c20872644a6c6869ea920430770ccaa9a035d75d",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1067-desktop-word-font-size-list",
+      "fixture": "desktop-word.ps1",
+      "evidence": {
+        "sha256": "16fa2444233a5d99fe62114e96eb9c3388f0be7ab6256b6e7bdff3865b0c711a",
+        "capture_script_sha256": "0175d651cd6b155da21e17c8c20872644a6c6869ea920430770ccaa9a035d75d",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "107-article-chars",
       "fixture": "news-article.html",
       "evidence": {
@@ -9911,10 +9953,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 689,
-    "scenarios_with_evidence": 689,
-    "total_trials": 2073,
-    "successful_trials": 2056,
-    "deterministic_scenarios": 443
+    "scenarios": 692,
+    "scenarios_with_evidence": 692,
+    "total_trials": 2082,
+    "successful_trials": 2065,
+    "deterministic_scenarios": 444
   }
 }

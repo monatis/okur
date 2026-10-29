@@ -1,0 +1,33 @@
+{
+  "id": "1067-desktop-word-font-size-list",
+  "name": "Word: the Home tab's Font Size box by its key tips (Alt, H, F, S), its list opened with Alt+Down, Down and Up through the sizes, Escape out of the list, the box and the ribbon; no size is chosen",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Alt"},
+    {"id": "s2", "type": "key", "command": "H"},
+    {"id": "s3", "type": "key", "command": "F"},
+    {"id": "s4", "type": "key", "command": "S"},
+    {"id": "s5", "type": "key", "command": "Alt+Down"},
+    {"id": "s6", "type": "key", "command": "Down"},
+    {"id": "s7", "type": "key", "command": "Down"},
+    {"id": "s8", "type": "key", "command": "Up"},
+    {"id": "s9", "type": "key", "command": "Escape"},
+    {"id": "s10", "type": "key", "command": "Escape"},
+    {"id": "s11", "type": "key", "command": "Escape"},
+    {"id": "s12", "type": "key", "command": "Insert+Up"}
+  ]
+}
