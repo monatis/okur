@@ -1009,6 +1009,16 @@ A step can be in more than one entry; all of its entries apply.
   selection as Word leaves it: "LIBRARY HOURS", "library hours", "Library Hours".
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
 
+### Word's comment read with JAWS's own name for it
+
+- Steps: `1081-desktop-word-comment-read/s8`.
+- Difference: the whole step. Alt+Shift+Apostrophe on a comment in Word: JAWS reads a name of
+  its own before the comment, "vispero:comment | Check the summer hours. | by Lab" [obs,
+  1081/s8, every trial].
+- Why: the first words are an identifier, not the comment. Okur says the comment and its
+  author: "Check the summer hours. | by Lab".
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row

@@ -1010,6 +1010,14 @@ divergences! {
      \"LIBRARYHOURS\", \"libraryhours\"). Okur says the selection as Word leaves it, \
      \"LIBRARY HOURS\", \"library hours\", \"Library Hours\".",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
+    Difference::Step => [
+        "1081-desktop-word-comment-read/s8",
+    ],
+    "Alt+Shift+Apostrophe on a comment in Word: JAWS reads a name of its own first, \
+     \"vispero:comment | Check the summer hours. | by Lab\". Okur says the comment and its \
+     author: \"Check the summer hours. | by Lab\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
 }
 
 /// The divergence covering `step`, if any.
