@@ -2,7 +2,9 @@
 //! Okur's own executable and kept running, so that a window opens without a process start.
 //! Messages go to its standard input from a thread of their own, so the engine never waits
 //! on it; what the user did to a window comes back from its standard output as
-//! [`AccessibilityEvent::Ui`]. If it exits, it is started again for the next message.
+//! [`AccessibilityEvent::Ui`]. If it exits, it is started again for the next message, and the
+//! windows it showed are reported closed, as each one's own closing is: Okur no longer believes
+//! them open (performance review 2026-10-25, finding 9).
 //!
 //! An Okur with UI Access (the installed `okur-sr.exe`) starts it with a lowered token, UI
 //! Access cleared and the integrity Medium, so that it stays the normal process
@@ -12,7 +14,7 @@
 use std::io::{BufRead, BufReader, Read, Write};
 use std::path::PathBuf;
 use std::process::{Child, Command, Stdio};
-use std::sync::mpsc;
+use std::sync::{mpsc, Arc, Mutex};
 use std::time::Duration;
 
 use okur_core::event::AccessibilityEvent;
@@ -28,6 +30,57 @@ enum Message {
 
 pub struct ProcessUiHost {
     messages: mpsc::Sender<Message>,
+}
+
+/// The windows `okur-ui` shows: its dialogs and wizards by id, oldest first, and whether the
+/// viewer's window is up. Kept from what it is told and what it tells, so that its exit can
+/// report them closed.
+#[derive(Debug, Default)]
+struct OpenWindows {
+    dialogs: Vec<u32>,
+    viewer: bool,
+}
+
+impl OpenWindows {
+    /// Notes what `message` shows or closes.
+    fn told(&mut self, message: &ToUi) {
+        let mut opened = |id: u32| {
+            if !self.dialogs.contains(&id) {
+                self.dialogs.push(id);
+            }
+        };
+        match message {
+            ToUi::DialogShow { dialog } => opened(dialog.id),
+            ToUi::WizardShow { wizard } => opened(wizard.id),
+            ToUi::DialogClose { id } => self.dialogs.retain(|d| d != id),
+            ToUi::ViewerShow { .. } => self.viewer = true,
+            ToUi::ViewerClose => self.viewer = false,
+            _ => {}
+        }
+    }
+
+    /// Notes what the user closed.
+    fn heard(&mut self, message: &FromUi) {
+        match message {
+            FromUi::DialogClosed { id } => self.dialogs.retain(|d| d != id),
+            FromUi::ViewerDismissed => self.viewer = false,
+            _ => {}
+        }
+    }
+
+    /// What the windows' going says to Okur, the newest first: each dialog closed, the viewer
+    /// dismissed. Forgets them.
+    fn gone(&mut self) -> Vec<FromUi> {
+        let mut said: Vec<FromUi> = std::mem::take(&mut self.dialogs)
+            .into_iter()
+            .rev()
+            .map(|id| FromUi::DialogClosed { id })
+            .collect();
+        if std::mem::take(&mut self.viewer) {
+            said.push(FromUi::ViewerDismissed);
+        }
+        said
+    }
 }
 
 /// Ends `okur-ui` as Okur exits, from outside the engine that owns the host.
@@ -58,10 +111,11 @@ impl ProcessUiHost {
         // keeps its okur-ui at its own level, as before.
         let lowered = crate::elevation::has_ui_access();
         let (messages, received) = mpsc::channel::<Message>();
+        let open = Arc::new(Mutex::new(OpenWindows::default()));
         std::thread::Builder::new()
             .name("okur-ui writer".to_owned())
             .spawn(move || {
-                let mut running = Running::start(&program, &events, lowered);
+                let mut running = Running::start(&program, &events, lowered, &open);
                 for message in received {
                     let message = match message {
                         Message::Send(message) => message,
@@ -76,6 +130,9 @@ impl ProcessUiHost {
                     let Ok(line) = okur_ui_model::encode(&message) else {
                         continue;
                     };
+                    if let Ok(mut open) = open.lock() {
+                        open.told(&message);
+                    }
                     // A window coming to the front: a lowered okur-ui may take the foreground
                     // only when Okur lets it (the wizard and the main window were left to the
                     // thread-attach trick alone: performance review 2026-10-25, finding 10).
@@ -93,7 +150,7 @@ impl ProcessUiHost {
                         .as_mut()
                         .is_some_and(|r| r.write(&line, shows_dialog))
                     {
-                        running = Running::start(&program, &events, lowered);
+                        running = Running::start(&program, &events, lowered, &open);
                         if !running
                             .as_mut()
                             .is_some_and(|r| r.write(&line, shows_dialog))
@@ -167,6 +224,7 @@ impl Running {
         program: &PathBuf,
         events: &UnboundedSender<AccessibilityEvent>,
         lowered: bool,
+        open: &Arc<Mutex<OpenWindows>>,
     ) -> Option<Self> {
         let (process, input, output) = if lowered {
             Self::spawn_lowered(program)?
@@ -174,6 +232,7 @@ impl Running {
             Self::spawn_plain(program)?
         };
         let events = events.clone();
+        let open = Arc::clone(open);
         let _ = std::thread::Builder::new()
             .name("okur-ui reader".to_owned())
             .spawn(move || {
@@ -181,12 +240,23 @@ impl Running {
                     let Ok(line) = line else { break };
                     match okur_ui_model::decode::<FromUi>(&line) {
                         Ok(message) => {
+                            if let Ok(mut open) = open.lock() {
+                                open.heard(&message);
+                            }
                             let _ = events.send(AccessibilityEvent::Ui(message));
                         }
                         Err(e) => {
                             tracing::warn!(%line, error = %e, "unreadable okur-ui message")
                         }
                     }
+                }
+                // okur-ui is gone, and every window it showed with it.
+                let gone = open.lock().map(|mut open| open.gone()).unwrap_or_default();
+                if !gone.is_empty() {
+                    tracing::warn!(windows = gone.len(), "okur-ui exited with windows open");
+                }
+                for message in gone {
+                    let _ = events.send(AccessibilityEvent::Ui(message));
                 }
             });
         tracing::debug!(pid = process.id(), lowered, "okur-ui started");
@@ -260,5 +330,48 @@ impl Running {
         while !self.process.has_exited() && std::time::Instant::now() < until {
             std::thread::sleep(Duration::from_millis(10));
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use okur_ui_model::DialogSpec;
+
+    fn dialog(id: u32) -> ToUi {
+        ToUi::DialogShow {
+            dialog: DialogSpec {
+                id,
+                title: String::new(),
+                controls: Vec::new(),
+                keys: Vec::new(),
+            },
+        }
+    }
+
+    /// The windows okur-ui leaves as it exits are reported closed, the newest first; those
+    /// Okur or the user closed are not.
+    #[test]
+    fn the_windows_left_open_are_reported_closed() {
+        let mut open = OpenWindows::default();
+        for message in [dialog(1), dialog(2), dialog(3), ToUi::DialogClose { id: 2 }] {
+            open.told(&message);
+        }
+        open.told(&ToUi::ViewerShow {
+            title: String::new(),
+            lines: Vec::new(),
+            mark: okur_ui_model::TextSpan::default(),
+        });
+        open.heard(&FromUi::DialogClosed { id: 3 });
+        open.told(&dialog(4));
+        assert_eq!(
+            open.gone(),
+            [
+                FromUi::DialogClosed { id: 4 },
+                FromUi::DialogClosed { id: 1 },
+                FromUi::ViewerDismissed
+            ]
+        );
+        assert!(open.gone().is_empty());
     }
 }
