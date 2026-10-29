@@ -1263,6 +1263,10 @@ struct ScreenSnapshot {
     /// beside the headings (none before 1068), for Ctrl+Shift+E.
     #[serde(default)]
     track_changes: Option<bool>,
+    /// The alignment of the caret's paragraph after the step, from Word's object model, saved
+    /// beside the headings (none before 1071), for Ctrl+E, R, J and L.
+    #[serde(default)]
+    alignment: Option<i32>,
 }
 
 /// A line spacing as the recorder saves it: Word's rule and its points.
@@ -1300,6 +1304,7 @@ impl ScreenSnapshot {
             self.line_spacing = other.line_spacing;
             self.fields = other.fields;
             self.track_changes = other.track_changes;
+            self.alignment = other.alignment;
         }
     }
 }
@@ -1317,6 +1322,7 @@ struct ScreenReads {
     spacings: usize,
     fields: usize,
     track_changes: usize,
+    alignments: usize,
 }
 
 impl ScreenReads {
@@ -1408,6 +1414,7 @@ impl ScreenReads {
             count("document fields"),
         );
         let track_changes = count("track changes");
+        let alignments = count("paragraph alignment");
         let mut deliver = |event: okur_core::AccessibilityEvent| {
             if let Some(speech) = engine.handle_accessibility_event(&event) {
                 if spoken.is_empty() {
@@ -1430,6 +1437,14 @@ impl ScreenReads {
             self.track_changes += 1;
             deliver(okur_core::AccessibilityEvent::TrackChanges(
                 snapshot.and_then(|s| s.track_changes),
+            ));
+        }
+        // The paragraph's alignment after Ctrl+E, R, J or L, always answered: none where the
+        // step saved none, and nothing is said.
+        while self.alignments < alignments {
+            self.alignments += 1;
+            deliver(okur_core::AccessibilityEvent::ParagraphAlignment(
+                snapshot.and_then(|s| s.alignment),
             ));
         }
         // Say Font's line spacing, always answered: none where the step saved none (scenarios

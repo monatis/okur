@@ -443,6 +443,34 @@ pub(crate) fn track_changes_key(event: &crate::input::KeyEvent) -> bool {
     m.ctrl && m.shift && !m.alt && !m.insert && !m.win && event.key == crate::input::Key::Alpha('E')
 }
 
+/// Word's alignment keys, Ctrl+E, Ctrl+R, Ctrl+J and Ctrl+L, after which JAWS says the
+/// alignment they leave the paragraph in (Ctrl+E on a centered paragraph aligns it left).
+pub(crate) fn alignment_key(event: &crate::input::KeyEvent) -> bool {
+    let m = &event.modifiers;
+    m.ctrl
+        && !m.shift
+        && !m.alt
+        && !m.insert
+        && !m.win
+        && matches!(event.key, crate::input::Key::Alpha('E' | 'R' | 'J' | 'L'))
+}
+
+/// A paragraph's alignment as JAWS says it after an alignment key: "Centered", "aligned
+/// right", "justified", "Aligned left" [obs, 1071/s2-s5]. Word's other justifications (4, 5,
+/// 7, 8) are said as justified, its Thai one (9) not at all.
+pub(crate) fn alignment_said(alignment: i32) -> Option<String> {
+    Some(
+        match alignment {
+            0 => msg::word_aligned_left(),
+            1 => msg::word_aligned_centered(),
+            2 => msg::word_aligned_right(),
+            3 | 4 | 5 | 7 | 8 => msg::word_aligned_justified(),
+            _ => return None,
+        }
+        .to_string(),
+    )
+}
+
 /// How the caret came to a cell of Word's table, which decides what JAWS says of it.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CellMove {

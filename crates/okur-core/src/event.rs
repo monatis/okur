@@ -915,6 +915,11 @@ pub enum AccessibilityEvent {
     /// ([`crate::actions::ApplicationActions::read_track_changes`]); `None` when it could not
     /// be read.
     TrackChanges(Option<bool>),
+    /// The alignment of the focused document's paragraph (Word's `WdParagraphAlignment`: 0
+    /// left, 1 centered, 2 right, 3 justified), read after Ctrl+E, R, J or L
+    /// ([`crate::actions::ApplicationActions::read_paragraph_alignment`]); `None` when it
+    /// could not be read.
+    ParagraphAlignment(Option<i32>),
     /// The focused document's fields, in order, asked for by its list of fields (Insert+F5 in
     /// Word; [`crate::actions::ApplicationActions::read_document_fields`]); empty when it has
     /// none or could not be read.

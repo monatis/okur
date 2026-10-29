@@ -102,6 +102,12 @@ word-view-outline = Outline View
 # Ctrl+Shift+E in Word: the state it leaves Track Changes in [obs, 1068/s1, s8].
 word-track-changes-on = Track Changes on
 word-track-changes-off = Track Changes off
+# Ctrl+E, Ctrl+R, Ctrl+J and Ctrl+L in Word: the alignment they leave the paragraph in, JAWS's
+# capitals [obs, 1071/s2-s5].
+word-aligned-centered = Centered
+word-aligned-right = aligned right
+word-aligned-justified = justified
+word-aligned-left = Aligned left
 # Say Window Title in Web Layout and Read Mode: JAWS's lower case "reading layout" [obs,
 # 1042/s5, s9].
 word-view-web = Web Layout View

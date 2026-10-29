@@ -7665,6 +7665,53 @@ fn words_track_changes_key_says_its_state() {
     assert_eq!(speech.take().len(), 2);
 }
 
+/// Ctrl+E, R, J and L in Word's document ask for the paragraph's alignment once Word has acted
+/// on them, and say it as JAWS does: "Centered", "aligned right", "justified", "Aligned left";
+/// the line spacing keys say nothing [obs, 1071/s2-s8].
+#[test]
+fn words_alignment_keys_say_the_alignment() {
+    let (mut engine, _speech) = word_document(
+        "Library Hours\r",
+        0,
+        crate::event::LineStructure {
+            line: (0, 14),
+            ..Default::default()
+        },
+    );
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ctrl = |letter: char| {
+        let mut key = KeyEvent::new(Key::Alpha(letter), Modifiers::none(), true);
+        key.modifiers.ctrl = true;
+        key
+    };
+    engine.handle_key_event(&ctrl('E'));
+    let mut double = KeyEvent::new(Key::Digit(2), Modifiers::none(), true);
+    double.modifiers.ctrl = true;
+    engine.handle_key_event(&double);
+    let asked = actions
+        .requests()
+        .iter()
+        .filter(|(request, _)| request == "paragraph alignment")
+        .count();
+    assert_eq!(asked, 1);
+    for (alignment, said) in [
+        (Some(1), Some("Centered")),
+        (Some(2), Some("aligned right")),
+        (Some(3), Some("justified")),
+        (Some(0), Some("Aligned left")),
+        (Some(9), None),
+        (None, None),
+    ] {
+        assert_eq!(
+            engine
+                .handle_accessibility_event(&AccessibilityEvent::ParagraphAlignment(alignment))
+                .as_deref(),
+            said
+        );
+    }
+}
+
 /// A drop-down form field of Word's: Alt+Down says "Open List Box" first; once its list
 /// closes, the menus are left without the document's name and the field is said with its new
 /// choice and the combo box's hint [obs, 1057/s7, s9].

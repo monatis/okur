@@ -445,6 +445,15 @@ pub fn track_revisions(document: HWND) -> Option<bool> {
     bool::try_from(&property(&document, "TrackRevisions")?).ok()
 }
 
+/// The alignment of the selection's paragraph in Word's document window `document`
+/// (`Selection.ParagraphFormat.Alignment`: 0 left, 1 centered, 2 right, 3 justified); `None`
+/// where Word's object model does not answer.
+pub fn paragraph_alignment(document: HWND) -> Option<i32> {
+    let selection = object(&property(&word_window(document)?, "Selection")?)?;
+    let format = object(&property(&selection, "ParagraphFormat")?)?;
+    i32::try_from(&property(&format, "Alignment")?).ok()
+}
+
 /// Marks the document in Word's document window `document` saved (`Document.Saved = True`),
 /// so that closing its window asks nothing: the harness's, for a fixture a scenario changed
 /// (a form filled in). False where Word's object model does not answer.

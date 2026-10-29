@@ -102,6 +102,9 @@ mod windows_actions {
         /// Whether the focused document tracks its changes, read once Ctrl+Shift+E has acted,
         /// answered always.
         TrackChanges,
+        /// The alignment of the focused document's paragraph, read once Ctrl+E, R, J or L has
+        /// acted, answered always.
+        ParagraphAlignment,
         /// The focused document's fields, answered even when there are none.
         DocumentFields,
         /// The caret to a field of the focused document (from 0), then the field's text.
@@ -184,6 +187,7 @@ mod windows_actions {
                 Request::DocumentLinks => "document links",
                 Request::LineSpacing => "line spacing",
                 Request::TrackChanges => "track changes",
+                Request::ParagraphAlignment => "paragraph alignment",
                 Request::DocumentFields => "document fields",
                 Request::Field(..) => "field",
                 Request::ActivateDocumentLink(_) => "document link",
@@ -404,25 +408,22 @@ mod windows_actions {
                                 );
                                 let _ = events.send(AccessibilityEvent::LineSpacing(spacing));
                             }
-                            // Read after Ctrl+Shift+E, which Word may not have acted on yet: its
-                            // state polled until it changes, or the settle time passes.
                             Request::TrackChanges => {
                                 let Some(events) = events.as_ref() else {
                                     return;
                                 };
-                                let started = Instant::now();
-                                let first = crate::text_context::word_track_changes();
-                                let mut now = first;
-                                while now == first && started.elapsed() < SETTLE {
-                                    std::thread::sleep(POLL);
-                                    now = crate::text_context::word_track_changes();
-                                }
-                                tracing::debug!(
-                                    ?now,
-                                    ms = started.elapsed().as_millis(),
-                                    "track changes read"
-                                );
+                                let now = after_word_key(crate::text_context::word_track_changes);
+                                tracing::debug!(?now, "track changes read");
                                 let _ = events.send(AccessibilityEvent::TrackChanges(now));
+                            }
+                            Request::ParagraphAlignment => {
+                                let Some(events) = events.as_ref() else {
+                                    return;
+                                };
+                                let now =
+                                    after_word_key(crate::text_context::word_paragraph_alignment);
+                                tracing::debug!(?now, "paragraph alignment read");
+                                let _ = events.send(AccessibilityEvent::ParagraphAlignment(now));
                             }
                             Request::DocumentFields => {
                                 let Some(events) = events.as_ref() else {
@@ -789,6 +790,22 @@ mod windows_actions {
         }
     }
 
+    /// A state of Word's that a key just passed on changes (Track Changes, a paragraph's
+    /// alignment), read once Word has acted on it: polled until it differs from its first read,
+    /// or the settle time passes (Word had acted before the first read, or nothing changed).
+    fn after_word_key<T: PartialEq>(read: impl Fn() -> Option<T>) -> Option<T> {
+        let started = Instant::now();
+        let first = read();
+        while started.elapsed() < SETTLE {
+            std::thread::sleep(POLL);
+            let now = read();
+            if now != first {
+                return now;
+            }
+        }
+        first
+    }
+
     /// The field's state once the application has acted on the key.
     ///
     /// An idle application acts on a key before a read made as the key is passed on can
@@ -967,6 +984,10 @@ mod windows_actions {
 
         fn read_track_changes(&self) -> bool {
             self.send(Request::TrackChanges)
+        }
+
+        fn read_paragraph_alignment(&self) -> bool {
+            self.send(Request::ParagraphAlignment)
         }
 
         fn read_document_paragraphs(&self) -> bool {

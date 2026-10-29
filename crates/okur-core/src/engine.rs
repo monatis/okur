@@ -1258,10 +1258,13 @@ impl ScreenReaderEngine {
                     self.speech.speak(&view, true);
                     self.document_view_by_key = Some(view);
                 }
-                // Track Changes' key: its new state, read once Word has acted on it.
-                if crate::apps::windows::word::track_changes_key(event) {
-                    if let Some(actions) = &self.actions {
+                // Track Changes' key, and the alignment keys: the state they leave, read once
+                // Word has acted on them.
+                if let Some(actions) = &self.actions {
+                    if crate::apps::windows::word::track_changes_key(event) {
                         actions.read_track_changes();
+                    } else if crate::apps::windows::word::alignment_key(event) {
+                        actions.read_paragraph_alignment();
                     }
                 }
             }
@@ -1548,6 +1551,11 @@ impl ScreenReaderEngine {
             AccessibilityEvent::DocumentHeadings(headings) => self.document_headings(headings),
             AccessibilityEvent::DocumentLinks(links) => self.document_links(links),
             AccessibilityEvent::LineSpacing(spacing) => self.word_font(*spacing),
+            AccessibilityEvent::ParagraphAlignment(alignment) => {
+                let said = crate::apps::windows::word::alignment_said((*alignment)?)?;
+                self.speech.speak(&said, true);
+                Some(said)
+            }
             AccessibilityEvent::TrackChanges(on) => {
                 let said = if (*on)? {
                     msg::word_track_changes_on()

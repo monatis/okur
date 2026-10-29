@@ -329,6 +329,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::DocumentLinks(_)) => "document links",
         Some(AccessibilityEvent::LineSpacing(_)) => "line spacing",
         Some(AccessibilityEvent::TrackChanges(_)) => "track changes",
+        Some(AccessibilityEvent::ParagraphAlignment(_)) => "paragraph alignment",
         Some(AccessibilityEvent::DocumentFields(_)) => "document fields",
         Some(AccessibilityEvent::DocumentParagraphs(_)) => "document paragraphs",
         Some(AccessibilityEvent::DocumentView(_)) => "document view",
