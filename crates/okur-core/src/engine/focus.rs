@@ -144,10 +144,19 @@ impl ScreenReaderEngine {
                 .accelerator_key
                 .as_ref()
                 .is_some_and(|k| !menu_shortcut(k));
-        let access_keys = self
+        // Speak Menus Only keeps a menu's items' access keys, Speak Dialogs Only a dialog's
+        // controls' (JAWS's Access Key choices).
+        let in_menu = focus.role == Role::MenuItem;
+        let access_keys = match self
             .settings
             .verbosity
-            .is_on(crate::settings::OutputType::AccessKey);
+            .mode(crate::settings::OutputType::AccessKey)
+        {
+            crate::settings::OutputMode::On => true,
+            crate::settings::OutputMode::MenusOnly => in_menu,
+            crate::settings::OutputMode::DialogsOnly => !in_menu && focus.in_dialog_box,
+            crate::settings::OutputMode::Off | crate::settings::OutputMode::CustomOnly => false,
+        };
         if has_key && !access_keys {
             FocusEvent {
                 access_key: None,

@@ -418,10 +418,13 @@ spoken form is a parity target.
    "Options menu | Basics... | To move through items press up or down arrow.", "leaving menu
    bar"). Basics: Tutor Messages, Access Key, Prompt to confirm when exiting Okur, Show Virtual
    Viewer on screen, Use Keyboard Layout, OK, Cancel. Still to do: Automatically Start Okur...
-   and Run Okur from System Tray (with setup's start entries), Tutor Messages' "Announce Custom
-   Messages Only" and Access Key's "Speak Menus Only" and "Speak Dialogs Only", the window when
+   and Run Okur from System Tray (with setup's start entries), the window when
    Okur starts (minimized or not, to record), the Language menu with voice profiles (milestone
-   4), Commands Search in Help once Okur has it.
+   4), Commands Search in Help once Okur has it. Since 2026-10-29 Basics and the Startup Wizard
+   offer Tutor Messages' "Announce Custom Messages Only" (Okur has no custom messages, so no
+   tutor message is said) and Access Key's "Speak Menus Only" and "Speak Dialogs Only" (a
+   menu's items' access keys only, a dialog's controls' only), as JAWS's documentation
+   describes them; not yet recorded, nor how JAWS's `ACCESS_KEY` line writes them.
 4. **Voices**: voice contexts, profiles, Voice Adjustment, Select a Voice Profile, the Language
    menu's profiles.
    **Voice contexts built 2026-10-24**:

@@ -113,8 +113,9 @@ impl StartupWizard {
     }
 
     /// Whether `output` is on at every verbosity level.
-    fn everywhere(&self, output: OutputType) -> bool {
-        (0..3).all(|level| self.draft.verbosity.mode_at(output, level) == OutputMode::On)
+    fn mode_chosen(&self, output: OutputType, modes: &[OutputMode]) -> usize {
+        let mode = self.draft.verbosity.mode(output);
+        modes.iter().position(|m| *m == mode).unwrap_or(0)
     }
 
     /// The choice of `choices` the draft's setting `id` has.
@@ -240,13 +241,13 @@ impl StartupWizard {
                 )
             }
             Page::Verbosity => {
-                let two = |id: &str, label: StaticMessage, names: [StaticMessage; 2], on| {
+                let radios = |id: &str, label: StaticMessage, names: &[StaticMessage], selected| {
                     control(
                         id,
                         label,
                         ControlKind::Radios {
                             options: names.iter().map(ToString::to_string).collect(),
-                            selected: usize::from(on),
+                            selected,
                         },
                     )
                 };
@@ -254,20 +255,26 @@ impl StartupWizard {
                 (
                     msg::startup_wizard_verbosity(),
                     vec![
-                        two(
+                        radios(
                             TUTOR,
                             msg::basics_tutor(),
-                            [msg::basics_tutor_off(), msg::basics_tutor_on()],
-                            self.everywhere(OutputType::Hint),
+                            &[
+                                msg::basics_tutor_off(),
+                                msg::basics_tutor_on(),
+                                msg::basics_tutor_custom(),
+                            ],
+                            self.mode_chosen(OutputType::Hint, &OutputMode::TUTOR),
                         ),
-                        two(
+                        radios(
                             ACCESS_KEY,
                             msg::basics_access_key(),
-                            [
+                            &[
                                 msg::basics_access_key_off(),
                                 msg::startup_wizard_access_key_all(),
+                                msg::basics_access_key_menus(),
+                                msg::basics_access_key_dialogs(),
                             ],
-                            self.everywhere(OutputType::AccessKey),
+                            self.mode_chosen(OutputType::AccessKey, &OutputMode::ACCESS_KEY),
                         ),
                         control(
                             VERBOSITY,
@@ -364,13 +371,9 @@ impl StartupWizard {
 
     /// What the wizard's window reported.
     pub fn handle(&mut self, message: &FromUi) -> Outcome {
-        let every = |on: bool| {
-            if on {
-                [OutputMode::On; 3]
-            } else {
-                [OutputMode::Off; 3]
-            }
-        };
+        // A choice is every level's.
+        let every =
+            |modes: &[OutputMode], i: usize| [modes.get(i).copied().unwrap_or(OutputMode::Off); 3];
         let pick = |draft: &mut Settings, id: &str, choices: Vec<Choice>, i: usize| {
             if let Some(choice) = choices.into_iter().nth(i) {
                 registry::set(draft, id, choice.value);
@@ -406,12 +409,12 @@ impl StartupWizard {
                     (LAYOUT, Value::Selected(i)) => {
                         pick(draft, "keyboard.layout", choices::<KeyboardLayout>(), *i);
                     }
-                    (TUTOR, Value::Selected(i)) => {
-                        draft.verbosity.set_modes(OutputType::Hint, every(*i == 1))
-                    }
+                    (TUTOR, Value::Selected(i)) => draft
+                        .verbosity
+                        .set_modes(OutputType::Hint, every(&OutputMode::TUTOR, *i)),
                     (ACCESS_KEY, Value::Selected(i)) => draft
                         .verbosity
-                        .set_modes(OutputType::AccessKey, every(*i == 1)),
+                        .set_modes(OutputType::AccessKey, every(&OutputMode::ACCESS_KEY, *i)),
                     (VERBOSITY, Value::Selected(i)) => {
                         pick(draft, "verbosity.level", choices::<VerbosityLevel>(), *i);
                     }
@@ -572,7 +575,18 @@ mod tests {
             options(&verbosity, VERBOSITY),
             ["Beginner, Highest", "Intermediate", "Advanced, Lowest"]
         );
-        assert_eq!(options(&verbosity, ACCESS_KEY), ["Off", "Speak all"]);
+        assert_eq!(
+            options(&verbosity, ACCESS_KEY),
+            ["Off", "Speak all", "Speak Menus Only", "Speak Dialogs Only"]
+        );
+        assert_eq!(
+            options(&verbosity, TUTOR),
+            [
+                "Turn Off Menu and Control Help",
+                "Announce Menu and Control Help",
+                "Announce Custom Messages Only"
+            ]
+        );
     }
 
     /// A change is tried at once; Finish keeps the changes, Escape nothing.

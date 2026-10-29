@@ -32,9 +32,10 @@ a fetched evidence file) must read 90; `fix-rate.ps1` otherwise. old-pc's master
 
 1. **Voices:** Apply's question whether to make a saved profile the default (record first);
    Synthesizer Language.
-2. **The Startup Wizard's rest:** Run Okur from System Tray; Tutor Messages' "Announce Custom
-   Messages Only", Access Key's "Speak Menus Only" and "Speak Dialogs Only", each with its
-   behavior; Basics' "Automatically Start Okur..." button.
+2. **The Startup Wizard's rest:** Run Okur from System Tray; Basics' "Automatically Start
+   Okur..." button. Tutor Messages' "Announce Custom Messages Only" and Access Key's "Speak
+   Menus Only" and "Speak Dialogs Only" are built from the documentation (2026-10-29); record
+   them (and how JAWS's `ACCESS_KEY` writes them) when old-pc is free.
 3. **Smaller:** the lifetimes' icons beside Quick Settings' items.
 4. **A live look** at Settings Center's results list and pane name on screen, with the owner's
    leave on the dev box.

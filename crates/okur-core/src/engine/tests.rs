@@ -5290,6 +5290,43 @@ fn the_hint_output_type_drops_native_usage_hints() {
         "Yes \u{1d} Button \u{1e} \nTo activate press spacebar."
     );
     assert_eq!(said(OutputMode::Off), "Yes \u{1d} Button \u{1e} ");
+    // Announce Custom Messages Only: Okur has no custom message, so none is said.
+    assert_eq!(said(OutputMode::CustomOnly), "Yes \u{1d} Button \u{1e} ");
+}
+
+/// JAWS's Access Key choices: Speak Menus Only says a menu item's access key and not a
+/// dialog's control's, Speak Dialogs Only the other way round [the Startup Wizard's walk;
+/// documented as menus' and dialogs' access keys].
+#[test]
+fn access_keys_are_said_in_menus_or_dialogs_only_as_chosen() {
+    let said = |mode: OutputMode, focus: &FocusEvent| {
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(create_test_buffer()),
+            Box::new(MockSpeechOutput::new()),
+        );
+        engine
+            .settings
+            .verbosity
+            .set_modes(OutputType::AccessKey, [mode; 3]);
+        engine.keys_as_output(focus).access_key.is_some()
+    };
+    let mut check = FocusEvent::new(Role::CheckBox).with_name("Match case");
+    check.access_key = Some("Alt+C".into());
+    check.in_dialog_box = true;
+    let mut item = FocusEvent::new(Role::MenuItem).with_name("Copy");
+    item.access_key = Some("C".into());
+    for (mode, in_dialog, in_menu) in [
+        (OutputMode::On, true, true),
+        (OutputMode::MenusOnly, false, true),
+        (OutputMode::DialogsOnly, true, false),
+        (OutputMode::Off, false, false),
+    ] {
+        assert_eq!(
+            (said(mode, &check), said(mode, &item)),
+            (in_dialog, in_menu),
+            "{mode:?}"
+        );
+    }
 }
 
 /// Without Auto Forms Mode, Tab onto a page's menu bar leaves the virtual cursor there: the

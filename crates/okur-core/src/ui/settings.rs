@@ -327,7 +327,7 @@ impl SettingsDialog {
             id: format!("{OUTPUT}{}", output_id(output)),
             label: output.label().to_string(),
             kind: ControlKind::CheckBox {
-                checked: verbosity.mode_at(output, level) == OutputMode::On,
+                checked: verbosity.mode_at(output, level).speaks(),
             },
             enabled: true,
             hidden: false,

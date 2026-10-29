@@ -37,9 +37,10 @@ impl BasicsDialog {
         }
     }
 
-    /// Whether `output` is on at every verbosity level.
-    fn everywhere(&self, output: OutputType) -> bool {
-        (0..3).all(|level| self.draft.verbosity.mode_at(output, level) == OutputMode::On)
+    /// Which of `modes` `output` has at the current verbosity level.
+    fn chosen(&self, output: OutputType, modes: &[OutputMode]) -> usize {
+        let mode = self.draft.verbosity.mode(output);
+        modes.iter().position(|m| *m == mode).unwrap_or(0)
     }
 
     pub fn spec(&self) -> DialogSpec {
@@ -50,9 +51,9 @@ impl BasicsDialog {
             enabled: true,
             hidden: false,
         };
-        let radios = |options: [StaticMessage; 2], on: bool| ControlKind::Radios {
+        let radios = |options: &[StaticMessage], selected: usize| ControlKind::Radios {
             options: options.iter().map(ToString::to_string).collect(),
-            selected: usize::from(on),
+            selected,
         };
         let layouts = choices::<KeyboardLayout>();
         let layout = registry::get(&self.draft, "keyboard.layout");
@@ -64,16 +65,25 @@ impl BasicsDialog {
                     TUTOR,
                     msg::basics_tutor(),
                     radios(
-                        [msg::basics_tutor_off(), msg::basics_tutor_on()],
-                        self.everywhere(OutputType::Hint),
+                        &[
+                            msg::basics_tutor_off(),
+                            msg::basics_tutor_on(),
+                            msg::basics_tutor_custom(),
+                        ],
+                        self.chosen(OutputType::Hint, &OutputMode::TUTOR),
                     ),
                 ),
                 control(
                     ACCESS_KEY,
                     msg::basics_access_key(),
                     radios(
-                        [msg::basics_access_key_off(), msg::basics_access_key_all()],
-                        self.everywhere(OutputType::AccessKey),
+                        &[
+                            msg::basics_access_key_off(),
+                            msg::basics_access_key_all(),
+                            msg::basics_access_key_menus(),
+                            msg::basics_access_key_dialogs(),
+                        ],
+                        self.chosen(OutputType::AccessKey, &OutputMode::ACCESS_KEY),
                     ),
                 ),
                 control(
@@ -123,24 +133,20 @@ impl BasicsDialog {
 
     /// What the dialog's window reported.
     pub fn handle(&mut self, message: &FromUi) -> Outcome {
-        let every = |on: bool| {
-            if on {
-                [OutputMode::On; 3]
-            } else {
-                [OutputMode::Off; 3]
-            }
-        };
+        // A choice is every level's.
+        let every =
+            |modes: &[OutputMode], i: usize| [modes.get(i).copied().unwrap_or(OutputMode::Off); 3];
         match message {
             FromUi::DialogChanged { id, control, value } if *id == self.id => {
                 match (control.as_str(), value) {
                     (TUTOR, Value::Selected(i)) => self
                         .draft
                         .verbosity
-                        .set_modes(OutputType::Hint, every(*i == 1)),
+                        .set_modes(OutputType::Hint, every(&OutputMode::TUTOR, *i)),
                     (ACCESS_KEY, Value::Selected(i)) => self
                         .draft
                         .verbosity
-                        .set_modes(OutputType::AccessKey, every(*i == 1)),
+                        .set_modes(OutputType::AccessKey, every(&OutputMode::ACCESS_KEY, *i)),
                     (CONFIRM_EXIT, Value::Checked(on)) => self.draft.confirm_exit = *on,
                     (VIEWER, Value::Checked(on)) => {
                         self.draft.viewer_display = if *on {

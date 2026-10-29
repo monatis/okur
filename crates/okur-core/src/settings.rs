@@ -745,12 +745,35 @@ impl VerbosityLevel {
     }
 }
 
-/// Whether an output type is spoken at a level. More modes only if JAWS's files show them.
+/// Whether an output type is spoken at a level, and where: JAWS's Access Key choices (Off,
+/// Speak all, Speak Menus Only, Speak Dialogs Only) and Tutor Messages' (Turn Off, Announce
+/// Menu and Control Help, Announce Custom Messages Only) [the walk of the Startup Wizard,
+/// `docs/references/okur-settings-redesign.md`; documented as menus' and dialogs' access keys,
+/// and the custom messages a trainer writes].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum OutputMode {
     Off,
     On,
+    /// Access keys in menus only.
+    MenusOnly,
+    /// Access keys in dialogs only.
+    DialogsOnly,
+    /// Tutor messages written for the user only: Okur has none, so none is said.
+    CustomOnly,
+}
+
+impl OutputMode {
+    /// The Tutor Messages choices, in JAWS's order.
+    pub const TUTOR: [OutputMode; 3] = [Self::Off, Self::On, Self::CustomOnly];
+    /// The Access Key choices, in JAWS's order.
+    pub const ACCESS_KEY: [OutputMode; 4] =
+        [Self::Off, Self::On, Self::MenusOnly, Self::DialogsOnly];
+
+    /// Whether the output is said, in the places its mode names.
+    pub fn speaks(self) -> bool {
+        matches!(self, Self::On | Self::MenusOnly | Self::DialogsOnly)
+    }
 }
 
 /// Whether messages that have a short form are said long or short (JAWS's message length;
@@ -923,7 +946,7 @@ impl Default for Verbosity {
 impl Verbosity {
     /// Whether `output` is spoken at the current level.
     pub fn is_on(&self, output: OutputType) -> bool {
-        self.mode(output) == OutputMode::On
+        self.mode(output).speaks()
     }
 
     /// `output`'s mode at the current level.
