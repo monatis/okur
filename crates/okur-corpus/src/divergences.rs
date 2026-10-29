@@ -1018,6 +1018,15 @@ divergences! {
      \"vispero:comment | Check the summer hours. | by Lab\". Okur says the comment and its \
      author: \"Check the summer hours. | by Lab\".",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
+    Difference::Step => [
+        "1080-desktop-word-indent-keys/s3",
+    ],
+    "Word's second Ctrl+M: JAWS says the indent as it was before the key, \"indent | 1.5 \
+     inches\", where Word's paragraph now starts 2 inches from the page's edge (saved with the \
+     step); in round-1080c one trial said \"2 inches\". Okur says what the key left, \
+     \"indent | 2 inches\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
 }
 
 /// The divergence covering `step`, if any.

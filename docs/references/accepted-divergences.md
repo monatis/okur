@@ -1019,6 +1019,18 @@ A step can be in more than one entry; all of its entries apply.
   author: "Check the summer hours. | by Lab".
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
 
+### Word's indent said before the key acts
+
+- Steps: `1080-desktop-word-indent-keys/s3`.
+- Difference: the whole step. Word's second Ctrl+M: JAWS says the indent as it was before the
+  key, "indent | 1.5 inches", where Word's paragraph now starts 2 inches from the page's edge
+  (saved with the step) [obs, 1080/s3, round-1080d, every trial; round-1080c had one trial say
+  "2 inches"]. The first Ctrl+M is the same in two trials of three ("1 inch" for 1.5), which
+  the third trial's words cover.
+- Why: the number said is not the paragraph's. Okur says what the key left: "indent | 2
+  inches".
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row

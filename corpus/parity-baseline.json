@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
   "matched_steps": 9260,
-  "total_steps": 9825,
-  "accepted_divergences": 274,
+  "total_steps": 9824,
+  "accepted_divergences": 275,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -1305,7 +1305,7 @@
     "108-article-lists/s9": "match",
     "1080-desktop-word-indent-keys/s1": "match",
     "1080-desktop-word-indent-keys/s2": "match",
-    "1080-desktop-word-indent-keys/s3": "mismatch",
+    "1080-desktop-word-indent-keys/s3": "accepted divergence",
     "1080-desktop-word-indent-keys/s4": "match",
     "1080-desktop-word-indent-keys/s5": "match",
     "1081-desktop-word-comment-read/s1": "match",
