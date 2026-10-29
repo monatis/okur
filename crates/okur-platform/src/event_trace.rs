@@ -1083,6 +1083,30 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         }
     }
     toolbar_button(event, focused, &mut focus);
+    // A Win32 combo box's own focus while UI Automation's chain is still on the edit before
+    // it: Tab from Save As's File name to Save as type gives the MSAA object "Save as type:"
+    // with the chain on File name's edit, and JAWS reads the combo box, "Save as type: Combo
+    // box | Word Document (*.docx) | 1 of 17" [obs, 1077/s2]. The combo box is the focus, as
+    // MSAA has it, its place in its list asked of the control.
+    const MSAA_COMBOBOX: i32 = 0x2E;
+    if let Some(object) = event.object.as_ref().filter(|o| {
+        o.role == Some(MSAA_COMBOBOX)
+            && focused.control_type == UIA_EDIT
+            && o.name
+                .as_deref()
+                .map(str::trim)
+                .filter(|n| !n.is_empty())
+                .is_some_and(|n| focused.name.as_deref().map(str::trim) != Some(n))
+    }) {
+        focus.role = okur_core::Role::ComboBox;
+        focus.name = object.name.clone();
+        focus.value = object.value.clone().filter(|v| !v.trim().is_empty());
+        focus.text = None;
+        focus.container_role = None;
+        focus.container_name = None;
+        focus.item_index = None;
+        focus.item_count = None;
+    }
     // A Win32 dialog's control names its access key through MSAA only: the focus event's
     // object is the control ("Script: Combo box … Alt+r" [obs, 541/s8]).
     if focus.access_key.is_none() {
