@@ -728,6 +728,34 @@ $launch = $scenario.launch
 # and three were left open after round 283.
 $script:fixtureProcess = $null
 
+# The visible top-level windows a window owns: the dialogs and message boxes it has open.
+Add-Type -Namespace SrOwned -Name W -MemberDefinition @'
+public delegate bool EnumProc(System.IntPtr h, System.IntPtr l);
+[System.Runtime.InteropServices.DllImport("user32.dll")] public static extern bool EnumWindows(EnumProc f, System.IntPtr l);
+[System.Runtime.InteropServices.DllImport("user32.dll")] public static extern System.IntPtr GetWindow(System.IntPtr h, uint cmd);
+[System.Runtime.InteropServices.DllImport("user32.dll")] public static extern bool IsWindowVisible(System.IntPtr h);
+public static System.IntPtr[] Owned(System.IntPtr owner) {
+    var found = new System.Collections.Generic.List<System.IntPtr>();
+    EnumWindows((h, l) => { if (GetWindow(h, 4) == owner && IsWindowVisible(h)) found.Add(h); return true; }, System.IntPtr.Zero);
+    return found.ToArray();
+}
+'@ -ErrorAction SilentlyContinue
+
+# Cancels what the fixture's window has open (a Save As, Word's own dialogs, its message boxes:
+# Cancel is Escape, which an OK-only box takes as OK), so that the window can close: a trial
+# that left Save As open had Word refuse to close and keep its dialogs, and the next round's
+# keys went to them (round-1074b's 1077, round-1078).
+function Close-OwnedWindows([IntPtr]$window) {
+    for ($pass = 0; $pass -lt 3; $pass++) {
+        $owned = @([SrOwned.W]::Owned($window))
+        if ($owned.Count -eq 0) { return }
+        foreach ($h in $owned) {
+            [void][SrKeyInput]::PostMessage($h, 0x111, [IntPtr]2, [IntPtr]::Zero)
+        }
+        Start-Sleep -Milliseconds 700
+    }
+}
+
 function Stop-DesktopFixture {
     if ($launch.shell_window) {
         # File Explorer's windows are the shell's process, the taskbar's too: closed, not killed.
@@ -748,6 +776,7 @@ function Stop-DesktopFixture {
         # nineteen piled up (round-1055e).
         $old = Find-WindowByTitle $launch.window_title
         if ($old) {
+            Close-OwnedWindows $old.MainWindowHandle
             try { & $OkurLab word-discard --title $launch.window_title 2>&1 | Out-Null } catch { }
             for ($attempt = 0; $attempt -lt 2 -and $old; $attempt++) {
                 [void][SrKeyInput]::PostMessage($old.MainWindowHandle, 0x10, [IntPtr]::Zero, [IntPtr]::Zero)
@@ -756,6 +785,9 @@ function Stop-DesktopFixture {
                     $old = Find-WindowByTitle $launch.window_title
                     if (-not $old) { break }
                 }
+                # Word's "You cannot close Microsoft Word because a dialog box is open": cancelled
+                # with the dialog, then Close once more.
+                if ($old) { Close-OwnedWindows $old.MainWindowHandle }
             }
             if ($old) { Write-Warning "the fixture window '$($launch.window_title)' did not close" }
         }
