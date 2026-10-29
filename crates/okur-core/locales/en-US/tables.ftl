@@ -108,6 +108,12 @@ word-aligned-centered = Centered
 word-aligned-right = aligned right
 word-aligned-justified = justified
 word-aligned-left = Aligned left
+# Ctrl+M and Ctrl+Shift+M in Word: the way, then the paragraph's left indent: "indent | 1 inch",
+# "out dent | 1.5 inches" [obs, 1080/s2-s4].
+word-indent = indent
+word-outdent = out dent
+word-one-inch = 1 inch
+word-inches = { $inches } inches
 # Say Window Title in Web Layout and Read Mode: JAWS's lower case "reading layout" [obs,
 # 1042/s5, s9].
 word-view-web = Web Layout View

@@ -166,6 +166,8 @@ pub enum WordKey {
     Alignment,
     /// Ctrl+Shift+Period and Ctrl+Shift+Comma: the selection's font size.
     FontSize,
+    /// Ctrl+M (`out` false) and Ctrl+Shift+M: the paragraph's left indent.
+    Indent { out: bool },
 }
 
 impl WordKey {
@@ -175,8 +177,19 @@ impl WordKey {
             Self::TrackChanges => "track changes",
             Self::Alignment => "paragraph alignment",
             Self::FontSize => "font size",
+            Self::Indent { out: false } => "indent",
+            Self::Indent { out: true } => "outdent",
         }
     }
+
+    /// Every key, as replay answers them.
+    pub const ALL: [WordKey; 5] = [
+        Self::TrackChanges,
+        Self::Alignment,
+        Self::FontSize,
+        Self::Indent { out: false },
+        Self::Indent { out: true },
+    ];
 }
 
 /// What one of Word's keys left ([`WordKey`]).
@@ -187,6 +200,11 @@ pub enum WordKeyState {
     Alignment(i32),
     /// In tenths of a point.
     FontSize(u32),
+    /// The paragraph's left indent in hundredths of an inch, and the way the key moved it.
+    Indent {
+        out: bool,
+        hundredths: u32,
+    },
 }
 
 /// A paragraph's line spacing as Word keeps it, for Say Font's "Line spacing:" [obs, 1040/s17].

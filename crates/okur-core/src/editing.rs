@@ -41,6 +41,9 @@ pub enum EditKey {
     /// selected in Notepad. In a WinForms edit JAWS read only the first line (313/s7),
     /// apparently a fallback for that control.
     SelectAll,
+    /// Word's Shift+F3: the selection as the key leaves it, its case changed ("LIBRARY HOURS")
+    /// [obs, 1078/s3-s5].
+    ChangeCase,
     /// Ctrl+C: "Copied selection to clipboard" when text is selected (313/s8).
     Copy,
     /// Ctrl+X: "cut selection to clipboard", in JAWS's lower case, when text was selected
@@ -785,6 +788,13 @@ pub fn speech_in(
                 return None;
             }
             wording.selection(msg::selection_added(), &lines.join("\n"), true)
+        }
+        EditKey::ChangeCase => {
+            let lines = selection_lines(&selected_text(after), plain_edit);
+            if lines.is_empty() {
+                return None;
+            }
+            lines.join("\n")
         }
         // JAWS's messages: short above Beginner ("Copied", "cut", "Pasted" [obs, 599/s3, s19,
         // s6]), none at Advanced [obs, 609/s3, s6, s7, s19, s20].

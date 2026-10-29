@@ -374,6 +374,12 @@ mod reader {
             }
             WordKey::FontSize => crate::word_om::selection_font_size(window)
                 .map(|points| WordKeyState::FontSize((points * 10.0).round() as u32)),
+            WordKey::Indent { out } => {
+                crate::word_om::paragraph_left_indent(window).map(|points| WordKeyState::Indent {
+                    out,
+                    hundredths: (points.max(0.0) / 72.0 * 100.0).round() as u32,
+                })
+            }
         }
     }
 

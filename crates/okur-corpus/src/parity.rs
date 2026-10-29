@@ -1271,6 +1271,10 @@ struct ScreenSnapshot {
     /// beside the headings (none before 1074), for Ctrl+Shift+Period and Comma.
     #[serde(default)]
     font_size: Option<f32>,
+    /// The caret's paragraph's left indent after the step, in points, from Word's object model,
+    /// saved beside the headings (none before 1080's second recording), for Ctrl+M.
+    #[serde(default)]
+    left_indent: Option<f32>,
 }
 
 impl ScreenSnapshot {
@@ -1283,6 +1287,10 @@ impl ScreenSnapshot {
             WordKey::FontSize => self
                 .font_size
                 .map(|points| WordKeyState::FontSize((points * 10.0).round() as u32)),
+            WordKey::Indent { out } => self.left_indent.map(|points| WordKeyState::Indent {
+                out,
+                hundredths: (points.max(0.0) / 72.0 * 100.0).round() as u32,
+            }),
         }
     }
 }
@@ -1324,6 +1332,7 @@ impl ScreenSnapshot {
             self.track_changes = other.track_changes;
             self.alignment = other.alignment;
             self.font_size = other.font_size;
+            self.left_indent = other.left_indent;
         }
     }
 }
@@ -1341,7 +1350,7 @@ struct ScreenReads {
     spacings: usize,
     fields: usize,
     /// Word's keys' states asked for and answered, by key.
-    word_keys: [usize; 3],
+    word_keys: [usize; 5],
 }
 
 impl ScreenReads {
@@ -1433,7 +1442,7 @@ impl ScreenReads {
             count("document fields"),
         );
         use okur_core::WordKey;
-        let word_keys = [WordKey::TrackChanges, WordKey::Alignment, WordKey::FontSize];
+        let word_keys = WordKey::ALL;
         let mut deliver = |event: okur_core::AccessibilityEvent| {
             if let Some(speech) = engine.handle_accessibility_event(&event) {
                 if spoken.is_empty() {

@@ -456,6 +456,17 @@ pub fn selection_font_size(document: HWND) -> Option<f32> {
     (size > 0.0 && size < 1639.0).then_some(size as f32)
 }
 
+/// The left indent of the selection's paragraph in Word's document window `document`, in
+/// points (`Selection.ParagraphFormat.LeftIndent`); `None` where Word's object model does not
+/// answer, or for paragraphs of several indents.
+pub fn paragraph_left_indent(document: HWND) -> Option<f32> {
+    let selection = object(&property(&word_window(document)?, "Selection")?)?;
+    let format = object(&property(&selection, "ParagraphFormat")?)?;
+    let points = f64::try_from(&property(&format, "LeftIndent")?).ok()?;
+    // Word's wdUndefined (9999999) for several indents.
+    (points.abs() < 1584.0).then_some(points as f32)
+}
+
 /// The alignment of the selection's paragraph in Word's document window `document`
 /// (`Selection.ParagraphFormat.Alignment`: 0 left, 1 centered, 2 right, 3 justified); `None`
 /// where Word's object model does not answer.
