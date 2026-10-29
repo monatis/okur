@@ -1,0 +1,30 @@
+{
+  "id": "1070-desktop-word-bold-italic-underline",
+  "name": "Word: the heading's text selected (End, Shift+Home), then Ctrl+B, Ctrl+I and Ctrl+U each twice, on and off; Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "End"},
+    {"id": "s2", "type": "key", "command": "Shift+Home"},
+    {"id": "s3", "type": "key", "command": "Ctrl+B"},
+    {"id": "s4", "type": "key", "command": "Ctrl+B"},
+    {"id": "s5", "type": "key", "command": "Ctrl+I"},
+    {"id": "s6", "type": "key", "command": "Ctrl+I"},
+    {"id": "s7", "type": "key", "command": "Ctrl+U"},
+    {"id": "s8", "type": "key", "command": "Ctrl+U"},
+    {"id": "s9", "type": "key", "command": "Insert+Up"}
+  ]
+}
