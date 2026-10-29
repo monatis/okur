@@ -44,7 +44,7 @@ Step types:
                where the physical key has one: "Down", "H", "Shift+H", "Ctrl+Alt+Right",
                "Insert+Down", "Insert+F7". Modifiers: Ctrl, Alt, Shift, Insert, Win.
                The keypad as with Num Lock off: "Numpad5", "Numpad4", "Insert+Numpad5",
-               "NumpadPlus"; "Comma", "Period", "Slash" by their US places ($ScanTable).
+               "NumpadPlus"; "Comma", "Period", "Slash", "Semicolon", "Apostrophe" by their US places ($ScanTable).
                An optional "repeat": N presses the chord N times quickly ("twice quickly").
                "capture_clipboard": true stores the clipboard after the step (observation.clipboard).
                "copies_speech_history": true for a key that copies JAWS's speech history itself
@@ -271,7 +271,8 @@ $KeyTable = @{
 # on Turkish Q "comma" types what that key types there, and JAWS hears its Comma.
 $ScanTable = @{
     'comma' = 0x33; 'period' = 0x34; 'slash' = 0x35; 'leftbracket' = 0x1A; 'rightbracket' = 0x1B;
-    'backslash' = 0x2B; 'grave' = 0x29; 'minus' = 0x0C; 'equals' = 0x0D
+    'backslash' = 0x2B; 'grave' = 0x29; 'minus' = 0x0C; 'equals' = 0x0D; 'semicolon' = 0x27;
+    'apostrophe' = 0x28
 }
 
 # name -> @(virtual key, extended, scan code or 0 for the layout's)
