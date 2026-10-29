@@ -1,0 +1,27 @@
+{
+  "id": "1078-desktop-word-change-case",
+  "name": "Word: the heading's text selected (End, Shift+Home), Shift+F3 three times through Word's cases; Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "End"},
+    {"id": "s2", "type": "key", "command": "Shift+Home"},
+    {"id": "s3", "type": "key", "command": "Shift+F3"},
+    {"id": "s4", "type": "key", "command": "Shift+F3"},
+    {"id": "s5", "type": "key", "command": "Shift+F3"},
+    {"id": "s6", "type": "key", "command": "Insert+Up"}
+  ]
+}
