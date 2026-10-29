@@ -129,6 +129,19 @@ pub struct LineStructure {
     /// where one begins, "has comment" [obs, 1081/s1].
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub comments: Vec<DocumentComment>,
+    /// The footnote references on the caret's paragraph (Word's), each where it stands in the
+    /// text, which shows none of it, and its number: a line read says it there, "every day
+    /// footnote 1." [obs, 1083/s4].
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub footnotes: Vec<DocumentFootnote>,
+}
+
+/// A footnote reference of Word's on the caret's paragraph: the place in the text before which
+/// it stands, and the footnote's number.
+#[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub struct DocumentFootnote {
+    pub at: usize,
+    pub number: u32,
 }
 
 /// A comment of Word's on the caret's paragraph, over the text from `start` to `end`.
@@ -238,6 +251,38 @@ pub struct DocumentField {
     pub code: String,
     #[serde(default)]
     pub result: String,
+}
+
+/// Which of a document's notes JAWS lists in Word: its comments (Ctrl+Shift+Apostrophe) or its
+/// footnotes (Insert+Shift+F).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum NoteKind {
+    Comment,
+    Footnote,
+}
+
+impl NoteKind {
+    /// The request's name for reading them, in a log and in replay.
+    pub fn read_name(self) -> &'static str {
+        match self {
+            Self::Comment => "document comments",
+            Self::Footnote => "document footnotes",
+        }
+    }
+}
+
+/// A comment or footnote of a document the platform reads (Word's), for JAWS's list of them:
+/// its text; a comment's author and its date as the user's locale writes "ddd, MMM dd, yy"
+/// ("Fri, Jan 02, 26"); a footnote's number.
+#[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub struct DocumentNote {
+    pub text: String,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub author: String,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub date: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub number: Option<u32>,
 }
 
 /// A link of a document the platform reads by paragraphs (Word's hyperlinks), for its Links
@@ -984,6 +1029,10 @@ pub enum AccessibilityEvent {
     /// Word; [`crate::actions::ApplicationActions::read_document_fields`]); empty when it has
     /// none or could not be read.
     DocumentFields(Vec<DocumentField>),
+    /// The focused document's comments or footnotes, in order, asked for by JAWS's list of them
+    /// in Word ([`crate::actions::ApplicationActions::read_document_notes`]); empty when it has
+    /// none or they could not be read.
+    DocumentNotes(NoteKind, Vec<DocumentNote>),
     /// The focused document's paragraphs, in order, asked for by Say All in Word
     /// ([`crate::actions::ApplicationActions::read_document_paragraphs`]); empty when they could
     /// not be read.

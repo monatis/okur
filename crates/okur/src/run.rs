@@ -330,6 +330,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::LineSpacing(_)) => "line spacing",
         Some(AccessibilityEvent::WordKeyState(_)) => "word key state",
         Some(AccessibilityEvent::DocumentFields(_)) => "document fields",
+        Some(AccessibilityEvent::DocumentNotes(..)) => "document notes",
         Some(AccessibilityEvent::DocumentParagraphs(_)) => "document paragraphs",
         Some(AccessibilityEvent::DocumentView(_)) => "document view",
         Some(AccessibilityEvent::DocumentLoaded { .. }) => "document loaded",

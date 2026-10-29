@@ -1259,6 +1259,12 @@ struct ScreenSnapshot {
     /// 1050's second recording), for its List Fields.
     #[serde(default)]
     fields: Vec<okur_core::DocumentField>,
+    /// Word's document's comments and footnotes, from its object model, saved beside the
+    /// headings (none before 1082's third recording), for JAWS's lists of them.
+    #[serde(default)]
+    comments: Vec<okur_core::DocumentNote>,
+    #[serde(default)]
+    footnotes: Vec<okur_core::DocumentNote>,
     /// Whether the document tracked its changes after the step, from Word's object model, saved
     /// beside the headings (none before 1068), for Ctrl+Shift+E.
     #[serde(default)]
@@ -1330,6 +1336,8 @@ impl ScreenSnapshot {
             self.links = other.links;
             self.line_spacing = other.line_spacing;
             self.fields = other.fields;
+            self.comments = other.comments;
+            self.footnotes = other.footnotes;
             self.track_changes = other.track_changes;
             self.alignment = other.alignment;
             self.font_size = other.font_size;
@@ -1350,6 +1358,8 @@ struct ScreenReads {
     links: usize,
     spacings: usize,
     fields: usize,
+    /// Word's comments and footnotes asked for and answered.
+    notes: [usize; 2],
     /// Word's keys' states asked for and answered, by key.
     word_keys: [usize; 5],
 }
@@ -1497,6 +1507,28 @@ impl ScreenReads {
             deliver(okur_core::AccessibilityEvent::DocumentFields(
                 snapshot.map(|s| s.fields.clone()).unwrap_or_default(),
             ));
+        }
+        // The lists of comments and footnotes, always answered: none where the step saved none
+        // (scenarios recorded before they were saved, 1089's document without them).
+        use okur_core::NoteKind;
+        for (answered, kind) in self
+            .notes
+            .iter_mut()
+            .zip([NoteKind::Comment, NoteKind::Footnote])
+        {
+            let asked = count(kind.read_name());
+            while *answered < asked {
+                *answered += 1;
+                deliver(okur_core::AccessibilityEvent::DocumentNotes(
+                    kind,
+                    snapshot
+                        .map(|s| match kind {
+                            NoteKind::Comment => s.comments.clone(),
+                            NoteKind::Footnote => s.footnotes.clone(),
+                        })
+                        .unwrap_or_default(),
+                ));
+            }
         }
         let Some(snapshot) = snapshot else {
             return;

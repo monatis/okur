@@ -106,6 +106,11 @@ mod windows_actions {
         DocumentFields,
         /// The caret to a field of the focused document (from 0), then the field's text.
         Field(Option<Box<TextContext>>, usize),
+        /// The focused document's comments or footnotes, answered even when there are none.
+        DocumentNotes(okur_core::NoteKind),
+        /// The caret to a comment's or footnote's mark in the focused document (from 0), then
+        /// the field's text.
+        Note(Option<Box<TextContext>>, okur_core::NoteKind, usize),
         /// The focused document's link (from 0, as its links are listed) followed.
         ActivateDocumentLink(usize),
         /// The focused document's paragraphs, answered even when there are none.
@@ -186,6 +191,8 @@ mod windows_actions {
                 Request::WordKey(_) => "word key",
                 Request::DocumentFields => "document fields",
                 Request::Field(..) => "field",
+                Request::DocumentNotes(_) => "document notes",
+                Request::Note(..) => "note",
                 Request::ActivateDocumentLink(_) => "document link",
                 Request::DocumentParagraphs => "document paragraphs",
                 Request::DocumentView => "document view",
@@ -434,6 +441,36 @@ mod windows_actions {
                                 };
                                 if !crate::text_context::word_select_field(index) {
                                     tracing::debug!(index, "caret not moved to the field");
+                                    return;
+                                }
+                                if let Some(context) =
+                                    read_after_key(uia, before.map(|b| *b), false)
+                                {
+                                    let _ = events.send(AccessibilityEvent::TextContext(context));
+                                }
+                            }
+                            Request::DocumentNotes(kind) => {
+                                let Some(events) = events.as_ref() else {
+                                    return;
+                                };
+                                let started = Instant::now();
+                                let notes = crate::text_context::word_document_notes(kind)
+                                    .unwrap_or_default();
+                                tracing::debug!(
+                                    ?kind,
+                                    notes = notes.len(),
+                                    ms = started.elapsed().as_millis(),
+                                    "document notes read"
+                                );
+                                let _ = events.send(AccessibilityEvent::DocumentNotes(kind, notes));
+                            }
+                            Request::Note(before, kind, index) => {
+                                let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
+                                else {
+                                    return;
+                                };
+                                if !crate::text_context::word_select_note(kind, index) {
+                                    tracing::debug!(?kind, index, "caret not moved to the note");
                                     return;
                                 }
                                 if let Some(context) =
@@ -964,6 +1001,19 @@ mod windows_actions {
 
         fn move_to_document_field(&self, before: Option<&TextContext>, index: usize) -> bool {
             self.send(Request::Field(before.cloned().map(Box::new), index))
+        }
+
+        fn read_document_notes(&self, kind: okur_core::NoteKind) -> bool {
+            self.send(Request::DocumentNotes(kind))
+        }
+
+        fn move_to_document_note(
+            &self,
+            before: Option<&TextContext>,
+            kind: okur_core::NoteKind,
+            index: usize,
+        ) -> bool {
+            self.send(Request::Note(before.cloned().map(Box::new), kind, index))
         }
 
         fn read_document_view(&self) -> bool {

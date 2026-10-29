@@ -39,8 +39,8 @@ pub use reader::{
     focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
     move_caret_in_edit, move_to_cell, move_to_paragraph, read_focused, read_focused_outside_page,
     visible_text, with_paragraph_alignment, word_document_fields, word_document_headings,
-    word_document_links, word_document_paragraphs, word_key_state, word_line_spacing,
-    word_select_field, word_view,
+    word_document_links, word_document_notes, word_document_paragraphs, word_key_state,
+    word_line_spacing, word_select_field, word_select_note, word_view,
 };
 
 #[cfg(windows)]
@@ -402,6 +402,37 @@ mod reader {
         )
     }
 
+    /// The comments or footnotes of Word's focused document, in order, from Word's own object
+    /// model (`crate::word_om`); `None` outside Word's document.
+    pub fn word_document_notes(kind: okur_core::NoteKind) -> Option<Vec<okur_core::DocumentNote>> {
+        let (window, class) = focused_window()?;
+        if class != "_WWG" {
+            return None;
+        }
+        let notes = crate::word_om::document_notes(window, kind == okur_core::NoteKind::Footnote)?;
+        Some(notes.into_iter().map(document_note).collect())
+    }
+
+    /// A note of Word's as the core lists it.
+    pub fn document_note(note: crate::word_om::WordNote) -> okur_core::DocumentNote {
+        okur_core::DocumentNote {
+            text: note.text,
+            author: note.author,
+            date: note.date,
+            number: note.number,
+        }
+    }
+
+    /// Puts the caret of Word's focused document on the mark of its comment or footnote
+    /// `index` (from 0, as [`word_document_notes`] lists them). False outside Word's document.
+    pub fn word_select_note(kind: okur_core::NoteKind, index: usize) -> bool {
+        focused_window()
+            .filter(|(_, class)| class == "_WWG")
+            .is_some_and(|(window, _)| {
+                crate::word_om::select_note(window, kind == okur_core::NoteKind::Footnote, index)
+            })
+    }
+
     /// Puts the caret of Word's focused document on its field `index` (from 0, as
     /// [`word_document_fields`] lists them). False outside Word's document.
     pub fn word_select_field(index: usize) -> bool {
@@ -672,6 +703,7 @@ mod reader {
                 form_fields: word_form_fields(focused, caret, start).unwrap_or_default(),
                 links: line_links(pattern, caret, line.0).unwrap_or_default(),
                 comments: word_comments(focused, caret, start).unwrap_or_default(),
+                footnotes: word_footnotes(focused, caret, start).unwrap_or_default(),
             })
         }
     }
@@ -714,6 +746,48 @@ mod reader {
                     end: paragraph + placed.before + placed.length,
                     text: placed.text,
                     author: placed.author,
+                })
+                .collect(),
+        )
+    }
+
+    /// The footnote references on the caret's paragraph of Word's `focused` document, placed in
+    /// the text from the paragraph's start; none where the document has none (asked once a
+    /// second).
+    fn word_footnotes(
+        focused: &IUIAutomationElement,
+        caret: &IUIAutomationTextRange,
+        start: usize,
+    ) -> Option<Vec<okur_core::DocumentFootnote>> {
+        use windows::Win32::Foundation::HWND;
+        use windows::Win32::UI::Accessibility::TextUnit_Paragraph;
+        // SAFETY: a UIA property read on a valid element.
+        let window = unsafe { focused.CurrentNativeWindowHandle() }.ok()?;
+        let window = HWND(window.0);
+        let key = window.0 as isize;
+        let known = FOOTNOTES_SEEN.with(|seen| {
+            seen.get()
+                .filter(|(at, when, _)| *at == key && when.elapsed() < FORM_FIELDS_KEPT)
+                .map(|(_, _, has)| has)
+        });
+        let has = match known {
+            Some(has) => has,
+            None => {
+                let has = crate::word_om::has_footnotes(window).unwrap_or(false);
+                FOOTNOTES_SEEN.with(|seen| seen.set(Some((key, std::time::Instant::now(), has))));
+                has
+            }
+        };
+        if !has {
+            return None;
+        }
+        let (paragraph, _) = unit_at(caret, start, TextUnit_Paragraph)?;
+        Some(
+            crate::word_om::paragraph_footnotes(window)?
+                .into_iter()
+                .map(|placed| okur_core::DocumentFootnote {
+                    at: paragraph + placed.before,
+                    number: placed.number,
                 })
                 .collect(),
         )
@@ -767,6 +841,9 @@ mod reader {
             const { std::cell::Cell::new(None) };
         /// The Word document last asked whether it has comments, when, and its answer.
         static COMMENTS_SEEN: std::cell::Cell<Option<(isize, std::time::Instant, bool)>> =
+            const { std::cell::Cell::new(None) };
+        /// The Word document last asked whether it has footnotes, when, and its answer.
+        static FOOTNOTES_SEEN: std::cell::Cell<Option<(isize, std::time::Instant, bool)>> =
             const { std::cell::Cell::new(None) };
     }
 

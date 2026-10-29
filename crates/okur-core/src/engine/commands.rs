@@ -1038,6 +1038,16 @@ impl ScreenReaderEngine {
     /// An Okur key command (Insert+…). In a text field the reading commands read the field;
     /// elsewhere they run as virtual cursor or application commands.
     pub(super) fn okur_key_command(&mut self, event: &KeyEvent) {
+        // Word's Insert+Shift+F: its footnotes listed [obs, 1083/s1].
+        let m = event.modifiers;
+        if event.key == Key::Alpha('F')
+            && m.shift
+            && !m.ctrl
+            && !m.alt
+            && self.open_document_notes(crate::event::NoteKind::Footnote)
+        {
+            return;
+        }
         let layout_command = crate::command::layout_command_for(&self.settings.keyboard, event);
         let say_line = layout_command == Some(Command::SayLine)
             || crate::editing::EditKey::of(event).is_some();

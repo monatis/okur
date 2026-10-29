@@ -10,6 +10,10 @@ list-dialog-headings-list = headings
 list-dialog-form-fields = Select a Form Field
 # Word's fields, Insert+F5 in a document [obs, 1050/s1].
 list-dialog-document-fields = List Fields
+# Word's comments, Ctrl+Shift+Apostrophe in a document [obs, 1082/s1].
+list-dialog-comments = Reviewers' Comments
+# Word's footnotes, Insert+Shift+F in a document [obs, 1083/s1].
+list-dialog-footnotes = Footnotes
 # The name of the Form Fields list's list, as JAWS's dialog names it.
 list-dialog-form-fields-list = List1
 list-dialog-features = Virtual HTML Features

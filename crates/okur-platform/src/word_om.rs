@@ -8,13 +8,14 @@
 
 use std::ptr::null_mut;
 
-use windows::core::{Interface, GUID, HSTRING, PCWSTR};
-use windows::Win32::Foundation::HWND;
+use windows::core::{w, Interface, GUID, HSTRING, PCWSTR};
+use windows::Win32::Foundation::{HWND, SYSTEMTIME};
+use windows::Win32::Globalization::{GetDateFormatEx, ENUM_DATE_FORMATS_FLAGS};
 use windows::Win32::System::Com::{
     IDispatch, DISPATCH_FLAGS, DISPATCH_METHOD, DISPATCH_PROPERTYGET, DISPATCH_PROPERTYPUT,
     DISPPARAMS,
 };
-use windows::Win32::System::Variant::{VARIANT, VT_DISPATCH};
+use windows::Win32::System::Variant::{VariantTimeToSystemTime, VARIANT, VT_DATE, VT_DISPATCH};
 use windows::Win32::UI::Accessibility::AccessibleObjectFromWindow;
 
 /// `OBJID_NATIVEOM`: the window's application object model.
@@ -310,6 +311,174 @@ pub fn paragraph_comments(document: HWND) -> Option<Vec<PlacedComment>> {
             })
             .collect(),
     )
+}
+
+/// A comment or footnote of Word's document, as JAWS's lists of them show it: its text; a
+/// comment's author and its date, as the user's locale writes "ddd, MMM dd, yy" ("Fri, Jan
+/// 02, 26" [obs, 1082/s1]); a footnote's number (`Footnote.Index`).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct WordNote {
+    pub text: String,
+    pub author: String,
+    pub date: String,
+    pub number: Option<u32>,
+}
+
+/// The collection of the document's comments, or of its footnotes.
+fn notes_of(whole: &IDispatch, footnotes: bool) -> Option<IDispatch> {
+    object(&property(
+        whole,
+        if footnotes { "Footnotes" } else { "Comments" },
+    )?)
+}
+
+/// The comments (`Document.Comments`) or footnotes (`Document.Footnotes`) of the document in
+/// Word's document window `document`, in the document's order; `None` where Word's object
+/// model does not answer.
+pub fn document_notes(document: HWND, footnotes: bool) -> Option<Vec<WordNote>> {
+    let whole = object(&property(&word_window(document)?, "Document")?)?;
+    let notes = notes_of(&whole, footnotes)?;
+    let count = number(&notes, "Count")?;
+    Some(
+        (1..=count.clamp(0, MAX_FIELDS))
+            .filter_map(|index| item(&notes, index))
+            .map(|note| {
+                let said = property(&note, "Range")
+                    .as_ref()
+                    .and_then(object)
+                    .map(|range| text(&range, "Text"))
+                    .unwrap_or_default();
+                let (author, date, number) = if footnotes {
+                    let index = number(&note, "Index").and_then(|n| u32::try_from(n).ok());
+                    (String::new(), String::new(), index)
+                } else {
+                    let date = property(&note, "Date")
+                        .as_ref()
+                        .and_then(date_of)
+                        .and_then(note_date)
+                        .unwrap_or_default();
+                    (text(&note, "Author").trim().to_owned(), date, None)
+                };
+                WordNote {
+                    text: said.trim().to_owned(),
+                    author,
+                    date,
+                    number,
+                }
+            })
+            .collect(),
+    )
+}
+
+/// Puts the caret on the mark of the document's comment or footnote `index` (from 0, as
+/// [`document_notes`] lists them): where the text a comment is on ends, before its mark; on a
+/// footnote's reference, which Right then moves over [obs, 1087/s6-s8, 1088/s6-s8]. False
+/// where Word's object model does not answer.
+pub fn select_note(document: HWND, footnotes: bool, index: usize) -> bool {
+    let select = || -> Option<()> {
+        let window = word_window(document)?;
+        let whole = object(&property(&window, "Document")?)?;
+        let notes = notes_of(&whole, footnotes)?;
+        let note = item(&notes, i32::try_from(index).ok()?.checked_add(1)?)?;
+        let start = number(&object(&property(&note, "Reference")?)?, "Start")?;
+        let selection = object(&property(&window, "Selection")?)?;
+        invoke(
+            &selection,
+            "SetRange",
+            DISPATCH_METHOD,
+            &mut [VARIANT::from(start), VARIANT::from(start)],
+        )?;
+        Some(())
+    };
+    select().is_some()
+}
+
+/// A date Word's object model gave (`VT_DATE`, days since 1899-12-30).
+fn date_of(value: &VARIANT) -> Option<f64> {
+    // SAFETY: the discriminant read, then for VT_DATE the number it holds.
+    unsafe {
+        let inner = &value.Anonymous.Anonymous;
+        (inner.vt == VT_DATE).then_some(inner.Anonymous.date)
+    }
+}
+
+/// A comment's date as JAWS's list of comments writes it, "Fri, Jan 02, 26", in the names of
+/// the user's locale.
+fn note_date(date: f64) -> Option<String> {
+    let mut time = SYSTEMTIME::default();
+    // SAFETY: converts into a local.
+    if unsafe { VariantTimeToSystemTime(date, &mut time) } == 0 {
+        return None;
+    }
+    let mut written = [0u16; 64];
+    // SAFETY: the user's locale (no name), the date and the picture, into a local buffer.
+    let length = unsafe {
+        GetDateFormatEx(
+            PCWSTR::null(),
+            ENUM_DATE_FORMATS_FLAGS(0),
+            Some(&time),
+            w!("ddd, MMM dd, yy"),
+            Some(&mut written),
+            PCWSTR::null(),
+        )
+    };
+    let length = usize::try_from(length).ok()?.checked_sub(1)?;
+    Some(String::from_utf16_lossy(written.get(..length)?))
+}
+
+/// Whether the document in Word's document window `document` has footnotes at all
+/// (`Document.Footnotes.Count`): a document without them is looked through no further.
+pub fn has_footnotes(document: HWND) -> Option<bool> {
+    let document = object(&property(&word_window(document)?, "Document")?)?;
+    let footnotes = object(&property(&document, "Footnotes")?)?;
+    Some(number(&footnotes, "Count")? > 0)
+}
+
+/// A footnote reference on the selection's paragraph: how many of the paragraph's characters,
+/// as UI Automation shows them, come before it, and the footnote's number.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PlacedFootnote {
+    pub before: usize,
+    pub number: u32,
+}
+
+/// The footnote references on the selection's paragraph in Word's document window `document`,
+/// in order; `None` where Word's object model does not answer.
+pub fn paragraph_footnotes(document: HWND) -> Option<Vec<PlacedFootnote>> {
+    let window = word_window(document)?;
+    let whole = object(&property(&window, "Document")?)?;
+    let selection = object(&property(&window, "Selection")?)?;
+    let paragraph = item(&object(&property(&selection, "Paragraphs")?)?, 1)?;
+    let range = object(&property(&paragraph, "Range")?)?;
+    let start = number(&range, "Start")?;
+    let footnotes = object(&property(&range, "Footnotes")?)?;
+    let count = number(&footnotes, "Count").unwrap_or(0);
+    Some(
+        (1..=count.clamp(0, MAX_FIELDS))
+            .filter_map(|index| item(&footnotes, index))
+            .filter_map(|footnote| {
+                let at = number(&object(&property(&footnote, "Reference")?)?, "Start")?;
+                let before = object(&invoke(
+                    &whole,
+                    "Range",
+                    DISPATCH_METHOD,
+                    &mut [VARIANT::from(start), VARIANT::from(at.max(start))],
+                )?)?;
+                Some(PlacedFootnote {
+                    before: shown_chars(&text(&before, "Text")),
+                    number: u32::try_from(number(&footnote, "Index")?).ok()?,
+                })
+            })
+            .collect(),
+    )
+}
+
+/// How many of `text`'s characters UI Automation shows: Word's range text holds a mark for
+/// each footnote reference (U+0002) and comment (U+0005), which its UI Automation text does not.
+fn shown_chars(text: &str) -> usize {
+    text.chars()
+        .filter(|c| !matches!(c, '\u{2}' | '\u{5}'))
+        .count()
 }
 
 /// Whether the document in Word's document window `document` has form fields at all

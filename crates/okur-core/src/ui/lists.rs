@@ -12,6 +12,9 @@
 //!   default) and Cancel; OK opens the chosen list [obs, 226, 230];
 //! - JAWS's element lists (Insert+Ctrl and a letter: "Select a Button", ...): list "List1",
 //!   OK (the default) and Cancel; their items are `crate::element_lists` [obs, 231-259];
+//! - Word's comments and footnotes (Ctrl+Shift+Apostrophe, Insert+Shift+F in its document):
+//!   "Reviewers' Comments" and "Footnotes", list "List1", OK (the default) and Cancel [obs,
+//!   1082/s1, 1083/s1, 1087/s2-s5, 1088/s2-s5];
 //! - Document Regions (Insert+Ctrl+R): tree "Regions" of the page's regions, Move To region
 //!   start (the default) and Cancel [obs, 241, 256, 274];
 //! - the Word List (Ctrl+Insert+W): list "List1" of the page's words, "m (10)", OK (the
@@ -50,6 +53,8 @@ pub enum ListKind {
     FormFields,
     /// Word's fields (Insert+F5 in Word's document): JAWS's List Fields [obs, 1050, 1053].
     DocumentFields,
+    /// Word's comments or footnotes (Ctrl+Shift+Apostrophe, Insert+Shift+F in Word's document).
+    DocumentNotes(crate::event::NoteKind),
     /// Virtual HTML Features: the lists themselves.
     Features,
     /// One of JAWS's element lists.
@@ -240,6 +245,39 @@ impl Entry {
         }
     }
 
+    /// A document's comment or footnote `index`: a comment's text, author and date, "Check the
+    /// summer hours. Lab Fri, Jan 02, 26" [obs, 1082/s1]; a footnote's number and text, "1
+    /// Holidays excepted." [obs, 1083/s1].
+    pub fn document_note(
+        index: usize,
+        kind: crate::event::NoteKind,
+        note: &crate::event::DocumentNote,
+    ) -> Self {
+        let number = note.number.map(|n| n.to_string()).unwrap_or_default();
+        let parts: [&str; 3] = match kind {
+            crate::event::NoteKind::Comment => {
+                [note.text.trim(), note.author.trim(), note.date.trim()]
+            }
+            crate::event::NoteKind::Footnote => [number.as_str(), note.text.trim(), ""],
+        };
+        let text = parts
+            .into_iter()
+            .filter(|part| !part.is_empty())
+            .collect::<Vec<_>>()
+            .join(" ");
+        Self {
+            sort_key: text.to_lowercase(),
+            text,
+            level: None,
+            address: None,
+            same_page: false,
+            visited: false,
+            node_id: index,
+            offset: index,
+            feature: None,
+        }
+    }
+
     /// A document's field `index`: its code's first word and the text it shows.
     pub fn document_field(index: usize, field: &crate::event::DocumentField) -> Self {
         let text = field
@@ -415,6 +453,24 @@ impl ListDialog {
         )
     }
 
+    /// Word's comments or footnotes, in the document's order, the first selected; an entry's
+    /// node is the note's index.
+    pub fn document_notes(
+        id: u32,
+        kind: crate::event::NoteKind,
+        notes: &[crate::event::DocumentNote],
+    ) -> Self {
+        Self::new(
+            id,
+            ListKind::DocumentNotes(kind),
+            notes
+                .iter()
+                .enumerate()
+                .map(|(index, note)| Entry::document_note(index, kind, note))
+                .collect(),
+        )
+    }
+
     /// One of JAWS's element lists over `items`, in page order, the first selected.
     pub fn elements(id: u32, list: ElementList, items: &[ElementItem]) -> Self {
         Self::new(
@@ -471,6 +527,7 @@ impl ListDialog {
             ListKind::Links => "links",
             ListKind::Headings => "headings",
             ListKind::FormFields | ListKind::DocumentFields => "fields",
+            ListKind::DocumentNotes(_) => "notes",
             ListKind::Features => "lists",
             ListKind::Elements(_) => "elements",
             ListKind::Regions => "regions",
@@ -490,6 +547,7 @@ impl ListDialog {
                 .collect(),
             ListKind::FormFields
             | ListKind::DocumentFields
+            | ListKind::DocumentNotes(_)
             | ListKind::Features
             | ListKind::Elements(_)
             | ListKind::Regions
@@ -510,6 +568,7 @@ impl ListDialog {
             (
                 ListKind::FormFields
                 | ListKind::DocumentFields
+                | ListKind::DocumentNotes(_)
                 | ListKind::Features
                 | ListKind::Elements(_)
                 | ListKind::Regions
@@ -639,6 +698,19 @@ impl ListDialog {
                     button("cancel", msg::form_field_list_cancel(), false),
                 ],
             ),
+            // Word's comments and footnotes: their list, then OK and Cancel [obs, 1087/s2-s5,
+            // 1088/s2-s5].
+            ListKind::DocumentNotes(kind) => (
+                match kind {
+                    crate::event::NoteKind::Comment => msg::list_dialog_comments(),
+                    crate::event::NoteKind::Footnote => msg::list_dialog_footnotes(),
+                },
+                vec![
+                    list(msg::list_dialog_form_fields_list()),
+                    button("ok", msg::form_field_list_ok(), true),
+                    button("cancel", msg::form_field_list_cancel(), false),
+                ],
+            ),
             ListKind::Features => (
                 msg::list_dialog_features(),
                 vec![
@@ -712,6 +784,7 @@ impl ListDialog {
             ListKind::Headings
             | ListKind::FormFields
             | ListKind::DocumentFields
+            | ListKind::DocumentNotes(_)
             | ListKind::Features
             | ListKind::Elements(_)
             | ListKind::Regions
@@ -765,7 +838,9 @@ impl ListDialog {
                     ("move", Some(entry), _) => Outcome::MoveTo(entry.clone()),
                     ("activate", Some(entry), ListKind::Links) => Outcome::Activate(entry.clone()),
                     ("ok", Some(entry), ListKind::FormFields) => Outcome::Focus(entry.clone()),
-                    ("ok", Some(entry), ListKind::DocumentFields) => Outcome::MoveTo(entry.clone()),
+                    ("ok", Some(entry), ListKind::DocumentFields | ListKind::DocumentNotes(_)) => {
+                        Outcome::MoveTo(entry.clone())
+                    }
                     ("ok", Some(entry), ListKind::Elements(list)) if list.focuses() => {
                         Outcome::Focus(entry.clone())
                     }

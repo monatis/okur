@@ -93,6 +93,28 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for the focused document's comments or footnotes (Word's), which arrive later as
+    /// [`crate::event::AccessibilityEvent::DocumentNotes`], always. Returns false when
+    /// unsupported.
+    fn read_document_notes(&self, kind: crate::event::NoteKind) -> bool {
+        let _ = kind;
+        false
+    }
+
+    /// Puts the caret of the focused document on its comment's or footnote's mark `index`
+    /// (from 0, as [`crate::event::AccessibilityEvent::DocumentNotes`] lists them), then reads
+    /// the caret as [`Self::read_at_caret`] does, compared with `before`. Returns false when
+    /// unsupported.
+    fn move_to_document_note(
+        &self,
+        before: Option<&crate::event::TextContext>,
+        kind: crate::event::NoteKind,
+        index: usize,
+    ) -> bool {
+        let _ = (before, kind, index);
+        false
+    }
+
     /// Asks for the line spacing of the paragraph at the focused document's caret (Word's),
     /// which arrives later as [`crate::event::AccessibilityEvent::LineSpacing`], always.
     /// Returns false when unsupported.
@@ -466,6 +488,25 @@ impl ApplicationActions for RecordingActions {
     ) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push((format!("field {index}"), 0));
+        }
+        true
+    }
+
+    fn read_document_notes(&self, kind: crate::event::NoteKind) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((kind.read_name().to_owned(), 0));
+        }
+        true
+    }
+
+    fn move_to_document_note(
+        &self,
+        _before: Option<&crate::event::TextContext>,
+        kind: crate::event::NoteKind,
+        index: usize,
+    ) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((format!("{kind:?} {index}"), 0));
         }
         true
     }

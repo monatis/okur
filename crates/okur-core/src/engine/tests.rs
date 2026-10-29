@@ -8045,6 +8045,177 @@ fn words_fields_list_lists_the_documents_fields() {
     assert_eq!(speech.take().last().map(String::as_str), Some("no fields"));
 }
 
+/// Ctrl+Shift+Apostrophe and Insert+Shift+F in Word list the document's comments and footnotes,
+/// which the platform reads: "Reviewers' Comments dialog | List1 List view | Check the summer
+/// hours. Lab Fri, Jan 02, 26", "Footnotes dialog | List1 List view | 1 Holidays excepted."
+/// [obs, 1082/s1, 1083/s1], then OK and Cancel [obs, 1087/s2-s5]. OK puts the caret on the
+/// note's mark and says "Edit", after the footnote for a footnote [obs, 1087/s6, 1088/s6].
+#[test]
+fn words_notes_lists_list_comments_and_footnotes() {
+    use crate::event::{DocumentNote, NoteKind};
+    use crate::ui::{ControlKind, FromUi, ToUi};
+    let text = "Library Notes\rThe library opens at nine in the morning.\rIt is open every day1.\r";
+    let (mut engine, speech) = word_document(
+        text,
+        0,
+        crate::event::LineStructure {
+            line: (0, 14),
+            heading: Some(1),
+            ..Default::default()
+        },
+    );
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut key = KeyEvent::new(Key::Apostrophe, Modifiers::none(), true);
+    key.modifiers.ctrl = true;
+    key.modifiers.shift = true;
+    assert_eq!(engine.handle_key_event(&key), KeyAction::Consume);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "document comments"));
+    let comment = DocumentNote {
+        text: "Check the summer hours.".into(),
+        author: "Lab".into(),
+        date: "Fri, Jan 02, 26".into(),
+        number: None,
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentNotes(
+        NoteKind::Comment,
+        vec![comment],
+    ));
+    let sent = ui.take();
+    let Some(ToUi::DialogShow { dialog }) = sent.first() else {
+        panic_free_fail(&format!("no dialog shown: {sent:?}"));
+        return;
+    };
+    assert_eq!(dialog.title, "Reviewers' Comments");
+    let labels: Vec<&str> = dialog.controls.iter().map(|c| c.label.as_str()).collect();
+    assert_eq!(labels, ["List1", "OK", "Cancel"]);
+    assert!(dialog.controls.iter().any(|c| matches!(
+        &c.kind,
+        ControlKind::List { items, selected: 0 }
+            if items == &["Check the summer hours. Lab Fri, Jan 02, 26"]
+    )));
+    let edit = crate::linearize::role_marker("Edit");
+    let moved = |engine: &mut ScreenReaderEngine, caret| {
+        engine.handle_accessibility_event(&AccessibilityEvent::TextContext(
+            crate::event::TextContext {
+                text: text.to_owned(),
+                caret,
+                selection: None,
+                font: None,
+                word: None,
+                misspelled: Vec::new(),
+                structure: Some(crate::event::LineStructure {
+                    line: (14, 55),
+                    ..Default::default()
+                }),
+            },
+        ));
+    };
+    // OK: the caret to the comment's mark, and "Edit" alone.
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: dialog.id,
+        control: "ok".into(),
+    }));
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "Comment 0"));
+    speech.take();
+    moved(&mut engine, 54);
+    assert_eq!(speech.take().last(), Some(&edit));
+    // Insert+Shift+F: the footnotes; OK says the footnote, then "Edit".
+    let mut key = KeyEvent::new(Key::Alpha('F'), Modifiers::none(), true);
+    key.modifiers.insert = true;
+    key.modifiers.shift = true;
+    engine.handle_key_event(&key);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "document footnotes"));
+    let footnote = DocumentNote {
+        text: "Holidays excepted.".into(),
+        number: Some(1),
+        ..Default::default()
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentNotes(
+        NoteKind::Footnote,
+        vec![footnote],
+    ));
+    let shown = ui.take().into_iter().find_map(|m| match m {
+        ToUi::DialogShow { dialog } => Some(dialog),
+        _ => None,
+    });
+    let Some(dialog) = shown else {
+        panic_free_fail("no footnotes dialog shown");
+        return;
+    };
+    assert_eq!(dialog.title, "Footnotes");
+    assert!(dialog.controls.iter().any(|c| matches!(
+        &c.kind,
+        ControlKind::List { items, selected: 0 } if items == &["1 Holidays excepted."]
+    )));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: dialog.id,
+        control: "ok".into(),
+    }));
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "Footnote 0"));
+    speech.take();
+    moved(&mut engine, 76);
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some(format!("footnote reference: 1 Holidays excepted.\n{edit}").as_str())
+    );
+    // None: said so.
+    engine.handle_key_event(&key);
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentNotes(
+        NoteKind::Footnote,
+        Vec::new(),
+    ));
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some("There are no footnotes in the document.")
+    );
+}
+
+/// Ctrl+Shift+Apostrophe outside Word's document is the application's.
+#[test]
+fn ctrl_shift_apostrophe_is_the_applications_outside_word() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(SharedSpeech::default()));
+    let mut editor = FocusEvent::new(Role::Document)
+        .with_name("Text Editor")
+        .with_window_title("notes.txt - Notepad");
+    editor.app = Some("notepad.exe".into());
+    editor.text = Some(crate::event::TextContext {
+        text: "Plain text".to_owned(),
+        caret: 0,
+        selection: None,
+        font: None,
+        word: None,
+        misspelled: Vec::new(),
+        structure: None,
+    });
+    engine.handle_focus_event(&editor);
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut key = KeyEvent::new(Key::Apostrophe, Modifiers::none(), true);
+    key.modifiers.ctrl = true;
+    key.modifiers.shift = true;
+    assert_eq!(engine.handle_key_event(&key), KeyAction::PassThrough);
+    assert!(!actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "document comments"));
+}
+
 /// Ctrl+Alt+Right in a table of Word's moves the caret to the next cell through the platform;
 /// at the row's end it says so.
 #[test]

@@ -1324,6 +1324,24 @@ async fn main() {
                 let fields = document
                     .and_then(okur_platform::word_om::document_fields)
                     .unwrap_or_default();
+                // The document's comments and footnotes, for JAWS's lists of them
+                // (Ctrl+Shift+Apostrophe, Insert+Shift+F).
+                let notes = |footnotes: bool| {
+                    document
+                        .and_then(|d| okur_platform::word_om::document_notes(d, footnotes))
+                        .unwrap_or_default()
+                        .into_iter()
+                        .map(|note| {
+                            serde_json::json!({
+                                "text": note.text,
+                                "author": note.author,
+                                "date": note.date,
+                                "number": note.number,
+                            })
+                        })
+                        .collect::<Vec<_>>()
+                };
+                let (comments, footnotes) = (notes(false), notes(true));
                 // The form fields at the caret and on its paragraph, for reading them as
                 // controls.
                 let (selected_form_fields, paragraph_form_fields) = document
@@ -1370,6 +1388,8 @@ async fn main() {
                         "left_edge": left_edge,
                         "selected_form_fields": form_json(&selected_form_fields),
                         "paragraph_form_fields": form_json(&paragraph_form_fields),
+                        "comments": comments,
+                        "footnotes": footnotes,
                         "fields": fields
                             .iter()
                             .map(|f| serde_json::json!({

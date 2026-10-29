@@ -317,6 +317,18 @@ impl ScreenReaderEngine {
         // document its focus came back to: "heading level 1 Library Hours | Edit" [obs,
         // 1036/s3, s7].
         let from_list = std::mem::take(&mut self.moved_by_document_list);
+        // A list of comments or footnotes says its own words before "Edit", not the line.
+        if let Some(said) = self.document_list_says.take().filter(|_| from_list) {
+            self.pending_edit = None;
+            let edit = crate::linearize::role_marker(msg::role_edit().as_str());
+            let speech = if said.is_empty() {
+                edit
+            } else {
+                format!("{said}\n{edit}")
+            };
+            self.speech.speak(&speech, true);
+            return Some(speech);
+        }
         // A drop-down form field's list closed: the field with its new choice and the combo
         // box's hint, "Branch: Combo box | Northside | 2 of 3 | To change the selection use
         // the Arrow keys." [obs, 1057/s9].

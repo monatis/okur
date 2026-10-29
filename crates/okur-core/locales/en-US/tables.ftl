@@ -117,10 +117,20 @@ word-one-inch = 1 inch
 word-inches = { $inches } inches
 # A comment's start in a line of Word's [obs, 1081/s1].
 word-has-comment = has comment
+# A footnote reference in a line of Word's, before its number: "every day footnote 1." [obs,
+# 1083/s4].
+word-footnote = footnote
 # Alt+Shift+Apostrophe in Word: the comment at the caret, then its author [obs, 1081/s8], or
 # none [obs, 1081/s3].
 word-comment-by = by { $author }
 word-no-comment = No comment mark at cursor.
+# OK on a footnote in JAWS's list of Word's footnotes: the footnote as the list shows it, before
+# the document's "Edit" [obs, 1088/s6].
+word-footnote-reference = footnote reference: { $footnote }
+# Ctrl+Shift+Apostrophe and Insert+Shift+F in a document without comments or footnotes [obs,
+# 1089/s1, s3].
+word-no-comments = There are no comments in the document.
+word-no-footnotes = There are no footnotes in the document.
 # Say Window Title in Web Layout and Read Mode: JAWS's lower case "reading layout" [obs,
 # 1042/s5, s9].
 word-view-web = Web Layout View

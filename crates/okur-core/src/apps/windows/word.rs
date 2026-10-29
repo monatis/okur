@@ -194,9 +194,23 @@ fn line_with_fields(context: &TextContext) -> Option<String> {
         .map(|c| (c.start, c.end))
         .filter(|(from, to)| *from < end && *to > start)
         .collect();
-    if fields.is_empty() && links.is_empty() && comments.is_empty() {
+    // A footnote reference is said where it stands, by its number: "every day footnote 1."
+    // [obs, 1083/s4].
+    let footnotes: Vec<&crate::event::DocumentFootnote> = structure
+        .footnotes
+        .iter()
+        .filter(|f| (start..=end).contains(&f.at))
+        .collect();
+    if fields.is_empty() && links.is_empty() && comments.is_empty() && footnotes.is_empty() {
         return None;
     }
+    let footnote_at = |at: usize| {
+        footnotes
+            .iter()
+            .filter(|f| f.at == at)
+            .map(|f| format!(" \u{1d}{} \u{1e} {}", msg::word_footnote(), f.number))
+            .collect::<String>()
+    };
     fields.sort_by_key(|f| f.start);
     let text: Vec<char> = context.text.chars().collect();
     // A stretch of the line's text, each link in it after its mark.
@@ -212,9 +226,14 @@ fn line_with_fields(context: &TextContext) -> Option<String> {
             if links.contains(&at) {
                 said.push_str(&format!(" \u{1d}{} \u{1e} ", msg::role_link_in_line()));
             }
+            said.push_str(&footnote_at(at));
             if let Some(&c) = text.get(at) {
                 said.push(if c.is_control() { ' ' } else { c });
             }
+        }
+        // A footnote at the line's very end.
+        if to == end {
+            said.push_str(&footnote_at(end));
         }
         said
     };
@@ -354,6 +373,7 @@ pub(crate) fn say_all_pieces(
             form_fields: Vec::new(),
             links: Vec::new(),
             comments: Vec::new(),
+            footnotes: Vec::new(),
         };
         let said = match was.as_ref() {
             None => line,
@@ -893,6 +913,7 @@ mod tests {
                 form_fields: Vec::new(),
                 links: Vec::new(),
                 comments: Vec::new(),
+                footnotes: Vec::new(),
             }),
         }
     }
@@ -1023,6 +1044,35 @@ mod tests {
         assert_eq!(
             comment_at_caret(&context(35)).as_deref(),
             Some("Check the summer hours.\nby Lab")
+        );
+    }
+
+    /// A line's footnote reference, which Word's text does not show, is said where it stands,
+    /// by its number: "It is open every day footnote 1." [obs, 1083/s4]; one at the line's end
+    /// too.
+    #[test]
+    fn a_lines_footnote_is_said_by_its_number() {
+        let text = "Library Notes\rIt is open every day.\r";
+        let context = |at: usize| TextContext {
+            text: text.into(),
+            caret: 14,
+            selection: None,
+            font: None,
+            word: None,
+            misspelled: Vec::new(),
+            structure: Some(LineStructure {
+                line: (14, 35),
+                footnotes: vec![crate::event::DocumentFootnote { at, number: 1 }],
+                ..Default::default()
+            }),
+        };
+        assert_eq!(
+            line_with_fields(&context(34)).as_deref(),
+            Some("It is open every day \u{1d}footnote \u{1e} 1.")
+        );
+        assert_eq!(
+            line_with_fields(&context(35)).as_deref(),
+            Some("It is open every day. \u{1d}footnote \u{1e} 1")
         );
     }
 
