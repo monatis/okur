@@ -65,16 +65,40 @@ fn in_dialog(focus: &FocusEvent) -> bool {
         && (class(&focus.platform.window_class) || class(&focus.platform.top_window_class))
 }
 
+/// The class of Windows' own dialog boxes, Save As's among them.
+const COMMON_DIALOG_CLASS: &str = "#32770";
+
+/// Whether the focus is in a dialog box of Windows' own that Word opened (Save As, Open): its
+/// controls read as anywhere, and Escape back to the document says "Edit", as from Word's own
+/// dialogs.
+fn in_common_dialog(focus: &FocusEvent) -> bool {
+    in_word(focus) && focus.platform.top_window_class.as_deref() == Some(COMMON_DIALOG_CLASS)
+}
+
+/// Whether the focus is back in Word from one of its dialogs: in Word, or on a document from a
+/// window already gone, which names no application (the first focus as Save As closes, from
+/// its own window, with Word's document in it [obs, 1077/s4]).
+fn back_in_word(focus: &FocusEvent) -> bool {
+    in_word(focus) || (focus.app.is_none() && focus.role == Role::Document)
+}
+
 impl AppModule for WordDialog {
     fn owns(&self, focus: &FocusEvent) -> bool {
         in_dialog(focus)
             || in_task_pane(focus)
-            || ((self.in_dialog || self.in_pane) && in_word(focus))
+            || in_common_dialog(focus)
+            || ((self.in_dialog || self.in_pane) && back_in_word(focus))
     }
 
     fn focus(&mut self, focus: &FocusEvent, cx: &mut AppContext<'_>) -> FocusResponse {
         if in_task_pane(focus) {
             self.in_pane = true;
+            return FocusResponse::Pass;
+        }
+        if in_common_dialog(focus) && !in_dialog(focus) {
+            self.in_dialog = true;
+            self.modeless = focus.modeless;
+            self.said = None;
             return FocusResponse::Pass;
         }
         // Back from a task pane: Word's window on the way says nothing, its document its name
@@ -102,7 +126,7 @@ impl AppModule for WordDialog {
             };
         }
         if !in_dialog(focus) {
-            if !(self.in_dialog && in_word(focus)) {
+            if !(self.in_dialog && back_in_word(focus)) {
                 return FocusResponse::Pass;
             }
             // Back from the dialog: Word's window on the way says nothing, its document "Edit".
@@ -314,5 +338,24 @@ mod tests {
             said(&mut dialog, &document, &mut title).as_deref(),
             Some("sr-word-fixture.docx - Word\n \u{1d} Edit \u{1e} ")
         );
+    }
+
+    /// A dialog box of Windows' own that Word opened (Save As) reads as anywhere; back in the
+    /// document, the first focus can come from the closed dialog's window, naming no
+    /// application, and says "Edit" as from Word's own dialogs [obs, 1077/s4].
+    #[test]
+    fn the_document_after_save_as_says_edit() {
+        let mut dialog = WordDialog::default();
+        let mut title = Some("Save As".to_owned());
+        let mut name = FocusEvent::new(Role::Edit).with_name("File name:");
+        name.app = Some("WINWORD.EXE".into());
+        name.platform.top_window_class = Some(COMMON_DIALOG_CLASS.into());
+        assert_eq!(said(&mut dialog, &name, &mut title), None);
+        let document = FocusEvent::new(Role::Document).with_name("sr-word-fixture.docx");
+        assert_eq!(
+            said(&mut dialog, &document, &mut title).as_deref(),
+            Some(" \u{1d} Edit \u{1e} ")
+        );
+        assert!(!dialog.owns(&document));
     }
 }
