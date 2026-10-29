@@ -12,6 +12,10 @@
 //!
 //! Its buttons, check boxes and lists are the engine's (they read as JAWS reads them:
 //! "Font Color (Automatic) Button | To activate press spacebar." [obs, 1058/s4]).
+//!
+//! Word's task panes (the Spelling pane, NetUI windows outside the ribbon) read their controls
+//! as the engine does; Escape back from one says the document's name and "Edit":
+//! "sr-word-fixture.docx | Edit" [obs, 1069/s6].
 
 use crate::announcement::{Announcement, Line, Part, PartKind};
 use crate::aom::Role;
@@ -35,6 +39,8 @@ pub struct WordDialog {
     in_dialog: bool,
     /// That dialog is modeless: the document taking the focus back names its window.
     modeless: bool,
+    /// One of Word's task panes had the focus: the document taking it back says its name.
+    in_pane: bool,
 }
 
 /// Whether the focus is in Word.
@@ -43,6 +49,13 @@ fn in_word(focus: &FocusEvent) -> bool {
         .app
         .as_deref()
         .is_some_and(|app| app.eq_ignore_ascii_case(super::word_ribbon::WORD))
+}
+
+/// Whether the focus is in one of Word's task panes: a NetUI window outside its ribbon.
+fn in_task_pane(focus: &FocusEvent) -> bool {
+    in_word(focus)
+        && !focus.in_ribbon
+        && focus.platform.window_class.as_deref() == Some(super::word_ribbon::NETUI_CLASS)
 }
 
 /// Whether the focus is in one of Word's dialogs.
@@ -54,10 +67,40 @@ fn in_dialog(focus: &FocusEvent) -> bool {
 
 impl AppModule for WordDialog {
     fn owns(&self, focus: &FocusEvent) -> bool {
-        in_dialog(focus) || (self.in_dialog && in_word(focus))
+        in_dialog(focus)
+            || in_task_pane(focus)
+            || ((self.in_dialog || self.in_pane) && in_word(focus))
     }
 
     fn focus(&mut self, focus: &FocusEvent, cx: &mut AppContext<'_>) -> FocusResponse {
+        if in_task_pane(focus) {
+            self.in_pane = true;
+            return FocusResponse::Pass;
+        }
+        // Back from a task pane: Word's window on the way says nothing, its document its name
+        // and "Edit".
+        if self.in_pane && !in_dialog(focus) {
+            return match focus.role {
+                Role::Window => FocusResponse::Silent,
+                Role::Document => {
+                    self.in_pane = false;
+                    let mut lines: Vec<Line> = focus
+                        .name
+                        .as_deref()
+                        .map(str::trim)
+                        .filter(|name| !name.is_empty())
+                        .map(|name| Line::of(PartKind::Name, name))
+                        .into_iter()
+                        .collect();
+                    lines.push(Line::new(vec![Part::role(msg::role_edit().as_str())]));
+                    FocusResponse::Speak(Announcement::new(lines))
+                }
+                _ => {
+                    self.in_pane = false;
+                    FocusResponse::Pass
+                }
+            };
+        }
         if !in_dialog(focus) {
             if !(self.in_dialog && in_word(focus)) {
                 return FocusResponse::Pass;
@@ -229,6 +272,28 @@ mod tests {
         assert_eq!(
             said(&mut dialog, &document, &mut title).as_deref(),
             Some(" \u{1d} Edit \u{1e} ")
+        );
+        assert_eq!(said(&mut dialog, &document, &mut title), None);
+    }
+
+    /// Word's task pane's controls are the engine's; Escape back from it says the document's
+    /// name and "Edit" [obs, 1069/s2, s6].
+    #[test]
+    fn the_document_after_a_task_pane_says_its_name() {
+        let mut dialog = WordDialog::default();
+        let mut title = Some("sr-word-fixture.docx - Word".to_owned());
+        let mut ignore = FocusEvent::new(Role::Button).with_name("Ignore All");
+        ignore.app = Some("WINWORD.EXE".into());
+        ignore.platform.window_class = Some("NetUIHWND".into());
+        assert_eq!(said(&mut dialog, &ignore, &mut title), None);
+        let mut window = FocusEvent::new(Role::Window);
+        window.app = Some("WINWORD.EXE".into());
+        assert_eq!(said(&mut dialog, &window, &mut title).as_deref(), Some(""));
+        let mut document = FocusEvent::new(Role::Document).with_name("sr-word-fixture.docx");
+        document.app = Some("WINWORD.EXE".into());
+        assert_eq!(
+            said(&mut dialog, &document, &mut title).as_deref(),
+            Some("sr-word-fixture.docx\n \u{1d} Edit \u{1e} ")
         );
         assert_eq!(said(&mut dialog, &document, &mut title), None);
     }

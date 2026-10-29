@@ -58,6 +58,8 @@ use crate::messages::msg;
 
 /// Word's process.
 pub(crate) const WORD: &str = "WINWORD.EXE";
+/// The window class of Office's own controls: its ribbon's, its task panes'.
+pub(crate) const NETUI_CLASS: &str = "NetUIHWND";
 
 /// Where in Word's ribbon the focus last was.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]

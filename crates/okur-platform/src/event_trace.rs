@@ -1010,7 +1010,9 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         item.states.disabled = object.states & STATE_SYSTEM_UNAVAILABLE != 0;
         return Some(item);
     }
-    if let Some(focus) = netui_focus(event) {
+    if let Some(mut focus) = netui_focus(event) {
+        // Its window's class: Word's task panes are NetUI windows outside the ribbon.
+        focus.platform.window_class = event.window_class.clone();
         return Some(focus);
     }
     // Word's ribbon taking the focus back from a box of its own (the Font box, a RichEdit
@@ -2274,6 +2276,14 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     {
         return Some(gallery_item(event, object, name));
     }
+    // A list's item in an Office task pane: the Spelling pane's suggestions, "the | 1 of 5"
+    // [obs, 1069/s4].
+    if object.role == Some(LISTITEM)
+        && in_task_pane(event)
+        && event.msaa_ancestors.iter().any(|a| a.role == Some(LIST))
+    {
+        return Some(task_pane_item(event, object, name));
+    }
     const UIA_BUTTON: i32 = 50000;
     const UIA_MENU_ITEM: i32 = 50011;
     const LINK: i32 = 0x1E;
@@ -2338,7 +2348,11 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     if object.states & MSAA_UNAVAILABLE != 0 {
         focus.states.disabled = true;
     }
-    focus.groups = ribbon_groups(event);
+    // A task pane's controls are said without the dock and pane around them: "Ignore All
+    // Button" [obs, 1069/s2].
+    if !in_task_pane(event) {
+        focus.groups = ribbon_groups(event);
+    }
     focus.app = event.process.clone();
     focus.app_product = event.process_product.clone();
     focus.app_version = event.process_version.clone();
@@ -2352,7 +2366,8 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     if let Some(toggle) = control.and_then(|c| c.toggle_state) {
         focus.states.checked = Some(toggle == 1);
     }
-    focus.in_ribbon = true;
+    // An Office task pane's controls (the Spelling pane) are no ribbon's.
+    focus.in_ribbon = !in_task_pane(event);
     // The ribbon's own name: its outermost property page's, "Ribbon".
     focus.ribbon_name = event
         .msaa_ancestors
@@ -2370,6 +2385,44 @@ fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
         .count();
     focus.ribbon_menu = tab || pages >= 2;
     Some(focus)
+}
+
+/// Whether a NetUI focus is in one of Office's task panes (the Spelling pane, in a dock of
+/// Office's window beside the document, `MsoDockRight`), not in its ribbon, docked at the top
+/// (`MsoDockTop`) [obs, 1069].
+fn in_task_pane(event: &TraceEvent) -> bool {
+    event.focus_chain.iter().any(|n| {
+        n.class_name.as_deref() == Some("MsoCommandBarDock")
+            && n.name.as_deref().is_some_and(|dock| dock != "MsoDockTop")
+    })
+}
+
+/// A list's item in an Office task pane, placed among the list's items: the Spelling pane's
+/// suggestions, "the | 1 of 5" [obs, 1069/s4].
+fn task_pane_item(event: &TraceEvent, object: &TraceObject, name: &str) -> okur_core::FocusEvent {
+    const LISTITEM: i32 = 0x22;
+    let mut focus =
+        okur_core::FocusEvent::new(okur_core::Role::ListItem).with_name(name.to_owned());
+    let items: Vec<&MsaaNode> = event
+        .msaa_siblings
+        .iter()
+        .filter(|s| s.role == Some(LISTITEM))
+        .collect();
+    focus.item_index = items
+        .iter()
+        .position(|s| s.name.as_deref() == Some(name))
+        .map(|i| i + 1);
+    focus.item_count = focus.item_index.map(|_| items.len());
+    apply_msaa_states(&mut focus, object.states);
+    focus.app = event.process.clone();
+    focus.app_product = event.process_product.clone();
+    focus.app_version = event.process_version.clone();
+    focus.bounds = event
+        .netui_control
+        .as_ref()
+        .and_then(|c| c.bounds)
+        .or_else(|| event.focus_chain.last().and_then(|n| n.bounds));
+    focus
 }
 
 /// A ribbon gallery's item (Word's Styles gallery): named by its description, the name without
