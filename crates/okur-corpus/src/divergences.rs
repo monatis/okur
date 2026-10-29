@@ -1027,6 +1027,29 @@ divergences! {
      step); in round-1080c one trial said \"2 inches\". Okur says what the key left, \
      \"indent | 2 inches\".",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
+    Difference::Step => [
+        "1084-desktop-notepad-access-keys-all/s6",
+        "1085-desktop-notepad-access-keys-menus/s6",
+        "1086-desktop-notepad-access-keys-dialogs/s6",
+    ],
+    "Notepad's Page Setup opened by its menu (Alt+F, U) after an earlier visit to the menus: \
+     JAWS says \"Leaving menus | edit | Type in text.\" and nothing of the dialog, in every \
+     trial (its synthesizer heard nothing more either), then reads the next Tab's control. \
+     Recorded without that earlier visit, JAWS says the dialog and its first field (544/s2). \
+     Okur says them: \"Page Setup dialog | Paper Size: Combo box | Letter | 8 of 10 | ...\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
+    Difference::Step => [
+        "1085-desktop-notepad-access-keys-menus/s5",
+        "1086-desktop-notepad-access-keys-dialogs/s5",
+    ],
+    "Notepad's File menu opened again by Alt+F after Escape twice left it: JAWS says \"Menu \
+     bar\" before \"File menu\" in some trials and not in others (1084/s5 has both; 1085 and \
+     1086 happened to have it in every trial), and in one trial it said the bar's item and a \
+     context menu first. Okur says the menu as JAWS's trials without them do: \"File menu | New \
+     Ctrl+N | To move through items press up or down arrow.\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
 }
 
 /// The divergence covering `step`, if any.
