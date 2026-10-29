@@ -57,15 +57,15 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `a4dc7bf6` (2026-10-29).
+Every figure is tool output, rerun for this README at commit `ac55f505` (2026-10-29).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **9212 of 9776** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **9116 of 9837** | `okur-lab parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **270** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **695, 2091** (2074 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1531 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **9282 of 9846** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **9182 of 9907** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **280** | `okur-lab parity` |
+| Recorded JAWS scenarios, trials | **706, 2124** (2107 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1536 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
@@ -177,8 +177,12 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   and the Font and Font Size boxes' lists the font or size the arrows choose. Its own dialogs
   (Font, Paragraph, Find and Replace) read their fields as edit combos ("Font:, edit combo,
   Calibri"); back from Find and Replace, which stays open beside the document, the window is
-  named again. Ctrl+Shift+E says whether Track Changes is on, and Ctrl+E, R, J and L the
-  alignment they leave ("Centered", "Aligned left"). The Links List (Insert+F7) lists the document's hyperlinks, Move To Link moves to
+  named again. Ctrl+Shift+E says whether Track Changes is on, Ctrl+E, R, J and L the alignment
+  they leave ("Centered", "Aligned left"), Ctrl+Shift+Period and Comma the font size, Ctrl+M
+  and Ctrl+Shift+M the indent from the page's edge ("indent, 1.5 inches"), and Shift+F3 the
+  selection in its new case. A line marks a comment ("has comment"), and Alt+Shift+Apostrophe
+  reads the comment at the caret with its author. Task panes (the Spelling pane) read their
+  controls as controls, and Escape back names the document. The Links List (Insert+F7) lists the document's hyperlinks, Move To Link moves to
   one and Activate Link follows it; List Fields (Insert+F5) lists its fields ("HYPERLINK
   opening hours", "FORMTEXT") and OK moves to one; with none, each says so in Word's words.
   The line spacing and the fields come from Word's own object model.
@@ -241,7 +245,8 @@ in [accepted divergences](docs/references/accepted-divergences.md).
     Settings (an application's settings turned off or removed) and Restore to Factory
     Settings; Utilities for Settings Center and the Notification History; Help for the Startup
     Wizard, the most common settings a page at a time, which also opens the first time Okur
-    starts.
+    starts. Basics and the wizard offer JAWS's Access Key choices (all, menus only, dialogs
+    only, off): a menu item then ends with its letter, a dialog's control with its key.
 - **Speech:** punctuation levels and symbol names as JAWS has them (Insert+Shift+2); typing
   echo by characters, words, both or none (Insert+2); a reading key pressed twice quickly
   spells, with capitals at a higher pitch; the rate on the fly (Ctrl+Alt+PageUp and
@@ -282,8 +287,8 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- Outlook and Excel, not yet supported or checked; in Word, its Spelling pane, comments and
-  footnotes are not yet checked against JAWS;
+- Outlook and Excel, not yet supported or checked; in Word, JAWS's lists of comments and
+  footnotes and the Insert Hyperlink dialog;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;
