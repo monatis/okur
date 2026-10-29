@@ -186,6 +186,83 @@ impl SettingsStore for SettingsFolder {
     }
 }
 
+/// The settings folder written on a thread of its own: Apply and OK hand it what to keep and go
+/// on, and the files are written behind them, the newest of what waits only. They were written
+/// on the engine's thread, which the keyboard hook waits on: 100 ms with 300 site files
+/// (performance review 2026-10-25, finding 7).
+pub struct BackgroundStore {
+    writes: std::sync::mpsc::Sender<Write>,
+    /// The folder itself, for the writes the thread could not take (it could not start).
+    folder: SettingsFolder,
+}
+
+/// What the writer thread is handed.
+enum Write {
+    Layers(SettingsLayers),
+    History(okur_core::ui::settings_tree::SavedHistory),
+    /// Answered once everything handed before it is written.
+    Flush(std::sync::mpsc::Sender<()>),
+}
+
+/// How long Okur's exit waits for the settings to be written.
+const FLUSH_WAIT: std::time::Duration = std::time::Duration::from_secs(2);
+
+impl BackgroundStore {
+    pub fn new(folder: SettingsFolder) -> Self {
+        let (writes, waiting) = std::sync::mpsc::channel::<Write>();
+        let writer = folder.clone();
+        let started = std::thread::Builder::new()
+            .name("okur-settings".into())
+            .spawn(move || {
+                while let Ok(first) = waiting.recv() {
+                    let (mut layers, mut history, mut flushes) = (None, None, Vec::new());
+                    for write in std::iter::once(first).chain(waiting.try_iter()) {
+                        match write {
+                            Write::Layers(newer) => layers = Some(newer),
+                            Write::History(newer) => history = Some(newer),
+                            Write::Flush(done) => flushes.push(done),
+                        }
+                    }
+                    if let Some(layers) = layers {
+                        writer.save(&layers);
+                    }
+                    if let Some(history) = history {
+                        writer.save_history(&history);
+                    }
+                    for done in flushes {
+                        let _ = done.send(());
+                    }
+                }
+            });
+        if let Err(e) = started {
+            tracing::warn!(error = %e, "settings writer not started: settings written at once");
+        }
+        Self { writes, folder }
+    }
+}
+
+impl SettingsStore for BackgroundStore {
+    fn save(&self, layers: &SettingsLayers) {
+        if self.writes.send(Write::Layers(layers.clone())).is_err() {
+            self.folder.save(layers);
+        }
+    }
+
+    fn save_history(&self, history: &okur_core::ui::settings_tree::SavedHistory) {
+        if self.writes.send(Write::History(history.clone())).is_err() {
+            self.folder.save_history(history);
+        }
+    }
+
+    fn flush(&self) {
+        let (done, written) = std::sync::mpsc::channel();
+        if self.writes.send(Write::Flush(done)).is_ok() && written.recv_timeout(FLUSH_WAIT).is_err()
+        {
+            tracing::warn!("settings not written before exit");
+        }
+    }
+}
+
 /// The custom labels' file: a table per site (or page), each element's label in it.
 const LABELS: &str = "labels.toml";
 /// The saved PlaceMarkers' file: a list per page address.
@@ -479,6 +556,35 @@ mod tests {
             std::env::temp_dir().join(format!("okur-settings-{name}-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&folder);
         folder
+    }
+
+    /// The settings handed to the background store are in the files once it is flushed, the
+    /// newest of them.
+    #[test]
+    fn the_background_store_writes_the_newest_settings() {
+        let root = folder("background");
+        let store = BackgroundStore::new(SettingsFolder::at(&root));
+        let mut layers = SettingsLayers::default();
+        let before = layers.resolve(None, None);
+        for rate in [3, 6] {
+            let mut after = before.clone();
+            after.voice.rate = rate;
+            let mut changed = layers.clone();
+            changed.change(&Scope::Global, &before, &after, None);
+            store.save(&changed);
+            layers = changed;
+        }
+        store.flush();
+        assert_eq!(SettingsFolder::at(&root).load(), layers);
+        assert_eq!(
+            SettingsFolder::at(&root)
+                .load()
+                .resolve(None, None)
+                .voice
+                .rate,
+            6
+        );
+        let _ = std::fs::remove_dir_all(&root);
     }
 
     /// Each layer is saved in its own file with only its changes, and read back the same.

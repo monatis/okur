@@ -640,7 +640,11 @@ pub async fn run(config: RunConfig) {
             }
             engine.open_startup_wizard();
         }
-        engine.set_settings_store(Box::new(folder));
+        // Written on a thread of its own, off the engine's (performance review 2026-10-25,
+        // finding 7).
+        engine.set_settings_store(Box::new(
+            okur_platform::settings_file::BackgroundStore::new(folder),
+        ));
     }
     // Say System Time (Insert+F12) in the user's locale formats.
     #[cfg(windows)]
@@ -1033,6 +1037,8 @@ pub async fn run(config: RunConfig) {
     }
     {
         let mut eng = lock_engine(&engine);
+        // The settings applied last are kept before Okur goes.
+        eng.flush_settings();
         if reason == ExitReason::EndSession {
             eng.speech.stop();
         } else {

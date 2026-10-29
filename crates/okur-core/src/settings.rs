@@ -1179,6 +1179,9 @@ pub trait SettingsStore: Send {
     fn save(&self, layers: &crate::settings_layers::SettingsLayers);
     /// Last Changed Settings, kept so that it holds the next time Okur starts, as JAWS's.
     fn save_history(&self, history: &crate::ui::settings_tree::SavedHistory);
+    /// Waits until what was handed to the store is kept, as Okur exits. A store that keeps it
+    /// at once has nothing to wait for.
+    fn flush(&self) {}
 }
 
 /// A store that keeps what it was given, for tests.

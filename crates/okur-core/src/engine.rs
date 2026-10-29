@@ -1747,6 +1747,13 @@ impl ScreenReaderEngine {
         self.settings_store = Some(store);
     }
 
+    /// Waits until the settings handed to the store are kept: Okur is exiting.
+    pub fn flush_settings(&self) {
+        if let Some(store) = &self.settings_store {
+            store.flush();
+        }
+    }
+
     /// Makes `settings` Okur's for all applications, with no layer of their own: `okur run`'s
     /// settings, replay's reference machine.
     pub fn set_settings(&mut self, settings: crate::settings::Settings) {
