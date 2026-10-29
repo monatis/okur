@@ -999,6 +999,17 @@ divergences! {
      nothing, there or on the next two Escapes. Okur says \"Leaving menus | Leaving ribbons | \
      Edit\" when the document's focus comes, as Escape out of the ribbon says.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
+    Difference::Step => [
+        "1078-desktop-word-change-case/s3",
+        "1078-desktop-word-change-case/s4",
+        "1078-desktop-word-change-case/s5",
+    ],
+    "Shift+F3 on Word's selected heading: JAWS says the selection as it was before the key, its \
+     words run together (\"LibraryHours\" where Word made it \"LIBRARY HOURS\", then \
+     \"LIBRARYHOURS\", \"libraryhours\"). Okur says the selection as Word leaves it, \
+     \"LIBRARY HOURS\", \"library hours\", \"Library Hours\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
 }
 
 /// The divergence covering `step`, if any.

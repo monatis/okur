@@ -37,12 +37,6 @@ impl BasicsDialog {
         }
     }
 
-    /// Which of `modes` `output` has at the current verbosity level.
-    fn chosen(&self, output: OutputType, modes: &[OutputMode]) -> usize {
-        let mode = self.draft.verbosity.mode(output);
-        modes.iter().position(|m| *m == mode).unwrap_or(0)
-    }
-
     pub fn spec(&self) -> DialogSpec {
         let control = |id: &str, label: StaticMessage, kind: ControlKind| Control {
             id: id.to_owned(),
@@ -70,7 +64,9 @@ impl BasicsDialog {
                             msg::basics_tutor_on(),
                             msg::basics_tutor_custom(),
                         ],
-                        self.chosen(OutputType::Hint, &OutputMode::TUTOR),
+                        self.draft
+                            .verbosity
+                            .chosen(OutputType::Hint, &OutputMode::TUTOR),
                     ),
                 ),
                 control(
@@ -83,7 +79,9 @@ impl BasicsDialog {
                             msg::basics_access_key_menus(),
                             msg::basics_access_key_dialogs(),
                         ],
-                        self.chosen(OutputType::AccessKey, &OutputMode::ACCESS_KEY),
+                        self.draft
+                            .verbosity
+                            .chosen(OutputType::AccessKey, &OutputMode::ACCESS_KEY),
                     ),
                 ),
                 control(
@@ -133,20 +131,19 @@ impl BasicsDialog {
 
     /// What the dialog's window reported.
     pub fn handle(&mut self, message: &FromUi) -> Outcome {
-        // A choice is every level's.
-        let every =
-            |modes: &[OutputMode], i: usize| [modes.get(i).copied().unwrap_or(OutputMode::Off); 3];
         match message {
             FromUi::DialogChanged { id, control, value } if *id == self.id => {
                 match (control.as_str(), value) {
-                    (TUTOR, Value::Selected(i)) => self
-                        .draft
-                        .verbosity
-                        .set_modes(OutputType::Hint, every(&OutputMode::TUTOR, *i)),
-                    (ACCESS_KEY, Value::Selected(i)) => self
-                        .draft
-                        .verbosity
-                        .set_modes(OutputType::AccessKey, every(&OutputMode::ACCESS_KEY, *i)),
+                    (TUTOR, Value::Selected(i)) => {
+                        self.draft
+                            .verbosity
+                            .choose(OutputType::Hint, &OutputMode::TUTOR, *i)
+                    }
+                    (ACCESS_KEY, Value::Selected(i)) => self.draft.verbosity.choose(
+                        OutputType::AccessKey,
+                        &OutputMode::ACCESS_KEY,
+                        *i,
+                    ),
                     (CONFIRM_EXIT, Value::Checked(on)) => self.draft.confirm_exit = *on,
                     (VIEWER, Value::Checked(on)) => {
                         self.draft.viewer_display = if *on {

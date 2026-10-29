@@ -973,6 +973,21 @@ impl Verbosity {
         self.set_modes(output, modes);
     }
 
+    /// Which of `modes` `output` has at the current level: a dialog's radio button for it
+    /// (Basics' and the Startup Wizard's Tutor Messages and Access Key).
+    pub fn chosen(&self, output: OutputType, modes: &[OutputMode]) -> usize {
+        let mode = self.mode(output);
+        modes.iter().position(|m| *m == mode).unwrap_or(0)
+    }
+
+    /// `output` set to `modes`' choice `index` at every level, as such a radio button chooses.
+    pub fn choose(&mut self, output: OutputType, modes: &[OutputMode], index: usize) {
+        self.set_modes(
+            output,
+            [modes.get(index).copied().unwrap_or(OutputMode::Off); 3],
+        );
+    }
+
     /// Sets `output`'s mode at each level, Beginner first.
     pub fn set_modes(&mut self, output: OutputType, modes: [OutputMode; 3]) {
         self.output_modes.insert(output, modes);

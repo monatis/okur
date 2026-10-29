@@ -112,12 +112,6 @@ impl StartupWizard {
         }
     }
 
-    /// Whether `output` is on at every verbosity level.
-    fn mode_chosen(&self, output: OutputType, modes: &[OutputMode]) -> usize {
-        let mode = self.draft.verbosity.mode(output);
-        modes.iter().position(|m| *m == mode).unwrap_or(0)
-    }
-
     /// The choice of `choices` the draft's setting `id` has.
     fn chosen(&self, id: &str, choices: &[Choice]) -> usize {
         let value = registry::get(&self.draft, id);
@@ -263,7 +257,9 @@ impl StartupWizard {
                                 msg::basics_tutor_on(),
                                 msg::basics_tutor_custom(),
                             ],
-                            self.mode_chosen(OutputType::Hint, &OutputMode::TUTOR),
+                            self.draft
+                                .verbosity
+                                .chosen(OutputType::Hint, &OutputMode::TUTOR),
                         ),
                         radios(
                             ACCESS_KEY,
@@ -274,7 +270,9 @@ impl StartupWizard {
                                 msg::basics_access_key_menus(),
                                 msg::basics_access_key_dialogs(),
                             ],
-                            self.mode_chosen(OutputType::AccessKey, &OutputMode::ACCESS_KEY),
+                            self.draft
+                                .verbosity
+                                .chosen(OutputType::AccessKey, &OutputMode::ACCESS_KEY),
                         ),
                         control(
                             VERBOSITY,
@@ -371,9 +369,6 @@ impl StartupWizard {
 
     /// What the wizard's window reported.
     pub fn handle(&mut self, message: &FromUi) -> Outcome {
-        // A choice is every level's.
-        let every =
-            |modes: &[OutputMode], i: usize| [modes.get(i).copied().unwrap_or(OutputMode::Off); 3];
         let pick = |draft: &mut Settings, id: &str, choices: Vec<Choice>, i: usize| {
             if let Some(choice) = choices.into_iter().nth(i) {
                 registry::set(draft, id, choice.value);
@@ -409,12 +404,16 @@ impl StartupWizard {
                     (LAYOUT, Value::Selected(i)) => {
                         pick(draft, "keyboard.layout", choices::<KeyboardLayout>(), *i);
                     }
-                    (TUTOR, Value::Selected(i)) => draft
-                        .verbosity
-                        .set_modes(OutputType::Hint, every(&OutputMode::TUTOR, *i)),
-                    (ACCESS_KEY, Value::Selected(i)) => draft
-                        .verbosity
-                        .set_modes(OutputType::AccessKey, every(&OutputMode::ACCESS_KEY, *i)),
+                    (TUTOR, Value::Selected(i)) => {
+                        draft
+                            .verbosity
+                            .choose(OutputType::Hint, &OutputMode::TUTOR, *i)
+                    }
+                    (ACCESS_KEY, Value::Selected(i)) => {
+                        draft
+                            .verbosity
+                            .choose(OutputType::AccessKey, &OutputMode::ACCESS_KEY, *i)
+                    }
                     (VERBOSITY, Value::Selected(i)) => {
                         pick(draft, "verbosity.level", choices::<VerbosityLevel>(), *i);
                     }
