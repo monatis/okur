@@ -452,6 +452,9 @@ $ConfirmationMaxMs = 180000
 # spoken_end: "confirmation", "timeout" (JAWS did not reach it in time; the step fails) or
 # "no-recorder" (no log to cut).
 function Read-SpeechHistoryOnce([long]$SpokenStart) {
+    # The clipboard's text as the step left it, put back once the history is read: a later
+    # step may paste it (Ctrl+C, then Ctrl+V; round-1072's 1073 pasted the sentinel).
+    $stepClipboard = Get-Clipboard -Raw -ErrorAction SilentlyContinue
     $sentinel = "__SR_SENTINEL_$([guid]::NewGuid().ToString('N').Substring(0,8))__"
     Set-Clipboard -Value $sentinel
     [void]$jaws.RunScript("CopySpeechHistoryToClipboard")
@@ -510,6 +513,9 @@ function Read-SpeechHistoryOnce([long]$SpokenStart) {
     $jaws.StopSpeech()
     [void]$jaws.RunScript("ClearSpeechHistory")
     Start-Sleep -Milliseconds 80
+    if (-not [string]::IsNullOrEmpty($stepClipboard)) {
+        Set-Clipboard -Value $stepClipboard -ErrorAction SilentlyContinue
+    }
     return [pscustomobject]@{ text = $text; records = $records; spoken_end = $spokenEnd }
 }
 
