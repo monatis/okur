@@ -884,14 +884,16 @@ A step can be in more than one entry; all of its entries apply.
   - `1083-desktop-word-footnotes-list/s1`
   - `1087-desktop-word-comments-list-controls/s1`
   - `1088-desktop-word-footnotes-list-controls/s1`
+  - `1090-desktop-word-endnotes-list/s1`
+  - `1091-desktop-word-bookmarks-list/s1`
 - Difference: `JawsSaysBeforeItsDialog`. Before its Heading List, Links List, List Fields,
-  Spelling Errors, Reviewers' Comments and Footnotes lists in Word, JAWS says what it said or
-  showed before them in most trials, in every one before its Links List, List Fields and the
-  comments and footnotes [obs, 1049/s1; 1050/s1, 1053/s1, 1054/s1; 1082/s1, 1083/s1, 1087/s1,
-  1088/s1]: its main window's version, "JAWS Version 2025.2505.43", the document's name,
-  "Microsoft Word Document", a button's or a list's hint, or "Please wait processing 1 items"
-  while it gathers the errors, comments or footnotes; one trial of 1050 says nothing at all
-  before the next key.
+  Spelling Errors, Reviewers' Comments, Footnotes, End Notes and Bookmark List lists in Word,
+  JAWS says what it said or showed before them in most trials, in every one before its Links
+  List, List Fields and the notes and bookmarks [obs, 1049/s1; 1050/s1, 1053/s1, 1054/s1;
+  1082/s1, 1083/s1, 1087/s1, 1088/s1, 1090/s1, 1091/s1]: its main window's version, "JAWS
+  Version 2025.2505.43", the document's name, "Microsoft Word Document", a button's or a list's
+  hint, or "Please wait processing 1 items" while it gathers the errors, notes or bookmarks;
+  one trial of 1050 says nothing at all before the next key.
 - Why: Okur's lists open without them, as JAWS's do in the other trials.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-24.
 
@@ -1013,6 +1015,28 @@ A step can be in more than one entry; all of its entries apply.
   after each key].
 - Why: the case said is the one the user left, and the words lose their space. Okur says the
   selection as Word leaves it: "LIBRARY HOURS", "library hours", "Library Hours".
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
+
+### Word's Spelling pane takes the focus anywhere
+
+- Steps: `1069-desktop-word-spelling-pane/s1`.
+- Difference: the whole step. F7 in Word opens its Spelling pane with the focus on a different
+  control in each trial [obs, 1069/s1]: JAWS said nothing in one, "Spelling | Add Button" in
+  another, "teh | teh | No spelling suggestions" in the third, and the next keys followed from
+  there.
+- Why: where the focus lands is Word's, not JAWS's; Okur reads the control the pane gave the
+  focus to in the trial replayed ("Ignore Button").
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
+
+### Insert Hyperlink's Address read twice
+
+- Steps: `1076-desktop-word-insert-hyperlink-dialog/s3`.
+- Difference: the whole step. Ctrl+K in Word: JAWS reads the Address field twice as its focus
+  settles, first as an edit, then as the edit combo it is, "Insert Hyperlink dialog | Address:
+  Edit | Type in text. | Address: | edit combo | To set the value use the Arrow keys or type the
+  value." [obs, 1076/s3, every trial].
+- Why: the first reading is of a focus that does not stay. Okur reads the field once, as the
+  edit combo.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
 
 ### "blank" before "Edit" after OK on a Word comment

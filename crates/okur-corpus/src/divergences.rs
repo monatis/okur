@@ -898,13 +898,16 @@ divergences! {
         "1083-desktop-word-footnotes-list/s1",
         "1087-desktop-word-comments-list-controls/s1",
         "1088-desktop-word-footnotes-list-controls/s1",
+        "1090-desktop-word-endnotes-list/s1",
+        "1091-desktop-word-bookmarks-list/s1",
     ],
-    "Before its Heading List, Links List, List Fields, Spelling Errors, Reviewers' Comments and \
-     Footnotes lists in Word, JAWS says what it said or showed before them in most trials, in \
-     every one before its Links List, List Fields and the comments and footnotes: its main \
+    "Before its Heading List, Links List, List Fields, Spelling Errors, Reviewers' Comments, \
+     Footnotes, End Notes and Bookmark List lists in Word, JAWS says what it said or showed \
+     before them in most trials, in every one before its Links List, List Fields and the notes \
+     and bookmarks: its main \
      window's version, \"JAWS Version \
      2025.2505.43\", the document's name, \"Microsoft Word Document\", a button's hint, or \
-     \"Please wait processing 1 items\" while it gathers the errors, comments or footnotes. \
+     \"Please wait processing 1 items\" while it gathers the errors, notes or bookmarks. \
      Okur's lists open without them, as JAWS's do in the other trials.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
 
@@ -1013,6 +1016,21 @@ divergences! {
      words run together (\"LibraryHours\" where Word made it \"LIBRARY HOURS\", then \
      \"LIBRARYHOURS\", \"libraryhours\"). Okur says the selection as Word leaves it, \
      \"LIBRARY HOURS\", \"library hours\", \"Library Hours\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
+    Difference::Step => ["1069-desktop-word-spelling-pane/s1"],
+    "F7 in Word opens its Spelling pane with the focus on a different control in each trial: \
+     JAWS said nothing in one, \"Spelling | Add Button\" in another, \"teh | teh | No \
+     spelling suggestions\" in the third, and the next keys followed from there. Okur reads the \
+     control the pane gave the focus to in the trial replayed (\"Ignore Button\").",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
+    Difference::Step => ["1076-desktop-word-insert-hyperlink-dialog/s3"],
+    "Ctrl+K in Word: JAWS reads Insert Hyperlink's Address field twice as its focus settles, \
+     first as an edit, then as the edit combo it is: \"Insert Hyperlink dialog | Address: Edit \
+     | Type in text. | Address: | edit combo | To set the value use the Arrow keys or type the \
+     value.\", in every trial. Okur reads it once, as the edit combo: \"Insert Hyperlink dialog \
+     | Address: edit combo | To set the value use the Arrow keys or type the value.\"",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
 
     Difference::JawsAlsoSays("blank") => ["1087-desktop-word-comments-list-controls/s6"],
