@@ -292,6 +292,37 @@ pub(crate) fn comment_at_caret(context: &TextContext) -> Option<String> {
     )
 }
 
+/// The comment the caret is in, as JAWS's Alt+Shift+Apostrophe pressed twice shows it in the
+/// Virtual Viewer: its text, its author, the document's text it is on, and how to close it,
+/// "Check the summer hours. | by Lab | Document text: | nine in the morning | Press ESCAPE to
+/// close this message." [obs, 1095/s6]. `None` where the caret is in none.
+pub(crate) fn comment_viewer(context: &TextContext) -> Option<Vec<String>> {
+    let structure = context.structure.as_ref()?;
+    let caret = context.caret;
+    let comment = structure
+        .comments
+        .iter()
+        .find(|c| (c.start..=c.end).contains(&caret) && c.end > c.start)?;
+    let on: String = context
+        .text
+        .chars()
+        .skip(comment.start)
+        .take(comment.end - comment.start)
+        .collect();
+    let mut lines = vec![comment.text.clone()];
+    if !comment.author.is_empty() {
+        lines.push(msg::word_comment_by(comment.author.as_str()).render());
+    }
+    lines.extend([
+        String::new(),
+        msg::word_comment_document_text().to_string(),
+        on.trim().to_owned(),
+        String::new(),
+        msg::viewer_close_hint().to_string(),
+    ]);
+    Some(lines)
+}
+
 /// The footnote or endnote whose reference Word's caret is on, as JAWS's Alt+Shift+E reads it:
 /// "end note reference: i Renewals are free.", "footnote reference: 1 Bring a photo ID.";
 /// elsewhere "No footnote or EndNote reference at cursor." [obs, 1092/s1, s7, s9, s14]. `None`

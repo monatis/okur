@@ -8321,6 +8321,62 @@ fn words_bookmarks_and_endnotes_lists() {
     );
 }
 
+/// Alt+Shift+Apostrophe pressed twice quickly in a comment of Word's shows it in the Virtual
+/// Viewer, read whole: the comment, its author, the text it is on and how to close it; Escape
+/// reads the document's line again, then "Edit" [obs, 1095/s6, s7, s10].
+#[test]
+fn alt_shift_apostrophe_twice_shows_the_comment() {
+    let text = "Library Notes\rThe library opens at nine in the morning.\r";
+    let (mut engine, speech) = word_document(
+        text,
+        53,
+        crate::event::LineStructure {
+            line: (14, 56),
+            comments: vec![crate::event::DocumentComment {
+                start: 35,
+                end: 54,
+                text: "Check the summer hours.".into(),
+                author: "Lab".into(),
+            }],
+            ..Default::default()
+        },
+    );
+    let press = |engine: &mut ScreenReaderEngine, time_ms| {
+        let mut key = KeyEvent::new(Key::Apostrophe, Modifiers::none(), true);
+        key.modifiers.alt = true;
+        key.modifiers.shift = true;
+        key.time_ms = time_ms;
+        engine.handle_key_event(&key);
+    };
+    press(&mut engine, 1000);
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some("Check the summer hours.\nby Lab")
+    );
+    press(&mut engine, 1150);
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some(
+            "Check the summer hours.\nby Lab\nDocument text:\nnine in the morning\nPress ESCAPE to close this message."
+        )
+    );
+    // Down stays on the last line, read again.
+    engine.handle_key_event(&KeyEvent::new(Key::DownArrow, Modifiers::none(), true));
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some("Press ESCAPE to close this message.")
+    );
+    engine.handle_key_event(&KeyEvent::new(Key::Escape, Modifiers::none(), true));
+    let edit = crate::linearize::role_marker("Edit");
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some(
+            format!("The library opens at  \u{1d}has comment \u{1e} nine in the morning .\n{edit}")
+                .as_str()
+        )
+    );
+}
+
 /// Alt+Shift+E in Word reads the footnote or endnote whose reference the caret is on: "end note
 /// reference: i Renewals are free."; elsewhere "No footnote or EndNote reference at cursor."
 /// [obs, 1092/s1, s7]. Left onto the reference says it: " end note i" [obs, 1092/s6].

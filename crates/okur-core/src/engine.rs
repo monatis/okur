@@ -66,6 +66,9 @@ enum Press {
     CapsLock,
     /// A key described by Keyboard Help, with its modifiers.
     Described(Key, crate::input::Modifiers),
+    /// An application's key that does more pressed twice quickly (Word's Alt+Shift+Apostrophe
+    /// shows the comment in the Virtual Viewer), with its modifiers.
+    Application(Key, crate::input::Modifiers),
 }
 
 /// A Virtual Viewer that opens once its text is read; `window` is Virtualize Window, not
@@ -1287,12 +1290,28 @@ impl ScreenReaderEngine {
             // Word's Alt+Shift+Apostrophe: the comment at the caret [obs, 1081/s3, s8]; the key
             // is the application's elsewhere.
             if event.key == Key::Apostrophe && m.alt && m.shift && !m.ctrl && !m.insert {
-                if let Some(said) = self
-                    .last_text
+                let context = self.last_text.clone().filter(|_| self.editing_text());
+                if let Some(said) = context
                     .as_ref()
-                    .filter(|_| self.editing_text())
                     .and_then(crate::apps::windows::word::comment_at_caret)
                 {
+                    // Twice quickly, the comment in the Virtual Viewer with the text it is on,
+                    // read whole [obs, 1095/s6].
+                    let twice = self.pressed_twice(Press::Application(event.key, m), event.time_ms);
+                    let viewer = context
+                        .as_ref()
+                        .and_then(crate::apps::windows::word::comment_viewer)
+                        .filter(|_| twice && self.viewer.is_none());
+                    let said = match viewer {
+                        Some(lines) => {
+                            let viewer = crate::viewer::VirtualViewer::message(lines);
+                            let speech = viewer.message_speech();
+                            self.viewer = Some(viewer);
+                            self.show_viewer_window();
+                            speech
+                        }
+                        None => said,
+                    };
                     self.speech.speak(&said, true);
                     return KeyAction::Consume;
                 }

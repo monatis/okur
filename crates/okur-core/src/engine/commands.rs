@@ -1714,11 +1714,29 @@ impl ScreenReaderEngine {
                         && !f.multi_line
                         && f.container_role != Some(Role::ComboBox)
                 });
-            let line = self
+            // Word's document reads its line as a line read says it, then names itself: "The
+            // library opens at has comment nine in the morning . | Edit" [obs, 1095/s10,
+            // 1096/s7].
+            let word_line = self
                 .last_text
                 .as_ref()
-                .filter(|_| !single_line)
-                .map(crate::editing::line_at);
+                .filter(|t| t.structure.is_some())
+                .map(|t| {
+                    let line = crate::editing::line_at(t)
+                        .trim_matches(|c: char| c.is_whitespace() || c == '\u{feff}')
+                        .to_owned();
+                    format!(
+                        "{}\n{}",
+                        crate::apps::windows::word::spoken_line(t, line),
+                        crate::linearize::role_marker(msg::role_edit().as_str())
+                    )
+                });
+            let line = word_line.or_else(|| {
+                self.last_text
+                    .as_ref()
+                    .filter(|_| !single_line)
+                    .map(crate::editing::line_at)
+            });
             // A combo box's field adds its list position (JAWS on the Run dialog, dev box:
             // "C: | 1 of 6").
             let position = self

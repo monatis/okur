@@ -125,6 +125,9 @@ word-endnote = end note
 # none [obs, 1081/s3].
 word-comment-by = by { $author }
 word-no-comment = No comment mark at cursor.
+# Alt+Shift+Apostrophe pressed twice: the Virtual Viewer's line before the text the comment is
+# on [obs, 1095/s6].
+word-comment-document-text = Document text:
 # OK on a footnote in JAWS's list of Word's footnotes: the footnote as the list shows it, before
 # the document's "Edit" [obs, 1088/s6].
 word-footnote-reference = footnote reference: { $footnote }
