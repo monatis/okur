@@ -49,8 +49,16 @@ a fetched evidence file) must read 90; `fix-rate.ps1` otherwise. old-pc's master
   focus is `in_ribbon`); JAWS says the document's name on Escape back. Its first focus differs
   by trial in JAWS itself: record with a steadier start (Tab to a known control first), then
   build.
-- **Comments, footnotes, page and section keys:** JAWS's Word keystrokes
-  (`popapps.chm`'s JAWS_specific_keystrokes_wd), documentation first.
+- **Comments, footnotes, page and section keys:** comments built (1081: marked in a line,
+  Alt+Shift+Apostrophe). Pending: JAWS's comments and footnotes lists (1082 Ctrl+Shift+Apostrophe,
+  1083 Insert+Shift+F, desktop-word-notes.ps1): their first step is steady ("Reviewers' Comments
+  dialog | List1 List view | Check the summer hours. Lab Fri, Jan 02, 26 | 1 of 1"), but after
+  JAWS's own list dialog every step's speech is "Speech history cleared" (the recorder's clear
+  spoken, the keys silent): fix the recorder first. Page and section keys need a longer fixture.
+- **Insert Hyperlink** (1076, pending): JAWS reads the Link to bar's internal name ("MSO Generic
+  Control Container") and "Existing File or Web Page Button Pressed"; Okur has no Pressed state
+  and drops the MsoCommandBar focus. The dialog's silent opening and closing are like 1060/s4.
+- **Save As** (1077) and **indent** (1080): recorded again in round-1080d, to import.
 - **Excel** once 521 records; **Outlook**: whether old-pc's opens without an account.
 
 ## 3. The review of 2026-10-25, what is open
