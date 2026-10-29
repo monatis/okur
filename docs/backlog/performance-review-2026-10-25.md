@@ -39,7 +39,7 @@ until the next review's pass, then go to git history.
 | 16 | Bug | Choosing another place in Settings Center kept the previous place's rows (Last Changed Settings). | fixed `c86b6804`. Open: what JAWS does with unapplied changes then (record first) |
 | 17 | Bug | Okur's main window's text was a 0 by 0 control: the window was known only after it showed. | fixed `c86b6804` |
 | 18 | Performance | Settings by name serialize the whole Settings per get (8.3 µs) and set (18.5 µs); about 58 gets per Space; `StaticMessage::suffixed` scans 1,417 ids. Fine today. | open |
-| 19 | Design | `DialogKey::ChangeBack` maps to `change(false)`, a dead branch; Tutor and Access Key logic duplicated in Basics and the Startup Wizard; application knowledge (process names, the NetUI policy) in the platform's event source. | partly fixed `c86b6804` (`strip_prefix` for menu ids); the rest open |
+| 19 | Design | `DialogKey::ChangeBack` maps to `change(false)`, a dead branch; Tutor and Access Key logic duplicated in Basics and the Startup Wizard; application knowledge (process names, the NetUI policy) in the platform's event source. | partly fixed `c86b6804` (`strip_prefix` for menu ids), `e62e9513` (Tutor and Access Key choices shared, `Verbosity::chosen`, `choose`); the NetUI policy open |
 | 20 | Small | The deferred WinEvent queue drops its newest event on overflow at debug level; Word's ribbon reads 21 sibling positions it never speaks; UIA notification text logged before the foreground filter; okur-ui's diagnostics go to a null stderr; wizard pages accumulate per Next and Back. | open |
 
 ## Checked and found fine
