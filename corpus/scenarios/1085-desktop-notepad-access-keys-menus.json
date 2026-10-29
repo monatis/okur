@@ -1,0 +1,34 @@
+{
+  "id": "1085-desktop-notepad-access-keys-menus",
+  "name": "Notepad's File menu and Page Setup dialog with JAWS's Access Key at Speak Menus Only (ACCESS_KEY=2): Alt+F, Down, Escape twice, Alt+F, U, Tab twice, Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "OutputModes": {
+        "ACCESS_KEY": "2|2|2|Access Key"
+      }
+    }
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Alt+F"},
+    {"id": "s2", "type": "key", "command": "Down"},
+    {"id": "s3", "type": "key", "command": "Escape"},
+    {"id": "s4", "type": "key", "command": "Escape"},
+    {"id": "s5", "type": "key", "command": "Alt+F"},
+    {"id": "s6", "type": "key", "command": "U", "settle_max_ms": 15000},
+    {"id": "s7", "type": "key", "command": "Tab"},
+    {"id": "s8", "type": "key", "command": "Tab"},
+    {"id": "s9", "type": "key", "command": "Escape"}
+  ]
+}
