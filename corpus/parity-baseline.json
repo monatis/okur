@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
   "matched_steps": 9249,
-  "total_steps": 9816,
-  "accepted_divergences": 270,
+  "total_steps": 9813,
+  "accepted_divergences": 273,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -1281,9 +1281,9 @@
     "1075-desktop-word-heading-style-keys/s7": "match",
     "1078-desktop-word-change-case/s1": "match",
     "1078-desktop-word-change-case/s2": "match",
-    "1078-desktop-word-change-case/s3": "mismatch",
-    "1078-desktop-word-change-case/s4": "mismatch",
-    "1078-desktop-word-change-case/s5": "mismatch",
+    "1078-desktop-word-change-case/s3": "accepted divergence",
+    "1078-desktop-word-change-case/s4": "accepted divergence",
+    "1078-desktop-word-change-case/s5": "accepted divergence",
     "1078-desktop-word-change-case/s6": "match",
     "1079-desktop-word-list-bullet-style/s1": "match",
     "1079-desktop-word-list-bullet-style/s2": "match",
