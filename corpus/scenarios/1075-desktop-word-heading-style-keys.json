@@ -1,0 +1,28 @@
+{
+  "id": "1075-desktop-word-heading-style-keys",
+  "name": "Word: on the second paragraph, Ctrl+Alt+1 and Ctrl+Alt+2 for heading styles, then Ctrl+Shift+N back to Normal; Insert+Up after each",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "Ctrl+Alt+1"},
+    {"id": "s3", "type": "key", "command": "Insert+Up"},
+    {"id": "s4", "type": "key", "command": "Ctrl+Alt+2"},
+    {"id": "s5", "type": "key", "command": "Insert+Up"},
+    {"id": "s6", "type": "key", "command": "Ctrl+Shift+N"},
+    {"id": "s7", "type": "key", "command": "Insert+Up"}
+  ]
+}

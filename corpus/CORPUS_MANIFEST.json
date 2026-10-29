@@ -1384,10 +1384,38 @@
       }
     },
     {
+      "scenario_id": "1071-desktop-word-alignment-and-spacing-keys",
+      "fixture": "desktop-word.ps1",
+      "evidence": {
+        "sha256": "5bf8824ee81917157d7aa853cf15ddca24ac22076dbd1d7be54c9b4a08ddf984",
+        "capture_script_sha256": "0175d651cd6b155da21e17c8c20872644a6c6869ea920430770ccaa9a035d75d",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "1072-desktop-word-undo-redo",
       "fixture": "desktop-word.ps1",
       "evidence": {
         "sha256": "d1ec88fc9beb7b4fefcd0c238dd85ef17cc0ccd93e748cb52891d8f33304e8f2",
+        "capture_script_sha256": "0175d651cd6b155da21e17c8c20872644a6c6869ea920430770ccaa9a035d75d",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1075-desktop-word-heading-style-keys",
+      "fixture": "desktop-word.ps1",
+      "evidence": {
+        "sha256": "ea93488c0e4e3f1f16995a39a9433adf49f7c7f7b642e3e89bd269690b377735",
         "capture_script_sha256": "0175d651cd6b155da21e17c8c20872644a6c6869ea920430770ccaa9a035d75d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
@@ -9995,10 +10023,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 695,
-    "scenarios_with_evidence": 695,
-    "total_trials": 2091,
-    "successful_trials": 2074,
-    "deterministic_scenarios": 447
+    "scenarios": 697,
+    "scenarios_with_evidence": 697,
+    "total_trials": 2097,
+    "successful_trials": 2080,
+    "deterministic_scenarios": 449
   }
 }

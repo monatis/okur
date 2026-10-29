@@ -1,0 +1,30 @@
+{
+  "id": "1071-desktop-word-alignment-and-spacing-keys",
+  "name": "Word: on the second paragraph, Ctrl+E, Ctrl+R, Ctrl+J and Ctrl+L for its alignment, then Ctrl+2, Ctrl+5 and Ctrl+1 for its line spacing; Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "Ctrl+E"},
+    {"id": "s3", "type": "key", "command": "Ctrl+R"},
+    {"id": "s4", "type": "key", "command": "Ctrl+J"},
+    {"id": "s5", "type": "key", "command": "Ctrl+L"},
+    {"id": "s6", "type": "key", "command": "Ctrl+2"},
+    {"id": "s7", "type": "key", "command": "Ctrl+5"},
+    {"id": "s8", "type": "key", "command": "Ctrl+1"},
+    {"id": "s9", "type": "key", "command": "Insert+Up"}
+  ]
+}
