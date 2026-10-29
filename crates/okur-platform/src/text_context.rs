@@ -39,8 +39,8 @@ pub use reader::{
     focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
     move_caret_in_edit, move_to_cell, move_to_paragraph, read_focused, read_focused_outside_page,
     visible_text, with_paragraph_alignment, word_document_fields, word_document_headings,
-    word_document_links, word_document_paragraphs, word_line_spacing, word_paragraph_alignment,
-    word_select_field, word_track_changes, word_view,
+    word_document_links, word_document_paragraphs, word_key_state, word_line_spacing,
+    word_select_field, word_view,
 };
 
 #[cfg(windows)]
@@ -356,24 +356,25 @@ mod reader {
         })
     }
 
-    /// Whether Word's focused document tracks its changes, from Word's own object model
-    /// (`crate::word_om`); `None` outside Word's document.
-    pub fn word_track_changes() -> Option<bool> {
+    /// What one of Word's keys (`key`) concerns in Word's focused document, from Word's own
+    /// object model (`crate::word_om`): whether it tracks its changes, its paragraph's
+    /// alignment, its selection's font size. `None` outside Word's document.
+    pub fn word_key_state(key: okur_core::WordKey) -> Option<okur_core::WordKeyState> {
+        use okur_core::{WordKey, WordKeyState};
         let (window, class) = focused_window()?;
         if class != "_WWG" {
             return None;
         }
-        crate::word_om::track_revisions(window)
-    }
-
-    /// The alignment of the paragraph at the caret of Word's focused document, from Word's own
-    /// object model (`crate::word_om`); `None` outside Word's document.
-    pub fn word_paragraph_alignment() -> Option<i32> {
-        let (window, class) = focused_window()?;
-        if class != "_WWG" {
-            return None;
+        match key {
+            WordKey::TrackChanges => {
+                crate::word_om::track_revisions(window).map(WordKeyState::TrackChanges)
+            }
+            WordKey::Alignment => {
+                crate::word_om::paragraph_alignment(window).map(WordKeyState::Alignment)
+            }
+            WordKey::FontSize => crate::word_om::selection_font_size(window)
+                .map(|points| WordKeyState::FontSize((points * 10.0).round() as u32)),
         }
-        crate::word_om::paragraph_alignment(window)
     }
 
     /// The fields of Word's focused document, in order, from Word's own object model

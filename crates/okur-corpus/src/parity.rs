@@ -1267,6 +1267,24 @@ struct ScreenSnapshot {
     /// beside the headings (none before 1071), for Ctrl+E, R, J and L.
     #[serde(default)]
     alignment: Option<i32>,
+    /// The selection's font size after the step, in points, from Word's object model, saved
+    /// beside the headings (none before 1074), for Ctrl+Shift+Period and Comma.
+    #[serde(default)]
+    font_size: Option<f32>,
+}
+
+impl ScreenSnapshot {
+    /// What one of Word's keys left, as the step's snapshot saved it.
+    fn word_key_state(&self, key: okur_core::WordKey) -> Option<okur_core::WordKeyState> {
+        use okur_core::{WordKey, WordKeyState};
+        match key {
+            WordKey::TrackChanges => self.track_changes.map(WordKeyState::TrackChanges),
+            WordKey::Alignment => self.alignment.map(WordKeyState::Alignment),
+            WordKey::FontSize => self
+                .font_size
+                .map(|points| WordKeyState::FontSize((points * 10.0).round() as u32)),
+        }
+    }
 }
 
 /// A line spacing as the recorder saves it: Word's rule and its points.
@@ -1305,6 +1323,7 @@ impl ScreenSnapshot {
             self.fields = other.fields;
             self.track_changes = other.track_changes;
             self.alignment = other.alignment;
+            self.font_size = other.font_size;
         }
     }
 }
@@ -1321,8 +1340,8 @@ struct ScreenReads {
     links: usize,
     spacings: usize,
     fields: usize,
-    track_changes: usize,
-    alignments: usize,
+    /// Word's keys' states asked for and answered, by key.
+    word_keys: [usize; 3],
 }
 
 impl ScreenReads {
@@ -1413,8 +1432,8 @@ impl ScreenReads {
             count("line spacing"),
             count("document fields"),
         );
-        let track_changes = count("track changes");
-        let alignments = count("paragraph alignment");
+        use okur_core::WordKey;
+        let word_keys = [WordKey::TrackChanges, WordKey::Alignment, WordKey::FontSize];
         let mut deliver = |event: okur_core::AccessibilityEvent| {
             if let Some(speech) = engine.handle_accessibility_event(&event) {
                 if spoken.is_empty() {
@@ -1431,21 +1450,17 @@ impl ScreenReads {
                 snapshot.map(|s| s.paragraphs.clone()).unwrap_or_default(),
             ));
         }
-        // Track Changes' state after Ctrl+Shift+E, always answered: none where the step saved
-        // none (scenarios recorded before it was saved), and nothing is said.
-        while self.track_changes < track_changes {
-            self.track_changes += 1;
-            deliver(okur_core::AccessibilityEvent::TrackChanges(
-                snapshot.and_then(|s| s.track_changes),
-            ));
-        }
-        // The paragraph's alignment after Ctrl+E, R, J or L, always answered: none where the
-        // step saved none, and nothing is said.
-        while self.alignments < alignments {
-            self.alignments += 1;
-            deliver(okur_core::AccessibilityEvent::ParagraphAlignment(
-                snapshot.and_then(|s| s.alignment),
-            ));
+        // What Word's keys left (Track Changes, the alignment, the font size), always answered:
+        // none where the step saved none (scenarios recorded before it was saved), and nothing
+        // is said.
+        for (answered, key) in self.word_keys.iter_mut().zip(word_keys) {
+            let asked = count(key.name());
+            while *answered < asked {
+                *answered += 1;
+                deliver(okur_core::AccessibilityEvent::WordKeyState(
+                    snapshot.and_then(|s| s.word_key_state(key)),
+                ));
+            }
         }
         // Say Font's line spacing, always answered: none where the step saved none (scenarios
         // recorded before it was saved), and Say Font then leaves it out.

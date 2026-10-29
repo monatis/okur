@@ -7655,9 +7655,10 @@ fn words_track_changes_key_says_its_state() {
         (Some(false), Some("Track Changes off")),
         (None, None),
     ] {
+        let state = state.map(crate::event::WordKeyState::TrackChanges);
         assert_eq!(
             engine
-                .handle_accessibility_event(&AccessibilityEvent::TrackChanges(state))
+                .handle_accessibility_event(&AccessibilityEvent::WordKeyState(state))
                 .as_deref(),
             said
         );
@@ -7667,9 +7668,10 @@ fn words_track_changes_key_says_its_state() {
 
 /// Ctrl+E, R, J and L in Word's document ask for the paragraph's alignment once Word has acted
 /// on them, and say it as JAWS does: "Centered", "aligned right", "justified", "Aligned left";
-/// the line spacing keys say nothing [obs, 1071/s2-s8].
+/// Ctrl+Shift+Period and Comma the font size, "16 point"; the line spacing keys say nothing
+/// [obs, 1071/s2-s8, 1074/s3-s5].
 #[test]
-fn words_alignment_keys_say_the_alignment() {
+fn words_alignment_and_font_size_keys_say_what_they_leave() {
     let (mut engine, _speech) = word_document(
         "Library Hours\r",
         0,
@@ -7689,23 +7691,31 @@ fn words_alignment_keys_say_the_alignment() {
     let mut double = KeyEvent::new(Key::Digit(2), Modifiers::none(), true);
     double.modifiers.ctrl = true;
     engine.handle_key_event(&double);
-    let asked = actions
+    let mut grow = KeyEvent::new(Key::Period, Modifiers::none(), true);
+    grow.modifiers.ctrl = true;
+    grow.modifiers.shift = true;
+    engine.handle_key_event(&grow);
+    let asked: Vec<String> = actions
         .requests()
-        .iter()
-        .filter(|(request, _)| request == "paragraph alignment")
-        .count();
-    assert_eq!(asked, 1);
-    for (alignment, said) in [
-        (Some(1), Some("Centered")),
-        (Some(2), Some("aligned right")),
-        (Some(3), Some("justified")),
-        (Some(0), Some("Aligned left")),
-        (Some(9), None),
+        .into_iter()
+        .map(|(request, _)| request)
+        .filter(|request| request == "paragraph alignment" || request == "font size")
+        .collect();
+    assert_eq!(asked, ["paragraph alignment", "font size"]);
+    use crate::event::WordKeyState;
+    for (state, said) in [
+        (Some(WordKeyState::Alignment(1)), Some("Centered")),
+        (Some(WordKeyState::Alignment(2)), Some("aligned right")),
+        (Some(WordKeyState::Alignment(3)), Some("justified")),
+        (Some(WordKeyState::Alignment(0)), Some("Aligned left")),
+        (Some(WordKeyState::Alignment(9)), None),
+        (Some(WordKeyState::FontSize(160)), Some("16 point")),
+        (Some(WordKeyState::FontSize(105)), Some("10.5 point")),
         (None, None),
     ] {
         assert_eq!(
             engine
-                .handle_accessibility_event(&AccessibilityEvent::ParagraphAlignment(alignment))
+                .handle_accessibility_event(&AccessibilityEvent::WordKeyState(state))
                 .as_deref(),
             said
         );

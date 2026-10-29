@@ -99,12 +99,9 @@ mod windows_actions {
         DocumentLinks,
         /// The line spacing at the focused document's caret, answered always.
         LineSpacing,
-        /// Whether the focused document tracks its changes, read once Ctrl+Shift+E has acted,
-        /// answered always.
-        TrackChanges,
-        /// The alignment of the focused document's paragraph, read once Ctrl+E, R, J or L has
-        /// acted, answered always.
-        ParagraphAlignment,
+        /// What one of Word's keys left in the focused document, read once Word has acted on
+        /// it, answered always.
+        WordKey(okur_core::WordKey),
         /// The focused document's fields, answered even when there are none.
         DocumentFields,
         /// The caret to a field of the focused document (from 0), then the field's text.
@@ -186,8 +183,7 @@ mod windows_actions {
                 Request::DocumentHeadings => "document headings",
                 Request::DocumentLinks => "document links",
                 Request::LineSpacing => "line spacing",
-                Request::TrackChanges => "track changes",
-                Request::ParagraphAlignment => "paragraph alignment",
+                Request::WordKey(_) => "word key",
                 Request::DocumentFields => "document fields",
                 Request::Field(..) => "field",
                 Request::ActivateDocumentLink(_) => "document link",
@@ -408,22 +404,14 @@ mod windows_actions {
                                 );
                                 let _ = events.send(AccessibilityEvent::LineSpacing(spacing));
                             }
-                            Request::TrackChanges => {
-                                let Some(events) = events.as_ref() else {
-                                    return;
-                                };
-                                let now = after_word_key(crate::text_context::word_track_changes);
-                                tracing::debug!(?now, "track changes read");
-                                let _ = events.send(AccessibilityEvent::TrackChanges(now));
-                            }
-                            Request::ParagraphAlignment => {
+                            Request::WordKey(key) => {
                                 let Some(events) = events.as_ref() else {
                                     return;
                                 };
                                 let now =
-                                    after_word_key(crate::text_context::word_paragraph_alignment);
-                                tracing::debug!(?now, "paragraph alignment read");
-                                let _ = events.send(AccessibilityEvent::ParagraphAlignment(now));
+                                    after_word_key(|| crate::text_context::word_key_state(key));
+                                tracing::debug!(?key, ?now, "word key read");
+                                let _ = events.send(AccessibilityEvent::WordKeyState(now));
                             }
                             Request::DocumentFields => {
                                 let Some(events) = events.as_ref() else {
@@ -791,7 +779,7 @@ mod windows_actions {
     }
 
     /// A state of Word's that a key just passed on changes (Track Changes, a paragraph's
-    /// alignment), read once Word has acted on it: polled until it differs from its first read,
+    /// alignment, a font size), read once Word has acted on it: polled until it differs from its first read,
     /// or the settle time passes (Word had acted before the first read, or nothing changed).
     fn after_word_key<T: PartialEq>(read: impl Fn() -> Option<T>) -> Option<T> {
         let started = Instant::now();
@@ -982,12 +970,8 @@ mod windows_actions {
             self.send(Request::DocumentView)
         }
 
-        fn read_track_changes(&self) -> bool {
-            self.send(Request::TrackChanges)
-        }
-
-        fn read_paragraph_alignment(&self) -> bool {
-            self.send(Request::ParagraphAlignment)
+        fn read_word_key(&self, key: okur_core::WordKey) -> bool {
+            self.send(Request::WordKey(key))
         }
 
         fn read_document_paragraphs(&self) -> bool {

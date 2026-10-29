@@ -445,6 +445,17 @@ pub fn track_revisions(document: HWND) -> Option<bool> {
     bool::try_from(&property(&document, "TrackRevisions")?).ok()
 }
 
+/// The font size of the selection in Word's document window `document`, in points
+/// (`Selection.Font.Size`); `None` for a selection of several sizes, or where Word's object
+/// model does not answer.
+pub fn selection_font_size(document: HWND) -> Option<f32> {
+    let selection = object(&property(&word_window(document)?, "Selection")?)?;
+    let font = object(&property(&selection, "Font")?)?;
+    let size = f64::try_from(&property(&font, "Size")?).ok()?;
+    // Word's wdUndefined (9999999) for several sizes.
+    (size > 0.0 && size < 1639.0).then_some(size as f32)
+}
+
 /// The alignment of the selection's paragraph in Word's document window `document`
 /// (`Selection.ParagraphFormat.Alignment`: 0 left, 1 centered, 2 right, 3 justified); `None`
 /// where Word's object model does not answer.

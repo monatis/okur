@@ -46,7 +46,7 @@ pub use event::{
     AccessibilityEvent, ChangeKind, DocumentField, DocumentFormField, DocumentHeading,
     DocumentLink, DocumentParagraph, FocusEvent, FontInfo, FormFieldKind, GroupEntry, LineSpacing,
     LineStructure, LiveRegionEvent, MenuEvent, MousePoint, PlatformIds, Politeness, TableCell,
-    TextContext, UnitTexts, WindowItem,
+    TextContext, UnitTexts, WindowItem, WordKey, WordKeyState,
 };
 pub use input::{Key, KeyAction, KeyEvent, Modifiers};
 pub use speech::{MockSpeechOutput, SpeechFormatter, SpeechOutput};

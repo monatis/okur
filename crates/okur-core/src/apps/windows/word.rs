@@ -343,12 +343,7 @@ pub(crate) fn font(context: &TextContext, spacing: Option<&LineSpacing>) -> Opti
         }
     }
     if font.size_tenths > 0 {
-        let size = if font.size_tenths % 10 == 0 {
-            (font.size_tenths / 10).to_string()
-        } else {
-            format!("{}.{}", font.size_tenths / 10, font.size_tenths % 10)
-        };
-        said.push(msg::font_size(size).render());
+        said.push(msg::font_size(points(font.size_tenths)).render());
     }
     let name = |color: Option<crate::color::Rgb>| {
         color
@@ -436,39 +431,51 @@ pub(crate) fn view_key(event: &crate::input::KeyEvent) -> Option<String> {
     )
 }
 
-/// Word's Track Changes key, Ctrl+Shift+E, after which JAWS says the state it leaves: "Track
-/// Changes on", "Track Changes off" [obs, 1068/s1, s8].
-pub(crate) fn track_changes_key(event: &crate::input::KeyEvent) -> bool {
+/// Word's keys after which JAWS says what they left, read once Word has acted on them (Ctrl+E
+/// on a centered paragraph aligns it left): Ctrl+Shift+E, Track Changes [obs, 1068/s1, s8];
+/// Ctrl+E, R, J and L, the alignment [obs, 1071/s2-s5]; Ctrl+Shift+Period and Comma, the font
+/// size [obs, 1074/s3-s5]. The line spacing keys and Ctrl+B, I, U say nothing [obs, 1071/s6-s8,
+/// 1070].
+pub(crate) fn word_key(event: &crate::input::KeyEvent) -> Option<crate::event::WordKey> {
+    use crate::event::WordKey;
+    use crate::input::Key;
     let m = &event.modifiers;
-    m.ctrl && m.shift && !m.alt && !m.insert && !m.win && event.key == crate::input::Key::Alpha('E')
+    if !m.ctrl || m.alt || m.insert || m.win {
+        return None;
+    }
+    match (m.shift, event.key) {
+        (true, Key::Alpha('E')) => Some(WordKey::TrackChanges),
+        (false, Key::Alpha('E' | 'R' | 'J' | 'L')) => Some(WordKey::Alignment),
+        (true, Key::Period | Key::Comma) => Some(WordKey::FontSize),
+        _ => None,
+    }
 }
 
-/// Word's alignment keys, Ctrl+E, Ctrl+R, Ctrl+J and Ctrl+L, after which JAWS says the
-/// alignment they leave the paragraph in (Ctrl+E on a centered paragraph aligns it left).
-pub(crate) fn alignment_key(event: &crate::input::KeyEvent) -> bool {
-    let m = &event.modifiers;
-    m.ctrl
-        && !m.shift
-        && !m.alt
-        && !m.insert
-        && !m.win
-        && matches!(event.key, crate::input::Key::Alpha('E' | 'R' | 'J' | 'L'))
+/// What one of Word's keys left, as JAWS says it: "Track Changes on", "Centered", "aligned
+/// right", "justified", "Aligned left", "16 point". Word's other justifications (4, 5, 7, 8)
+/// are said as justified, its Thai one (9) not at all.
+pub(crate) fn word_key_said(state: crate::event::WordKeyState) -> Option<String> {
+    use crate::event::WordKeyState;
+    let said = match state {
+        WordKeyState::TrackChanges(true) => msg::word_track_changes_on(),
+        WordKeyState::TrackChanges(false) => msg::word_track_changes_off(),
+        WordKeyState::Alignment(0) => msg::word_aligned_left(),
+        WordKeyState::Alignment(1) => msg::word_aligned_centered(),
+        WordKeyState::Alignment(2) => msg::word_aligned_right(),
+        WordKeyState::Alignment(3 | 4 | 5 | 7 | 8) => msg::word_aligned_justified(),
+        WordKeyState::Alignment(_) => return None,
+        WordKeyState::FontSize(tenths) => return Some(msg::font_size(points(tenths)).render()),
+    };
+    Some(said.to_string())
 }
 
-/// A paragraph's alignment as JAWS says it after an alignment key: "Centered", "aligned
-/// right", "justified", "Aligned left" [obs, 1071/s2-s5]. Word's other justifications (4, 5,
-/// 7, 8) are said as justified, its Thai one (9) not at all.
-pub(crate) fn alignment_said(alignment: i32) -> Option<String> {
-    Some(
-        match alignment {
-            0 => msg::word_aligned_left(),
-            1 => msg::word_aligned_centered(),
-            2 => msg::word_aligned_right(),
-            3 | 4 | 5 | 7 | 8 => msg::word_aligned_justified(),
-            _ => return None,
-        }
-        .to_string(),
-    )
+/// A size in tenths of a point as Word shows it: "16", "10.5".
+fn points(tenths: u32) -> String {
+    if tenths.is_multiple_of(10) {
+        (tenths / 10).to_string()
+    } else {
+        format!("{}.{}", tenths / 10, tenths % 10)
+    }
 }
 
 /// How the caret came to a cell of Word's table, which decides what JAWS says of it.

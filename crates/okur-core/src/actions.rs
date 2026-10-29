@@ -129,19 +129,11 @@ pub trait ApplicationActions: Send {
         false
     }
 
-    /// Asks whether the focused document tracks its changes, once the key just pressed has
-    /// acted (Word's Ctrl+Shift+E), which arrives later as
-    /// [`crate::event::AccessibilityEvent::TrackChanges`], always. Returns false when
+    /// Asks for what one of Word's keys (`key`, just pressed) left in the focused document,
+    /// once Word has acted on it, which arrives later as
+    /// [`crate::event::AccessibilityEvent::WordKeyState`], always. Returns false when
     /// unsupported.
-    fn read_track_changes(&self) -> bool {
-        false
-    }
-
-    /// Asks for the alignment of the focused document's paragraph once the key just pressed
-    /// has acted (Word's Ctrl+E, R, J and L), which arrives later as
-    /// [`crate::event::AccessibilityEvent::ParagraphAlignment`], always. Returns false when
-    /// unsupported.
-    fn read_paragraph_alignment(&self) -> bool {
+    fn read_word_key(&self, _key: crate::event::WordKey) -> bool {
         false
     }
 
@@ -492,16 +484,9 @@ impl ApplicationActions for RecordingActions {
         true
     }
 
-    fn read_track_changes(&self) -> bool {
+    fn read_word_key(&self, key: crate::event::WordKey) -> bool {
         if let Ok(mut log) = self.log.lock() {
-            log.push(("track changes".to_owned(), 0));
-        }
-        true
-    }
-
-    fn read_paragraph_alignment(&self) -> bool {
-        if let Ok(mut log) = self.log.lock() {
-            log.push(("paragraph alignment".to_owned(), 0));
+            log.push((key.name().to_owned(), 0));
         }
         true
     }

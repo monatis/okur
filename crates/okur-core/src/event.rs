@@ -156,6 +156,39 @@ pub enum FormFieldKind {
     DropDown,
 }
 
+/// One of Word's keys whose result JAWS says, read from Word's object model once Word has
+/// acted on it.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum WordKey {
+    /// Ctrl+Shift+E: whether the document tracks its changes.
+    TrackChanges,
+    /// Ctrl+E, R, J and L: the paragraph's alignment.
+    Alignment,
+    /// Ctrl+Shift+Period and Ctrl+Shift+Comma: the selection's font size.
+    FontSize,
+}
+
+impl WordKey {
+    /// Its name in the actions' log, which replay answers by.
+    pub fn name(self) -> &'static str {
+        match self {
+            Self::TrackChanges => "track changes",
+            Self::Alignment => "paragraph alignment",
+            Self::FontSize => "font size",
+        }
+    }
+}
+
+/// What one of Word's keys left ([`WordKey`]).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum WordKeyState {
+    TrackChanges(bool),
+    /// Word's `WdParagraphAlignment`: 0 left, 1 centered, 2 right, 3 justified.
+    Alignment(i32),
+    /// In tenths of a point.
+    FontSize(u32),
+}
+
 /// A paragraph's line spacing as Word keeps it, for Say Font's "Line spacing:" [obs, 1040/s17].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LineSpacing {
@@ -911,15 +944,10 @@ pub enum AccessibilityEvent {
     /// by Say Font ([`crate::actions::ApplicationActions::read_line_spacing`]); `None` when it
     /// could not be read.
     LineSpacing(Option<LineSpacing>),
-    /// Whether the focused document tracks its changes (Word's), read after Ctrl+Shift+E
-    /// ([`crate::actions::ApplicationActions::read_track_changes`]); `None` when it could not
-    /// be read.
-    TrackChanges(Option<bool>),
-    /// The alignment of the focused document's paragraph (Word's `WdParagraphAlignment`: 0
-    /// left, 1 centered, 2 right, 3 justified), read after Ctrl+E, R, J or L
-    /// ([`crate::actions::ApplicationActions::read_paragraph_alignment`]); `None` when it
-    /// could not be read.
-    ParagraphAlignment(Option<i32>),
+    /// What one of Word's keys left in the focused document, read once Word acted on it
+    /// ([`crate::actions::ApplicationActions::read_word_key`]); `None` when it could not be
+    /// read.
+    WordKeyState(Option<WordKeyState>),
     /// The focused document's fields, in order, asked for by its list of fields (Insert+F5 in
     /// Word; [`crate::actions::ApplicationActions::read_document_fields`]); empty when it has
     /// none or could not be read.

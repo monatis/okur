@@ -1315,6 +1315,8 @@ async fn main() {
                 let track_changes = document.and_then(okur_platform::word_om::track_revisions);
                 // The caret's paragraph's alignment, for Ctrl+E, R, J and L.
                 let alignment = document.and_then(okur_platform::word_om::paragraph_alignment);
+                // The selection's font size, for Ctrl+Shift+Period and Comma.
+                let font_size = document.and_then(okur_platform::word_om::selection_font_size);
                 // The document's fields, for its list of fields (Insert+F5).
                 let fields = document
                     .and_then(okur_platform::word_om::document_fields)
@@ -1361,6 +1363,7 @@ async fn main() {
                         })),
                         "track_changes": track_changes,
                         "alignment": alignment,
+                        "font_size": font_size,
                         "selected_form_fields": form_json(&selected_form_fields),
                         "paragraph_form_fields": form_json(&paragraph_form_fields),
                         "fields": fields
