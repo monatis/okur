@@ -1,0 +1,29 @@
+{
+  "id": "1090-desktop-word-endnotes-list",
+  "name": "Word: Insert+Shift+E lists the document's endnotes; Tab through its controls and back (keys with UI Access), Enter on the endnote, then Say Line and Right where it left the caret",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-marks.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-marks.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Insert+Shift+E", "settle_max_ms": 20000},
+    {"id": "s2", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s3", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s4", "type": "key_ui_access", "command": "Shift+Tab"},
+    {"id": "s5", "type": "key_ui_access", "command": "Shift+Tab"},
+    {"id": "s6", "type": "key_ui_access", "command": "Enter"},
+    {"id": "s7", "type": "key", "command": "Insert+Up"},
+    {"id": "s8", "type": "key", "command": "Right"}
+  ]
+}

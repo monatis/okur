@@ -1,0 +1,27 @@
+{
+  "id": "1093-desktop-word-no-marks",
+  "name": "Word: in a document without endnotes, bookmarks or notes, Insert+Shift+E, Insert+Alt+B and Alt+Shift+E, each with Say Line after",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Insert+Shift+E", "settle_max_ms": 20000},
+    {"id": "s2", "type": "key", "command": "Insert+Up"},
+    {"id": "s3", "type": "key", "command": "Insert+Alt+B", "settle_max_ms": 20000},
+    {"id": "s4", "type": "key", "command": "Insert+Up"},
+    {"id": "s5", "type": "key", "command": "Alt+Shift+E", "settle_max_ms": 20000},
+    {"id": "s6", "type": "key", "command": "Insert+Up"}
+  ]
+}

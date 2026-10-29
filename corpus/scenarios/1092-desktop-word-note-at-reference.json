@@ -1,0 +1,36 @@
+{
+  "id": "1092-desktop-word-note-at-reference",
+  "name": "Word: Alt+Shift+E at the start of a line, then on the endnote's reference (End and Left twice onto it) and with it selected (Shift+Right), then on the footnote's; Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-marks.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-marks.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Alt+Shift+E"},
+    {"id": "s2", "type": "key", "command": "Down"},
+    {"id": "s3", "type": "key", "command": "Down"},
+    {"id": "s4", "type": "key", "command": "End"},
+    {"id": "s5", "type": "key", "command": "Left"},
+    {"id": "s6", "type": "key", "command": "Left"},
+    {"id": "s7", "type": "key", "command": "Alt+Shift+E"},
+    {"id": "s8", "type": "key", "command": "Shift+Right"},
+    {"id": "s9", "type": "key", "command": "Alt+Shift+E"},
+    {"id": "s10", "type": "key", "command": "Down"},
+    {"id": "s11", "type": "key", "command": "End"},
+    {"id": "s12", "type": "key", "command": "Left"},
+    {"id": "s13", "type": "key", "command": "Left"},
+    {"id": "s14", "type": "key", "command": "Alt+Shift+E"},
+    {"id": "s15", "type": "key", "command": "Insert+Up"}
+  ]
+}

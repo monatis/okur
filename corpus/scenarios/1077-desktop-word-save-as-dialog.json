@@ -1,0 +1,26 @@
+{
+  "id": "1077-desktop-word-save-as-dialog",
+  "name": "Word: F12 opens Save As, Tab to Save as type and Shift+Tab back to File name, Escape back without saving; Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "F12", "onset_ms": 5000, "settle_max_ms": 20000},
+    {"id": "s2", "type": "key", "command": "Tab"},
+    {"id": "s3", "type": "key", "command": "Shift+Tab"},
+    {"id": "s4", "type": "key", "command": "Escape", "onset_ms": 3000},
+    {"id": "s5", "type": "key", "command": "Insert+Up"}
+  ]
+}
