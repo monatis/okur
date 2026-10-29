@@ -997,6 +997,18 @@ A step can be in more than one entry; all of its entries apply.
   1064/s10].
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
 
+### Word's Shift+F3 one change behind
+
+- Steps: `1078-desktop-word-change-case/s3`, `1078-desktop-word-change-case/s4`,
+  `1078-desktop-word-change-case/s5`.
+- Difference: the whole step. Shift+F3 on Word's selected heading: JAWS says the selection as
+  it was before the key, its words run together: "LibraryHours" where Word made it "LIBRARY
+  HOURS", then "LIBRARYHOURS", "libraryhours" [obs, 1078/s3-s5; the trace reads Word's text
+  after each key].
+- Why: the case said is the one the user left, and the words lose their space. Okur says the
+  selection as Word leaves it: "LIBRARY HOURS", "library hours", "Library Hours".
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row
