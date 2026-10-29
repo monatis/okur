@@ -962,6 +962,41 @@ A step can be in more than one entry; all of its entries apply.
   value."
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-28.
 
+### Word's Find and Replace opening
+
+- Steps: `1065-desktop-word-find-replace-dialog/s1`.
+- Difference: the whole step. Opening Find and Replace (Ctrl+H), JAWS reads the first field's
+  own window, which Word reports last and without its label: "Find and Replace | Edit | To set
+  the value use the Arrow keys or type the value." [obs, 1065/s1, round-1065b, every trial].
+- Why: the field is read without its name or kind, where JAWS names the dialog's other fields
+  ("Replace with: | edit combo" [obs, 1065/s2]). Okur says "Find and Replace dialog | Find
+  what: | edit combo | To set the value use the Arrow keys or type the value."
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
+
+### "Lower Ribbon" carried over from an earlier trial
+
+- Steps: `1066-desktop-word-font-name-list/s1`, `1067-desktop-word-font-size-list/s1`.
+- Difference: the whole step. Alt in Word after an earlier trial left the ribbon from its lower
+  ribbon by key tips (the Styles gallery, the Font box): JAWS says "Lower Ribbon | Ribbon |
+  Home Tab" though the tabs have the focus, and in one trial of 1067 nothing [obs, 1064/s1
+  trials 2-3, 1066/s1, 1067/s1].
+- Why: the word is JAWS's memory of an earlier visit, and wrong for where the focus is; replay
+  starts each trial anew. Okur says "Upper Ribbon | Ribbon | Home Tab", as JAWS does where no
+  trial before went there [obs, 1043/s1, 1045/s1].
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
+
+### Escape out of the Font box's list
+
+- Steps: `1066-desktop-word-font-name-list/s9`, `1067-desktop-word-font-size-list/s9`.
+- Difference: the whole step. Escape in the Font or Font Size box's dropped list: Word closes
+  it and gives the focus back to the document, reported about four seconds later (in one trial
+  not at all), and JAWS says nothing, there or on the next two Escapes [obs, 1066/s9-s11,
+  1067/s9-s11].
+- Why: the user is back in the document without a word. Okur says "Leaving menus | Leaving
+  ribbons | Edit" when the document's focus comes, as Escape out of the ribbon says [obs,
+  1064/s10].
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row

@@ -969,6 +969,36 @@ divergences! {
      the dialog's name, the field and its hint once: \"Font dialog | Font: | edit combo | \
      Calibri | To set the value use the Arrow keys or type the value.\"",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-28";
+
+    Difference::Step => [
+        "1065-desktop-word-find-replace-dialog/s1",
+    ],
+    "Opening Word's Find and Replace (Ctrl+H), JAWS reads the first field's own window, which \
+     Word reports last and without its label: \"Find and Replace | Edit | To set the value use \
+     the Arrow keys or type the value.\" Okur says the dialog and the field as JAWS says its \
+     other fields: \"Find and Replace dialog | Find what: | edit combo | To set the value use \
+     the Arrow keys or type the value.\"",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
+    Difference::Step => [
+        "1066-desktop-word-font-name-list/s1",
+        "1067-desktop-word-font-size-list/s1",
+    ],
+    "Alt in Word after an earlier trial left the ribbon from its lower ribbon by key tips: JAWS \
+     says \"Lower Ribbon | Ribbon | Home Tab\", though the tabs have the focus, and in one \
+     trial nothing. Replay starts each trial anew; Okur says \"Upper Ribbon | Ribbon | Home \
+     Tab\", as JAWS does where no trial before it went there (1043/s1, 1045/s1).",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
+    Difference::Step => [
+        "1066-desktop-word-font-name-list/s9",
+        "1067-desktop-word-font-size-list/s9",
+    ],
+    "Escape in the Font or Font Size box's list: Word closes it and gives the focus back to the \
+     document, reported about four seconds later (in one trial not at all), and JAWS says \
+     nothing, there or on the next two Escapes. Okur says \"Leaving menus | Leaving ribbons | \
+     Edit\" when the document's focus comes, as Escape out of the ribbon says.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
 }
 
 /// The divergence covering `step`, if any.
