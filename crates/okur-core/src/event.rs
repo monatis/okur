@@ -134,14 +134,37 @@ pub struct LineStructure {
     /// footnote 1." [obs, 1083/s4].
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub footnotes: Vec<DocumentFootnote>,
+    /// The endnote references on the caret's paragraph, as its footnotes: "three weeks end note
+    /// i." [obs, 1090/s7].
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub endnotes: Vec<DocumentFootnote>,
 }
 
-/// A footnote reference of Word's on the caret's paragraph: the place in the text before which
-/// it stands, and the footnote's number.
+/// A footnote's or endnote's reference of Word's on the caret's paragraph: the place in the text
+/// before which it stands, the note's number, its mark as the document shows it ("i" for the
+/// first endnote), the number where it shows that, the note's text, and whether Word's caret is
+/// on the reference itself (which the text does not show, so the place cannot tell).
 #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub struct DocumentFootnote {
     pub at: usize,
     pub number: u32,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub mark: String,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub text: String,
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub at_caret: bool,
+}
+
+impl DocumentFootnote {
+    /// The note's mark as the document shows it.
+    pub fn shown(&self) -> String {
+        if self.mark.is_empty() {
+            self.number.to_string()
+        } else {
+            self.mark.clone()
+        }
+    }
 }
 
 /// A comment of Word's on the caret's paragraph, over the text from `start` to `end`.
@@ -253,12 +276,14 @@ pub struct DocumentField {
     pub result: String,
 }
 
-/// Which of a document's notes JAWS lists in Word: its comments (Ctrl+Shift+Apostrophe) or its
-/// footnotes (Insert+Shift+F).
+/// Which of a document's marks JAWS lists in Word: its comments (Ctrl+Shift+Apostrophe), its
+/// footnotes (Insert+Shift+F), its endnotes (Insert+Shift+E) or its bookmarks (Insert+Alt+B).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum NoteKind {
     Comment,
     Footnote,
+    Endnote,
+    Bookmark,
 }
 
 impl NoteKind {
@@ -267,13 +292,17 @@ impl NoteKind {
         match self {
             Self::Comment => "document comments",
             Self::Footnote => "document footnotes",
+            Self::Endnote => "document endnotes",
+            Self::Bookmark => "document bookmarks",
         }
     }
 }
 
-/// A comment or footnote of a document the platform reads (Word's), for JAWS's list of them:
-/// its text; a comment's author and its date as the user's locale writes "ddd, MMM dd, yy"
-/// ("Fri, Jan 02, 26"); a footnote's number.
+/// A comment, footnote, endnote or bookmark of a document the platform reads (Word's), for
+/// JAWS's list of them: its text (a bookmark's, the text it marks); a comment's author and its
+/// date as the user's locale writes "ddd, MMM dd, yy" ("Fri, Jan 02, 26"); a note's number, and
+/// its mark as the document shows it ("i" for the first endnote), the number where it shows
+/// that; a bookmark's name.
 #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub struct DocumentNote {
     pub text: String,
@@ -283,6 +312,21 @@ pub struct DocumentNote {
     pub date: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub number: Option<u32>,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub mark: String,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub name: String,
+}
+
+impl DocumentNote {
+    /// A note's mark as the document shows it.
+    pub fn shown_mark(&self) -> String {
+        match (self.mark.is_empty(), self.number) {
+            (false, _) => self.mark.clone(),
+            (true, Some(number)) => number.to_string(),
+            (true, None) => String::new(),
+        }
+    }
 }
 
 /// A link of a document the platform reads by paragraphs (Word's hyperlinks), for its Links

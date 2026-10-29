@@ -18,6 +18,8 @@ use windows::Win32::System::Com::{
 use windows::Win32::System::Variant::{VariantTimeToSystemTime, VARIANT, VT_DATE, VT_DISPATCH};
 use windows::Win32::UI::Accessibility::AccessibleObjectFromWindow;
 
+use okur_core::NoteKind;
+
 /// `OBJID_NATIVEOM`: the window's application object model.
 const OBJID_NATIVEOM: u32 = 0xFFFF_FFF0;
 /// `LOCALE_USER_DEFAULT`, for property names, which Word takes in English whatever its locale.
@@ -313,32 +315,79 @@ pub fn paragraph_comments(document: HWND) -> Option<Vec<PlacedComment>> {
     )
 }
 
-/// A comment or footnote of Word's document, as JAWS's lists of them show it: its text; a
-/// comment's author and its date, as the user's locale writes "ddd, MMM dd, yy" ("Fri, Jan
-/// 02, 26" [obs, 1082/s1]); a footnote's number (`Footnote.Index`).
-#[derive(Debug, Clone, PartialEq, Eq)]
+/// A comment, footnote, endnote or bookmark of Word's document, as JAWS's lists of them show it:
+/// its text (a bookmark's, the text it marks); a comment's author and its date, as the user's
+/// locale writes "ddd, MMM dd, yy" ("Fri, Jan 02, 26" [obs, 1082/s1]); a note's number
+/// (`Index`) and its mark as the document shows it ("i" for the first endnote [obs, 1090/s6]);
+/// a bookmark's name.
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct WordNote {
     pub text: String,
     pub author: String,
     pub date: String,
     pub number: Option<u32>,
+    pub mark: String,
+    pub name: String,
 }
 
-/// The collection of the document's comments, or of its footnotes.
-fn notes_of(whole: &IDispatch, footnotes: bool) -> Option<IDispatch> {
+/// The collection of the document's (or a range's) comments, footnotes or endnotes.
+fn notes_of(whole: &IDispatch, kind: NoteKind) -> Option<IDispatch> {
     object(&property(
         whole,
-        if footnotes { "Footnotes" } else { "Comments" },
+        match kind {
+            NoteKind::Comment => "Comments",
+            NoteKind::Footnote => "Footnotes",
+            NoteKind::Endnote => "Endnotes",
+            NoteKind::Bookmark => "Bookmarks",
+        },
     )?)
 }
 
-/// The comments (`Document.Comments`) or footnotes (`Document.Footnotes`) of the document in
-/// Word's document window `document`, in the document's order; `None` where Word's object
-/// model does not answer.
-pub fn document_notes(document: HWND, footnotes: bool) -> Option<Vec<WordNote>> {
+/// The document's bookmarks in the document's order (Word's collection is in their names'),
+/// each with where it starts: JAWS lists them so, "Opening" before "Borrowing" [obs, 1091/s1].
+fn bookmarks(whole: &IDispatch) -> Option<Vec<(i32, WordNote)>> {
+    let marks = notes_of(whole, NoteKind::Bookmark)?;
+    let count = number(&marks, "Count")?;
+    let mut found: Vec<(i32, WordNote)> = (1..=count.clamp(0, MAX_FIELDS))
+        .filter_map(|index| item(&marks, index))
+        .filter_map(|mark| {
+            let range = object(&property(&mark, "Range")?)?;
+            Some((
+                number(&range, "Start")?,
+                WordNote {
+                    text: text(&range, "Text").trim().to_owned(),
+                    name: text(&mark, "Name").trim().to_owned(),
+                    ..WordNote::default()
+                },
+            ))
+        })
+        .collect();
+    found.sort_by_key(|(start, _)| *start);
+    Some(found)
+}
+
+/// How the document numbers its footnotes or endnotes: the collection's numbering style
+/// (`WdNoteNumberStyle`) and the number of its first note.
+fn numbering(whole: &IDispatch, kind: NoteKind) -> (i32, u32) {
+    let notes = notes_of(whole, kind);
+    let style = notes.as_ref().and_then(|n| number(n, "NumberStyle"));
+    let first = notes
+        .as_ref()
+        .and_then(|n| number(n, "StartingNumber"))
+        .and_then(|n| u32::try_from(n).ok());
+    (style.unwrap_or(0), first.unwrap_or(1))
+}
+
+/// The comments, footnotes or endnotes of the document in Word's document window `document`,
+/// in the document's order; `None` where Word's object model does not answer.
+pub fn document_notes(document: HWND, kind: NoteKind) -> Option<Vec<WordNote>> {
     let whole = object(&property(&word_window(document)?, "Document")?)?;
-    let notes = notes_of(&whole, footnotes)?;
+    if kind == NoteKind::Bookmark {
+        return Some(bookmarks(&whole)?.into_iter().map(|(_, b)| b).collect());
+    }
+    let notes = notes_of(&whole, kind)?;
     let count = number(&notes, "Count")?;
+    let (style, first) = numbering(&whole, kind);
     Some(
         (1..=count.clamp(0, MAX_FIELDS))
             .filter_map(|index| item(&notes, index))
@@ -348,39 +397,46 @@ pub fn document_notes(document: HWND, footnotes: bool) -> Option<Vec<WordNote>> 
                     .and_then(object)
                     .map(|range| text(&range, "Text"))
                     .unwrap_or_default();
-                let (author, date, number) = if footnotes {
-                    let index = number(&note, "Index").and_then(|n| u32::try_from(n).ok());
-                    (String::new(), String::new(), index)
-                } else {
-                    let date = property(&note, "Date")
+                let mut found = WordNote {
+                    text: said.trim().to_owned(),
+                    ..WordNote::default()
+                };
+                if kind == NoteKind::Comment {
+                    found.author = text(&note, "Author").trim().to_owned();
+                    found.date = property(&note, "Date")
                         .as_ref()
                         .and_then(date_of)
                         .and_then(note_date)
                         .unwrap_or_default();
-                    (text(&note, "Author").trim().to_owned(), date, None)
-                };
-                WordNote {
-                    text: said.trim().to_owned(),
-                    author,
-                    date,
-                    number,
+                } else {
+                    found.number = number(&note, "Index").and_then(|n| u32::try_from(n).ok());
+                    found.mark = found
+                        .number
+                        .map(|n| note_mark(style, (first + n).saturating_sub(1)))
+                        .unwrap_or_default();
                 }
+                found
             })
             .collect(),
     )
 }
 
-/// Puts the caret on the mark of the document's comment or footnote `index` (from 0, as
-/// [`document_notes`] lists them): where the text a comment is on ends, before its mark; on a
-/// footnote's reference, which Right then moves over [obs, 1087/s6-s8, 1088/s6-s8]. False
-/// where Word's object model does not answer.
-pub fn select_note(document: HWND, footnotes: bool, index: usize) -> bool {
+/// Puts the caret on the mark of the document's comment, footnote, endnote or bookmark `index`
+/// (from 0, as [`document_notes`] lists them): where the text a comment is on ends, before its
+/// mark; on a note's reference, which Right then moves over; at a bookmark's start [obs,
+/// 1087/s6-s8, 1088/s6-s8, 1090/s6-s8, 1091/s9-s11]. False where Word's object model does not
+/// answer.
+pub fn select_note(document: HWND, kind: NoteKind, index: usize) -> bool {
     let select = || -> Option<()> {
         let window = word_window(document)?;
         let whole = object(&property(&window, "Document")?)?;
-        let notes = notes_of(&whole, footnotes)?;
-        let note = item(&notes, i32::try_from(index).ok()?.checked_add(1)?)?;
-        let start = number(&object(&property(&note, "Reference")?)?, "Start")?;
+        let start = if kind == NoteKind::Bookmark {
+            bookmarks(&whole)?.get(index)?.0
+        } else {
+            let notes = notes_of(&whole, kind)?;
+            let note = item(&notes, i32::try_from(index).ok()?.checked_add(1)?)?;
+            number(&object(&property(&note, "Reference")?)?, "Start")?
+        };
         let selection = object(&property(&window, "Selection")?)?;
         invoke(
             &selection,
@@ -426,47 +482,127 @@ fn note_date(date: f64) -> Option<String> {
     Some(String::from_utf16_lossy(written.get(..length)?))
 }
 
-/// Whether the document in Word's document window `document` has footnotes at all
-/// (`Document.Footnotes.Count`): a document without them is looked through no further.
-pub fn has_footnotes(document: HWND) -> Option<bool> {
-    let document = object(&property(&word_window(document)?, "Document")?)?;
-    let footnotes = object(&property(&document, "Footnotes")?)?;
-    Some(number(&footnotes, "Count")? > 0)
+/// A note's mark as Word shows it, for its collection's numbering style (`WdNoteNumberStyle`):
+/// 1 upper and 2 lower roman ("i", Word's endnotes' own), 3 upper and 4 lower letters repeated
+/// past the alphabet ("aa"), 9 symbols repeated past their four ("**"); any other, arabic.
+pub fn note_mark(style: i32, number: u32) -> String {
+    const SYMBOLS: [char; 4] = ['*', '\u{2020}', '\u{2021}', '\u{a7}'];
+    let repeated = |kinds: u32| -> (u32, usize) {
+        let past = number.saturating_sub(1);
+        (past % kinds, usize::try_from(past / kinds).unwrap_or(0) + 1)
+    };
+    match style {
+        1 => roman(number),
+        2 => roman(number).to_lowercase(),
+        3 | 4 => {
+            let (letter, times) = repeated(26);
+            let base = if style == 3 { b'A' } else { b'a' };
+            let letter = char::from(base.saturating_add(u8::try_from(letter).unwrap_or(0)));
+            std::iter::repeat_n(letter, times).collect()
+        }
+        9 => {
+            let (symbol, times) = repeated(4);
+            let symbol = SYMBOLS
+                .get(usize::try_from(symbol).unwrap_or(0))
+                .copied()
+                .unwrap_or('*');
+            std::iter::repeat_n(symbol, times).collect()
+        }
+        _ => number.to_string(),
+    }
 }
 
-/// A footnote reference on the selection's paragraph: how many of the paragraph's characters,
-/// as UI Automation shows them, come before it, and the footnote's number.
+/// `number` in upper-case roman numerals ("XIV"); arabic past what they write (3999).
+fn roman(number: u32) -> String {
+    const NUMERALS: [(u32, &str); 13] = [
+        (1000, "M"),
+        (900, "CM"),
+        (500, "D"),
+        (400, "CD"),
+        (100, "C"),
+        (90, "XC"),
+        (50, "L"),
+        (40, "XL"),
+        (10, "X"),
+        (9, "IX"),
+        (5, "V"),
+        (4, "IV"),
+        (1, "I"),
+    ];
+    if number == 0 || number > 3999 {
+        return number.to_string();
+    }
+    let mut left = number;
+    let mut written = String::new();
+    for (value, numeral) in NUMERALS {
+        while left >= value {
+            written.push_str(numeral);
+            left -= value;
+        }
+    }
+    written
+}
+
+/// Whether the document in Word's document window `document` has footnotes, or endnotes, at
+/// all (`Document.Footnotes.Count`): a document without them is looked through no further.
+pub fn has_notes(document: HWND, kind: NoteKind) -> Option<bool> {
+    let document = object(&property(&word_window(document)?, "Document")?)?;
+    Some(number(&notes_of(&document, kind)?, "Count")? > 0)
+}
+
+/// A footnote's or endnote's reference on the selection's paragraph: how many of the
+/// paragraph's characters, as UI Automation shows them, come before it, the note's number in
+/// the document, its mark and text, and whether the selection starts on the reference itself.
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct PlacedFootnote {
+pub struct PlacedNote {
     pub before: usize,
     pub number: u32,
+    pub mark: String,
+    pub text: String,
+    pub at_caret: bool,
 }
 
-/// The footnote references on the selection's paragraph in Word's document window `document`,
-/// in order; `None` where Word's object model does not answer.
-pub fn paragraph_footnotes(document: HWND) -> Option<Vec<PlacedFootnote>> {
+/// The footnote or endnote references on the selection's paragraph in Word's document window
+/// `document`, in order; `None` where Word's object model does not answer.
+pub fn paragraph_notes(document: HWND, kind: NoteKind) -> Option<Vec<PlacedNote>> {
     let window = word_window(document)?;
     let whole = object(&property(&window, "Document")?)?;
     let selection = object(&property(&window, "Selection")?)?;
     let paragraph = item(&object(&property(&selection, "Paragraphs")?)?, 1)?;
     let range = object(&property(&paragraph, "Range")?)?;
     let start = number(&range, "Start")?;
-    let footnotes = object(&property(&range, "Footnotes")?)?;
-    let count = number(&footnotes, "Count").unwrap_or(0);
+    let caret = number(&selection, "Start");
+    let notes = notes_of(&range, kind)?;
+    let count = number(&notes, "Count").unwrap_or(0);
+    let (style, first) = numbering(&whole, kind);
+    let span = |from: i32, to: i32| {
+        object(&invoke(
+            &whole,
+            "Range",
+            DISPATCH_METHOD,
+            &mut [VARIANT::from(from), VARIANT::from(to)],
+        )?)
+    };
     Some(
         (1..=count.clamp(0, MAX_FIELDS))
-            .filter_map(|index| item(&footnotes, index))
-            .filter_map(|footnote| {
-                let at = number(&object(&property(&footnote, "Reference")?)?, "Start")?;
-                let before = object(&invoke(
-                    &whole,
-                    "Range",
-                    DISPATCH_METHOD,
-                    &mut [VARIANT::from(start), VARIANT::from(at.max(start))],
-                )?)?;
-                Some(PlacedFootnote {
-                    before: shown_chars(&text(&before, "Text")),
-                    number: u32::try_from(number(&footnote, "Index")?).ok()?,
+            .filter_map(|index| item(&notes, index))
+            .filter_map(|note| {
+                let at = number(&object(&property(&note, "Reference")?)?, "Start")?;
+                // A range's notes count from its own first: the document's before it give the
+                // note's number.
+                let earlier = number(&notes_of(&span(0, at)?, kind)?, "Count")?;
+                let number = u32::try_from(earlier).ok()?.checked_add(1)?;
+                let said = property(&note, "Range")
+                    .as_ref()
+                    .and_then(object)
+                    .map(|range| text(&range, "Text"))
+                    .unwrap_or_default();
+                Some(PlacedNote {
+                    before: shown_chars(&text(&span(start, at.max(start))?, "Text")),
+                    number,
+                    mark: note_mark(style, (first + number).saturating_sub(1)),
+                    text: said.trim().to_owned(),
+                    at_caret: caret == Some(at),
                 })
             })
             .collect(),
@@ -474,7 +610,8 @@ pub fn paragraph_footnotes(document: HWND) -> Option<Vec<PlacedFootnote>> {
 }
 
 /// How many of `text`'s characters UI Automation shows: Word's range text holds a mark for
-/// each footnote reference (U+0002) and comment (U+0005), which its UI Automation text does not.
+/// each footnote or endnote reference (U+0002) and comment (U+0005), which its UI Automation
+/// text does not.
 fn shown_chars(text: &str) -> usize {
     text.chars()
         .filter(|c| !matches!(c, '\u{2}' | '\u{5}'))
@@ -804,5 +941,25 @@ fn object(value: &VARIANT) -> Option<IDispatch> {
         (inner.vt == VT_DISPATCH)
             .then(|| inner.Anonymous.pdispVal.as_ref().cloned())
             .flatten()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// A note's mark as Word numbers it: endnotes in lower-case roman ("i" [obs, 1090/s6]),
+    /// footnotes in arabic, letters and symbols repeated past their set.
+    #[test]
+    fn note_marks_follow_the_numbering_style() {
+        assert_eq!(note_mark(0, 1), "1");
+        assert_eq!(note_mark(2, 1), "i");
+        assert_eq!(note_mark(2, 14), "xiv");
+        assert_eq!(note_mark(1, 1999), "MCMXCIX");
+        assert_eq!(note_mark(4, 2), "b");
+        assert_eq!(note_mark(3, 28), "BB");
+        assert_eq!(note_mark(9, 1), "*");
+        assert_eq!(note_mark(9, 6), "\u{2020}\u{2020}");
+        assert_eq!(note_mark(14, 3), "3");
     }
 }

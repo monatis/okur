@@ -194,21 +194,26 @@ fn line_with_fields(context: &TextContext) -> Option<String> {
         .map(|c| (c.start, c.end))
         .filter(|(from, to)| *from < end && *to > start)
         .collect();
-    // A footnote reference is said where it stands, by its number: "every day footnote 1."
-    // [obs, 1083/s4].
-    let footnotes: Vec<&crate::event::DocumentFootnote> = structure
+    // A footnote or endnote reference is said where it stands, by its mark: "every day
+    // footnote 1.", "three weeks end note i." [obs, 1083/s4, 1090/s7].
+    let notes: Vec<(
+        &crate::event::DocumentFootnote,
+        crate::messages::StaticMessage,
+    )> = structure
         .footnotes
         .iter()
-        .filter(|f| (start..=end).contains(&f.at))
+        .map(|f| (f, msg::word_footnote()))
+        .chain(structure.endnotes.iter().map(|f| (f, msg::word_endnote())))
+        .filter(|(f, _)| (start..=end).contains(&f.at))
         .collect();
-    if fields.is_empty() && links.is_empty() && comments.is_empty() && footnotes.is_empty() {
+    if fields.is_empty() && links.is_empty() && comments.is_empty() && notes.is_empty() {
         return None;
     }
     let footnote_at = |at: usize| {
-        footnotes
+        notes
             .iter()
-            .filter(|f| f.at == at)
-            .map(|f| format!(" \u{1d}{} \u{1e} {}", msg::word_footnote(), f.number))
+            .filter(|(f, _)| f.at == at)
+            .map(|(f, kind)| format!(" \u{1d}{kind} \u{1e} {}", f.shown()))
             .collect::<String>()
     };
     fields.sort_by_key(|f| f.start);
@@ -285,6 +290,40 @@ pub(crate) fn comment_at_caret(context: &TextContext) -> Option<String> {
             None => msg::word_no_comment().to_string(),
         },
     )
+}
+
+/// The footnote or endnote whose reference Word's caret is on, as JAWS's Alt+Shift+E reads it:
+/// "end note reference: i Renewals are free.", "footnote reference: 1 Bring a photo ID.";
+/// elsewhere "No footnote or EndNote reference at cursor." [obs, 1092/s1, s7, s9, s14]. `None`
+/// outside a document Word's object model reads.
+pub(crate) fn note_at_caret(context: &TextContext) -> Option<String> {
+    let structure = context.structure.as_ref()?;
+    let note = |notes: &[crate::event::DocumentFootnote]| {
+        notes
+            .iter()
+            .find(|n| n.at_caret)
+            .map(|n| format!("{} {}", n.shown(), n.text.trim()))
+    };
+    Some(if let Some(said) = note(&structure.footnotes) {
+        msg::word_footnote_reference(said.as_str()).render()
+    } else if let Some(said) = note(&structure.endnotes) {
+        msg::word_endnote_reference(said.as_str()).render()
+    } else {
+        msg::word_no_note_at_cursor().to_string()
+    })
+}
+
+/// The reference Word's caret is on, as a character key says it: " end note i" [obs, 1092/s6,
+/// s13].
+pub(crate) fn reference_at_caret(context: &TextContext) -> Option<String> {
+    let structure = context.structure.as_ref()?;
+    structure
+        .footnotes
+        .iter()
+        .map(|n| (n, msg::word_footnote()))
+        .chain(structure.endnotes.iter().map(|n| (n, msg::word_endnote())))
+        .find(|(n, _)| n.at_caret)
+        .map(|(n, kind)| format!(" \u{1d}{kind} \u{1e} {}", n.shown()))
 }
 
 /// Tab, Shift+Tab or Space read as moving among a document's form fields or changing one: Tab
@@ -374,6 +413,7 @@ pub(crate) fn say_all_pieces(
             links: Vec::new(),
             comments: Vec::new(),
             footnotes: Vec::new(),
+            endnotes: Vec::new(),
         };
         let said = match was.as_ref() {
             None => line,
@@ -914,6 +954,7 @@ mod tests {
                 links: Vec::new(),
                 comments: Vec::new(),
                 footnotes: Vec::new(),
+                endnotes: Vec::new(),
             }),
         }
     }
@@ -1062,7 +1103,11 @@ mod tests {
             misspelled: Vec::new(),
             structure: Some(LineStructure {
                 line: (14, 35),
-                footnotes: vec![crate::event::DocumentFootnote { at, number: 1 }],
+                footnotes: vec![crate::event::DocumentFootnote {
+                    at,
+                    number: 1,
+                    ..Default::default()
+                }],
                 ..Default::default()
             }),
         };
@@ -1073,6 +1118,18 @@ mod tests {
         assert_eq!(
             line_with_fields(&context(35)).as_deref(),
             Some("It is open every day. \u{1d}footnote \u{1e} 1")
+        );
+        // An endnote by its mark: "three weeks end note i." [obs, 1090/s7].
+        let mut endnote = context(34);
+        if let Some(s) = endnote.structure.as_mut() {
+            s.endnotes = std::mem::take(&mut s.footnotes);
+            if let Some(note) = s.endnotes.first_mut() {
+                note.mark = "i".into();
+            }
+        }
+        assert_eq!(
+            line_with_fields(&endnote).as_deref(),
+            Some("It is open every day \u{1d}end note \u{1e} i.")
         );
     }
 

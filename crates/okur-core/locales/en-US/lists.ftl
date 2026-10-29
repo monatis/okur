@@ -14,6 +14,10 @@ list-dialog-document-fields = List Fields
 list-dialog-comments = Reviewers' Comments
 # Word's footnotes, Insert+Shift+F in a document [obs, 1083/s1].
 list-dialog-footnotes = Footnotes
+# Word's endnotes, Insert+Shift+E in a document [obs, 1090/s1].
+list-dialog-endnotes = End Notes
+# Word's bookmarks, Insert+Alt+B in a document [obs, 1091/s1].
+list-dialog-bookmarks = Bookmark List
 # The name of the Form Fields list's list, as JAWS's dialog names it.
 list-dialog-form-fields-list = List1
 list-dialog-features = Virtual HTML Features

@@ -120,6 +120,7 @@ word-has-comment = has comment
 # A footnote reference in a line of Word's, before its number: "every day footnote 1." [obs,
 # 1083/s4].
 word-footnote = footnote
+word-endnote = end note
 # Alt+Shift+Apostrophe in Word: the comment at the caret, then its author [obs, 1081/s8], or
 # none [obs, 1081/s3].
 word-comment-by = by { $author }
@@ -127,10 +128,16 @@ word-no-comment = No comment mark at cursor.
 # OK on a footnote in JAWS's list of Word's footnotes: the footnote as the list shows it, before
 # the document's "Edit" [obs, 1088/s6].
 word-footnote-reference = footnote reference: { $footnote }
-# Ctrl+Shift+Apostrophe and Insert+Shift+F in a document without comments or footnotes [obs,
-# 1089/s1, s3].
+# The same for an endnote, by its mark: "end note reference: i Renewals are free." [obs, 1090/s6].
+word-endnote-reference = end note reference: { $endnote }
+# Ctrl+Shift+Apostrophe, Insert+Shift+F, Insert+Shift+E and Insert+Alt+B in a document without
+# comments, footnotes, endnotes or bookmarks [obs, 1089/s1, s3; 1093/s1, s3].
 word-no-comments = There are no comments in the document.
 word-no-footnotes = There are no footnotes in the document.
+word-no-endnotes = There are no end notes in the document.
+word-no-bookmarks = There are no bookmarks in the document.
+# Alt+Shift+E in Word away from a footnote's or endnote's reference [obs, 1092/s1].
+word-no-note-at-cursor = No footnote or EndNote reference at cursor.
 # Say Window Title in Web Layout and Read Mode: JAWS's lower case "reading layout" [obs,
 # 1042/s5, s9].
 word-view-web = Web Layout View

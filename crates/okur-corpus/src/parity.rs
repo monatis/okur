@@ -1265,6 +1265,10 @@ struct ScreenSnapshot {
     comments: Vec<okur_core::DocumentNote>,
     #[serde(default)]
     footnotes: Vec<okur_core::DocumentNote>,
+    #[serde(default)]
+    endnotes: Vec<okur_core::DocumentNote>,
+    #[serde(default)]
+    bookmarks: Vec<okur_core::DocumentNote>,
     /// Whether the document tracked its changes after the step, from Word's object model, saved
     /// beside the headings (none before 1068), for Ctrl+Shift+E.
     #[serde(default)]
@@ -1338,6 +1342,8 @@ impl ScreenSnapshot {
             self.fields = other.fields;
             self.comments = other.comments;
             self.footnotes = other.footnotes;
+            self.endnotes = other.endnotes;
+            self.bookmarks = other.bookmarks;
             self.track_changes = other.track_changes;
             self.alignment = other.alignment;
             self.font_size = other.font_size;
@@ -1358,8 +1364,8 @@ struct ScreenReads {
     links: usize,
     spacings: usize,
     fields: usize,
-    /// Word's comments and footnotes asked for and answered.
-    notes: [usize; 2],
+    /// Word's comments, footnotes, endnotes and bookmarks asked for and answered.
+    notes: [usize; 4],
     /// Word's keys' states asked for and answered, by key.
     word_keys: [usize; 5],
 }
@@ -1511,11 +1517,12 @@ impl ScreenReads {
         // The lists of comments and footnotes, always answered: none where the step saved none
         // (scenarios recorded before they were saved, 1089's document without them).
         use okur_core::NoteKind;
-        for (answered, kind) in self
-            .notes
-            .iter_mut()
-            .zip([NoteKind::Comment, NoteKind::Footnote])
-        {
+        for (answered, kind) in self.notes.iter_mut().zip([
+            NoteKind::Comment,
+            NoteKind::Footnote,
+            NoteKind::Endnote,
+            NoteKind::Bookmark,
+        ]) {
             let asked = count(kind.read_name());
             while *answered < asked {
                 *answered += 1;
@@ -1525,6 +1532,8 @@ impl ScreenReads {
                         .map(|s| match kind {
                             NoteKind::Comment => s.comments.clone(),
                             NoteKind::Footnote => s.footnotes.clone(),
+                            NoteKind::Endnote => s.endnotes.clone(),
+                            NoteKind::Bookmark => s.bookmarks.clone(),
                         })
                         .unwrap_or_default(),
                 ));

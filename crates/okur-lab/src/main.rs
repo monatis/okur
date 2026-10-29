@@ -1326,9 +1326,9 @@ async fn main() {
                     .unwrap_or_default();
                 // The document's comments and footnotes, for JAWS's lists of them
                 // (Ctrl+Shift+Apostrophe, Insert+Shift+F).
-                let notes = |footnotes: bool| {
+                let notes = |kind: okur_core::NoteKind| {
                     document
-                        .and_then(|d| okur_platform::word_om::document_notes(d, footnotes))
+                        .and_then(|d| okur_platform::word_om::document_notes(d, kind))
                         .unwrap_or_default()
                         .into_iter()
                         .map(|note| {
@@ -1337,11 +1337,18 @@ async fn main() {
                                 "author": note.author,
                                 "date": note.date,
                                 "number": note.number,
+                                "mark": note.mark,
+                                "name": note.name,
                             })
                         })
                         .collect::<Vec<_>>()
                 };
-                let (comments, footnotes) = (notes(false), notes(true));
+                let (comments, footnotes, endnotes, bookmarks) = (
+                    notes(okur_core::NoteKind::Comment),
+                    notes(okur_core::NoteKind::Footnote),
+                    notes(okur_core::NoteKind::Endnote),
+                    notes(okur_core::NoteKind::Bookmark),
+                );
                 // The form fields at the caret and on its paragraph, for reading them as
                 // controls.
                 let (selected_form_fields, paragraph_form_fields) = document
@@ -1390,6 +1397,8 @@ async fn main() {
                         "paragraph_form_fields": form_json(&paragraph_form_fields),
                         "comments": comments,
                         "footnotes": footnotes,
+                        "endnotes": endnotes,
+                        "bookmarks": bookmarks,
                         "fields": fields
                             .iter()
                             .map(|f| serde_json::json!({

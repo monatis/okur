@@ -677,6 +677,13 @@ pub fn speech_in(
     plain_edit: bool,
     wording: Wording,
 ) -> Option<String> {
+    // A character key onto a footnote's or endnote's reference in Word says it, "end note i"
+    // [obs, 1092/s6, s13].
+    if key == EditKey::Character {
+        if let Some(reference) = word::reference_at_caret(after) {
+            return Some(reference);
+        }
+    }
     // A form field of Word's at the caret is said as a control, "Name: Edit", whatever key
     // brought the caret there [obs, 1055/s4, s7; 1056].
     if let Some(field) = word::form_field_at(after).filter(|_| {

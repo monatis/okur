@@ -258,7 +258,12 @@ impl Entry {
             crate::event::NoteKind::Comment => {
                 [note.text.trim(), note.author.trim(), note.date.trim()]
             }
-            crate::event::NoteKind::Footnote => [number.as_str(), note.text.trim(), ""],
+            crate::event::NoteKind::Footnote | crate::event::NoteKind::Endnote => {
+                [number.as_str(), note.text.trim(), ""]
+            }
+            // A bookmark by its name and the text it marks: "Opening nine in the morning" [obs,
+            // 1091/s1].
+            crate::event::NoteKind::Bookmark => [note.name.trim(), note.text.trim(), ""],
         };
         let text = parts
             .into_iter()
@@ -704,6 +709,8 @@ impl ListDialog {
                 match kind {
                     crate::event::NoteKind::Comment => msg::list_dialog_comments(),
                     crate::event::NoteKind::Footnote => msg::list_dialog_footnotes(),
+                    crate::event::NoteKind::Endnote => msg::list_dialog_endnotes(),
+                    crate::event::NoteKind::Bookmark => msg::list_dialog_bookmarks(),
                 },
                 vec![
                     list(msg::list_dialog_form_fields_list()),

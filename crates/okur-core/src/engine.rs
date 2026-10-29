@@ -367,6 +367,9 @@ pub struct ScreenReaderEngine {
     /// of the line it reached: nothing for a comment [obs, 1087/s6], the footnote for a
     /// footnote [obs, 1088/s6].
     document_list_says: Option<String>,
+    /// The notes the list of a document's comments, footnotes or endnotes shows, by its entries'
+    /// nodes.
+    listed_notes: Vec<crate::event::DocumentNote>,
     /// The word chosen in the Word List, which W and Shift+W move to.
     word_from_list: Option<String>,
     /// Skim Reading while it is open, and its choices, which Ctrl+Insert+Down reads by.
@@ -637,6 +640,7 @@ impl ScreenReaderEngine {
             word_read_mode: false,
             moved_by_document_list: false,
             document_list_says: None,
+            listed_notes: Vec::new(),
             word_from_list: None,
             skim_dialog: None,
             skim_options: crate::ui::skim::SkimOptions::default(),
@@ -1266,6 +1270,19 @@ impl ScreenReaderEngine {
                 && self.open_document_notes(crate::event::NoteKind::Comment)
             {
                 return KeyAction::Consume;
+            }
+            // Word's Alt+Shift+E: the footnote or endnote at the caret [obs, 1092/s1, s7, s14];
+            // the key is the application's elsewhere.
+            if event.key == Key::Alpha('E') && m.alt && m.shift && !m.ctrl && !m.insert {
+                if let Some(said) = self
+                    .last_text
+                    .as_ref()
+                    .filter(|_| self.editing_text())
+                    .and_then(crate::apps::windows::word::note_at_caret)
+                {
+                    self.speech.speak(&said, true);
+                    return KeyAction::Consume;
+                }
             }
             // Word's Alt+Shift+Apostrophe: the comment at the caret [obs, 1081/s3, s8]; the key
             // is the application's elsewhere.
@@ -3012,11 +3029,14 @@ impl ScreenReaderEngine {
             let none = match kind {
                 crate::event::NoteKind::Comment => msg::word_no_comments(),
                 crate::event::NoteKind::Footnote => msg::word_no_footnotes(),
+                crate::event::NoteKind::Endnote => msg::word_no_endnotes(),
+                crate::event::NoteKind::Bookmark => msg::word_no_bookmarks(),
             }
             .to_string();
             self.speech.speak(&none, true);
             return Some(none);
         }
+        self.listed_notes = notes.to_vec();
         let dialog =
             crate::ui::lists::ListDialog::document_notes(self.dialog_count + 1, kind, notes);
         let mode = self.app_mode;
@@ -3112,11 +3132,28 @@ impl ScreenReaderEngine {
                         // OK on a comment or footnote: the caret on its mark, and "Edit" said
                         // after the footnote, not the line [obs, 1087/s6, 1088/s6].
                         ListKind::DocumentNotes(note) => {
+                            // A note by its mark, as the document shows it: "end note
+                            // reference: i Renewals are free." [obs, 1090/s6].
+                            let shown = self
+                                .listed_notes
+                                .get(entry.node_id)
+                                .map(|n| format!("{} {}", n.shown_mark(), n.text.trim()));
+                            let shown = shown.as_deref().unwrap_or(entry.text.as_str());
                             self.document_list_says = Some(match note {
                                 crate::event::NoteKind::Comment => String::new(),
                                 crate::event::NoteKind::Footnote => {
-                                    msg::word_footnote_reference(entry.text.as_str()).render()
+                                    msg::word_footnote_reference(shown).render()
                                 }
+                                crate::event::NoteKind::Endnote => {
+                                    msg::word_endnote_reference(shown).render()
+                                }
+                                // A bookmark by the text it marks: "three weeks | Edit" [obs,
+                                // 1091/s9].
+                                crate::event::NoteKind::Bookmark => self
+                                    .listed_notes
+                                    .get(entry.node_id)
+                                    .map(|n| n.text.trim().to_owned())
+                                    .unwrap_or_default(),
                             });
                             actions.move_to_document_note(
                                 self.last_text.as_ref(),

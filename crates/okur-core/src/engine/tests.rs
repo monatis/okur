@@ -8080,7 +8080,7 @@ fn words_notes_lists_list_comments_and_footnotes() {
         text: "Check the summer hours.".into(),
         author: "Lab".into(),
         date: "Fri, Jan 02, 26".into(),
-        number: None,
+        ..Default::default()
     };
     engine.handle_accessibility_event(&AccessibilityEvent::DocumentNotes(
         NoteKind::Comment,
@@ -8182,6 +8182,193 @@ fn words_notes_lists_list_comments_and_footnotes() {
     assert_eq!(
         speech.take().last().map(String::as_str),
         Some("There are no footnotes in the document.")
+    );
+}
+
+/// Insert+Alt+B in Word lists the document's bookmarks in its order, each by its name and the
+/// text it marks: "Bookmark List dialog | List1 List view | Opening nine in the morning" [obs,
+/// 1091/s1]; OK on one says its text, then "Edit" [obs, 1091/s9]. Insert+Shift+E lists the
+/// endnotes, and OK on one says it by its mark: "end note reference: i Renewals are free."
+/// [obs, 1090/s1, s6].
+#[test]
+fn words_bookmarks_and_endnotes_lists() {
+    use crate::event::{DocumentNote, NoteKind};
+    use crate::ui::{ControlKind, FromUi, ToUi};
+    let text = "Library Marks\rThe library opens at nine in the morning.\rMembers borrow books for three weeks.\r";
+    let (mut engine, speech) = word_document(
+        text,
+        0,
+        crate::event::LineStructure {
+            line: (0, 14),
+            heading: Some(1),
+            ..Default::default()
+        },
+    );
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let edit = crate::linearize::role_marker("Edit");
+    let moved = |engine: &mut ScreenReaderEngine, caret| {
+        engine.handle_accessibility_event(&AccessibilityEvent::TextContext(
+            crate::event::TextContext {
+                text: text.to_owned(),
+                caret,
+                selection: None,
+                font: None,
+                word: None,
+                misspelled: Vec::new(),
+                structure: Some(crate::event::LineStructure {
+                    line: (56, 94),
+                    ..Default::default()
+                }),
+            },
+        ));
+    };
+    let shown = |ui: &crate::ui::RecordingUiHost| {
+        ui.take().into_iter().find_map(|m| match m {
+            ToUi::DialogShow { dialog } => Some(dialog),
+            _ => None,
+        })
+    };
+    // Insert+Alt+B: the bookmarks.
+    let mut key = KeyEvent::new(Key::Alpha('B'), Modifiers::none(), true);
+    key.modifiers.insert = true;
+    key.modifiers.alt = true;
+    engine.handle_key_event(&key);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "document bookmarks"));
+    let bookmark = |name: &str, text: &str| DocumentNote {
+        text: text.into(),
+        name: name.into(),
+        ..Default::default()
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentNotes(
+        NoteKind::Bookmark,
+        vec![
+            bookmark("Opening", "nine in the morning"),
+            bookmark("Borrowing", "three weeks"),
+        ],
+    ));
+    let Some(dialog) = shown(&ui) else {
+        panic_free_fail("no bookmarks dialog shown");
+        return;
+    };
+    assert_eq!(dialog.title, "Bookmark List");
+    assert!(dialog.controls.iter().any(|c| matches!(
+        &c.kind,
+        ControlKind::List { items, selected: 0 }
+            if items == &["Opening nine in the morning", "Borrowing three weeks"]
+    )));
+    let list = dialog
+        .controls
+        .first()
+        .map(|c| c.id.clone())
+        .unwrap_or_default();
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogChanged {
+        id: dialog.id,
+        control: list,
+        value: crate::ui::Value::Selected(1),
+    }));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: dialog.id,
+        control: "ok".into(),
+    }));
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "Bookmark 1"));
+    speech.take();
+    moved(&mut engine, 81);
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some(format!("three weeks\n{edit}").as_str())
+    );
+    // Insert+Shift+E: the endnotes, OK says the endnote by its mark.
+    let mut key = KeyEvent::new(Key::Alpha('E'), Modifiers::none(), true);
+    key.modifiers.insert = true;
+    key.modifiers.shift = true;
+    engine.handle_key_event(&key);
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentNotes(
+        NoteKind::Endnote,
+        vec![DocumentNote {
+            text: "Renewals are free.".into(),
+            number: Some(1),
+            mark: "i".into(),
+            ..Default::default()
+        }],
+    ));
+    let Some(dialog) = shown(&ui) else {
+        panic_free_fail("no endnotes dialog shown");
+        return;
+    };
+    assert_eq!(dialog.title, "End Notes");
+    assert!(dialog.controls.iter().any(|c| matches!(
+        &c.kind,
+        ControlKind::List { items, selected: 0 } if items == &["1 Renewals are free."]
+    )));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: dialog.id,
+        control: "ok".into(),
+    }));
+    speech.take();
+    moved(&mut engine, 92);
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some(format!("end note reference: i Renewals are free.\n{edit}").as_str())
+    );
+}
+
+/// Alt+Shift+E in Word reads the footnote or endnote whose reference the caret is on: "end note
+/// reference: i Renewals are free."; elsewhere "No footnote or EndNote reference at cursor."
+/// [obs, 1092/s1, s7]. Left onto the reference says it: " end note i" [obs, 1092/s6].
+#[test]
+fn alt_shift_e_reads_the_note_at_the_caret() {
+    let text = "Library Marks\rMembers borrow books for three weeks.\r";
+    let structure = |at_caret: bool| crate::event::LineStructure {
+        line: (14, 52),
+        endnotes: vec![crate::event::DocumentFootnote {
+            at: 50,
+            number: 1,
+            mark: "i".into(),
+            text: "Renewals are free.".into(),
+            at_caret,
+        }],
+        ..Default::default()
+    };
+    let (mut engine, speech) = word_document(text, 14, structure(false));
+    let mut key = KeyEvent::new(Key::Alpha('E'), Modifiers::none(), true);
+    key.modifiers.alt = true;
+    key.modifiers.shift = true;
+    assert_eq!(engine.handle_key_event(&key), KeyAction::Consume);
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some("No footnote or EndNote reference at cursor.")
+    );
+    let context = |caret, at_caret| crate::event::TextContext {
+        text: text.to_owned(),
+        caret,
+        selection: None,
+        font: None,
+        word: None,
+        misspelled: Vec::new(),
+        structure: Some(structure(at_caret)),
+    };
+    // Left from before the period onto the reference, which the text does not show.
+    engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context(50, false)));
+    engine.handle_key_event(&KeyEvent::new(Key::LeftArrow, Modifiers::none(), true));
+    speech.take();
+    engine.handle_accessibility_event(&AccessibilityEvent::TextContext(context(50, true)));
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some(" \u{1d}end note \u{1e} i")
+    );
+    engine.handle_key_event(&key);
+    assert_eq!(
+        speech.take().last().map(String::as_str),
+        Some("end note reference: i Renewals are free.")
     );
 }
 
