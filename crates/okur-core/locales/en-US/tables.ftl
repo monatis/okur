@@ -115,6 +115,12 @@ word-indent = indent
 word-outdent = out dent
 word-one-inch = 1 inch
 word-inches = { $inches } inches
+# A comment's start in a line of Word's [obs, 1081/s1].
+word-has-comment = has comment
+# Alt+Shift+Apostrophe in Word: the comment at the caret, then its author [obs, 1081/s8], or
+# none [obs, 1081/s3].
+word-comment-by = by { $author }
+word-no-comment = No comment mark at cursor.
 # Say Window Title in Web Layout and Read Mode: JAWS's lower case "reading layout" [obs,
 # 1042/s5, s9].
 word-view-web = Web Layout View

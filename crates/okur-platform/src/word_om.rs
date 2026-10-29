@@ -256,6 +256,62 @@ pub struct PlacedFormField {
     pub length: usize,
 }
 
+/// A comment on the selection's paragraph: how many of the paragraph's characters come before
+/// the text it is on, that text's length, the comment's text and its author.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PlacedComment {
+    pub before: usize,
+    pub length: usize,
+    pub text: String,
+    pub author: String,
+}
+
+/// Whether the document in Word's document window `document` has comments at all
+/// (`Document.Comments.Count`): a document without them is looked through no further.
+pub fn has_comments(document: HWND) -> Option<bool> {
+    let document = object(&property(&word_window(document)?, "Document")?)?;
+    let comments = object(&property(&document, "Comments")?)?;
+    Some(number(&comments, "Count")? > 0)
+}
+
+/// The comments on the selection's paragraph in Word's document window `document`, in order,
+/// each placed in the paragraph's text; `None` where Word's object model does not answer.
+pub fn paragraph_comments(document: HWND) -> Option<Vec<PlacedComment>> {
+    let window = word_window(document)?;
+    let whole = object(&property(&window, "Document")?)?;
+    let selection = object(&property(&window, "Selection")?)?;
+    let paragraph = item(&object(&property(&selection, "Paragraphs")?)?, 1)?;
+    let range = object(&property(&paragraph, "Range")?)?;
+    let start = number(&range, "Start")?;
+    let comments = object(&property(&range, "Comments")?)?;
+    let count = number(&comments, "Count").unwrap_or(0);
+    Some(
+        (1..=count.clamp(0, MAX_FIELDS))
+            .filter_map(|index| item(&comments, index))
+            .filter_map(|comment| {
+                let scope = object(&property(&comment, "Scope")?)?;
+                let (from, to) = (number(&scope, "Start")?, number(&scope, "End")?);
+                if to < from {
+                    return None;
+                }
+                let before = object(&invoke(
+                    &whole,
+                    "Range",
+                    DISPATCH_METHOD,
+                    &mut [VARIANT::from(start), VARIANT::from(from.max(start))],
+                )?)?;
+                let said = object(&property(&comment, "Range")?)?;
+                Some(PlacedComment {
+                    before: text(&before, "Text").chars().count(),
+                    length: text(&scope, "Text").chars().count(),
+                    text: text(&said, "Text").trim().to_owned(),
+                    author: text(&comment, "Author").trim().to_owned(),
+                })
+            })
+            .collect(),
+    )
+}
+
 /// Whether the document in Word's document window `document` has form fields at all
 /// (`Document.FormFields.Count`): a document without them is looked through no further.
 pub fn has_form_fields(document: HWND) -> Option<bool> {

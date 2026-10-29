@@ -186,7 +186,15 @@ fn line_with_fields(context: &TextContext) -> Option<String> {
         .map(|(at, _)| *at)
         .filter(|at| (start..end).contains(at))
         .collect();
-    if fields.is_empty() && links.is_empty() {
+    // A comment's text begins with its mark, and ends apart from what follows it: "opens at
+    // has comment nine in the morning ." [obs, 1081/s1].
+    let comments: Vec<(usize, usize)> = structure
+        .comments
+        .iter()
+        .map(|c| (c.start, c.end))
+        .filter(|(from, to)| *from < end && *to > start)
+        .collect();
+    if fields.is_empty() && links.is_empty() && comments.is_empty() {
         return None;
     }
     fields.sort_by_key(|f| f.start);
@@ -195,6 +203,12 @@ fn line_with_fields(context: &TextContext) -> Option<String> {
     let piece = |from: usize, to: usize| -> String {
         let mut said = String::new();
         for at in from..to.max(from) {
+            if comments.iter().any(|(_, to)| *to == at && at > start) {
+                said.push(' ');
+            }
+            if comments.iter().any(|(from, _)| *from == at) {
+                said.push_str(&format!(" \u{1d}{} \u{1e} ", msg::word_has_comment()));
+            }
             if links.contains(&at) {
                 said.push_str(&format!(" \u{1d}{} \u{1e} ", msg::role_link_in_line()));
             }
@@ -226,6 +240,32 @@ fn line_with_fields(context: &TextContext) -> Option<String> {
     }
     line.push_str(&piece(at, end));
     Some(line)
+}
+
+/// The comment the caret is in, as JAWS's Alt+Shift+Apostrophe reads it: its text, then its
+/// author, "Check the summer hours. | by Lab"; elsewhere "No comment mark at cursor." [obs,
+/// 1081/s3, s8]. JAWS says "vispero:comment" before the text, a name of its own read out (an
+/// accepted divergence). `None` outside a document Word's object model reads.
+pub(crate) fn comment_at_caret(context: &TextContext) -> Option<String> {
+    let structure = context.structure.as_ref()?;
+    let caret = context.caret;
+    Some(
+        match structure
+            .comments
+            .iter()
+            .find(|c| (c.start..=c.end).contains(&caret) && c.end > c.start)
+        {
+            Some(comment) => {
+                let mut said = comment.text.clone();
+                if !comment.author.is_empty() {
+                    said.push('\n');
+                    said.push_str(&msg::word_comment_by(comment.author.as_str()).render());
+                }
+                said
+            }
+            None => msg::word_no_comment().to_string(),
+        },
+    )
 }
 
 /// Tab, Shift+Tab or Space read as moving among a document's form fields or changing one: Tab
@@ -313,6 +353,7 @@ pub(crate) fn say_all_pieces(
             cell: paragraph.cell.clone(),
             form_fields: Vec::new(),
             links: Vec::new(),
+            comments: Vec::new(),
         };
         let said = match was.as_ref() {
             None => line,
@@ -851,6 +892,7 @@ mod tests {
                 }),
                 form_fields: Vec::new(),
                 links: Vec::new(),
+                comments: Vec::new(),
             }),
         }
     }
@@ -943,6 +985,44 @@ mod tests {
                 .map(|f| form_field_speech(&at_branch, f, true))
                 .as_deref(),
             Some("Branch:  \u{1d} Combo box \u{1e} \nCentral\n1 of 3")
+        );
+    }
+
+    /// A line's comment is marked where its text begins and set apart where it ends: "The
+    /// library opens at has comment nine in the morning ."; Alt+Shift+Apostrophe reads the
+    /// comment at the caret with its author, or says there is none [obs, 1081/s1, s3, s8].
+    #[test]
+    fn a_lines_comment_is_marked_and_read() {
+        let text = "Library Notes\rThe library opens at nine in the morning.\rIt is open.";
+        let context = |caret: usize| TextContext {
+            text: text.into(),
+            caret,
+            selection: None,
+            font: None,
+            word: None,
+            misspelled: Vec::new(),
+            structure: Some(LineStructure {
+                line: (14, 55),
+                comments: vec![crate::event::DocumentComment {
+                    start: 35,
+                    end: 54,
+                    text: "Check the summer hours.".into(),
+                    author: "Lab".into(),
+                }],
+                ..Default::default()
+            }),
+        };
+        assert_eq!(
+            line_with_fields(&context(14)).as_deref(),
+            Some("The library opens at  \u{1d}has comment \u{1e} nine in the morning .")
+        );
+        assert_eq!(
+            comment_at_caret(&context(14)).as_deref(),
+            Some("No comment mark at cursor.")
+        );
+        assert_eq!(
+            comment_at_caret(&context(35)).as_deref(),
+            Some("Check the summer hours.\nby Lab")
         );
     }
 

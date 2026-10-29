@@ -1247,6 +1247,20 @@ impl ScreenReaderEngine {
             if let Some(action) = self.document_table_key(event) {
                 return action;
             }
+            // Word's Alt+Shift+Apostrophe: the comment at the caret [obs, 1081/s3, s8]; the key
+            // is the application's elsewhere.
+            let m = event.modifiers;
+            if event.key == Key::Apostrophe && m.alt && m.shift && !m.ctrl && !m.insert {
+                if let Some(said) = self
+                    .last_text
+                    .as_ref()
+                    .filter(|_| self.editing_text())
+                    .and_then(crate::apps::windows::word::comment_at_caret)
+                {
+                    self.speech.speak(&said, true);
+                    return KeyAction::Consume;
+                }
+            }
             // Word's view keys say the view chosen; the key goes on to Word.
             if self.editing_text()
                 && self

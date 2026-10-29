@@ -125,6 +125,19 @@ pub struct LineStructure {
     /// marks: "See the link opening hours" [obs, 1055/s1].
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub links: Vec<(usize, usize)>,
+    /// The comments on the caret's paragraph (Word's), placed in the text: a line read marks
+    /// where one begins, "has comment" [obs, 1081/s1].
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub comments: Vec<DocumentComment>,
+}
+
+/// A comment of Word's on the caret's paragraph, over the text from `start` to `end`.
+#[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub struct DocumentComment {
+    pub start: usize,
+    pub end: usize,
+    pub text: String,
+    pub author: String,
 }
 
 /// A legacy form field of Word's on the caret's paragraph, placed in the context's text: a

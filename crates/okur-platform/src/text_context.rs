@@ -671,8 +671,52 @@ mod reader {
                 cell: table_cell(uia, focused, pattern, caret),
                 form_fields: word_form_fields(focused, caret, start).unwrap_or_default(),
                 links: line_links(pattern, caret, line.0).unwrap_or_default(),
+                comments: word_comments(focused, caret, start).unwrap_or_default(),
             })
         }
+    }
+
+    /// The comments on the caret's paragraph of Word's `focused` document, placed in the text
+    /// from the paragraph's start; none where the document has none (asked once a second).
+    fn word_comments(
+        focused: &IUIAutomationElement,
+        caret: &IUIAutomationTextRange,
+        start: usize,
+    ) -> Option<Vec<okur_core::DocumentComment>> {
+        use windows::Win32::Foundation::HWND;
+        use windows::Win32::UI::Accessibility::TextUnit_Paragraph;
+        // SAFETY: a UIA property read on a valid element.
+        let window = unsafe { focused.CurrentNativeWindowHandle() }.ok()?;
+        let window = HWND(window.0);
+        let key = window.0 as isize;
+        let known = COMMENTS_SEEN.with(|seen| {
+            seen.get()
+                .filter(|(at, when, _)| *at == key && when.elapsed() < FORM_FIELDS_KEPT)
+                .map(|(_, _, has)| has)
+        });
+        let has = match known {
+            Some(has) => has,
+            None => {
+                let has = crate::word_om::has_comments(window).unwrap_or(false);
+                COMMENTS_SEEN.with(|seen| seen.set(Some((key, std::time::Instant::now(), has))));
+                has
+            }
+        };
+        if !has {
+            return None;
+        }
+        let (paragraph, _) = unit_at(caret, start, TextUnit_Paragraph)?;
+        Some(
+            crate::word_om::paragraph_comments(window)?
+                .into_iter()
+                .map(|placed| okur_core::DocumentComment {
+                    start: paragraph + placed.before,
+                    end: paragraph + placed.before + placed.length,
+                    text: placed.text,
+                    author: placed.author,
+                })
+                .collect(),
+        )
     }
 
     /// The hyperlinks on the caret's line, each as `(start, end)` from `line_start`, the line's
@@ -720,6 +764,9 @@ mod reader {
     thread_local! {
         /// The Word document last asked whether it has form fields, when, and its answer.
         static FORM_FIELDS_SEEN: std::cell::Cell<Option<(isize, std::time::Instant, bool)>> =
+            const { std::cell::Cell::new(None) };
+        /// The Word document last asked whether it has comments, when, and its answer.
+        static COMMENTS_SEEN: std::cell::Cell<Option<(isize, std::time::Instant, bool)>> =
             const { std::cell::Cell::new(None) };
     }
 
