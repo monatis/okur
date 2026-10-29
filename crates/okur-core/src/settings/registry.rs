@@ -760,7 +760,7 @@ fn import_output_modes(lookup: JawsLookup<'_>, settings: &mut Settings) {
             continue;
         };
         let modes = lookup(JawsFile::DefaultJcf, "OutputModes", key)
-            .and_then(|v| Verbosity::modes_from_jcf(&v))
+            .and_then(|v| Verbosity::modes_from_jcf(output, &v))
             .unwrap_or(output.default_modes());
         settings.verbosity.set_modes(output, modes);
     }

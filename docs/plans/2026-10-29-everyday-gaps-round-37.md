@@ -34,8 +34,9 @@ a fetched evidence file) must read 90; `fix-rate.ps1` otherwise. old-pc's master
    Synthesizer Language.
 2. **The Startup Wizard's rest:** Run Okur from System Tray; Basics' "Automatically Start
    Okur..." button. Tutor Messages' "Announce Custom Messages Only" and Access Key's "Speak
-   Menus Only" and "Speak Dialogs Only" are built from the documentation (2026-10-29); record
-   them (and how JAWS's `ACCESS_KEY` writes them) when old-pc is free.
+   Menus Only" and "Speak Dialogs Only" are built from the documentation (2026-10-29), and how
+   JAWS's file writes them is learned; record their behavior (a scenario's `jaws_settings`
+   with `ACCESS_KEY=2|2|2` over a menu and a dialog).
 3. **Smaller:** the lifetimes' icons beside Quick Settings' items.
 4. **A live look** at Settings Center's results list and pane name on screen, with the owner's
    leave on the dev box.

@@ -746,10 +746,10 @@ impl VerbosityLevel {
 }
 
 /// Whether an output type is spoken at a level, and where: JAWS's Access Key choices (Off,
-/// Speak all, Speak Menus Only, Speak Dialogs Only) and Tutor Messages' (Turn Off, Announce
-/// Menu and Control Help, Announce Custom Messages Only) [the walk of the Startup Wizard,
-/// `docs/references/okur-settings-redesign.md`; documented as menus' and dialogs' access keys,
-/// and the custom messages a trainer writes].
+/// Speak all, Speak Menus Only, Speak Dialogs Only; `ACCESS_KEY` 0, 1, 2, 3) and Tutor Messages'
+/// (Turn Off, Announce Menu and Control Help, Announce Custom Messages Only; `TUTOR` 0, 1, 2)
+/// [the walk of the Startup Wizard, `docs/references/okur-settings-redesign.md`; documented as
+/// menus' and dialogs' access keys, and the custom messages a trainer writes].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum OutputMode {
@@ -1009,9 +1009,17 @@ impl Verbosity {
     /// The modes a `DEFAULT.JCF` `[OutputModes]` value gives: `0|0|0|Access Key` is one mode
     /// per level, Beginner first ("0" off, anything else on), then the type's display name.
     /// `None` when the value has fewer than three modes.
-    pub fn modes_from_jcf(value: &str) -> Option<[OutputMode; 3]> {
-        let mut fields = value.split('|').map(|f| match f.trim() {
-            "0" => OutputMode::Off,
+    ///
+    /// Access Key and Tutor Messages write their other choices as numbers of their own:
+    /// `ACCESS_KEY` 2 for Speak Menus Only and 3 for Speak Dialogs Only, `TUTOR` 2 for Announce
+    /// Custom Messages Only, each chosen in JAWS's Startup Wizard and read back from the file
+    /// (`access-key-modes-walk.ps1`, old-pc, 2026-10-29).
+    pub fn modes_from_jcf(output: OutputType, value: &str) -> Option<[OutputMode; 3]> {
+        let mut fields = value.split('|').map(|f| match (output, f.trim()) {
+            (_, "0") => OutputMode::Off,
+            (OutputType::AccessKey, "2") => OutputMode::MenusOnly,
+            (OutputType::AccessKey, "3") => OutputMode::DialogsOnly,
+            (OutputType::Hint, "2") => OutputMode::CustomOnly,
             _ => OutputMode::On,
         });
         Some([fields.next()?, fields.next()?, fields.next()?])
@@ -1300,12 +1308,19 @@ mod tests {
             assert!(at.is_on(OutputType::Hint));
         }
 
+        let access = |value: &str| Verbosity::modes_from_jcf(OutputType::AccessKey, value);
+        assert_eq!(access("0|0|0|Access Key"), Some([OutputMode::Off; 3]));
+        assert_eq!(access("2|2|2|Access Key"), Some([OutputMode::MenusOnly; 3]));
         assert_eq!(
-            Verbosity::modes_from_jcf("0|0|0|Access Key"),
-            Some([OutputMode::Off; 3])
+            access("3|3|3|Access Key"),
+            Some([OutputMode::DialogsOnly; 3])
         );
-        assert_eq!(Verbosity::modes_from_jcf("1|0"), None);
-        let modes = Verbosity::modes_from_jcf("1|0|0|Access Key");
+        assert_eq!(
+            Verbosity::modes_from_jcf(OutputType::Hint, "2|2|2|Tutor"),
+            Some([OutputMode::CustomOnly; 3])
+        );
+        assert_eq!(access("1|0"), None);
+        let modes = access("1|0|0|Access Key");
         verbosity.set_modes(OutputType::AccessKey, modes.unwrap_or([OutputMode::On; 3]));
         assert!(verbosity.is_on(OutputType::AccessKey));
         verbosity.level = VerbosityLevel::Advanced;

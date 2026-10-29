@@ -424,7 +424,12 @@ spoken form is a parity target.
    offer Tutor Messages' "Announce Custom Messages Only" (Okur has no custom messages, so no
    tutor message is said) and Access Key's "Speak Menus Only" and "Speak Dialogs Only" (a
    menu's items' access keys only, a dialog's controls' only), as JAWS's documentation
-   describes them; not yet recorded, nor how JAWS's `ACCESS_KEY` line writes them.
+   describes them. JAWS's DEFAULT.JCF writes them per level as `ACCESS_KEY=2|2|2|Access Key`
+   (Speak Menus Only), `3|3|3` (Speak Dialogs Only), `0|0|0` (Off) and `TUTOR=2|2|2|Tutor`
+   (Announce Custom Messages Only), leaving `TUTOR` out at its default
+   (`access-key-modes-walk.ps1`, old-pc, 2026-10-29: each chosen in the Startup Wizard, Finish,
+   the file read; old-pc's own choices put back and the file found as before). Okur reads them
+   so; their behavior is not yet recorded.
 4. **Voices**: voice contexts, profiles, Voice Adjustment, Select a Voice Profile, the Language
    menu's profiles.
    **Voice contexts built 2026-10-24**:
