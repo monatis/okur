@@ -1528,6 +1528,34 @@
       }
     },
     {
+      "scenario_id": "1082-desktop-word-comments-list",
+      "fixture": "desktop-word-notes.ps1",
+      "evidence": {
+        "sha256": "cae41eb35746899cbdc40c22288195641c6430251471de06c102b7db41d1dba7",
+        "capture_script_sha256": "79ecbfb0b0fb8bb55ce8583bc3db7a0bbcfaeee13235674c26211b44dca05e78",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1083-desktop-word-footnotes-list",
+      "fixture": "desktop-word-notes.ps1",
+      "evidence": {
+        "sha256": "5f3a402485c1fcc3c8555f3a81b05e4c7ee9897ac766ed2bb731dba2c4f78661",
+        "capture_script_sha256": "79ecbfb0b0fb8bb55ce8583bc3db7a0bbcfaeee13235674c26211b44dca05e78",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "1084-desktop-notepad-access-keys-all",
       "fixture": "desktop-notepad.ps1",
       "evidence": {
@@ -1566,6 +1594,48 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1087-desktop-word-comments-list-controls",
+      "fixture": "desktop-word-notes.ps1",
+      "evidence": {
+        "sha256": "1c2c4015384ea5b247cf87586608c84438e0d083b7472b216e9e8aa51fb8b909",
+        "capture_script_sha256": "79ecbfb0b0fb8bb55ce8583bc3db7a0bbcfaeee13235674c26211b44dca05e78",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1088-desktop-word-footnotes-list-controls",
+      "fixture": "desktop-word-notes.ps1",
+      "evidence": {
+        "sha256": "e388b9330b35ebe95af9e6c37d25bb5cc613140caafcfca5ffe1ca0d41022057",
+        "capture_script_sha256": "79ecbfb0b0fb8bb55ce8583bc3db7a0bbcfaeee13235674c26211b44dca05e78",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1089-desktop-word-no-notes",
+      "fixture": "desktop-word.ps1",
+      "evidence": {
+        "sha256": "c638cff5c77048181a5109792fc8c67be891b889c9159a00a7a4786f1ec4d1e7",
+        "capture_script_sha256": "79ecbfb0b0fb8bb55ce8583bc3db7a0bbcfaeee13235674c26211b44dca05e78",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -10153,10 +10223,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 706,
-    "scenarios_with_evidence": 706,
-    "total_trials": 2124,
-    "successful_trials": 2107,
-    "deterministic_scenarios": 454
+    "scenarios": 711,
+    "scenarios_with_evidence": 711,
+    "total_trials": 2139,
+    "successful_trials": 2122,
+    "deterministic_scenarios": 455
   }
 }

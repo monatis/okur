@@ -1,0 +1,25 @@
+{
+  "id": "1089-desktop-word-no-notes",
+  "name": "Word: in a document without comments or footnotes, Ctrl+Shift+Apostrophe and Insert+Shift+F, each with Say Line after",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Ctrl+Shift+Apostrophe", "settle_max_ms": 20000},
+    {"id": "s2", "type": "key", "command": "Insert+Up"},
+    {"id": "s3", "type": "key", "command": "Insert+Shift+F", "settle_max_ms": 20000},
+    {"id": "s4", "type": "key", "command": "Insert+Up"}
+  ]
+}

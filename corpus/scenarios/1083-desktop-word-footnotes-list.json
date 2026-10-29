@@ -1,0 +1,26 @@
+{
+  "id": "1083-desktop-word-footnotes-list",
+  "name": "Word: Insert+Shift+F lists the document's footnotes; Escape out of JAWS's list (its own dialog, keys with UI Access); Down twice onto the footnote's paragraph and Say Line",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-notes.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-notes.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Insert+Shift+F", "settle_max_ms": 20000},
+    {"id": "s2", "type": "key_ui_access", "command": "Escape"},
+    {"id": "s3", "type": "key", "command": "Down"},
+    {"id": "s4", "type": "key", "command": "Down"},
+    {"id": "s5", "type": "key", "command": "Insert+Up"}
+  ]
+}
