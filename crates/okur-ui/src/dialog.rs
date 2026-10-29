@@ -697,6 +697,46 @@ fn clear_tree(tree: HWND) {
     unsafe {
         SendMessageW(tree, TVM_DELETEITEM, None, Some(LPARAM(TVI_ROOT.0)));
     }
+    TREE_ORDERS.with(|orders| {
+        if let Ok(mut orders) = orders.try_borrow_mut() {
+            orders.remove(&(tree.0 as isize));
+        }
+    });
+}
+
+thread_local! {
+    /// Each tree view's items in order, as `fill_tree` inserted them, an item's items right
+    /// after it: okur-ui's trees change only by being filled, so an item is found by its place
+    /// without walking the tree item by item, two calls into it per item (performance review
+    /// 2026-10-25, finding 8).
+    static TREE_ORDERS: RefCell<std::collections::HashMap<isize, Vec<HTREEITEM>>> =
+        RefCell::new(std::collections::HashMap::new());
+}
+
+/// The item at `index` of `tree`, in `tree_order`'s order.
+fn tree_item_at(tree: HWND, index: usize) -> Option<HTREEITEM> {
+    TREE_ORDERS
+        .with(|orders| {
+            orders.try_borrow().ok().and_then(|orders| {
+                orders
+                    .get(&(tree.0 as isize))
+                    .map(|o| o.get(index).copied())
+            })
+        })
+        .unwrap_or_else(|| tree_order(tree).get(index).copied())
+}
+
+/// The place of `item` in `tree`, in `tree_order`'s order.
+fn tree_index_of(tree: HWND, item: HTREEITEM) -> Option<usize> {
+    TREE_ORDERS
+        .with(|orders| {
+            orders.try_borrow().ok().and_then(|orders| {
+                orders
+                    .get(&(tree.0 as isize))
+                    .map(|o| o.iter().position(|i| *i == item))
+            })
+        })
+        .unwrap_or_else(|| tree_order(tree).iter().position(|i| *i == item))
 }
 
 /// A list's items, `selected` selected, focused and in view.
@@ -708,6 +748,7 @@ fn fill_tree(tree: HWND, items: &[TreeItem], selected: usize) {
     }
     let mut parents: Vec<HTREEITEM> = Vec::new();
     let mut inserted = Vec::new();
+    let mut order = Vec::with_capacity(items.len());
     for item in items {
         let mut text = wide(&item.text);
         parents.truncate(item.level);
@@ -739,11 +780,17 @@ fn fill_tree(tree: HWND, items: &[TreeItem], selected: usize) {
             .0
         });
         parents.push(handle);
+        order.push(handle);
         set_tree_item(tree, handle, item);
         if item.open {
             inserted.push(handle);
         }
     }
+    TREE_ORDERS.with(|orders| {
+        if let Ok(mut orders) = orders.try_borrow_mut() {
+            orders.insert(tree.0 as isize, order);
+        }
+    });
     // The open items shown open; a closed one opens with Right Arrow.
     for handle in inserted {
         // SAFETY: a message to our own tree view about its own item.
@@ -799,7 +846,7 @@ fn tree_order(tree: HWND) -> Vec<HTREEITEM> {
 }
 
 fn select_tree_item(tree: HWND, index: usize) {
-    if let Some(item) = tree_order(tree).get(index) {
+    if let Some(item) = tree_item_at(tree, index) {
         // SAFETY: a message to our own tree view about its own item.
         unsafe {
             SendMessageW(
@@ -922,8 +969,8 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
             }
             (ControlKind::Tree { .. }, Value::Selected(i)) => select_tree_item(item, *i),
             (ControlKind::Tree { .. }, Value::TreeItem(i, changed)) => {
-                if let Some(handle) = tree_order(item).get(*i) {
-                    set_tree_item(item, *handle, changed);
+                if let Some(handle) = tree_item_at(item, *i) {
+                    set_tree_item(item, handle, changed);
                 }
             }
             (ControlKind::ListBox { .. }, Value::Selected(i)) => {
@@ -1805,8 +1852,7 @@ pub(crate) unsafe extern "system" fn dialog_proc(
                     TVN_SELCHANGEDW => {
                         // SAFETY: a tree view's selection change sends an NMTREEVIEWW.
                         let change = unsafe { &*(lparam.0 as *const NMTREEVIEWW) };
-                        let order = tree_order(header.hwndFrom);
-                        if let Some(index) = order.iter().position(|i| *i == change.itemNew.hItem) {
+                        if let Some(index) = tree_index_of(header.hwndFrom, change.itemNew.hItem) {
                             changed(window, &hit, Value::Selected(index));
                         }
                     }
@@ -1840,8 +1886,7 @@ pub(crate) unsafe extern "system" fn dialog_proc(
                         // SAFETY: a tree view's expansion sends an NMTREEVIEWW.
                         let change = unsafe { &*(lparam.0 as *const NMTREEVIEWW) };
                         let open = change.itemNew.state.0 & TVIS_EXPANDED.0 != 0;
-                        let order = tree_order(header.hwndFrom);
-                        if let Some(index) = order.iter().position(|i| *i == change.itemNew.hItem) {
+                        if let Some(index) = tree_index_of(header.hwndFrom, change.itemNew.hItem) {
                             changed(window, &hit, Value::ItemOpened(index, open));
                         }
                     }
