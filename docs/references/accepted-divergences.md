@@ -886,11 +886,15 @@ A step can be in more than one entry; all of its entries apply.
   - `1088-desktop-word-footnotes-list-controls/s1`
   - `1090-desktop-word-endnotes-list/s1`
   - `1091-desktop-word-bookmarks-list/s1`
+  - `1094-desktop-word-notes-viewer/s1`, `1096-desktop-word-comments-in-viewer/s1`,
+    `1097-desktop-word-footnotes-in-viewer/s1`, `1098-desktop-word-viewer-items/s1`,
+    `1099-desktop-word-endnotes-in-viewer/s1`, `1100-desktop-word-no-comments-in-viewer/s1`
 - Difference: `JawsSaysBeforeItsDialog`. Before its Heading List, Links List, List Fields,
-  Spelling Errors, Reviewers' Comments, Footnotes, End Notes and Bookmark List lists in Word,
-  JAWS says what it said or showed before them in most trials, in every one before its Links
-  List, List Fields and the notes and bookmarks [obs, 1049/s1; 1050/s1, 1053/s1, 1054/s1;
-  1082/s1, 1083/s1, 1087/s1, 1088/s1, 1090/s1, 1091/s1]: its main window's version, "JAWS
+  Spelling Errors, Reviewers' Comments, Footnotes, End Notes, Bookmark List and Items to Display
+  in Virtual Viewer dialogs in Word, JAWS says what it said or showed before them in most
+  trials, in every one before its Links List, List Fields, the notes and bookmarks and Items to
+  Display [obs, 1049/s1; 1050/s1, 1053/s1, 1054/s1; 1082/s1, 1083/s1, 1087/s1, 1088/s1,
+  1090/s1, 1091/s1; 1094/s1, 1096-1100/s1]: its main window's version, "JAWS
   Version 2025.2505.43", the document's name, "Microsoft Word Document", a button's or a list's
   hint, or "Please wait processing 1 items" while it gathers the errors, notes or bookmarks;
   one trial of 1050 says nothing at all before the next key.
@@ -1059,6 +1063,16 @@ A step can be in more than one entry; all of its entries apply.
   "footnote reference: 1 Holidays excepted." [obs, 1088/s6].
 - Why: "blank" tells nothing about the comment or where the caret is. Okur says "Edit".
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
+
+### Word's comment in the Virtual Viewer with JAWS's own name for it
+
+- Steps: `1095-desktop-word-comment-in-viewer/s5`, `1095-desktop-word-comment-in-viewer/s6`.
+- Difference: `JawsAlsoSays("vispero:comment")`. Alt+Shift+Apostrophe on a comment in Word,
+  once and twice quickly: JAWS reads a name of its own before the comment, also as the first
+  line of the Virtual Viewer it opens [obs, 1095/s5, s6, every trial].
+- Why: an identifier, not the comment. Okur says the comment and its author, and its viewer
+  begins with the comment.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-30.
 
 ### Word's comment read with JAWS's own name for it
 

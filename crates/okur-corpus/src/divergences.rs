@@ -900,11 +900,17 @@ divergences! {
         "1088-desktop-word-footnotes-list-controls/s1",
         "1090-desktop-word-endnotes-list/s1",
         "1091-desktop-word-bookmarks-list/s1",
+        "1094-desktop-word-notes-viewer/s1",
+        "1096-desktop-word-comments-in-viewer/s1",
+        "1097-desktop-word-footnotes-in-viewer/s1",
+        "1098-desktop-word-viewer-items/s1",
+        "1099-desktop-word-endnotes-in-viewer/s1",
+        "1100-desktop-word-no-comments-in-viewer/s1",
     ],
     "Before its Heading List, Links List, List Fields, Spelling Errors, Reviewers' Comments, \
-     Footnotes, End Notes and Bookmark List lists in Word, JAWS says what it said or showed \
-     before them in most trials, in every one before its Links List, List Fields and the notes \
-     and bookmarks: its main \
+     Footnotes, End Notes, Bookmark List and Items to Display in Virtual Viewer dialogs in \
+     Word, JAWS says what it said or showed before them in most trials, in every one before its \
+     Links List, List Fields, the notes and bookmarks and Items to Display: its main \
      window's version, \"JAWS Version \
      2025.2505.43\", the document's name, \"Microsoft Word Document\", a button's hint, or \
      \"Please wait processing 1 items\" while it gathers the errors, notes or bookmarks. \
@@ -1046,6 +1052,16 @@ divergences! {
      text at the comment's mark said, where a footnote's is \"footnote reference: 1 Holidays \
      excepted.\". Okur says \"Edit\".",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
+    Difference::JawsAlsoSays("vispero:comment") => [
+        "1095-desktop-word-comment-in-viewer/s5",
+        "1095-desktop-word-comment-in-viewer/s6",
+    ],
+    "Alt+Shift+Apostrophe on a comment in Word, once and twice quickly: JAWS reads a name of \
+     its own before the comment, \"vispero:comment\", also as the first line of the Virtual \
+     Viewer it opens. Okur says the comment and its author, and its viewer begins with the \
+     comment.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-30";
 
     Difference::Step => [
         "1081-desktop-word-comment-read/s8",
