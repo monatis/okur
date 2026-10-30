@@ -134,8 +134,6 @@ word-no-revision = No Revision
 word-revision-inserted-mark = Inserted
 word-revision-deleted-mark = Deleted
 word-revision-line = revision
-# Insert+Shift+R in Word, before its list of revisions [obs, 1107/s2; hyp: the same for one].
-word-revisions-processing = Please wait processing { $count } items
 # Alt+Shift+Apostrophe in Word: the comment at the caret, then its author [obs, 1081/s8], or
 # none [obs, 1081/s3].
 word-comment-by = by { $author }

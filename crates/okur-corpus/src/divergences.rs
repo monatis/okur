@@ -906,14 +906,16 @@ divergences! {
         "1098-desktop-word-viewer-items/s1",
         "1099-desktop-word-endnotes-in-viewer/s1",
         "1100-desktop-word-no-comments-in-viewer/s1",
+        "1107-desktop-word-revisions-list/s2",
     ],
     "Before its Heading List, Links List, List Fields, Spelling Errors, Reviewers' Comments, \
-     Footnotes, End Notes, Bookmark List and Items to Display in Virtual Viewer dialogs in \
-     Word, JAWS says what it said or showed before them in most trials, in every one before its \
-     Links List, List Fields, the notes and bookmarks and Items to Display: its main \
-     window's version, \"JAWS Version \
+     Footnotes, End Notes, Bookmark List, Revisions and Items to Display in Virtual Viewer \
+     dialogs in Word, JAWS says what it said or showed before them in most trials, in every one \
+     before its Links List, List Fields, the notes, bookmarks and revisions and Items to \
+     Display: its main window's version, \"JAWS Version \
      2025.2505.43\", the document's name, \"Microsoft Word Document\", a button's hint, or \
-     \"Please wait processing 1 items\" while it gathers the errors, notes or bookmarks. \
+     \"Please wait processing 1 items\" while it gathers the errors, notes or bookmarks \
+     (\"Please wait processing 2 items | Inserted\" for two revisions, the first one's change). \
      Okur's lists open without them, as JAWS's do in the other trials.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-24";
 
@@ -1044,6 +1046,24 @@ divergences! {
      text at the comment's mark said, where a footnote's is \"footnote reference: 1 Holidays \
      excepted.\". Okur says \"Edit\".",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
+    Difference::JawsAlsoSays("Print View") => [
+        "1104-desktop-word-revisions-in-viewer/s5",
+        "1104-desktop-word-revisions-in-viewer/s12",
+    ],
+    "Word's revisions in JAWS's Virtual Viewer (Windows+Semicolon, Revisions): JAWS changes \
+     Word's view while it gathers them, to Draft (\"Normal\") and back (the trace's zoom and \
+     focus events), and says the view it comes back to, \"Print View\", as the viewer opens \
+     and again as it closes, in every trial. Okur reads the revisions without changing the \
+     view.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-30";
+
+    Difference::Step => ["1107-desktop-word-revisions-list/s8"],
+    "OK on a revision in JAWS's list of Word's revisions: JAWS gives its synthesizer \"blank\", \
+     then says the revision, \"nine Deleted\", \"Edit\", and the revision again, in every \
+     trial: the caret's place read once as the list closes and once as Word's caret event \
+     comes. Okur says it once: \"nine Deleted | Edit\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-30";
 
     Difference::JawsAlsoSays("vispero:comment") => [
         "1095-desktop-word-comment-in-viewer/s5",

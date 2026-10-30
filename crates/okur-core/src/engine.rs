@@ -3170,11 +3170,6 @@ impl ScreenReaderEngine {
             return Some(none);
         }
         self.listed_notes = notes.to_vec();
-        // Revisions are counted first: "Please wait processing 2 items" [obs, 1107/s2].
-        if kind == crate::event::NoteKind::Revision {
-            let processing = msg::word_revisions_processing(notes.len()).render();
-            self.speech.speak(&processing, true);
-        }
         let dialog =
             crate::ui::lists::ListDialog::document_notes(self.dialog_count + 1, kind, notes);
         let mode = self.app_mode;
