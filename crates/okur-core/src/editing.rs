@@ -67,6 +67,9 @@ pub enum EditKey {
     FormField,
     /// Space on a check box form field: its new state, "checked" [obs, 1057/s2, s5].
     FormFieldState,
+    /// Word's Ctrl+PageDown and Ctrl+PageUp, to its next or previous page: the way, then the
+    /// line, "Next page | page 2 | heading level 1 Borrowing" [obs, 1113/s1-s4].
+    BrowsePage { next: bool },
 }
 
 impl EditKey {
@@ -732,12 +735,16 @@ pub fn speech_in(
                 ))
                 .unwrap_or_default()
         ),
-        EditKey::Line => format!(
+        EditKey::Line | EditKey::BrowsePage { .. } => format!(
             "{}{}",
             misspelled_mark(after).unwrap_or_default(),
             or_line_break(word::spoken_line(after, line_at(after)))
         ),
         EditKey::SelectCharacter | EditKey::SelectWord => {
+            // A note's reference of Word's taken in, which the text does not show.
+            if let Some(said) = word::reference_selection(before, after) {
+                return Some(said);
+            }
             // The text, then the word: "Hello, selected", "world. Unselected" [obs, 529/s12,
             // s14]; a character taken out is read as a word is.
             match selection_change(before, after) {

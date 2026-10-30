@@ -147,6 +147,20 @@ pub struct LineStructure {
     /// Inserted" [obs, 1108/s7], which it does not without [obs, 1106/s6].
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub tracking: bool,
+    /// Where the caret is on Word's pages: JAWS says a page and a section reached, "page 3 |
+    /// Section 2" [obs, 1112/s5], and Insert+Delete the line and column [obs, 1112/s7].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub place: Option<PagePlace>,
+}
+
+/// The caret's place on a word processor's pages (Word's `Selection.Information`): its page and
+/// section, its line on the page and its column, each from 1.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PagePlace {
+    pub page: u32,
+    pub section: u32,
+    pub line: u32,
+    pub column: u32,
 }
 
 /// A revision of Word's on the caret's paragraph: where it is in the text, as `(start, end)`
@@ -178,6 +192,10 @@ pub struct DocumentFootnote {
     pub text: String,
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub at_caret: bool,
+    /// Word's selection holds the reference (Shift+Right onto it), which the text does not
+    /// show, so its selection cannot tell.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub selected: bool,
 }
 
 impl DocumentFootnote {

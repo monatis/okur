@@ -8478,6 +8478,7 @@ fn alt_shift_e_reads_the_note_at_the_caret() {
             mark: "i".into(),
             text: "Renewals are free.".into(),
             at_caret,
+            selected: false,
         }],
         ..Default::default()
     };

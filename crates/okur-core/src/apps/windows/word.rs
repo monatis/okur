@@ -566,6 +566,87 @@ pub(crate) fn reference_at_caret(context: &TextContext) -> Option<String> {
         .map(|(n, kind)| format!(" \u{1d}{kind} \u{1e} {}", n.shown()))
 }
 
+/// A page or section of Word's reached by a key that moved the caret, said before what it reads:
+/// "page 2", and the section where it changed too, "page 3 | Section 2", "page 2 | Section 1"
+/// [obs, 1112/s2, s5, s9; 1113/s7]. `None` on the same page.
+pub(crate) fn page_reached(before: Option<&TextContext>, after: &TextContext) -> Option<String> {
+    let place = |c: &TextContext| c.structure.as_ref().and_then(|s| s.place);
+    let (was, now) = (place(before?)?, place(after)?);
+    if was.page == now.page {
+        return None;
+    }
+    let mut said = msg::word_page(now.page).render();
+    if was.section != now.section {
+        said.push('\n');
+        said.push_str(&msg::word_section(now.section).render());
+    }
+    Some(said)
+}
+
+/// Whether Word's selection holds a footnote's or endnote's reference.
+fn reference_selected(context: &TextContext) -> bool {
+    context.structure.as_ref().is_some_and(|s| {
+        s.footnotes
+            .iter()
+            .chain(&s.endnotes)
+            .any(|note| note.selected)
+    })
+}
+
+/// A footnote's or endnote's reference taken into the selection, which the text does not show:
+/// JAWS reads its formatting, "superscript | selected" [obs, 1092/s8].
+pub(crate) fn reference_selection(
+    before: Option<&TextContext>,
+    after: &TextContext,
+) -> Option<String> {
+    (reference_selected(after) && !before.is_some_and(reference_selected)).then(|| {
+        format!(
+            "\u{1d}{} \u{1e}\n{}",
+            msg::word_superscript(),
+            msg::selection_added()
+        )
+    })
+}
+
+/// A key that leaves a selected reference behind: JAWS ends the formatting it read there
+/// first, "end superscript" before the next line [obs, 1092/s10].
+fn superscript_left(before: Option<&TextContext>, after: &TextContext) -> Option<String> {
+    (before.is_some_and(reference_selected) && !reference_selected(after))
+        .then(|| format!("\u{1d}{} \u{1e}", msg::word_end_superscript()))
+}
+
+/// Word's Ctrl+PageDown and Ctrl+PageUp, to the next or previous page: "Next page", "Previous
+/// page" before the page and its line [obs, 1113/s1-s4]. Word's browse object can be another
+/// than the page (Alt+Ctrl+Home), which JAWS's words would then name [hyp: not recorded].
+pub(crate) fn browse_page(event: &crate::input::KeyEvent) -> Option<bool> {
+    let m = &event.modifiers;
+    if !m.ctrl || m.shift || m.alt || m.insert || m.win {
+        return None;
+    }
+    match event.key {
+        crate::input::Key::PageDown => Some(true),
+        crate::input::Key::PageUp => Some(false),
+        _ => None,
+    }
+}
+
+/// The way Ctrl+PageDown or Ctrl+PageUp went, "Next page".
+pub(crate) fn browse_page_said(next: bool) -> String {
+    if next {
+        msg::word_next_page()
+    } else {
+        msg::word_previous_page()
+    }
+    .to_string()
+}
+
+/// Insert+Delete in Word, JAWS's sayLineAndColumn: the caret's line on its page and its
+/// column, "line 2 column 28" [obs, 1112/s7, 1113/s6, s8].
+pub(crate) fn line_and_column(context: &TextContext) -> Option<String> {
+    let place = context.structure.as_ref()?.place?;
+    Some(msg::word_line_and_column(place.line, place.column).render())
+}
+
 /// JAWS's keys for Word's revisions, from its key map for Word: Insert+Shift+R lists them
 /// (`listRevisions`), Ctrl+Insert+R says the one at the caret (`AnnounceRevision`), the
 /// regions list's key elsewhere.
@@ -691,6 +772,7 @@ pub(crate) fn say_all_pieces(
             endnotes: Vec::new(),
             revisions: Vec::new(),
             tracking: false,
+            place: None,
         };
         let said = match was.as_ref() {
             None => line,
@@ -1064,8 +1146,9 @@ fn cell_line(context: &TextContext) -> String {
 }
 
 /// `speech` for a key that moved the caret to `after`'s line, with what JAWS says around a
-/// line of Word's ([`line_change`]); `None` when JAWS says nothing. Outside Word's documents
-/// (no structure) and for other keys, `speech` as it is.
+/// line of Word's ([`line_change`]), first the way Ctrl+PageDown went and the page reached
+/// ([`page_reached`]); `None` when JAWS says nothing. Outside Word's documents (no structure)
+/// and for other keys, `speech` as it is.
 pub(crate) fn around_line(
     key: EditKey,
     before: Option<&TextContext>,
@@ -1076,11 +1159,17 @@ pub(crate) fn around_line(
         after.structure.as_ref(),
         matches!(
             key,
-            EditKey::Line | EditKey::TopOfFile | EditKey::BottomOfFile
+            EditKey::Line | EditKey::TopOfFile | EditKey::BottomOfFile | EditKey::BrowsePage { .. }
         ),
     ) else {
         return Some(speech);
     };
+    let way = match key {
+        EditKey::BrowsePage { next } => Some(browse_page_said(next)),
+        _ => None,
+    };
+    let page = page_reached(before, after);
+    let superscript = superscript_left(before, after);
     let was = before.and_then(|b| b.structure.as_ref());
     // A move to the document's top or bottom that leaves the caret on its line says nothing:
     // Ctrl+End on the last line [obs, 518/s17].
@@ -1091,9 +1180,12 @@ pub(crate) fn around_line(
     }
     let (first, last) = line_change(was, now);
     Some(
-        first
-            .into_iter()
-            .chain(std::iter::once(speech))
+        way.into_iter()
+            .chain(page)
+            .chain(first)
+            .chain(std::iter::once(
+                superscript.map_or(speech.clone(), |end| format!("{end} {speech}")),
+            ))
             .chain(last)
             .collect::<Vec<_>>()
             .join("\n"),
@@ -1234,6 +1326,7 @@ mod tests {
                 endnotes: Vec::new(),
                 revisions: Vec::new(),
                 tracking: false,
+                place: None,
             }),
         }
     }
@@ -1485,6 +1578,116 @@ mod tests {
             s.revisions.clear();
         }
         assert!(as_shown(&plain).is_none());
+    }
+
+    /// Shift+Right over a note's reference, which the text does not show, reads its formatting,
+    /// "superscript | selected"; Down from there ends it before the next line, "end superscript
+    /// Bring your card" [obs, 1092/s8, s10].
+    #[test]
+    fn a_selected_reference_is_read_as_superscript() {
+        use crate::editing::EditKey;
+        let context = |selected: bool, with_note: bool| TextContext {
+            text: "Members borrow books for three weeks.\rBring your card.\r".into(),
+            caret: if with_note { 36 } else { 38 },
+            selection: None,
+            font: None,
+            word: None,
+            misspelled: Vec::new(),
+            structure: Some(LineStructure {
+                line: if with_note { (0, 38) } else { (38, 55) },
+                endnotes: vec![crate::event::DocumentFootnote {
+                    at: 36,
+                    number: 1,
+                    mark: "i".into(),
+                    text: "Renewals are free.".into(),
+                    at_caret: true,
+                    selected,
+                }]
+                .into_iter()
+                .filter(|_| with_note)
+                .collect(),
+                ..Default::default()
+            }),
+        };
+        let (on, selected, below) = (
+            context(false, true),
+            context(true, true),
+            context(false, false),
+        );
+        assert_eq!(
+            reference_selection(Some(&on), &selected).as_deref(),
+            Some("\u{1d}superscript \u{1e}\nselected")
+        );
+        assert_eq!(reference_selection(Some(&selected), &selected), None);
+        assert_eq!(
+            around_line(
+                EditKey::Line,
+                Some(&selected),
+                &below,
+                "Bring your card.".into()
+            )
+            .as_deref(),
+            Some("\u{1d}end superscript \u{1e} Bring your card.")
+        );
+        assert_eq!(
+            around_line(EditKey::Line, Some(&on), &below, "Bring your card.".into()).as_deref(),
+            Some("Bring your card.")
+        );
+    }
+
+    /// A line key onto another page says it first, and the section where that changed too;
+    /// Ctrl+PageDown says its way before them; Insert+Delete the line and column [obs, 1112/s2,
+    /// s5, s7, s9; 1113/s1, s2].
+    #[test]
+    fn pages_and_sections_reached() {
+        use crate::editing::EditKey;
+        use crate::event::PagePlace;
+        let at = |page: u32, section: u32, line: u32| TextContext {
+            text: "Borrowing\r".into(),
+            caret: 0,
+            selection: None,
+            font: None,
+            word: None,
+            misspelled: Vec::new(),
+            structure: Some(LineStructure {
+                line: (0, 10),
+                place: Some(PagePlace {
+                    page,
+                    section,
+                    line,
+                    column: 1,
+                }),
+                ..Default::default()
+            }),
+        };
+        let said = |key: EditKey, before: &TextContext, after: &TextContext| {
+            around_line(key, Some(before), after, "Borrowing".into())
+        };
+        assert_eq!(
+            said(EditKey::Line, &at(1, 1, 2), &at(2, 1, 1)).as_deref(),
+            Some("page 2\nBorrowing")
+        );
+        assert_eq!(
+            said(EditKey::Line, &at(2, 1, 3), &at(3, 2, 1)).as_deref(),
+            Some("page 3\nSection 2\nBorrowing")
+        );
+        assert_eq!(
+            said(EditKey::Line, &at(1, 1, 1), &at(1, 1, 2)).as_deref(),
+            Some("Borrowing")
+        );
+        assert_eq!(
+            said(
+                EditKey::BrowsePage { next: true },
+                &at(1, 1, 1),
+                &at(2, 1, 1)
+            )
+            .as_deref(),
+            Some("Next page\npage 2\nBorrowing")
+        );
+        assert_eq!(
+            line_and_column(&at(3, 2, 2)).as_deref(),
+            Some("line 2 column 1")
+        );
     }
 
     /// Revisions as comments, each with what it changed: "1  eight inserted text Lab Sun, Jan

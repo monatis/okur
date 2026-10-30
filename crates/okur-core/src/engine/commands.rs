@@ -1052,6 +1052,18 @@ impl ScreenReaderEngine {
                 return;
             }
         }
+        // Word's Insert+Delete, the caret's line and column: Route Virtual to PC elsewhere.
+        if event.key == Key::Delete && !m.ctrl && !m.shift && !m.alt && !m.win {
+            let said = self
+                .last_text
+                .as_ref()
+                .filter(|_| self.in_word_document())
+                .and_then(crate::apps::windows::word::line_and_column);
+            if let Some(said) = said {
+                self.speech.speak(&said, true);
+                return;
+            }
+        }
         // Word's Insert+Shift+R and Ctrl+Insert+R, its revisions: before the regions list,
         // whose key Ctrl+Insert+R is elsewhere.
         if let Some(key) = crate::apps::windows::word::RevisionKey::of(event) {

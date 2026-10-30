@@ -104,7 +104,19 @@ impl ScreenReaderEngine {
                         || plain(f.platform.window_class.as_deref());
                     f.role == crate::aom::Role::Edit || plain_class
                 });
+            // Word's Ctrl+PageDown and Ctrl+PageUp, to its next or previous page.
+            let browse = self
+                .last_text
+                .as_ref()
+                .is_some_and(|t| t.structure.is_some())
+                .then(|| crate::apps::windows::word::browse_page(event))
+                .flatten();
             let key = match key.in_document(event.key, event.modifiers.ctrl) {
+                _ if browse.is_some() && self.editing_document() => {
+                    crate::editing::EditKey::BrowsePage {
+                        next: browse.unwrap_or(true),
+                    }
+                }
                 _ if !self.editing_document() => key,
                 crate::editing::EditKey::Character
                     if plain_edit && key == crate::editing::EditKey::Silent =>

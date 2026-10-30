@@ -134,6 +134,18 @@ word-no-revision = No Revision
 word-revision-inserted-mark = Inserted
 word-revision-deleted-mark = Deleted
 word-revision-line = revision
+# A page and a section of Word's reached, before the line [obs, 1112/s2, s5, s9].
+word-page = page { $page }
+word-section = Section { $section }
+# Ctrl+PageDown and Ctrl+PageUp in Word, Word's next and previous page [obs, 1113/s1-s4].
+word-next-page = Next page
+word-previous-page = Previous page
+# Insert+Delete in Word [obs, 1112/s7, 1113/s6, s8].
+word-line-and-column = line { $line } column { $column }
+# A footnote's or endnote's reference selected, by its formatting, and the line read after it
+# [obs, 1092/s8, s10].
+word-superscript = superscript
+word-end-superscript = end superscript
 # Alt+Shift+Apostrophe in Word: the comment at the caret, then its author [obs, 1081/s8], or
 # none [obs, 1081/s3].
 word-comment-by = by { $author }

@@ -711,6 +711,7 @@ mod reader {
                     .unwrap_or_default(),
                 revisions,
                 tracking,
+                place: word_place(focused),
             })
         }
     }
@@ -756,6 +757,14 @@ mod reader {
                 })
                 .collect(),
         )
+    }
+
+    /// Where the caret of Word's `focused` document is on its pages.
+    fn word_place(focused: &IUIAutomationElement) -> Option<okur_core::PagePlace> {
+        use windows::Win32::Foundation::HWND;
+        // SAFETY: a UIA property read on a valid element.
+        let window = unsafe { focused.CurrentNativeWindowHandle() }.ok()?;
+        crate::word_om::selection_place(HWND(window.0))
     }
 
     /// The revisions on the caret's paragraph of Word's `focused` document, placed in the text
@@ -850,6 +859,7 @@ mod reader {
                     mark: placed.mark,
                     text: placed.text,
                     at_caret: placed.at_caret,
+                    selected: placed.selected,
                 })
                 .collect(),
         )

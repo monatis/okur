@@ -315,6 +315,32 @@ pub fn paragraph_comments(document: HWND) -> Option<Vec<PlacedComment>> {
     )
 }
 
+/// Where the selection of Word's document window `document` is on its pages
+/// (`Selection.Information`: `wdActiveEndPageNumber` 3, `wdActiveEndSectionNumber` 2,
+/// `wdFirstCharacterLineNumber` 10, `wdFirstCharacterColumnNumber` 9); `None` where Word's
+/// object model does not answer, or a number is not one (-1 outside a page's view).
+pub fn selection_place(document: HWND) -> Option<okur_core::PagePlace> {
+    let selection = object(&property(&word_window(document)?, "Selection")?)?;
+    let information = |kind: i32| -> Option<u32> {
+        let value = invoke(
+            &selection,
+            "Information",
+            DISPATCH_PROPERTYGET,
+            &mut [VARIANT::from(kind)],
+        )?;
+        i32::try_from(&value)
+            .ok()
+            .and_then(|n| u32::try_from(n).ok())
+            .filter(|&n| n > 0)
+    };
+    Some(okur_core::PagePlace {
+        page: information(3)?,
+        section: information(2)?,
+        line: information(10)?,
+        column: information(9)?,
+    })
+}
+
 /// A revision on the selection's paragraph: how many of the paragraph's characters come before
 /// its text, that text's length, the text (a deletion's too, which Word's text holds), what it
 /// changed, its author and date.
@@ -640,6 +666,7 @@ pub struct PlacedNote {
     pub mark: String,
     pub text: String,
     pub at_caret: bool,
+    pub selected: bool,
 }
 
 /// The footnote or endnote references on the selection's paragraph in Word's document window
@@ -652,6 +679,7 @@ pub fn paragraph_notes(document: HWND, kind: NoteKind) -> Option<Vec<PlacedNote>
     let range = object(&property(&paragraph, "Range")?)?;
     let start = number(&range, "Start")?;
     let caret = number(&selection, "Start");
+    let selection_end = number(&selection, "End");
     let notes = notes_of(&range, kind)?;
     let count = number(&notes, "Count").unwrap_or(0);
     let (style, first) = numbering(&whole, kind);
@@ -683,6 +711,8 @@ pub fn paragraph_notes(document: HWND, kind: NoteKind) -> Option<Vec<PlacedNote>
                     mark: note_mark(style, (first + number).saturating_sub(1)),
                     text: said.trim().to_owned(),
                     at_caret: caret == Some(at),
+                    selected: caret.is_some_and(|c| c <= at)
+                        && selection_end.is_some_and(|end| end > at),
                 })
             })
             .collect(),
