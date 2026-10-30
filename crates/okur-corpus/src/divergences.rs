@@ -1031,14 +1031,6 @@ divergences! {
      control the pane gave the focus to in the trial replayed (\"Ignore Button\").",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
 
-    Difference::Step => ["1076-desktop-word-insert-hyperlink-dialog/s3"],
-    "Ctrl+K in Word: JAWS reads Insert Hyperlink's Address field twice as its focus settles, \
-     first as an edit, then as the edit combo it is: \"Insert Hyperlink dialog | Address: Edit \
-     | Type in text. | Address: | edit combo | To set the value use the Arrow keys or type the \
-     value.\", in every trial. Okur reads it once, as the edit combo: \"Insert Hyperlink dialog \
-     | Address: edit combo | To set the value use the Arrow keys or type the value.\"",
-    "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
-
     Difference::Step => ["1077-desktop-word-save-as-dialog/s4"],
     "Escape from Save As back to Word's document: JAWS says the document window's own name, \
      \"Microsoft Word Document\", and the hint of Save As's combo box, \"To set the value use \

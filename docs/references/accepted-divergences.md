@@ -1032,17 +1032,6 @@ A step can be in more than one entry; all of its entries apply.
   focus to in the trial replayed ("Ignore Button").
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
 
-### Insert Hyperlink's Address read twice
-
-- Steps: `1076-desktop-word-insert-hyperlink-dialog/s3`.
-- Difference: the whole step. Ctrl+K in Word: JAWS reads the Address field twice as its focus
-  settles, first as an edit, then as the edit combo it is, "Insert Hyperlink dialog | Address:
-  Edit | Type in text. | Address: | edit combo | To set the value use the Arrow keys or type the
-  value." [obs, 1076/s3, every trial].
-- Why: the first reading is of a focus that does not stay. Okur reads the field once, as the
-  edit combo.
-- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
-
 ### Back from Save As, the document window's name and a hint
 
 - Steps: `1077-desktop-word-save-as-dialog/s4`.
