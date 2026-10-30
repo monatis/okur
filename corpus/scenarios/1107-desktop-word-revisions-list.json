@@ -1,0 +1,31 @@
+{
+  "id": "1107-desktop-word-revisions-list",
+  "name": "Word: Ctrl+Shift+E turns Track Changes on; Insert+Shift+R lists the document's revisions; Down, Tab through its controls and back (keys with UI Access), Enter on the second revision, then Say Line and Ctrl+Insert+R where it left the caret",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-revisions.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-revisions.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Ctrl+Shift+E"},
+    {"id": "s2", "type": "key", "command": "Insert+Shift+R", "settle_max_ms": 20000},
+    {"id": "s3", "type": "key_ui_access", "command": "Down"},
+    {"id": "s4", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s5", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s6", "type": "key_ui_access", "command": "Shift+Tab"},
+    {"id": "s7", "type": "key_ui_access", "command": "Shift+Tab"},
+    {"id": "s8", "type": "key_ui_access", "command": "Enter"},
+    {"id": "s9", "type": "key", "command": "Insert+Up"},
+    {"id": "s10", "type": "key", "command": "Ctrl+Insert+R", "settle_max_ms": 20000}
+  ]
+}

@@ -145,6 +145,10 @@
       "sha256": "8bdc000f832fff9501fa204f6b8b5c6bdd0f2f368b6fc795b07fd93fb2c95800",
       "size_bytes": 8043
     },
+    "desktop-word-revisions.ps1": {
+      "sha256": "e500556b97c2c41e6a742454e47c414b693fdd21b8fa5e41d88f42294ec51f46",
+      "size_bytes": 7932
+    },
     "desktop-word-spacing.ps1": {
       "sha256": "9e643908b89a19b48c4bfba1cb7c717fbfec645eded2d2c9fa2776839eeb850f",
       "size_bytes": 6624
@@ -1924,6 +1928,90 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1104-desktop-word-revisions-in-viewer",
+      "fixture": "desktop-word-revisions.ps1",
+      "evidence": {
+        "sha256": "5397b56e26766007f09afd9fb6b610946bf8547baf209bdaafa97b7a46dbb325",
+        "capture_script_sha256": "5b2e2538f0684bc3bd96633df46c3d4a0242dbd4ba24e2f2944a21f0f18f23f0",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1105-desktop-word-two-endnotes-in-viewer",
+      "fixture": "desktop-word-revisions.ps1",
+      "evidence": {
+        "sha256": "1c95cf6393e50e4fdcaf103ca1fb1c2ee9bc8c73435835180de1c1462333eb9b",
+        "capture_script_sha256": "7016cc9af4f4da14a268d3415ed33c4b99d8c7e0a739ecae25803c321ab05aae",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1106-desktop-word-revision-lines",
+      "fixture": "desktop-word-revisions.ps1",
+      "evidence": {
+        "sha256": "27d5f8415c5b8a8a69ac5108f1acce56f8379d4166156ed1cc0660653636c609",
+        "capture_script_sha256": "5b2e2538f0684bc3bd96633df46c3d4a0242dbd4ba24e2f2944a21f0f18f23f0",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1107-desktop-word-revisions-list",
+      "fixture": "desktop-word-revisions.ps1",
+      "evidence": {
+        "sha256": "e0c72ec727c957462ad29af4333f17bc3aa4d251d74f3a5d031aa46d559ff121",
+        "capture_script_sha256": "5b2e2538f0684bc3bd96633df46c3d4a0242dbd4ba24e2f2944a21f0f18f23f0",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1108-desktop-word-announce-revision",
+      "fixture": "desktop-word-revisions.ps1",
+      "evidence": {
+        "sha256": "8f25a2487ec11963f13cc891453c9cd191d20f595306d545f75dfefddd03b202",
+        "capture_script_sha256": "5b2e2538f0684bc3bd96633df46c3d4a0242dbd4ba24e2f2944a21f0f18f23f0",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1109-desktop-word-no-revisions",
+      "fixture": "desktop-word.ps1",
+      "evidence": {
+        "sha256": "743b4fa5d509f30496f4e05e449d5e890d08b0dc2666bc5fe8f00c02ee9664ee",
+        "capture_script_sha256": "5b2e2538f0684bc3bd96633df46c3d4a0242dbd4ba24e2f2944a21f0f18f23f0",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -10469,10 +10557,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 728,
-    "scenarios_with_evidence": 728,
-    "total_trials": 2190,
-    "successful_trials": 2173,
-    "deterministic_scenarios": 461
+    "scenarios": 734,
+    "scenarios_with_evidence": 734,
+    "total_trials": 2208,
+    "successful_trials": 2191,
+    "deterministic_scenarios": 465
   }
 }

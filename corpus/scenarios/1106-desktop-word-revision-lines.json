@@ -1,0 +1,30 @@
+{
+  "id": "1106-desktop-word-revision-lines",
+  "name": "Word: the line with a tracked insertion and deletion, by Down and Say Line, then word by word with Ctrl+Right across the changes; Say Line",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-revisions.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-revisions.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "Insert+Up"},
+    {"id": "s3", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s4", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s5", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s6", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s7", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s8", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s9", "type": "key", "command": "Insert+Up"}
+  ]
+}
