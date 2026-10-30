@@ -1,0 +1,32 @@
+{
+  "id": "1102-desktop-word-two-footnotes-in-viewer",
+  "name": "Word: two footnotes; Windows+Semicolon, Down and Enter on Footnotes (keys with UI Access in JAWS's dialog): the footnotes in the Virtual Viewer; Down through it, Escape; Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-notes-two.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-notes-two.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Win+Semicolon", "settle_max_ms": 20000},
+    {"id": "s2", "type": "key_ui_access", "command": "Down"},
+    {"id": "s3", "type": "key_ui_access", "command": "Enter", "settle_max_ms": 20000},
+    {"id": "s4", "type": "key", "command": "Down"},
+    {"id": "s5", "type": "key", "command": "Down"},
+    {"id": "s6", "type": "key", "command": "Down"},
+    {"id": "s7", "type": "key", "command": "Down"},
+    {"id": "s8", "type": "key", "command": "Down"},
+    {"id": "s9", "type": "key", "command": "Down"},
+    {"id": "s10", "type": "key", "command": "Escape"},
+    {"id": "s11", "type": "key", "command": "Insert+Up"}
+  ]
+}
