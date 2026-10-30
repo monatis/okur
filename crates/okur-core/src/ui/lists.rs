@@ -44,8 +44,8 @@ const HEADING_SORTS: [fn() -> StaticMessage; 2] = [
 ];
 /// An item of Items to Display in Virtual Viewer: its name, and the notes it shows.
 pub type NoteToView = (fn() -> StaticMessage, Option<crate::event::NoteKind>);
-/// Items to Display in Virtual Viewer's items, in JAWS's order, each with the notes it shows:
-/// Revisions shows a document's tracked changes, not yet read [obs, 1098/s1-s4].
+/// Items to Display in Virtual Viewer's items, in JAWS's order, each with the notes it shows
+/// [obs, 1098/s1-s4].
 pub const NOTES_TO_VIEW: [NoteToView; 4] = [
     (
         msg::notes_to_view_comments,
@@ -59,7 +59,10 @@ pub const NOTES_TO_VIEW: [NoteToView; 4] = [
         msg::notes_to_view_endnotes,
         Some(crate::event::NoteKind::Endnote),
     ),
-    (msg::notes_to_view_revisions, None),
+    (
+        msg::notes_to_view_revisions,
+        Some(crate::event::NoteKind::Revision),
+    ),
 ];
 /// Heading levels the Display group offers after "All Headings".
 const HEADING_LEVELS: u32 = 6;
@@ -269,23 +272,36 @@ impl Entry {
 
     /// A document's comment or footnote `index`: a comment's text, author and date, "Check the
     /// summer hours. Lab Fri, Jan 02, 26" [obs, 1082/s1]; a footnote's number and text, "1
-    /// Holidays excepted." [obs, 1083/s1].
+    /// Holidays excepted." [obs, 1083/s1]; a revision's text, change, author and date, "eight
+    /// inserted text Lab Sun, Jan 04, 26" [obs, 1104/s7].
     pub fn document_note(
         index: usize,
         kind: crate::event::NoteKind,
         note: &crate::event::DocumentNote,
     ) -> Self {
         let number = note.number.map(|n| n.to_string()).unwrap_or_default();
-        let parts: [&str; 3] = match kind {
+        // Another change than text inserted or deleted is not named [hyp: none recorded yet].
+        let change = match note.revision {
+            Some(crate::event::RevisionKind::Inserted) => msg::word_revision_inserted().to_string(),
+            Some(crate::event::RevisionKind::Deleted) => msg::word_revision_deleted().to_string(),
+            Some(crate::event::RevisionKind::Other) | None => String::new(),
+        };
+        let parts: [&str; 4] = match kind {
             crate::event::NoteKind::Comment => {
-                [note.text.trim(), note.author.trim(), note.date.trim()]
+                [note.text.trim(), note.author.trim(), note.date.trim(), ""]
             }
             crate::event::NoteKind::Footnote | crate::event::NoteKind::Endnote => {
-                [number.as_str(), note.text.trim(), ""]
+                [number.as_str(), note.text.trim(), "", ""]
             }
             // A bookmark by its name and the text it marks: "Opening nine in the morning" [obs,
             // 1091/s1].
-            crate::event::NoteKind::Bookmark => [note.name.trim(), note.text.trim(), ""],
+            crate::event::NoteKind::Bookmark => [note.name.trim(), note.text.trim(), "", ""],
+            crate::event::NoteKind::Revision => [
+                note.text.trim(),
+                change.as_str(),
+                note.author.trim(),
+                note.date.trim(),
+            ],
         };
         let text = parts
             .into_iter()
@@ -766,6 +782,7 @@ impl ListDialog {
                     crate::event::NoteKind::Footnote => msg::list_dialog_footnotes(),
                     crate::event::NoteKind::Endnote => msg::list_dialog_endnotes(),
                     crate::event::NoteKind::Bookmark => msg::list_dialog_bookmarks(),
+                    crate::event::NoteKind::Revision => msg::list_dialog_revisions(),
                 },
                 vec![
                     list(msg::list_dialog_form_fields_list()),

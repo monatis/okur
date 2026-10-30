@@ -1324,8 +1324,9 @@ async fn main() {
                 let fields = document
                     .and_then(okur_platform::word_om::document_fields)
                     .unwrap_or_default();
-                // The document's comments and footnotes, for JAWS's lists of them
-                // (Ctrl+Shift+Apostrophe, Insert+Shift+F).
+                // The document's comments, footnotes, endnotes, bookmarks and revisions, for
+                // JAWS's lists of them (Ctrl+Shift+Apostrophe, Insert+Shift+F) and its Virtual
+                // Viewer of them (Windows+Semicolon).
                 let notes = |kind: okur_core::NoteKind| {
                     document
                         .and_then(|d| okur_platform::word_om::document_notes(d, kind))
@@ -1339,15 +1340,17 @@ async fn main() {
                                 "number": note.number,
                                 "mark": note.mark,
                                 "name": note.name,
+                                "revision": note.revision,
                             })
                         })
                         .collect::<Vec<_>>()
                 };
-                let (comments, footnotes, endnotes, bookmarks) = (
+                let (comments, footnotes, endnotes, bookmarks, revisions) = (
                     notes(okur_core::NoteKind::Comment),
                     notes(okur_core::NoteKind::Footnote),
                     notes(okur_core::NoteKind::Endnote),
                     notes(okur_core::NoteKind::Bookmark),
+                    notes(okur_core::NoteKind::Revision),
                 );
                 // The form fields at the caret and on its paragraph, for reading them as
                 // controls.
@@ -1399,6 +1402,7 @@ async fn main() {
                         "footnotes": footnotes,
                         "endnotes": endnotes,
                         "bookmarks": bookmarks,
+                        "revisions": revisions,
                         "fields": fields
                             .iter()
                             .map(|f| serde_json::json!({

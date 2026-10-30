@@ -18,6 +18,8 @@ list-dialog-footnotes = Footnotes
 list-dialog-endnotes = End Notes
 # Word's bookmarks, Insert+Alt+B in a document [obs, 1091/s1].
 list-dialog-bookmarks = Bookmark List
+# Word's revisions, Insert+Shift+R in a document [hyp: 1107 records JAWS's title].
+list-dialog-revisions = Revisions
 # Windows+Semicolon in a document of Word's: the notes the Virtual Viewer shows, JAWS's items in
 # its order [obs, 1094/s1, 1098/s1-s4].
 list-dialog-notes-to-view = Items to Display in Virtual Viewer

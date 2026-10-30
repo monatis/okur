@@ -8956,3 +8956,133 @@ fn voice_profiles_are_chosen_for_all_applications_and_one() {
         .get("notepad")
         .is_none_or(|values| !values.contains_key("voice")));
 }
+
+/// Insert+Shift+R and Ctrl+Insert+R in Word ask whether the document tracks its changes, which
+/// they need; without, JAWS's words for each [obs, 1109/s1, s3]. Ctrl+Insert+R is not the
+/// regions list there.
+#[test]
+fn word_revision_keys_need_track_changes() {
+    let (mut engine, speech) = word_document(
+        "Library Hours\rIt is open every day.\r",
+        0,
+        crate::event::LineStructure {
+            line: (0, 14),
+            heading: Some(1),
+            ..Default::default()
+        },
+    );
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let press = |engine: &mut ScreenReaderEngine, ctrl: bool, shift: bool| {
+        let mut key = KeyEvent::new(Key::Alpha('R'), Modifiers::none(), true);
+        key.modifiers.insert = true;
+        key.modifiers.ctrl = ctrl;
+        key.modifiers.shift = shift;
+        engine.handle_key_event(&key);
+    };
+    for (ctrl, shift, said) in [
+        (
+            false,
+            true,
+            "Track Changes is disabled. Press the Word command, CONTROL+SHIFT+E, to enable the feature.",
+        ),
+        (
+            true,
+            false,
+            "You must enable Track Changes in order to use this feature.",
+        ),
+    ] {
+        speech.take();
+        press(&mut engine, ctrl, shift);
+        assert!(actions
+            .requests()
+            .iter()
+            .any(|(action, _)| action == "track changes"));
+        engine.handle_accessibility_event(&AccessibilityEvent::WordKeyState(Some(
+            crate::event::WordKeyState::TrackChanges(false),
+        )));
+        assert_eq!(speech.take(), vec![said.to_owned()]);
+    }
+}
+
+/// While Word tracks changes, Insert+Shift+R counts the revisions and lists them, "Please wait
+/// processing 2 items | Revisions dialog" [obs, 1107/s2], and Ctrl+Insert+R reads the one at
+/// the caret, "eight | inserted text revised by Lab on Sun, Jan 04, 26", or says there is none
+/// [obs, 1108/s3, s8].
+#[test]
+fn word_revision_keys_with_track_changes() {
+    use crate::event::{DocumentNote, DocumentRevision, NoteKind, RevisionKind, WordKeyState};
+    use crate::ui::ToUi;
+    let text = "Library Changes\rThe library opens at eight in the morning.\r";
+    let structure = |caret_in_revision: bool| crate::event::LineStructure {
+        line: (16, 59),
+        revisions: vec![DocumentRevision {
+            start: 37,
+            end: 42,
+            kind: RevisionKind::Inserted,
+            text: "eight".into(),
+            author: "Lab".into(),
+            date: "Sun, Jan 04, 26".into(),
+        }]
+        .into_iter()
+        .filter(|_| caret_in_revision)
+        .collect(),
+        tracking: true,
+        ..Default::default()
+    };
+    let (mut engine, speech) = word_document(text, 37, structure(true));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let press = |engine: &mut ScreenReaderEngine, ctrl: bool, shift: bool| {
+        let mut key = KeyEvent::new(Key::Alpha('R'), Modifiers::none(), true);
+        key.modifiers.insert = true;
+        key.modifiers.ctrl = ctrl;
+        key.modifiers.shift = shift;
+        engine.handle_key_event(&key);
+        engine.handle_accessibility_event(&AccessibilityEvent::WordKeyState(Some(
+            WordKeyState::TrackChanges(true),
+        )));
+    };
+    speech.take();
+    press(&mut engine, true, false);
+    assert_eq!(
+        speech.take(),
+        vec!["eight\ninserted text revised by Lab on Sun, Jan 04, 26".to_owned()]
+    );
+    press(&mut engine, false, true);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "document revisions"));
+    let revision = |text: &str, kind: RevisionKind| DocumentNote {
+        text: text.into(),
+        author: "Lab".into(),
+        date: "Sun, Jan 04, 26".into(),
+        revision: Some(kind),
+        ..Default::default()
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentNotes(
+        NoteKind::Revision,
+        vec![
+            revision("eight", RevisionKind::Inserted),
+            revision("nine", RevisionKind::Deleted),
+        ],
+    ));
+    assert_eq!(
+        speech.take(),
+        vec!["Please wait processing 2 items".to_owned()]
+    );
+    let shown = ui.take().into_iter().find_map(|m| match m {
+        ToUi::DialogShow { dialog } => Some(dialog),
+        _ => None,
+    });
+    assert_eq!(shown.map(|d| d.title).as_deref(), Some("Revisions"));
+    // Away from a revision: "No Revision".
+    let (mut engine, speech) = word_document(text, 16, structure(false));
+    engine.set_actions(Box::new(crate::actions::RecordingActions::default()));
+    speech.take();
+    press(&mut engine, true, false);
+    assert_eq!(speech.take(), vec!["No Revision".to_owned()]);
+}

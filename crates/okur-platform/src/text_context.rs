@@ -422,6 +422,7 @@ mod reader {
             number: note.number,
             mark: note.mark,
             name: note.name,
+            revision: note.revision,
         }
     }
 
@@ -695,6 +696,7 @@ mod reader {
                 .and_then(|id| u8::try_from(id - STYLE_HEADING_1 + 1).ok());
             let list_item = attribute(UIA_BulletStyleAttributeId).is_some_and(|b| b != 0)
                 || matches!(style, Some(STYLE_BULLETED_LIST | STYLE_NUMBERED_LIST));
+            let (revisions, tracking) = word_revisions(focused, caret, start).unwrap_or_default();
             Some(okur_core::LineStructure {
                 line,
                 heading,
@@ -707,6 +709,8 @@ mod reader {
                     .unwrap_or_default(),
                 endnotes: word_notes(focused, caret, start, okur_core::NoteKind::Endnote)
                     .unwrap_or_default(),
+                revisions,
+                tracking,
             })
         }
     }
@@ -752,6 +756,53 @@ mod reader {
                 })
                 .collect(),
         )
+    }
+
+    /// The revisions on the caret's paragraph of Word's `focused` document, placed in the text
+    /// from the paragraph's start, and whether Word tracks the document's changes; none where
+    /// the document has none (asked once a second).
+    fn word_revisions(
+        focused: &IUIAutomationElement,
+        caret: &IUIAutomationTextRange,
+        start: usize,
+    ) -> Option<(Vec<okur_core::DocumentRevision>, bool)> {
+        use windows::Win32::Foundation::HWND;
+        use windows::Win32::UI::Accessibility::TextUnit_Paragraph;
+        // SAFETY: a UIA property read on a valid element.
+        let window = unsafe { focused.CurrentNativeWindowHandle() }.ok()?;
+        let window = HWND(window.0);
+        let key = window.0 as isize;
+        let known = REVISIONS_SEEN.with(|seen| {
+            seen.get()
+                .filter(|(at, when, _)| *at == key && when.elapsed() < FORM_FIELDS_KEPT)
+                .map(|(_, _, has)| has)
+        });
+        let has = match known {
+            Some(has) => has,
+            None => {
+                let has = crate::word_om::has_notes(window, okur_core::NoteKind::Revision)
+                    .unwrap_or(false);
+                REVISIONS_SEEN.with(|seen| seen.set(Some((key, std::time::Instant::now(), has))));
+                has
+            }
+        };
+        if !has {
+            return None;
+        }
+        let (paragraph, _) = unit_at(caret, start, TextUnit_Paragraph)?;
+        let revisions = crate::word_om::paragraph_revisions(window)?
+            .into_iter()
+            .map(|placed| okur_core::DocumentRevision {
+                start: paragraph + placed.before,
+                end: paragraph + placed.before + placed.length,
+                kind: placed.kind,
+                text: placed.text,
+                author: placed.author,
+                date: placed.date,
+            })
+            .collect();
+        let tracking = crate::word_om::track_revisions(window).unwrap_or(false);
+        Some((revisions, tracking))
     }
 
     /// The footnote or endnote references on the caret's paragraph of Word's `focused`
@@ -858,6 +909,9 @@ mod reader {
             const { std::cell::Cell::new(None) };
         /// The same for endnotes.
         static ENDNOTES_SEEN: std::cell::Cell<Option<(isize, std::time::Instant, bool)>> =
+            const { std::cell::Cell::new(None) };
+        /// The same for revisions.
+        static REVISIONS_SEEN: std::cell::Cell<Option<(isize, std::time::Instant, bool)>> =
             const { std::cell::Cell::new(None) };
     }
 

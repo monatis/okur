@@ -138,6 +138,30 @@ pub struct LineStructure {
     /// i." [obs, 1090/s7].
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub endnotes: Vec<DocumentFootnote>,
+    /// The revisions on the caret's paragraph (Word's tracked changes), placed in the text. A
+    /// deletion's text is in Word's text, which its view does not show and JAWS does not read:
+    /// "The library opens at eight in the morning." [obs, 1106/s1].
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub revisions: Vec<DocumentRevision>,
+    /// Word tracks the document's changes: JAWS then marks its revisions as it reads, "eight |
+    /// Inserted" [obs, 1108/s7], which it does not without [obs, 1106/s6].
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub tracking: bool,
+}
+
+/// A revision of Word's on the caret's paragraph: where it is in the text, as `(start, end)`
+/// (a deletion's text, once taken out of the text as Word's view shows it, where it was), what
+/// it changed, its text, author and date (as a comment's).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct DocumentRevision {
+    pub start: usize,
+    pub end: usize,
+    pub kind: RevisionKind,
+    pub text: String,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub author: String,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub date: String,
 }
 
 /// A footnote's or endnote's reference of Word's on the caret's paragraph: the place in the text
@@ -277,13 +301,15 @@ pub struct DocumentField {
 }
 
 /// Which of a document's marks JAWS lists in Word: its comments (Ctrl+Shift+Apostrophe), its
-/// footnotes (Insert+Shift+F), its endnotes (Insert+Shift+E) or its bookmarks (Insert+Alt+B).
+/// footnotes (Insert+Shift+F), its endnotes (Insert+Shift+E), its bookmarks (Insert+Alt+B) or
+/// its revisions, Word's tracked changes (Insert+Shift+R in JAWS's key map).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum NoteKind {
     Comment,
     Footnote,
     Endnote,
     Bookmark,
+    Revision,
 }
 
 impl NoteKind {
@@ -294,6 +320,7 @@ impl NoteKind {
             Self::Footnote => "document footnotes",
             Self::Endnote => "document endnotes",
             Self::Bookmark => "document bookmarks",
+            Self::Revision => "document revisions",
         }
     }
 }
@@ -302,7 +329,7 @@ impl NoteKind {
 /// JAWS's list of them: its text (a bookmark's, the text it marks); a comment's author and its
 /// date as the user's locale writes "ddd, MMM dd, yy" ("Fri, Jan 02, 26"); a note's number, and
 /// its mark as the document shows it ("i" for the first endnote), the number where it shows
-/// that; a bookmark's name.
+/// that; a bookmark's name; a revision's text, its change, author and date as a comment's.
 #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub struct DocumentNote {
     pub text: String,
@@ -316,6 +343,17 @@ pub struct DocumentNote {
     pub mark: String,
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub revision: Option<RevisionKind>,
+}
+
+/// What a revision of Word's changed: text inserted or deleted, or another change (formatting,
+/// a moved paragraph, a table's cells).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum RevisionKind {
+    Inserted,
+    Deleted,
+    Other,
 }
 
 impl DocumentNote {

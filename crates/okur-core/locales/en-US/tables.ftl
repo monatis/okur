@@ -121,6 +121,21 @@ word-has-comment = has comment
 # 1083/s4].
 word-footnote = footnote
 word-endnote = end note
+# What a revision of Word's changed, after its text in the Virtual Viewer: "eight inserted text
+# Lab Sun, Jan 04, 26" [obs, 1104/s7, s8].
+word-revision-inserted = inserted text
+word-revision-deleted = deleted text
+# Ctrl+Insert+R in Word: the revision at the caret, after its text, or none [obs, 1107/s10,
+# 1108/s3, s8, s10].
+word-revision-by = { $change } revised by { $author } on { $date }
+word-no-revision = No Revision
+# A word read in a revision while Word tracks changes [obs, 1107/s8, 1108/s7], and a line read
+# with the caret on one, after JAWS's mark [obs, 1107/s9, 1111/s10].
+word-revision-inserted-mark = Inserted
+word-revision-deleted-mark = Deleted
+word-revision-line = revision
+# Insert+Shift+R in Word, before its list of revisions [obs, 1107/s2; hyp: the same for one].
+word-revisions-processing = Please wait processing { $count } items
 # Alt+Shift+Apostrophe in Word: the comment at the caret, then its author [obs, 1081/s8], or
 # none [obs, 1081/s3].
 word-comment-by = by { $author }
@@ -133,14 +148,17 @@ word-comment-document-text = Document text:
 word-viewer-processing-comments = Please wait: Processing Comments
 word-viewer-processing-footnotes = Please wait: Processing Footnotes
 word-viewer-processing-endnotes = Please wait: Processing Endnotes
+word-viewer-processing-revisions = Please wait: Processing Revisions
 word-viewer-one-comment = There is only one Comment to display.
 word-viewer-one-footnote = There is only one Footnote to display.
 word-viewer-one-endnote = There is only one Endnote to display.
-# Several [obs, 1101/s2, 1102/s3]; endnotes' as the others' [hyp: no document with two endnotes
-# recorded yet].
+# One revision as one of the others [hyp: no document with one revision recorded yet].
+word-viewer-one-revision = There is only one Revision to display.
+# Several [obs, 1101/s2, 1102/s3, 1104/s5, 1105/s4].
 word-viewer-comments = There are { $count } Comments in this document.
 word-viewer-footnotes = There are { $count } Footnotes in this document.
 word-viewer-endnotes = There are { $count } Endnotes in this document.
+word-viewer-revisions = There are { $count } Revisions in this document.
 # The same with none: no viewer opens [obs, 1100/s2].
 word-viewer-none = There are no items to display.
 # OK on a footnote in JAWS's list of Word's footnotes: the footnote as the list shows it, before
@@ -154,6 +172,11 @@ word-no-comments = There are no comments in the document.
 word-no-footnotes = There are no footnotes in the document.
 word-no-endnotes = There are no end notes in the document.
 word-no-bookmarks = There are no bookmarks in the document.
+# Insert+Shift+R without revisions [hyp: 1107 records it].
+word-no-revisions = There are no revisions in the document.
+# Insert+Shift+R and Ctrl+Insert+R in Word while it does not track changes [obs, 1109/s1, s3].
+word-revisions-list-untracked = Track Changes is disabled. Press the Word command, CONTROL+SHIFT+E, to enable the feature.
+word-revisions-untracked = You must enable Track Changes in order to use this feature.
 # Alt+Shift+E in Word away from a footnote's or endnote's reference [obs, 1092/s1].
 word-no-note-at-cursor = No footnote or EndNote reference at cursor.
 # Say Window Title in Web Layout and Read Mode: JAWS's lower case "reading layout" [obs,

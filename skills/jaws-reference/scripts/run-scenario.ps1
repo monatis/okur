@@ -309,16 +309,18 @@ function Send-Chord([string]$chord) {
     $ok = $true
     foreach ($k in $keys) {
         if (-not [SrKeyInput]::Key([uint16]$k[0], $k[1], $false, [uint16]$k[2])) { $ok = $false }
+        # A Windows key chord whose other key JAWS takes (Windows+Semicolon in Word): Windows saw
+        # the Windows key pressed and released alone and opened the Start menu, whose search box
+        # took the next steps' keys (1102, 1103 in round-1101c). A key no layout uses (VK 0xE8)
+        # is sent while it is down, so that Windows sees the Windows key used, as AutoHotkey's
+        # menu mask key does. Sent at once, before the chord's other key: sent after it, it was
+        # refused at times, as JAWS's dialog had come forward, while the release was not, and the
+        # Start menu opened all the same (1104 in round-1104).
+        if ($k[0] -eq 0x5B -or $k[0] -eq 0x5C) {
+            [void][SrKeyInput]::Key([uint16]0xE8, $false, $false, [uint16]0)
+            [void][SrKeyInput]::Key([uint16]0xE8, $false, $true, [uint16]0)
+        }
         Start-Sleep -Milliseconds 30
-    }
-    # A Windows key chord whose other key JAWS takes (Windows+Semicolon in Word): Windows saw
-    # the Windows key pressed and released alone and opened the Start menu, whose search box took
-    # the next steps' keys (1102, 1103 in round-1101c). A key no layout uses (VK 0xE8) is sent
-    # before the release, so that Windows sees the Windows key used, as AutoHotkey's menu mask
-    # key does.
-    if (@($keys | Where-Object { $_[0] -eq 0x5B -or $_[0] -eq 0x5C }).Count -gt 0) {
-        [void][SrKeyInput]::Key([uint16]0xE8, $false, $false, [uint16]0)
-        [void][SrKeyInput]::Key([uint16]0xE8, $false, $true, [uint16]0)
     }
     [array]::Reverse($keys)
     foreach ($k in $keys) {

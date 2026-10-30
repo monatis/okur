@@ -18,7 +18,7 @@ use windows::Win32::System::Com::{
 use windows::Win32::System::Variant::{VariantTimeToSystemTime, VARIANT, VT_DATE, VT_DISPATCH};
 use windows::Win32::UI::Accessibility::AccessibleObjectFromWindow;
 
-use okur_core::NoteKind;
+use okur_core::{NoteKind, RevisionKind};
 
 /// `OBJID_NATIVEOM`: the window's application object model.
 const OBJID_NATIVEOM: u32 = 0xFFFF_FFF0;
@@ -315,11 +315,70 @@ pub fn paragraph_comments(document: HWND) -> Option<Vec<PlacedComment>> {
     )
 }
 
-/// A comment, footnote, endnote or bookmark of Word's document, as JAWS's lists of them show it:
-/// its text (a bookmark's, the text it marks); a comment's author and its date, as the user's
-/// locale writes "ddd, MMM dd, yy" ("Fri, Jan 02, 26" [obs, 1082/s1]); a note's number
-/// (`Index`) and its mark as the document shows it ("i" for the first endnote [obs, 1090/s6]);
-/// a bookmark's name.
+/// A revision on the selection's paragraph: how many of the paragraph's characters come before
+/// its text, that text's length, the text (a deletion's too, which Word's text holds), what it
+/// changed, its author and date.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PlacedRevision {
+    pub before: usize,
+    pub length: usize,
+    pub text: String,
+    pub kind: RevisionKind,
+    pub author: String,
+    pub date: String,
+}
+
+/// The revisions on the selection's paragraph in Word's document window `document`, in order,
+/// each placed in the paragraph's text as its comments are; `None` where Word's object model
+/// does not answer.
+pub fn paragraph_revisions(document: HWND) -> Option<Vec<PlacedRevision>> {
+    let window = word_window(document)?;
+    let whole = object(&property(&window, "Document")?)?;
+    let selection = object(&property(&window, "Selection")?)?;
+    let paragraph = item(&object(&property(&selection, "Paragraphs")?)?, 1)?;
+    let range = object(&property(&paragraph, "Range")?)?;
+    let start = number(&range, "Start")?;
+    let revisions = notes_of(&range, NoteKind::Revision)?;
+    let count = number(&revisions, "Count").unwrap_or(0);
+    Some(
+        (1..=count.clamp(0, MAX_FIELDS))
+            .filter_map(|index| item(&revisions, index))
+            .filter_map(|revision| {
+                let scope = object(&property(&revision, "Range")?)?;
+                let (from, to) = (number(&scope, "Start")?, number(&scope, "End")?);
+                if to < from {
+                    return None;
+                }
+                let before = object(&invoke(
+                    &whole,
+                    "Range",
+                    DISPATCH_METHOD,
+                    &mut [VARIANT::from(start), VARIANT::from(from.max(start))],
+                )?)?;
+                let said = text(&scope, "Text");
+                Some(PlacedRevision {
+                    before: text(&before, "Text").chars().count(),
+                    length: said.chars().count(),
+                    text: said.trim().to_owned(),
+                    kind: number(&revision, "Type").map_or(RevisionKind::Other, revision_kind),
+                    author: text(&revision, "Author").trim().to_owned(),
+                    date: property(&revision, "Date")
+                        .as_ref()
+                        .and_then(date_of)
+                        .and_then(note_date)
+                        .unwrap_or_default(),
+                })
+            })
+            .collect(),
+    )
+}
+
+/// A comment, footnote, endnote, bookmark or revision of Word's document, as JAWS's lists of
+/// them show it: its text (a bookmark's, the text it marks; a revision's, the text it inserted
+/// or deleted); a comment's or revision's author and its date, as the user's locale writes
+/// "ddd, MMM dd, yy" ("Fri, Jan 02, 26" [obs, 1082/s1]); a note's number (`Index`) and its
+/// mark as the document shows it ("i" for the first endnote [obs, 1090/s6]); a bookmark's
+/// name; what a revision changed.
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct WordNote {
     pub text: String,
@@ -328,9 +387,20 @@ pub struct WordNote {
     pub number: Option<u32>,
     pub mark: String,
     pub name: String,
+    pub revision: Option<RevisionKind>,
 }
 
-/// The collection of the document's (or a range's) comments, footnotes or endnotes.
+/// What a revision changed, from its `WdRevisionType`: 1 text inserted, 2 deleted.
+fn revision_kind(kind: i32) -> RevisionKind {
+    match kind {
+        1 => RevisionKind::Inserted,
+        2 => RevisionKind::Deleted,
+        _ => RevisionKind::Other,
+    }
+}
+
+/// The collection of the document's (or a range's) comments, footnotes, endnotes, bookmarks or
+/// revisions.
 fn notes_of(whole: &IDispatch, kind: NoteKind) -> Option<IDispatch> {
     object(&property(
         whole,
@@ -339,6 +409,7 @@ fn notes_of(whole: &IDispatch, kind: NoteKind) -> Option<IDispatch> {
             NoteKind::Footnote => "Footnotes",
             NoteKind::Endnote => "Endnotes",
             NoteKind::Bookmark => "Bookmarks",
+            NoteKind::Revision => "Revisions",
         },
     )?)
 }
@@ -378,8 +449,9 @@ fn numbering(whole: &IDispatch, kind: NoteKind) -> (i32, u32) {
     (style.unwrap_or(0), first.unwrap_or(1))
 }
 
-/// The comments, footnotes or endnotes of the document in Word's document window `document`,
-/// in the document's order; `None` where Word's object model does not answer.
+/// The comments, footnotes, endnotes, bookmarks or revisions of the document in Word's document
+/// window `document`, in the document's order; `None` where Word's object model does not
+/// answer.
 pub fn document_notes(document: HWND, kind: NoteKind) -> Option<Vec<WordNote>> {
     let whole = object(&property(&word_window(document)?, "Document")?)?;
     if kind == NoteKind::Bookmark {
@@ -401,13 +473,16 @@ pub fn document_notes(document: HWND, kind: NoteKind) -> Option<Vec<WordNote>> {
                     text: said.trim().to_owned(),
                     ..WordNote::default()
                 };
-                if kind == NoteKind::Comment {
+                if matches!(kind, NoteKind::Comment | NoteKind::Revision) {
                     found.author = text(&note, "Author").trim().to_owned();
                     found.date = property(&note, "Date")
                         .as_ref()
                         .and_then(date_of)
                         .and_then(note_date)
                         .unwrap_or_default();
+                    if kind == NoteKind::Revision {
+                        found.revision = number(&note, "Type").map(revision_kind);
+                    }
                 } else {
                     found.number = number(&note, "Index").and_then(|n| u32::try_from(n).ok());
                     found.mark = found
@@ -424,8 +499,8 @@ pub fn document_notes(document: HWND, kind: NoteKind) -> Option<Vec<WordNote>> {
 /// Puts the caret on the mark of the document's comment, footnote, endnote or bookmark `index`
 /// (from 0, as [`document_notes`] lists them): where the text a comment is on ends, before its
 /// mark; on a note's reference, which Right then moves over; at a bookmark's start [obs,
-/// 1087/s6-s8, 1088/s6-s8, 1090/s6-s8, 1091/s9-s11]. False where Word's object model does not
-/// answer.
+/// 1087/s6-s8, 1088/s6-s8, 1090/s6-s8, 1091/s9-s11]; at a revision's start. False where Word's
+/// object model does not answer.
 pub fn select_note(document: HWND, kind: NoteKind, index: usize) -> bool {
     let select = || -> Option<()> {
         let window = word_window(document)?;
@@ -435,7 +510,12 @@ pub fn select_note(document: HWND, kind: NoteKind, index: usize) -> bool {
         } else {
             let notes = notes_of(&whole, kind)?;
             let note = item(&notes, i32::try_from(index).ok()?.checked_add(1)?)?;
-            number(&object(&property(&note, "Reference")?)?, "Start")?
+            let mark = if kind == NoteKind::Revision {
+                "Range"
+            } else {
+                "Reference"
+            };
+            number(&object(&property(&note, mark)?)?, "Start")?
         };
         let selection = object(&property(&window, "Selection")?)?;
         invoke(

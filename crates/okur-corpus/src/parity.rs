@@ -1269,6 +1269,9 @@ struct ScreenSnapshot {
     endnotes: Vec<okur_core::DocumentNote>,
     #[serde(default)]
     bookmarks: Vec<okur_core::DocumentNote>,
+    /// Its revisions, Word's tracked changes (none before 1104's second recording).
+    #[serde(default)]
+    revisions: Vec<okur_core::DocumentNote>,
     /// Whether the document tracked its changes after the step, from Word's object model, saved
     /// beside the headings (none before 1068), for Ctrl+Shift+E.
     #[serde(default)]
@@ -1364,8 +1367,8 @@ struct ScreenReads {
     links: usize,
     spacings: usize,
     fields: usize,
-    /// Word's comments, footnotes, endnotes and bookmarks asked for and answered.
-    notes: [usize; 4],
+    /// Word's comments, footnotes, endnotes, bookmarks and revisions asked for and answered.
+    notes: [usize; 5],
     /// Word's keys' states asked for and answered, by key.
     word_keys: [usize; 5],
 }
@@ -1522,6 +1525,7 @@ impl ScreenReads {
             NoteKind::Footnote,
             NoteKind::Endnote,
             NoteKind::Bookmark,
+            NoteKind::Revision,
         ]) {
             let asked = count(kind.read_name());
             while *answered < asked {
@@ -1534,6 +1538,7 @@ impl ScreenReads {
                             NoteKind::Footnote => s.footnotes.clone(),
                             NoteKind::Endnote => s.endnotes.clone(),
                             NoteKind::Bookmark => s.bookmarks.clone(),
+                            NoteKind::Revision => s.revisions.clone(),
                         })
                         .unwrap_or_default(),
                 ));

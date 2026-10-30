@@ -719,10 +719,18 @@ pub fn speech_in(
         }
         // A word move that stops at a line's end reads the line break, as a character move onto
         // it does [obs, 320/s7, s11].
+        // A word in a revision Word tracks, what it changed after it: "eight | Inserted"
+        // [obs, 1108/s7].
         EditKey::Word => format!(
-            "{}{}",
+            "{}{}{}",
             misspelled_word_mark(after).unwrap_or_default(),
-            or_line_break(word_at(after, plain_edit))
+            or_line_break(word_at(after, plain_edit)),
+            word::revision_mark(after)
+                .map(|mark| format!(
+                    "
+{mark}"
+                ))
+                .unwrap_or_default()
         ),
         EditKey::Line => format!(
             "{}{}",

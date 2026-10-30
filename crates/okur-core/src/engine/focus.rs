@@ -214,6 +214,14 @@ impl ScreenReaderEngine {
         // JAWS, with it off, said "alt+R" [obs, 323/s1].
         self.focus_access_key = focus.access_key.clone();
         let mut keyed = self.keys_as_output(focus);
+        // Word's text as its view shows it, without its tracked deletions.
+        if let Some(shown) = keyed
+            .text
+            .as_ref()
+            .and_then(crate::apps::windows::word::as_shown)
+        {
+            keyed.text = Some(shown);
+        }
         self.as_find_dialog_focus(&mut keyed);
         let focus = &keyed;
         self.last_selected = None;

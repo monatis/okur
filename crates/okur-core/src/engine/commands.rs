@@ -1052,6 +1052,13 @@ impl ScreenReaderEngine {
                 return;
             }
         }
+        // Word's Insert+Shift+R and Ctrl+Insert+R, its revisions: before the regions list,
+        // whose key Ctrl+Insert+R is elsewhere.
+        if let Some(key) = crate::apps::windows::word::RevisionKey::of(event) {
+            if self.ask_revisions(key) {
+                return;
+            }
+        }
         let layout_command = crate::command::layout_command_for(&self.settings.keyboard, event);
         let say_line = layout_command == Some(Command::SayLine)
             || crate::editing::EditKey::of(event).is_some();

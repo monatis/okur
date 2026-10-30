@@ -343,6 +343,9 @@ pub struct ScreenReaderEngine {
     document_notes_asked: Option<crate::event::NoteKind>,
     /// The focused document's notes were asked for the Virtual Viewer, and are awaited.
     notes_viewer_asked: Option<crate::event::NoteKind>,
+    /// A key for Word's revisions asked whether the document tracks its changes, which it
+    /// needs, and awaits the answer.
+    revisions_asked: Option<crate::apps::windows::word::RevisionKey>,
     /// Say All waits for Word's document's paragraphs.
     say_all_paragraphs_asked: bool,
     /// Say Window Title in Word asked for the document's view, said with this title when it
@@ -636,6 +639,7 @@ impl ScreenReaderEngine {
             document_fields_asked: false,
             document_notes_asked: None,
             notes_viewer_asked: None,
+            revisions_asked: None,
             say_all_paragraphs_asked: false,
             document_view_title: None,
             document_view_by_key: None,
@@ -1620,7 +1624,10 @@ impl ScreenReaderEngine {
             }
             AccessibilityEvent::Menu(menu) => self.handle_menu_event(menu.clone()),
             AccessibilityEvent::Change { kind, control } => self.handle_change(*kind, control),
-            AccessibilityEvent::TextContext(context) => self.handle_text_context(context),
+            AccessibilityEvent::TextContext(context) => {
+                let shown = crate::apps::windows::word::as_shown(context);
+                self.handle_text_context(shown.as_ref().unwrap_or(context))
+            }
             AccessibilityEvent::ConsoleText(text) => self.console_text(text),
             AccessibilityEvent::Selected(item) => self.handle_selected(item),
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
@@ -1635,6 +1642,9 @@ impl ScreenReaderEngine {
             AccessibilityEvent::DocumentHeadings(headings) => self.document_headings(headings),
             AccessibilityEvent::DocumentLinks(links) => self.document_links(links),
             AccessibilityEvent::LineSpacing(spacing) => self.word_font(*spacing),
+            AccessibilityEvent::WordKeyState(state) if self.revisions_asked.is_some() => {
+                self.revisions_tracked(*state)
+            }
             AccessibilityEvent::WordKeyState(state) => {
                 let said = crate::apps::windows::word::word_key_said((*state)?)?;
                 self.speech.speak(&said, true);
@@ -3051,6 +3061,49 @@ impl ScreenReaderEngine {
         true
     }
 
+    /// Insert+Shift+R or Ctrl+Insert+R in Word's document: whether the document tracks its
+    /// changes is asked first, which both need. False outside such a document.
+    pub(crate) fn ask_revisions(&mut self, key: crate::apps::windows::word::RevisionKey) -> bool {
+        if !self.in_word_document()
+            || !self
+                .actions
+                .as_ref()
+                .is_some_and(|actions| actions.read_word_key(crate::event::WordKey::TrackChanges))
+        {
+            return false;
+        }
+        tracing::debug!(?key, "revisions: whether the document tracks changes asked");
+        self.revisions_asked = Some(key);
+        true
+    }
+
+    /// Whether the document tracks its changes came, for a key for its revisions: without,
+    /// what JAWS says then [obs, 1109/s1, s3]; with, the list of revisions, or the revision at
+    /// the caret [obs, 1108/s3, s8].
+    fn revisions_tracked(&mut self, state: Option<crate::event::WordKeyState>) -> Option<String> {
+        let key = self.revisions_asked.take()?;
+        match state? {
+            crate::event::WordKeyState::TrackChanges(false) => {
+                let said = key.untracked();
+                self.speech.speak(&said, true);
+                Some(said)
+            }
+            crate::event::WordKeyState::TrackChanges(true) => match key {
+                crate::apps::windows::word::RevisionKey::List => {
+                    self.open_document_notes(crate::event::NoteKind::Revision);
+                    None
+                }
+                crate::apps::windows::word::RevisionKey::Announce => {
+                    let said =
+                        crate::apps::windows::word::announce_revision(self.last_text.as_ref()?);
+                    self.speech.speak(&said, true);
+                    Some(said)
+                }
+            },
+            _ => None,
+        }
+    }
+
     /// Whether the keys go to a document whose structure Word's object model reads.
     fn in_word_document(&self) -> bool {
         self.app_mode != AppMode::VirtualBuffer
@@ -3110,12 +3163,18 @@ impl ScreenReaderEngine {
                 crate::event::NoteKind::Footnote => msg::word_no_footnotes(),
                 crate::event::NoteKind::Endnote => msg::word_no_endnotes(),
                 crate::event::NoteKind::Bookmark => msg::word_no_bookmarks(),
+                crate::event::NoteKind::Revision => msg::word_no_revisions(),
             }
             .to_string();
             self.speech.speak(&none, true);
             return Some(none);
         }
         self.listed_notes = notes.to_vec();
+        // Revisions are counted first: "Please wait processing 2 items" [obs, 1107/s2].
+        if kind == crate::event::NoteKind::Revision {
+            let processing = msg::word_revisions_processing(notes.len()).render();
+            self.speech.speak(&processing, true);
+        }
         let dialog =
             crate::ui::lists::ListDialog::document_notes(self.dialog_count + 1, kind, notes);
         let mode = self.app_mode;
@@ -3237,7 +3296,9 @@ impl ScreenReaderEngine {
                                 .map(|n| format!("{} {}", n.shown_mark(), n.text.trim()));
                             let shown = shown.as_deref().unwrap_or(entry.text.as_str());
                             self.document_list_says = Some(match note {
-                                crate::event::NoteKind::Comment => String::new(),
+                                // A revision as a comment [hyp: 1107 records it].
+                                crate::event::NoteKind::Comment
+                                | crate::event::NoteKind::Revision => String::new(),
                                 crate::event::NoteKind::Footnote => {
                                     msg::word_footnote_reference(shown).render()
                                 }

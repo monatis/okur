@@ -45,6 +45,135 @@ impl AppModule for WordDocument {
     }
 }
 
+/// Word's text as its view shows it, without the text deleted while it tracked its changes,
+/// which JAWS does not read: "The library opens at eight in the morning." where Word's text
+/// holds "eightnine", Ctrl+Right "eight" [obs, 1106/s1, s6]. Every place in the context is
+/// moved with it; one inside a deletion goes to where it was, the deletion's own too. `None`
+/// without deletions still in the text.
+pub(crate) fn as_shown(context: &TextContext) -> Option<TextContext> {
+    let structure = context.structure.as_ref()?;
+    let mut deleted: Vec<(usize, usize)> = structure
+        .revisions
+        .iter()
+        .filter(|r| r.kind == crate::event::RevisionKind::Deleted && r.start < r.end)
+        .map(|r| (r.start, r.end))
+        .collect();
+    if deleted.is_empty() {
+        return None;
+    }
+    deleted.sort_unstable();
+    // How many deleted characters come before `at`, the part of a deletion holding it too.
+    let place = |at: usize| -> usize {
+        let gone: usize = deleted
+            .iter()
+            .map(|&(start, end)| end.min(at).saturating_sub(start))
+            .sum();
+        at.saturating_sub(gone)
+    };
+    let span = |(start, end): (usize, usize)| (place(start), place(end));
+    let mut shown = context.clone();
+    shown.text = context
+        .text
+        .chars()
+        .enumerate()
+        .filter(|(at, _)| {
+            !deleted
+                .iter()
+                .any(|&(start, end)| (start..end).contains(at))
+        })
+        .map(|(_, c)| c)
+        .collect();
+    shown.caret = place(context.caret);
+    shown.selection = context.selection.map(span);
+    shown.word = context.word.map(span);
+    shown.misspelled = context.misspelled.iter().copied().map(span).collect();
+    if let Some(structure) = shown.structure.as_mut() {
+        structure.line = span(structure.line);
+        structure.links = structure.links.iter().copied().map(span).collect();
+        for field in &mut structure.form_fields {
+            (field.start, field.end) = span((field.start, field.end));
+        }
+        for comment in &mut structure.comments {
+            (comment.start, comment.end) = span((comment.start, comment.end));
+        }
+        for note in structure
+            .footnotes
+            .iter_mut()
+            .chain(&mut structure.endnotes)
+        {
+            note.at = place(note.at);
+        }
+        for revision in &mut structure.revisions {
+            (revision.start, revision.end) = span((revision.start, revision.end));
+        }
+    }
+    Some(shown)
+}
+
+/// The revision at Word's caret: one whose text holds it, or a deletion where it stands.
+fn revision_at(context: &TextContext) -> Option<&crate::event::DocumentRevision> {
+    let revisions = &context.structure.as_ref()?.revisions;
+    let caret = context.caret;
+    revisions
+        .iter()
+        .find(|r| r.start <= caret && caret < r.end)
+        .or_else(|| {
+            revisions
+                .iter()
+                .find(|r| r.start == caret && r.end == caret)
+        })
+}
+
+/// The revision at the caret while Word tracks changes, which JAWS reads with it.
+fn tracked_revision_at(context: &TextContext) -> Option<&crate::event::DocumentRevision> {
+    context
+        .structure
+        .as_ref()
+        .filter(|s| s.tracking)
+        .and_then(|_| revision_at(context))
+}
+
+/// A word read onto a revision while Word tracks changes, what it changed after it: "eight |
+/// Inserted" [obs, 1108/s7, 1111/s8]; none without tracking [obs, 1106/s6].
+pub(crate) fn revision_mark(context: &TextContext) -> Option<String> {
+    let revision = tracked_revision_at(context)?;
+    Some(
+        match revision.kind {
+            crate::event::RevisionKind::Inserted => msg::word_revision_inserted_mark(),
+            crate::event::RevisionKind::Deleted => msg::word_revision_deleted_mark(),
+            crate::event::RevisionKind::Other => return None,
+        }
+        .to_string(),
+    )
+}
+
+/// Ctrl+Insert+R, Announce Revision: the revision at the caret's text, then what it changed,
+/// who and when, "eight | inserted text revised by Lab on Sun, Jan 04, 26"; elsewhere "No
+/// Revision" [obs, 1107/s10, 1108/s3, s8, s10].
+pub(crate) fn announce_revision(context: &TextContext) -> String {
+    let Some(revision) = revision_at(context) else {
+        return msg::word_no_revision().to_string();
+    };
+    let change = match revision.kind {
+        crate::event::RevisionKind::Inserted => msg::word_revision_inserted().to_string(),
+        crate::event::RevisionKind::Deleted => msg::word_revision_deleted().to_string(),
+        // [hyp: no other change recorded yet]
+        crate::event::RevisionKind::Other => String::new(),
+    };
+    let said = msg::word_revision_by(
+        change.as_str(),
+        revision.author.trim(),
+        revision.date.trim(),
+    )
+    .render();
+    format!(
+        "{}
+{}",
+        revision.text.trim(),
+        said.trim()
+    )
+}
+
 /// `line` spoken as JAWS speaks a line of Word's: a heading with its level before it,
 /// " heading level 1 Library Hours" [obs, 518/s1, s9]; a line with form fields says them in
 /// it ([`line_with_fields`]).
@@ -52,7 +181,14 @@ pub(crate) fn spoken_line(context: &TextContext, line: String) -> String {
     let line = line_with_fields(context)
         .map(|l| l.trim().to_owned())
         .unwrap_or(line);
-    with_heading(context.structure.as_ref().and_then(|s| s.heading), line)
+    let line = with_heading(context.structure.as_ref().and_then(|s| s.heading), line);
+    // With the caret on a revision while Word tracks changes, JAWS's mark first: "revision The
+    // library opens at eight in the morning." [obs, 1107/s9, 1111/s10], not with it elsewhere
+    // on the line [obs, 1111/s4].
+    match tracked_revision_at(context) {
+        Some(_) => format!(" {}  {line}", msg::word_revision_line()),
+        None => line,
+    }
 }
 
 /// The form field of Word's at the caret: a text field holding it (at its end too), a check box
@@ -333,6 +469,7 @@ pub(crate) fn notes_processing(kind: crate::event::NoteKind) -> Option<String> {
             NoteKind::Comment => msg::word_viewer_processing_comments(),
             NoteKind::Footnote => msg::word_viewer_processing_footnotes(),
             NoteKind::Endnote => msg::word_viewer_processing_endnotes(),
+            NoteKind::Revision => msg::word_viewer_processing_revisions(),
             NoteKind::Bookmark => return None,
         }
         .to_string(),
@@ -341,11 +478,11 @@ pub(crate) fn notes_processing(kind: crate::event::NoteKind) -> Option<String> {
 
 /// The Virtual Viewer's lines for a document's notes: their count, "There is only one Comment
 /// to display.", "There are 2 Comments in this document.", then each after a link of its
-/// number, a comment on the link's line ("1  Check the summer hours. Lab Fri, Jan 02, 26"), the
-/// comments one under another; a footnote on a line of its own with its number ("1 Holidays
-/// excepted."), each apart from the next; and how to close it, after a blank line [obs,
-/// 1096/s3-s6, 1097/s4-s6, 1099/s5-s7, 1101/s2-s7, 1102/s3-s9]. `None` for a bookmark, or with
-/// no notes.
+/// number, a comment or revision on the link's line ("1  Check the summer hours. Lab Fri, Jan
+/// 02, 26", "1  eight inserted text Lab Sun, Jan 04, 26"), one under another; a footnote on a
+/// line of its own with its number ("1 Holidays excepted."), each apart from the next; and how
+/// to close it, after a blank line [obs, 1096/s3-s6, 1097/s4-s6, 1099/s5-s7, 1101/s2-s7,
+/// 1102/s3-s9, 1104/s5-s11, 1105/s4-s10]. `None` for a bookmark, or with no notes.
 pub(crate) fn notes_viewer_lines(
     kind: crate::event::NoteKind,
     notes: &[crate::event::DocumentNote],
@@ -356,16 +493,20 @@ pub(crate) fn notes_viewer_lines(
         (NoteKind::Comment, 1) => msg::word_viewer_one_comment().to_string(),
         (NoteKind::Footnote, 1) => msg::word_viewer_one_footnote().to_string(),
         (NoteKind::Endnote, 1) => msg::word_viewer_one_endnote().to_string(),
+        (NoteKind::Revision, 1) => msg::word_viewer_one_revision().to_string(),
         (NoteKind::Comment, count) => msg::word_viewer_comments(count).render(),
         (NoteKind::Footnote, count) => msg::word_viewer_footnotes(count).render(),
         (NoteKind::Endnote, count) => msg::word_viewer_endnotes(count).render(),
+        (NoteKind::Revision, count) => msg::word_viewer_revisions(count).render(),
     };
     let link = |number: usize| format!("\u{1d} {} \u{1e} {number}", msg::role_link());
     let mut lines = vec![count, String::new()];
     for (index, note) in notes.iter().enumerate() {
         let entry = crate::ui::lists::Entry::document_note(index, kind, note);
         match kind {
-            NoteKind::Comment => lines.push(format!("{}  {}", link(index + 1), entry.text)),
+            NoteKind::Comment | NoteKind::Revision => {
+                lines.push(format!("{}  {}", link(index + 1), entry.text));
+            }
             _ => {
                 lines.push(link(index + 1));
                 // By its number, not its mark: an endnote is "1 Renewals are free." though the
@@ -379,7 +520,7 @@ pub(crate) fn notes_viewer_lines(
             }
         }
     }
-    if kind == NoteKind::Comment {
+    if matches!(kind, NoteKind::Comment | NoteKind::Revision) {
         lines.push(String::new());
     }
     lines.push(msg::viewer_close_hint().to_string());
@@ -418,6 +559,41 @@ pub(crate) fn reference_at_caret(context: &TextContext) -> Option<String> {
         .chain(structure.endnotes.iter().map(|n| (n, msg::word_endnote())))
         .find(|(n, _)| n.at_caret)
         .map(|(n, kind)| format!(" \u{1d}{kind} \u{1e} {}", n.shown()))
+}
+
+/// JAWS's keys for Word's revisions, from its key map for Word: Insert+Shift+R lists them
+/// (`listRevisions`), Ctrl+Insert+R says the one at the caret (`AnnounceRevision`), the
+/// regions list's key elsewhere.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum RevisionKey {
+    List,
+    Announce,
+}
+
+impl RevisionKey {
+    /// Insert+Shift+R or Ctrl+Insert+R, without other modifiers.
+    pub(crate) fn of(event: &crate::input::KeyEvent) -> Option<Self> {
+        let m = &event.modifiers;
+        if event.key != crate::input::Key::Alpha('R') || !m.insert || m.alt || m.win {
+            return None;
+        }
+        match (m.ctrl, m.shift) {
+            (false, true) => Some(Self::List),
+            (true, false) => Some(Self::Announce),
+            _ => None,
+        }
+    }
+
+    /// What it says while Word does not track changes, which both need: "Track Changes is
+    /// disabled. Press the Word command, CONTROL+SHIFT+E, to enable the feature.", "You must
+    /// enable Track Changes in order to use this feature." [obs, 1109/s1, s3].
+    pub(crate) fn untracked(self) -> String {
+        match self {
+            Self::List => msg::word_revisions_list_untracked(),
+            Self::Announce => msg::word_revisions_untracked(),
+        }
+        .to_string()
+    }
 }
 
 /// Tab, Shift+Tab or Space read as moving among a document's form fields or changing one: Tab
@@ -508,6 +684,8 @@ pub(crate) fn say_all_pieces(
             comments: Vec::new(),
             footnotes: Vec::new(),
             endnotes: Vec::new(),
+            revisions: Vec::new(),
+            tracking: false,
         };
         let said = match was.as_ref() {
             None => line,
@@ -1049,6 +1227,8 @@ mod tests {
                 comments: Vec::new(),
                 footnotes: Vec::new(),
                 endnotes: Vec::new(),
+                revisions: Vec::new(),
+                tracking: false,
             }),
         }
     }
@@ -1228,6 +1408,111 @@ mod tests {
                 String::new(),
                 "Press ESCAPE to close this message.".to_owned(),
             ])
+        );
+    }
+
+    fn panic_free_fail(message: &str) {
+        assert!(message.is_empty(), "{message}");
+    }
+
+    /// A line's tracked deletion is not read, and the places after it move back over it: "The
+    /// library opens at eight in the morning.", the word at "eight" "eight" [obs, 1106/s1, s6].
+    #[test]
+    fn tracked_deletions_are_not_read() {
+        let text = "Library Changes\rThe library opens at eightnine in the morning.\r";
+        let line_start = 16;
+        // "eight" at 37..42, "nine" deleted at 42..46.
+        let context = TextContext {
+            text: text.into(),
+            caret: 37,
+            selection: None,
+            font: None,
+            word: Some((37, 46)),
+            misspelled: Vec::new(),
+            structure: Some(LineStructure {
+                line: (line_start, 63),
+                comments: vec![crate::event::DocumentComment {
+                    start: 50,
+                    end: 53,
+                    text: "Early?".into(),
+                    author: "Lab".into(),
+                }],
+                revisions: vec![crate::event::DocumentRevision {
+                    start: 42,
+                    end: 46,
+                    kind: crate::event::RevisionKind::Deleted,
+                    text: "nine".into(),
+                    author: "Lab".into(),
+                    date: "Sun, Jan 04, 26".into(),
+                }],
+                ..Default::default()
+            }),
+        };
+        let Some(shown) = as_shown(&context) else {
+            panic_free_fail("no shown text");
+            return;
+        };
+        assert_eq!(
+            shown.text,
+            "Library Changes\rThe library opens at eight in the morning.\r"
+        );
+        assert_eq!(shown.caret, 37);
+        assert_eq!(shown.word, Some((37, 42)));
+        let structure = shown.structure.clone().unwrap_or_default();
+        assert_eq!(structure.line, (line_start, 59));
+        assert_eq!(
+            structure.comments.first().map(|c| (c.start, c.end)),
+            Some((46, 49))
+        );
+        // The deletion stays, where it was.
+        assert_eq!(
+            structure.revisions.first().map(|r| (r.start, r.end)),
+            Some((42, 42))
+        );
+        assert!(as_shown(&shown).is_none());
+        assert_eq!(
+            crate::editing::line_at(&shown).trim(),
+            "The library opens at eight in the morning."
+        );
+        // Without deletions, nothing to narrow.
+        let mut plain = context.clone();
+        if let Some(s) = plain.structure.as_mut() {
+            s.revisions.clear();
+        }
+        assert!(as_shown(&plain).is_none());
+    }
+
+    /// Revisions as comments, each with what it changed: "1  eight inserted text Lab Sun, Jan
+    /// 04, 26" [obs, 1104/s5-s11].
+    #[test]
+    fn revisions_in_the_viewer() {
+        use crate::event::{DocumentNote, NoteKind, RevisionKind};
+        let revision = |text: &str, kind: RevisionKind| DocumentNote {
+            text: text.into(),
+            author: "Lab".into(),
+            date: "Sun, Jan 04, 26".into(),
+            revision: Some(kind),
+            ..Default::default()
+        };
+        let link = |n: u32| format!("\u{1d} Link \u{1e} {n}");
+        let revisions = [
+            revision("eight", RevisionKind::Inserted),
+            revision("nine", RevisionKind::Deleted),
+        ];
+        assert_eq!(
+            notes_viewer_lines(NoteKind::Revision, &revisions),
+            Some(vec![
+                "There are 2 Revisions in this document.".to_owned(),
+                String::new(),
+                format!("{}  eight inserted text Lab Sun, Jan 04, 26", link(1)),
+                format!("{}  nine deleted text Lab Sun, Jan 04, 26", link(2)),
+                String::new(),
+                "Press ESCAPE to close this message.".to_owned(),
+            ])
+        );
+        assert_eq!(
+            notes_processing(NoteKind::Revision).as_deref(),
+            Some("Please wait: Processing Revisions")
         );
     }
 
