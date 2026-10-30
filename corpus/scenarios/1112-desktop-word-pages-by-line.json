@@ -1,0 +1,30 @@
+{
+  "id": "1112-desktop-word-pages-by-line",
+  "name": "Word: Down line by line across a page break and a section break onto the third page, Insert+Delete (line and column), then Up back across the section break",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-pages.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-pages.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "Down"},
+    {"id": "s3", "type": "key", "command": "Down"},
+    {"id": "s4", "type": "key", "command": "Down"},
+    {"id": "s5", "type": "key", "command": "Down"},
+    {"id": "s6", "type": "key", "command": "Down"},
+    {"id": "s7", "type": "key", "command": "Insert+Delete"},
+    {"id": "s8", "type": "key", "command": "Up"},
+    {"id": "s9", "type": "key", "command": "Up"}
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "1113-desktop-word-page-keys",
+  "name": "Word: Ctrl+PageDown twice and Ctrl+PageUp twice (Word's next and previous page), PageDown, Insert+Delete, Ctrl+End, Insert+Delete, Insert+PageDown (the window's bottom line)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-pages.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-pages.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Ctrl+PageDown"},
+    {"id": "s2", "type": "key", "command": "Ctrl+PageDown"},
+    {"id": "s3", "type": "key", "command": "Ctrl+PageUp"},
+    {"id": "s4", "type": "key", "command": "Ctrl+PageUp"},
+    {"id": "s5", "type": "key", "command": "PageDown"},
+    {"id": "s6", "type": "key", "command": "Insert+Delete"},
+    {"id": "s7", "type": "key", "command": "Ctrl+End"},
+    {"id": "s8", "type": "key", "command": "Insert+Delete"},
+    {"id": "s9", "type": "key", "command": "Insert+PageDown"}
+  ]
+}
