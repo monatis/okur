@@ -1756,6 +1756,90 @@
       }
     },
     {
+      "scenario_id": "1094-desktop-word-notes-viewer",
+      "fixture": "desktop-word-notes.ps1",
+      "evidence": {
+        "sha256": "5db372b404e2af8440a06890877d5572f71cbc1c892d66f2c7def3d5aa17f38a",
+        "capture_script_sha256": "79ecbfb0b0fb8bb55ce8583bc3db7a0bbcfaeee13235674c26211b44dca05e78",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1095-desktop-word-comment-in-viewer",
+      "fixture": "desktop-word-notes.ps1",
+      "evidence": {
+        "sha256": "5b596e9ac8cea60b2ab27b48c57101ea590e8ae5ed3588cb4c63ee166531cabb",
+        "capture_script_sha256": "79ecbfb0b0fb8bb55ce8583bc3db7a0bbcfaeee13235674c26211b44dca05e78",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1096-desktop-word-comments-in-viewer",
+      "fixture": "desktop-word-notes.ps1",
+      "evidence": {
+        "sha256": "813a68c4b959b4fa961efc55ccd2febc0ca5a8f28301634d94458461cb58498e",
+        "capture_script_sha256": "79ecbfb0b0fb8bb55ce8583bc3db7a0bbcfaeee13235674c26211b44dca05e78",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1097-desktop-word-footnotes-in-viewer",
+      "fixture": "desktop-word-notes.ps1",
+      "evidence": {
+        "sha256": "61e9518ebb360b739a8ac4d3b1850f77072e9d474b3263e5d5a4657824e7c805",
+        "capture_script_sha256": "79ecbfb0b0fb8bb55ce8583bc3db7a0bbcfaeee13235674c26211b44dca05e78",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1098-desktop-word-viewer-items",
+      "fixture": "desktop-word-notes.ps1",
+      "evidence": {
+        "sha256": "ca642e566a03185de9e4541ccebc360ee0ba57eb0c758eb70408d8a9ed2d1fcc",
+        "capture_script_sha256": "79ecbfb0b0fb8bb55ce8583bc3db7a0bbcfaeee13235674c26211b44dca05e78",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1099-desktop-word-endnotes-in-viewer",
+      "fixture": "desktop-word-marks.ps1",
+      "evidence": {
+        "sha256": "7f97017f1062a87834e240f527af207dc50b7ed5fa6a96c7bf99d0be7100d48a",
+        "capture_script_sha256": "79ecbfb0b0fb8bb55ce8583bc3db7a0bbcfaeee13235674c26211b44dca05e78",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "11-struct-next-heading",
       "fixture": "structural-navigation.html",
       "evidence": {
@@ -1775,6 +1859,20 @@
       "evidence": {
         "sha256": "a10f9be05b9b917db25c20bf8a0051bd88f47aea76be761c73e54a24656b9074",
         "capture_script_sha256": "52497c30fa69eac8937bd79b2cff9c5b387ad9246d0a3d1333fdf43c76994e11",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1100-desktop-word-no-comments-in-viewer",
+      "fixture": "desktop-word-marks.ps1",
+      "evidence": {
+        "sha256": "8837029660799ca65aa3667cb2f79d72ab2e228fdc7d510722779d6079adb2f5",
+        "capture_script_sha256": "79ecbfb0b0fb8bb55ce8583bc3db7a0bbcfaeee13235674c26211b44dca05e78",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -10325,10 +10423,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 718,
-    "scenarios_with_evidence": 718,
-    "total_trials": 2160,
-    "successful_trials": 2143,
-    "deterministic_scenarios": 457
+    "scenarios": 725,
+    "scenarios_with_evidence": 725,
+    "total_trials": 2181,
+    "successful_trials": 2164,
+    "deterministic_scenarios": 461
   }
 }

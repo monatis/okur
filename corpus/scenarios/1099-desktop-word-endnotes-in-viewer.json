@@ -1,0 +1,30 @@
+{
+  "id": "1099-desktop-word-endnotes-in-viewer",
+  "name": "Word: Windows+Semicolon, Down twice and Enter on its third item (keys with UI Access in JAWS's dialog): the document's endnotes in the Virtual Viewer; Down through it, Escape; Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-marks.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-marks.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Win+Semicolon", "settle_max_ms": 20000},
+    {"id": "s2", "type": "key_ui_access", "command": "Down"},
+    {"id": "s3", "type": "key_ui_access", "command": "Down"},
+    {"id": "s4", "type": "key_ui_access", "command": "Enter", "settle_max_ms": 20000},
+    {"id": "s5", "type": "key", "command": "Down"},
+    {"id": "s6", "type": "key", "command": "Down"},
+    {"id": "s7", "type": "key", "command": "Down"},
+    {"id": "s8", "type": "key", "command": "Escape"},
+    {"id": "s9", "type": "key", "command": "Insert+Up"}
+  ]
+}
