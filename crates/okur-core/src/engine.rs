@@ -3296,9 +3296,22 @@ impl ScreenReaderEngine {
                                 .map(|n| format!("{} {}", n.shown_mark(), n.text.trim()));
                             let shown = shown.as_deref().unwrap_or(entry.text.as_str());
                             self.document_list_says = Some(match note {
-                                // A revision as a comment [hyp: 1107 records it].
-                                crate::event::NoteKind::Comment
-                                | crate::event::NoteKind::Revision => String::new(),
+                                crate::event::NoteKind::Comment => String::new(),
+                                // A revision by its text and what it changed: "nine Deleted |
+                                // Edit" [obs, 1107/s8].
+                                crate::event::NoteKind::Revision => self
+                                    .listed_notes
+                                    .get(entry.node_id)
+                                    .map(|n| {
+                                        let mark = n
+                                            .revision
+                                            .and_then(
+                                                crate::apps::windows::word::revision_kind_mark,
+                                            )
+                                            .unwrap_or_default();
+                                        format!("{} {mark}", n.text.trim()).trim().to_owned()
+                                    })
+                                    .unwrap_or_default(),
                                 crate::event::NoteKind::Footnote => {
                                     msg::word_footnote_reference(shown).render()
                                 }

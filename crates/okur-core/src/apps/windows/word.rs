@@ -136,9 +136,14 @@ fn tracked_revision_at(context: &TextContext) -> Option<&crate::event::DocumentR
 /// A word read onto a revision while Word tracks changes, what it changed after it: "eight |
 /// Inserted" [obs, 1108/s7, 1111/s8]; none without tracking [obs, 1106/s6].
 pub(crate) fn revision_mark(context: &TextContext) -> Option<String> {
-    let revision = tracked_revision_at(context)?;
+    revision_kind_mark(tracked_revision_at(context)?.kind)
+}
+
+/// What a revision changed, as JAWS marks it after its text: "Inserted", "Deleted" [obs,
+/// 1107/s8, 1108/s7]; another change unmarked [hyp: none recorded yet].
+pub(crate) fn revision_kind_mark(kind: crate::event::RevisionKind) -> Option<String> {
     Some(
-        match revision.kind {
+        match kind {
             crate::event::RevisionKind::Inserted => msg::word_revision_inserted_mark(),
             crate::event::RevisionKind::Deleted => msg::word_revision_deleted_mark(),
             crate::event::RevisionKind::Other => return None,
@@ -186,7 +191,7 @@ pub(crate) fn spoken_line(context: &TextContext, line: String) -> String {
     // library opens at eight in the morning." [obs, 1107/s9, 1111/s10], not with it elsewhere
     // on the line [obs, 1111/s4].
     match tracked_revision_at(context) {
-        Some(_) => format!(" {}  {line}", msg::word_revision_line()),
+        Some(_) => format!("\u{1d}{} \u{1e} {line}", msg::word_revision_line()),
         None => line,
     }
 }

@@ -1518,8 +1518,12 @@ impl ScreenReads {
             ));
         }
         // The lists of comments and footnotes, always answered: none where the step saved none
-        // (scenarios recorded before they were saved, 1089's document without them).
+        // (scenarios recorded before they were saved, 1089's document without them). Counted
+        // afresh: the revisions are asked once Word has said above that it tracks changes, and
+        // are answered at once, as live (1107/s2).
         use okur_core::NoteKind;
+        let requests = actions.requests();
+        let count = |name: &str| requests.iter().filter(|(a, _)| a == name).count();
         for (answered, kind) in self.notes.iter_mut().zip([
             NoteKind::Comment,
             NoteKind::Footnote,
