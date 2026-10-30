@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
   "matched_steps": 9518,
-  "total_steps": 10088,
-  "accepted_divergences": 283,
+  "total_steps": 10087,
+  "accepted_divergences": 284,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -1610,7 +1610,7 @@
     "1113-desktop-word-page-keys/s2": "match",
     "1113-desktop-word-page-keys/s3": "match",
     "1113-desktop-word-page-keys/s4": "match",
-    "1113-desktop-word-page-keys/s5": "mismatch",
+    "1113-desktop-word-page-keys/s5": "accepted divergence",
     "1113-desktop-word-page-keys/s6": "match",
     "1113-desktop-word-page-keys/s7": "match",
     "1113-desktop-word-page-keys/s8": "match",

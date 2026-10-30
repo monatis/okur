@@ -1058,6 +1058,12 @@ divergences! {
      view.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-30";
 
+    Difference::Step => ["1113-desktop-word-page-keys/s5"],
+    "PageDown in Word onto the next page: JAWS says the page, then the line twice, \"page 2 | \
+     heading level 1 Borrowing | heading level 1 Borrowing\", in every trial: Word's caret \
+     comes to the line twice as the window scrolls. Okur says it once.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-30";
+
     Difference::Step => ["1107-desktop-word-revisions-list/s8"],
     "OK on a revision in JAWS's list of Word's revisions: JAWS gives its synthesizer \"blank\", \
      then says the revision, \"nine Deleted\", \"Edit\", and the revision again, in every \

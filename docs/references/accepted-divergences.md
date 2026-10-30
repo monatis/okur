@@ -1066,6 +1066,15 @@ A step can be in more than one entry; all of its entries apply.
   view.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-30.
 
+### Word's line said twice after PageDown
+
+- Steps: `1113-desktop-word-page-keys/s5`.
+- Difference: the whole step. PageDown in Word onto the next page: JAWS says the page, then the
+  line twice, "page 2 | heading level 1 Borrowing | heading level 1 Borrowing" [obs, 1113/s5,
+  every trial].
+- Why: Word's caret comes to the line twice as the window scrolls. Okur says it once.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-30.
+
 ### Word's revision said twice after JAWS's list of them
 
 - Steps: `1107-desktop-word-revisions-list/s8`.
