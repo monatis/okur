@@ -537,6 +537,15 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                 parts.push(state(msg::state_pressed().as_str()));
             }
             lines.push(Line::new(parts));
+            // Its own description, then: "Existing File or Web Page button" [obs, 1076/s5].
+            if let Some(description) = focus
+                .description
+                .as_deref()
+                .map(str::trim)
+                .filter(|d| !d.is_empty())
+            {
+                lines.push(Line::of(PartKind::Description, description));
+            }
             // A WinUI toggle switch is a button with a toggle state, said as its switch
             // reads: Windows Settings' "Night light Button | Off" (JAWS, dev box 2026-10-16).
             if focus.platform.element_class.as_deref() == Some("ToggleSwitch") {

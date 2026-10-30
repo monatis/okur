@@ -340,10 +340,12 @@ pub(crate) fn notes_processing(kind: crate::event::NoteKind) -> Option<String> {
 }
 
 /// The Virtual Viewer's lines for a document's notes: their count, "There is only one Comment
-/// to display.", then each after a link of its number, a comment on the link's line ("1  Check
-/// the summer hours. Lab Fri, Jan 02, 26"), a footnote on a line of its own with its mark ("1
-/// Holidays excepted."), and how to close it, apart by blank lines [obs, 1096/s3-s6,
-/// 1097/s4-s6, 1099/s5-s7]. `None` for a bookmark, or with no notes.
+/// to display.", "There are 2 Comments in this document.", then each after a link of its
+/// number, a comment on the link's line ("1  Check the summer hours. Lab Fri, Jan 02, 26"), the
+/// comments one under another; a footnote on a line of its own with its number ("1 Holidays
+/// excepted."), each apart from the next; and how to close it, after a blank line [obs,
+/// 1096/s3-s6, 1097/s4-s6, 1099/s5-s7, 1101/s2-s7, 1102/s3-s9]. `None` for a bookmark, or with
+/// no notes.
 pub(crate) fn notes_viewer_lines(
     kind: crate::event::NoteKind,
     notes: &[crate::event::DocumentNote],
@@ -351,13 +353,15 @@ pub(crate) fn notes_viewer_lines(
     use crate::event::NoteKind;
     let count = match (kind, notes.len()) {
         (_, 0) | (NoteKind::Bookmark, _) => return None,
-        (NoteKind::Comment, 1) => msg::word_viewer_one_comment(),
-        (NoteKind::Footnote, 1) => msg::word_viewer_one_footnote(),
-        (NoteKind::Endnote, 1) => msg::word_viewer_one_endnote(),
-        _ => return None,
+        (NoteKind::Comment, 1) => msg::word_viewer_one_comment().to_string(),
+        (NoteKind::Footnote, 1) => msg::word_viewer_one_footnote().to_string(),
+        (NoteKind::Endnote, 1) => msg::word_viewer_one_endnote().to_string(),
+        (NoteKind::Comment, count) => msg::word_viewer_comments(count).render(),
+        (NoteKind::Footnote, count) => msg::word_viewer_footnotes(count).render(),
+        (NoteKind::Endnote, count) => msg::word_viewer_endnotes(count).render(),
     };
     let link = |number: usize| format!("\u{1d} {} \u{1e} {number}", msg::role_link());
-    let mut lines = vec![count.to_string(), String::new()];
+    let mut lines = vec![count, String::new()];
     for (index, note) in notes.iter().enumerate() {
         let entry = crate::ui::lists::Entry::document_note(index, kind, note);
         match kind {
@@ -371,10 +375,14 @@ pub(crate) fn notes_viewer_lines(
                     .and_then(|n| usize::try_from(n).ok())
                     .unwrap_or(index + 1);
                 lines.push(format!("{number} {}", note.text.trim()));
+                lines.push(String::new());
             }
         }
     }
-    lines.extend([String::new(), msg::viewer_close_hint().to_string()]);
+    if kind == NoteKind::Comment {
+        lines.push(String::new());
+    }
+    lines.push(msg::viewer_close_hint().to_string());
     Some(lines)
 }
 
@@ -1171,6 +1179,55 @@ mod tests {
         assert_eq!(
             comment_at_caret(&context(35)).as_deref(),
             Some("Check the summer hours.\nby Lab")
+        );
+    }
+
+    /// The Virtual Viewer of several notes: their count, then comments one under another and
+    /// footnotes each apart from the next, then how to close it [obs, 1101/s2-s7,
+    /// 1102/s3-s9].
+    #[test]
+    fn several_notes_in_the_viewer() {
+        use crate::event::{DocumentNote, NoteKind};
+        let note = |number: u32, text: &str, author: &str, date: &str| DocumentNote {
+            text: text.into(),
+            author: author.into(),
+            date: date.into(),
+            number: Some(number),
+            ..Default::default()
+        };
+        let link = |n: u32| format!("\u{1d} Link \u{1e} {n}");
+        let comments = [
+            note(1, "Check the summer hours.", "Lab", "Fri, Jan 02, 26"),
+            note(2, "Say how many.", "Lab", "Sat, Jan 03, 26"),
+        ];
+        assert_eq!(
+            notes_viewer_lines(NoteKind::Comment, &comments),
+            Some(vec![
+                "There are 2 Comments in this document.".to_owned(),
+                String::new(),
+                format!("{}  Check the summer hours. Lab Fri, Jan 02, 26", link(1)),
+                format!("{}  Say how many. Lab Sat, Jan 03, 26", link(2)),
+                String::new(),
+                "Press ESCAPE to close this message.".to_owned(),
+            ])
+        );
+        let footnotes = [
+            note(1, "Holidays excepted.", "", ""),
+            note(2, "Renewals are free.", "", ""),
+        ];
+        assert_eq!(
+            notes_viewer_lines(NoteKind::Footnote, &footnotes),
+            Some(vec![
+                "There are 2 Footnotes in this document.".to_owned(),
+                String::new(),
+                link(1),
+                "1 Holidays excepted.".to_owned(),
+                String::new(),
+                link(2),
+                "2 Renewals are free.".to_owned(),
+                String::new(),
+                "Press ESCAPE to close this message.".to_owned(),
+            ])
         );
     }
 

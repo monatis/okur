@@ -58,6 +58,13 @@ public static class SrLabState {
         int released = 0;
         foreach (int vk in keys) {
             if ((GetAsyncKeyState(vk) & 0x8000) == 0) continue;
+            // A Windows key released alone opens the Start menu, whose search box took the next
+            // steps' keys (1103 in round-1102b): a key no layout uses (VK 0xE8) first, so that
+            // Windows sees it used.
+            if (vk == 0x5B || vk == 0x5C) {
+                keybd_event(0xE8, 0, 0, UIntPtr.Zero);
+                keybd_event(0xE8, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+            }
             bool extended = vk == 0xA3 || vk == 0xA5 || vk == 0x5B || vk == 0x5C || vk == 0x2D;
             byte scan = (byte)MapVirtualKey((uint)vk, 0);
             keybd_event((byte)vk, scan, KEYEVENTF_KEYUP | (extended ? KEYEVENTF_EXTENDEDKEY : 0), UIntPtr.Zero);

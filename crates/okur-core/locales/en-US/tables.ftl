@@ -136,6 +136,11 @@ word-viewer-processing-endnotes = Please wait: Processing Endnotes
 word-viewer-one-comment = There is only one Comment to display.
 word-viewer-one-footnote = There is only one Footnote to display.
 word-viewer-one-endnote = There is only one Endnote to display.
+# Several [obs, 1101/s2, 1102/s3]; endnotes' as the others' [hyp: no document with two endnotes
+# recorded yet].
+word-viewer-comments = There are { $count } Comments in this document.
+word-viewer-footnotes = There are { $count } Footnotes in this document.
+word-viewer-endnotes = There are { $count } Endnotes in this document.
 # The same with none: no viewer opens [obs, 1100/s2].
 word-viewer-none = There are no items to display.
 # OK on a footnote in JAWS's list of Word's footnotes: the footnote as the list shows it, before

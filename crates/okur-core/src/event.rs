@@ -631,6 +631,11 @@ pub struct FocusEvent {
     pub window_title: Option<String>,
     pub folder_name: Option<String>,
     pub help_text: Option<String>,
+    /// A native control's own description, which JAWS says after its state where MSAA alone
+    /// knows the control: an Office command bar's button, "Existing File or Web Page button"
+    /// [obs, 1076/s5].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
     /// What kind of item it is, where the application says (UIA `ItemType`: File Explorer's
     /// "File folder").
     pub item_type: Option<String>,
@@ -852,6 +857,7 @@ impl FocusEvent {
             window_title: None,
             folder_name: None,
             help_text: None,
+            description: None,
             item_type: None,
             item_size: None,
             item_details: Vec::new(),

@@ -2423,7 +2423,8 @@ pub(crate) const COMMAND_BAR_CLASS: &str = "MsoCommandBar";
 
 /// A button of an Office command bar (`MsoCommandBar`), known only to MSAA: UI Automation's
 /// focus stays on the dialog around it. Read from its MSAA object, held down where MSAA says
-/// so: "Existing File or Web Page Button Pressed" [obs, 1076/s5]. The bar's own focus, a
+/// so, its description after: "Existing File or Web Page Button Pressed | Existing File or Web
+/// Page button" [obs, 1076/s5]. The bar's own focus, a
 /// moment before (an internal name, "MSO Generic Control Container"), is no focus.
 fn command_bar_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     const PUSHBUTTON: i32 = 0x2B;
@@ -2443,6 +2444,10 @@ fn command_bar_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
     let mut focus = okur_core::FocusEvent::new(okur_core::Role::Button).with_name(name.to_owned());
     focus.states.pressed = object.states & PRESSED != 0;
     focus.states.disabled = object.states & MSAA_UNAVAILABLE != 0;
+    focus.description = event
+        .msaa_description
+        .clone()
+        .filter(|d| !d.trim().is_empty());
     focus.access_key = object.shortcut.clone().filter(|k| !k.trim().is_empty());
     focus.window_title = event.top_window_title.clone();
     focus.app = event.process.clone();

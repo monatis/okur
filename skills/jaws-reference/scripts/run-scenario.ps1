@@ -311,6 +311,15 @@ function Send-Chord([string]$chord) {
         if (-not [SrKeyInput]::Key([uint16]$k[0], $k[1], $false, [uint16]$k[2])) { $ok = $false }
         Start-Sleep -Milliseconds 30
     }
+    # A Windows key chord whose other key JAWS takes (Windows+Semicolon in Word): Windows saw
+    # the Windows key pressed and released alone and opened the Start menu, whose search box took
+    # the next steps' keys (1102, 1103 in round-1101c). A key no layout uses (VK 0xE8) is sent
+    # before the release, so that Windows sees the Windows key used, as AutoHotkey's menu mask
+    # key does.
+    if (@($keys | Where-Object { $_[0] -eq 0x5B -or $_[0] -eq 0x5C }).Count -gt 0) {
+        [void][SrKeyInput]::Key([uint16]0xE8, $false, $false, [uint16]0)
+        [void][SrKeyInput]::Key([uint16]0xE8, $false, $true, [uint16]0)
+    }
     [array]::Reverse($keys)
     foreach ($k in $keys) {
         if (-not [SrKeyInput]::Key([uint16]$k[0], $k[1], $true, [uint16]$k[2])) { $ok = $false }
