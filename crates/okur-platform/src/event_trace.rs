@@ -2958,6 +2958,8 @@ mod capture {
         /// The events that arrived while one was read, in order.
         static DEFERRED: RefCell<std::collections::VecDeque<Deferred>> =
             const { RefCell::new(std::collections::VecDeque::new()) };
+        /// How many waiting events were dropped since the queue last drained.
+        static DROPPED: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
         /// When a console last wrote to its screen, and its window: read once its writing
         /// pauses ([`record_console_text`]).
         static CONSOLE_WRITTEN: std::cell::Cell<Option<(std::time::Instant, isize)>> =
@@ -3038,7 +3040,9 @@ mod capture {
         id_child: i32,
     }
 
-    /// The most events kept waiting: past it the newest are dropped (logged).
+    /// The most events kept waiting: past it the oldest are dropped, since the newest say where
+    /// the focus is now, and their count is logged once the queue drains (performance review
+    /// 2026-10-25, 20).
     const MAX_DEFERRED: usize = 512;
 
     /// Whether a newer caret or selection event of `hwnd` is already waiting: the text read
@@ -3084,6 +3088,13 @@ mod capture {
             });
         }
         READING.with(|r| r.set(false));
+        let dropped = DROPPED.with(|d| d.take());
+        if dropped > 0 {
+            tracing::warn!(
+                dropped,
+                "events dropped while one was read: too many waiting"
+            );
+        }
     }
 
     /// [`record_at`] now, or after the event being read when one is.
@@ -3091,11 +3102,11 @@ mod capture {
         if READING.with(|r| r.get()) {
             DEFERRED.with(|d| {
                 let mut deferred = d.borrow_mut();
-                if deferred.len() < MAX_DEFERRED {
-                    deferred.push_back(event);
-                } else {
-                    tracing::debug!(event = event.name, "event dropped: too many waiting");
+                if deferred.len() >= MAX_DEFERRED {
+                    deferred.pop_front();
+                    DROPPED.with(|n| n.set(n.get() + 1));
                 }
+                deferred.push_back(event);
             });
             return;
         }
@@ -4355,7 +4366,6 @@ mod capture {
             use windows::Win32::Foundation::{LPARAM, WPARAM};
             use windows::Win32::UI::WindowsAndMessaging::PostThreadMessageW;
             let text = display.to_string();
-            tracing::debug!(%text, "UIA notification");
             if text.trim().is_empty() {
                 return Ok(());
             }
@@ -4366,9 +4376,17 @@ mod capture {
                 .and_then(|p| u32::try_from(p).ok())
                 .unwrap_or(0);
             if pid == 0 || !(foreground_processes().contains(&pid) || is_notification_host(pid)) {
-                tracing::debug!(pid, %text, "UIA notification from a process behind, not taken");
+                // What an application behind says stays out of the log: only its length
+                // (performance review 2026-10-25, 20).
+                let chars = text.chars().count();
+                tracing::debug!(
+                    pid,
+                    chars,
+                    "UIA notification from a process behind, not taken"
+                );
                 return Ok(());
             }
+            tracing::debug!(%text, "UIA notification");
             if let Ok(mut queue) = UIA_NOTIFICATIONS.lock() {
                 if queue.len() >= MAX_UIA_FOCUSED {
                     queue.pop_front();
