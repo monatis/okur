@@ -1,0 +1,29 @@
+{
+  "id": "1114-desktop-excel-row-and-column-reading",
+  "name": "Excel: JAWS's row and column readers from B3: Shift+Insert+Up (the row), Shift+Insert+Home and Shift+Insert+PageUp (from the row's start, to its end), Ctrl+Insert+Up (the column), Ctrl+Insert+Home and Ctrl+Insert+PageUp (from the column's top, to its bottom)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "Down"},
+    {"id": "s3", "type": "key", "command": "Right"},
+    {"id": "s4", "type": "key", "command": "Shift+Insert+Up"},
+    {"id": "s5", "type": "key", "command": "Shift+Insert+Home"},
+    {"id": "s6", "type": "key", "command": "Shift+Insert+PageUp"},
+    {"id": "s7", "type": "key", "command": "Ctrl+Insert+Up"},
+    {"id": "s8", "type": "key", "command": "Ctrl+Insert+Home"},
+    {"id": "s9", "type": "key", "command": "Ctrl+Insert+PageUp"}
+  ]
+}

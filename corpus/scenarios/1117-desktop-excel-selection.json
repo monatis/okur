@@ -1,0 +1,25 @@
+{
+  "id": "1117-desktop-excel-selection",
+  "name": "Excel: Shift+Right and Shift+Down from A1 (a range selected), Shift+Space (the row), Ctrl+Space (the column), then Right (the selection collapsed)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Shift+Right"},
+    {"id": "s2", "type": "key", "command": "Shift+Down"},
+    {"id": "s3", "type": "key", "command": "Shift+Space"},
+    {"id": "s4", "type": "key", "command": "Ctrl+Space"},
+    {"id": "s5", "type": "key", "command": "Right"}
+  ]
+}

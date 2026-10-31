@@ -1,0 +1,29 @@
+{
+  "id": "1115-desktop-excel-moves",
+  "name": "Excel: Ctrl+End to the last cell with data, Ctrl+Home back, Ctrl+Right and Ctrl+Down to the data region's edges, Ctrl+Left and Ctrl+Up back, Home in a row, End then Right",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Ctrl+End"},
+    {"id": "s2", "type": "key", "command": "Ctrl+Home"},
+    {"id": "s3", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s4", "type": "key", "command": "Ctrl+Down"},
+    {"id": "s5", "type": "key", "command": "Ctrl+Left"},
+    {"id": "s6", "type": "key", "command": "Ctrl+Up"},
+    {"id": "s7", "type": "key", "command": "Down"},
+    {"id": "s8", "type": "key", "command": "Right"},
+    {"id": "s9", "type": "key", "command": "Home"}
+  ]
+}

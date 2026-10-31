@@ -2066,6 +2066,48 @@
       }
     },
     {
+      "scenario_id": "1114-desktop-excel-row-and-column-reading",
+      "fixture": "desktop-excel.ps1",
+      "evidence": {
+        "sha256": "79a51075dcde953171fb9cb01cb1b712fc56e0c64c09e6240759ef4eda12dd5a",
+        "capture_script_sha256": "7eb9d91a388e46b1a1958a171c7b58af7c8ff0f9b489687e37e10009e703cb8c",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1115-desktop-excel-moves",
+      "fixture": "desktop-excel.ps1",
+      "evidence": {
+        "sha256": "7ae272b69a93b9d2477ea4f903fe9704382259fdfa591f314bc9d375dcce558b",
+        "capture_script_sha256": "7eb9d91a388e46b1a1958a171c7b58af7c8ff0f9b489687e37e10009e703cb8c",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1117-desktop-excel-selection",
+      "fixture": "desktop-excel.ps1",
+      "evidence": {
+        "sha256": "be8164bbc47ffa460a3284c3ac7d4ab357109a6983a77b50ab3e1a28583aa98b",
+        "capture_script_sha256": "7eb9d91a388e46b1a1958a171c7b58af7c8ff0f9b489687e37e10009e703cb8c",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "112-article-paragraphs",
       "fixture": "news-article.html",
       "evidence": {
@@ -10607,10 +10649,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 737,
-    "scenarios_with_evidence": 737,
-    "total_trials": 2217,
-    "successful_trials": 2200,
-    "deterministic_scenarios": 468
+    "scenarios": 740,
+    "scenarios_with_evidence": 740,
+    "total_trials": 2226,
+    "successful_trials": 2209,
+    "deterministic_scenarios": 471
   }
 }
