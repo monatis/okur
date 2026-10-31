@@ -1069,6 +1069,17 @@ divergences! {
      Okur's lists open without them.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-31";
 
+    Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
+        "1122-desktop-excel-context-menus/s2",
+    ],
+    "Shift+F10 on an Excel cell opens Office's own context menu, in a window of its own that \
+     closes when it loses the foreground: in every trial it closed 2.5 s into the step, while \
+     the recorder copied JAWS's speech history (after the step's speech had settled at 2.2 s), \
+     and the focus went back to the cell. What JAWS said of that came after the copy, in \
+     neither step. Okur, replaying the closing the trace holds, says it: \"Leaving menus | \
+     Weekdays | B 1\".",
+    "the agent, 2026-10-31: the recorder's copy of the speech history closed the menu";
+
     Difference::Step => ["1119-desktop-word-pages-by-character-and-word/s3"],
     "Right in Word onto the next page: JAWS says the page, then the letter twice, the second \
      time by its phonetic name, \"page 2 | B | bravo\" on its synthesizer, in every trial: Word \

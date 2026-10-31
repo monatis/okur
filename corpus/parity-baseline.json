@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 9607,
+  "matched_steps": 9608,
   "total_steps": 10174,
   "accepted_divergences": 285,
   "errors": [],
@@ -1704,7 +1704,7 @@
     "1121-desktop-excel-selection-from-b2/s6": "match",
     "1121-desktop-excel-selection-from-b2/s7": "match",
     "1122-desktop-excel-context-menus/s1": "match",
-    "1122-desktop-excel-context-menus/s2": "mismatch",
+    "1122-desktop-excel-context-menus/s2": "match",
     "1122-desktop-excel-context-menus/s3": "match",
     "1122-desktop-excel-context-menus/s4": "match",
     "1122-desktop-excel-context-menus/s5": "match",
