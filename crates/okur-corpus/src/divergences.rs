@@ -1069,6 +1069,25 @@ divergences! {
      Okur's lists open without them.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-31";
 
+    Difference::Step => [
+        "2071-aria-radiogroup-roving-tabindex-nav-forwards-in-to-radio-group-where-no-radio-buttons-are-checked-tab-pc/s1",
+        "2076-aria-radiogroup-roving-tabindex-nav-back-in-to-radio-group-where-no-radio-buttons-are-checked-shift-tab-pc/s1",
+    ],
+    "Tab and Shift+Tab into an ARIA radio group with none checked, the virtual cursor off: \
+     JAWS says the usage hint first, \"To change the selection press Up or Down Arrow. | \
+     Pizza Crust group | | Regular crust radio button not checked | 1 of 3\", in every trial; \
+     with one checked it says it last (2081/s1, 2086/s1), the trace the same one focus event \
+     either way. Okur says it last.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-31";
+
+    Difference::Step => ["2112-aria-radiogroup-roving-tabindex-check-radio-enter-vc/s1"],
+    "Enter checking an ARIA radio button in the virtual cursor: JAWS adds its place, \
+     \"Regular crust radio button checked | 1 of 3\", where Space checking it the same way \
+     (the trace the same one state change) does not (2111/s1). Okur says it without, as Space; \
+     the other radio groups' plans, with the same tests, are to tell which is JAWS's rule.",
+    "the agent, 2026-10-31: one observation, to check against radiogroup-aria-activedescendant \
+     and rating-radio-group";
+
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
     ],

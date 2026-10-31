@@ -1078,6 +1078,28 @@ A step can be in more than one entry; all of its entries apply.
   open without them.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-31.
 
+### An ARIA radio group's hint said first when none is checked
+
+- Steps: `2071-aria-radiogroup-roving-tabindex-nav-forwards-in-to-radio-group-where-no-radio-buttons-are-checked-tab-pc/s1`,
+  `2076-aria-radiogroup-roving-tabindex-nav-back-in-to-radio-group-where-no-radio-buttons-are-checked-shift-tab-pc/s1`.
+- Difference: the whole step. Tab and Shift+Tab into an ARIA radio group with none checked, the
+  virtual cursor off: JAWS says the usage hint first, "To change the selection press Up or Down
+  Arrow. | Pizza Crust group | | Regular crust radio button not checked | 1 of 3" [obs,
+  round-aria4, every trial].
+- Why: with one checked JAWS says it last (2081/s1, 2086/s1), and the trace holds the same one
+  focus event either way. Okur says it last.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-31.
+
+### Enter's place on an ARIA radio button
+
+- Steps: `2112-aria-radiogroup-roving-tabindex-check-radio-enter-vc/s1`.
+- Difference: the whole step. Enter checking an ARIA radio button in the virtual cursor: JAWS
+  adds its place, "Regular crust radio button checked | 1 of 3"; Space checking it the same way
+  does not (2111/s1), the trace the same one state change. Okur says it without, as Space.
+- Why: one observation; the other radio groups' plans (radiogroup-aria-activedescendant,
+  rating-radio-group), with the same tests, are to tell which is JAWS's rule.
+- Decided by the agent, 2026-10-31.
+
 ### Excel's cell menu closed by the recorder
 
 - Steps: `1122-desktop-excel-context-menus/s2`.
