@@ -1,0 +1,44 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleLink",
+        "phrase": "convey role 'link'",
+        "priority": "1"
+      },
+      {
+        "id": "nameW3cWebsite",
+        "phrase": "convey name 'W3C website'.",
+        "priority": "1"
+      }
+    ],
+    "command": "ins+up",
+    "instructions": "With focus on the 'W3C website' link, read information about the link.",
+    "plan": "apg/link-img-alt",
+    "presentation_number": "7.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutLink"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/link-img-alt/link-img-alt.setFocusOnLink.html",
+  "id": "2371-aria-link-img-alt-req-info-about-link-ins-up-vc",
+  "name": "ARIA-AT, Link Example 2 (img element with alt attribute): Request information about a link; Insert+Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Up",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

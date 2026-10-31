@@ -1,0 +1,1108 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Link Example 2 (img element with alt attribute) - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "284d804e81ca880b7282d287d3c20a0afe1d185c623b7f3ea547ca66c4c122f2",
+    "captured_at_unix_ms": 1793469440426,
+    "node_count": 30,
+    "capture_ms": 215
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Link Example 2 (img element with alt attribute)",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/link-img-alt/link-img-alt.setFocusBeforeLink.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -31904,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Arial",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -31912,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,90,156)",
+              "font-family": "Arial",
+              "font-size": "20.5pt"
+            }
+          },
+          {
+            "start": 1,
+            "end": 4,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Arial",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Link Example 2 (img element with alt attribute",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -31936,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Link Example 2 (img element with alt attribute",
+            "lines": [
+              [
+                0,
+                46
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 46,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "20.5pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Link Example 2 (img element with alt attribute",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -31905,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Link Example 2 (img element with alt attribute",
+                "lines": [
+                  [
+                    0,
+                    46
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 46,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "20.5pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -31938,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "17pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "About This Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -31929,
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "About This Example",
+                "lines": [
+                  [
+                    0,
+                    18
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 18,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "17pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "About This Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -31919,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "About This Example",
+                    "lines": [
+                      [
+                        0,
+                        18
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 18,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "17pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -31917,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "The example below demonstrates one variation of the ￼. The link pattern is used when it is necessary for elements other than the HTML ￼ element to have link behaviors.",
+                "lines": [
+                  [
+                    0,
+                    101
+                  ],
+                  [
+                    101,
+                    167
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 52,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 52,
+                    "end": 53,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  },
+                  {
+                    "start": 53,
+                    "end": 134,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 134,
+                    "end": 135,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Consolas",
+                      "font-size": "11pt"
+                    }
+                  },
+                  {
+                    "start": 135,
+                    "end": 167,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "The example below demonstrates one variation of the ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -31927,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "The example below demonstrates one variation of the ",
+                    "lines": [
+                      [
+                        0,
+                        52
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 52,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Link Pattern",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/link-pattern.html",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -31908,
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Link Pattern",
+                    "lines": [
+                      [
+                        0,
+                        12
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 12,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Link Pattern",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -31933,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Link Pattern",
+                        "lines": [
+                          [
+                            0,
+                            12
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 12,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": ". The link pattern is used when it is necessary for elements other than the HTML ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -31934,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": ". The link pattern is used when it is necessary for elements other than the HTML ",
+                    "lines": [
+                      [
+                        0,
+                        48
+                      ],
+                      [
+                        48,
+                        81
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 81,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1065,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -31939,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "code",
+                      "text-align": "left"
+                    },
+                    "text": "a",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Consolas",
+                          "font-size": "11pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "a",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -31915,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "a",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 1,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Consolas",
+                              "font-size": "11pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " element to have link behaviors.",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -31907,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " element to have link behaviors.",
+                    "lines": [
+                      [
+                        0,
+                        32
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 32,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -31937,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ],
+              [
+                5,
+                6
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "17pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 6,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Examples",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -31922,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Examples",
+                "lines": [
+                  [
+                    0,
+                    8
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 8,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "17pt"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelFor": [
+                    -31923,
+                    -31920
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Examples",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -31914,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Examples",
+                    "lines": [
+                      [
+                        0,
+                        8
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 8,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "17pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "Start of Examples",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -31923,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -31922
+                  ]
+                }
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -31925,
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Navigate forwards from here",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/link-img-alt/link-img-alt.setFocusBeforeLink.html#beforelink",
+                    "msaa_states": 5242884,
+                    "ia2_states": 1024,
+                    "unique_id": -31902,
+                    "attributes": {
+                      "display": "inline",
+                      "id": "beforelink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Navigate forwards from here",
+                    "lines": [
+                      [
+                        0,
+                        27
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 27,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Navigate forwards from here",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -31926,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Navigate forwards from here",
+                        "lines": [
+                          [
+                            0,
+                            27
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 27,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -31941,
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,153)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "W3C Website",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -31942,
+                    "attributes": {
+                      "display": "inline",
+                      "explicit-name": "true",
+                      "id": "link",
+                      "name-from": "attribute",
+                      "tag": "img",
+                      "text-align": "left",
+                      "xml-roles": "link"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -31932,
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Navigate backwards from here",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/link-img-alt/link-img-alt.setFocusBeforeLink.html#afterlink",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -31916,
+                    "attributes": {
+                      "display": "inline",
+                      "id": "afterlink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Navigate backwards from here",
+                    "lines": [
+                      [
+                        0,
+                        28
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 28,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Navigate backwards from here",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -31930,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Navigate backwards from here",
+                        "lines": [
+                          [
+                            0,
+                            28
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 28,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "End of Examples",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -31920,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -31922
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -31909,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(250,250,250)",
+                  "color": "rgb(5,5,5)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1,
+                "ia2_states": 1024,
+                "unique_id": -31943,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

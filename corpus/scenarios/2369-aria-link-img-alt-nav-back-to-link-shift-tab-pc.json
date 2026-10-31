@@ -1,0 +1,50 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleLink",
+        "phrase": "convey role 'link'",
+        "priority": "1"
+      },
+      {
+        "id": "nameW3cWebsite",
+        "phrase": "convey name 'W3C website'.",
+        "priority": "1"
+      }
+    ],
+    "command": "shift+tab",
+    "instructions": "With focus on the 'Navigate backwards from here' link, navigate to the 'W3C website' link.",
+    "plan": "apg/link-img-alt",
+    "presentation_number": "5.0",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToLink"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/link-img-alt/link-img-alt.setFocusAfterLink.html",
+  "id": "2369-aria-link-img-alt-nav-back-to-link-shift-tab-pc",
+  "name": "ARIA-AT, Link Example 2 (img element with alt attribute): Navigate backwards to a link; Shift+Tab in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+Tab",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
