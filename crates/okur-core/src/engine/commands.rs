@@ -1064,6 +1064,24 @@ impl ScreenReaderEngine {
                 return;
             }
         }
+        // Excel's Insert+Shift+S: the sheet tabs' menu, which says itself as it opens [obs,
+        // 1116/s5].
+        if event.key == Key::Alpha('S')
+            && m.shift
+            && !m.ctrl
+            && !m.alt
+            && !m.win
+            && self
+                .last_native_focus
+                .as_ref()
+                .is_some_and(crate::apps::windows::excel::in_sheet)
+            && self
+                .actions
+                .as_ref()
+                .is_some_and(|actions| actions.open_sheet_tabs_menu())
+        {
+            return;
+        }
         // Excel's row and column readers, the active cell's row and column asked for first.
         if let Some(reading) = crate::apps::windows::excel::SheetReading::of(event) {
             let in_sheet = self

@@ -3747,7 +3747,10 @@ fn a_page_menu_is_left_when_the_focus_returns_to_the_page() {
         }
         AccessibilityEvent::Focus(focus)
     };
-    let popup = AccessibilityEvent::Menu(crate::event::MenuEvent::PopupStart);
+    let popup = AccessibilityEvent::Menu(crate::event::MenuEvent::PopupStart {
+        window_class: None,
+        window_title: None,
+    });
     engine.handle_accessibility_event(&popup);
     engine.handle_accessibility_event(&item("Accessibility", true));
     engine.handle_accessibility_event(&item("Accessibility", true));
@@ -3827,7 +3830,10 @@ fn a_page_menu_opened_from_a_field_takes_its_keys() {
     assert!(engine.forms_mode);
 
     engine.handle_accessibility_event(&AccessibilityEvent::Menu(
-        crate::event::MenuEvent::PopupStart,
+        crate::event::MenuEvent::PopupStart {
+            window_class: None,
+            window_title: None,
+        },
     ));
     engine.handle_accessibility_event(&AccessibilityEvent::Focus(
         FocusEvent::new(Role::MenuItem).with_name("New"),
@@ -5110,7 +5116,10 @@ fn a_menu_takes_the_keys_before_any_item_is_focused() {
         window_class: None,
     }));
     engine.handle_accessibility_event(&AccessibilityEvent::Menu(
-        crate::event::MenuEvent::PopupStart,
+        crate::event::MenuEvent::PopupStart {
+            window_class: None,
+            window_title: None,
+        },
     ));
     assert_eq!(engine.handle_key_event(&down), KeyAction::PassThrough);
     // The menu's first item, outside the page: forms mode stays off.
@@ -7651,7 +7660,10 @@ fn an_edit_combos_list_keeps_the_keys_on_the_field() {
         structure: None,
     });
     engine.handle_focus_event(&font);
-    engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::PopupStart));
+    engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::PopupStart {
+        window_class: None,
+        window_title: None,
+    }));
     let before = actions.requests().len();
     engine.handle_key_event(&key(Key::DownArrow));
     assert!(
@@ -7791,7 +7803,10 @@ fn a_word_drop_down_fields_list_is_opened_and_closed() {
     engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::Start {
         window_class: None,
     }));
-    engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::PopupStart));
+    engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::PopupStart {
+        window_class: None,
+        window_title: None,
+    }));
     let mut item = FocusEvent::new(Role::MenuItem).with_name("Northside");
     item.app = Some("WINWORD.EXE".into());
     item.platform.window_class = Some("#32768".into());

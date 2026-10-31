@@ -563,8 +563,14 @@ pub enum MenuEvent {
     },
     /// Menu mode ended; focus returns to the application.
     End,
-    /// A popup menu opened.
-    PopupStart,
+    /// A popup menu opened, in this window (its class and caption: Office's command bar
+    /// popups are `MsoCommandBarPopup` windows captioned with the command bar's name, "Ply").
+    PopupStart {
+        #[serde(default)]
+        window_class: Option<String>,
+        #[serde(default)]
+        window_title: Option<String>,
+    },
     /// A popup menu closed.
     PopupEnd,
 }

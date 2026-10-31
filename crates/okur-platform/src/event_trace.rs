@@ -1638,7 +1638,10 @@ pub fn menu_event_from_trace(event: &TraceEvent) -> Option<okur_core::MenuEvent>
             window_class: event.window_class.clone(),
         }),
         "menu_end" => Some(MenuEvent::End),
-        "menu_popup_start" => Some(MenuEvent::PopupStart),
+        "menu_popup_start" => Some(MenuEvent::PopupStart {
+            window_class: event.window_class.clone(),
+            window_title: event.window_title.clone(),
+        }),
         "menu_popup_end" => Some(MenuEvent::PopupEnd),
         _ => None,
     }

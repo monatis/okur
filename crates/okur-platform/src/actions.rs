@@ -121,6 +121,8 @@ mod windows_actions {
         SheetPlace,
         SheetList(okur_core::SheetListKind),
         SheetEntry(okur_core::SheetListKind, String),
+        /// The sheet tabs' context menu of the spreadsheet in front opened.
+        SheetTabsMenu,
         /// The caret to a paragraph of the focused document (from 0), then the field's text.
         Paragraph(Option<Box<TextContext>>, usize),
         /// A chord of virtual keys, sent marked as the screen reader's own.
@@ -204,6 +206,7 @@ mod windows_actions {
                 Request::SheetPlace => "sheet place",
                 Request::SheetList(_) => "sheet list",
                 Request::SheetEntry(..) => "sheet entry",
+                Request::SheetTabsMenu => "sheet tabs menu",
                 Request::Paragraph(..) => "paragraph",
                 Request::Keys(_) => "keys",
                 Request::Window(_) => "viewer read",
@@ -562,6 +565,33 @@ mod windows_actions {
                                     crate::excel_om::go_to(grid, kind, &target)
                                 });
                                 tracing::debug!(?kind, went, "sheet entry gone to");
+                            }
+                            Request::SheetTabsMenu => {
+                                use windows::Win32::Foundation::HWND;
+                                use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+                                // SAFETY: a plain query.
+                                let top = unsafe { GetForegroundWindow() };
+                                let Some(grid) = crate::excel_om::grid_window(top) else {
+                                    tracing::debug!("no sheet for its tabs' menu");
+                                    return;
+                                };
+                                let grid = grid.0 as isize;
+                                // Excel holds the call until the menu closes: on a thread of its
+                                // own, so that the reads queued behind it go on meanwhile.
+                                let spawned = std::thread::Builder::new()
+                                    .name("sheet tabs menu".to_owned())
+                                    .spawn(move || {
+                                        // SAFETY: COM initialization for this thread.
+                                        let _ =
+                                            unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+                                        let shown = crate::excel_om::show_sheet_tabs_menu(HWND(
+                                            grid as *mut core::ffi::c_void,
+                                        ));
+                                        tracing::debug!(shown, "sheet tabs menu closed");
+                                    });
+                                if let Err(error) = spawned {
+                                    tracing::debug!(%error, "sheet tabs menu not opened");
+                                }
                             }
                             Request::Paragraph(before, paragraph) => {
                                 let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
@@ -1083,6 +1113,10 @@ mod windows_actions {
 
         fn move_to_sheet_entry(&self, kind: okur_core::SheetListKind, target: &str) -> bool {
             self.send(Request::SheetEntry(kind, target.to_owned()))
+        }
+
+        fn open_sheet_tabs_menu(&self) -> bool {
+            self.send(Request::SheetTabsMenu)
         }
 
         fn read_word_key(&self, key: okur_core::WordKey) -> bool {

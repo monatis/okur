@@ -169,6 +169,8 @@ key-followed-by = { $keys } followed by { $key }
 access-key-alt = alt+{ $letter }
 # A menu named after the item it opened from: "File menu".
 menu-named = { $name } menu
+# An Office command bar's popup, by the command bar's name: "Ply pop-up menu" [obs, 1116/s5].
+menu-pop-up-named = { $name } pop-up menu
 
 ## JAWS's text analysis: what Say Current Focus (Insert+Tab) adds after a text field, one per
 ## inconsistency of the caret's line, with its column from 1 [obs, 568, 571/s4].

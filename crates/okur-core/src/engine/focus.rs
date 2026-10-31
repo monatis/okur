@@ -1204,7 +1204,7 @@ impl ScreenReaderEngine {
             // An edit combo's own list dropping down (Word's Font box, Alt+Down) is no menu:
             // the keys stay the field's, and the arrows read the text they put in it [obs,
             // 1066/s5-s8, 1067/s5-s8].
-            MenuEvent::PopupStart
+            MenuEvent::PopupStart { .. }
                 if self.last_native_focus.as_ref().is_some_and(|f| {
                     f.role == Role::Edit && f.container_role == Some(Role::ComboBox)
                 }) =>
@@ -1212,8 +1212,16 @@ impl ScreenReaderEngine {
                 self.combo_list_open = true;
                 None
             }
-            MenuEvent::PopupStart => {
-                self.menus.popup_start();
+            MenuEvent::PopupStart {
+                window_class,
+                window_title,
+            } => {
+                // An Office command bar's popup is named by its command bar [obs, 1116/s5].
+                let command_bar = window_title
+                    .filter(|_| window_class.as_deref() == Some("MsoCommandBarPopup"))
+                    .map(|title| title.trim().to_owned())
+                    .filter(|title| !title.is_empty());
+                self.menus.popup_start(command_bar);
                 None
             }
             MenuEvent::PopupEnd if std::mem::take(&mut self.combo_list_open) => None,

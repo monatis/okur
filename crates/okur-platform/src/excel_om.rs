@@ -208,6 +208,28 @@ pub fn go_to(grid: HWND, kind: okur_core::SheetListKind, target: &str) -> bool {
     go().is_some()
 }
 
+/// Opens the sheet tabs' context menu of the Excel in grid window `grid`
+/// (`Application.CommandBars("Ply").ShowPopup`). Excel holds the call until the menu closes.
+/// False where Excel's object model does not answer.
+pub fn show_sheet_tabs_menu(grid: HWND) -> bool {
+    use windows::core::BSTR;
+    use windows::Win32::System::Com::DISPATCH_METHOD;
+    let show = || -> Option<()> {
+        let window = word_window(grid)?;
+        let application = object(&property(&window, "Application")?)?;
+        let bars = object(&property(&application, "CommandBars")?)?;
+        let ply = object(&invoke(
+            &bars,
+            "Item",
+            DISPATCH_PROPERTYGET,
+            &mut [VARIANT::from(BSTR::from("Ply"))],
+        )?)?;
+        invoke(&ply, "ShowPopup", DISPATCH_METHOD, &mut [])?;
+        Some(())
+    };
+    show().is_some()
+}
+
 /// A cell's reference without dollar signs, "B4" (`Range.Address(False, False)`).
 fn address(cell: &IDispatch) -> Option<String> {
     let value = invoke(

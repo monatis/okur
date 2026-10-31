@@ -417,6 +417,11 @@ fn grid(focus: &FocusEvent) -> bool {
     focus.platform.window_class.as_deref() == Some(GRID_WINDOW) && focus.role != Role::TableCell
 }
 
+/// Excel's sheet focused: one of its cells, or the grid where the cell is empty.
+pub(crate) fn in_sheet(focus: &FocusEvent) -> bool {
+    cell(focus).is_some() || grid(focus)
+}
+
 /// Excel's cell editor focused (F2).
 fn editor(focus: &FocusEvent) -> bool {
     focus.platform.window_class.as_deref() == Some(EDITOR_WINDOW) && focus.role == Role::Edit

@@ -180,6 +180,12 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Opens the sheet tabs' context menu of the spreadsheet in front (Excel's `Ply` command
+    /// bar), which says itself as a menu does. Returns false when unsupported.
+    fn open_sheet_tabs_menu(&self) -> bool {
+        false
+    }
+
     /// Asks for what one of Word's keys (`key`, just pressed) left in the focused document,
     /// once Word has acted on it, which arrives later as
     /// [`crate::event::AccessibilityEvent::WordKeyState`], always. Returns false when
@@ -578,6 +584,13 @@ impl ApplicationActions for RecordingActions {
     fn move_to_sheet_entry(&self, kind: crate::event::SheetListKind, target: &str) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push((format!("{kind:?} {target}"), 0));
+        }
+        true
+    }
+
+    fn open_sheet_tabs_menu(&self) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("sheet tabs menu".to_owned(), 0));
         }
         true
     }
