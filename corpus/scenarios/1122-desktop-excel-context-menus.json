@@ -1,0 +1,30 @@
+{
+  "id": "1122-desktop-excel-context-menus",
+  "name": "Excel: Right onto B1, Shift+F10 for the cell's context menu, Down, Escape, then Insert+Shift+S for the sheet tabs' menu, Down twice, Escape, and Down to B2",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Right"},
+    {"id": "s2", "type": "key", "command": "Shift+F10"},
+    {"id": "s3", "type": "key", "command": "Down"},
+    {"id": "s4", "type": "key", "command": "Escape"},
+    {"id": "s5", "type": "key", "command": "Insert+Shift+S"},
+    {"id": "s6", "type": "key", "command": "Down"},
+    {"id": "s7", "type": "key", "command": "Down"},
+    {"id": "s8", "type": "key", "command": "Escape"},
+    {"id": "s9", "type": "key", "command": "Down"}
+  ]
+}

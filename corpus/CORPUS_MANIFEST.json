@@ -2192,6 +2192,20 @@
       }
     },
     {
+      "scenario_id": "1122-desktop-excel-context-menus",
+      "fixture": "desktop-excel.ps1",
+      "evidence": {
+        "sha256": "ce83debb355e3c1070b62450830edfb491ea2167274111e1e714ec7017a8ae8f",
+        "capture_script_sha256": "7eb9d91a388e46b1a1958a171c7b58af7c8ff0f9b489687e37e10009e703cb8c",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "113-article-graphics-and-say-line",
       "fixture": "news-article.html",
       "evidence": {
@@ -10719,10 +10733,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 745,
-    "scenarios_with_evidence": 745,
-    "total_trials": 2241,
-    "successful_trials": 2224,
-    "deterministic_scenarios": 475
+    "scenarios": 746,
+    "scenarios_with_evidence": 746,
+    "total_trials": 2244,
+    "successful_trials": 2227,
+    "deterministic_scenarios": 476
   }
 }
