@@ -530,12 +530,24 @@ impl SpeechFormatter {
                 parts.extend(node.current_phrase().map(Part::state));
                 Announcement::new(vec![Line::new(parts)])
             }
-            // On focus a menu button says no state and no hint (JAWS on the dev box).
+            // On focus a menu button says no state (JAWS on the dev box); a quick key to it
+            // says it collapsed or expanded: "Actions button menu collapsed" [obs,
+            // round-aria20, 2574/s1, 2578/s1].
             Role::MenuButton => {
                 let role = node
                     .role_description()
                     .unwrap_or(msg::role_button_menu().as_str());
-                Announcement::new(vec![Line::new(name_and_role(name, role))])
+                let mut parts = name_and_role(name, role);
+                let state = match node.states.expanded {
+                    Some(true) => Some(msg::state_expanded()),
+                    Some(false) => Some(msg::state_collapsed()),
+                    None => None,
+                };
+                if let Some(state) = state.filter(|_| !said.by_focus) {
+                    parts.push(Part::text(" "));
+                    parts.push(Part::state(state));
+                }
+                Announcement::new(vec![Line::new(parts)])
             }
             _ => Announcement::new(vec![Line::of(PartKind::Name, name)]),
         }
@@ -559,6 +571,9 @@ impl SpeechFormatter {
             // round-aria3, 2035/s1, 2040/s1], and a radio button moved through with the arrows
             // [obs, round-aria4, 2081/s1, 2086/s1].
             Role::Button if virtual_off => Some(msg::hint_activate_spacebar().as_str()),
+            // A menu button with the virtual cursor off: "Press space to activate the menu,
+            // then navigate with arrow keys" [obs, round-aria20, 2582/s1].
+            Role::MenuButton if virtual_off => Some(msg::hint_menu_button().as_str()),
             Role::RadioButton if virtual_off => Some(msg::hint_radio_up_down().as_str()),
             Role::Link { .. } | Role::Button => Some(msg::hint_activate_enter().as_str()),
             _ => None,

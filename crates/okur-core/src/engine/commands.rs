@@ -1006,9 +1006,21 @@ impl ScreenReaderEngine {
                         | crate::aom::Role::CheckBox
                         | crate::aom::Role::Link { .. }
                         | crate::aom::Role::Tab
+                        | crate::aom::Role::MenuButton
                 )
             })
         {
+            // A menu button by its name and role, no state: "Actions button menu" [obs,
+            // round-aria20, 2587/s1].
+            if node.role == crate::aom::Role::MenuButton {
+                let name = node.name.as_deref().unwrap_or_default().trim();
+                let role = node
+                    .role_description()
+                    .unwrap_or(msg::role_button_menu().as_str());
+                return format!("{name}{}", crate::linearize::role_marker(role))
+                    .trim()
+                    .to_owned();
+            }
             // A tab by its name, role and selection, without its place: "Maria Ahlefeldt Tab
             // selected" [obs, round-aria18, 2511/s1, 2515/s1].
             if node.role == crate::aom::Role::Tab {

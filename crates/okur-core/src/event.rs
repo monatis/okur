@@ -636,6 +636,10 @@ pub struct FocusEvent {
     /// reaction buttons at the top of its message menu): the menu keeps its keys.
     #[serde(default)]
     pub in_menu: bool,
+    /// The name of the page's menu the focus is in, where it has one (a menu named by its
+    /// menu button, "Actions").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub menu_name: Option<String>,
     /// The named groups and the lists a native control is in, outermost first, up to its
     /// window: Windows Settings' "Brightness & color", "Night light"; "Advanced",
     /// "Troubleshoot common sound problems", then that list. Empty where none, and where the
@@ -941,6 +945,7 @@ impl FocusEvent {
             in_menu_bar: false,
             under_menu_bar: false,
             in_menu: false,
+            menu_name: None,
             groups: Vec::new(),
             columns: Vec::new(),
             column_headers: Vec::new(),

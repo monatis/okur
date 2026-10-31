@@ -701,6 +701,16 @@ pub fn focus_event_from_chain(
             .skip(1)
             .take_while(|a| a.control_type != UIA_DOCUMENT)
             .any(|a| a.control_type == UIA_MENU);
+    event.menu_name = chain
+        .iter()
+        .rev()
+        .skip(1)
+        .take_while(|a| a.control_type != UIA_DOCUMENT)
+        .find(|a| a.control_type == UIA_MENU)
+        .and_then(|a| a.name.as_deref())
+        .map(str::trim)
+        .filter(|n| event.in_document && !n.is_empty())
+        .map(str::to_owned);
     // Groups that are a control's content name nothing: not even as the nearest container.
     let (groups, inside_control) = nested_groups(chain);
     let control_content = !event.in_document && inside_control;
@@ -956,6 +966,18 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .focus_chain
             .iter()
             .any(|n| n.control_type == UIA_MENUBAR);
+        // The menu's own name, where its menu button gives it one ("Actions").
+        const UIA_MENU: i32 = 50009;
+        focus.menu_name = event
+            .focus_chain
+            .iter()
+            .rev()
+            .nth(1)
+            .filter(|parent| parent.control_type == UIA_MENU)
+            .and_then(|menu| menu.name.as_deref())
+            .map(str::trim)
+            .filter(|name| !name.is_empty())
+            .map(str::to_owned);
         // Without a reported position, the item's place among its menu's items: "Mesaj
         // bilgisi | 1 of 9" (WhatsApp's message menu, JAWS on the dev box, 2026-10-17).
         if focus.item_index.is_none() {

@@ -1485,6 +1485,11 @@ impl Menus {
             lines.push(String::new());
             lines.push(msg::hint_context_menu_up_down().to_string());
         }
+        // A page's popup menu named by its menu button says its name first: "Actions menu |
+        // Action 1 | 1 of 4" [obs, round-aria20, 2588/s1].
+        if let Some(menu) = item.menu_name.as_deref().filter(|_| first && !context_menu) {
+            lines.push(msg::menu_named(menu).render());
+        }
         // An accelerator of one character is the letter that chooses the item in its menu
         // (Chrome reports "n" for "Yeni pencere Ctrl+N"), said as its access key; a longer one is
         // its shortcut, said with its name (Explorer's "Cut<tab>Ctrl+X", "Delete<tab>Delete").
@@ -1562,6 +1567,7 @@ impl Menus {
         place: PageMenuPlace,
         position: Option<(usize, usize)>,
         opens_menu: bool,
+        menu_name: Option<&str>,
     ) -> Option<String> {
         let name = name.trim();
         if self.active && self.current.as_deref() == Some(name) {
@@ -1581,6 +1587,11 @@ impl Menus {
         if first && self.from_bar {
             lines.push(role_marker(msg::role_menu().as_str()));
             lines.push(String::new());
+        }
+        // A popup menu named by its menu button says its name first: "Actions menu | Action 1
+        // | 1 of 4" [obs, round-aria20, 2588/s1].
+        if let Some(menu) = menu_name.filter(|_| first && place == PageMenuPlace::Popup) {
+            lines.push(msg::menu_named(menu).render());
         }
         if opens_menu && !on_bar {
             lines.push(format!(
@@ -1932,9 +1943,15 @@ To activate press Enter."
         let mut m = Menus::default();
         m.popup_start(PopupKind::Plain);
         assert_eq!(
-            m.page_focus("Accessibility", PageMenuPlace::Bar, Some((10, 10)), true)
-                .as_deref()
-                .map(norm),
+            m.page_focus(
+                "Accessibility",
+                PageMenuPlace::Bar,
+                Some((10, 10)),
+                true,
+                None
+            )
+            .as_deref()
+            .map(norm),
             Some(norm(
                 " \u{1d} menu \u{1e} \n\nAccessibility\n10 of 10\n\
                  To move through items press left or right arrow."
@@ -1942,7 +1959,7 @@ To activate press Enter."
         );
         m.popup_end();
         assert_eq!(
-            m.page_focus("Help", PageMenuPlace::Bar, Some((9, 10)), true)
+            m.page_focus("Help", PageMenuPlace::Bar, Some((9, 10)), true, None)
                 .as_deref(),
             Some("Help\n9 of 10")
         );
@@ -1952,13 +1969,14 @@ To activate press Enter."
                 "Search the menus",
                 PageMenuPlace::Popup,
                 Some((1, 3)),
-                false
+                false,
+                None
             )
             .as_deref(),
             Some("Search the menus")
         );
         assert_eq!(
-            m.page_focus("Search the menus", PageMenuPlace::Popup, None, false),
+            m.page_focus("Search the menus", PageMenuPlace::Popup, None, false, None),
             None
         );
         assert_eq!(
@@ -1966,7 +1984,8 @@ To activate press Enter."
                 "Verbalize to screen reader",
                 PageMenuPlace::Popup,
                 None,
-                true
+                true,
+                None
             )
             .as_deref()
             .map(norm),

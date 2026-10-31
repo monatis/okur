@@ -266,8 +266,13 @@ impl ScreenReaderEngine {
                 } else {
                     PageMenuPlace::Popup
                 };
-                self.menus
-                    .page_focus(name, place, position, focus.states.expanded.is_some())
+                self.menus.page_focus(
+                    name,
+                    place,
+                    position,
+                    focus.states.expanded.is_some(),
+                    focus.menu_name.as_deref(),
+                )
             } else if focus.item_index.is_some() && focus.item_count.is_some() && !focus.in_menu_bar
             {
                 // A modern menu reports its items' positions; a Win32 one does not (302).
@@ -1181,9 +1186,13 @@ impl ScreenReaderEngine {
         let name = focus.name.as_deref().unwrap_or_default();
         let position = focus.item_index.zip(focus.item_count);
         // The menus know where the focus is, for Escape's "Leaving menus".
-        let _ = self
-            .menus
-            .page_focus(name, place, position, focus.states.expanded.is_some());
+        let _ = self.menus.page_focus(
+            name,
+            place,
+            position,
+            focus.states.expanded.is_some(),
+            focus.menu_name.as_deref(),
+        );
         let entering_page = self.last_page_focus.is_none();
         self.last_page_focus = Some(id);
         self.tab_start = Some(id);
@@ -1193,6 +1202,15 @@ impl ScreenReaderEngine {
         }
         if entering_page {
             lines.extend(self.cursor.buffer.document_title().map(str::to_owned));
+        }
+        // A popup menu named by its menu button says its name first: "Actions menu | Action 1
+        // | 1 of 4" [obs, round-aria20, 2588/s1].
+        if let Some(menu) = focus
+            .menu_name
+            .as_deref()
+            .filter(|_| first && place == PageMenuPlace::Popup)
+        {
+            lines.push(msg::menu_named(menu).render());
         }
         lines.push(line);
         if first {
