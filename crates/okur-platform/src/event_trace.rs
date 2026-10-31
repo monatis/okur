@@ -1761,7 +1761,9 @@ impl EventConverter {
         if let Some([x, y]) = event.mouse {
             return vec![okur_core::AccessibilityEvent::MouseMoved { x, y }];
         }
-        if event.event == "live_region_change" {
+        // A page's alert carries its content as a live region does [obs, round-aria12].
+        if event.event == "live_region_change" || (event.event == "alert" && event.region.is_some())
+        {
             return live_region_events(event);
         }
         if event.event == "uia_live_region" {
@@ -5204,7 +5206,11 @@ mod capture {
                     )
                 };
             stages.push(("window", clock.elapsed().as_millis()));
-            let (region, page) = if name == "live_region_change" {
+            // An alert in a page (role="alert") is read as a live region: Chromium tells of its
+            // new content with an alert event alone, no live region change [obs, round-aria12,
+            // 2346/s1].
+            let page_alert = name == "alert" && class == "Chrome_RenderWidgetHostHWND";
+            let (region, page) = if name == "live_region_change" || page_alert {
                 // Live, the page after the change is captured by the listener's page worker.
                 chromium_live_region(hwnd, &class, id_child, !state.live)
             } else {
