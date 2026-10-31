@@ -2,6 +2,16 @@ use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
 
+/// A scenario's fixture as the corpus keys it, from its URI: its path under `corpus/fixtures/`,
+/// with slashes (`news-article.html`, or `aria-at/checkbox-tri-state/checkbox-mixed.html` for
+/// a page kept with its own files); the file's name for a URI elsewhere.
+pub fn fixture_key(uri: &str) -> &str {
+    const ROOT: &str = "/corpus/fixtures/";
+    uri.find(ROOT)
+        .and_then(|at| uri.get(at + ROOT.len()..))
+        .unwrap_or_else(|| uri.rsplit('/').next().unwrap_or_default())
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Scenario {
     pub id: String,
@@ -89,6 +99,28 @@ impl Scenario {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// A fixture is keyed by its path under the lab's fixtures folder, a folder's included, and
+    /// its snapshots by that path with dots.
+    #[test]
+    fn a_fixture_in_a_folder_is_keyed_by_its_path() {
+        let page = "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox/checkbox.html";
+        assert_eq!(fixture_key(page), "aria-at/checkbox/checkbox.html");
+        assert_eq!(
+            fixture_key("file:///C:/Users/ailabs/corpus/fixtures/news-article.html"),
+            "news-article.html"
+        );
+        assert_eq!(fixture_key("file:///C:/elsewhere/page.html"), "page.html");
+        let snapshot = crate::snapshots::path(
+            Path::new("corpus"),
+            fixture_key(page),
+            crate::snapshots::Api::Ia2,
+        );
+        assert_eq!(
+            snapshot.file_name().and_then(|n| n.to_str()),
+            Some("aria-at.checkbox.checkbox.chrome.ia2.json")
+        );
+    }
 
     #[test]
     fn a_step_reads_the_keys_pressed_during_its_speech() -> Result<(), serde_json::Error> {

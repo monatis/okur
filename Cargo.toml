@@ -37,6 +37,7 @@ tokio = { version = "1.40", features = ["full"] }
 clap = { version = "4.5", features = ["derive"] }
 regex = "1.11"
 sha2 = "0.10"
+csv = "1.3"
 # Vendored from xa11y 0.15.2 (MIT, see crates/xa11y/LICENSE) and extended in-tree.
 xa11y = { path = "crates/xa11y/xa11y", default-features = false }
 xa11y-core = { path = "crates/xa11y/xa11y-core", default-features = false }

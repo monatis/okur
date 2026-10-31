@@ -86,7 +86,9 @@ if ($Snapshots.Count -gt 0) {
     $folder = Join-Path $OutputDir 'snapshots'
     New-Item -ItemType Directory -Force -Path $folder | Out-Null
     foreach ($fixture in $Snapshots) {
-        $stem = [IO.Path]::GetFileNameWithoutExtension($fixture)
+        # A fixture in a folder ("aria-at/checkbox/checkbox.html") is named by its path, dots
+        # for slashes, as okur-corpus's snapshots::path names it.
+        $stem = ($fixture -replace '\.html$', '') -replace '[\\/]', '.'
         foreach ($api in 'ia2', 'uia') {
             $out = Join-Path $folder "$stem.chrome.$api.json"
             # A failed capture is logged and the batch still runs: with 'Stop', the capture's

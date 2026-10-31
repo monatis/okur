@@ -43,9 +43,15 @@ impl Api {
     }
 }
 
-/// The snapshot of `fixture` (a file name such as `news-article.html`) for `api`.
+/// The snapshot of `fixture` (its key, [`crate::scenario::fixture_key`]: `news-article.html`,
+/// `aria-at/checkbox-tri-state/checkbox-mixed.html`) for `api`. Snapshots lie side by side: a
+/// fixture in a folder is named by its path, dots for slashes
+/// (`aria-at.checkbox-tri-state.checkbox-mixed.chrome.ia2.json`).
 pub fn path(corpus_dir: &Path, fixture: &str, api: Api) -> PathBuf {
-    let stem = fixture.strip_suffix(".html").unwrap_or(fixture);
+    let stem = fixture
+        .strip_suffix(".html")
+        .unwrap_or(fixture)
+        .replace('/', ".");
     corpus_dir
         .join("snapshots")
         .join(format!("{stem}{}", api.suffix()))

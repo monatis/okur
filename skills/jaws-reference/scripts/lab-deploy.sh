@@ -7,7 +7,7 @@
 #   bin/okur-ui.exe         <- okur-ui.exe beside it, if built (Okur's windows)
 #   bin/okur-lab.exe        <- okur-lab.exe beside it, if built (the harness's program)
 #   skill scripts           <- skills/jaws-reference/scripts/*.ps1
-#   corpus fixtures         <- corpus/fixtures/*.html, *.ps1
+#   corpus fixtures         <- corpus/fixtures/*.html, *.ps1, and every file in its folders
 #   corpus scenarios        <- corpus/scenarios/*.json
 #   recorder DLLs           <- --recorder / --recorder32 (stop JAWS first if it uses the voice)
 # Files whose installed copy already has the same hash are not sent. Run from the repository
@@ -44,6 +44,10 @@ files() {
     done
     for f in corpus/fixtures/*.html corpus/fixtures/*.ps1; do
         [ -f "$f" ] && printf '%s\t%s\n' "$f" "$LAB/corpus/fixtures/$(basename "$f")"
+    done
+    # A page kept with its own files, in a folder (ARIA-AT's pages, their scripts and styles).
+    find corpus/fixtures -mindepth 2 -type f | sort | while read -r f; do
+        printf '%s\t%s\n' "$f" "$LAB/${f}"
     done
     for f in corpus/scenarios/*.json; do
         printf '%s\t%s\n' "$f" "$LAB/corpus/scenarios/$(basename "$f")"

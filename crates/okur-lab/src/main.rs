@@ -5,6 +5,8 @@
 //! `window-text`, `history`, `latency`). What sends keys to other programs, reads the
 //! clipboard and traces every window lives here, never in the program users run.
 
+mod aria_at;
+
 use clap::{Parser, Subcommand};
 use okur::run::load_aom_from_path;
 use okur_core::{AomNode, Role, VirtualBuffer, VirtualCursor};
@@ -201,6 +203,29 @@ enum Commands {
         /// Empty the history after reading it
         #[arg(long)]
         clear: bool,
+    },
+    /// Make one of W3C ARIA-AT's test plans into pending scenarios: its test pages copied with
+    /// their files, a scenario per JAWS command of each test
+    AriaAtImport {
+        /// The `tests` folder of a checkout of https://github.com/w3c/aria-at
+        #[arg(long)]
+        tests: String,
+
+        /// The test plan, as its folder under `tests` ("apg/checkbox-tri-state")
+        #[arg(long)]
+        plan: String,
+
+        /// The first scenario id to give
+        #[arg(long)]
+        first_id: u32,
+
+        /// The checkout's commit, recorded in each scenario and in the pages' notice
+        #[arg(long)]
+        source: String,
+
+        /// Where the pages (`aria-at/<plan>/`) and scenarios go
+        #[arg(long, default_value = "corpus/pending")]
+        out: String,
     },
     /// Print an evidence file's steps and JAWS transcripts readably
     Evidence {
@@ -1722,6 +1747,22 @@ async fn main() {
                 std::process::exit(1);
             }
         }
+        Some(Commands::AriaAtImport {
+            tests,
+            plan,
+            first_id,
+            source,
+            out,
+        }) => match aria_at::import(Path::new(&tests), &plan, first_id, &source, Path::new(&out)) {
+            Ok(imported) => println!(
+                "{plan}: {} scenario(s), {} page file(s); ids {first_id} to {}",
+                imported.scenarios, imported.files, imported.last_id
+            ),
+            Err(e) => {
+                eprintln!("{e}");
+                std::process::exit(1);
+            }
+        },
         Some(Commands::Evidence {
             evidence,
             trial,

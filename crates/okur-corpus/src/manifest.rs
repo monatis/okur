@@ -81,6 +81,26 @@ fn sorted_files(dir: &Path, suffix: &str) -> Result<Vec<std::path::PathBuf>, Str
     Ok(files)
 }
 
+/// The files in `dir` and its folders whose names end with `suffix`, each with its path under
+/// `dir` (slashes between folders), in that path's order.
+fn files_under(dir: &Path, suffix: &str) -> Result<Vec<(String, std::path::PathBuf)>, String> {
+    let mut found = Vec::new();
+    let mut folders = vec![(String::new(), dir.to_path_buf())];
+    while let Some((prefix, folder)) = folders.pop() {
+        for entry in fs::read_dir(&folder).map_err(|e| format!("{folder:?}: {e}"))? {
+            let path = entry.map_err(|e| format!("{folder:?}: {e}"))?.path();
+            let key = format!("{prefix}{}", file_name(&path));
+            if path.is_dir() {
+                folders.push((format!("{key}/"), path));
+            } else if path.is_file() && key.ends_with(suffix) {
+                found.push((key, path));
+            }
+        }
+    }
+    found.sort();
+    Ok(found)
+}
+
 fn file_name(path: &Path) -> String {
     path.file_name()
         .map(|n| n.to_string_lossy().into_owned())
@@ -154,11 +174,13 @@ fn evidence_entry(path: &Path) -> Result<EvidenceEntry, String> {
 
 /// Builds the manifest for the corpus rooted at `corpus_dir` from the files on disk.
 pub fn generate(corpus_dir: &Path) -> Result<CorpusManifest, String> {
+    // Every fixture file, a page's own files in its folder too (ARIA-AT's pages with their
+    // scripts and styles), keyed by its path under fixtures/.
     let mut fixtures = BTreeMap::new();
-    for path in sorted_files(&corpus_dir.join("fixtures"), "")? {
+    for (key, path) in files_under(&corpus_dir.join("fixtures"), "")? {
         let bytes = fs::read(&path).map_err(|e| format!("{path:?}: {e}"))?;
         fixtures.insert(
-            file_name(&path),
+            key,
             FileEntry {
                 sha256: sha256_hex(&bytes),
                 size_bytes: bytes.len() as u64,
@@ -178,7 +200,7 @@ pub fn generate(corpus_dir: &Path) -> Result<CorpusManifest, String> {
         let fixture = json
             .get("fixture")
             .and_then(Value::as_str)
-            .and_then(|uri| uri.rsplit('/').next())
+            .map(crate::scenario::fixture_key)
             .unwrap_or_default()
             .to_owned();
         if !fixtures.contains_key(&fixture) {

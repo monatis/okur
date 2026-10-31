@@ -346,7 +346,7 @@ fn replay_scenario(
     let aom = if desktop {
         okur_core::AomNode::new(0, okur_core::Role::Document)
     } else {
-        let fixture = scenario.fixture.rsplit('/').next().unwrap_or_default();
+        let fixture = crate::scenario::fixture_key(&scenario.fixture);
         let snapshot = snapshots::load(&snapshots::path(corpus_dir, fixture, api))?;
         let fixture_bytes =
             fs::read(corpus_dir.join("fixtures").join(fixture)).map_err(|e| format!("{e}"))?;
