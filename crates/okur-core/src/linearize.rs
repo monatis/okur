@@ -371,8 +371,7 @@ struct Builder<'a> {
     /// How many preformatted elements (`<pre>`) the visit is inside.
     preformatted: usize,
     /// Enclosing named groups, innermost last: (node id, name, kind: "radiogroup" for an ARIA
-    /// radio group, "titled-group" for an ARIA group whose label is a heading inside it, "group"
-    /// for another ARIA group, "fieldset" otherwise).
+    /// radio group, "group" for an ARIA group, "fieldset" otherwise).
     groups: Vec<(usize, String, &'static str)>,
     /// Names of enclosing tab lists, innermost last.
     tablists: Vec<String>,
@@ -833,14 +832,6 @@ impl<'a> Builder<'a> {
                         legend.clone().unwrap_or_default(),
                         if attr(node, "radiogroup") == Some("true") {
                             "radiogroup"
-                        } else if attr(node, "aria_group") == Some("true")
-                            && node.children.iter().any(|child| {
-                                matches!(child.role, Role::Heading { .. })
-                                    && legend.as_deref().is_some_and(|l| text_content(child) == l)
-                            })
-                        {
-                            // An ARIA group whose label is a heading inside it.
-                            "titled-group"
                         } else if attr(node, "aria_group") == Some("true") {
                             "group"
                         } else {

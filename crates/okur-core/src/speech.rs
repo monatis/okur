@@ -381,15 +381,15 @@ impl SpeechFormatter {
         // A focus coming into an ARIA radio group says an empty state after it: "Pizza Crust
         // group | | Regular crust radio button" [obs, round-aria4, 2080/s1, 2085/s1]; a quick
         // key does not [obs, 2082/s1], nor a fieldset [obs, round-aria2, 2003/s1].
-        // Insert+Tab names a control's group, but not an ARIA group's (role="group") whose label
-        // is a heading inside it: "Living Room Lights Switch Off", where F coming from its link
-        // says "Environmental Controls group | ..." [obs, round-aria9, 2286/s1, 2270/s1]; a
-        // fieldset's, an ARIA group's labelled from outside and a radio group's are named
-        // [obs, round-aria2, 2010/s1; round-aria6, 2190/s1; round-aria4, 2118/s1].
+        // Insert+Tab names a check box's or radio button's group, but not a switch's, in a
+        // fieldset as in an ARIA group: "Reduced motion Switch Off", where F coming to it
+        // names the group [obs, round-aria9, 2286/s1, 2270/s1; round-aria10, 2318/s1; check
+        // boxes and radio buttons: round-aria2, 2010/s1; round-aria6, 2190/s1; round-aria4,
+        // 2118/s1].
         let entered_group = || {
             let (group, group_id) = (attr("group_name")?, attr("group_id")?);
             let kind = attr("group_kind");
-            if said.asked && kind == Some("titled-group") {
+            if said.asked && crate::linearize::switch_state(node).is_some() {
                 return None;
             }
             (!group_id.parse().is_ok_and(&was_inside)).then(|| {
