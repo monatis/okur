@@ -24,6 +24,9 @@ article-end = article end
 # A named group of controls (a fieldset): its legend follows.
 group-start = group start { $name }
 group-end = group end { $name }
+# A page's tab panel, named by its tab: "tab panel start Peter Müller", then "tab panel end".
+tab-panel-start = tab panel start { $name }
+tab-panel-end = tab panel end
 # The lines before and after a page's menu bar's items, the first after its name ("Main menu
 # MenuBar with 3 items"). JAWS writes MenuBar as one word.
 menu-bar-start = MenuBar with { $items } items

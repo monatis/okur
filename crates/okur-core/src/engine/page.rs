@@ -468,6 +468,10 @@ impl ScreenReaderEngine {
                         "region" => Some(named(msg::role_region().as_str())),
                         _ => None,
                     },
+                    // "Peter Müller TabPanel" [obs, round-aria18, 2531/s1].
+                    Role::TabPanel if !name.is_empty() => {
+                        Some(named(msg::role_tab_panel().as_str()))
+                    }
                     Role::List => {
                         let items = n
                             .children

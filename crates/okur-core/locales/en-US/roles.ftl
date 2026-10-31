@@ -90,6 +90,8 @@ role-slider = slider
 role-slider-horizontal = left right slider
 role-split-button = split button
 role-tab = Tab
+# A page's tab panel, as JAWS says it entering one: "Peter Müller TabPanel".
+role-tab-panel = TabPanel
 # A button with a pressed state (aria-pressed).
 role-toggle-button = Toggle button
 # A tool bar entered by the focus (a Win32 toolbar of buttons).

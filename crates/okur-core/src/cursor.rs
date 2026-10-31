@@ -1337,33 +1337,7 @@ impl VirtualCursor {
             Role::Link { .. } => {
                 self.with_verbosity(SpeechFormatter::link_focus(name, node, self.virtual_off))
             }
-            // A tab: its tab list as a group when focus enters it, then name, position and
-            // selection [obs, 29/s2-s3].
-            Role::Tab => {
-                let info = self.buffer.tab_info_for_node(node_id);
-                let entering = info.is_some_and(|i| {
-                    !self
-                        .buffer
-                        .tabs
-                        .iter()
-                        .any(|t| t.group_name == i.group_name && t.offset == previous)
-                });
-                let mut lines = Vec::new();
-                if let Some(group) = info
-                    .and_then(|i| i.group_name.as_deref())
-                    .filter(|_| entering)
-                {
-                    lines.push(format!("{group} \u{1d} {} \u{1e} \n", msg::role_group()));
-                }
-                lines.push(format!("{name}  \u{1d} {} \u{1e} ", msg::role_tab()));
-                if let Some(i) = info {
-                    lines.push(msg::position(i.index, i.total).render());
-                }
-                if node.states.selected == Some(true) {
-                    lines.push(format!(" \u{1d}{}\u{1e}", msg::state_selected()));
-                }
-                lines.join("\n")
-            }
+            Role::Tab => self.tab_speech(node, previous, group),
             // Its empty state mark goes with the other states [obs, 738/s3].
             Role::Edit if attr("password") == Some("true") => {
                 let field = self.control_focus_speech(self.offset, previous, group);
@@ -1475,6 +1449,55 @@ impl VirtualCursor {
         }
     }
 
+    /// A tab said as its focus or a quick key says it: its tab list as a group when it is
+    /// entered from outside the list, then name, position and selection [obs, 29/s2-s3;
+    /// round-aria18].
+    fn tab_speech(&self, node: &AomNode, previous: usize, group: GroupNamed) -> String {
+        let name = node.name.as_deref().unwrap_or_default().trim();
+        let info = self.buffer.tab_info_for_node(node.id);
+        let entering = info.is_some_and(|i| {
+            !self
+                .buffer
+                .tabs
+                .iter()
+                .any(|t| t.group_name == i.group_name && t.offset == previous)
+        });
+        let mut lines = Vec::new();
+        let asked = matches!(group, GroupNamed::Asked);
+        let selected = node.states.selected == Some(true);
+        // Asked for (Insert+Tab), the tab list is named only with the virtual cursor
+        // off, and without its role: "Danish Composers | Maria Ahlefeldt Tab" [obs,
+        // round-aria18, 2508/s1, 2510/s1].
+        if let Some(group) = info
+            .and_then(|i| i.group_name.as_deref())
+            .filter(|_| entering && (!asked || self.virtual_off))
+        {
+            if asked {
+                lines.push(format!("{group}\n"));
+            } else {
+                lines.push(format!("{group} \u{1d} {} \u{1e} \n", msg::role_group()));
+            }
+        }
+        // With the virtual cursor off a selected tab says so after its role too:
+        // "Peter Müller Tab selected | 4 of 4 | selected" [obs, round-aria18, 2507/s1].
+        if self.virtual_off && selected {
+            lines.push(format!(
+                "{name}  \u{1d} {} \u{1e}  \u{1d}{}\u{1e} ",
+                msg::role_tab(),
+                msg::state_selected()
+            ));
+        } else {
+            lines.push(format!("{name}  \u{1d} {} \u{1e} ", msg::role_tab()));
+        }
+        if let Some(i) = info {
+            lines.push(msg::position(i.index, i.total).render());
+        }
+        if selected {
+            lines.push(format!(" \u{1d}{}\u{1e}", msg::state_selected()));
+        }
+        lines.join("\n")
+    }
+
     fn control_focus_speech(&self, offset: usize, previous: usize, group: GroupNamed) -> String {
         let Some(node) = self
             .buffer
@@ -1483,6 +1506,11 @@ impl VirtualCursor {
         else {
             return String::new();
         };
+        // F reaches a page's tab as its focus says it: "Danish Composers group | Maria
+        // Ahlefeldt Tab | 1 of 4 | selected" [obs, round-aria18, 2502/s1].
+        if node.role == Role::Tab {
+            return self.tab_speech(node, previous, group);
+        }
         let previous_group = self
             .buffer
             .line_at_offset(previous)

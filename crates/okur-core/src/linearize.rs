@@ -689,6 +689,15 @@ impl<'a> Builder<'a> {
                     end: msg::group_end(name).render(),
                 }
             }
+            // A named tab panel has lines at both ends: "tab panel start Peter Müller", "tab
+            // panel end" [obs, round-aria18, 2506/s1, 2533/s1].
+            Role::TabPanel if node.name.as_deref().is_some_and(|n| !n.trim().is_empty()) => {
+                let name = node.name.as_deref().map(squash).unwrap_or_default();
+                Class::Container {
+                    start: msg::tab_panel_start(name).render(),
+                    end: msg::tab_panel_end().to_string(),
+                }
+            }
             Role::Text if node.text.is_none() && !node.children.is_empty() => {
                 // Inline wrappers Chrome exposes as Text (strong, em, time), except the
                 // caption wrapper directly inside a table, which is its own line.
@@ -1269,7 +1278,18 @@ impl<'a> Builder<'a> {
                 }
                 s
             }
-            Role::Tab => format!("{name}{}", role_marker(msg::role_tab().as_str())),
+            // "Maria Ahlefeldt Tab selected | 1 of 4", "Carl Andersen Tab | 2 of 4" [obs,
+            // round-aria18, 2509/s1, 2513/s1].
+            Role::Tab => {
+                let mut s = format!("{name}{}", role_marker(msg::role_tab().as_str()));
+                if node.states.selected == Some(true) {
+                    s.push_str(&state_marker(msg::state_selected().as_str()));
+                }
+                if let (Some(pos), Some(size)) = (attr(node, "posinset"), attr(node, "setsize")) {
+                    s.push_str(&format!("\n{}", msg::position(pos, size)));
+                }
+                s
+            }
             Role::Slider => format!("{name}{}", role_marker(msg::role_slider().as_str())),
             Role::ProgressBar => {
                 format!("{name}{}", role_marker(msg::role_progress_bar().as_str()))
@@ -1345,6 +1365,8 @@ impl<'a> Builder<'a> {
             Role::Slider => self.buffer.sliders.push(off),
             Role::ProgressBar => self.buffer.progress_bars.push(off),
             Role::Tab => {
+                // F stops on a page's tabs as on its fields [obs, round-aria18, 2497/s1].
+                self.buffer.form_controls.push(off);
                 let position = |key: &str| attr(node, key).and_then(|v| v.parse::<usize>().ok());
                 let index = position("posinset").unwrap_or(self.buffer.tabs.len() + 1);
                 self.buffer.tabs.push(TabInfo {

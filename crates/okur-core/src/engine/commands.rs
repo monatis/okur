@@ -972,11 +972,11 @@ impl ScreenReaderEngine {
 
     pub(super) fn line_here(&self) -> String {
         use crate::announcement::PartKind;
-        // A focused tab adds its place among its list's tabs: "Advanced Tab 2 of 2" [obs,
-        // 260/s4].
+        // A focused tab's line with its place among its list's tabs: "Advanced Tab 2 of 2"
+        // [obs, 260/s4], the place added where the page gives the tab none of its own.
         let line = self.cursor.buffer.line_at_offset(self.cursor.offset);
         if let Some(tab) = line
-            .filter(|line| Some(line.node_id) == self.last_page_focus)
+            .filter(|line| Some(line.node_id) == self.last_page_focus && !self.virtual_cursor_off)
             .and_then(|line| {
                 self.cursor
                     .buffer
@@ -985,11 +985,12 @@ impl ScreenReaderEngine {
                     .find(|t| t.node_id == line.node_id)
             })
         {
-            return format!(
-                "{}\n{}",
-                self.cursor.current_line(),
-                msg::position(tab.index.to_string(), tab.total.to_string())
-            );
+            let current = self.cursor.current_line();
+            let place = msg::position(tab.index.to_string(), tab.total.to_string()).render();
+            if current.ends_with(place.as_str()) {
+                return current;
+            }
+            return format!("{current}\n{place}");
         }
         // With the virtual cursor off the focused control is said as its focus says it, its
         // hint and group left out: a button in a heading without the heading [obs, round-aria5,
@@ -1004,9 +1005,25 @@ impl ScreenReaderEngine {
                         | crate::aom::Role::RadioButton
                         | crate::aom::Role::CheckBox
                         | crate::aom::Role::Link { .. }
+                        | crate::aom::Role::Tab
                 )
             })
         {
+            // A tab by its name, role and selection, without its place: "Maria Ahlefeldt Tab
+            // selected" [obs, round-aria18, 2511/s1, 2515/s1].
+            if node.role == crate::aom::Role::Tab {
+                let name = node.name.as_deref().unwrap_or_default().trim();
+                let mut said = format!(
+                    "{name}{}",
+                    crate::linearize::role_marker(msg::role_tab().as_str())
+                );
+                if node.states.selected == Some(true) {
+                    said.push_str(&crate::linearize::state_marker(
+                        msg::state_selected().as_str(),
+                    ));
+                }
+                return said.trim().to_owned();
+            }
             // A link as its focus says it, name first: "W3C website Link" [obs, round-aria13,
             // 2361/s1].
             if matches!(node.role, crate::aom::Role::Link { .. }) {
