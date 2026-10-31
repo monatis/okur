@@ -992,9 +992,8 @@ impl ScreenReaderEngine {
             );
         }
         // With the virtual cursor off the focused control is said as its focus says it, its
-        // hint and group left out: a checked ARIA radio button with its place, which the
-        // virtual cursor's line leaves out; a button in a heading without the heading [obs,
-        // round-aria4, 2121/s1; round-aria5, 2152/s1, 2156/s1].
+        // hint and group left out: a button in a heading without the heading [obs, round-aria5,
+        // 2152/s1, 2156/s1].
         if let Some(node) = line
             .filter(|line| self.virtual_cursor_off && Some(line.node_id) == self.last_page_focus)
             .and_then(|line| self.cursor.buffer.node(line.node_id))

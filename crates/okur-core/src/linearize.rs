@@ -46,16 +46,6 @@ pub(crate) fn switch_state(node: &AomNode) -> Option<crate::messages::StaticMess
     })
 }
 
-/// Whether a radio button is a checked ARIA one (`role="radio"` on another element), whose
-/// place in its group JAWS says only with the virtual cursor off: "Thin crust radio button
-/// checked", where an unchecked one is "Regular crust radio button not checked | 1 of 3", and a
-/// native one checked keeps it [obs, round-aria4, 2084/s2, 2074/s2, 2081/s1; 202].
-pub(crate) fn is_checked_aria_radio(node: &AomNode) -> bool {
-    node.role == Role::RadioButton
-        && node.states.checked == Some(true)
-        && node.attributes.get("aria_role").map(String::as_str) == Some("radio")
-}
-
 /// Where an element said between two marks starts and ends in a run's text: noncharacters,
 /// which no page holds, left out of the line's text and said as the marks.
 const DELETION_START: char = '\u{FDD0}';
@@ -1202,12 +1192,10 @@ impl<'a> Builder<'a> {
                     role_marker(msg::role_radio_button().as_str()),
                     state_marker(checked(&node.states))
                 );
-                // A checked ARIA radio button's line has no place in its group: "Thin crust
-                // radio button checked" [obs, round-aria4, 2084/s2]; a native one's has.
-                let position = (attr(node, "posinset"), attr(node, "setsize"));
-                if let (Some(pos), Some(size), false) =
-                    (position.0, position.1, is_checked_aria_radio(node))
-                {
+                // Its place in its group, checked or not: "Deep dish radio button checked |
+                // 2 of 3" [obs, round-aria16, 2420/s1; round-aria17; 1126]. ARIA-AT's
+                // roving-tabindex page alone leaves a checked one's out (accepted divergence).
+                if let (Some(pos), Some(size)) = (attr(node, "posinset"), attr(node, "setsize")) {
                     s.push_str(&format!("\n{}", msg::position(pos, size)));
                 }
                 s

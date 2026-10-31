@@ -1093,15 +1093,34 @@ A step can be in more than one entry; all of its entries apply.
   focus event either way. Okur says it last.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-31.
 
-### Enter's place on an ARIA radio button
+### A checked ARIA radio button's place on one page
 
-- Steps: `2112-aria-radiogroup-roving-tabindex-check-radio-enter-vc/s1`.
-- Difference: the whole step. Enter checking an ARIA radio button in the virtual cursor: JAWS
-  adds its place, "Regular crust radio button checked | 1 of 3"; Space checking it the same way
-  does not (2111/s1), the trace the same one state change. Okur says it without, as Space.
-- Why: one observation; the other radio groups' plans (radiogroup-aria-activedescendant,
-  rating-radio-group), with the same tests, are to tell which is JAWS's rule.
-- Decided by the agent, 2026-10-31.
+- Steps: `2077-aria-radiogroup-roving-tabindex-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-f-vc/s1`,
+  `2078-aria-radiogroup-roving-tabindex-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-a-vc/s1`,
+  `2079-aria-radiogroup-roving-tabindex-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-down-down-down-vc/s3`,
+  `2080-aria-radiogroup-roving-tabindex-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-tab-vc/s1`,
+  `2082-aria-radiogroup-roving-tabindex-nav-back-into-radio-group-where-last-radio-checked-shift-f-vc/s1`,
+  `2083-aria-radiogroup-roving-tabindex-nav-back-into-radio-group-where-last-radio-checked-shift-a-vc/s1`,
+  `2084-aria-radiogroup-roving-tabindex-nav-back-into-radio-group-where-last-radio-checked-up-up-vc/s2`,
+  `2085-aria-radiogroup-roving-tabindex-nav-back-into-radio-group-where-last-radio-checked-shift-tab-vc/s1`,
+  `2101-aria-radiogroup-roving-tabindex-nav-to-next-checked-radio-f-vc/s1`,
+  `2102-aria-radiogroup-roving-tabindex-nav-to-next-checked-radio-a-vc/s1`,
+  `2103-aria-radiogroup-roving-tabindex-nav-to-next-checked-radio-down-vc/s1`,
+  `2104-aria-radiogroup-roving-tabindex-nav-to-prev-checked-radio-shift-f-vc/s1`,
+  `2105-aria-radiogroup-roving-tabindex-nav-to-prev-checked-radio-shift-a-vc/s1`,
+  `2106-aria-radiogroup-roving-tabindex-nav-to-prev-checked-radio-up-vc/s1`,
+  `2111-aria-radiogroup-roving-tabindex-check-radio-space-vc/s1`,
+  `2118-aria-radiogroup-roving-tabindex-req-info-about-checked-radio-ins-tab-vc/s1`,
+  `2119-aria-radiogroup-roving-tabindex-req-info-about-checked-radio-ins-up-vc/s1`.
+- Difference: the whole step. A checked ARIA radio button on ARIA-AT's roving-tabindex page, the
+  virtual cursor on: JAWS leaves out its place, "Regular crust radio button checked" [obs,
+  round-aria4], but says it after Enter checked it (2112/s1).
+- Why: everywhere else a checked one has its place: the activedescendant and rating groups
+  [obs, round-aria16, round-aria17] and seven groups made to vary what that page has [obs, 1126:
+  a group focusable or not, its label inside or out, its radio buttons focusable or not,
+  checked in the markup or by a script]. No property of the page's accessibility tree tells it
+  apart. Okur says the place.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-11-01.
 
 ### Excel's cell menu closed by the recorder
 

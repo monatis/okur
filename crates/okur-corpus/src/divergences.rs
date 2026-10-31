@@ -1083,13 +1083,33 @@ divergences! {
      Okur says it last.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-31";
 
-    Difference::Step => ["2112-aria-radiogroup-roving-tabindex-check-radio-enter-vc/s1"],
-    "Enter checking an ARIA radio button in the virtual cursor: JAWS adds its place, \
-     \"Regular crust radio button checked | 1 of 3\", where Space checking it the same way \
-     (the trace the same one state change) does not (2111/s1). Okur says it without, as Space; \
-     the other radio groups' plans, with the same tests, are to tell which is JAWS's rule.",
-    "the agent, 2026-10-31: one observation, to check against radiogroup-aria-activedescendant \
-     and rating-radio-group";
+    Difference::Step => [
+        "2077-aria-radiogroup-roving-tabindex-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-f-vc/s1",
+        "2078-aria-radiogroup-roving-tabindex-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-a-vc/s1",
+        "2079-aria-radiogroup-roving-tabindex-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-down-down-down-vc/s3",
+        "2080-aria-radiogroup-roving-tabindex-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-tab-vc/s1",
+        "2082-aria-radiogroup-roving-tabindex-nav-back-into-radio-group-where-last-radio-checked-shift-f-vc/s1",
+        "2083-aria-radiogroup-roving-tabindex-nav-back-into-radio-group-where-last-radio-checked-shift-a-vc/s1",
+        "2084-aria-radiogroup-roving-tabindex-nav-back-into-radio-group-where-last-radio-checked-up-up-vc/s2",
+        "2085-aria-radiogroup-roving-tabindex-nav-back-into-radio-group-where-last-radio-checked-shift-tab-vc/s1",
+        "2101-aria-radiogroup-roving-tabindex-nav-to-next-checked-radio-f-vc/s1",
+        "2102-aria-radiogroup-roving-tabindex-nav-to-next-checked-radio-a-vc/s1",
+        "2103-aria-radiogroup-roving-tabindex-nav-to-next-checked-radio-down-vc/s1",
+        "2104-aria-radiogroup-roving-tabindex-nav-to-prev-checked-radio-shift-f-vc/s1",
+        "2105-aria-radiogroup-roving-tabindex-nav-to-prev-checked-radio-shift-a-vc/s1",
+        "2106-aria-radiogroup-roving-tabindex-nav-to-prev-checked-radio-up-vc/s1",
+        "2111-aria-radiogroup-roving-tabindex-check-radio-space-vc/s1",
+        "2118-aria-radiogroup-roving-tabindex-req-info-about-checked-radio-ins-tab-vc/s1",
+        "2119-aria-radiogroup-roving-tabindex-req-info-about-checked-radio-ins-up-vc/s1",
+    ],
+    "A checked ARIA radio button on ARIA-AT's roving-tabindex page, the virtual cursor on: JAWS \
+     leaves out its place, \"Regular crust radio button checked\", but after Enter checked it \
+     (2112/s1). Everywhere else a checked one has it: the activedescendant and rating groups \
+     (round-aria16, round-aria17) and seven groups made to vary what that page has (1126: a \
+     group focusable or not, its label inside or out, its radio buttons focusable or not, \
+     checked in the markup or by a script); no property of the page's tree tells it apart. \
+     Okur says the place.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
 
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",

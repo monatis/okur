@@ -451,10 +451,8 @@ impl SpeechFormatter {
                 parts.push(Part::text(" "));
                 parts.push(Part::state(checked(&node.states)));
                 lines.push(Line::new(parts));
-                // A checked ARIA radio button's place in its group, only with the virtual
-                // cursor off [obs, round-aria4, 2081/s1, 2082/s1].
-                let placed = !crate::linearize::is_checked_aria_radio(node) || said.virtual_off;
-                if let (Some(p), Some(n), true) = (attr("posinset"), attr("setsize"), placed) {
+                // Its place in its group, checked or not [obs, round-aria16, 2399/s1; 1126].
+                if let (Some(p), Some(n)) = (attr("posinset"), attr("setsize")) {
                     lines.push(Line::of(PartKind::Position, msg::position(p, n)));
                 }
                 Announcement::new(lines)
