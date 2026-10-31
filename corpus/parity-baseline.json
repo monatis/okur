@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 9557,
+  "matched_steps": 9558,
   "total_steps": 10132,
   "accepted_divergences": 284,
   "errors": [],
@@ -3789,7 +3789,7 @@
     "520-desktop-say-clipboard/s3": "accepted divergence",
     "520-desktop-say-clipboard/s4": "match",
     "520-desktop-say-clipboard/s5": "match",
-    "521-desktop-excel-cells/s1": "mismatch",
+    "521-desktop-excel-cells/s1": "match",
     "521-desktop-excel-cells/s10": "match",
     "521-desktop-excel-cells/s11": "match",
     "521-desktop-excel-cells/s12": "match",
