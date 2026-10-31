@@ -495,6 +495,15 @@ impl SpeechFormatter {
                     .role_description()
                     .unwrap_or(msg::role_button().as_str());
                 let mut parts = name_and_role(name, role);
+                // A button that is its heading's only content says the heading after its name,
+                // "Billing Address heading level 3 | Button expanded", in the virtual cursor;
+                // with it off, the button alone [obs, round-aria5, 2122/s1, 2126/s1, 2128/s1].
+                let heading = attr("heading_level")
+                    .and_then(|l| l.parse::<u32>().ok())
+                    .filter(|_| !said.virtual_off);
+                if let Some(level) = heading {
+                    parts.insert(1, Part::role(msg::role_heading_level(level).render()));
+                }
                 // A disclosure button speaks its state [obs, 29/s1].
                 match node.states.expanded {
                     Some(true) => parts.push(Part::state(msg::state_expanded())),

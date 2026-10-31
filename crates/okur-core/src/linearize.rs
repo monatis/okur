@@ -851,7 +851,9 @@ impl<'a> Builder<'a> {
                     t => t,
                 };
                 // A heading that is a single button (GitHub's "Collapse file tree") says the
-                // button, and its line is the button's: Tab, B and Enter reach it.
+                // button, and its line is the button's: Tab, B and Enter reach it. Its name
+                // comes first, then the heading and the button: "Billing Address heading level
+                // 3 | Button collapsed" [obs, round-aria5, 2140/s1, 2144/s1].
                 let button = sole_button(node, &text);
                 let suffix = button.map(button_suffix).unwrap_or_default();
                 let role = self
@@ -859,7 +861,15 @@ impl<'a> Builder<'a> {
                     .role(level)
                     .map(|role| role_marker(&role))
                     .unwrap_or_default();
-                let speech = format!("{role}{text}{suffix}");
+                let speech = match button {
+                    Some(_) => format!("{text}{role}{suffix}"),
+                    None => format!("{role}{text}{suffix}"),
+                };
+                // Its focus and its quick keys say the heading after its name too.
+                if let Some(button) = button {
+                    self.annotations
+                        .push((button.id, "heading_level", level.to_string()));
+                }
                 let line_node = button.map_or(node.id, |b| b.id);
                 let off = self.emit(line_node, node.role.clone(), &text, speech);
                 if let Some(button) = button {
@@ -2512,7 +2522,8 @@ mod tests {
 
     /// GitHub's code view, JAWS on the dev box (2026-10-16): a link named by aria-label says
     /// that name and its key shortcuts; an avatar says its shortcuts; a heading that is a
-    /// button says the button, and its line is the button's.
+    /// button says the button, and its line is the button's: its name, then the heading and
+    /// the button (ARIA-AT's accordion headers [obs, round-aria5, 2140/s1, 2144/s1]).
     #[test]
     fn labels_shortcuts_and_a_heading_that_is_a_button() {
         let mut commits = link(1, "https://github.com/x", "commits by monatis", None);
@@ -2541,7 +2552,7 @@ mod tests {
                 format!("{}commits by monatis Alt+ArrowUp", role_marker("Link")),
                 format!("monatis Alt+ArrowUp\n{}", role_marker("Graphic")),
                 format!(
-                    "{}Collapse file tree{}{}",
+                    "Collapse file tree{}{}{}",
                     role_marker("heading level 2"),
                     role_marker("Button"),
                     state_marker("expanded")
