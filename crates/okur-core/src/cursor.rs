@@ -1312,6 +1312,19 @@ impl VirtualCursor {
         // into) is said by its name, not by the cursor's line, which is some other element's;
         // a group adds its role (Google Sheets' grid, back from a cell's editor: JAWS on the
         // dev box said "group", 2026-10-16).
+        // A tab panel taking the focus itself: "Peter Müller TabPanel" [obs, round-aria19,
+        // 2567/s1].
+        if node.role == Role::TabPanel {
+            let name = node.name.as_deref().unwrap_or_default().trim();
+            return Some(
+                format!(
+                    "{name}{}",
+                    crate::linearize::role_marker(msg::role_tab_panel().as_str())
+                )
+                .trim()
+                .to_owned(),
+            );
+        }
         if !self.buffer.shows(node_id) {
             let name = node.name.as_deref().unwrap_or_default().trim();
             return Some(match node.role {

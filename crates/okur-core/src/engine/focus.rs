@@ -693,14 +693,26 @@ impl ScreenReaderEngine {
                             || (focus.value.is_some() && n.value != focus.value)
                             || (focus.name.is_some() && n.name != focus.name))
                 };
+                // A tab the arrows select as they move to it (automatic activation) is focused
+                // selected before the page's change reaches the buffer: "Carl Andersen Tab
+                // selected | 2 of 4 | selected" [obs, round-aria19, 2558/s1].
+                let tab_changed = |n: &crate::aom::AomNode| {
+                    n.role == Role::Tab
+                        && focus.states.selected.is_some()
+                        && n.states.selected != focus.states.selected
+                };
                 let stale = self.cursor.buffer.node(id).is_some_and(|n| {
                     (focus.states.checked.is_some() && n.states.checked != focus.states.checked)
                         || combo_changed(n)
+                        || tab_changed(n)
                 });
                 if stale {
                     self.change_page_node(id, |n| {
                         if focus.states.checked.is_some() {
                             n.states.checked = focus.states.checked;
+                        }
+                        if tab_changed(n) {
+                            n.states.selected = focus.states.selected;
                         }
                         if n.role == Role::ComboBox {
                             n.states.expanded = focus.states.expanded.or(n.states.expanded);
