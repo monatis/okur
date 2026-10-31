@@ -52,6 +52,8 @@ pub struct FormFieldListItem {
     pub value: Option<String>,
     /// A check box's or radio button's state.
     pub checked: Option<bool>,
+    /// A tri-state check box between checked and not.
+    pub mixed: bool,
     /// A combo box one types in (an edit combo).
     pub editable: bool,
     pub offset: usize,
@@ -1615,6 +1617,7 @@ impl VirtualBuffer {
                     role: node.role.clone(),
                     value: node.value.clone(),
                     checked: node.states.checked,
+                    mixed: node.states.mixed,
                     editable: node.attributes.get("editable").is_some_and(|e| e == "true"),
                     offset,
                 })

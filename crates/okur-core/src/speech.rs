@@ -227,13 +227,10 @@ impl SpeechFormatter {
         parts.join("\n")
     }
 
-    /// Formats a checkbox announcement.
-    pub fn format_checkbox(name: &str, checked: bool) -> String {
-        let state_str = if checked {
-            msg::state_checked()
-        } else {
-            msg::state_not_checked()
-        };
+    /// Formats a checkbox announcement: its state "checked", "not checked" or "partially
+    /// checked", "not checked" when it reports none.
+    pub fn format_checkbox(name: &str, states: &crate::aom::NodeStates) -> String {
+        let state_str = states.check_word().unwrap_or_else(msg::state_not_checked);
         format!(
             " {}  \u{001d} {} \u{001e}   \u{001d}{}\u{001e}",
             name,
@@ -256,8 +253,7 @@ impl SpeechFormatter {
             }
             Role::CheckBox => {
                 let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
-                let checked = node.states.checked.unwrap_or(false);
-                Self::format_checkbox(name, checked)
+                Self::format_checkbox(name, &node.states)
             }
             Role::ComboBox => {
                 let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
@@ -365,12 +361,8 @@ impl SpeechFormatter {
         let attr = |k: &str| node.attributes.get(k).map(String::as_str);
         let name = node.name.as_deref().unwrap_or_default().trim();
         let required = attr("required") == Some("true");
-        let checked = |c: Option<bool>| {
-            if c == Some(true) {
-                msg::state_checked()
-            } else {
-                msg::state_not_checked()
-            }
+        let checked = |states: &crate::aom::NodeStates| {
+            states.check_word().unwrap_or_else(msg::state_not_checked)
         };
         match &node.role {
             Role::Edit => {
@@ -426,7 +418,7 @@ impl SpeechFormatter {
                 }
                 let mut parts = name_and_role(name, msg::role_radio_button().as_str());
                 parts.push(Part::text(" "));
-                parts.push(Part::state(checked(node.states.checked)));
+                parts.push(Part::state(checked(&node.states)));
                 lines.push(Line::new(parts));
                 if let (Some(p), Some(n)) = (attr("posinset"), attr("setsize")) {
                     lines.push(Line::of(PartKind::Position, msg::position(p, n)));
@@ -457,7 +449,7 @@ impl SpeechFormatter {
                     .unwrap_or(msg::role_check_box().as_str());
                 let mut parts = name_and_role(name, role);
                 parts.push(Part::text(" "));
-                parts.push(Part::state(checked(node.states.checked)));
+                parts.push(Part::state(checked(&node.states)));
                 Announcement::new(vec![Line::new(parts)])
             }
             // A toggle button (`aria-pressed`): "Sohbetler Toggle button Pressed", "👍 Toggle
@@ -898,6 +890,7 @@ impl SpeechFormatter {
             _ => msg::role_field(),
         };
         let state = match (&item.role, item.checked) {
+            (Role::CheckBox, _) if item.mixed => Some(msg::state_partially_checked()),
             (Role::CheckBox | Role::RadioButton, Some(true)) => Some(msg::state_checked()),
             (Role::CheckBox | Role::RadioButton, Some(false)) => Some(msg::state_not_checked()),
             _ => None,

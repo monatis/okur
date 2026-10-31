@@ -14,6 +14,15 @@ SCRATCH="$FETCHED-preview"
 rm -rf "$SCRATCH"
 mkdir -p "$SCRATCH/scenarios" "$SCRATCH/evidence" "$SCRATCH/traces"
 cp -r corpus/fixtures corpus/snapshots "$SCRATCH/"
+# The pending fixtures, and the pages kept in folders (ARIA-AT's), and the snapshots the round
+# captured of them.
+for pending in corpus/pending/*.html corpus/pending/*.ps1; do
+    [ -f "$pending" ] && cp "$pending" "$SCRATCH/fixtures/"
+done
+for folder in corpus/pending/*/; do
+    [ -d "$folder" ] && cp -r "$folder" "$SCRATCH/fixtures/"
+done
+[ -d "$FETCHED/snapshots" ] && cp "$FETCHED"/snapshots/*.json "$SCRATCH/snapshots/" 2>/dev/null
 count=0
 for evidence in "$FETCHED"/*-evidence.json; do
     [ -e "$evidence" ] || continue

@@ -95,11 +95,13 @@ fn list_position(focus: &FocusEvent) -> Option<Line> {
 }
 
 fn checked(focus: &FocusEvent) -> Part {
-    if focus.states.checked == Some(true) {
-        state(msg::state_checked().as_str())
-    } else {
-        state(msg::state_not_checked().as_str())
-    }
+    state(
+        focus
+            .states
+            .check_word()
+            .unwrap_or_else(msg::state_not_checked)
+            .as_str(),
+    )
 }
 
 /// A control's access key, said last on arrival, as JAWS says it in a Win32 dialog (dev box,

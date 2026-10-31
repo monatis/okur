@@ -194,6 +194,11 @@ impl TextFormatting {
 pub struct NodeStates {
     #[serde(default)]
     pub checked: Option<bool>,
+    /// A tri-state check box between checked and not (`aria-checked="mixed"`, MSAA's mixed
+    /// state, UI Automation's indeterminate toggle state): "partially checked" [obs,
+    /// round-aria2, 2000/s1].
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub mixed: bool,
     #[serde(default)]
     pub selected: Option<bool>,
     #[serde(default)]
@@ -217,6 +222,24 @@ pub struct NodeStates {
     /// [obs, 1076/s5].
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub pressed: bool,
+}
+
+impl NodeStates {
+    /// A check box's or radio button's state as JAWS says it: "checked", "not checked", or
+    /// "partially checked" for a tri-state one between; `None` when the element reports none.
+    pub fn check_word(&self) -> Option<crate::messages::StaticMessage> {
+        use crate::messages::msg;
+        if self.mixed {
+            return Some(msg::state_partially_checked());
+        }
+        self.checked.map(|checked| {
+            if checked {
+                msg::state_checked()
+            } else {
+                msg::state_not_checked()
+            }
+        })
+    }
 }
 
 /// AOM attribute holding a node's IA2 `uniqueID`: the live object's identity, the same in
@@ -376,5 +399,29 @@ impl AomNode {
             }
         }
         result
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::NodeStates;
+
+    /// A tri-state check box between checked and not is "partially checked", whatever its
+    /// checked state says [obs, round-aria2, 2000/s1].
+    #[test]
+    fn a_mixed_check_box_is_partially_checked() {
+        let word = |checked, mixed| {
+            NodeStates {
+                checked,
+                mixed,
+                ..NodeStates::default()
+            }
+            .check_word()
+            .map(|word| word.as_str())
+        };
+        assert_eq!(word(Some(false), true), Some("partially checked"));
+        assert_eq!(word(Some(true), false), Some("checked"));
+        assert_eq!(word(Some(false), false), Some("not checked"));
+        assert_eq!(word(None, false), None);
     }
 }

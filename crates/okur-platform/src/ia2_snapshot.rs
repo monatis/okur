@@ -293,8 +293,8 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     use okur_core::{AomNode, NodeStates, Role};
     use xa11y_windows::ia2::msaa_states::{
         STATE_SYSTEM_CHECKED, STATE_SYSTEM_COLLAPSED, STATE_SYSTEM_EXPANDED,
-        STATE_SYSTEM_FOCUSABLE, STATE_SYSTEM_FOCUSED, STATE_SYSTEM_INVISIBLE, STATE_SYSTEM_PRESSED,
-        STATE_SYSTEM_PROTECTED, STATE_SYSTEM_READONLY, STATE_SYSTEM_SELECTED,
+        STATE_SYSTEM_FOCUSABLE, STATE_SYSTEM_FOCUSED, STATE_SYSTEM_INVISIBLE, STATE_SYSTEM_MIXED,
+        STATE_SYSTEM_PRESSED, STATE_SYSTEM_PROTECTED, STATE_SYSTEM_READONLY, STATE_SYSTEM_SELECTED,
         STATE_SYSTEM_TRAVERSED, STATE_SYSTEM_UNAVAILABLE,
     };
 
@@ -335,6 +335,8 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
         } else {
             matches!(role, Role::CheckBox | Role::RadioButton).then(|| has(STATE_SYSTEM_CHECKED))
         },
+        // A tri-state check box between checked and not (`aria-checked="mixed"`).
+        mixed: role == Role::CheckBox && has(STATE_SYSTEM_MIXED),
         selected: has(STATE_SYSTEM_SELECTED).then_some(true),
         expanded: if has(STATE_SYSTEM_EXPANDED) {
             Some(true)

@@ -1065,12 +1065,13 @@ impl<'a> Builder<'a> {
             && labelled_by_previous_line.as_deref() == node.name.as_deref().map(squash).as_deref();
         let name = node.name.as_deref().map(squash).unwrap_or_default();
         let required = attr(node, "required") == Some("true");
-        let checked = |c: Option<bool>| {
-            if c == Some(true) {
-                msg::state_checked().as_str()
-            } else {
-                msg::state_not_checked().as_str()
-            }
+        // "checked", "not checked" or "partially checked"; a state the element does not report is
+        // "not checked".
+        let checked = |states: &crate::aom::NodeStates| {
+            states
+                .check_word()
+                .unwrap_or_else(msg::state_not_checked)
+                .as_str()
         };
 
         let speech = match &node.role {
@@ -1125,13 +1126,13 @@ impl<'a> Builder<'a> {
                     node.role_description()
                         .unwrap_or(msg::role_check_box().as_str())
                 ),
-                state_marker(checked(node.states.checked))
+                state_marker(checked(&node.states))
             ),
             Role::RadioButton => {
                 let mut s = format!(
                     "{name}{}{}",
                     role_marker(msg::role_radio_button().as_str()),
-                    state_marker(checked(node.states.checked))
+                    state_marker(checked(&node.states))
                 );
                 if let (Some(pos), Some(size)) = (attr(node, "posinset"), attr(node, "setsize")) {
                     s.push_str(&format!("\n{}", msg::position(pos, size)));

@@ -3,6 +3,8 @@
 
 state-checked = checked
 state-not-checked = not checked
+# A tri-state check box between checked and not [obs, round-aria2, 2000/s1].
+state-partially-checked = partially checked
 # A native tree item that shows its children.
 state-open = open
 # An open tree item as the focus lands on it, in JAWS's own trees [obs, 274/s1].

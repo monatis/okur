@@ -2851,8 +2851,7 @@ impl VirtualCursor {
             }
             Role::CheckBox => {
                 let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");
-                let checked = node.states.checked.unwrap_or(false);
-                SpeechFormatter::format_checkbox(name, checked)
+                SpeechFormatter::format_checkbox(name, &node.states)
             }
             Role::ComboBox => {
                 let name = node.name.as_deref().or(node.text.as_deref()).unwrap_or("");

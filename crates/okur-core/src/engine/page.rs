@@ -213,13 +213,13 @@ impl ScreenReaderEngine {
         let before = self.cursor.buffer.node(id)?;
         let speech = match control.role {
             Role::CheckBox | Role::RadioButton
-                if before.states.checked != control.states.checked =>
+                if before.states.checked != control.states.checked
+                    || before.states.mixed != control.states.mixed =>
             {
-                let state = if control.states.checked == Some(true) {
-                    msg::state_checked()
-                } else {
-                    msg::state_not_checked()
-                };
+                let state = control
+                    .states
+                    .check_word()
+                    .unwrap_or_else(msg::state_not_checked);
                 crate::linearize::state_marker(state.as_str())
             }
             // An autocomplete's list opened or closed as it is typed in: " expanded " (JAWS on

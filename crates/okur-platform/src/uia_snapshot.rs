@@ -352,6 +352,8 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> okur_core::AomNode {
             (_, Some(1)) => Some(true),
             _ => None,
         },
+        // `ToggleState_Indeterminate`: a tri-state check box between checked and not.
+        mixed: role != Role::RadioButton && node.toggle_state == Some(2),
         selected: node.is_selected,
         expanded: match node.expand_collapse_state {
             Some(0) => Some(false),

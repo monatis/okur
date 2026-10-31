@@ -85,6 +85,7 @@ impl PlatformBridge {
                 Some(Toggled::Off) => Some(false),
                 _ => None,
             },
+            mixed: element.states.checked == Some(Toggled::Mixed),
             selected: if element.states.selected {
                 Some(true)
             } else {

@@ -179,11 +179,9 @@ impl ElementList {
             .unwrap_or_default()
             .trim();
         let checked = || {
-            if node.states.checked == Some(true) {
-                msg::state_checked()
-            } else {
-                msg::state_not_checked()
-            }
+            node.states
+                .check_word()
+                .unwrap_or_else(msg::state_not_checked)
         };
         let join = |parts: &[&str]| {
             parts
