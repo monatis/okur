@@ -1,0 +1,44 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "namePrintPage",
+        "phrase": "convey name 'Print Page'",
+        "priority": "1"
+      }
+    ],
+    "command": "shift+f",
+    "instructions": "Starting at the 'Navigate backwards from here' link, navigate to the 'Print Page' button.",
+    "plan": "apg/command-button",
+    "presentation_number": "2.2",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/command-button/button.setFocusAfterButton.html",
+  "id": "2338-aria-command-button-nav-back-to-button-shift-f-vc",
+  "name": "ARIA-AT, Command Button Example: Navigate backwards to a button; Shift+F in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+F",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

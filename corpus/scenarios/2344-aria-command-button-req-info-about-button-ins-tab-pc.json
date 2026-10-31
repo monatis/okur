@@ -1,0 +1,50 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "namePrintPage",
+        "phrase": "convey name 'Print Page'",
+        "priority": "1"
+      }
+    ],
+    "command": "ins+tab",
+    "instructions": "Starting at the 'Print Page' button, read information about the button.",
+    "plan": "apg/command-button",
+    "presentation_number": "8.0",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/command-button/button.setFocusOnButton.html",
+  "id": "2344-aria-command-button-req-info-about-button-ins-tab-pc",
+  "name": "ARIA-AT, Command Button Example: Request information about a button; Insert+Tab in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Tab",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

@@ -129,6 +129,30 @@
       "sha256": "cac2ee505252f9c47969c90b455364e1663c84b31edebb6f8c1d1907da034bc5",
       "size_bytes": 1649
     },
+    "aria-at/command-button/button.html": {
+      "sha256": "99ebd008dd716eab2a866e84b42b4fb21d87ae01f43e90741079ca75c757ed85",
+      "size_bytes": 1229
+    },
+    "aria-at/command-button/button.setFocusAfterButton.html": {
+      "sha256": "683ee64a4781abf027ff26a7974b861ea2b65752e424c86c0be3ed40dfcdc0d1",
+      "size_bytes": 1987
+    },
+    "aria-at/command-button/button.setFocusBeforeButton.html": {
+      "sha256": "c3f637b6db8a491ad5e736db0973656e7ab65f88e6147260a6f742ceb1fb3789",
+      "size_bytes": 1990
+    },
+    "aria-at/command-button/button.setFocusOnButton.html": {
+      "sha256": "f17becaf43708766b778893ed4cf03735dbda18e04d7f611ebe9011ccfe3ea92",
+      "size_bytes": 1968
+    },
+    "aria-at/command-button/css/button.css": {
+      "sha256": "5d1bc9a91b0da8f1925f9fc4078a6035a7bd8f595a3fba98090cb1621131c22b",
+      "size_bytes": 2702
+    },
+    "aria-at/command-button/js/button.js": {
+      "sha256": "f71e2ac605bdc457aa03f68997f221d59e262b9ae39b9b11965ca4d54a4584db",
+      "size_bytes": 3097
+    },
     "aria-at/disclosure-faq/css/disclosure-card.css": {
       "sha256": "4683aa7cd2469f8cdd48c95a7a22b5717e92b83c350a1b2c2665161a505d83fc",
       "size_bytes": 6029
@@ -7952,6 +7976,118 @@
       }
     },
     {
+      "scenario_id": "2332-aria-command-button-nav-forwards-to-button-down-vc",
+      "fixture": "aria-at/command-button/button.setFocusBeforeButton.html",
+      "evidence": {
+        "sha256": "53c15e9b06f6b05ccab228411915e527ebb1bb74e067180b727905ae2c0f79ba",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2333-aria-command-button-nav-forwards-to-button-b-vc",
+      "fixture": "aria-at/command-button/button.setFocusBeforeButton.html",
+      "evidence": {
+        "sha256": "8e0370ca51f5edb2e77d54ca9867d5a040375e3dbe5122eaf0659315ae86d29b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2334-aria-command-button-nav-forwards-to-button-f-vc",
+      "fixture": "aria-at/command-button/button.setFocusBeforeButton.html",
+      "evidence": {
+        "sha256": "b039fbb1ff3adb56a56f803fcd3e2ed3fd3980093496580013132cc248211e21",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2335-aria-command-button-nav-forwards-to-button-tab-vc",
+      "fixture": "aria-at/command-button/button.setFocusBeforeButton.html",
+      "evidence": {
+        "sha256": "8212062ff779e4612fdde0213c32c1d6fe95e7bee31492c2f41273a486a6c18b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2336-aria-command-button-nav-back-to-button-up-vc",
+      "fixture": "aria-at/command-button/button.setFocusAfterButton.html",
+      "evidence": {
+        "sha256": "612091bcf154662b2c29f130cd0d934ae81e117f6822034189dddeac95bf7a0d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2337-aria-command-button-nav-back-to-button-shift-b-vc",
+      "fixture": "aria-at/command-button/button.setFocusAfterButton.html",
+      "evidence": {
+        "sha256": "a66a7897f35f82f83fe85042141129212e25b3bb0fa9e415d401d1b82cf77485",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2338-aria-command-button-nav-back-to-button-shift-f-vc",
+      "fixture": "aria-at/command-button/button.setFocusAfterButton.html",
+      "evidence": {
+        "sha256": "ad39b030540536cf4cfaa8c2d58ee4d2309c7bb7e391b7bbc4ebc257bc8d741a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2339-aria-command-button-nav-back-to-button-shift-tab-vc",
+      "fixture": "aria-at/command-button/button.setFocusAfterButton.html",
+      "evidence": {
+        "sha256": "4aea8f46c0aaa913646ac1a8969fdc938974a8facac4730c7489a49118a6c5fc",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "234-web-list-edits",
       "fixture": "signup-form.html",
       "evidence": {
@@ -7962,6 +8098,90 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2340-aria-command-button-nav-forwards-to-button-tab-pc",
+      "fixture": "aria-at/command-button/button.setFocusBeforeButton.html",
+      "evidence": {
+        "sha256": "09e0258c92600ea5e9abd63e5f62350b1e75233d7f5acba636daa1b5a27e4c99",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2341-aria-command-button-nav-back-to-button-shift-tab-pc",
+      "fixture": "aria-at/command-button/button.setFocusAfterButton.html",
+      "evidence": {
+        "sha256": "fbf1bbdececef27893652424f27baf607cc2ec6d91ee71fb966ff469dcd16c52",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2342-aria-command-button-req-info-about-button-ins-tab-vc",
+      "fixture": "aria-at/command-button/button.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "ff63b8fe9af1a5faeb16ba7a43c750df0227d942f3bb6f449bc36c4ef4d47b84",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2343-aria-command-button-req-info-about-button-ins-up-vc",
+      "fixture": "aria-at/command-button/button.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "d16fb78a5c88ab175fc0935ea8969d7e006c9914cba3f416eda2c5bd51615441",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2344-aria-command-button-req-info-about-button-ins-tab-pc",
+      "fixture": "aria-at/command-button/button.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "740cf8f52f99b231866c0b50ab1196635e7575071468457dff0d5d82f101fb71",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2345-aria-command-button-req-info-about-button-ins-up-pc",
+      "fixture": "aria-at/command-button/button.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "1e10dcee95c1ae92b84c24d8b30af40706929f1efe04b8ce52dff3f070cfb9a3",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -15821,10 +16041,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1078,
-    "scenarios_with_evidence": 1078,
-    "total_trials": 3240,
-    "successful_trials": 3223,
-    "deterministic_scenarios": 806
+    "scenarios": 1092,
+    "scenarios_with_evidence": 1092,
+    "total_trials": 3282,
+    "successful_trials": 3265,
+    "deterministic_scenarios": 820
   }
 }
