@@ -14,7 +14,8 @@
 //! virtual cursor on again for the scenarios after it. The test's assertions go with the
 //! scenario (`aria_at`), for the measure of what is conveyed.
 //!
-//! Only the plans in ARIA-AT's second format (`jaws-commands.csv`, `assertions.csv`) are read.
+//! Both of ARIA-AT's formats are read: the second (`jaws-commands.csv`, `assertions.csv`) and the
+//! first (`commands.csv` with a column per command, the assertions in `tests.csv`).
 
 use std::collections::BTreeMap;
 use std::fs;
@@ -218,6 +219,167 @@ fn notice(source: &str) -> String {
     )
 }
 
+/// One JAWS command of a test, from either of ARIA-AT's formats.
+struct Command {
+    test_id: String,
+    title: String,
+    instructions: String,
+    setup: String,
+    /// As the plan writes it ("ins+up", "DOWN,DOWN").
+    keys: String,
+    /// The recorder's chords, one per press.
+    presses: Vec<String>,
+    /// "virtualCursor" or "pcCursor".
+    setting: &'static str,
+    presentation: String,
+    assertions: Vec<serde_json::Value>,
+    exceptions: String,
+}
+
+/// The second format's commands (`jaws-commands.csv`), with `assertions.csv`'s assertions.
+fn second_format_commands(
+    data: &Path,
+    tests: &BTreeMap<String, BTreeMap<String, String>>,
+) -> Result<Vec<Command>, String> {
+    let assertions: BTreeMap<String, BTreeMap<String, String>> =
+        rows(&data.join("assertions.csv"))?
+            .into_iter()
+            .map(|row| (field(&row, "assertionId").to_owned(), row))
+            .collect();
+    rows(&data.join("jaws-commands.csv"))?
+        .into_iter()
+        .map(|row| {
+            let test_id = field(&row, "testId");
+            let test = tests
+                .get(test_id)
+                .ok_or_else(|| format!("command for unknown test {test_id:?}"))?;
+            let setting = match field(&row, "settings") {
+                "virtualCursor" => "virtualCursor",
+                "pcCursor" => "pcCursor",
+                other => return Err(format!("{test_id}: unknown setting {other:?}")),
+            };
+            let keys = field(&row, "command");
+            Ok(Command {
+                test_id: test_id.to_owned(),
+                title: field(test, "title").to_owned(),
+                instructions: field(test, "instructions").to_owned(),
+                setup: field(test, "setupScript").to_owned(),
+                keys: keys.to_owned(),
+                presses: chords(keys)?,
+                setting,
+                presentation: field(&row, "presentationNumber").to_owned(),
+                assertions: field(test, "assertions")
+                    .split_whitespace()
+                    .map(|assertion| {
+                        let row = assertions.get(assertion);
+                        serde_json::json!({
+                            "id": assertion,
+                            "priority": row.map(|r| field(r, "priority")).unwrap_or_default(),
+                            "phrase": row.map(|r| field(r, "assertionPhrase")).unwrap_or_default(),
+                        })
+                    })
+                    .collect(),
+                exceptions: field(&row, "assertionExceptions").to_owned(),
+            })
+        })
+        .collect()
+}
+
+/// One of the first format's keys ("INS_TAB", "SHIFT_F", "ALT_DOWN", "PAGE_UP", "SHIFT_ONE")
+/// as the recorder's chord: modifiers first, then the key, whose name may hold an underscore.
+fn first_format_key(token: &str) -> Option<String> {
+    let lower = token.trim().to_ascii_lowercase();
+    let parts: Vec<&str> = lower.split('_').collect();
+    let mut chord = Vec::new();
+    let mut at = 0;
+    while let Some(part) = parts.get(at) {
+        let modifier = match *part {
+            "ins" | "insert" => "Insert",
+            "shift" => "Shift",
+            "ctrl" | "control" => "Ctrl",
+            "alt" => "Alt",
+            _ => break,
+        };
+        chord.push(modifier.to_owned());
+        at += 1;
+    }
+    let rest = parts.get(at..)?;
+    let key = match rest {
+        ["page", "up"] => "PageUp".to_owned(),
+        ["page", "down"] => "PageDown".to_owned(),
+        ["period"] => "Period".to_owned(),
+        ["comma"] => "Comma".to_owned(),
+        [single] => key_name(single)?,
+        _ => return None,
+    };
+    chord.push(key);
+    Some(chord.join("+"))
+}
+
+/// The first format's commands (`commands.csv`: a row per test and screen reader, a command per
+/// `command*` column, its presses apart by commas), with the test's assertions (`assertion1`
+/// ..., a priority before a colon, 1 without).
+fn first_format_commands(
+    data: &Path,
+    tests: &BTreeMap<String, BTreeMap<String, String>>,
+) -> Result<Vec<Command>, String> {
+    let mut commands = Vec::new();
+    for row in rows(&data.join("commands.csv"))? {
+        if field(&row, "at") != "JAWS" {
+            continue;
+        }
+        let test_id = field(&row, "testId");
+        let test = tests
+            .get(test_id)
+            .ok_or_else(|| format!("command for unknown test {test_id:?}"))?;
+        let setting = match field(&row, "mode").to_ascii_lowercase().as_str() {
+            "reading" => "virtualCursor",
+            "interaction" => "pcCursor",
+            other => return Err(format!("{test_id}: unknown mode {other:?}")),
+        };
+        let assertions: Vec<serde_json::Value> = (1..)
+            .map_while(|n| test.get(&format!("assertion{n}")))
+            .filter(|text| !text.is_empty())
+            .enumerate()
+            .map(|(at, text)| {
+                let (priority, phrase) = match text.split_once(':') {
+                    Some((p, rest)) if p.chars().all(|c| c.is_ascii_digit()) => (p, rest),
+                    _ => ("1", text.as_str()),
+                };
+                serde_json::json!({
+                    "id": format!("assertion{}", at + 1),
+                    "priority": priority,
+                    "phrase": phrase.trim(),
+                })
+            })
+            .collect();
+        for (column, keys) in row
+            .iter()
+            .filter(|(c, k)| c.starts_with("command") && !k.is_empty())
+        {
+            let presses = keys
+                .split(',')
+                .map(str::trim)
+                .filter(|k| !k.is_empty())
+                .map(|k| first_format_key(k).ok_or_else(|| format!("unknown key {k:?}")))
+                .collect::<Result<Vec<_>, _>>()?;
+            commands.push(Command {
+                test_id: test_id.to_owned(),
+                title: field(test, "title").to_owned(),
+                instructions: field(test, "instructions").to_owned(),
+                setup: field(test, "setupScript").to_owned(),
+                keys: keys.trim().to_owned(),
+                presses,
+                setting,
+                presentation: column.clone(),
+                assertions: assertions.clone(),
+                exceptions: String::new(),
+            });
+        }
+    }
+    Ok(commands)
+}
+
 /// Imports the test plan `plan` ("apg/checkbox-tri-state") of the ARIA-AT `tests` folder
 /// `tests` into `out`, its scenarios numbered from `first_id`; `source` is the checkout's
 /// commit.
@@ -251,21 +413,16 @@ pub fn import(
         .ok_or_else(|| format!("{plan}: reference {reference:?} names no page"))?;
     let reference_dir = plan_dir.join(reference.parent().unwrap_or(Path::new("")));
 
-    let commands_path = data.join("jaws-commands.csv");
-    if !commands_path.exists() {
-        return Err(format!(
-            "{plan}: no jaws-commands.csv (ARIA-AT's first format, not read yet)"
-        ));
-    }
     let tests_by_id: BTreeMap<String, BTreeMap<String, String>> = rows(&data.join("tests.csv"))?
         .into_iter()
         .map(|row| (field(&row, "testId").to_owned(), row))
         .collect();
-    let assertions: BTreeMap<String, BTreeMap<String, String>> =
-        rows(&data.join("assertions.csv"))?
-            .into_iter()
-            .map(|row| (field(&row, "assertionId").to_owned(), row))
-            .collect();
+    let commands = if data.join("jaws-commands.csv").exists() {
+        second_format_commands(&data, &tests_by_id)
+    } else {
+        first_format_commands(&data, &tests_by_id)
+    }
+    .map_err(|e| format!("{plan}: {e}"))?;
 
     let pages = out.join("aria-at").join(name);
     let mut files = copy_folder(&reference_dir, &pages)?;
@@ -274,12 +431,9 @@ pub fn import(
 
     let mut id = first_id;
     let mut scenarios = 0;
-    for command in rows(&commands_path)? {
-        let test_id = field(&command, "testId");
-        let test = tests_by_id
-            .get(test_id)
-            .ok_or_else(|| format!("{plan}: command for unknown test {test_id:?}"))?;
-        let setup = field(test, "setupScript");
+    for command in commands {
+        let test_id = command.test_id.as_str();
+        let setup = command.setup.as_str();
         let page = if setup.is_empty() {
             format!("{page_stem}.html")
         } else {
@@ -296,9 +450,9 @@ pub fn import(
             fs::write(pages.join(&page), made).map_err(|e| format!("{page}: {e}"))?;
             files += 1;
         }
-        let keys = field(&command, "command");
-        let setting = field(&command, "settings");
-        let mut steps = chords(keys)?;
+        let keys = command.keys.as_str();
+        let setting = command.setting;
+        let mut steps = command.presses;
         let mut reset = if setup.is_empty() {
             vec!["Ctrl+Home".to_owned()]
         } else {
@@ -317,22 +471,16 @@ pub fn import(
             }
             other => return Err(format!("{plan}: {test_id}: unknown setting {other:?}")),
         };
+        // A test of the first format is a number: "t3".
+        let test_slug = if test_id.chars().all(|c| c.is_ascii_digit()) {
+            format!("t{test_id}")
+        } else {
+            kebab(test_id)
+        };
         let scenario_id = format!(
-            "{id}-aria-{name}-{}-{}-{cursor}",
-            kebab(test_id),
-            kebab(&keys.replace('+', " "))
+            "{id}-aria-{name}-{test_slug}-{}-{cursor}",
+            kebab(&keys.replace(['+', ',', '_'], " "))
         );
-        let asserted: Vec<serde_json::Value> = field(test, "assertions")
-            .split_whitespace()
-            .map(|assertion| {
-                let row = assertions.get(assertion);
-                serde_json::json!({
-                    "id": assertion,
-                    "priority": row.map(|r| field(r, "priority")).unwrap_or_default(),
-                    "phrase": row.map(|r| field(r, "assertionPhrase")).unwrap_or_default(),
-                })
-            })
-            .collect();
         let cursor_name = if cursor == "pc" {
             "the PC cursor"
         } else {
@@ -342,7 +490,7 @@ pub fn import(
             "id": scenario_id,
             "name": format!(
                 "ARIA-AT, {title}: {}; {} in {cursor_name}",
-                field(test, "title"),
+                command.title,
                 steps.first().map(String::as_str).unwrap_or_default()
             ),
             "category": "aria-at",
@@ -363,12 +511,12 @@ pub fn import(
                 "source": format!("w3c/aria-at@{source}"),
                 "plan": plan,
                 "test": test_id,
-                "instructions": field(test, "instructions"),
+                "instructions": command.instructions,
                 "command": keys,
                 "setting": setting,
-                "presentation_number": field(&command, "presentationNumber"),
-                "assertions": asserted,
-                "assertion_exceptions": field(&command, "assertionExceptions"),
+                "presentation_number": command.presentation,
+                "assertions": command.assertions,
+                "assertion_exceptions": command.exceptions,
             },
         });
         let text = serde_json::to_string_pretty(&scenario).map_err(|e| e.to_string())?;
@@ -404,6 +552,22 @@ mod tests {
         assert_eq!(chords("nine"), Ok(vec!["9".to_owned()]));
         assert_eq!(chords("f12"), Ok(vec!["F12".to_owned()]));
         assert!(chords("ins+bogus").is_err());
+    }
+
+    /// The first format's keys, its modifiers joined to the key by underscores.
+    #[test]
+    fn first_format_keys_become_the_recorders_chords() {
+        assert_eq!(first_format_key("INS_TAB").as_deref(), Some("Insert+Tab"));
+        assert_eq!(first_format_key("SHIFT_F").as_deref(), Some("Shift+F"));
+        assert_eq!(first_format_key("ALT_DOWN").as_deref(), Some("Alt+Down"));
+        assert_eq!(first_format_key("PAGE_UP").as_deref(), Some("PageUp"));
+        assert_eq!(first_format_key("SHIFT_ONE").as_deref(), Some("Shift+1"));
+        assert_eq!(
+            first_format_key("SHIFT_PERIOD").as_deref(),
+            Some("Shift+Period")
+        );
+        assert_eq!(first_format_key("C\t").as_deref(), Some("C"));
+        assert_eq!(first_format_key("INS_BOGUS"), None);
     }
 
     #[test]
