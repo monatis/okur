@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
   "matched_steps": 9599,
-  "total_steps": 10166,
-  "accepted_divergences": 284,
+  "total_steps": 10165,
+  "accepted_divergences": 285,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -1658,7 +1658,7 @@
     "1118-desktop-excel-empty-cells-and-editing/s9": "match",
     "1119-desktop-word-pages-by-character-and-word/s1": "match",
     "1119-desktop-word-pages-by-character-and-word/s2": "match",
-    "1119-desktop-word-pages-by-character-and-word/s3": "mismatch",
+    "1119-desktop-word-pages-by-character-and-word/s3": "accepted divergence",
     "1119-desktop-word-pages-by-character-and-word/s4": "match",
     "1119-desktop-word-pages-by-character-and-word/s5": "match",
     "1119-desktop-word-pages-by-character-and-word/s6": "match",

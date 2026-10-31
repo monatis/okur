@@ -1069,6 +1069,13 @@ divergences! {
      Okur's lists open without them.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-31";
 
+    Difference::Step => ["1119-desktop-word-pages-by-character-and-word/s3"],
+    "Right in Word onto the next page: JAWS says the page, then the letter twice, the second \
+     time by its phonetic name, \"page 2 | B | bravo\" on its synthesizer, in every trial: Word \
+     sends two caret events as the window scrolls, and JAWS's second reading of the character \
+     comes as a second press. Okur says it once: \"page 2 | B\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-31";
+
     Difference::Step => ["1113-desktop-word-page-keys/s5"],
     "PageDown in Word onto the next page: JAWS says the page, then the line twice, \"page 2 | \
      heading level 1 Borrowing | heading level 1 Borrowing\", in every trial: Word's caret \

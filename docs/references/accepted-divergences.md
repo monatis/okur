@@ -1078,6 +1078,16 @@ A step can be in more than one entry; all of its entries apply.
   open without them.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-31.
 
+### Word's letter said twice, then phonetically, onto a new page
+
+- Steps: `1119-desktop-word-pages-by-character-and-word/s3`.
+- Difference: the whole step. Right in Word onto the next page: JAWS says the page, then the
+  letter twice, the second time by its phonetic name, "page 2 | B | bravo" on its synthesizer
+  [obs, 1119/s3, every trial].
+- Why: Word sends two caret events as the window scrolls (1119's trace), and JAWS's second
+  reading of the character comes as a second press. Okur says it once: "page 2 | B".
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-31.
+
 ### Word's line said twice after PageDown
 
 - Steps: `1113-desktop-word-page-keys/s5`.
