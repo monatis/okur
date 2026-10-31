@@ -1,0 +1,59 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "3:roleHeading 3:headingLevel3",
+    "assertions": [
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "roleHeading",
+        "phrase": "convey role 'heading'",
+        "priority": "1"
+      },
+      {
+        "id": "headingLevel3",
+        "phrase": "convey heading level, '3'",
+        "priority": "1"
+      },
+      {
+        "id": "namePersonalInformation",
+        "phrase": "convey name of button, 'Personal Information'",
+        "priority": "1"
+      },
+      {
+        "id": "stateExpanded",
+        "phrase": "convey state of the button, 'expanded'",
+        "priority": "1"
+      }
+    ],
+    "command": "shift+tab",
+    "instructions": "Starting at the 'Name' input field, navigate to the 'Personal Information' accordion header.",
+    "plan": "apg/accordion",
+    "presentation_number": "2.5",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToExpandedAccordionHeader"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/accordion/accordion.setFocusOnNameInputField.html",
+  "id": "2133-aria-accordion-nav-back-to-expanded-accordion-header-shift-tab-vc",
+  "name": "ARIA-AT, Accordion: Navigate backwards to an expanded accordion header; Shift+Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

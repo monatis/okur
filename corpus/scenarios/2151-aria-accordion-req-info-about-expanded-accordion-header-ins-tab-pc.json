@@ -1,0 +1,55 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "namePersonalInformation",
+        "phrase": "convey name of button, 'Personal Information'",
+        "priority": "1"
+      },
+      {
+        "id": "stateExpanded",
+        "phrase": "convey state of the button, 'expanded'",
+        "priority": "1"
+      }
+    ],
+    "command": "ins+tab",
+    "instructions": "Starting at the 'Personal Information' accordion header, read information about the accordion header.",
+    "plan": "apg/accordion",
+    "presentation_number": "14",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutExpandedAccordionHeader"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+  "id": "2151-aria-accordion-req-info-about-expanded-accordion-header-ins-tab-pc",
+  "name": "ARIA-AT, Accordion: Request information about an expanded accordion header; Insert+Tab in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Tab",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

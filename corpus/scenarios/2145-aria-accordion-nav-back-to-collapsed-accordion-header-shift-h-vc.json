@@ -1,0 +1,59 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "roleHeading",
+        "phrase": "convey role 'heading'",
+        "priority": "1"
+      },
+      {
+        "id": "headingLevel3",
+        "phrase": "convey heading level, '3'",
+        "priority": "1"
+      },
+      {
+        "id": "namePersonalInformation",
+        "phrase": "convey name of button, 'Personal Information'",
+        "priority": "1"
+      },
+      {
+        "id": "stateCollapsed",
+        "phrase": "convey state of the button, 'collapsed'",
+        "priority": "1"
+      }
+    ],
+    "command": "shift+h",
+    "instructions": "Starting at the 'Billing Address' accordion header, navigate to the 'Personal Information' accordion header.",
+    "plan": "apg/accordion",
+    "presentation_number": "8.3",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToCollapsedAccordionHeader"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/accordion/accordion.setFocusOnSecondAccordionHeaderAndCollapseFirstAccordionHeader.html",
+  "id": "2145-aria-accordion-nav-back-to-collapsed-accordion-header-shift-h-vc",
+  "name": "ARIA-AT, Accordion: Navigate backwards to a collapsed accordion header; Shift+H in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+H",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

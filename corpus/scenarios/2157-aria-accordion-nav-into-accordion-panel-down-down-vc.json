@@ -1,0 +1,64 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "2:interactionModeEnabled",
+    "assertions": [
+      {
+        "id": "roleRegion",
+        "phrase": "convey role 'region'",
+        "priority": "1"
+      },
+      {
+        "id": "nameRegionPersonalInformation",
+        "phrase": "convey name of region, 'Personal Information'",
+        "priority": "1"
+      },
+      {
+        "id": "nameInputName",
+        "phrase": "convey name of input, 'Name'",
+        "priority": "1"
+      },
+      {
+        "id": "theAbilityToEnterOrEditText",
+        "phrase": "convey the ability to enter or edit text",
+        "priority": "1"
+      },
+      {
+        "id": "stateInputRequired",
+        "phrase": "convey state of the input, 'required'",
+        "priority": "1"
+      }
+    ],
+    "command": "down down",
+    "instructions": "Starting at the 'Personal Information' accordion header, navigate into the accordion panel.",
+    "plan": "apg/accordion",
+    "presentation_number": "19",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navIntoAccordionPanel"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+  "id": "2157-aria-accordion-nav-into-accordion-panel-down-down-vc",
+  "name": "ARIA-AT, Accordion: Navigate into an accordion panel; Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Down",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

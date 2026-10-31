@@ -9,6 +9,42 @@
       "sha256": "1f5d58619ade20112bed08f6bc4dbc10103336c0cf295017a3b163e39640533c",
       "size_bytes": 1029
     },
+    "aria-at/accordion/accordion.expandSecondAccordionHeaderAndSetFocusOnCollapsedFirstAccordionHeader.html": {
+      "sha256": "4181329f86f04efbd772f3bf075621c1e1171f1c28ced3da0a74ffa1fc9d14e9",
+      "size_bytes": 8328
+    },
+    "aria-at/accordion/accordion.html": {
+      "sha256": "a2408753871147beb2f9868d66663048ec6cc8cfbfee4d3fd05a193ea5ea4ce7",
+      "size_bytes": 6556
+    },
+    "aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html": {
+      "sha256": "0774b5620b928dcae60a86811386b3777394e3497e492a459b0fc25f405163f2",
+      "size_bytes": 7803
+    },
+    "aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html": {
+      "sha256": "368f14a718366b423aa3e1298927c25424810c3043d919de22cdb909300d4404",
+      "size_bytes": 7286
+    },
+    "aria-at/accordion/accordion.setFocusOnNameInputField.html": {
+      "sha256": "9060d8dd134b59b553a97d2930ebf691c6050a15e220a8ed75cf56cf3c9d64a7",
+      "size_bytes": 7582
+    },
+    "aria-at/accordion/accordion.setFocusOnSecondAccordionHeader.html": {
+      "sha256": "b91c95397e4689bb97ed1a23e89b2eff54f1d8a1481837e76a06317761d4fcec",
+      "size_bytes": 7282
+    },
+    "aria-at/accordion/accordion.setFocusOnSecondAccordionHeaderAndCollapseFirstAccordionHeader.html": {
+      "sha256": "9bbd312de11386d78a8c89c6dac68399524b651f3e1354bd80756be72633d367",
+      "size_bytes": 7944
+    },
+    "aria-at/accordion/css/accordion.css": {
+      "sha256": "2ebfee0983bbb7d4f0e7d40249ca9bc7d2b284e6a5f29ce6d977de095d0d92d8",
+      "size_bytes": 2161
+    },
+    "aria-at/accordion/js/accordion.js": {
+      "sha256": "91c470a0d52a50fa43f1400cc1f5bc9508ba26a222d97170d8aae0f3a0893788",
+      "size_bytes": 1414
+    },
     "aria-at/checkbox-tri-state/checkbox-mixed.html": {
       "sha256": "b16e45a11d08b6701a8dba146f32f7176fbc9be39b64c91b8d66dca0f95ead63",
       "size_bytes": 3085
@@ -4418,6 +4454,118 @@
       }
     },
     {
+      "scenario_id": "2122-aria-accordion-nav-forwards-to-expanded-accordion-header-b-vc",
+      "fixture": "aria-at/accordion/accordion.expandSecondAccordionHeaderAndSetFocusOnCollapsedFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "ade43dab8a8112fbfcb91250266e2f4d613689914d18cadc89d42b9e20a211db",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2123-aria-accordion-nav-forwards-to-expanded-accordion-header-f-vc",
+      "fixture": "aria-at/accordion/accordion.expandSecondAccordionHeaderAndSetFocusOnCollapsedFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "4e7325eeb51cf5055c26e4d57963c0ca717b82dc6e4ff7a7e5bf9dd0dddcac2e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2124-aria-accordion-nav-forwards-to-expanded-accordion-header-h-vc",
+      "fixture": "aria-at/accordion/accordion.expandSecondAccordionHeaderAndSetFocusOnCollapsedFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "234a9e8b8eef223f568ff4a83610d0e946ec8f20070eb9ba58c673eb8575e8da",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2125-aria-accordion-nav-forwards-to-expanded-accordion-header-three-vc",
+      "fixture": "aria-at/accordion/accordion.expandSecondAccordionHeaderAndSetFocusOnCollapsedFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "accae3e2016a7006e90a65016f424e5517e5fd63364e01adc3960d16a69532b4",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2126-aria-accordion-nav-forwards-to-expanded-accordion-header-tab-vc",
+      "fixture": "aria-at/accordion/accordion.expandSecondAccordionHeaderAndSetFocusOnCollapsedFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "be3bf97fc4c1b50a2a210c32d50a730d7076bf57bc717b3852b5442034dd273e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2127-aria-accordion-nav-forwards-to-expanded-accordion-header-down-vc",
+      "fixture": "aria-at/accordion/accordion.expandSecondAccordionHeaderAndSetFocusOnCollapsedFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "5625d113ee41b18a37e3e77f7c10635c3bb3beb827033b1f0bb2d8fe1ed9a526",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2128-aria-accordion-nav-forwards-to-expanded-accordion-header-tab-pc",
+      "fixture": "aria-at/accordion/accordion.expandSecondAccordionHeaderAndSetFocusOnCollapsedFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "efd8fdecaa43f484f278ff5f41bc3e2cc0f04a1d165a7e9f16dac5fce475721b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2129-aria-accordion-nav-back-to-expanded-accordion-header-shift-b-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnNameInputField.html",
+      "evidence": {
+        "sha256": "ed598dd1b42b749137c59a400283cfb1f96e8a30d84661afe482433743a408ac",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "213-web-textarea-words",
       "fixture": "web-app-patterns.html",
       "evidence": {
@@ -4428,6 +4576,146 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2130-aria-accordion-nav-back-to-expanded-accordion-header-shift-f-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnNameInputField.html",
+      "evidence": {
+        "sha256": "f1da4257c09915e7c2a27ff0a5fa24932cbde4f96ee492e0b3d6b19ac07b2f23",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2131-aria-accordion-nav-back-to-expanded-accordion-header-shift-h-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnNameInputField.html",
+      "evidence": {
+        "sha256": "a0de3cd8d5cc6b8086f76367ea124889d6fa9fb4086f755a60082ac9db1b7eb3",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2132-aria-accordion-nav-back-to-expanded-accordion-header-shift-three-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnNameInputField.html",
+      "evidence": {
+        "sha256": "1254bbbaf848e42442a55cf2d0ba522ad343b846e4d45ba7f1dccc7b12c6afb1",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2133-aria-accordion-nav-back-to-expanded-accordion-header-shift-tab-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnNameInputField.html",
+      "evidence": {
+        "sha256": "79c5e80bb359930fc8f30d5293efc2f48b7f21ef19abed5d109cc43dd3d03691",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2134-aria-accordion-nav-back-to-expanded-accordion-header-shift-tab-pc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnNameInputField.html",
+      "evidence": {
+        "sha256": "ea863a3906563eb1ce765e565421685104fb3246ba3305db4b5f36b16249b811",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2135-aria-accordion-nav-forwards-to-collapsed-accordion-header-b-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "57e38e3f5e650c505dfe6c60f64fb79d26c30b1ec4292bda1ed435a4a845af45",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2136-aria-accordion-nav-forwards-to-collapsed-accordion-header-f-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "14ebb250942a5ffff656c1c654d5fcc57a7ca0dcb03e1320f15395f9d879afc0",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2137-aria-accordion-nav-forwards-to-collapsed-accordion-header-h-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "efec53f5cc936502d37a1d2ae64b07310994cb55315706ac60383904d327c84b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2138-aria-accordion-nav-forwards-to-collapsed-accordion-header-three-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "ea061c479e6ecae5249c333dc94fe6bdb64f394cbbc740e5e484969c20297622",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2139-aria-accordion-nav-forwards-to-collapsed-accordion-header-tab-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "878f185b08cf570c5966b2f399b6122b47eed3129be99c4ba279796bea351e46",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -4446,11 +4734,291 @@
       }
     },
     {
+      "scenario_id": "2140-aria-accordion-nav-forwards-to-collapsed-accordion-header-down-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "792e3745888231c64d91561c0fd0225933437ee28ec34ebd737c977963e86116",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2141-aria-accordion-nav-forwards-to-collapsed-accordion-header-tab-pc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "4c5ced449c5c82fe62747b9c91a26f08512de3a2a7a453b58365eb8243c6d929",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2142-aria-accordion-nav-back-to-collapsed-accordion-header-shift-b-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnSecondAccordionHeaderAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "1234065053aeecfcb1d9396f3262c95659f35d77f8b4f511544ee763017ac83d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2143-aria-accordion-nav-back-to-collapsed-accordion-header-shift-f-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnSecondAccordionHeaderAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "dc725a1ed727dadb4de8e36212da7d6c66eeae4b780a6858220561a6068a059b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2144-aria-accordion-nav-back-to-collapsed-accordion-header-up-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnSecondAccordionHeaderAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "fa0061c9f5baaea9df972402245e3c7ed7c1ec400ccc08cdc55c604e4f15e0a7",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2145-aria-accordion-nav-back-to-collapsed-accordion-header-shift-h-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnSecondAccordionHeaderAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "5914d99e4b8def884a9d277156eee204d982fdd7fcd6276aaed0308bb3264be2",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2146-aria-accordion-nav-back-to-collapsed-accordion-header-shift-three-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnSecondAccordionHeaderAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "b1d84c2378358c4fd4b8f61cf56694de4cb8b917922b71c42188ed848ee9451e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2147-aria-accordion-nav-back-to-collapsed-accordion-header-shift-tab-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnSecondAccordionHeaderAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "bdb6552c193a48c1c9f14b089c2a669b905251f3bef45004db68a8af85e506bb",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2148-aria-accordion-nav-back-to-collapsed-accordion-header-shift-tab-pc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnSecondAccordionHeaderAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "590d5915f81f158cb277ee35bbb6287c5c66a69c6f3e4dca18b9fd9f907b8ee6",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2149-aria-accordion-req-info-about-expanded-accordion-header-ins-tab-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "c182a7022b31065ee1008ffaf0336296ea8e07364c5851ccadc7313508209c12",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "215-web-application-region",
       "fixture": "web-app-patterns.html",
       "evidence": {
         "sha256": "f08838a941595c643aafd808c355467993d4a3af5e57b003ddcb7eb72508bd47",
         "capture_script_sha256": "52497c30fa69eac8937bd79b2cff9c5b387ad9246d0a3d1333fdf43c76994e11",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2150-aria-accordion-req-info-about-expanded-accordion-header-ins-up-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "9e5411c310ce05240344436334bb45f1d02af33903a98b3d54e42a985cc4d24d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2151-aria-accordion-req-info-about-expanded-accordion-header-ins-tab-pc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "618d34d303d4efa703af8f80a218c15441bdd04626afc9bb75a547632bd7a591",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2152-aria-accordion-req-info-about-expanded-accordion-header-ins-up-pc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "6b0e67310b3512db1e1e90d3fc5e06c1dd5e956670ebc850a96a4852b1ea0404",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2153-aria-accordion-req-info-about-collapsed-accordion-header-ins-tab-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "6ba0acbf32a735e33ceb75e03b1de8bf06ee4c2b965fdcf1b602ff3bb2a0344a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2154-aria-accordion-req-info-about-collapsed-accordion-header-ins-up-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "d52477b604e4bf368364058673da0867510032e029affb4d1b8491a119484c90",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2155-aria-accordion-req-info-about-collapsed-accordion-header-ins-tab-pc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "a11b5e08fef2d2da97cff5376768d3c3cabcd09982cd144173567f8c698a4bea",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2156-aria-accordion-req-info-about-collapsed-accordion-header-ins-up-pc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnAndCollapseFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "7789bbb554ac1c5574149dd991605aae7c32eab979d235318aa753995cd33064",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2157-aria-accordion-nav-into-accordion-panel-down-down-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "05f9c5eed39600675181531c9fcf33bbc66b4a6edd176bdd248ef00bb6e31d17",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2158-aria-accordion-nav-into-accordion-panel-f-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "974ceaa58f609b83b536b94bede3cf61af2b174dc82b11c3d56df89b19ce9f30",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2159-aria-accordion-nav-into-accordion-panel-e-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "debb2df4dc58685a0fb86da27bf7f076a73604356e0dd93670ee965e7e485312",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -4470,6 +5038,146 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2160-aria-accordion-nav-into-accordion-panel-tab-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "141458e5fc0a975953a560957e61a81731fd497ff99b79247147c4d82056616a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2161-aria-accordion-nav-into-accordion-panel-tab-pc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "6a011347c91cda9def3d17c180c736677b416822c164d81c1f358a784f3e1286",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2162-aria-accordion-operate-collapsed-accordion-header-space-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnSecondAccordionHeader.html",
+      "evidence": {
+        "sha256": "e5c8ab1f959147ad909931122cf8b70eb0a21d24eb46e070a351f925401a6742",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2163-aria-accordion-operate-collapsed-accordion-header-enter-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnSecondAccordionHeader.html",
+      "evidence": {
+        "sha256": "903fe0df5e1ef3888b46d374279151250ca18f91e3b5fcda4d160d33c8512c55",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2164-aria-accordion-operate-collapsed-accordion-header-space-pc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnSecondAccordionHeader.html",
+      "evidence": {
+        "sha256": "1188fa8fb28c7291960521f40cd965b884803e0af105be6e01bf8032cabff15b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2165-aria-accordion-operate-collapsed-accordion-header-enter-pc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnSecondAccordionHeader.html",
+      "evidence": {
+        "sha256": "bf4edee78f5ae9a0bae21af3098a1ea0e8c04596615db8feb74e7e75b99fdd45",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2166-aria-accordion-operate-expanded-accordion-header-space-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "4de22ee27e741d5a5edf7a93e9f1c1b8bd14a998337006c99bd9fbc266a19395",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2167-aria-accordion-operate-expanded-accordion-header-enter-vc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "ba38664bcdefabe7f08a420af9ff5c95bcbe4b0e958635f00100ec5f897009c5",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2168-aria-accordion-operate-expanded-accordion-header-space-pc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "308918b8fcd4dc455631f90ea07f9d142437b00334065dd640c63b661fe5bbe8",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2169-aria-accordion-operate-expanded-accordion-header-enter-pc",
+      "fixture": "aria-at/accordion/accordion.setFocusOnFirstAccordionHeader.html",
+      "evidence": {
+        "sha256": "68090cde827fc6cc51b50dd610fb1dadb63abd9cd945a9960b4b22188724c0db",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -12609,10 +13317,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 868,
-    "scenarios_with_evidence": 868,
-    "total_trials": 2610,
-    "successful_trials": 2593,
-    "deterministic_scenarios": 596
+    "scenarios": 916,
+    "scenarios_with_evidence": 916,
+    "total_trials": 2754,
+    "successful_trials": 2737,
+    "deterministic_scenarios": 644
   }
 }
