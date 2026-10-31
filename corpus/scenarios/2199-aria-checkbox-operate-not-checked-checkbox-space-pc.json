@@ -1,0 +1,45 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "stateChangeToChecked",
+        "phrase": "convey change in state, to 'checked'",
+        "priority": "1"
+      }
+    ],
+    "command": "space",
+    "instructions": "Starting at the 'Lettuce' checkbox, change its state to 'checked'.",
+    "plan": "apg/checkbox",
+    "presentation_number": "20",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "operateNotCheckedCheckbox"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox/checkbox.setFocusOnCheckbox.html",
+  "id": "2199-aria-checkbox-operate-not-checked-checkbox-space-pc",
+  "name": "ARIA-AT, Checkbox Example (Two State): Operate a checkbox that is not checked; Space in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Space",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

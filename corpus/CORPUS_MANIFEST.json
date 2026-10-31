@@ -85,6 +85,50 @@
       "sha256": "cac2ee505252f9c47969c90b455364e1663c84b31edebb6f8c1d1907da034bc5",
       "size_bytes": 1649
     },
+    "aria-at/checkbox/checkbox.html": {
+      "sha256": "82d88929d738fc3be13e46ea897b7b53c3840c21a4005db0cd65bdfb3cfeef21",
+      "size_bytes": 1458
+    },
+    "aria-at/checkbox/checkbox.setFocusAfterAndCheckCheckCheckbox.html": {
+      "sha256": "38c99ec79bec8cb4177f1147abb142a74e364213a7f4ea5f06c21d2dd8bdb285",
+      "size_bytes": 2421
+    },
+    "aria-at/checkbox/checkbox.setFocusAfterCheckbox.html": {
+      "sha256": "daaeb51e5ee369c5ab3a069d990cf64295d2847c1eeac54c524eded1eb6e878f",
+      "size_bytes": 2268
+    },
+    "aria-at/checkbox/checkbox.setFocusBeforeAndCheckCheckbox.html": {
+      "sha256": "075ec9376f71c00f39a4ae26ff6e1cd37f3a8f52a9372e173c7868f6f45740d1",
+      "size_bytes": 2426
+    },
+    "aria-at/checkbox/checkbox.setFocusBeforeCheckbox.html": {
+      "sha256": "c130a9a2ae76af4c44a7333b55d8ffa502ab00c6f094ba31e55ce71c3053df36",
+      "size_bytes": 2271
+    },
+    "aria-at/checkbox/checkbox.setFocusOnAndCheckCheckbox.html": {
+      "sha256": "7100b92f7f7a8941b3652e96ea24b2ec07ae837f9a8b3bba6f44f2b969ba0007",
+      "size_bytes": 2408
+    },
+    "aria-at/checkbox/checkbox.setFocusOnCheckbox.html": {
+      "sha256": "4869e84854eb3061f114f2549af9e17521466bde3d313df766b9d091e45b84d4",
+      "size_bytes": 2269
+    },
+    "aria-at/checkbox/css/checkbox-mixed.css": {
+      "sha256": "2f8f98e0e1a86e65d2f013cd15f7293eebdedfc7cde01fa7e6b319712ef5d54b",
+      "size_bytes": 2003
+    },
+    "aria-at/checkbox/css/checkbox.css": {
+      "sha256": "ee4c2207e3ff6c0f4399dba4012e7ad715e51e8518fa97f1951297dc19bb9d4c",
+      "size_bytes": 1220
+    },
+    "aria-at/checkbox/js/checkbox-mixed.js": {
+      "sha256": "5ff910e0c0d26ee99ff2eff0a7e7f1f06901b38e5c0f7f45862cadb15f637e90",
+      "size_bytes": 4318
+    },
+    "aria-at/checkbox/js/checkbox.js": {
+      "sha256": "cac2ee505252f9c47969c90b455364e1663c84b31edebb6f8c1d1907da034bc5",
+      "size_bytes": 1649
+    },
     "aria-at/disclosure-faq/css/disclosure-card.css": {
       "sha256": "4683aa7cd2469f8cdd48c95a7a22b5717e92b83c350a1b2c2665161a505d83fc",
       "size_bytes": 6029
@@ -5196,6 +5240,146 @@
       }
     },
     {
+      "scenario_id": "2170-aria-checkbox-nav-forwards-to-not-checked-checkbox-x-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusBeforeCheckbox.html",
+      "evidence": {
+        "sha256": "11c32145f79c181e54e581aaf00518c653f2444262546d65d665c0c808fbcc73",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2171-aria-checkbox-nav-forwards-to-not-checked-checkbox-f-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusBeforeCheckbox.html",
+      "evidence": {
+        "sha256": "8742a7564db91cbfb13ef6d499657fd6f2a6a41bdbdfb71cc4300adc57c4b8a9",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2172-aria-checkbox-nav-forwards-to-not-checked-checkbox-down-down-down-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusBeforeCheckbox.html",
+      "evidence": {
+        "sha256": "63ab7e5d20728ae767b6da45a83359a0b802dd373cf70a6dd50a9eff7b7cdc55",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2173-aria-checkbox-nav-forwards-to-not-checked-checkbox-tab-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusBeforeCheckbox.html",
+      "evidence": {
+        "sha256": "e8dcbdec1afb9a923849df44909a3b449fb8a4a9051b2d7b4e436d2d91ff1386",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2174-aria-checkbox-nav-forwards-to-not-checked-checkbox-tab-pc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusBeforeCheckbox.html",
+      "evidence": {
+        "sha256": "ed2056a6dc7de4141012bda3fb00c47c32ee2748c836c22d9180df645399e787",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2175-aria-checkbox-nav-back-to-not-checked-checkbox-shift-x-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusAfterCheckbox.html",
+      "evidence": {
+        "sha256": "fcfef52d6acf883255d551f0a3db89db5d4ea36a37bf5c83e2f049d96a362744",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2176-aria-checkbox-nav-back-to-not-checked-checkbox-shift-f-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusAfterCheckbox.html",
+      "evidence": {
+        "sha256": "c73a284d15e50425cb8f98ca23c9bf29e68c5d3556bd738842c50551980121b5",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2177-aria-checkbox-nav-back-to-not-checked-checkbox-up-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusAfterCheckbox.html",
+      "evidence": {
+        "sha256": "bb161bf4fa1ec8ad8f5ad8fd9c29606d5e0c9882113c2e7a324e40284670c9b7",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2178-aria-checkbox-nav-back-to-not-checked-checkbox-shift-tab-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusAfterCheckbox.html",
+      "evidence": {
+        "sha256": "246a81c445ec034ce64af0691af948c87f02726ffb33a41943a924dcd1d5eee2",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2179-aria-checkbox-nav-back-to-not-checked-checkbox-shift-tab-pc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusAfterCheckbox.html",
+      "evidence": {
+        "sha256": "20b9f0a7ffd54161ee2b776b893db8940b73abe62ac6010c3c13b9b43a45afbe",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "218-web-aria-menus",
       "fixture": "web-menus.html",
       "evidence": {
@@ -5210,6 +5394,146 @@
       }
     },
     {
+      "scenario_id": "2180-aria-checkbox-nav-forwards-to-checked-checkbox-x-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusBeforeAndCheckCheckbox.html",
+      "evidence": {
+        "sha256": "40c2a3f51d391e773d1b364541153a913504163c34c44a306226810f630529e4",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2181-aria-checkbox-nav-forwards-to-checked-checkbox-f-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusBeforeAndCheckCheckbox.html",
+      "evidence": {
+        "sha256": "a9d8b0e3d48da0857fd6af5a5ec1439797d93c8a6035366fa9f957ecc2c451cd",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2182-aria-checkbox-nav-forwards-to-checked-checkbox-down-down-down-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusBeforeAndCheckCheckbox.html",
+      "evidence": {
+        "sha256": "8c7bba070855144b4a3b6c1ac10cbf3a3c780670355f4d7cb420e28e8ba28dec",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2183-aria-checkbox-nav-forwards-to-checked-checkbox-tab-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusBeforeAndCheckCheckbox.html",
+      "evidence": {
+        "sha256": "49a9409b871a8d118b9cd40bee8cfee22e365011e79f9a9d48d7be72b99ef670",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2184-aria-checkbox-nav-forwards-to-checked-checkbox-tab-pc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusBeforeAndCheckCheckbox.html",
+      "evidence": {
+        "sha256": "f7b8187c20c2f30b8a1e8d8d8d73da791076ad14f05c3251a0343b14e6dfc6b1",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2185-aria-checkbox-nav-back-to-checked-checkbox-shift-x-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusAfterAndCheckCheckCheckbox.html",
+      "evidence": {
+        "sha256": "1be1052270aa3d60989b4ffe4c13720c7c270d992275aa91e1fd5a2c9673962c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2186-aria-checkbox-nav-back-to-checked-checkbox-shift-f-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusAfterAndCheckCheckCheckbox.html",
+      "evidence": {
+        "sha256": "95b841a126301e12dcaafca8f18c5d8d1ea8eee5a50c5db79db82e1a034f548e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2187-aria-checkbox-nav-back-to-checked-checkbox-up-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusAfterAndCheckCheckCheckbox.html",
+      "evidence": {
+        "sha256": "07f49c392705bad3af2bea8f7b01fe7c809733bb1da942a4c88d8b5ca9520f7a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2188-aria-checkbox-nav-back-to-checked-checkbox-shift-tab-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusAfterAndCheckCheckCheckbox.html",
+      "evidence": {
+        "sha256": "f31d28a53cf6d3e1707c46d8611e4e57d21c164febb84721ac7aa596be94b59d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2189-aria-checkbox-nav-back-to-checked-checkbox-shift-tab-pc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusAfterAndCheckCheckCheckbox.html",
+      "evidence": {
+        "sha256": "0c01d30ba19b53fc019bce000b2709900e157f6b0d63d2b11dc482b40f2c8eb5",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "219-web-chat-patterns",
       "fixture": "web-chat.html",
       "evidence": {
@@ -5220,6 +5544,146 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2190-aria-checkbox-req-info-about-not-checked-checkbox-ins-tab-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusOnCheckbox.html",
+      "evidence": {
+        "sha256": "b5d8e646c4d4925ec1a77d5e3c8f3f55b2558eaea8c1e500ad2aa876ceb83b78",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2191-aria-checkbox-req-info-about-not-checked-checkbox-ins-up-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusOnCheckbox.html",
+      "evidence": {
+        "sha256": "2865f79eac20e0258817f38370225af284fde54175bf38d17837304d8f6e62fb",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2192-aria-checkbox-req-info-about-not-checked-checkbox-ins-tab-pc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusOnCheckbox.html",
+      "evidence": {
+        "sha256": "e783e83d1c7f264bfb6da36b977d73bbe37200758fc7f35fa7b50e7c240c1073",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2193-aria-checkbox-req-info-about-not-checked-checkbox-ins-up-pc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusOnCheckbox.html",
+      "evidence": {
+        "sha256": "5611f0ed1a7db92be0ce283e41d2d11a7c6198404285d53b0437d7a770c148da",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2194-aria-checkbox-req-info-about-checked-checkbox-ins-tab-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusOnAndCheckCheckbox.html",
+      "evidence": {
+        "sha256": "eea0e362f8abfe1c8f257661a821ef4dbe416cb88a4a3cb8a687fb442586f53a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2195-aria-checkbox-req-info-about-checked-checkbox-ins-up-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusOnAndCheckCheckbox.html",
+      "evidence": {
+        "sha256": "a31ae0d3789f9a87eba3480154ddfeff260f9eb4a854dea8c23ee233632e524d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2196-aria-checkbox-req-info-about-checked-checkbox-ins-tab-pc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusOnAndCheckCheckbox.html",
+      "evidence": {
+        "sha256": "a260b54ff1134cf58f8eb63c347b6ba099879c70c0f79b062e94809fd3aef24e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2197-aria-checkbox-req-info-about-checked-checkbox-ins-up-pc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusOnAndCheckCheckbox.html",
+      "evidence": {
+        "sha256": "d8f4856c363dcecd2ad8bb2fe3cf8e1fbfe00f12e7204b12a53fabec11437306",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2198-aria-checkbox-operate-not-checked-checkbox-space-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusOnCheckbox.html",
+      "evidence": {
+        "sha256": "744fb7dce7ff60aabc2f0f891f5a1f3de663aa4bb72d56a636bb2bbb562381e9",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2199-aria-checkbox-operate-not-checked-checkbox-space-pc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusOnCheckbox.html",
+      "evidence": {
+        "sha256": "698edab3de5dd72cd125cb68b6ba67d58de886eb6d5121fb4aaacd34ecbead25",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -5248,6 +5712,34 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2200-aria-checkbox-operate-checked-checkbox-space-vc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusOnAndCheckCheckbox.html",
+      "evidence": {
+        "sha256": "9fec093eacb9c071725d6c7fd81051ee2adf43e7dc1639c5b058b8290a555a24",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2201-aria-checkbox-operate-checked-checkbox-space-pc",
+      "fixture": "aria-at/checkbox/checkbox.setFocusOnAndCheckCheckbox.html",
+      "evidence": {
+        "sha256": "29023a3e94cdc95fa2a25afe8b55b0fec69d9decdb1a240291b94b5c6fe9509b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -13317,10 +13809,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 916,
-    "scenarios_with_evidence": 916,
-    "total_trials": 2754,
-    "successful_trials": 2737,
-    "deterministic_scenarios": 644
+    "scenarios": 948,
+    "scenarios_with_evidence": 948,
+    "total_trials": 2850,
+    "successful_trials": 2833,
+    "deterministic_scenarios": 676
   }
 }

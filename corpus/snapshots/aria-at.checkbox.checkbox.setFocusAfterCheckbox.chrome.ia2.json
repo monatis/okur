@@ -1,0 +1,1103 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Checkbox Example (Two State) - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "daaeb51e5ee369c5ab3a069d990cf64295d2847c1eeac54c524eded1eb6e878f",
+    "captured_at_unix_ms": 1793456872504,
+    "node_count": 32,
+    "capture_ms": 218
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Checkbox Example (Two State)",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox/checkbox.setFocusAfterCheckbox.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -77930,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Arial",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -77955,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 2,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Arial",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -77959,
+            "attributes": {
+              "display": "block",
+              "id": "ex1",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "14.5pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 3,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Sandwich Condiments",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -77947,
+                "attributes": {
+                  "display": "block",
+                  "id": "id-group-label",
+                  "level": "3",
+                  "name-from": "contents",
+                  "tag": "h3",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  3,
+                  0,
+                  0
+                ],
+                "text": "Sandwich Condiments",
+                "lines": [
+                  [
+                    0,
+                    19
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 19,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "14.5pt"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelFor": [
+                    -77962
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Sandwich Condiments",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -77933,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Sandwich Condiments",
+                    "lines": [
+                      [
+                        0,
+                        19
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 19,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "14.5pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -77939,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Navigate forwards from here",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox/checkbox.setFocusAfterCheckbox.html#beforelink",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -77970,
+                    "attributes": {
+                      "display": "inline",
+                      "id": "beforelink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Navigate forwards from here",
+                    "lines": [
+                      [
+                        0,
+                        27
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 27,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Navigate forwards from here",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -77954,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Navigate forwards from here",
+                        "lines": [
+                          [
+                            0,
+                            27
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 27,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 20,
+                "name": "Sandwich Condiments",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -77962,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "name-from": "related-element",
+                  "setsize": "0",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "group"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelledBy": [
+                    -77947
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 33,
+                    "ia2_role": 33,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "unique_id": -77956,
+                    "attributes": {
+                      "class": "checkboxes",
+                      "display": "block",
+                      "setsize": "5",
+                      "tag": "ul",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      0,
+                      5,
+                      0
+                    ],
+                    "text": "￼￼￼￼￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        2,
+                        3
+                      ],
+                      [
+                        3,
+                        4
+                      ],
+                      [
+                        4,
+                        5
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 5,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 34,
+                        "ia2_role": 34,
+                        "msaa_states": 64,
+                        "ia2_states": 1024,
+                        "unique_id": -77948,
+                        "attributes": {
+                          "display": "list-item",
+                          "level": "1",
+                          "posinset": "1",
+                          "setsize": "5",
+                          "tag": "li",
+                          "text-align": "left"
+                        },
+                        "group_position": [
+                          1,
+                          5,
+                          1
+                        ],
+                        "text": "￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 1,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 44,
+                            "ia2_role": 44,
+                            "name": "Lettuce",
+                            "msaa_states": 1048576,
+                            "ia2_states": 263168,
+                            "unique_id": -77936,
+                            "attributes": {
+                              "checkable": "true",
+                              "display": "inline-block",
+                              "name-from": "contents",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "checkbox"
+                            },
+                            "text": "￼Lettuce",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 40,
+                                "ia2_role": 40,
+                                "msaa_states": 64,
+                                "ia2_states": 1024,
+                                "unique_id": -77942,
+                                "attributes": {
+                                  "text-align": "left"
+                                }
+                              },
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "Lettuce",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -77963,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "Lettuce",
+                                "lines": [
+                                  [
+                                    0,
+                                    7
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 7,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Arial",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 34,
+                        "ia2_role": 34,
+                        "msaa_states": 64,
+                        "ia2_states": 1024,
+                        "unique_id": -77971,
+                        "attributes": {
+                          "display": "list-item",
+                          "level": "1",
+                          "posinset": "2",
+                          "setsize": "5",
+                          "tag": "li",
+                          "text-align": "left"
+                        },
+                        "group_position": [
+                          1,
+                          5,
+                          2
+                        ],
+                        "text": "￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 1,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 20,
+                            "ia2_role": 1054,
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -77968,
+                            "attributes": {
+                              "display": "block",
+                              "tag": "p",
+                              "text-align": "left"
+                            },
+                            "text": "￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 1,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(3,69,117)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 30,
+                                "ia2_role": 30,
+                                "name": "Navigate backwards from here",
+                                "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox/checkbox.setFocusAfterCheckbox.html#afterlink",
+                                "msaa_states": 5242884,
+                                "ia2_states": 1024,
+                                "unique_id": -77969,
+                                "attributes": {
+                                  "display": "inline",
+                                  "id": "afterlink",
+                                  "name-from": "contents",
+                                  "tag": "a",
+                                  "text-align": "left"
+                                },
+                                "text": "Navigate backwards from here",
+                                "lines": [
+                                  [
+                                    0,
+                                    28
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 28,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(3,69,117)",
+                                      "font-family": "Arial",
+                                      "font-size": "12pt",
+                                      "text-underline-style": "solid"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Navigate backwards from here",
+                                    "msaa_states": 4194304,
+                                    "ia2_states": 1024,
+                                    "unique_id": -77958,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Navigate backwards from here",
+                                    "lines": [
+                                      [
+                                        0,
+                                        28
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 28,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(3,69,117)",
+                                          "font-family": "Arial",
+                                          "font-size": "12pt",
+                                          "text-underline-style": "solid"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 34,
+                        "ia2_role": 34,
+                        "msaa_states": 64,
+                        "ia2_states": 1024,
+                        "unique_id": -77951,
+                        "attributes": {
+                          "display": "list-item",
+                          "level": "1",
+                          "posinset": "3",
+                          "setsize": "5",
+                          "tag": "li",
+                          "text-align": "left"
+                        },
+                        "group_position": [
+                          1,
+                          5,
+                          3
+                        ],
+                        "text": "￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 1,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 44,
+                            "ia2_role": 44,
+                            "name": "Tomato",
+                            "msaa_states": 1048592,
+                            "ia2_states": 263168,
+                            "unique_id": -77952,
+                            "attributes": {
+                              "checkable": "true",
+                              "display": "inline-block",
+                              "name-from": "contents",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "checkbox"
+                            },
+                            "text": "￼Tomato",
+                            "lines": [
+                              [
+                                0,
+                                7
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 7,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 40,
+                                "ia2_role": 40,
+                                "msaa_states": 64,
+                                "ia2_states": 1024,
+                                "unique_id": -77944,
+                                "attributes": {
+                                  "text-align": "left"
+                                }
+                              },
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "Tomato",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -77972,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "Tomato",
+                                "lines": [
+                                  [
+                                    0,
+                                    6
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 6,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Arial",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 34,
+                        "ia2_role": 34,
+                        "msaa_states": 64,
+                        "ia2_states": 1024,
+                        "unique_id": -77940,
+                        "attributes": {
+                          "display": "list-item",
+                          "level": "1",
+                          "posinset": "4",
+                          "setsize": "5",
+                          "tag": "li",
+                          "text-align": "left"
+                        },
+                        "group_position": [
+                          1,
+                          5,
+                          4
+                        ],
+                        "text": "￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 1,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 44,
+                            "ia2_role": 44,
+                            "name": "Mustard",
+                            "msaa_states": 1048576,
+                            "ia2_states": 263168,
+                            "unique_id": -77973,
+                            "attributes": {
+                              "checkable": "true",
+                              "display": "inline-block",
+                              "name-from": "contents",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "checkbox"
+                            },
+                            "text": "￼Mustard",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 40,
+                                "ia2_role": 40,
+                                "msaa_states": 64,
+                                "ia2_states": 1024,
+                                "unique_id": -77928,
+                                "attributes": {
+                                  "text-align": "left"
+                                }
+                              },
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "Mustard",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -77934,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "Mustard",
+                                "lines": [
+                                  [
+                                    0,
+                                    7
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 7,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Arial",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 34,
+                        "ia2_role": 34,
+                        "msaa_states": 64,
+                        "ia2_states": 1024,
+                        "unique_id": -77967,
+                        "attributes": {
+                          "display": "list-item",
+                          "level": "1",
+                          "posinset": "5",
+                          "setsize": "5",
+                          "tag": "li",
+                          "text-align": "left"
+                        },
+                        "group_position": [
+                          1,
+                          5,
+                          5
+                        ],
+                        "text": "￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 1,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 44,
+                            "ia2_role": 44,
+                            "name": "Sprouts",
+                            "msaa_states": 1048576,
+                            "ia2_states": 263168,
+                            "unique_id": -77957,
+                            "attributes": {
+                              "checkable": "true",
+                              "display": "inline-block",
+                              "name-from": "contents",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "checkbox"
+                            },
+                            "text": "￼Sprouts",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 40,
+                                "ia2_role": 40,
+                                "msaa_states": 64,
+                                "ia2_states": 1024,
+                                "unique_id": -77961,
+                                "attributes": {
+                                  "text-align": "left"
+                                }
+                              },
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "Sprouts",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -77931,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "Sprouts",
+                                "lines": [
+                                  [
+                                    0,
+                                    7
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 7,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Arial",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -77946,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(250,250,250)",
+                  "color": "rgb(5,5,5)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1,
+                "ia2_states": 1024,
+                "unique_id": -77949,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

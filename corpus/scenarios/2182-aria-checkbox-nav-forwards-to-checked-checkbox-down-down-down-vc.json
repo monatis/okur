@@ -1,0 +1,74 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "1:roleGroup 1:nameSandwichCondiments 1:listBoundary",
+    "assertions": [
+      {
+        "id": "roleGroup",
+        "phrase": "convey role 'group'",
+        "priority": "2"
+      },
+      {
+        "id": "nameSandwichCondiments",
+        "phrase": "convey name of the group, 'Sandwich Condiments'",
+        "priority": "1"
+      },
+      {
+        "id": "listBoundary",
+        "phrase": "convey list boundary",
+        "priority": "3"
+      },
+      {
+        "id": "roleCheckbox",
+        "phrase": "convey role 'checkbox'",
+        "priority": "1"
+      },
+      {
+        "id": "nameLettuce",
+        "phrase": "convey name of the checkbox, 'Lettuce'",
+        "priority": "1"
+      },
+      {
+        "id": "stateChecked",
+        "phrase": "convey state of the checkbox, 'checked'",
+        "priority": "1"
+      }
+    ],
+    "command": "down down down",
+    "instructions": "Starting at the 'Navigate forwards from here' link, navigate to the 'Lettuce' checkbox.",
+    "plan": "apg/checkbox",
+    "presentation_number": "7.2",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToCheckedCheckbox"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox/checkbox.setFocusBeforeAndCheckCheckbox.html",
+  "id": "2182-aria-checkbox-nav-forwards-to-checked-checkbox-down-down-down-vc",
+  "name": "ARIA-AT, Checkbox Example (Two State): Navigate forwards to a checkbox that is checked; Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Down",
+      "id": "s2",
+      "type": "key"
+    },
+    {
+      "command": "Down",
+      "id": "s3",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

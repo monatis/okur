@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleCheckbox",
+        "phrase": "convey role 'checkbox'",
+        "priority": "1"
+      },
+      {
+        "id": "nameLettuce",
+        "phrase": "convey name of the checkbox, 'Lettuce'",
+        "priority": "1"
+      },
+      {
+        "id": "stateNotChecked",
+        "phrase": "convey state of the checkbox, 'not checked'",
+        "priority": "1"
+      }
+    ],
+    "command": "up",
+    "instructions": "Starting at the 'Navigate backwards from here' link, navigate to the 'Lettuce' checkbox.",
+    "plan": "apg/checkbox",
+    "presentation_number": "4.2",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToNotCheckedCheckbox"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox/checkbox.setFocusAfterCheckbox.html",
+  "id": "2177-aria-checkbox-nav-back-to-not-checked-checkbox-up-vc",
+  "name": "ARIA-AT, Checkbox Example (Two State): Navigate backwards to a checkbox that is not checked; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

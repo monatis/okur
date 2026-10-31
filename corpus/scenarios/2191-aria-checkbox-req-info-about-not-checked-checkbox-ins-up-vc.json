@@ -1,0 +1,59 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "0:roleGroup",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "0:nameSandwichCondiments",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "roleCheckbox",
+        "phrase": "convey role 'checkbox'",
+        "priority": "1"
+      },
+      {
+        "id": "nameLettuce",
+        "phrase": "convey name of the checkbox, 'Lettuce'",
+        "priority": "1"
+      },
+      {
+        "id": "stateNotChecked",
+        "phrase": "convey state of the checkbox, 'not checked'",
+        "priority": "1"
+      }
+    ],
+    "command": "ins+up",
+    "instructions": "Starting at the 'Lettuce' checkbox, read information about the checkbox.",
+    "plan": "apg/checkbox",
+    "presentation_number": "13.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutNotCheckedCheckbox"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox/checkbox.setFocusOnCheckbox.html",
+  "id": "2191-aria-checkbox-req-info-about-not-checked-checkbox-ins-up-vc",
+  "name": "ARIA-AT, Checkbox Example (Two State): Request information about a checkbox that is not checked; Insert+Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Up",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

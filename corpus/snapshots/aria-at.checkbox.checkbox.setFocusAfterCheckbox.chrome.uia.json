@@ -1,0 +1,853 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Checkbox Example (Two State) - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "daaeb51e5ee369c5ab3a069d990cf64295d2847c1eeac54c524eded1eb6e878f",
+    "captured_at_unix_ms": 1793456881565,
+    "node_count": 32,
+    "capture_ms": 66
+  },
+  "root": {
+    "control_type": 50030,
+    "localized_control_type": "document",
+    "name": "Checkbox Example (Two State)",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox/checkbox.setFocusAfterCheckbox.html",
+    "value_is_read_only": true,
+    "aria_role": "document",
+    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+    "automation_id": "RootWebArea",
+    "runtime_id": [
+      42,
+      7407642,
+      4,
+      314,
+      5,
+      9
+    ],
+    "heading_level": 80050,
+    "is_enabled": true,
+    "is_offscreen": false,
+    "is_password": false,
+    "is_required_for_form": false,
+    "is_keyboard_focusable": true,
+    "has_keyboard_focus": false,
+    "is_control_element": true,
+    "is_content_element": true,
+    "children": [
+      {
+        "control_type": 50026,
+        "localized_control_type": "main",
+        "aria_role": "main",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "runtime_id": [
+          42,
+          7407642,
+          4,
+          314,
+          5,
+          26
+        ],
+        "heading_level": 80050,
+        "landmark_type": 80002,
+        "localized_landmark_type": "main",
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50026,
+            "localized_control_type": "group",
+            "aria_role": "group",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "automation_id": "ex1",
+            "runtime_id": [
+              42,
+              7407642,
+              4,
+              314,
+              5,
+              27
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "heading",
+                "name": "Sandwich Condiments",
+                "aria_role": "heading",
+                "aria_properties": "readonly=true;expanded=false;level=3;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "automation_id": "id-group-label",
+                "runtime_id": [
+                  42,
+                  7407642,
+                  4,
+                  314,
+                  5,
+                  28
+                ],
+                "heading_level": 80053,
+                "level": 3,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50020,
+                    "localized_control_type": "text",
+                    "name": "Sandwich Condiments",
+                    "aria_role": "description",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      7407642,
+                      4,
+                      314,
+                      5,
+                      1
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": false,
+                    "is_content_element": false
+                  }
+                ]
+              },
+              {
+                "control_type": 50026,
+                "localized_control_type": "group",
+                "aria_role": "group",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  7407642,
+                  4,
+                  314,
+                  5,
+                  29
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false,
+                "children": [
+                  {
+                    "control_type": 50005,
+                    "localized_control_type": "link",
+                    "name": "Navigate forwards from here",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox/checkbox.setFocusAfterCheckbox.html#beforelink",
+                    "value_is_read_only": true,
+                    "aria_role": "link",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "automation_id": "beforelink",
+                    "runtime_id": [
+                      42,
+                      7407642,
+                      4,
+                      314,
+                      5,
+                      30
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": true,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true,
+                    "children": [
+                      {
+                        "control_type": 50020,
+                        "localized_control_type": "text",
+                        "name": "Navigate forwards from here",
+                        "aria_role": "description",
+                        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          7407642,
+                          4,
+                          314,
+                          5,
+                          2
+                        ],
+                        "heading_level": 80050,
+                        "is_enabled": true,
+                        "is_offscreen": false,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": false,
+                        "is_content_element": false
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "control_type": 50026,
+                "localized_control_type": "group",
+                "name": "Sandwich Condiments",
+                "aria_role": "group",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  7407642,
+                  4,
+                  314,
+                  5,
+                  31
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50008,
+                    "localized_control_type": "list",
+                    "aria_role": "list",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "class_name": "checkboxes",
+                    "runtime_id": [
+                      42,
+                      7407642,
+                      4,
+                      314,
+                      5,
+                      32
+                    ],
+                    "heading_level": 80050,
+                    "size_of_set": 5,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true,
+                    "children": [
+                      {
+                        "control_type": 50007,
+                        "localized_control_type": "list item",
+                        "name": "Lettuce",
+                        "aria_role": "listitem",
+                        "aria_properties": "readonly=true;expanded=false;level=1;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          7407642,
+                          4,
+                          314,
+                          5,
+                          33
+                        ],
+                        "heading_level": 80050,
+                        "position_in_set": 1,
+                        "size_of_set": 5,
+                        "level": 1,
+                        "is_enabled": true,
+                        "is_offscreen": false,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": true,
+                        "is_content_element": true,
+                        "children": [
+                          {
+                            "control_type": 50002,
+                            "localized_control_type": "check box",
+                            "name": "Lettuce",
+                            "value_is_read_only": false,
+                            "aria_role": "checkbox",
+                            "aria_properties": "checked=false;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                            "runtime_id": [
+                              42,
+                              7407642,
+                              4,
+                              314,
+                              5,
+                              34
+                            ],
+                            "heading_level": 80050,
+                            "toggle_state": 0,
+                            "is_enabled": true,
+                            "is_offscreen": false,
+                            "is_password": false,
+                            "is_required_for_form": false,
+                            "is_keyboard_focusable": true,
+                            "has_keyboard_focus": false,
+                            "is_control_element": true,
+                            "is_content_element": true,
+                            "children": [
+                              {
+                                "control_type": 50006,
+                                "localized_control_type": "graphic",
+                                "aria_role": "img",
+                                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                                "runtime_id": [
+                                  42,
+                                  7407642,
+                                  4,
+                                  0,
+                                  0,
+                                  78023
+                                ],
+                                "heading_level": 80050,
+                                "is_enabled": true,
+                                "is_offscreen": false,
+                                "is_password": false,
+                                "is_required_for_form": false,
+                                "is_keyboard_focusable": false,
+                                "has_keyboard_focus": false,
+                                "is_control_element": true,
+                                "is_content_element": true
+                              },
+                              {
+                                "control_type": 50020,
+                                "localized_control_type": "text",
+                                "name": "Lettuce",
+                                "aria_role": "description",
+                                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                                "runtime_id": [
+                                  42,
+                                  7407642,
+                                  4,
+                                  314,
+                                  5,
+                                  3
+                                ],
+                                "heading_level": 80050,
+                                "is_enabled": true,
+                                "is_offscreen": false,
+                                "is_password": false,
+                                "is_required_for_form": false,
+                                "is_keyboard_focusable": false,
+                                "has_keyboard_focus": false,
+                                "is_control_element": false,
+                                "is_content_element": false
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "control_type": 50007,
+                        "localized_control_type": "list item",
+                        "name": "Navigate backwards from here",
+                        "aria_role": "listitem",
+                        "aria_properties": "readonly=true;expanded=false;level=1;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          7407642,
+                          4,
+                          314,
+                          5,
+                          35
+                        ],
+                        "heading_level": 80050,
+                        "position_in_set": 2,
+                        "size_of_set": 5,
+                        "level": 1,
+                        "is_enabled": true,
+                        "is_offscreen": false,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": true,
+                        "is_content_element": true,
+                        "children": [
+                          {
+                            "control_type": 50026,
+                            "localized_control_type": "group",
+                            "aria_role": "group",
+                            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                            "runtime_id": [
+                              42,
+                              7407642,
+                              4,
+                              314,
+                              5,
+                              36
+                            ],
+                            "heading_level": 80050,
+                            "is_enabled": true,
+                            "is_offscreen": false,
+                            "is_password": false,
+                            "is_required_for_form": false,
+                            "is_keyboard_focusable": false,
+                            "has_keyboard_focus": false,
+                            "is_control_element": false,
+                            "is_content_element": false,
+                            "children": [
+                              {
+                                "control_type": 50005,
+                                "localized_control_type": "link",
+                                "name": "Navigate backwards from here",
+                                "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox/checkbox.setFocusAfterCheckbox.html#afterlink",
+                                "value_is_read_only": true,
+                                "aria_role": "link",
+                                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                                "automation_id": "afterlink",
+                                "runtime_id": [
+                                  42,
+                                  7407642,
+                                  4,
+                                  314,
+                                  5,
+                                  37
+                                ],
+                                "heading_level": 80050,
+                                "is_enabled": true,
+                                "is_offscreen": false,
+                                "is_password": false,
+                                "is_required_for_form": false,
+                                "is_keyboard_focusable": true,
+                                "has_keyboard_focus": true,
+                                "is_control_element": true,
+                                "is_content_element": true,
+                                "children": [
+                                  {
+                                    "control_type": 50020,
+                                    "localized_control_type": "text",
+                                    "name": "Navigate backwards from here",
+                                    "aria_role": "description",
+                                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                                    "runtime_id": [
+                                      42,
+                                      7407642,
+                                      4,
+                                      314,
+                                      5,
+                                      4
+                                    ],
+                                    "heading_level": 80050,
+                                    "is_enabled": true,
+                                    "is_offscreen": false,
+                                    "is_password": false,
+                                    "is_required_for_form": false,
+                                    "is_keyboard_focusable": false,
+                                    "has_keyboard_focus": false,
+                                    "is_control_element": false,
+                                    "is_content_element": false
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "control_type": 50007,
+                        "localized_control_type": "list item",
+                        "name": "Tomato",
+                        "aria_role": "listitem",
+                        "aria_properties": "readonly=true;expanded=false;level=1;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          7407642,
+                          4,
+                          314,
+                          5,
+                          38
+                        ],
+                        "heading_level": 80050,
+                        "position_in_set": 3,
+                        "size_of_set": 5,
+                        "level": 1,
+                        "is_enabled": true,
+                        "is_offscreen": false,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": true,
+                        "is_content_element": true,
+                        "children": [
+                          {
+                            "control_type": 50002,
+                            "localized_control_type": "check box",
+                            "name": "Tomato",
+                            "value_is_read_only": false,
+                            "aria_role": "checkbox",
+                            "aria_properties": "checked=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                            "runtime_id": [
+                              42,
+                              7407642,
+                              4,
+                              314,
+                              5,
+                              39
+                            ],
+                            "heading_level": 80050,
+                            "toggle_state": 1,
+                            "is_enabled": true,
+                            "is_offscreen": false,
+                            "is_password": false,
+                            "is_required_for_form": false,
+                            "is_keyboard_focusable": true,
+                            "has_keyboard_focus": false,
+                            "is_control_element": true,
+                            "is_content_element": true,
+                            "children": [
+                              {
+                                "control_type": 50006,
+                                "localized_control_type": "graphic",
+                                "aria_role": "img",
+                                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                                "runtime_id": [
+                                  42,
+                                  7407642,
+                                  4,
+                                  0,
+                                  0,
+                                  78005
+                                ],
+                                "heading_level": 80050,
+                                "is_enabled": true,
+                                "is_offscreen": false,
+                                "is_password": false,
+                                "is_required_for_form": false,
+                                "is_keyboard_focusable": false,
+                                "has_keyboard_focus": false,
+                                "is_control_element": true,
+                                "is_content_element": true
+                              },
+                              {
+                                "control_type": 50020,
+                                "localized_control_type": "text",
+                                "name": "Tomato",
+                                "aria_role": "description",
+                                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                                "runtime_id": [
+                                  42,
+                                  7407642,
+                                  4,
+                                  314,
+                                  5,
+                                  5
+                                ],
+                                "heading_level": 80050,
+                                "is_enabled": true,
+                                "is_offscreen": false,
+                                "is_password": false,
+                                "is_required_for_form": false,
+                                "is_keyboard_focusable": false,
+                                "has_keyboard_focus": false,
+                                "is_control_element": false,
+                                "is_content_element": false
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "control_type": 50007,
+                        "localized_control_type": "list item",
+                        "name": "Mustard",
+                        "aria_role": "listitem",
+                        "aria_properties": "readonly=true;expanded=false;level=1;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          7407642,
+                          4,
+                          314,
+                          5,
+                          40
+                        ],
+                        "heading_level": 80050,
+                        "position_in_set": 4,
+                        "size_of_set": 5,
+                        "level": 1,
+                        "is_enabled": true,
+                        "is_offscreen": false,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": true,
+                        "is_content_element": true,
+                        "children": [
+                          {
+                            "control_type": 50002,
+                            "localized_control_type": "check box",
+                            "name": "Mustard",
+                            "value_is_read_only": false,
+                            "aria_role": "checkbox",
+                            "aria_properties": "checked=false;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                            "runtime_id": [
+                              42,
+                              7407642,
+                              4,
+                              314,
+                              5,
+                              41
+                            ],
+                            "heading_level": 80050,
+                            "toggle_state": 0,
+                            "is_enabled": true,
+                            "is_offscreen": false,
+                            "is_password": false,
+                            "is_required_for_form": false,
+                            "is_keyboard_focusable": true,
+                            "has_keyboard_focus": false,
+                            "is_control_element": true,
+                            "is_content_element": true,
+                            "children": [
+                              {
+                                "control_type": 50006,
+                                "localized_control_type": "graphic",
+                                "aria_role": "img",
+                                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                                "runtime_id": [
+                                  42,
+                                  7407642,
+                                  4,
+                                  0,
+                                  0,
+                                  78024
+                                ],
+                                "heading_level": 80050,
+                                "is_enabled": true,
+                                "is_offscreen": false,
+                                "is_password": false,
+                                "is_required_for_form": false,
+                                "is_keyboard_focusable": false,
+                                "has_keyboard_focus": false,
+                                "is_control_element": true,
+                                "is_content_element": true
+                              },
+                              {
+                                "control_type": 50020,
+                                "localized_control_type": "text",
+                                "name": "Mustard",
+                                "aria_role": "description",
+                                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                                "runtime_id": [
+                                  42,
+                                  7407642,
+                                  4,
+                                  314,
+                                  5,
+                                  6
+                                ],
+                                "heading_level": 80050,
+                                "is_enabled": true,
+                                "is_offscreen": false,
+                                "is_password": false,
+                                "is_required_for_form": false,
+                                "is_keyboard_focusable": false,
+                                "has_keyboard_focus": false,
+                                "is_control_element": false,
+                                "is_content_element": false
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "control_type": 50007,
+                        "localized_control_type": "list item",
+                        "name": "Sprouts",
+                        "aria_role": "listitem",
+                        "aria_properties": "readonly=true;expanded=false;level=1;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          7407642,
+                          4,
+                          314,
+                          5,
+                          42
+                        ],
+                        "heading_level": 80050,
+                        "position_in_set": 5,
+                        "size_of_set": 5,
+                        "level": 1,
+                        "is_enabled": true,
+                        "is_offscreen": false,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": true,
+                        "is_content_element": true,
+                        "children": [
+                          {
+                            "control_type": 50002,
+                            "localized_control_type": "check box",
+                            "name": "Sprouts",
+                            "value_is_read_only": false,
+                            "aria_role": "checkbox",
+                            "aria_properties": "checked=false;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                            "runtime_id": [
+                              42,
+                              7407642,
+                              4,
+                              314,
+                              5,
+                              43
+                            ],
+                            "heading_level": 80050,
+                            "toggle_state": 0,
+                            "is_enabled": true,
+                            "is_offscreen": false,
+                            "is_password": false,
+                            "is_required_for_form": false,
+                            "is_keyboard_focusable": true,
+                            "has_keyboard_focus": false,
+                            "is_control_element": true,
+                            "is_content_element": true,
+                            "children": [
+                              {
+                                "control_type": 50006,
+                                "localized_control_type": "graphic",
+                                "aria_role": "img",
+                                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                                "runtime_id": [
+                                  42,
+                                  7407642,
+                                  4,
+                                  0,
+                                  0,
+                                  78042
+                                ],
+                                "heading_level": 80050,
+                                "is_enabled": true,
+                                "is_offscreen": false,
+                                "is_password": false,
+                                "is_required_for_form": false,
+                                "is_keyboard_focusable": false,
+                                "has_keyboard_focus": false,
+                                "is_control_element": true,
+                                "is_content_element": true
+                              },
+                              {
+                                "control_type": 50020,
+                                "localized_control_type": "text",
+                                "name": "Sprouts",
+                                "aria_role": "description",
+                                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                                "runtime_id": [
+                                  42,
+                                  7407642,
+                                  4,
+                                  314,
+                                  5,
+                                  7
+                                ],
+                                "heading_level": 80050,
+                                "is_enabled": true,
+                                "is_offscreen": false,
+                                "is_password": false,
+                                "is_required_for_form": false,
+                                "is_keyboard_focusable": false,
+                                "has_keyboard_focus": false,
+                                "is_control_element": false,
+                                "is_content_element": false
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "control_type": 50026,
+            "localized_control_type": "group",
+            "aria_role": "group",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              7407642,
+              4,
+              314,
+              5,
+              44
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false,
+            "children": [
+              {
+                "control_type": 50000,
+                "localized_control_type": "button",
+                "name": "Run Test Setup",
+                "aria_role": "button",
+                "aria_properties": "disabled=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "class_name": "button-run-test-setup",
+                "runtime_id": [
+                  42,
+                  7407642,
+                  4,
+                  314,
+                  5,
+                  45
+                ],
+                "heading_level": 80050,
+                "is_enabled": false,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
