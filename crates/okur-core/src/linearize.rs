@@ -370,9 +370,10 @@ struct Builder<'a> {
     list_depth: usize,
     /// How many preformatted elements (`<pre>`) the visit is inside.
     preformatted: usize,
-    /// Enclosing named groups (fieldsets, ARIA radio groups), innermost last: (node id, name,
-    /// whether an ARIA radio group).
-    groups: Vec<(usize, String, bool)>,
+    /// Enclosing named groups, innermost last: (node id, name, kind: "radiogroup" for an ARIA
+    /// radio group, "titled-group" for an ARIA group whose label is a heading inside it, "group"
+    /// for another ARIA group, "fieldset" otherwise).
+    groups: Vec<(usize, String, &'static str)>,
     /// Names of enclosing tab lists, innermost last.
     tablists: Vec<String>,
     document_url: Option<&'a str>,
@@ -830,7 +831,21 @@ impl<'a> Builder<'a> {
                     self.groups.push((
                         node.id,
                         legend.clone().unwrap_or_default(),
-                        attr(node, "radiogroup") == Some("true"),
+                        if attr(node, "radiogroup") == Some("true") {
+                            "radiogroup"
+                        } else if attr(node, "aria_group") == Some("true")
+                            && node.children.iter().any(|child| {
+                                matches!(child.role, Role::Heading { .. })
+                                    && legend.as_deref().is_some_and(|l| text_content(child) == l)
+                            })
+                        {
+                            // An ARIA group whose label is a heading inside it.
+                            "titled-group"
+                        } else if attr(node, "aria_group") == Some("true") {
+                            "group"
+                        } else {
+                            "fieldset"
+                        },
                     ));
                 }
                 // A tab list's name is its tabs' group name, as in a list of its own.
@@ -1100,16 +1115,14 @@ impl<'a> Builder<'a> {
             _ => false,
         };
         if grouped {
-            if let Some((group_id, group_name, radiogroup)) = self.groups.last() {
-                let radiogroup = *radiogroup;
+            if let Some((group_id, group_name, kind)) = self.groups.last() {
+                let kind = *kind;
                 let (group_id, group_name) = (group_id.to_string(), group_name.clone());
                 self.buffer.mark_readable(node.id);
                 self.annotations.push((node.id, "group_id", group_id));
                 self.annotations.push((node.id, "group_name", group_name));
-                if radiogroup {
-                    self.annotations
-                        .push((node.id, "group_radiogroup", "true".to_owned()));
-                }
+                self.annotations
+                    .push((node.id, "group_kind", kind.to_owned()));
             }
         }
         // Flush first: an inline label in the same block is still pending in the run.

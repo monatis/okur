@@ -1010,6 +1010,7 @@ impl ScreenReaderEngine {
             let said = crate::speech::FocusSaid {
                 virtual_off: true,
                 by_focus: false,
+                asked: false,
             };
             return SpeechFormatter::control_focus(node, |_| true, said).render_all();
         }

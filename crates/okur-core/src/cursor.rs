@@ -69,6 +69,9 @@ enum GroupNamed {
     /// the fieldset too (Shift+X: "Sandwich Condiments group | All condiments ..." [obs,
     /// round-aria2, 2005/s1]).
     NotFromItsControls,
+    /// Insert+Tab: wherever the cursor is, but not an ARIA group's (role="group" on a
+    /// division) [obs, round-aria9, 2286/s1].
+    Asked,
 }
 
 impl FocusFrom {
@@ -1274,7 +1277,7 @@ impl VirtualCursor {
     /// heading, dev box).
     pub fn focus_node_from(&mut self, node_id: usize, from: FocusFrom) -> Option<String> {
         let previous = self.offset;
-        self.focus_said(node_id, from, previous, true)
+        self.focus_said(node_id, from, previous, true, GroupNamed::Entered)
     }
 
     /// Say Current Focus (Insert+Tab) on a page's focus: the control as a focus coming from
@@ -1284,7 +1287,13 @@ impl VirtualCursor {
     /// round-aria2, 2010/s1, 2012/s1].
     pub fn say_focus(&mut self, node_id: usize, hint: bool) -> Option<String> {
         // An offset past the page: inside none of its groups, lists or tables.
-        self.focus_said(node_id, FocusFrom::Outside, usize::MAX, hint)
+        self.focus_said(
+            node_id,
+            FocusFrom::Outside,
+            usize::MAX,
+            hint,
+            GroupNamed::Asked,
+        )
     }
 
     /// The focus on `node_id` said, the virtual cursor moved to it: `previous` is where it
@@ -1295,6 +1304,7 @@ impl VirtualCursor {
         from: FocusFrom,
         previous: usize,
         hint: bool,
+        group: GroupNamed,
     ) -> Option<String> {
         self.move_to_node_id(node_id);
         let node = self.buffer.node(node_id)?;
@@ -1356,7 +1366,7 @@ impl VirtualCursor {
             }
             // Its empty state mark goes with the other states [obs, 738/s3].
             Role::Edit if attr("password") == Some("true") => {
-                let field = self.control_focus_speech(self.offset, previous, GroupNamed::Entered);
+                let field = self.control_focus_speech(self.offset, previous, group);
                 if self.verbosity.is_on(crate::settings::OutputType::ItemState) {
                     format!("{field}  \u{1d}\u{1e}")
                 } else {
@@ -1367,7 +1377,7 @@ impl VirtualCursor {
             // JAWS says WhatsApp's chats moving through its list (the chat's name, its last
             // message's date and the message; dev box, 2026-10-17).
             Role::TableCell if !name.is_empty() => name.to_owned(),
-            _ => self.control_focus_speech(self.offset, previous, GroupNamed::Entered),
+            _ => self.control_focus_speech(self.offset, previous, group),
         };
         if speech.trim().is_empty() {
             speech = name.to_owned();
@@ -1481,7 +1491,8 @@ impl VirtualCursor {
             .and_then(|id| id.parse::<usize>().ok());
         let said_how = crate::speech::FocusSaid {
             virtual_off: self.virtual_off,
-            by_focus: group == GroupNamed::Entered,
+            by_focus: matches!(group, GroupNamed::Entered | GroupNamed::Asked),
+            asked: group == GroupNamed::Asked,
         };
         let mut said = SpeechFormatter::control_focus(
             node,
@@ -1496,6 +1507,7 @@ impl VirtualCursor {
                     .max_by_key(|s| s.end_offset - s.start_offset)
                     .is_some_and(|s| previous > s.start_offset && previous < s.end_offset),
                 GroupNamed::NotFromItsControls => previous_group == Some(group_id),
+                GroupNamed::Asked => false,
             },
             said_how,
         );

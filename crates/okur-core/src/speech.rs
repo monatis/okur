@@ -15,12 +15,13 @@ fn name_and_role(name: &str, role: &str) -> Vec<Part> {
 /// Formats virtual buffer elements and reading events into canonical JAWS speech tokens.
 pub struct SpeechFormatter;
 
-/// How a page control's focus speech is said: with the virtual cursor off (Insert+Z), and by
-/// a focus moving onto it (Tab) rather than a quick key.
+/// How a page control's focus speech is said: with the virtual cursor off (Insert+Z), by a
+/// focus moving onto it (Tab) rather than a quick key, and asked for (Insert+Tab).
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct FocusSaid {
     pub virtual_off: bool,
     pub by_focus: bool,
+    pub asked: bool,
 }
 
 impl SpeechFormatter {
@@ -380,14 +381,23 @@ impl SpeechFormatter {
         // A focus coming into an ARIA radio group says an empty state after it: "Pizza Crust
         // group | | Regular crust radio button" [obs, round-aria4, 2080/s1, 2085/s1]; a quick
         // key does not [obs, 2082/s1], nor a fieldset [obs, round-aria2, 2003/s1].
+        // Insert+Tab names a control's group, but not an ARIA group's (role="group") whose label
+        // is a heading inside it: "Living Room Lights Switch Off", where F coming from its link
+        // says "Environmental Controls group | ..." [obs, round-aria9, 2286/s1, 2270/s1]; a
+        // fieldset's, an ARIA group's labelled from outside and a radio group's are named
+        // [obs, round-aria2, 2010/s1; round-aria6, 2190/s1; round-aria4, 2118/s1].
         let entered_group = || {
             let (group, group_id) = (attr("group_name")?, attr("group_id")?);
+            let kind = attr("group_kind");
+            if said.asked && kind == Some("titled-group") {
+                return None;
+            }
             (!group_id.parse().is_ok_and(&was_inside)).then(|| {
                 let mut parts = vec![
                     Part::new(PartKind::Container, group),
                     Part::role(msg::role_group()),
                 ];
-                if said.by_focus && attr("group_radiogroup") == Some("true") {
+                if said.by_focus && kind == Some("radiogroup") {
                     parts.push(Part::text(" "));
                     parts.push(Part::state(""));
                 }

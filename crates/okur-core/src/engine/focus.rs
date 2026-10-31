@@ -747,6 +747,7 @@ impl ScreenReaderEngine {
                         crate::speech::FocusSaid {
                             virtual_off: self.virtual_cursor_off,
                             by_focus: true,
+                            asked: false,
                         },
                     );
                     if let Some(hint) =

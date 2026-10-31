@@ -381,6 +381,11 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     if role == Role::Group && attr("xml-roles").as_deref() == Some("radiogroup") {
         set_attr("radiogroup", "true".to_owned());
     }
+    // An ARIA group (`role="group"` on another element, not a fieldset), whose name a focus
+    // coming into it does not say [obs, round-aria9, 2272/s1, 2286/s1].
+    if role == Role::Group && attr("xml-roles").as_deref() == Some("group") {
+        set_attr("aria_group", "true".to_owned());
+    }
     // Struck, deleted, inserted and highlighted text (<s>, <del>, <ins>, <mark>), which JAWS
     // reads between "Deletion" and "end Deletion" and the like [obs, 814/s3, 819/s2, s4].
     {

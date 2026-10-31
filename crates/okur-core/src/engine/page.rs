@@ -230,6 +230,7 @@ impl ScreenReaderEngine {
                     crate::speech::FocusSaid {
                         virtual_off: self.virtual_cursor_off || self.forms_mode,
                         by_focus: false,
+                        asked: false,
                     },
                 )
                 .render_all()
