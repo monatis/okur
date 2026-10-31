@@ -1,0 +1,45 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "stateChangeToExpanded",
+        "phrase": "convey change in state to 'expanded'",
+        "priority": "1"
+      }
+    ],
+    "command": "space",
+    "instructions": "Starting at the 'What do I do if I have a permit for an assigned lot, but can't find a space there?' disclosure button, change its state to 'expanded'.",
+    "plan": "apg/disclosure-faq",
+    "presentation_number": "20",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "operateCollapsedDisclosureButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-faq/disclosure-faq.moveFocusToFirstDisclosure.html",
+  "id": "2060-aria-disclosure-faq-operate-collapsed-disclosure-button-space-pc",
+  "name": "ARIA-AT, Disclosure of Answers to Frequently Asked Questions Example: Operate a collapsed disclosure button; Space in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Space",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

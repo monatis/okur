@@ -1,0 +1,54 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "listBoundary",
+        "phrase": "convey list boundary",
+        "priority": "3"
+      },
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameQ1",
+        "phrase": "convey name of the button, 'What do I do if I have a permit for an assigned lot, but cant find a space there'",
+        "priority": "1"
+      },
+      {
+        "id": "stateButtonExpanded",
+        "phrase": "convey state of the button 'expanded'",
+        "priority": "1"
+      }
+    ],
+    "command": "tab",
+    "instructions": "Starting at the 'Navigate forwards from here' link, navigate to the 'What do I do if I have a permit for an assigned lot, but can't find a space there?' disclosure button.",
+    "plan": "apg/disclosure-faq",
+    "presentation_number": "7.2",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToExpandedDisclosureButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-faq/disclosure-faq.moveFocusBeforeAndExpandFirstDisclosure.html",
+  "id": "2043-aria-disclosure-faq-nav-forwards-to-expanded-disclosure-button-tab-vc",
+  "name": "ARIA-AT, Disclosure of Answers to Frequently Asked Questions Example: Navigate forwards to an expanded disclosure button; Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

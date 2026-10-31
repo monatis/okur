@@ -49,6 +49,74 @@
       "sha256": "cac2ee505252f9c47969c90b455364e1663c84b31edebb6f8c1d1907da034bc5",
       "size_bytes": 1649
     },
+    "aria-at/disclosure-faq/css/disclosure-card.css": {
+      "sha256": "4683aa7cd2469f8cdd48c95a7a22b5717e92b83c350a1b2c2665161a505d83fc",
+      "size_bytes": 6029
+    },
+    "aria-at/disclosure-faq/css/disclosure-faq.css": {
+      "sha256": "80e9c543d08310b8a9fd28748f9124a5d91dafbefa60288f8ebee84723f196ab",
+      "size_bytes": 1389
+    },
+    "aria-at/disclosure-faq/css/disclosure-image-description.css": {
+      "sha256": "818faf0ca5e091697b2af9cc8b55cd66631ba9997395f498c7dd94171ec125b3",
+      "size_bytes": 1284
+    },
+    "aria-at/disclosure-faq/css/disclosure-navigation.css": {
+      "sha256": "f8af59250e7fc5cc4ae0870c4240fbf509663fb0413af32a509ab423c61275bb",
+      "size_bytes": 2351
+    },
+    "aria-at/disclosure-faq/disclosure-faq.html": {
+      "sha256": "8487271239432671c2202e33b80f8d22757e25ae628e0303f086985b3ab4dc64",
+      "size_bytes": 4314
+    },
+    "aria-at/disclosure-faq/disclosure-faq.moveFocusAfterAndExpandFourthDisclosure.html": {
+      "sha256": "1837c9f57d57be70e45784e5fd7046d0fd66760989254c8145e366c421e86212",
+      "size_bytes": 5396
+    },
+    "aria-at/disclosure-faq/disclosure-faq.moveFocusAfterFourthDisclosure.html": {
+      "sha256": "f7b92ab60f841eb61f09e3600cdcb7016a1e8daa340342313844b566c89c6018",
+      "size_bytes": 5092
+    },
+    "aria-at/disclosure-faq/disclosure-faq.moveFocusBeforeAndExpandFirstDisclosure.html": {
+      "sha256": "8d5ae889affae30f62b0c3fd59aef42050e4718000be8352f646bbc6e3f81ea7",
+      "size_bytes": 5403
+    },
+    "aria-at/disclosure-faq/disclosure-faq.moveFocusBeforeFirstDisclosure.html": {
+      "sha256": "880b457a43bccd1a7f9bbe82d05526c99b7bc326e62ceac2846630bbc6a2c2a6",
+      "size_bytes": 5093
+    },
+    "aria-at/disclosure-faq/disclosure-faq.moveFocusToAndExpandFirstDisclosure.html": {
+      "sha256": "8cc073e89ea44e804c834c2b61c069539329c89f36c0723dbd9f383836ee5d01",
+      "size_bytes": 5471
+    },
+    "aria-at/disclosure-faq/disclosure-faq.moveFocusToAndExpandFourthDisclosure.html": {
+      "sha256": "1b7cbcce10f7090367a7f986cf39039c7df2d4656fb7d464637a0a6d04545c87",
+      "size_bytes": 5473
+    },
+    "aria-at/disclosure-faq/disclosure-faq.moveFocusToFirstDisclosure.html": {
+      "sha256": "7a289c707eec8d787fc0ca94cf487c510c223fdbf24d3260528fda2cf8506f21",
+      "size_bytes": 5097
+    },
+    "aria-at/disclosure-faq/disclosure-faq.moveFocusToFourthDisclosure.html": {
+      "sha256": "784503fec6d823b031d3279aab52313d10a85ff000d56b348759a2e6470a4c93",
+      "size_bytes": 5099
+    },
+    "aria-at/disclosure-faq/images/minard.png": {
+      "sha256": "8d48041171daa9d9a29bb97a7c69855f863b286d55f752779fd2bf3c25b41da6",
+      "size_bytes": 687027
+    },
+    "aria-at/disclosure-faq/js/disclosure-button.js": {
+      "sha256": "a04b2871ab64b5b3222a142ef89af81353e2484fbb09079ad9733590b72827a5",
+      "size_bytes": 1885
+    },
+    "aria-at/disclosure-faq/js/disclosure-card.js": {
+      "sha256": "d2a86a99f2286a23dfbc15a2ee2d6b3cfae6ac30e8c860467bcf92e51dfbafb9",
+      "size_bytes": 1670
+    },
+    "aria-at/disclosure-faq/js/disclosureMenu.js": {
+      "sha256": "db8618f3db03612c3c127c915fa915509c0ecc877031baea4cc76380598b536b",
+      "size_bytes": 6771
+    },
     "boundaries-dynamic.html": {
       "sha256": "4caaa7092df80f075b4fd5bfa8f3fbbdba558f90188e4f3711aec05dd9c71953",
       "size_bytes": 2383
@@ -2880,11 +2948,277 @@
       }
     },
     {
+      "scenario_id": "2031-aria-disclosure-faq-nav-forwards-to-collapsed-disclosure-button-b-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusBeforeFirstDisclosure.html",
+      "evidence": {
+        "sha256": "a7c7adb899ea10dc74e44de235a03da317e698000d0292eb40692fa7739cc005",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2032-aria-disclosure-faq-nav-forwards-to-collapsed-disclosure-button-f-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusBeforeFirstDisclosure.html",
+      "evidence": {
+        "sha256": "66e7672cf7f98f1cf2cd7cc7d0f780dad72ab67b7d4dd81573d99e85d56ba33c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2033-aria-disclosure-faq-nav-forwards-to-collapsed-disclosure-button-tab-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusBeforeFirstDisclosure.html",
+      "evidence": {
+        "sha256": "d3383e83afa563cf5b7a4e31e501103f9d5273eb5077b7562aaee11a0eba02da",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2034-aria-disclosure-faq-nav-forwards-to-collapsed-disclosure-button-down-down-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusBeforeFirstDisclosure.html",
+      "evidence": {
+        "sha256": "df67ee90f13942f8d25676535f5f5d1c07b529c0b8536e3b98fdbfe32b56a5dc",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2035-aria-disclosure-faq-nav-forwards-to-collapsed-disclosure-button-tab-pc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusBeforeFirstDisclosure.html",
+      "evidence": {
+        "sha256": "05f9c0981f2a78151a97f47aadf881223ee6c1da634b378d45ff6f934dc45b35",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2036-aria-disclosure-faq-nav-back-to-collapsed-disclosure-button-shift-b-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusAfterFourthDisclosure.html",
+      "evidence": {
+        "sha256": "7f17a09cbba892f238536570f72b05c6bca857bf22a55602ba60ed1946084995",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2037-aria-disclosure-faq-nav-back-to-collapsed-disclosure-button-shift-f-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusAfterFourthDisclosure.html",
+      "evidence": {
+        "sha256": "7ee0df3a9a7c5a754502911c591eac9ec6cec95210cee91d91ae5cce56aa188d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2038-aria-disclosure-faq-nav-back-to-collapsed-disclosure-button-shift-tab-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusAfterFourthDisclosure.html",
+      "evidence": {
+        "sha256": "04131f1c0e1fba09a873f16a0feb09a06ff0802db50dad0b4dad973d6d111260",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2039-aria-disclosure-faq-nav-back-to-collapsed-disclosure-button-up-up-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusAfterFourthDisclosure.html",
+      "evidence": {
+        "sha256": "10f6432464bf825e55442d279bfabaed5d36e4cdf2c4e4e3ffe4b29d122c29ca",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "204-form-tab-order",
       "fixture": "signup-form.html",
       "evidence": {
         "sha256": "d1b5b093ac53a0157b84295a7ca54f4c571d9395da1a15fd1c692c7363862c2a",
         "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2040-aria-disclosure-faq-nav-back-to-collapsed-disclosure-button-shift-tab-pc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusAfterFourthDisclosure.html",
+      "evidence": {
+        "sha256": "13c444ac02215ec9b17c269b0c3c0ad2dfda5d533a691e76d6fccf4433b18b73",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2041-aria-disclosure-faq-nav-forwards-to-expanded-disclosure-button-b-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusBeforeAndExpandFirstDisclosure.html",
+      "evidence": {
+        "sha256": "03a514f3396e6cfa0d459e2230dc779138ad58630f47e1a6ec4bc5467dae17df",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2042-aria-disclosure-faq-nav-forwards-to-expanded-disclosure-button-f-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusBeforeAndExpandFirstDisclosure.html",
+      "evidence": {
+        "sha256": "3b45e8546c9a4163c1c97f69017e7c76d67320b137d2129496b2020137a6051f",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2043-aria-disclosure-faq-nav-forwards-to-expanded-disclosure-button-tab-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusBeforeAndExpandFirstDisclosure.html",
+      "evidence": {
+        "sha256": "12c2d7f94bc4b3ca674f3af3833ca4b6ccb6b31cda3ba272b486fa0c099fa767",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2044-aria-disclosure-faq-nav-forwards-to-expanded-disclosure-button-down-down-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusBeforeAndExpandFirstDisclosure.html",
+      "evidence": {
+        "sha256": "72f7945cdd7669afe98874a24c47cb609a9a8732efc6c575b5167f6b67332394",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2045-aria-disclosure-faq-nav-forwards-to-expanded-disclosure-button-tab-pc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusBeforeAndExpandFirstDisclosure.html",
+      "evidence": {
+        "sha256": "baff500e810d2c85dc294526a9785bae26417c2d9341b6af31ec168c9608c9e9",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2046-aria-disclosure-faq-nav-back-to-expanded-disclosure-button-shift-b-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusAfterAndExpandFourthDisclosure.html",
+      "evidence": {
+        "sha256": "7edee3f99951d460d3863d9f843da67c95e80c70276caadd4523786fbf546e57",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2047-aria-disclosure-faq-nav-back-to-expanded-disclosure-button-shift-f-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusAfterAndExpandFourthDisclosure.html",
+      "evidence": {
+        "sha256": "43398c632b30dbdd0d056f1ebd4cec72425c450e79731bc374c95699be3ad5ad",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2048-aria-disclosure-faq-nav-back-to-expanded-disclosure-button-shift-tab-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusAfterAndExpandFourthDisclosure.html",
+      "evidence": {
+        "sha256": "5a7a264587b5a67df1cb8f6d0e16e93341d3b20decdb99cf1eb043de6f549048",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2049-aria-disclosure-faq-nav-back-to-expanded-disclosure-button-shift-tab-pc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusAfterAndExpandFourthDisclosure.html",
+      "evidence": {
+        "sha256": "63b66ed700d012b2cb649e6ad05a901e3c2b06da441a9ddd6c9b908365ffeb49",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -2908,6 +3242,146 @@
       }
     },
     {
+      "scenario_id": "2050-aria-disclosure-faq-req-info-about-collapsed-disclosure-button-ins-tab-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToFirstDisclosure.html",
+      "evidence": {
+        "sha256": "982f9bb34a54d04d00e971b42f16bd7bba4e053231ce7520cec897129ead088c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2051-aria-disclosure-faq-req-info-about-collapsed-disclosure-button-ins-up-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToFirstDisclosure.html",
+      "evidence": {
+        "sha256": "a70a1481ba90f89b3e3e6ac067fd71c4ac84c45cc378371f7fbfdef40261f90d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2052-aria-disclosure-faq-req-info-about-collapsed-disclosure-button-ins-up-pc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToFirstDisclosure.html",
+      "evidence": {
+        "sha256": "e64315c4f83aed025d3e2d2ce4f0d1634d335657b8972cda943482af554dd0ab",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2053-aria-disclosure-faq-req-info-about-collapsed-disclosure-button-ins-tab-pc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToFirstDisclosure.html",
+      "evidence": {
+        "sha256": "d3c34eafee4d6da4f9a93f2c767903419d86dcef48c8e75a7424a6d822958909",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2054-aria-disclosure-faq-req-info-about-expanded-disclosure-button-ins-tab-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToAndExpandFirstDisclosure.html",
+      "evidence": {
+        "sha256": "dd81ee35443e16f12968043d41d47574f3a6933748f7c0b68721c48fc66b1e2c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2055-aria-disclosure-faq-req-info-about-expanded-disclosure-button-ins-up-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToAndExpandFirstDisclosure.html",
+      "evidence": {
+        "sha256": "e96b8fb208ae3da2033f7f0d8cea88babb1b55f14a81bbed6fe75b4c50d6d02d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2056-aria-disclosure-faq-req-info-about-expanded-disclosure-button-ins-tab-pc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToAndExpandFirstDisclosure.html",
+      "evidence": {
+        "sha256": "58f1ecd565bc2e8ded47e93121dcd44b1a70c599657fbbd33de544e8151ead1b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2057-aria-disclosure-faq-req-info-about-expanded-disclosure-button-ins-up-pc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToAndExpandFirstDisclosure.html",
+      "evidence": {
+        "sha256": "cb337e076b65bc711275907c22b4e09297184b7a329d2f540030d36ceba4401b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2058-aria-disclosure-faq-operate-collapsed-disclosure-button-space-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToFirstDisclosure.html",
+      "evidence": {
+        "sha256": "aa139e8fd0de78c33a8c85400541254769c5b570d2ad56398379bb4d525283e1",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2059-aria-disclosure-faq-operate-collapsed-disclosure-button-enter-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToFirstDisclosure.html",
+      "evidence": {
+        "sha256": "a5af50b257bde9b26f3cf7de906194c8b7bf23f68300e01eff226c7da08745f9",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "206-live-updates",
       "fixture": "live-updates.html",
       "evidence": {
@@ -2918,6 +3392,104 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2060-aria-disclosure-faq-operate-collapsed-disclosure-button-space-pc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToFirstDisclosure.html",
+      "evidence": {
+        "sha256": "2023d6c8250c36892166484f2dfe3dcc67a6fffdc6d1ccd659b8c5ef358a32e3",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2061-aria-disclosure-faq-operate-collapsed-disclosure-button-enter-pc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToFirstDisclosure.html",
+      "evidence": {
+        "sha256": "43ecc69c00e4c375b7c8a75aaad8d40d56416a149c92badfacc19272497c2c2d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2062-aria-disclosure-faq-operate-expanded-disclosure-button-space-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToAndExpandFirstDisclosure.html",
+      "evidence": {
+        "sha256": "c404945bd9773c1a1f5dfd4d0f89facb9e320e53630b2621e223cdd2c30ce97c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2063-aria-disclosure-faq-operate-expanded-disclosure-button-enter-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToAndExpandFirstDisclosure.html",
+      "evidence": {
+        "sha256": "f521743f52702aee4ce4972330d763efc0313530c38d983bcd95a079ee5cdb75",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2064-aria-disclosure-faq-operate-expanded-disclosure-button-space-pc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToAndExpandFirstDisclosure.html",
+      "evidence": {
+        "sha256": "c33c022298d3c52efbc497dbf0e7e45982a273c995dd59ea88bb5ac56217652a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2065-aria-disclosure-faq-operate-expanded-disclosure-button-enter-pc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToAndExpandFirstDisclosure.html",
+      "evidence": {
+        "sha256": "c88dab1d765190acff5bef6fd52e2d6675fe0e53feec6b4c3f765f633339596e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2066-aria-disclosure-faq-nav-from-expanded-disclosure-button-to-text-question-answer-down-vc",
+      "fixture": "aria-at/disclosure-faq/disclosure-faq.moveFocusToAndExpandFirstDisclosure.html",
+      "evidence": {
+        "sha256": "6801f407ec89b4ad9b1840f4fef8bbdeb7651e7347b285e3bc1bf37a52fd9e5c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -11211,10 +11783,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 777,
-    "scenarios_with_evidence": 777,
-    "total_trials": 2337,
-    "successful_trials": 2320,
-    "deterministic_scenarios": 506
+    "scenarios": 813,
+    "scenarios_with_evidence": 813,
+    "total_trials": 2445,
+    "successful_trials": 2428,
+    "deterministic_scenarios": 542
   }
 }

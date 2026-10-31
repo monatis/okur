@@ -1,0 +1,54 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "listBoundary",
+        "phrase": "convey list boundary",
+        "priority": "3"
+      },
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameQ4",
+        "phrase": "convey name of the button, 'Do all parking facilities have the same enforcement rules'",
+        "priority": "1"
+      },
+      {
+        "id": "stateButtonExpanded",
+        "phrase": "convey state of the button 'expanded'",
+        "priority": "1"
+      }
+    ],
+    "command": "shift+b",
+    "instructions": "Starting at the 'Navigate backwards from here' link, navigate to the 'Do all parking facilities have the same enforcement rules?' disclosure button.",
+    "plan": "apg/disclosure-faq",
+    "presentation_number": "8",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToExpandedDisclosureButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-faq/disclosure-faq.moveFocusAfterAndExpandFourthDisclosure.html",
+  "id": "2046-aria-disclosure-faq-nav-back-to-expanded-disclosure-button-shift-b-vc",
+  "name": "ARIA-AT, Disclosure of Answers to Frequently Asked Questions Example: Navigate backwards to an expanded disclosure button; Shift+B in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+B",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

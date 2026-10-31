@@ -1,0 +1,1728 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Example Disclosure (Show/Hide) for Answers to Frequently Asked Questions - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "1b7cbcce10f7090367a7f986cf39039c7df2d4656fb7d464637a0a6d04545c87",
+    "captured_at_unix_ms": 1793451956292,
+    "node_count": 47,
+    "capture_ms": 307
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Example Disclosure (Show/Hide) for Answers to Frequently Asked Questions",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-faq/disclosure-faq.moveFocusToAndExpandFourthDisclosure.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -40051,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Arial",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -40087,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,90,156)",
+              "font-family": "Arial",
+              "font-size": "20.5pt"
+            }
+          },
+          {
+            "start": 1,
+            "end": 2,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Arial",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Example Disclosure (Show/Hide) for Answers to Frequently Asked Questions",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -40089,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Example Disclosure (Show/Hide) for Answers to Frequently Asked Questions",
+            "lines": [
+              [
+                0,
+                63
+              ],
+              [
+                63,
+                72
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 72,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "20.5pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Example Disclosure (Show/Hide) for Answers to Frequently Asked Questions",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -40104,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Example Disclosure (Show/Hide) for Answers to Frequently Asked Questions",
+                "lines": [
+                  [
+                    0,
+                    63
+                  ],
+                  [
+                    63,
+                    72
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 72,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "20.5pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -40069,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼section>￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                10
+              ],
+              [
+                10,
+                11
+              ],
+              [
+                11,
+                12
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "17pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 12,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "About This Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -40105,
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "About This Example",
+                "lines": [
+                  [
+                    0,
+                    18
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 18,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "17pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "About This Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -40103,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "About This Example",
+                    "lines": [
+                      [
+                        0,
+                        18
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 18,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "17pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -40042,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "The following example demonstrates using the ￼ to create a set of frequently asked questions where the answers may be independently shown or hidden.",
+                "lines": [
+                  [
+                    0,
+                    93
+                  ],
+                  [
+                    93,
+                    148
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 45,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 45,
+                    "end": 46,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  },
+                  {
+                    "start": 46,
+                    "end": 148,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "The following example demonstrates using the ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -40070,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "The following example demonstrates using the ",
+                    "lines": [
+                      [
+                        0,
+                        45
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 45,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Disclosure Pattern",
+                    "value": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -40057,
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Disclosure Pattern",
+                    "lines": [
+                      [
+                        0,
+                        18
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 18,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Disclosure Pattern",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -40072,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Disclosure Pattern",
+                        "lines": [
+                          [
+                            0,
+                            18
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 18,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " to create a set of frequently asked questions where the answers may be independently shown or hidden.",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -40078,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " to create a set of frequently asked questions where the answers may be independently shown or hidden.",
+                    "lines": [
+                      [
+                        0,
+                        47
+                      ],
+                      [
+                        47,
+                        102
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 102,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "section>",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -40050,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "section>",
+                "lines": [
+                  [
+                    0,
+                    8
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 8,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -40056,
+                "attributes": {
+                  "display": "block",
+                  "tag": "section",
+                  "text-align": "left"
+                },
+                "text": "￼￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ],
+                  [
+                    3,
+                    4
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "17pt"
+                    }
+                  },
+                  {
+                    "start": 1,
+                    "end": 4,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1044,
+                    "name": "Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -40077,
+                    "attributes": {
+                      "display": "block",
+                      "id": "ex_label",
+                      "level": "2",
+                      "name-from": "contents",
+                      "tag": "h2",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      2,
+                      0,
+                      0
+                    ],
+                    "text": "Example",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "17pt"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "labelFor": [
+                        -40074,
+                        -40095
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Example",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -40058,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Example",
+                        "lines": [
+                          [
+                            0,
+                            7
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 7,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,90,156)",
+                              "font-family": "Arial",
+                              "font-size": "17pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 21,
+                    "ia2_role": 21,
+                    "name": "Start of Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1040,
+                    "unique_id": -40074,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "ex_start_sep",
+                      "name-from": "related-element",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "separator"
+                    },
+                    "relations": {
+                      "labelledBy": [
+                        -40077
+                      ]
+                    }
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -40083,
+                    "attributes": {
+                      "display": "block",
+                      "id": "ex1",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "text": "￼￼￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        2,
+                        3
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "14.5pt"
+                        }
+                      },
+                      {
+                        "start": 1,
+                        "end": 2,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      },
+                      {
+                        "start": 2,
+                        "end": 3,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 20,
+                        "ia2_role": 1044,
+                        "name": "Parking FAQs",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -40093,
+                        "attributes": {
+                          "display": "block",
+                          "level": "3",
+                          "name-from": "contents",
+                          "tag": "h3",
+                          "text-align": "left"
+                        },
+                        "group_position": [
+                          3,
+                          0,
+                          0
+                        ],
+                        "text": "Parking ￼s",
+                        "lines": [
+                          [
+                            0,
+                            10
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 8,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,90,156)",
+                              "font-family": "Arial",
+                              "font-size": "14.5pt"
+                            }
+                          },
+                          {
+                            "start": 8,
+                            "end": 9,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,90,156)",
+                              "font-family": "Arial",
+                              "font-size": "14.5pt",
+                              "text-underline-style": "solid"
+                            }
+                          },
+                          {
+                            "start": 9,
+                            "end": 10,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,90,156)",
+                              "font-family": "Arial",
+                              "font-size": "14.5pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Parking ",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -40062,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Parking ",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,90,156)",
+                                  "font-family": "Arial",
+                                  "font-size": "14.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 42,
+                            "ia2_role": 1065,
+                            "name": "Frequently Asked Questions",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -40110,
+                            "attributes": {
+                              "display": "inline",
+                              "explicit-name": "true",
+                              "name-from": "tooltip",
+                              "tag": "abbr",
+                              "text-align": "left"
+                            },
+                            "text": "FAQ",
+                            "lines": [
+                              [
+                                0,
+                                3
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 3,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,90,156)",
+                                  "font-family": "Arial",
+                                  "font-size": "14.5pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "FAQ",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -40041,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "FAQ",
+                                "lines": [
+                                  [
+                                    0,
+                                    3
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 3,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,90,156)",
+                                      "font-family": "Arial",
+                                      "font-size": "14.5pt",
+                                      "text-underline-style": "solid"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "s",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -40060,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "s",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 1,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,90,156)",
+                                  "font-family": "Arial",
+                                  "font-size": "14.5pt"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Navigate forwards from here",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-faq/disclosure-faq.moveFocusToAndExpandFourthDisclosure.html#beforelink",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "unique_id": -40097,
+                        "attributes": {
+                          "display": "inline",
+                          "id": "beforelink",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Navigate forwards from here",
+                        "lines": [
+                          [
+                            0,
+                            27
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 27,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Navigate forwards from here",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "unique_id": -40053,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Navigate forwards from here",
+                            "lines": [
+                              [
+                                0,
+                                27
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 27,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(3,69,117)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 33,
+                        "ia2_role": 33,
+                        "msaa_states": 64,
+                        "ia2_states": 1024,
+                        "unique_id": -40043,
+                        "attributes": {
+                          "class": "faq",
+                          "display": "block",
+                          "setsize": "4",
+                          "tag": "ul",
+                          "text-align": "left"
+                        },
+                        "group_position": [
+                          0,
+                          4,
+                          0
+                        ],
+                        "text": "￼￼￼￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            2
+                          ],
+                          [
+                            2,
+                            3
+                          ],
+                          [
+                            3,
+                            4
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 4,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "msaa_states": 64,
+                            "ia2_states": 1024,
+                            "unique_id": -40047,
+                            "attributes": {
+                              "display": "list-item",
+                              "level": "1",
+                              "posinset": "1",
+                              "setsize": "4",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "group_position": [
+                              1,
+                              4,
+                              1
+                            ],
+                            "text": "￼￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ],
+                              [
+                                1,
+                                2
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 1,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "13pt",
+                                  "font-weight": "bold"
+                                }
+                              },
+                              {
+                                "start": 1,
+                                "end": 2,
+                                "attributes": {
+                                  "background-color": "rgb(255,238,221)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "13pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 43,
+                                "ia2_role": 43,
+                                "name": "What do I do if I have a permit for an assigned lot, but can't find a space there?",
+                                "msaa_states": 1049600,
+                                "ia2_states": 1024,
+                                "unique_id": -40046,
+                                "attributes": {
+                                  "display": "inline-block",
+                                  "name-from": "contents",
+                                  "tag": "button",
+                                  "text-align": "center"
+                                },
+                                "text": "￼What do I do if I have a permit for an assigned lot, but can't find a space there?",
+                                "lines": [
+                                  [
+                                    0,
+                                    83
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 83,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Arial",
+                                      "font-size": "13pt",
+                                      "font-weight": "bold"
+                                    }
+                                  }
+                                ],
+                                "relations": {
+                                  "controllerFor": [
+                                    -40116
+                                  ]
+                                },
+                                "children": [
+                                  {
+                                    "msaa_role": 40,
+                                    "ia2_role": 40,
+                                    "msaa_states": 64,
+                                    "ia2_states": 1024,
+                                    "unique_id": -40098,
+                                    "attributes": {
+                                      "text-align": "center"
+                                    }
+                                  },
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "What do I do if I have a permit for an assigned lot, but can't find a space there?",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -40085,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "What do I do if I have a permit for an assigned lot, but can't find a space there?",
+                                    "lines": [
+                                      [
+                                        0,
+                                        82
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 82,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Arial",
+                                          "font-size": "13pt",
+                                          "font-weight": "bold"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 20,
+                                "ia2_role": 1060,
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -40116,
+                                "attributes": {
+                                  "class": "desc",
+                                  "display": "block",
+                                  "id": "faq1_desc",
+                                  "tag": "div",
+                                  "text-align": "left"
+                                },
+                                "text": "Park at the nearest available parking meter without paying the meter and call 999-999-9999 to report the problem. We will note and approve your alternate location and will investigate the cause of the shortage in your assigned facility.",
+                                "lines": [
+                                  [
+                                    0,
+                                    94
+                                  ],
+                                  [
+                                    94,
+                                    194
+                                  ],
+                                  [
+                                    194,
+                                    236
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 236,
+                                    "attributes": {
+                                      "background-color": "rgb(255,238,221)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Arial",
+                                      "font-size": "13pt"
+                                    }
+                                  }
+                                ],
+                                "relations": {
+                                  "controlledBy": [
+                                    -40046
+                                  ]
+                                },
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Park at the nearest available parking meter without paying the meter and call 999-999-9999 to report the problem. We will note and approve your alternate location and will investigate the cause of the shortage in your assigned facility.",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -40119,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Park at the nearest available parking meter without paying the meter and call 999-999-9999 to report the problem. We will note and approve your alternate location and will investigate the cause of the shortage in your assigned facility.",
+                                    "lines": [
+                                      [
+                                        0,
+                                        94
+                                      ],
+                                      [
+                                        94,
+                                        194
+                                      ],
+                                      [
+                                        194,
+                                        236
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 236,
+                                        "attributes": {
+                                          "background-color": "rgb(255,238,221)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Arial",
+                                          "font-size": "13pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "msaa_states": 64,
+                            "ia2_states": 1024,
+                            "unique_id": -40064,
+                            "attributes": {
+                              "display": "list-item",
+                              "level": "1",
+                              "posinset": "2",
+                              "setsize": "4",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "group_position": [
+                              1,
+                              4,
+                              2
+                            ],
+                            "text": "￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 1,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "13pt",
+                                  "font-weight": "bold"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 43,
+                                "ia2_role": 43,
+                                "name": "What do I do if I lose my permit or if my permit is stolen?",
+                                "msaa_states": 1049600,
+                                "ia2_states": 1024,
+                                "unique_id": -40066,
+                                "attributes": {
+                                  "display": "inline-block",
+                                  "name-from": "contents",
+                                  "tag": "button",
+                                  "text-align": "center"
+                                },
+                                "text": "￼What do I do if I lose my permit or if my permit is stolen?",
+                                "lines": [
+                                  [
+                                    0,
+                                    60
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 60,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Arial",
+                                      "font-size": "13pt",
+                                      "font-weight": "bold"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 40,
+                                    "ia2_role": 40,
+                                    "msaa_states": 64,
+                                    "ia2_states": 1024,
+                                    "unique_id": -40100,
+                                    "attributes": {
+                                      "text-align": "center"
+                                    }
+                                  },
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "What do I do if I lose my permit or if my permit is stolen?",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -40076,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "What do I do if I lose my permit or if my permit is stolen?",
+                                    "lines": [
+                                      [
+                                        0,
+                                        59
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 59,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Arial",
+                                          "font-size": "13pt",
+                                          "font-weight": "bold"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "msaa_states": 64,
+                            "ia2_states": 1024,
+                            "unique_id": -40082,
+                            "attributes": {
+                              "display": "list-item",
+                              "level": "1",
+                              "posinset": "3",
+                              "setsize": "4",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "group_position": [
+                              1,
+                              4,
+                              3
+                            ],
+                            "text": "￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 1,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "13pt",
+                                  "font-weight": "bold"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 43,
+                                "ia2_role": 43,
+                                "name": "Is there free parking on holidays?",
+                                "msaa_states": 1049600,
+                                "ia2_states": 1024,
+                                "unique_id": -40081,
+                                "attributes": {
+                                  "display": "inline-block",
+                                  "name-from": "contents",
+                                  "tag": "button",
+                                  "text-align": "center"
+                                },
+                                "text": "￼Is there free parking on holidays?",
+                                "lines": [
+                                  [
+                                    0,
+                                    35
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 35,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Arial",
+                                      "font-size": "13pt",
+                                      "font-weight": "bold"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 40,
+                                    "ia2_role": 40,
+                                    "msaa_states": 64,
+                                    "ia2_states": 1024,
+                                    "unique_id": -40048,
+                                    "attributes": {
+                                      "text-align": "center"
+                                    }
+                                  },
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Is there free parking on holidays?",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -40068,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Is there free parking on holidays?",
+                                    "lines": [
+                                      [
+                                        0,
+                                        34
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 34,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Arial",
+                                          "font-size": "13pt",
+                                          "font-weight": "bold"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "msaa_states": 64,
+                            "ia2_states": 1024,
+                            "unique_id": -40065,
+                            "attributes": {
+                              "display": "list-item",
+                              "level": "1",
+                              "posinset": "4",
+                              "setsize": "4",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "group_position": [
+                              1,
+                              4,
+                              4
+                            ],
+                            "text": "￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 1,
+                                "attributes": {
+                                  "background-color": "rgb(221,238,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "13pt",
+                                  "font-weight": "bold"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 43,
+                                "ia2_role": 43,
+                                "name": "Do all parking facilities have the same enforcement rules?",
+                                "msaa_states": 1049092,
+                                "ia2_states": 1024,
+                                "unique_id": -40071,
+                                "attributes": {
+                                  "class": "focus",
+                                  "display": "inline-block",
+                                  "name-from": "contents",
+                                  "tag": "button",
+                                  "text-align": "center"
+                                },
+                                "text": "￼Do all parking facilities have the same enforcement rules?",
+                                "lines": [
+                                  [
+                                    0,
+                                    59
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 59,
+                                    "attributes": {
+                                      "background-color": "rgb(221,238,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Arial",
+                                      "font-size": "13pt",
+                                      "font-weight": "bold"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 40,
+                                    "ia2_role": 40,
+                                    "msaa_states": 64,
+                                    "ia2_states": 1024,
+                                    "unique_id": -40115,
+                                    "attributes": {
+                                      "text-align": "center"
+                                    }
+                                  },
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Do all parking facilities have the same enforcement rules?",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -40108,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Do all parking facilities have the same enforcement rules?",
+                                    "lines": [
+                                      [
+                                        0,
+                                        58
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 58,
+                                        "attributes": {
+                                          "background-color": "rgb(221,238,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Arial",
+                                          "font-size": "13pt",
+                                          "font-weight": "bold"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 21,
+                    "ia2_role": 21,
+                    "name": "End of Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1040,
+                    "unique_id": -40095,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "ex_end_sep",
+                      "name-from": "related-element",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "separator"
+                    },
+                    "relations": {
+                      "labelledBy": [
+                        -40077
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -40109,
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 43,
+                    "ia2_role": 43,
+                    "name": "Run Test Setup",
+                    "msaa_states": 1,
+                    "ia2_states": 1024,
+                    "unique_id": -40039,
+                    "attributes": {
+                      "class": "button-run-test-setup",
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "text": "Run Test Setup",
+                    "lines": [
+                      [
+                        0,
+                        14
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 14,
+                        "attributes": {
+                          "background-color": "rgb(250,250,250)",
+                          "color": "rgb(5,5,5)",
+                          "font-family": "Arial",
+                          "font-size": "10pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
