@@ -232,6 +232,7 @@ mod tests {
     fn rows_and_columns_are_read_whole_or_from_the_cell() {
         let place = crate::event::SheetPlace {
             address: "B3".into(),
+            selection: "B3".into(),
             row: vec!["Northside".into(), "10".into(), "6".into()],
             column: vec!["Weekdays".into(), "12".into(), "10".into(), "22".into()],
             row_at: 1,

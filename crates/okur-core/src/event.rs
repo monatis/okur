@@ -191,6 +191,10 @@ pub struct SheetPlace {
     /// The active cell's reference, "D1".
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub address: String,
+    /// The selection's reference, "A1:B2", the active cell's alone where nothing more is
+    /// selected.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub selection: String,
     pub row: Vec<String>,
     pub column: Vec<String>,
     pub row_at: usize,
