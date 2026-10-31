@@ -43,15 +43,16 @@ its keeper workbook; keep it running.
 ## 2. Word, Excel, Outlook
 
 - **Excel, open:**
-  - selections (1117): record Shift+Right twice, Shift+Down, Shift+End, Shift+Space and
-    Ctrl+Space from a few cells, saved with the selection's address and corners; then build;
+  - selections: done (1117, 1120, 1121);
   - the sheet tabs' menu (1116/s5): Insert+Shift+S opens it (Excel's `CommandBars("Ply")`),
     and an Office popup is named as JAWS names it, "Ply pop-up menu";
   - Insert+C on an empty cell (the grid's focus has no cell: the sheet place gives it);
   - typing into a cell, Delete, and Excel's own dialogs (Format Cells, Go To).
 - **Word, open:** 1069/s4 (record again); 1119/s3 (the phonetic name after the page);
   Insert+Alt+R; one revision and other changes in the viewer.
-- **Outlook:** whether old-pc's opens without an account.
+- **Outlook:** old-pc's does not open without an account: it starts "Welcome to Microsoft
+  Outlook 2016", the account wizard (tried 2026-10-31, cancelled). Recording Outlook needs a
+  mail account set up there, which is the owner's to decide.
 
 ## 3. The review of 2026-10-25, what is open
 

@@ -203,8 +203,10 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   and last cell, the Ctrl arrows the edge of the data region they stop at. Say Line reads the
   row; Shift+Insert+Up, Home and PageUp read the row whole, from its start or to its end, and
   Ctrl+Insert with the same keys the column. Insert+Shift+F lists the cells with formulas,
-  Insert+Shift+C the column's cells and Ctrl+Shift+S the worksheets, and OK goes there. The
-  rows, columns and lists come from Excel's own object model.
+  Insert+Shift+C the column's cells and Ctrl+Shift+S the worksheets, and OK goes there.
+  Selecting with Shift and the arrows says the cells added, Shift+Space and Ctrl+Space the
+  whole row or column. The rows, columns, selections and lists come from Excel's own object
+  model.
 - **The cursors:** Numpad Minus to the Okur cursor at the mouse, Numpad Plus back to the PC
   cursor, Insert+Numpad Minus to bring the Okur cursor to the PC cursor, Insert+Numpad Plus
   the other way, Insert+R for where the Okur cursor may go, and Alt+Delete for where the
@@ -306,7 +308,7 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- Outlook, not yet supported; in Excel, selections and the sheet tabs' menu (Insert+Shift+S);
+- Outlook, not yet supported; in Excel, the sheet tabs' menu (Insert+Shift+S) and editing a cell;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;
