@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleSwitch",
+        "phrase": "convey role 'switch'",
+        "priority": "1"
+      },
+      {
+        "id": "nameReducedMotion",
+        "phrase": "convey name 'Reduced motion'",
+        "priority": "1"
+      },
+      {
+        "id": "stateOff",
+        "phrase": "convey state 'off'",
+        "priority": "1"
+      }
+    ],
+    "command": "up",
+    "instructions": "Starting at the 'Navigate backwards from here' link, navigate to the 'Reduced motion' switch.",
+    "plan": "apg/switch-checkbox",
+    "presentation_number": "4.2",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToSwitchOffState"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/switch-checkbox/switch-checkbox.setFocusAfterSwitch.html",
+  "id": "2307-aria-switch-checkbox-nav-back-to-switch-off-state-up-vc",
+  "name": "ARIA-AT, Switch Example Using HTML Checkbox Input: Navigate backwards to a switch that is off; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

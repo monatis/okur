@@ -305,6 +305,58 @@
       "sha256": "b30c3d42d47c6750e0d2ac50f95d1f7b8df573d217893d64ef3813debf1fb615",
       "size_bytes": 4277
     },
+    "aria-at/switch-checkbox/css/switch-button.css": {
+      "sha256": "f3b6e33873a887eac1de2938479a877bf4c5da8793e3f02cc3539504300ecfe4",
+      "size_bytes": 1518
+    },
+    "aria-at/switch-checkbox/css/switch-checkbox.css": {
+      "sha256": "6c58e2b65a63d940eff4c22723c0cb83c5f07260de4b1e00684d895c891122bf",
+      "size_bytes": 1388
+    },
+    "aria-at/switch-checkbox/css/switch.css": {
+      "sha256": "3088bc961d8e43d4de4682542ec285c5bdc785a2590ee999bb3b8ccbf38322fb",
+      "size_bytes": 1147
+    },
+    "aria-at/switch-checkbox/js/switch-button.js": {
+      "sha256": "e8729aacf071b396a973dc5d2daa16c8b1786a71141abde252484129d6c51729",
+      "size_bytes": 1205
+    },
+    "aria-at/switch-checkbox/js/switch-checkbox.js": {
+      "sha256": "0c7367cd8ab886a1f08c72539e0124269689ff2fc5cdff842179464d2d659fad",
+      "size_bytes": 976
+    },
+    "aria-at/switch-checkbox/js/switch.js": {
+      "sha256": "726ed7dbbe58c4e5af47c7ca2e8c68c32921dba20237ffd872dbed12add60765",
+      "size_bytes": 1213
+    },
+    "aria-at/switch-checkbox/switch-checkbox.html": {
+      "sha256": "6997c5262c828b0170a4cc906ed6cef7881211f88f330848202e4c91bf9acd40",
+      "size_bytes": 3198
+    },
+    "aria-at/switch-checkbox/switch-checkbox.setFocusAfterAndTurnOnSwitch.html": {
+      "sha256": "d43ad625346983b5e4798ce586227379b43d0458e4b49819aa97e38cf59f96a2",
+      "size_bytes": 4101
+    },
+    "aria-at/switch-checkbox/switch-checkbox.setFocusAfterSwitch.html": {
+      "sha256": "0721511756a163ad3ca676ca121171a2aaa31ada3e01c041d09aef7b8876e5af",
+      "size_bytes": 3966
+    },
+    "aria-at/switch-checkbox/switch-checkbox.setFocusBeforeAndTurnOnSwitch.html": {
+      "sha256": "253e440c0daf8d80cac861527cf8a99182da801e6a874962e8f3fb4b0f78a4e7",
+      "size_bytes": 4111
+    },
+    "aria-at/switch-checkbox/switch-checkbox.setFocusBeforeSwitch.html": {
+      "sha256": "531f46743586a2d11a2381faef65bdf9867c77abd4dfac2d41f953cfe60ab95b",
+      "size_bytes": 3969
+    },
+    "aria-at/switch-checkbox/switch-checkbox.setFocusOnAndTurnOnSwitch.html": {
+      "sha256": "a68836562b5bddee17f616d53892a7a6c2fa59f8aa0df57e6495b8706d6089a8",
+      "size_bytes": 4099
+    },
+    "aria-at/switch-checkbox/switch-checkbox.setFocusOnSwitch.html": {
+      "sha256": "d87c5a8f092f2e8e5c2430a1200a0148c7833083ba87ee95bbbdd2801355e03e",
+      "size_bytes": 3971
+    },
     "aria-at/switch/css/switch-button.css": {
       "sha256": "b64bcfd75b3de7e4720d3c42e5fad3f908f59b0f060d617b9db3b88ce47c110b",
       "size_bytes": 1403
@@ -7438,11 +7490,263 @@
       }
     },
     {
+      "scenario_id": "2302-aria-switch-checkbox-nav-forwards-to-switch-off-state-f-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusBeforeSwitch.html",
+      "evidence": {
+        "sha256": "798ce94a22d46ef0a5e163e852806e9e368b33eebca266724f7460870c416360",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2303-aria-switch-checkbox-nav-forwards-to-switch-off-state-down-down-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusBeforeSwitch.html",
+      "evidence": {
+        "sha256": "13f9b9aa83901a5f5566262742923f66128a327611a30a4c265fec81c090204e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2304-aria-switch-checkbox-nav-forwards-to-switch-off-state-tab-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusBeforeSwitch.html",
+      "evidence": {
+        "sha256": "56ff1b5108f994a01a760615bc4bdcf1f2f6f11172b0832c95a42da90b87b84a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2305-aria-switch-checkbox-nav-forwards-to-switch-off-state-tab-pc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusBeforeSwitch.html",
+      "evidence": {
+        "sha256": "be7555b1966b18c0fdabae56edca1562504aee26b2b80e0a0800f6abd435159e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2306-aria-switch-checkbox-nav-back-to-switch-off-state-shift-f-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusAfterSwitch.html",
+      "evidence": {
+        "sha256": "1ddeccbebdcda88fde20f13965a16201f013ed772e4beabfe50a29adec28db5d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2307-aria-switch-checkbox-nav-back-to-switch-off-state-up-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusAfterSwitch.html",
+      "evidence": {
+        "sha256": "63ec31f55d6528a0a14ae8be1849b20084f64509b6a5b9cd9064b280f29e9d2f",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2308-aria-switch-checkbox-nav-back-to-switch-off-state-shift-tab-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusAfterSwitch.html",
+      "evidence": {
+        "sha256": "1e7c95a0e19215bbecd21ac10349c54cf5b3e49f1db1d02550b47019ddaf4de0",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2309-aria-switch-checkbox-nav-back-to-switch-off-state-shift-tab-pc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusAfterSwitch.html",
+      "evidence": {
+        "sha256": "ae8d120015de08f2b2bcadb0d051727cbfdb593674d92c8fceaef58cdf08539a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "231-web-list-radio-buttons",
       "fixture": "signup-form.html",
       "evidence": {
         "sha256": "834ffe88518fb082cc652350d46c408fac8918874a97758a2a14861a361d0487",
         "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2310-aria-switch-checkbox-nav-forwards-to-switch-on-state-f-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusBeforeAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "76998e6fe83f78dcc8d1808e6d6cd7252b76c8a39bcedaec70c90fb58afd8655",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2311-aria-switch-checkbox-nav-forwards-to-switch-on-state-down-down-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusBeforeAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "29c7b9c34ddf04c6d57251cf6bb49e1f8cd6814876e61bda34dcf2832c735a10",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2312-aria-switch-checkbox-nav-forwards-to-switch-on-state-tab-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusBeforeAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "89fe6ee877c3453970f5e4886f45738164f76e92ca799038ab8599c1ad24eebd",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2313-aria-switch-checkbox-nav-forwards-to-switch-on-state-tab-pc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusBeforeAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "79a4d9ac17bf259a18e307c1975da3607692456061e112f1775960b3992ba9b8",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2314-aria-switch-checkbox-nav-back-to-switch-on-state-shift-f-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusAfterAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "4d24cb012daff3831b39cf5b8c6fc6bd7f5b78d03aa4ab93b56672dd65dcb443",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2315-aria-switch-checkbox-nav-back-to-switch-on-state-up-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusAfterAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "6cb7f5999aae4290049207055c432da99674544cd50a5acd83ed2ac4a3486199",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2316-aria-switch-checkbox-nav-back-to-switch-on-state-shift-tab-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusAfterAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "2dc0ba48480ee9e90785c8cfa3003efb2e08cf880e425105df9d0d8ea76aa636",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2317-aria-switch-checkbox-nav-back-to-switch-on-state-shift-tab-pc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusAfterAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "0d66f696ebefdb1d9dd0eafc4f9761a4e26b3226697dbd9c9db51b24635408ff",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2318-aria-switch-checkbox-req-info-about-switch-off-state-ins-tab-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "5b2bbb32f0b21c996fae9de58c6e50823b9c7dfdc28bac1cd0b4d3237fe12e4b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2319-aria-switch-checkbox-req-info-about-switch-off-state-ins-up-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "d3ea2d9ac77c87c96d624d95d6bea1f369cd6d1ef7b92a8bd6b3da88cb5e0cef",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -7466,6 +7770,146 @@
       }
     },
     {
+      "scenario_id": "2320-aria-switch-checkbox-req-info-about-switch-off-state-ins-tab-pc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "53f31908ba2a5fd5b72d40457a6a175b84799249a0460e6fdeea645b0a246a5c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2321-aria-switch-checkbox-req-info-about-switch-off-state-ins-up-pc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "af722ad36cf243138308c4bed475d483ee0a9d6315602077278cdc4a8b300d44",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2322-aria-switch-checkbox-req-info-about-switch-on-state-ins-tab-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "d4700b5d7f6b38ac58b0cc0db6f7ec4378affcaa1f5202ec95161a293bd65694",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2323-aria-switch-checkbox-req-info-about-switch-on-state-ins-up-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "9666cffec0e37bcd9bc20d096df191b01fb2e7fc1535f76e0d77538d0c087900",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2324-aria-switch-checkbox-req-info-about-switch-on-state-ins-tab-pc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "6ee07e24d5652132a8b059eac5ca8209a34cd49f482dc3821a6a7e05d8194511",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2325-aria-switch-checkbox-req-info-about-switch-on-state-ins-up-pc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "dee2af914a30e782580a96e60bd1c4e9cd04b96064ded7dee2cad54efe4b8c1a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2326-aria-switch-checkbox-operate-switch-off-state-space-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "ee53069b68ca5cff7189e69e9492864f43ed6d5633beaf552d5c68fbf4091a6b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2327-aria-switch-checkbox-operate-switch-off-state-enter-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "49082947e605236a871c381eb7eb49810cc262583dc52b89faa54b680d1d8f6c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2328-aria-switch-checkbox-operate-switch-off-state-space-pc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "14e287ea7caf2d12da117a1ce66409404881008c08483bb501a7492b6bd46943",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2329-aria-switch-checkbox-operate-switch-on-state-space-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "6667b0c9f95da1564c5c89637b5f155b7eb7ae6e1c5501db7ccb11dd72b09a2b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "233-web-list-combo-boxes",
       "fixture": "signup-form.html",
       "evidence": {
@@ -7476,6 +7920,34 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2330-aria-switch-checkbox-operate-switch-on-state-enter-vc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "b264c4622e2f158d652d3731757b1bcd2bd51bbeec6d32f2bd730579ade8964d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2331-aria-switch-checkbox-operate-switch-on-state-space-pc",
+      "fixture": "aria-at/switch-checkbox/switch-checkbox.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "695e41a353c2732f9dd936cefcc5967a25acba8fdb091e3c00197990731bf864",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -15349,10 +15821,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1048,
-    "scenarios_with_evidence": 1048,
-    "total_trials": 3150,
-    "successful_trials": 3133,
-    "deterministic_scenarios": 776
+    "scenarios": 1078,
+    "scenarios_with_evidence": 1078,
+    "total_trials": 3240,
+    "successful_trials": 3223,
+    "deterministic_scenarios": 806
   }
 }

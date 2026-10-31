@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleSwitch",
+        "phrase": "convey role 'switch'",
+        "priority": "1"
+      },
+      {
+        "id": "nameReducedMotion",
+        "phrase": "convey name 'Reduced motion'",
+        "priority": "1"
+      },
+      {
+        "id": "stateOn",
+        "phrase": "convey state 'on'",
+        "priority": "1"
+      }
+    ],
+    "command": "shift+f",
+    "instructions": "Starting at the 'Navigate backwards from here' link, navigate to the 'Reduced motion' switch.",
+    "plan": "apg/switch-checkbox",
+    "presentation_number": "10.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToSwitchOnState"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/switch-checkbox/switch-checkbox.setFocusAfterAndTurnOnSwitch.html",
+  "id": "2314-aria-switch-checkbox-nav-back-to-switch-on-state-shift-f-vc",
+  "name": "ARIA-AT, Switch Example Using HTML Checkbox Input: Navigate backwards to a switch that is on; Shift+F in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+F",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

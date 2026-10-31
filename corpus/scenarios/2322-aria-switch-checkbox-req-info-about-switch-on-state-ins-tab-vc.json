@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleSwitch",
+        "phrase": "convey role 'switch'",
+        "priority": "1"
+      },
+      {
+        "id": "nameReducedMotion",
+        "phrase": "convey name 'Reduced motion'",
+        "priority": "1"
+      },
+      {
+        "id": "stateOn",
+        "phrase": "convey state 'on'",
+        "priority": "1"
+      }
+    ],
+    "command": "ins+tab",
+    "instructions": "Starting at the 'Reduced motion' switch, read information about the switch.",
+    "plan": "apg/switch-checkbox",
+    "presentation_number": "16",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutSwitchOnState"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/switch-checkbox/switch-checkbox.setFocusOnAndTurnOnSwitch.html",
+  "id": "2322-aria-switch-checkbox-req-info-about-switch-on-state-ins-tab-vc",
+  "name": "ARIA-AT, Switch Example Using HTML Checkbox Input: Request information about a switch that is on; Insert+Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
