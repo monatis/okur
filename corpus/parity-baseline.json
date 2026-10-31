@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 9561,
-  "total_steps": 10132,
+  "matched_steps": 9567,
+  "total_steps": 10139,
   "accepted_divergences": 284,
   "errors": [],
   "steps": {
@@ -1646,6 +1646,13 @@
     "1117-desktop-excel-selection/s3": "mismatch",
     "1117-desktop-excel-selection/s4": "mismatch",
     "1117-desktop-excel-selection/s5": "match",
+    "1119-desktop-word-pages-by-character-and-word/s1": "match",
+    "1119-desktop-word-pages-by-character-and-word/s2": "match",
+    "1119-desktop-word-pages-by-character-and-word/s3": "mismatch",
+    "1119-desktop-word-pages-by-character-and-word/s4": "match",
+    "1119-desktop-word-pages-by-character-and-word/s5": "match",
+    "1119-desktop-word-pages-by-character-and-word/s6": "match",
+    "1119-desktop-word-pages-by-character-and-word/s7": "match",
     "112-article-paragraphs/s1": "match",
     "112-article-paragraphs/s10": "match",
     "112-article-paragraphs/s11": "match",

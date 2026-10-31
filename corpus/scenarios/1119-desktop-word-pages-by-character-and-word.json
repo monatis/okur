@@ -1,0 +1,28 @@
+{
+  "id": "1119-desktop-word-pages-by-character-and-word",
+  "name": "Word: End of the first page's last line, Right onto the second page, Left back, Ctrl+Right onto the second page, Ctrl+Left back, Insert+Delete",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word-pages.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-pages.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "End"},
+    {"id": "s3", "type": "key", "command": "Right"},
+    {"id": "s4", "type": "key", "command": "Left"},
+    {"id": "s5", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s6", "type": "key", "command": "Ctrl+Left"},
+    {"id": "s7", "type": "key", "command": "Insert+Delete"}
+  ]
+}

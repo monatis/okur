@@ -2122,6 +2122,20 @@
       }
     },
     {
+      "scenario_id": "1119-desktop-word-pages-by-character-and-word",
+      "fixture": "desktop-word-pages.ps1",
+      "evidence": {
+        "sha256": "9614fb0a4fcf4a270cba5b473db27165b7918f3d1e8e5761fd4be63b9a60082a",
+        "capture_script_sha256": "7eb9d91a388e46b1a1958a171c7b58af7c8ff0f9b489687e37e10009e703cb8c",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "112-article-paragraphs",
       "fixture": "news-article.html",
       "evidence": {
@@ -10663,10 +10677,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 741,
-    "scenarios_with_evidence": 741,
-    "total_trials": 2229,
-    "successful_trials": 2212,
-    "deterministic_scenarios": 471
+    "scenarios": 742,
+    "scenarios_with_evidence": 742,
+    "total_trials": 2232,
+    "successful_trials": 2215,
+    "deterministic_scenarios": 472
   }
 }
