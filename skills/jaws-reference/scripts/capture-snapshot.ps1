@@ -67,6 +67,16 @@ Start-Sleep -Milliseconds $SettleMs
 $sb = New-Object System.Text.StringBuilder 512
 [void][SnapshotWin32]::GetWindowText([SnapshotWin32]::GetForegroundWindow(), $sb, 512)
 $foreground = $sb.ToString()
+# Windows may refuse this process the foreground: Word's kept document stayed in front of a
+# round's first page (round-aria17, round-probe-radio). okur-lab front asks again as the
+# harness's own program does, a few times.
+for ($try = 0; $expectedTitle -and -not $foreground.StartsWith($expectedTitle) -and $try -lt 3; $try++) {
+    & $OkurLab front $expectedTitle | Out-Null
+    Start-Sleep -Milliseconds $SettleMs
+    $sb.Clear() | Out-Null
+    [void][SnapshotWin32]::GetWindowText([SnapshotWin32]::GetForegroundWindow(), $sb, 512)
+    $foreground = $sb.ToString()
+}
 if ($expectedTitle -and -not $foreground.StartsWith($expectedTitle)) {
     throw "Foreground window '$foreground' does not show fixture title '$expectedTitle'."
 }
