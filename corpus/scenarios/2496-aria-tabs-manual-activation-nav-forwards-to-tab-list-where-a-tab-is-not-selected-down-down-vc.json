@@ -1,0 +1,74 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "2:nameTabListDanishComposers 2:roleTabList",
+    "assertions": [
+      {
+        "id": "roleTabList",
+        "phrase": "convey role 'tab list'",
+        "priority": "3"
+      },
+      {
+        "id": "nameTabListDanishComposers",
+        "phrase": "convey name of the tab list, 'Danish Composers'",
+        "priority": "3"
+      },
+      {
+        "id": "roleTab",
+        "phrase": "convey role 'tab'",
+        "priority": "1"
+      },
+      {
+        "id": "nameTabMariaAhlefeldt",
+        "phrase": "convey name of the tab, 'Maria Ahlefeldt'",
+        "priority": "1"
+      },
+      {
+        "id": "stateNotSelected",
+        "phrase": "convey state of the tab, 'not selected'",
+        "priority": "3"
+      },
+      {
+        "id": "positionTab1",
+        "phrase": "convey position of the tab, 1",
+        "priority": "2"
+      },
+      {
+        "id": "numberTabsTabList4",
+        "phrase": "convey number of tabs in the tab list, 4",
+        "priority": "2"
+      }
+    ],
+    "command": "down down",
+    "instructions": "Starting at the 'Navigate forwards from here' link, Navigate forwards to the 'Maria Ahlefeldt' tab in the 'Danish Composers' tab list.",
+    "plan": "apg/tabs-manual-activation",
+    "presentation_number": "1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToTabListWhereATabIsNotSelected"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-manual-activation/tabs-manual.deactivateFirstTabAndSetFocusBeforeTablist.html",
+  "id": "2496-aria-tabs-manual-activation-nav-forwards-to-tab-list-where-a-tab-is-not-selected-down-down-vc",
+  "name": "ARIA-AT, Tabs with Manual Activation: Navigate forwards into a tab list to a tab that is not selected; Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Down",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

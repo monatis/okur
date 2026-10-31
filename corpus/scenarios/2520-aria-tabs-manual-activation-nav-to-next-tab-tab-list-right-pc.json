@@ -1,0 +1,65 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleTab",
+        "phrase": "convey role 'tab'",
+        "priority": "1"
+      },
+      {
+        "id": "nameTabCarlAndersen",
+        "phrase": "convey name of the tab, 'Carl Andersen'",
+        "priority": "1"
+      },
+      {
+        "id": "stateNotSelected",
+        "phrase": "convey state of the tab, 'not selected'",
+        "priority": "3"
+      },
+      {
+        "id": "positionTab2",
+        "phrase": "convey position of the tab, 2",
+        "priority": "2"
+      },
+      {
+        "id": "numberTabsTabList4",
+        "phrase": "convey number of tabs in the tab list, 4",
+        "priority": "2"
+      }
+    ],
+    "command": "right",
+    "instructions": "Starting at the 'Maria Ahlefeldt' tab, navigate to the 'Carl Andersen' tab.",
+    "plan": "apg/tabs-manual-activation",
+    "presentation_number": "18.3",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToNextTabTabList"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-manual-activation/tabs-manual.setFocusOnFirstTab.html",
+  "id": "2520-aria-tabs-manual-activation-nav-to-next-tab-tab-list-right-pc",
+  "name": "ARIA-AT, Tabs with Manual Activation: Navigate to the next tab in a tab list when the next tab is not selected; Right in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Right",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

@@ -1,0 +1,59 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleTab",
+        "phrase": "convey role 'tab'",
+        "priority": "1"
+      },
+      {
+        "id": "nameTabMariaAhlefeldt",
+        "phrase": "convey name of the tab, 'Maria Ahlefeldt'",
+        "priority": "1"
+      },
+      {
+        "id": "stateSelected",
+        "phrase": "convey state of the tab, 'selected'",
+        "priority": "1"
+      },
+      {
+        "id": "positionTab1",
+        "phrase": "convey position of the tab, 1",
+        "priority": "2"
+      },
+      {
+        "id": "numberTabsTabList4",
+        "phrase": "convey number of tabs in the tab list, 4",
+        "priority": "2"
+      }
+    ],
+    "command": "shift+f",
+    "instructions": "Starting at the 'Carl Andersen' tab, navigate to the 'Maria Ahlefeldt' tab.",
+    "plan": "apg/tabs-manual-activation",
+    "presentation_number": "19.4",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToPreviousSelectedTabTablist"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-manual-activation/tabs-manual.setFocusOnSecondTab.html",
+  "id": "2528-aria-tabs-manual-activation-nav-to-previous-selected-tab-tablist-shift-f-vc",
+  "name": "ARIA-AT, Tabs with Manual Activation: Navigate to the previous tab in a tab list when the previous tab is selected; Shift+F in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+F",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

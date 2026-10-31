@@ -1,0 +1,69 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleTabList",
+        "phrase": "convey role 'tab list'",
+        "priority": "3"
+      },
+      {
+        "id": "nameTabListDanishComposers",
+        "phrase": "convey name of the tab list, 'Danish Composers'",
+        "priority": "3"
+      },
+      {
+        "id": "roleTab",
+        "phrase": "convey role 'tab'",
+        "priority": "1"
+      },
+      {
+        "id": "nameTabPeterMuller",
+        "phrase": "convey name of the tab, 'Peter Müller'",
+        "priority": "1"
+      },
+      {
+        "id": "stateNotSelected",
+        "phrase": "convey state of the tab, 'not selected'",
+        "priority": "3"
+      },
+      {
+        "id": "positionTab4",
+        "phrase": "convey position of the tab, 4",
+        "priority": "2"
+      },
+      {
+        "id": "numberTabsTabList4",
+        "phrase": "convey number of tabs in the tab list, 4",
+        "priority": "2"
+      }
+    ],
+    "command": "shift+f",
+    "instructions": "Starting at the 'Maria Ahlefeldt' tab panel, Navigate backwards to the 'Peter Müller' tab in the 'Danish Composers' tab list.",
+    "plan": "apg/tabs-manual-activation",
+    "presentation_number": "1.4",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackwardsToTabListWhereATabIsNotSelected"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-manual-activation/tabs-manual.setFocusOnTabPanel.html",
+  "id": "2499-aria-tabs-manual-activation-nav-backwards-to-tab-list-where-a-tab-is-not-selected-shift-f-vc",
+  "name": "ARIA-AT, Tabs with Manual Activation: Navigate backwards into a tab list to a tab that is not selected; Shift+F in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+F",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

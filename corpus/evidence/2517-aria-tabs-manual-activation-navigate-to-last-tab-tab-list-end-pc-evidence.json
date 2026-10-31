@@ -1,0 +1,1113 @@
+{
+    "format_version":  2,
+    "scenario_id":  "2517-aria-tabs-manual-activation-navigate-to-last-tab-tab-list-end-pc",
+    "scenario_version":  "1.0.0",
+    "timestamp":  "2026-11-01T00:10:10.1407241+03:00",
+    "provenance":  {
+                       "capture_script_sha256":  "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+                       "scenario_sha256":  "15e2d5b1135e316590f7e7204de2e0c62c0f83abf1ffa0080853ba26359bd4bf",
+                       "fixture_sha256":  "3b12caf4b4e693064e20e976fc696fbee5a2179347da4f7770f1ec36d6ddedfb",
+                       "host":  "DESKTOP-DCNAKQQ",
+                       "os_build":  "Microsoft Windows [Version 10.0.19045.6456]",
+                       "keyboard_layout":  "Turkish Q",
+                       "num_lock":  false,
+                       "culture":  "en-US",
+                       "utc_offset_minutes":  180,
+                       "chrome_version":  "156.0.8078.76",
+                       "chrome_profile":  "sr-harness",
+                       "jaws_version":  "2025.2505.43.400",
+                       "jaws_settings":  {
+                                             "DEFAULT.JCF":  {
+                                                                 "Options":  {
+                                                                                 "MigrationWizardDisplayed":  "1",
+                                                                                 "TypingEcho":  "0",
+                                                                                 "KeyboardType":  "Laptop",
+                                                                                 "LanguageDetection":  "0",
+                                                                                 "AutomaticNotificationOfUpdates":  "0",
+                                                                                 "EnableAdditionalVoiceProfiles":  "0",
+                                                                                 "DisplayStartupWizard":  "0",
+                                                                                 "ShowSoundMixerDiscoveryDialog":  "0"
+                                                                             },
+                                                                 "FormsMode":  {
+                                                                                   "AutoFormsMode":  "0"
+                                                                               },
+                                                                 "OutputModes":  {
+                                                                                     "ACCESS_KEY":  "0|0|0|Access Key"
+                                                                                 },
+                                                                 "FSCasts":  {
+                                                                                 "EnableNotifications":  "0"
+                                                                             },
+                                                                 "Braille":  {
+                                                                                 "SelectedBrailleTranslator":  ""
+                                                                             },
+                                                                 "Braille Profiles":  {
+                                                                                          "ENU":  "0|20|US_Unicode|US_Unicode|0|1|0"
+                                                                                      },
+                                                                 "MessageCenter":  {
+                                                                                       "PendingMessages":  "0"
+                                                                                   },
+                                                                 "Voice Profiles":  {
+                                                                                        "ActiveVoiceProfileName":  "SAPI 5X 64"
+                                                                                    },
+                                                                 "Skim Reading History":  {
+                                                                                              "History1":  "|4:8192::|0|0:shadow  */*",
+                                                                                              "History2":  "|4:4096::|0|0:subscript  */*",
+                                                                                              "History3":  "|4:2048::|0|0:superscript  */*",
+                                                                                              "History4":  "|4:1024::|0|0:double strike through  */*",
+                                                                                              "History5":  "|4:16::|0|0:strike through  */*",
+                                                                                              "History6":  "|4:0:255000000:|0|0:red/*",
+                                                                                              "History7":  "|4:8::|0|0:underline  */*",
+                                                                                              "History8":  "|4:6::|0|0:bold italic  */*",
+                                                                                              "History9":  "|4:2::|0|0:bold  */*",
+                                                                                              "LastSkimRead":  "1:0::|0|0:"
+                                                                                          }
+                                                             },
+                                             "Chrome.JCF":  {
+                                                                "VirtualCursorVerbosity":  {
+                                                                                               "VirtualCursorVerbosityLevel":  "2"
+                                                                                           },
+                                                                "options":  {
+                                                                                "AllowWebAppReservedKeystrokes":  "0"
+                                                                            }
+                                                            },
+                                             "voiceprofiles/Eloquence.VPF":  {
+                                                                                 "Options":  {
+                                                                                                 "Factory":  "0"
+                                                                                             },
+                                                                                 "ENU-Message":  {
+                                                                                                     "Rate":  "94"
+                                                                                                 },
+                                                                                 "ENU-PCCursor":  {
+                                                                                                      "Rate":  "94",
+                                                                                                      "Punctuation":  "0"
+                                                                                                  },
+                                                                                 "ENU-JAWSCursor":  {
+                                                                                                        "Rate":  "94",
+                                                                                                        "Punctuation":  "0"
+                                                                                                    },
+                                                                                 "ENU-Keyboard":  {
+                                                                                                      "Rate":  "94",
+                                                                                                      "Punctuation":  "0"
+                                                                                                  },
+                                                                                 "ENU-Global":  {
+                                                                                                    "Rate":  "94",
+                                                                                                    "Punctuation":  "0"
+                                                                                                },
+                                                                                 "ENU-MenuAndDialog":  {
+                                                                                                           "Rate":  "94",
+                                                                                                           "Punctuation":  "0"
+                                                                                                       },
+                                                                                 "ENG-Message":  {
+                                                                                                     "Rate":  "94"
+                                                                                                 },
+                                                                                 "ENG-PCCursor":  {
+                                                                                                      "Rate":  "94",
+                                                                                                      "Punctuation":  "0"
+                                                                                                  },
+                                                                                 "ENG-JAWSCursor":  {
+                                                                                                        "Rate":  "94",
+                                                                                                        "Punctuation":  "0"
+                                                                                                    },
+                                                                                 "ENG-Keyboard":  {
+                                                                                                      "Rate":  "94",
+                                                                                                      "Punctuation":  "0"
+                                                                                                  },
+                                                                                 "ENG-Global":  {
+                                                                                                    "Rate":  "94",
+                                                                                                    "Punctuation":  "0"
+                                                                                                },
+                                                                                 "ENG-MenuAndDialog":  {
+                                                                                                           "Rate":  "94",
+                                                                                                           "Punctuation":  "0"
+                                                                                                       }
+                                                                             },
+                                             "voiceprofiles/Persian.VPF":  {
+                                                                               "Options":  {
+                                                                                               "PrimarySynthesizer":  "SAPI 5X",
+                                                                                               "PrimaryLanguage":  "FAR",
+                                                                                               "Factory":  "0"
+                                                                                           },
+                                                                               "ENU-Message":  {
+                                                                                                   "Parent":  "Global",
+                                                                                                   "VoiceName":  "Microsoft David Desktop",
+                                                                                                   "Volume":  "100",
+                                                                                                   "Rate":  "11",
+                                                                                                   "Pitch":  "20",
+                                                                                                   "Punctuation":  "2",
+                                                                                                   "SpellRateDelta":  "-2",
+                                                                                                   "UppercasePitchDelta":  "20",
+                                                                                                   "SynthLangString":  "0x409"
+                                                                                               },
+                                                                               "ENU-PCCursor":  {
+                                                                                                    "Parent":  "Global",
+                                                                                                    "VoiceName":  "Microsoft David Desktop",
+                                                                                                    "Volume":  "100",
+                                                                                                    "Rate":  "11",
+                                                                                                    "Pitch":  "10",
+                                                                                                    "Punctuation":  "2",
+                                                                                                    "SpellRateDelta":  "-2",
+                                                                                                    "UppercasePitchDelta":  "20",
+                                                                                                    "SynthLangString":  "0x409"
+                                                                                                },
+                                                                               "ENU-JAWSCursor":  {
+                                                                                                      "Parent":  "Global",
+                                                                                                      "VoiceName":  "Microsoft David Desktop",
+                                                                                                      "Volume":  "100",
+                                                                                                      "Rate":  "11",
+                                                                                                      "Pitch":  "1",
+                                                                                                      "Punctuation":  "2",
+                                                                                                      "SpellRateDelta":  "-2",
+                                                                                                      "UppercasePitchDelta":  "20",
+                                                                                                      "SynthLangString":  "0x409"
+                                                                                                  },
+                                                                               "ENU-Keyboard":  {
+                                                                                                    "Parent":  "Global",
+                                                                                                    "VoiceName":  "Microsoft David Desktop",
+                                                                                                    "Volume":  "100",
+                                                                                                    "Rate":  "11",
+                                                                                                    "Pitch":  "10",
+                                                                                                    "Punctuation":  "2",
+                                                                                                    "SpellRateDelta":  "-2",
+                                                                                                    "UppercasePitchDelta":  "20",
+                                                                                                    "SynthLangString":  "0x409"
+                                                                                                },
+                                                                               "ENU-Global":  {
+                                                                                                  "Parent":  "None",
+                                                                                                  "VoiceName":  "Microsoft David Desktop",
+                                                                                                  "Volume":  "100",
+                                                                                                  "Rate":  "11",
+                                                                                                  "Pitch":  "10",
+                                                                                                  "Punctuation":  "2",
+                                                                                                  "SpellRateDelta":  "-2",
+                                                                                                  "UppercasePitchDelta":  "20",
+                                                                                                  "SynthLangString":  "0x409"
+                                                                                              },
+                                                                               "ENU-Voice Aliases":  {
+                                                                                                         "SpellingVoice":  "*|0|-2%",
+                                                                                                         "SingleCapVoice":  "*|20%|0",
+                                                                                                         "AllCapsVoice":  "*|20%|0",
+                                                                                                         "SmallCapsVoice":  "*|20%|0"
+                                                                                                     },
+                                                                               "ENU-MenuAndDialog":  {
+                                                                                                         "Parent":  "Global",
+                                                                                                         "VoiceName":  "Microsoft David Desktop",
+                                                                                                         "Volume":  "100",
+                                                                                                         "Rate":  "11",
+                                                                                                         "Pitch":  "10",
+                                                                                                         "Punctuation":  "2",
+                                                                                                         "SpellRateDelta":  "-2",
+                                                                                                         "UppercasePitchDelta":  "20",
+                                                                                                         "SynthLangString":  "0x409"
+                                                                                                     },
+                                                                               "FAR-Message":  {
+                                                                                                   "Parent":  "Global",
+                                                                                                   "VoiceName":  "eSpeakPlus-mb-de6-fa",
+                                                                                                   "Volume":  "100",
+                                                                                                   "Rate":  "7",
+                                                                                                   "Pitch":  "10",
+                                                                                                   "Punctuation":  "1",
+                                                                                                   "SpellRateDelta":  "-2",
+                                                                                                   "UppercasePitchDelta":  "20",
+                                                                                                   "SynthLangString":  "0x429"
+                                                                                               },
+                                                                               "FAR-PCCursor":  {
+                                                                                                    "Parent":  "Global",
+                                                                                                    "VoiceName":  "eSpeakPlus-mb-de6-fa",
+                                                                                                    "Volume":  "100",
+                                                                                                    "Rate":  "7",
+                                                                                                    "Pitch":  "10",
+                                                                                                    "Punctuation":  "1",
+                                                                                                    "SpellRateDelta":  "-2",
+                                                                                                    "UppercasePitchDelta":  "20",
+                                                                                                    "SynthLangString":  "0x429"
+                                                                                                },
+                                                                               "FAR-JawsCursor":  {
+                                                                                                      "Parent":  "Global",
+                                                                                                      "VoiceName":  "eSpeakPlus-mb-de6-fa",
+                                                                                                      "Volume":  "100",
+                                                                                                      "Rate":  "7",
+                                                                                                      "Pitch":  "10",
+                                                                                                      "Punctuation":  "1",
+                                                                                                      "SpellRateDelta":  "-2",
+                                                                                                      "UppercasePitchDelta":  "20",
+                                                                                                      "SynthLangString":  "0x429"
+                                                                                                  },
+                                                                               "FAR-Keyboard":  {
+                                                                                                    "Parent":  "Global",
+                                                                                                    "VoiceName":  "eSpeakPlus-mb-de6-fa",
+                                                                                                    "Volume":  "100",
+                                                                                                    "Rate":  "7",
+                                                                                                    "Pitch":  "10",
+                                                                                                    "Punctuation":  "1",
+                                                                                                    "SpellRateDelta":  "-2",
+                                                                                                    "UppercasePitchDelta":  "20",
+                                                                                                    "SynthLangString":  "0x429"
+                                                                                                },
+                                                                               "FAR-Global":  {
+                                                                                                  "Parent":  "None",
+                                                                                                  "VoiceName":  "eSpeakPlus-mb-de6-fa",
+                                                                                                  "Volume":  "100",
+                                                                                                  "Rate":  "7",
+                                                                                                  "Pitch":  "10",
+                                                                                                  "Punctuation":  "1",
+                                                                                                  "SpellRateDelta":  "-2",
+                                                                                                  "UppercasePitchDelta":  "20",
+                                                                                                  "SynthLangString":  "0x429"
+                                                                                              },
+                                                                               "FAR-Voice Aliases":  {
+                                                                                                         "SpellingVoice":  "*|0|-2%",
+                                                                                                         "SingleCapVoice":  "*|20%|0",
+                                                                                                         "AllCapsVoice":  "*|20%|0",
+                                                                                                         "SmallCapsVoice":  "*|20%|0"
+                                                                                                     },
+                                                                               "FAR-MenuAndDialog":  {
+                                                                                                         "Parent":  "Global",
+                                                                                                         "VoiceName":  "eSpeakPlus-mb-de6-fa",
+                                                                                                         "Volume":  "100",
+                                                                                                         "Rate":  "7",
+                                                                                                         "Pitch":  "10",
+                                                                                                         "Punctuation":  "1",
+                                                                                                         "SpellRateDelta":  "-2",
+                                                                                                         "UppercasePitchDelta":  "20",
+                                                                                                         "SynthLangString":  "0x429"
+                                                                                                     },
+                                                                               "Language Aliases":  {
+                                                                                                        "ar,arb":  "0x401",
+                                                                                                        "chs":  "0x804",
+                                                                                                        "cs,csy":  "0x405",
+                                                                                                        "da,dan":  "0x406",
+                                                                                                        "deu,de":  "0x407",
+                                                                                                        "el,ell":  "0x408",
+                                                                                                        "en,enu":  "0x409;0x809;0xc09",
+                                                                                                        "eng":  "0x809;0x409;0xc09",
+                                                                                                        "ena":  "0xc09;0x409;0x809",
+                                                                                                        "es":  "0xc0a;0x40a;0x80a",
+                                                                                                        "esl,esp":  "0x40a;0xc0a;0x80a",
+                                                                                                        "esm,esu,est":  "0x80a;0x40a;0xc0a",
+                                                                                                        "esx,es-cu":  "0x5c0a;0x80a;0x40a;0xc0a",
+                                                                                                        "fin,fi":  "0x40b",
+                                                                                                        "fr,fra":  "0x40c;0xc0c",
+                                                                                                        "frc":  "0xc0c;0x40c",
+                                                                                                        "he,heb":  "0x40d",
+                                                                                                        "hu,hun":  "0x40e",
+                                                                                                        "ita,it":  "0x410",
+                                                                                                        "ja,jpn":  "0x411",
+                                                                                                        "nl,Nld,dun":  "0x413;0x813",
+                                                                                                        "Nlb,dub":  "0x813;0x413",
+                                                                                                        "nor":  "0x414",
+                                                                                                        "pl,plk":  "0x415",
+                                                                                                        "pt,ptb":  "0x416;0x816",
+                                                                                                        "ptg":  "0x816;0x416",
+                                                                                                        "rus,ru":  "0x419",
+                                                                                                        "sky":  "0x41b",
+                                                                                                        "sve":  "0x41d",
+                                                                                                        "svf":  "0x81d;0x41d",
+                                                                                                        "th,tha":  "0x41e",
+                                                                                                        "tr,trk":  "0x41f",
+                                                                                                        "zhh":  "0xc04"
+                                                                                                    },
+                                                                               "ENU-UI Voice Alias Translation":  {
+                                                                                                                      "PCCursorVoice":  "PCCursorVoice",
+                                                                                                                      "MessageVoice":  "MessageVoice",
+                                                                                                                      "HeaderVoice":  "HeaderVoice",
+                                                                                                                      "JAWSCursorVoice":  "JAWSCursorVoice",
+                                                                                                                      "NormalVoice":  "NormalVoice",
+                                                                                                                      "BoldVoice":  "BoldVoice",
+                                                                                                                      "UnderlineVoice":  "UnderlineVoice",
+                                                                                                                      "ItalicVoice":  "ItalicVoice",
+                                                                                                                      "StrikeoutVoice":  "StrikeoutVoice",
+                                                                                                                      "DoubleStrikeoutVoice":  "DoubleStrikeoutVoice",
+                                                                                                                      "GraphicVoice":  "GraphicVoice",
+                                                                                                                      "HighlightVoice":  "HighlightVoice",
+                                                                                                                      "HugeTextVoice":  "HugeTextVoice",
+                                                                                                                      "LargeTextVoice":  "LargeTextVoice",
+                                                                                                                      "SmallTextVoice":  "SmallTextVoice",
+                                                                                                                      "TinyTextVoice":  "TinyTextVoice",
+                                                                                                                      "SuperscriptVoice":  "SuperscriptVoice",
+                                                                                                                      "SubscriptVoice":  "SubscriptVoice",
+                                                                                                                      "ShadowVoice":  "ShadowVoice",
+                                                                                                                      "EmbossVoice":  "EmbossVoice",
+                                                                                                                      "EngraveVoice":  "EngraveVoice",
+                                                                                                                      "OutlineVoice":  "OutlineVoice",
+                                                                                                                      "HeadingLevel1Voice":  "HeadingLevel1Voice",
+                                                                                                                      "HeadingLevel2Voice":  "HeadingLevel2Voice",
+                                                                                                                      "HeadingLevel3Voice":  "HeadingLevel3Voice",
+                                                                                                                      "HeadingLevel4Voice":  "HeadingLevel4Voice",
+                                                                                                                      "HeadingLevel5Voice":  "HeadingLevel5Voice",
+                                                                                                                      "HeadingLevel6Voice":  "HeadingLevel6Voice",
+                                                                                                                      "LinkVoice":  "LinkVoice",
+                                                                                                                      "SpellingVoice":  "SpellingVoice",
+                                                                                                                      "QuotationVoice":  "QuotationVoice",
+                                                                                                                      "SingleCapVoice":  "SingleCapVoice",
+                                                                                                                      "AllCapsVoice":  "AllCapsVoice",
+                                                                                                                      "SmallCapsVoice":  "SmallCapsVoice",
+                                                                                                                      "KeyboardVoice":  "KeyboardVoice",
+                                                                                                                      "MenuAndDialogVoice":  "MenuAndDialogVoice",
+                                                                                                                      "GlobalVoice":  "GlobalVoice"
+                                                                                                                  }
+                                                                           },
+                                             "voiceprofiles/SAPI 5X 64.VPF":  {
+                                                                                  "Options":  {
+                                                                                                  "Factory":  "0"
+                                                                                              },
+                                                                                  "ENU-Message":  {
+                                                                                                      "Rate":  "90",
+                                                                                                      "VoiceName":  "SR Speech Recorder",
+                                                                                                      "Pitch":  "10",
+                                                                                                      "SynthLangString":  "0x409"
+                                                                                                  },
+                                                                                  "ENU-PCCursor":  {
+                                                                                                       "Rate":  "90",
+                                                                                                       "VoiceName":  "SR Speech Recorder",
+                                                                                                       "SynthLangString":  "0x409"
+                                                                                                   },
+                                                                                  "ENU-JAWSCursor":  {
+                                                                                                         "Rate":  "90",
+                                                                                                         "VoiceName":  "SR Speech Recorder",
+                                                                                                         "Pitch":  "10",
+                                                                                                         "SynthLangString":  "0x409"
+                                                                                                     },
+                                                                                  "ENU-Keyboard":  {
+                                                                                                       "Rate":  "90",
+                                                                                                       "VoiceName":  "SR Speech Recorder",
+                                                                                                       "SynthLangString":  "0x409"
+                                                                                                   },
+                                                                                  "ENU-Global":  {
+                                                                                                     "Rate":  "90",
+                                                                                                     "Parent":  "None",
+                                                                                                     "VoiceName":  "SR Speech Recorder",
+                                                                                                     "SynthLangString":  "0x409"
+                                                                                                 },
+                                                                                  "ENU-Voice Aliases":  {
+                                                                                                            "SpellingVoice":  "*|0|-2%",
+                                                                                                            "SingleCapVoice":  "*|20%|0",
+                                                                                                            "AllCapsVoice":  "*|20%|0",
+                                                                                                            "SmallCapsVoice":  "*|20%|0"
+                                                                                                        },
+                                                                                  "ENU-MenuAndDialog":  {
+                                                                                                            "Rate":  "90",
+                                                                                                            "VoiceName":  "SR Speech Recorder",
+                                                                                                            "SynthLangString":  "0x409"
+                                                                                                        }
+                                                                              },
+                                             "voiceprofiles/SAPI 5X.VPF":  {
+                                                                               "FAR-Message":  {
+                                                                                                   "VoiceName":  "eSpeakPlus-mb-ir1",
+                                                                                                   "Pitch":  "10"
+                                                                                               },
+                                                                               "FAR-PCCursor":  {
+                                                                                                    "VoiceName":  "eSpeakPlus-mb-ir1",
+                                                                                                    "Pitch":  "10"
+                                                                                                },
+                                                                               "FAR-JawsCursor":  {
+                                                                                                      "VoiceName":  "eSpeakPlus-mb-ir1",
+                                                                                                      "Pitch":  "10"
+                                                                                                  },
+                                                                               "FAR-Keyboard":  {
+                                                                                                    "VoiceName":  "eSpeakPlus-mb-ir1",
+                                                                                                    "Pitch":  "10"
+                                                                                                },
+                                                                               "FAR-Global":  {
+                                                                                                  "VoiceName":  "eSpeakPlus-mb-ir1",
+                                                                                                  "Pitch":  "10"
+                                                                                              },
+                                                                               "FAR-MenuAndDialog":  {
+                                                                                                         "VoiceName":  "eSpeakPlus-mb-ir1",
+                                                                                                         "Pitch":  "10"
+                                                                                                     }
+                                                                           }
+                                         },
+                       "reader":  "jaws",
+                       "okur_sha256":  null,
+                       "okur_lab_sha256":  "88a3f0bf3ab8e6d95775c0f11a99a2785d65342014e788071a1c0d8356e83b1a",
+                       "trace_elevated":  true,
+                       "other_browsers_closed":  0
+                   },
+    "environment":  {
+                        "os_version":  "Microsoft Windows NT 10.0.19045.0",
+                        "jaws_version":  "2025.2505.43.400 (File: 26.4.10.0)",
+                        "target_process":  "chrome",
+                        "interactive_session":  true
+                    },
+    "speech_recorder_log":  "C:\\Users\\ailabs\\sr-harness\\recorder\\spoken.jsonl",
+    "fixture":  "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-manual-activation/tabs-manual.setFocusOnFirstTab.html",
+    "repetitions_requested":  3,
+    "trials":  [
+                   {
+                       "trial_index":  1,
+                       "timestamp":  "2026-11-01T00:10:13.6340068+03:00",
+                       "foreground_window_start":  "Example of Tabs with Manual Activation - Google Chrome",
+                       "setup_settled":  true,
+                       "reset_keys":  [
+                                          {
+                                              "chord":  "Ctrl+End",
+                                              "t_ms":  1793481018499
+                                          },
+                                          {
+                                              "chord":  "Shift+B",
+                                              "t_ms":  1793481019762
+                                          },
+                                          {
+                                              "chord":  "Enter",
+                                              "t_ms":  1793481021030
+                                          },
+                                          {
+                                              "chord":  "Insert+Z",
+                                              "t_ms":  1793481024237
+                                          }
+                                      ],
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1793481030783,
+                                                "t_end_ms":  1793481032882,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "End",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Peter Müller  \u001d Tab \u001e  \n4 of 4",
+                                                                    "spoken":  [
+                                                                                   "Peter Müller Tab  ",
+                                                                                   "4 of 4"
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1793481031011,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Peter",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Müller",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Tab  ",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1793481031128,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "4",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "3",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "of",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "4",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "4",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1684,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true,
+                                                                    "history_read":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1793481034536,
+                                                "t_end_ms":  1793481036335,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Z",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "use virtual PC cursor on",
+                                                                    "spoken":  [
+                                                                                   "use virtual PC cursor on"
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1793481034731,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "use",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "virtual",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "PC",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "3",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "cursor",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "4",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "on",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1346,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true,
+                                                                    "history_read":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "2517-aria-tabs-manual-activation-navigate-to-last-tab-tab-list-end-pc-trial1.jsonl",
+                       "page_focus":  {
+                                          "class_name":  "button-run-test-setup",
+                                          "control_type":  50000,
+                                          "in_document":  true,
+                                          "name":  "Run Test Setup"
+                                      },
+                       "jaws_in_page":  true,
+                       "page_load_settled":  true,
+                       "trace_sha256":  "72eb2bab79c5c98994d0570d4e25f9b77b650025c232f3578a374fb877aceb96"
+                   },
+                   {
+                       "trial_index":  2,
+                       "timestamp":  "2026-11-01T00:10:36.4747265+03:00",
+                       "foreground_window_start":  "Example of Tabs with Manual Activation - Google Chrome",
+                       "setup_settled":  true,
+                       "reset_keys":  [
+                                          {
+                                              "chord":  "Ctrl+End",
+                                              "t_ms":  1793481041226
+                                          },
+                                          {
+                                              "chord":  "Shift+B",
+                                              "t_ms":  1793481042493
+                                          },
+                                          {
+                                              "chord":  "Enter",
+                                              "t_ms":  1793481043762
+                                          },
+                                          {
+                                              "chord":  "Insert+Z",
+                                              "t_ms":  1793481046482
+                                          }
+                                      ],
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1793481052982,
+                                                "t_end_ms":  1793481055064,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "End",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Peter Müller  \u001d Tab \u001e  \n4 of 4",
+                                                                    "spoken":  [
+                                                                                   "Peter Müller Tab  ",
+                                                                                   "4 of 4"
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1793481053211,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Peter",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Müller",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Tab  ",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1793481053338,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "4",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "3",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "of",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "4",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "4",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1722,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true,
+                                                                    "history_read":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1793481056746,
+                                                "t_end_ms":  1793481058508,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Z",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "use virtual PC cursor on",
+                                                                    "spoken":  [
+                                                                                   "use virtual PC cursor on"
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1793481056940,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "use",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "virtual",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "PC",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "3",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "cursor",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "4",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "on",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1328,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true,
+                                                                    "history_read":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "2517-aria-tabs-manual-activation-navigate-to-last-tab-tab-list-end-pc-trial2.jsonl",
+                       "page_focus":  {
+                                          "class_name":  "button-run-test-setup",
+                                          "control_type":  50000,
+                                          "in_document":  true,
+                                          "name":  "Run Test Setup"
+                                      },
+                       "jaws_in_page":  true,
+                       "page_load_settled":  true,
+                       "trace_sha256":  "6793c932a89c41c114a0dd8f4e629d07d5cfacb9405d9eba15019cb7c92e25ff"
+                   },
+                   {
+                       "trial_index":  3,
+                       "timestamp":  "2026-11-01T00:10:58.6420089+03:00",
+                       "foreground_window_start":  "Example of Tabs with Manual Activation - Google Chrome",
+                       "setup_settled":  true,
+                       "reset_keys":  [
+                                          {
+                                              "chord":  "Ctrl+End",
+                                              "t_ms":  1793481063515
+                                          },
+                                          {
+                                              "chord":  "Shift+B",
+                                              "t_ms":  1793481064793
+                                          },
+                                          {
+                                              "chord":  "Enter",
+                                              "t_ms":  1793481066070
+                                          },
+                                          {
+                                              "chord":  "Insert+Z",
+                                              "t_ms":  1793481068796
+                                          }
+                                      ],
+                       "step_results":  [
+                                            {
+                                                "step_id":  "s1",
+                                                "t_start_ms":  1793481075322,
+                                                "t_end_ms":  1793481077395,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "End",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "Peter Müller  \u001d Tab \u001e  \n4 of 4",
+                                                                    "spoken":  [
+                                                                                   "Peter Müller Tab  ",
+                                                                                   "4 of 4"
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1793481075526,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Peter",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Müller",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "Tab  ",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           },
+                                                                                           {
+                                                                                               "t":  1793481075643,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "4",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "3",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "of",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "4",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "4",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1681,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true,
+                                                                    "history_read":  true
+                                                                },
+                                                "step_success":  true
+                                            },
+                                            {
+                                                "step_id":  "s2",
+                                                "t_start_ms":  1793481079036,
+                                                "t_end_ms":  1793481080843,
+                                                "action":  {
+                                                               "type":  "key",
+                                                               "command":  "Insert+Z",
+                                                               "repeat":  1
+                                                           },
+                                                "observation":  {
+                                                                    "speech_raw":  "use virtual PC cursor on",
+                                                                    "spoken":  [
+                                                                                   "use virtual PC cursor on"
+                                                                               ],
+                                                                    "spoken_records":  [
+                                                                                           {
+                                                                                               "t":  1793481079243,
+                                                                                               "frags":  [
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "use",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "1",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "virtual",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "2",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "PC",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "3",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "cursor",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "bookmark",
+                                                                                                                 "text":  "4",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "action":  "speak",
+                                                                                                                 "text":  "on",
+                                                                                                                 "rate":  10,
+                                                                                                                 "volume":  100
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                                       ],
+                                                                    "spoken_end":  "confirmation",
+                                                                    "clipboard":  null,
+                                                                    "dispatch_ok":  true,
+                                                                    "settled":  true,
+                                                                    "heard_audio":  true,
+                                                                    "settle_ms":  1370,
+                                                                    "contaminated":  false,
+                                                                    "audio_without_text":  false,
+                                                                    "baseline_settled":  true,
+                                                                    "history_read":  true
+                                                                },
+                                                "step_success":  true
+                                            }
+                                        ],
+                       "trial_success":  true,
+                       "trace_file":  "2517-aria-tabs-manual-activation-navigate-to-last-tab-tab-list-end-pc-trial3.jsonl",
+                       "page_focus":  {
+                                          "class_name":  "button-run-test-setup",
+                                          "control_type":  50000,
+                                          "in_document":  true,
+                                          "name":  "Run Test Setup"
+                                      },
+                       "jaws_in_page":  true,
+                       "page_load_settled":  false,
+                       "trace_sha256":  "dbc28d975d228947fc12b2b93f79b8a5b11c7c1e4f6cc54e08d954434f2dba23"
+                   }
+               ],
+    "total_elapsed_ms":  72148
+}

@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "0:tabPanelText",
+    "assertions": [
+      {
+        "id": "1:tabPanelBoundary",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "3:tabPanelNamePeterMuller",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "tabPanelText",
+        "phrase": "convey text of tab panel, 'Peter Erasmus Lange-Müller (1 December 1850 – 26 February 1926) was a Danish composer and pianist. His compositional style was influenced by Danish folk music and by the work of Robert Schumann; Johannes Brahms; and his Danish countrymen, including J.P.E. Hartmann.'",
+        "priority": "3"
+      }
+    ],
+    "command": "up",
+    "instructions": "Starting at the 'Navigate backwards from here' link, navigate to the 'Peter Müller' tab panel.",
+    "plan": "apg/tabs-manual-activation",
+    "presentation_number": "22",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToTabPanel"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-manual-activation/tabs-manual.setFocusAfterTabpanel.html",
+  "id": "2533-aria-tabs-manual-activation-nav-back-to-tab-panel-up-vc",
+  "name": "ARIA-AT, Tabs with Manual Activation: Navigate backwards to a tab panel; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

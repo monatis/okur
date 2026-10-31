@@ -1,0 +1,75 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "0:positionTab1 0:numberTabsTabList4 0:nameTabListDanishComposers 0:roleTabList",
+    "assertions": [
+      {
+        "id": "roleTab",
+        "phrase": "convey role 'tab'",
+        "priority": "1"
+      },
+      {
+        "id": "nameTabMariaAhlefeldt",
+        "phrase": "convey name of the tab, 'Maria Ahlefeldt'",
+        "priority": "1"
+      },
+      {
+        "id": "stateSelected",
+        "phrase": "convey state of the tab, 'selected'",
+        "priority": "1"
+      },
+      {
+        "id": "positionTab1",
+        "phrase": "convey position of the tab, 1",
+        "priority": "2"
+      },
+      {
+        "id": "numberTabsTabList4",
+        "phrase": "convey number of tabs in the tab list, 4",
+        "priority": "2"
+      },
+      {
+        "id": "nameTabListDanishComposers",
+        "phrase": "convey name of the tab list, 'Danish Composers'",
+        "priority": "3"
+      },
+      {
+        "id": "roleTabList",
+        "phrase": "convey role 'tab list'",
+        "priority": "3"
+      }
+    ],
+    "command": "ins+up",
+    "instructions": "Starting at the 'Maria Ahlefeldt' tab, read information about the tab.",
+    "plan": "apg/tabs-manual-activation",
+    "presentation_number": "8.1",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutTabTabList"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-manual-activation/tabs-manual.setFocusOnFirstTab.html",
+  "id": "2511-aria-tabs-manual-activation-req-info-about-tab-tab-list-ins-up-pc",
+  "name": "ARIA-AT, Tabs with Manual Activation: Request information about a selected tab in a tab list; Insert+Up in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

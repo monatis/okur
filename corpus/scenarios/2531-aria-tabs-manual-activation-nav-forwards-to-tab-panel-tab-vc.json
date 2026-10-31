@@ -1,0 +1,64 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "3:tabListBoundary 3:roleTabPanel 1:roleLink 3:tabPanelNamePeterMuller 1:nameLinkPeterMuller 0:tabPanelText",
+    "assertions": [
+      {
+        "id": "tabListBoundary",
+        "phrase": "convey tab list boundry",
+        "priority": "2"
+      },
+      {
+        "id": "roleTabPanel",
+        "phrase": "convey role 'tab panel'",
+        "priority": "1"
+      },
+      {
+        "id": "0:roleLink",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "tabPanelNamePeterMuller",
+        "phrase": "convey name of the tab panel, 'Peter Müller'",
+        "priority": "1"
+      },
+      {
+        "id": "0:nameLinkPeterMuller",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "tabPanelText",
+        "phrase": "convey text of tab panel, 'Peter Erasmus Lange-Müller (1 December 1850 – 26 February 1926) was a Danish composer and pianist. His compositional style was influenced by Danish folk music and by the work of Robert Schumann; Johannes Brahms; and his Danish countrymen, including J.P.E. Hartmann.'",
+        "priority": "3"
+      }
+    ],
+    "command": "tab",
+    "instructions": "Starting at the 'Peter Müller' tab, navigate to its tab panel.",
+    "plan": "apg/tabs-manual-activation",
+    "presentation_number": "20.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToTabPanel"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-manual-activation/tabs-manual.activateAndSetFocusOnFourthTab.html",
+  "id": "2531-aria-tabs-manual-activation-nav-forwards-to-tab-panel-tab-vc",
+  "name": "ARIA-AT, Tabs with Manual Activation: Navigate forwards to a tab panel; Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
