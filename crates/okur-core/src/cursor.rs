@@ -1324,7 +1324,9 @@ impl VirtualCursor {
                 SpeechFormatter::format_edit_combo(name, node)
             }
             Role::ComboBox => self.with_verbosity(SpeechFormatter::combo_box_tab_focus(name, node)),
-            Role::Link { .. } => self.with_verbosity(SpeechFormatter::link_focus(name, node)),
+            Role::Link { .. } => {
+                self.with_verbosity(SpeechFormatter::link_focus(name, node, self.virtual_off))
+            }
             // A tab: its tab list as a group when focus enters it, then name, position and
             // selection [obs, 29/s2-s3].
             Role::Tab => {
@@ -1477,18 +1479,26 @@ impl VirtualCursor {
             .and_then(|l| self.buffer.node(l.node_id))
             .and_then(|n| n.attributes.get("group_id"))
             .and_then(|id| id.parse::<usize>().ok());
-        let mut said = SpeechFormatter::control_focus(node, |group_id| match group {
-            // The container's own span is the widest one carrying its id (its start and
-            // end lines have narrower spans of their own).
-            GroupNamed::Entered => self
-                .buffer
-                .spans
-                .iter()
-                .filter(|s| s.node_id == group_id)
-                .max_by_key(|s| s.end_offset - s.start_offset)
-                .is_some_and(|s| previous > s.start_offset && previous < s.end_offset),
-            GroupNamed::NotFromItsControls => previous_group == Some(group_id),
-        });
+        let said_how = crate::speech::FocusSaid {
+            virtual_off: self.virtual_off,
+            by_focus: group == GroupNamed::Entered,
+        };
+        let mut said = SpeechFormatter::control_focus(
+            node,
+            |group_id| match group {
+                // The container's own span is the widest one carrying its id (its start and
+                // end lines have narrower spans of their own).
+                GroupNamed::Entered => self
+                    .buffer
+                    .spans
+                    .iter()
+                    .filter(|s| s.node_id == group_id)
+                    .max_by_key(|s| s.end_offset - s.start_offset)
+                    .is_some_and(|s| previous > s.start_offset && previous < s.end_offset),
+                GroupNamed::NotFromItsControls => previous_group == Some(group_id),
+            },
+            said_how,
+        );
         // What the verbosity level leaves out: a field's description at Advanced [obs,
         // 553/s4].
         said.retain(|kind| self.verbosity.says(kind));

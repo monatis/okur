@@ -791,7 +791,7 @@ impl ScreenReaderEngine {
         }
         // The field as its focus is said, but for its description, which the next arrow reads
         // as a line of its own (280/s9), and an empty field's "blank" (280/s5).
-        let mut field = SpeechFormatter::control_focus(&node, |_| false);
+        let mut field = SpeechFormatter::control_focus(&node, |_| false, Default::default());
         field.retain(|kind| kind != crate::announcement::PartKind::Description);
         let said = field.render();
         let blank = msg::blank();
@@ -1014,7 +1014,7 @@ impl ScreenReaderEngine {
         let Some(node) = focused_field else {
             return self.cursor.current_line();
         };
-        let mut field = SpeechFormatter::control_focus(node, |_| true);
+        let mut field = SpeechFormatter::control_focus(node, |_| true, Default::default());
         field.retain(|kind| kind != PartKind::Description);
         let blank = msg::blank().to_string();
         field.lines.retain(|line| line.render().trim() != blank);

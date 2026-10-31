@@ -741,7 +741,14 @@ impl ScreenReaderEngine {
                     node.name = focus.name.clone();
                     node.value = focus.value.clone();
                     node.states = focus.states.clone();
-                    let mut speech = SpeechFormatter::format_control_focus(&node, |_| false);
+                    let mut speech = SpeechFormatter::format_control_focus(
+                        &node,
+                        |_| false,
+                        crate::speech::FocusSaid {
+                            virtual_off: self.virtual_cursor_off,
+                            by_focus: true,
+                        },
+                    );
                     if let Some(hint) =
                         SpeechFormatter::web_focus_hint(&node, self.virtual_cursor_off)
                     {

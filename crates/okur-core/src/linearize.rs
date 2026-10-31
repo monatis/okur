@@ -30,6 +30,16 @@ pub(crate) fn state_marker(name: &str) -> String {
     format!(" {RS}{name}{RE} ")
 }
 
+/// Whether a radio button is a checked ARIA one (`role="radio"` on another element), whose
+/// place in its group JAWS says only with the virtual cursor off: "Thin crust radio button
+/// checked", where an unchecked one is "Regular crust radio button not checked | 1 of 3", and a
+/// native one checked keeps it [obs, round-aria4, 2084/s2, 2074/s2, 2081/s1; 202].
+pub(crate) fn is_checked_aria_radio(node: &AomNode) -> bool {
+    node.role == Role::RadioButton
+        && node.states.checked == Some(true)
+        && node.attributes.get("aria_role").map(String::as_str) == Some("radio")
+}
+
 /// Where an element said between two marks starts and ends in a run's text: noncharacters,
 /// which no page holds, left out of the line's text and said as the marks.
 const DELETION_START: char = '\u{FDD0}';
@@ -344,8 +354,9 @@ struct Builder<'a> {
     list_depth: usize,
     /// How many preformatted elements (`<pre>`) the visit is inside.
     preformatted: usize,
-    /// Enclosing named groups (fieldsets), innermost last: (node id, name).
-    groups: Vec<(usize, String)>,
+    /// Enclosing named groups (fieldsets, ARIA radio groups), innermost last: (node id, name,
+    /// whether an ARIA radio group).
+    groups: Vec<(usize, String, bool)>,
     /// Names of enclosing tab lists, innermost last.
     tablists: Vec<String>,
     document_url: Option<&'a str>,
@@ -800,8 +811,11 @@ impl<'a> Builder<'a> {
                 let legend = node.name.as_deref().map(squash);
                 let is_group = node.role == Role::Group;
                 if is_group {
-                    self.groups
-                        .push((node.id, legend.clone().unwrap_or_default()));
+                    self.groups.push((
+                        node.id,
+                        legend.clone().unwrap_or_default(),
+                        attr(node, "radiogroup") == Some("true"),
+                    ));
                 }
                 // A tab list's name is its tabs' group name, as in a list of its own.
                 let is_tablist = node.role == Role::TabList;
@@ -809,8 +823,11 @@ impl<'a> Builder<'a> {
                     self.tablists.push(legend.clone().unwrap_or_default());
                 }
                 for child in &node.children {
-                    // The legend repeats the fieldset name and is not read again.
+                    // The legend repeats the fieldset name and is not read again; a heading
+                    // that names a group (an ARIA radio group labelled by it) is read as a
+                    // heading [obs, round-aria4, 2079/s2, 2088/s1].
                     if node.role == Role::Group
+                        && !matches!(child.role, Role::Heading { .. })
                         && legend.as_deref().is_some_and(|l| text_content(child) == l)
                     {
                         continue;
@@ -1050,15 +1067,23 @@ impl<'a> Builder<'a> {
         // Condiments group | All condiments check box" [obs, round-aria2, 2000/s1, 2003/s1]).
         let grouped = match node.role {
             Role::RadioButton => true,
-            Role::CheckBox => self.groups.last().is_some_and(|(_, name)| !name.is_empty()),
+            Role::CheckBox => self
+                .groups
+                .last()
+                .is_some_and(|(_, name, _)| !name.is_empty()),
             _ => false,
         };
         if grouped {
-            if let Some((group_id, group_name)) = self.groups.last() {
+            if let Some((group_id, group_name, radiogroup)) = self.groups.last() {
+                let radiogroup = *radiogroup;
                 let (group_id, group_name) = (group_id.to_string(), group_name.clone());
                 self.buffer.mark_readable(node.id);
                 self.annotations.push((node.id, "group_id", group_id));
                 self.annotations.push((node.id, "group_name", group_name));
+                if radiogroup {
+                    self.annotations
+                        .push((node.id, "group_radiogroup", "true".to_owned()));
+                }
             }
         }
         // Flush first: an inline label in the same block is still pending in the run.
@@ -1140,7 +1165,12 @@ impl<'a> Builder<'a> {
                     role_marker(msg::role_radio_button().as_str()),
                     state_marker(checked(&node.states))
                 );
-                if let (Some(pos), Some(size)) = (attr(node, "posinset"), attr(node, "setsize")) {
+                // A checked ARIA radio button's line has no place in its group: "Thin crust
+                // radio button checked" [obs, round-aria4, 2084/s2]; a native one's has.
+                let position = (attr(node, "posinset"), attr(node, "setsize"));
+                if let (Some(pos), Some(size), false) =
+                    (position.0, position.1, is_checked_aria_radio(node))
+                {
                     s.push_str(&format!("\n{}", msg::position(pos, size)));
                 }
                 s

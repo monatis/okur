@@ -15,6 +15,14 @@ fn name_and_role(name: &str, role: &str) -> Vec<Part> {
 /// Formats virtual buffer elements and reading events into canonical JAWS speech tokens.
 pub struct SpeechFormatter;
 
+/// How a page control's focus speech is said: with the virtual cursor off (Insert+Z), and by
+/// a focus moving onto it (Tab) rather than a quick key.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct FocusSaid {
+    pub virtual_off: bool,
+    pub by_focus: bool,
+}
+
 impl SpeechFormatter {
     /// Formats a line announcement matching JAWS speech history tokens.
     pub fn format_line(line: &BufferLine) -> String {
@@ -347,8 +355,9 @@ impl SpeechFormatter {
     pub fn format_control_focus(
         node: &crate::aom::AomNode,
         was_inside: impl Fn(usize) -> bool,
+        said: FocusSaid,
     ) -> String {
-        Self::control_focus(node, was_inside).render_all()
+        Self::control_focus(node, was_inside, said).render_all()
     }
 
     /// [`Self::format_control_focus`] as parts with their kinds. A line whose spacing parts
@@ -356,6 +365,7 @@ impl SpeechFormatter {
     pub fn control_focus(
         node: &crate::aom::AomNode,
         was_inside: impl Fn(usize) -> bool,
+        said: FocusSaid,
     ) -> Announcement {
         use crate::aom::Role;
         let attr = |k: &str| node.attributes.get(k).map(String::as_str);
@@ -367,13 +377,21 @@ impl SpeechFormatter {
         // The group a radio button or check box is in, named when the cursor comes into it
         // from outside: "Membership type group" [obs, 202], "Sandwich Condiments group" [obs,
         // round-aria2, 2000/s1].
+        // A focus coming into an ARIA radio group says an empty state after it: "Pizza Crust
+        // group | | Regular crust radio button" [obs, round-aria4, 2080/s1, 2085/s1]; a quick
+        // key does not [obs, 2082/s1], nor a fieldset [obs, round-aria2, 2003/s1].
         let entered_group = || {
             let (group, group_id) = (attr("group_name")?, attr("group_id")?);
             (!group_id.parse().is_ok_and(&was_inside)).then(|| {
-                Line::new(vec![
+                let mut parts = vec![
                     Part::new(PartKind::Container, group),
                     Part::role(msg::role_group()),
-                ])
+                ];
+                if said.by_focus && attr("group_radiogroup") == Some("true") {
+                    parts.push(Part::text(" "));
+                    parts.push(Part::state(""));
+                }
+                Line::new(parts)
             })
         };
         match &node.role {
@@ -423,7 +441,10 @@ impl SpeechFormatter {
                 parts.push(Part::text(" "));
                 parts.push(Part::state(checked(&node.states)));
                 lines.push(Line::new(parts));
-                if let (Some(p), Some(n)) = (attr("posinset"), attr("setsize")) {
+                // A checked ARIA radio button's place in its group, only with the virtual
+                // cursor off [obs, round-aria4, 2081/s1, 2082/s1].
+                let placed = !crate::linearize::is_checked_aria_radio(node) || said.virtual_off;
+                if let (Some(p), Some(n), true) = (attr("posinset"), attr("setsize"), placed) {
                     lines.push(Line::of(PartKind::Position, msg::position(p, n)));
                 }
                 Announcement::new(lines)
@@ -512,8 +533,10 @@ impl SpeechFormatter {
                 Some(msg::hint_toggle_spacebar().as_str())
             }
             // With the virtual cursor off a button is pressed as a native one [obs,
-            // round-aria3, 2035/s1, 2040/s1].
+            // round-aria3, 2035/s1, 2040/s1], and a radio button moved through with the arrows
+            // [obs, round-aria4, 2081/s1, 2086/s1].
             Role::Button if virtual_off => Some(msg::hint_activate_spacebar().as_str()),
+            Role::RadioButton if virtual_off => Some(msg::hint_radio_up_down().as_str()),
             Role::Link { .. } | Role::Button => Some(msg::hint_activate_enter().as_str()),
             _ => None,
         }
@@ -582,7 +605,7 @@ impl SpeechFormatter {
     /// A link taking focus: "Page one ‹ same page link › ‹Current Page›". aria-current comes
     /// before a plain link's role: "README ‹Current Page› ‹ Link ›".
     pub fn format_link_focus(name: &str, node: &AomNode) -> String {
-        Self::link_focus(name, node).render_all()
+        Self::link_focus(name, node, false).render_all()
     }
 
     /// A combo box taking the focus by Tab in a page: its name, role and value, without its
@@ -599,13 +622,16 @@ impl SpeechFormatter {
     }
 
     /// [`Self::format_link_focus`] as parts with their kinds.
-    pub fn link_focus(name: &str, node: &AomNode) -> Announcement {
+    pub fn link_focus(name: &str, node: &AomNode, virtual_off: bool) -> Announcement {
         let current = node.current_phrase().map(Part::state);
-        let parts = if node
-            .attributes
-            .get("same_page")
-            .is_some_and(|v| v == "true")
-        {
+        // With the virtual cursor off a same page link is a "Link" as any [obs, round-aria4,
+        // 2090/s1].
+        let same_page = !virtual_off
+            && node
+                .attributes
+                .get("same_page")
+                .is_some_and(|v| v == "true");
+        let parts = if same_page {
             let mut parts = name_and_role(name, msg::role_link_same_page().as_str());
             parts.extend(current);
             parts
@@ -1174,7 +1200,7 @@ mod kind_tests {
             ],
         );
         radio.states.checked = Some(true);
-        let said = SpeechFormatter::control_focus(&radio, |_| false);
+        let said = SpeechFormatter::control_focus(&radio, |_| false, FocusSaid::default());
         assert_eq!(
             said.kinds(),
             [
@@ -1199,7 +1225,7 @@ mod kind_tests {
                 .with_value("a@b.c"),
             &[("required", "true"), ("description", "Work address")],
         );
-        let said = SpeechFormatter::control_focus(&edit, |_| false);
+        let said = SpeechFormatter::control_focus(&edit, |_| false, FocusSaid::default());
         assert_eq!(
             said.kinds(),
             [

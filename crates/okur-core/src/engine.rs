@@ -1614,8 +1614,12 @@ impl ScreenReaderEngine {
                         field.value = Some(typed);
                     }
                     if let Some(field) = field {
-                        let said = crate::speech::SpeechFormatter::control_focus(&field, |_| false)
-                            .render();
+                        let said = crate::speech::SpeechFormatter::control_focus(
+                            &field,
+                            |_| false,
+                            Default::default(),
+                        )
+                        .render();
                         self.speech.speak(&said, true);
                     }
                     return true;
@@ -3721,7 +3725,11 @@ impl ScreenReaderEngine {
                 let buffer = &self.cursor.buffer;
                 let offset = self.cursor.offset;
                 let page = if let Some(field) = buffer.find_form_control_node(offset) {
-                    crate::speech::SpeechFormatter::format_control_focus(field, |_| true)
+                    crate::speech::SpeechFormatter::format_control_focus(
+                        field,
+                        |_| true,
+                        Default::default(),
+                    )
                 } else if buffer
                     .line_at_offset(offset)
                     .is_none_or(|line| line.role == crate::aom::Role::Document)

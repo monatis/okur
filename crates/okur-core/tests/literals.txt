@@ -17,6 +17,8 @@ okur-core/src/linearize.rs: "flows-to"
 okur-core/src/linearize.rs: "deletion"
 okur-core/src/linearize.rs: "insertion"
 okur-core/src/linearize.rs: "mark"
+okur-core/src/linearize.rs: "radio"
+okur-core/src/linearize.rs: "radiogroup"
 # A message's short form and description are looked up by its name with these endings.
 okur-core/src/messages.rs: "short"
 okur-core/src/ui/voice_adjustment.rs: "cancel"
