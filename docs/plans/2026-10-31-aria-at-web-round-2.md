@@ -21,6 +21,13 @@ live reader took Chromium's alert event (`db2d52aa`). §2's plans are queued as 
 aria29, §3's eleven as round-aria30 to aria40 (ids 2859-3153; menubar-editor has no JAWS
 commands).
 
+2026-11-01: radiogroup-aria-activedescendant (aria16) and rating-radio-group (aria17) imported.
+A probe of seven radio groups (1126) showed a checked ARIA radio button says its place, so the
+roving-tabindex page's silence about it became an accepted divergence. Open, with a second probe
+queued after aria40 (round-probe-radio2: 1127, 1128): rating's "Rating group" has no empty state
+after it where the heading-labelled groups have one, and its checked radio leaves out its place
+after setups that leave the focus on a radio button of the group.
+
 ## 1. The plans recording now
 
 As each round finishes: fetch, preview, fix what differs, import. In order: disclosure-faq
