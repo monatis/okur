@@ -1,0 +1,31 @@
+{
+  "id": "1120-desktop-excel-selection-from-a1",
+  "name": "Excel: from A1, Shift+Right twice, Shift+Left, Shift+Down twice (a range grown and shrunk), Right, Shift+Space and Ctrl+Space, Right",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Shift+Right"},
+    {"id": "s2", "type": "key", "command": "Shift+Right"},
+    {"id": "s3", "type": "key", "command": "Shift+Left"},
+    {"id": "s4", "type": "key", "command": "Shift+Down"},
+    {"id": "s5", "type": "key", "command": "Shift+Down"},
+    {"id": "s6", "type": "key", "command": "Right"},
+    {"id": "s7", "type": "key", "command": "Shift+Space"},
+    {"id": "s8", "type": "key", "command": "Right"},
+    {"id": "s9", "type": "key", "command": "Ctrl+Space"},
+    {"id": "s10", "type": "key", "command": "Right"}
+  ]
+}

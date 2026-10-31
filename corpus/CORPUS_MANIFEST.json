@@ -2111,7 +2111,7 @@
       "scenario_id": "1117-desktop-excel-selection",
       "fixture": "desktop-excel.ps1",
       "evidence": {
-        "sha256": "be8164bbc47ffa460a3284c3ac7d4ab357109a6983a77b50ab3e1a28583aa98b",
+        "sha256": "9178f2b76eedf6d8a294a9a4ec706c920341d7d6447dc45a2f9da329a48646c9",
         "capture_script_sha256": "7eb9d91a388e46b1a1958a171c7b58af7c8ff0f9b489687e37e10009e703cb8c",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
@@ -2155,6 +2155,34 @@
       "evidence": {
         "sha256": "f75b9ca6e27a475ebfd3efdd96237bc7670e54f866ef27c268ea92177bef102b",
         "capture_script_sha256": "52497c30fa69eac8937bd79b2cff9c5b387ad9246d0a3d1333fdf43c76994e11",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1120-desktop-excel-selection-from-a1",
+      "fixture": "desktop-excel.ps1",
+      "evidence": {
+        "sha256": "0df130cc5cbe366a8bc61955da04d7f9db60288c9a1bd3b2a0873309339d87af",
+        "capture_script_sha256": "7eb9d91a388e46b1a1958a171c7b58af7c8ff0f9b489687e37e10009e703cb8c",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1121-desktop-excel-selection-from-b2",
+      "fixture": "desktop-excel.ps1",
+      "evidence": {
+        "sha256": "5b4cf73fcebebf24e83d419d1c8d034dc0c249efd2f552021cc72aad825d156f",
+        "capture_script_sha256": "7eb9d91a388e46b1a1958a171c7b58af7c8ff0f9b489687e37e10009e703cb8c",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -10691,10 +10719,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 743,
-    "scenarios_with_evidence": 743,
-    "total_trials": 2235,
-    "successful_trials": 2218,
-    "deterministic_scenarios": 473
+    "scenarios": 745,
+    "scenarios_with_evidence": 745,
+    "total_trials": 2241,
+    "successful_trials": 2224,
+    "deterministic_scenarios": 475
   }
 }

@@ -1,0 +1,28 @@
+{
+  "id": "1121-desktop-excel-selection-from-b2",
+  "name": "Excel: from B2, Shift+Right twice (onto the empty D2), Shift+Down, Shift+Up, then Left",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "Right"},
+    {"id": "s3", "type": "key", "command": "Shift+Right"},
+    {"id": "s4", "type": "key", "command": "Shift+Right"},
+    {"id": "s5", "type": "key", "command": "Shift+Down"},
+    {"id": "s6", "type": "key", "command": "Shift+Up"},
+    {"id": "s7", "type": "key", "command": "Left"}
+  ]
+}

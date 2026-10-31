@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
   "target_app": "desktop",
+  "trace_headings": true,
   "launch": {
     "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
     "close_window": true,
