@@ -212,6 +212,28 @@ impl ScreenReaderEngine {
         let id = self.page_node_for(control)?;
         let before = self.cursor.buffer.node(id)?;
         let speech = match control.role {
+            // An ARIA radio button checked (Space, Enter) is said whole, its place as its
+            // focus gives it: "Regular crust radio button checked", "... | 1 of 3" with the
+            // virtual cursor off or in forms mode [obs, round-aria4, 2111/s1, 2112/s1, 2113/s1].
+            Role::RadioButton
+                if before.states.checked != control.states.checked
+                    && before
+                        .attributes
+                        .get("aria_role")
+                        .is_some_and(|r| r == "radio") =>
+            {
+                let mut radio = before.clone();
+                radio.states.checked = control.states.checked;
+                SpeechFormatter::control_focus(
+                    &radio,
+                    |_| true,
+                    crate::speech::FocusSaid {
+                        virtual_off: self.virtual_cursor_off || self.forms_mode,
+                        by_focus: false,
+                    },
+                )
+                .render_all()
+            }
             Role::CheckBox | Role::RadioButton
                 if before.states.checked != control.states.checked
                     || before.states.mixed != control.states.mixed =>

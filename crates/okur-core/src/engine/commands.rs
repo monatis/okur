@@ -991,6 +991,20 @@ impl ScreenReaderEngine {
                 msg::position(tab.index.to_string(), tab.total.to_string())
             );
         }
+        // With the virtual cursor off a checked ARIA radio button's line says its place, which
+        // the virtual cursor's leaves out [obs, round-aria4, 2121/s1].
+        if let Some(node) = line
+            .filter(|line| self.virtual_cursor_off && Some(line.node_id) == self.last_page_focus)
+            .and_then(|line| self.cursor.buffer.node(line.node_id))
+            .filter(|node| crate::linearize::is_checked_aria_radio(node))
+        {
+            if let (Some(p), Some(n)) = (
+                node.attributes.get("posinset"),
+                node.attributes.get("setsize"),
+            ) {
+                return format!("{}\n{}", self.cursor.current_line(), msg::position(p, n));
+            }
+        }
         // A field's line, focused or only under the virtual cursor, is said as the field with
         // its name, which its line leaves to the label above it: "Full name Edit Required"
         // where Down says "Required Edit" [obs, 564/s2, s15, s16].
