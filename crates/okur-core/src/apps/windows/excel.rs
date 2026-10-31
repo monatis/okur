@@ -21,6 +21,17 @@ impl AppModule for Excel {
         cell(focus).is_some()
     }
 
+    /// A cell Okur's list closes back onto, "22 | B 4" [obs, 521/s10, s14].
+    fn focus_again(&self, focus: &FocusEvent) -> Option<String> {
+        let coordinates = cell(focus)?;
+        let value = focus.value.as_deref().map(str::trim).unwrap_or_default();
+        Some(if value.is_empty() {
+            coordinates
+        } else {
+            format!("{value}\n{coordinates}")
+        })
+    }
+
     /// A cell the menus give back, "Leaving menus | 14 | C 4" [obs, 1116/s7].
     fn says_focus_after_menus(&self, focus: &FocusEvent) -> bool {
         cell(focus).is_some()
@@ -71,6 +82,9 @@ impl AppModule for Excel {
 /// (`readColumn`, `readFromTopOfColumn`, `readToBottomOfColumn`).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) enum SheetReading {
+    /// Say Line (Insert+Up): the row, cell after cell, "Branch | Weekdays | Weekends" [obs,
+    /// 521/s1].
+    Line,
     Row,
     RowFromStart,
     RowToEnd,
@@ -83,7 +97,13 @@ impl SheetReading {
     /// The reader an Okur-key chord is, if any.
     pub(crate) fn of(event: &crate::input::KeyEvent) -> Option<Self> {
         let m = &event.modifiers;
-        if !m.insert || m.alt || m.win || m.ctrl == m.shift {
+        if !m.insert || m.alt || m.win {
+            return None;
+        }
+        if !m.ctrl && !m.shift {
+            return (event.key == Key::UpArrow).then_some(Self::Line);
+        }
+        if m.ctrl == m.shift {
             return None;
         }
         Some(match (event.key, m.shift) {
@@ -104,11 +124,12 @@ impl SheetReading {
     /// read.
     pub(crate) fn said(self, place: &crate::event::SheetPlace) -> Option<String> {
         let (cells, at, row) = match self {
+            Self::Line => (&place.row, place.row_at, false),
             Self::Row | Self::RowFromStart | Self::RowToEnd => (&place.row, place.row_at, true),
             _ => (&place.column, place.column_at, false),
         };
         let part: &[String] = match self {
-            Self::Row | Self::Column => cells,
+            Self::Line | Self::Row | Self::Column => cells,
             Self::RowFromStart | Self::ColumnFromTop => cells.get(..=at).unwrap_or(cells),
             Self::RowToEnd | Self::ColumnToBottom => cells.get(at..).unwrap_or_default(),
         };
@@ -155,6 +176,10 @@ mod tests {
             column_at: 2,
         };
         let said = |reading: SheetReading| reading.said(&place);
+        assert_eq!(
+            said(SheetReading::Line).as_deref(),
+            Some("Northside\n10\n6")
+        );
         assert_eq!(said(SheetReading::Row).as_deref(), Some("Northside 10 6"));
         assert_eq!(
             said(SheetReading::RowFromStart).as_deref(),

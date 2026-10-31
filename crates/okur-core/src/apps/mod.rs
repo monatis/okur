@@ -108,6 +108,13 @@ pub trait AppModule: Send {
         false
     }
 
+    /// What `focus` says as Okur's own window closes back onto it (a list cancelled), where
+    /// the application says its focus otherwise than the engine: an Excel cell, "22 | B 4"
+    /// [obs, 521/s10, s14]. `None` for the engine's.
+    fn focus_again(&self, _focus: &FocusEvent) -> Option<String> {
+        None
+    }
+
     /// Whether arriving in one of the application's windows announces the window's title.
     fn names_window(&self, _focus: &FocusEvent) -> bool {
         true

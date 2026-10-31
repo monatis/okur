@@ -334,6 +334,8 @@ pub struct ScreenReaderEngine {
     /// The mode the list dialog gives the keys back to: a document's Heading List (Word's)
     /// returns to its application, any other list to the page.
     list_return_mode: AppMode,
+    /// The native focus a list dialog was opened from, which closing it gives back.
+    list_return_focus: Option<FocusEvent>,
     /// The focused document's headings were asked for its Heading List, which opens when they
     /// come.
     document_headings_asked: bool,
@@ -647,6 +649,7 @@ impl ScreenReaderEngine {
             settings_history: Vec::new(),
             list_dialog: None,
             list_return_mode: AppMode::VirtualBuffer,
+            list_return_focus: None,
             document_headings_asked: false,
             document_links_asked: false,
             document_fields_asked: false,
@@ -3025,6 +3028,7 @@ impl ScreenReaderEngine {
         });
         self.list_dialog = Some(dialog);
         self.list_return_mode = return_mode;
+        self.list_return_focus = self.last_native_focus.clone();
         // The keys are the dialog's now, before its window reports the focus: a Down the
         // window has yet to take must not move the virtual cursor [obs, 242/s2].
         self.app_mode = AppMode::NativeControl;
@@ -3392,6 +3396,8 @@ impl ScreenReaderEngine {
                         // activated; the cell's focus then says itself [obs, 1116/s3].
                         ListKind::SheetList(list) => {
                             self.moved_by_document_list = false;
+                            // The cell gone to is the answer: its focus is said at once.
+                            self.quiet_focus_until = None;
                             if let Some(target) = entry.address.as_deref() {
                                 actions.move_to_sheet_entry(list, target);
                             }
@@ -3658,6 +3664,18 @@ impl ScreenReaderEngine {
                 self.list_dialog = None;
                 self.app_mode = self.list_return_mode;
                 self.returning_from_dialog();
+                // An application that says its focus itself says it (Excel's cell, "22 | B 4"
+                // [obs, 521/s10]).
+                let again = self
+                    .list_return_focus
+                    .take()
+                    .as_ref()
+                    .filter(|_| in_document)
+                    .and_then(|focus| self.apps.iter().find_map(|app| app.focus_again(focus)));
+                if let Some(again) = again {
+                    self.speech.speak(&again, true);
+                    return Some(again);
+                }
                 // Word's document is named as the focus comes back to it: "Edit" [obs, 519/s4].
                 if in_document {
                     let edit = crate::linearize::role_marker(msg::role_edit().as_str());
