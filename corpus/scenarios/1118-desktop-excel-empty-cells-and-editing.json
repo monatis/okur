@@ -1,0 +1,31 @@
+{
+  "id": "1118-desktop-excel-empty-cells-and-editing",
+  "name": "Excel: Right three times onto the empty D1, Down to D2, Ctrl+Left back to the data, F2 to edit the cell, Escape, Enter (the cell below), Shift+Enter back, Insert+Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Right"},
+    {"id": "s2", "type": "key", "command": "Right"},
+    {"id": "s3", "type": "key", "command": "Right"},
+    {"id": "s4", "type": "key", "command": "Down"},
+    {"id": "s5", "type": "key", "command": "Ctrl+Left"},
+    {"id": "s6", "type": "key", "command": "F2"},
+    {"id": "s7", "type": "key", "command": "Escape"},
+    {"id": "s8", "type": "key", "command": "Enter"},
+    {"id": "s9", "type": "key", "command": "Shift+Enter"},
+    {"id": "s10", "type": "key", "command": "Insert+Up"}
+  ]
+}
