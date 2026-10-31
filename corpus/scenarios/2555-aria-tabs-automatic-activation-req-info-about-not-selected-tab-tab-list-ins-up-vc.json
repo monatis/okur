@@ -1,0 +1,69 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "0:positionTab2 0:numberTabsTabList4 0:nameTabListDanishComposers 0:roleTabList",
+    "assertions": [
+      {
+        "id": "roleTab",
+        "phrase": "convey role 'tab'",
+        "priority": "1"
+      },
+      {
+        "id": "nameTabCarlAndersen",
+        "phrase": "convey name of the tab, 'Carl Andersen'",
+        "priority": "1"
+      },
+      {
+        "id": "stateNotSelected",
+        "phrase": "convey state of the tab, 'not selected'",
+        "priority": "3"
+      },
+      {
+        "id": "positionTab2",
+        "phrase": "convey position of the tab, 2",
+        "priority": "2"
+      },
+      {
+        "id": "numberTabsTabList4",
+        "phrase": "convey number of tabs in the tab list, 4",
+        "priority": "2"
+      },
+      {
+        "id": "nameTabListDanishComposers",
+        "phrase": "convey name of the tab list, 'Danish Composers'",
+        "priority": "3"
+      },
+      {
+        "id": "roleTabList",
+        "phrase": "convey role 'tab list'",
+        "priority": "3"
+      }
+    ],
+    "command": "ins+up",
+    "instructions": "Starting at the 'Carl Andersen' tab, read information about the tab.",
+    "plan": "apg/tabs-automatic-activation",
+    "presentation_number": "10.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutNotSelectedTabTabList"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+  "id": "2555-aria-tabs-automatic-activation-req-info-about-not-selected-tab-tab-list-ins-up-vc",
+  "name": "ARIA-AT, Tabs with Automatic Activation: Request information about a not selected tab in a tab list; Insert+Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Up",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

@@ -1,0 +1,65 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleTab",
+        "phrase": "convey role 'tab'",
+        "priority": "1"
+      },
+      {
+        "id": "nameTabMariaAhlefeldt",
+        "phrase": "convey name of the tab, 'Maria Ahlefeldt'",
+        "priority": "1"
+      },
+      {
+        "id": "stateSelected",
+        "phrase": "convey state of the tab, 'selected'",
+        "priority": "1"
+      },
+      {
+        "id": "positionTab1",
+        "phrase": "convey position of the tab, 1",
+        "priority": "2"
+      },
+      {
+        "id": "numberTabsTabList4",
+        "phrase": "convey number of tabs in the tab list, 4",
+        "priority": "2"
+      }
+    ],
+    "command": "left",
+    "instructions": "Starting at the 'Carl Andersen' tab, activate the 'Maria Ahlefeldt' tab.",
+    "plan": "apg/tabs-automatic-activation",
+    "presentation_number": "14",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "activatePrevTabTabList"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+  "id": "2559-aria-tabs-automatic-activation-activate-prev-tab-tab-list-left-pc",
+  "name": "ARIA-AT, Tabs with Automatic Activation: Activate the previous tab in a tab list; Left in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Left",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

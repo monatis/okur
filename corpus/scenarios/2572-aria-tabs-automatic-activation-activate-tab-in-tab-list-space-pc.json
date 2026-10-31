@@ -1,0 +1,45 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "stateChangeToSelected",
+        "phrase": "convey change in state of the tab to 'selected'",
+        "priority": "1"
+      }
+    ],
+    "command": "space",
+    "instructions": "Starting at the 'Carl Andersen' tab, activate the tab.",
+    "plan": "apg/tabs-automatic-activation",
+    "presentation_number": "25.2",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "activateTabInTabList"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+  "id": "2572-aria-tabs-automatic-activation-activate-tab-in-tab-list-space-pc",
+  "name": "ARIA-AT, Tabs with Automatic Activation: Activate a tab in a tab list; Space in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Space",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

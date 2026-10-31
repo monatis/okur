@@ -1,0 +1,74 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleTabList",
+        "phrase": "convey role 'tab list'",
+        "priority": "3"
+      },
+      {
+        "id": "nameTabListDanishComposers",
+        "phrase": "convey name of the tab list, 'Danish Composers'",
+        "priority": "3"
+      },
+      {
+        "id": "roleTab",
+        "phrase": "convey role 'tab'",
+        "priority": "1"
+      },
+      {
+        "id": "nameTabMariaAhlefeldt",
+        "phrase": "convey name of the tab, 'Maria Ahlefeldt'",
+        "priority": "1"
+      },
+      {
+        "id": "stateSelected",
+        "phrase": "convey state of the tab, 'selected'",
+        "priority": "1"
+      },
+      {
+        "id": "positionTab1",
+        "phrase": "convey position of the tab, 1",
+        "priority": "2"
+      },
+      {
+        "id": "numberTabsTabList4",
+        "phrase": "convey number of tabs in the tab list, 4",
+        "priority": "2"
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "f",
+    "instructions": "Starting at the 'Navigate forwards from here' link, Navigate forwards to the 'Maria Ahlefeldt' tab in the 'Danish Composers' tab list.",
+    "plan": "apg/tabs-automatic-activation",
+    "presentation_number": "1.7",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToTabList"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.setFocusBeforeTablist.html",
+  "id": "2544-aria-tabs-automatic-activation-nav-forwards-to-tab-list-f-vc",
+  "name": "ARIA-AT, Tabs with Automatic Activation: Navigate forwards into a tab list to a tab that is selected; F in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "F",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

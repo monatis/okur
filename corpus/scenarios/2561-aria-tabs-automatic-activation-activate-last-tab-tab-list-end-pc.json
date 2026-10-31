@@ -1,0 +1,65 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleTab",
+        "phrase": "convey role 'tab'",
+        "priority": "1"
+      },
+      {
+        "id": "nameTabPeterMuller",
+        "phrase": "convey name of the tab, 'Peter Müller'",
+        "priority": "1"
+      },
+      {
+        "id": "stateSelected",
+        "phrase": "convey state of the tab, 'selected'",
+        "priority": "1"
+      },
+      {
+        "id": "positionTab4",
+        "phrase": "convey position of the tab, 4",
+        "priority": "2"
+      },
+      {
+        "id": "numberTabsTabList4",
+        "phrase": "convey number of tabs in the tab list, 4",
+        "priority": "2"
+      }
+    ],
+    "command": "end",
+    "instructions": "Starting at the 'Maria Ahlefeldt' tab, activate the 'Peter Müller' tab.",
+    "plan": "apg/tabs-automatic-activation",
+    "presentation_number": "18",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "activateLastTabTabList"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFirstTab.html",
+  "id": "2561-aria-tabs-automatic-activation-activate-last-tab-tab-list-end-pc",
+  "name": "ARIA-AT, Tabs with Automatic Activation: Activate the last tab in a tab list; End in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "End",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

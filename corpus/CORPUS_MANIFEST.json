@@ -645,6 +645,66 @@
       "sha256": "3393f827795b9fd5ae25aab1a84a11353a056f87ff7a6bce05e20d80b95f7f3b",
       "size_bytes": 2319
     },
+    "aria-at/tabs-automatic-activation/css/tabs-actions.css": {
+      "sha256": "6af873735b536b43be8729fbb228421c85ca2ad646bd552b61efc3c10b5fa582",
+      "size_bytes": 5108
+    },
+    "aria-at/tabs-automatic-activation/css/tabs.css": {
+      "sha256": "88335e4cf3c790441dc4f79f235ae8718c86544e723f5327910c278d3c915b57",
+      "size_bytes": 1429
+    },
+    "aria-at/tabs-automatic-activation/js/tabs-actions.js": {
+      "sha256": "f45e8c86803776041a7d2ee7150d0fe08ce0bff90c8ca2cc634400a3999643d9",
+      "size_bytes": 10173
+    },
+    "aria-at/tabs-automatic-activation/js/tabs-automatic.js": {
+      "sha256": "5759b7b6621ff0a064ad3c20c915dd49f0f7b72667ecc9c8a1d347cf141a3f6f",
+      "size_bytes": 3159
+    },
+    "aria-at/tabs-automatic-activation/js/tabs-manual.js": {
+      "sha256": "546985d94acf58e5a393989ff53abbbe9130dde6ee5549ee442326fb9be300eb",
+      "size_bytes": 3173
+    },
+    "aria-at/tabs-automatic-activation/tabs-automatic.activateAndSetFocusOnFourthTab.html": {
+      "sha256": "798cde727355a5c57b21b9c64d7ae155987089fcc230f478996190a82f9233dd",
+      "size_bytes": 7504
+    },
+    "aria-at/tabs-automatic-activation/tabs-automatic.activateFourthTabAndSetFocusOnTabpanel.html": {
+      "sha256": "df0fa579238647c55d6caf180655c7db9285f620caed90855c33763d88c328da",
+      "size_bytes": 7674
+    },
+    "aria-at/tabs-automatic-activation/tabs-automatic.deactivateFirstTabAndSetFocusBeforeTablist.html": {
+      "sha256": "bcba9804febb523383ebd73ffa505994678e001433d1898501f0d450c314c30e",
+      "size_bytes": 7697
+    },
+    "aria-at/tabs-automatic-activation/tabs-automatic.html": {
+      "sha256": "bd14c6948dae8dc93a13f68afae69399b40d6625b43f9fca8360ee52a2140acf",
+      "size_bytes": 6013
+    },
+    "aria-at/tabs-automatic-activation/tabs-automatic.setFocusAfterTabpanel.html": {
+      "sha256": "117effe42db226f8d7e7d57dafac99ebbf04021260a2a0d74264d4309e16e727",
+      "size_bytes": 6825
+    },
+    "aria-at/tabs-automatic-activation/tabs-automatic.setFocusBeforeTablist.html": {
+      "sha256": "7c94872a8d26661fafa3904aee3420f9daf9614291528ed4b5faecf2add7204b",
+      "size_bytes": 6760
+    },
+    "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFirstTab.html": {
+      "sha256": "7d19bc4f505e13945bd8e705387f92ab8390d597e82249fbc27120d2fac36feb",
+      "size_bytes": 6802
+    },
+    "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFourthTab.html": {
+      "sha256": "9d1ecdd77078d5292a36a422b0af15e682ffd6ceb81c0e026f15ea1b41c38f8f",
+      "size_bytes": 6807
+    },
+    "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html": {
+      "sha256": "1a577602985a1b2542e5c1571d9fb22d8278a1d1204c45dd37874e80ba1d8235",
+      "size_bytes": 6807
+    },
+    "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnTabPanel.html": {
+      "sha256": "5747c1647f122af5208d35786c71f3729a2e0692aab058e6b65f59fc5d6d9874",
+      "size_bytes": 6894
+    },
     "aria-at/tabs-manual-activation/css/tabs-actions.css": {
       "sha256": "6af873735b536b43be8729fbb228421c85ca2ad646bd552b61efc3c10b5fa582",
       "size_bytes": 5108
@@ -11466,11 +11526,179 @@
       }
     },
     {
+      "scenario_id": "2538-aria-tabs-automatic-activation-nav-forwards-to-tab-list-where-a-tab-is-not-selected-down-down-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.deactivateFirstTabAndSetFocusBeforeTablist.html",
+      "evidence": {
+        "sha256": "7289edb38e60daadb9493f7669506a0006b0f01fecc94c8c019cb5cdd4e0f666",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2539-aria-tabs-automatic-activation-nav-forwards-to-tab-list-where-a-tab-is-not-selected-f-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.deactivateFirstTabAndSetFocusBeforeTablist.html",
+      "evidence": {
+        "sha256": "5e25a6c94bebd89bef7c10dfb252ec770904ba587e1e19262aac1ed916b71537",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "254-web-list-paragraphs-enter",
       "fixture": "news-article.html",
       "evidence": {
         "sha256": "4e653a65c1103ad02c365cd5546d4e6ee8af791afdf9202c4de4db63e477b253",
         "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2540-aria-tabs-automatic-activation-nav-backwards-to-tab-list-where-a-tab-is-not-selected-up-up-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnTabPanel.html",
+      "evidence": {
+        "sha256": "e727d118d7ce1f6e8b3e33224cdd61a45aecd6263d1f73929f42c6086f767f71",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2541-aria-tabs-automatic-activation-nav-backwards-to-tab-list-where-a-tab-is-not-selected-shift-f-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnTabPanel.html",
+      "evidence": {
+        "sha256": "edf5aac59623190f74e00923000020ea23113900fbc9f31e786ebefafe58f2c4",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2542-aria-tabs-automatic-activation-nav-forwards-to-tab-list-tab-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusBeforeTablist.html",
+      "evidence": {
+        "sha256": "8cf0e18869b8b40b869ff38801677b9794625c826be4e56ade3a7408aa49ad61",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2543-aria-tabs-automatic-activation-nav-forwards-to-tab-list-down-down-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusBeforeTablist.html",
+      "evidence": {
+        "sha256": "b04a0e7c9f6dc352bd7e633b4b010cb9973127910a671ece828e0d0ee62559ed",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2544-aria-tabs-automatic-activation-nav-forwards-to-tab-list-f-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusBeforeTablist.html",
+      "evidence": {
+        "sha256": "d0cd6a497f9a896d31110527d578019befce90639693a12c2a19f59d018a9b39",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2545-aria-tabs-automatic-activation-nav-forwards-to-tab-list-tab-pc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusBeforeTablist.html",
+      "evidence": {
+        "sha256": "2687c6b19a5ed2a83a464e037bce6cc12251ba264364a0a6528e334c448df1a1",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2546-aria-tabs-automatic-activation-nav-back-to-tab-list-shift-tab-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.activateFourthTabAndSetFocusOnTabpanel.html",
+      "evidence": {
+        "sha256": "39c769d6476ea4dcdfdf869f23d75b3d0a3182df43b998ea679f158d4e1302b6",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2547-aria-tabs-automatic-activation-nav-back-to-tab-list-up-up-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.activateFourthTabAndSetFocusOnTabpanel.html",
+      "evidence": {
+        "sha256": "1d020a87fb3eedf310a47d4392362d1c45a132e84041f8078c59f7ef21ac917d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2548-aria-tabs-automatic-activation-nav-back-to-tab-list-shift-f-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.activateFourthTabAndSetFocusOnTabpanel.html",
+      "evidence": {
+        "sha256": "8d0cb2c574d9ecb3811609d19352f966407915a3170b7e41f0db2b0a4e6e2503",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2549-aria-tabs-automatic-activation-nav-back-to-tab-list-shift-tab-pc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.activateFourthTabAndSetFocusOnTabpanel.html",
+      "evidence": {
+        "sha256": "0db90ca17d7ec4ea577dd0f89c2f8be8850424b623506bd8fb384086910ca740",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -11494,6 +11722,146 @@
       }
     },
     {
+      "scenario_id": "2550-aria-tabs-automatic-activation-req-info-about-tab-tab-list-ins-tab-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFirstTab.html",
+      "evidence": {
+        "sha256": "1b2e3e53652eba0f6e9e84cc015142e3e94da28598dc82cb217aa6430705f5bf",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2551-aria-tabs-automatic-activation-req-info-about-tab-tab-list-ins-up-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFirstTab.html",
+      "evidence": {
+        "sha256": "c91ef048ae0e61b0b86fc1b958a573afd54db84b0f66db98b0e0536792b19260",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2552-aria-tabs-automatic-activation-req-info-about-tab-tab-list-ins-tab-pc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFirstTab.html",
+      "evidence": {
+        "sha256": "4a884a4a355a0f92194553f15a7b93e290f6b89d3f4f308f0dfc698e1fa26b41",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2553-aria-tabs-automatic-activation-req-info-about-tab-tab-list-ins-up-pc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFirstTab.html",
+      "evidence": {
+        "sha256": "8d8512e26d701716645a194744e2f045f6d277037121eb9efff6d706880db679",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2554-aria-tabs-automatic-activation-req-info-about-not-selected-tab-tab-list-ins-tab-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+      "evidence": {
+        "sha256": "c5f315de41a72800543b2ce380691eda1b7d1582d23709bff522bd5552774d61",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2555-aria-tabs-automatic-activation-req-info-about-not-selected-tab-tab-list-ins-up-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+      "evidence": {
+        "sha256": "d4f6c714f1e5b0310cb43f3c7f5e98f1ab1cdfe7bebe635e93402cdb804ef823",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2556-aria-tabs-automatic-activation-req-info-about-not-selected-tab-tab-list-ins-tab-pc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+      "evidence": {
+        "sha256": "feb4d37fa1a83d2c6d5c691735d5baba608c145f02d99b1cc6031388c7709096",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2557-aria-tabs-automatic-activation-req-info-about-not-selected-tab-tab-list-ins-up-pc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+      "evidence": {
+        "sha256": "43b4e8a240fcec1e8170db7a793ea7207e74f0be055b5052ee33cb767103a0d7",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2558-aria-tabs-automatic-activation-activate-next-tab-tab-list-right-pc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFirstTab.html",
+      "evidence": {
+        "sha256": "9fbfb35b11f2e92396164ff0d1140bca5e69ebed1d5c9662c883c82f8fd71e71",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2559-aria-tabs-automatic-activation-activate-prev-tab-tab-list-left-pc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+      "evidence": {
+        "sha256": "531eb17b2bc3c8fd3bb206d2ff949b3fd72b04d7dc1ffcebe64135f00c312c1d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "256-web-list-regions-enter",
       "fixture": "news-article.html",
       "evidence": {
@@ -11508,6 +11876,146 @@
       }
     },
     {
+      "scenario_id": "2560-aria-tabs-automatic-activation-activate-first-tab-tab-list-home-pc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFourthTab.html",
+      "evidence": {
+        "sha256": "8426375d2ceb46ac62f016f2fb047c1812f00a38b123f212d7678633514fe34b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2561-aria-tabs-automatic-activation-activate-last-tab-tab-list-end-pc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFirstTab.html",
+      "evidence": {
+        "sha256": "c7f5afcdd19097274ab67e53b686eccbb488b84754806b0a103f865f44a2ffd0",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2562-aria-tabs-automatic-activation-nav-to-next-tab-tab-list-down-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFirstTab.html",
+      "evidence": {
+        "sha256": "01b7fa2945a256ec275f4a674c117fba3f5e9ac87cb69bfbae2dfec2116c2c76",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2563-aria-tabs-automatic-activation-nav-to-next-tab-tab-list-f-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFirstTab.html",
+      "evidence": {
+        "sha256": "8fccbcfadf03ba75da182571e593f417e75235d63ccb84d58d6bd67d0b34b076",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2564-aria-tabs-automatic-activation-nav-to-previous-tab-tablist-up-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+      "evidence": {
+        "sha256": "79d4a5703ad9c4374854aff5b76d89d11fab423624c58f442d206056836435a1",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2565-aria-tabs-automatic-activation-nav-to-previous-tab-tablist-shift-f-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+      "evidence": {
+        "sha256": "20cf7a1a7d74ee05427199be0e473596114ba476a65573d38273e2e4a0a61f87",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2566-aria-tabs-automatic-activation-nav-forwards-to-tab-panel-down-down-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.activateAndSetFocusOnFourthTab.html",
+      "evidence": {
+        "sha256": "09d0d0233be7d224ac5221438f6355455e8fdd2294d41476db1a2a7b2d265bac",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2567-aria-tabs-automatic-activation-nav-forwards-to-tab-panel-tab-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.activateAndSetFocusOnFourthTab.html",
+      "evidence": {
+        "sha256": "14ad917ae9ae96a2621cf1f903ae85f489cc4d8f3ed9e8ae16ea2557a5a9ac21",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2568-aria-tabs-automatic-activation-nav-forwards-to-tab-panel-tab-pc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.activateAndSetFocusOnFourthTab.html",
+      "evidence": {
+        "sha256": "a4eb1204104c7df5e22b0490d21f57f8bd06fb6525f7d6959c60192528cdb4f4",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2569-aria-tabs-automatic-activation-nav-back-to-tab-panel-up-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusAfterTabpanel.html",
+      "evidence": {
+        "sha256": "c13205342df4b42e0c2dd0f3388c334d90b779b1c08235f7ce98b363bdd07210",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "257-web-list-tables-enter",
       "fixture": "news-article.html",
       "evidence": {
@@ -11518,6 +12026,62 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2570-aria-tabs-automatic-activation-activate-tab-in-tab-list-space-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+      "evidence": {
+        "sha256": "8a276c03f456817394a098625b0a48ea2f380e864671d0e212f8d9022e553d09",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2571-aria-tabs-automatic-activation-activate-tab-in-tab-list-enter-vc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+      "evidence": {
+        "sha256": "801ea1190c27415dee6cc7ed346715d88d21c83bca11655bba4ba02d551fc5f4",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2572-aria-tabs-automatic-activation-activate-tab-in-tab-list-space-pc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+      "evidence": {
+        "sha256": "03fc625c68e2bb2290733a599bc721481b5aa057c67d3928aafbb6a5866a444d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2573-aria-tabs-automatic-activation-activate-tab-in-tab-list-enter-pc",
+      "fixture": "aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+      "evidence": {
+        "sha256": "c92b278bb43d6a7f2f5e83f949d3c9e263eadcc56d86d7223e5d965b51ec56e0",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -19027,10 +19591,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1285,
-    "scenarios_with_evidence": 1285,
-    "total_trials": 3861,
-    "successful_trials": 3844,
-    "deterministic_scenarios": 1013
+    "scenarios": 1321,
+    "scenarios_with_evidence": 1321,
+    "total_trials": 3969,
+    "successful_trials": 3952,
+    "deterministic_scenarios": 1048
   }
 }

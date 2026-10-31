@@ -1,0 +1,59 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleTab",
+        "phrase": "convey role 'tab'",
+        "priority": "1"
+      },
+      {
+        "id": "nameTabCarlAndersen",
+        "phrase": "convey name of the tab, 'Carl Andersen'",
+        "priority": "1"
+      },
+      {
+        "id": "stateNotSelected",
+        "phrase": "convey state of the tab, 'not selected'",
+        "priority": "3"
+      },
+      {
+        "id": "positionTab2",
+        "phrase": "convey position of the tab, 2",
+        "priority": "2"
+      },
+      {
+        "id": "numberTabsTabList4",
+        "phrase": "convey number of tabs in the tab list, 4",
+        "priority": "2"
+      }
+    ],
+    "command": "down",
+    "instructions": "Starting at the 'Maria Ahlefeldt' tab, navigate to the 'Carl Andersen' tab.",
+    "plan": "apg/tabs-automatic-activation",
+    "presentation_number": "18.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToNextTabTabList"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnFirstTab.html",
+  "id": "2562-aria-tabs-automatic-activation-nav-to-next-tab-tab-list-down-vc",
+  "name": "ARIA-AT, Tabs with Automatic Activation: Navigate to the next tab in a tab list; Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

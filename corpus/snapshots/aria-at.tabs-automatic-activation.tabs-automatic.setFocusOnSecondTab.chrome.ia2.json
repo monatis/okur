@@ -1,0 +1,2263 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Example of Tabs with Automatic Activation - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "1a577602985a1b2542e5c1571d9fb22d8278a1d1204c45dd37874e80ba1d8235",
+    "captured_at_unix_ms": 1793482478579,
+    "node_count": 56,
+    "capture_ms": 371
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Example of Tabs with Automatic Activation",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -19752,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Arial",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -19775,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,90,156)",
+              "font-family": "Arial",
+              "font-size": "20.5pt"
+            }
+          },
+          {
+            "start": 1,
+            "end": 4,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Arial",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Example of Tabs with Automatic Activation",
+            "msaa_states": 65536,
+            "ia2_states": 1024,
+            "unique_id": -19790,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Example of Tabs with Automatic Activation",
+            "lines": [
+              [
+                0,
+                41
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 41,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "20.5pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Example of Tabs with Automatic Activation",
+                "msaa_states": 65536,
+                "ia2_states": 1024,
+                "unique_id": -19786,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Example of Tabs with Automatic Activation",
+                "lines": [
+                  [
+                    0,
+                    41
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 41,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "20.5pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -19805,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "17pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 4,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "About This Example",
+                "msaa_states": 65536,
+                "ia2_states": 1024,
+                "unique_id": -19792,
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "About This Example",
+                "lines": [
+                  [
+                    0,
+                    18
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 18,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "17pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "About This Example",
+                    "msaa_states": 65536,
+                    "ia2_states": 1024,
+                    "unique_id": -19787,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "About This Example",
+                    "lines": [
+                      [
+                        0,
+                        18
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 18,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "17pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -19850,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "This example section demonstrates a tabs widget that implements the ￼. In this example, a tab is automatically activated and its associated panel is displayed when the tab receives focus. It is recommended that authors consider implementing automatic activation of tabs ￼ circumstances where panels can be displayed instantly, i.e., all panel content is present in the DOM. For additional guidance, see ￼.",
+                "lines": [
+                  [
+                    0,
+                    97
+                  ],
+                  [
+                    97,
+                    206
+                  ],
+                  [
+                    206,
+                    306
+                  ],
+                  [
+                    306,
+                    404
+                  ],
+                  [
+                    403,
+                    405
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 68,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 68,
+                    "end": 69,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  },
+                  {
+                    "start": 69,
+                    "end": 270,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 270,
+                    "end": 271,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "font-weight": "bold"
+                    }
+                  },
+                  {
+                    "start": 271,
+                    "end": 403,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 403,
+                    "end": 404,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  },
+                  {
+                    "start": 404,
+                    "end": 405,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "This example section demonstrates a tabs widget that implements the ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -19754,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "This example section demonstrates a tabs widget that implements the ",
+                    "lines": [
+                      [
+                        0,
+                        68
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 68,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Tabs Pattern",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-pattern.html",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -19844,
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Tabs Pattern",
+                    "lines": [
+                      [
+                        0,
+                        12
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 12,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Tabs Pattern",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -19757,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Tabs Pattern",
+                        "lines": [
+                          [
+                            0,
+                            12
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 12,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": ". In this example, a tab is automatically activated and its associated panel is displayed when the tab receives focus. It is recommended that authors consider implementing automatic activation of tabs ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -19764,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": ". In this example, a tab is automatically activated and its associated panel is displayed when the tab receives focus. It is recommended that authors consider implementing automatic activation of tabs ",
+                    "lines": [
+                      [
+                        0,
+                        28
+                      ],
+                      [
+                        28,
+                        137
+                      ],
+                      [
+                        137,
+                        201
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 201,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1065,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -19750,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "strong",
+                      "text-align": "left"
+                    },
+                    "text": "only in",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "only in",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -19830,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "only in",
+                        "lines": [
+                          [
+                            0,
+                            7
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 7,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "font-weight": "bold"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " circumstances where panels can be displayed instantly, i.e., all panel content is present in the DOM. For additional guidance, see ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -19838,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " circumstances where panels can be displayed instantly, i.e., all panel content is present in the DOM. For additional guidance, see ",
+                    "lines": [
+                      [
+                        0,
+                        35
+                      ],
+                      [
+                        35,
+                        132
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 132,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Deciding When to Make Selection Automatically Follow Focus",
+                    "value": "file:///C:/Users/ailabs/corpus/practices/keyboard-interface/keyboard-interface-practice.html#kbd_selection_follows_focus",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -19771,
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Deciding When to Make Selection Automatically Follow Focus",
+                    "lines": [
+                      [
+                        0,
+                        17
+                      ],
+                      [
+                        17,
+                        58
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 58,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Deciding When to Make Selection Automatically Follow Focus",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -19846,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Deciding When to Make Selection Automatically Follow Focus",
+                        "lines": [
+                          [
+                            0,
+                            17
+                          ],
+                          [
+                            17,
+                            58
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 58,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": ".",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -19808,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": ".",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -19768,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "Similar examples include:",
+                "lines": [
+                  [
+                    0,
+                    25
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 25,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Similar examples include:",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -19812,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Similar examples include:",
+                    "lines": [
+                      [
+                        0,
+                        25
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 25,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 33,
+                "ia2_role": 33,
+                "msaa_states": 64,
+                "ia2_states": 1024,
+                "unique_id": -19795,
+                "attributes": {
+                  "display": "block",
+                  "setsize": "1",
+                  "tag": "ul",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  0,
+                  1,
+                  0
+                ],
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "unique_id": -19789,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "1",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      1,
+                      1
+                    ],
+                    "text": "• ￼: A tabs widget where users activate a tab and display its panel by pressing Space or Enter.",
+                    "lines": [
+                      [
+                        0,
+                        71
+                      ],
+                      [
+                        71,
+                        95
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 2,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      },
+                      {
+                        "start": 2,
+                        "end": 3,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      },
+                      {
+                        "start": 3,
+                        "end": 80,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      },
+                      {
+                        "start": 80,
+                        "end": 85,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Consolas",
+                          "font-size": "10pt"
+                        }
+                      },
+                      {
+                        "start": 85,
+                        "end": 89,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      },
+                      {
+                        "start": 89,
+                        "end": 94,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Consolas",
+                          "font-size": "10pt"
+                        }
+                      },
+                      {
+                        "start": 94,
+                        "end": 95,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -19835,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 2,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Example of Tabs with Manual Activation",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-manual.html",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "unique_id": -19793,
+                        "attributes": {
+                          "display": "inline",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Example of Tabs with Manual Activation",
+                        "lines": [
+                          [
+                            0,
+                            38
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 38,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Example of Tabs with Manual Activation",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "unique_id": -19770,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Example of Tabs with Manual Activation",
+                            "lines": [
+                              [
+                                0,
+                                38
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 38,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(3,69,117)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": ": A tabs widget where users activate a tab and display its panel by pressing ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -19760,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": ": A tabs widget where users activate a tab and display its panel by pressing ",
+                        "lines": [
+                          [
+                            0,
+                            68
+                          ],
+                          [
+                            68,
+                            77
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 77,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Space",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -19756,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Space",
+                        "lines": [
+                          [
+                            0,
+                            5
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 5,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Consolas",
+                              "font-size": "10pt"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": " or ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -19796,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": " or ",
+                        "lines": [
+                          [
+                            0,
+                            4
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 4,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Enter",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -19788,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Enter",
+                        "lines": [
+                          [
+                            0,
+                            5
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 5,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Consolas",
+                              "font-size": "10pt"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": ".",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -19779,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": ".",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 1,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -19834,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "17pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 5,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -19843,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Example",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "17pt"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelFor": [
+                    -19751,
+                    -19839
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -19823,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Example",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "17pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "Start of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -19751,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -19843
+                  ]
+                }
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -19766,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ],
+                  [
+                    3,
+                    4
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "14.5pt"
+                    }
+                  },
+                  {
+                    "start": 1,
+                    "end": 3,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 3,
+                    "end": 4,
+                    "attributes": {
+                      "background-color": "rgb(251,252,254)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1044,
+                    "name": "Danish Composers",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -19774,
+                    "attributes": {
+                      "display": "block",
+                      "id": "tablist-1",
+                      "level": "3",
+                      "name-from": "contents",
+                      "tag": "h3",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      3,
+                      0,
+                      0
+                    ],
+                    "text": "Danish Composers",
+                    "lines": [
+                      [
+                        0,
+                        16
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 16,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "14.5pt"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "labelFor": [
+                        -19802
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Danish Composers",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -19810,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Danish Composers",
+                        "lines": [
+                          [
+                            0,
+                            16
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 16,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,90,156)",
+                              "font-family": "Arial",
+                              "font-size": "14.5pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1054,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -19784,
+                    "attributes": {
+                      "display": "block",
+                      "tag": "p",
+                      "text-align": "left"
+                    },
+                    "text": "￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Navigate forwards from here",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html#beforelink",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "unique_id": -19794,
+                        "attributes": {
+                          "display": "inline",
+                          "id": "beforelink",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Navigate forwards from here",
+                        "lines": [
+                          [
+                            0,
+                            27
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 27,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Navigate forwards from here",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "unique_id": -19799,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Navigate forwards from here",
+                            "lines": [
+                              [
+                                0,
+                                27
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 27,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(3,69,117)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 60,
+                    "ia2_role": 60,
+                    "name": "Danish Composers",
+                    "msaa_states": 0,
+                    "ia2_states": 1040,
+                    "unique_id": -19802,
+                    "attributes": {
+                      "class": "automatic",
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "related-element",
+                      "setsize": "4",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "tablist"
+                    },
+                    "group_position": [
+                      0,
+                      4,
+                      0
+                    ],
+                    "text": "￼￼￼￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        2,
+                        3
+                      ],
+                      [
+                        3,
+                        4
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(251,252,254)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "10pt",
+                          "font-weight": "bold"
+                        }
+                      },
+                      {
+                        "start": 1,
+                        "end": 4,
+                        "attributes": {
+                          "background-color": "rgb(237,239,243)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "10pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "labelledBy": [
+                        -19774
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 37,
+                        "ia2_role": 37,
+                        "name": "Maria Ahlefeldt",
+                        "msaa_states": 3145730,
+                        "ia2_states": 1024,
+                        "unique_id": -19814,
+                        "attributes": {
+                          "display": "inline-block",
+                          "id": "tab-1",
+                          "name-from": "contents",
+                          "posinset": "1",
+                          "setsize": "4",
+                          "tag": "button",
+                          "text-align": "left",
+                          "xml-roles": "tab"
+                        },
+                        "group_position": [
+                          0,
+                          4,
+                          1
+                        ],
+                        "text": "Maria Ahlefeldt",
+                        "lines": [
+                          [
+                            0,
+                            15
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 15,
+                            "attributes": {
+                              "background-color": "rgb(251,252,254)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "10pt",
+                              "font-weight": "bold"
+                            }
+                          }
+                        ],
+                        "relations": {
+                          "controllerFor": [
+                            -19824
+                          ],
+                          "labelFor": [
+                            -19824
+                          ]
+                        }
+                      },
+                      {
+                        "msaa_role": 37,
+                        "ia2_role": 37,
+                        "name": "Carl Andersen",
+                        "msaa_states": 3145732,
+                        "ia2_states": 1024,
+                        "unique_id": -19769,
+                        "attributes": {
+                          "display": "inline-block",
+                          "id": "tab-2",
+                          "name-from": "contents",
+                          "posinset": "2",
+                          "setsize": "4",
+                          "tag": "button",
+                          "text-align": "left",
+                          "xml-roles": "tab"
+                        },
+                        "group_position": [
+                          0,
+                          4,
+                          2
+                        ],
+                        "text": "Carl Andersen",
+                        "lines": [
+                          [
+                            0,
+                            13
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 13,
+                            "attributes": {
+                              "background-color": "rgb(237,239,243)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "10pt",
+                              "font-weight": "bold"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 37,
+                        "ia2_role": 37,
+                        "name": "Ida da Fonseca",
+                        "msaa_states": 3145728,
+                        "ia2_states": 1024,
+                        "unique_id": -19755,
+                        "attributes": {
+                          "display": "inline-block",
+                          "id": "tab-3",
+                          "name-from": "contents",
+                          "posinset": "3",
+                          "setsize": "4",
+                          "tag": "button",
+                          "text-align": "left",
+                          "xml-roles": "tab"
+                        },
+                        "group_position": [
+                          0,
+                          4,
+                          3
+                        ],
+                        "text": "Ida da Fonseca",
+                        "lines": [
+                          [
+                            0,
+                            14
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 14,
+                            "attributes": {
+                              "background-color": "rgb(237,239,243)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "10pt",
+                              "font-weight": "bold"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 37,
+                        "ia2_role": 37,
+                        "name": "Peter Müller",
+                        "msaa_states": 3145728,
+                        "ia2_states": 1024,
+                        "unique_id": -19841,
+                        "attributes": {
+                          "display": "inline-block",
+                          "id": "tab-4",
+                          "name-from": "contents",
+                          "posinset": "4",
+                          "setsize": "4",
+                          "tag": "button",
+                          "text-align": "left",
+                          "xml-roles": "tab"
+                        },
+                        "group_position": [
+                          0,
+                          4,
+                          4
+                        ],
+                        "text": "Peter Müller",
+                        "lines": [
+                          [
+                            0,
+                            12
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 12,
+                            "attributes": {
+                              "background-color": "rgb(237,239,243)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "10pt",
+                              "font-weight": "bold"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 38,
+                    "ia2_role": 38,
+                    "name": "Maria Ahlefeldt",
+                    "msaa_states": 1048576,
+                    "ia2_states": 1024,
+                    "unique_id": -19824,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "tabpanel-1",
+                      "name-from": "related-element",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "tabpanel"
+                    },
+                    "text": "￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(251,252,254)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "controlledBy": [
+                        -19814
+                      ],
+                      "labelledBy": [
+                        -19814
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 20,
+                        "ia2_role": 1054,
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -19815,
+                        "attributes": {
+                          "display": "block",
+                          "tag": "p",
+                          "text-align": "left"
+                        },
+                        "text": "Maria Theresia Ahlefeldt (16 January 1755 – 20 December 1810) was a Danish, (originally German), composer. She is known as the first female composer in Denmark. Maria Theresia composed music for several ballets, operas, and plays of the royal theatre. She was given good critic as a composer and described as a “virkelig Tonekunstnerinde” ('a True Artist of Music').",
+                        "lines": [
+                          [
+                            0,
+                            107
+                          ],
+                          [
+                            107,
+                            212
+                          ],
+                          [
+                            212,
+                            321
+                          ],
+                          [
+                            321,
+                            366
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 366,
+                            "attributes": {
+                              "background-color": "rgb(251,252,254)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Maria Theresia Ahlefeldt (16 January 1755 – 20 December 1810) was a Danish, (originally German), composer. She is known as the first female composer in Denmark. Maria Theresia composed music for several ballets, operas, and plays of the royal theatre. She was given good critic as a composer and described as a “",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -19777,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Maria Theresia Ahlefeldt (16 January 1755 – 20 December 1810) was a Danish, (originally German), composer. She is known as the first female composer in Denmark. Maria Theresia composed music for several ballets, operas, and plays of the royal theatre. She was given good critic as a composer and described as a “",
+                            "lines": [
+                              [
+                                0,
+                                107
+                              ],
+                              [
+                                107,
+                                212
+                              ],
+                              [
+                                212,
+                                312
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 312,
+                                "attributes": {
+                                  "background-color": "rgb(251,252,254)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "virkelig Tonekunstnerinde",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -19782,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "virkelig Tonekunstnerinde",
+                            "lines": [
+                              [
+                                0,
+                                9
+                              ],
+                              [
+                                9,
+                                25
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 25,
+                                "attributes": {
+                                  "background-color": "rgb(251,252,254)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "” ('a True Artist of Music').",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -19827,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "” ('a True Artist of Music').",
+                            "lines": [
+                              [
+                                0,
+                                29
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 29,
+                                "attributes": {
+                                  "background-color": "rgb(251,252,254)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -19842,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Navigate backwards from here",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/tabs-automatic-activation/tabs-automatic.setFocusOnSecondTab.html#afterlink",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -19832,
+                    "attributes": {
+                      "display": "inline",
+                      "id": "afterlink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Navigate backwards from here",
+                    "lines": [
+                      [
+                        0,
+                        28
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 28,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Navigate backwards from here",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -19804,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Navigate backwards from here",
+                        "lines": [
+                          [
+                            0,
+                            28
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 28,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "End of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -19839,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -19843
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -19826,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(250,250,250)",
+                  "color": "rgb(5,5,5)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1,
+                "ia2_states": 1024,
+                "unique_id": -19818,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
