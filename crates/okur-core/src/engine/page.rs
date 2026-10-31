@@ -285,6 +285,7 @@ impl ScreenReaderEngine {
         let changed = self.change_page_node(id, |node| {
             node.states.expanded = control.states.expanded.or(node.states.expanded);
             node.states.checked = control.states.checked;
+            node.states.mixed = control.states.mixed;
             node.states.selected = control.states.selected;
             if control.value.is_some() {
                 node.value = control.value.clone();

@@ -364,6 +364,18 @@ impl SpeechFormatter {
         let checked = |states: &crate::aom::NodeStates| {
             states.check_word().unwrap_or_else(msg::state_not_checked)
         };
+        // The group a radio button or check box is in, named when the cursor comes into it
+        // from outside: "Membership type group" [obs, 202], "Sandwich Condiments group" [obs,
+        // round-aria2, 2000/s1].
+        let entered_group = || {
+            let (group, group_id) = (attr("group_name")?, attr("group_id")?);
+            (!group_id.parse().is_ok_and(&was_inside)).then(|| {
+                Line::new(vec![
+                    Part::new(PartKind::Container, group),
+                    Part::role(msg::role_group()),
+                ])
+            })
+        };
         match &node.role {
             Role::Edit => {
                 let password = attr("password") == Some("true");
@@ -406,16 +418,7 @@ impl SpeechFormatter {
                 Announcement::new(lines)
             }
             Role::RadioButton => {
-                let mut lines = Vec::new();
-                if let (Some(group), Some(group_id)) = (attr("group_name"), attr("group_id")) {
-                    let inside = group_id.parse().is_ok_and(&was_inside);
-                    if !inside {
-                        lines.push(Line::new(vec![
-                            Part::new(PartKind::Container, group),
-                            Part::role(msg::role_group()),
-                        ]));
-                    }
-                }
+                let mut lines: Vec<Line> = entered_group().into_iter().collect();
                 let mut parts = name_and_role(name, msg::role_radio_button().as_str());
                 parts.push(Part::text(" "));
                 parts.push(Part::state(checked(&node.states)));
@@ -450,7 +453,9 @@ impl SpeechFormatter {
                 let mut parts = name_and_role(name, role);
                 parts.push(Part::text(" "));
                 parts.push(Part::state(checked(&node.states)));
-                Announcement::new(vec![Line::new(parts)])
+                let mut lines: Vec<Line> = entered_group().into_iter().collect();
+                lines.push(Line::new(parts));
+                Announcement::new(lines)
             }
             // A toggle button (`aria-pressed`): "Sohbetler Toggle button Pressed", "👍 Toggle
             // button Not pressed" (WhatsApp, JAWS on the dev box, 2026-10-17).

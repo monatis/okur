@@ -1046,8 +1046,14 @@ impl<'a> Builder<'a> {
     /// §10: one line per form control, in JAWS's line-reading phrasing.
     fn visit_control(&mut self, node: &AomNode) {
         // Radio buttons remember their enclosing group, which focus speech names when the
-        // cursor enters the group (§17).
-        if node.role == Role::RadioButton {
+        // cursor enters the group (§17); check boxes too, in a named group ("Sandwich
+        // Condiments group | All condiments check box" [obs, round-aria2, 2000/s1, 2003/s1]).
+        let grouped = match node.role {
+            Role::RadioButton => true,
+            Role::CheckBox => self.groups.last().is_some_and(|(_, name)| !name.is_empty()),
+            _ => false,
+        };
+        if grouped {
             if let Some((group_id, group_name)) = self.groups.last() {
                 let (group_id, group_name) = (group_id.to_string(), group_name.clone());
                 self.buffer.mark_readable(node.id);

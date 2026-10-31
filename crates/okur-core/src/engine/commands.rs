@@ -124,7 +124,7 @@ impl ScreenReaderEngine {
             Command::SayCurrentFocus if self.app_mode == AppMode::VirtualBuffer => {
                 let id = self.last_page_focus?;
                 let (offset, node) = (self.cursor.offset, self.cursor.current_node_id);
-                let speech = self.cursor.focus_node(id);
+                let speech = self.cursor.say_focus(id, self.virtual_cursor_off);
                 self.cursor.offset = offset;
                 self.cursor.current_node_id = node;
                 let speech = speech.filter(|s| !s.trim().is_empty())?;

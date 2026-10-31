@@ -445,6 +445,24 @@ impl ScreenReaderEngine {
             }
 
             let target_id = self.page_node_for(focus);
+            // A check box or radio button whose state changed while it was not focused (a
+            // page's script set it): the focus brings its state, which the buffer takes before
+            // the control is said [obs, round-aria2, 2015/s1].
+            if let Some(id) = target_id.filter(|_| {
+                matches!(focus.role, Role::CheckBox | Role::RadioButton)
+                    && focus.states.checked.is_some()
+            }) {
+                let stale = self.cursor.buffer.node(id).is_some_and(|node| {
+                    node.states.checked != focus.states.checked
+                        || node.states.mixed != focus.states.mixed
+                });
+                if stale {
+                    let _ = self.change_page_node(id, |node| {
+                        node.states.checked = focus.states.checked;
+                        node.states.mixed = focus.states.mixed;
+                    });
+                }
+            }
             // Where the virtual cursor was, for the containers the focus enters.
             let cursor_offset = self.cursor.offset;
             let cursor_node = self

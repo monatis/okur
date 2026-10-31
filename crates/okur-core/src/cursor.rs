@@ -59,6 +59,18 @@ pub enum FocusFrom {
     Outside,
 }
 
+/// When a radio button's or check box's group is named before it.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum GroupNamed {
+    /// A focus: when it comes into the group from outside; from a link inside the group's
+    /// fieldset, not (Shift+Tab: "All condiments check box ..." [obs, round-aria2, 2008/s1]).
+    Entered,
+    /// A quick key: unless it comes from another of the group's controls; from a link inside
+    /// the fieldset too (Shift+X: "Sandwich Condiments group | All condiments ..." [obs,
+    /// round-aria2, 2005/s1]).
+    NotFromItsControls,
+}
+
 impl FocusFrom {
     fn offset(self, cursor: usize) -> Option<usize> {
         match self {
@@ -1258,6 +1270,28 @@ impl VirtualCursor {
     /// heading, dev box).
     pub fn focus_node_from(&mut self, node_id: usize, from: FocusFrom) -> Option<String> {
         let previous = self.offset;
+        self.focus_said(node_id, from, previous, true)
+    }
+
+    /// Say Current Focus (Insert+Tab) on a page's focus: the control as a focus coming from
+    /// outside says it, its group named wherever the virtual cursor is, "Sandwich Condiments
+    /// group | All condiments check box partially checked"; its usage hint only with `hint`
+    /// (JAWS says it with the virtual cursor off, not in the virtual cursor) [obs,
+    /// round-aria2, 2010/s1, 2012/s1].
+    pub fn say_focus(&mut self, node_id: usize, hint: bool) -> Option<String> {
+        // An offset past the page: inside none of its groups, lists or tables.
+        self.focus_said(node_id, FocusFrom::Outside, usize::MAX, hint)
+    }
+
+    /// The focus on `node_id` said, the virtual cursor moved to it: `previous` is where it
+    /// came from, for the containers it entered.
+    fn focus_said(
+        &mut self,
+        node_id: usize,
+        from: FocusFrom,
+        previous: usize,
+        hint: bool,
+    ) -> Option<String> {
         self.move_to_node_id(node_id);
         let node = self.buffer.node(node_id)?;
         // A focus with nothing of it in the buffer (Google Docs' empty element it types
@@ -1316,7 +1350,7 @@ impl VirtualCursor {
             }
             // Its empty state mark goes with the other states [obs, 738/s3].
             Role::Edit if attr("password") == Some("true") => {
-                let field = self.control_focus_speech(self.offset, previous);
+                let field = self.control_focus_speech(self.offset, previous, GroupNamed::Entered);
                 if self.verbosity.is_on(crate::settings::OutputType::ItemState) {
                     format!("{field}  \u{1d}\u{1e}")
                 } else {
@@ -1327,7 +1361,7 @@ impl VirtualCursor {
             // JAWS says WhatsApp's chats moving through its list (the chat's name, its last
             // message's date and the message; dev box, 2026-10-17).
             Role::TableCell if !name.is_empty() => name.to_owned(),
-            _ => self.control_focus_speech(self.offset, previous),
+            _ => self.control_focus_speech(self.offset, previous, GroupNamed::Entered),
         };
         if speech.trim().is_empty() {
             speech = name.to_owned();
@@ -1345,7 +1379,7 @@ impl VirtualCursor {
                 speech.push_str(&position);
             }
         }
-        if let Some(hint) = self.focus_hint(node) {
+        if let Some(hint) = self.focus_hint(node).filter(|_| hint) {
             speech.push('\n');
             speech.push_str(hint);
         }
@@ -1416,12 +1450,16 @@ impl VirtualCursor {
                 )
             });
         match line {
-            Some(l) if is_control => self.control_focus_speech(l.start_offset, self.offset),
+            Some(l) if is_control => self.control_focus_speech(
+                l.start_offset,
+                self.offset,
+                GroupNamed::NotFromItsControls,
+            ),
             _ => self.current_line(),
         }
     }
 
-    fn control_focus_speech(&self, offset: usize, previous: usize) -> String {
+    fn control_focus_speech(&self, offset: usize, previous: usize, group: GroupNamed) -> String {
         let Some(node) = self
             .buffer
             .line_at_offset(offset)
@@ -1429,15 +1467,23 @@ impl VirtualCursor {
         else {
             return String::new();
         };
-        let mut said = SpeechFormatter::control_focus(node, |node_id| {
+        let previous_group = self
+            .buffer
+            .line_at_offset(previous)
+            .and_then(|l| self.buffer.node(l.node_id))
+            .and_then(|n| n.attributes.get("group_id"))
+            .and_then(|id| id.parse::<usize>().ok());
+        let mut said = SpeechFormatter::control_focus(node, |group_id| match group {
             // The container's own span is the widest one carrying its id (its start and
             // end lines have narrower spans of their own).
-            self.buffer
+            GroupNamed::Entered => self
+                .buffer
                 .spans
                 .iter()
-                .filter(|s| s.node_id == node_id)
+                .filter(|s| s.node_id == group_id)
                 .max_by_key(|s| s.end_offset - s.start_offset)
-                .is_some_and(|s| previous > s.start_offset && previous < s.end_offset)
+                .is_some_and(|s| previous > s.start_offset && previous < s.end_offset),
+            GroupNamed::NotFromItsControls => previous_group == Some(group_id),
         });
         // What the verbosity level leaves out: a field's description at Advanced [obs,
         // 553/s4].
@@ -1544,7 +1590,7 @@ impl VirtualCursor {
         let previous = self.offset;
         self.offset = target;
         self.current_node_id = self.buffer.line_at_offset(target).map(|l| l.node_id);
-        Some(self.control_focus_speech(target, previous))
+        Some(self.control_focus_speech(target, previous, GroupNamed::NotFromItsControls))
     }
 
     /// Heading level keys do not wrap (§12); short messages say it without "this" and the
@@ -2033,7 +2079,7 @@ impl VirtualCursor {
 
     fn control_nav(&mut self, targets: Vec<usize>, forward: bool, none: &str) -> Option<String> {
         self.quick_nav(&targets, forward, none, |c, o, previous| {
-            c.control_focus_speech(o, previous)
+            c.control_focus_speech(o, previous, GroupNamed::NotFromItsControls)
         })
     }
 
