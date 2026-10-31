@@ -1301,6 +1301,8 @@ async fn main() {
                 let headings =
                     okur_platform::actions::document_headings_now(window_title.as_deref());
                 let view = okur_platform::actions::document_view_now(window_title.as_deref());
+                // Word's status bar, for Say Bottom Line of Window.
+                let status_bar = okur_platform::actions::status_bar_now(window_title.as_deref());
                 let paragraphs =
                     okur_platform::actions::document_paragraphs_now(window_title.as_deref());
                 let links = okur_platform::actions::document_links_now(window_title.as_deref());
@@ -1386,6 +1388,7 @@ async fn main() {
                         "t_ms": t_ms,
                         "headings": headings.unwrap_or_default(),
                         "view": view,
+                        "status_bar": status_bar,
                         "paragraphs": paragraphs.unwrap_or_default(),
                         "links": links.unwrap_or_default(),
                         "line_spacing": line_spacing.map(|s| serde_json::json!({

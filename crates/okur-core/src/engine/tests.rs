@@ -9085,3 +9085,46 @@ fn word_revision_keys_with_track_changes() {
     press(&mut engine, true, false);
     assert_eq!(speech.take(), vec!["No Revision".to_owned()]);
 }
+
+/// Insert+PageDown in Word reads its status bar, asked for and said item by item [obs,
+/// 1113/s9]; with none read, the document's last line, as elsewhere.
+#[test]
+fn word_status_bar_is_the_bottom_line() {
+    let (mut engine, speech) = word_document(
+        "Library Hours\rIt is open every day.\r",
+        0,
+        crate::event::LineStructure {
+            line: (0, 14),
+            heading: Some(1),
+            ..Default::default()
+        },
+    );
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let press = |engine: &mut ScreenReaderEngine| {
+        let mut key = KeyEvent::new(Key::PageDown, Modifiers::none(), true);
+        key.modifiers.insert = true;
+        engine.handle_key_event(&key);
+    };
+    speech.take();
+    press(&mut engine);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "status bar"));
+    engine.handle_accessibility_event(&AccessibilityEvent::StatusBar(vec![
+        "Page Number Page 1 of 1".into(),
+        "Word Count 7 words".into(),
+        "Print Layout".into(),
+    ]));
+    assert_eq!(
+        speech.take(),
+        vec!["Page Number Page 1 of 1\nWord Count 7 words\nPrint Layout".to_owned()]
+    );
+    press(&mut engine);
+    engine.handle_accessibility_event(&AccessibilityEvent::StatusBar(Vec::new()));
+    assert_eq!(speech.take(), vec!["It is open every day.".to_owned()]);
+    // Not asked for, nothing said.
+    engine.handle_accessibility_event(&AccessibilityEvent::StatusBar(vec!["Zoom 100%".into()]));
+    assert!(speech.take().is_empty());
+}

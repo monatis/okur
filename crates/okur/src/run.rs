@@ -333,6 +333,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::DocumentNotes(..)) => "document notes",
         Some(AccessibilityEvent::DocumentParagraphs(_)) => "document paragraphs",
         Some(AccessibilityEvent::DocumentView(_)) => "document view",
+        Some(AccessibilityEvent::StatusBar(_)) => "status bar",
         Some(AccessibilityEvent::DocumentLoaded { .. }) => "document loaded",
         Some(AccessibilityEvent::Ui(_)) => "okur window",
         Some(AccessibilityEvent::PageChanged) => "page changed",

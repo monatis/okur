@@ -40,7 +40,7 @@ pub use reader::{
     move_caret_in_edit, move_to_cell, move_to_paragraph, read_focused, read_focused_outside_page,
     visible_text, with_paragraph_alignment, word_document_fields, word_document_headings,
     word_document_links, word_document_notes, word_document_paragraphs, word_key_state,
-    word_line_spacing, word_select_field, word_select_note, word_view,
+    word_line_spacing, word_select_field, word_select_note, word_status_bar, word_view,
 };
 
 #[cfg(windows)]
@@ -1601,6 +1601,75 @@ mod reader {
                     .then(|| button.CurrentName().ok().map(|n| n.to_string()))
                     .flatten()
             })
+        }
+    }
+
+    /// The items of the status bar of Word's window `window`, or the window in front, as JAWS
+    /// reads them: each button by its name ("Page Number Page 3 of 3"), a view's button only
+    /// where it is on ("Print Layout"), not the zoom's slider or the size box [obs, 1113/s9].
+    /// Found by its windows (the bottom dock's "Status Bar" command bar), whose own UI
+    /// Automation tree is small. `None` where Word's window has none.
+    pub fn word_status_bar(
+        uia: &IUIAutomation,
+        window: Option<windows::Win32::Foundation::HWND>,
+    ) -> Option<Vec<String>> {
+        use windows::core::w;
+        use windows::Win32::System::Variant::VARIANT;
+        use windows::Win32::UI::Accessibility::{
+            IUIAutomationTogglePattern, ToggleState_On, TreeScope_Children, TreeScope_Descendants,
+            UIA_ControlTypePropertyId, UIA_SliderControlTypeId, UIA_StatusBarControlTypeId,
+            UIA_ThumbControlTypeId, UIA_TogglePatternId,
+        };
+        use windows::Win32::UI::WindowsAndMessaging::{FindWindowExW, GetAncestor, GA_ROOT};
+        /// Word's status bar's view buttons (Read Mode, Print Layout, Web Layout).
+        const VIEW_BUTTON_CLASS: &str = "NetUIStickyButton";
+        // SAFETY: plain Win32 and UIA client calls on valid handles and objects.
+        unsafe {
+            let window = window.unwrap_or_else(|| GetForegroundWindow());
+            let root = GetAncestor(window, GA_ROOT);
+            let dock = FindWindowExW(
+                Some(root),
+                None,
+                w!("MsoCommandBarDock"),
+                w!("MsoDockBottom"),
+            )
+            .ok()?;
+            let bar =
+                FindWindowExW(Some(dock), None, w!("MsoCommandBar"), w!("Status Bar")).ok()?;
+            let condition = uia
+                .CreatePropertyCondition(
+                    UIA_ControlTypePropertyId,
+                    &VARIANT::from(UIA_StatusBarControlTypeId.0),
+                )
+                .ok()?;
+            let status = uia
+                .ElementFromHandle(bar)
+                .ok()?
+                .FindFirst(TreeScope_Descendants, &condition)
+                .ok()?;
+            let items = status
+                .FindAll(TreeScope_Children, &uia.CreateTrueCondition().ok()?)
+                .ok()?;
+            Some(
+                (0..items.Length().ok()?)
+                    .filter_map(|i| {
+                        let item = items.GetElement(i).ok()?;
+                        let kind = item.CurrentControlType().ok()?;
+                        if kind == UIA_SliderControlTypeId || kind == UIA_ThumbControlTypeId {
+                            return None;
+                        }
+                        if item.CurrentClassName().ok()? == VIEW_BUTTON_CLASS {
+                            let toggle: IUIAutomationTogglePattern =
+                                item.GetCurrentPatternAs(UIA_TogglePatternId).ok()?;
+                            if toggle.CurrentToggleState().ok()? != ToggleState_On {
+                                return None;
+                            }
+                        }
+                        let name = item.CurrentName().ok()?.to_string();
+                        (!name.trim().is_empty()).then_some(name)
+                    })
+                    .collect(),
+            )
         }
     }
 

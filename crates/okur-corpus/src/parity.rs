@@ -1244,6 +1244,10 @@ struct ScreenSnapshot {
     /// The view Word showed its document in, saved beside the headings.
     #[serde(default)]
     view: Option<String>,
+    /// Word's status bar's items, saved beside the headings (none before 1113's second
+    /// recording), for Say Bottom Line of Window.
+    #[serde(default)]
+    status_bar: Option<Vec<String>>,
     /// Word's document's paragraphs, saved beside the headings (none before 1038), for Say All.
     #[serde(default)]
     paragraphs: Vec<okur_core::DocumentParagraph>,
@@ -1363,6 +1367,7 @@ struct ScreenReads {
     files: usize,
     headings: usize,
     views: usize,
+    status_bars: usize,
     paragraphs: usize,
     links: usize,
     spacings: usize,
@@ -1547,6 +1552,16 @@ impl ScreenReads {
                         .unwrap_or_default(),
                 ));
             }
+        }
+        // Word's status bar, always answered: none where the step saved none, and Say Bottom
+        // Line of Window then reads the document's last line.
+        while self.status_bars < count("status bar") {
+            self.status_bars += 1;
+            deliver(okur_core::AccessibilityEvent::StatusBar(
+                snapshot
+                    .and_then(|s| s.status_bar.clone())
+                    .unwrap_or_default(),
+            ));
         }
         let Some(snapshot) = snapshot else {
             return;

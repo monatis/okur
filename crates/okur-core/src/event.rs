@@ -1148,6 +1148,11 @@ pub enum AccessibilityEvent {
     /// ([`crate::actions::ApplicationActions::read_document_view`]); `None` when it could not
     /// be read.
     DocumentView(Option<String>),
+    /// The items of the status bar of Word's window in front, as JAWS reads them: each button
+    /// by its name, the view's only where it is on, none of the zoom's slider
+    /// ([`crate::actions::ApplicationActions::read_status_bar`]); none where it could not be
+    /// read.
+    StatusBar(Vec<String>),
     /// What the user did to one of Okur's own windows (`okur-ui`).
     Ui(crate::ui::FromUi),
     /// The page in front changed outside its live regions: a web application added or

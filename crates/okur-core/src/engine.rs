@@ -343,6 +343,8 @@ pub struct ScreenReaderEngine {
     document_notes_asked: Option<crate::event::NoteKind>,
     /// The focused document's notes were asked for the Virtual Viewer, and are awaited.
     notes_viewer_asked: Option<crate::event::NoteKind>,
+    /// Say Bottom Line of Window asked for Word's status bar, and awaits it.
+    status_bar_asked: bool,
     /// A key for Word's revisions asked whether the document tracks its changes, which it
     /// needs, and awaits the answer.
     revisions_asked: Option<crate::apps::windows::word::RevisionKey>,
@@ -640,6 +642,7 @@ impl ScreenReaderEngine {
             document_notes_asked: None,
             notes_viewer_asked: None,
             revisions_asked: None,
+            status_bar_asked: false,
             say_all_paragraphs_asked: false,
             document_view_title: None,
             document_view_by_key: None,
@@ -1651,6 +1654,7 @@ impl ScreenReaderEngine {
                 Some(said)
             }
             AccessibilityEvent::DocumentFields(fields) => self.document_fields(fields),
+            AccessibilityEvent::StatusBar(items) => self.word_status_bar(items),
             AccessibilityEvent::DocumentNotes(kind, notes)
                 if self.notes_viewer_asked == Some(*kind) =>
             {
@@ -3102,6 +3106,40 @@ impl ScreenReaderEngine {
             },
             _ => None,
         }
+    }
+
+    /// Say Bottom Line of Window in Word's document: its status bar is asked for. False
+    /// outside such a document.
+    pub(crate) fn ask_word_status_bar(&mut self) -> bool {
+        if !self.in_word_document()
+            || !self
+                .actions
+                .as_ref()
+                .is_some_and(|actions| actions.read_status_bar())
+        {
+            return false;
+        }
+        self.status_bar_asked = true;
+        true
+    }
+
+    /// Word's status bar came, asked by Say Bottom Line of Window: its items, "Page Number
+    /// Page 3 of 3 | Word Count 26 words | ... | Print Layout | Zoom Out | Zoom In | Zoom 100%"
+    /// [obs, 1113/s9]; with none read, the document's last line, as elsewhere.
+    fn word_status_bar(&mut self, items: &[String]) -> Option<String> {
+        if !std::mem::take(&mut self.status_bar_asked) {
+            return None;
+        }
+        let said = if items.is_empty() {
+            crate::editing::text_lines(&self.last_text.as_ref()?.text)
+                .into_iter()
+                .rev()
+                .find(|line| !line.trim().is_empty())?
+        } else {
+            items.join("\n")
+        };
+        self.speech.speak(&said, true);
+        Some(said)
     }
 
     /// Whether the keys go to a document whose structure Word's object model reads.

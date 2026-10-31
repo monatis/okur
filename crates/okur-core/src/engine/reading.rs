@@ -122,6 +122,10 @@ impl ScreenReaderEngine {
             // "100%" [obs, 522/s20]; "the bottom line is usually the status bar", JAWS 2025
             // help); else in an editor's page its text's last line, "teh quick brown fxo"
             // [obs, 510/s13, 504/s22]. Other windows wait for their screen lines.
+            // Word's status bar, asked for and said when it comes [obs, 1113/s9].
+            Command::SayBottomLineOfWindow if native && self.ask_word_status_bar() => {
+                return Some(None);
+            }
             Command::SayBottomLineOfWindow
                 if native
                     && self
