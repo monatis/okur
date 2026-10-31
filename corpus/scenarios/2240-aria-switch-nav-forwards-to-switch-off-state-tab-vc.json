@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleSwitch",
+        "phrase": "convey role 'switch'",
+        "priority": "1"
+      },
+      {
+        "id": "nameNotifications",
+        "phrase": "convey name 'Notifications'",
+        "priority": "1"
+      },
+      {
+        "id": "stateOff",
+        "phrase": "convey state 'off'",
+        "priority": "1"
+      }
+    ],
+    "command": "tab",
+    "instructions": "Starting at the 'Navigate forwards from here' link, navigate to the 'Notifications' switch.",
+    "plan": "apg/switch",
+    "presentation_number": "1.3",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToSwitchOffState"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/switch/switch.setFocusBeforeSwitch.html",
+  "id": "2240-aria-switch-nav-forwards-to-switch-off-state-tab-vc",
+  "name": "ARIA-AT, Switch Example: Navigate forwards to a switch that is off; Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
