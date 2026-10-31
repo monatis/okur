@@ -16,8 +16,10 @@ heavy job at a time. old-pc always has a round queued.
 Imported: checkbox-tri-state, disclosure-faq, radiogroup-roving-tabindex, accordion, checkbox,
 toggle-button, switch, switch-button, switch-checkbox, command-button, the three links
 ([`../handoff/2026-10-31-aria-at-first-plans.md`](../handoff/2026-10-31-aria-at-first-plans.md)).
-Alert records again in round-aria12b with the tracer that reads a page's alert; §2's plans are
-queued as round-aria16 to aria29.
+Alert recorded again in round-aria12b and imported, 6 of 6 steps matching once replay and the
+live reader took Chromium's alert event (`db2d52aa`). §2's plans are queued as round-aria16 to
+aria29, §3's eleven as round-aria30 to aria40 (ids 2859-3153; menubar-editor has no JAWS
+commands).
 
 ## 1. The plans recording now
 

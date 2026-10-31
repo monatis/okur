@@ -122,10 +122,14 @@ fn chords(command: &str) -> Result<Vec<String>, String> {
 /// "navForwardsToMixedCheckbox" as "nav-forwards-to-mixed-checkbox".
 fn kebab(name: &str) -> String {
     let mut out = String::new();
+    let mut previous = ' ';
     for c in name.chars() {
-        if c.is_ascii_uppercase() && !out.is_empty() {
+        // A capital after a small letter starts a word ("navForwards"); one after another
+        // capital continues it (the first format's "SHIFT_E").
+        if c.is_ascii_uppercase() && (previous.is_ascii_lowercase() || previous.is_ascii_digit()) {
             out.push('-');
         }
+        previous = c;
         if c.is_ascii_alphanumeric() {
             out.push(c.to_ascii_lowercase());
         } else if !out.ends_with('-') {
@@ -577,6 +581,8 @@ mod tests {
             "nav-forwards-to-mixed-checkbox"
         );
         assert_eq!(kebab("ins up"), "ins-up");
+        assert_eq!(kebab("SHIFT E"), "shift-e");
+        assert_eq!(kebab("DOWN DOWN"), "down-down");
     }
 
     /// A setup script's page is made as ARIA-AT's build makes it: the script in the head, the
