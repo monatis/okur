@@ -1,0 +1,798 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Alert Example - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "00366eab68f31e5e4ba4d39dd6c3c925933cc24d9c676c9260ece8139a7fdbe5",
+    "captured_at_unix_ms": 1793471081919,
+    "node_count": 22,
+    "capture_ms": 165
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Alert Example",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/alert/alert.setFocusOnButton.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -37625,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -37645,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          },
+          {
+            "start": 1,
+            "end": 4,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Alert Example",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -37615,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Alert Example",
+            "lines": [
+              [
+                0,
+                13
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 13,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Alert Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -37617,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Alert Example",
+                "lines": [
+                  [
+                    0,
+                    13
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 13,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "24pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -37647,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "The below example demonstrates the ￼. Activating the “Trigger Alert” button causes a message to be inserted into the example alert element.",
+            "lines": [
+              [
+                0,
+                139
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 35,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 35,
+                "end": 36,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 36,
+                "end": 139,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "The below example demonstrates the ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -37650,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "The below example demonstrates the ",
+                "lines": [
+                  [
+                    0,
+                    35
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 35,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "design pattern for alert",
+                "value": "https://w3c.github.io/#alert",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -37619,
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "design pattern for alert",
+                "lines": [
+                  [
+                    0,
+                    24
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 24,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "design pattern for alert",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -37649,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "design pattern for alert",
+                    "lines": [
+                      [
+                        0,
+                        24
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 24,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": ". Activating the ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -37642,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": ". Activating the ",
+                "lines": [
+                  [
+                    0,
+                    17
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 17,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "“",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -37638,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "“",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Trigger Alert",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -37631,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Trigger Alert",
+                "lines": [
+                  [
+                    0,
+                    13
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 13,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "”",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -37632,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "”",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": " button causes a message to be inserted into the example alert element.",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -37616,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": " button causes a message to be inserted into the example alert element.",
+                "lines": [
+                  [
+                    0,
+                    71
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 71,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -37628,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "18pt",
+                  "font-weight": "bold"
+                }
+              },
+              {
+                "start": 1,
+                "end": 4,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -37652,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Example",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "18pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelFor": [
+                    -37651,
+                    -37644
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -37646,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Example",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "18pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "Start of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -37651,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -37652
+                  ]
+                }
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -37622,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(240,240,240)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 43,
+                    "ia2_role": 43,
+                    "name": "Trigger Alert",
+                    "msaa_states": 1048580,
+                    "ia2_states": 1024,
+                    "unique_id": -37624,
+                    "attributes": {
+                      "display": "inline-block",
+                      "id": "alert-trigger",
+                      "name-from": "contents",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "text": "Trigger Alert",
+                    "lines": [
+                      [
+                        0,
+                        13
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 13,
+                        "attributes": {
+                          "background-color": "rgb(240,240,240)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "10pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "End of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -37644,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -37652
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -37620,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(250,250,250)",
+                  "color": "rgb(5,5,5)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1,
+                "ia2_states": 1024,
+                "unique_id": -37623,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

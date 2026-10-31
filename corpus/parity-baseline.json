@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 10129,
-  "total_steps": 10696,
+  "matched_steps": 10135,
+  "total_steps": 10702,
   "accepted_divergences": 288,
   "errors": [],
   "steps": {
@@ -2816,6 +2816,12 @@
     "2344-aria-command-button-req-info-about-button-ins-tab-pc/s2": "match",
     "2345-aria-command-button-req-info-about-button-ins-up-pc/s1": "match",
     "2345-aria-command-button-req-info-about-button-ins-up-pc/s2": "match",
+    "2346-aria-alert-trigger-alert-space-vc/s1": "match",
+    "2347-aria-alert-trigger-alert-enter-vc/s1": "match",
+    "2348-aria-alert-trigger-alert-space-pc/s1": "match",
+    "2348-aria-alert-trigger-alert-space-pc/s2": "match",
+    "2349-aria-alert-trigger-alert-enter-pc/s1": "match",
+    "2349-aria-alert-trigger-alert-enter-pc/s2": "match",
     "235-web-list-check-boxes/s1": "match",
     "235-web-list-check-boxes/s2": "match",
     "235-web-list-check-boxes/s3": "match",

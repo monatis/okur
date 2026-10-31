@@ -1,0 +1,50 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleAlert",
+        "phrase": "convey role 'alert'",
+        "priority": "3"
+      },
+      {
+        "id": "textHello",
+        "phrase": "convey text 'Hello'",
+        "priority": "1"
+      }
+    ],
+    "command": "enter",
+    "instructions": "Starting at the 'Trigger Alert' button, activate the button to trigger the alert.",
+    "plan": "apg/alert",
+    "presentation_number": "2.1",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "triggerAlert"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/alert/alert.setFocusOnButton.html",
+  "id": "2349-aria-alert-trigger-alert-enter-pc",
+  "name": "ARIA-AT, Alert Example: Trigger an alert; Enter in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Enter",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

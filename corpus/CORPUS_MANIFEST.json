@@ -45,6 +45,22 @@
       "sha256": "91c470a0d52a50fa43f1400cc1f5bc9508ba26a222d97170d8aae0f3a0893788",
       "size_bytes": 1414
     },
+    "aria-at/alert/alert.html": {
+      "sha256": "1c8c50fdbbaa64e4bbf31908b6a4cbe603a709dd95c6168621f116030c42296a",
+      "size_bytes": 1329
+    },
+    "aria-at/alert/alert.setFocusOnButton.html": {
+      "sha256": "00366eab68f31e5e4ba4d39dd6c3c925933cc24d9c676c9260ece8139a7fdbe5",
+      "size_bytes": 2133
+    },
+    "aria-at/alert/css/alert.css": {
+      "sha256": "d5b2069fabb29a70d3443f80175112c7d30503696845c47335b4ca15d2d6d139",
+      "size_bytes": 177
+    },
+    "aria-at/alert/js/alert.js": {
+      "sha256": "7fd434ceeb3ac08be11eac7d962d36f52ba3cf45a9ee7231e50171757db5d6e8",
+      "size_bytes": 641
+    },
     "aria-at/checkbox-tri-state/checkbox-mixed.html": {
       "sha256": "b16e45a11d08b6701a8dba146f32f7176fbc9be39b64c91b8d66dca0f95ead63",
       "size_bytes": 3085
@@ -8256,6 +8272,62 @@
       "fixture": "aria-at/command-button/button.setFocusOnButton.html",
       "evidence": {
         "sha256": "1e10dcee95c1ae92b84c24d8b30af40706929f1efe04b8ce52dff3f070cfb9a3",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2346-aria-alert-trigger-alert-space-vc",
+      "fixture": "aria-at/alert/alert.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "181088dc2d38344dc0542742f984c3dd1cb7bd896ee453de2c5bd62c5eaa898b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2347-aria-alert-trigger-alert-enter-vc",
+      "fixture": "aria-at/alert/alert.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "d56484aef659159cb833077aba1a7bf8db15b6f36d8f0f16459e20993a54dae1",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2348-aria-alert-trigger-alert-space-pc",
+      "fixture": "aria-at/alert/alert.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "518a841c9e94f9e245dfc4c956792378f8d38cf4c89bbd1a0debc3b8e835b2e5",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2349-aria-alert-trigger-alert-enter-pc",
+      "fixture": "aria-at/alert/alert.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "ab1a07f31958993baec33cf4307e89f047342fe6265dd844249ed62da48c8fe9",
         "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
@@ -16625,10 +16697,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1128,
-    "scenarios_with_evidence": 1128,
-    "total_trials": 3390,
-    "successful_trials": 3373,
-    "deterministic_scenarios": 856
+    "scenarios": 1132,
+    "scenarios_with_evidence": 1132,
+    "total_trials": 3402,
+    "successful_trials": 3385,
+    "deterministic_scenarios": 860
   }
 }
