@@ -1,0 +1,1603 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Actions Menu Button Example Using element.focus() - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "20a59eabbf037114deadf1255bd221f39e161300de0da447122639e996ed0c6c",
+    "captured_at_unix_ms": 1793484865607,
+    "node_count": 41,
+    "capture_ms": 275
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Actions Menu Button Example Using element.focus()",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToLastItem.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -36946,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Arial",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -36916,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,90,156)",
+              "font-family": "Arial",
+              "font-size": "20.5pt"
+            }
+          },
+          {
+            "start": 1,
+            "end": 4,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Arial",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Actions Menu Button Example Using element.focus()",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -36957,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Actions Menu Button Example Using ￼",
+            "lines": [
+              [
+                0,
+                35
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 34,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "20.5pt"
+                }
+              },
+              {
+                "start": 34,
+                "end": 35,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Consolas",
+                  "font-size": "18.5pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Actions Menu Button Example Using ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -36966,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Actions Menu Button Example Using ",
+                "lines": [
+                  [
+                    0,
+                    34
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 34,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "20.5pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 42,
+                "ia2_role": 1065,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -36948,
+                "attributes": {
+                  "display": "inline",
+                  "tag": "code",
+                  "text-align": "left"
+                },
+                "text": "element.focus()",
+                "lines": [
+                  [
+                    0,
+                    15
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 15,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Consolas",
+                      "font-size": "18.5pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "element.focus()",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -36951,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "element.focus()",
+                    "lines": [
+                      [
+                        0,
+                        15
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 15,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Consolas",
+                          "font-size": "18.5pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -36947,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -36907,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "This example demonstrates how the ￼ can be used to create a button that opens an actions menu. In this example, choosing an action from the menu will cause the chosen action to be displayed in the “Last Action” edit box.",
+                "lines": [
+                  [
+                    0,
+                    89
+                  ],
+                  [
+                    89,
+                    197
+                  ],
+                  [
+                    197,
+                    220
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 34,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 34,
+                    "end": 35,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  },
+                  {
+                    "start": 35,
+                    "end": 220,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "This example demonstrates how the ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -36939,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "This example demonstrates how the ",
+                    "lines": [
+                      [
+                        0,
+                        34
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 34,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Menu Button Pattern",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-pattern.html",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -36964,
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Menu Button Pattern",
+                    "lines": [
+                      [
+                        0,
+                        19
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 19,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Menu Button Pattern",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -36949,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Menu Button Pattern",
+                        "lines": [
+                          [
+                            0,
+                            19
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 19,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " can be used to create a button that opens an actions menu. In this example, choosing an action from the menu will cause the chosen action to be displayed in the ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -36926,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " can be used to create a button that opens an actions menu. In this example, choosing an action from the menu will cause the chosen action to be displayed in the ",
+                    "lines": [
+                      [
+                        0,
+                        54
+                      ],
+                      [
+                        54,
+                        162
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 162,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "“",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -36918,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "“",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Last Action",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -36933,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Last Action",
+                    "lines": [
+                      [
+                        0,
+                        11
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 11,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "”",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -36943,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "”",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " edit box.",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -36908,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " edit box.",
+                    "lines": [
+                      [
+                        0,
+                        10
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 10,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -36921,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "17pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 2,
+                "end": 3,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(3,69,117)",
+                  "font-family": "Arial",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 3,
+                "end": 5,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -36906,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Example",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "17pt"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelFor": [
+                    -36934,
+                    -36940
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -36904,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Example",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "17pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "Start of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -36934,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -36906
+                  ]
+                }
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "Navigate forwards from here",
+                "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToLastItem.html#beforelink",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -36929,
+                "attributes": {
+                  "display": "inline",
+                  "id": "beforelink",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "Navigate forwards from here",
+                "lines": [
+                  [
+                    0,
+                    27
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 27,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Navigate forwards from here",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -36913,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Navigate forwards from here",
+                    "lines": [
+                      [
+                        0,
+                        27
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 27,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -36919,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 1,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  },
+                  {
+                    "start": 2,
+                    "end": 3,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -36954,
+                    "attributes": {
+                      "class": "menu-button-actions focus",
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "text": "￼￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(238,238,238)",
+                          "color": "rgb(34,34,34)",
+                          "font-family": "Arial",
+                          "font-size": "11pt"
+                        }
+                      },
+                      {
+                        "start": 1,
+                        "end": 2,
+                        "attributes": {
+                          "background-color": "rgb(238,238,238)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 57,
+                        "ia2_role": 57,
+                        "name": "Actions ",
+                        "msaa_states": 1074790912,
+                        "ia2_states": 1024,
+                        "unique_id": -36953,
+                        "attributes": {
+                          "display": "inline-block",
+                          "haspopup": "menu",
+                          "id": "menubutton1",
+                          "name-from": "contents",
+                          "setsize": "4",
+                          "tag": "button",
+                          "text-align": "center"
+                        },
+                        "group_position": [
+                          0,
+                          4,
+                          0
+                        ],
+                        "text": "Actions ￼",
+                        "lines": [
+                          [
+                            0,
+                            9
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 9,
+                            "attributes": {
+                              "background-color": "rgb(238,238,238)",
+                              "color": "rgb(34,34,34)",
+                              "font-family": "Arial",
+                              "font-size": "11pt"
+                            }
+                          }
+                        ],
+                        "relations": {
+                          "controllerFor": [
+                            -36961
+                          ],
+                          "labelFor": [
+                            -36961
+                          ]
+                        },
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Actions ",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -36962,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Actions ",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(238,238,238)",
+                                  "color": "rgb(34,34,34)",
+                                  "font-family": "Arial",
+                                  "font-size": "11pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 40,
+                            "ia2_role": 40,
+                            "msaa_states": 64,
+                            "ia2_states": 1024,
+                            "unique_id": -36936,
+                            "attributes": {
+                              "class": "down",
+                              "display": "inline",
+                              "tag": "svg",
+                              "text-align": "center"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 11,
+                        "ia2_role": 11,
+                        "name": "Actions ",
+                        "msaa_states": 0,
+                        "ia2_states": 132096,
+                        "unique_id": -36961,
+                        "attributes": {
+                          "display": "block",
+                          "explicit-name": "true",
+                          "id": "menu1",
+                          "name-from": "related-element",
+                          "setsize": "4",
+                          "tag": "ul",
+                          "text-align": "left",
+                          "xml-roles": "menu"
+                        },
+                        "group_position": [
+                          0,
+                          4,
+                          0
+                        ],
+                        "text": "￼￼￼￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            2
+                          ],
+                          [
+                            2,
+                            3
+                          ],
+                          [
+                            3,
+                            4
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 3,
+                            "attributes": {
+                              "background-color": "rgb(238,238,238)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          },
+                          {
+                            "start": 3,
+                            "end": 4,
+                            "attributes": {
+                              "background-color": "rgb(3,69,117)",
+                              "color": "rgb(255,255,255)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "relations": {
+                          "controlledBy": [
+                            -36953
+                          ],
+                          "labelledBy": [
+                            -36953
+                          ]
+                        },
+                        "children": [
+                          {
+                            "msaa_role": 12,
+                            "ia2_role": 12,
+                            "name": "Action 1",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -36972,
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "posinset": "1",
+                              "setsize": "4",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "menuitem"
+                            },
+                            "group_position": [
+                              0,
+                              4,
+                              1
+                            ],
+                            "text": "Action 1",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(238,238,238)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 12,
+                            "ia2_role": 12,
+                            "name": "Action 2",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -36973,
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "posinset": "2",
+                              "setsize": "4",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "menuitem"
+                            },
+                            "group_position": [
+                              0,
+                              4,
+                              2
+                            ],
+                            "text": "Action 2",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(238,238,238)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 12,
+                            "ia2_role": 12,
+                            "name": "Action 3",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -36971,
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "posinset": "3",
+                              "setsize": "4",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "menuitem"
+                            },
+                            "group_position": [
+                              0,
+                              4,
+                              3
+                            ],
+                            "text": "Action 3",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(238,238,238)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 12,
+                            "ia2_role": 12,
+                            "name": "Action 4",
+                            "msaa_states": 1048580,
+                            "ia2_states": 1024,
+                            "unique_id": -36970,
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "posinset": "4",
+                              "setsize": "4",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "menuitem"
+                            },
+                            "group_position": [
+                              0,
+                              4,
+                              4
+                            ],
+                            "text": "Action 4",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(3,69,117)",
+                                  "color": "rgb(255,255,255)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Navigate backwards from here",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToLastItem.html#afterlink",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -36927,
+                    "attributes": {
+                      "display": "inline",
+                      "id": "afterlink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Navigate backwards from here",
+                    "lines": [
+                      [
+                        0,
+                        28
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 28,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Navigate backwards from here",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -36958,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Navigate backwards from here",
+                        "lines": [
+                          [
+                            0,
+                            28
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 28,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1054,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -36923,
+                    "attributes": {
+                      "display": "block",
+                      "tag": "p",
+                      "text-align": "left"
+                    },
+                    "text": "￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 42,
+                        "ia2_role": 1049,
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -36928,
+                        "attributes": {
+                          "display": "inline",
+                          "tag": "label",
+                          "text-align": "left"
+                        },
+                        "text": "Last Action: ￼",
+                        "lines": [
+                          [
+                            0,
+                            14
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 13,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          },
+                          {
+                            "start": 13,
+                            "end": 14,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "10pt"
+                            }
+                          }
+                        ],
+                        "relations": {
+                          "labelFor": [
+                            -36945
+                          ]
+                        },
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Last Action: ",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -36965,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Last Action: ",
+                            "lines": [
+                              [
+                                0,
+                                13
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 13,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 42,
+                            "ia2_role": 42,
+                            "name": "Last Action:",
+                            "value": "none",
+                            "msaa_states": 1048576,
+                            "ia2_states": 13320,
+                            "unique_id": -36945,
+                            "attributes": {
+                              "class": "action",
+                              "display": "inline-block",
+                              "explicit-name": "true",
+                              "id": "action_output",
+                              "name-from": "related-element",
+                              "tag": "input",
+                              "text-align": "left",
+                              "text-input-type": "text",
+                              "text-model": "a1"
+                            },
+                            "text": "none",
+                            "lines": [
+                              [
+                                0,
+                                4
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 4,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "10pt"
+                                }
+                              }
+                            ],
+                            "relations": {
+                              "labelledBy": [
+                                -36928
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "End of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -36940,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -36906
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -36944,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(250,250,250)",
+                  "color": "rgb(5,5,5)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1,
+                "ia2_states": 1024,
+                "unique_id": -36967,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

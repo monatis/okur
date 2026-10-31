@@ -317,6 +317,50 @@
       "sha256": "2762c430b66fa1189e8956b3416d485cd347d27fa4cc809cbf8706a14a00edec",
       "size_bytes": 2123
     },
+    "aria-at/menu-button-actions/css/menu-button-actions.css": {
+      "sha256": "b91a74831611805d5848e8bf58c3026261ef6d31a4290c83f23051d0fb27da16",
+      "size_bytes": 1600
+    },
+    "aria-at/menu-button-actions/css/menu-button-links.css": {
+      "sha256": "6391834a48d6cfe8dbcb2fc359f074684507f6ca0ade8b79234f43d2917e0ca5",
+      "size_bytes": 1498
+    },
+    "aria-at/menu-button-actions/js/menu-button-actions-active-descendant.js": {
+      "sha256": "7dbf1745970bec2e9282f466bfd6bb804ff6f340f3255b127da6305831bea5b4",
+      "size_bytes": 8199
+    },
+    "aria-at/menu-button-actions/js/menu-button-actions.js": {
+      "sha256": "05e8a97bba94bb33a3ade0751b319f7194b110ba682f7f4fcd29a95a6253c995",
+      "size_bytes": 7880
+    },
+    "aria-at/menu-button-actions/js/menu-button-links.js": {
+      "sha256": "312abde6d7d705b8b485532e9221bf31cfb2dae6b20bac6adff4f47aacc3a17f",
+      "size_bytes": 7330
+    },
+    "aria-at/menu-button-actions/menu-button-actions.html": {
+      "sha256": "45b6b234d13c92a33d176d991a4858be860c2e32a0bd1abcf32e329455be9bf0",
+      "size_bytes": 2704
+    },
+    "aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToFirstItem.html": {
+      "sha256": "88fb4cd6f14ea4d5d8249782628915bc78ca580213fa723edf9244de37cb3992",
+      "size_bytes": 3537
+    },
+    "aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToLastItem.html": {
+      "sha256": "20a59eabbf037114deadf1255bd221f39e161300de0da447122639e996ed0c6c",
+      "size_bytes": 3535
+    },
+    "aria-at/menu-button-actions/menu-button-actions.setFocusAfterMenuButton.html": {
+      "sha256": "bb08ef131dd8e61e12b16a5b951c3ff2da2439bf67cea3ca7f4cbbcf245ce2b6",
+      "size_bytes": 3448
+    },
+    "aria-at/menu-button-actions/menu-button-actions.setFocusBeforeMenuButton.html": {
+      "sha256": "bc919fa1746f0347f7beada48c6b230d53ddd99b0d98eb805e3d070d82518ef1",
+      "size_bytes": 3451
+    },
+    "aria-at/menu-button-actions/menu-button-actions.setFocusOnMenuButton.html": {
+      "sha256": "d22a6762fae0888c3560520d9c12a631facb8b19167d6358ac95f126aa105abd",
+      "size_bytes": 3434
+    },
     "aria-at/radiogroup-aria-activedescendant/css/radio.css": {
       "sha256": "5652a091b391cd1c4c3356a5b19a4686bda175c688f4924d4d2b2aa13bdbdff4",
       "size_bytes": 1219
@@ -12086,6 +12130,90 @@
       }
     },
     {
+      "scenario_id": "2574-aria-menu-button-actions-nav-forwards-to-menu-button-b-vc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusBeforeMenuButton.html",
+      "evidence": {
+        "sha256": "ca76c2d0e4e7f9b3d8018f0331db19d06355539f7c3517c24afd7a58e87f6673",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2575-aria-menu-button-actions-nav-forwards-to-menu-button-f-vc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusBeforeMenuButton.html",
+      "evidence": {
+        "sha256": "91e6b043f07a4568aa49e6ab25cb3a6c5801441735982b51814e23a2364080fb",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2576-aria-menu-button-actions-nav-forwards-to-menu-button-tab-vc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusBeforeMenuButton.html",
+      "evidence": {
+        "sha256": "525be5d3171528b8a84054eaffa609cfe94e5cd11b534a1876097ec64f945285",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2577-aria-menu-button-actions-nav-forwards-to-menu-button-down-vc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusBeforeMenuButton.html",
+      "evidence": {
+        "sha256": "4cc01665faa14182ca4173d8cafd8ad4b3209f39c18516d092bbeff65027005b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2578-aria-menu-button-actions-nav-back-to-menu-button-shift-b-vc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusAfterMenuButton.html",
+      "evidence": {
+        "sha256": "54feafacc32c26272a25e3e7fdd9ded6ea37f0f5129f9788d1d6738d36437bed",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2579-aria-menu-button-actions-nav-back-to-menu-button-shift-f-vc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusAfterMenuButton.html",
+      "evidence": {
+        "sha256": "f9d7a1942d15e86a2280b60d7c3d288923c010fd6d486de4be6efed4abed2b9c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "258-web-list-glance-highlights-enter",
       "fixture": "news-article.html",
       "evidence": {
@@ -12100,11 +12228,291 @@
       }
     },
     {
+      "scenario_id": "2580-aria-menu-button-actions-nav-back-to-menu-button-shift-tab-vc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusAfterMenuButton.html",
+      "evidence": {
+        "sha256": "3b04e411f8042fb6d56c47586533a7e54a765468323a67299eb5630bb9ef6d54",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2581-aria-menu-button-actions-nav-back-to-menu-button-up-vc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusAfterMenuButton.html",
+      "evidence": {
+        "sha256": "88c21570c92a735638526df4fe61b7accbea06e9ead032dc7f2b31186f491144",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2582-aria-menu-button-actions-nav-forwards-to-menu-button-tab-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusBeforeMenuButton.html",
+      "evidence": {
+        "sha256": "f8cd9a586a4d2f15025c64e6b7cba9a82cc3c7d41eef66bf7508843350c9d673",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2583-aria-menu-button-actions-nav-back-to-menu-button-shift-tab-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusAfterMenuButton.html",
+      "evidence": {
+        "sha256": "7029527c776a84256b13a933abd1473cbcab9a25f58f0bf939ced0f2a98683d7",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2584-aria-menu-button-actions-req-info-about-menu-button-ins-tab-vc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusOnMenuButton.html",
+      "evidence": {
+        "sha256": "0a8f171ec3cfadbf044dc97880f6b2c185e36161619cde34d375e583c925afdc",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2585-aria-menu-button-actions-req-info-about-menu-button-ins-up-vc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusOnMenuButton.html",
+      "evidence": {
+        "sha256": "dc458d4b1da7f9a30ebc3a052c33245d876f10a696046b9d75422e2076ea3871",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2586-aria-menu-button-actions-req-info-about-menu-button-ins-tab-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusOnMenuButton.html",
+      "evidence": {
+        "sha256": "28bd51a70f7d5b463ba58ab66257caaeb106ab4287650a20ec018eb3845d84a2",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2587-aria-menu-button-actions-req-info-about-menu-button-ins-up-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusOnMenuButton.html",
+      "evidence": {
+        "sha256": "90b930ea5c7d24a723644795621b24a25a2e268c3c0d6bf494c0516b9e706cdc",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2588-aria-menu-button-actions-open-menu-space-vc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusOnMenuButton.html",
+      "evidence": {
+        "sha256": "25e16d4aa73fe5ec00723dd4c919ca8ffa64d6e83c183faca8cde42c361117e8",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2589-aria-menu-button-actions-open-menu-enter-vc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusOnMenuButton.html",
+      "evidence": {
+        "sha256": "44b46caeda2e631d884274ff6320006753185aa70ac0cea409c1d8b276f9fb79",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "259-web-list-divisions-enter",
       "fixture": "web-chat.html",
       "evidence": {
         "sha256": "3f7520faacfae176d0f85b36bbea5c2e058e3dc950d8c13f77ce3d12800fddb6",
         "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2590-aria-menu-button-actions-open-menu-space-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusOnMenuButton.html",
+      "evidence": {
+        "sha256": "783bf4cfa3bb30f67165938030196db4b979500214b030cbec9ef0f5bbba70cf",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2591-aria-menu-button-actions-open-menu-enter-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusOnMenuButton.html",
+      "evidence": {
+        "sha256": "af8573589f613edf2f8f98a9d9d7aedb4a351578c95efbcef413d80a9541ef18",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2592-aria-menu-button-actions-open-menu-down-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusOnMenuButton.html",
+      "evidence": {
+        "sha256": "0659103fb58182a0245ca7a130719ac5166fdc0848d55502eadb8c62bfacc976",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2593-aria-menu-button-actions-open-menu-to-last-item-up-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.setFocusOnMenuButton.html",
+      "evidence": {
+        "sha256": "43fecfc5a7eeb50950915ce10640a82fe73db41539b1b076443150fc3404e91e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2594-aria-menu-button-actions-req-info-about-menu-item-ins-tab-vc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToFirstItem.html",
+      "evidence": {
+        "sha256": "b9f4371d3a0f437ce738102bb73f8470b9c2e92ae5fff399d53fd6bd12e1263a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2595-aria-menu-button-actions-req-info-about-menu-item-ins-up-vc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToFirstItem.html",
+      "evidence": {
+        "sha256": "54e9cf81576520d0bf75beef519eff431583b22e7df758635d60d440af9ff2bf",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2596-aria-menu-button-actions-req-info-about-menu-item-ins-tab-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToFirstItem.html",
+      "evidence": {
+        "sha256": "9cf0e525c077b2a37247fc895477a5c32908979fd25ef151c1b770f93057de38",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2597-aria-menu-button-actions-req-info-about-menu-item-ins-up-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToFirstItem.html",
+      "evidence": {
+        "sha256": "103158254e7b9336e0aa15fd837e7aa6e7aec629f078dd09ad70cb94b8110f41",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2598-aria-menu-button-actions-nav-to-first-item-menu-home-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToLastItem.html",
+      "evidence": {
+        "sha256": "f035112c3e80cce20d6c20a433ae9bb51444b48b306a894e248efd174716d18e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2599-aria-menu-button-actions-nav-to-first-item-menu-down-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToLastItem.html",
+      "evidence": {
+        "sha256": "0e9ec2a66393ae5d370884088b443475af76356422921725b7be0f67d6981143",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -12138,6 +12546,76 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2600-aria-menu-button-actions-nav-to-last-item-menu-end-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToFirstItem.html",
+      "evidence": {
+        "sha256": "0650600d7f456feb066ba4e58798b3c826f0fe0ef87ac3c01013a453adc60dca",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2601-aria-menu-button-actions-nav-to-last-item-menu-up-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToFirstItem.html",
+      "evidence": {
+        "sha256": "473161031afd4e5bb32f2e8ecbe816431e09198943c1bf36f4c23167e6432b4b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2602-aria-menu-button-actions-nav-to-item-menu-by-typing-character-a-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToFirstItem.html",
+      "evidence": {
+        "sha256": "388bfd9598e3ceaf4f90f1b979ed0297865a7a5cc9951b40b75da869b26ca422",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2603-aria-menu-button-actions-activate-menu-item-enter-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToFirstItem.html",
+      "evidence": {
+        "sha256": "d5c2fd742898eed82fd7dd24b699e85c60045ec9a6c2d9c4887afada05f5e8d1",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2604-aria-menu-button-actions-close-menu-esc-pc",
+      "fixture": "aria-at/menu-button-actions/menu-button-actions.openMenuAndSetFocusToFirstItem.html",
+      "evidence": {
+        "sha256": "b1e9d18dfc6d1b67ea83e9083f4f1cbbbe6944cea914b6ba3db7e5fae32ed0e5",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -19591,10 +20069,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1321,
-    "scenarios_with_evidence": 1321,
-    "total_trials": 3969,
-    "successful_trials": 3952,
-    "deterministic_scenarios": 1048
+    "scenarios": 1352,
+    "scenarios_with_evidence": 1352,
+    "total_trials": 4062,
+    "successful_trials": 4045,
+    "deterministic_scenarios": 1074
   }
 }

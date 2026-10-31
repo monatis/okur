@@ -1,0 +1,69 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "2:interactionModeEnabled",
+    "assertions": [
+      {
+        "id": "nameFocusedItemAction1",
+        "phrase": "convey name of the focused item, 'Action 1'",
+        "priority": "1"
+      },
+      {
+        "id": "3:roleFocusedItemMenuItem",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "positionFocusedItemMenu1",
+        "phrase": "convey position of the focused item in the menu, '1'",
+        "priority": "2"
+      },
+      {
+        "id": "numberItemsMenu4",
+        "phrase": "convey number of items in the menu, '4'",
+        "priority": "2"
+      },
+      {
+        "id": "nameMenuActions",
+        "phrase": "convey name of the menu, 'Actions'",
+        "priority": "3"
+      },
+      {
+        "id": "roleMenu",
+        "phrase": "convey role 'menu'",
+        "priority": "3"
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "enter",
+    "instructions": "Starting at the 'Actions' menu button, open the menu.",
+    "plan": "apg/menu-button-actions",
+    "presentation_number": "10.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "openMenu"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-actions/menu-button-actions.setFocusOnMenuButton.html",
+  "id": "2589-aria-menu-button-actions-open-menu-enter-vc",
+  "name": "ARIA-AT, Action Menu Button Example Using element.focus(): Open a menu; Enter in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Enter",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

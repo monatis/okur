@@ -1,0 +1,70 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "nameFocusedItemAction4",
+        "phrase": "convey name of the focused item, 'Action 4'",
+        "priority": "1"
+      },
+      {
+        "id": "3:roleFocusedItemMenuItem",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "positionFocusedItemMenu4",
+        "phrase": "convey position of the focused item in the menu, '4'",
+        "priority": "2"
+      },
+      {
+        "id": "numberItemsMenu4",
+        "phrase": "convey number of items in the menu, '4'",
+        "priority": "2"
+      },
+      {
+        "id": "nameMenuActions",
+        "phrase": "convey name of the menu, 'Actions'",
+        "priority": "3"
+      },
+      {
+        "id": "roleMenu",
+        "phrase": "convey role 'menu'",
+        "priority": "3"
+      }
+    ],
+    "command": "up",
+    "instructions": "Starting at the 'Actions' menu button, open the menu.",
+    "plan": "apg/menu-button-actions",
+    "presentation_number": "13",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "openMenuToLastItem"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-actions/menu-button-actions.setFocusOnMenuButton.html",
+  "id": "2593-aria-menu-button-actions-open-menu-to-last-item-up-pc",
+  "name": "ARIA-AT, Action Menu Button Example Using element.focus(): Open a menu to the last item; Up in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
