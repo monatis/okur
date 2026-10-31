@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleSwitch",
+        "phrase": "convey role 'switch'",
+        "priority": "1"
+      },
+      {
+        "id": "nameLivingRoomLights",
+        "phrase": "convey name 'Living Room Lights'",
+        "priority": "1"
+      },
+      {
+        "id": "stateOff",
+        "phrase": "convey state 'off'",
+        "priority": "1"
+      }
+    ],
+    "command": "down",
+    "instructions": "Starting at the 'Navigate forwards from here' link, navigate to the 'Living Room Lights' switch.",
+    "plan": "apg/switch-button",
+    "presentation_number": "1.2",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToSwitchOffState"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/switch-button/switch-button.setFocusBeforeSwitch.html",
+  "id": "2271-aria-switch-button-nav-forwards-to-switch-off-state-down-vc",
+  "name": "ARIA-AT, Switch Example Using HTML Button: Navigate forwards to a switch that is off; Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

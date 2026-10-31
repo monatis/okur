@@ -1,0 +1,1657 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Switch Example Using HTML Button - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "cde7759d3958fb842f880984f476842817bb38e20e7a77da7c4c85540be08bc2",
+    "captured_at_unix_ms": 1793463379916,
+    "node_count": 44,
+    "capture_ms": 296
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Switch Example Using HTML Button",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/switch-button/switch-button.setFocusBeforeSwitch.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -1284,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Arial",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -1258,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,90,156)",
+              "font-family": "Arial",
+              "font-size": "20.5pt"
+            }
+          },
+          {
+            "start": 1,
+            "end": 3,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Arial",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Switch Example Using HTML Button",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -1260,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Switch Example Using HTML Button",
+            "lines": [
+              [
+                0,
+                32
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 32,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "20.5pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Switch Example Using HTML Button",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -1300,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Switch Example Using HTML Button",
+                "lines": [
+                  [
+                    0,
+                    32
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 32,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "20.5pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -1253,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "17pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 3,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "About This Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -1264,
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "About This Example",
+                "lines": [
+                  [
+                    0,
+                    18
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 18,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "17pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "About This Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -1308,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "About This Example",
+                    "lines": [
+                      [
+                        0,
+                        18
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 18,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "17pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -1287,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "This example illustrates implementing the ￼ with an HTML ￼ as a switch element and using an ￼ element to provide graphical rendering of switch states. It also demonstrates using the ￼ role to present multiple switches in a labeled group.",
+                "lines": [
+                  [
+                    0,
+                    92
+                  ],
+                  [
+                    92,
+                    200
+                  ],
+                  [
+                    200,
+                    237
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 42,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 42,
+                    "end": 43,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  },
+                  {
+                    "start": 43,
+                    "end": 57,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 57,
+                    "end": 58,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Consolas",
+                      "font-size": "11pt"
+                    }
+                  },
+                  {
+                    "start": 58,
+                    "end": 92,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 92,
+                    "end": 93,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Consolas",
+                      "font-size": "11pt"
+                    }
+                  },
+                  {
+                    "start": 93,
+                    "end": 182,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 182,
+                    "end": 183,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Consolas",
+                      "font-size": "11pt"
+                    }
+                  },
+                  {
+                    "start": 183,
+                    "end": 237,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "This example illustrates implementing the ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -1277,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "This example illustrates implementing the ",
+                    "lines": [
+                      [
+                        0,
+                        42
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 42,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Switch Pattern",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/switch-pattern.html",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -1297,
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Switch Pattern",
+                    "lines": [
+                      [
+                        0,
+                        14
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 14,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Switch Pattern",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -1280,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Switch Pattern",
+                        "lines": [
+                          [
+                            0,
+                            14
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 14,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " with an HTML ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -1286,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " with an HTML ",
+                    "lines": [
+                      [
+                        0,
+                        14
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 14,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1065,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -1311,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "code",
+                      "text-align": "left"
+                    },
+                    "text": "button",
+                    "lines": [
+                      [
+                        0,
+                        6
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 6,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Consolas",
+                          "font-size": "11pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "button",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -1259,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "button",
+                        "lines": [
+                          [
+                            0,
+                            6
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 6,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Consolas",
+                              "font-size": "11pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " as a switch element and using an ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -1265,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " as a switch element and using an ",
+                    "lines": [
+                      [
+                        0,
+                        34
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 34,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1065,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -1302,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "code",
+                      "text-align": "left"
+                    },
+                    "text": "SVG",
+                    "lines": [
+                      [
+                        0,
+                        3
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 3,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Consolas",
+                          "font-size": "11pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "SVG",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -1270,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "SVG",
+                        "lines": [
+                          [
+                            0,
+                            3
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 3,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Consolas",
+                              "font-size": "11pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " element to provide graphical rendering of switch states. It also demonstrates using the ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -1247,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " element to provide graphical rendering of switch states. It also demonstrates using the ",
+                    "lines": [
+                      [
+                        0,
+                        89
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 89,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1065,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -1250,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "code",
+                      "text-align": "left"
+                    },
+                    "text": "group",
+                    "lines": [
+                      [
+                        0,
+                        5
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 5,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Consolas",
+                          "font-size": "11pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "group",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -1267,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "group",
+                        "lines": [
+                          [
+                            0,
+                            5
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 5,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Consolas",
+                              "font-size": "11pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " role to present multiple switches in a labeled group.",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -1261,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " role to present multiple switches in a labeled group.",
+                    "lines": [
+                      [
+                        0,
+                        17
+                      ],
+                      [
+                        17,
+                        54
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 54,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -1256,
+                "attributes": {
+                  "display": "block",
+                  "tag": "section",
+                  "text-align": "left"
+                },
+                "text": "￼￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ],
+                  [
+                    3,
+                    4
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "17pt"
+                    }
+                  },
+                  {
+                    "start": 1,
+                    "end": 4,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1044,
+                    "name": "Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -1269,
+                    "attributes": {
+                      "display": "block",
+                      "id": "ex_label",
+                      "level": "2",
+                      "name-from": "contents",
+                      "tag": "h2",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      2,
+                      0,
+                      0
+                    ],
+                    "text": "Example",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "17pt"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "labelFor": [
+                        -1274,
+                        -1257
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Example",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -1290,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Example",
+                        "lines": [
+                          [
+                            0,
+                            7
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 7,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,90,156)",
+                              "font-family": "Arial",
+                              "font-size": "17pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 21,
+                    "ia2_role": 21,
+                    "name": "Start of Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1040,
+                    "unique_id": -1274,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "ex_start_sep",
+                      "name-from": "related-element",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "separator"
+                    },
+                    "relations": {
+                      "labelledBy": [
+                        -1269
+                      ]
+                    }
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -1268,
+                    "attributes": {
+                      "display": "block",
+                      "id": "ex1",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "text": "￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 20,
+                        "ia2_role": 20,
+                        "name": "Environmental Controls",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -1276,
+                        "attributes": {
+                          "display": "block",
+                          "explicit-name": "true",
+                          "name-from": "related-element",
+                          "setsize": "0",
+                          "tag": "div",
+                          "text-align": "left",
+                          "xml-roles": "group"
+                        },
+                        "text": "￼￼￼￼￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            2
+                          ],
+                          [
+                            2,
+                            3
+                          ],
+                          [
+                            3,
+                            4
+                          ],
+                          [
+                            4,
+                            5
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 1,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,90,156)",
+                              "font-family": "Arial",
+                              "font-size": "14.5pt"
+                            }
+                          },
+                          {
+                            "start": 1,
+                            "end": 2,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          },
+                          {
+                            "start": 2,
+                            "end": 3,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "10pt"
+                            }
+                          },
+                          {
+                            "start": 3,
+                            "end": 4,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          },
+                          {
+                            "start": 4,
+                            "end": 5,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "10pt"
+                            }
+                          }
+                        ],
+                        "relations": {
+                          "labelledBy": [
+                            -1289
+                          ]
+                        },
+                        "children": [
+                          {
+                            "msaa_role": 20,
+                            "ia2_role": 1044,
+                            "name": "Environmental Controls",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -1289,
+                            "attributes": {
+                              "display": "block",
+                              "id": "id-group-label",
+                              "level": "3",
+                              "name-from": "contents",
+                              "tag": "h3",
+                              "text-align": "left"
+                            },
+                            "group_position": [
+                              3,
+                              0,
+                              0
+                            ],
+                            "text": "Environmental Controls",
+                            "lines": [
+                              [
+                                0,
+                                22
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 22,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,90,156)",
+                                  "font-family": "Arial",
+                                  "font-size": "14.5pt"
+                                }
+                              }
+                            ],
+                            "relations": {
+                              "labelFor": [
+                                -1276
+                              ]
+                            },
+                            "children": [
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "Environmental Controls",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -1285,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "Environmental Controls",
+                                "lines": [
+                                  [
+                                    0,
+                                    22
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 22,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,90,156)",
+                                      "font-family": "Arial",
+                                      "font-size": "14.5pt"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 30,
+                            "ia2_role": 30,
+                            "name": "Navigate forwards from here",
+                            "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/switch-button/switch-button.setFocusBeforeSwitch.html#beforelink",
+                            "msaa_states": 5242884,
+                            "ia2_states": 1024,
+                            "unique_id": -1288,
+                            "attributes": {
+                              "display": "inline",
+                              "id": "beforelink",
+                              "name-from": "contents",
+                              "tag": "a",
+                              "text-align": "left"
+                            },
+                            "text": "Navigate forwards from here",
+                            "lines": [
+                              [
+                                0,
+                                27
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 27,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(3,69,117)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "Navigate forwards from here",
+                                "msaa_states": 4194304,
+                                "ia2_states": 1024,
+                                "unique_id": -1278,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "Navigate forwards from here",
+                                "lines": [
+                                  [
+                                    0,
+                                    27
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 27,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(3,69,117)",
+                                      "font-family": "Arial",
+                                      "font-size": "12pt",
+                                      "text-underline-style": "solid"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 44,
+                            "ia2_role": 1066,
+                            "name": "Living Room Lights",
+                            "msaa_states": 1048576,
+                            "ia2_states": 263168,
+                            "unique_id": -1307,
+                            "attributes": {
+                              "checkable": "true",
+                              "display": "block",
+                              "name-from": "contents",
+                              "tag": "button",
+                              "text-align": "left",
+                              "xml-roles": "switch"
+                            },
+                            "text": "￼￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ],
+                              [
+                                1,
+                                2
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 2,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "10pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 20,
+                                "ia2_role": 1060,
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -1306,
+                                "attributes": {
+                                  "class": "label",
+                                  "display": "inline-block",
+                                  "tag": "span",
+                                  "text-align": "left"
+                                },
+                                "text": "Living Room Lights",
+                                "lines": [
+                                  [
+                                    0,
+                                    18
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 18,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Arial",
+                                      "font-size": "10pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Living Room Lights",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -1309,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Living Room Lights",
+                                    "lines": [
+                                      [
+                                        0,
+                                        18
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 18,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Arial",
+                                          "font-size": "10pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 40,
+                                "ia2_role": 40,
+                                "msaa_states": 64,
+                                "ia2_states": 1024,
+                                "unique_id": -1281,
+                                "attributes": {
+                                  "display": "inline-block",
+                                  "tag": "svg",
+                                  "text-align": "left"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 30,
+                            "ia2_role": 30,
+                            "name": "Navigate backwards from here",
+                            "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/switch-button/switch-button.setFocusBeforeSwitch.html#afterlink",
+                            "msaa_states": 5242880,
+                            "ia2_states": 1024,
+                            "unique_id": -1248,
+                            "attributes": {
+                              "display": "inline",
+                              "id": "afterlink",
+                              "name-from": "contents",
+                              "tag": "a",
+                              "text-align": "left"
+                            },
+                            "text": "Navigate backwards from here",
+                            "lines": [
+                              [
+                                0,
+                                28
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 28,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(3,69,117)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "Navigate backwards from here",
+                                "msaa_states": 4194304,
+                                "ia2_states": 1024,
+                                "unique_id": -1249,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "Navigate backwards from here",
+                                "lines": [
+                                  [
+                                    0,
+                                    28
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 28,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(3,69,117)",
+                                      "font-family": "Arial",
+                                      "font-size": "12pt",
+                                      "text-underline-style": "solid"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 44,
+                            "ia2_role": 1066,
+                            "name": "Outdoor Lights",
+                            "msaa_states": 1048576,
+                            "ia2_states": 263168,
+                            "unique_id": -1304,
+                            "attributes": {
+                              "checkable": "true",
+                              "display": "block",
+                              "name-from": "contents",
+                              "tag": "button",
+                              "text-align": "left",
+                              "xml-roles": "switch"
+                            },
+                            "text": "￼￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ],
+                              [
+                                1,
+                                2
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 2,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "10pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 20,
+                                "ia2_role": 1060,
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -1298,
+                                "attributes": {
+                                  "class": "label",
+                                  "display": "inline-block",
+                                  "tag": "span",
+                                  "text-align": "left"
+                                },
+                                "text": "Outdoor Lights",
+                                "lines": [
+                                  [
+                                    0,
+                                    14
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 14,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Arial",
+                                      "font-size": "10pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Outdoor Lights",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -1245,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Outdoor Lights",
+                                    "lines": [
+                                      [
+                                        0,
+                                        14
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 14,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Arial",
+                                          "font-size": "10pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 40,
+                                "ia2_role": 40,
+                                "msaa_states": 64,
+                                "ia2_states": 1024,
+                                "unique_id": -1294,
+                                "attributes": {
+                                  "display": "inline-block",
+                                  "tag": "svg",
+                                  "text-align": "left"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 21,
+                    "ia2_role": 21,
+                    "name": "End of Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1040,
+                    "unique_id": -1257,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "ex_end_sep",
+                      "name-from": "related-element",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "separator"
+                    },
+                    "relations": {
+                      "labelledBy": [
+                        -1269
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -1254,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(250,250,250)",
+                  "color": "rgb(5,5,5)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1,
+                "ia2_states": 1024,
+                "unique_id": -1246,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -253,6 +253,58 @@
       "sha256": "3c24a2114e6754dfe68296913a38ccbd03b4bdd199f8b20e499fe6cba4cb4dac",
       "size_bytes": 2899
     },
+    "aria-at/switch-button/css/switch-button.css": {
+      "sha256": "f3b6e33873a887eac1de2938479a877bf4c5da8793e3f02cc3539504300ecfe4",
+      "size_bytes": 1518
+    },
+    "aria-at/switch-button/css/switch-checkbox.css": {
+      "sha256": "6c58e2b65a63d940eff4c22723c0cb83c5f07260de4b1e00684d895c891122bf",
+      "size_bytes": 1388
+    },
+    "aria-at/switch-button/css/switch.css": {
+      "sha256": "3088bc961d8e43d4de4682542ec285c5bdc785a2590ee999bb3b8ccbf38322fb",
+      "size_bytes": 1147
+    },
+    "aria-at/switch-button/js/switch-button.js": {
+      "sha256": "e8729aacf071b396a973dc5d2daa16c8b1786a71141abde252484129d6c51729",
+      "size_bytes": 1205
+    },
+    "aria-at/switch-button/js/switch-checkbox.js": {
+      "sha256": "0c7367cd8ab886a1f08c72539e0124269689ff2fc5cdff842179464d2d659fad",
+      "size_bytes": 976
+    },
+    "aria-at/switch-button/js/switch.js": {
+      "sha256": "726ed7dbbe58c4e5af47c7ca2e8c68c32921dba20237ffd872dbed12add60765",
+      "size_bytes": 1213
+    },
+    "aria-at/switch-button/switch-button.html": {
+      "sha256": "b20f81ff801c898defbd6eaee0a636785ae6a644612d194a8c124ba91c1b5b8d",
+      "size_bytes": 3504
+    },
+    "aria-at/switch-button/switch-button.setFocusAfterAndTurnOnSwitch.html": {
+      "sha256": "71b3af9218ffba1a7c52a75d482d0853d5a5840c7113b06309d90bfa24f0911e",
+      "size_bytes": 4412
+    },
+    "aria-at/switch-button/switch-button.setFocusAfterSwitch.html": {
+      "sha256": "cbbae8266ddee17e195c62a8ea12049b12d34205cf098f1e41b845ed0e81d33b",
+      "size_bytes": 4272
+    },
+    "aria-at/switch-button/switch-button.setFocusBeforeAndTurnOnSwitch.html": {
+      "sha256": "bde306f37738c0589841ed334104bfbc2bfe6428860f322239a46a7c14a04ca7",
+      "size_bytes": 4422
+    },
+    "aria-at/switch-button/switch-button.setFocusBeforeSwitch.html": {
+      "sha256": "cde7759d3958fb842f880984f476842817bb38e20e7a77da7c4c85540be08bc2",
+      "size_bytes": 4275
+    },
+    "aria-at/switch-button/switch-button.setFocusOnAndTurnOnSwitch.html": {
+      "sha256": "22005704cbf0ad1586146cb1acbe4ca65a15bd77dd2b164bd012d7db07c8ca75",
+      "size_bytes": 4410
+    },
+    "aria-at/switch-button/switch-button.setFocusOnSwitch.html": {
+      "sha256": "b30c3d42d47c6750e0d2ac50f95d1f7b8df573d217893d64ef3813debf1fb615",
+      "size_bytes": 4277
+    },
     "aria-at/switch/css/switch-button.css": {
       "sha256": "b64bcfd75b3de7e4720d3c42e5fad3f908f59b0f060d617b9db3b88ce47c110b",
       "size_bytes": 1403
@@ -6882,6 +6934,146 @@
       }
     },
     {
+      "scenario_id": "2270-aria-switch-button-nav-forwards-to-switch-off-state-f-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusBeforeSwitch.html",
+      "evidence": {
+        "sha256": "18fda1da6e5b4c4a797f40d5bc292c13e752a3d4803597f860231195c63e3294",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2271-aria-switch-button-nav-forwards-to-switch-off-state-down-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusBeforeSwitch.html",
+      "evidence": {
+        "sha256": "3c8c313f094cc489839ab105609d0d7ca3a9fe592b79a5ed09852a23edbb7301",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2272-aria-switch-button-nav-forwards-to-switch-off-state-tab-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusBeforeSwitch.html",
+      "evidence": {
+        "sha256": "75f7b2256d941fa1d04e17716a453e6d7d5765deb771c7489879d63d5fca1efc",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2273-aria-switch-button-nav-forwards-to-switch-off-state-tab-pc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusBeforeSwitch.html",
+      "evidence": {
+        "sha256": "702f937c870ae906f59e26a7855ee7938a5053f5342f98c8bf30031ca11f1723",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2274-aria-switch-button-nav-back-to-switch-off-state-shift-f-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusAfterSwitch.html",
+      "evidence": {
+        "sha256": "e06dd85f1a0489f4459b035b47e34ce31699a2a30be5279a89a582e063f2de0e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2275-aria-switch-button-nav-back-to-switch-off-state-up-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusAfterSwitch.html",
+      "evidence": {
+        "sha256": "60b851eaac1a8ad9d82ca7e4039999c46df422de886e54c09936b26cdb56b14c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2276-aria-switch-button-nav-back-to-switch-off-state-shift-tab-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusAfterSwitch.html",
+      "evidence": {
+        "sha256": "2b82e8480545f08180cb8ec0857e29730d6db130ade240195b8e462d40ff8b18",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2277-aria-switch-button-nav-back-to-switch-off-state-shift-tab-pc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusAfterSwitch.html",
+      "evidence": {
+        "sha256": "278313b40497eddf0e5bf1232df16cba127bed005ad384274ecf19a36ea0f649",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2278-aria-switch-button-nav-forwards-to-switch-on-state-f-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusBeforeAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "55ecc56bd6cdbc9347453d95944c879225fe27cac89e739f7931bd0249b70097",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2279-aria-switch-button-nav-forwards-to-switch-on-state-down-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusBeforeAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "367998a7f0261996e54f6cd44cc1500d50ffc4a85fbd3f7d9c96d24a0fdf87cf",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "228-web-form-fields-list-edit",
       "fixture": "web-app-patterns.html",
       "evidence": {
@@ -6896,6 +7088,146 @@
       }
     },
     {
+      "scenario_id": "2280-aria-switch-button-nav-forwards-to-switch-on-state-tab-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusBeforeAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "d53fb4a2a52fd791f460b105a4635ef25dd1536280b98a1ca496c09efcdf506b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2281-aria-switch-button-nav-forwards-to-switch-on-state-tab-pc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusBeforeAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "b26b1f0037664a0724413873fb43474db77e935bd401c57db6d4134175516b3c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2282-aria-switch-button-nav-back-to-switch-on-state-shift-f-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusAfterAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "2e3039f4cccc002e49ca3e26e9f75eb6051998a7ff987a72789b31aa8529161c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2283-aria-switch-button-nav-back-to-switch-on-state-up-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusAfterAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "807102df5b30f3ee80e52ac2f618482927b8c9fe338805e447241848d1eb0c12",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2284-aria-switch-button-nav-back-to-switch-on-state-shift-tab-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusAfterAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "77d9707a73e8c61e8245bfcae519abbb47c96124d6f2e0a227ef385164bf17c9",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2285-aria-switch-button-nav-back-to-switch-on-state-shift-tab-pc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusAfterAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "cad23f4ddeb83a22d6bc3584bb585cf4f4cde986dfc9efb7680dbb55235dc46a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2286-aria-switch-button-req-info-about-switch-off-state-ins-tab-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "a2dc66d35bec05609c6b4a3698c3855b1f94ff03f8b4ee0f360b742f4f291493",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2287-aria-switch-button-req-info-about-switch-off-state-ins-up-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "1cd91f30c48cfdfdf9bce9adcfe23c13c8cd624b300f3a234e24a7a31bda03f4",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2288-aria-switch-button-req-info-about-switch-off-state-ins-tab-pc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "bfc04d34a538abb1526f19d886b758457b825ed5bccfb11df8433838e50bbbdb",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2289-aria-switch-button-req-info-about-switch-off-state-ins-up-pc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "d2119980bd4e74c5a9c1c02af7d90a248ea637db2fb2bf2b3ed265610001b17d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "229-web-space-activates",
       "fixture": "activation.html",
       "evidence": {
@@ -6906,6 +7238,146 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2290-aria-switch-button-req-info-about-switch-on-state-ins-tab-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "ef3d3a33511dc6c66de8887e3bbbc3d64cae29dd7d24eed878ea03318ba8a878",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2291-aria-switch-button-req-info-about-switch-on-state-ins-up-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "ba3a17c7021d67b80d3b4bbe30dd152f1e1e4f985d1c05e8d382fcc59436a8db",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2292-aria-switch-button-req-info-about-switch-on-state-ins-tab-pc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "1433986df75e54f3b2e80ba39d198a5880dff69ba39ef86f3da88cda5996705e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2293-aria-switch-button-req-info-about-switch-on-state-ins-up-pc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "570f1f4130019644f8a7c8dc1c009a14a7328f99a7c833066700ed2cf33e114c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2294-aria-switch-button-operate-switch-off-state-space-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "8f54be5922332f9fa401dd71c12119941b501982c4dec2d5c698dae50758b855",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2295-aria-switch-button-operate-switch-off-state-enter-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "3fa41025993a87d8fc857c4186e7614197fb74c43ddffdec8633ebaf8dce0cd1",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2296-aria-switch-button-operate-switch-off-state-space-pc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "e88ebd1a1094699206829b0b4b07c83516821c06e80497abd3819882b3bbd196",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2297-aria-switch-button-operate-switch-off-state-enter-pc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnSwitch.html",
+      "evidence": {
+        "sha256": "03fce759f09245cdc0c23e6de7f8460de04f3bc168da5bb72d29aac485c1cd83",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2298-aria-switch-button-operate-switch-on-state-space-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "ac048a3f1a28a5688ccd802016f19d223363b15af8dd5f115f79a72e1b4b9f8b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2299-aria-switch-button-operate-switch-on-state-enter-vc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "8bfb2fd14094cbba5b08def89519315d134342a4444282abe433615a2790da31",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -6934,6 +7406,34 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2300-aria-switch-button-operate-switch-on-state-space-pc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "3f440e9e397d8c5eefda00e0c6e5dfd54a49ef8bd7db49c6e2f822bf201774e8",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2301-aria-switch-button-operate-switch-on-state-enter-pc",
+      "fixture": "aria-at/switch-button/switch-button.setFocusOnAndTurnOnSwitch.html",
+      "evidence": {
+        "sha256": "2cd662f6c3f476ff279af72d0a28739705eaf0c5f476b7d92cc9a5e11281cf53",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -14849,10 +15349,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1016,
-    "scenarios_with_evidence": 1016,
-    "total_trials": 3054,
-    "successful_trials": 3037,
-    "deterministic_scenarios": 744
+    "scenarios": 1048,
+    "scenarios_with_evidence": 1048,
+    "total_trials": 3150,
+    "successful_trials": 3133,
+    "deterministic_scenarios": 776
   }
 }
