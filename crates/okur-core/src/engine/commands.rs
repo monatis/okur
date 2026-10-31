@@ -116,7 +116,11 @@ impl ScreenReaderEngine {
             // dev box 2026-10-16).
             // In a menu, its item (JAWS in Google Docs' menu: "menu | Accessibility | 10 of 10";
             // the position is not known here).
-            Command::SayCurrentFocus if self.menus.current().is_some() => {
+            // A page's menu item is said as the page's focus, its menu named (below).
+            Command::SayCurrentFocus
+                if self.menus.current().is_some()
+                    && !(self.menus.on_page() && self.app_mode == AppMode::VirtualBuffer) =>
+            {
                 let speech = self.menus.current()?.to_owned();
                 self.speech.speak(&speech, true);
                 return Some(speech);
@@ -1007,9 +1011,20 @@ impl ScreenReaderEngine {
                         | crate::aom::Role::Link { .. }
                         | crate::aom::Role::Tab
                         | crate::aom::Role::MenuButton
+                        | crate::aom::Role::MenuItem
                 )
             })
         {
+            // A page menu's item by its name and place: "Action 1 | 1 of 4" [obs,
+            // round-aria20, 2597/s1].
+            if node.role == crate::aom::Role::MenuItem {
+                let name = node.name.as_deref().unwrap_or_default().trim().to_owned();
+                let attr = |k: &str| node.attributes.get(k).map(String::as_str);
+                return match (attr("posinset"), attr("setsize")) {
+                    (Some(p), Some(n)) => format!("{name}\n{}", msg::position(p, n)),
+                    _ => name,
+                };
+            }
             // A menu button by its name and role, no state: "Actions button menu" [obs,
             // round-aria20, 2587/s1].
             if node.role == crate::aom::Role::MenuButton {

@@ -1312,6 +1312,35 @@ impl VirtualCursor {
         // into) is said by its name, not by the cursor's line, which is some other element's;
         // a group adds its role (Google Sheets' grid, back from a cell's editor: JAWS on the
         // dev box said "group", 2026-10-16).
+        // Insert+Tab on a page menu's item names its menu first: "Actions menu | Action 1
+        // menu", its line, with the virtual cursor on; "Actions menu | Action 1 | 1 of 4" with
+        // it off [obs, round-aria20, 2595/s1, 2596/s1].
+        if matches!(group, GroupNamed::Asked) && node.role == Role::MenuItem {
+            let mut lines = Vec::new();
+            if let Some(menu) = self
+                .buffer
+                .ancestors(node_id)
+                .first()
+                .and_then(|menu| menu.name.as_deref())
+                .map(str::trim)
+                .filter(|menu| !menu.is_empty())
+            {
+                lines.push(format!(
+                    "{menu}{}",
+                    crate::linearize::role_marker(msg::role_menu().as_str())
+                ));
+            }
+            if self.virtual_off {
+                lines.push(node.name.as_deref().unwrap_or_default().trim().to_owned());
+                let attr = |k: &str| node.attributes.get(k).map(String::as_str);
+                if let (Some(p), Some(n)) = (attr("posinset"), attr("setsize")) {
+                    lines.push(msg::position(p, n).render());
+                }
+            } else {
+                lines.push(self.current_line());
+            }
+            return Some(lines.join("\n"));
+        }
         // A tab panel taking the focus itself: "Peter Müller TabPanel" [obs, round-aria19,
         // 2567/s1].
         if node.role == Role::TabPanel {

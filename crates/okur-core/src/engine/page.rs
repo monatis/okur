@@ -307,6 +307,12 @@ impl ScreenReaderEngine {
             {
                 crate::linearize::state_marker(msg::state_selected().as_str())
             }
+            // A menu button whose menu was just left, the focus back on it: its collapse is
+            // not said, "Leaving menus | Actions button menu | Press space ..." [obs,
+            // round-aria20, 2604/s1].
+            Role::MenuButton if self.page_menu_left && control.states.expanded == Some(false) => {
+                return None;
+            }
             // A disclosure button opened or closed (Space or Enter on it): JAWS 2025 says the
             // new state (dev box, GitHub's "Solutions" menu button: " expanded ").
             Role::Button | Role::MenuButton

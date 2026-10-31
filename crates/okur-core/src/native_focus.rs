@@ -1243,6 +1243,9 @@ pub struct Menus {
     /// ones only with their name (302/s2 versus s5).
     popup_shown: bool,
     current: Option<String>,
+    /// A key was pressed since the item was said: a page's menu item focused again by it
+    /// (Home on its first item) is said again [obs, round-aria20, 2598/s1].
+    key_since_said: bool,
     /// The item whose popup just closed. If focus does not move on (switching menus with
     /// Left/Right), JAWS announces the item once speech goes idle (302/s7).
     closed: Option<String>,
@@ -1340,6 +1343,11 @@ impl Menus {
     pub fn start(&mut self, launcher: bool) {
         self.started = true;
         self.launcher = launcher;
+    }
+
+    /// Whether the menu is a page's (an ARIA menu in a browser's document).
+    pub fn on_page(&self) -> bool {
+        self.active && self.page
     }
 
     /// The menu item that has the focus, while menus are active.
@@ -1552,6 +1560,12 @@ impl Menus {
         self.popup_pending = false;
     }
 
+    /// A key was pressed: the next report of the page menu's item it focuses is said even
+    /// when it is the item said last.
+    pub fn key_pressed(&mut self) {
+        self.key_since_said = true;
+    }
+
     /// Focus landed on a page's menu item (an ARIA menu), said as JAWS says one (Google Docs'
     /// menus, dev box 2026-10-16): on the menu bar its name and position ("Help | 9 of 10"),
     /// in a menu its name, and "sub menu" for one that opens a menu ("Verbalize to screen
@@ -1570,9 +1584,10 @@ impl Menus {
         menu_name: Option<&str>,
     ) -> Option<String> {
         let name = name.trim();
-        if self.active && self.current.as_deref() == Some(name) {
+        if self.active && self.current.as_deref() == Some(name) && !self.key_since_said {
             return None;
         }
+        self.key_since_said = false;
         let first = !self.active;
         if first {
             self.from_bar = place != PageMenuPlace::Popup;

@@ -352,6 +352,9 @@ pub struct ScreenReaderEngine {
     /// The menus ended back on a focus its application says itself: "Leaving menus" waits for
     /// that focus, to be said with it.
     menus_left_unsaid: bool,
+    /// A page's menu was left since the last key: its menu button's collapse, which follows
+    /// the focus back to it, is not said [obs, round-aria20, 2604/s1].
+    page_menu_left: bool,
     /// Excel's active cell was asked for, to say it, its grid focused without a cell, or the
     /// selection a selecting key changed.
     sheet_cell_asked: bool,
@@ -664,6 +667,7 @@ impl ScreenReaderEngine {
             revisions_asked: None,
             status_bar_asked: false,
             menus_left_unsaid: false,
+            page_menu_left: false,
             sheet_reading_asked: None,
             sheet_list_asked: None,
             sheet_cell_asked: false,
@@ -879,6 +883,10 @@ impl ScreenReaderEngine {
     /// and returns whether the key was consumed or should pass through to the OS.
     pub fn handle_key_event(&mut self, event: &KeyEvent) -> KeyAction {
         self.sync_speech_mode();
+        if event.is_down {
+            self.menus.key_pressed();
+            self.page_menu_left = false;
+        }
         let offset = self.cursor.offset;
         let action = self.handle_key(event);
         if self.app_mode == AppMode::VirtualBuffer && self.cursor.offset != offset {

@@ -250,7 +250,11 @@ impl ScreenReaderEngine {
             // item and says its line, after "menu" the first time and the page's name on the
             // page's first focus, then the hint: "menu | Web Menus | File menu sub menu
             // collapsed | To move through items press left or right arrow." [obs, 218/s1].
-            if focus.in_document && self.app_mode == AppMode::VirtualBuffer && !self.forms_mode {
+            if focus.in_document
+                && self.app_mode == AppMode::VirtualBuffer
+                && !self.forms_mode
+                && !self.virtual_cursor_off
+            {
                 if let Some(speech) = self.page_menu_line(focus) {
                     self.speech.speak(&speech, true);
                     return Some(speech);
@@ -426,6 +430,7 @@ impl ScreenReaderEngine {
             // 2026-10-16).
             // A focus still inside the page's menu (one of WhatsApp's reactions) has not left it.
             let leaving_menus = !focus.in_menu && self.menus.in_menu_mode() && self.menus.end();
+            self.page_menu_left |= leaving_menus;
             if focus.in_menu {
                 self.menus.off_items();
             }
