@@ -7,6 +7,14 @@ The owner's order, unchanged from plan 40:
 3. the review's open findings (§3), punctuation by word (§4), then the README's "Not yet"
    list, in its order.
 
+**Paused** (the owner, 2026-10-31, afternoon): Excel waits while ARIA-AT's test plans are
+worked on, and is continued later. Where it stopped: 1122 imported (`c0325942`); round-1122b
+(1123 typing in cells, 1124 Excel's dialogs, 1125 Word's context menu, recorded again with the
+recorder's text step typing by keys, `2096be7d`) is on old-pc in
+`sr-harness\evidence-out\round-1122b`, to fetch and import; their scenarios wait in
+`corpus/pending/`. Keepers on old-pc: Excel's Book1 and Word's Document1, both changed and
+unsaved ("lab"): a keeper marked saved is replaced by the fixture and Word quits with it.
+
 **Scheduled after Excel** (the owner, 2026-10-31): ARIA-AT's test plans for the web
 ([`2026-10-31-aria-at-web-round-1.md`](2026-10-31-aria-at-web-round-1.md)), then the first
 release through the Microsoft Store
