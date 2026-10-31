@@ -234,6 +234,23 @@ impl ScreenReaderEngine {
                 )
                 .render_all()
             }
+            // A toggle button pressed or released (Space, Enter): its role and state, then its
+            // name, "Toggle button Pressed Mute"; released, "Not pressed" is said as a word,
+            // not a state [obs, round-aria7, 2230/s1, 2234/s1, every trial].
+            Role::Button
+                if before.states.checked.is_some()
+                    && control.states.checked.is_some()
+                    && before.states.checked != control.states.checked =>
+            {
+                let name = before.name.as_deref().map(str::trim).unwrap_or_default();
+                let role = crate::linearize::role_marker(msg::role_toggle_button().as_str());
+                if control.states.checked == Some(true) {
+                    let state = crate::linearize::state_marker(msg::state_pressed().as_str());
+                    format!("{role}{state}\n{name}")
+                } else {
+                    format!("{role}\n{}\n{name}", msg::state_not_pressed())
+                }
+            }
             Role::CheckBox | Role::RadioButton
                 if before.states.checked != control.states.checked
                     || before.states.mixed != control.states.mixed =>

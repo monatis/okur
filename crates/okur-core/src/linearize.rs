@@ -1186,6 +1186,20 @@ impl<'a> Builder<'a> {
                 s
             }
             // "Platform ‹ Button › ‹collapsed›", "Overview ‹ Button › ‹Current Page›".
+            // A toggle button (`aria-pressed`): "Mute Toggle button Not pressed" [obs,
+            // round-aria7, 2202/s1, 2212/s1].
+            Role::Button if node.states.checked.is_some() => {
+                let pressed = if node.states.checked == Some(true) {
+                    msg::state_pressed()
+                } else {
+                    msg::state_not_pressed()
+                };
+                format!(
+                    "{name}{}{}",
+                    role_marker(msg::role_toggle_button().as_str()),
+                    state_marker(pressed.as_str())
+                )
+            }
             Role::Button => {
                 let role = node
                     .role_description()
