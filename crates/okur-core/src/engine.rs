@@ -347,6 +347,9 @@ pub struct ScreenReaderEngine {
     notes_viewer_asked: Option<crate::event::NoteKind>,
     /// Say Bottom Line of Window asked for Word's status bar, and awaits it.
     status_bar_asked: bool,
+    /// The menus ended back on a focus its application says itself: "Leaving menus" waits for
+    /// that focus, to be said with it.
+    menus_left_unsaid: bool,
     /// One of Excel's row or column readers asked for the active cell's row and column, and
     /// awaits them.
     sheet_reading_asked: Option<crate::apps::windows::excel::SheetReading>,
@@ -649,6 +652,7 @@ impl ScreenReaderEngine {
             notes_viewer_asked: None,
             revisions_asked: None,
             status_bar_asked: false,
+            menus_left_unsaid: false,
             sheet_reading_asked: None,
             say_all_paragraphs_asked: false,
             document_view_title: None,

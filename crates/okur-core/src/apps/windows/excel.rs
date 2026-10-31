@@ -21,6 +21,11 @@ impl AppModule for Excel {
         cell(focus).is_some()
     }
 
+    /// A cell the menus give back, "Leaving menus | 14 | C 4" [obs, 1116/s7].
+    fn says_focus_after_menus(&self, focus: &FocusEvent) -> bool {
+        cell(focus).is_some()
+    }
+
     /// A cell reached: its value, then its coordinates [obs, 521/s2-s5, s7, s8, s11, s12];
     /// by Ctrl+End and Ctrl+Home, which cell it is first, "Last Cell | 14 | C 4"; by a Ctrl
     /// arrow, that it is a data region's edge after, "Weekends | C 1 | edge of current data

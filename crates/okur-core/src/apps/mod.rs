@@ -101,6 +101,13 @@ pub trait AppModule: Send {
         None
     }
 
+    /// Whether the application says `focus` itself when the menus give it back: the engine
+    /// then leaves the menus' end unsaid until that focus comes, and says it with the module's
+    /// speech, "Leaving menus | 14 | C 4" (Excel's cell [obs, 1116/s7]).
+    fn says_focus_after_menus(&self, _focus: &FocusEvent) -> bool {
+        false
+    }
+
     /// Whether arriving in one of the application's windows announces the window's title.
     fn names_window(&self, _focus: &FocusEvent) -> bool {
         true

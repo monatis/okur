@@ -304,7 +304,8 @@ impl ScreenReaderEngine {
         // own focus [obs, 1064/s3-s7].
         let leaving_menus =
             (!focus.in_document && !in_menu && self.menus.in_menu_mode() && self.menus.end())
-                || ribbon_left;
+                || ribbon_left
+                || std::mem::take(&mut self.menus_left_unsaid);
         // The control the menus give the focus back to is said again [obs, 302/s8, 547/s8].
         if leaving_menus {
             self.native_focus.forget_last();
@@ -1213,6 +1214,16 @@ impl ScreenReaderEngine {
             }
             MenuEvent::End => {
                 if !self.menus.end() {
+                    return None;
+                }
+                // A focus its application says itself as it comes back takes "Leaving menus"
+                // with it (Excel's cell [obs, 1116/s7]).
+                if self.last_native_focus.as_ref().is_some_and(|focus| {
+                    self.apps
+                        .iter()
+                        .any(|app| app.says_focus_after_menus(focus))
+                }) {
+                    self.menus_left_unsaid = true;
                     return None;
                 }
                 let mut speech = msg::menus_left().to_string();
