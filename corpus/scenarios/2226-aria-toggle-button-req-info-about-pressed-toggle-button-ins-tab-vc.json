@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleToggleButton",
+        "phrase": "convey role 'toggle button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameMute",
+        "phrase": "convey name 'Mute'",
+        "priority": "1"
+      },
+      {
+        "id": "statePressed",
+        "phrase": "convey state 'pressed'",
+        "priority": "1"
+      }
+    ],
+    "command": "ins+tab",
+    "instructions": "Starting at the 'Mute' button, read information about the button.",
+    "plan": "apg/toggle-button",
+    "presentation_number": "16.0",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutPressedToggleButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/toggle-button/button.setFocusOnButtonAndSetStateToPressed.html",
+  "id": "2226-aria-toggle-button-req-info-about-pressed-toggle-button-ins-tab-vc",
+  "name": "ARIA-AT, Toggle Button: Request information about a pressed toggle button; Insert+Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

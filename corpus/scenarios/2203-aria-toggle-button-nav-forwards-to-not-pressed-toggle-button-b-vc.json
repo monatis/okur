@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleToggleButton",
+        "phrase": "convey role 'toggle button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameMute",
+        "phrase": "convey name 'Mute'",
+        "priority": "1"
+      },
+      {
+        "id": "stateNotPressed",
+        "phrase": "convey state 'not pressed'",
+        "priority": "3"
+      }
+    ],
+    "command": "b",
+    "instructions": "Starting at the 'Navigate forwards from here' link, navigate to the 'Mute' button.",
+    "plan": "apg/toggle-button",
+    "presentation_number": "1.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToNotPressedToggleButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/toggle-button/button.setFocusBeforeButton.html",
+  "id": "2203-aria-toggle-button-nav-forwards-to-not-pressed-toggle-button-b-vc",
+  "name": "ARIA-AT, Toggle Button: Navigate forwards to a not pressed toggle button; B in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "B",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

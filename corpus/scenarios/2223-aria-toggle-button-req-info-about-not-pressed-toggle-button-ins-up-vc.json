@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleToggleButton",
+        "phrase": "convey role 'toggle button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameMute",
+        "phrase": "convey name 'Mute'",
+        "priority": "1"
+      },
+      {
+        "id": "stateNotPressed",
+        "phrase": "convey state 'not pressed'",
+        "priority": "3"
+      }
+    ],
+    "command": "ins+up",
+    "instructions": "Starting at the 'Mute' button, read information about the button.",
+    "plan": "apg/toggle-button",
+    "presentation_number": "13.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutNotPressedToggleButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/toggle-button/button.setFocusOnButton.html",
+  "id": "2223-aria-toggle-button-req-info-about-not-pressed-toggle-button-ins-up-vc",
+  "name": "ARIA-AT, Toggle Button: Request information about a not pressed toggle button; Insert+Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Up",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

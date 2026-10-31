@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleToggleButton",
+        "phrase": "convey role 'toggle button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameMute",
+        "phrase": "convey name 'Mute'",
+        "priority": "1"
+      },
+      {
+        "id": "statePressed",
+        "phrase": "convey state 'pressed'",
+        "priority": "1"
+      }
+    ],
+    "command": "up",
+    "instructions": "Starting at the 'Navigate backwards from here' link, navigate to the 'Mute' button.",
+    "plan": "apg/toggle-button",
+    "presentation_number": "8.0",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToPressedToggleButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/toggle-button/button.setFocusAfterButtonAndSetStateToPressed.html",
+  "id": "2216-aria-toggle-button-nav-back-to-pressed-toggle-button-up-vc",
+  "name": "ARIA-AT, Toggle Button: Navigate backwards to a pressed toggle button; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

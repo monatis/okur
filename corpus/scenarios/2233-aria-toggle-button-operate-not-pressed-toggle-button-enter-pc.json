@@ -1,0 +1,45 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "stateChangeToPressed",
+        "phrase": "convey change in state, to 'pressed'",
+        "priority": "1"
+      }
+    ],
+    "command": "enter",
+    "instructions": "Starting at the 'Mute' button, activate the button.",
+    "plan": "apg/toggle-button",
+    "presentation_number": "20.1",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "operateNotPressedToggleButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/toggle-button/button.setFocusOnButton.html",
+  "id": "2233-aria-toggle-button-operate-not-pressed-toggle-button-enter-pc",
+  "name": "ARIA-AT, Toggle Button: Operate a not pressed toggle button; Enter in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Enter",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

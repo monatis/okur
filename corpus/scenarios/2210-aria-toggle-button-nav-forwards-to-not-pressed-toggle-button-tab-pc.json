@@ -1,0 +1,55 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleToggleButton",
+        "phrase": "convey role 'toggle button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameMute",
+        "phrase": "convey name 'Mute'",
+        "priority": "1"
+      },
+      {
+        "id": "stateNotPressed",
+        "phrase": "convey state 'not pressed'",
+        "priority": "3"
+      }
+    ],
+    "command": "tab",
+    "instructions": "Starting at the 'Navigate forwards from here' link, navigate to the 'Mute' button.",
+    "plan": "apg/toggle-button",
+    "presentation_number": "3.0",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToNotPressedToggleButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/toggle-button/button.setFocusBeforeButton.html",
+  "id": "2210-aria-toggle-button-nav-forwards-to-not-pressed-toggle-button-tab-pc",
+  "name": "ARIA-AT, Toggle Button: Navigate forwards to a not pressed toggle button; Tab in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Tab",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

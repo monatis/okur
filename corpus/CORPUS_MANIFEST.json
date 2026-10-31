@@ -253,6 +253,42 @@
       "sha256": "3c24a2114e6754dfe68296913a38ccbd03b4bdd199f8b20e499fe6cba4cb4dac",
       "size_bytes": 2899
     },
+    "aria-at/toggle-button/button.html": {
+      "sha256": "65f9dba8abde35dcb0c7f90c71a8c336303ba6eeaf7a03174bd3a6406ecbb506",
+      "size_bytes": 3540
+    },
+    "aria-at/toggle-button/button.setFocusAfterButton.html": {
+      "sha256": "23383a6b466ce8da7bd62ed204a583ee96a147aea54ce99dc3cd3c11f1e6e066",
+      "size_bytes": 4260
+    },
+    "aria-at/toggle-button/button.setFocusAfterButtonAndSetStateToPressed.html": {
+      "sha256": "59e2751d3d0ac34dd6bf8d26c25b49cc246390c64a4f518faafa2d8abe82347d",
+      "size_bytes": 4517
+    },
+    "aria-at/toggle-button/button.setFocusBeforeButton.html": {
+      "sha256": "0c793ecfab6f386af0b18f2bafaa0881d0327a6289a8ff3e493f6ba9077417e4",
+      "size_bytes": 4263
+    },
+    "aria-at/toggle-button/button.setFocusBeforeButtonAndSetStateToPressed.html": {
+      "sha256": "f9988f1f22fa7d5a368e54e84689fdcecfd2b2289d8cc535e9405d2336a89ec5",
+      "size_bytes": 4520
+    },
+    "aria-at/toggle-button/button.setFocusOnButton.html": {
+      "sha256": "b3cd0dd64a4a9ffdc6ee926ca99b81ddb9eaa5da0b477d5d4d5f294762b828c8",
+      "size_bytes": 4241
+    },
+    "aria-at/toggle-button/button.setFocusOnButtonAndSetStateToPressed.html": {
+      "sha256": "13e42c55dd7b80120c545fabdfc62735b017b7c3c57d0c301bd0bc287f00a472",
+      "size_bytes": 4449
+    },
+    "aria-at/toggle-button/css/button.css": {
+      "sha256": "5d1bc9a91b0da8f1925f9fc4078a6035a7bd8f595a3fba98090cb1621131c22b",
+      "size_bytes": 2702
+    },
+    "aria-at/toggle-button/js/button.js": {
+      "sha256": "f71e2ac605bdc457aa03f68997f221d59e262b9ae39b9b11965ca4d54a4584db",
+      "size_bytes": 3097
+    },
     "boundaries-dynamic.html": {
       "sha256": "4caaa7092df80f075b4fd5bfa8f3fbbdba558f90188e4f3711aec05dd9c71953",
       "size_bytes": 2383
@@ -5744,11 +5780,263 @@
       }
     },
     {
+      "scenario_id": "2202-aria-toggle-button-nav-forwards-to-not-pressed-toggle-button-down-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusBeforeButton.html",
+      "evidence": {
+        "sha256": "7c16bc79663fde52c673b4e90b955bc1d72280d42d7b4fe8ab1a815f146f3e07",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2203-aria-toggle-button-nav-forwards-to-not-pressed-toggle-button-b-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusBeforeButton.html",
+      "evidence": {
+        "sha256": "ec7e6dc495fa9a85cc5be0975eb99c0012d82af4b469e2c5d500621f84a88da6",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2204-aria-toggle-button-nav-forwards-to-not-pressed-toggle-button-f-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusBeforeButton.html",
+      "evidence": {
+        "sha256": "79163e9ee5ea51aa12ea33d0f2330af8ddc51d26956c92bd9e14c0eee6ce0f8b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2205-aria-toggle-button-nav-forwards-to-not-pressed-toggle-button-tab-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusBeforeButton.html",
+      "evidence": {
+        "sha256": "d0bef18963b00f955575526537613bcae1ede06a75a277f36121112a576ac84c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2206-aria-toggle-button-nav-back-to-not-pressed-toggle-button-up-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusAfterButton.html",
+      "evidence": {
+        "sha256": "08ac8510ba97473db580472f0b56e381d2185fb1ead0d489fe296ee241012bea",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2207-aria-toggle-button-nav-back-to-not-pressed-toggle-button-shift-b-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusAfterButton.html",
+      "evidence": {
+        "sha256": "becfb6293f5202e397351d5e37f51c9cdbf246bfd21e707bac45676bd93551c1",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2208-aria-toggle-button-nav-back-to-not-pressed-toggle-button-shift-f-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusAfterButton.html",
+      "evidence": {
+        "sha256": "a9a9681fea29b1c387556a6f7fb7c12998f888b4787a190c1fa7dcd9d89e8cf0",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2209-aria-toggle-button-nav-back-to-not-pressed-toggle-button-shift-tab-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusAfterButton.html",
+      "evidence": {
+        "sha256": "2f84069a22f10d22e163286df0e8bf73a6ab2508b16fef4e9139fcf11a24f50a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "221-web-empty-element-lists",
       "fixture": "doc-reading.html",
       "evidence": {
         "sha256": "fcff5cd75ed91b283d71e71db5f72daf9bbc4366e5a1b2c49bf8b04855c5586e",
         "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2210-aria-toggle-button-nav-forwards-to-not-pressed-toggle-button-tab-pc",
+      "fixture": "aria-at/toggle-button/button.setFocusBeforeButton.html",
+      "evidence": {
+        "sha256": "0f505930c075bc2be5bc8a4f5e71cc2097325796f30b4e52fabe4919fa07d987",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2211-aria-toggle-button-nav-back-to-not-pressed-toggle-button-shift-tab-pc",
+      "fixture": "aria-at/toggle-button/button.setFocusAfterButton.html",
+      "evidence": {
+        "sha256": "d76ee8d725393a5e09674d59ac3662d633a86f0572dc7f6ff814ed717aa91e52",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2212-aria-toggle-button-nav-forwards-to-pressed-toggle-button-down-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusBeforeButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "57936defe79e92e1a6ae6f78edb62603d111e84705529ff5f453ba15a53cee1c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2213-aria-toggle-button-nav-forwards-to-pressed-toggle-button-b-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusBeforeButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "9b08949fd7aeebba9cef9c63ffa5b75c01bd91859ce21700c6842c552f858d09",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2214-aria-toggle-button-nav-forwards-to-pressed-toggle-button-f-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusBeforeButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "95dad445cd714e7e4a8e5ff946e75950b1be8b120b752be9f981d7e8de60d298",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2215-aria-toggle-button-nav-forwards-to-pressed-toggle-button-tab-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusBeforeButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "5b1e02adadf2d77f0884abf9c2555432414307a3238bddede969d1aebdb2c583",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2216-aria-toggle-button-nav-back-to-pressed-toggle-button-up-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusAfterButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "7cce0ca43d84075fcdcaaa97f2ac3c9341d00cf3b1fc0c92e754e9c8f4e8b823",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2217-aria-toggle-button-nav-back-to-pressed-toggle-button-shift-b-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusAfterButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "9dcdb52efd673c684b6b04af5932fb160b8a5e6ed646db654d350cd20cb2e96b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2218-aria-toggle-button-nav-back-to-pressed-toggle-button-shift-f-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusAfterButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "c9cfc856231a0bc64ca7f32fa5eabaf26f2c1409dbb86970b058cb7223c161f7",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2219-aria-toggle-button-nav-back-to-pressed-toggle-button-shift-tab-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusAfterButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "e31d15e1c41608d635677a0f0618969e81d2a0c14f052bf8bfe97ad66ac37ad3",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -5772,6 +6060,146 @@
       }
     },
     {
+      "scenario_id": "2220-aria-toggle-button-nav-forwards-to-pressed-toggle-button-tab-pc",
+      "fixture": "aria-at/toggle-button/button.setFocusBeforeButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "bd316c9e500ca28fe906f74c223d3cb2830063531d751755d7a931abbdbea0d7",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2221-aria-toggle-button-nav-back-to-pressed-toggle-button-shift-tab-pc",
+      "fixture": "aria-at/toggle-button/button.setFocusAfterButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "2c879efc996ef0d46986d83e0ea1ba37da514d7f634d49e22aee8537b0a4a6fb",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2222-aria-toggle-button-req-info-about-not-pressed-toggle-button-ins-tab-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "a21d56745fc26ce6959bf15759945f7f0f863263bed1548c5316de157d0a3c51",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2223-aria-toggle-button-req-info-about-not-pressed-toggle-button-ins-up-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "0f6638ba707667c47b78bfef38f05cdaf2b87287a8317d78c6f5ea8720fd45f4",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2224-aria-toggle-button-req-info-about-not-pressed-toggle-button-ins-tab-pc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "f6d16e660e6d52f544717c1594a895f083ac1cb7f61415a159643fec3e04250f",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2225-aria-toggle-button-req-info-about-not-pressed-toggle-button-ins-up-pc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "d42fe25d4e4490d143b08cb3a2a4602e49cbca8e39a03c8319723376ff083709",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2226-aria-toggle-button-req-info-about-pressed-toggle-button-ins-tab-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "d05f6677759b68c802abf6c56bcaa0af98bf35b28a3e3ea94a47ea36a58dda53",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2227-aria-toggle-button-req-info-about-pressed-toggle-button-ins-up-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "bab5a56f18f3f8c0c2e9f7c3f129544e0b05f6cf8eb41e1ab5f8256b9eeb434b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2228-aria-toggle-button-req-info-about-pressed-toggle-button-ins-tab-pc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "617d8d658cd28df4bc1f4bd08f233ba995331dcbe86f3d44ee19d126b54210c7",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2229-aria-toggle-button-req-info-about-pressed-toggle-button-ins-up-pc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "60a3e1514fd9a4c22d9e5147487e024825b8e361a5449a62c53993100004aa51",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "223-web-links-list-escape",
       "fixture": "web-app-patterns.html",
       "evidence": {
@@ -5782,6 +6210,118 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2230-aria-toggle-button-operate-not-pressed-toggle-button-space-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "cba5cff8153db8e81ccf869a58c8eca5fad5ffaeb8a4647c2d3aab84ebf95899",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2231-aria-toggle-button-operate-not-pressed-toggle-button-enter-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "41d40254ee9836315579d9f17fd2ded85cb558a20d29b03b881781fb41944cc2",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2232-aria-toggle-button-operate-not-pressed-toggle-button-space-pc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "ccb5762919aeccfd13a572d927eac12571fd82f185939a9c8a926724ff83ea1d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2233-aria-toggle-button-operate-not-pressed-toggle-button-enter-pc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButton.html",
+      "evidence": {
+        "sha256": "c96edfdde5bc226a9ea5b8b1618dbd841a7e70b14b9a1c4a3e00f2aabe792d34",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2234-aria-toggle-button-operate-pressed-toggle-button-space-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "0e595250a5f7dd31bfec529dff77692954d3cf22f013cebc8ff2128050d2d688",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2235-aria-toggle-button-operate-pressed-toggle-button-enter-vc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "64840a7e17180730b06907613e220795da3f3af9e73a349c877861aa812653d6",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2236-aria-toggle-button-operate-pressed-toggle-button-space-pc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "42fbd103def22b78840a733d443181c1feb0b535d31dd6ed591e7fc0ac3f2363",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2237-aria-toggle-button-operate-pressed-toggle-button-enter-pc",
+      "fixture": "aria-at/toggle-button/button.setFocusOnButtonAndSetStateToPressed.html",
+      "evidence": {
+        "sha256": "c04845e92814f6351fac917039bfbda3944a7fa0176ce2444a83caa4ff17665b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -13809,10 +14349,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 948,
-    "scenarios_with_evidence": 948,
-    "total_trials": 2850,
-    "successful_trials": 2833,
-    "deterministic_scenarios": 676
+    "scenarios": 984,
+    "scenarios_with_evidence": 984,
+    "total_trials": 2958,
+    "successful_trials": 2941,
+    "deterministic_scenarios": 712
   }
 }
