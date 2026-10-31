@@ -834,11 +834,16 @@ impl<'a> Builder<'a> {
                 if is_tablist {
                     self.tablists.push(legend.clone().unwrap_or_default());
                 }
+                // A fieldset's own group, not an ARIA one (`role="radiogroup"`, `role="group"`).
+                let fieldset = is_group
+                    && attr(node, "radiogroup").is_none()
+                    && attr(node, "aria_group").is_none();
                 for child in &node.children {
-                    // The legend repeats the fieldset name and is not read again; a heading
-                    // that names a group (an ARIA radio group labelled by it) is read as a
-                    // heading [obs, round-aria4, 2079/s2, 2088/s1].
-                    if node.role == Role::Group
+                    // The legend repeats the fieldset name and is not read again; the element
+                    // that names an ARIA group is read where it is: a heading as a heading, a
+                    // line of text as its line ("group start Rating | Rating") [obs,
+                    // round-aria4, 2079/s2, 2088/s1; round-aria17, 2443/s2, 2462/s1].
+                    if fieldset
                         && !matches!(child.role, Role::Heading { .. })
                         && legend.as_deref().is_some_and(|l| text_content(child) == l)
                     {
