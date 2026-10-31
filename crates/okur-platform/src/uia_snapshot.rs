@@ -242,9 +242,12 @@ pub(crate) fn aria_property<'a>(node: &'a UiaNode, key: &str) -> Option<&'a str>
 }
 
 /// A focusable element whose ARIA properties say it is writable (Chromium reports
-/// `readonly=true` for all other content).
+/// `readonly=true` for all other content), with no role of its own: a role that may be read-only
+/// (a radio group, a list box) leaves `readonly` out unless the page sets it
+/// [obs, round-aria16 snapshots].
 fn is_editing_host(node: &UiaNode) -> bool {
     node.is_keyboard_focusable
+        && matches!(node.aria_role.as_deref(), None | Some("" | "group"))
         && node.aria_properties.is_some()
         && aria_property(node, "readonly") != Some("true")
 }
@@ -1740,5 +1743,24 @@ mod tests {
         assert_eq!(without_access_mark("Speech or _Sound"), "Speech or Sound");
         assert_eq!(without_access_mark("snake__case"), "snake_case");
         assert_eq!(without_access_mark("No mark"), "No mark");
+    }
+
+    /// A focusable group without `readonly=true` is an editing host only without a role of its
+    /// own: a radio group taking the focus itself (`aria-activedescendant`) is a group, its radio
+    /// buttons in the buffer [obs, round-aria16 snapshots].
+    #[test]
+    fn a_focusable_radio_group_is_no_editing_host() {
+        let group = |aria: &str| super::UiaNode {
+            control_type: super::CT_GROUP,
+            aria_role: Some(aria.to_owned()),
+            aria_properties: Some("expanded=false;multiline=false;required=false".to_owned()),
+            is_keyboard_focusable: true,
+            ..Default::default()
+        };
+        assert_eq!(super::map_role(&group("group")), okur_core::Role::Edit);
+        assert_eq!(
+            super::map_role(&group("radiogroup")),
+            okur_core::Role::Group
+        );
     }
 }
