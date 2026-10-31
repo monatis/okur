@@ -86,12 +86,28 @@ NOTICE.md` (written by the importer) names the commit, the copyright and both li
   setting, assertions and exceptions. Ids from 2000.
 - Each trial reloads the page (Ctrl+R) before the reset, so the setup runs afresh.
 
+## The measure of assertions
+
+`okur-lab aria-at-report` (`crates/okur-lab/src/aria_at_report.rs`) replays the ARIA-AT
+scenarios and judges each assertion twice, on Okur's speech and on JAWS's first recorded
+transcript, the same way: the command's steps joined (a PC cursor scenario's closing Insert+Z
+left out); a role by the words JAWS uses for it ("check box", "radio button", "TabPanel"); a
+state by its words, whole ("checked" is not in "not checked"); a name as written, letters and
+digits only ("cant" is "can't"); a place as "2 of 3"; "some or all" of a text by its first six
+words. An assertion it cannot read (a list's boundary, the ability to edit text) is unjudged.
+Priority 1 is MUST, 2 SHOULD, 3 MAY; a command's exceptions lower an assertion's priority
+(the tab list's role is MAY for JAWS's commands).
+
+Its figures are a judge's, read by hand before they are trusted: the unmet MUST assertions of
+2026-11-01 were all real, and JAWS leaves the same ones (an accordion header's heading level
+on the PC cursor's Tab; Shift+Tab into a radio group with none checked landing on its first
+radio button, the page's tab stop). Where Okur conveys more than JAWS (56 assertions then), it
+is the places JAWS leaves out (accepted divergences and the open steps of rating and tabs).
+
 ## Open
 
-- **Assertions as a measure.** Each scenario carries its test's assertions; a judge of whether
-  Okur's speech conveys each role, name and state (in JAWS's words) is to come, beside exact
-  parity.
-- **The first format's 12 plans**, among them the comboboxes and the menubar.
+- **The first format's 11 plans with JAWS commands** are imported (ids 2859-3153) and queued;
+  menubar-editor has none.
 - **Office-like harness effects.** A widget that closes when its window loses the foreground
   could close during the recorder's history copy, as Excel's NetUI menu did (1122/s2); watch
   for it in the menu buttons and the dialog.

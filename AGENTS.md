@@ -115,6 +115,7 @@ Building evidence collection and verification tooling is the real engineering in
 - `okur-lab latency <debug log>`: per-step timings of a live run, including key to speech audio per chord; `skills/jaws-reference/scripts/measure-edit-keys.sh` plays the everyday edit keys for it.
 - `skills/jaws-reference/scripts/parity-snapshot.sh <dir>`: the three parity outputs, to compare before and after a change with `diff -r`.
 - `skills/jaws-reference/scripts/preview-round.sh <fetched round dir>`: replays the scenarios a round has recorded so far, from a scratch corpus, before the round is imported (fetch what is done with `lab-fetch.sh`).
+- `okur-lab aria-at-report [--unmet <plan>]`: the measure of ARIA-AT's assertions, per imported test plan: how many Okur's speech conveys beside JAWS's recorded speech, judged the same way (`docs/references/aria-at-research.md`).
 
 ### Verification Integrity Rules (non-negotiable)
 
