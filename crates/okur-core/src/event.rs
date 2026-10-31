@@ -195,6 +195,11 @@ pub struct SheetPlace {
     /// selected.
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub selection: String,
+    /// The texts of the selection's first and last cells, its top left and bottom right.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub selection_first: String,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub selection_last: String,
     pub row: Vec<String>,
     pub column: Vec<String>,
     pub row_at: usize,

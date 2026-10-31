@@ -352,8 +352,12 @@ pub struct ScreenReaderEngine {
     /// The menus ended back on a focus its application says itself: "Leaving menus" waits for
     /// that focus, to be said with it.
     menus_left_unsaid: bool,
-    /// Excel's active cell was asked for, to say it, its grid focused without a cell.
+    /// Excel's active cell was asked for, to say it, its grid focused without a cell, or the
+    /// selection a selecting key changed.
     sheet_cell_asked: bool,
+    /// Excel's selection as last read, before the next selecting key; none after any other key
+    /// (the selection is then the active cell alone).
+    sheet_selection: Option<String>,
     /// One of Excel's lists was asked for, and is awaited.
     sheet_list_asked: Option<crate::event::SheetListKind>,
     /// One of Excel's row or column readers asked for the active cell's row and column, and
@@ -663,6 +667,7 @@ impl ScreenReaderEngine {
             sheet_reading_asked: None,
             sheet_list_asked: None,
             sheet_cell_asked: false,
+            sheet_selection: None,
             say_all_paragraphs_asked: false,
             document_view_title: None,
             document_view_by_key: None,
@@ -925,6 +930,10 @@ impl ScreenReaderEngine {
         self.last_key_escapes =
             event.key == Key::Escape && event.modifiers == crate::input::Modifiers::none();
         self.last_key = Some((event.key, event.modifiers));
+        // Excel's selection is the active cell's alone again after any other key.
+        if crate::apps::windows::excel::SelectionKey::of(event.key, event.modifiers).is_none() {
+            self.sheet_selection = None;
+        }
         self.last_key_letter = matches!(event.key, Key::Alpha(_))
             && event.modifiers == crate::input::Modifiers::none();
         self.last_key_selects = event.modifiers.shift
@@ -1695,7 +1704,22 @@ impl ScreenReaderEngine {
             } => self.sheet_list(*kind, column, entries),
             AccessibilityEvent::SheetPlace(place) if self.sheet_cell_asked => {
                 self.sheet_cell_asked = false;
-                let said = crate::apps::windows::excel::blank_or_cell(place.as_ref()?)?;
+                let place = place.as_ref()?;
+                // A selecting key's change, "select | 8 | C 2" [obs, 1120, 1121].
+                let selecting = self
+                    .last_key
+                    .and_then(|(key, m)| crate::apps::windows::excel::SelectionKey::of(key, m));
+                if let Some(kind) = selecting {
+                    let before = self.sheet_selection.replace(place.selection.clone());
+                    let said = crate::apps::windows::excel::selection_said(
+                        before.as_deref(),
+                        place,
+                        kind,
+                    )?;
+                    self.speech.speak(&said, true);
+                    return Some(said);
+                }
+                let said = crate::apps::windows::excel::blank_or_cell(place)?;
                 self.speech.speak(&said, true);
                 Some(said)
             }

@@ -64,13 +64,33 @@ pub fn sheet_place(grid: HWND) -> Option<okur_core::SheetPlace> {
     let row_cells: Vec<String> = (left..left + columns).map(|c| shown(row, c)).collect();
     let column_cells: Vec<String> = (top..top + rows).map(|r| shown(r, column)).collect();
     let at = |from: i32, here: i32| usize::try_from(here.saturating_sub(from)).ok();
+    // The selection's corners, as Excel shows them (`Selection.Cells(1, 1)` and its last).
+    let selected = property(&window, "Selection").as_ref().and_then(object);
+    let corner = |last: bool| -> String {
+        let Some(selected) = selected.as_ref() else {
+            return String::new();
+        };
+        let count = |name: &str| {
+            property(selected, name)
+                .as_ref()
+                .and_then(object)
+                .and_then(|range| number(&range, "Count"))
+                .unwrap_or(1)
+        };
+        let (r, c) = if last {
+            (count("Rows"), count("Columns"))
+        } else {
+            (1, 1)
+        };
+        sheet_cell(selected, r, c)
+            .map(|cell| text(&cell, "Text").trim().to_owned())
+            .unwrap_or_default()
+    };
     Some(okur_core::SheetPlace {
         address: address(&cell).unwrap_or_default(),
-        selection: property(&window, "Selection")
-            .as_ref()
-            .and_then(object)
-            .and_then(|selected| address(&selected))
-            .unwrap_or_default(),
+        selection: selected.as_ref().and_then(address).unwrap_or_default(),
+        selection_first: corner(false),
+        selection_last: corner(true),
         row_at: at(left, column)?,
         column_at: at(top, row)?,
         row: row_cells,

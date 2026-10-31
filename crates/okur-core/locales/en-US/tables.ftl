@@ -198,6 +198,12 @@ excel-data-region-edge = edge of current data region
 excel-data-region-start = start of new Data Region
 # An empty cell, after "blank" and its coordinates [obs, 1118/s3, s4].
 excel-active-cell = Active Cell: { $cell }
+# Excel's selections: a cell taken in or out, or the selection's corners after "select"; whole
+# rows and columns first, in JAWS's capitals [obs, 1120, 1121, 1117].
+excel-select = select
+excel-unselect = unselect
+excel-selected-row = selected entire row
+excel-selected-column = Selected entire column
 # Excel's lists with nothing to list: a column's [obs, 521/s9 in round-521e]; formulas' and
 # worksheets' [hyp: not recorded].
 excel-no-column-cells = No cells with data in current column.

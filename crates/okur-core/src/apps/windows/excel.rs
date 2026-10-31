@@ -65,6 +65,18 @@ impl AppModule for Excel {
         let Some(coordinates) = cell(focus) else {
             return FocusResponse::Pass;
         };
+        // A selecting key leaves the focus on the active cell: the selection is read from
+        // Excel's object model and said for what it changed [obs, 1120, 1121].
+        if cx
+            .key
+            .and_then(|(key, m)| SelectionKey::of(key, m))
+            .is_some()
+        {
+            cx.note_window(focus);
+            *cx.app_mode = crate::engine::AppMode::NativeControl;
+            cx.ask_sheet = true;
+            return FocusResponse::Silent;
+        }
         cx.note_window(focus);
         // A native control's keys are the application's, as for any cell the engine reads.
         *cx.app_mode = crate::engine::AppMode::NativeControl;
@@ -172,6 +184,234 @@ impl SheetReading {
     }
 }
 
+/// Excel's keys that change the selection: Shift with an arrow, Home, End, PageUp or PageDown
+/// extends it; Shift+Space selects the rows, Ctrl+Space the columns.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum SelectionKey {
+    Extend,
+    Rows,
+    Columns,
+}
+
+impl SelectionKey {
+    pub(crate) fn of(key: Key, m: crate::input::Modifiers) -> Option<Self> {
+        if m.alt || m.insert || m.win {
+            return None;
+        }
+        match (key, m.shift, m.ctrl) {
+            (Key::Space, true, false) => Some(Self::Rows),
+            (Key::Space, false, true) => Some(Self::Columns),
+            (
+                Key::LeftArrow
+                | Key::RightArrow
+                | Key::UpArrow
+                | Key::DownArrow
+                | Key::Home
+                | Key::End
+                | Key::PageUp
+                | Key::PageDown,
+                true,
+                _,
+            ) => Some(Self::Extend),
+            _ => None,
+        }
+    }
+}
+
+/// The last column and row of an Excel sheet (XFD, 1048576).
+const LAST_COLUMN: u32 = 16_384;
+const LAST_ROW: u32 = 1_048_576;
+
+/// A rectangle of cells, columns and rows from 1.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct Cells {
+    left: u32,
+    top: u32,
+    right: u32,
+    bottom: u32,
+}
+
+impl Cells {
+    fn count(&self) -> u64 {
+        u64::from(self.right - self.left + 1) * u64::from(self.bottom - self.top + 1)
+    }
+
+    fn holds(&self, other: &Cells) -> bool {
+        self.left <= other.left
+            && self.top <= other.top
+            && self.right >= other.right
+            && self.bottom >= other.bottom
+    }
+
+    /// The one cell of `self` outside `smaller`, which `self` holds with one cell more.
+    fn extra(&self, smaller: &Cells) -> Option<(u32, u32)> {
+        let column = if self.left < smaller.left {
+            self.left
+        } else if self.right > smaller.right {
+            self.right
+        } else {
+            self.left
+        };
+        let row = if self.top < smaller.top {
+            self.top
+        } else if self.bottom > smaller.bottom {
+            self.bottom
+        } else {
+            self.top
+        };
+        (!smaller.holds(&Cells {
+            left: column,
+            top: row,
+            right: column,
+            bottom: row,
+        }))
+        .then_some((column, row))
+    }
+}
+
+/// A column's number from its letters ("XFD" 16384).
+fn column_number(letters: &str) -> Option<u32> {
+    letters.chars().try_fold(0u32, |n, c| {
+        let digit = u32::from(c.to_ascii_uppercase()).checked_sub(u32::from('A'))? + 1;
+        (digit <= 26).then(|| n * 26 + digit)
+    })
+}
+
+/// A column's letters from its number (16384 "XFD").
+fn column_letters(mut number: u32) -> String {
+    let mut letters = Vec::new();
+    while number > 0 {
+        let digit = (number - 1) % 26;
+        letters.push(char::from(b'A' + u8::try_from(digit).unwrap_or(0)));
+        number = (number - 1) / 26;
+    }
+    letters.iter().rev().collect()
+}
+
+/// One end of a reference: a cell ("B2"), a whole column ("C") or a whole row ("1"), as
+/// (column, row), either `None` where the reference gives none.
+fn reference_end(end: &str) -> Option<(Option<u32>, Option<u32>)> {
+    let split = end.find(|c: char| c.is_ascii_digit()).unwrap_or(end.len());
+    let (letters, digits) = (end.get(..split)?, end.get(split..)?);
+    let column = (!letters.is_empty())
+        .then(|| column_number(letters))
+        .flatten();
+    let row = (!digits.is_empty()).then(|| digits.parse().ok()).flatten();
+    (column.is_some() || row.is_some()).then_some((column, row))
+}
+
+/// A selection's reference as its cells: "A1:B2", "B1", "1:1" (a whole row), "C:C" (a whole
+/// column).
+fn cells(reference: &str) -> Option<Cells> {
+    let reference = reference.trim();
+    let (first, last) = reference.split_once(':').unwrap_or((reference, reference));
+    let (c1, r1) = reference_end(first)?;
+    let (c2, r2) = reference_end(last)?;
+    Some(Cells {
+        left: c1.unwrap_or(1),
+        top: r1.unwrap_or(1),
+        right: c2.unwrap_or(LAST_COLUMN),
+        bottom: r2.unwrap_or(LAST_ROW),
+    })
+}
+
+/// A cell's coordinates as JAWS says them, its column's letters apart and from its row: "B 2",
+/// "X F D 1" [obs, 1120/s7].
+fn cell_coordinates(column: u32, row: u32) -> String {
+    let letters: Vec<String> = column_letters(column).chars().map(String::from).collect();
+    format!("{} {row}", letters.join(" "))
+}
+
+/// The text of the cell at `column` and `row` where the active cell's row or column holds
+/// it; empty elsewhere.
+fn known_text(place: &crate::event::SheetPlace, active: (u32, u32), cell: (u32, u32)) -> String {
+    let index = |at: usize, from: u32, to: u32| {
+        let offset = i64::from(to) - i64::from(from);
+        usize::try_from(i64::try_from(at).ok()? + offset).ok()
+    };
+    let found = if cell.1 == active.1 {
+        index(place.row_at, active.0, cell.0).and_then(|i| place.row.get(i))
+    } else if cell.0 == active.0 {
+        index(place.column_at, active.1, cell.1).and_then(|i| place.column.get(i))
+    } else {
+        None
+    };
+    found.map(|t| t.trim().to_owned()).unwrap_or_default()
+}
+
+/// What a selecting key changed, as JAWS says it [obs, 1120, 1121, 1117]:
+/// - one cell more, "select" and the cell, "select | 8 | C 2", a blank one by its coordinates
+///   alone, "select | D 2"; one cell less, "unselect | Weekends | C 1";
+/// - any other change, "select" and the selection's corners with their values, "select | B 2 |
+///   12 | D 3 | blank";
+/// - Shift+Space and Ctrl+Space first say what they selected, "selected entire row", "Selected
+///   entire column"; the whole sheet selected, the active cell after it, "Selected entire
+///   column | Branch | A 1".
+///
+/// `before` is the selection before the key, the active cell's alone where none was read.
+pub(crate) fn selection_said(
+    before: Option<&str>,
+    place: &crate::event::SheetPlace,
+    key: SelectionKey,
+) -> Option<String> {
+    let now = cells(&place.selection)?;
+    let active = cells(&place.address)?;
+    let was = before.and_then(cells).unwrap_or(active);
+    let blank = msg::blank().to_string();
+    let shown = |text: &str| {
+        if text.trim().is_empty() {
+            blank.clone()
+        } else {
+            text.trim().to_owned()
+        }
+    };
+    let mut lines = Vec::new();
+    match key {
+        SelectionKey::Rows => lines.push(msg::excel_selected_row().to_string()),
+        SelectionKey::Columns => lines.push(msg::excel_selected_column().to_string()),
+        SelectionKey::Extend => {}
+    }
+    let whole_sheet =
+        now.left == 1 && now.top == 1 && now.right == LAST_COLUMN && now.bottom == LAST_ROW;
+    if whole_sheet {
+        let value = known_text(place, (active.left, active.top), (active.left, active.top));
+        if !value.is_empty() {
+            lines.push(value);
+        }
+        lines.push(cell_coordinates(active.left, active.top));
+        return Some(lines.join("\n"));
+    }
+    let single = |cell: (u32, u32), word: String| {
+        let value = known_text(place, (active.left, active.top), cell);
+        let mut said = vec![word];
+        if !value.is_empty() {
+            said.push(value);
+        }
+        said.push(cell_coordinates(cell.0, cell.1));
+        said
+    };
+    if now.holds(&was) && now.count() == was.count() + 1 {
+        if let Some(cell) = now.extra(&was) {
+            lines.extend(single(cell, msg::excel_select().to_string()));
+            return Some(lines.join("\n"));
+        }
+    }
+    if was.holds(&now) && was.count() == now.count() + 1 {
+        if let Some(cell) = was.extra(&now) {
+            lines.extend(single(cell, msg::excel_unselect().to_string()));
+            return Some(lines.join("\n"));
+        }
+    }
+    lines.extend([
+        msg::excel_select().to_string(),
+        cell_coordinates(now.left, now.top),
+        shown(&place.selection_first),
+        cell_coordinates(now.right, now.bottom),
+        shown(&place.selection_last),
+    ]);
+    Some(lines.join("\n"))
+}
+
 /// Excel's grid itself focused, as an empty cell leaves it (no cell element to focus).
 fn grid(focus: &FocusEvent) -> bool {
     focus.platform.window_class.as_deref() == Some(GRID_WINDOW) && focus.role != Role::TableCell
@@ -233,6 +473,8 @@ mod tests {
         let place = crate::event::SheetPlace {
             address: "B3".into(),
             selection: "B3".into(),
+            selection_first: "10".into(),
+            selection_last: "10".into(),
             row: vec!["Northside".into(), "10".into(), "6".into()],
             column: vec!["Weekdays".into(), "12".into(), "10".into(), "22".into()],
             row_at: 1,
@@ -261,6 +503,61 @@ mod tests {
             said(SheetReading::ColumnToBottom).as_deref(),
             Some("10\n22")
         );
+    }
+
+    /// JAWS's words for selections [obs, 1120/s1-s9, 1121/s3-s6].
+    #[test]
+    fn selections_are_said_by_what_changed() {
+        let place = |selection: &str, first: &str, last: &str| crate::event::SheetPlace {
+            address: "B2".into(),
+            selection: selection.into(),
+            selection_first: first.into(),
+            selection_last: last.into(),
+            row: vec!["Central".into(), "12".into(), "8".into(), String::new()],
+            column: vec!["Weekdays".into(), "12".into(), "10".into(), "22".into()],
+            row_at: 1,
+            column_at: 1,
+        };
+        let said = |before: Option<&str>, now: crate::event::SheetPlace, key| {
+            selection_said(before, &now, key)
+        };
+        assert_eq!(
+            said(None, place("B2:C2", "12", "8"), SelectionKey::Extend).as_deref(),
+            Some("select\n8\nC 2")
+        );
+        assert_eq!(
+            said(
+                Some("B2:C2"),
+                place("B2:D2", "12", ""),
+                SelectionKey::Extend
+            )
+            .as_deref(),
+            Some("select\nD 2")
+        );
+        assert_eq!(
+            said(
+                Some("B2:D2"),
+                place("B2:D3", "12", ""),
+                SelectionKey::Extend
+            )
+            .as_deref(),
+            Some("select\nB 2\n12\nD 3\nblank")
+        );
+        assert_eq!(
+            said(
+                Some("B2:D2"),
+                place("B2:C2", "12", "8"),
+                SelectionKey::Extend
+            )
+            .as_deref(),
+            Some("unselect\nD 2")
+        );
+        assert_eq!(
+            said(None, place("2:2", "Central", ""), SelectionKey::Rows).as_deref(),
+            Some("selected entire row\nselect\nA 2\nCentral\nX F D 2\nblank")
+        );
+        assert_eq!(column_letters(16_384), "XFD");
+        assert_eq!(column_number("XFD"), Some(16_384));
     }
 
     #[test]
