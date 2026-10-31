@@ -57,15 +57,15 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `8fc9c9e4` (2026-10-31).
+Every figure is tool output, rerun for this README at commit `b2f2c2c5` (2026-10-31).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **9521 of 10101** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **9412 of 10162** | `okur-lab parity` |
+| Steps matching JAWS's speech history, word for word | **9577 of 10149** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **9455 of 10210** | `okur-lab parity` |
 | Steps left out on purpose (accepted divergences, each a written decision) | **284** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **737, 2217** (2200 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1556 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
+| Recorded JAWS scenarios, trials | **743, 2235** (2218 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1560 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
@@ -198,6 +198,13 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   one and Activate Link follows it; List Fields (Insert+F5) lists its fields ("HYPERLINK
   opening hours", "FORMTEXT") and OK moves to one; with none, each says so in Word's words.
   The line spacing and the fields come from Word's own object model.
+- **Microsoft Excel:** a cell is read as JAWS reads it, its value and then its coordinates
+  ("12, B 2"), and Insert+C says the coordinates alone. Ctrl+Home and Ctrl+End name the first
+  and last cell, the Ctrl arrows the edge of the data region they stop at. Say Line reads the
+  row; Shift+Insert+Up, Home and PageUp read the row whole, from its start or to its end, and
+  Ctrl+Insert with the same keys the column. Insert+Shift+F lists the cells with formulas,
+  Insert+Shift+C the column's cells and Ctrl+Shift+S the worksheets, and OK goes there. The
+  rows, columns and lists come from Excel's own object model.
 - **The cursors:** Numpad Minus to the Okur cursor at the mouse, Numpad Plus back to the PC
   cursor, Insert+Numpad Minus to bring the Okur cursor to the PC cursor, Insert+Numpad Plus
   the other way, Insert+R for where the Okur cursor may go, and Alt+Delete for where the
@@ -299,7 +306,7 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- Outlook and Excel, not yet supported (Excel's first scenario is recorded);
+- Outlook, not yet supported; in Excel, selections and the sheet tabs' menu (Insert+Shift+S);
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;
