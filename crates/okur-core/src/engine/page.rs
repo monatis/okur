@@ -255,10 +255,15 @@ impl ScreenReaderEngine {
                 if before.states.checked != control.states.checked
                     || before.states.mixed != control.states.mixed =>
             {
-                let state = control
-                    .states
-                    .check_word()
-                    .unwrap_or_else(msg::state_not_checked);
+                // A switch says "On" or "Off" [obs, round-aria8, 2262/s1, 2266/s1].
+                let mut after = before.clone();
+                after.states.checked = control.states.checked;
+                let state = crate::linearize::switch_state(&after).unwrap_or_else(|| {
+                    control
+                        .states
+                        .check_word()
+                        .unwrap_or_else(msg::state_not_checked)
+                });
                 crate::linearize::state_marker(state.as_str())
             }
             // An autocomplete's list opened or closed as it is typed in: " expanded " (JAWS on

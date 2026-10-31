@@ -30,6 +30,22 @@ pub(crate) fn state_marker(name: &str) -> String {
     format!(" {RS}{name}{RE} ")
 }
 
+/// An ARIA switch's state, "On" or "Off", where `node` is one (`role="switch"`, a check box
+/// with that ARIA role): JAWS says "Notifications Switch Off" on its line, its focus and its
+/// quick keys, with no usage hint, and "On" or "Off" as it is toggled [obs, round-aria8,
+/// 2238/s1, 2240/s1, 2262/s1].
+pub(crate) fn switch_state(node: &AomNode) -> Option<crate::messages::StaticMessage> {
+    (node.role == Role::CheckBox
+        && node.attributes.get("aria_role").map(String::as_str) == Some("switch"))
+    .then(|| {
+        if node.states.checked == Some(true) {
+            msg::state_on()
+        } else {
+            msg::state_off()
+        }
+    })
+}
+
 /// Whether a radio button is a checked ARIA one (`role="radio"` on another element), whose
 /// place in its group JAWS says only with the virtual cursor off: "Thin crust radio button
 /// checked", where an unchecked one is "Regular crust radio button not checked | 1 of 3", and a
@@ -1161,14 +1177,21 @@ impl<'a> Builder<'a> {
                 s.push_str(node.value.as_deref().unwrap_or_default());
                 s
             }
-            Role::CheckBox => format!(
-                "{name}{}{}",
-                role_marker(
-                    node.role_description()
-                        .unwrap_or(msg::role_check_box().as_str())
+            Role::CheckBox => match switch_state(node) {
+                Some(state) => format!(
+                    "{name}{}{}",
+                    role_marker(msg::role_switch().as_str()),
+                    state_marker(state.as_str())
                 ),
-                state_marker(checked(&node.states))
-            ),
+                None => format!(
+                    "{name}{}{}",
+                    role_marker(
+                        node.role_description()
+                            .unwrap_or(msg::role_check_box().as_str())
+                    ),
+                    state_marker(checked(&node.states))
+                ),
+            },
             Role::RadioButton => {
                 let mut s = format!(
                     "{name}{}{}",

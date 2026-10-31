@@ -19,6 +19,9 @@ state-expanded = expanded
 # The element opens a popup (aria-haspopup); its kind follows. JAWS's spacing and capitals.
 state-has-popup = Has Popup
 state-pressed = Pressed
+# A switch's states [obs, round-aria8, 2238/s1, 2246/s1].
+state-on = On
+state-off = Off
 state-not-pressed = Not pressed
 state-required = Required
 # A word the field marks as a spelling error: said in a mark before its line, and before a

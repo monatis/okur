@@ -257,6 +257,9 @@ fn map_role(node: &UiaNode) -> okur_core::Role {
     }
     match aria {
         "dialog" => return Role::Dialog,
+        // An ARIA switch, a toggle button to UI Automation, is a check box as IA2 has it, so
+        // that its focus meets its line [obs, round-aria8, 2255/s1].
+        "switch" => return Role::CheckBox,
         // Chrome exposes tab panels as Pane or Group; the ARIA role is authoritative.
         "tabpanel" => return Role::TabPanel,
         "alertdialog" => return Role::AlertDialog,

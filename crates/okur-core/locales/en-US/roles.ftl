@@ -10,6 +10,8 @@ role-button = Button
 role-button-line = button
 role-button-menu = button menu
 role-check-box = check box
+# An ARIA switch (role="switch") [obs, round-aria8, 2238/s1].
+role-switch = Switch
 # Said before the text of a virtual cursor line that holds a check box. JAWS writes it as one word here.
 role-check-box-line = checkbox
 role-combo-box = combo box

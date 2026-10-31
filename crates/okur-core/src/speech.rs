@@ -468,12 +468,16 @@ impl SpeechFormatter {
             // In parts, so that verbosity's Control Type and Item State can leave them out
             // [obs, 737/s7, 738/s7].
             Role::CheckBox => {
-                let role = node
-                    .role_description()
-                    .unwrap_or(msg::role_check_box().as_str());
+                let switch = crate::linearize::switch_state(node);
+                let role = if switch.is_some() {
+                    msg::role_switch().as_str()
+                } else {
+                    node.role_description()
+                        .unwrap_or(msg::role_check_box().as_str())
+                };
                 let mut parts = name_and_role(name, role);
                 parts.push(Part::text(" "));
-                parts.push(Part::state(checked(&node.states)));
+                parts.push(Part::state(switch.unwrap_or_else(|| checked(&node.states))));
                 let mut lines: Vec<Line> = entered_group().into_iter().collect();
                 lines.push(Line::new(parts));
                 Announcement::new(lines)
@@ -534,6 +538,8 @@ impl SpeechFormatter {
     pub fn web_focus_hint(node: &crate::aom::AomNode, virtual_off: bool) -> Option<&'static str> {
         use crate::aom::Role;
         match node.role {
+            // A switch has none [obs, round-aria8, 2240/s1].
+            Role::CheckBox if crate::linearize::switch_state(node).is_some() => None,
             Role::CheckBox if node.states.checked == Some(true) => {
                 Some(msg::hint_clear_checkmark_spacebar().as_str())
             }
