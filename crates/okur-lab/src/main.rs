@@ -1303,6 +1303,8 @@ async fn main() {
                 let view = okur_platform::actions::document_view_now(window_title.as_deref());
                 // Word's status bar, for Say Bottom Line of Window.
                 let status_bar = okur_platform::actions::status_bar_now(window_title.as_deref());
+                // Excel's active cell's row and column, for its row and column readers.
+                let sheet_place = okur_platform::actions::sheet_place_now(window_title.as_deref());
                 let paragraphs =
                     okur_platform::actions::document_paragraphs_now(window_title.as_deref());
                 let links = okur_platform::actions::document_links_now(window_title.as_deref());
@@ -1389,6 +1391,7 @@ async fn main() {
                         "headings": headings.unwrap_or_default(),
                         "view": view,
                         "status_bar": status_bar,
+                        "sheet_place": sheet_place,
                         "paragraphs": paragraphs.unwrap_or_default(),
                         "links": links.unwrap_or_default(),
                         "line_spacing": line_spacing.map(|s| serde_json::json!({

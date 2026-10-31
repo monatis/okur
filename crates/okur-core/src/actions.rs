@@ -158,6 +158,13 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for the active cell's row and column of the spreadsheet in front (Excel's), which
+    /// arrive later as [`crate::event::AccessibilityEvent::SheetPlace`], always. Returns false
+    /// when unsupported.
+    fn read_sheet_place(&self) -> bool {
+        false
+    }
+
     /// Asks for what one of Word's keys (`key`, just pressed) left in the focused document,
     /// once Word has acted on it, which arrives later as
     /// [`crate::event::AccessibilityEvent::WordKeyState`], always. Returns false when
@@ -535,6 +542,13 @@ impl ApplicationActions for RecordingActions {
     fn read_status_bar(&self) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push(("status bar".to_owned(), 0));
+        }
+        true
+    }
+
+    fn read_sheet_place(&self) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("sheet place".to_owned(), 0));
         }
         true
     }

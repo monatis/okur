@@ -118,6 +118,7 @@ mod windows_actions {
         /// The view Word's window in front shows its document in, answered always.
         DocumentView,
         StatusBar,
+        SheetPlace,
         /// The caret to a paragraph of the focused document (from 0), then the field's text.
         Paragraph(Option<Box<TextContext>>, usize),
         /// A chord of virtual keys, sent marked as the screen reader's own.
@@ -198,6 +199,7 @@ mod windows_actions {
                 Request::DocumentParagraphs => "document paragraphs",
                 Request::DocumentView => "document view",
                 Request::StatusBar => "status bar",
+                Request::SheetPlace => "sheet place",
                 Request::Paragraph(..) => "paragraph",
                 Request::Keys(_) => "keys",
                 Request::Window(_) => "viewer read",
@@ -526,6 +528,14 @@ mod windows_actions {
                                     .unwrap_or_default();
                                 tracing::debug!(items = items.len(), "status bar read");
                                 let _ = events.send(AccessibilityEvent::StatusBar(items));
+                            }
+                            Request::SheetPlace => {
+                                let Some(events) = events.as_ref() else {
+                                    return;
+                                };
+                                let place = crate::actions::sheet_place_now(None);
+                                tracing::debug!(read = place.is_some(), "sheet place read");
+                                let _ = events.send(AccessibilityEvent::SheetPlace(place));
                             }
                             Request::Paragraph(before, paragraph) => {
                                 let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
@@ -1037,6 +1047,10 @@ mod windows_actions {
             self.send(Request::StatusBar)
         }
 
+        fn read_sheet_place(&self) -> bool {
+            self.send(Request::SheetPlace)
+        }
+
         fn read_word_key(&self, key: okur_core::WordKey) -> bool {
             self.send(Request::WordKey(key))
         }
@@ -1309,6 +1323,19 @@ pub fn document_view_now(window_title: Option<&str>) -> Option<String> {
     }
     .ok()?;
     crate::text_context::word_view(&uia, window)
+}
+
+/// The active cell's row and column of Excel's window, read right away on the calling thread:
+/// the window in front, or the top-level window titled `window_title`.
+#[cfg(windows)]
+pub fn sheet_place_now(window_title: Option<&str>) -> Option<okur_core::SheetPlace> {
+    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+    let top = match window_title {
+        Some(title) => crate::harness::window_titled(title)?,
+        // SAFETY: a plain query.
+        None => unsafe { GetForegroundWindow() },
+    };
+    crate::excel_om::sheet_place(crate::excel_om::grid_window(top)?)
 }
 
 /// The items of the status bar of Word's window, read right away on the calling thread: the

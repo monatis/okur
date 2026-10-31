@@ -1052,6 +1052,23 @@ impl ScreenReaderEngine {
                 return;
             }
         }
+        // Excel's row and column readers, the active cell's row and column asked for first.
+        if let Some(reading) = crate::apps::windows::excel::SheetReading::of(event) {
+            let in_sheet = self
+                .last_native_focus
+                .as_ref()
+                .and_then(crate::apps::windows::excel::cell)
+                .is_some();
+            if in_sheet
+                && self
+                    .actions
+                    .as_ref()
+                    .is_some_and(|actions| actions.read_sheet_place())
+            {
+                self.sheet_reading_asked = Some(reading);
+                return;
+            }
+        }
         // Excel's Insert+C, the cell's coordinates: "B 2" [obs, 521/s6].
         if event.key == Key::Alpha('C') && !m.ctrl && !m.shift && !m.alt && !m.win {
             let said = self

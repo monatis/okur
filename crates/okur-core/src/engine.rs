@@ -347,6 +347,9 @@ pub struct ScreenReaderEngine {
     notes_viewer_asked: Option<crate::event::NoteKind>,
     /// Say Bottom Line of Window asked for Word's status bar, and awaits it.
     status_bar_asked: bool,
+    /// One of Excel's row or column readers asked for the active cell's row and column, and
+    /// awaits them.
+    sheet_reading_asked: Option<crate::apps::windows::excel::SheetReading>,
     /// A key for Word's revisions asked whether the document tracks its changes, which it
     /// needs, and awaits the answer.
     revisions_asked: Option<crate::apps::windows::word::RevisionKey>,
@@ -646,6 +649,7 @@ impl ScreenReaderEngine {
             notes_viewer_asked: None,
             revisions_asked: None,
             status_bar_asked: false,
+            sheet_reading_asked: None,
             say_all_paragraphs_asked: false,
             document_view_title: None,
             document_view_by_key: None,
@@ -1659,6 +1663,12 @@ impl ScreenReaderEngine {
             }
             AccessibilityEvent::DocumentFields(fields) => self.document_fields(fields),
             AccessibilityEvent::StatusBar(items) => self.word_status_bar(items),
+            AccessibilityEvent::SheetPlace(place) => {
+                let reading = self.sheet_reading_asked.take()?;
+                let said = reading.said(place.as_ref()?)?;
+                self.speech.speak(&said, true);
+                Some(said)
+            }
             AccessibilityEvent::DocumentNotes(kind, notes)
                 if self.notes_viewer_asked == Some(*kind) =>
             {

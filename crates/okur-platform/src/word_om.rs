@@ -159,7 +159,7 @@ pub fn document_window(top: HWND) -> Option<HWND> {
 }
 
 /// Word's `Window` object for its document window.
-fn word_window(document: HWND) -> Option<IDispatch> {
+pub(crate) fn word_window(document: HWND) -> Option<IDispatch> {
     let mut raw = null_mut();
     // SAFETY: asks the window for an IDispatch into the out-pointer, a local.
     unsafe { AccessibleObjectFromWindow(document, OBJID_NATIVEOM, &IDispatch::IID, &mut raw) }
@@ -892,7 +892,7 @@ fn form_field(field: &IDispatch) -> FormField {
 }
 
 /// The text property `name` of `object`; empty where it has none.
-fn text(object: &IDispatch, name: &str) -> String {
+pub(crate) fn text(object: &IDispatch, name: &str) -> String {
     property(object, name)
         .and_then(|text| windows::core::BSTR::try_from(&text).ok())
         .map(|text| text.to_string())
@@ -900,7 +900,7 @@ fn text(object: &IDispatch, name: &str) -> String {
 }
 
 /// The number property `name` of `object`.
-fn number(object: &IDispatch, name: &str) -> Option<i32> {
+pub(crate) fn number(object: &IDispatch, name: &str) -> Option<i32> {
     property(object, name).and_then(|value| i32::try_from(&value).ok())
 }
 
@@ -971,10 +971,10 @@ pub fn mark_saved(document: HWND) -> bool {
 }
 
 /// At most this many of a document's fields are listed.
-const MAX_FIELDS: i32 = 2000;
+pub(crate) const MAX_FIELDS: i32 = 2000;
 
 /// The item `index` (from 1) of a Word collection.
-fn item(collection: &IDispatch, index: i32) -> Option<IDispatch> {
+pub(crate) fn item(collection: &IDispatch, index: i32) -> Option<IDispatch> {
     let flags = DISPATCH_FLAGS(DISPATCH_METHOD.0 | DISPATCH_PROPERTYGET.0);
     object(&invoke(
         collection,
@@ -985,13 +985,13 @@ fn item(collection: &IDispatch, index: i32) -> Option<IDispatch> {
 }
 
 /// The property `name` of `object`, read by late binding.
-fn property(object: &IDispatch, name: &str) -> Option<VARIANT> {
+pub(crate) fn property(object: &IDispatch, name: &str) -> Option<VARIANT> {
     invoke(object, name, DISPATCH_PROPERTYGET, &mut [])
 }
 
 /// A late-bound call of `name` on `object` with `arguments` (in order; one at most here); a
 /// property put passes its one argument as the property's new value.
-fn invoke(
+pub(crate) fn invoke(
     object: &IDispatch,
     name: &str,
     flags: DISPATCH_FLAGS,
@@ -1044,7 +1044,7 @@ fn invoke(
 }
 
 /// The object a property gave: Word's are dispatch pointers (`VT_DISPATCH`).
-fn object(value: &VARIANT) -> Option<IDispatch> {
+pub(crate) fn object(value: &VARIANT) -> Option<IDispatch> {
     // SAFETY: the discriminant read, then for VT_DISPATCH the pointer it names.
     unsafe {
         let inner = &value.Anonymous.Anonymous;

@@ -7,6 +7,8 @@ pub mod ease_of_access;
 pub mod elevation;
 pub mod event_trace;
 pub mod events;
+#[cfg(windows)]
+pub mod excel_om;
 pub mod file_text;
 pub mod harness;
 pub mod hook;

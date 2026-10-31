@@ -153,6 +153,18 @@ pub struct LineStructure {
     pub place: Option<PagePlace>,
 }
 
+/// A spreadsheet's active cell among its row's and its column's cells within the sheet's used
+/// range (Excel's), each as the sheet shows it, for JAWS's row and column readers: `row_at`
+/// and `column_at` are the active cell's place in `row` and `column`, past their ends where
+/// it is outside the used range.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct SheetPlace {
+    pub row: Vec<String>,
+    pub column: Vec<String>,
+    pub row_at: usize,
+    pub column_at: usize,
+}
+
 /// The caret's place on a word processor's pages (Word's `Selection.Information`): its page and
 /// section, its line on the page and its column, each from 1.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -1153,6 +1165,10 @@ pub enum AccessibilityEvent {
     /// ([`crate::actions::ApplicationActions::read_status_bar`]); none where it could not be
     /// read.
     StatusBar(Vec<String>),
+    /// The active cell's row and column of the spreadsheet in front
+    /// ([`crate::actions::ApplicationActions::read_sheet_place`]); `None` where they could
+    /// not be read.
+    SheetPlace(Option<SheetPlace>),
     /// What the user did to one of Okur's own windows (`okur-ui`).
     Ui(crate::ui::FromUi),
     /// The page in front changed outside its live regions: a web application added or

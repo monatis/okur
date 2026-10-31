@@ -1248,6 +1248,10 @@ struct ScreenSnapshot {
     /// recording), for Say Bottom Line of Window.
     #[serde(default)]
     status_bar: Option<Vec<String>>,
+    /// Excel's active cell's row and column, saved beside the headings (none before 1114's
+    /// second recording), for its row and column readers.
+    #[serde(default)]
+    sheet_place: Option<okur_core::SheetPlace>,
     /// Word's document's paragraphs, saved beside the headings (none before 1038), for Say All.
     #[serde(default)]
     paragraphs: Vec<okur_core::DocumentParagraph>,
@@ -1368,6 +1372,7 @@ struct ScreenReads {
     headings: usize,
     views: usize,
     status_bars: usize,
+    sheet_places: usize,
     paragraphs: usize,
     links: usize,
     spacings: usize,
@@ -1561,6 +1566,13 @@ impl ScreenReads {
                 snapshot
                     .and_then(|s| s.status_bar.clone())
                     .unwrap_or_default(),
+            ));
+        }
+        // Excel's row and column, always answered: none where the step saved none.
+        while self.sheet_places < count("sheet place") {
+            self.sheet_places += 1;
+            deliver(okur_core::AccessibilityEvent::SheetPlace(
+                snapshot.and_then(|s| s.sheet_place.clone()),
             ));
         }
         let Some(snapshot) = snapshot else {

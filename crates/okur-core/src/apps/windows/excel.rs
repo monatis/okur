@@ -59,6 +59,61 @@ impl AppModule for Excel {
     }
 }
 
+/// JAWS's row and column readers in Excel, from its key map: Shift+Insert+Up, Home and PageUp
+/// (`ReadRow`, `ReadFromStartOfRow`, `ReadToEndOfRow`), Ctrl+Insert+Up, Home and PageUp
+/// (`readColumn`, `readFromTopOfColumn`, `readToBottomOfColumn`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum SheetReading {
+    Row,
+    RowFromStart,
+    RowToEnd,
+    Column,
+    ColumnFromTop,
+    ColumnToBottom,
+}
+
+impl SheetReading {
+    /// The reader an Okur-key chord is, if any.
+    pub(crate) fn of(event: &crate::input::KeyEvent) -> Option<Self> {
+        let m = &event.modifiers;
+        if !m.insert || m.alt || m.win || m.ctrl == m.shift {
+            return None;
+        }
+        Some(match (event.key, m.shift) {
+            (Key::UpArrow, true) => Self::Row,
+            (Key::Home, true) => Self::RowFromStart,
+            (Key::PageUp, true) => Self::RowToEnd,
+            (Key::UpArrow, false) => Self::Column,
+            (Key::Home, false) => Self::ColumnFromTop,
+            (Key::PageUp, false) => Self::ColumnToBottom,
+            _ => return None,
+        })
+    }
+
+    /// What it reads of `place`: a row's cells in one breath, "Northside 10 6", from its start
+    /// to the active cell, "Northside 10", or from it to the row's end, "10 6"; a column's cells
+    /// one by one, "Weekdays | 12 | 10 | 22", likewise from its top or to its bottom [obs,
+    /// 1114/s4-s9]. Empty cells are left out [hyp: none recorded yet]. `None` with nothing to
+    /// read.
+    pub(crate) fn said(self, place: &crate::event::SheetPlace) -> Option<String> {
+        let (cells, at, row) = match self {
+            Self::Row | Self::RowFromStart | Self::RowToEnd => (&place.row, place.row_at, true),
+            _ => (&place.column, place.column_at, false),
+        };
+        let part: &[String] = match self {
+            Self::Row | Self::Column => cells,
+            Self::RowFromStart | Self::ColumnFromTop => cells.get(..=at).unwrap_or(cells),
+            Self::RowToEnd | Self::ColumnToBottom => cells.get(at..).unwrap_or_default(),
+        };
+        let read: Vec<&str> = part
+            .iter()
+            .map(|c| c.trim())
+            .filter(|c| !c.is_empty())
+            .collect();
+        (!read.is_empty()).then(|| read.join(if row { " " } else { "\n" }))
+    }
+}
+
 /// The coordinates of the cell `focus` is, as JAWS says them, its column's letters apart from
 /// its row's number: "B 2"; `None` for any other focus.
 pub(crate) fn cell(focus: &FocusEvent) -> Option<String> {
@@ -82,6 +137,36 @@ fn coordinates(reference: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// The row and column readers from B3 of 1114's sheet [obs, 1114/s4-s9].
+    #[test]
+    fn rows_and_columns_are_read_whole_or_from_the_cell() {
+        let place = crate::event::SheetPlace {
+            row: vec!["Northside".into(), "10".into(), "6".into()],
+            column: vec!["Weekdays".into(), "12".into(), "10".into(), "22".into()],
+            row_at: 1,
+            column_at: 2,
+        };
+        let said = |reading: SheetReading| reading.said(&place);
+        assert_eq!(said(SheetReading::Row).as_deref(), Some("Northside 10 6"));
+        assert_eq!(
+            said(SheetReading::RowFromStart).as_deref(),
+            Some("Northside 10")
+        );
+        assert_eq!(said(SheetReading::RowToEnd).as_deref(), Some("10 6"));
+        assert_eq!(
+            said(SheetReading::Column).as_deref(),
+            Some("Weekdays\n12\n10\n22")
+        );
+        assert_eq!(
+            said(SheetReading::ColumnFromTop).as_deref(),
+            Some("Weekdays\n12\n10")
+        );
+        assert_eq!(
+            said(SheetReading::ColumnToBottom).as_deref(),
+            Some("10\n22")
+        );
+    }
 
     #[test]
     fn a_cell_reference_is_said_column_apart_from_row() {
