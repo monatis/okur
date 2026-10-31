@@ -57,19 +57,19 @@ Where to go from here:
 > (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
 > know.
 
-Every figure is tool output, rerun for this README at commit `b2bd14ef` (2026-10-29).
+Every figure is tool output, rerun for this README at commit `8fc9c9e4` (2026-10-31).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **9361 of 9932** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **9258 of 9993** | `okur-lab parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **282** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **718, 2160** (2143 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1542 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **9521 of 10101** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **9412 of 10162** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **284** | `okur-lab parity` |
+| Recorded JAWS scenarios, trials | **737, 2217** (2200 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1556 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
-The 251 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
+The 284 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
 accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
 place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
 Okur says its help in its own words. Each one is listed, with the reason and who decided it,
@@ -184,7 +184,16 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   endnote by its mark ("every day, footnote 1"); Alt+Shift+Apostrophe reads the comment at the
   caret with its author, Alt+Shift+E the footnote or endnote. Ctrl+Shift+Apostrophe,
   Insert+Shift+F, Insert+Shift+E and Insert+Alt+B list the document's comments, footnotes,
-  endnotes and bookmarks, and OK moves to one. Task panes (the Spelling pane) read their
+  endnotes and bookmarks, and OK moves to one; Windows+Semicolon shows them, or the
+  revisions, in the Virtual Viewer ("There are 2 Comments in this document."), and
+  Alt+Shift+Apostrophe pressed twice the comment at the caret. Tracked changes: a deleted word
+  is not read, as Word's view does not show it; Insert+Shift+R lists the revisions and
+  Ctrl+Insert+R says the one at the caret ("eight, inserted text revised by Lab on Sun, Jan 04,
+  26"), both only while Word tracks changes, as JAWS's; then a word read in one says its change
+  ("eight, Inserted"). Moving onto another page says it, and the section where it changes
+  ("page 3, Section 2"); Ctrl+PageDown and Ctrl+PageUp say "Next page" and "Previous page",
+  Insert+Delete the line and column, and Insert+PageDown reads Word's status bar ("Page Number
+  Page 3 of 3, Word Count 26 words, ..."). Task panes (the Spelling pane) read their
   controls as controls, and Escape back names the document. The Links List (Insert+F7) lists the document's hyperlinks, Move To Link moves to
   one and Activate Link follows it; List Fields (Insert+F5) lists its fields ("HYPERLINK
   opening hours", "FORMTEXT") and OK moves to one; with none, each says so in Word's words.
@@ -290,8 +299,7 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- Outlook and Excel, not yet supported or checked; in Word, its notes in the Virtual Viewer
-  (Windows+Semicolon) and the Insert Hyperlink dialog's buttons;
+- Outlook and Excel, not yet supported (Excel's first scenario is recorded);
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;
