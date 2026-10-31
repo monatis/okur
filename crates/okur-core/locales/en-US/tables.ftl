@@ -189,6 +189,11 @@ word-revisions-list-untracked = Track Changes is disabled. Press the Word comman
 word-revisions-untracked = You must enable Track Changes in order to use this feature.
 # Alt+Shift+E in Word away from a footnote's or endnote's reference [obs, 1092/s1].
 word-no-note-at-cursor = No footnote or EndNote reference at cursor.
+# Excel's Ctrl+End and Ctrl+Home, before the cell they reach, and a Ctrl arrow's, after it
+# [obs, 1115/s1-s6].
+excel-last-cell = Last Cell
+excel-first-cell = First cell
+excel-data-region-edge = edge of current data region
 # Say Window Title in Web Layout and Read Mode: JAWS's lower case "reading layout" [obs,
 # 1042/s5, s9].
 word-view-web = Web Layout View

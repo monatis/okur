@@ -188,6 +188,7 @@ mod tests {
             alt_held: false,
             letter_key: false,
             escape_key: false,
+            key: None,
             ask_view: false,
         };
         match explorer.focus(focus, &mut cx) {
@@ -246,6 +247,7 @@ mod tests {
             alt_held: false,
             letter_key: false,
             escape_key: false,
+            key: None,
             ask_view: false,
         };
         assert!(matches!(
@@ -270,6 +272,7 @@ mod tests {
                 alt_held: false,
                 letter_key: false,
                 escape_key: false,
+                key: None,
                 ask_view: false,
             };
             match explorer.focus(focus, &mut cx) {

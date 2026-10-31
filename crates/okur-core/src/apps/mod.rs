@@ -51,6 +51,9 @@ pub struct AppContext<'a> {
     pub letter_key: bool,
     /// The last key was Escape alone (a ribbon's key tips stepped back).
     pub escape_key: bool,
+    /// The last key pressed and its modifiers, which a module may read the focus by (Excel's
+    /// Ctrl+End, "Last Cell").
+    pub key: Option<(crate::input::Key, crate::input::Modifiers)>,
     /// Set by a module that waits for the document's view before it says the focus (Word's
     /// document, back from its ribbon by a key tip, which can have changed the view): the
     /// engine asks for it, and the module's `document_view` says what the view makes of it.

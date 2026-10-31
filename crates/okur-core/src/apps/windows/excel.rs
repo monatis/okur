@@ -6,6 +6,8 @@
 use crate::aom::Role;
 use crate::apps::{AppContext, AppModule, FocusResponse};
 use crate::event::FocusEvent;
+use crate::input::Key;
+use crate::messages::msg;
 
 /// Excel's grid window, which holds a sheet's cells.
 const GRID_WINDOW: &str = "EXCEL7";
@@ -19,20 +21,41 @@ impl AppModule for Excel {
         cell(focus).is_some()
     }
 
-    /// A cell reached: its value, then its coordinates [obs, 521/s2-s5, s7, s8, s11, s12].
+    /// A cell reached: its value, then its coordinates [obs, 521/s2-s5, s7, s8, s11, s12];
+    /// by Ctrl+End and Ctrl+Home, which cell it is first, "Last Cell | 14 | C 4"; by a Ctrl
+    /// arrow, that it is a data region's edge after, "Weekends | C 1 | edge of current data
+    /// region" [obs, 1115/s1-s6].
     fn focus(&mut self, focus: &FocusEvent, cx: &mut AppContext<'_>) -> FocusResponse {
         let Some(coordinates) = cell(focus) else {
             return FocusResponse::Pass;
         };
         cx.note_window(focus);
         let value = focus.value.as_deref().map(str::trim).unwrap_or_default();
+        let mut lines = Vec::new();
+        let ctrl = cx
+            .key
+            .map(|(_, m)| m.ctrl && !m.shift && !m.alt && !m.insert && !m.win)
+            .unwrap_or(false);
+        let key = cx.key.map(|(k, _)| k).filter(|_| ctrl);
+        match key {
+            Some(Key::End) => lines.push(msg::excel_last_cell().to_string()),
+            Some(Key::Home) => lines.push(msg::excel_first_cell().to_string()),
+            _ => {}
+        }
         // An empty cell by its coordinates alone [hyp: no empty cell recorded yet].
-        let said = if value.is_empty() {
-            coordinates
-        } else {
-            format!("{value}\n{coordinates}")
-        };
-        FocusResponse::Speak(crate::announcement::Announcement::from_text(&said))
+        if !value.is_empty() {
+            lines.push(value.to_owned());
+        }
+        lines.push(coordinates);
+        if matches!(
+            key,
+            Some(Key::LeftArrow | Key::RightArrow | Key::UpArrow | Key::DownArrow)
+        ) {
+            lines.push(msg::excel_data_region_edge().to_string());
+        }
+        FocusResponse::Speak(crate::announcement::Announcement::from_text(
+            &lines.join("\n"),
+        ))
     }
 }
 

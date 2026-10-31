@@ -476,6 +476,7 @@ mod tests {
             alt_held: false,
             letter_key: false,
             escape_key: false,
+            key: None,
             ask_view: false,
         };
         match ribbon.focus(focus, &mut cx) {
@@ -762,6 +763,7 @@ mod tests {
             alt_held: false,
             letter_key: true,
             escape_key: false,
+            key: None,
             ask_view: false,
         };
         assert!(matches!(
@@ -794,6 +796,7 @@ mod tests {
                 alt_held: false,
                 letter_key: letter,
                 escape_key: escape,
+                key: None,
                 ask_view: false,
             };
             match ribbon.focus(focus, &mut cx) {

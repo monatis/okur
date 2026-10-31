@@ -335,6 +335,7 @@ impl ScreenReaderEngine {
             alt_held: self.alt_held,
             letter_key: self.last_key_letter,
             escape_key: self.last_key_escapes,
+            key: self.last_key,
             ask_view: false,
         };
         for app in &mut self.apps {

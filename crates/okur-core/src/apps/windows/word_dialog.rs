@@ -242,6 +242,7 @@ mod tests {
             alt_held: false,
             letter_key: false,
             escape_key: false,
+            key: None,
             ask_view: false,
         };
         match dialog.focus(focus, &mut cx) {
