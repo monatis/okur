@@ -434,8 +434,16 @@ impl ScreenReaderEngine {
             key,
             EditKey::Word | EditKey::DeleteWordBackward | EditKey::SelectMore | EditKey::SelectAll
         );
+        // A character after what the move said first, the page it reached, "page 2 | B": the
+        // character read as one, its phonetic name after it [obs, 1119/s3].
+        let after_prefix = speech
+            .rsplit_once('\n')
+            .filter(|(_, last)| key == EditKey::Character && last.chars().count() == 1);
         if character {
             self.speech.speak_character(&speech, true);
+        } else if let Some((prefix, last)) = after_prefix {
+            self.speech.speak(prefix, true);
+            self.speech.speak_character(last, false);
         } else if symbols {
             self.speech.speak_symbols(&speech, true);
         } else {

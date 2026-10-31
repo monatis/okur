@@ -1155,6 +1155,18 @@ pub(crate) fn around_line(
     after: &TextContext,
     speech: String,
 ) -> Option<String> {
+    // A character or word key onto another page says it first too: "page 2 | Borrowing", and
+    // at a line's end, where it reads nothing, the page alone, "page 1" [obs, 1119/s4-s6].
+    if matches!(key, EditKey::Character | EditKey::Word) {
+        if let Some(page) = page_reached(before, after) {
+            let speech = speech.trim();
+            return Some(if speech.is_empty() {
+                page
+            } else {
+                format!("{page}\n{speech}")
+            });
+        }
+    }
     let (Some(now), true) = (
         after.structure.as_ref(),
         matches!(
