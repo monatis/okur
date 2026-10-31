@@ -899,10 +899,37 @@ impl ScreenReaderEngine {
             // "Repository files NavigationRegion | list | with 1 items | README ...").
             if !entering_page {
                 if let (Some(from), Some(to)) = (cursor_node, target_id) {
-                    let entered = self.entered_containers(from, to);
-                    if !entered.is_empty() {
-                        speech = speech.map(|s| format!("{entered}{s}"));
-                    }
+                    // Outermost first, the control's group among them where its speech names
+                    // it: "Sandwich Condiments group | list with 5 items | Lettuce check box"
+                    // [obs, round-aria6, 2173/s1].
+                    let entered = self.entered_container_lines(from, to);
+                    let group_depth = self
+                        .cursor
+                        .buffer
+                        .node(to)
+                        .and_then(|n| n.attributes.get("group_id"))
+                        .and_then(|g| g.parse::<usize>().ok())
+                        .and_then(|g| self.depth_of(g, to));
+                    let lines = |inside: bool| -> String {
+                        entered
+                            .iter()
+                            .filter(|(depth, _)| group_depth.is_some_and(|g| *depth > g) == inside)
+                            .map(|(_, line)| line.as_str())
+                            .collect()
+                    };
+                    let (outside, inside) = (lines(false), lines(true));
+                    speech = speech.map(|s| {
+                        let group_named = group_depth.is_some()
+                            && s.lines()
+                                .next()
+                                .is_some_and(|l| l.contains(msg::role_group().as_str()));
+                        match s.split_once('\n') {
+                            Some((group, rest)) if group_named && !inside.is_empty() => {
+                                format!("{outside}{group}\n{inside}{rest}")
+                            }
+                            _ => format!("{outside}{inside}{s}"),
+                        }
+                    });
                 }
             }
             if entering_page {

@@ -397,6 +397,15 @@ impl ScreenReaderEngine {
     /// " ‹ MainRegion › ", " ‹ FormRegion › ", "Related ‹ ComplementaryRegion ›", "Updates
     /// ‹ Region ›" (JAWS's names, dev box 2026-10-16; a table is said otherwise, and left out).
     pub(super) fn entered_containers(&self, from: usize, to: usize) -> String {
+        self.entered_container_lines(from, to)
+            .into_iter()
+            .map(|(_, line)| line)
+            .collect()
+    }
+
+    /// [`Self::entered_containers`], each with its container's place on the path from the
+    /// page to `to` (0 the page).
+    pub(super) fn entered_container_lines(&self, from: usize, to: usize) -> Vec<(usize, String)> {
         let ancestors = |id: usize| -> Vec<&AomNode> {
             let mut path = Vec::new();
             if let Some(root) = self
@@ -413,8 +422,9 @@ impl ScreenReaderEngine {
             ancestors(from).iter().map(|n| n.id).collect();
         ancestors(to)
             .into_iter()
-            .filter(|n| !around_from.contains(&n.id) && n.id != from)
-            .filter_map(|n| {
+            .enumerate()
+            .filter(|(_, n)| !around_from.contains(&n.id) && n.id != from)
+            .filter_map(|(depth, n)| {
                 let name = n.name.as_deref().map(str::trim).unwrap_or_default();
                 let named = |marker: &str| {
                     if name.is_empty() {
@@ -449,8 +459,21 @@ impl ScreenReaderEngine {
                     }
                     _ => None,
                 }
+                .map(|line| (depth, line))
             })
             .collect()
+    }
+
+    /// The place of `ancestor` on the path from the page to `id` (0 the page), if it is on it.
+    pub(super) fn depth_of(&self, ancestor: usize, id: usize) -> Option<usize> {
+        let root = self
+            .cursor
+            .buffer
+            .root_id
+            .and_then(|r| self.cursor.buffer.node(r))?;
+        let mut path = Vec::new();
+        ancestors_in(&self.cursor.buffer, root, id, &mut path);
+        path.iter().position(|n| n.id == ancestor)
     }
 
     pub(super) fn region_markers(&self, node_id: usize) -> String {
