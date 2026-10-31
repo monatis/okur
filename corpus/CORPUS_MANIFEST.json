@@ -617,6 +617,10 @@
       "sha256": "f71e2ac605bdc457aa03f68997f221d59e262b9ae39b9b11965ca4d54a4584db",
       "size_bytes": 3097
     },
+    "aria-radio-place.html": {
+      "sha256": "c074ae9edb3e8353813ebea09f72136e1f6fb88e818e8266edb5dae156360ae9",
+      "size_bytes": 3120
+    },
     "boundaries-dynamic.html": {
       "sha256": "4caaa7092df80f075b4fd5bfa8f3fbbdba558f90188e4f3711aec05dd9c71953",
       "size_bytes": 2383
@@ -2809,6 +2813,20 @@
       "evidence": {
         "sha256": "ce83debb355e3c1070b62450830edfb491ea2167274111e1e714ec7017a8ae8f",
         "capture_script_sha256": "7eb9d91a388e46b1a1958a171c7b58af7c8ff0f9b489687e37e10009e703cb8c",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1126-web-aria-radio-group-variants",
+      "fixture": "aria-radio-place.html",
+      "evidence": {
+        "sha256": "275af50b94b21ea68c15852e011bba1a572c0eb86b2d8cc2a21b034ea799e0a3",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -17519,10 +17537,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1187,
-    "scenarios_with_evidence": 1187,
-    "total_trials": 3567,
-    "successful_trials": 3550,
-    "deterministic_scenarios": 915
+    "scenarios": 1188,
+    "scenarios_with_evidence": 1188,
+    "total_trials": 3570,
+    "successful_trials": 3553,
+    "deterministic_scenarios": 916
   }
 }
