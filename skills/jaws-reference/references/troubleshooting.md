@@ -55,3 +55,15 @@
   **No**. Then Alt+Tab the same way if JAWS's window keeps the foreground. Never walk a
   confirmation whose Yes is irreversible: record its words once, by Enter and Tab only, and
   answer it No by the procedure above (2026-10-24, Restore to Factory Settings).
+
+## 8. A Typed Character Taken as a JAWS Key
+- **Symptom**: a `text` step that types a digit, a capital or punctuation into an application
+  does something else: "7" in an Excel cell said "right mouse button" and opened the cell's
+  context menu at the mouse (round-1122, every trial of 1123).
+- **Cause**: a character sent as Unicode input (`KEYEVENTF_UNICODE`) carries the character in
+  the scan code of the key event, and JAWS's keyboard hook reads that scan code as a key: 0x37
+  ("7") is the numpad's star, 0x52 ("R") the numpad's Insert, 0x4A ("J") and 0x4E ("N") the
+  numpad's minus and plus, 0x43 ("C") F9. Lowercase letters (0x61 and up) are past every key.
+- **Fix**: `run-scenario.ps1` types each character by its own key on the layout of the window
+  in front (`VkKeyScanEx`, Shift included), as a hand types it, and keeps Unicode input for the
+  characters that need AltGr or are not on the layout (2026-10-31).

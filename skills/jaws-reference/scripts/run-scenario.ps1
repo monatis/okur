@@ -53,8 +53,9 @@ Step types:
                "during": [{"after_ms": 3000, "command": "Ctrl"}] presses chords while the
                step's speech goes on, each after_ms after the one before (Say All stopped or
                moved by Left and Right); the step settles after the last one.
-  text         Characters typed as Unicode input, whatever the keyboard layout:
-               "%TEMP%\sr-dialogs" into a file dialog's name field.
+  text         Characters typed as written, whatever the keyboard layout: each by its key on
+               the layout in front (Shift included), else as Unicode input (AltGr's
+               characters): "%TEMP%\sr-dialogs" into a file dialog's name field.
   jaws_script  JAWS script name dispatched through FSAPI RunScript.
   jaws_function  JAWS function call through FSAPI RunFunction: TypeKey("Down") for keys and
                TypeString("name") for text inside JAWS's own dialogs (Links List, Find,
@@ -197,8 +198,28 @@ public static class SrKeyInput {
         return SendInput(1, input, Marshal.SizeOf(typeof(INPUT))) == 1;
     }
 
-    /// One character typed as itself (KEYEVENTF_UNICODE), whatever the keyboard layout.
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] static extern short VkKeyScanEx(char ch, IntPtr layout);
+    [DllImport("user32.dll")] static extern IntPtr GetKeyboardLayout(uint thread);
+
+    /// One character typed by the key the layout of the window in front types it with, Shift
+    /// included, as a hand types it. A character that needs another modifier (AltGr) or that
+    /// the layout lacks is typed as itself (KEYEVENTF_UNICODE): such a packet carries the
+    /// character in its scan code, which JAWS reads as a key, so "7" (0x37) was the numpad's
+    /// star, JAWS's right mouse button (round-1122), and "R" (0x52) would be its Insert key.
     public static bool Char(char c) {
+        uint pid;
+        IntPtr layout = GetKeyboardLayout(GetWindowThreadProcessId(GetForegroundWindow(), out pid));
+        short typed = VkKeyScanEx(c, layout);
+        int shifts = (typed >> 8) & 0xFF;
+        if (typed != -1 && (shifts & ~1) == 0) {
+            ushort vk = (ushort)(typed & 0xFF);
+            bool shift = shifts == 1;
+            bool ok = !shift || Key(0x10, false, false, 0);
+            ok = Key(vk, false, false, 0) && ok;
+            ok = Key(vk, false, true, 0) && ok;
+            if (shift) { ok = Key(0x10, false, true, 0) && ok; }
+            return ok;
+        }
         INPUT[] input = new INPUT[2];
         for (int i = 0; i < 2; i++) {
             input[i].type = 1;
@@ -288,7 +309,8 @@ function Resolve-Key([string]$name) {
     throw "Unknown key name '$name'"
 }
 
-# Text typed character by character as Unicode input, so old-pc's Turkish layout types it as
+# Text typed character by character, each by its key on the layout of the window in front, or
+# as Unicode input where no key without AltGr types it, so old-pc's Turkish layout types it as
 # written ("%TEMP%\sr-dialogs" into a file dialog). Environment variables are left for the
 # application to expand.
 function Send-Text([string]$text) {
