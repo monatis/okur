@@ -1,0 +1,69 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleRadio",
+        "phrase": "convey role 'radio button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameRegularCrust",
+        "phrase": "convey name of the radio button, 'Regular crust'",
+        "priority": "1"
+      },
+      {
+        "id": "stateRadioUnchecked",
+        "phrase": "convey state of the radio button, 'unchecked'",
+        "priority": "3"
+      },
+      {
+        "id": "positionRadio1",
+        "phrase": "convey position of the radio button, 1",
+        "priority": "2"
+      },
+      {
+        "id": "numberRadioButtonsGroup3",
+        "phrase": "convey number of radio buttons in the group, 3",
+        "priority": "2"
+      },
+      {
+        "id": "2:roleGroup",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "2:nameGroupPizzaCrust",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "ins+tab",
+    "instructions": "Starting at the 'Regular crust' radio button, read information about the radio button.",
+    "plan": "apg/radiogroup-roving-tabindex",
+    "presentation_number": "50",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutUncheckedRadio"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/radiogroup-roving-tabindex/radio.setFocusOnFirstRadioButton.html",
+  "id": "2114-aria-radiogroup-roving-tabindex-req-info-about-unchecked-radio-ins-tab-vc",
+  "name": "ARIA-AT, Radio Group Example Using Roving tabindex: Request information about an unchecked radio button; Insert+Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

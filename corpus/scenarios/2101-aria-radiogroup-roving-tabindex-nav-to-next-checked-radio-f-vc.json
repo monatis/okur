@@ -1,0 +1,59 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleRadio",
+        "phrase": "convey role 'radio button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameDeepDish",
+        "phrase": "convey name of the radio button, 'Deep dish'",
+        "priority": "1"
+      },
+      {
+        "id": "stateRadioChecked",
+        "phrase": "convey state of the radio button, 'checked'",
+        "priority": "1"
+      },
+      {
+        "id": "positionRadio2",
+        "phrase": "convey position of the radio button, 2",
+        "priority": "2"
+      },
+      {
+        "id": "numberRadioButtonsGroup3",
+        "phrase": "convey number of radio buttons in the group, 3",
+        "priority": "2"
+      }
+    ],
+    "command": "f",
+    "instructions": "Starting at the 'Regular crust' radio button, navigate to the 'Deep dish' radio button.",
+    "plan": "apg/radiogroup-roving-tabindex",
+    "presentation_number": "24",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToNextCheckedRadio"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/radiogroup-roving-tabindex/radio.setFocusOnFirstRadioButtonAndCheckSecondRadioButton.html",
+  "id": "2101-aria-radiogroup-roving-tabindex-nav-to-next-checked-radio-f-vc",
+  "name": "ARIA-AT, Radio Group Example Using Roving tabindex: Navigate forwards to a checked radio button within a radio group; F in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "F",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

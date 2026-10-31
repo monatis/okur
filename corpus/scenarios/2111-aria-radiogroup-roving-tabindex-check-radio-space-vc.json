@@ -1,0 +1,44 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "stateChangeToChecked",
+        "phrase": "convey change in state of the radio button to 'checked'",
+        "priority": "1"
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "space",
+    "instructions": "Starting at the 'Regular crust' radio button, check the radio button.",
+    "plan": "apg/radiogroup-roving-tabindex",
+    "presentation_number": "45",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "checkRadio"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/radiogroup-roving-tabindex/radio.setFocusOnFirstRadioButton.html",
+  "id": "2111-aria-radiogroup-roving-tabindex-check-radio-space-vc",
+  "name": "ARIA-AT, Radio Group Example Using Roving tabindex: Check a radio button; Space in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Space",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

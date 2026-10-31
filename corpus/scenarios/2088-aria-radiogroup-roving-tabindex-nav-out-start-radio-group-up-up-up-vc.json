@@ -1,0 +1,59 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleLink",
+        "phrase": "convey role 'link'",
+        "priority": "1"
+      },
+      {
+        "id": "nameNavigateForwardsFromHere",
+        "phrase": "convey name of the link, 'Navigate forwards from here'",
+        "priority": "1"
+      },
+      {
+        "id": "2:groupBoundary",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "up up up",
+    "instructions": "Starting at the 'Regular crust' radio button, navigate to the 'Navigate forwards from here' link.",
+    "plan": "apg/radiogroup-roving-tabindex",
+    "presentation_number": "10.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navOutStartRadioGroup"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/radiogroup-roving-tabindex/radio.setFocusOnFirstRadioButton.html",
+  "id": "2088-aria-radiogroup-roving-tabindex-nav-out-start-radio-group-up-up-up-vc",
+  "name": "ARIA-AT, Radio Group Example Using Roving tabindex: Navigate out of the start of a radio group; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Up",
+      "id": "s2",
+      "type": "key"
+    },
+    {
+      "command": "Up",
+      "id": "s3",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

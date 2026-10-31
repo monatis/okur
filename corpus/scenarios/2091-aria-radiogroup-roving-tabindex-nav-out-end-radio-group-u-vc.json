@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "3:groupBoundary",
+    "assertions": [
+      {
+        "id": "roleLink",
+        "phrase": "convey role 'link'",
+        "priority": "1"
+      },
+      {
+        "id": "nameNavigateBackFromHere",
+        "phrase": "convey name of the link, 'Navigate backwards from here'",
+        "priority": "1"
+      },
+      {
+        "id": "2:groupBoundary",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "u",
+    "instructions": "Starting at the 'Thin crust' radio button, navigate to the 'Navigate backwards from here' link.",
+    "plan": "apg/radiogroup-roving-tabindex",
+    "presentation_number": "12",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navOutEndRadioGroup"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/radiogroup-roving-tabindex/radio.setFocusOnThirdRadioButton.html",
+  "id": "2091-aria-radiogroup-roving-tabindex-nav-out-end-radio-group-u-vc",
+  "name": "ARIA-AT, Radio Group Example Using Roving tabindex: Navigate out of the end of a radio group; U in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "U",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

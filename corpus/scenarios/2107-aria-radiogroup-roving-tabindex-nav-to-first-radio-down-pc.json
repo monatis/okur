@@ -1,0 +1,65 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleRadio",
+        "phrase": "convey role 'radio button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameRegularCrust",
+        "phrase": "convey name of the radio button, 'Regular crust'",
+        "priority": "1"
+      },
+      {
+        "id": "stateRadioChecked",
+        "phrase": "convey state of the radio button, 'checked'",
+        "priority": "1"
+      },
+      {
+        "id": "positionRadio1",
+        "phrase": "convey position of the radio button, 1",
+        "priority": "2"
+      },
+      {
+        "id": "numberRadioButtonsGroup3",
+        "phrase": "convey number of radio buttons in the group, 3",
+        "priority": "2"
+      }
+    ],
+    "command": "down",
+    "instructions": "Starting at the 'Thin crust' radio button, navigate to the 'Regular crust' radio button.",
+    "plan": "apg/radiogroup-roving-tabindex",
+    "presentation_number": "30",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToFirstRadio"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/radiogroup-roving-tabindex/radio.setFocusOnThirdRadioButton.html",
+  "id": "2107-aria-radiogroup-roving-tabindex-nav-to-first-radio-down-pc",
+  "name": "ARIA-AT, Radio Group Example Using Roving tabindex: Check the next radio button in a radio group by navigating to it; Down in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

@@ -1,0 +1,65 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleRadio",
+        "phrase": "convey role 'radio button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameThinCrust",
+        "phrase": "convey name of the radio button, 'Thin crust'",
+        "priority": "1"
+      },
+      {
+        "id": "stateRadioChecked",
+        "phrase": "convey state of the radio button, 'checked'",
+        "priority": "1"
+      },
+      {
+        "id": "positionRadio3",
+        "phrase": "convey position of the radio button, 3",
+        "priority": "2"
+      },
+      {
+        "id": "numberRadioButtonsGroup3",
+        "phrase": "convey number of radio buttons in the group, 3",
+        "priority": "2"
+      }
+    ],
+    "command": "left",
+    "instructions": "Starting at the 'Regular crust' radio button, navigate to the 'Thin crust' radio button.",
+    "plan": "apg/radiogroup-roving-tabindex",
+    "presentation_number": "32.1",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToLastRadio"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/radiogroup-roving-tabindex/radio.setFocusOnFirstRadioButton.html",
+  "id": "2110-aria-radiogroup-roving-tabindex-nav-to-last-radio-left-pc",
+  "name": "ARIA-AT, Radio Group Example Using Roving tabindex: Check the previous radio button in a radio group by navigating to it; Left in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Left",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

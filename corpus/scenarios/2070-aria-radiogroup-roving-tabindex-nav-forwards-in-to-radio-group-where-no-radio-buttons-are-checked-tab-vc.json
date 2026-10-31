@@ -1,0 +1,74 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "2:interactionModeEnabled",
+    "assertions": [
+      {
+        "id": "roleGroup",
+        "phrase": "convey role 'group'",
+        "priority": "2"
+      },
+      {
+        "id": "nameGroupPizzaCrust",
+        "phrase": "convey name of the group, 'Pizza Crust'",
+        "priority": "1"
+      },
+      {
+        "id": "roleRadio",
+        "phrase": "convey role 'radio button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameRegularCrust",
+        "phrase": "convey name of the radio button, 'Regular crust'",
+        "priority": "1"
+      },
+      {
+        "id": "stateRadioUnchecked",
+        "phrase": "convey state of the radio button, 'unchecked'",
+        "priority": "3"
+      },
+      {
+        "id": "positionRadio1",
+        "phrase": "convey position of the radio button, 1",
+        "priority": "2"
+      },
+      {
+        "id": "numberRadioButtonsGroup3",
+        "phrase": "convey number of radio buttons in the group, 3",
+        "priority": "2"
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "tab",
+    "instructions": "Starting at the 'Navigate forwards from here' link, navigate forwards into the 'Pizza crust' radio group.",
+    "plan": "apg/radiogroup-roving-tabindex",
+    "presentation_number": "1.3",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsInToRadioGroupWhereNoRadioButtonsAreChecked"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/radiogroup-roving-tabindex/radio.setFocusBeforeRadioGroup.html",
+  "id": "2070-aria-radiogroup-roving-tabindex-nav-forwards-in-to-radio-group-where-no-radio-buttons-are-checked-tab-vc",
+  "name": "ARIA-AT, Radio Group Example Using Roving tabindex: Navigate forwards into a radio group where no radio buttons are checked; Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

@@ -1,0 +1,1319 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Radio Group Example Using Roving tabindex - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "5fcd7bd3f46967fd8e3de47aeb5193c0fa2f5a0463f64b4e98f2766360972c61",
+    "captured_at_unix_ms": 1793451665509,
+    "node_count": 36,
+    "capture_ms": 243
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Radio Group Example Using Roving tabindex",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/radiogroup-roving-tabindex/radio.checkFirstRadioButtonAndSetFocusAfterRadioGroup.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -37453,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -37467,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          },
+          {
+            "start": 1,
+            "end": 4,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Radio Group Example Using Roving tabindex",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -37455,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Radio Group Example Using Roving tabindex",
+            "lines": [
+              [
+                0,
+                41
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 41,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Radio Group Example Using Roving tabindex",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -37468,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Radio Group Example Using Roving tabindex",
+                "lines": [
+                  [
+                    0,
+                    41
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 41,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "24pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -37441,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "This example implements the features of the ￼ for a radio group for choosing a pizza crust. This implementation uses a roving tabindex for managing focus within the radio group.",
+            "lines": [
+              [
+                0,
+                135
+              ],
+              [
+                135,
+                177
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 44,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 44,
+                "end": 45,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 45,
+                "end": 177,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "This example implements the features of the ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -37486,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "This example implements the features of the ",
+                "lines": [
+                  [
+                    0,
+                    44
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 44,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "Radio Group Design Pattern",
+                "value": "https://w3c.github.io/aria-practices/#radiobutton",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -37484,
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "Radio Group Design Pattern",
+                "lines": [
+                  [
+                    0,
+                    26
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 26,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Radio Group Design Pattern",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -37444,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Radio Group Design Pattern",
+                    "lines": [
+                      [
+                        0,
+                        26
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 26,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": " for a radio group for choosing a pizza crust. This implementation uses a roving tabindex for managing focus within the radio group.",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -37446,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": " for a radio group for choosing a pizza crust. This implementation uses a roving tabindex for managing focus within the radio group.",
+                "lines": [
+                  [
+                    0,
+                    90
+                  ],
+                  [
+                    90,
+                    132
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 132,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -37476,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ],
+              [
+                5,
+                6
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "18pt",
+                  "font-weight": "bold"
+                }
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 2,
+                "end": 3,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 3,
+                "end": 4,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 4,
+                "end": 5,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 5,
+                "end": 6,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -37456,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Example",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "18pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelFor": [
+                    -37447,
+                    -37472
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -37460,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Example",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "18pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "Start of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -37447,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -37456
+                  ]
+                }
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "Navigate forwards from here",
+                "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/radiogroup-roving-tabindex/radio.checkFirstRadioButtonAndSetFocusAfterRadioGroup.html#beforelink",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -37440,
+                "attributes": {
+                  "display": "inline",
+                  "id": "beforelink",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "Navigate forwards from here",
+                "lines": [
+                  [
+                    0,
+                    27
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 27,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Navigate forwards from here",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -37474,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Navigate forwards from here",
+                    "lines": [
+                      [
+                        0,
+                        27
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 27,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -37479,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 20,
+                    "name": "Pizza Crust",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -37482,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "rg1",
+                      "name-from": "related-element",
+                      "setsize": "3",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "radiogroup"
+                    },
+                    "group_position": [
+                      0,
+                      3,
+                      0
+                    ],
+                    "text": "￼￼￼￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        2,
+                        3
+                      ],
+                      [
+                        3,
+                        4
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "14pt",
+                          "font-weight": "bold"
+                        }
+                      },
+                      {
+                        "start": 1,
+                        "end": 4,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "labelledBy": [
+                        -37457
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 20,
+                        "ia2_role": 1044,
+                        "name": "Pizza Crust",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -37457,
+                        "attributes": {
+                          "display": "block",
+                          "id": "group_label_1",
+                          "level": "3",
+                          "name-from": "contents",
+                          "tag": "h3",
+                          "text-align": "left"
+                        },
+                        "group_position": [
+                          3,
+                          0,
+                          0
+                        ],
+                        "text": "Pizza Crust",
+                        "lines": [
+                          [
+                            0,
+                            11
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 11,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "14pt",
+                              "font-weight": "bold"
+                            }
+                          }
+                        ],
+                        "relations": {
+                          "labelFor": [
+                            -37482
+                          ]
+                        },
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Pizza Crust",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -37470,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Pizza Crust",
+                            "lines": [
+                              [
+                                0,
+                                11
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 11,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "14pt",
+                                  "font-weight": "bold"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 45,
+                        "ia2_role": 45,
+                        "name": "Regular crust",
+                        "msaa_states": 1048592,
+                        "ia2_states": 263168,
+                        "unique_id": -37454,
+                        "attributes": {
+                          "checkable": "true",
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "posinset": "1",
+                          "setsize": "3",
+                          "tag": "div",
+                          "text-align": "left",
+                          "xml-roles": "radio"
+                        },
+                        "group_position": [
+                          0,
+                          3,
+                          1
+                        ],
+                        "text": "￼Regular crust￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            14
+                          ],
+                          [
+                            14,
+                            15
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 1,
+                            "attributes": {
+                              "background-color": "rgb(96,155,251)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt"
+                            }
+                          },
+                          {
+                            "start": 1,
+                            "end": 15,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 20,
+                            "ia2_role": 1060,
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -37449,
+                            "attributes": {
+                              "display": "block",
+                              "tag": "::before",
+                              "text-align": "left"
+                            }
+                          },
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Regular crust",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -37477,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Regular crust",
+                            "lines": [
+                              [
+                                0,
+                                13
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 13,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 20,
+                            "ia2_role": 1060,
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -37481,
+                            "attributes": {
+                              "display": "block",
+                              "tag": "::after",
+                              "text-align": "left"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 45,
+                        "ia2_role": 45,
+                        "name": "Deep dish",
+                        "msaa_states": 1048576,
+                        "ia2_states": 263168,
+                        "unique_id": -37450,
+                        "attributes": {
+                          "checkable": "true",
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "posinset": "2",
+                          "setsize": "3",
+                          "tag": "div",
+                          "text-align": "left",
+                          "xml-roles": "radio"
+                        },
+                        "group_position": [
+                          0,
+                          3,
+                          2
+                        ],
+                        "text": "￼Deep dish￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            10
+                          ],
+                          [
+                            10,
+                            11
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 11,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 20,
+                            "ia2_role": 1060,
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -37488,
+                            "attributes": {
+                              "display": "block",
+                              "tag": "::before",
+                              "text-align": "left"
+                            }
+                          },
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Deep dish",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -37439,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Deep dish",
+                            "lines": [
+                              [
+                                0,
+                                9
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 9,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 20,
+                            "ia2_role": 1060,
+                            "msaa_states": 65536,
+                            "ia2_states": 1024,
+                            "unique_id": -37475,
+                            "attributes": {
+                              "display": "block",
+                              "tag": "::after",
+                              "text-align": "left"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 45,
+                        "ia2_role": 45,
+                        "name": "Thin crust",
+                        "msaa_states": 1048576,
+                        "ia2_states": 263168,
+                        "unique_id": -37485,
+                        "attributes": {
+                          "checkable": "true",
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "posinset": "3",
+                          "setsize": "3",
+                          "tag": "div",
+                          "text-align": "left",
+                          "xml-roles": "radio"
+                        },
+                        "group_position": [
+                          0,
+                          3,
+                          3
+                        ],
+                        "text": "￼Thin crust￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            11
+                          ],
+                          [
+                            11,
+                            12
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 12,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 20,
+                            "ia2_role": 1060,
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -37451,
+                            "attributes": {
+                              "display": "block",
+                              "tag": "::before",
+                              "text-align": "left"
+                            }
+                          },
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Thin crust",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -37448,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Thin crust",
+                            "lines": [
+                              [
+                                0,
+                                10
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 10,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 20,
+                            "ia2_role": 1060,
+                            "msaa_states": 65536,
+                            "ia2_states": 1024,
+                            "unique_id": -37459,
+                            "attributes": {
+                              "display": "block",
+                              "tag": "::after",
+                              "text-align": "left"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "Navigate backwards from here",
+                "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/radiogroup-roving-tabindex/radio.checkFirstRadioButtonAndSetFocusAfterRadioGroup.html#afterlink",
+                "msaa_states": 5242884,
+                "ia2_states": 1024,
+                "unique_id": -37480,
+                "attributes": {
+                  "display": "inline",
+                  "id": "afterlink",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "Navigate backwards from here",
+                "lines": [
+                  [
+                    0,
+                    28
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 28,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Navigate backwards from here",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -37471,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Navigate backwards from here",
+                    "lines": [
+                      [
+                        0,
+                        28
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 28,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "End of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -37472,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -37456
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -37462,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(250,250,250)",
+                  "color": "rgb(5,5,5)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1,
+                "ia2_states": 1024,
+                "unique_id": -37458,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
