@@ -1,6 +1,6 @@
 {
   "id": "521-desktop-excel-cells",
-  "name": "Excel: arrows through a table's cells with a header row, a total with a formula, the cell's coordinates (Insert+C), the column's cells (Insert+Shift+C), the next and prior sheet (Ctrl+PageDown, Ctrl+PageUp), and the list of worksheets (Ctrl+Shift+S, closed with JAWS's TypeKey Escape)",
+  "name": "Excel: arrows through a table's cells with a header row, a total with a formula, the cell's coordinates (Insert+C), the column's cells (Insert+Shift+C, JAWS's list closed with Escape, a key with UI Access), the next and prior sheet (Ctrl+PageDown, Ctrl+PageUp), and the list of worksheets (Ctrl+Shift+S, closed the same way)",
   "category": "desktop",
   "version": "1.0.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
@@ -64,7 +64,7 @@
     },
     {
       "id": "s10",
-      "type": "key",
+      "type": "key_ui_access",
       "command": "Escape"
     },
     {
@@ -85,8 +85,8 @@
     },
     {
       "id": "s14",
-      "type": "jaws_function",
-      "command": "TypeKey(\"Escape\")"
+      "type": "key_ui_access",
+      "command": "Escape"
     }
   ]
 }
