@@ -1072,12 +1072,15 @@ divergences! {
     Difference::Step => [
         "2071-aria-radiogroup-roving-tabindex-nav-forwards-in-to-radio-group-where-no-radio-buttons-are-checked-tab-pc/s1",
         "2076-aria-radiogroup-roving-tabindex-nav-back-in-to-radio-group-where-no-radio-buttons-are-checked-shift-tab-pc/s1",
+        "2390-aria-radiogroup-aria-activedescendant-nav-forwards-in-to-radio-group-where-no-radio-buttons-are-checked-tab-pc/s1",
+        "2395-aria-radiogroup-aria-activedescendant-nav-back-in-to-radio-group-where-no-radio-buttons-are-checked-shift-tab-pc/s1",
     ],
     "Tab and Shift+Tab into an ARIA radio group with none checked, the virtual cursor off: \
      JAWS says the usage hint first, \"To change the selection press Up or Down Arrow. | \
      Pizza Crust group | | Regular crust radio button not checked | 1 of 3\", in every trial; \
      with one checked it says it last (2081/s1, 2086/s1), the trace the same one focus event \
-     either way. Okur says it last.",
+     either way; the same in the radio group taking the focus itself (aria-activedescendant). \
+     Okur says it last.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-31";
 
     Difference::Step => ["2112-aria-radiogroup-roving-tabindex-check-radio-enter-vc/s1"],
