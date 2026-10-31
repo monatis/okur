@@ -67,3 +67,14 @@
 - **Fix**: `run-scenario.ps1` types each character by its own key on the layout of the window
   in front (`VkKeyScanEx`, Shift included), as a hand types it, and keeps Unicode input for the
   characters that need AltGr or are not on the layout (2026-10-31).
+
+## 9. A Long Chain of Queued Rounds Gives Up
+- **Symptom**: rounds queued behind one another never start; their `queued.log` ends while
+  waiting for the round before.
+- **Cause**: `queue-batch.ps1` waits for the round before for at most `-MaxWaitMinutes` (360 by
+  default) from the moment it was queued, not from when its turn comes: fourteen ARIA-AT rounds
+  queued at 18:00 would have given up from about midnight, before most of them ran (2026-10-31).
+- **Fix**: queue a long chain with `-MaxWaitMinutes 1440`. To take back a queue, stop only the
+  rounds whose `batch.log` does not exist yet: a round's batch runs inside its `queue-batch`
+  process, so stopping a started one stops its batch mid-scenario, and a PC cursor scenario
+  cut off may leave JAWS's virtual cursor off (queue the next round with `-FreshJaws`).
