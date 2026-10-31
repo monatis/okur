@@ -768,6 +768,27 @@ function Close-OwnedWindows([IntPtr]$window) {
     }
 }
 
+# Office's own question on closing a changed document, a NetUI dialog (NUIDialog) in the
+# application's window: its Don't Save button pressed. True when one was.
+function Discard-SaveQuestion([int]$processId) {
+    Add-Type -AssemblyName UIAutomationClient, UIAutomationTypes
+    $A = [System.Windows.Automation.AutomationElement]
+    $ofProcess = New-Object System.Windows.Automation.PropertyCondition($A::ProcessIdProperty, $processId)
+    $dialogClass = New-Object System.Windows.Automation.PropertyCondition($A::ClassNameProperty, 'NUIDialog')
+    $dontSave = New-Object System.Windows.Automation.PropertyCondition($A::NameProperty, "Don't Save")
+    foreach ($window in $A::RootElement.FindAll([System.Windows.Automation.TreeScope]::Children, $ofProcess)) {
+        foreach ($dialog in $window.FindAll([System.Windows.Automation.TreeScope]::Children, $dialogClass)) {
+            $button = $dialog.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $dontSave)
+            if (-not $button) { continue }
+            try {
+                $button.GetCurrentPattern([System.Windows.Automation.InvokePattern]::Pattern).Invoke()
+                return $true
+            } catch { }
+        }
+    }
+    return $false
+}
+
 function Stop-DesktopFixture {
     if ($launch.shell_window) {
         # File Explorer's windows are the shell's process, the taskbar's too: closed, not killed.
@@ -787,21 +808,39 @@ function Stop-DesktopFixture {
         # repeated over Word's question had Word answer it with a message box of its own, and
         # nineteen piled up (round-1055e).
         $old = Find-WindowByTitle $launch.window_title
+        $fixtureId = if ($old) { $old.Id } else { 0 }
         if ($old) {
             Close-OwnedWindows $old.MainWindowHandle
             try { & $OkurLab word-discard --title $launch.window_title 2>&1 | Out-Null } catch { }
             for ($attempt = 0; $attempt -lt 2 -and $old; $attempt++) {
-                [void][SrKeyInput]::PostMessage($old.MainWindowHandle, 0x10, [IntPtr]::Zero, [IntPtr]::Zero)
+                # WM_SYSCOMMAND SC_CLOSE, as the Close button sends: Excel takes WM_CLOSE for
+                # quitting, every workbook with it, the lab's keeper too (2026-10-31).
+                [void][SrKeyInput]::PostMessage($old.MainWindowHandle, 0x112, [IntPtr]0xF060, [IntPtr]::Zero)
                 for ($i = 0; $i -lt 20; $i++) {
                     Start-Sleep -Milliseconds 300
                     $old = Find-WindowByTitle $launch.window_title
                     if (-not $old) { break }
+                    # Office's "Want to save your changes to ...?": Don't Save. Excel recalculates
+                    # a fixture's formulas on opening and asks; fixtures are written anew each run.
+                    if (Discard-SaveQuestion $old.Id) { Start-Sleep -Milliseconds 500 }
                 }
                 # Word's "You cannot close Microsoft Word because a dialog box is open": cancelled
                 # with the dialog, then Close once more.
                 if ($old) { Close-OwnedWindows $old.MainWindowHandle }
             }
             if ($old) { Write-Warning "the fixture window '$($launch.window_title)' did not close" }
+        }
+        # Excel's window, its workbook closed, stays as an empty frame ("Excel (Product
+        # Activation Failed)"), and the next trial starts another process: three were left after
+        # round 521e. The fixture's own process, once its window names no document (no " - "
+        # before the application's name), has its frame closed too. Word's process keeps its
+        # other documents' windows, which name them, and is left alone.
+        if ($fixtureId -gt 0) {
+            Start-Sleep -Milliseconds 500
+            $left = Get-Process -Id $fixtureId -ErrorAction SilentlyContinue
+            if ($left -and $left.MainWindowHandle -ne [IntPtr]::Zero -and $left.MainWindowTitle -notmatch ' - ') {
+                [void][SrKeyInput]::PostMessage($left.MainWindowHandle, 0x10, [IntPtr]::Zero, [IntPtr]::Zero)
+            }
         }
     } else {
         $old = Find-WindowByTitle $launch.window_title
