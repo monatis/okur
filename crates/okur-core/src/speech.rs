@@ -501,7 +501,7 @@ impl SpeechFormatter {
 
     /// The usage hint JAWS adds when focus lands on a page control [obs, 204/s7–s10].
     /// Edits, radio buttons and combo boxes get none.
-    pub fn web_focus_hint(node: &crate::aom::AomNode) -> Option<&'static str> {
+    pub fn web_focus_hint(node: &crate::aom::AomNode, virtual_off: bool) -> Option<&'static str> {
         use crate::aom::Role;
         match node.role {
             Role::CheckBox if node.states.checked == Some(true) => {
@@ -511,6 +511,9 @@ impl SpeechFormatter {
             Role::Button if node.states.checked.is_some() => {
                 Some(msg::hint_toggle_spacebar().as_str())
             }
+            // With the virtual cursor off a button is pressed as a native one [obs,
+            // round-aria3, 2035/s1, 2040/s1].
+            Role::Button if virtual_off => Some(msg::hint_activate_spacebar().as_str()),
             Role::Link { .. } | Role::Button => Some(msg::hint_activate_enter().as_str()),
             _ => None,
         }

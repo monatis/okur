@@ -47,6 +47,7 @@ impl ScreenReaderEngine {
             return None;
         }
         self.virtual_cursor_off = !self.virtual_cursor_off;
+        self.cursor.virtual_off = self.virtual_cursor_off;
         // Short messages say "Off" and "On" alone [obs, 841/s9, s11].
         let short =
             self.settings.verbosity.message_length() == crate::settings::MessageLength::Short;

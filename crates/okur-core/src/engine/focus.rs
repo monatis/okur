@@ -742,7 +742,9 @@ impl ScreenReaderEngine {
                     node.value = focus.value.clone();
                     node.states = focus.states.clone();
                     let mut speech = SpeechFormatter::format_control_focus(&node, |_| false);
-                    if let Some(hint) = SpeechFormatter::web_focus_hint(&node) {
+                    if let Some(hint) =
+                        SpeechFormatter::web_focus_hint(&node, self.virtual_cursor_off)
+                    {
                         speech.push('\n');
                         speech.push_str(hint);
                     }

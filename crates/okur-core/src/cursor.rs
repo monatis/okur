@@ -128,6 +128,9 @@ pub struct VirtualCursor {
     /// The verbosity a page control's focus is said at (its description at Advanced), as the
     /// engine last set it.
     pub verbosity: crate::settings::Verbosity,
+    /// The virtual cursor turned off (Insert+Z), as the engine last set it: a page's button
+    /// is then pressed with Space, as a native one.
+    pub virtual_off: bool,
 }
 
 impl VirtualCursor {
@@ -142,6 +145,7 @@ impl VirtualCursor {
             active_modal_root: None,
             search: SearchState::default(),
             verbosity: crate::settings::Verbosity::default(),
+            virtual_off: false,
         }
     }
 
@@ -1388,7 +1392,7 @@ impl VirtualCursor {
 
     /// The usage hint said after a focus, unless verbosity's Tutor leaves it out [obs, 736].
     fn focus_hint(&self, node: &AomNode) -> Option<&'static str> {
-        SpeechFormatter::web_focus_hint(node)
+        SpeechFormatter::web_focus_hint(node, self.virtual_off)
             .filter(|_| self.verbosity.is_on(crate::settings::OutputType::Hint))
     }
 
