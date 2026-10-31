@@ -11,6 +11,14 @@ fixed by which mode owns the key, imported in a `Corpus:` commit of its own. A f
 copied from the tool's output after the tool ran. The dev box is shared: cargo on 4 cores, one
 heavy job at a time. old-pc always has a round queued.
 
+## Status (2026-10-31, evening)
+
+Imported: checkbox-tri-state, disclosure-faq, radiogroup-roving-tabindex, accordion, checkbox,
+toggle-button, switch, switch-button, switch-checkbox, command-button, the three links
+([`../handoff/2026-10-31-aria-at-first-plans.md`](../handoff/2026-10-31-aria-at-first-plans.md)).
+Alert records again in round-aria12b with the tracer that reads a page's alert; §2's plans are
+queued as round-aria16 to aria29.
+
 ## 1. The plans recording now
 
 As each round finishes: fetch, preview, fix what differs, import. In order: disclosure-faq
