@@ -188,6 +188,9 @@ pub struct SheetEntry {
 /// it is outside the used range.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SheetPlace {
+    /// The active cell's reference, "D1".
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub address: String,
     pub row: Vec<String>,
     pub column: Vec<String>,
     pub row_at: usize,

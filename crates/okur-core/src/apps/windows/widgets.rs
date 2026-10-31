@@ -57,6 +57,7 @@ mod tests {
                     escape_key: false,
                     key: None,
                     ask_view: false,
+                    ask_sheet: false,
                 }
             ),
             FocusResponse::Silent

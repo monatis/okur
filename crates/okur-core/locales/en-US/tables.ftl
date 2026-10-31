@@ -194,6 +194,10 @@ word-no-note-at-cursor = No footnote or EndNote reference at cursor.
 excel-last-cell = Last Cell
 excel-first-cell = First cell
 excel-data-region-edge = edge of current data region
+# A Ctrl arrow from an empty cell into data [obs, 1118/s5].
+excel-data-region-start = start of new Data Region
+# An empty cell, after "blank" and its coordinates [obs, 1118/s3, s4].
+excel-active-cell = Active Cell: { $cell }
 # Excel's lists with nothing to list: a column's [obs, 521/s9 in round-521e]; formulas' and
 # worksheets' [hyp: not recorded].
 excel-no-column-cells = No cells with data in current column.

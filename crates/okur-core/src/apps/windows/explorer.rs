@@ -190,6 +190,7 @@ mod tests {
             escape_key: false,
             key: None,
             ask_view: false,
+            ask_sheet: false,
         };
         match explorer.focus(focus, &mut cx) {
             FocusResponse::Speak(announcement) => announcement.render(),
@@ -249,6 +250,7 @@ mod tests {
             escape_key: false,
             key: None,
             ask_view: false,
+            ask_sheet: false,
         };
         assert!(matches!(
             explorer.focus(&view, &mut cx),
@@ -274,6 +276,7 @@ mod tests {
                 escape_key: false,
                 key: None,
                 ask_view: false,
+                ask_sheet: false,
             };
             match explorer.focus(focus, &mut cx) {
                 FocusResponse::Speak(announcement) => announcement.render(),

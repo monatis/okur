@@ -11,14 +11,19 @@ use crate::messages::msg;
 
 /// Excel's grid window, which holds a sheet's cells.
 const GRID_WINDOW: &str = "EXCEL7";
+/// Excel's cell editor, F2's (and typing's) edit.
+const EDITOR_WINDOW: &str = "EXCEL6";
 
 /// Excel's module.
 #[derive(Debug, Default)]
-pub struct Excel;
+pub struct Excel {
+    /// The last cell reached was empty, which a Ctrl arrow leaves for a new data region.
+    from_blank: bool,
+}
 
 impl AppModule for Excel {
     fn owns(&self, focus: &FocusEvent) -> bool {
-        cell(focus).is_some()
+        cell(focus).is_some() || grid(focus) || editor(focus)
     }
 
     /// A cell Okur's list closes back onto, "22 | B 4" [obs, 521/s10, s14].
@@ -42,6 +47,21 @@ impl AppModule for Excel {
     /// arrow, that it is a data region's edge after, "Weekends | C 1 | edge of current data
     /// region" [obs, 1115/s1-s6].
     fn focus(&mut self, focus: &FocusEvent, cx: &mut AppContext<'_>) -> FocusResponse {
+        // F2 into the cell's editor: JAWS says nothing [obs, 1118/s6].
+        if editor(focus) {
+            cx.note_window(focus);
+            *cx.app_mode = crate::engine::AppMode::NativeControl;
+            return FocusResponse::Silent;
+        }
+        // An empty cell: the grid itself has the focus, and the cell comes from Excel's object
+        // model, "blank | D 1 | Active Cell: D1" [obs, 1118/s3, s4].
+        if grid(focus) {
+            cx.note_window(focus);
+            *cx.app_mode = crate::engine::AppMode::NativeControl;
+            cx.ask_sheet = true;
+            self.from_blank = true;
+            return FocusResponse::Silent;
+        }
         let Some(coordinates) = cell(focus) else {
             return FocusResponse::Pass;
         };
@@ -65,12 +85,22 @@ impl AppModule for Excel {
             lines.push(value.to_owned());
         }
         lines.push(coordinates);
+        // From an empty cell a new data region starts, "8 | C 2 | start of new Data Region"
+        // [obs, 1118/s5].
         if matches!(
             key,
             Some(Key::LeftArrow | Key::RightArrow | Key::UpArrow | Key::DownArrow)
         ) {
-            lines.push(msg::excel_data_region_edge().to_string());
+            lines.push(
+                if self.from_blank {
+                    msg::excel_data_region_start()
+                } else {
+                    msg::excel_data_region_edge()
+                }
+                .to_string(),
+            );
         }
+        self.from_blank = value.is_empty();
         FocusResponse::Speak(crate::announcement::Announcement::from_text(
             &lines.join("\n"),
         ))
@@ -142,6 +172,37 @@ impl SheetReading {
     }
 }
 
+/// Excel's grid itself focused, as an empty cell leaves it (no cell element to focus).
+fn grid(focus: &FocusEvent) -> bool {
+    focus.platform.window_class.as_deref() == Some(GRID_WINDOW) && focus.role != Role::TableCell
+}
+
+/// Excel's cell editor focused (F2).
+fn editor(focus: &FocusEvent) -> bool {
+    focus.platform.window_class.as_deref() == Some(EDITOR_WINDOW) && focus.role == Role::Edit
+}
+
+/// The active cell read from Excel's object model, where the grid had no cell to focus: an
+/// empty one as JAWS says it, "blank | D 1 | Active Cell: D1" [obs, 1118/s3, s4]; one with a
+/// value as any cell. `None` without its reference.
+pub(crate) fn blank_or_cell(place: &crate::event::SheetPlace) -> Option<String> {
+    let at = coordinates(&place.address)?;
+    let value = place
+        .row
+        .get(place.row_at)
+        .map(|v| v.trim())
+        .unwrap_or_default();
+    Some(if value.is_empty() {
+        format!(
+            "{}\n{at}\n{}",
+            msg::blank(),
+            msg::excel_active_cell(place.address.trim()).render()
+        )
+    } else {
+        format!("{value}\n{at}")
+    })
+}
+
 /// The coordinates of the cell `focus` is, as JAWS says them, its column's letters apart from
 /// its row's number: "B 2"; `None` for any other focus.
 pub(crate) fn cell(focus: &FocusEvent) -> Option<String> {
@@ -170,6 +231,7 @@ mod tests {
     #[test]
     fn rows_and_columns_are_read_whole_or_from_the_cell() {
         let place = crate::event::SheetPlace {
+            address: "B3".into(),
             row: vec!["Northside".into(), "10".into(), "6".into()],
             column: vec!["Weekdays".into(), "12".into(), "10".into(), "22".into()],
             row_at: 1,

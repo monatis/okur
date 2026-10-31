@@ -352,6 +352,8 @@ pub struct ScreenReaderEngine {
     /// The menus ended back on a focus its application says itself: "Leaving menus" waits for
     /// that focus, to be said with it.
     menus_left_unsaid: bool,
+    /// Excel's active cell was asked for, to say it, its grid focused without a cell.
+    sheet_cell_asked: bool,
     /// One of Excel's lists was asked for, and is awaited.
     sheet_list_asked: Option<crate::event::SheetListKind>,
     /// One of Excel's row or column readers asked for the active cell's row and column, and
@@ -660,6 +662,7 @@ impl ScreenReaderEngine {
             menus_left_unsaid: false,
             sheet_reading_asked: None,
             sheet_list_asked: None,
+            sheet_cell_asked: false,
             say_all_paragraphs_asked: false,
             document_view_title: None,
             document_view_by_key: None,
@@ -1690,6 +1693,12 @@ impl ScreenReaderEngine {
                 column,
                 entries,
             } => self.sheet_list(*kind, column, entries),
+            AccessibilityEvent::SheetPlace(place) if self.sheet_cell_asked => {
+                self.sheet_cell_asked = false;
+                let said = crate::apps::windows::excel::blank_or_cell(place.as_ref()?)?;
+                self.speech.speak(&said, true);
+                Some(said)
+            }
             AccessibilityEvent::SheetPlace(place) => {
                 let reading = self.sheet_reading_asked.take()?;
                 let said = reading.said(place.as_ref()?)?;

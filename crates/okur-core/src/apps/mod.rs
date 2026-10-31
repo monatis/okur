@@ -58,6 +58,10 @@ pub struct AppContext<'a> {
     /// document, back from its ribbon by a key tip, which can have changed the view): the
     /// engine asks for it, and the module's `document_view` says what the view makes of it.
     pub ask_view: bool,
+    /// Set by a module whose focus is a spreadsheet's grid without a cell to read (Excel's
+    /// empty cell has no UI Automation element): the engine asks for the sheet's active cell
+    /// and says it as [`crate::apps::windows::excel::blank_or_cell`] does.
+    pub ask_sheet: bool,
 }
 
 impl AppContext<'_> {

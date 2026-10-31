@@ -29,7 +29,7 @@ pub fn modules() -> Vec<Box<dyn AppModule>> {
         Box::new(terminal::Terminal),
         Box::new(search::Search),
         Box::new(settings::Settings),
-        Box::new(excel::Excel),
+        Box::new(excel::Excel::default()),
         Box::new(word_ribbon::WordRibbon::default()),
         Box::new(word_dialog::WordDialog::default()),
         Box::new(word::WordDocument),

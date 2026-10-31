@@ -65,6 +65,7 @@ pub fn sheet_place(grid: HWND) -> Option<okur_core::SheetPlace> {
     let column_cells: Vec<String> = (top..top + rows).map(|r| shown(r, column)).collect();
     let at = |from: i32, here: i32| usize::try_from(here.saturating_sub(from)).ok();
     Some(okur_core::SheetPlace {
+        address: address(&cell).unwrap_or_default(),
         row_at: at(left, column)?,
         column_at: at(top, row)?,
         row: row_cells,

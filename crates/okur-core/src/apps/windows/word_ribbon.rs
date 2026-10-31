@@ -478,6 +478,7 @@ mod tests {
             escape_key: false,
             key: None,
             ask_view: false,
+            ask_sheet: false,
         };
         match ribbon.focus(focus, &mut cx) {
             FocusResponse::Speak(announcement) | FocusResponse::SpeakWhole(announcement) => {
@@ -765,6 +766,7 @@ mod tests {
             escape_key: false,
             key: None,
             ask_view: false,
+            ask_sheet: false,
         };
         assert!(matches!(
             ribbon.focus(&document, &mut cx),
@@ -798,6 +800,7 @@ mod tests {
                 escape_key: escape,
                 key: None,
                 ask_view: false,
+                ask_sheet: false,
             };
             match ribbon.focus(focus, &mut cx) {
                 FocusResponse::Speak(announcement) | FocusResponse::SpeakWhole(announcement) => {

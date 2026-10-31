@@ -338,6 +338,7 @@ impl ScreenReaderEngine {
             escape_key: self.last_key_escapes,
             key: self.last_key,
             ask_view: false,
+            ask_sheet: false,
         };
         for app in &mut self.apps {
             match app.focus(focus, &mut cx) {
@@ -348,6 +349,14 @@ impl ScreenReaderEngine {
                     return Some(speech);
                 }
                 FocusResponse::Silent => {
+                    if cx.ask_sheet
+                        && self
+                            .actions
+                            .as_ref()
+                            .is_some_and(|actions| actions.read_sheet_place())
+                    {
+                        self.sheet_cell_asked = true;
+                    }
                     if cx.ask_view
                         && self
                             .actions
