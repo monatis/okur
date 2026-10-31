@@ -317,6 +317,58 @@
       "sha256": "2762c430b66fa1189e8956b3416d485cd347d27fa4cc809cbf8706a14a00edec",
       "size_bytes": 2123
     },
+    "aria-at/radiogroup-aria-activedescendant/css/radio.css": {
+      "sha256": "5652a091b391cd1c4c3356a5b19a4686bda175c688f4924d4d2b2aa13bdbdff4",
+      "size_bytes": 1219
+    },
+    "aria-at/radiogroup-aria-activedescendant/js/radio-activedescendant.js": {
+      "sha256": "67d4a16d27fe80d41cfa0d3fb24416ebe192361bd72cae556bc89fc82d5bfce9",
+      "size_bytes": 4690
+    },
+    "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.checkFirstRadioButtonAndSetFocusBeforeRadioGroup.html": {
+      "sha256": "108c03fae606ab5102abce4ea21373227d3b4131339dfcd2c85e3e5aa3629b8e",
+      "size_bytes": 3271
+    },
+    "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.checkThirdRadioButtonAndSetFocusAfterRadioGroup.html": {
+      "sha256": "23c418d05ca3dffd3dac5b31789f050e4bd546b9f4c206123fb6a7c98995c46f",
+      "size_bytes": 3268
+    },
+    "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.html": {
+      "sha256": "32c04b6e61cf1661a51e9160f3dd61325d282817f11724fe7ae253b441926384",
+      "size_bytes": 2012
+    },
+    "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusAfterRadioGroup.html": {
+      "sha256": "a8a6a1d9fcf2432116677cbd659deb77d3d1b8309267fb655d823aa155146deb",
+      "size_bytes": 2803
+    },
+    "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusBeforeRadioGroup.html": {
+      "sha256": "d879ab08b60fb53c4bb433597e7bf2cd396253f1f940293ee8634a2279b19a78",
+      "size_bytes": 2806
+    },
+    "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnAndCheckFirstRadioButton.html": {
+      "sha256": "7ecc22a22eb1a16c6caa26103394827ae9a616d8aa6f4eafcd40f9dce2f59d05",
+      "size_bytes": 3189
+    },
+    "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html": {
+      "sha256": "f28d49abeeaca18e679d1e29231b3956cc73185150321908e6c409801b687de4",
+      "size_bytes": 3166
+    },
+    "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButtonAndCheckSecondRadioButton.html": {
+      "sha256": "049df732cb10d2757a45678256faed4900827260067b394b38ff8779d68ed9e0",
+      "size_bytes": 3212
+    },
+    "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnSecondRadioButton.html": {
+      "sha256": "1e2771b9c1ee138d43668d7a90ea1a4d4ce5c67aaf6971e771f7cc78cfb8e643",
+      "size_bytes": 3104
+    },
+    "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnSecondRadioButtonAndCheckFirstRadioButton.html": {
+      "sha256": "498cccc460b964592b1c9e92a81f5e0a54db80aba870b2703fbc655b6af429f2",
+      "size_bytes": 3211
+    },
+    "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnThirdRadioButton.html": {
+      "sha256": "1a10ec1d092831a8f043d760e77a45fa5b13e51fde9011410a9c4b3fc5d0541b",
+      "size_bytes": 3166
+    },
     "aria-at/radiogroup-roving-tabindex/css/radio.css": {
       "sha256": "e75650d9b5b7edb347761c65dc2c8e962296f06b3e6715751615b953a8147cf2",
       "size_bytes": 1816
@@ -8898,6 +8950,62 @@
       }
     },
     {
+      "scenario_id": "2386-aria-radiogroup-aria-activedescendant-nav-forwards-in-to-radio-group-where-no-radio-buttons-are-checked-f-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusBeforeRadioGroup.html",
+      "evidence": {
+        "sha256": "f6fea74c30e3968d29ddf6ba19ee24e4c5a2440cc77aabded531704e04a74c54",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2387-aria-radiogroup-aria-activedescendant-nav-forwards-in-to-radio-group-where-no-radio-buttons-are-checked-a-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusBeforeRadioGroup.html",
+      "evidence": {
+        "sha256": "0370053f9dda65ec5e020e08d4a04b4154c3f7cdea215119dd657a330ddd3a0c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2388-aria-radiogroup-aria-activedescendant-nav-forwards-in-to-radio-group-where-no-radio-buttons-are-checked-down-down-down-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusBeforeRadioGroup.html",
+      "evidence": {
+        "sha256": "c3075ccd0e46c02b4d62b6c87d8d6d835090fe1772fe9104466f157db0c11ab9",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2389-aria-radiogroup-aria-activedescendant-nav-forwards-in-to-radio-group-where-no-radio-buttons-are-checked-tab-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusBeforeRadioGroup.html",
+      "evidence": {
+        "sha256": "2f368686b1a32ec4856279b2bd6b1cb09af0ca609c792814d382cd6a6c9d53d9",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "239-web-list-paragraphs",
       "fixture": "news-article.html",
       "evidence": {
@@ -8908,6 +9016,146 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2390-aria-radiogroup-aria-activedescendant-nav-forwards-in-to-radio-group-where-no-radio-buttons-are-checked-tab-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusBeforeRadioGroup.html",
+      "evidence": {
+        "sha256": "e3abe3447ae33aaf87684490f0b97d50fa2e97c6113c964fd031bbb79ccc4f17",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2391-aria-radiogroup-aria-activedescendant-nav-back-in-to-radio-group-where-no-radio-buttons-are-checked-shift-f-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusAfterRadioGroup.html",
+      "evidence": {
+        "sha256": "d81b39467a0b946fabab56b161d0837de0edc3f6f2a00e0e849bc06b732305f2",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2392-aria-radiogroup-aria-activedescendant-nav-back-in-to-radio-group-where-no-radio-buttons-are-checked-shift-a-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusAfterRadioGroup.html",
+      "evidence": {
+        "sha256": "1d681670e1a320a9c0d2e2ae725b7691a990a6c580bf99aae5c04f949a297070",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2393-aria-radiogroup-aria-activedescendant-nav-back-in-to-radio-group-where-no-radio-buttons-are-checked-up-up-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusAfterRadioGroup.html",
+      "evidence": {
+        "sha256": "67405eb247c5c1af020c50f12d649b3d0f1f0d338628ca81e779774ecfd01945",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2394-aria-radiogroup-aria-activedescendant-nav-back-in-to-radio-group-where-no-radio-buttons-are-checked-shift-tab-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusAfterRadioGroup.html",
+      "evidence": {
+        "sha256": "98e6e92761ece3852fad620549bb884f3d2320c001a26419c9a622179aabba35",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2395-aria-radiogroup-aria-activedescendant-nav-back-in-to-radio-group-where-no-radio-buttons-are-checked-shift-tab-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusAfterRadioGroup.html",
+      "evidence": {
+        "sha256": "7f7ecbdf7be75482d7ff87ee9644e41e0c21f8f372a016ceb4de5048537e622c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2396-aria-radiogroup-aria-activedescendant-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-f-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.checkFirstRadioButtonAndSetFocusBeforeRadioGroup.html",
+      "evidence": {
+        "sha256": "f1f836a01be87264b1bc4fb2c8e44f8c2fc1ecf4dcd63ca68403a88ce6bd3be7",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2397-aria-radiogroup-aria-activedescendant-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-a-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.checkFirstRadioButtonAndSetFocusBeforeRadioGroup.html",
+      "evidence": {
+        "sha256": "d3c7925dcfe28fecb4d69f6447029231adb3c2e069c1637f8c4888b49b7c459c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2398-aria-radiogroup-aria-activedescendant-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-down-down-down-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.checkFirstRadioButtonAndSetFocusBeforeRadioGroup.html",
+      "evidence": {
+        "sha256": "13c507e9847955ece8b53a41e1aaa22314e6ec513165bb83ec7bbbef574de20e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2399-aria-radiogroup-aria-activedescendant-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-tab-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.checkFirstRadioButtonAndSetFocusBeforeRadioGroup.html",
+      "evidence": {
+        "sha256": "b4d5edbd0bcb087d8f8a656be7a76394e89dc184cc5535542baad2e300ce92f4",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -8940,6 +9188,146 @@
       }
     },
     {
+      "scenario_id": "2400-aria-radiogroup-aria-activedescendant-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-tab-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.checkFirstRadioButtonAndSetFocusBeforeRadioGroup.html",
+      "evidence": {
+        "sha256": "96c4ed23b0ff0a0cd1df2f22f3ef39ec8781597ff8071afec47f263f39865d90",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2401-aria-radiogroup-aria-activedescendant-nav-back-into-radio-group-where-last-radio-checked-shift-f-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.checkThirdRadioButtonAndSetFocusAfterRadioGroup.html",
+      "evidence": {
+        "sha256": "2b842307efe41ba49a9b1f9ccf0a55b30fd0ab11c771daa14b1a3ef67bdb5966",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2402-aria-radiogroup-aria-activedescendant-nav-back-into-radio-group-where-last-radio-checked-shift-a-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.checkThirdRadioButtonAndSetFocusAfterRadioGroup.html",
+      "evidence": {
+        "sha256": "782d3f662ae8079a2b5840434ea42e1b93444a0a98f7086d24ecec910813e527",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2403-aria-radiogroup-aria-activedescendant-nav-back-into-radio-group-where-last-radio-checked-up-up-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.checkThirdRadioButtonAndSetFocusAfterRadioGroup.html",
+      "evidence": {
+        "sha256": "eec3a0ef9c1873e08ca0cca71f79bd3519d8d86102535217a246fe8ec3805dcd",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2404-aria-radiogroup-aria-activedescendant-nav-back-into-radio-group-where-last-radio-checked-shift-tab-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.checkThirdRadioButtonAndSetFocusAfterRadioGroup.html",
+      "evidence": {
+        "sha256": "fd79f9a7925f38d0ff55b781e0e7ac1b79e473df4752029e78e2cb1565bac1b5",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2405-aria-radiogroup-aria-activedescendant-nav-back-into-radio-group-where-last-radio-checked-shift-tab-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.checkThirdRadioButtonAndSetFocusAfterRadioGroup.html",
+      "evidence": {
+        "sha256": "048eddba57874ab6a256329aaea9092cd3b52c41c74f2f29d4b721b973676f63",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2406-aria-radiogroup-aria-activedescendant-nav-out-start-radio-group-shift-u-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "11971477443940b00fea8f0b2d106b521ec564ee7891cf8d618f2eb108a1eef3",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2407-aria-radiogroup-aria-activedescendant-nav-out-start-radio-group-up-up-up-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "4fa3fd5a5375155dd6a70a1dee8580d484bde310d7078def8cb8022b2c8ac9dd",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2408-aria-radiogroup-aria-activedescendant-nav-out-start-radio-group-shift-tab-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "e06da4cd5491aba6e8c868734227d38bf5d70be8e496513666edf643f2e8cdf8",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2409-aria-radiogroup-aria-activedescendant-nav-out-start-radio-group-shift-tab-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "5b369058e6021dd939ff3680971c16fba5b1e9bcfc7357aa403fe9538cc08821",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "241-web-list-regions",
       "fixture": "news-article.html",
       "evidence": {
@@ -8950,6 +9338,146 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2410-aria-radiogroup-aria-activedescendant-nav-out-end-radio-group-u-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnThirdRadioButton.html",
+      "evidence": {
+        "sha256": "3f5f8da0b3616ec03a99183768e8c9c5be3f288c33866b6c1ee67d6cd3062a69",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2411-aria-radiogroup-aria-activedescendant-nav-out-end-radio-group-down-down-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnThirdRadioButton.html",
+      "evidence": {
+        "sha256": "e0e3dadfcdaf0fab3dbf6c3b5afbf40f3333d83900b5a7036370294125320521",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2412-aria-radiogroup-aria-activedescendant-nav-out-end-radio-group-tab-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnThirdRadioButton.html",
+      "evidence": {
+        "sha256": "ba86e5aa269ce6b818b51cc51548521d866463422a9b7ad954b462b1f6eeea6b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2413-aria-radiogroup-aria-activedescendant-nav-out-end-radio-group-tab-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnThirdRadioButton.html",
+      "evidence": {
+        "sha256": "12936edd5c7a24a7f9f5c43767cc9611f50ca25d7c4f599f0d62f0c094802b9f",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2414-aria-radiogroup-aria-activedescendant-nav-to-next-unchecked-radio-f-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "5951044b3e914df4598dfa1c19f6eeee8dfa74368f46efa2fac20a9aaf28b40b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2415-aria-radiogroup-aria-activedescendant-nav-to-next-unchecked-radio-a-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "7cbe3c0d86dffdc21507ced58f60095ca47bd9af82cbd68d3d2bc9d033113383",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2416-aria-radiogroup-aria-activedescendant-nav-to-next-unchecked-radio-down-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "8f3767bad430077e88d95a1f4006ca1faa9372f7374d9d3a4f167d24e48b6b51",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2417-aria-radiogroup-aria-activedescendant-nav-to-prev-unchecked-radio-shift-f-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnSecondRadioButton.html",
+      "evidence": {
+        "sha256": "da7c8cab2bc6a6f51be9e410cf7792eb4bcbcd62b4f923a7659879f4536f4601",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2418-aria-radiogroup-aria-activedescendant-nav-to-prev-unchecked-radio-shift-a-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnSecondRadioButton.html",
+      "evidence": {
+        "sha256": "fb827ce25b577a8e5f7abb3207068b27d802f80472c3df1b2c476fa776062e7a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2419-aria-radiogroup-aria-activedescendant-nav-to-prev-unchecked-radio-up-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnSecondRadioButton.html",
+      "evidence": {
+        "sha256": "78faadbf9aac22628ebadc6fafbe0ea3adde34bb93786e4cd13972126a63a111",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -8968,6 +9496,146 @@
       }
     },
     {
+      "scenario_id": "2420-aria-radiogroup-aria-activedescendant-nav-to-next-checked-radio-f-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButtonAndCheckSecondRadioButton.html",
+      "evidence": {
+        "sha256": "b443a6f2954f657c644412e3847b08fdb01c4c0f6a4bb29f8c082620a5100c5b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2421-aria-radiogroup-aria-activedescendant-nav-to-next-checked-radio-a-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButtonAndCheckSecondRadioButton.html",
+      "evidence": {
+        "sha256": "2daac808129e56e290602317249e564b4e71bed765a0066a10bd2879c11deebb",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2422-aria-radiogroup-aria-activedescendant-nav-to-next-checked-radio-down-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButtonAndCheckSecondRadioButton.html",
+      "evidence": {
+        "sha256": "2f8e2aa6a08515da2ed2693d2c45608f48e19224cd36bb83d2f15c1d0a792f03",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2423-aria-radiogroup-aria-activedescendant-nav-to-prev-checked-radio-shift-f-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnSecondRadioButtonAndCheckFirstRadioButton.html",
+      "evidence": {
+        "sha256": "d39a4d04ef0947b1e17cf5c7f65822362f7a456ed06c3f8c41bad1535bc05753",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2424-aria-radiogroup-aria-activedescendant-nav-to-prev-checked-radio-shift-a-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnSecondRadioButtonAndCheckFirstRadioButton.html",
+      "evidence": {
+        "sha256": "df11bb09acb8a96b9cd6d649e518aa6a9a4f6a1ee0e1376fca385a8451dd2902",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2425-aria-radiogroup-aria-activedescendant-nav-to-prev-checked-radio-up-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnSecondRadioButtonAndCheckFirstRadioButton.html",
+      "evidence": {
+        "sha256": "798c33c36f103bab9de667bb76e952bb378f64075d4774edb9f3b5a06060a8ea",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2426-aria-radiogroup-aria-activedescendant-nav-to-first-radio-down-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnThirdRadioButton.html",
+      "evidence": {
+        "sha256": "f791c4a9ba41b7b289d623b8451d813b5522a762a102a6dd745e82efc33cf808",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2427-aria-radiogroup-aria-activedescendant-nav-to-first-radio-right-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnThirdRadioButton.html",
+      "evidence": {
+        "sha256": "9c07c6f5e174e03fcff848fb1991d271d734caca48fffae234c242b88dd3a309",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2428-aria-radiogroup-aria-activedescendant-nav-to-last-radio-up-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "f7a12ab64247a9f1dae026ef4e4b60729c9b3272479fb1dea3275fb2283728e9",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2429-aria-radiogroup-aria-activedescendant-nav-to-last-radio-left-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "1b8f6af4b2080d3116e5644fbd58db836040bb8b436a220ff3ec0174e6f05f3b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "243-web-list-glance-highlights",
       "fixture": "news-article.html",
       "evidence": {
@@ -8982,6 +9650,146 @@
       }
     },
     {
+      "scenario_id": "2430-aria-radiogroup-aria-activedescendant-check-radio-space-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "d08d32fa2d9b16c7c344c90d4577d3d8d0f79c88fef1dbad2a6996fab09724b3",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2431-aria-radiogroup-aria-activedescendant-check-radio-enter-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "9494bdf98f0cf053532046a3fdc43e3c537ae764611234e839f514aca558f305",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2432-aria-radiogroup-aria-activedescendant-check-radio-space-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "6a9350465a2206cf860805d24ad89d6acbdfd0bd22110d55faea5d8a7d7034da",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2433-aria-radiogroup-aria-activedescendant-req-info-about-unchecked-radio-ins-tab-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "4c10344dcd15fc6574e8cdbd3696b59e9def992e693b7dfb0412849c167bb25a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2434-aria-radiogroup-aria-activedescendant-req-info-about-unchecked-radio-ins-up-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "0999646afc19f0604dfcb86947b5daba33ec86389d6aeed1ab304050f59124e2",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2435-aria-radiogroup-aria-activedescendant-req-info-about-unchecked-radio-ins-tab-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "305607d156a426f3e9927619f5cb7a098e5c227d7042a165f048f636ccc7bb56",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2436-aria-radiogroup-aria-activedescendant-req-info-about-unchecked-radio-ins-up-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnFirstRadioButton.html",
+      "evidence": {
+        "sha256": "12ac1ab297ecfeda6798fcfe3e569cb46c12ef366e42c1756dbf525bb07b0db4",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2437-aria-radiogroup-aria-activedescendant-req-info-about-checked-radio-ins-tab-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnAndCheckFirstRadioButton.html",
+      "evidence": {
+        "sha256": "835a7900b0a0b027f266fdfb1a43e252634d1b9b7425785bf263e375b3f72118",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2438-aria-radiogroup-aria-activedescendant-req-info-about-checked-radio-ins-up-vc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnAndCheckFirstRadioButton.html",
+      "evidence": {
+        "sha256": "a2d7d5862efce827665fd87bfcd72ea960e070a4a0ceedf33206b807c40cb624",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2439-aria-radiogroup-aria-activedescendant-req-info-about-checked-radio-ins-tab-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnAndCheckFirstRadioButton.html",
+      "evidence": {
+        "sha256": "52f188b5b5a685296b6d5523c004c1f73cc6bb29fff51ff8d7572463f229cf72",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "244-web-list-divisions",
       "fixture": "web-chat.html",
       "evidence": {
@@ -8992,6 +9800,20 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2440-aria-radiogroup-aria-activedescendant-req-info-about-checked-radio-ins-up-pc",
+      "fixture": "aria-at/radiogroup-aria-activedescendant/radio-activedescendant.setFocusOnAndCheckFirstRadioButton.html",
+      "evidence": {
+        "sha256": "abe9838c2edf9cf6f92d72a70acc7c5ef66b0ea5834e20e43cc85380ac52a360",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -16697,10 +17519,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1132,
-    "scenarios_with_evidence": 1132,
-    "total_trials": 3402,
-    "successful_trials": 3385,
-    "deterministic_scenarios": 860
+    "scenarios": 1187,
+    "scenarios_with_evidence": 1187,
+    "total_trials": 3567,
+    "successful_trials": 3550,
+    "deterministic_scenarios": 915
   }
 }
