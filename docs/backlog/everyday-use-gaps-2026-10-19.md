@@ -67,6 +67,8 @@ file and topic, with each topic's notes page:
 **Other sources:**
 - **[K]** `Default.JKM` and `Chrome.jkm`: key names and command names only (AGENTS.md §1.4).
 - **[R]** [`jaws-reading-settings-research.md`](../references/jaws-reading-settings-research.md).
+- **[AA]** W3C's ARIA-AT project: its reports, <https://aria-at.w3.org/reports>, and its tests,
+  <https://github.com/w3c/aria-at> (`tests/apg/<pattern>/`), under the W3C Document License.
 
 ## Gaps, most important for everyday use first
 
@@ -99,6 +101,8 @@ open ones keep their numbers.
 | 41 | Web | Element information, link source, F8, frames list, visited links, live-region filter, mouse over | [P1, W1] | **Partial** (2026-10-19): element information, the live-region filter and mouse over are missing | P2 | 536 |
 | 42 | Web | PlaceMarkers, custom labels, Flexible Web, Smart Navigation | [P1, S4, W2] | **Partial** (2026-10-21): Smart Navigation's units of the character and word keys are not built | P2 | 691, 699, 705-742, 913 |
 | 43 | Other | Audio ducking, keyboard lock, schemes, dictionary, language switching | [H4, H8] | **Missing** | P2 | — |
+| 44 | Web | ARIA-AT's test plans: 40 for the APG's patterns (checkbox, combobox, menu button, menubar, modal dialog, sliders, spin button, tabs, data grid, landmarks, links and more) and 3 for HTML and ARIA attributes, each test's JAWS commands in the virtual and PC cursors, and its assertions of role, name and state | [AA] | **Missing**: scheduled after Excel ([plan](../plans/2026-10-31-aria-at-web-round-1.md), the owner, 2026-10-31) | P1 | — |
+| 45 | Release | The first release, through the Microsoft Store as an MSIX package the Store signs; the owner's individual developer account has the name "okur" reserved | — | **Missing**: scheduled after ARIA-AT ([plan](../plans/2026-10-31-microsoft-store-release.md), the owner, 2026-10-31) | P1 | — |
 
 **Later, not in this list:**
 - OCR and Picture Smart;
@@ -133,3 +137,5 @@ open ones keep their numbers.
 3. The virtual keys queued in rounds 9-11.
 4. Page load (row 20, 507) and the help layer.
 5. Word and Outlook.
+6. Excel, then ARIA-AT's test plans for the web (row 44), then the first release through the
+   Microsoft Store (row 45) (the owner, 2026-10-31).

@@ -7,6 +7,11 @@ The owner's order, unchanged from plan 40:
 3. the review's open findings (§3), punctuation by word (§4), then the README's "Not yet"
    list, in its order.
 
+**Scheduled after Excel** (the owner, 2026-10-31): ARIA-AT's test plans for the web
+([`2026-10-31-aria-at-web-round-1.md`](2026-10-31-aria-at-web-round-1.md)), then the first
+release through the Microsoft Store
+([`2026-10-31-microsoft-store-release.md`](2026-10-31-microsoft-store-release.md)).
+
 Each item is found in JAWS's documentation, recorded on old-pc, then built. JAWS's accidents
 become accepted divergences. old-pc always has a round queued behind the running one. Okur's own
 words never use JAWS's name (AGENTS.md §1.5). A stretch is a few hours or about thirty commits;
