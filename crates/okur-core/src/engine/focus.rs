@@ -279,6 +279,18 @@ impl ScreenReaderEngine {
             self.speech.speak(&speech, true);
             return Some(speech);
         }
+        // The window a menu opens in, focused before its first item (Office's menus open in a
+        // "Net UI Tool Window" whose own pane, unnamed, takes the focus first): the menu has not
+        // been left, and its item is said next [obs, 1122/s2].
+        if self.menus.awaiting_first_item()
+            && focus.role == Role::Generic
+            && focus
+                .name
+                .as_deref()
+                .is_none_or(|name| name.trim().is_empty())
+        {
+            return None;
+        }
         // A native focus outside the menus while they are active: a modern menu closed with
         // no menu-end event (File Explorer's context menu, Escape: "Leaving menus | Items View
         // MultiSelect ListBox | backlog | …"; JAWS on the dev box, 2026-10-17).
@@ -1216,12 +1228,18 @@ impl ScreenReaderEngine {
                 window_class,
                 window_title,
             } => {
-                // An Office command bar's popup is named by its command bar [obs, 1116/s5].
-                let command_bar = window_title
-                    .filter(|_| window_class.as_deref() == Some("MsoCommandBarPopup"))
+                use crate::native_focus::PopupKind;
+                // An Office command bar's popup is named by its command bar [obs, 1116/s5];
+                // Office's own menus are read their own way [obs, 1122/s2].
+                let title = window_title
                     .map(|title| title.trim().to_owned())
                     .filter(|title| !title.is_empty());
-                self.menus.popup_start(command_bar);
+                let kind = match (window_class.as_deref(), title) {
+                    (Some("MsoCommandBarPopup"), Some(bar)) => PopupKind::CommandBar(bar),
+                    (Some(crate::apps::windows::word_ribbon::NETUI_CLASS), _) => PopupKind::NetUi,
+                    _ => PopupKind::Plain,
+                };
+                self.menus.popup_start(kind);
                 None
             }
             MenuEvent::PopupEnd if std::mem::take(&mut self.combo_list_open) => None,

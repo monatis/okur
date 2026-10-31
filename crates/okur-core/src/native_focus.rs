@@ -1267,9 +1267,21 @@ pub struct Menus {
     /// A menu bar item has the focus, no menu open: leaving from there is "leaving menu bar";
     /// a menu closed by choosing an item leaves no bar item focused [obs, 544/s2, 547/s8].
     on_bar_item: bool,
-    /// The Office command bar whose popup just opened ("Ply", Excel's sheet tabs' menu): a
-    /// context menu of one is said by its name before its first item [obs, 1116/s5].
-    command_bar: Option<String>,
+    /// What kind of popup just opened, which a context menu is read by.
+    popup_kind: PopupKind,
+}
+
+/// A popup menu's kind, by the window it opens in.
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub enum PopupKind {
+    #[default]
+    Plain,
+    /// An Office command bar's (`MsoCommandBarPopup`), by its name: "Ply", Excel's sheet tabs'
+    /// menu. A context menu of one says the name before its first item [obs, 1116/s5].
+    CommandBar(String),
+    /// Office's own menu (`NetUIHWND`): the cell's context menu in Excel. A context menu of one
+    /// says its first item and how to move, with no role [obs, 1122/s2].
+    NetUi,
 }
 
 /// Where a page's menu item is ([`Menus::page_focus`]).
@@ -1374,26 +1386,25 @@ impl Menus {
             } else {
                 name.to_owned()
             };
-            // An Office command bar's popup says its name first, then the item and how to move
-            // ("Context Menu | | Ply pop-up menu | Insert... | To move through items ..." [obs,
-            // 1116/s5]).
-            let command_bar = self
-                .command_bar
-                .take()
-                .map(|bar| format!("{}\n", msg::menu_pop_up_named(bar)))
-                .unwrap_or_default();
-            Some(if self.launcher || !command_bar.is_empty() {
-                format!(
-                    "{}\n\n{command_bar}{said}\n{}",
-                    role_marker(msg::role_context_menu().as_str()),
-                    msg::hint_menu_items_up_down()
-                )
-            } else {
-                format!(
-                    "{}\n\n{}\n{said}",
-                    role_marker(msg::role_context_menu().as_str()),
+            let context_menu = role_marker(msg::role_context_menu().as_str());
+            let items_hint = msg::hint_menu_items_up_down();
+            Some(match std::mem::take(&mut self.popup_kind) {
+                // An Office command bar's popup says its name first, then the item and how to
+                // move ("Context Menu | | Ply pop-up menu | Insert... | To move through items
+                // ..." [obs, 1116/s5]).
+                PopupKind::CommandBar(bar) => format!(
+                    "{context_menu}\n\n{}\n{said}\n{items_hint}",
+                    msg::menu_pop_up_named(bar)
+                ),
+                // Office's own menu says only the item and how to move [obs, 1122/s2].
+                PopupKind::NetUi => format!("{said}\n{items_hint}"),
+                PopupKind::Plain if self.launcher => {
+                    format!("{context_menu}\n\n{said}\n{items_hint}")
+                }
+                PopupKind::Plain => format!(
+                    "{context_menu}\n\n{}\n{said}",
                     msg::hint_context_menu_up_down()
-                )
+                ),
             })
         } else if !self.active {
             self.active = true;
@@ -1508,12 +1519,18 @@ impl Menus {
         Some(lines.join("\n"))
     }
 
-    /// A popup menu opened: an Office command bar's (`command_bar`, its name) or another.
-    pub fn popup_start(&mut self, command_bar: Option<String>) {
+    /// Whether a popup opened and none of its items has had the focus yet, with no menu before
+    /// it: its first item is coming.
+    pub fn awaiting_first_item(&self) -> bool {
+        self.popup_pending && !self.active
+    }
+
+    /// A popup menu of this kind opened.
+    pub fn popup_start(&mut self, kind: PopupKind) {
         if self.page {
             return;
         }
-        self.command_bar = command_bar;
+        self.popup_kind = kind;
         self.open.push(self.current.clone().unwrap_or_default());
         self.popup_pending = true;
         self.on_bar_item = false;
@@ -1641,7 +1658,7 @@ mod tests {
         let mut m = Menus::default();
         m.access_key(true);
         assert_eq!(m.focus("File", false, None), None);
-        m.popup_start(None);
+        m.popup_start(PopupKind::Plain);
         assert_eq!(
             m.focus("New\tCtrl+N", false, None).as_deref().map(norm),
             Some(norm(&format!(
@@ -1667,7 +1684,7 @@ mod tests {
                 " \u{1d} Menu bar \u{1e} \nFile \nTo navigate press Left or Right Arrow."
             ))
         );
-        m.popup_start(None);
+        m.popup_start(PopupKind::Plain);
         assert_eq!(
             m.focus("New", false, None).as_deref().map(norm),
             Some(norm("  \u{1d} menu \u{1e} \n  \nFile menu\nNew \nTo move through items press up or down arrow."))
@@ -1677,7 +1694,7 @@ mod tests {
         // Right: the File popup closes, Edit gets focus silently, its popup opens.
         m.popup_end();
         assert_eq!(m.focus("Edit", false, None), None);
-        m.popup_start(None);
+        m.popup_start(PopupKind::Plain);
         assert_eq!(
             m.focus("Copy", false, None).as_deref(),
             Some("Edit menu\nCopy")
@@ -1911,7 +1928,7 @@ To activate press Enter."
     #[test]
     fn a_pages_menus_say_where_their_items_are() {
         let mut m = Menus::default();
-        m.popup_start(None);
+        m.popup_start(PopupKind::Plain);
         assert_eq!(
             m.page_focus("Accessibility", PageMenuPlace::Bar, Some((10, 10)), true)
                 .as_deref()
@@ -1927,7 +1944,7 @@ To activate press Enter."
                 .as_deref(),
             Some("Help\n9 of 10")
         );
-        m.popup_start(None);
+        m.popup_start(PopupKind::Plain);
         assert_eq!(
             m.page_focus(
                 "Search the menus",
@@ -1965,7 +1982,7 @@ To activate press Enter."
     fn a_context_menu_says_its_hint_first() {
         let mut m = Menus::default();
         m.start(false);
-        m.popup_start(None);
+        m.popup_start(PopupKind::Plain);
         assert_eq!(
             m.focus("Undo", true, None).as_deref().map(norm),
             Some(norm(
@@ -1983,7 +2000,7 @@ Undo  Unavailable"
     #[test]
     fn an_office_command_bar_popup_is_named_by_its_command_bar() {
         let mut m = Menus::default();
-        m.popup_start(Some("Ply".into()));
+        m.popup_start(PopupKind::CommandBar("Ply".into()));
         m.start(false);
         assert_eq!(
             m.focus("Insert...", false, None).as_deref().map(norm),
@@ -1994,6 +2011,21 @@ Undo  Unavailable"
         assert_eq!(m.focus("Delete", false, None).as_deref(), Some("Delete"));
     }
 
+    /// Office's own context menu (Excel's cell menu, Shift+F10) says its first item and how to
+    /// move, with no role [obs, 1122/s2].
+    #[test]
+    fn an_office_netui_context_menu_says_its_item_and_how_to_move() {
+        let mut m = Menus::default();
+        m.popup_start(PopupKind::NetUi);
+        assert!(m.awaiting_first_item());
+        assert_eq!(
+            m.focus("Cut", false, None).as_deref(),
+            Some("Cut\nTo move through items press up or down arrow.")
+        );
+        assert!(!m.awaiting_first_item());
+        assert_eq!(m.focus("Copy", false, None).as_deref(), Some("Copy"));
+    }
+
     /// A menu whose popup opens before any item has the focus, with no menu bar item open
     /// (Windows' Win+X menu), is a context menu [obs, 520/s3]; Escape moves the focus back
     /// to a bar item, which is said once the events go quiet.
@@ -2001,7 +2033,7 @@ Undo  Unavailable"
     fn a_popup_opened_with_no_menu_bar_is_a_context_menu() {
         let mut m = Menus::default();
         m.start(true);
-        m.popup_start(None);
+        m.popup_start(PopupKind::Plain);
         assert_eq!(
             m.focus("New", false, None).as_deref().map(norm),
             Some(norm(
@@ -2019,7 +2051,7 @@ Undo  Unavailable"
         );
         // A popup that closes with no item to name says nothing once quiet.
         let mut m = Menus::default();
-        m.popup_start(None);
+        m.popup_start(PopupKind::Plain);
         m.popup_end();
         assert_eq!(m.idle(), None);
     }
