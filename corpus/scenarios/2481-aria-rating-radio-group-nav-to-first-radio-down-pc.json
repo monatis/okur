@@ -1,0 +1,65 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleRadio",
+        "phrase": "convey role 'radio button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameOneStar",
+        "phrase": "convey name of the radio button, 'one star'",
+        "priority": "1"
+      },
+      {
+        "id": "stateRadioChecked",
+        "phrase": "convey state of the radio button, 'checked'",
+        "priority": "1"
+      },
+      {
+        "id": "positionRadio1",
+        "phrase": "convey position of the radio button, 1",
+        "priority": "2"
+      },
+      {
+        "id": "numberRadioButtonsGroup5",
+        "phrase": "convey number of radio buttons in the group, 5",
+        "priority": "2"
+      }
+    ],
+    "command": "down",
+    "instructions": "Starting at the 'five stars' radio button, navigate to the 'one star' radio button.",
+    "plan": "apg/rating-radio-group",
+    "presentation_number": "30",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToFirstRadio"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/rating-radio-group/radio-rating.setFocusOnFifthRadioButton.html",
+  "id": "2481-aria-rating-radio-group-nav-to-first-radio-down-pc",
+  "name": "ARIA-AT, Rating Radio Group: Check the next radio button in a radio group by navigating to it; Down in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

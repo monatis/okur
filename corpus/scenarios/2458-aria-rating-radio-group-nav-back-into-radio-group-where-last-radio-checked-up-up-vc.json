@@ -1,0 +1,79 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleGroup",
+        "phrase": "convey role 'group'",
+        "priority": "2"
+      },
+      {
+        "id": "nameGroupRating",
+        "phrase": "convey name of the group, 'Rating'",
+        "priority": "1"
+      },
+      {
+        "id": "roleRadio",
+        "phrase": "convey role 'radio button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameFiveStars",
+        "phrase": "convey name of the radio button, 'five stars'",
+        "priority": "1"
+      },
+      {
+        "id": "stateRadioChecked",
+        "phrase": "convey state of the radio button, 'checked'",
+        "priority": "1"
+      },
+      {
+        "id": "positionRadio5",
+        "phrase": "convey position of the radio button, 5",
+        "priority": "2"
+      },
+      {
+        "id": "numberRadioButtonsGroup5",
+        "phrase": "convey number of radio buttons in the group, 5",
+        "priority": "2"
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "up up",
+    "instructions": "Starting at the 'Navigate backwards from here' link, navigate backwards into the 'Rating' radio group.",
+    "plan": "apg/rating-radio-group",
+    "presentation_number": "7.2",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "NavBackIntoRadioGroupWhereLastRadioChecked"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/rating-radio-group/radio-rating.checkFifthRadioButtonAndSetFocusAfterRadioGroup.html",
+  "id": "2458-aria-rating-radio-group-nav-back-into-radio-group-where-last-radio-checked-up-up-vc",
+  "name": "ARIA-AT, Rating Radio Group: Navigate backwards into a radio group where the last radio button is checked; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Up",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

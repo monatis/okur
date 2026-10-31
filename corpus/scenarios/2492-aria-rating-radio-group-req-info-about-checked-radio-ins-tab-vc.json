@@ -1,0 +1,69 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleRadio",
+        "phrase": "convey role 'radio button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameOneStar",
+        "phrase": "convey name of the radio button, 'one star'",
+        "priority": "1"
+      },
+      {
+        "id": "stateRadioChecked",
+        "phrase": "convey state of the radio button, 'checked'",
+        "priority": "1"
+      },
+      {
+        "id": "positionRadio1",
+        "phrase": "convey position of the radio button, 1",
+        "priority": "2"
+      },
+      {
+        "id": "numberRadioButtonsGroup5",
+        "phrase": "convey number of radio buttons in the group, 5",
+        "priority": "2"
+      },
+      {
+        "id": "2:roleGroup",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "2:nameGroupRating",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "ins+tab",
+    "instructions": "Starting at the 'one star' radio button, read information about the radio button.",
+    "plan": "apg/rating-radio-group",
+    "presentation_number": "55",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutCheckedRadio"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/rating-radio-group/radio-rating.setFocusOnAndCheckFirstRadioButton.html",
+  "id": "2492-aria-rating-radio-group-req-info-about-checked-radio-ins-tab-vc",
+  "name": "ARIA-AT, Rating Radio Group: Request information about a checked radio button; Insert+Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
