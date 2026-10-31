@@ -1052,6 +1052,17 @@ impl ScreenReaderEngine {
                 return;
             }
         }
+        // Excel's Insert+C, the cell's coordinates: "B 2" [obs, 521/s6].
+        if event.key == Key::Alpha('C') && !m.ctrl && !m.shift && !m.alt && !m.win {
+            let said = self
+                .last_native_focus
+                .as_ref()
+                .and_then(crate::apps::windows::excel::cell);
+            if let Some(said) = said {
+                self.speech.speak(&said, true);
+                return;
+            }
+        }
         // Word's Insert+Delete, the caret's line and column: Route Virtual to PC elsewhere.
         if event.key == Key::Delete && !m.ctrl && !m.shift && !m.alt && !m.win {
             let said = self
