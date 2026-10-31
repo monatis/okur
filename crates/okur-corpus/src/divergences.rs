@@ -1058,6 +1058,17 @@ divergences! {
      view.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-30";
 
+    Difference::JawsSaysBeforeItsDialog => [
+        "1116-desktop-excel-lists/s1",
+        "521-desktop-excel-cells/s9",
+        "521-desktop-excel-cells/s13",
+    ],
+    "Before its Cells with Formulas, Col B and Move to Worksheet lists in Excel, JAWS says the \
+     cell it was on and a list's hint, \"22 | B 4 | To move to an item press the Arrow \
+     keys.\", in every trial but one of 1116, which says nothing before the list's next key. \
+     Okur's lists open without them.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-10-31";
+
     Difference::Step => ["1113-desktop-word-page-keys/s5"],
     "PageDown in Word onto the next page: JAWS says the page, then the line twice, \"page 2 | \
      heading level 1 Borrowing | heading level 1 Borrowing\", in every trial: Word's caret \

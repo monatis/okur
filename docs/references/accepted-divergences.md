@@ -1066,6 +1066,18 @@ A step can be in more than one entry; all of its entries apply.
   view.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-30.
 
+### Excel's cell said again before JAWS's lists
+
+- Steps: `1116-desktop-excel-lists/s1`, `521-desktop-excel-cells/s9`,
+  `521-desktop-excel-cells/s13`.
+- Difference: `JawsSaysBeforeItsDialog`. Before its Cells with Formulas, Col B and Move to
+  Worksheet lists in Excel, JAWS says the cell it was on and a list's hint, "22 | B 4 | To
+  move to an item press the Arrow keys." [obs, 1116/s1, 521/s9, s13, every trial but one of
+  1116, which says nothing before the list's next key].
+- Why: what JAWS said before its list comes forward, as before its Word lists. Okur's lists
+  open without them.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-31.
+
 ### Word's line said twice after PageDown
 
 - Steps: `1113-desktop-word-page-keys/s5`.
