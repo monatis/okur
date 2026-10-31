@@ -1,0 +1,65 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "0:roleGroup 0:nameSandwichCondiments",
+    "assertions": [
+      {
+        "id": "roleGroup",
+        "phrase": "convey role 'group'",
+        "priority": "2"
+      },
+      {
+        "id": "nameSandwichCondiments",
+        "phrase": "convey name of the group, 'Sandwich Condiments'",
+        "priority": "2"
+      },
+      {
+        "id": "roleCheckbox",
+        "phrase": "convey role 'checkbox'",
+        "priority": "1"
+      },
+      {
+        "id": "nameAllCondiments",
+        "phrase": "convey name of the checkbox, 'All condiments'",
+        "priority": "1"
+      },
+      {
+        "id": "stateChecked",
+        "phrase": "convey state of the checkbox, 'checked'",
+        "priority": "1"
+      }
+    ],
+    "command": "ins+up",
+    "instructions": "With focus on the 'All condiments' checkbox, read information about the checkbox.",
+    "plan": "apg/checkbox-tri-state",
+    "presentation_number": "9.3",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutMixedCheckboxThatIsChecked"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndCheckFirstCheckbox.html",
+  "id": "2021-aria-checkbox-tri-state-req-info-about-mixed-checkbox-that-is-checked-ins-up-pc",
+  "name": "ARIA-AT, Checkbox (Mixed-State): Request information about a mixed checkbox that is checked; Insert+Up in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

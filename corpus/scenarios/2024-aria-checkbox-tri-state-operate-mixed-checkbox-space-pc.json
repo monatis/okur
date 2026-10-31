@@ -1,0 +1,45 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "stateChangeToChecked",
+        "phrase": "convey change in state of the checkbox to 'checked'",
+        "priority": "1"
+      }
+    ],
+    "command": "space",
+    "instructions": "With focus on the 'All condiments' checkbox, activate the checkbox to change its state.",
+    "plan": "apg/checkbox-tri-state",
+    "presentation_number": "10.2",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "operateMixedCheckbox"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToFirstCheckbox.html",
+  "id": "2024-aria-checkbox-tri-state-operate-mixed-checkbox-space-pc",
+  "name": "ARIA-AT, Checkbox (Mixed-State): Operate a mixed checkbox that is partially checked; Space in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Space",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleCheckbox",
+        "phrase": "convey role 'checkbox'",
+        "priority": "1"
+      },
+      {
+        "id": "nameAllCondiments",
+        "phrase": "convey name of the checkbox, 'All condiments'",
+        "priority": "1"
+      },
+      {
+        "id": "stateMixed",
+        "phrase": "convey state of the checkbox, partially checked'",
+        "priority": "1"
+      }
+    ],
+    "command": "up",
+    "instructions": "With focus on the 'Navigate backwards from here' link, navigate to the  'All condiments' checkbox.",
+    "plan": "apg/checkbox-tri-state",
+    "presentation_number": "4.2",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToMixedCheckbox"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox-tri-state/checkbox-mixed.moveFocusAfterFirstCheckbox.html",
+  "id": "2007-aria-checkbox-tri-state-nav-back-to-mixed-checkbox-up-vc",
+  "name": "ARIA-AT, Checkbox (Mixed-State): Navigate backwards to a mixed checkbox that is partially checked; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

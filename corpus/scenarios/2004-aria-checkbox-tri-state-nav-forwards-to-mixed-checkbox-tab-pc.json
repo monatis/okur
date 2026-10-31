@@ -1,0 +1,65 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleGroup",
+        "phrase": "convey role 'group'",
+        "priority": "2"
+      },
+      {
+        "id": "nameSandwichCondiments",
+        "phrase": "convey name of the group, 'Sandwich Condiments'",
+        "priority": "2"
+      },
+      {
+        "id": "roleCheckbox",
+        "phrase": "convey role 'checkbox'",
+        "priority": "1"
+      },
+      {
+        "id": "nameAllCondiments",
+        "phrase": "convey name of the checkbox, 'All condiments'",
+        "priority": "1"
+      },
+      {
+        "id": "stateMixed",
+        "phrase": "convey state of the checkbox, partially checked'",
+        "priority": "1"
+      }
+    ],
+    "command": "tab",
+    "instructions": "With focus on the 'Navigate forwards from here' link, navigate to the  'All condiments' checkbox.",
+    "plan": "apg/checkbox-tri-state",
+    "presentation_number": "1.4",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToMixedCheckbox"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox-tri-state/checkbox-mixed.moveFocusBeforeFirstCheckbox.html",
+  "id": "2004-aria-checkbox-tri-state-nav-forwards-to-mixed-checkbox-tab-pc",
+  "name": "ARIA-AT, Checkbox (Mixed-State): Navigate forwards to a mixed checkbox that is partially checked; Tab in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Tab",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

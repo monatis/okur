@@ -1,0 +1,1519 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Checkbox Example (Mixed-State) - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "4bef7a28805dcb3dcb8b6d3ec873ef0e0ea5ce4b8e6786a10d5783d2dcd7f595",
+    "captured_at_unix_ms": 1793444795842,
+    "node_count": 41,
+    "capture_ms": 292
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Checkbox Example (Mixed-State)",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox-tri-state/checkbox-mixed.moveFocusAfterFirstCheckbox.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -3847,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Arial",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -3824,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,90,156)",
+              "font-family": "Arial",
+              "font-size": "20.5pt"
+            }
+          },
+          {
+            "start": 1,
+            "end": 4,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Arial",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Checkbox Example (Mixed-State)",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -3822,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Checkbox Example (Mixed-State)",
+            "lines": [
+              [
+                0,
+                30
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 30,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "20.5pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Checkbox Example (Mixed-State)",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -3816,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Checkbox Example (Mixed-State)",
+                "lines": [
+                  [
+                    0,
+                    30
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 30,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "20.5pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -3815,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "17pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "About This Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -3877,
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "About This Example",
+                "lines": [
+                  [
+                    0,
+                    18
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 18,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "17pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "About This Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -3828,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "About This Example",
+                    "lines": [
+                      [
+                        0,
+                        18
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 18,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "17pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -3868,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "This example demonstrates using the ￼ to create a tri-state, or mixed-state, checkbox. In this implementation, the mixed-state checkbox represents the state of a set of standard HTML checkboxes. If none of the checkboxes in the set are checked, the mixed state checkbox is not checked, and if all members of the set are checked, the mixed state checkbox is checked. If the set contains both some checked and unchecked checkboxes, the mixed state checkbox is partially checked. Activating the tri-state checkbox changes the states of the checkboxes in the set.",
+                "lines": [
+                  [
+                    0,
+                    95
+                  ],
+                  [
+                    95,
+                    206
+                  ],
+                  [
+                    206,
+                    316
+                  ],
+                  [
+                    316,
+                    418
+                  ],
+                  [
+                    418,
+                    530
+                  ],
+                  [
+                    530,
+                    559
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 36,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 36,
+                    "end": 37,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  },
+                  {
+                    "start": 37,
+                    "end": 559,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "This example demonstrates using the ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -3836,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "This example demonstrates using the ",
+                    "lines": [
+                      [
+                        0,
+                        36
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 36,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Checkbox Pattern",
+                    "value": "https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -3861,
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Checkbox Pattern",
+                    "lines": [
+                      [
+                        0,
+                        16
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 16,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Checkbox Pattern",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -3833,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Checkbox Pattern",
+                        "lines": [
+                          [
+                            0,
+                            16
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 16,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " to create a tri-state, or mixed-state, checkbox. In this implementation, the mixed-state checkbox represents the state of a set of standard HTML checkboxes. If none of the checkboxes in the set are checked, the mixed state checkbox is not checked, and if all members of the set are checked, the mixed state checkbox is checked. If the set contains both some checked and unchecked checkboxes, the mixed state checkbox is partially checked. Activating the tri-state checkbox changes the states of the checkboxes in the set.",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -3845,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " to create a tri-state, or mixed-state, checkbox. In this implementation, the mixed-state checkbox represents the state of a set of standard HTML checkboxes. If none of the checkboxes in the set are checked, the mixed state checkbox is not checked, and if all members of the set are checked, the mixed state checkbox is checked. If the set contains both some checked and unchecked checkboxes, the mixed state checkbox is partially checked. Activating the tri-state checkbox changes the states of the checkboxes in the set.",
+                    "lines": [
+                      [
+                        0,
+                        58
+                      ],
+                      [
+                        58,
+                        169
+                      ],
+                      [
+                        169,
+                        279
+                      ],
+                      [
+                        279,
+                        381
+                      ],
+                      [
+                        381,
+                        493
+                      ],
+                      [
+                        493,
+                        522
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 522,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -3865,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "17pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 4,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -3843,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Example",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "17pt"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelFor": [
+                    -3840,
+                    -3860
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -3853,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Example",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "17pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "Start of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -3840,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -3843
+                  ]
+                }
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -3841,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1054,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -3823,
+                    "attributes": {
+                      "display": "block",
+                      "tag": "p",
+                      "text-align": "left"
+                    },
+                    "text": "￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Navigate forwards from here",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox-tri-state/checkbox-mixed.moveFocusAfterFirstCheckbox.html#beforelink",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "unique_id": -3825,
+                        "attributes": {
+                          "display": "inline",
+                          "id": "beforelink",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Navigate forwards from here",
+                        "lines": [
+                          [
+                            0,
+                            27
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 27,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Navigate forwards from here",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "unique_id": -3848,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Navigate forwards from here",
+                            "lines": [
+                              [
+                                0,
+                                27
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 27,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(3,69,117)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 20,
+                    "name": "Sandwich Condiments",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -3820,
+                    "attributes": {
+                      "class": "checkbox-mixed",
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "related-element",
+                      "setsize": "0",
+                      "tag": "fieldset",
+                      "text-align": "left"
+                    },
+                    "text": "￼￼￼￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        2,
+                        3
+                      ],
+                      [
+                        3,
+                        4
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 4,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "labelledBy": [
+                        -3871
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 42,
+                        "ia2_role": 1049,
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -3871,
+                        "attributes": {
+                          "display": "block",
+                          "tag": "legend",
+                          "text-align": "left"
+                        },
+                        "text": "Sandwich Condiments",
+                        "lines": [
+                          [
+                            0,
+                            19
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 19,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "relations": {
+                          "labelFor": [
+                            -3820
+                          ]
+                        },
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Sandwich Condiments",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -3864,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Sandwich Condiments",
+                            "lines": [
+                              [
+                                0,
+                                19
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 19,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 44,
+                        "ia2_role": 44,
+                        "name": "All condiments",
+                        "msaa_states": 1048608,
+                        "ia2_states": 263168,
+                        "unique_id": -3879,
+                        "attributes": {
+                          "checkable": "true",
+                          "class": "group_checkbox",
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "div",
+                          "text-align": "left",
+                          "xml-roles": "checkbox"
+                        },
+                        "text": "￼All condiments",
+                        "lines": [
+                          [
+                            0,
+                            15
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 15,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "relations": {
+                          "controllerFor": [
+                            -3832,
+                            -3813,
+                            -3811,
+                            -3862
+                          ]
+                        },
+                        "children": [
+                          {
+                            "msaa_role": 40,
+                            "ia2_role": 40,
+                            "msaa_states": 64,
+                            "ia2_states": 1024,
+                            "unique_id": -3880,
+                            "attributes": {
+                              "text-align": "left"
+                            }
+                          },
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "All condiments",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -3872,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "All condiments",
+                            "lines": [
+                              [
+                                0,
+                                14
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 14,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 20,
+                        "ia2_role": 1054,
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -3870,
+                        "attributes": {
+                          "display": "block",
+                          "tag": "p",
+                          "text-align": "left"
+                        },
+                        "text": "￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 1,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 30,
+                            "ia2_role": 30,
+                            "name": "Navigate backwards from here",
+                            "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/checkbox-tri-state/checkbox-mixed.moveFocusAfterFirstCheckbox.html#afterlink",
+                            "msaa_states": 5242880,
+                            "ia2_states": 1024,
+                            "unique_id": -3858,
+                            "attributes": {
+                              "display": "inline",
+                              "id": "afterlink",
+                              "name-from": "contents",
+                              "tag": "a",
+                              "text-align": "left"
+                            },
+                            "text": "Navigate backwards from here",
+                            "lines": [
+                              [
+                                0,
+                                28
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 28,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(3,69,117)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 41,
+                                "ia2_role": 41,
+                                "name": "Navigate backwards from here",
+                                "msaa_states": 4194304,
+                                "ia2_states": 1024,
+                                "unique_id": -3874,
+                                "attributes": {
+                                  "name-from": "contents"
+                                },
+                                "text": "Navigate backwards from here",
+                                "lines": [
+                                  [
+                                    0,
+                                    28
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 28,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(3,69,117)",
+                                      "font-family": "Arial",
+                                      "font-size": "12pt",
+                                      "text-underline-style": "solid"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 33,
+                        "ia2_role": 33,
+                        "msaa_states": 64,
+                        "ia2_states": 1024,
+                        "unique_id": -3850,
+                        "attributes": {
+                          "class": "checkboxes",
+                          "display": "block",
+                          "setsize": "4",
+                          "tag": "ul",
+                          "text-align": "left"
+                        },
+                        "group_position": [
+                          0,
+                          4,
+                          0
+                        ],
+                        "text": "￼￼￼￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            2
+                          ],
+                          [
+                            2,
+                            3
+                          ],
+                          [
+                            3,
+                            4
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 4,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "msaa_states": 64,
+                            "ia2_states": 1024,
+                            "unique_id": -3855,
+                            "attributes": {
+                              "display": "list-item",
+                              "level": "1",
+                              "posinset": "1",
+                              "setsize": "4",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "group_position": [
+                              1,
+                              4,
+                              1
+                            ],
+                            "text": "￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 1,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "10pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 44,
+                                "ia2_role": 44,
+                                "name": "Lettuce",
+                                "msaa_states": 1048576,
+                                "ia2_states": 263168,
+                                "unique_id": -3832,
+                                "attributes": {
+                                  "checkable": "true",
+                                  "display": "inline-block",
+                                  "explicit-name": "true",
+                                  "id": "cond1",
+                                  "name-from": "related-element",
+                                  "tag": "input",
+                                  "text-align": "left"
+                                },
+                                "relations": {
+                                  "controlledBy": [
+                                    -3879
+                                  ]
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "msaa_states": 64,
+                            "ia2_states": 1024,
+                            "unique_id": -3839,
+                            "attributes": {
+                              "display": "list-item",
+                              "level": "1",
+                              "posinset": "2",
+                              "setsize": "4",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "group_position": [
+                              1,
+                              4,
+                              2
+                            ],
+                            "text": "￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 1,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "10pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 44,
+                                "ia2_role": 44,
+                                "name": "Tomato",
+                                "msaa_states": 1048592,
+                                "ia2_states": 263168,
+                                "unique_id": -3813,
+                                "attributes": {
+                                  "checkable": "true",
+                                  "display": "inline-block",
+                                  "explicit-name": "true",
+                                  "id": "cond2",
+                                  "name-from": "related-element",
+                                  "tag": "input",
+                                  "text-align": "left"
+                                },
+                                "relations": {
+                                  "controlledBy": [
+                                    -3879
+                                  ]
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "msaa_states": 64,
+                            "ia2_states": 1024,
+                            "unique_id": -3819,
+                            "attributes": {
+                              "display": "list-item",
+                              "level": "1",
+                              "posinset": "3",
+                              "setsize": "4",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "group_position": [
+                              1,
+                              4,
+                              3
+                            ],
+                            "text": "￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 1,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "10pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 44,
+                                "ia2_role": 44,
+                                "name": "Mustard",
+                                "msaa_states": 1048576,
+                                "ia2_states": 263168,
+                                "unique_id": -3811,
+                                "attributes": {
+                                  "checkable": "true",
+                                  "display": "inline-block",
+                                  "explicit-name": "true",
+                                  "id": "cond3",
+                                  "name-from": "related-element",
+                                  "tag": "input",
+                                  "text-align": "left"
+                                },
+                                "relations": {
+                                  "controlledBy": [
+                                    -3879
+                                  ]
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "msaa_states": 64,
+                            "ia2_states": 1024,
+                            "unique_id": -3875,
+                            "attributes": {
+                              "display": "list-item",
+                              "level": "1",
+                              "posinset": "4",
+                              "setsize": "4",
+                              "tag": "li",
+                              "text-align": "left"
+                            },
+                            "group_position": [
+                              1,
+                              4,
+                              4
+                            ],
+                            "text": "￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 1,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "10pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 44,
+                                "ia2_role": 44,
+                                "name": "Sprouts",
+                                "msaa_states": 1048576,
+                                "ia2_states": 263168,
+                                "unique_id": -3862,
+                                "attributes": {
+                                  "checkable": "true",
+                                  "display": "inline-block",
+                                  "explicit-name": "true",
+                                  "id": "cond4",
+                                  "name-from": "related-element",
+                                  "tag": "input",
+                                  "text-align": "left"
+                                },
+                                "relations": {
+                                  "controlledBy": [
+                                    -3879
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "End of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -3860,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -3843
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -3837,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(240,240,240)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1048580,
+                "ia2_states": 1024,
+                "unique_id": -3842,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(240,240,240)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

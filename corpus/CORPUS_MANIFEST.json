@@ -5,6 +5,50 @@
       "sha256": "f9b85f7c2f7242756f2872a11c4ae9cfef44f61f544c93031f95015f6ad1bf8b",
       "size_bytes": 3368
     },
+    "aria-at/NOTICE.md": {
+      "sha256": "1f5d58619ade20112bed08f6bc4dbc10103336c0cf295017a3b163e39640533c",
+      "size_bytes": 1029
+    },
+    "aria-at/checkbox-tri-state/checkbox-mixed.html": {
+      "sha256": "b16e45a11d08b6701a8dba146f32f7176fbc9be39b64c91b8d66dca0f95ead63",
+      "size_bytes": 3085
+    },
+    "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusAfterFirstCheckbox.html": {
+      "sha256": "4bef7a28805dcb3dcb8b6d3ec873ef0e0ea5ce4b8e6786a10d5783d2dcd7f595",
+      "size_bytes": 3938
+    },
+    "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusBeforeFirstCheckbox.html": {
+      "sha256": "e6387c6afd3b383e935bfb263e35f231edc382979244e1f84bca09b5adfb666c",
+      "size_bytes": 3941
+    },
+    "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndCheckFirstCheckbox.html": {
+      "sha256": "11f30a8eedcb5703d4fbf9354a54412de76613c5427ec0e96559d1a1a66597c1",
+      "size_bytes": 4057
+    },
+    "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndUncheckFirstCheckbox.html": {
+      "sha256": "28e5d6c2eb53ced29162e2b8a4cdaaf8cd71b57fedf94c241372ab1f5d58bbd1",
+      "size_bytes": 4062
+    },
+    "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToFirstCheckbox.html": {
+      "sha256": "0029409fc70c857a762dd1385740eb07b0ea0aad2f8dddabd94cea04cc8bdc68",
+      "size_bytes": 3929
+    },
+    "aria-at/checkbox-tri-state/css/checkbox-mixed.css": {
+      "sha256": "2f8f98e0e1a86e65d2f013cd15f7293eebdedfc7cde01fa7e6b319712ef5d54b",
+      "size_bytes": 2003
+    },
+    "aria-at/checkbox-tri-state/css/checkbox.css": {
+      "sha256": "ee4c2207e3ff6c0f4399dba4012e7ad715e51e8518fa97f1951297dc19bb9d4c",
+      "size_bytes": 1220
+    },
+    "aria-at/checkbox-tri-state/js/checkbox-mixed.js": {
+      "sha256": "5ff910e0c0d26ee99ff2eff0a7e7f1f06901b38e5c0f7f45862cadb15f637e90",
+      "size_bytes": 4318
+    },
+    "aria-at/checkbox-tri-state/js/checkbox.js": {
+      "sha256": "cac2ee505252f9c47969c90b455364e1663c84b31edebb6f8c1d1907da034bc5",
+      "size_bytes": 1649
+    },
     "boundaries-dynamic.html": {
       "sha256": "4caaa7092df80f075b4fd5bfa8f3fbbdba558f90188e4f3711aec05dd9c71953",
       "size_bytes": 2383
@@ -2360,11 +2404,291 @@
       }
     },
     {
+      "scenario_id": "2000-aria-checkbox-tri-state-nav-forwards-to-mixed-checkbox-x-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusBeforeFirstCheckbox.html",
+      "evidence": {
+        "sha256": "2a6661708b2033247a6cec13250a2fe84e818b699d00b447b3bdb1769c9d262b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2001-aria-checkbox-tri-state-nav-forwards-to-mixed-checkbox-f-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusBeforeFirstCheckbox.html",
+      "evidence": {
+        "sha256": "2b90bd7b63ba7493805488219f98a397fbde519a54fdc2c680a393bb6f943659",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2002-aria-checkbox-tri-state-nav-forwards-to-mixed-checkbox-down-down-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusBeforeFirstCheckbox.html",
+      "evidence": {
+        "sha256": "82dfd8ea9a94c834f7840df11a0b5c73975c39a9c594eea368341d17329d5dcd",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2003-aria-checkbox-tri-state-nav-forwards-to-mixed-checkbox-tab-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusBeforeFirstCheckbox.html",
+      "evidence": {
+        "sha256": "d85092bac31534f01731c6134d403d995eae7a28e2771b86124f227bf84b1e25",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2004-aria-checkbox-tri-state-nav-forwards-to-mixed-checkbox-tab-pc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusBeforeFirstCheckbox.html",
+      "evidence": {
+        "sha256": "3d64fe690f07cbaddb8035aac046c71a2cc37d3484016b1ec7e06d7757038d11",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2005-aria-checkbox-tri-state-nav-back-to-mixed-checkbox-shift-x-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusAfterFirstCheckbox.html",
+      "evidence": {
+        "sha256": "178c2a7721917b4956354a3324cdf3c4674ba1ae9acf65008832608fab76724e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2006-aria-checkbox-tri-state-nav-back-to-mixed-checkbox-shift-f-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusAfterFirstCheckbox.html",
+      "evidence": {
+        "sha256": "da457cc867f9564fc1b614cf39b198784fcae70c8cd1711f1e2f0f2a05245475",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2007-aria-checkbox-tri-state-nav-back-to-mixed-checkbox-up-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusAfterFirstCheckbox.html",
+      "evidence": {
+        "sha256": "653c22218f45202a1efa0bddf69c88a84efe5c0f3c1ef2386104bcff01ef36c6",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2008-aria-checkbox-tri-state-nav-back-to-mixed-checkbox-shift-tab-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusAfterFirstCheckbox.html",
+      "evidence": {
+        "sha256": "57a42baddfe2564409b0b56714b27f0860329468dda150123f67ba6a256291d1",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2009-aria-checkbox-tri-state-nav-back-to-mixed-checkbox-shift-tab-pc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusAfterFirstCheckbox.html",
+      "evidence": {
+        "sha256": "f56bf8b743d164f3d93cdd87f72cb3bbdc0a06cf840dac6f714d495a7ceca387",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "201-form-read-down",
       "fixture": "signup-form.html",
       "evidence": {
         "sha256": "d1617dee825416abc2ca09f149bcd8aa3b434a79dc8cf184ec2787a05c7d00fc",
         "capture_script_sha256": "52497c30fa69eac8937bd79b2cff9c5b387ad9246d0a3d1333fdf43c76994e11",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2010-aria-checkbox-tri-state-req-info-about-mixed-checkbox-ins-tab-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToFirstCheckbox.html",
+      "evidence": {
+        "sha256": "2c59602828b7aec0104c31a99c4a73713997696345acf212a42b19ca1ebc88c6",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2011-aria-checkbox-tri-state-req-info-about-mixed-checkbox-ins-up-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToFirstCheckbox.html",
+      "evidence": {
+        "sha256": "86c03869838592a0eafc81d33dbb513b45bf8727edbd7c89ca12514d8a1716e1",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2012-aria-checkbox-tri-state-req-info-about-mixed-checkbox-ins-tab-pc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToFirstCheckbox.html",
+      "evidence": {
+        "sha256": "3bc3508934a9a9130f63607f3278890428351358acff3593d20df28a0f3a9c08",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2013-aria-checkbox-tri-state-req-info-about-mixed-checkbox-ins-up-pc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToFirstCheckbox.html",
+      "evidence": {
+        "sha256": "ebc3b13cfbad4a8d18eb61234272c06e29976437f0d89eea0b287ce6ae196ff6",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2014-aria-checkbox-tri-state-req-info-about-mixed-checkbox-that-is-not-checked-ins-tab-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndUncheckFirstCheckbox.html",
+      "evidence": {
+        "sha256": "038d08f82c35ae2284aa5b54c6fce33f3524554224ca1414fdc5574c4ffdc395",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2015-aria-checkbox-tri-state-req-info-about-mixed-checkbox-that-is-not-checked-ins-up-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndUncheckFirstCheckbox.html",
+      "evidence": {
+        "sha256": "a9df9a2901801713250fd331dca70c43e2ff3d8472162427e9922a858a927a61",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2016-aria-checkbox-tri-state-req-info-about-mixed-checkbox-that-is-not-checked-ins-tab-pc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndUncheckFirstCheckbox.html",
+      "evidence": {
+        "sha256": "6cc53a6857942797888b80abbde0bf3f3e1675d18704d5e0de95b3be48426aab",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2017-aria-checkbox-tri-state-req-info-about-mixed-checkbox-that-is-not-checked-ins-up-pc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndUncheckFirstCheckbox.html",
+      "evidence": {
+        "sha256": "2e63fdb92610e86d4aa2f3d9fd287b97b09a1f14e2baec293739d0b8521937a3",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2018-aria-checkbox-tri-state-req-info-about-mixed-checkbox-that-is-checked-ins-tab-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndCheckFirstCheckbox.html",
+      "evidence": {
+        "sha256": "68294e498ff4f0d7a3391a95d5d54a763d739282ba25fefb261c66bca1e0f449",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2019-aria-checkbox-tri-state-req-info-about-mixed-checkbox-that-is-checked-ins-up-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndCheckFirstCheckbox.html",
+      "evidence": {
+        "sha256": "5e7099149854d9dd7e88c3647f3f5f410abaa48e60b2f31ba847061a469438ca",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -2388,11 +2712,165 @@
       }
     },
     {
+      "scenario_id": "2020-aria-checkbox-tri-state-req-info-about-mixed-checkbox-that-is-checked-ins-tab-pc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndCheckFirstCheckbox.html",
+      "evidence": {
+        "sha256": "9372ba2dc76f0e512fa24422ce00ca072609fba9113cdc0ca650da79afa0130d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2021-aria-checkbox-tri-state-req-info-about-mixed-checkbox-that-is-checked-ins-up-pc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndCheckFirstCheckbox.html",
+      "evidence": {
+        "sha256": "3535d273210bdc34ac4203194507d06f5aa1f4a847eb67a38dad8e267420b712",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2022-aria-checkbox-tri-state-operate-mixed-checkbox-enter-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToFirstCheckbox.html",
+      "evidence": {
+        "sha256": "86cbb66521812eef59f66bb6cd0c08c33afa92cf64f61767f49653dc2dac1859",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2023-aria-checkbox-tri-state-operate-mixed-checkbox-space-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToFirstCheckbox.html",
+      "evidence": {
+        "sha256": "19e3358e735dde110a5c98b3c3edb85276697f2fcd7f82b75ad3ae9064e5feed",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2024-aria-checkbox-tri-state-operate-mixed-checkbox-space-pc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToFirstCheckbox.html",
+      "evidence": {
+        "sha256": "a1a584dbe243347dcb9b947c6e47b4d6331fb0166c10ef46551085e1f66ca036",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2025-aria-checkbox-tri-state-operate-unchecked-checkbox-enter-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndUncheckFirstCheckbox.html",
+      "evidence": {
+        "sha256": "da82323caf41d1b354b928381d1e9574abe94dcb104617f3ebfab1045e42a0e7",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2026-aria-checkbox-tri-state-operate-unchecked-checkbox-space-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndUncheckFirstCheckbox.html",
+      "evidence": {
+        "sha256": "ce119377268dfd11e0960c1f836f32bf3f456efdf48cc27a1a81907aab047448",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2027-aria-checkbox-tri-state-operate-unchecked-checkbox-space-pc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndUncheckFirstCheckbox.html",
+      "evidence": {
+        "sha256": "e1db5c519214b6da9c7e427bab0751ea60161819cac875a08bcdd2395034c9b4",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2028-aria-checkbox-tri-state-operate-checked-checkbox-enter-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndCheckFirstCheckbox.html",
+      "evidence": {
+        "sha256": "de3d3e087ea34006c809d023a80fa63bbc0d0a6a59dca6b5c55ddf2dba12239a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2029-aria-checkbox-tri-state-operate-checked-checkbox-space-vc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndCheckFirstCheckbox.html",
+      "evidence": {
+        "sha256": "daafeabec2b28e4b250f0e3db9cbcb03e4ab494db0d35cdf932d0158007d68dd",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "203-form-quick-keys",
       "fixture": "signup-form.html",
       "evidence": {
         "sha256": "3b4aa5b9865af1655bb174438b1fb7bbb1c9b3cfbc1b0d2b05277cd962ddd554",
         "capture_script_sha256": "52497c30fa69eac8937bd79b2cff9c5b387ad9246d0a3d1333fdf43c76994e11",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2030-aria-checkbox-tri-state-operate-checked-checkbox-space-pc",
+      "fixture": "aria-at/checkbox-tri-state/checkbox-mixed.moveFocusToAndCheckFirstCheckbox.html",
+      "evidence": {
+        "sha256": "316c77971e7bf534ebb33ccb2b05ebf24cd44e717dd5a5769c4211ebec7f6b58",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -10733,10 +11211,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 746,
-    "scenarios_with_evidence": 746,
-    "total_trials": 2244,
-    "successful_trials": 2227,
-    "deterministic_scenarios": 476
+    "scenarios": 777,
+    "scenarios_with_evidence": 777,
+    "total_trials": 2337,
+    "successful_trials": 2320,
+    "deterministic_scenarios": 506
   }
 }
