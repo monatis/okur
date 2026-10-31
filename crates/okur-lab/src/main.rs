@@ -6,6 +6,7 @@
 //! clipboard and traces every window lives here, never in the program users run.
 
 mod aria_at;
+mod aria_at_report;
 
 use clap::{Parser, Subcommand};
 use okur::run::load_aom_from_path;
@@ -203,6 +204,17 @@ enum Commands {
         /// Empty the history after reading it
         #[arg(long)]
         clear: bool,
+    },
+    /// The measure of ARIA-AT's assertions: per imported test plan, how many Okur's speech
+    /// conveys beside JAWS's recorded speech, judged the same way
+    AriaAtReport {
+        /// Corpus directory (contains scenarios/ and evidence/)
+        #[arg(short = 'c', long, default_value = "corpus")]
+        corpus_dir: String,
+
+        /// Also list the assertions Okur leaves unmet in this plan ("apg/tabs-manual-activation")
+        #[arg(long)]
+        unmet: Option<String>,
     },
     /// Make one of W3C ARIA-AT's test plans into pending scenarios: its test pages copied with
     /// their files, a scenario per JAWS command of each test
@@ -1745,6 +1757,48 @@ async fn main() {
                 let _ = clear;
                 eprintln!("JAWS runs only on Windows");
                 std::process::exit(1);
+            }
+        }
+        Some(Commands::AriaAtReport { corpus_dir, unmet }) => {
+            let dir = Path::new(&corpus_dir);
+            // The ARIA-AT scenarios alone are replayed; their ids carry "-aria-".
+            let only: Vec<String> = fs::read_dir(dir.join("scenarios"))
+                .map(|entries| {
+                    entries
+                        .filter_map(Result::ok)
+                        .filter_map(|e| e.file_name().to_str().map(str::to_owned))
+                        .filter(|n| n.contains("-aria-") && n.ends_with(".json"))
+                        .map(|n| n.trim_end_matches(".json").to_owned())
+                        .collect()
+                })
+                .unwrap_or_default();
+            let report =
+                okur_corpus::parity::run_matching(dir, okur_corpus::snapshots::PARITY_API, &only);
+            match aria_at_report::measure(dir, &report.steps) {
+                Ok(measure) => {
+                    print!("{}", aria_at_report::render(&measure));
+                    if let Some(plan) = unmet {
+                        for (_, u) in measure.unmet.iter().filter(|(p, _)| *p == plan) {
+                            println!(
+                                "{} [{}] {}{}
+    okur: {}",
+                                u.scenario,
+                                u.priority,
+                                u.phrase,
+                                if u.jaws_conveys {
+                                    "  (JAWS conveys it)"
+                                } else {
+                                    ""
+                                },
+                                u.okur
+                            );
+                        }
+                    }
+                }
+                Err(e) => {
+                    eprintln!("{e}");
+                    std::process::exit(1);
+                }
             }
         }
         Some(Commands::AriaAtImport {
