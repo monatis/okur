@@ -20,7 +20,11 @@ param(
     [string]$OkurLab = (Join-Path $env:USERPROFILE "sr-harness\bin\okur-lab.exe"),
     [ValidateSet("uia", "ia2")][string]$Api = "uia",
     [int]$LoadWaitMs = 2500,
-    [int]$SettleMs = 750
+    [int]$SettleMs = 750,
+    # Keys pressed in the page before it is captured, comma-separated ("Ctrl+End,Shift+B,Enter"):
+    # an ARIA-AT setup page is captured after its "Run Test Setup" button ran the setup, the
+    # state every scenario of it starts from (its script expands a disclosure, checks a box).
+    [string]$Keys = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -65,6 +69,12 @@ $sb = New-Object System.Text.StringBuilder 512
 $foreground = $sb.ToString()
 if ($expectedTitle -and -not $foreground.StartsWith($expectedTitle)) {
     throw "Foreground window '$foreground' does not show fixture title '$expectedTitle'."
+}
+
+if ($Keys) {
+    $steps = @($Keys -split ',' | Where-Object { $_ } | ForEach-Object { $_.Trim(); 'wait:1200' })
+    & $OkurLab keys --allow chrome @steps | Out-Null
+    Start-Sleep -Milliseconds $SettleMs
 }
 
 $outDir = Split-Path -Parent $OutputPath

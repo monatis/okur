@@ -37,6 +37,9 @@ param(
     # A harness script run once the staged files are in place and before the batch, outside
     # any trial (a setup the scenarios need that is not a fixture of its own).
     [string]$Before,
+    # Keys pressed in each snapshot's page before it is captured (capture-snapshot.ps1 -Keys):
+    # "Ctrl+End,Shift+B,Enter" runs an ARIA-AT setup page's setup first.
+    [string]$SnapshotKeys = '',
     # Give up waiting after this long.
     [int]$MaxWaitMinutes = 360
 )
@@ -95,9 +98,10 @@ if ($Snapshots.Count -gt 0) {
             # error output once ended this script before its batch, and every batch queued
             # after it waited for a batch.done that never came (round 83, 2026-10-20).
             try {
+                $keys = if ($SnapshotKeys) { @('-Keys', $SnapshotKeys) } else { @() }
                 $said = & powershell -NoProfile -ExecutionPolicy Bypass -File $capture `
                     -Fixture (Join-Path 'C:\Users\ailabs\corpus\fixtures' $fixture) `
-                    -OutputPath $out -OkurLab $okurLab -Api $api 2>&1 | Select-Object -Last 1
+                    -OutputPath $out -OkurLab $okurLab -Api $api @keys 2>&1 | Select-Object -Last 1
             } catch {
                 $said = "failed: $($_.Exception.Message)"
             }
