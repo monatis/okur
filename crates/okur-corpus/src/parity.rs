@@ -1160,6 +1160,10 @@ fn replayable(event: &TraceEvent) -> bool {
     if event.event == "uia_window_opened" {
         return event.focus_subtree.is_some();
     }
+    // A page's alert, its content captured as a live region's [obs, 2346/s1].
+    if event.event == "alert" {
+        return event.region.is_some();
+    }
     // A console's screen after it wrote to it, for Screen Echo [obs, 962].
     if event.event == "console_update" {
         return event.text_context.is_some();

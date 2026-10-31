@@ -3485,7 +3485,7 @@ mod capture {
     /// their text the converter makes nothing of them, though reading their MSAA object cost
     /// the WinEvent thread a cross-process call or six for each, 16% of all events (performance
     /// review, 2026-10-20, P5; `caret_events_without_their_text_give_nothing`).
-    const LIVE_EVENTS: [&str; 13] = [
+    const LIVE_EVENTS: [&str; 14] = [
         "focus",
         "dialog_shown",
         "uia_focus",
@@ -3495,6 +3495,7 @@ mod capture {
         "state_change",
         "selection",
         "live_region_change",
+        "alert",
         "menu_start",
         "menu_end",
         "menu_popup_start",
@@ -4963,6 +4964,10 @@ mod capture {
             // ([`UiaLiveRegionHandler`]); this one has nothing to read, and its MSAA object took
             // 970 ms to answer as Windows Settings opened (dev box, 2026-10-17).
             if name == "live_region_change" && class != "Chrome_RenderWidgetHostHWND" {
+                return;
+            }
+            // An alert outside a page (a message box's) is read from its dialog's focus.
+            if state.live && name == "alert" && class != "Chrome_RenderWidgetHostHWND" {
                 return;
             }
             // Each read's end, in milliseconds since the event arrived, for the debug log when
