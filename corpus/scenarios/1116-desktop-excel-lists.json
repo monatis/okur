@@ -1,0 +1,28 @@
+{
+  "id": "1116-desktop-excel-lists",
+  "name": "Excel: Insert+Shift+F lists the cells with formulas (Down, Enter on the second, keys with UI Access), Insert+C there; Insert+Shift+S, Excel's sheet tabs' menu (Down, Escape, plain keys)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Insert+Shift+F", "onset_ms": 5000, "settle_max_ms": 20000},
+    {"id": "s2", "type": "key_ui_access", "command": "Down"},
+    {"id": "s3", "type": "key_ui_access", "command": "Enter"},
+    {"id": "s4", "type": "key", "command": "Insert+C"},
+    {"id": "s5", "type": "key", "command": "Insert+Shift+S", "onset_ms": 5000, "settle_max_ms": 20000},
+    {"id": "s6", "type": "key", "command": "Down"},
+    {"id": "s7", "type": "key", "command": "Escape"},
+    {"id": "s8", "type": "key", "command": "Insert+C"}
+  ]
+}
