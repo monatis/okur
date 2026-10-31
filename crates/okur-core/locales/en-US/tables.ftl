@@ -194,6 +194,11 @@ word-no-note-at-cursor = No footnote or EndNote reference at cursor.
 excel-last-cell = Last Cell
 excel-first-cell = First cell
 excel-data-region-edge = edge of current data region
+# Excel's lists with nothing to list: a column's [obs, 521/s9 in round-521e]; formulas' and
+# worksheets' [hyp: not recorded].
+excel-no-column-cells = No cells with data in current column.
+excel-no-formulas = No cells with formulas.
+excel-no-worksheets = No worksheets.
 # Say Window Title in Web Layout and Read Mode: JAWS's lower case "reading layout" [obs,
 # 1042/s5, s9].
 word-view-web = Web Layout View

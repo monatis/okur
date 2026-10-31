@@ -153,6 +153,35 @@ pub struct LineStructure {
     pub place: Option<PagePlace>,
 }
 
+/// Which of JAWS's lists of a spreadsheet's (Excel's): its cells with formulas (Insert+Shift+F),
+/// the active cell's column's cells with data (Insert+Shift+C), or its worksheets
+/// (Ctrl+Shift+S).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum SheetListKind {
+    Formulas,
+    Column,
+    Worksheets,
+}
+
+impl SheetListKind {
+    /// The request's name for reading them, in a log and in replay.
+    pub fn read_name(self) -> &'static str {
+        match self {
+            Self::Formulas => "sheet formulas",
+            Self::Column => "sheet column",
+            Self::Worksheets => "worksheets",
+        }
+    }
+}
+
+/// An entry of one of those lists, as JAWS's list shows it ("B4: =SUM(B2:B3)", "Weekdays: B1",
+/// "Hours"), and what moving to it goes to: a cell's reference, or a worksheet's name.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct SheetEntry {
+    pub label: String,
+    pub target: String,
+}
+
 /// A spreadsheet's active cell among its row's and its column's cells within the sheet's used
 /// range (Excel's), each as the sheet shows it, for JAWS's row and column readers: `row_at`
 /// and `column_at` are the active cell's place in `row` and `column`, past their ends where
@@ -1169,6 +1198,14 @@ pub enum AccessibilityEvent {
     /// ([`crate::actions::ApplicationActions::read_sheet_place`]); `None` where they could
     /// not be read.
     SheetPlace(Option<SheetPlace>),
+    /// One of JAWS's lists of the spreadsheet in front
+    /// ([`crate::actions::ApplicationActions::read_sheet_list`]): its entries, and for the
+    /// column's, the column's letters ("B"); none where they could not be read.
+    SheetList {
+        kind: SheetListKind,
+        column: String,
+        entries: Vec<SheetEntry>,
+    },
     /// What the user did to one of Okur's own windows (`okur-ui`).
     Ui(crate::ui::FromUi),
     /// The page in front changed outside its live regions: a web application added or

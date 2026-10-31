@@ -77,6 +77,9 @@ pub enum ListKind {
     DocumentFields,
     /// Word's comments or footnotes (Ctrl+Shift+Apostrophe, Insert+Shift+F in Word's document).
     DocumentNotes(crate::event::NoteKind),
+    /// Excel's cells with formulas, a column's cells, its worksheets (Insert+Shift+F,
+    /// Insert+Shift+C, Ctrl+Shift+S in a sheet) [obs, 1116/s1, 521/s9, s13].
+    SheetList(crate::event::SheetListKind),
     /// Items to Display in Virtual Viewer (Windows+Semicolon in Word's document): the notes the
     /// Virtual Viewer can show [obs, 1094, 1098].
     NotesToView,
@@ -270,6 +273,22 @@ impl Entry {
         }
     }
 
+    /// An entry of one of Excel's lists, by its label, its target kept as its address.
+    pub fn sheet_entry(index: usize, entry: &crate::event::SheetEntry) -> Self {
+        let text = entry.label.trim().to_owned();
+        Self {
+            sort_key: text.to_lowercase(),
+            text,
+            level: None,
+            address: Some(entry.target.clone()),
+            same_page: false,
+            visited: false,
+            node_id: index,
+            offset: index,
+            feature: None,
+        }
+    }
+
     /// A document's comment or footnote `index`: a comment's text, author and date, "Check the
     /// summer hours. Lab Fri, Jan 02, 26" [obs, 1082/s1]; a footnote's number and text, "1
     /// Holidays excepted." [obs, 1083/s1]; a revision's text, change, author and date, "eight
@@ -456,6 +475,8 @@ pub struct ListDialog {
     shown: Vec<usize>,
     /// The selected entry of `shown`.
     selected: usize,
+    /// A title of the list's own, where its kind's is not fixed: a column's, "Col B".
+    title: Option<String>,
 }
 
 fn control(id: &str, label: &str, kind: ControlKind) -> Control {
@@ -585,8 +606,33 @@ impl ListDialog {
             display: 0,
             shown: Vec::new(),
             selected: 0,
+            title: None,
         };
         dialog.shown = dialog.order();
+        dialog
+    }
+
+    /// One of JAWS's lists of an Excel sheet: "Cells with Formulas", "Col B", "Move to
+    /// Worksheet", each entry as JAWS shows it, the first selected [obs, 1116/s1, 521/s9, s13];
+    /// an entry's address is where moving to it goes.
+    pub fn sheet_list(
+        id: u32,
+        kind: crate::event::SheetListKind,
+        column: &str,
+        entries: &[crate::event::SheetEntry],
+    ) -> Self {
+        let mut dialog = Self::new(
+            id,
+            ListKind::SheetList(kind),
+            entries
+                .iter()
+                .enumerate()
+                .map(|(index, entry)| Entry::sheet_entry(index, entry))
+                .collect(),
+        );
+        if kind == crate::event::SheetListKind::Column {
+            dialog.title = Some(msg::list_dialog_column(column).render());
+        }
         dialog
     }
 
@@ -602,6 +648,7 @@ impl ListDialog {
             ListKind::FormFields | ListKind::DocumentFields => "fields",
             ListKind::DocumentNotes(_) => "notes",
             ListKind::NotesToView => "items",
+            ListKind::SheetList(_) => "cells",
             ListKind::Features => "lists",
             ListKind::Elements(_) => "elements",
             ListKind::Regions => "regions",
@@ -623,6 +670,7 @@ impl ListDialog {
             | ListKind::DocumentFields
             | ListKind::DocumentNotes(_)
             | ListKind::NotesToView
+            | ListKind::SheetList(_)
             | ListKind::Features
             | ListKind::Elements(_)
             | ListKind::Regions
@@ -645,6 +693,7 @@ impl ListDialog {
                 | ListKind::DocumentFields
                 | ListKind::DocumentNotes(_)
                 | ListKind::NotesToView
+                | ListKind::SheetList(_)
                 | ListKind::Features
                 | ListKind::Elements(_)
                 | ListKind::Regions
@@ -790,6 +839,19 @@ impl ListDialog {
                     button("cancel", msg::form_field_list_cancel(), false),
                 ],
             ),
+            // Excel's lists: their list, then OK and Cancel [hyp: the buttons not walked yet].
+            ListKind::SheetList(kind) => (
+                match kind {
+                    crate::event::SheetListKind::Formulas => msg::list_dialog_cells_with_formulas(),
+                    crate::event::SheetListKind::Column => msg::list_dialog_column_cells(),
+                    crate::event::SheetListKind::Worksheets => msg::list_dialog_move_to_worksheet(),
+                },
+                vec![
+                    list(msg::list_dialog_form_fields_list()),
+                    button("ok", msg::form_field_list_ok(), true),
+                    button("cancel", msg::form_field_list_cancel(), false),
+                ],
+            ),
             // Items to Display in Virtual Viewer: its list, then OK and Cancel [obs, 1094/s3,
             // s4].
             ListKind::NotesToView => (
@@ -856,7 +918,7 @@ impl ListDialog {
         };
         DialogSpec {
             id: self.id,
-            title: title.to_string(),
+            title: self.title.clone().unwrap_or_else(|| title.to_string()),
             controls,
             keys: Vec::new(),
         }
@@ -875,6 +937,7 @@ impl ListDialog {
             | ListKind::DocumentFields
             | ListKind::DocumentNotes(_)
             | ListKind::NotesToView
+            | ListKind::SheetList(_)
             | ListKind::Features
             | ListKind::Elements(_)
             | ListKind::Regions
@@ -933,7 +996,8 @@ impl ListDialog {
                         Some(entry),
                         ListKind::DocumentFields
                         | ListKind::DocumentNotes(_)
-                        | ListKind::NotesToView,
+                        | ListKind::NotesToView
+                        | ListKind::SheetList(_),
                     ) => Outcome::MoveTo(entry.clone()),
                     ("ok", Some(entry), ListKind::Elements(list)) if list.focuses() => {
                         Outcome::Focus(entry.clone())

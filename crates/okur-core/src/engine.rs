@@ -350,6 +350,8 @@ pub struct ScreenReaderEngine {
     /// The menus ended back on a focus its application says itself: "Leaving menus" waits for
     /// that focus, to be said with it.
     menus_left_unsaid: bool,
+    /// One of Excel's lists was asked for, and is awaited.
+    sheet_list_asked: Option<crate::event::SheetListKind>,
     /// One of Excel's row or column readers asked for the active cell's row and column, and
     /// awaits them.
     sheet_reading_asked: Option<crate::apps::windows::excel::SheetReading>,
@@ -654,6 +656,7 @@ impl ScreenReaderEngine {
             status_bar_asked: false,
             menus_left_unsaid: false,
             sheet_reading_asked: None,
+            sheet_list_asked: None,
             say_all_paragraphs_asked: false,
             document_view_title: None,
             document_view_by_key: None,
@@ -1287,6 +1290,18 @@ impl ScreenReaderEngine {
             // Word's Ctrl+Shift+Apostrophe: its comments listed [obs, 1082/s1]; the key is the
             // application's elsewhere.
             let m = event.modifiers;
+            // Excel's Ctrl+Shift+S in a sheet: its worksheets listed, JAWS's Move to Worksheet
+            // [obs, 521/s13]; the key is the application's elsewhere.
+            if event.key == Key::Alpha('S')
+                && m.ctrl
+                && m.shift
+                && !m.alt
+                && !m.insert
+                && !m.win
+                && self.open_sheet_list(crate::event::SheetListKind::Worksheets)
+            {
+                return KeyAction::Consume;
+            }
             // Windows+Semicolon in Word's document: Items to Display in Virtual Viewer [obs,
             // 1094/s1]; elsewhere the key is Windows'.
             if event.key == Key::Semicolon
@@ -1667,6 +1682,11 @@ impl ScreenReaderEngine {
             }
             AccessibilityEvent::DocumentFields(fields) => self.document_fields(fields),
             AccessibilityEvent::StatusBar(items) => self.word_status_bar(items),
+            AccessibilityEvent::SheetList {
+                kind,
+                column,
+                entries,
+            } => self.sheet_list(*kind, column, entries),
             AccessibilityEvent::SheetPlace(place) => {
                 let reading = self.sheet_reading_asked.take()?;
                 let said = reading.said(place.as_ref()?)?;
@@ -2968,7 +2988,9 @@ impl ScreenReaderEngine {
             ListKind::DocumentFields => (None, msg::form_fields_list_none().to_string()),
             // A document's notes too, by Word's keys (`Self::open_document_notes`), and what
             // the Virtual Viewer shows of them.
-            ListKind::DocumentNotes(_) | ListKind::NotesToView => return None,
+            ListKind::DocumentNotes(_) | ListKind::NotesToView | ListKind::SheetList(_) => {
+                return None
+            }
             // With none, JAWS says so and then the page [obs, 221/s2].
             ListKind::FormFields => {
                 let fields = self.cursor.buffer.get_form_fields_list();
@@ -3160,6 +3182,54 @@ impl ScreenReaderEngine {
         Some(said)
     }
 
+    /// One of Excel's lists, asked for from a cell of its sheet. False elsewhere.
+    pub(crate) fn open_sheet_list(&mut self, kind: crate::event::SheetListKind) -> bool {
+        let in_sheet = self
+            .last_native_focus
+            .as_ref()
+            .and_then(crate::apps::windows::excel::cell)
+            .is_some();
+        if !in_sheet
+            || !self
+                .actions
+                .as_ref()
+                .is_some_and(|actions| actions.read_sheet_list(kind))
+        {
+            return false;
+        }
+        self.sheet_list_asked = Some(kind);
+        true
+    }
+
+    /// One of Excel's lists came: shown as JAWS's, the first entry selected, "Cells with
+    /// Formulas dialog | List1 List view | B4: =SUM(B2:B3) | 1 of 2" [obs, 1116/s1]; with none,
+    /// said so, "No cells with data in current column." [obs, 521/s9 in round-521e].
+    fn sheet_list(
+        &mut self,
+        kind: crate::event::SheetListKind,
+        column: &str,
+        entries: &[crate::event::SheetEntry],
+    ) -> Option<String> {
+        if self.sheet_list_asked != Some(kind) {
+            return None;
+        }
+        self.sheet_list_asked = None;
+        if entries.is_empty() {
+            let none = match kind {
+                crate::event::SheetListKind::Formulas => msg::excel_no_formulas(),
+                crate::event::SheetListKind::Column => msg::excel_no_column_cells(),
+                crate::event::SheetListKind::Worksheets => msg::excel_no_worksheets(),
+            }
+            .to_string();
+            self.speech.speak(&none, true);
+            return Some(none);
+        }
+        let dialog =
+            crate::ui::lists::ListDialog::sheet_list(self.dialog_count + 1, kind, column, entries);
+        let mode = self.app_mode;
+        self.show_list(dialog, mode)
+    }
+
     /// Whether the keys go to a document whose structure Word's object model reads.
     fn in_word_document(&self) -> bool {
         self.app_mode != AppMode::VirtualBuffer
@@ -3318,6 +3388,14 @@ impl ScreenReaderEngine {
                         ListKind::Links => {
                             actions.move_to_paragraph(self.last_text.as_ref(), entry.offset);
                         }
+                        // OK in one of Excel's lists: its cell selected, or its worksheet
+                        // activated; the cell's focus then says itself [obs, 1116/s3].
+                        ListKind::SheetList(list) => {
+                            self.moved_by_document_list = false;
+                            if let Some(target) = entry.address.as_deref() {
+                                actions.move_to_sheet_entry(list, target);
+                            }
+                        }
                         // OK in Items to Display in Virtual Viewer: what is gathered is said,
                         // and the viewer opens when the notes come [obs, 1096/s2].
                         ListKind::NotesToView => {
@@ -3448,6 +3526,7 @@ impl ScreenReaderEngine {
                     | ListKind::DocumentFields
                     | ListKind::DocumentNotes(_)
                     | ListKind::NotesToView
+                    | ListKind::SheetList(_)
                     | ListKind::Features
                     | ListKind::Words
                     | ListKind::Elements(_) => self.cursor.current_line(),

@@ -335,6 +335,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::DocumentView(_)) => "document view",
         Some(AccessibilityEvent::StatusBar(_)) => "status bar",
         Some(AccessibilityEvent::SheetPlace(_)) => "sheet place",
+        Some(AccessibilityEvent::SheetList { .. }) => "sheet list",
         Some(AccessibilityEvent::DocumentLoaded { .. }) => "document loaded",
         Some(AccessibilityEvent::Ui(_)) => "okur window",
         Some(AccessibilityEvent::PageChanged) => "page changed",

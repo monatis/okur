@@ -1052,6 +1052,18 @@ impl ScreenReaderEngine {
                 return;
             }
         }
+        // Excel's Insert+Shift+F and Insert+Shift+C: its cells with formulas, the column's
+        // cells [obs, 1116/s1, 521/s9]; before Word's lists, whose keys they share.
+        let sheet_list = match (event.key, m.shift, m.ctrl, m.alt) {
+            (Key::Alpha('F'), true, false, false) => Some(crate::event::SheetListKind::Formulas),
+            (Key::Alpha('C'), true, false, false) => Some(crate::event::SheetListKind::Column),
+            _ => None,
+        };
+        if let Some(kind) = sheet_list.filter(|_| !m.win) {
+            if self.open_sheet_list(kind) {
+                return;
+            }
+        }
         // Excel's row and column readers, the active cell's row and column asked for first.
         if let Some(reading) = crate::apps::windows::excel::SheetReading::of(event) {
             let in_sheet = self

@@ -18,6 +18,13 @@ list-dialog-footnotes = Footnotes
 list-dialog-endnotes = End Notes
 # Word's bookmarks, Insert+Alt+B in a document [obs, 1091/s1].
 list-dialog-bookmarks = Bookmark List
+# Excel's lists: its cells with formulas, Insert+Shift+F [obs, 1116/s1]; the active cell's
+# column's cells, Insert+Shift+C, titled by the column [obs, 521/s9]; its worksheets,
+# Ctrl+Shift+S [obs, 521/s13].
+list-dialog-cells-with-formulas = Cells with Formulas
+list-dialog-column = Col { $column }
+list-dialog-column-cells = Col
+list-dialog-move-to-worksheet = Move to Worksheet
 # Word's revisions, Insert+Shift+R in a document [hyp: 1107 records JAWS's title].
 list-dialog-revisions = Revisions
 # Windows+Semicolon in a document of Word's: the notes the Virtual Viewer shows, JAWS's items in

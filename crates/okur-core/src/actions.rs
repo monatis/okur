@@ -165,6 +165,21 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for one of JAWS's lists of the spreadsheet in front, which arrives later as
+    /// [`crate::event::AccessibilityEvent::SheetList`], always. Returns false when
+    /// unsupported.
+    fn read_sheet_list(&self, kind: crate::event::SheetListKind) -> bool {
+        let _ = kind;
+        false
+    }
+
+    /// Goes to an entry of such a list: selects its cell, or activates its worksheet. Returns
+    /// false when unsupported.
+    fn move_to_sheet_entry(&self, kind: crate::event::SheetListKind, target: &str) -> bool {
+        let _ = (kind, target);
+        false
+    }
+
     /// Asks for what one of Word's keys (`key`, just pressed) left in the focused document,
     /// once Word has acted on it, which arrives later as
     /// [`crate::event::AccessibilityEvent::WordKeyState`], always. Returns false when
@@ -549,6 +564,20 @@ impl ApplicationActions for RecordingActions {
     fn read_sheet_place(&self) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push(("sheet place".to_owned(), 0));
+        }
+        true
+    }
+
+    fn read_sheet_list(&self, kind: crate::event::SheetListKind) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((kind.read_name().to_owned(), 0));
+        }
+        true
+    }
+
+    fn move_to_sheet_entry(&self, kind: crate::event::SheetListKind, target: &str) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push((format!("{kind:?} {target}"), 0));
         }
         true
     }

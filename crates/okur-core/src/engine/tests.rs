@@ -9128,3 +9128,66 @@ fn word_status_bar_is_the_bottom_line() {
     engine.handle_accessibility_event(&AccessibilityEvent::StatusBar(vec!["Zoom 100%".into()]));
     assert!(speech.take().is_empty());
 }
+
+/// In an Excel sheet a cell is its value and coordinates; Insert+Shift+F asks for the cells
+/// with formulas and lists them as JAWS's "Cells with Formulas"; OK goes to the one chosen
+/// [obs, 521/s3, 1116/s1-s3].
+#[test]
+fn excel_cells_and_the_formula_list() {
+    use crate::ui::{ControlKind, FromUi, ToUi};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut cell = FocusEvent::new(Role::TableCell)
+        .with_name("B2")
+        .with_window_title("sr-excel-fixture.xlsx - Excel");
+    cell.value = Some("12".into());
+    cell.app = Some("EXCEL.EXE".into());
+    cell.platform.window_class = Some("EXCEL7".into());
+    engine.handle_focus_event(&cell);
+    assert!(speech.take().iter().any(|said| said.ends_with("12\nB 2")));
+    let mut key = KeyEvent::new(Key::Alpha('F'), Modifiers::none(), true);
+    key.modifiers.insert = true;
+    key.modifiers.shift = true;
+    engine.handle_key_event(&key);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "sheet formulas"));
+    let entry = |label: &str, target: &str| crate::event::SheetEntry {
+        label: label.into(),
+        target: target.into(),
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::SheetList {
+        kind: crate::event::SheetListKind::Formulas,
+        column: "B".into(),
+        entries: vec![
+            entry("B4: =SUM(B2:B3)", "B4"),
+            entry("C4: =SUM(C2:C3)", "C4"),
+        ],
+    });
+    let Some(dialog) = ui.take().into_iter().find_map(|m| match m {
+        ToUi::DialogShow { dialog } => Some(dialog),
+        _ => None,
+    }) else {
+        panic_free_fail("no list shown");
+        return;
+    };
+    assert_eq!(dialog.title, "Cells with Formulas");
+    assert!(dialog.controls.iter().any(|c| matches!(
+        &c.kind,
+        ControlKind::List { items, .. } if items.first().map(String::as_str) == Some("B4: =SUM(B2:B3)")
+    )));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: dialog.id,
+        control: "ok".into(),
+    }));
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "Formulas B4"));
+}

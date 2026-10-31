@@ -1252,6 +1252,9 @@ struct ScreenSnapshot {
     /// second recording), for its row and column readers.
     #[serde(default)]
     sheet_place: Option<okur_core::SheetPlace>,
+    /// Excel's lists, saved with it, for Insert+Shift+F, Insert+Shift+C and Ctrl+Shift+S.
+    #[serde(default)]
+    sheet_lists: Option<SnapshotSheetLists>,
     /// Word's document's paragraphs, saved beside the headings (none before 1038), for Say All.
     #[serde(default)]
     paragraphs: Vec<okur_core::DocumentParagraph>,
@@ -1363,6 +1366,26 @@ impl ScreenSnapshot {
     }
 }
 
+/// One of Excel's lists in a step's snapshot: the active cell's column's letters, the entries.
+#[derive(Debug, Clone, Default, serde::Deserialize)]
+struct SnapshotSheetList {
+    #[serde(default)]
+    column: String,
+    #[serde(default)]
+    entries: Vec<okur_core::SheetEntry>,
+}
+
+/// Excel's three lists in a step's snapshot.
+#[derive(Debug, Clone, Default, serde::Deserialize)]
+struct SnapshotSheetLists {
+    #[serde(default)]
+    formulas: Option<SnapshotSheetList>,
+    #[serde(default)]
+    column: Option<SnapshotSheetList>,
+    #[serde(default)]
+    worksheets: Option<SnapshotSheetList>,
+}
+
 /// The screen reads and recognitions the engine asked for, counted as answered.
 #[derive(Default)]
 struct ScreenReads {
@@ -1373,6 +1396,8 @@ struct ScreenReads {
     views: usize,
     status_bars: usize,
     sheet_places: usize,
+    /// Excel's lists asked for and answered, by kind.
+    sheet_lists: [usize; 3],
     paragraphs: usize,
     links: usize,
     spacings: usize,
@@ -1567,6 +1592,30 @@ impl ScreenReads {
                     .and_then(|s| s.status_bar.clone())
                     .unwrap_or_default(),
             ));
+        }
+        // Excel's lists, always answered: none where the step saved none.
+        use okur_core::SheetListKind;
+        for (answered, kind) in self.sheet_lists.iter_mut().zip([
+            SheetListKind::Formulas,
+            SheetListKind::Column,
+            SheetListKind::Worksheets,
+        ]) {
+            while *answered < count(kind.read_name()) {
+                *answered += 1;
+                let list = snapshot
+                    .and_then(|s| s.sheet_lists.as_ref())
+                    .and_then(|lists| match kind {
+                        SheetListKind::Formulas => lists.formulas.clone(),
+                        SheetListKind::Column => lists.column.clone(),
+                        SheetListKind::Worksheets => lists.worksheets.clone(),
+                    })
+                    .unwrap_or_default();
+                deliver(okur_core::AccessibilityEvent::SheetList {
+                    kind,
+                    column: list.column,
+                    entries: list.entries,
+                });
+            }
         }
         // Excel's row and column, always answered: none where the step saved none.
         while self.sheet_places < count("sheet place") {

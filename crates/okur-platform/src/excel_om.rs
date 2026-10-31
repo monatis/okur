@@ -72,6 +72,129 @@ pub fn sheet_place(grid: HWND) -> Option<okur_core::SheetPlace> {
     })
 }
 
+/// The most cells looked through for a sheet's list of cells with formulas.
+const MAX_LISTED: i32 = 10_000;
+
+/// One of JAWS's lists of the sheet in Excel's grid window `grid`, with the active cell's
+/// column's letters: its cells with formulas, "B4: =SUM(B2:B3)" [obs, 1116/s1]; the active
+/// cell's column's cells with data, "Weekdays: B1" [obs, 521/s9]; its workbook's worksheets,
+/// "Hours" [obs, 521/s13]. In the sheet's order, by rows. `None` where Excel's object model
+/// does not answer.
+pub fn sheet_list(
+    grid: HWND,
+    kind: okur_core::SheetListKind,
+) -> Option<(String, Vec<okur_core::SheetEntry>)> {
+    let window = word_window(grid)?;
+    let cell = object(&property(&window, "ActiveCell")?)?;
+    let column = number(&cell, "Column")?;
+    let letters = address(&cell)?
+        .chars()
+        .take_while(|c| c.is_ascii_alphabetic())
+        .collect::<String>();
+    let sheet = object(&property(&window, "ActiveSheet")?)?;
+    let entry = |label: String, target: String| okur_core::SheetEntry { label, target };
+    let entries = match kind {
+        okur_core::SheetListKind::Worksheets => {
+            let book = object(&property(&sheet, "Parent")?)?;
+            let sheets = object(&property(&book, "Worksheets")?)?;
+            let count = number(&sheets, "Count")?.clamp(0, MAX_CELLS);
+            (1..=count)
+                .filter_map(|index| crate::word_om::item(&sheets, index))
+                .map(|ws| text(&ws, "Name").trim().to_owned())
+                .filter(|name| !name.is_empty())
+                .map(|name| entry(name.clone(), name))
+                .collect()
+        }
+        okur_core::SheetListKind::Column | okur_core::SheetListKind::Formulas => {
+            let used = object(&property(&sheet, "UsedRange")?)?;
+            let (top, left) = (number(&used, "Row")?, number(&used, "Column")?);
+            let rows = number(&object(&property(&used, "Rows")?)?, "Count")?.clamp(0, MAX_LISTED);
+            let columns =
+                number(&object(&property(&used, "Columns")?)?, "Count")?.clamp(0, MAX_CELLS);
+            let (first, last) = if kind == okur_core::SheetListKind::Column {
+                (column, column)
+            } else {
+                (left, left + columns - 1)
+            };
+            let mut found = Vec::new();
+            let mut looked = 0;
+            for r in top..top + rows {
+                for c in first..=last {
+                    looked += 1;
+                    if looked > MAX_LISTED {
+                        break;
+                    }
+                    let Some(cell) = sheet_cell(&sheet, r, c) else {
+                        continue;
+                    };
+                    let Some(at) = address(&cell) else {
+                        continue;
+                    };
+                    if kind == okur_core::SheetListKind::Column {
+                        let shown = text(&cell, "Text").trim().to_owned();
+                        if !shown.is_empty() {
+                            found.push(entry(format!("{shown}: {at}"), at));
+                        }
+                    } else if property(&cell, "HasFormula")
+                        .and_then(|v| bool::try_from(&v).ok())
+                        .unwrap_or(false)
+                    {
+                        let formula = text(&cell, "Formula");
+                        found.push(entry(format!("{at}: {}", formula.trim()), at));
+                    }
+                }
+            }
+            found
+        }
+    };
+    Some((letters, entries))
+}
+
+/// Goes to `target` of one of those lists in Excel's grid window `grid`: selects the cell it
+/// names, or activates the worksheet. False where Excel's object model does not answer.
+pub fn go_to(grid: HWND, kind: okur_core::SheetListKind, target: &str) -> bool {
+    use windows::core::BSTR;
+    use windows::Win32::System::Com::DISPATCH_METHOD;
+    let go = || -> Option<()> {
+        let window = word_window(grid)?;
+        let sheet = object(&property(&window, "ActiveSheet")?)?;
+        if kind == okur_core::SheetListKind::Worksheets {
+            let book = object(&property(&sheet, "Parent")?)?;
+            let sheets = object(&property(&book, "Worksheets")?)?;
+            let named = object(&invoke(
+                &sheets,
+                "Item",
+                DISPATCH_PROPERTYGET,
+                &mut [VARIANT::from(BSTR::from(target))],
+            )?)?;
+            invoke(&named, "Activate", DISPATCH_METHOD, &mut [])?;
+        } else {
+            let range = object(&invoke(
+                &sheet,
+                "Range",
+                DISPATCH_PROPERTYGET,
+                &mut [VARIANT::from(BSTR::from(target))],
+            )?)?;
+            invoke(&range, "Select", DISPATCH_METHOD, &mut [])?;
+        }
+        Some(())
+    };
+    go().is_some()
+}
+
+/// A cell's reference without dollar signs, "B4" (`Range.Address(False, False)`).
+fn address(cell: &IDispatch) -> Option<String> {
+    let value = invoke(
+        cell,
+        "Address",
+        DISPATCH_PROPERTYGET,
+        &mut [VARIANT::from(false), VARIANT::from(false)],
+    )?;
+    let shown = windows::core::BSTR::try_from(&value).ok()?.to_string();
+    let shown = shown.trim().to_owned();
+    (!shown.is_empty()).then_some(shown)
+}
+
 /// The cell at row `row` and column `column` (from 1) of `sheet` (`Worksheet.Cells`).
 fn sheet_cell(sheet: &IDispatch, row: i32, column: i32) -> Option<IDispatch> {
     object(&invoke(

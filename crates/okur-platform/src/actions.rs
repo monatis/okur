@@ -119,6 +119,8 @@ mod windows_actions {
         DocumentView,
         StatusBar,
         SheetPlace,
+        SheetList(okur_core::SheetListKind),
+        SheetEntry(okur_core::SheetListKind, String),
         /// The caret to a paragraph of the focused document (from 0), then the field's text.
         Paragraph(Option<Box<TextContext>>, usize),
         /// A chord of virtual keys, sent marked as the screen reader's own.
@@ -200,6 +202,8 @@ mod windows_actions {
                 Request::DocumentView => "document view",
                 Request::StatusBar => "status bar",
                 Request::SheetPlace => "sheet place",
+                Request::SheetList(_) => "sheet list",
+                Request::SheetEntry(..) => "sheet entry",
                 Request::Paragraph(..) => "paragraph",
                 Request::Keys(_) => "keys",
                 Request::Window(_) => "viewer read",
@@ -536,6 +540,28 @@ mod windows_actions {
                                 let place = crate::actions::sheet_place_now(None);
                                 tracing::debug!(read = place.is_some(), "sheet place read");
                                 let _ = events.send(AccessibilityEvent::SheetPlace(place));
+                            }
+                            Request::SheetList(kind) => {
+                                let Some(events) = events.as_ref() else {
+                                    return;
+                                };
+                                let (column, entries) =
+                                    crate::actions::sheet_list_now(None, kind).unwrap_or_default();
+                                tracing::debug!(?kind, entries = entries.len(), "sheet list read");
+                                let _ = events.send(AccessibilityEvent::SheetList {
+                                    kind,
+                                    column,
+                                    entries,
+                                });
+                            }
+                            Request::SheetEntry(kind, target) => {
+                                use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+                                // SAFETY: a plain query.
+                                let top = unsafe { GetForegroundWindow() };
+                                let went = crate::excel_om::grid_window(top).is_some_and(|grid| {
+                                    crate::excel_om::go_to(grid, kind, &target)
+                                });
+                                tracing::debug!(?kind, went, "sheet entry gone to");
                             }
                             Request::Paragraph(before, paragraph) => {
                                 let (Some(uia), Some(events)) = (uia.as_ref(), events.as_ref())
@@ -1051,6 +1077,14 @@ mod windows_actions {
             self.send(Request::SheetPlace)
         }
 
+        fn read_sheet_list(&self, kind: okur_core::SheetListKind) -> bool {
+            self.send(Request::SheetList(kind))
+        }
+
+        fn move_to_sheet_entry(&self, kind: okur_core::SheetListKind, target: &str) -> bool {
+            self.send(Request::SheetEntry(kind, target.to_owned()))
+        }
+
         fn read_word_key(&self, key: okur_core::WordKey) -> bool {
             self.send(Request::WordKey(key))
         }
@@ -1336,6 +1370,23 @@ pub fn sheet_place_now(window_title: Option<&str>) -> Option<okur_core::SheetPla
         None => unsafe { GetForegroundWindow() },
     };
     crate::excel_om::sheet_place(crate::excel_om::grid_window(top)?)
+}
+
+/// One of JAWS's lists of Excel's window, with the active cell's column's letters, read right
+/// away on the calling thread: the window in front, or the top-level window titled
+/// `window_title`.
+#[cfg(windows)]
+pub fn sheet_list_now(
+    window_title: Option<&str>,
+    kind: okur_core::SheetListKind,
+) -> Option<(String, Vec<okur_core::SheetEntry>)> {
+    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+    let top = match window_title {
+        Some(title) => crate::harness::window_titled(title)?,
+        // SAFETY: a plain query.
+        None => unsafe { GetForegroundWindow() },
+    };
+    crate::excel_om::sheet_list(crate::excel_om::grid_window(top)?, kind)
 }
 
 /// The items of the status bar of Word's window, read right away on the calling thread: the

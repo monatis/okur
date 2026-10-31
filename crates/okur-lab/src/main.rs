@@ -1305,6 +1305,19 @@ async fn main() {
                 let status_bar = okur_platform::actions::status_bar_now(window_title.as_deref());
                 // Excel's active cell's row and column, for its row and column readers.
                 let sheet_place = okur_platform::actions::sheet_place_now(window_title.as_deref());
+                // Excel's lists: its cells with formulas, the column's cells, its worksheets.
+                let sheet_list = |kind: okur_core::SheetListKind| {
+                    okur_platform::actions::sheet_list_now(window_title.as_deref(), kind).map(
+                        |(column, entries)| serde_json::json!({ "column": column, "entries": entries }),
+                    )
+                };
+                let sheet_lists = sheet_place.as_ref().map(|_| {
+                    serde_json::json!({
+                        "formulas": sheet_list(okur_core::SheetListKind::Formulas),
+                        "column": sheet_list(okur_core::SheetListKind::Column),
+                        "worksheets": sheet_list(okur_core::SheetListKind::Worksheets),
+                    })
+                });
                 let paragraphs =
                     okur_platform::actions::document_paragraphs_now(window_title.as_deref());
                 let links = okur_platform::actions::document_links_now(window_title.as_deref());
@@ -1392,6 +1405,7 @@ async fn main() {
                         "view": view,
                         "status_bar": status_bar,
                         "sheet_place": sheet_place,
+                        "sheet_lists": sheet_lists,
                         "paragraphs": paragraphs.unwrap_or_default(),
                         "links": links.unwrap_or_default(),
                         "line_spacing": line_spacing.map(|s| serde_json::json!({

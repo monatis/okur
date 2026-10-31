@@ -35,6 +35,8 @@ impl AppModule for Excel {
             return FocusResponse::Pass;
         };
         cx.note_window(focus);
+        // A native control's keys are the application's, as for any cell the engine reads.
+        *cx.app_mode = crate::engine::AppMode::NativeControl;
         let value = focus.value.as_deref().map(str::trim).unwrap_or_default();
         let mut lines = Vec::new();
         let ctrl = cx
