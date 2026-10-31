@@ -417,7 +417,11 @@ fn replay_scenario(
         }
         Ok(())
     };
-    if desktop {
+    // Where the recorder stamped the reset keys, each is pressed among the setup events in the
+    // order they came (ARIA-AT's reset presses a page's setup button, and the focus moves
+    // after it); without stamps, an application's keys go before its events, a page's after.
+    let stamped = !replay.reset_times.is_empty();
+    if desktop && !stamped {
         press_reset(&mut engine)?;
     }
     // The focused text as the trace last showed it, and the fresh reads of it answered.
@@ -425,13 +429,20 @@ fn replay_scenario(
     let mut text_reads = 0;
     // The screen reads and recognitions answered from the recorder's snapshots.
     let mut screen_reads = ScreenReads::default();
+    let mut reset_keys = replay.reset_times.iter().peekable();
     for event in &replay.setup {
+        while let Some((chord, _)) = reset_keys.next_if(|(_, at)| *at <= event.t_ms) {
+            press(&mut engine, &actions, chord, 0, Modifiers::none())?;
+        }
         for converted in converter.convert(event) {
             note_text(&mut last_text, &converted);
             let _ = engine.handle_accessibility_event(&converted);
         }
     }
-    if !desktop {
+    for (chord, _) in reset_keys {
+        press(&mut engine, &actions, chord, 0, Modifiers::none())?;
+    }
+    if !desktop && !stamped {
         press_reset(&mut engine)?;
     }
     spoken.take();
@@ -1205,6 +1216,9 @@ struct StepEvents {
     /// its renaming (a console titled by what runs in it), and the caret's moves, replayed
     /// silently so the engine knows the window, focus and caret JAWS had when step 1 began.
     setup: Vec<okur_platform::event_trace::TraceEvent>,
+    /// The reset keys and when the recorder sent each (unix ms), where it stamped them, so that
+    /// they are pressed among the setup events in the order they came.
+    reset_times: Vec<(String, u128)>,
     /// When each step began (unix ms), for the replay clock and key times.
     starts: std::collections::HashMap<String, u64>,
     /// What the clipboard held after each step that captured it (`capture_clipboard`): the
@@ -1750,9 +1764,22 @@ impl StepEvents {
                 }
             }
         }
+        let reset_times = trial
+            .get("reset_keys")
+            .and_then(Value::as_array)
+            .into_iter()
+            .flatten()
+            .filter_map(|key| {
+                Some((
+                    key.get("chord")?.as_str()?.to_owned(),
+                    u128::from(key.get("t_ms")?.as_u64()?),
+                ))
+            })
+            .collect();
         Ok(Self {
             by_step,
             setup,
+            reset_times,
             starts,
             clipboards,
             screens,

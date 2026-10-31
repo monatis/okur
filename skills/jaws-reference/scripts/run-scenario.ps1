@@ -1093,6 +1093,10 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         timestamp = (Get-Date -Format "o")
         foreground_window_start = $null
         setup_settled = $true
+        # Each reset key and when it was sent (unix ms), so that replay presses it among the
+        # events traced before step 1 in the order they came: ARIA-AT's reset presses the
+        # page's setup button, whose focus move follows the key.
+        reset_keys = @()
         step_results = @()
         trial_success = $true
     }
@@ -1169,6 +1173,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     $resetKeys = if ($hasResetKeys) { @($scenario.reset.keys) } else { @("Ctrl+Home") }
     $resetQuiet = $loadQuiet
     foreach ($rk in $resetKeys) {
+        $trialResult.reset_keys += ,([ordered]@{ chord = $rk; t_ms = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds() })
         [void](Send-Chord $rk)
         $resetQuiet = Wait-Silence -OnsetMs 800 -QuietMs 500 -MaxMs 10000
     }
@@ -1181,7 +1186,10 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         $inPage = Test-JawsInPage
         if (-not $inPage) {
             Restart-LabPage
+            # Sent again after the restart: the times replay goes by are these.
+            $trialResult.reset_keys = @()
             foreach ($rk in $resetKeys) {
+                $trialResult.reset_keys += ,([ordered]@{ chord = $rk; t_ms = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds() })
                 [void](Send-Chord $rk)
                 $resetQuiet = Wait-Silence -OnsetMs 800 -QuietMs 500 -MaxMs 10000
             }

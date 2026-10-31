@@ -73,9 +73,15 @@ NOTICE.md` (written by the importer) names the commit, the copyright and both li
 
 - copies the plan's `reference/<date>/` folder unchanged to `aria-at/<plan>/` (a fixture in a
   folder: the corpus keys it by its path, its snapshots are named with dots for slashes);
-- writes a scenario per JAWS command: its fixture the test's setup page; its reset `Ctrl+End`
-  (to the setup button, the page's last element) and `Enter` (the setup runs), then `Insert+Z`
-  for the PC cursor; its steps the command's presses, then `Insert+Z` again in the PC cursor, so
+- makes a setup page the plan's folder lacks (7 plans lack some) as ARIA-AT's build does: the
+  setup script before `</head>`, the button before `</main>`
+  (`lib/data/example-scripts-template.js`);
+- writes a scenario per JAWS command: its fixture the test's setup page; its reset `Ctrl+End`,
+  `Shift+B`, `Enter`: JAWS's Ctrl+End lands on "main region end", Shift+B goes back to the
+  page's last button, the setup's, and Enter runs the setup, after which JAWS says the page's
+  title and the focused element, with the virtual cursor on it (old-pc, 2026-10-31; a first
+  round with Ctrl+End and Enter only pressed nothing and was stopped); then `Insert+Z` for the
+  PC cursor; its steps the command's presses, then `Insert+Z` again in the PC cursor, so
   that the next scenario starts in the virtual cursor; its `aria_at` the plan, test, command,
   setting, assertions and exceptions. Ids from 2000.
 - Each trial reloads the page (Ctrl+R) before the reset, so the setup runs afresh.

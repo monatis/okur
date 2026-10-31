@@ -964,6 +964,7 @@ dependencies = [
  "okur-core",
  "okur-corpus",
  "okur-platform",
+ "regex",
  "serde",
  "serde_json",
  "tokio",
