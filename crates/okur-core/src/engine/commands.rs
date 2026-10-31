@@ -1004,9 +1004,21 @@ impl ScreenReaderEngine {
                     crate::aom::Role::Button
                         | crate::aom::Role::RadioButton
                         | crate::aom::Role::CheckBox
+                        | crate::aom::Role::Link { .. }
                 )
             })
         {
+            // A link as its focus says it, name first: "W3C website Link" [obs, round-aria13,
+            // 2361/s1].
+            if matches!(node.role, crate::aom::Role::Link { .. }) {
+                let name = node
+                    .name
+                    .as_deref()
+                    .or(node.text.as_deref())
+                    .unwrap_or_default()
+                    .trim();
+                return SpeechFormatter::link_focus(name, node, true).render_all();
+            }
             let said = crate::speech::FocusSaid {
                 virtual_off: true,
                 by_focus: false,
