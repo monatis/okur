@@ -221,6 +221,34 @@
       "sha256": "db8618f3db03612c3c127c915fa915509c0ecc877031baea4cc76380598b536b",
       "size_bytes": 6771
     },
+    "aria-at/link-css/css/link.css": {
+      "sha256": "a61b8276d5de0ca3983fccbc45194e47966e8869bb65cec159557b4b48ec40b2",
+      "size_bytes": 3008
+    },
+    "aria-at/link-css/images/w3c-logo.svg": {
+      "sha256": "f105ad7d50560ae0be0c2f029188888a415ecaac35b91c2937bb2663d587c094",
+      "size_bytes": 2497
+    },
+    "aria-at/link-css/js/link.js": {
+      "sha256": "932da7d8b3746faa7739d4fe2a524c19ee84a892b0b9e96b033d37a9c87f6dd1",
+      "size_bytes": 425
+    },
+    "aria-at/link-css/link-css.html": {
+      "sha256": "3b513c45bbcb6d14820a668600130d679860c64fd2c851c3545e4a7924b8aa83",
+      "size_bytes": 2042
+    },
+    "aria-at/link-css/link-css.setFocusAfterLink.html": {
+      "sha256": "35f788ec886e324b5cbeb50aedab690c8db3a70c05d0e23dcad4c7f52b3fe9ce",
+      "size_bytes": 2842
+    },
+    "aria-at/link-css/link-css.setFocusBeforeLink.html": {
+      "sha256": "07dcad250adc5388aaa54b75b4a101b424c648a27a27d991bde37aafa3e88da0",
+      "size_bytes": 2845
+    },
+    "aria-at/link-css/link-css.setFocusOnLink.html": {
+      "sha256": "6507ccfe04b4073379c741649047d329aa8acf5125b328b10b973d3eb08d753d",
+      "size_bytes": 2821
+    },
     "aria-at/radiogroup-roving-tabindex/css/radio.css": {
       "sha256": "e75650d9b5b7edb347761c65dc2c8e962296f06b3e6715751615b953a8147cf2",
       "size_bytes": 1816
@@ -8200,6 +8228,146 @@
       }
     },
     {
+      "scenario_id": "2350-aria-link-css-nav-forwards-to-link-u-vc",
+      "fixture": "aria-at/link-css/link-css.setFocusBeforeLink.html",
+      "evidence": {
+        "sha256": "2218d8d2589c87e4b5be4b3390302eb45dc5dfc2a80439c646870a49178ed34b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2351-aria-link-css-nav-forwards-to-link-tab-vc",
+      "fixture": "aria-at/link-css/link-css.setFocusBeforeLink.html",
+      "evidence": {
+        "sha256": "70069d5a10389d3f7403c313f8631d50d522676666095a88d2653be72225e9d2",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2352-aria-link-css-nav-forwards-to-link-down-vc",
+      "fixture": "aria-at/link-css/link-css.setFocusBeforeLink.html",
+      "evidence": {
+        "sha256": "72030904b85975f15f280d8588aa4847ce75bab1b2bc56eb3988f58ce7a6b354",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2353-aria-link-css-nav-forwards-to-link-tab-pc",
+      "fixture": "aria-at/link-css/link-css.setFocusBeforeLink.html",
+      "evidence": {
+        "sha256": "d1ef51d787bd7c0dcc854bf2d2e80fcb53d4b18023e27c45ca90dfc078c0e244",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2354-aria-link-css-nav-back-to-link-shift-u-vc",
+      "fixture": "aria-at/link-css/link-css.setFocusAfterLink.html",
+      "evidence": {
+        "sha256": "509b8022ce61150e927ed9da442bc5e9981082c2e085433bd5a8d9ec83e576a3",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2355-aria-link-css-nav-back-to-link-up-vc",
+      "fixture": "aria-at/link-css/link-css.setFocusAfterLink.html",
+      "evidence": {
+        "sha256": "303b7e86b54b42518e7cff12e18ae7d5bcee29825d5eec176f3aad9f9457592e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2356-aria-link-css-nav-back-to-link-shift-tab-vc",
+      "fixture": "aria-at/link-css/link-css.setFocusAfterLink.html",
+      "evidence": {
+        "sha256": "11a368664c80c3538544dfa7d492d97c861c31f82799316ec96f298bead249b2",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2357-aria-link-css-nav-back-to-link-shift-tab-pc",
+      "fixture": "aria-at/link-css/link-css.setFocusAfterLink.html",
+      "evidence": {
+        "sha256": "ad5569525ca39f5f10acb233bc51ea895ba9ad19a9ae352344064351bcb9087e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2358-aria-link-css-req-info-about-link-ins-tab-vc",
+      "fixture": "aria-at/link-css/link-css.setFocusOnLink.html",
+      "evidence": {
+        "sha256": "76025961cabdf4bf56b91feea31b6104c6cf116671b7a3736a845a8e459411dd",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2359-aria-link-css-req-info-about-link-ins-up-vc",
+      "fixture": "aria-at/link-css/link-css.setFocusOnLink.html",
+      "evidence": {
+        "sha256": "4224f48cacee6e49d0dae0fd15c7fd4280ebebcc8cf2e3e210b8626981174c79",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "236-web-list-graphics",
       "fixture": "news-article.html",
       "evidence": {
@@ -8210,6 +8378,34 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2360-aria-link-css-req-info-about-link-ins-tab-pc",
+      "fixture": "aria-at/link-css/link-css.setFocusOnLink.html",
+      "evidence": {
+        "sha256": "dff56fdc7954783757580d1bf053ea831eab1ece648b66ed93d8ffe7ad70fad5",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2361-aria-link-css-req-info-about-link-ins-up-pc",
+      "fixture": "aria-at/link-css/link-css.setFocusOnLink.html",
+      "evidence": {
+        "sha256": "1405f7bb10ffd066ab3c6e42aa6b23e5fbb65b284ba2b1e300baf0a8f4a2a0bd",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -16041,10 +16237,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1092,
-    "scenarios_with_evidence": 1092,
-    "total_trials": 3282,
-    "successful_trials": 3265,
-    "deterministic_scenarios": 820
+    "scenarios": 1104,
+    "scenarios_with_evidence": 1104,
+    "total_trials": 3318,
+    "successful_trials": 3301,
+    "deterministic_scenarios": 832
   }
 }
