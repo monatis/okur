@@ -78,3 +78,8 @@
   rounds whose `batch.log` does not exist yet: a round's batch runs inside its `queue-batch`
   process, so stopping a started one stops its batch mid-scenario, and a PC cursor scenario
   cut off may leave JAWS's virtual cursor off (queue the next round with `-FreshJaws`).
+- **Which round a queue process is**: its command line names two rounds, the one it waits for
+  (`-After`) and its own (`-OutputDir`). Take the round from `-OutputDir`: a filter that took
+  the first round named left the old aria18 waiter (after round-aria17) beside the new one
+  (after the probe), and aria18 would have run beside the probe (2026-10-31). After any
+  requeue, list the waiting processes with their `-After` and check each round has one.
