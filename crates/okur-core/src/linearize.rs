@@ -950,11 +950,16 @@ impl<'a> Builder<'a> {
             }
             Class::Separator => {
                 self.flush();
-                let speech = format!(
-                    "{SEPARATOR_LINE}{}",
-                    role_marker(msg::role_separator().as_str())
-                );
-                let off = self.emit(node.id, node.role.clone(), SEPARATOR_LINE, speech);
+                // A named one is read by its name: "End of Example separator" [obs,
+                // round-aria40, 3138/s1]; a rule without one as its dashes.
+                let name = node.name.as_deref().map(squash).unwrap_or_default();
+                let text = if name.is_empty() {
+                    SEPARATOR_LINE.to_owned()
+                } else {
+                    name
+                };
+                let speech = format!("{text}{}", role_marker(msg::role_separator().as_str()));
+                let off = self.emit(node.id, node.role.clone(), &text, speech);
                 self.buffer.separators.push(off);
             }
             Class::Control => self.visit_control(node),
