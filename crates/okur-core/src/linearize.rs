@@ -901,9 +901,16 @@ impl<'a> Builder<'a> {
                     .role(level)
                     .map(|role| role_marker(&role))
                     .unwrap_or_default();
+                // Its description follows its text: "heading level 2 Shipping options Orders
+                // over fifty dollars ship free." [obs, 1129/s5].
+                let description = attr(node, "description")
+                    .map(squash)
+                    .filter(|d| !d.is_empty() && button.is_none())
+                    .map(|d| format!(" {d}"))
+                    .unwrap_or_default();
                 let speech = match button {
                     Some(_) => format!("{text}{role}{suffix}"),
-                    None => format!("{role}{text}{suffix}"),
+                    None => format!("{role}{text}{suffix}{description}"),
                 };
                 // Its focus and its quick keys say the heading after its name too.
                 if let Some(button) = button {
@@ -1068,7 +1075,17 @@ impl<'a> Builder<'a> {
         } else {
             String::new()
         };
-        let speech = format!("{prefix}{visited}{}{current}{text}", role_marker(kind));
+        // Its description follows its text: "same page link Skip ahead Jumps to the end of
+        // the page" [obs, 1129/s10].
+        let description = attr(node, "description")
+            .map(squash)
+            .filter(|d| !d.is_empty())
+            .map(|d| format!(" {d}"))
+            .unwrap_or_default();
+        let speech = format!(
+            "{prefix}{visited}{}{current}{text}{description}",
+            role_marker(kind)
+        );
         let line_text = squash(&format!("{prefix} {text}"));
         let line_start = self.emit(node.id, node.role.clone(), &line_text, speech);
         // A list item's bullet is not the link's: the link starts after it and its space,
@@ -1299,6 +1316,15 @@ impl<'a> Builder<'a> {
                 }
                 if node.states.disabled {
                     s.push_str(&state_marker(msg::state_unavailable().as_str()));
+                }
+                // Its description after it: "Delete account Button | This cannot be undone."
+                // [obs, 1129/s7].
+                if let Some(description) = attr(node, "description")
+                    .map(squash)
+                    .filter(|d| !d.is_empty())
+                {
+                    s.push('\n');
+                    s.push_str(&description);
                 }
                 s
             }

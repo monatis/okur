@@ -1089,7 +1089,20 @@ impl ScreenReaderEngine {
                 } else {
                     String::new()
                 };
-                if let Some(title) = self.cursor.buffer.document_title() {
+                // A first focus inside a dialog says the dialog and its description, not the
+                // page: "Address Added dialog | The address you provided has been added. | OK
+                // Button" [obs, 1129/s13].
+                let dialog = target_id.and_then(|id| {
+                    self.cursor
+                        .buffer
+                        .ancestors(id)
+                        .into_iter()
+                        .find(|n| matches!(n.role, Role::Dialog | Role::AlertDialog))
+                        .and_then(SpeechFormatter::container_entered)
+                });
+                if let Some(dialog) = dialog {
+                    speech = speech.map(|s| format!("{dialog}{s}"));
+                } else if let Some(title) = self.cursor.buffer.document_title() {
                     speech = speech.map(|s| format!("{title}\n{regions}{s}"));
                 }
                 // An element list's Enter moved the virtual cursor into named groups: they are
