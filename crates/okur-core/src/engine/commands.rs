@@ -1074,8 +1074,11 @@ impl ScreenReaderEngine {
                 }
                 return said.trim().to_owned();
             }
-            // A tab by its name, role and selection, without its place: "Maria Ahlefeldt Tab
-            // selected" [obs, round-aria18, 2511/s1, 2515/s1].
+            // A tab by its name, role, selection and place: "Maria Ahlefeldt Tab selected | 1 of
+            // 4". JAWS leaves the place out here [obs, round-aria18, 2511/s1, 2515/s1], as a
+            // newer JAWS (2025.2508, ARIA-AT's reports) does, where ARIA-AT's tabs plans ask
+            // for it (SHOULD) and the virtual cursor's Insert+Up says it (the owner's rule for
+            // the web, 2026-11-01).
             if node.role == crate::aom::Role::Tab {
                 let name = node.name.as_deref().unwrap_or_default().trim();
                 let mut said = format!(
@@ -1087,7 +1090,20 @@ impl ScreenReaderEngine {
                         msg::state_selected().as_str(),
                     ));
                 }
-                return said.trim().to_owned();
+                let mut said = said.trim().to_owned();
+                if let Some(tab) = self
+                    .cursor
+                    .buffer
+                    .tabs
+                    .iter()
+                    .find(|t| t.node_id == node.id)
+                {
+                    said.push('\n');
+                    said.push_str(
+                        &msg::position(tab.index.to_string(), tab.total.to_string()).render(),
+                    );
+                }
+                return said;
             }
             // A link as its focus says it, name first: "W3C website Link" [obs, round-aria13,
             // 2361/s1].

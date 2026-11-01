@@ -1301,6 +1301,24 @@ divergences! {
      collapsed\".",
     "the owner's rule for the web: Okur conveys what ARIA-AT asks, 2026-11-01";
 
+    Difference::OkurAlsoSays("1 of 4") => [
+        "2511-aria-tabs-manual-activation-req-info-about-tab-tab-list-ins-up-pc/s1",
+        "2553-aria-tabs-automatic-activation-req-info-about-tab-tab-list-ins-up-pc/s1",
+    ],
+    "Insert+Up on a focused tab, the virtual cursor off: JAWS says its name, role and \
+     selection without its place, \"Maria Ahlefeldt Tab selected\" [obs, round-aria18, \
+     round-aria19], as a newer JAWS (2025.2508.120, ARIA-AT's reports) does. ARIA-AT's tabs \
+     plans ask for the place (SHOULD), which JAWS says with the virtual cursor on: Okur says \
+     it.",
+    "the owner's rule for the web: Okur conveys what ARIA-AT asks, 2026-11-01";
+
+    Difference::OkurAlsoSays("2 of 4") => [
+        "2515-aria-tabs-manual-activation-req-info-about-not-selected-tab-tab-list-ins-up-pc/s1",
+        "2557-aria-tabs-automatic-activation-req-info-about-not-selected-tab-tab-list-ins-up-pc/s1",
+    ],
+    "The same for a tab that is not selected: see the entry above.",
+    "the owner's rule for the web: Okur conveys what ARIA-AT asks, 2026-11-01";
+
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
     ],

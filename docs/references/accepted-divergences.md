@@ -1384,12 +1384,28 @@ A step can be in more than one entry; all of its entries apply.
   ARIA-AT's reports) does the same. ARIA-AT's menu button plans ask for the state (SHOULD).
 - Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
 
+### A tab's place on the PC cursor's Insert+Up
+
+- Steps: `2511-aria-tabs-manual-activation-req-info-about-tab-tab-list-ins-up-pc/s1`,
+  `2515-aria-tabs-manual-activation-req-info-about-not-selected-tab-tab-list-ins-up-pc/s1`,
+  `2553-aria-tabs-automatic-activation-req-info-about-tab-tab-list-ins-up-pc/s1`,
+  `2557-aria-tabs-automatic-activation-req-info-about-not-selected-tab-tab-list-ins-up-pc/s1`.
+- Difference: Okur also says the tab's place, "1 of 4", after it.
+- Why: Insert+Up on a focused tab with the virtual cursor off, JAWS says "Maria Ahlefeldt Tab
+  selected" without the place [obs, round-aria18, round-aria19], as a newer JAWS (2025.2508.120,
+  ARIA-AT's reports) does; with the virtual cursor on it says the place. ARIA-AT's tabs plans ask
+  for it (SHOULD).
+- Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
+
 ## Considered and not accepted
 
 - From a newer JAWS (2025.2508.120, ARIA-AT's reports), not followed: Insert+Up on a menu
   button without its state (JAWS 2025.2505 says it, and ARIA-AT asks for it), and a radio
   button's hint with the virtual cursor on (before the group in some of the reports' outputs,
   after it in others; on old-pc's forms pages JAWS says none).
+
+- A tab list's role, "tab list", and a tab's "not selected" (ARIA-AT, MAY): JAWS calls the list
+  a group and says only "selected"; Okur keeps its words.
 
 - A menu item's role, "menu item" (ARIA-AT, SHOULD on Insert+Tab and Insert+Up): JAWS has no
   such word; it names the menu, "Actions menu | Action 1 | 1 of 4", and Okur keeps its
