@@ -1524,6 +1524,18 @@ divergences! {
      leaves item states out.",
     "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
 
+    Difference::Step => [
+        "3109-aria-meter-t1-down-vc/s1",
+        "3110-aria-meter-t3-up-vc/s1",
+        "3111-aria-meter-t5-ins-tab-vc/s1",
+        "3112-aria-meter-t5-ins-up-vc/s1",
+    ],
+    "An ARIA meter: JAWS reads no line for it, Down and Up passing from the link before it to \
+     the link after it, and Insert+Tab and Insert+Up on the meter the page focused say the link \
+     JAWS last knew [obs, round-aria38], where ARIA-AT's meter plan requires its role, name and \
+     value (MUST). Okur reads it, \"Central Processing Unit (CPU) Usage meter 36.1665\".",
+    "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
+
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
     ],

@@ -1529,6 +1529,16 @@ A step can be in more than one entry; all of its entries apply.
   combo box plan requires it (MUST). Verbosity without item states leaves it out (738).
 - Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
 
+### An ARIA meter read
+
+- Steps: `3109-aria-meter-t1-down-vc/s1`, `3110-aria-meter-t3-up-vc/s1`,
+  `3111-aria-meter-t5-ins-tab-vc/s1`, `3112-aria-meter-t5-ins-up-vc/s1` (whole steps).
+- Difference: Okur reads the meter, "Central Processing Unit (CPU) Usage meter 36.1665".
+- Why: JAWS reads no line for an ARIA meter: Down and Up pass from the link before it to the
+  link after it, and Insert+Tab and Insert+Up on the meter the page focused say the link JAWS
+  last knew [obs, round-aria38]. ARIA-AT's meter plan requires its role, name and value (MUST).
+- Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
+
 ## Considered and not accepted
 
 - From a newer JAWS (2025.2508.120, ARIA-AT's reports), not followed: Insert+Up on a menu
