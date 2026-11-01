@@ -204,8 +204,10 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   row; Shift+Insert+Up, Home and PageUp read the row whole, from its start or to its end, and
   Ctrl+Insert with the same keys the column. Insert+Shift+F lists the cells with formulas,
   Insert+Shift+C the column's cells, Insert+Shift+R the row's and Ctrl+Shift+S the worksheets,
-  and OK goes there. Insert+Ctrl+Alt+C and R set a row as the column titles and a column as the
-  row titles, which are then said on entering another column or row, and Insert+F says the
+  and OK goes there; Ctrl+Shift+D lists the visible cells with data. Insert+Ctrl+Alt+C and R set
+  a row as the column titles and a column as the row titles, or the workbook's names give them
+  ("Title", "ColumnTitle", "RowTitle"), and they are said on entering another column or row;
+  Insert+NumPad Enter and Insert+Delete read the column's and the row's total, and Insert+F the
   cell's font and formatting.
   Selecting with Shift and the arrows says the cells added, Shift+Space and Ctrl+Space the
   whole row or column. An empty cell is "blank" with its coordinates; typing in a cell, Delete
@@ -314,8 +316,8 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- Outlook, not yet supported; in Excel, totals, titles kept across sessions, monitor cells,
-  comments, the list of visible cells with data and the rest of JAWS's Excel keys;
+- Outlook, not yet supported; in Excel, titles kept across sessions, monitor cells, comments and
+  the rest of JAWS's Excel keys;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;
