@@ -85,6 +85,11 @@ Headings: "trace_headings": true saves, with -TraceDir, the headings of Word's d
 fixture's window, the view it shows it in, its paragraphs and its links after each step
 (okur-lab document-headings), to the same file: replay gives them to Okur's Heading List, Say
 Window Title, Say All and Links List in Word.
+JAWS's own files: "jaws_forget" names files under JAWS's user settings folder (Settings\enu)
+that each trial starts without, and the scenario leaves behind none of: JAWS keeps Excel's
+titles per workbook in its personalized settings for the file, which a trial writes and the
+next would start with. They are removed with JAWS stopped, which keeps them loaded otherwise,
+and JAWS is started again; they are never read into the evidence.
 Files: "trace_file": true saves, with -TraceDir, what Okur's recognizer reads in the file
 selected in the fixture's File Explorer window after each step (okur-lab file-text), to the same
 file: replay gives it to Okur's Insert+Space, O, F. Such a fixture's launch has "shell_window":
@@ -408,6 +413,29 @@ function Invoke-JawsProcess([switch]$Stop, [switch]$Start) {
     $p = Start-Process powershell -Verb RunAs -WindowStyle Hidden -PassThru -ArgumentList $helperArgs
     if ($p) { [void]$p.WaitForExit(60000) }
 }
+
+# Removes the files of "jaws_forget" that exist, under JAWS's user settings folder, with JAWS
+# stopped (it keeps them loaded while it runs), then starts JAWS again and waits for it as
+# run-batch.ps1 does.
+function Reset-JawsFiles([string[]]$names) {
+    $root = Join-Path $env:APPDATA 'Freedom Scientific\JAWS\2025\Settings\enu'
+    $found = @($names | Where-Object { $_ } | ForEach-Object { Join-Path $root $_ } |
+        Where-Object { Test-Path -LiteralPath $_ })
+    if ($found.Count -eq 0) { return }
+    Invoke-JawsProcess -Stop
+    Start-Sleep -Seconds 3
+    $found | ForEach-Object { Remove-Item -LiteralPath $_ -Force }
+    Invoke-JawsProcess -Start
+    for ($i = 0; $i -lt 30 -and -not (Get-Process jfw -ErrorAction SilentlyContinue); $i++) {
+        Start-Sleep -Seconds 1
+    }
+    Start-Sleep -Seconds 15
+    $jfw = Get-Process jfw -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($jfw) { $script:JawsPid = [uint32]$jfw.Id }
+    if ($Reader -ne 'okur') { $script:jaws = New-Object -ComObject "FreedomSci.JawsApi" }
+}
+$jawsForget = @()
+if ($scenario.PSObject.Properties.Name -contains 'jaws_forget') { $jawsForget = @($scenario.jaws_forget) }
 
 $okurRun = $null
 if ($Reader -eq 'okur') {
@@ -1102,6 +1130,8 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         trial_success = $true
     }
 
+    # JAWS's own files the trial starts without, before its trace starts.
+    if ($jawsForget.Count -gt 0) { Reset-JawsFiles $jawsForget }
     # A desktop trial puts the browser's windows away before its trace starts: one left in front
     # by a web scenario reached the trace with its title, which carries the browser profile's
     # name (526, round 24). A second lets the minimizing's events go by first (300 ms was not
@@ -1341,9 +1371,11 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     if ($Reader -eq 'okur') { Invoke-JawsProcess -Start }
 }
 
-# Close what this run opened: the desktop fixture app, or the browser tab.
+# Close what this run opened: the desktop fixture app, or the browser tab. The fixture closes
+# before JAWS's own files of "jaws_forget" go, so that its last trial writes none after.
 if ($launch) {
     Stop-DesktopFixture
+    if ($jawsForget.Count -gt 0) { Reset-JawsFiles $jawsForget }
 } else {
     Focus-Target $targetProc
     [void](Send-Chord "Ctrl+W")
