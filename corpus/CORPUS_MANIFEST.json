@@ -365,6 +365,94 @@
       "sha256": "f71e2ac605bdc457aa03f68997f221d59e262b9ae39b9b11965ca4d54a4584db",
       "size_bytes": 3097
     },
+    "aria-at/complementary/complementary.html": {
+      "sha256": "b3c03d55b771cee64c85e77691bc61e2ab930960625132682e3c43c4637b5539",
+      "size_bytes": 2188
+    },
+    "aria-at/complementary/complementary.setFocusAfterComplementary.html": {
+      "sha256": "e1f809c818d6f6108b11f2d06ed7f6b7534f8b1cc28870311f8eaaf2609b2219",
+      "size_bytes": 3072
+    },
+    "aria-at/complementary/complementary.setFocusBeforeComplementary.html": {
+      "sha256": "b879c6539bcc192ae5f9b544ce99335ca805c929168abd6d8b127d98027a1ad0",
+      "size_bytes": 3075
+    },
+    "aria-at/complementary/complementary.setFocusOnBottomLink.html": {
+      "sha256": "98926220eafa27ad9a899088fe333ebc7d30d85b8aa3a20a41d9c445f12bb92e",
+      "size_bytes": 3041
+    },
+    "aria-at/complementary/complementary.setFocusOnTopLink.html": {
+      "sha256": "2a6954618cfc108b621bcb9497878e653fc00c14fc675948d2b589e61d073c9e",
+      "size_bytes": 3032
+    },
+    "aria-at/complementary/css/bootstrap-accessibility.css": {
+      "sha256": "f67f3ab8999c6ee40e319f44995c5e4beb1148128fea5d940a21b2200385833f",
+      "size_bytes": 977
+    },
+    "aria-at/complementary/css/bootstrap-theme.css": {
+      "sha256": "3226f2443c214b02805b30d01727e8ed280e2de37eaa1143a40942b306c87818",
+      "size_bytes": 22608
+    },
+    "aria-at/complementary/css/bootstrap.css": {
+      "sha256": "1db1ff31a314c1368d069cc61aee8f1fd2453f40ad1bf98ec63c14206b4bf396",
+      "size_bytes": 140915
+    },
+    "aria-at/complementary/css/common.css": {
+      "sha256": "2eabbb8ac9dd6c64238e8c001ef547a2795194a6d9ae9be08955da7b3e3ecbea",
+      "size_bytes": 2224
+    },
+    "aria-at/complementary/css/visua11y.css": {
+      "sha256": "7f140e8ac2f2999c7d4f2016f0e551b79a4221059d4f4c2b47f02f5681a75e56",
+      "size_bytes": 1184
+    },
+    "aria-at/complementary/images/landmarks-jaws.png": {
+      "sha256": "c431e73b481b8114b5fcddac85bf3436eaea08dc7b871fd038860916d87a4d01",
+      "size_bytes": 108670
+    },
+    "aria-at/complementary/images/landmarks-nvda.png": {
+      "sha256": "f9402b8d2bb80378ce4fe205a35a60bf5182d3c7e9185b4f891ec9d4fd754f6f",
+      "size_bytes": 219023
+    },
+    "aria-at/complementary/images/landmarks-orca.png": {
+      "sha256": "5f9cc1e6448cd350d0d257b014a56072252e75d6ef816cb56d1a0b96cd54dc5d",
+      "size_bytes": 219017
+    },
+    "aria-at/complementary/images/landmarks-skipto.png": {
+      "sha256": "e8c681e663b3919c81545fbd63cc1eea06b7deb79e2d01bd4cc65092ac0f73ee",
+      "size_bytes": 193199
+    },
+    "aria-at/complementary/images/landmarks-vo.png": {
+      "sha256": "408ac5e50e87a881b69f0dbcf7e2f6aa30848250d922f1ba9edda2b9b6eff6e5",
+      "size_bytes": 429475
+    },
+    "aria-at/complementary/images/w3c.png": {
+      "sha256": "fb33bfb1ddde9a7168b0c6838c6a71885725988d15e98ea51c80fdc69c49e0de",
+      "size_bytes": 2769
+    },
+    "aria-at/complementary/js/bootstrap-accessibility-2.js": {
+      "sha256": "56ad12ee909d53ef27d0ba1064e59071c7c0e7f28c8b1ab422fa223e0265f6be",
+      "size_bytes": 806
+    },
+    "aria-at/complementary/js/bootstrap-accessibility.min.js": {
+      "sha256": "f27f5855daa0d5a9ab6577f130e45df472f5566ddad81c8458bbf17fb5eeb579",
+      "size_bytes": 9649
+    },
+    "aria-at/complementary/js/bootstrap.min.js": {
+      "sha256": "c8eeec83fe8bf655eeeda291466d268770436dde4e3e40416a85d05d3893e892",
+      "size_bytes": 35452
+    },
+    "aria-at/complementary/js/jquery-2.1.1.min.js": {
+      "sha256": "874706b2b1311a0719b5267f7d1cf803057e367e94ae1ff7bf78c5450d30f5d4",
+      "size_bytes": 84245
+    },
+    "aria-at/complementary/js/show.js": {
+      "sha256": "30b3e23b1a32586fdd3110caec5206935779a3769418b5c6b0c514fd2cfca824",
+      "size_bytes": 1312
+    },
+    "aria-at/complementary/js/visua11y.js": {
+      "sha256": "590e3fa610ad5ee02694fe7abdc58aa63107d0a69bc75cbbd22273f3d30958d8",
+      "size_bytes": 47786
+    },
     "aria-at/disclosure-faq/css/disclosure-card.css": {
       "sha256": "4683aa7cd2469f8cdd48c95a7a22b5717e92b83c350a1b2c2665161a505d83fc",
       "size_bytes": 6029
@@ -19154,11 +19242,179 @@
       }
     },
     {
+      "scenario_id": "3018-aria-complementary-t1-r-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusBeforeComplementary.html",
+      "evidence": {
+        "sha256": "28ea4fd52dda18c634cb8bb704e12be69ec3a6207ec1d2cc088641e190fe4027",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3019-aria-complementary-t1-down-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusBeforeComplementary.html",
+      "evidence": {
+        "sha256": "06adf13917dd0276ae1dbc8de3e09a28c3a78d92218a77f63bebadccb8ee442d",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "302-desktop-menu-bar",
       "fixture": "desktop-forms.ps1",
       "evidence": {
         "sha256": "983942a6211a19cf78a31e0ab032e0138566173f9efde7a180e5c68c0ac2f421",
         "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3020-aria-complementary-t1-tab-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusBeforeComplementary.html",
+      "evidence": {
+        "sha256": "78866e9ec33b540ce46e5f6d7cefc6ff8e416e9c8896c25545e6f497071753b5",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3021-aria-complementary-t1-u-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusBeforeComplementary.html",
+      "evidence": {
+        "sha256": "6dbd5f62aa4694f0cbb2286ccb787255840926515bbdae02516589240369207e",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3022-aria-complementary-t2-tab-pc",
+      "fixture": "aria-at/complementary/complementary.setFocusBeforeComplementary.html",
+      "evidence": {
+        "sha256": "e8423bdb10de219c27dd329210c2693d1b6a8c6c179447fab00ecd631ac8ec18",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3023-aria-complementary-t4-up-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusAfterComplementary.html",
+      "evidence": {
+        "sha256": "65d58af102a9bae3de441b5d5758738f656fd843a0e9d890f5395d601628ce40",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3024-aria-complementary-t4-shift-tab-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusAfterComplementary.html",
+      "evidence": {
+        "sha256": "a054fb82be39cd0aac37ab52a28bef19921855b411219ceb2fa9d6069b405947",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3025-aria-complementary-t4-shift-u-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusAfterComplementary.html",
+      "evidence": {
+        "sha256": "a70740e95ac6ee31766e4b70577c3fecc9dbfc524b671fc8b328a8528c501667",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3026-aria-complementary-t5-shift-tab-pc",
+      "fixture": "aria-at/complementary/complementary.setFocusAfterComplementary.html",
+      "evidence": {
+        "sha256": "7eb7322d9121773e057a924a1169ca353606d3ae14b98398c52c0d5e5db0c8bc",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3027-aria-complementary-t7-down-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusOnBottomLink.html",
+      "evidence": {
+        "sha256": "6922f024956feed039f08f39f17a30d3b052ef43a1d9a9a46af57c780c175f64",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3028-aria-complementary-t7-u-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusOnBottomLink.html",
+      "evidence": {
+        "sha256": "488c3d35f3748cee9adc5d1d9518ff2cb858e55015f1debe1db81274ceba5e3f",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3029-aria-complementary-t7-tab-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusOnBottomLink.html",
+      "evidence": {
+        "sha256": "9341c951a1cf8560621122f13cc61b8c33fe81927dd28cf014b04960f361d364",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -19182,6 +19438,146 @@
       }
     },
     {
+      "scenario_id": "3030-aria-complementary-t8-tab-pc",
+      "fixture": "aria-at/complementary/complementary.setFocusOnBottomLink.html",
+      "evidence": {
+        "sha256": "8903d94274371740426727c893556fe51b8710b75c2b0d68e8156d5791bbcfbf",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3031-aria-complementary-t10-up-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusOnTopLink.html",
+      "evidence": {
+        "sha256": "08b9245e7b38425f722d0bbad3acf80fd49b3d8295d939536361c1bcfc11c8d1",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3032-aria-complementary-t10-shift-u-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusOnTopLink.html",
+      "evidence": {
+        "sha256": "23dad0be1b27925b67ed57f5ee4f17b89eb42c4ca5e4e2b8cad69e77cf040003",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3033-aria-complementary-t10-shift-tab-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusOnTopLink.html",
+      "evidence": {
+        "sha256": "b73f035216b2f81a933caea0d491a7b052825cff9482aa7f436dfc2e5ee209d6",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3034-aria-complementary-t11-shift-tab-pc",
+      "fixture": "aria-at/complementary/complementary.setFocusOnTopLink.html",
+      "evidence": {
+        "sha256": "0fcb631625780c5490fa3b5113cf2154a1bc38748472f439677c65a7b77e2fe2",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3035-aria-complementary-t13-h-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusBeforeComplementary.html",
+      "evidence": {
+        "sha256": "31135ec8ca3f0fd65a21d3c843948f38d309159924df3e6a40c3b36ee1710bc6",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3036-aria-complementary-t13-two-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusBeforeComplementary.html",
+      "evidence": {
+        "sha256": "3cd5e00d9b8982c84ef165dd92dd70e4e515b4fe81367621c3ca60a9f3cb80a6",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3037-aria-complementary-t15-shift-h-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusAfterComplementary.html",
+      "evidence": {
+        "sha256": "249226c00b53b31e90e4af1313f4c24e5129ddbfa0d2c47325a2e8b001cb55a1",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3038-aria-complementary-t15-shift-two-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusAfterComplementary.html",
+      "evidence": {
+        "sha256": "fc81731360fde42e5eff00f8b8b3d155f468ceb97a4845294631cc45aeee8178",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3039-aria-complementary-t17-l-down-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusBeforeComplementary.html",
+      "evidence": {
+        "sha256": "fcb98da57060c58efc149de6c4c43d2775b8205659d9aba93a457264844e1fe2",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "304-desktop-state-changes",
       "fixture": "desktop-forms.ps1",
       "evidence": {
@@ -19192,6 +19588,34 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3040-aria-complementary-t17-i-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusBeforeComplementary.html",
+      "evidence": {
+        "sha256": "82d41bde5e5d464eed4a4757fd010a0f23b5f8f9bb0544cce964deec5a005efa",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3041-aria-complementary-t19-shift-l-down-vc",
+      "fixture": "aria-at/complementary/complementary.setFocusAfterComplementary.html",
+      "evidence": {
+        "sha256": "fb1d3ef0628fbea7294e3a7eace62975bf96ce5647e27791fb3a6946b1a74df0",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -25987,10 +26411,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1731,
-    "scenarios_with_evidence": 1731,
-    "total_trials": 5199,
-    "successful_trials": 5182,
-    "deterministic_scenarios": 1429
+    "scenarios": 1755,
+    "scenarios_with_evidence": 1755,
+    "total_trials": 5271,
+    "successful_trials": 5254,
+    "deterministic_scenarios": 1453
   }
 }

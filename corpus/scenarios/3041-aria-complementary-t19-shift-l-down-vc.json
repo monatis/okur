@@ -1,0 +1,64 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'complementary' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name 'Landmarks' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Role 'list' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Number of items in the list (6) is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "Name of first list item, 'Banner', is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "SHIFT_L,DOWN",
+    "instructions": "With the reading cursor on the 'Navigate backwards from here' link, navigate to the list.",
+    "plan": "apg/complementary",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "19"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/complementary/complementary.setFocusAfterComplementary.html",
+  "id": "3041-aria-complementary-t19-shift-l-down-vc",
+  "name": "ARIA-AT, Complementary Landmark: Navigate backwards to a list inside a complementary landmark in reading mode; Shift+L in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+L",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Down",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

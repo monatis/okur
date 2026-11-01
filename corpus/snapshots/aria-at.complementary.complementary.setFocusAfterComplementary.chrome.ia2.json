@@ -1,0 +1,1770 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Complementary Landmark Example - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "e1f809c818d6f6108b11f2d06ed7f6b7534f8b1cc28870311f8eaaf2609b2219",
+    "captured_at_unix_ms": 1793519405081,
+    "node_count": 45,
+    "capture_ms": 302
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Complementary Landmark Example",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/complementary/complementary.setFocusAfterComplementary.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -233045,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 2,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(51,51,51)",
+          "font-family": "Arial",
+          "font-size": "13.5pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1060,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -232990,
+        "attributes": {
+          "class": "col-xs-12 col-sm-12 col-md-3 col-lg-3",
+          "display": "block",
+          "tag": "div",
+          "text-align": "left"
+        },
+        "text": "￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(51,122,183)",
+              "font-family": "Arial",
+              "font-size": "13.5pt"
+            }
+          },
+          {
+            "start": 1,
+            "end": 2,
+            "attributes": {
+              "background-color": "rgb(244,244,244)",
+              "color": "rgb(51,51,51)",
+              "font-family": "Arial",
+              "font-size": "13.5pt"
+            }
+          },
+          {
+            "start": 2,
+            "end": 3,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(35,82,124)",
+              "font-family": "Arial",
+              "font-size": "13.5pt",
+              "text-underline-style": "solid"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 30,
+            "ia2_role": 30,
+            "name": "Navigate forwards from here",
+            "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/complementary/complementary.setFocusAfterComplementary.html#beforelink",
+            "msaa_states": 5242880,
+            "ia2_states": 1024,
+            "unique_id": -232997,
+            "attributes": {
+              "display": "inline",
+              "id": "beforelink",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "text": "Navigate forwards from here",
+            "lines": [
+              [
+                0,
+                23
+              ],
+              [
+                23,
+                27
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 27,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(51,122,183)",
+                  "font-family": "Arial",
+                  "font-size": "13.5pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Navigate forwards from here",
+                "msaa_states": 4194304,
+                "ia2_states": 1024,
+                "unique_id": -233024,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Navigate forwards from here",
+                "lines": [
+                  [
+                    0,
+                    23
+                  ],
+                  [
+                    23,
+                    27
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 27,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(51,122,183)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1069,
+            "name": "Landmarks",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -232982,
+            "attributes": {
+              "display": "block",
+              "explicit-name": "true",
+              "name-from": "related-element",
+              "tag": "aside",
+              "text-align": "left",
+              "xml-roles": "complementary"
+            },
+            "text": "￼￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(244,244,244)",
+                  "color": "rgb(51,122,183)",
+                  "font-family": "Arial",
+                  "font-size": "13.5pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(244,244,244)",
+                  "color": "rgb(51,51,51)",
+                  "font-family": "Arial",
+                  "font-size": "18pt"
+                }
+              },
+              {
+                "start": 2,
+                "end": 4,
+                "attributes": {
+                  "background-color": "rgb(244,244,244)",
+                  "color": "rgb(51,51,51)",
+                  "font-family": "Arial",
+                  "font-size": "13.5pt"
+                }
+              },
+              {
+                "start": 4,
+                "end": 5,
+                "attributes": {
+                  "background-color": "rgb(244,244,244)",
+                  "color": "rgb(51,122,183)",
+                  "font-family": "Arial",
+                  "font-size": "13.5pt",
+                  "text-underline-style": "solid"
+                }
+              }
+            ],
+            "relations": {
+              "labelledBy": [
+                -232998
+              ]
+            },
+            "children": [
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "Top",
+                "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/complementary/complementary.setFocusAfterComplementary.html#top",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -233015,
+                "attributes": {
+                  "display": "inline",
+                  "id": "top",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "Top",
+                "lines": [
+                  [
+                    0,
+                    3
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 3,
+                    "attributes": {
+                      "background-color": "rgb(244,244,244)",
+                      "color": "rgb(51,122,183)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Top",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -233038,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Top",
+                    "lines": [
+                      [
+                        0,
+                        3
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 3,
+                        "attributes": {
+                          "background-color": "rgb(244,244,244)",
+                          "color": "rgb(51,122,183)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Landmarks",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -232998,
+                "attributes": {
+                  "display": "block",
+                  "id": "id4",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Landmarks",
+                "lines": [
+                  [
+                    0,
+                    9
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 9,
+                    "attributes": {
+                      "background-color": "rgb(244,244,244)",
+                      "color": "rgb(51,51,51)",
+                      "font-family": "Arial",
+                      "font-size": "18pt"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelFor": [
+                    -232982
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Landmarks",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -233001,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Landmarks",
+                    "lines": [
+                      [
+                        0,
+                        9
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 9,
+                        "attributes": {
+                          "background-color": "rgb(244,244,244)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "18pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -233004,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "The following landmarks are defined on this page:",
+                "lines": [
+                  [
+                    0,
+                    24
+                  ],
+                  [
+                    24,
+                    44
+                  ],
+                  [
+                    44,
+                    49
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 49,
+                    "attributes": {
+                      "background-color": "rgb(244,244,244)",
+                      "color": "rgb(51,51,51)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "The following landmarks are defined on this page:",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -233005,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "The following landmarks are defined on this page:",
+                    "lines": [
+                      [
+                        0,
+                        24
+                      ],
+                      [
+                        24,
+                        44
+                      ],
+                      [
+                        44,
+                        49
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 49,
+                        "attributes": {
+                          "background-color": "rgb(244,244,244)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 33,
+                "ia2_role": 33,
+                "msaa_states": 64,
+                "ia2_states": 1024,
+                "unique_id": -233031,
+                "attributes": {
+                  "display": "block",
+                  "setsize": "6",
+                  "tag": "ul",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  0,
+                  6,
+                  0
+                ],
+                "text": "￼￼￼￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ],
+                  [
+                    3,
+                    4
+                  ],
+                  [
+                    4,
+                    5
+                  ],
+                  [
+                    5,
+                    6
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 6,
+                    "attributes": {
+                      "background-color": "rgb(244,244,244)",
+                      "color": "rgb(51,51,51)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "unique_id": -233021,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "1",
+                      "setsize": "6",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      6,
+                      1
+                    ],
+                    "text": "• Banner",
+                    "lines": [
+                      [
+                        0,
+                        8
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 8,
+                        "attributes": {
+                          "background-color": "rgb(244,244,244)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -233016,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 2,
+                            "attributes": {
+                              "background-color": "rgb(244,244,244)",
+                              "color": "rgb(51,51,51)",
+                              "font-family": "Arial",
+                              "font-size": "13.5pt"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Banner",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -232975,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Banner",
+                        "lines": [
+                          [
+                            0,
+                            6
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 6,
+                            "attributes": {
+                              "background-color": "rgb(244,244,244)",
+                              "color": "rgb(51,51,51)",
+                              "font-family": "Arial",
+                              "font-size": "13.5pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "unique_id": -233026,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "2",
+                      "setsize": "6",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      6,
+                      2
+                    ],
+                    "text": "• Complementary",
+                    "lines": [
+                      [
+                        0,
+                        15
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 15,
+                        "attributes": {
+                          "background-color": "rgb(244,244,244)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -232984,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 2,
+                            "attributes": {
+                              "background-color": "rgb(244,244,244)",
+                              "color": "rgb(51,51,51)",
+                              "font-family": "Arial",
+                              "font-size": "13.5pt"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Complementary",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -232993,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Complementary",
+                        "lines": [
+                          [
+                            0,
+                            13
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 13,
+                            "attributes": {
+                              "background-color": "rgb(244,244,244)",
+                              "color": "rgb(51,51,51)",
+                              "font-family": "Arial",
+                              "font-size": "13.5pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "unique_id": -233053,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "3",
+                      "setsize": "6",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      6,
+                      3
+                    ],
+                    "text": "• Contentinfo",
+                    "lines": [
+                      [
+                        0,
+                        13
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 13,
+                        "attributes": {
+                          "background-color": "rgb(244,244,244)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -233039,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 2,
+                            "attributes": {
+                              "background-color": "rgb(244,244,244)",
+                              "color": "rgb(51,51,51)",
+                              "font-family": "Arial",
+                              "font-size": "13.5pt"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Contentinfo",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -233048,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Contentinfo",
+                        "lines": [
+                          [
+                            0,
+                            11
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 11,
+                            "attributes": {
+                              "background-color": "rgb(244,244,244)",
+                              "color": "rgb(51,51,51)",
+                              "font-family": "Arial",
+                              "font-size": "13.5pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "unique_id": -233042,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "4",
+                      "setsize": "6",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      6,
+                      4
+                    ],
+                    "text": "• Main",
+                    "lines": [
+                      [
+                        0,
+                        6
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 6,
+                        "attributes": {
+                          "background-color": "rgb(244,244,244)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -233052,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 2,
+                            "attributes": {
+                              "background-color": "rgb(244,244,244)",
+                              "color": "rgb(51,51,51)",
+                              "font-family": "Arial",
+                              "font-size": "13.5pt"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Main",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -233023,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Main",
+                        "lines": [
+                          [
+                            0,
+                            4
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 4,
+                            "attributes": {
+                              "background-color": "rgb(244,244,244)",
+                              "color": "rgb(51,51,51)",
+                              "font-family": "Arial",
+                              "font-size": "13.5pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "unique_id": -233044,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "5",
+                      "setsize": "6",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      6,
+                      5
+                    ],
+                    "text": "• Navigation",
+                    "lines": [
+                      [
+                        0,
+                        12
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 12,
+                        "attributes": {
+                          "background-color": "rgb(244,244,244)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -233028,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 2,
+                            "attributes": {
+                              "background-color": "rgb(244,244,244)",
+                              "color": "rgb(51,51,51)",
+                              "font-family": "Arial",
+                              "font-size": "13.5pt"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Navigation",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -233034,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Navigation",
+                        "lines": [
+                          [
+                            0,
+                            10
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 10,
+                            "attributes": {
+                              "background-color": "rgb(244,244,244)",
+                              "color": "rgb(51,51,51)",
+                              "font-family": "Arial",
+                              "font-size": "13.5pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 34,
+                    "ia2_role": 34,
+                    "msaa_states": 64,
+                    "ia2_states": 1024,
+                    "unique_id": -232981,
+                    "attributes": {
+                      "display": "list-item",
+                      "level": "1",
+                      "posinset": "6",
+                      "setsize": "6",
+                      "tag": "li",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      1,
+                      6,
+                      6
+                    ],
+                    "text": "• Region",
+                    "lines": [
+                      [
+                        0,
+                        8
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 8,
+                        "attributes": {
+                          "background-color": "rgb(244,244,244)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "• ",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -232994,
+                        "attributes": {
+                          "display": "inline-block",
+                          "name-from": "contents",
+                          "tag": "::marker",
+                          "text-align": "left"
+                        },
+                        "text": "• ",
+                        "lines": [
+                          [
+                            0,
+                            2
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 2,
+                            "attributes": {
+                              "background-color": "rgb(244,244,244)",
+                              "color": "rgb(51,51,51)",
+                              "font-family": "Arial",
+                              "font-size": "13.5pt"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Region",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -232987,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Region",
+                        "lines": [
+                          [
+                            0,
+                            6
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 6,
+                            "attributes": {
+                              "background-color": "rgb(244,244,244)",
+                              "color": "rgb(51,51,51)",
+                              "font-family": "Arial",
+                              "font-size": "13.5pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "Bottom",
+                "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/complementary/complementary.setFocusAfterComplementary.html#bottom",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -232995,
+                "attributes": {
+                  "display": "inline",
+                  "id": "bottom",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "Bottom",
+                "lines": [
+                  [
+                    0,
+                    6
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 6,
+                    "attributes": {
+                      "background-color": "rgb(244,244,244)",
+                      "color": "rgb(51,122,183)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Bottom",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -232978,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Bottom",
+                    "lines": [
+                      [
+                        0,
+                        6
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 6,
+                        "attributes": {
+                          "background-color": "rgb(244,244,244)",
+                          "color": "rgb(51,122,183)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 30,
+            "ia2_role": 30,
+            "name": "Navigate backwards from here",
+            "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/complementary/complementary.setFocusAfterComplementary.html#afterlink",
+            "msaa_states": 5242884,
+            "ia2_states": 1024,
+            "unique_id": -232991,
+            "attributes": {
+              "display": "inline",
+              "id": "afterlink",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "text": "Navigate backwards from here",
+            "lines": [
+              [
+                0,
+                24
+              ],
+              [
+                24,
+                28
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 28,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(35,82,124)",
+                  "font-family": "Arial",
+                  "font-size": "13.5pt",
+                  "text-underline-style": "solid"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Navigate backwards from here",
+                "msaa_states": 4194304,
+                "ia2_states": 1024,
+                "unique_id": -233011,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Navigate backwards from here",
+                "lines": [
+                  [
+                    0,
+                    24
+                  ],
+                  [
+                    24,
+                    28
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 28,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(35,82,124)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1060,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -233002,
+        "attributes": {
+          "class": "col-xs-12 col-sm-9 col-md-6 col-lg-7",
+          "display": "block",
+          "tag": "div",
+          "text-align": "left"
+        },
+        "text": "￼",
+        "lines": [
+          [
+            0,
+            1
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(51,51,51)",
+              "font-family": "Arial",
+              "font-size": "13.5pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1069,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -233013,
+            "attributes": {
+              "display": "block",
+              "tag": "main",
+              "text-align": "left",
+              "xml-roles": "main"
+            },
+            "text": "￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(51,51,51)",
+                  "font-family": "Arial",
+                  "font-size": "23.5pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 3,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(51,51,51)",
+                  "font-family": "Arial",
+                  "font-size": "13.5pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Complementary Landmark",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -233009,
+                "attributes": {
+                  "display": "block",
+                  "id": "id1",
+                  "level": "1",
+                  "name-from": "contents",
+                  "tag": "h1",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  1,
+                  0,
+                  0
+                ],
+                "text": "Complementary Landmark",
+                "lines": [
+                  [
+                    0,
+                    22
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 22,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(51,51,51)",
+                      "font-family": "Arial",
+                      "font-size": "23.5pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Complementary Landmark",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -233007,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Complementary Landmark",
+                    "lines": [
+                      [
+                        0,
+                        22
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 22,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "23.5pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -233020,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "A ￼ landmark is a supporting section of the document, designed to be complementary to the main content at a similar level in the DOM hierarchy, but remains meaningful when separated from the main content.",
+                "lines": [
+                  [
+                    0,
+                    44
+                  ],
+                  [
+                    44,
+                    95
+                  ],
+                  [
+                    95,
+                    148
+                  ],
+                  [
+                    148,
+                    196
+                  ],
+                  [
+                    196,
+                    204
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(51,51,51)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt"
+                    }
+                  },
+                  {
+                    "start": 2,
+                    "end": 3,
+                    "attributes": {
+                      "background-color": "rgb(249,242,244)",
+                      "color": "rgb(199,37,78)",
+                      "font-family": "Consolas",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 3,
+                    "end": 204,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(51,51,51)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "A ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -232999,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "A ",
+                    "lines": [
+                      [
+                        0,
+                        2
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 2,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1065,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -233035,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "code",
+                      "text-align": "left"
+                    },
+                    "text": "complementary",
+                    "lines": [
+                      [
+                        0,
+                        13
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 13,
+                        "attributes": {
+                          "background-color": "rgb(249,242,244)",
+                          "color": "rgb(199,37,78)",
+                          "font-family": "Consolas",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "complementary",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -233030,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "complementary",
+                        "lines": [
+                          [
+                            0,
+                            13
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 13,
+                            "attributes": {
+                              "background-color": "rgb(249,242,244)",
+                              "color": "rgb(199,37,78)",
+                              "font-family": "Consolas",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " landmark is a supporting section of the document, designed to be complementary to the main content at a similar level in the DOM hierarchy, but remains meaningful when separated from the main content.",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -233022,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " landmark is a supporting section of the document, designed to be complementary to the main content at a similar level in the DOM hierarchy, but remains meaningful when separated from the main content.",
+                    "lines": [
+                      [
+                        0,
+                        41
+                      ],
+                      [
+                        41,
+                        92
+                      ],
+                      [
+                        92,
+                        145
+                      ],
+                      [
+                        145,
+                        193
+                      ],
+                      [
+                        193,
+                        201
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 201,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -233040,
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(51,51,51)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 43,
+                    "ia2_role": 43,
+                    "name": "Run Test Setup",
+                    "msaa_states": 1,
+                    "ia2_states": 1024,
+                    "unique_id": -233037,
+                    "attributes": {
+                      "class": "button-run-test-setup",
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "text": "Run Test Setup",
+                    "lines": [
+                      [
+                        0,
+                        14
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 14,
+                        "attributes": {
+                          "background-color": "rgb(250,250,250)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
