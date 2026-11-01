@@ -68,6 +68,8 @@ pub struct AppContext<'a> {
     /// Office's own context menu closed, giving the focus back: Word's document says "Edit"
     /// alone, with nothing of leaving menus [obs, 1125/s4].
     pub office_menu_closed: bool,
+    /// The titles set for the workbook in front (Excel's Insert+Ctrl+Alt+C and R).
+    pub sheet_titles: crate::apps::windows::excel::SheetTitles,
 }
 
 impl AppContext<'_> {
@@ -116,6 +118,12 @@ pub trait AppModule: Send {
     /// speech, "Leaving menus | 14 | C 4" (Excel's cell [obs, 1116/s7]).
     fn says_focus_after_menus(&self, _focus: &FocusEvent) -> bool {
         false
+    }
+
+    /// The sheet's place a focus of the application waited for (`AppContext::ask_sheet`), or
+    /// `None` where it could not be read: what the application says with it, if anything.
+    fn sheet_place(&mut self, _place: Option<&crate::event::SheetPlace>) -> Option<String> {
+        None
     }
 
     /// What `focus` says as Okur's own window closes back onto it (a list cancelled), where

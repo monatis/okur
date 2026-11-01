@@ -373,6 +373,9 @@ pub struct ScreenReaderEngine {
     /// Excel's selection as last read, before the next selecting key; none after any other key
     /// (the selection is then the active cell alone).
     sheet_selection: Option<String>,
+    /// Each workbook's row and column titles, by its window's title, for the session (Excel's
+    /// Insert+Ctrl+Alt+C and R).
+    sheet_titles: std::collections::HashMap<String, crate::apps::windows::excel::SheetTitles>,
     /// One of Excel's lists was asked for, and is awaited.
     sheet_list_asked: Option<crate::event::SheetListKind>,
     /// One of Excel's row or column readers asked for the active cell's row and column, and
@@ -688,6 +691,7 @@ impl ScreenReaderEngine {
             sheet_list_asked: None,
             sheet_cell_asked: false,
             sheet_selection: None,
+            sheet_titles: std::collections::HashMap::new(),
             say_all_paragraphs_asked: false,
             document_view_title: None,
             document_view_by_key: None,
@@ -1735,6 +1739,15 @@ impl ScreenReaderEngine {
             } => self.sheet_list(*kind, column, entries),
             AccessibilityEvent::SheetPlace(place) if self.sheet_cell_asked => {
                 self.sheet_cell_asked = false;
+                // A cell its application waited to say with the place (its titles).
+                if let Some(said) = self
+                    .apps
+                    .iter_mut()
+                    .find_map(|app| app.sheet_place(place.as_ref()))
+                {
+                    self.speech.speak(&said, true);
+                    return Some(said);
+                }
                 let place = place.as_ref()?;
                 // A selecting key's change, "select | 8 | C 2" [obs, 1120, 1121].
                 let selecting = self

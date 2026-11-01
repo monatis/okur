@@ -121,6 +121,24 @@ impl ScreenReaderEngine {
         }
     }
 
+    /// Asks for the sheet's place that a focus of Excel's waits for. The sheet's focus, a cell or
+    /// the grid of an empty one, is what Insert+C and the row and column readers read from.
+    /// Where the place cannot be read, what the application says without it, said.
+    fn ask_sheet_for(&mut self, focus: &crate::event::FocusEvent) -> Option<String> {
+        self.last_native_focus = Some(focus.clone());
+        if self
+            .actions
+            .as_ref()
+            .is_some_and(|actions| actions.read_sheet_place())
+        {
+            self.sheet_cell_asked = true;
+            return None;
+        }
+        let said = self.apps.iter_mut().find_map(|app| app.sheet_place(None))?;
+        self.speech.speak(&said, true);
+        Some(said)
+    }
+
     /// Says that menus were left, when nothing else is said with it.
     fn say_leaving_menus(&mut self) -> String {
         let speech = msg::menus_left().to_string();
@@ -355,6 +373,12 @@ impl ScreenReaderEngine {
         };
         // Applications first, as JAWS runs an application's script before the default one.
         let repeat = !std::mem::take(&mut self.key_since_focus) && self.native_focus.is_last(focus);
+        let sheet_titles = focus
+            .window_title
+            .as_ref()
+            .and_then(|window| self.sheet_titles.get(window))
+            .copied()
+            .unwrap_or_default();
         let mut cx = AppContext {
             app_mode: &mut self.app_mode,
             window_title: &mut self.last_window_title,
@@ -368,66 +392,69 @@ impl ScreenReaderEngine {
             ask_sheet: false,
             repeat,
             office_menu_closed,
+            sheet_titles,
         };
+        let mut response = FocusResponse::Pass;
         for app in &mut self.apps {
-            match app.focus(focus, &mut cx) {
-                FocusResponse::Pass => {}
-                FocusResponse::Silent if leaving_menus => {
-                    let speech = leaving_message.clone();
-                    self.speech.speak(&speech, true);
-                    return Some(speech);
+            response = app.focus(focus, &mut cx);
+            if !matches!(response, FocusResponse::Pass) {
+                break;
+            }
+        }
+        let (ask_sheet, ask_view) = (cx.ask_sheet, cx.ask_view);
+        match response {
+            FocusResponse::Pass => {}
+            FocusResponse::Silent if leaving_menus => {
+                let speech = leaving_message.clone();
+                self.speech.speak(&speech, true);
+                if ask_sheet {
+                    self.ask_sheet_for(focus);
                 }
-                FocusResponse::Silent => {
-                    if cx.ask_sheet {
-                        // The sheet's focus, a cell or the grid of an empty one, is what
-                        // Insert+C and the row and column readers read from.
-                        self.last_native_focus = Some(focus.clone());
-                        if self
-                            .actions
-                            .as_ref()
-                            .is_some_and(|actions| actions.read_sheet_place())
-                        {
-                            self.sheet_cell_asked = true;
-                        }
+                return Some(speech);
+            }
+            FocusResponse::Silent => {
+                if ask_sheet {
+                    if let Some(said) = self.ask_sheet_for(focus) {
+                        return Some(said);
                     }
-                    if cx.ask_view
-                        && self
-                            .actions
-                            .as_ref()
-                            .is_some_and(|actions| actions.read_document_view())
-                    {
-                        self.view_asked_by_app = true;
-                        // The focus the module waits to say is the current one: the same
-                        // focus reported again is no new one.
-                        let _ = self.native_focus.focus(focus);
-                        self.last_native_focus = Some(focus.clone());
-                    }
-                    return None;
                 }
-                FocusResponse::SpeakWhole(announcement) => {
-                    let speech = self.said(announcement).render();
-                    self.speech.speak(&speech, true);
-                    if !focus.in_document {
-                        let _ = self.native_focus.focus(focus);
-                        self.last_native_focus = Some(focus.clone());
-                    }
-                    return Some(speech);
+                if ask_view
+                    && self
+                        .actions
+                        .as_ref()
+                        .is_some_and(|actions| actions.read_document_view())
+                {
+                    self.view_asked_by_app = true;
+                    // The focus the module waits to say is the current one: the same
+                    // focus reported again is no new one.
+                    let _ = self.native_focus.focus(focus);
+                    self.last_native_focus = Some(focus.clone());
                 }
-                FocusResponse::Speak(announcement) => {
-                    let speech = with_leaving(self.said(announcement).render());
-                    self.speech.speak(&speech, true);
-                    // The focus is still the last one native focus knows, for the container
-                    // the next one is in: File Explorer's column header after its list's item
-                    // is within that list (JAWS on the dev box, 2026-10-17: "Name split
-                    // button").
-                    if !focus.in_document {
-                        let _ = self.native_focus.focus(focus);
-                        // And the focus an application read is the one Say Line and
-                        // Convenient OCR's F know: File Explorer's item [obs, 1029/s4].
-                        self.last_native_focus = Some(focus.clone());
-                    }
-                    return Some(speech);
+                return None;
+            }
+            FocusResponse::SpeakWhole(announcement) => {
+                let speech = self.said(announcement).render();
+                self.speech.speak(&speech, true);
+                if !focus.in_document {
+                    let _ = self.native_focus.focus(focus);
+                    self.last_native_focus = Some(focus.clone());
                 }
+                return Some(speech);
+            }
+            FocusResponse::Speak(announcement) => {
+                let speech = with_leaving(self.said(announcement).render());
+                self.speech.speak(&speech, true);
+                // The focus is still the last one native focus knows, for the container
+                // the next one is in: File Explorer's column header after its list's item
+                // is within that list (JAWS on the dev box, 2026-10-17: "Name split
+                // button").
+                if !focus.in_document {
+                    let _ = self.native_focus.focus(focus);
+                    // And the focus an application read is the one Say Line and
+                    // Convenient OCR's F know: File Explorer's item [obs, 1029/s4].
+                    self.last_native_focus = Some(focus.clone());
+                }
+                return Some(speech);
             }
         }
 

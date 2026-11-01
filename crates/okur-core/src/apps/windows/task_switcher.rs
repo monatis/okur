@@ -213,6 +213,7 @@ mod tests {
             ask_sheet: false,
             repeat: false,
             office_menu_closed: false,
+            sheet_titles: Default::default(),
         };
         assert!(matches!(
             switcher.focus(&item, &mut cx),

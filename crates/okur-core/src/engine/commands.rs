@@ -1195,6 +1195,41 @@ impl ScreenReaderEngine {
 
     /// An Okur key command (Insert+…). In a text field the reading commands read the field;
     /// elsewhere they run as virtual cursor or application commands.
+    /// One of Excel's title keys in a sheet; false elsewhere, the key left to the rest.
+    fn sheet_title_key(&mut self, key: crate::apps::windows::excel::TitleKey) -> bool {
+        use crate::apps::windows::excel::{self, SheetReading, TitleKey};
+        let Some(focus) = self.last_native_focus.clone().filter(excel::in_sheet) else {
+            return false;
+        };
+        let Some(window) = focus.window_title.clone() else {
+            return false;
+        };
+        let titles = self.sheet_titles.entry(window).or_default();
+        let reading = match key {
+            TitleKey::SayColumnTitle => titles.row.map(SheetReading::ColumnTitle),
+            TitleKey::SayRowTitle => titles.column.map(SheetReading::RowTitle),
+            TitleKey::SetColumnTitles | TitleKey::SetRowTitles => {
+                // Set from a cell; an empty one, the grid's focus, sets nothing [hyp].
+                let said = excel::cell_at(&focus).and_then(|at| key.set(titles, at));
+                if let Some(said) = said {
+                    self.speech.speak(&said, true);
+                }
+                return true;
+            }
+        };
+        // Without the titles set, nothing to say [hyp: not recorded].
+        if let Some(reading) = reading {
+            if self
+                .actions
+                .as_ref()
+                .is_some_and(|actions| actions.read_sheet_place())
+            {
+                self.sheet_reading_asked = Some(reading);
+            }
+        }
+        true
+    }
+
     pub(super) fn okur_key_command(&mut self, event: &KeyEvent) {
         // Word's Insert+Shift+F, Insert+Shift+E and Insert+Alt+B: its footnotes, endnotes and
         // bookmarks listed [obs, 1083/s1, 1090/s1, 1091/s1].
@@ -1239,6 +1274,13 @@ impl ScreenReaderEngine {
                 .is_some_and(|actions| actions.open_sheet_tabs_menu())
         {
             return;
+        }
+        // Excel's titles: Insert+Ctrl+Alt+C and R set them, the Okur key with Alt+Shift and C or
+        // R says them [obs, 1132/s1, s2, s7, s8].
+        if let Some(key) = crate::apps::windows::excel::TitleKey::of(event.key, m) {
+            if self.sheet_title_key(key) {
+                return;
+            }
         }
         // Excel's row and column readers, the active cell's row and column asked for first.
         if let Some(reading) = crate::apps::windows::excel::SheetReading::of(event) {

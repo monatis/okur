@@ -200,6 +200,10 @@ excel-data-region-edge = edge of current data region
 excel-data-region-start = start of new Data Region
 # An empty cell, after "blank" and its coordinates [obs, 1118/s3, s4].
 excel-active-cell = Active Cell: { $cell }
+# Insert+Ctrl+Alt+C and R: the active cell's row set as the column titles, its column as the row
+# titles [obs, 1132/s1, s2].
+excel-column-titles-set = Setting column titles row range to { $row }
+excel-row-titles-set = Setting row titles column range to { $column }
 # Excel's selections: a cell taken in or out, or the selection's corners after "select"; whole
 # rows and columns first, in JAWS's capitals [obs, 1120, 1121, 1117].
 excel-select = select

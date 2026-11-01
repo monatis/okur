@@ -22,11 +22,89 @@ const MAIN_WINDOW: &str = "XLMAIN";
 pub struct Excel {
     /// The last cell reached was empty, which a Ctrl arrow leaves for a new data region.
     from_blank: bool,
+    /// The last cell said, (column, row): the next one says the title of a column or a row it
+    /// enters.
+    last_cell: Option<(u32, u32)>,
+    /// A cell said once its titles come with the sheet's place.
+    pending: Option<PendingTitles>,
+}
+
+/// A cell's speech waiting for the titles of the column or the row it entered: the row that
+/// holds the column titles, the column that holds the row titles.
+#[derive(Debug)]
+struct PendingTitles {
+    lines: Vec<String>,
+    titles_row: Option<u32>,
+    titles_column: Option<u32>,
+}
+
+/// A workbook's titles, as Insert+Ctrl+Alt+C and R set them: the row holding the column titles
+/// and the column holding the row titles, each from 1 [obs, 1132/s1, s2].
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct SheetTitles {
+    pub row: Option<u32>,
+    pub column: Option<u32>,
+}
+
+/// Excel's title keys (Excel.jkm): Insert+Ctrl+Alt+C and R set the titles
+/// (setColTitlesRange, setRowTitlesRange), the Okur key with Alt+Shift and C or R says them
+/// (sayColumnTitle, sayRowTitle).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum TitleKey {
+    SetColumnTitles,
+    SetRowTitles,
+    SayColumnTitle,
+    SayRowTitle,
+}
+
+impl TitleKey {
+    /// The title key a chord with the Okur key is, if any.
+    pub(crate) fn of(key: Key, m: crate::input::Modifiers) -> Option<Self> {
+        if !m.insert || m.win {
+            return None;
+        }
+        match (key, m.ctrl, m.alt, m.shift) {
+            (Key::Alpha('C'), true, true, false) => Some(Self::SetColumnTitles),
+            (Key::Alpha('R'), true, true, false) => Some(Self::SetRowTitles),
+            (Key::Alpha('C'), false, true, true) => Some(Self::SayColumnTitle),
+            (Key::Alpha('R'), false, true, true) => Some(Self::SayRowTitle),
+            _ => None,
+        }
+    }
+
+    /// Sets `titles` from the cell at (`column`, `row`), and what that says: "Setting column
+    /// titles row range to 1", "Setting row titles column range to A" [obs, 1132/s1, s2];
+    /// `None` for a key that says a title.
+    pub(crate) fn set(self, titles: &mut SheetTitles, (column, row): (u32, u32)) -> Option<String> {
+        match self {
+            Self::SetColumnTitles => {
+                titles.row = Some(row);
+                Some(msg::excel_column_titles_set(row.to_string()).render())
+            }
+            Self::SetRowTitles => {
+                titles.column = Some(column);
+                Some(msg::excel_row_titles_set(column_letters(column)).render())
+            }
+            Self::SayColumnTitle | Self::SayRowTitle => None,
+        }
+    }
 }
 
 impl AppModule for Excel {
     fn owns(&self, focus: &FocusEvent) -> bool {
         cell(focus).is_some() || grid(focus) || editor(focus)
+    }
+
+    /// The sheet's place for a cell waiting for its titles: the column's title, the row's,
+    /// then the cell, "Weekdays | 12 | B 2" [obs, 1132/s4, s5]; the cell alone without the
+    /// place.
+    fn sheet_place(&mut self, place: Option<&crate::event::SheetPlace>) -> Option<String> {
+        let pending = self.pending.take()?;
+        let mut lines: Vec<String> = place
+            .map(|place| titles_of(place, pending.titles_row, pending.titles_column))
+            .unwrap_or_default();
+        lines.extend(pending.lines);
+        Some(lines.join("\n"))
     }
 
     /// A cell Okur's list closes back onto, "22 | B 4" [obs, 521/s10, s14].
@@ -90,6 +168,18 @@ impl AppModule for Excel {
         cx.note_window(focus);
         // A native control's keys are the application's, as for any cell the engine reads.
         *cx.app_mode = crate::engine::AppMode::NativeControl;
+        // Into another column, the column's title first; into another row, the row's; not the
+        // title of a title cell itself, "Central | A 2" [obs, 1132/s3-s6, s9-s13].
+        let at = cell_at(focus);
+        let before = std::mem::replace(&mut self.last_cell, at);
+        let titles = cx.sheet_titles;
+        let (titles_row, titles_column) = match (at, before) {
+            (Some((column, row)), Some((was_column, was_row))) => (
+                titles.row.filter(|&r| column != was_column && row != r),
+                titles.column.filter(|&c| row != was_row && column != c),
+            ),
+            _ => (None, None),
+        };
         let value = focus.value.as_deref().map(str::trim).unwrap_or_default();
         let mut lines = Vec::new();
         let ctrl = cx
@@ -125,6 +215,15 @@ impl AppModule for Excel {
             );
         }
         self.from_blank = value.is_empty();
+        if titles_row.is_some() || titles_column.is_some() {
+            self.pending = Some(PendingTitles {
+                lines,
+                titles_row,
+                titles_column,
+            });
+            cx.ask_sheet = true;
+            return FocusResponse::Silent;
+        }
         FocusResponse::Speak(crate::announcement::Announcement::from_text(
             &lines.join("\n"),
         ))
@@ -148,6 +247,10 @@ pub(crate) enum SheetReading {
     /// Insert+C where the grid has the focus, an empty cell: the active cell's coordinates,
     /// "D 1" [obs, 1123/s3].
     Cell,
+    /// Say Column Title and Say Row Title: the active cell's column's title, in the row given,
+    /// "Weekends"; its row's, in the column given, "Northside" [obs, 1132/s7, s8].
+    ColumnTitle(u32),
+    RowTitle(u32),
 }
 
 impl SheetReading {
@@ -180,8 +283,11 @@ impl SheetReading {
     /// 1114/s4-s9]. Empty cells are left out [hyp: none recorded yet]. `None` with nothing to
     /// read.
     pub(crate) fn said(self, place: &crate::event::SheetPlace) -> Option<String> {
-        if self == Self::Cell {
-            return coordinates(&place.address);
+        match self {
+            Self::Cell => return coordinates(&place.address),
+            Self::ColumnTitle(row) => return titles_of(place, Some(row), None).pop(),
+            Self::RowTitle(column) => return titles_of(place, None, Some(column)).pop(),
+            _ => {}
         }
         let (cells, at, row) = match self {
             Self::Line => (&place.row, place.row_at, false),
@@ -192,7 +298,7 @@ impl SheetReading {
             Self::Line | Self::Row | Self::Column => cells,
             Self::RowFromStart | Self::ColumnFromTop => cells.get(..=at).unwrap_or(cells),
             Self::RowToEnd | Self::ColumnToBottom => cells.get(at..).unwrap_or_default(),
-            Self::Cell => return None,
+            Self::Cell | Self::ColumnTitle(_) | Self::RowTitle(_) => return None,
         };
         let read: Vec<&str> = part
             .iter()
@@ -317,6 +423,32 @@ fn reference_end(end: &str) -> Option<(Option<u32>, Option<u32>)> {
         .flatten();
     let row = (!digits.is_empty()).then(|| digits.parse().ok()).flatten();
     (column.is_some() || row.is_some()).then_some((column, row))
+}
+
+/// The cell `focus` is, as (column, row) from 1.
+pub(crate) fn cell_at(focus: &FocusEvent) -> Option<(u32, u32)> {
+    cell(focus)?;
+    let (column, row) = reference_end(focus.name.as_deref()?.trim())?;
+    Some((column?, row?))
+}
+
+/// The titles of the active cell of `place`: its column's, in `titles_row`, then its row's, in
+/// `titles_column`, each where the active cell's row or column holds it and not empty.
+fn titles_of(
+    place: &crate::event::SheetPlace,
+    titles_row: Option<u32>,
+    titles_column: Option<u32>,
+) -> Vec<String> {
+    let Some((Some(column), Some(row))) = reference_end(place.address.trim()) else {
+        return Vec::new();
+    };
+    let column_title = titles_row.map(|r| known_text(place, (column, row), (column, r)));
+    let row_title = titles_column.map(|c| known_text(place, (column, row), (c, row)));
+    column_title
+        .into_iter()
+        .chain(row_title)
+        .filter(|title| !title.is_empty())
+        .collect()
 }
 
 /// A selection's reference as its cells: "A1:B2", "B1", "1:1" (a whole row), "C:C" (a whole
@@ -638,6 +770,7 @@ mod tests {
             ask_sheet: false,
             repeat,
             office_menu_closed: false,
+            sheet_titles: Default::default(),
         };
         match excel.focus(focus, &mut cx) {
             FocusResponse::Speak(announcement) => Some(announcement.render()),
@@ -692,5 +825,89 @@ mod tests {
         );
         assert_eq!(blank_or_cell(&place, false).as_deref(), Some("blank\nD 1"));
         assert_eq!(SheetReading::Cell.said(&place).as_deref(), Some("D 1"));
+    }
+
+    /// Row 1 as the column titles and column A as the row titles, from A1: a cell entering a
+    /// column says its title first, one entering a row the row's, waiting for the sheet's place;
+    /// a title cell says no title of its own [obs, 1132/s1-s10].
+    #[test]
+    fn titles_come_before_a_cell_entering_their_column_or_row() {
+        let mut titles = SheetTitles::default();
+        assert_eq!(
+            TitleKey::SetColumnTitles
+                .set(&mut titles, (1, 1))
+                .as_deref(),
+            Some("Setting column titles row range to 1")
+        );
+        assert_eq!(
+            TitleKey::SetRowTitles.set(&mut titles, (1, 1)).as_deref(),
+            Some("Setting row titles column range to A")
+        );
+        let cell = |name: &str, value: &str| {
+            let mut focus = FocusEvent::new(Role::TableCell);
+            focus.name = Some(name.into());
+            focus.value = Some(value.into());
+            focus.platform.window_class = Some(GRID_WINDOW.into());
+            focus
+        };
+        // What the module says of `focus`, and whether it asked for the place.
+        let step = |excel: &mut Excel, focus: &FocusEvent| {
+            let mut mode = crate::engine::AppMode::NativeControl;
+            let (mut title, mut kind) = (None, None);
+            let mut cx = AppContext {
+                app_mode: &mut mode,
+                window_title: &mut title,
+                window_kind: &mut kind,
+                selecting: false,
+                alt_held: false,
+                letter_key: false,
+                escape_key: false,
+                key: None,
+                ask_view: false,
+                ask_sheet: false,
+                repeat: false,
+                office_menu_closed: false,
+                sheet_titles: titles,
+            };
+            let said = match excel.focus(focus, &mut cx) {
+                FocusResponse::Speak(announcement) => announcement.render(),
+                _ => String::new(),
+            };
+            (said, cx.ask_sheet)
+        };
+        let mut excel = Excel::default();
+        assert!(!step(&mut excel, &cell("A1", "Branch")).1);
+        // A2 is in the row titles' column: no title of its own.
+        assert_eq!(
+            step(&mut excel, &cell("A2", "Central")),
+            ("Central\nA 2".to_owned(), false)
+        );
+        // Into column B: its title comes with the place.
+        assert_eq!(step(&mut excel, &cell("B2", "12")), (String::new(), true));
+        let place = crate::event::SheetPlace {
+            address: "B2".into(),
+            selection: "B2".into(),
+            selection_first: String::new(),
+            selection_last: String::new(),
+            row_at: 1,
+            column_at: 1,
+            row: vec!["Central".into(), "12".into(), "8".into()],
+            column: vec!["Weekdays".into(), "12".into(), "10".into(), "22".into()],
+        };
+        assert_eq!(
+            excel.sheet_place(Some(&place)).as_deref(),
+            Some("Weekdays\n12\nB 2")
+        );
+        assert_eq!(
+            SheetReading::ColumnTitle(1).said(&place).as_deref(),
+            Some("Weekdays")
+        );
+        assert_eq!(
+            SheetReading::RowTitle(1).said(&place).as_deref(),
+            Some("Central")
+        );
+        // Without the place, the cell alone.
+        assert_eq!(step(&mut excel, &cell("B3", "10")), (String::new(), true));
+        assert_eq!(excel.sheet_place(None).as_deref(), Some("10\nB 3"));
     }
 }

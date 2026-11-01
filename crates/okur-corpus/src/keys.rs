@@ -46,6 +46,9 @@ fn key_from_name(name: &str) -> Option<Key> {
         "numpadminus" => Key::NumpadMinus,
         "numpadslash" => Key::NumpadSlash,
         "numpadstar" => Key::NumpadStar,
+        // The keypad's Enter is Enter to Okur, as to JAWS's key maps that bind both alike
+        // (Excel.jkm: Insert+Enter and Insert+NumPadEnter, ReadColumnTotal).
+        "numpadenter" => Key::Enter,
         // The keypad with Num Lock off sends the keys it shares with the gray ones.
         "numpad4" => Key::LeftArrow,
         "numpad6" => Key::RightArrow,
