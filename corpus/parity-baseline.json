@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 11376,
+  "matched_steps": 11377,
   "total_steps": 11949,
   "accepted_divergences": 365,
   "errors": [],
@@ -1849,7 +1849,7 @@
     "1131-web-selected-text-fields/s8": "match",
     "1132-desktop-excel-titles-and-totals/s1": "match",
     "1132-desktop-excel-titles-and-totals/s10": "match",
-    "1132-desktop-excel-titles-and-totals/s11": "mismatch",
+    "1132-desktop-excel-titles-and-totals/s11": "match",
     "1132-desktop-excel-titles-and-totals/s12": "match",
     "1132-desktop-excel-titles-and-totals/s13": "match",
     "1132-desktop-excel-titles-and-totals/s2": "match",
