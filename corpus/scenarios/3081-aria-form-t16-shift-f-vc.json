@@ -1,0 +1,64 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'form' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name 'Add Contact' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Role 'group' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Name of the group, 'Add Contact', is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "Name of the input, 'Phone', is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion6",
+        "phrase": "The ability to enter text into the input is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "SHIFT_F",
+    "instructions": "With the reading cursor on the 'Navigate backwards from here' link, navigate to the 'Phone' text input.",
+    "plan": "apg/form",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "16"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/form/form.setFocusAfterFormAndHideBottomControls.html",
+  "id": "3081-aria-form-t16-shift-f-vc",
+  "name": "ARIA-AT, Form Landmark: Navigate backwards to a text input inside a form landmark in reading mode; Shift+F in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+F",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

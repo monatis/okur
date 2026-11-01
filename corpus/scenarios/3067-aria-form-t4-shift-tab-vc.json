@@ -1,0 +1,54 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'form' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name 'Add Contact' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Role 'link' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Name 'Bottom' is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "SHIFT_TAB",
+    "instructions": "With the reading cursor on the 'Navigate backwards from here' link, navigate to the 'Bottom' link.",
+    "plan": "apg/form",
+    "presentation_number": "commandB",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "4"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/form/form.setFocusAfterForm.html",
+  "id": "3067-aria-form-t4-shift-tab-vc",
+  "name": "ARIA-AT, Form Landmark: Navigate backwards into a form landmark in reading mode; Shift+Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

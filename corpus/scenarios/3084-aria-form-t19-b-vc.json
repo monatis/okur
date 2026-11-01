@@ -1,0 +1,64 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'form' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name 'Add Contact' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Role 'group' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Name of the group, 'Add Contact', is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "Role 'button' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion6",
+        "phrase": "Name of the button, 'Add Contact', is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "B",
+    "instructions": "With the reading cursor on the 'Navigate forwards from here' link, navigate to the 'Add contact' button.",
+    "plan": "apg/form",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "19"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/form/form.setFocusBeforeForm.html",
+  "id": "3084-aria-form-t19-b-vc",
+  "name": "ARIA-AT, Form Landmark: Navigate forwards to a button inside a form landmark in reading mode; B in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "B",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
