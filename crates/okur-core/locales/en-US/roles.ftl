@@ -88,6 +88,8 @@ role-region-search = SearchRegion
 role-slider = slider
 # A native slider (a trackbar) that moves left and right.
 role-slider-horizontal = left right slider
+# A slider that moves up and down (an ARIA slider with aria-orientation="vertical").
+role-slider-vertical = up down slider
 role-split-button = split button
 role-tab = Tab
 # A page's tab panel, as JAWS says it entering one: "Peter Müller TabPanel".

@@ -587,6 +587,8 @@ impl SpeechFormatter {
     pub fn slider_role(node: &crate::aom::AomNode) -> crate::messages::StaticMessage {
         match node.attributes.get("orientation").map(String::as_str) {
             Some("horizontal") => msg::role_slider_horizontal(),
+            // "Temperature up down slider" [obs, round-aria28, 2779/s2].
+            Some("vertical") => msg::role_slider_vertical(),
             _ => msg::role_slider(),
         }
     }
