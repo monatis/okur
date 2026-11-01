@@ -104,6 +104,13 @@ waits for the owner's choice: always, never (JAWS), or a setting. Also not taken
 landmark saying its first line with it (JAWS's "banner" line of its own, ARIA-AT MUST in the
 banner plan), which would change JAWS's line model.
 
+Then (2026-11-01, later): an ARIA grid's cell says where it is (Insert+Tab, and the arrows with
+the virtual cursor off); an invalid field says its error message; a tab its place on the PC
+cursor's Insert+Up. Next from the open steps: JAWS's descriptive text, Insert+Alt+R, and its
+hint "Use JawsKey+Alt+R to read descriptive text" on a line whose element has a description
+(modal-dialog 2692; Word's open item too): find it in JAWS's documentation, then build it, the
+hint in Okur's name ("Okur Key"), which parity's name rule must learn to compare.
+
 ## 5. Then
 
 Excel's round-1122b (typing in cells, its dialogs, Word's context menu), when Excel resumes.
