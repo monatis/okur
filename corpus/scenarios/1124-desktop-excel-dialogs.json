@@ -1,0 +1,30 @@
+{
+  "id": "1124-desktop-excel-dialogs",
+  "name": "Excel: Ctrl+G for Go To, C3 typed, Enter; Ctrl+1 for Format Cells, Ctrl+Tab to its next page and Ctrl+Shift+Tab back (Excel opens it on the page it was left on), Escape; F5 for Go To again, Escape",
+  "category": "desktop",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Ctrl+G"},
+    {"id": "s2", "type": "text", "command": "C3"},
+    {"id": "s3", "type": "key", "command": "Enter"},
+    {"id": "s4", "type": "key", "command": "Ctrl+1"},
+    {"id": "s5", "type": "key", "command": "Ctrl+Tab"},
+    {"id": "s6", "type": "key", "command": "Ctrl+Shift+Tab"},
+    {"id": "s7", "type": "key", "command": "Escape"},
+    {"id": "s8", "type": "key", "command": "F5"},
+    {"id": "s9", "type": "key", "command": "Escape"}
+  ]
+}

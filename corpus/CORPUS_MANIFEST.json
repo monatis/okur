@@ -4198,6 +4198,48 @@
       }
     },
     {
+      "scenario_id": "1123-desktop-excel-typing-in-cells",
+      "fixture": "desktop-excel.ps1",
+      "evidence": {
+        "sha256": "6f211d9a001d2d4ab89746b24b0ae8d1499b13f64ed92ff01e00eaf1867c7fa2",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1124-desktop-excel-dialogs",
+      "fixture": "desktop-excel.ps1",
+      "evidence": {
+        "sha256": "6109ce55a05514df51ad446f48b09245b480830136faed6a6acf832daabf38ba",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1125-desktop-word-context-menu",
+      "fixture": "desktop-word.ps1",
+      "evidence": {
+        "sha256": "5177dfc3d1110d9515163e9129a738556153a35a3bb21ee9de7bd359720cb417",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "1126-web-aria-radio-group-variants",
       "fixture": "aria-radio-place.html",
       "evidence": {
@@ -28965,10 +29007,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1906,
-    "scenarios_with_evidence": 1906,
-    "total_trials": 5724,
-    "successful_trials": 5707,
-    "deterministic_scenarios": 1592
+    "scenarios": 1909,
+    "scenarios_with_evidence": 1909,
+    "total_trials": 5733,
+    "successful_trials": 5716,
+    "deterministic_scenarios": 1593
   }
 }

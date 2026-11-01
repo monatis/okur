@@ -1,0 +1,31 @@
+{
+  "id": "1123-desktop-excel-typing-in-cells",
+  "name": "Excel: Ctrl+Right to C1, Right onto the empty D1, Insert+C there, 7 typed, Enter, Up back to D1, Delete, Ctrl+Z, Down and Up",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s2", "type": "key", "command": "Right"},
+    {"id": "s3", "type": "key", "command": "Insert+C"},
+    {"id": "s4", "type": "text", "command": "7"},
+    {"id": "s5", "type": "key", "command": "Enter"},
+    {"id": "s6", "type": "key", "command": "Up"},
+    {"id": "s7", "type": "key", "command": "Delete"},
+    {"id": "s8", "type": "key", "command": "Ctrl+Z"},
+    {"id": "s9", "type": "key", "command": "Down"},
+    {"id": "s10", "type": "key", "command": "Up"}
+  ]
+}

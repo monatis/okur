@@ -1,0 +1,26 @@
+{
+  "id": "1125-desktop-word-context-menu",
+  "name": "Word: Shift+F10 for the document's context menu, Down twice, Escape, then Insert+Up. Inside the menu no step reads JAWS's speech history, which the harness copies through the clipboard: a change of the clipboard closes Office's menus (old-pc, 2026-11-01; round-1122b's menu closed at each first step's copy). The speech recorder's text is kept",
+  "category": "desktop",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-word.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "launch": {
+    "window_title": "sr-word-fixture.docx - Word (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Shift+F10", "history": false},
+    {"id": "s2", "type": "key", "command": "Down", "history": false},
+    {"id": "s3", "type": "key", "command": "Down", "history": false},
+    {"id": "s4", "type": "key", "command": "Escape"},
+    {"id": "s5", "type": "key", "command": "Insert+Up"}
+  ]
+}
