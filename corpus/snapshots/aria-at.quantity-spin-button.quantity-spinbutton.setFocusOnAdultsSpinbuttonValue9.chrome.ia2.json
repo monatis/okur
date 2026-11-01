@@ -8,9 +8,9 @@
     "window_class": "Chrome_WidgetWin_1",
     "process_version": "156.0.8078.76",
     "fixture_sha256": "9abb1c9989741a9c9f9cb648e849b65299dcb46d4db2a65cf306ebbddddcde0a",
-    "captured_at_unix_ms": 1793495575165,
+    "captured_at_unix_ms": 1793529245044,
     "node_count": 38,
-    "capture_ms": 291
+    "capture_ms": 305
   },
   "root": {
     "msaa_role": 15,
@@ -19,7 +19,7 @@
     "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue9.html",
     "msaa_states": 1048640,
     "ia2_states": 1024,
-    "unique_id": -108202,
+    "unique_id": -275406,
     "attributes": {
       "explicit-name": "true",
       "name-from": "related-element",
@@ -49,9 +49,10 @@
       {
         "msaa_role": 20,
         "ia2_role": 1069,
+        "default_action": "click ancestor",
         "msaa_states": 0,
         "ia2_states": 1024,
-        "unique_id": -108159,
+        "unique_id": -275424,
         "attributes": {
           "display": "block",
           "tag": "main",
@@ -85,9 +86,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1060,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -108178,
+            "unique_id": -275416,
             "attributes": {
               "display": "block",
               "id": "example",
@@ -118,9 +120,10 @@
                 "msaa_role": 20,
                 "ia2_role": 20,
                 "name": "Guests",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -108176,
+                "unique_id": -275402,
                 "attributes": {
                   "display": "block",
                   "explicit-name": "true",
@@ -398,16 +401,17 @@
                 ],
                 "relations": {
                   "labelledBy": [
-                    -108192
+                    -275396
                   ]
                 },
                 "children": [
                   {
                     "msaa_role": 42,
                     "ia2_role": 1049,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -108192,
+                    "unique_id": -275396,
                     "attributes": {
                       "display": "block",
                       "tag": "legend",
@@ -435,7 +439,7 @@
                     ],
                     "relations": {
                       "labelFor": [
-                        -108176
+                        -275402
                       ]
                     },
                     "children": [
@@ -443,9 +447,10 @@
                         "msaa_role": 41,
                         "ia2_role": 41,
                         "name": "Guests",
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -108171,
+                        "unique_id": -275430,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -475,9 +480,10 @@
                   {
                     "msaa_role": 42,
                     "ia2_role": 1049,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -108204,
+                    "unique_id": -275442,
                     "attributes": {
                       "display": "block",
                       "tag": "label",
@@ -504,7 +510,7 @@
                     ],
                     "relations": {
                       "labelFor": [
-                        -108173
+                        -275408
                       ]
                     },
                     "children": [
@@ -512,9 +518,10 @@
                         "msaa_role": 41,
                         "ia2_role": 41,
                         "name": "Adults",
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -108160,
+                        "unique_id": -275440,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -544,9 +551,10 @@
                     "msaa_role": 43,
                     "ia2_role": 43,
                     "name": "Remove adult",
+                    "default_action": "press",
                     "msaa_states": 1048576,
                     "ia2_states": 1024,
-                    "unique_id": -108214,
+                    "unique_id": -275435,
                     "attributes": {
                       "display": "block",
                       "explicit-name": "true",
@@ -556,16 +564,17 @@
                     },
                     "relations": {
                       "controllerFor": [
-                        -108173
+                        -275408
                       ]
                     }
                   },
                   {
                     "msaa_role": 20,
                     "ia2_role": 1054,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -108163,
+                    "unique_id": -275423,
                     "attributes": {
                       "display": "block",
                       "tag": "p",
@@ -597,9 +606,10 @@
                         "ia2_role": 30,
                         "name": "Navigate forwards from here",
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue9.html#beforelink",
+                        "default_action": "jump",
                         "msaa_states": 5242880,
                         "ia2_states": 1024,
-                        "unique_id": -108164,
+                        "unique_id": -275418,
                         "attributes": {
                           "display": "inline",
                           "id": "beforelink",
@@ -632,9 +642,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Navigate forwards from here",
+                            "default_action": "click ancestor",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -108188,
+                            "unique_id": -275445,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -668,9 +679,12 @@
                     "ia2_role": 52,
                     "name": "Adults",
                     "value": "9",
+                    "default_action": "activate",
+                    "value_min": 1.0,
+                    "value_max": 8.0,
                     "msaa_states": 1048580,
                     "ia2_states": 13384,
-                    "unique_id": -108173,
+                    "unique_id": -275408,
                     "attributes": {
                       "display": "block",
                       "explicit-name": "true",
@@ -705,23 +719,24 @@
                     ],
                     "relations": {
                       "controlledBy": [
-                        -108214,
-                        -108196
+                        -275435,
+                        -275448
                       ],
                       "error": [
-                        -108225
+                        -275454
                       ],
                       "labelledBy": [
-                        -108204
+                        -275442
                       ]
                     }
                   },
                   {
                     "msaa_role": 20,
                     "ia2_role": 1054,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -108187,
+                    "unique_id": -275391,
                     "attributes": {
                       "display": "block",
                       "tag": "p",
@@ -753,9 +768,10 @@
                         "ia2_role": 30,
                         "name": "Navigate backwards from here",
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue9.html#afterlink",
+                        "default_action": "jump",
                         "msaa_states": 5242880,
                         "ia2_states": 1024,
-                        "unique_id": -108191,
+                        "unique_id": -275393,
                         "attributes": {
                           "display": "inline",
                           "id": "afterlink",
@@ -788,9 +804,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Navigate backwards from here",
+                            "default_action": "click ancestor",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -108205,
+                            "unique_id": -275395,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -823,9 +840,10 @@
                     "msaa_role": 43,
                     "ia2_role": 43,
                     "name": "Add adult",
+                    "default_action": "press",
                     "msaa_states": 1048577,
                     "ia2_states": 1024,
-                    "unique_id": -108196,
+                    "unique_id": -275448,
                     "attributes": {
                       "display": "block",
                       "explicit-name": "true",
@@ -835,16 +853,17 @@
                     },
                     "relations": {
                       "controllerFor": [
-                        -108173
+                        -275408
                       ]
                     }
                   },
                   {
                     "msaa_role": 20,
                     "ia2_role": 1060,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -108225,
+                    "unique_id": -275454,
                     "attributes": {
                       "display": "block",
                       "id": "error-adults",
@@ -872,7 +891,7 @@
                     ],
                     "relations": {
                       "errorFor": [
-                        -108173
+                        -275408
                       ]
                     },
                     "children": [
@@ -880,9 +899,10 @@
                         "msaa_role": 41,
                         "ia2_role": 41,
                         "name": "Must be between 1 and 8",
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -108222,
+                        "unique_id": -275458,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -911,9 +931,10 @@
                   {
                     "msaa_role": 23,
                     "ia2_role": 23,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -108215,
+                    "unique_id": -275428,
                     "attributes": {
                       "atomic": "true",
                       "class": "visually-hidden",
@@ -931,9 +952,10 @@
                   {
                     "msaa_role": 42,
                     "ia2_role": 1049,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -108161,
+                    "unique_id": -275426,
                     "attributes": {
                       "display": "block",
                       "tag": "label",
@@ -960,7 +982,7 @@
                     ],
                     "relations": {
                       "labelFor": [
-                        -108183
+                        -275388
                       ]
                     },
                     "children": [
@@ -968,9 +990,10 @@
                         "msaa_role": 41,
                         "ia2_role": 41,
                         "name": "Kids",
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -108220,
+                        "unique_id": -275410,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -1000,9 +1023,10 @@
                     "msaa_role": 43,
                     "ia2_role": 43,
                     "name": "Remove kid",
+                    "default_action": "press",
                     "msaa_states": 1048577,
                     "ia2_states": 1024,
-                    "unique_id": -108174,
+                    "unique_id": -275411,
                     "attributes": {
                       "display": "block",
                       "explicit-name": "true",
@@ -1012,7 +1036,7 @@
                     },
                     "relations": {
                       "controllerFor": [
-                        -108183
+                        -275388
                       ]
                     }
                   },
@@ -1021,9 +1045,12 @@
                     "ia2_role": 52,
                     "name": "Kids",
                     "value": "0",
+                    "default_action": "activate",
+                    "value_min": 0.0,
+                    "value_max": 8.0,
                     "msaa_states": 1048576,
                     "ia2_states": 13320,
-                    "unique_id": -108183,
+                    "unique_id": -275388,
                     "attributes": {
                       "display": "block",
                       "explicit-name": "true",
@@ -1058,11 +1085,11 @@
                     ],
                     "relations": {
                       "controlledBy": [
-                        -108174,
-                        -108189
+                        -275411,
+                        -275389
                       ],
                       "labelledBy": [
-                        -108161
+                        -275426
                       ]
                     }
                   },
@@ -1070,9 +1097,10 @@
                     "msaa_role": 43,
                     "ia2_role": 43,
                     "name": "Add kid",
+                    "default_action": "press",
                     "msaa_states": 1048576,
                     "ia2_states": 1024,
-                    "unique_id": -108189,
+                    "unique_id": -275389,
                     "attributes": {
                       "display": "block",
                       "explicit-name": "true",
@@ -1082,16 +1110,17 @@
                     },
                     "relations": {
                       "controllerFor": [
-                        -108183
+                        -275388
                       ]
                     }
                   },
                   {
                     "msaa_role": 20,
                     "ia2_role": 1060,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -108169,
+                    "unique_id": -275427,
                     "attributes": {
                       "display": "block",
                       "id": "help-kids",
@@ -1122,9 +1151,10 @@
                         "msaa_role": 41,
                         "ia2_role": 41,
                         "name": "0 to 8",
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -108170,
+                        "unique_id": -275431,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -1153,9 +1183,10 @@
                   {
                     "msaa_role": 23,
                     "ia2_role": 23,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -108162,
+                    "unique_id": -275436,
                     "attributes": {
                       "atomic": "true",
                       "class": "visually-hidden",
@@ -1173,9 +1204,10 @@
                   {
                     "msaa_role": 42,
                     "ia2_role": 1049,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -108217,
+                    "unique_id": -275405,
                     "attributes": {
                       "display": "block",
                       "tag": "label",
@@ -1202,7 +1234,7 @@
                     ],
                     "relations": {
                       "labelFor": [
-                        -108197
+                        -275399
                       ]
                     },
                     "children": [
@@ -1210,9 +1242,10 @@
                         "msaa_role": 41,
                         "ia2_role": 41,
                         "name": "Animals",
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -108158,
+                        "unique_id": -275441,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -1242,9 +1275,10 @@
                     "msaa_role": 43,
                     "ia2_role": 43,
                     "name": "Remove animal",
+                    "default_action": "press",
                     "msaa_states": 1048577,
                     "ia2_states": 1024,
-                    "unique_id": -108207,
+                    "unique_id": -275394,
                     "attributes": {
                       "display": "block",
                       "explicit-name": "true",
@@ -1254,7 +1288,7 @@
                     },
                     "relations": {
                       "controllerFor": [
-                        -108197
+                        -275399
                       ]
                     }
                   },
@@ -1263,9 +1297,12 @@
                     "ia2_role": 52,
                     "name": "Animals",
                     "value": "0",
+                    "default_action": "activate",
+                    "value_min": 0.0,
+                    "value_max": 12.0,
                     "msaa_states": 1048576,
                     "ia2_states": 13320,
-                    "unique_id": -108197,
+                    "unique_id": -275399,
                     "attributes": {
                       "display": "block",
                       "explicit-name": "true",
@@ -1300,11 +1337,11 @@
                     ],
                     "relations": {
                       "controlledBy": [
-                        -108207,
-                        -108182
+                        -275394,
+                        -275446
                       ],
                       "labelledBy": [
-                        -108217
+                        -275405
                       ]
                     }
                   },
@@ -1312,9 +1349,10 @@
                     "msaa_role": 43,
                     "ia2_role": 43,
                     "name": "Add animal",
+                    "default_action": "press",
                     "msaa_states": 1048576,
                     "ia2_states": 1024,
-                    "unique_id": -108182,
+                    "unique_id": -275446,
                     "attributes": {
                       "display": "block",
                       "explicit-name": "true",
@@ -1324,16 +1362,17 @@
                     },
                     "relations": {
                       "controllerFor": [
-                        -108197
+                        -275399
                       ]
                     }
                   },
                   {
                     "msaa_role": 20,
                     "ia2_role": 1060,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -108172,
+                    "unique_id": -275429,
                     "attributes": {
                       "display": "block",
                       "id": "help-animals",
@@ -1364,9 +1403,10 @@
                         "msaa_role": 41,
                         "ia2_role": 41,
                         "name": "0 to 12",
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -108203,
+                        "unique_id": -275387,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -1395,9 +1435,10 @@
                   {
                     "msaa_role": 23,
                     "ia2_role": 23,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -108157,
+                    "unique_id": -275437,
                     "attributes": {
                       "atomic": "true",
                       "class": "visually-hidden",
@@ -1419,9 +1460,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1060,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -108219,
+            "unique_id": -275417,
             "attributes": {
               "display": "block",
               "tag": "div",
@@ -1451,9 +1493,10 @@
                 "msaa_role": 43,
                 "ia2_role": 43,
                 "name": "Run Test Setup",
+                "default_action": "press",
                 "msaa_states": 1,
                 "ia2_states": 1024,
-                "unique_id": -108211,
+                "unique_id": -275419,
                 "attributes": {
                   "class": "button-run-test-setup",
                   "display": "inline-block",

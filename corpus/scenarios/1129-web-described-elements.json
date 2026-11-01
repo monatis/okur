@@ -1,0 +1,95 @@
+{
+  "id": "1129-web-described-elements",
+  "name": "Down through a heading, a button, a link and a dialog that have descriptions (aria-describedby, aria-description), Insert+Alt+R on each, Tab to the dialog's button, and Insert+Alt+R on a line without one: what JAWS says of descriptive text and its hint",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/described-elements.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Insert+Alt+R"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+Alt+R"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Insert+Alt+R"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Insert+Alt+R"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Insert+Alt+R"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Insert+Alt+R"
+    }
+  ]
+}

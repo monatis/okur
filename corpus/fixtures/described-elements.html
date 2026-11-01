@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Described Elements</title>
+</head>
+<body>
+  <main>
+    <h1>Described elements</h1>
+    <p>A plain line before them.</p>
+    <h2 aria-describedby="shipping-note">Shipping options</h2>
+    <p id="shipping-note" hidden>Orders over fifty dollars ship free.</p>
+    <button type="button" aria-describedby="delete-note">Delete account</button>
+    <p id="delete-note">This cannot be undone.</p>
+    <p><a href="#end" aria-description="Jumps to the end of the page">Skip ahead</a></p>
+    <div role="dialog" aria-labelledby="added-title" aria-describedby="added-note">
+      <h2 id="added-title">Address Added</h2>
+      <p id="added-note">The address you provided has been added.</p>
+      <button type="button">OK</button>
+    </div>
+    <p id="end">The end.</p>
+  </main>
+</body>
+</html>

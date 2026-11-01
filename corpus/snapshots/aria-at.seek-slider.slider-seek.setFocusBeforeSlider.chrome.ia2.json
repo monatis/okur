@@ -8,9 +8,9 @@
     "window_class": "Chrome_WidgetWin_1",
     "process_version": "156.0.8078.76",
     "fixture_sha256": "017b1798baf2d40721be715299daa5444f41e4b602d9461e97e3c6e552cac569",
-    "captured_at_unix_ms": 1793500629502,
+    "captured_at_unix_ms": 1793529349195,
     "node_count": 26,
-    "capture_ms": 189
+    "capture_ms": 204
   },
   "root": {
     "msaa_role": 15,
@@ -19,7 +19,7 @@
     "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/seek-slider/slider-seek.setFocusBeforeSlider.html",
     "msaa_states": 1048640,
     "ia2_states": 1024,
-    "unique_id": -142814,
+    "unique_id": -276292,
     "attributes": {
       "explicit-name": "true",
       "name-from": "related-element",
@@ -49,9 +49,10 @@
       {
         "msaa_role": 20,
         "ia2_role": 1069,
+        "default_action": "click ancestor",
         "msaa_states": 0,
         "ia2_states": 1024,
-        "unique_id": -142813,
+        "unique_id": -276281,
         "attributes": {
           "display": "block",
           "tag": "main",
@@ -105,9 +106,10 @@
             "msaa_role": 20,
             "ia2_role": 1044,
             "name": "Media Seek Slider Example",
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -142816,
+            "unique_id": -276274,
             "attributes": {
               "display": "block",
               "level": "1",
@@ -145,9 +147,10 @@
                 "msaa_role": 41,
                 "ia2_role": 41,
                 "name": "Media Seek Slider Example",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -142817,
+                "unique_id": -276297,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -177,9 +180,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1054,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -142815,
+            "unique_id": -276290,
             "attributes": {
               "display": "block",
               "tag": "p",
@@ -230,9 +234,10 @@
                 "msaa_role": 41,
                 "ia2_role": 41,
                 "name": "The following example of the ",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -142830,
+                "unique_id": -276298,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -261,9 +266,10 @@
                 "ia2_role": 30,
                 "name": "slider design pattern",
                 "value": "https://w3c.github.io/aria-practices/#slider",
+                "default_action": "jump",
                 "msaa_states": 5242880,
                 "ia2_states": 1024,
-                "unique_id": -142801,
+                "unique_id": -276299,
                 "attributes": {
                   "display": "inline",
                   "name-from": "contents",
@@ -295,9 +301,10 @@
                     "msaa_role": 41,
                     "ia2_role": 41,
                     "name": "slider design pattern",
+                    "default_action": "click ancestor",
                     "msaa_states": 4194304,
                     "ia2_states": 1024,
-                    "unique_id": -142802,
+                    "unique_id": -276276,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -328,9 +335,10 @@
                 "msaa_role": 41,
                 "ia2_role": 41,
                 "name": " illustrates a seek control that could be used to move the current play position in an audio or video media player.",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -142800,
+                "unique_id": -276275,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -359,9 +367,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1060,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -142798,
+            "unique_id": -276295,
             "attributes": {
               "display": "block",
               "tag": "section",
@@ -414,9 +423,10 @@
                 "msaa_role": 20,
                 "ia2_role": 1044,
                 "name": "Example",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -142823,
+                "unique_id": -276279,
                 "attributes": {
                   "display": "block",
                   "id": "ex_label",
@@ -452,8 +462,8 @@
                 ],
                 "relations": {
                   "labelFor": [
-                    -142810,
-                    -142804
+                    -276286,
+                    -276264
                   ]
                 },
                 "children": [
@@ -461,9 +471,10 @@
                     "msaa_role": 41,
                     "ia2_role": 41,
                     "name": "Example",
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -142805,
+                    "unique_id": -276266,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -494,9 +505,10 @@
                 "msaa_role": 21,
                 "ia2_role": 21,
                 "name": "Start of Example",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1040,
-                "unique_id": -142810,
+                "unique_id": -276286,
                 "attributes": {
                   "display": "block",
                   "explicit-name": "true",
@@ -508,16 +520,17 @@
                 },
                 "relations": {
                   "labelledBy": [
-                    -142823
+                    -276279
                   ]
                 }
               },
               {
                 "msaa_role": 20,
                 "ia2_role": 1060,
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -142808,
+                "unique_id": -276282,
                 "attributes": {
                   "class": "example",
                   "display": "block",
@@ -581,9 +594,10 @@
                   {
                     "msaa_role": 20,
                     "ia2_role": 1060,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -142806,
+                    "unique_id": -276267,
                     "attributes": {
                       "display": "block",
                       "tag": "div",
@@ -615,9 +629,10 @@
                         "ia2_role": 30,
                         "name": "Navigate forwards from here",
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/seek-slider/slider-seek.setFocusBeforeSlider.html#beforelink",
+                        "default_action": "jump",
                         "msaa_states": 5242884,
                         "ia2_states": 1024,
-                        "unique_id": -142828,
+                        "unique_id": -276271,
                         "attributes": {
                           "display": "inline",
                           "id": "beforelink",
@@ -650,9 +665,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Navigate forwards from here",
+                            "default_action": "click ancestor",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -142826,
+                            "unique_id": -276296,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -684,9 +700,10 @@
                   {
                     "msaa_role": 20,
                     "ia2_role": 1060,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -142822,
+                    "unique_id": -276278,
                     "attributes": {
                       "class": "label",
                       "display": "block",
@@ -716,7 +733,7 @@
                     ],
                     "relations": {
                       "labelFor": [
-                        -142793
+                        -276289
                       ]
                     },
                     "children": [
@@ -724,9 +741,10 @@
                         "msaa_role": 41,
                         "ia2_role": 41,
                         "name": "Seek",
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -142819,
+                        "unique_id": -276300,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -758,9 +776,12 @@
                     "ia2_role": 51,
                     "name": "Seek",
                     "value": "1 Minute 30 Seconds of 5 Minutes",
+                    "default_action": "click ancestor",
+                    "value_min": 0.0,
+                    "value_max": 300.0,
                     "msaa_states": 1048576,
                     "ia2_states": 1040,
-                    "unique_id": -142793,
+                    "unique_id": -276289,
                     "attributes": {
                       "display": "inline",
                       "explicit-name": "true",
@@ -773,16 +794,17 @@
                     },
                     "relations": {
                       "labelledBy": [
-                        -142822
+                        -276278
                       ]
                     }
                   },
                   {
                     "msaa_role": 20,
                     "ia2_role": 1060,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -142809,
+                    "unique_id": -276284,
                     "attributes": {
                       "display": "block",
                       "tag": "div",
@@ -814,9 +836,10 @@
                         "ia2_role": 30,
                         "name": "Navigate backwards from here",
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/seek-slider/slider-seek.setFocusBeforeSlider.html#afterlink",
+                        "default_action": "jump",
                         "msaa_states": 5242880,
                         "ia2_states": 1024,
-                        "unique_id": -142795,
+                        "unique_id": -276294,
                         "attributes": {
                           "display": "inline",
                           "id": "afterlink",
@@ -849,9 +872,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Navigate backwards from here",
+                            "default_action": "click ancestor",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -142831,
+                            "unique_id": -276288,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -886,9 +910,10 @@
                 "msaa_role": 21,
                 "ia2_role": 21,
                 "name": "End of Example",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1040,
-                "unique_id": -142804,
+                "unique_id": -276264,
                 "attributes": {
                   "display": "block",
                   "explicit-name": "true",
@@ -900,7 +925,7 @@
                 },
                 "relations": {
                   "labelledBy": [
-                    -142823
+                    -276279
                   ]
                 }
               }
@@ -909,9 +934,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1060,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -142792,
+            "unique_id": -276302,
             "attributes": {
               "display": "block",
               "tag": "div",
@@ -941,9 +967,10 @@
                 "msaa_role": 43,
                 "ia2_role": 43,
                 "name": "Run Test Setup",
+                "default_action": "press",
                 "msaa_states": 1,
                 "ia2_states": 1024,
-                "unique_id": -142829,
+                "unique_id": -276285,
                 "attributes": {
                   "class": "button-run-test-setup",
                   "display": "inline-block",

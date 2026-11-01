@@ -1,0 +1,90 @@
+{
+  "id": "1128-web-aria-radio-group-focus-inside",
+  "name": "The A quick key through five ARIA radio groups, the focus on the first group's unchecked radio button, its second one checked",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-radio-labels-focused.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "A"
+    }
+  ]
+}

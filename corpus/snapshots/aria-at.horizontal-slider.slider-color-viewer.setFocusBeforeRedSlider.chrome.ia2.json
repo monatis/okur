@@ -8,9 +8,9 @@
     "window_class": "Chrome_WidgetWin_1",
     "process_version": "156.0.8078.76",
     "fixture_sha256": "6cabd6be4bf89a3a179c844ca1f39331cdc011e77c059d32818d717e539787d2",
-    "captured_at_unix_ms": 1793496988993,
+    "captured_at_unix_ms": 1793529286754,
     "node_count": 40,
-    "capture_ms": 282
+    "capture_ms": 295
   },
   "root": {
     "msaa_role": 15,
@@ -19,7 +19,7 @@
     "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/horizontal-slider/slider-color-viewer.setFocusBeforeRedSlider.html",
     "msaa_states": 1048640,
     "ia2_states": 1024,
-    "unique_id": -115044,
+    "unique_id": -275789,
     "attributes": {
       "explicit-name": "true",
       "name-from": "related-element",
@@ -49,9 +49,10 @@
       {
         "msaa_role": 20,
         "ia2_role": 1069,
+        "default_action": "click ancestor",
         "msaa_states": 0,
         "ia2_states": 1024,
-        "unique_id": -114985,
+        "unique_id": -275803,
         "attributes": {
           "display": "block",
           "tag": "main",
@@ -105,9 +106,10 @@
             "msaa_role": 20,
             "ia2_role": 1044,
             "name": "Color Viewer Slider Example",
+            "default_action": "click ancestor",
             "msaa_states": 65536,
             "ia2_states": 1024,
-            "unique_id": -114989,
+            "unique_id": -275791,
             "attributes": {
               "display": "block",
               "level": "1",
@@ -145,9 +147,10 @@
                 "msaa_role": 41,
                 "ia2_role": 41,
                 "name": "Color Viewer Slider Example",
+                "default_action": "click ancestor",
                 "msaa_states": 65536,
                 "ia2_states": 1024,
-                "unique_id": -115015,
+                "unique_id": -275768,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -177,9 +180,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1054,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -115038,
+            "unique_id": -275777,
             "attributes": {
               "display": "block",
               "tag": "p",
@@ -220,9 +224,10 @@
                 "msaa_role": 41,
                 "ia2_role": 41,
                 "name": "Following is an example of a color viewer that demonstrates the ",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -115024,
+                "unique_id": -275779,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -251,9 +256,10 @@
                 "ia2_role": 30,
                 "name": "slider design pattern.",
                 "value": "https://w3c.github.io/aria-practices/#slider",
+                "default_action": "jump",
                 "msaa_states": 5242880,
                 "ia2_states": 1024,
-                "unique_id": -115032,
+                "unique_id": -275771,
                 "attributes": {
                   "display": "inline",
                   "name-from": "contents",
@@ -285,9 +291,10 @@
                     "msaa_role": 41,
                     "ia2_role": 41,
                     "name": "slider design pattern.",
+                    "default_action": "click ancestor",
                     "msaa_states": 4194304,
                     "ia2_states": 1024,
-                    "unique_id": -115026,
+                    "unique_id": -275795,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -319,9 +326,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1060,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -115039,
+            "unique_id": -275762,
             "attributes": {
               "display": "block",
               "tag": "section",
@@ -374,9 +382,10 @@
                 "msaa_role": 20,
                 "ia2_role": 1044,
                 "name": "Example",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -115012,
+                "unique_id": -275790,
                 "attributes": {
                   "display": "block",
                   "id": "ex_label",
@@ -412,8 +421,8 @@
                 ],
                 "relations": {
                   "labelFor": [
-                    -115020,
-                    -114992
+                    -275778,
+                    -275796
                   ]
                 },
                 "children": [
@@ -421,9 +430,10 @@
                     "msaa_role": 41,
                     "ia2_role": 41,
                     "name": "Example",
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -115030,
+                    "unique_id": -275794,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -454,9 +464,10 @@
                 "msaa_role": 21,
                 "ia2_role": 21,
                 "name": "Start of Example",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1040,
-                "unique_id": -115020,
+                "unique_id": -275778,
                 "attributes": {
                   "display": "block",
                   "explicit-name": "true",
@@ -468,16 +479,17 @@
                 },
                 "relations": {
                   "labelledBy": [
-                    -115012
+                    -275790
                   ]
                 }
               },
               {
                 "msaa_role": 20,
                 "ia2_role": 1060,
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -115008,
+                "unique_id": -275784,
                 "attributes": {
                   "display": "block",
                   "id": "ex1",
@@ -508,9 +520,10 @@
                     "msaa_role": 20,
                     "ia2_role": 20,
                     "name": "Color Viewer",
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -114997,
+                    "unique_id": -275755,
                     "attributes": {
                       "class": "color-viewer-sliders",
                       "display": "block",
@@ -693,7 +706,7 @@
                     ],
                     "relations": {
                       "labelledBy": [
-                        -115003
+                        -275807
                       ]
                     },
                     "children": [
@@ -701,9 +714,10 @@
                         "msaa_role": 20,
                         "ia2_role": 1044,
                         "name": "Color Viewer",
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -115003,
+                        "unique_id": -275807,
                         "attributes": {
                           "display": "block",
                           "id": "id-color-viewer",
@@ -739,7 +753,7 @@
                         ],
                         "relations": {
                           "labelFor": [
-                            -114997
+                            -275755
                           ]
                         },
                         "children": [
@@ -747,9 +761,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Color Viewer",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -115037,
+                            "unique_id": -275806,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -781,9 +796,10 @@
                         "ia2_role": 30,
                         "name": "Navigate forwards from here",
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/horizontal-slider/slider-color-viewer.setFocusBeforeRedSlider.html#beforelink",
+                        "default_action": "jump",
                         "msaa_states": 5242884,
                         "ia2_states": 1024,
-                        "unique_id": -114994,
+                        "unique_id": -275811,
                         "attributes": {
                           "display": "inline",
                           "id": "beforelink",
@@ -816,9 +832,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Navigate forwards from here",
+                            "default_action": "click ancestor",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -115042,
+                            "unique_id": -275759,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -848,9 +865,10 @@
                       {
                         "msaa_role": 20,
                         "ia2_role": 1060,
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -115047,
+                        "unique_id": -275797,
                         "attributes": {
                           "class": "color-slider-label",
                           "display": "block",
@@ -880,7 +898,7 @@
                         ],
                         "relations": {
                           "labelFor": [
-                            -115036
+                            -275783
                           ]
                         },
                         "children": [
@@ -888,9 +906,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Red",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -115048,
+                            "unique_id": -275769,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -922,9 +941,12 @@
                         "ia2_role": 51,
                         "name": "Red",
                         "value": "128",
+                        "default_action": "click ancestor",
+                        "value_min": 0.0,
+                        "value_max": 255.0,
                         "msaa_states": 1048576,
                         "ia2_states": 1040,
-                        "unique_id": -115036,
+                        "unique_id": -275783,
                         "attributes": {
                           "class": "color-slider red",
                           "display": "block",
@@ -937,7 +959,7 @@
                         },
                         "relations": {
                           "labelledBy": [
-                            -115047
+                            -275797
                           ]
                         }
                       },
@@ -946,9 +968,10 @@
                         "ia2_role": 30,
                         "name": "Navigate backwards from here",
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/horizontal-slider/slider-color-viewer.setFocusBeforeRedSlider.html#afterlink",
+                        "default_action": "jump",
                         "msaa_states": 5242880,
                         "ia2_states": 1024,
-                        "unique_id": -115016,
+                        "unique_id": -275787,
                         "attributes": {
                           "display": "inline",
                           "id": "afterlink",
@@ -981,9 +1004,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Navigate backwards from here",
+                            "default_action": "click ancestor",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -114986,
+                            "unique_id": -275781,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -1013,9 +1037,10 @@
                       {
                         "msaa_role": 20,
                         "ia2_role": 1060,
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -115001,
+                        "unique_id": -275767,
                         "attributes": {
                           "class": "color-slider-label",
                           "display": "block",
@@ -1045,7 +1070,7 @@
                         ],
                         "relations": {
                           "labelFor": [
-                            -115002
+                            -275808
                           ]
                         },
                         "children": [
@@ -1053,9 +1078,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Green",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -115046,
+                            "unique_id": -275792,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -1087,9 +1113,12 @@
                         "ia2_role": 51,
                         "name": "Green",
                         "value": "128",
+                        "default_action": "click ancestor",
+                        "value_min": 0.0,
+                        "value_max": 255.0,
                         "msaa_states": 1048576,
                         "ia2_states": 1040,
-                        "unique_id": -115002,
+                        "unique_id": -275808,
                         "attributes": {
                           "class": "color-slider green",
                           "display": "block",
@@ -1102,16 +1131,17 @@
                         },
                         "relations": {
                           "labelledBy": [
-                            -115001
+                            -275767
                           ]
                         }
                       },
                       {
                         "msaa_role": 20,
                         "ia2_role": 1060,
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -115031,
+                        "unique_id": -275756,
                         "attributes": {
                           "class": "color-slider-label",
                           "display": "block",
@@ -1141,7 +1171,7 @@
                         ],
                         "relations": {
                           "labelFor": [
-                            -115009
+                            -275805
                           ]
                         },
                         "children": [
@@ -1149,9 +1179,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Blue",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -115040,
+                            "unique_id": -275801,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -1183,9 +1214,12 @@
                         "ia2_role": 51,
                         "name": "Blue",
                         "value": "128",
+                        "default_action": "click ancestor",
+                        "value_min": 0.0,
+                        "value_max": 255.0,
                         "msaa_states": 1048576,
                         "ia2_states": 1040,
-                        "unique_id": -115009,
+                        "unique_id": -275805,
                         "attributes": {
                           "class": "color-slider blue",
                           "display": "block",
@@ -1198,7 +1232,7 @@
                         },
                         "relations": {
                           "labelledBy": [
-                            -115031
+                            -275756
                           ]
                         }
                       },
@@ -1206,9 +1240,10 @@
                         "msaa_role": 20,
                         "ia2_role": 1044,
                         "name": "Color View Box",
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -115045,
+                        "unique_id": -275758,
                         "attributes": {
                           "display": "block",
                           "level": "4",
@@ -1246,9 +1281,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Color View Box",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -115033,
+                            "unique_id": -275810,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -1278,9 +1314,10 @@
                       {
                         "msaa_role": 42,
                         "ia2_role": 1049,
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -115034,
+                        "unique_id": -275800,
                         "attributes": {
                           "display": "block",
                           "tag": "label",
@@ -1317,7 +1354,7 @@
                         ],
                         "relations": {
                           "labelFor": [
-                            -115010
+                            -275809
                           ]
                         },
                         "children": [
@@ -1325,9 +1362,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Color (HEX): ",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -115028,
+                            "unique_id": -275760,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -1356,9 +1394,10 @@
                             "ia2_role": 42,
                             "name": "Color (HEX):",
                             "value": "#808080",
+                            "default_action": "activate",
                             "msaa_states": 1048640,
                             "ia2_states": 13320,
-                            "unique_id": -115010,
+                            "unique_id": -275809,
                             "attributes": {
                               "class": "color-value-hex",
                               "display": "inline-block",
@@ -1390,7 +1429,7 @@
                             ],
                             "relations": {
                               "labelledBy": [
-                                -115034
+                                -275800
                               ]
                             }
                           }
@@ -1399,9 +1438,10 @@
                       {
                         "msaa_role": 42,
                         "ia2_role": 1049,
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -115011,
+                        "unique_id": -275765,
                         "attributes": {
                           "display": "block",
                           "tag": "label",
@@ -1438,7 +1478,7 @@
                         ],
                         "relations": {
                           "labelFor": [
-                            -115006
+                            -275776
                           ]
                         },
                         "children": [
@@ -1446,9 +1486,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Color (RGB): ",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -115025,
+                            "unique_id": -275773,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -1477,9 +1518,10 @@
                             "ia2_role": 42,
                             "name": "Color (RGB):",
                             "value": "128, 128, 128",
+                            "default_action": "activate",
                             "msaa_states": 1048640,
                             "ia2_states": 13320,
-                            "unique_id": -115006,
+                            "unique_id": -275776,
                             "attributes": {
                               "class": "color-value-rgb",
                               "display": "inline-block",
@@ -1511,7 +1553,7 @@
                             ],
                             "relations": {
                               "labelledBy": [
-                                -115011
+                                -275765
                               ]
                             }
                           }
@@ -1525,9 +1567,10 @@
                 "msaa_role": 21,
                 "ia2_role": 21,
                 "name": "End of Example",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1040,
-                "unique_id": -114992,
+                "unique_id": -275796,
                 "attributes": {
                   "display": "block",
                   "explicit-name": "true",
@@ -1539,7 +1582,7 @@
                 },
                 "relations": {
                   "labelledBy": [
-                    -115012
+                    -275790
                   ]
                 }
               }
@@ -1548,9 +1591,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1060,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -114995,
+            "unique_id": -275816,
             "attributes": {
               "display": "block",
               "tag": "div",
@@ -1580,9 +1624,10 @@
                 "msaa_role": 43,
                 "ia2_role": 43,
                 "name": "Run Test Setup",
+                "default_action": "press",
                 "msaa_states": 1,
                 "ia2_states": 1024,
-                "unique_id": -115005,
+                "unique_id": -275766,
                 "attributes": {
                   "class": "button-run-test-setup",
                   "display": "inline-block",

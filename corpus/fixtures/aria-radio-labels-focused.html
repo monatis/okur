@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Radio Group Labels Focused</title>
+  <style>
+    [role="radio"] { display: block; padding: 2px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Radio group labels</h1>
+    <p>Each group has its second radio button checked.</p>
+
+    <div role="radiogroup" aria-labelledby="label-h">
+      <h3 id="label-h">Hotel</h3>
+      <div role="radio" aria-checked="false" tabindex="-1">Hotel one</div>
+      <div role="radio" aria-checked="true" tabindex="0">Hotel two</div>
+      <div role="radio" aria-checked="false" tabindex="-1">Hotel three</div>
+    </div>
+
+    <h3 id="label-i">India</h3>
+    <div role="radiogroup" aria-labelledby="label-i">
+      <div role="radio" aria-checked="false" tabindex="-1">India one</div>
+      <div role="radio" aria-checked="true" tabindex="0">India two</div>
+      <div role="radio" aria-checked="false" tabindex="-1">India three</div>
+    </div>
+
+    <div role="radiogroup" aria-labelledby="label-j">
+      <div id="label-j">Juliett</div>
+      <div role="radio" aria-checked="false" tabindex="-1">Juliett one</div>
+      <div role="radio" aria-checked="true" tabindex="0">Juliett two</div>
+      <div role="radio" aria-checked="false" tabindex="-1">Juliett three</div>
+    </div>
+
+    <div id="label-k">Kilo</div>
+    <div role="radiogroup" aria-labelledby="label-k">
+      <div role="radio" aria-checked="false" tabindex="-1">Kilo one</div>
+      <div role="radio" aria-checked="true" tabindex="0">Kilo two</div>
+      <div role="radio" aria-checked="false" tabindex="-1">Kilo three</div>
+    </div>
+
+    <div role="radiogroup" aria-label="Lima">
+      <div role="radio" aria-checked="false" tabindex="-1">Lima one</div>
+      <div role="radio" aria-checked="true" tabindex="0">Lima two</div>
+      <div role="radio" aria-checked="false" tabindex="-1">Lima three</div>
+    </div>
+
+    <p>End of the groups.</p>
+  </main>
+  <script>
+    // As ARIA-AT's rating setups leave it: the focus on a radio button of the first group,
+    // the second one checked.
+    window.addEventListener('load', function () {
+      document.querySelector('[aria-labelledby="label-h"] [role="radio"]').focus();
+    });
+  </script>
+</body>
+</html>

@@ -1973,6 +1973,14 @@
       "sha256": "cab89d10c3286135f6dc413d2c23b814123807c8d1657130e1b58559c7b2393c",
       "size_bytes": 2878
     },
+    "aria-radio-labels-focused.html": {
+      "sha256": "eeebe5add32d3ea56cc0da2b5658fd736c67dcd70c0315e11229775e981c70ab",
+      "size_bytes": 2227
+    },
+    "aria-radio-labels.html": {
+      "sha256": "c18b9b364b6ab449bfcd74832468085951dab8c490f9035fb03d5842b21ea70b",
+      "size_bytes": 1931
+    },
     "aria-radio-place.html": {
       "sha256": "c074ae9edb3e8353813ebea09f72136e1f6fb88e818e8266edb5dae156360ae9",
       "size_bytes": 3120
@@ -2004,6 +2012,10 @@
     "custom-label.html": {
       "sha256": "27916f23f111a301e8c331dd1f684792ab3feb50f5ed8bb81bc3b610a164e2c7",
       "size_bytes": 467
+    },
+    "described-elements.html": {
+      "sha256": "3c5e470c48c7391f066604d67a8eace4d7bf49a8249827af7d244432d25940e4",
+      "size_bytes": 858
     },
     "desktop-changing-text.ps1": {
       "sha256": "4460fff976e973072263689fec4c0d92d4a751a362d54678585d95df7e3dc19e",
@@ -4183,6 +4195,48 @@
       "evidence": {
         "sha256": "275af50b94b21ea68c15852e011bba1a572c0eb86b2d8cc2a21b034ea799e0a3",
         "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1127-web-aria-radio-group-labels",
+      "fixture": "aria-radio-labels.html",
+      "evidence": {
+        "sha256": "70e2067b1532d42ae5c227b42c53b96ddb780ab9f638c178ccacf2099389987c",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1128-web-aria-radio-group-focus-inside",
+      "fixture": "aria-radio-labels-focused.html",
+      "evidence": {
+        "sha256": "14e99ebd1abd4ebc84d7f9400116830e05386985a4529fda856ef2de6bd58d5a",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1129-web-described-elements",
+      "fixture": "described-elements.html",
+      "evidence": {
+        "sha256": "82fa1e15a036df7161d036208b0593c3321a939edf7fdb621fb4d773239ed338",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -28875,10 +28929,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1901,
-    "scenarios_with_evidence": 1901,
-    "total_trials": 5709,
-    "successful_trials": 5692,
-    "deterministic_scenarios": 1590
+    "scenarios": 1904,
+    "scenarios_with_evidence": 1904,
+    "total_trials": 5718,
+    "successful_trials": 5701,
+    "deterministic_scenarios": 1592
   }
 }

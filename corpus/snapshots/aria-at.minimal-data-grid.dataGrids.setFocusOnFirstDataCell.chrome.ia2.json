@@ -8,9 +8,9 @@
     "window_class": "Chrome_WidgetWin_1",
     "process_version": "156.0.8078.76",
     "fixture_sha256": "59464157f54b453a5cb0049bfc7b50bb4d397f8dbcf3cc4886b69a73d6b8ccea",
-    "captured_at_unix_ms": 1793493742463,
+    "captured_at_unix_ms": 1793529119318,
     "node_count": 111,
-    "capture_ms": 678
+    "capture_ms": 712
   },
   "root": {
     "msaa_role": 15,
@@ -19,7 +19,7 @@
     "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html",
     "msaa_states": 1048640,
     "ia2_states": 1024,
-    "unique_id": -90340,
+    "unique_id": -274097,
     "attributes": {
       "explicit-name": "true",
       "name-from": "related-element",
@@ -49,9 +49,10 @@
       {
         "msaa_role": 20,
         "ia2_role": 1069,
+        "default_action": "click ancestor",
         "msaa_states": 0,
         "ia2_states": 1024,
-        "unique_id": -90435,
+        "unique_id": -274007,
         "attributes": {
           "display": "block",
           "tag": "main",
@@ -109,9 +110,10 @@
             "msaa_role": 20,
             "ia2_role": 1044,
             "name": "Data Grid Examples",
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -90424,
+            "unique_id": -274020,
             "attributes": {
               "display": "block",
               "level": "1",
@@ -149,9 +151,10 @@
                 "msaa_role": 41,
                 "ia2_role": 41,
                 "name": "Data Grid Examples",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -90353,
+                "unique_id": -274028,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -181,9 +184,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1054,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -90416,
+            "unique_id": -274095,
             "attributes": {
               "display": "block",
               "tag": "p",
@@ -238,9 +242,10 @@
                 "msaa_role": 41,
                 "ia2_role": 41,
                 "name": "Following is an example implementation of the ",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -90345,
+                "unique_id": -274029,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -269,9 +274,10 @@
                 "ia2_role": 30,
                 "name": "design pattern for grid",
                 "value": "https://w3c.github.io/aria-practices/#grid",
+                "default_action": "jump",
                 "msaa_states": 5242880,
                 "ia2_states": 1024,
-                "unique_id": -90419,
+                "unique_id": -274084,
                 "attributes": {
                   "display": "inline",
                   "name-from": "contents",
@@ -303,9 +309,10 @@
                     "msaa_role": 41,
                     "ia2_role": 41,
                     "name": "design pattern for grid",
+                    "default_action": "click ancestor",
                     "msaa_states": 4194304,
                     "ia2_states": 1024,
-                    "unique_id": -90377,
+                    "unique_id": -274051,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -336,9 +343,10 @@
                 "msaa_role": 41,
                 "ia2_role": 41,
                 "name": " that demonstrate the keyboard interactions and ARIA features that enable accessible, interactive presentation of tabular information. The following grid presents a set of financial transactions via a simple grid with minimum ARIA markup and keyboard support.",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -90382,
+                "unique_id": -274050,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -371,9 +379,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1060,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -90408,
+            "unique_id": -274077,
             "attributes": {
               "display": "block",
               "tag": "section",
@@ -418,9 +427,10 @@
                 "msaa_role": 20,
                 "ia2_role": 1044,
                 "name": "Examples",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -90393,
+                "unique_id": -274073,
                 "attributes": {
                   "display": "block",
                   "level": "2",
@@ -458,9 +468,10 @@
                     "msaa_role": 41,
                     "ia2_role": 41,
                     "name": "Examples",
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -90360,
+                    "unique_id": -274041,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -490,9 +501,10 @@
               {
                 "msaa_role": 20,
                 "ia2_role": 1060,
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -90391,
+                "unique_id": -274059,
                 "attributes": {
                   "display": "block",
                   "tag": "section",
@@ -545,9 +557,10 @@
                     "msaa_role": 20,
                     "ia2_role": 1044,
                     "name": "Example 1: Minimal Data Grid",
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -90375,
+                    "unique_id": -274132,
                     "attributes": {
                       "display": "block",
                       "id": "ex1_label",
@@ -583,8 +596,8 @@
                     ],
                     "relations": {
                       "labelFor": [
-                        -90367,
-                        -90486
+                        -274124,
+                        -273985
                       ]
                     },
                     "children": [
@@ -592,9 +605,10 @@
                         "msaa_role": 41,
                         "ia2_role": 41,
                         "name": "Example 1: Minimal Data Grid",
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -90395,
+                        "unique_id": -273993,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -625,9 +639,10 @@
                     "msaa_role": 21,
                     "ia2_role": 21,
                     "name": "Start of Example 1: Minimal Data Grid",
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1040,
-                    "unique_id": -90367,
+                    "unique_id": -274124,
                     "attributes": {
                       "display": "block",
                       "explicit-name": "true",
@@ -639,16 +654,17 @@
                     },
                     "relations": {
                       "labelledBy": [
-                        -90375
+                        -274132
                       ]
                     }
                   },
                   {
                     "msaa_role": 20,
                     "ia2_role": 1060,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -90361,
+                    "unique_id": -274122,
                     "attributes": {
                       "display": "block",
                       "id": "ex1",
@@ -724,9 +740,10 @@
                         "msaa_role": 20,
                         "ia2_role": 1044,
                         "name": "Transactions January 1 through January 6",
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -90352,
+                        "unique_id": -274105,
                         "attributes": {
                           "display": "block",
                           "id": "grid1Label",
@@ -762,7 +779,7 @@
                         ],
                         "relations": {
                           "labelFor": [
-                            -90492
+                            -274015
                           ]
                         },
                         "children": [
@@ -770,9 +787,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Transactions January 1 through January 6",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -90398,
+                            "unique_id": -273987,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -804,9 +822,10 @@
                         "ia2_role": 30,
                         "name": "Navigate forwards from here",
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#beforelink",
+                        "default_action": "jump",
                         "msaa_states": 5242880,
                         "ia2_states": 1024,
-                        "unique_id": -90338,
+                        "unique_id": -274100,
                         "attributes": {
                           "display": "inline",
                           "id": "beforelink",
@@ -839,9 +858,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Navigate forwards from here",
+                            "default_action": "click ancestor",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -90385,
+                            "unique_id": -273977,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -872,9 +892,10 @@
                         "msaa_role": 24,
                         "ia2_role": 24,
                         "name": "Transactions January 1 through January 6",
+                        "default_action": "click",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -90492,
+                        "unique_id": -274015,
                         "attributes": {
                           "class": "data",
                           "display": "table",
@@ -930,7 +951,7 @@
                         ],
                         "relations": {
                           "labelledBy": [
-                            -90352
+                            -274105
                           ]
                         },
                         "children": [
@@ -938,9 +959,10 @@
                             "msaa_role": 28,
                             "ia2_role": 28,
                             "name": "Date Type Description Amount Balance",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -90479,
+                            "unique_id": -274001,
                             "attributes": {
                               "display": "table-row",
                               "name-from": "contents",
@@ -988,9 +1010,10 @@
                                 "msaa_role": 25,
                                 "ia2_role": 25,
                                 "name": "Date",
+                                "default_action": "click ancestor",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -90471,
+                                "unique_id": -273995,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -1023,9 +1046,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "Date",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90417,
+                                    "unique_id": -274006,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -1056,9 +1080,10 @@
                                 "msaa_role": 25,
                                 "ia2_role": 25,
                                 "name": "Type",
+                                "default_action": "click ancestor",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -90473,
+                                "unique_id": -273989,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -1091,9 +1116,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "Type",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90428,
+                                    "unique_id": -274011,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -1124,9 +1150,10 @@
                                 "msaa_role": 25,
                                 "ia2_role": 25,
                                 "name": "Description",
+                                "default_action": "click ancestor",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -90468,
+                                "unique_id": -273982,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -1159,9 +1186,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "Description",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90413,
+                                    "unique_id": -274003,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -1192,9 +1220,10 @@
                                 "msaa_role": 25,
                                 "ia2_role": 25,
                                 "name": "Amount",
+                                "default_action": "click ancestor",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -90461,
+                                "unique_id": -274048,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -1227,9 +1256,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "Amount",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90436,
+                                    "unique_id": -274113,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -1260,9 +1290,10 @@
                                 "msaa_role": 25,
                                 "ia2_role": 25,
                                 "name": "Balance",
+                                "default_action": "click ancestor",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -90465,
+                                "unique_id": -274049,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -1295,9 +1326,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "Balance",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90443,
+                                    "unique_id": -274115,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -1330,9 +1362,10 @@
                             "msaa_role": 28,
                             "ia2_role": 28,
                             "name": "01-Jan-16 Deposit Cash Deposit $1,000,000.00 $1,000,000.00",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -90450,
+                            "unique_id": -274043,
                             "attributes": {
                               "display": "table-row",
                               "name-from": "contents",
@@ -1379,9 +1412,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "01-Jan-16",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048580,
                                 "ia2_states": 1024,
-                                "unique_id": -90441,
+                                "unique_id": -274026,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -1413,9 +1447,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "01-Jan-16",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90430,
+                                    "unique_id": -274101,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -1445,9 +1480,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "Deposit",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90446,
+                                "unique_id": -274038,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -1479,9 +1515,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "Deposit",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90457,
+                                    "unique_id": -274130,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -1511,9 +1548,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "Cash Deposit",
+                                "default_action": "click ancestor",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -90426,
+                                "unique_id": -274025,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -1547,9 +1585,10 @@
                                     "ia2_role": 30,
                                     "name": "Cash Deposit",
                                     "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#",
+                                    "default_action": "jump",
                                     "msaa_states": 5242880,
                                     "ia2_states": 1024,
-                                    "unique_id": -90415,
+                                    "unique_id": -274090,
                                     "attributes": {
                                       "display": "inline",
                                       "name-from": "contents",
@@ -1581,9 +1620,10 @@
                                         "msaa_role": 41,
                                         "ia2_role": 41,
                                         "name": "Cash Deposit",
+                                        "default_action": "click ancestor",
                                         "msaa_states": 4194304,
                                         "ia2_states": 1024,
-                                        "unique_id": -90458,
+                                        "unique_id": -274135,
                                         "attributes": {
                                           "name-from": "contents"
                                         },
@@ -1616,9 +1656,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "$1,000,000.00",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90403,
+                                "unique_id": -274076,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -1650,9 +1691,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "$1,000,000.00",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90453,
+                                    "unique_id": -274125,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -1682,9 +1724,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "$1,000,000.00",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90411,
+                                "unique_id": -274080,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -1716,9 +1759,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "$1,000,000.00",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90469,
+                                    "unique_id": -274069,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -1750,9 +1794,10 @@
                             "msaa_role": 28,
                             "ia2_role": 28,
                             "name": "02-Jan-16 Debit Down Town Grocery $250.00 $999,750.00",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -90397,
+                            "unique_id": -274068,
                             "attributes": {
                               "display": "table-row",
                               "name-from": "contents",
@@ -1799,9 +1844,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "02-Jan-16",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90401,
+                                "unique_id": -274056,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -1833,9 +1879,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "02-Jan-16",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90475,
+                                    "unique_id": -274055,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -1865,9 +1912,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "Debit",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90394,
+                                "unique_id": -274064,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -1899,9 +1947,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "Debit",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90470,
+                                    "unique_id": -274062,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -1931,9 +1980,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "Down Town Grocery",
+                                "default_action": "click ancestor",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -90369,
+                                "unique_id": -274133,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -1967,9 +2017,10 @@
                                     "ia2_role": 30,
                                     "name": "Down Town Grocery",
                                     "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#",
+                                    "default_action": "jump",
                                     "msaa_states": 5242880,
                                     "ia2_states": 1024,
-                                    "unique_id": -90381,
+                                    "unique_id": -274117,
                                     "attributes": {
                                       "display": "inline",
                                       "name-from": "contents",
@@ -2001,9 +2052,10 @@
                                         "msaa_role": 41,
                                         "ia2_role": 41,
                                         "name": "Down Town Grocery",
+                                        "default_action": "click ancestor",
                                         "msaa_states": 4194304,
                                         "ia2_states": 1024,
-                                        "unique_id": -90483,
+                                        "unique_id": -274091,
                                         "attributes": {
                                           "name-from": "contents"
                                         },
@@ -2036,9 +2088,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "$250.00",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90371,
+                                "unique_id": -274128,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -2070,9 +2123,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "$250.00",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90339,
+                                    "unique_id": -274074,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -2102,9 +2156,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "$999,750.00",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90343,
+                                "unique_id": -274109,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -2136,9 +2191,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "$999,750.00",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90488,
+                                    "unique_id": -274085,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -2170,9 +2226,10 @@
                             "msaa_role": 28,
                             "ia2_role": 28,
                             "name": "03-Jan-16 Debit Hot Coffee $9.00 $999,741.00",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -90359,
+                            "unique_id": -274110,
                             "attributes": {
                               "display": "table-row",
                               "name-from": "contents",
@@ -2219,9 +2276,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "03-Jan-16",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90354,
+                                "unique_id": -274103,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -2253,9 +2311,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "03-Jan-16",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90347,
+                                    "unique_id": -274030,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -2285,9 +2344,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "Debit",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90478,
+                                "unique_id": -274000,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -2319,9 +2379,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "Debit",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90363,
+                                    "unique_id": -274031,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -2351,9 +2412,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "Hot Coffee",
+                                "default_action": "click ancestor",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -90341,
+                                "unique_id": -274012,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -2387,9 +2449,10 @@
                                     "ia2_role": 30,
                                     "name": "Hot Coffee",
                                     "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#",
+                                    "default_action": "jump",
                                     "msaa_states": 5242880,
                                     "ia2_states": 1024,
-                                    "unique_id": -90497,
+                                    "unique_id": -274014,
                                     "attributes": {
                                       "display": "inline",
                                       "name-from": "contents",
@@ -2421,9 +2484,10 @@
                                         "msaa_role": 41,
                                         "ia2_role": 41,
                                         "name": "Hot Coffee",
+                                        "default_action": "click ancestor",
                                         "msaa_states": 4194304,
                                         "ia2_states": 1024,
-                                        "unique_id": -90355,
+                                        "unique_id": -274027,
                                         "attributes": {
                                           "name-from": "contents"
                                         },
@@ -2456,9 +2520,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "$9.00",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90462,
+                                "unique_id": -273984,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -2490,9 +2555,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "$9.00",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90364,
+                                    "unique_id": -274035,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -2522,9 +2588,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "$999,741.00",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90476,
+                                "unique_id": -273990,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -2556,9 +2623,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "$999,741.00",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90378,
+                                    "unique_id": -274053,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -2590,9 +2658,10 @@
                             "msaa_role": 28,
                             "ia2_role": 28,
                             "name": "04-Jan-16 Debit The Filling Station $88.00 $999,653.00",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -90449,
+                            "unique_id": -274040,
                             "attributes": {
                               "display": "table-row",
                               "name-from": "contents",
@@ -2639,9 +2708,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "04-Jan-16",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90454,
+                                "unique_id": -274036,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -2673,9 +2743,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "04-Jan-16",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90376,
+                                    "unique_id": -274044,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -2705,9 +2776,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "Debit",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90464,
+                                "unique_id": -274054,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -2739,9 +2811,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "Debit",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90384,
+                                    "unique_id": -273979,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -2771,9 +2844,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "The Filling Station",
+                                "default_action": "click ancestor",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -90433,
+                                "unique_id": -274023,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -2807,9 +2881,10 @@
                                     "ia2_role": 30,
                                     "name": "The Filling Station",
                                     "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#",
+                                    "default_action": "jump",
                                     "msaa_states": 5242880,
                                     "ia2_states": 1024,
-                                    "unique_id": -90429,
+                                    "unique_id": -274022,
                                     "attributes": {
                                       "display": "inline",
                                       "name-from": "contents",
@@ -2841,9 +2916,10 @@
                                         "msaa_role": 41,
                                         "ia2_role": 41,
                                         "name": "The Filling Station",
+                                        "default_action": "click ancestor",
                                         "msaa_states": 4194304,
                                         "ia2_states": 1024,
-                                        "unique_id": -90400,
+                                        "unique_id": -273991,
                                         "attributes": {
                                           "name-from": "contents"
                                         },
@@ -2876,9 +2952,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "$88.00",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90434,
+                                "unique_id": -274032,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -2910,9 +2987,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "$88.00",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90396,
+                                    "unique_id": -273986,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -2942,9 +3020,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "$999,653.00",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90407,
+                                "unique_id": -274087,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -2976,9 +3055,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "$999,653.00",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90404,
+                                    "unique_id": -273998,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -3010,9 +3090,10 @@
                             "msaa_role": 28,
                             "ia2_role": 28,
                             "name": "05-Jan-16 Debit Tinker's Hardware $3,421.00 $996,232.00",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -90410,
+                            "unique_id": -274078,
                             "attributes": {
                               "display": "table-row",
                               "name-from": "contents",
@@ -3059,9 +3140,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "05-Jan-16",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90421,
+                                "unique_id": -274089,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -3093,9 +3175,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "05-Jan-16",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90422,
+                                    "unique_id": -274013,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -3125,9 +3208,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "Debit",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90387,
+                                "unique_id": -274061,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -3159,9 +3243,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "Debit",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90427,
+                                    "unique_id": -274099,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -3191,9 +3276,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "Tinker's Hardware",
+                                "default_action": "click ancestor",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -90390,
+                                "unique_id": -274060,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -3227,9 +3313,10 @@
                                     "ia2_role": 30,
                                     "name": "Tinker's Hardware",
                                     "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#",
+                                    "default_action": "jump",
                                     "msaa_states": 5242880,
                                     "ia2_states": 1024,
-                                    "unique_id": -90402,
+                                    "unique_id": -274071,
                                     "attributes": {
                                       "display": "inline",
                                       "name-from": "contents",
@@ -3261,9 +3348,10 @@
                                         "msaa_role": 41,
                                         "ia2_role": 41,
                                         "name": "Tinker's Hardware",
+                                        "default_action": "click ancestor",
                                         "msaa_states": 4194304,
                                         "ia2_states": 1024,
-                                        "unique_id": -90432,
+                                        "unique_id": -274096,
                                         "attributes": {
                                           "name-from": "contents"
                                         },
@@ -3296,9 +3384,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "$3,421.00",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90366,
+                                "unique_id": -274116,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -3330,9 +3419,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "$3,421.00",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90438,
+                                    "unique_id": -274111,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -3362,9 +3452,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "$996,232.00",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90372,
+                                "unique_id": -274123,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -3396,9 +3487,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "$996,232.00",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90448,
+                                    "unique_id": -274127,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -3430,9 +3522,10 @@
                             "msaa_role": 28,
                             "ia2_role": 28,
                             "name": "06-Jan-16 Debit Cutey's Salon $700.00 $995,532.00",
+                            "default_action": "click ancestor",
                             "msaa_states": 0,
                             "ia2_states": 1024,
-                            "unique_id": -90383,
+                            "unique_id": -273981,
                             "attributes": {
                               "display": "table-row",
                               "name-from": "contents",
@@ -3479,9 +3572,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "06-Jan-16",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90344,
+                                "unique_id": -274098,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -3513,9 +3607,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "06-Jan-16",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90452,
+                                    "unique_id": -274121,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -3545,9 +3640,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "Debit",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90349,
+                                "unique_id": -274107,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -3579,9 +3675,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "Debit",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90455,
+                                    "unique_id": -273976,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -3611,9 +3708,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "Cutey's Salon",
+                                "default_action": "click ancestor",
                                 "msaa_states": 0,
                                 "ia2_states": 1024,
-                                "unique_id": -90358,
+                                "unique_id": -274120,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -3647,9 +3745,10 @@
                                     "ia2_role": 30,
                                     "name": "Cutey's Salon",
                                     "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#",
+                                    "default_action": "jump",
                                     "msaa_states": 5242880,
                                     "ia2_states": 1024,
-                                    "unique_id": -90484,
+                                    "unique_id": -273996,
                                     "attributes": {
                                       "display": "inline",
                                       "name-from": "contents",
@@ -3681,9 +3780,10 @@
                                         "msaa_role": 41,
                                         "ia2_role": 41,
                                         "name": "Cutey's Salon",
+                                        "default_action": "click ancestor",
                                         "msaa_states": 4194304,
                                         "ia2_states": 1024,
-                                        "unique_id": -90466,
+                                        "unique_id": -274065,
                                         "attributes": {
                                           "name-from": "contents"
                                         },
@@ -3716,9 +3816,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "$700.00",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90490,
+                                "unique_id": -274009,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -3750,9 +3851,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "$700.00",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90467,
+                                    "unique_id": -274067,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -3782,9 +3884,10 @@
                                 "msaa_role": 29,
                                 "ia2_role": 29,
                                 "name": "$995,532.00",
+                                "default_action": "click ancestor",
                                 "msaa_states": 1048576,
                                 "ia2_states": 1024,
-                                "unique_id": -90496,
+                                "unique_id": -274018,
                                 "attributes": {
                                   "display": "table-cell",
                                   "name-from": "contents",
@@ -3816,9 +3919,10 @@
                                     "msaa_role": 41,
                                     "ia2_role": 41,
                                     "name": "$995,532.00",
+                                    "default_action": "click ancestor",
                                     "msaa_states": 0,
                                     "ia2_states": 1024,
-                                    "unique_id": -90474,
+                                    "unique_id": -274075,
                                     "attributes": {
                                       "name-from": "contents"
                                     },
@@ -3853,9 +3957,10 @@
                         "ia2_role": 30,
                         "name": "Navigate backwards from here",
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#afterlink",
+                        "default_action": "jump",
                         "msaa_states": 5242880,
                         "ia2_states": 1024,
-                        "unique_id": -90494,
+                        "unique_id": -273978,
                         "attributes": {
                           "display": "inline",
                           "id": "afterlink",
@@ -3888,9 +3993,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Navigate backwards from here",
+                            "default_action": "click ancestor",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -90477,
+                            "unique_id": -274079,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -3923,9 +4029,10 @@
                     "msaa_role": 21,
                     "ia2_role": 21,
                     "name": "End of Example 1: Minimal Data Grid",
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1040,
-                    "unique_id": -90486,
+                    "unique_id": -273985,
                     "attributes": {
                       "display": "block",
                       "explicit-name": "true",
@@ -3937,7 +4044,7 @@
                     },
                     "relations": {
                       "labelledBy": [
-                        -90375
+                        -274132
                       ]
                     }
                   }
@@ -3948,9 +4055,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1060,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -90498,
+            "unique_id": -274136,
             "attributes": {
               "display": "block",
               "id": "arrow-keys-indicator",
@@ -3961,9 +4069,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1060,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -90444,
+            "unique_id": -274042,
             "attributes": {
               "display": "block",
               "tag": "div",
@@ -3993,9 +4102,10 @@
                 "msaa_role": 43,
                 "ia2_role": 43,
                 "name": "Run Test Setup",
+                "default_action": "press",
                 "msaa_states": 1,
                 "ia2_states": 1024,
-                "unique_id": -90442,
+                "unique_id": -274046,
                 "attributes": {
                   "class": "button-run-test-setup",
                   "display": "inline-block",

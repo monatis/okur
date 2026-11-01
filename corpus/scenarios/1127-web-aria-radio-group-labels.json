@@ -1,0 +1,120 @@
+{
+  "id": "1127-web-aria-radio-group-labels",
+  "name": "Tab into five ARIA radio groups labelled by a heading or a line of text, inside the group or before it, or by aria-label; then the A quick key through their radio buttons with the focus in the last group",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-radio-labels.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "A"
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "A"
+    }
+  ]
+}

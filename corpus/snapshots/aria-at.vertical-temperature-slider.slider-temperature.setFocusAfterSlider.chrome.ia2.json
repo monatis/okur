@@ -8,9 +8,9 @@
     "window_class": "Chrome_WidgetWin_1",
     "process_version": "156.0.8078.76",
     "fixture_sha256": "eb6ec88e44376d63b2982c5dae6e7c6b8fd13fe9c3a96b571fad6b698e0ddceb",
-    "captured_at_unix_ms": 1793502087679,
+    "captured_at_unix_ms": 1793529390733,
     "node_count": 25,
-    "capture_ms": 192
+    "capture_ms": 203
   },
   "root": {
     "msaa_role": 15,
@@ -19,7 +19,7 @@
     "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/vertical-temperature-slider/slider-temperature.setFocusAfterSlider.html",
     "msaa_states": 1048640,
     "ia2_states": 1024,
-    "unique_id": -147189,
+    "unique_id": -276535,
     "attributes": {
       "explicit-name": "true",
       "name-from": "related-element",
@@ -49,9 +49,10 @@
       {
         "msaa_role": 20,
         "ia2_role": 1069,
+        "default_action": "click ancestor",
         "msaa_states": 0,
         "ia2_states": 1024,
-        "unique_id": -147187,
+        "unique_id": -276543,
         "attributes": {
           "display": "block",
           "tag": "main",
@@ -105,9 +106,10 @@
             "msaa_role": 20,
             "ia2_role": 1044,
             "name": "Vertical Temperature Slider Example",
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -147192,
+            "unique_id": -276524,
             "attributes": {
               "display": "block",
               "level": "1",
@@ -145,9 +147,10 @@
                 "msaa_role": 41,
                 "ia2_role": 41,
                 "name": "Vertical Temperature Slider Example",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -147221,
+                "unique_id": -276551,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -177,9 +180,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1054,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -147204,
+            "unique_id": -276513,
             "attributes": {
               "display": "block",
               "tag": "p",
@@ -220,9 +224,10 @@
                 "msaa_role": 41,
                 "ia2_role": 41,
                 "name": "The following example is a vertically oriented temperature control that implements the ",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -147218,
+                "unique_id": -276548,
                 "attributes": {
                   "name-from": "contents"
                 },
@@ -251,9 +256,10 @@
                 "ia2_role": 30,
                 "name": "slider design pattern.",
                 "value": "https://w3c.github.io/aria-practices/#slider",
+                "default_action": "jump",
                 "msaa_states": 5242880,
                 "ia2_states": 1024,
-                "unique_id": -147210,
+                "unique_id": -276529,
                 "attributes": {
                   "display": "inline",
                   "name-from": "contents",
@@ -285,9 +291,10 @@
                     "msaa_role": 41,
                     "ia2_role": 41,
                     "name": "slider design pattern.",
+                    "default_action": "click ancestor",
                     "msaa_states": 4194304,
                     "ia2_states": 1024,
-                    "unique_id": -147231,
+                    "unique_id": -276540,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -319,9 +326,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1060,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -147217,
+            "unique_id": -276514,
             "attributes": {
               "display": "block",
               "tag": "section",
@@ -374,9 +382,10 @@
                 "msaa_role": 20,
                 "ia2_role": 1044,
                 "name": "Example",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -147190,
+                "unique_id": -276542,
                 "attributes": {
                   "display": "block",
                   "id": "ex_label",
@@ -412,8 +421,8 @@
                 ],
                 "relations": {
                   "labelFor": [
-                    -147229,
-                    -147207
+                    -276530,
+                    -276537
                   ]
                 },
                 "children": [
@@ -421,9 +430,10 @@
                     "msaa_role": 41,
                     "ia2_role": 41,
                     "name": "Example",
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -147199,
+                    "unique_id": -276531,
                     "attributes": {
                       "name-from": "contents"
                     },
@@ -454,9 +464,10 @@
                 "msaa_role": 21,
                 "ia2_role": 21,
                 "name": "Start of Example",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1040,
-                "unique_id": -147229,
+                "unique_id": -276530,
                 "attributes": {
                   "display": "block",
                   "explicit-name": "true",
@@ -468,16 +479,17 @@
                 },
                 "relations": {
                   "labelledBy": [
-                    -147190
+                    -276542
                   ]
                 }
               },
               {
                 "msaa_role": 20,
                 "ia2_role": 1060,
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1024,
-                "unique_id": -147219,
+                "unique_id": -276512,
                 "attributes": {
                   "class": "example",
                   "display": "block",
@@ -541,9 +553,10 @@
                   {
                     "msaa_role": 20,
                     "ia2_role": 1060,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -147205,
+                    "unique_id": -276538,
                     "attributes": {
                       "display": "block",
                       "tag": "div",
@@ -575,9 +588,10 @@
                         "ia2_role": 30,
                         "name": "Navigate forwards from here",
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/vertical-temperature-slider/slider-temperature.setFocusAfterSlider.html#beforelink",
+                        "default_action": "jump",
                         "msaa_states": 5242880,
                         "ia2_states": 1024,
-                        "unique_id": -147203,
+                        "unique_id": -276508,
                         "attributes": {
                           "display": "inline",
                           "id": "beforelink",
@@ -610,9 +624,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Navigate forwards from here",
+                            "default_action": "click ancestor",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -147191,
+                            "unique_id": -276526,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -644,9 +659,10 @@
                   {
                     "msaa_role": 20,
                     "ia2_role": 1060,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -147230,
+                    "unique_id": -276519,
                     "attributes": {
                       "class": "label",
                       "display": "block",
@@ -676,7 +692,7 @@
                     ],
                     "relations": {
                       "labelFor": [
-                        -147227
+                        -276533
                       ]
                     },
                     "children": [
@@ -684,9 +700,10 @@
                         "msaa_role": 41,
                         "ia2_role": 41,
                         "name": "Temperature",
+                        "default_action": "click ancestor",
                         "msaa_states": 0,
                         "ia2_states": 1024,
-                        "unique_id": -147212,
+                        "unique_id": -276517,
                         "attributes": {
                           "name-from": "contents"
                         },
@@ -718,9 +735,12 @@
                     "ia2_role": 51,
                     "name": "Temperature",
                     "value": "25.0 degrees Celsius",
+                    "default_action": "click ancestor",
+                    "value_min": 10.0,
+                    "value_max": 38.0,
                     "msaa_states": 1048576,
                     "ia2_states": 132096,
-                    "unique_id": -147227,
+                    "unique_id": -276533,
                     "attributes": {
                       "display": "inline",
                       "explicit-name": "true",
@@ -733,16 +753,17 @@
                     },
                     "relations": {
                       "labelledBy": [
-                        -147230
+                        -276519
                       ]
                     }
                   },
                   {
                     "msaa_role": 20,
                     "ia2_role": 1060,
+                    "default_action": "click ancestor",
                     "msaa_states": 0,
                     "ia2_states": 1024,
-                    "unique_id": -147214,
+                    "unique_id": -276523,
                     "attributes": {
                       "display": "block",
                       "tag": "div",
@@ -774,9 +795,10 @@
                         "ia2_role": 30,
                         "name": "Navigate backwards from here",
                         "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/vertical-temperature-slider/slider-temperature.setFocusAfterSlider.html#afterlink",
+                        "default_action": "jump",
                         "msaa_states": 5242884,
                         "ia2_states": 1024,
-                        "unique_id": -147206,
+                        "unique_id": -276539,
                         "attributes": {
                           "display": "inline",
                           "id": "afterlink",
@@ -813,9 +835,10 @@
                             "msaa_role": 41,
                             "ia2_role": 41,
                             "name": "Navigate backwards from here",
+                            "default_action": "click ancestor",
                             "msaa_states": 4194304,
                             "ia2_states": 1024,
-                            "unique_id": -147224,
+                            "unique_id": -276549,
                             "attributes": {
                               "name-from": "contents"
                             },
@@ -854,9 +877,10 @@
                 "msaa_role": 21,
                 "ia2_role": 21,
                 "name": "End of Example",
+                "default_action": "click ancestor",
                 "msaa_states": 0,
                 "ia2_states": 1040,
-                "unique_id": -147207,
+                "unique_id": -276537,
                 "attributes": {
                   "display": "block",
                   "explicit-name": "true",
@@ -868,7 +892,7 @@
                 },
                 "relations": {
                   "labelledBy": [
-                    -147190
+                    -276542
                   ]
                 }
               }
@@ -877,9 +901,10 @@
           {
             "msaa_role": 20,
             "ia2_role": 1060,
+            "default_action": "click ancestor",
             "msaa_states": 0,
             "ia2_states": 1024,
-            "unique_id": -147201,
+            "unique_id": -276507,
             "attributes": {
               "display": "block",
               "tag": "div",
@@ -909,9 +934,10 @@
                 "msaa_role": 43,
                 "ia2_role": 43,
                 "name": "Run Test Setup",
+                "default_action": "press",
                 "msaa_states": 1,
                 "ia2_states": 1024,
-                "unique_id": -147228,
+                "unique_id": -276520,
                 "attributes": {
                   "class": "button-run-test-setup",
                   "display": "inline-block",
