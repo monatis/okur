@@ -20,6 +20,7 @@ This is an **autonomous, agent-driven project with a "verification harness in th
 2. **User-Facing Parity Target: JAWS**:
    - While internal architecture and algorithms may borrow best practices from other screen readers (e.g., NVDA), **all user-facing behavior must match JAWS**.
    - Keyboard navigation defaults, quick-nav keys (e.g., `H` for headings, `1`–`6` for levels, `K` for links, `C` for checkboxes, `E` for edits), announcement phrasing, and browse/forms mode switching must follow JAWS conventions.
+   - **The web beyond JAWS (the owner, 2026-11-01)**: where JAWS does not convey what W3C ARIA-AT's test plans require (a role, state, name or place an assertion asks for), Okur conveys it: Okur is to be the most accessible screen reader for the web. Everything else stays JAWS's, and the words added follow JAWS's own vocabulary. Each such step is an accepted divergence naming the assertion (`docs/references/accepted-divergences.md`); `okur-lab aria-at-report --unmet <plan>` finds them.
 
 3. **Cross-Platform Target Tiers & Zero-Cost Trait Architecture**:
    - **First-Citizen Targets (Tier 1)**:

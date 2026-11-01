@@ -63,6 +63,23 @@ Each scenario carries its test's assertions (`aria_at.assertions`). A report, pe
 many of them Okur's speech conveys, beside ARIA-AT's JAWS figures: a role, name or state
 assertion judged by JAWS's words for it, reviewed by hand before it is trusted.
 
+## 4b. Beyond JAWS (the owner, 2026-11-01)
+
+Where JAWS does not convey what a plan's assertion requires, Okur conveys it (AGENTS.md §1.2): the
+most accessible screen reader for the web.  lists the
+assertions neither conveys (334 on 2026-11-01, MUST first). Each is checked by hand against the
+judge (a value text holding its number is no failure of "not convey numeric value"), then added
+in JAWS's vocabulary with the rest of the utterance JAWS's, and its steps become accepted
+divergences () naming the assertion. In order:
+
+1. MUST: an accordion header's heading and level on the PC cursor's Tab; a spin button's name,
+   role and invalid state on the PC cursor's Insert+Up; a named region a quick key enters (where
+   it does not change other pages' speech).
+2. SHOULD: a grid cell's row and column, a grid's size on Tab; a menu's item count and an item's
+   role and place; a slider's and a spin button's limits; a menu button's state on opening;
+   checkbox-tri-state's group.
+3. MAY: the tab list as a tab list, a tab's "not selected".
+
 ## 5. Then
 
 Excel's round-1122b (typing in cells, its dialogs, Word's context menu), when Excel resumes.
