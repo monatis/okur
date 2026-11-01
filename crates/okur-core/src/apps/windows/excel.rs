@@ -275,6 +275,10 @@ pub(crate) enum SheetReading {
     RowTitle(u32),
     /// Insert+F: the active cell's font and formatting ([`format_said`]) [obs, 1133/s4].
     Format,
+    /// The totals readers, Insert+NumPad Enter and Insert+Delete: the column's or the row's SUM
+    /// formula's value, "column total=14" [obs, 1132/s11, s12].
+    ColumnTotal,
+    RowTotal,
 }
 
 impl SheetReading {
@@ -312,6 +316,18 @@ impl SheetReading {
             Self::ColumnTitle(row) => return titles_of(place, Some(row), None).pop(),
             Self::RowTitle(column) => return titles_of(place, None, Some(column)).pop(),
             Self::Format => return place.format.as_ref().map(format_said),
+            Self::ColumnTotal => {
+                return Some(match place.column_sum.as_deref() {
+                    Some(total) => msg::excel_column_total(total).render(),
+                    None => msg::excel_no_column_total().to_string(),
+                });
+            }
+            Self::RowTotal => {
+                return Some(match place.row_sum.as_deref() {
+                    Some(total) => msg::excel_row_total(total).render(),
+                    None => msg::excel_no_row_total().to_string(),
+                });
+            }
             _ => {}
         }
         let (cells, at, row) = match self {
@@ -323,7 +339,12 @@ impl SheetReading {
             Self::Line | Self::Row | Self::Column => cells,
             Self::RowFromStart | Self::ColumnFromTop => cells.get(..=at).unwrap_or(cells),
             Self::RowToEnd | Self::ColumnToBottom => cells.get(at..).unwrap_or_default(),
-            Self::Cell | Self::ColumnTitle(_) | Self::RowTitle(_) | Self::Format => return None,
+            Self::Cell
+            | Self::ColumnTitle(_)
+            | Self::RowTitle(_)
+            | Self::Format
+            | Self::ColumnTotal
+            | Self::RowTotal => return None,
         };
         let read: Vec<&str> = part
             .iter()
@@ -769,6 +790,8 @@ mod tests {
             column_at: 2,
             title_row: None,
             title_column: None,
+            column_sum: None,
+            row_sum: None,
             format: None,
         };
         let said = |reading: SheetReading| reading.said(&place);
@@ -810,6 +833,8 @@ mod tests {
             column_at: 1,
             title_row: None,
             title_column: None,
+            column_sum: None,
+            row_sum: None,
             format: None,
         };
         let said = |before: Option<&str>, now: crate::event::SheetPlace, key| {
@@ -952,6 +977,8 @@ mod tests {
             column: vec![String::new()],
             title_row: None,
             title_column: None,
+            column_sum: None,
+            row_sum: None,
             format: None,
         };
         assert_eq!(
@@ -1030,6 +1057,8 @@ mod tests {
             column: vec!["Weekdays".into(), "12".into(), "10".into(), "22".into()],
             title_row: None,
             title_column: None,
+            column_sum: None,
+            row_sum: None,
             format: None,
         };
         assert_eq!(
@@ -1143,6 +1172,25 @@ Central
 12
 B 2"
             )
+        );
+    }
+
+    /// The totals readers on C3: the column's SUM formula's value, "column total=14"; no SUM in the
+    /// row [obs, 1132/s11, s12].
+    #[test]
+    fn the_totals_come_from_sum_formulas() {
+        let place = crate::event::SheetPlace {
+            address: "C3".into(),
+            column_sum: Some("14".into()),
+            ..Default::default()
+        };
+        assert_eq!(
+            SheetReading::ColumnTotal.said(&place).as_deref(),
+            Some("column total=14")
+        );
+        assert_eq!(
+            SheetReading::RowTotal.said(&place).as_deref(),
+            Some("no totals column defined and I cannot find a sum formula in the current row.")
         );
     }
 }

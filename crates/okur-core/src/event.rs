@@ -214,8 +214,14 @@ pub struct SheetPlace {
     pub title_row: Option<u32>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub title_column: Option<u32>,
+    /// The texts of the first cells with a SUM formula in the active cell's column and row, for
+    /// JAWS's totals readers, where the details were asked for [obs, 1132/s11, s12].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub column_sum: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub row_sum: Option<String>,
     /// The active cell's font and formatting, where it was asked for
-    /// ([`crate::actions::ApplicationActions::read_sheet_format`]).
+    /// ([`crate::actions::ApplicationActions::read_sheet_details`]).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub format: Option<SheetFormat>,
 }

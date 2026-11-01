@@ -203,6 +203,12 @@ excel-active-cell = Active Cell: { $cell }
 # Insert+Ctrl+Alt+C and R: the active cell's row set as the column titles, its column as the row
 # titles [obs, 1132/s1, s2].
 excel-column-titles-set = Setting column titles row range to { $row }
+# The totals readers: Insert+NumPad Enter the column's, from its SUM formula, "column total=14"
+# [obs, 1132/s11]; Insert+Delete the row's, none found [obs, 1132/s12]; the others [hyp].
+excel-column-total = column total={ $total }
+excel-row-total = row total={ $total }
+excel-no-column-total = no totals row defined and I cannot find a sum formula in the current column.
+excel-no-row-total = no totals column defined and I cannot find a sum formula in the current row.
 # Insert+F: the active cell's font and formatting, line by line, its size with font-size;
 # a cell without fill is White, and the active cell "highlighted" [obs, 1133/s4].
 excel-cell-format = Cell Font and Formatting:

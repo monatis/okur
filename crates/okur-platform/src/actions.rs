@@ -119,8 +119,8 @@ mod windows_actions {
         DocumentView,
         StatusBar,
         SheetPlace,
-        /// The place with the active cell's font and formatting.
-        SheetFormat,
+        /// The place with the active cell's font and formatting and its column's and row's sums.
+        SheetDetails,
         SheetList(okur_core::SheetListKind),
         SheetEntry(okur_core::SheetListKind, String),
         /// The sheet tabs' context menu of the spreadsheet in front opened.
@@ -206,7 +206,7 @@ mod windows_actions {
                 Request::DocumentView => "document view",
                 Request::StatusBar => "status bar",
                 Request::SheetPlace => "sheet place",
-                Request::SheetFormat => "sheet format",
+                Request::SheetDetails => "sheet details",
                 Request::SheetList(_) => "sheet list",
                 Request::SheetEntry(..) => "sheet entry",
                 Request::SheetTabsMenu => "sheet tabs menu",
@@ -547,12 +547,12 @@ mod windows_actions {
                                 tracing::debug!(read = place.is_some(), "sheet place read");
                                 let _ = events.send(AccessibilityEvent::SheetPlace(place));
                             }
-                            Request::SheetFormat => {
+                            Request::SheetDetails => {
                                 let Some(events) = events.as_ref() else {
                                     return;
                                 };
-                                let place = crate::actions::sheet_place_with_format_now(None);
-                                tracing::debug!(read = place.is_some(), "sheet format read");
+                                let place = crate::actions::sheet_place_with_details_now(None);
+                                tracing::debug!(read = place.is_some(), "sheet details read");
                                 let _ = events.send(AccessibilityEvent::SheetPlace(place));
                             }
                             Request::SheetList(kind) => {
@@ -1118,8 +1118,8 @@ mod windows_actions {
             self.send(Request::SheetPlace)
         }
 
-        fn read_sheet_format(&self) -> bool {
-            self.send(Request::SheetFormat)
+        fn read_sheet_details(&self) -> bool {
+            self.send(Request::SheetDetails)
         }
 
         fn read_sheet_list(&self, kind: okur_core::SheetListKind) -> bool {
@@ -1415,12 +1415,14 @@ pub fn sheet_place_now(window_title: Option<&str>) -> Option<okur_core::SheetPla
     crate::excel_om::sheet_place(sheet_grid(window_title)?)
 }
 
-/// The same, with the active cell's font and formatting (Insert+F).
+/// The same, with the active cell's font and formatting (Insert+F) and its column's and row's
+/// sums (the totals readers).
 #[cfg(windows)]
-pub fn sheet_place_with_format_now(window_title: Option<&str>) -> Option<okur_core::SheetPlace> {
+pub fn sheet_place_with_details_now(window_title: Option<&str>) -> Option<okur_core::SheetPlace> {
     let grid = sheet_grid(window_title)?;
     let mut place = crate::excel_om::sheet_place(grid)?;
     place.format = crate::excel_om::cell_format(grid);
+    (place.column_sum, place.row_sum) = crate::excel_om::cell_sums(grid);
     Some(place)
 }
 

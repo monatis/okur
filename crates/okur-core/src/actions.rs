@@ -165,8 +165,9 @@ pub trait ApplicationActions: Send {
         false
     }
 
-    /// The same, with the active cell's font and formatting ([`crate::event::SheetPlace::format`]).
-    fn read_sheet_format(&self) -> bool {
+    /// The same, with the active cell's font and formatting and its column's and row's sums
+    /// ([`crate::event::SheetPlace::format`], [`crate::event::SheetPlace::column_sum`]).
+    fn read_sheet_details(&self) -> bool {
         false
     }
 
@@ -579,9 +580,9 @@ impl ApplicationActions for RecordingActions {
         true
     }
 
-    fn read_sheet_format(&self) -> bool {
+    fn read_sheet_details(&self) -> bool {
         if let Ok(mut log) = self.log.lock() {
-            log.push(("sheet format".to_owned(), 0));
+            log.push(("sheet details".to_owned(), 0));
         }
         true
     }

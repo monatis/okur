@@ -1299,22 +1299,26 @@ impl ScreenReaderEngine {
                 return;
             }
         }
-        // Excel's Insert+F, the active cell's font and formatting, asked of Excel [obs, 1133/s4].
-        if event.key == Key::Alpha('F')
-            && !m.ctrl
-            && !m.shift
-            && !m.alt
-            && !m.win
-            && self
-                .last_native_focus
+        // Excel's Insert+F, the active cell's font and formatting [obs, 1133/s4]; Insert+NumPad
+        // Enter and Insert+Delete, the column's and the row's total [obs, 1132/s11, s12]; asked
+        // of Excel. Insert+Delete is Word's line and column elsewhere.
+        let details = match event.key {
+            _ if m.ctrl || m.shift || m.alt || m.win => None,
+            Key::Alpha('F') => Some(crate::apps::windows::excel::SheetReading::Format),
+            Key::Enter => Some(crate::apps::windows::excel::SheetReading::ColumnTotal),
+            Key::Delete => Some(crate::apps::windows::excel::SheetReading::RowTotal),
+            _ => None,
+        };
+        if let Some(reading) = details.filter(|_| {
+            self.last_native_focus
                 .as_ref()
                 .is_some_and(crate::apps::windows::excel::in_sheet)
-            && self
-                .actions
-                .as_ref()
-                .is_some_and(|actions| actions.read_sheet_format())
-        {
-            self.sheet_reading_asked = Some(crate::apps::windows::excel::SheetReading::Format);
+                && self
+                    .actions
+                    .as_ref()
+                    .is_some_and(|actions| actions.read_sheet_details())
+        }) {
+            self.sheet_reading_asked = Some(reading);
             return;
         }
         // Excel's Insert+C, the cell's coordinates: "B 2" [obs, 521/s6]; an empty cell's, where

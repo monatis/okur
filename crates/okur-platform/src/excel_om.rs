@@ -98,6 +98,8 @@ pub fn sheet_place(grid: HWND) -> Option<okur_core::SheetPlace> {
         column: column_cells,
         title_row,
         title_column,
+        column_sum: None,
+        row_sum: None,
         format: None,
     })
 }
@@ -189,6 +191,35 @@ pub fn cell_format(grid: HWND) -> Option<okur_core::SheetFormat> {
         width: hundredths(&cell, "Width").unwrap_or_default(),
         height: hundredths(&cell, "Height").unwrap_or_default(),
     })
+}
+
+/// The texts of the first cells with a SUM formula in the active cell's column and in its row,
+/// within the sheet's used range, for JAWS's totals readers: "column total=14" [obs, 1132/s11].
+/// `None` for each where there is none, or where Excel's object model does not answer.
+pub fn cell_sums(grid: HWND) -> (Option<String>, Option<String>) {
+    let read = || -> Option<(Option<String>, Option<String>)> {
+        let window = word_window(grid)?;
+        let cell = object(&property(&window, "ActiveCell")?)?;
+        let (row, column) = (number(&cell, "Row")?, number(&cell, "Column")?);
+        let sheet = object(&property(&window, "ActiveSheet")?)?;
+        let used = object(&property(&sheet, "UsedRange")?)?;
+        let (top, left) = (number(&used, "Row")?, number(&used, "Column")?);
+        let rows = number(&object(&property(&used, "Rows")?)?, "Count")?.clamp(0, MAX_CELLS);
+        let columns = number(&object(&property(&used, "Columns")?)?, "Count")?.clamp(0, MAX_CELLS);
+        let sum_at = |r: i32, c: i32| {
+            let cell = sheet_cell(&sheet, r, c)?;
+            let formula = text(&cell, "Formula");
+            formula
+                .trim_start()
+                .to_ascii_uppercase()
+                .starts_with("=SUM(")
+                .then(|| text(&cell, "Text").trim().to_owned())
+        };
+        let in_column = (top..top + rows).find_map(|r| sum_at(r, column));
+        let in_row = (left..left + columns).find_map(|c| sum_at(row, c));
+        Some((in_column, in_row))
+    };
+    read().unwrap_or_default()
 }
 
 /// The number property `name` of `object`, whole or not.
