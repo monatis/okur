@@ -54,6 +54,13 @@ impl ScreenReaderEngine {
                     }
                 } else if native {
                     String::new()
+                } else if self.cursor_on_focused_field() && self.cursor.selected_text().is_empty() {
+                    // The page's focused field under the virtual cursor, its own selection:
+                    // "Selection is | Alabama", the text Tab selected [obs, 1131/s2, s5].
+                    self.last_text
+                        .as_ref()
+                        .map(crate::editing::selected_text)
+                        .unwrap_or_default()
                 } else {
                     self.cursor.selected_text()
                 };

@@ -715,6 +715,17 @@ impl ScreenReaderEngine {
 
     /// Whether keys go to a text field: forms mode in a page, or a focused native edit or
     /// text document (Windows 11 Notepad, Word).
+    /// The virtual cursor is on the page's focused text field (an edit, an edit combo).
+    pub(super) fn cursor_on_focused_field(&self) -> bool {
+        self.app_mode == AppMode::VirtualBuffer
+            && self.node_under_cursor().is_some_and(|n| {
+                Some(n.id) == self.last_page_focus
+                    && (n.role == Role::Edit
+                        || (n.role == Role::ComboBox
+                            && n.attributes.get("editable").is_some_and(|e| e == "true")))
+            })
+    }
+
     pub(super) fn editing_text(&self) -> bool {
         // A combo box one types in is a text field too (Google Sheets' cell editor).
         (self.forms_mode
