@@ -1381,6 +1381,62 @@ divergences! {
      Error | invalid entry | 9 | Must be between 1 and 8\" and the hint.",
     "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
 
+    Difference::OkurAlsoSays("To set the value use the Arrow keys or type the value.") => [
+        "2916-aria-combobox-autocomplete-both-updated-t1-tab-vc/s1",
+        "2921-aria-combobox-autocomplete-both-updated-t2-shift-tab-vc/s1",
+        "2931-aria-combobox-autocomplete-both-updated-t10-tab-vc/s1",
+        "2936-aria-combobox-autocomplete-both-updated-t11-shift-tab-vc/s1",
+    ],
+    "Tab to ARIA-AT's edit combo, the virtual cursor on: JAWS says no hint [obs, round-aria32], \
+     where on another page's edit combo it says \"To set the value use the Arrow keys or type the \
+     value.\" [obs, 211/s6, every trial]; neither page nor focus tells the two apart. Okur says \
+     the hint each time.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
+
+    Difference::Step => [
+        "2926-aria-combobox-autocomplete-both-updated-t7-ins-up-vc/s1",
+        "2941-aria-combobox-autocomplete-both-updated-t16-ins-up-vc/s1",
+        "2954-aria-combobox-autocomplete-both-updated-t29-ins-up-vc/s1",
+        "2957-aria-combobox-autocomplete-both-updated-t32-ins-up-vc/s1",
+    ],
+    "Insert+Up on an edit combo, the virtual cursor on: JAWS says its text alone, \"blank\", \
+     \"Alabama\" [obs, round-aria32], where ARIA-AT's plan requires its role, name, state and \
+     autocomplete (MUST). Okur says the field whole, as Insert+Up says a focused field: \
+     \"State edit combo collapsed Supports AutoComplete | Alabama\".",
+    "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
+
+    Difference::Step => [
+        "2944-aria-combobox-autocomplete-both-updated-t19-alt-up-vc/s1",
+        "2948-aria-combobox-autocomplete-both-updated-t22-alt-up-vc/s1",
+    ],
+    "Alt+Up on an edit combo whose list is open, the virtual cursor on: JAWS keeps the key and \
+     reads the line before (\"State\", a link) [obs, round-aria32], the list left open. Alt+Up \
+     is the page's in Okur, as with the virtual cursor off: the list closes, \"Close List Box | \
+     collapsed\". ARIA-AT's plan requires the change of state (MUST).",
+    "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
+
+    Difference::Step => [
+        "2946-aria-combobox-autocomplete-both-updated-t20-alt-up-pc/s1",
+        "2950-aria-combobox-autocomplete-both-updated-t23-alt-up-pc/s1",
+    ],
+    "Alt+Up on an edit combo whose list is open, the virtual cursor off: JAWS says \
+     \"Close List Box | expanded\" in every trial [obs, round-aria32]: Chrome still reports the \
+     list expanded as the change arrives, and JAWS says the state it reads then. Okur says the \
+     state the key gave it, \"Close List Box | collapsed\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
+
+    Difference::Step => [
+        "2969-aria-combobox-autocomplete-both-updated-t49-down-pc/s1",
+        "2970-aria-combobox-autocomplete-both-updated-t51-up-pc/s1",
+        "2973-aria-combobox-autocomplete-both-updated-t57-down-pc/s1",
+        "2974-aria-combobox-autocomplete-both-updated-t59-up-pc/s1",
+    ],
+    "Down or Up from an edit combo into its list box, five options shown: JAWS calls it \"list | \
+     with 5 items\" [obs, round-aria32], where with all 56 shown it says \"States List box\" \
+     (2967/s1, 2971/s1); the two focuses are alike but for the count. Okur says \"List box\" \
+     each time.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
+
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
     ],

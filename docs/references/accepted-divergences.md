@@ -1436,6 +1436,34 @@ A step can be in more than one entry; all of its entries apply.
 - Decided under the owner's rules for the web and on JAWS's accidents (AGENTS.md §1.2),
   2026-11-01.
 
+### ARIA-AT's edit combo and its list box
+
+- Steps: `2916-aria-combobox-autocomplete-both-updated-t1-tab-vc/s1`, `2921-aria-combobox-autocomplete-both-updated-t2-shift-tab-vc/s1`,
+  `2931-aria-combobox-autocomplete-both-updated-t10-tab-vc/s1`, `2936-aria-combobox-autocomplete-both-updated-t11-shift-tab-vc/s1` (Okur also
+  says the hint); `2926-aria-combobox-autocomplete-both-updated-t7-ins-up-vc/s1`, `2941-aria-combobox-autocomplete-both-updated-t16-ins-up-vc/s1`,
+  `2954-aria-combobox-autocomplete-both-updated-t29-ins-up-vc/s1`, `2957-aria-combobox-autocomplete-both-updated-t32-ins-up-vc/s1`,
+  `2944-aria-combobox-autocomplete-both-updated-t19-alt-up-vc/s1`, `2948-aria-combobox-autocomplete-both-updated-t22-alt-up-vc/s1`,
+  `2946-aria-combobox-autocomplete-both-updated-t20-alt-up-pc/s1`, `2950-aria-combobox-autocomplete-both-updated-t23-alt-up-pc/s1`,
+  `2969-aria-combobox-autocomplete-both-updated-t49-down-pc/s1`, `2970-aria-combobox-autocomplete-both-updated-t51-up-pc/s1`,
+  `2973-aria-combobox-autocomplete-both-updated-t57-down-pc/s1`, `2974-aria-combobox-autocomplete-both-updated-t59-up-pc/s1` (whole steps).
+- Difference and why:
+  - Tab with the virtual cursor on: Okur says the edit combo's hint, "To set the value use the
+    Arrow keys or type the value.", which JAWS says on another page's edit combo [obs, 211/s6]
+    and not on ARIA-AT's, with nothing in the page or the focus to tell them apart.
+  - Insert+Up with the virtual cursor on: JAWS says the text alone ("blank"); ARIA-AT requires
+    the role, name, state and autocomplete (MUST), and Okur says the field whole, "State edit
+    combo collapsed Supports AutoComplete | Alabama".
+  - Alt+Up with the virtual cursor on: JAWS keeps the key and reads the line before, the list
+    left open; in Okur Alt+Up is the page's, the list closes, "Close List Box | collapsed"
+    (ARIA-AT requires the change of state, MUST).
+  - Alt+Up with the virtual cursor off: JAWS says "Close List Box | expanded" in every trial,
+    the state Chrome still reports as the change arrives; Okur says the state the key gave it.
+  - Down or Up into the list box with five options shown: JAWS calls it "list | with 5 items",
+    and "States List box" with all 56 shown (2967/s1), the focuses alike but for the count.
+    Okur says "List box" each time.
+- Decided under the owner's rules for the web and on JAWS's accidents (AGENTS.md §1.2),
+  2026-11-01.
+
 ## Considered and not accepted
 
 - From a newer JAWS (2025.2508.120, ARIA-AT's reports), not followed: Insert+Up on a menu

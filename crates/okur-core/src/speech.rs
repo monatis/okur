@@ -552,7 +552,22 @@ impl SpeechFormatter {
                 }
                 Announcement::new(lines)
             }
-            Role::ComboBox if attr("editable") == Some("true") => Self::edit_combo(name, node),
+            // Insert+Up says that it completes what is typed too: "State edit combo collapsed
+            // Supports AutoComplete", where JAWS says its text alone, "blank", and ARIA-AT
+            // requires its role, name, state and autocomplete (MUST) [obs, round-aria32,
+            // 2926/s1] (the owner's rule for the web, 2026-11-01).
+            Role::ComboBox if attr("editable") == Some("true") => {
+                let mut combo = Self::edit_combo(name, node);
+                if said.line && attr("autocomplete") == Some("true") {
+                    if let Some(first) = combo.lines.first_mut() {
+                        first.parts.push(Part::text(" "));
+                        first
+                            .parts
+                            .push(Part::state(msg::state_supports_autocomplete()));
+                    }
+                }
+                combo
+            }
             Role::ComboBox => {
                 let state = if node.states.expanded == Some(true) {
                     msg::state_expanded()
