@@ -15,6 +15,15 @@ release in the Microsoft Store. Backlog row 45 of
   should end SmartScreen's and Defender's distrust of an unknown, unsigned `okur.exe` (old-pc's
   Defender has quarantined it as `Bearfoos.A!ml`).
 
+**Answered (2026-11-01):** [`../references/microsoft-store-release-research.md`](../references/microsoft-store-release-research.md).
+The Store route works for a full-trust package without UI Access; UI Access in a package is
+documented but unproven (experiment E1 on old-pc, then Microsoft's approval). Against this
+plan: the Store's certification starts with a malware scan, so Defender's detection must be
+solved first rather than cured by the Store; `0.1.0` is no valid package version (the first
+part cannot be 0); the first submission must be a Private audience, which a public one can
+never become; the sign-in screen and Ease of Access registration stay outside the Store build.
+Its §8 lists the package's requirements and experiments E1-E7.
+
 ## Questions to answer first (research, with sources)
 
 1. **UI Access in a package.** Okur needs `uiAccess="true"` to read and drive elevated windows
