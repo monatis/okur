@@ -2197,6 +2197,10 @@
       "sha256": "b3567efa1f8f22dfc3fbc0347978c42909d2921a59b1559fdb51dac6120b0fa4",
       "size_bytes": 3144
     },
+    "nonmodal-dialog.html": {
+      "sha256": "597b58fdb218d0460fca4fa1bc712a3657ec28c90abb948b3504ed6cda6704a6",
+      "size_bytes": 574
+    },
     "number-positions.html": {
       "sha256": "a6287e6f4150df8d0354b5b427cb153fd54fe0cd27d99ea98373e797cba9c226",
       "size_bytes": 706
@@ -4256,6 +4260,20 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1130-web-nonmodal-dialog-confinement",
+      "fixture": "nonmodal-dialog.html",
+      "evidence": {
+        "sha256": "54be132c1e3cbbd32614201750c353f7788cadf5687b238f0ba2a371e47cdc79",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
         "summary_consistent": true
       }
     },
@@ -28929,10 +28947,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1904,
-    "scenarios_with_evidence": 1904,
-    "total_trials": 5718,
-    "successful_trials": 5701,
+    "scenarios": 1905,
+    "scenarios_with_evidence": 1905,
+    "total_trials": 5721,
+    "successful_trials": 5704,
     "deterministic_scenarios": 1592
   }
 }

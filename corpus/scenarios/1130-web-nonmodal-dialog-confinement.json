@@ -1,0 +1,80 @@
+{
+  "id": "1130-web-nonmodal-dialog-confinement",
+  "name": "Tab into a dialog that is not aria-modal, then Ctrl+Home, Down, Ctrl+End, Down, Up and the heading keys inside it; Shift+Tab out of it to a button before it, then Ctrl+Home and Ctrl+End: whether the virtual cursor keeps to a focused dialog and reads its start and end",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/nonmodal-dialog.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Ctrl+End"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "H"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Shift+H"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Shift+Tab"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Ctrl+End"
+    }
+  ]
+}
