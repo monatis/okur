@@ -1,0 +1,50 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "3:isInvalid",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "3:errorMessage",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "nine",
+    "instructions": "Starting at the 'Adults' spin button, set its value to 9",
+    "plan": "apg/quantity-spin-button",
+    "presentation_number": "16",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "typeInvalidValueIntoSpinButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbutton.html",
+  "id": "2738-aria-quantity-spin-button-type-invalid-value-into-spin-button-nine-pc",
+  "name": "ARIA-AT, Quantity Spin Button Example: Type an invalid value into a spin button; 9 in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "9",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

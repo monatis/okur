@@ -489,6 +489,42 @@
       "sha256": "d695af6576102b5b4ced5ceb0c405f7c51d764044e951d28e7d0c11600fb6b59",
       "size_bytes": 3103
     },
+    "aria-at/quantity-spin-button/css/quantity-spinbutton.css": {
+      "sha256": "1ff56b53a9cfde02ac8d790d618740123add907302606fd53b36e34a6da1e19c",
+      "size_bytes": 3470
+    },
+    "aria-at/quantity-spin-button/js/quantity-spinbutton.js": {
+      "sha256": "633186a5cfeb239087e34dbda8dba5d3e9413733f12419f8435154014c64c610",
+      "size_bytes": 3883
+    },
+    "aria-at/quantity-spin-button/js/spinbutton-date.js": {
+      "sha256": "2a248adda425185418fb0828071755c6df83fb485ebd42851695cfbafc3b7493",
+      "size_bytes": 5617
+    },
+    "aria-at/quantity-spin-button/quantity-spinbutton.html": {
+      "sha256": "d799b6041971b040279021a873dc038de172e631d84cff2391f94d85428c0676",
+      "size_bytes": 6466
+    },
+    "aria-at/quantity-spin-button/quantity-spinbutton.setFocusAfterAdultsSpinbutton.html": {
+      "sha256": "cb5e7f96f30ffb77afc198072aa4cbfde87080a14cca93e08b0f3d34562459ff",
+      "size_bytes": 7151
+    },
+    "aria-at/quantity-spin-button/quantity-spinbutton.setFocusBeforeAdultsSpinbutton.html": {
+      "sha256": "59df0d010571f4df04990806bc02db65f4acdd28cfa842f4dc3fcb684aaf4630",
+      "size_bytes": 7157
+    },
+    "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbutton.html": {
+      "sha256": "345b452bf0bc665085629fe4ac3d0ce183d859dcbf42dcc3b32fd89e415fa423",
+      "size_bytes": 7200
+    },
+    "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue2.html": {
+      "sha256": "98c318f821c31f0385c2a685bdfce13f9377c2348a89cebc7bf002776cae0cff",
+      "size_bytes": 7305
+    },
+    "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue9.html": {
+      "sha256": "9abb1c9989741a9c9f9cb648e849b65299dcb46d4db2a65cf306ebbddddcde0a",
+      "size_bytes": 7305
+    },
     "aria-at/radiogroup-aria-activedescendant/css/radio.css": {
       "sha256": "5652a091b391cd1c4c3356a5b19a4686bda175c688f4924d4d2b2aa13bdbdff4",
       "size_bytes": 1219
@@ -14106,6 +14142,34 @@
       }
     },
     {
+      "scenario_id": "2718-aria-quantity-spin-button-nav-forwards-to-spinbutton-down-vc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusBeforeAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "2d023098f50f786c3237ba4b0328860f2c7b215611c7a016aeba09d0c46b7178",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2719-aria-quantity-spin-button-nav-forwards-to-spinbutton-f-vc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusBeforeAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "b7a27e3917da83334099859192dbb378ff45f2d7948331ef0aae0d09db386cac",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "272-web-list-divisions-none",
       "fixture": "tables-navigation.html",
       "evidence": {
@@ -14120,11 +14184,277 @@
       }
     },
     {
+      "scenario_id": "2720-aria-quantity-spin-button-nav-forwards-to-spinbutton-tab-vc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusBeforeAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "e4587cb1794735d38762f5bb8661bc39e06ee81df6e5498048535c1facf5ab0f",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2721-aria-quantity-spin-button-nav-forwards-to-spinbutton-tab-pc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusBeforeAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "cbf29ff3fb949ffe5e9ccd3ef196f88fb12307570059dde9b22e05bb72533e78",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2722-aria-quantity-spin-button-nav-forwards-to-spinbutton-e-vc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusBeforeAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "f59213a6ce8cf34bad142793bcc6011eba40a7f2edfe8c8a1983e9d4c95c44b6",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2723-aria-quantity-spin-button-nav-back-to-spinbutton-up-vc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusAfterAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "94b382c7ab647c9184b7aea598316f905ccd7a726fa0a3575ce4ccbf2259e43a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2724-aria-quantity-spin-button-nav-back-to-spinbutton-shift-f-vc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusAfterAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "e962c8bc4ec539c1062d17d1057b91cd3700347192fe8ff599e0a4f9aca4c474",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2725-aria-quantity-spin-button-nav-back-to-spinbutton-shift-tab-vc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusAfterAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "84751d824edacc48e847e7478d02b0f3cc4fc405f47febf400ff8aa0a673c166",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2726-aria-quantity-spin-button-nav-back-to-spinbutton-shift-tab-pc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusAfterAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "1dd631a5e82485a4f6551f030dbe504c79933fe0a36b9c94835e1a6d9891ec63",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2727-aria-quantity-spin-button-nav-back-to-spinbutton-shift-e-vc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusAfterAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "e5fbb9c5c28fd3759a0ec737906d0db78103c341aa453eed6ca8348d7eb73a9d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2728-aria-quantity-spin-button-req-info-about-spinbutton-ins-tab-vc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "cb2e0214cedac8f39947d7dbad90956ccc388a05b3c433a1ca3d833cb4f44d06",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2729-aria-quantity-spin-button-req-info-about-spinbutton-ins-up-vc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "c34bd9bf3b6a81ac85d9f69936f45a68f004911d3b2db0e41027908146c89c6a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "273-web-list-tabs-none",
       "fixture": "doc-reading.html",
       "evidence": {
         "sha256": "b5a75b54ebe32c42a086a8ff2df675688a21fbaca4bc4c248552ade21b4dabc6",
         "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2730-aria-quantity-spin-button-req-info-about-spinbutton-ins-tab-pc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "840d539d96c46d9bbb501f04a35f5bb83d801218d66e01b650da27725738a563",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2731-aria-quantity-spin-button-req-info-about-spinbutton-ins-up-pc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "9d0464615263c917b5aa6939a372fd1e0ce93b878ab0e65a03721c1e10d7726c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2732-aria-quantity-spin-button-req-info-about-invalid-spinbutton-ins-tab-vc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue9.html",
+      "evidence": {
+        "sha256": "9e890929699a24b181383ca4709939ff6fd058786e758db5e45fc6cdb79ee5c6",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2733-aria-quantity-spin-button-req-info-about-invalid-spinbutton-ins-up-vc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue9.html",
+      "evidence": {
+        "sha256": "b5923b4c670c59fcd4c230ec454a341faf7b9186fe861238fc7d8c339e140f93",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2734-aria-quantity-spin-button-req-info-about-invalid-spinbutton-ins-tab-pc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue9.html",
+      "evidence": {
+        "sha256": "f177fc8badf14c29bbda881916c2087a7588324e8f84435a084c1182402c688a",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2735-aria-quantity-spin-button-req-info-about-invalid-spinbutton-ins-up-pc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue9.html",
+      "evidence": {
+        "sha256": "8d1dbe432eb479461e60f45d7d484c8e2df7d965275703b1ef6deab8ea1fceb3",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2736-aria-quantity-spin-button-increment-spinbutton-by-one-step-up-pc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "46db0d1a77ecce17e728ad4e50f89e6640e65ab41ffc167583e9de31ed37605c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2737-aria-quantity-spin-button-decrement-spinbutton-by-one-step-down-pc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue2.html",
+      "evidence": {
+        "sha256": "02c9643958057f282f015c24c9846795a2af31453d2a778d24a5caee38e7f16c",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2738-aria-quantity-spin-button-type-invalid-value-into-spin-button-nine-pc",
+      "fixture": "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbutton.html",
+      "evidence": {
+        "sha256": "74320edb6464faa93a9ce4b13b3f425076b08933d9be5c6d2596c0f35cfc9bad",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -21387,10 +21717,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1437,
-    "scenarios_with_evidence": 1437,
-    "total_trials": 4317,
-    "successful_trials": 4300,
-    "deterministic_scenarios": 1144
+    "scenarios": 1458,
+    "scenarios_with_evidence": 1458,
+    "total_trials": 4380,
+    "successful_trials": 4363,
+    "deterministic_scenarios": 1164
   }
 }

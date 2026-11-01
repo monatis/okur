@@ -1,0 +1,74 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "3:roleSpinbutton 3:editable 3:nameAdults 0:minimumValue1 0:maximumValue8 2:isInvalid 0:errorMessage",
+    "assertions": [
+      {
+        "id": "roleSpinbutton",
+        "phrase": "convey role, 'spin button'",
+        "priority": "1"
+      },
+      {
+        "id": "editable",
+        "phrase": "convey support for edit commands in the input",
+        "priority": "2"
+      },
+      {
+        "id": "nameAdults",
+        "phrase": "convey name of spin button, 'Adults'",
+        "priority": "1"
+      },
+      {
+        "id": "value9",
+        "phrase": "convey value, '9'",
+        "priority": "1"
+      },
+      {
+        "id": "isInvalid",
+        "phrase": "convey state, 'not valid'",
+        "priority": "1"
+      },
+      {
+        "id": "minimumValue1",
+        "phrase": "convey minimum value, '1'",
+        "priority": "2"
+      },
+      {
+        "id": "maximumValue8",
+        "phrase": "convey maximum value, '8'",
+        "priority": "2"
+      },
+      {
+        "id": "errorMessage",
+        "phrase": "convey error message, 'Must be between 1 and 8'",
+        "priority": "1"
+      }
+    ],
+    "command": "ins+up",
+    "instructions": "Starting at the 'Adults' spinbutton, read information about the spinbutton.",
+    "plan": "apg/quantity-spin-button",
+    "presentation_number": "9.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutInvalidSpinbutton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue9.html",
+  "id": "2733-aria-quantity-spin-button-req-info-about-invalid-spinbutton-ins-up-vc",
+  "name": "ARIA-AT, Quantity Spin Button Example: Request information about an invalid value in a spin button; Insert+Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Up",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

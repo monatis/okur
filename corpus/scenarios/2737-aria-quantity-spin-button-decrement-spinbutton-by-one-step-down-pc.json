@@ -1,0 +1,45 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "value1",
+        "phrase": "convey value, '1'",
+        "priority": "1"
+      }
+    ],
+    "command": "down",
+    "instructions": "Starting at the 'Adults' spin button, set its value to 1.",
+    "plan": "apg/quantity-spin-button",
+    "presentation_number": "13",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "decrementSpinbuttonByOneStep"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue2.html",
+  "id": "2737-aria-quantity-spin-button-decrement-spinbutton-by-one-step-down-pc",
+  "name": "ARIA-AT, Quantity Spin Button Example: Decrement a spin button by one step; Down in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

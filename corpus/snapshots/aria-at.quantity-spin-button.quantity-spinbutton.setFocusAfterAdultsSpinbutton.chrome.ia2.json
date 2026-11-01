@@ -1,0 +1,1472 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Quantity Spin Button Example - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "cb5e7f96f30ffb77afc198072aa4cbfde87080a14cca93e08b0f3d34562459ff",
+    "captured_at_unix_ms": 1793495495857,
+    "node_count": 38,
+    "capture_ms": 278
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Quantity Spin Button Example",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusAfterAdultsSpinbutton.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -107522,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Arial",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -107478,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 2,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Arial",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -107496,
+            "attributes": {
+              "display": "block",
+              "id": "example",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Segoe UI",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 20,
+                "name": "Guests",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -107460,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "name-from": "related-element",
+                  "setsize": "0",
+                  "tag": "fieldset",
+                  "text-align": "left"
+                },
+                "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ],
+                  [
+                    3,
+                    4
+                  ],
+                  [
+                    4,
+                    5
+                  ],
+                  [
+                    5,
+                    6
+                  ],
+                  [
+                    6,
+                    7
+                  ],
+                  [
+                    7,
+                    8
+                  ],
+                  [
+                    8,
+                    9
+                  ],
+                  [
+                    9,
+                    10
+                  ],
+                  [
+                    10,
+                    11
+                  ],
+                  [
+                    11,
+                    12
+                  ],
+                  [
+                    12,
+                    13
+                  ],
+                  [
+                    13,
+                    14
+                  ],
+                  [
+                    14,
+                    15
+                  ],
+                  [
+                    15,
+                    16
+                  ],
+                  [
+                    16,
+                    17
+                  ],
+                  [
+                    17,
+                    18
+                  ],
+                  [
+                    18,
+                    19
+                  ],
+                  [
+                    19,
+                    20
+                  ],
+                  [
+                    20,
+                    21
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "14.5pt",
+                      "font-weight": "bold"
+                    }
+                  },
+                  {
+                    "start": 1,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "14.5pt"
+                    }
+                  },
+                  {
+                    "start": 2,
+                    "end": 3,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "17pt",
+                      "font-weight": "bold"
+                    }
+                  },
+                  {
+                    "start": 3,
+                    "end": 4,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "17pt"
+                    }
+                  },
+                  {
+                    "start": 4,
+                    "end": 5,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "17pt",
+                      "font-weight": "bold"
+                    }
+                  },
+                  {
+                    "start": 5,
+                    "end": 6,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "17pt"
+                    }
+                  },
+                  {
+                    "start": 6,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(223,223,243)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "17pt",
+                      "font-weight": "bold"
+                    }
+                  },
+                  {
+                    "start": 7,
+                    "end": 9,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 9,
+                    "end": 10,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "14.5pt"
+                    }
+                  },
+                  {
+                    "start": 10,
+                    "end": 12,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "17pt",
+                      "font-weight": "bold"
+                    }
+                  },
+                  {
+                    "start": 12,
+                    "end": 13,
+                    "attributes": {
+                      "background-color": "rgb(223,223,243)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "17pt",
+                      "font-weight": "bold"
+                    }
+                  },
+                  {
+                    "start": 13,
+                    "end": 15,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 15,
+                    "end": 16,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "14.5pt"
+                    }
+                  },
+                  {
+                    "start": 16,
+                    "end": 18,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "17pt",
+                      "font-weight": "bold"
+                    }
+                  },
+                  {
+                    "start": 18,
+                    "end": 19,
+                    "attributes": {
+                      "background-color": "rgb(223,223,243)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "17pt",
+                      "font-weight": "bold"
+                    }
+                  },
+                  {
+                    "start": 19,
+                    "end": 21,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Segoe UI",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelledBy": [
+                    -107474
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1049,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -107474,
+                    "attributes": {
+                      "display": "block",
+                      "tag": "legend",
+                      "text-align": "left"
+                    },
+                    "text": "Guests",
+                    "lines": [
+                      [
+                        0,
+                        6
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 6,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Segoe UI",
+                          "font-size": "14.5pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "labelFor": [
+                        -107460
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Guests",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -107489,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Guests",
+                        "lines": [
+                          [
+                            0,
+                            6
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 6,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Segoe UI",
+                              "font-size": "14.5pt",
+                              "font-weight": "bold"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1049,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -107523,
+                    "attributes": {
+                      "display": "block",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "text": "Adults",
+                    "lines": [
+                      [
+                        0,
+                        6
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 6,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Segoe UI",
+                          "font-size": "14.5pt"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "labelFor": [
+                        -107493
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Adults",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -107479,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Adults",
+                        "lines": [
+                          [
+                            0,
+                            6
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 6,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Segoe UI",
+                              "font-size": "14.5pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 43,
+                    "ia2_role": 43,
+                    "name": "Remove adult",
+                    "msaa_states": 1048577,
+                    "ia2_states": 1024,
+                    "unique_id": -107499,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "tooltip",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "relations": {
+                      "controllerFor": [
+                        -107493
+                      ]
+                    }
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1054,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -107482,
+                    "attributes": {
+                      "display": "block",
+                      "tag": "p",
+                      "text-align": "left"
+                    },
+                    "text": "￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Segoe UI",
+                          "font-size": "17pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Navigate forwards from here",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusAfterAdultsSpinbutton.html#beforelink",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "unique_id": -107480,
+                        "attributes": {
+                          "display": "inline",
+                          "id": "beforelink",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Navigate forwards from here",
+                        "lines": [
+                          [
+                            0,
+                            27
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 27,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Segoe UI",
+                              "font-size": "17pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Navigate forwards from here",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "unique_id": -107476,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Navigate forwards from here",
+                            "lines": [
+                              [
+                                0,
+                                27
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 27,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(3,69,117)",
+                                  "font-family": "Segoe UI",
+                                  "font-size": "17pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 52,
+                    "ia2_role": 52,
+                    "name": "Adults",
+                    "value": "1",
+                    "msaa_states": 1048576,
+                    "ia2_states": 13320,
+                    "unique_id": -107493,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "adults",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "center",
+                      "text-input-type": "text",
+                      "text-model": "a1",
+                      "valuetext": "1",
+                      "xml-roles": "spinbutton"
+                    },
+                    "text": "1",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Segoe UI",
+                          "font-size": "17pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "controlledBy": [
+                        -107499,
+                        -107513
+                      ],
+                      "labelledBy": [
+                        -107523
+                      ]
+                    }
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1054,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -107473,
+                    "attributes": {
+                      "display": "block",
+                      "tag": "p",
+                      "text-align": "left"
+                    },
+                    "text": "￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Segoe UI",
+                          "font-size": "17pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Navigate backwards from here",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusAfterAdultsSpinbutton.html#afterlink",
+                        "msaa_states": 5242884,
+                        "ia2_states": 1024,
+                        "unique_id": -107472,
+                        "attributes": {
+                          "display": "inline",
+                          "id": "afterlink",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Navigate backwards from here",
+                        "lines": [
+                          [
+                            0,
+                            28
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 28,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Segoe UI",
+                              "font-size": "17pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Navigate backwards from here",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "unique_id": -107525,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Navigate backwards from here",
+                            "lines": [
+                              [
+                                0,
+                                28
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 28,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(3,69,117)",
+                                  "font-family": "Segoe UI",
+                                  "font-size": "17pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 43,
+                    "ia2_role": 43,
+                    "name": "Add adult",
+                    "msaa_states": 1048576,
+                    "ia2_states": 1024,
+                    "unique_id": -107513,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "tooltip",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "relations": {
+                      "controllerFor": [
+                        -107493
+                      ]
+                    }
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -107497,
+                    "attributes": {
+                      "display": "block",
+                      "id": "help-adults",
+                      "tag": "small",
+                      "text-align": "left"
+                    },
+                    "text": "1 to 8",
+                    "lines": [
+                      [
+                        0,
+                        6
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 6,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Segoe UI",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "1 to 8",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -107519,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "1 to 8",
+                        "lines": [
+                          [
+                            0,
+                            6
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 6,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Segoe UI",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 23,
+                    "ia2_role": 23,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -107507,
+                    "attributes": {
+                      "atomic": "true",
+                      "class": "visually-hidden",
+                      "container-atomic": "true",
+                      "container-busy": "false",
+                      "container-live": "polite",
+                      "container-relevant": "additions text",
+                      "display": "block",
+                      "live": "polite",
+                      "relevant": "additions text",
+                      "tag": "output",
+                      "text-align": "left"
+                    }
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1049,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -107481,
+                    "attributes": {
+                      "display": "block",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "text": "Kids",
+                    "lines": [
+                      [
+                        0,
+                        4
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 4,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Segoe UI",
+                          "font-size": "14.5pt"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "labelFor": [
+                        -107469
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Kids",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -107510,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Kids",
+                        "lines": [
+                          [
+                            0,
+                            4
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 4,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Segoe UI",
+                              "font-size": "14.5pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 43,
+                    "ia2_role": 43,
+                    "name": "Remove kid",
+                    "msaa_states": 1048577,
+                    "ia2_states": 1024,
+                    "unique_id": -107494,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "tooltip",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "relations": {
+                      "controllerFor": [
+                        -107469
+                      ]
+                    }
+                  },
+                  {
+                    "msaa_role": 52,
+                    "ia2_role": 52,
+                    "name": "Kids",
+                    "value": "0",
+                    "msaa_states": 1048576,
+                    "ia2_states": 13320,
+                    "unique_id": -107469,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "kids",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "center",
+                      "text-input-type": "text",
+                      "text-model": "a1",
+                      "valuetext": "0",
+                      "xml-roles": "spinbutton"
+                    },
+                    "text": "0",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Segoe UI",
+                          "font-size": "17pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "controlledBy": [
+                        -107494,
+                        -107465
+                      ],
+                      "labelledBy": [
+                        -107481
+                      ]
+                    }
+                  },
+                  {
+                    "msaa_role": 43,
+                    "ia2_role": 43,
+                    "name": "Add kid",
+                    "msaa_states": 1048576,
+                    "ia2_states": 1024,
+                    "unique_id": -107465,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "tooltip",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "relations": {
+                      "controllerFor": [
+                        -107469
+                      ]
+                    }
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -107488,
+                    "attributes": {
+                      "display": "block",
+                      "id": "help-kids",
+                      "tag": "small",
+                      "text-align": "left"
+                    },
+                    "text": "0 to 8",
+                    "lines": [
+                      [
+                        0,
+                        6
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 6,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Segoe UI",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "0 to 8",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -107487,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "0 to 8",
+                        "lines": [
+                          [
+                            0,
+                            6
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 6,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Segoe UI",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 23,
+                    "ia2_role": 23,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -107483,
+                    "attributes": {
+                      "atomic": "true",
+                      "class": "visually-hidden",
+                      "container-atomic": "true",
+                      "container-busy": "false",
+                      "container-live": "polite",
+                      "container-relevant": "additions text",
+                      "display": "block",
+                      "live": "polite",
+                      "relevant": "additions text",
+                      "tag": "output",
+                      "text-align": "left"
+                    }
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1049,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -107515,
+                    "attributes": {
+                      "display": "block",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "text": "Animals",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Segoe UI",
+                          "font-size": "14.5pt"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "labelFor": [
+                        -107517
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Animals",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -107477,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Animals",
+                        "lines": [
+                          [
+                            0,
+                            7
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 7,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Segoe UI",
+                              "font-size": "14.5pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 43,
+                    "ia2_role": 43,
+                    "name": "Remove animal",
+                    "msaa_states": 1048577,
+                    "ia2_states": 1024,
+                    "unique_id": -107524,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "tooltip",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "relations": {
+                      "controllerFor": [
+                        -107517
+                      ]
+                    }
+                  },
+                  {
+                    "msaa_role": 52,
+                    "ia2_role": 52,
+                    "name": "Animals",
+                    "value": "0",
+                    "msaa_states": 1048576,
+                    "ia2_states": 13320,
+                    "unique_id": -107517,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "animals",
+                      "name-from": "related-element",
+                      "tag": "input",
+                      "text-align": "center",
+                      "text-input-type": "text",
+                      "text-model": "a1",
+                      "valuetext": "0",
+                      "xml-roles": "spinbutton"
+                    },
+                    "text": "0",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Segoe UI",
+                          "font-size": "17pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "controlledBy": [
+                        -107524,
+                        -107467
+                      ],
+                      "labelledBy": [
+                        -107515
+                      ]
+                    }
+                  },
+                  {
+                    "msaa_role": 43,
+                    "ia2_role": 43,
+                    "name": "Add animal",
+                    "msaa_states": 1048576,
+                    "ia2_states": 1024,
+                    "unique_id": -107467,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "name-from": "tooltip",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "relations": {
+                      "controllerFor": [
+                        -107517
+                      ]
+                    }
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -107491,
+                    "attributes": {
+                      "display": "block",
+                      "id": "help-animals",
+                      "tag": "small",
+                      "text-align": "left"
+                    },
+                    "text": "0 to 12",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Segoe UI",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "0 to 12",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -107521,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "0 to 12",
+                        "lines": [
+                          [
+                            0,
+                            7
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 7,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Segoe UI",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 23,
+                    "ia2_role": 23,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -107492,
+                    "attributes": {
+                      "atomic": "true",
+                      "class": "visually-hidden",
+                      "container-atomic": "true",
+                      "container-busy": "false",
+                      "container-live": "polite",
+                      "container-relevant": "additions text",
+                      "display": "block",
+                      "live": "polite",
+                      "relevant": "additions text",
+                      "tag": "output",
+                      "text-align": "left"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -107505,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(250,250,250)",
+                  "color": "rgb(5,5,5)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1,
+                "ia2_states": 1024,
+                "unique_id": -107500,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

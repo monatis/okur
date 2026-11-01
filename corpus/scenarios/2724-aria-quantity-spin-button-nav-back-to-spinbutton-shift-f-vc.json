@@ -1,0 +1,69 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleSpinbutton",
+        "phrase": "convey role, 'spin button'",
+        "priority": "1"
+      },
+      {
+        "id": "editable",
+        "phrase": "convey support for edit commands in the input",
+        "priority": "2"
+      },
+      {
+        "id": "nameAdults",
+        "phrase": "convey name of spin button, 'Adults'",
+        "priority": "1"
+      },
+      {
+        "id": "value1",
+        "phrase": "convey value, '1'",
+        "priority": "1"
+      },
+      {
+        "id": "minimumValue1",
+        "phrase": "convey minimum value, '1'",
+        "priority": "2"
+      },
+      {
+        "id": "maximumValue8",
+        "phrase": "convey maximum value, '8'",
+        "priority": "2"
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "shift+f",
+    "instructions": "Starting at the 'Navigate backwards from here' link, navigate to the 'Adults' spinbutton.",
+    "plan": "apg/quantity-spin-button",
+    "presentation_number": "2.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToSpinbutton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/quantity-spin-button/quantity-spinbutton.setFocusAfterAdultsSpinbutton.html",
+  "id": "2724-aria-quantity-spin-button-nav-back-to-spinbutton-shift-f-vc",
+  "name": "ARIA-AT, Quantity Spin Button Example: Navigate backwards to a spin button; Shift+F in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+F",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
