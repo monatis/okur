@@ -628,6 +628,76 @@ impl SpeechFormatter {
         }
     }
 
+    /// A container a move comes into, on its line, as a focus coming into it says it: a
+    /// landmark "Repository files ‹ NavigationRegion ›", a list "‹ list › | with 1 items", a
+    /// dialog by its name and description, a named tab panel (JAWS's words, dev box
+    /// 2026-10-16; [obs, round-aria18, round-aria23]). None for any other node.
+    pub fn container_entered(n: &crate::aom::AomNode) -> Option<String> {
+        use crate::aom::Role;
+        let name = n.name.as_deref().map(str::trim).unwrap_or_default();
+        let named = |marker: &str| {
+            if name.is_empty() {
+                format!(" \u{1d} {marker} \u{1e} \n")
+            } else {
+                format!("{name} \u{1d} {marker} \u{1e} \n")
+            }
+        };
+        match &n.role {
+            Role::Landmark { landmark_type } => match landmark_type.as_str() {
+                "main" => Some(named(msg::role_region_main().as_str())),
+                "form" => Some(named(msg::role_region_form().as_str())),
+                "navigation" => Some(named(msg::role_region_navigation().as_str())),
+                "banner" => Some(named(msg::role_region_banner().as_str())),
+                "complementary" => Some(named(msg::role_region_complementary().as_str())),
+                "search" => Some(named(msg::role_region_search().as_str())),
+                "contentinfo" => Some(named(msg::role_region_content_info().as_str())),
+                "region" => Some(named(msg::role_region().as_str())),
+                _ => None,
+            },
+            // A dialog by its name, "Modal" where it is one, then its description:
+            // "Address Added Modal dialog | The address you provided has been
+            // added..." [obs, round-aria23, 2666/s1, 2668/s1, 2685/s1]. JAWS 2025.2505
+            // says "Modal" with the virtual cursor off only, a newer JAWS (2025.2508,
+            // ARIA-AT's reports) with it on too, as Okur does.
+            Role::Dialog | Role::AlertDialog => {
+                let mut line = if n.states.modal {
+                    format!(
+                        "{name} \u{1d}{}\u{1e} \u{1d} {} \u{1e} \n",
+                        msg::state_modal(),
+                        msg::role_dialog()
+                    )
+                } else {
+                    named(msg::role_dialog().as_str())
+                };
+                if let Some(text) = n
+                    .attributes
+                    .get("description")
+                    .map(|d| d.trim())
+                    .filter(|d| !d.is_empty())
+                {
+                    line.push_str(text);
+                    line.push('\n');
+                }
+                Some(line)
+            }
+            // "Peter Müller TabPanel" [obs, round-aria18, 2531/s1].
+            Role::TabPanel if !name.is_empty() => Some(named(msg::role_tab_panel().as_str())),
+            Role::List => {
+                let items = n
+                    .children
+                    .iter()
+                    .filter(|c| c.role == Role::ListItem)
+                    .count();
+                Some(format!(
+                    "{}{}\n",
+                    named(msg::role_list().as_str()),
+                    msg::list_items_count(items)
+                ))
+            }
+            _ => None,
+        }
+    }
+
     /// A slider's or spin button's limits, "min 0 max 255", where its value is a number (no
     /// aria-valuetext) and both limits are known. A newer JAWS (2025.2508, ARIA-AT's reports)
     /// says them after the value, which ARIA-AT asks for (SHOULD); JAWS 2025.2505 does not.
