@@ -1276,11 +1276,13 @@ A step can be in more than one entry; all of its entries apply.
   `2781-aria-vertical-temperature-slider-nav-forwards-to-slider-tab-vc/s1`,
   `2785-aria-vertical-temperature-slider-nav-back-to-slider-shift-tab-vc/s1`,
   `2666-aria-modal-dialog-open-modal-dialog-space-vc/s1`,
-  `2667-aria-modal-dialog-open-modal-dialog-enter-vc/s1`.
+  `2667-aria-modal-dialog-open-modal-dialog-enter-vc/s1`,
+  `2160-aria-accordion-nav-into-accordion-panel-tab-vc/s1`,
+  `2677-aria-modal-dialog-nav-to-first-focusable-element-modal-dialog-tab-vc/s1`.
 - Difference: Okur also says the control's hint after a focus onto it: a menu button's "Press
   space to activate the menu, then navigate with arrow keys", a spin button's "To set the value
   use the Arrow keys or type the value.", a slider's "To increase or decrease use the Arrow
-  keys.", and "Type in text." for the field a dialog's opening focuses.
+  keys.", and "Type in text." for a field a dialog's opening or Tab focuses.
 - Why: JAWS 2025.2505 on old-pc says these hints with the virtual cursor off only [obs,
   round-aria20, round-aria23, round-aria25, round-aria26, round-aria28]. A newer JAWS
   (2025.2508.120), in ARIA-AT's published reports, says them with it on too.
@@ -1418,6 +1420,20 @@ A step can be in more than one entry; all of its entries apply.
   round-aria24]; a newer JAWS (2025.2508.120, ARIA-AT's reports) says the cell alone. ARIA-AT's
   minimal-data-grid plan asks for the header (MUST) and the column and row (SHOULD).
 - Decided under the owner's rules on JAWS's accidents and for the web (AGENTS.md §1.2),
+  2026-11-01.
+
+### A spin button's error message
+
+- Steps: `2732-aria-quantity-spin-button-req-info-about-invalid-spinbutton-ins-tab-vc/s1` (Okur
+  also says "Must be between 1 and 8"),
+  `2734-aria-quantity-spin-button-req-info-about-invalid-spinbutton-ins-tab-pc/s1` (whole step).
+- Difference: Okur says an invalid field's error message (aria-errormessage) after its value
+  wherever the field is described, once, after "Has Error | invalid entry", not on Insert+Up.
+- Why: JAWS says the message only on the PC cursor's Insert+Tab, three times, after "invalid
+  entry | Has Error" (the other way round), without the hint it says on a valid value [obs,
+  round-aria25]; a newer JAWS (2025.2508.120, ARIA-AT's reports) says it once there and not
+  with the virtual cursor. ARIA-AT's quantity-spin-button plan requires the message (MUST).
+- Decided under the owner's rules for the web and on JAWS's accidents (AGENTS.md §1.2),
   2026-11-01.
 
 ## Considered and not accepted

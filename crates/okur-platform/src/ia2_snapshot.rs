@@ -289,10 +289,38 @@ fn map_role(node: &Ia2Node) -> okur_core::Role {
 /// the HTML `tag` (block quotes), the CSS `display` (block versus inline), visited links.
 pub fn ia2_to_aom(root: &Ia2Node) -> okur_core::AomNode {
     let mut next_id = 0;
-    convert(root, &mut next_id)
+    let mut by_id = std::collections::HashMap::new();
+    index_by_id(root, &mut by_id);
+    convert(root, &mut next_id, &by_id)
 }
 
-fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
+/// The tree's nodes by their IA2 uniqueID, which relations name.
+fn index_by_id<'a>(node: &'a Ia2Node, out: &mut std::collections::HashMap<i32, &'a Ia2Node>) {
+    if let Some(id) = node.unique_id {
+        out.insert(id, node);
+    }
+    for child in &node.children {
+        index_by_id(child, out);
+    }
+}
+
+/// A related node's words: its name, or its text without embedded objects' marks.
+fn related_text(node: &Ia2Node) -> Option<String> {
+    let text = node
+        .name
+        .as_deref()
+        .filter(|n| !n.trim().is_empty())
+        .or(node.text.as_deref())?;
+    let words = text.replace('\u{fffc}', " ");
+    let words = words.split_whitespace().collect::<Vec<_>>().join(" ");
+    (!words.is_empty()).then_some(words)
+}
+
+fn convert(
+    node: &Ia2Node,
+    next_id: &mut usize,
+    by_id: &std::collections::HashMap<i32, &Ia2Node>,
+) -> okur_core::AomNode {
     use okur_core::{AomNode, NodeStates, Role};
     use xa11y_windows::ia2::msaa_states::{
         STATE_SYSTEM_CHECKED, STATE_SYSTEM_COLLAPSED, STATE_SYSTEM_EXPANDED,
@@ -503,8 +531,16 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     if node.ia2_states & ia2_state::INVALID_ENTRY != 0 {
         set_attr("invalid", "true".to_owned());
     }
-    if node.relations.get("error").is_some_and(|t| !t.is_empty()) {
+    if let Some(targets) = node.relations.get("error").filter(|t| !t.is_empty()) {
         set_attr("has_error", "true".to_owned());
+        // The error message's words, "Must be between 1 and 8".
+        let message: Vec<String> = targets
+            .iter()
+            .filter_map(|id| by_id.get(id).and_then(|target| related_text(target)))
+            .collect();
+        if !message.is_empty() {
+            set_attr("error_message", message.join(" "));
+        }
     }
     // aria-flowto: the objects this one flows to, by their IA2 uniqueIDs (Equals follows them).
     if let Some(targets) = node.relations.get("flowsTo").filter(|t| !t.is_empty()) {
@@ -522,7 +558,11 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
         }
     }
 
-    aom.children = node.children.iter().map(|c| convert(c, next_id)).collect();
+    aom.children = node
+        .children
+        .iter()
+        .map(|c| convert(c, next_id, by_id))
+        .collect();
     aom
 }
 

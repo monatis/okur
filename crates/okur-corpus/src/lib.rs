@@ -647,6 +647,19 @@ mod tests {
                 .and_then(|n| n.attributes.get("description")),
             Some(&"We never share your email.".to_owned())
         );
+
+        // An invalid field's error message (aria-errormessage), through IA2's error relation.
+        let invalid = snapshot_aom(
+            "aria-at/quantity-spin-button/quantity-spinbutton.setFocusOnAdultsSpinbuttonValue9",
+            snapshots::Api::Ia2,
+        );
+        let messages: Vec<&String> = find(&invalid, &|n| {
+            n.attributes.get("has_error").map(String::as_str) == Some("true")
+        })
+        .iter()
+        .filter_map(|n| n.attributes.get("error_message"))
+        .collect();
+        assert_eq!(messages, vec!["Must be between 1 and 8"]);
     }
 
     /// Focus events built from a chain of real Chrome UIA nodes, as trace replay and the

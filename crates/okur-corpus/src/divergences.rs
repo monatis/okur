@@ -1228,12 +1228,15 @@ divergences! {
     "a newer JAWS (2025.2508.120, ARIA-AT's reports) under the owner's rule for the web, 2026-11-01";
 
     Difference::OkurAlsoSays("Type in text.") => [
+        "2160-aria-accordion-nav-into-accordion-panel-tab-vc/s1",
         "2666-aria-modal-dialog-open-modal-dialog-space-vc/s1",
         "2667-aria-modal-dialog-open-modal-dialog-enter-vc/s1",
+        "2677-aria-modal-dialog-nav-to-first-focusable-element-modal-dialog-tab-vc/s1",
     ],
-    "The field a dialog's opening focuses, the virtual cursor on: JAWS 2025.2505 says no hint, \
-     with it off \"Type in text.\" [obs, round-aria23, 2668/s1]. A newer JAWS (2025.2508.120, \
-     ARIA-AT's reports) says it with the virtual cursor on too, as Okur does.",
+    "A field a dialog's opening or Tab focuses, the virtual cursor on: JAWS 2025.2505 says no \
+     hint on these, with it off \"Type in text.\" [obs, round-aria5, round-aria23, 2668/s1]. A \
+     newer JAWS (2025.2508.120, ARIA-AT's reports) says it with the virtual cursor on too, as \
+     Okur does.",
     "a newer JAWS (2025.2508.120, ARIA-AT's reports) under the owner's rule for the web, 2026-11-01";
 
     Difference::Step => [
@@ -1356,6 +1359,27 @@ divergences! {
      changes, then the cell, then what changed, \"Balance | $999,741.00 | Column 5\", \
      \"$88.00 | Row 5\", both after Ctrl+Home and Ctrl+End.",
     "the agent under the owner's rules on JAWS's accidents and for the web, 2026-11-01";
+
+    Difference::OkurAlsoSays("Must be between 1 and 8") => [
+        "2732-aria-quantity-spin-button-req-info-about-invalid-spinbutton-ins-tab-vc/s1",
+    ],
+    "Insert+Tab on a spin button holding an invalid value, the virtual cursor on: JAWS says \
+     \"Has Error | invalid entry | 9 | min 1 max 8\" without the error message [obs, \
+     round-aria25], as a newer JAWS (2025.2508.120, ARIA-AT's reports) does, where ARIA-AT's \
+     quantity-spin-button plan requires it (MUST). Okur says it after the value wherever the \
+     field is described, not on Insert+Up.",
+    "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
+
+    Difference::Step => [
+        "2734-aria-quantity-spin-button-req-info-about-invalid-spinbutton-ins-tab-pc/s1",
+    ],
+    "Insert+Tab on a spin button holding an invalid value, the virtual cursor off: JAWS says \
+     \"invalid entry | Has Error\" (the other way round from its virtual cursor and its focus), \
+     then the error message three times, and leaves out the hint it says on a valid value \
+     [obs, round-aria25, 2730/s1]; a newer JAWS (2025.2508.120, ARIA-AT's reports) says the \
+     message once. Okur says the field as it does elsewhere: \"Adults edit spin box | Has \
+     Error | invalid entry | 9 | Must be between 1 and 8\" and the hint.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
 
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",

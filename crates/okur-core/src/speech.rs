@@ -485,6 +485,17 @@ impl SpeechFormatter {
                         lines.push(Line::of(PartKind::Text, limits));
                     }
                 }
+                // Its error message after its value, not on Insert+Up: "Adults edit spin box |
+                // Has Error | invalid entry | 9 | Must be between 1 and 8". JAWS says it on the
+                // PC cursor's Insert+Tab alone [obs, round-aria25, 2734/s1], where ARIA-AT's
+                // quantity-spin-button plan requires it (MUST): Okur says it wherever the field
+                // is described (the owner's rule for the web, 2026-11-01).
+                if let Some(message) = attr("error_message")
+                    .filter(|m| !m.trim().is_empty() && attr("has_error") == Some("true"))
+                    .filter(|_| !said.line)
+                {
+                    lines.push(Line::of(PartKind::Text, message));
+                }
                 if let Some(d) = attr("description") {
                     lines.push(Line::of(PartKind::Description, d));
                 }

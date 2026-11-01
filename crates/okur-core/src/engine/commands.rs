@@ -1147,7 +1147,11 @@ impl ScreenReaderEngine {
         let Some(node) = focused_field else {
             return self.cursor.current_line();
         };
-        let mut field = SpeechFormatter::control_focus(node, |_| true, Default::default());
+        let line = crate::speech::FocusSaid {
+            line: true,
+            ..Default::default()
+        };
+        let mut field = SpeechFormatter::control_focus(node, |_| true, line);
         field.retain(|kind| kind != PartKind::Description);
         let blank = msg::blank().to_string();
         field.lines.retain(|line| line.render().trim() != blank);
