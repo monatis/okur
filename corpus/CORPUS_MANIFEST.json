@@ -1469,6 +1469,42 @@
       "sha256": "962dbf19a15bb494164545e64ebe3e735a9769c500182749428ab8a1975a3e3e",
       "size_bytes": 5235
     },
+    "aria-at/rating-slider/css/slider-rating.css": {
+      "sha256": "c3845b0146ab92fdcab4fd3317cb0257fb980bcc09dcbe5c13e0f286fccd9756",
+      "size_bytes": 1842
+    },
+    "aria-at/rating-slider/js/slider-rating.js": {
+      "sha256": "e84efb5db7d0829e441159ba61540d60393167429172191497b8a62237eb0fda",
+      "size_bytes": 6238
+    },
+    "aria-at/rating-slider/slider-rating.html": {
+      "sha256": "44acbcf5a319fabc4b5fd6bdf32d08e49256f530c1b3a47a968c532f408ebacf",
+      "size_bytes": 3170
+    },
+    "aria-at/rating-slider/slider-rating.setFocusAfterSlider.html": {
+      "sha256": "ca553b9b949a4469f897485daf5a96ce58dfbd62f0be095fd0138d8fa67c841d",
+      "size_bytes": 3967
+    },
+    "aria-at/rating-slider/slider-rating.setFocusBeforeSlider.html": {
+      "sha256": "b468bfc30531cbf604e8be95c04d8afc145e4141ef84bcbb45b79fa4ff05e7f0",
+      "size_bytes": 3970
+    },
+    "aria-at/rating-slider/slider-rating.setFocusOnSlider.html": {
+      "sha256": "5484c8e9961ca07ecdb44089bb6003851d880ffdd766cfd01f598ded1cf73081",
+      "size_bytes": 3956
+    },
+    "aria-at/rating-slider/slider-rating.setFocusOnSliderAndSetValueToFive.html": {
+      "sha256": "7b1563cba3c989a94298af4f0140732a09187dbb1376a946e06037d9956352ed",
+      "size_bytes": 4150
+    },
+    "aria-at/rating-slider/slider-rating.setFocusOnSliderAndSetValueToOne.html": {
+      "sha256": "ca6d3dced6de3c150d5a6fd285b9fcd2a2d54d0a7cb87bff7e4ce54de8c36a19",
+      "size_bytes": 4146
+    },
+    "aria-at/rating-slider/slider-rating.setFocusOnSliderAndSetValueToOneHalfStar.html": {
+      "sha256": "c650bab2bc09ee14275d91351d3c62730ac6146f9ac1d1907a16e4a18600421e",
+      "size_bytes": 4166
+    },
     "aria-at/seek-slider/css/slider-seek.css": {
       "sha256": "3ff29348e44ccc2c29a6414e4bf5ecb4c787108fe4d32cbc50371019f34d61c8",
       "size_bytes": 1188
@@ -1492,6 +1528,42 @@
     "aria-at/seek-slider/slider-seek.setFocusOnSlider.html": {
       "sha256": "a68ab399485c5a097df50527c4ac0a9b40f4f5a271d9674ebc0170c5618c6c85",
       "size_bytes": 3752
+    },
+    "aria-at/slider-multithumb/css/slider-multithumb.css": {
+      "sha256": "8649ce935692d34d15187c20509466ebe5a8908a47208fb175dda14ec04999ad",
+      "size_bytes": 1615
+    },
+    "aria-at/slider-multithumb/js/slider-multithumb.js": {
+      "sha256": "1f516408a19b6af92a9abba2eeadd1ff0c7a5cac0d8923a52b3bd6f1db9fcccb",
+      "size_bytes": 11346
+    },
+    "aria-at/slider-multithumb/slider-multithumb.html": {
+      "sha256": "8d1eab23b84904f5dda039ebccda94955a14858bfa557ff4170b036525485079",
+      "size_bytes": 3232
+    },
+    "aria-at/slider-multithumb/slider-multithumb.setFocusAfterSlider.html": {
+      "sha256": "89690f3938314624eb2b467b5c5b48bc043c0971b88705ae845cabd9c5312cc5",
+      "size_bytes": 4002
+    },
+    "aria-at/slider-multithumb/slider-multithumb.setFocusBeforeSlider.html": {
+      "sha256": "83df371adb7476813796ca3cc5c04d91408e98910aef518fad7525a993934a9a",
+      "size_bytes": 4005
+    },
+    "aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html": {
+      "sha256": "9a5c869709c43743bf2d0f25de5d7282714e74bf53f4dd6a509257f5d4e86a3e",
+      "size_bytes": 3991
+    },
+    "aria-at/slider-multithumb/slider-multithumb.setFocusOnSliderAndSetValueToFive.html": {
+      "sha256": "8741fbe875172215d2f031b40c5bcb572d1f17339a0fb951a8afd5d11d4d58e2",
+      "size_bytes": 4191
+    },
+    "aria-at/slider-multithumb/slider-multithumb.setFocusOnSliderAndSetValueToOne.html": {
+      "sha256": "3369a9f11e8233845bc85d839f9df1c1d77dc0ca2f5617fb8c5bc12232c84801",
+      "size_bytes": 4187
+    },
+    "aria-at/slider-multithumb/slider-multithumb.setFocusOnSliderAndSetValueToOneHalfStar.html": {
+      "sha256": "6066d57ad10936d9d42e8159d6e8a4335c9972bf7fe0adf8b678fd811f51b902",
+      "size_bytes": 4207
     },
     "aria-at/switch-button/css/switch-button.css": {
       "sha256": "f3b6e33873a887eac1de2938479a877bf4c5da8793e3f02cc3539504300ecfe4",
@@ -21578,11 +21650,193 @@
       }
     },
     {
+      "scenario_id": "3117-aria-rating-slider-t1-down-down-down-vc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusBeforeSlider.html",
+      "evidence": {
+        "sha256": "3f4708d4b4b4720974b12434f7a6492b9770a12307155d81975c1de8daa6ff35",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3118-aria-rating-slider-t1-tab-vc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusBeforeSlider.html",
+      "evidence": {
+        "sha256": "45ff65aef4c98279deb1a1b4379981685ded5c18f48ef006b91f2967e1330cce",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3119-aria-rating-slider-t2-up-up-vc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusAfterSlider.html",
+      "evidence": {
+        "sha256": "a23548239d5e52313bbefbaee857f7987bb578112af144e9a3826dbf7f5db7ff",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "312-desktop-virtualize-control",
       "fixture": "desktop-editor.ps1",
       "evidence": {
         "sha256": "8293d9610445830f5742893ea49bcc0de17ce8dec9cd8ed1893a8ccfa566f0f0",
         "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3120-aria-rating-slider-t2-shift-tab-vc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusAfterSlider.html",
+      "evidence": {
+        "sha256": "91b4061465585dbc81e4c125629139a2b092bb409bbf125b25910704214887f8",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3121-aria-rating-slider-t3-tab-pc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusBeforeSlider.html",
+      "evidence": {
+        "sha256": "6f25db2efe89861d0d4c9e1c72e58eda993b9b25899a38db4f4171e1accaefda",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3122-aria-rating-slider-t4-shift-tab-pc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusAfterSlider.html",
+      "evidence": {
+        "sha256": "1b3ba8847d78231ed61925ffd2344954a359a1e6d9414936a0e3230123b5b64c",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3123-aria-rating-slider-t7-ins-tab-vc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "b2118765361d5653b8464903f74a6ee3f15f165a38fdf4f5fa46413236381f73",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3124-aria-rating-slider-t7-ins-up-vc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "5af6ed1c0fa110e0ec0b70c9747a2ed3c99d1cf6dd8e5221ba8f79f7b2480a21",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3125-aria-rating-slider-t8-ins-tab-pc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "0318d0beccd2e9abf84a1d2a044b38e541c74f4274dbb08424a3d54821ea1e14",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3126-aria-rating-slider-t8-ins-up-pc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "73c9ff40975a9e08eeac8e53d903dce368e72d38744a5ce4442e92e159091da1",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3127-aria-rating-slider-t10-right-pc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "04c523ac87b207fb5958325f528f15cfd8775018655ff35a494f07b3870f6476",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3128-aria-rating-slider-t10-up-pc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "870b22c268fa38a9907844d5775726504799483d27a9f9edbedb0d463c87139e",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3129-aria-rating-slider-t12-left-pc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusOnSliderAndSetValueToOneHalfStar.html",
+      "evidence": {
+        "sha256": "98b43426d48fca22a89038c9ca5ecbc6cbd8bf343d68642b7eada3f4d8d739a7",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -21606,6 +21860,146 @@
       }
     },
     {
+      "scenario_id": "3130-aria-rating-slider-t12-down-pc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusOnSliderAndSetValueToOneHalfStar.html",
+      "evidence": {
+        "sha256": "1b3267998c257550babfb327087bf452af55e65926221907de2c5ca377c10d81",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3131-aria-rating-slider-t14-page-up-pc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "83f619894313f6cee4d6879f7469d6e87f68f312530e250a04edb9d9edf1efe4",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3132-aria-rating-slider-t16-page-down-pc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusOnSliderAndSetValueToOne.html",
+      "evidence": {
+        "sha256": "c9c3c1e3219cfaeebffba2e0776523cf59dee1f4eb506a5c650dd1fa280e62b9",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3133-aria-rating-slider-t18-home-pc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusOnSliderAndSetValueToFive.html",
+      "evidence": {
+        "sha256": "73a8bc746fd7da349b3f5f2903e23afd49d635f7ab474592de90f60c0c2dc8e7",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3134-aria-rating-slider-t20-end-pc",
+      "fixture": "aria-at/rating-slider/slider-rating.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "29415140f9ae5a8b7bfd1f494b53f454dbac3e1f361610b3eee3f92470873153",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3135-aria-slider-multithumb-t1-down-down-vc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusBeforeSlider.html",
+      "evidence": {
+        "sha256": "411bbe909e920c33bad8ae69e33bc48a105af807b48b874ea3a7055660d6491d",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3136-aria-slider-multithumb-t1-tab-vc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusBeforeSlider.html",
+      "evidence": {
+        "sha256": "abdca452d09c35257e48f2224b88b539a7f6ae64624542b936667ff91177f2ff",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3137-aria-slider-multithumb-t2-tab-pc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusBeforeSlider.html",
+      "evidence": {
+        "sha256": "9fe2b84b7327afd2d07dbfb02b43037f726dd34f06759113cbb48463a3a125c4",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3138-aria-slider-multithumb-t4-up-vc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusAfterSlider.html",
+      "evidence": {
+        "sha256": "16eba7dd088852bea04ccda62f0bfc73a7facfc7846396c98ff5852edc2ea214",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3139-aria-slider-multithumb-t4-shift-tab-vc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusAfterSlider.html",
+      "evidence": {
+        "sha256": "44e6db55421c5ee7fa16667edf4d3d88dd0810eb7cc9ad816326fd99cb461b9b",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "314-desktop-notepad-font-and-viewer",
       "fixture": "desktop-notepad.ps1",
       "evidence": {
@@ -21620,11 +22014,207 @@
       }
     },
     {
+      "scenario_id": "3140-aria-slider-multithumb-t5-shift-tab-pc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusAfterSlider.html",
+      "evidence": {
+        "sha256": "3bc926c212f75d66059ce189cd84458e7e37d815e93d85ca5fc8f0e92ef55f11",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3141-aria-slider-multithumb-t7-ins-tab-vc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "f31e8c4791d947049e2721c1b2e1cdf48d009ca6ce01c2ad58f9851632393fa1",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3142-aria-slider-multithumb-t7-ins-up-vc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "b7a09e598ef27064254963a6b7457252172826cb2a147f86aae48120a6cb802a",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3143-aria-slider-multithumb-t8-ins-tab-pc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "fcdb33586aa371aa85582e91fda71e2ddfeb92da74a7d7601b83d68e6eaee3b4",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3144-aria-slider-multithumb-t8-ins-up-pc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "e9cb1b29661ae69938d27c6d69c3b270c240f65ab2df44e8e93e79bbbc474d5a",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3145-aria-slider-multithumb-t10-right-pc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "47e21da2380c4691d38af1c328d29a319bec102fbb03af480c659787694f2265",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3146-aria-slider-multithumb-t10-up-pc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "9342a4783aeca4f63d13610fcb9360a81306457f3e85c5cfd7d772652389bdaa",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3147-aria-slider-multithumb-t12-left-pc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "41e9bc28c704e01385558fa31a3d450d23986927f59a776e200e7c817ca10a2c",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3148-aria-slider-multithumb-t12-down-pc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "b41d7473a3210b609d960bbabee9c5b245b5a5a0ef60bb7967d88ec3adcac175",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3149-aria-slider-multithumb-t14-page-up-pc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "335a263d2836862565caf95f30e3a363857414463e5721af0defc8a4f47468ec",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "315-desktop-richedit-lines-and-font",
       "fixture": "desktop-richedit.ps1",
       "evidence": {
         "sha256": "c16dfc48fc9e2bad2a3a51c2cb398e8024e79bfcaaf9443a3feec4cb1aa1f20a",
         "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3150-aria-slider-multithumb-t16-page-down-pc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "a165008e729e44c3d240d7483448f7c57220bb3691c83e5476149114e55c384a",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3151-aria-slider-multithumb-t18-home-pc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "52b8b46b33656c50cab63be3f1d3020c7dc9ca284c6bee429be69c8b4544c980",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3152-aria-slider-multithumb-t20-end-pc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "947fc4229db6fbf7907df2d553e020bda14facee90eac8272467763e9a56ac7e",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3153-aria-slider-multithumb-t22-up-tab-pc",
+      "fixture": "aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "b8cffb2dc9d1a16fe1cbcdbb8ca4b2a531ca839bb4ff18ff123e5466b5c67a26",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -28285,10 +28875,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1864,
-    "scenarios_with_evidence": 1864,
-    "total_trials": 5598,
-    "successful_trials": 5581,
-    "deterministic_scenarios": 1557
+    "scenarios": 1901,
+    "scenarios_with_evidence": 1901,
+    "total_trials": 5709,
+    "successful_trials": 5692,
+    "deterministic_scenarios": 1590
   }
 }

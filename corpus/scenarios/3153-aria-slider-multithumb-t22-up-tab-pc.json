@@ -1,0 +1,75 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'slider' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name 'Hotel Maximum Price in US dollars' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Value '250' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Orientation 'horizontal' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "Minimum value '101' is conveyed",
+        "priority": "2"
+      },
+      {
+        "id": "assertion6",
+        "phrase": "Maximum value '400' is conveyed",
+        "priority": "2"
+      }
+    ],
+    "command": "UP,TAB",
+    "instructions": "With focus on the first slider thumb, increase its value to 101. Then, move focus to the second slider thumb.",
+    "plan": "apg/slider-multithumb",
+    "presentation_number": "commandA",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "22"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+  "id": "3153-aria-slider-multithumb-t22-up-tab-pc",
+  "name": "ARIA-AT, Horizontal Multi-Thumb Slider: Adjust the range of a slider thumb in interaction mode; Up in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Tab",
+      "id": "s2",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s3",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

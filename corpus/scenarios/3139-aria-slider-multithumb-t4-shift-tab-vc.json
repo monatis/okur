@@ -1,0 +1,64 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'slider' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name 'Hotel Maximum Price in US dollars' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Value '250' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Orientation 'horizontal' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "Minimum value '100' is conveyed",
+        "priority": "2"
+      },
+      {
+        "id": "assertion6",
+        "phrase": "Maximum value '400' is conveyed",
+        "priority": "2"
+      }
+    ],
+    "command": "SHIFT_TAB",
+    "instructions": "With the reading cursor on the 'Navigate backwards from here' link, navigate to the 'Hotel Maximum Price in US dollars' slider thumb.",
+    "plan": "apg/slider-multithumb",
+    "presentation_number": "commandB",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "4"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/slider-multithumb/slider-multithumb.setFocusAfterSlider.html",
+  "id": "3139-aria-slider-multithumb-t4-shift-tab-vc",
+  "name": "ARIA-AT, Horizontal Multi-Thumb Slider: Navigate backwards to a slider thumb in reading mode; Shift+Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

@@ -1,0 +1,69 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'slider' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name 'Rating' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Textual value 'zero of five stars' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Numeric value '0' is not conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "Orientation 'horizontal' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion6",
+        "phrase": "Minimum value '0' is not conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion7",
+        "phrase": "Maximum value '5' is not conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "INS_TAB",
+    "instructions": "With the reading cursor on the 'Rating' slider, read information about the slider.",
+    "plan": "apg/rating-slider",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "7"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/rating-slider/slider-rating.setFocusOnSlider.html",
+  "id": "3123-aria-rating-slider-t7-ins-tab-vc",
+  "name": "ARIA-AT, Rating Slider: Read information about a slider in reading mode; Insert+Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

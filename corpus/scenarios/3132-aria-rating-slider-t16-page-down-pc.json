@@ -1,0 +1,50 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Textual value 'zero stars' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Numeric value '0' is not conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "PAGE_DOWN",
+    "instructions": "With focus on the 'Rating' slider, set its value to zero stars.",
+    "plan": "apg/rating-slider",
+    "presentation_number": "commandA",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "16"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/rating-slider/slider-rating.setFocusOnSliderAndSetValueToOne.html",
+  "id": "3132-aria-rating-slider-t16-page-down-pc",
+  "name": "ARIA-AT, Rating Slider: Decrement a slider by one star in interaction mode; PageDown in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "PageDown",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

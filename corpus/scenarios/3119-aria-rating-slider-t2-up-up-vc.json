@@ -1,0 +1,74 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'slider' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name 'Rating' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Textual value 'zero of five stars' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Numeric value '0' is not conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "Orientation 'horizontal' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion6",
+        "phrase": "Minimum value '0' is not conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion7",
+        "phrase": "Maximum value '5' is not conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "UP,UP",
+    "instructions": "With the reading cursor on the 'Navigate backwards from here' link, navigate to the 'Rating' slider.",
+    "plan": "apg/rating-slider",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "2"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/rating-slider/slider-rating.setFocusAfterSlider.html",
+  "id": "3119-aria-rating-slider-t2-up-up-vc",
+  "name": "ARIA-AT, Rating Slider: Navigate backwards to a slider in reading mode; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Up",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

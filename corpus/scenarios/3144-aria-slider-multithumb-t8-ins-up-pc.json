@@ -1,0 +1,70 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'slider' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name 'Hotel Minimum Price in US dollars' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Value '100' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Orientation 'horizontal' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "Minimum value '0' is conveyed",
+        "priority": "2"
+      },
+      {
+        "id": "assertion6",
+        "phrase": "Maximum value '250' is conveyed",
+        "priority": "2"
+      }
+    ],
+    "command": "INS_UP",
+    "instructions": "With focus on the 'Hotel Minimum Price in US dollars' slider thumb, read information about the slider.",
+    "plan": "apg/slider-multithumb",
+    "presentation_number": "commandB",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "8"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+  "id": "3144-aria-slider-multithumb-t8-ins-up-pc",
+  "name": "ARIA-AT, Horizontal Multi-Thumb Slider: Read information about a slider thumb in interaction mode; Insert+Up in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

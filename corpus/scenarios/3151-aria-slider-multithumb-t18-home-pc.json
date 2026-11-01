@@ -1,0 +1,45 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Value '0' is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "HOME",
+    "instructions": "With focus on the 'Hotel Minimum Price in US dollars' slider thumb, set its value to 0.",
+    "plan": "apg/slider-multithumb",
+    "presentation_number": "commandA",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "18"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/slider-multithumb/slider-multithumb.setFocusOnSlider.html",
+  "id": "3151-aria-slider-multithumb-t18-home-pc",
+  "name": "ARIA-AT, Horizontal Multi-Thumb Slider: Decrement a slider thumb to the minimum value in interaction mode; Home in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Home",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
