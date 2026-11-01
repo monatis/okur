@@ -294,6 +294,12 @@ pub struct TraceEvent {
     /// For that focus: Office's own UIA element for the control ([`NetuiControl`]).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub netui_control: Option<NetuiControl>,
+    /// For a focus in a page's dialog: the name of the modal dialog (`aria-modal`) it is in,
+    /// read through IA2, which UI Automation does not say. A focus that opens the dialog
+    /// comes before the page is captured again, and is said with it [obs, round-aria23,
+    /// 2668/s1].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub modal_dialog: Option<String>,
 }
 
 /// Where the mouse came to rest and the text there by unit ([`crate::mouse_point`]).
@@ -1101,6 +1107,11 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .or(event.focus_window_class.as_deref()),
         top_window,
     )?;
+    focus.container_modal = event.modal_dialog.is_some()
+        && matches!(
+            focus.container_role,
+            Some(okur_core::Role::Dialog | okur_core::Role::AlertDialog)
+        );
     let focused = event.focus_chain.last()?;
     // A WPF dialog's window takes the focus a moment before its first control does, with
     // nothing of the dialog's text; the control's focus brings it, said with the dialog:
@@ -4057,6 +4068,7 @@ mod capture {
                     msaa_ancestors: Vec::new(),
                     msaa_description: None,
                     netui_control: None,
+                    modal_dialog: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -4489,6 +4501,7 @@ mod capture {
                     msaa_ancestors: Vec::new(),
                     msaa_description: None,
                     netui_control: None,
+                    modal_dialog: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -4589,6 +4602,7 @@ mod capture {
             msaa_ancestors: Vec::new(),
             msaa_description: None,
             netui_control: None,
+            modal_dialog: None,
         }
     }
 
@@ -4710,6 +4724,7 @@ mod capture {
                     msaa_ancestors: Vec::new(),
                     msaa_description: None,
                     netui_control: None,
+                    modal_dialog: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -4827,6 +4842,7 @@ mod capture {
                     msaa_ancestors: Vec::new(),
                     msaa_description: None,
                     netui_control: None,
+                    modal_dialog: None,
                 };
                 (state.sink)(event);
                 state.count += 1;
@@ -5340,6 +5356,20 @@ mod capture {
             } else {
                 (Vec::new(), Vec::new())
             };
+            // A focus in a page's dialog: the modal dialog around it, which only IA2 says.
+            let modal_dialog = if name == "focus"
+                && class == "Chrome_RenderWidgetHostHWND"
+                && focus.iter().any(|n| n.is_dialog == Some(true))
+            {
+                use windows::Win32::UI::WindowsAndMessaging::{GetAncestor, GA_ROOT};
+                // SAFETY: plain Win32 query on a window handle.
+                let top = unsafe { GetAncestor(hwnd, GA_ROOT) };
+                xa11y_windows::ia2::chromium_modal_dialog_of(top, id_child)
+                    .ok()
+                    .flatten()
+            } else {
+                None
+            };
             // What Ctrl+Insert+V says: the focused application's product and version.
             let (process_product, process_version) = if focused {
                 process_product_of(hwnd)
@@ -5390,6 +5420,7 @@ mod capture {
                 msaa_ancestors: netui.ancestors,
                 msaa_description: netui.description,
                 netui_control: netui.control,
+                modal_dialog,
             };
             (state.sink)(event);
             state.count += 1;
@@ -6483,6 +6514,7 @@ mod tests {
             msaa_ancestors: Vec::new(),
             msaa_description: None,
             netui_control: None,
+            modal_dialog: None,
         }
     }
 

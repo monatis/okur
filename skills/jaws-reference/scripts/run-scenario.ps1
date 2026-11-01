@@ -76,6 +76,7 @@ Notifications: a Windows notification JAWS announces in a step fails it, as a st
 spoils the transcript; a scenario about notifications sets "expects_notifications": true.
 Reset: "reset": {"keys": [...]} runs before each trial; "window_title" names the window the
 reset leaves in front when it is not the launched one (a trial fails if another is in front).
+"settle_max_ms" gives each reset key longer than 10 s to fall silent (a setup that reads long).
 Screen text: "trace_screen": true saves, with -TraceDir, the text UI Automation places on the
 window in front after each step (<TraceDir>\<id>-trial<N>.screen.jsonl, okur-lab screen-text),
 and "trace_ocr": true the words Windows' OCR reads in it too: replay gives them to Okur's
@@ -1171,11 +1172,14 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     # An explicit (possibly empty) reset.keys list wins; browser scenarios default to Ctrl+Home.
     $hasResetKeys = $scenario.reset -and ($scenario.reset.PSObject.Properties.Name -contains 'keys')
     $resetKeys = if ($hasResetKeys) { @($scenario.reset.keys) } else { @("Ctrl+Home") }
+    # How long a reset key may keep the reader speaking (reset.settle_max_ms): ARIA-AT's nested
+    # dialog setup kept JAWS speaking past the default 10 s in every trial (round-aria23, 2687).
+    $resetMaxMs = if ($scenario.reset -and $scenario.reset.settle_max_ms) { [int]$scenario.reset.settle_max_ms } else { 10000 }
     $resetQuiet = $loadQuiet
     foreach ($rk in $resetKeys) {
         $trialResult.reset_keys += ,([ordered]@{ chord = $rk; t_ms = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds() })
         [void](Send-Chord $rk)
-        $resetQuiet = Wait-Silence -OnsetMs 800 -QuietMs 500 -MaxMs 10000
+        $resetQuiet = Wait-Silence -OnsetMs 800 -QuietMs 500 -MaxMs $resetMaxMs
     }
     # JAWS can be outside the page though Chrome is in front with UI Automation's focus in it:
     # H said nothing and Say Line the window's title, "... - Google Chrome", for every key of
@@ -1191,7 +1195,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
             foreach ($rk in $resetKeys) {
                 $trialResult.reset_keys += ,([ordered]@{ chord = $rk; t_ms = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds() })
                 [void](Send-Chord $rk)
-                $resetQuiet = Wait-Silence -OnsetMs 800 -QuietMs 500 -MaxMs 10000
+                $resetQuiet = Wait-Silence -OnsetMs 800 -QuietMs 500 -MaxMs $resetMaxMs
             }
             $inPage = Test-JawsInPage
             $trialResult.chrome_restarted = $true

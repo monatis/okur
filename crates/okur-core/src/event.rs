@@ -754,6 +754,9 @@ pub struct FocusEvent {
     /// as the focus enters it.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub container_description: Option<String>,
+    /// The container is a modal dialog (`aria-modal`): "Add Delivery Address Modal dialog".
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub container_modal: bool,
     /// A native control's own description, which JAWS says after its state where MSAA alone
     /// knows the control: an Office command bar's button, "Existing File or Web Page button"
     /// [obs, 1076/s5].
@@ -982,6 +985,7 @@ impl FocusEvent {
             folder_name: None,
             help_text: None,
             container_description: None,
+            container_modal: false,
             description: None,
             item_type: None,
             item_size: None,

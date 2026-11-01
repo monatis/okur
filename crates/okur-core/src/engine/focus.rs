@@ -781,11 +781,17 @@ impl ScreenReaderEngine {
                     // Street: Edit | blank", its description after it [obs, round-aria23,
                     // 2666/s1, 2683/s1].
                     if matches!(focus.container_role, Some(Role::Dialog | Role::AlertDialog)) {
-                        let mut dialog = format!(
-                            "{} \u{1d} {} \u{1e} \n",
-                            focus.container_name.as_deref().unwrap_or_default().trim(),
-                            msg::role_dialog()
-                        );
+                        let name = focus.container_name.as_deref().unwrap_or_default().trim();
+                        // "Modal" with the virtual cursor off [obs, round-aria23, 2668/s1].
+                        let mut dialog = if self.virtual_cursor_off && focus.container_modal {
+                            format!(
+                                "{name} \u{1d}{}\u{1e} \u{1d} {} \u{1e} \n",
+                                msg::state_modal(),
+                                msg::role_dialog()
+                            )
+                        } else {
+                            format!("{name} \u{1d} {} \u{1e} \n", msg::role_dialog())
+                        };
                         if let Some(text) = focus.container_description.as_deref() {
                             dialog.push_str(text.trim());
                             dialog.push('\n');

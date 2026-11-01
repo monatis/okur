@@ -236,8 +236,8 @@ pub struct Ia2Probe {
 #[cfg(target_os = "windows")]
 pub use com::capture::{
     capture_chromium_document, capture_chromium_object, chromium_caret_text,
-    chromium_object_location, chromium_text_state, has_chromium_document, perform_chromium_action,
-    probe_window, ChromiumTextField, Ia2Action, Ia2CaptureError,
+    chromium_modal_dialog_of, chromium_object_location, chromium_text_state, has_chromium_document,
+    perform_chromium_action, probe_window, ChromiumTextField, Ia2Action, Ia2CaptureError,
 };
 
 #[cfg(target_os = "windows")]
@@ -663,6 +663,53 @@ mod com {
                 .cast()
                 .map_err(|e| err("IAccessible of the object", e))?;
             Ok(read_node(&object, 0))
+        }
+
+        /// The name of the modal dialog (`aria-modal`: IA2's modal state on a dialog) around one
+        /// object of a Chromium page, by the child id an event names: a focus that opens a page
+        /// dialog is said with it before the page is captured again. `None` where the object
+        /// is in no modal dialog.
+        pub fn chromium_modal_dialog_of(
+            top_level: HWND,
+            child_id: i32,
+        ) -> Result<Option<String>, Ia2CaptureError> {
+            const ROLE_SYSTEM_DIALOG: i32 = 0x12;
+            const IA2_STATE_MODAL: i32 = 0x100;
+            const MAX_DEPTH: usize = 64;
+            let document = chromium_document(top_level)?;
+            let child = VARIANT::from(child_id);
+            // SAFETY: MSAA child lookup on a valid IAccessible; Chromium returns an object.
+            let mut object: IAccessible = unsafe { document.get_accChild(&child) }
+                .map_err(|e| err("accChild", e))?
+                .cast()
+                .map_err(|e| err("IAccessible of the object", e))?;
+            let me = self_child();
+            for _ in 0..MAX_DEPTH {
+                // SAFETY: plain MSAA property reads on a valid IAccessible.
+                let role = unsafe { object.get_accRole(&me) }
+                    .ok()
+                    .and_then(|r| i32::try_from(&r).ok());
+                if role == Some(ROLE_SYSTEM_DIALOG) {
+                    let mut states = 0i32;
+                    let modal = ia2_of(&object).is_some_and(|ia2| {
+                        // SAFETY: out-pointer to a local on a valid interface.
+                        unsafe { ia2.get_states(&mut states) }.is_ok()
+                            && states & IA2_STATE_MODAL != 0
+                    });
+                    // SAFETY: plain MSAA property read on a valid IAccessible.
+                    let name = string(unsafe { object.get_accName(&me) });
+                    return Ok(modal.then(|| name.unwrap_or_default()));
+                }
+                // SAFETY: plain MSAA parent read on a valid IAccessible.
+                let Some(parent) = unsafe { object.accParent() }
+                    .ok()
+                    .and_then(|p| p.cast::<IAccessible>().ok())
+                else {
+                    return Ok(None);
+                };
+                object = parent;
+            }
+            Ok(None)
         }
 
         /// What to do with a live object.
