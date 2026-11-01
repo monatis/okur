@@ -1,0 +1,44 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameCancel",
+        "phrase": "convey name 'Cancel'",
+        "priority": "1"
+      }
+    ],
+    "command": "shift+tab",
+    "instructions": "Starting at the first focusable element in the dialog,the  'Street' input, navigate backward to the last focusable element, the 'Cancel' button.",
+    "plan": "apg/modal-dialog",
+    "presentation_number": "8",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToLastFocusableElementModalDialog"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusFirstInput.html",
+  "id": "2675-aria-modal-dialog-nav-to-last-focusable-element-modal-dialog-shift-tab-vc",
+  "name": "ARIA-AT, Modal Dialog Example: Navigate backward from the first focusable element to the last focusable element in a modal dialog; Shift+Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

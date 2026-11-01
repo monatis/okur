@@ -1,0 +1,44 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameAddDeliveryAddress",
+        "phrase": "convey name 'Add Delivery Address'",
+        "priority": "1"
+      }
+    ],
+    "command": "esc",
+    "instructions": "Starting at the 'Cancel' button inside the modal dialog, close the dialog.",
+    "plan": "apg/modal-dialog",
+    "presentation_number": "4",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "closeModalDialog"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusCancelButton.html",
+  "id": "2670-aria-modal-dialog-close-modal-dialog-esc-vc",
+  "name": "ARIA-AT, Modal Dialog Example: Close a modal dialog; Escape in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Escape",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

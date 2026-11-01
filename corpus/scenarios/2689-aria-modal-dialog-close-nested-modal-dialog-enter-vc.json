@@ -1,0 +1,55 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleDialog",
+        "phrase": "convey role 'dialog'",
+        "priority": "1"
+      },
+      {
+        "id": "nameAddDeliveryAddress",
+        "phrase": "convey name 'Add Delivery Address'",
+        "priority": "1"
+      },
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameVerifyAddress",
+        "phrase": "convey name 'Verify Address'",
+        "priority": "1"
+      }
+    ],
+    "command": "enter",
+    "instructions": "Starting at the 'Close' button inside the nested dialog, close the dialog.",
+    "plan": "apg/modal-dialog",
+    "presentation_number": "24.2",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "closeNestedModalDialog"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/modal-dialog/dialog.openVerificationResultDialogAndFocusCloseButton.html",
+  "id": "2689-aria-modal-dialog-close-nested-modal-dialog-enter-vc",
+  "name": "ARIA-AT, Modal Dialog Example: Close a nested modal dialog; Enter in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ],
+    "settle_max_ms": 30000
+  },
+  "steps": [
+    {
+      "command": "Enter",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

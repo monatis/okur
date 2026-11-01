@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "cursorAtCancelButton",
+        "phrase": "position screen reader cursor at 'Cancel' button|position the {readingCursor} at 'Cancel' button",
+        "priority": "1"
+      }
+    ],
+    "command": "down down ins+up",
+    "instructions": "Starting at the 'Cancel' button inside the dialog, make multiple attempts to navigate past the bottom edge",
+    "plan": "apg/modal-dialog",
+    "presentation_number": "15.5",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "bumpBottomEdge"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusCancelButton.html",
+  "id": "2682-aria-modal-dialog-bump-bottom-edge-down-down-ins-up-vc",
+  "name": "ARIA-AT, Modal Dialog Example: Bump into the bottom edge of a modal dialog; Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Down",
+      "id": "s2",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Up",
+      "id": "s3",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

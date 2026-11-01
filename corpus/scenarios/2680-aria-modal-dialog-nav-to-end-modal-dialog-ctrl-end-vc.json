@@ -1,0 +1,44 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameCancel",
+        "phrase": "convey name 'Cancel'",
+        "priority": "1"
+      }
+    ],
+    "command": "ctrl+end",
+    "instructions": "Starting at the 'Add' button inside the dialog, navigate to the bottom of the dialog.",
+    "plan": "apg/modal-dialog",
+    "presentation_number": "14",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToEndModalDialog"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusAddButton.html",
+  "id": "2680-aria-modal-dialog-nav-to-end-modal-dialog-ctrl-end-vc",
+  "name": "ARIA-AT, Modal Dialog Example: Navigate to the bottom of a modal dialog; Ctrl+End in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Ctrl+End",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

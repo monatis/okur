@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "cursorAtAddDeliveryAddressHeading",
+        "phrase": "position screen reader cursor at heading 'Add Delivery Address'|position the {readingCursor} at heading 'Add Delivery Address'",
+        "priority": "1"
+      }
+    ],
+    "command": "up up ins+up",
+    "instructions": "Starting at the 'Add Delivery Address' heading inside the dialog, make multiple attempts to navigate past the top edge",
+    "plan": "apg/modal-dialog",
+    "presentation_number": "15",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "bumpTopEdge"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusAddDeliveryAddressHeading.html",
+  "id": "2681-aria-modal-dialog-bump-top-edge-up-up-ins-up-vc",
+  "name": "ARIA-AT, Modal Dialog Example: Bump into the top edge of a modal dialog; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Up",
+      "id": "s2",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Up",
+      "id": "s3",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

@@ -1,0 +1,59 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleDialog",
+        "phrase": "convey role 'dialog'",
+        "priority": "1"
+      },
+      {
+        "id": "nameAddDeliveryAddress",
+        "phrase": "convey name 'Add Delivery Address'",
+        "priority": "1"
+      },
+      {
+        "id": "nameInputStreet",
+        "phrase": "convey name of input ('Street')",
+        "priority": "1"
+      },
+      {
+        "id": "theAbilityToEnterOrEditText",
+        "phrase": "convey the ability to enter or edit text",
+        "priority": "1"
+      },
+      {
+        "id": "interactionModeEnabled",
+        "phrase": "switch from reading mode to interaction mode|switch from {readingMode} to {interactionMode}",
+        "priority": "2"
+      }
+    ],
+    "command": "space",
+    "instructions": "Starting at the 'Add Delivery Address' button, activate it to open the dialog.",
+    "plan": "apg/modal-dialog",
+    "presentation_number": "1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "openModalDialog"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/modal-dialog/dialog.moveFocusToAddDeliveryAddressButton.html",
+  "id": "2666-aria-modal-dialog-open-modal-dialog-space-vc",
+  "name": "ARIA-AT, Modal Dialog Example: Open a modal dialog; Space in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Space",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

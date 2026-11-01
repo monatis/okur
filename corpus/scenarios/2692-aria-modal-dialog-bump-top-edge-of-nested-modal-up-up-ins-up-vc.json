@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "cursorAtAddressAddedHeading",
+        "phrase": "position screen reader cursor at heading 'Address Added'|position the {readingCursor} at heading 'Address Added'",
+        "priority": "1"
+      }
+    ],
+    "command": "up up ins+up",
+    "instructions": "Starting at the 'Address Added' heading inside the nested dialog, make multiple attempts to navigate past the top edge",
+    "plan": "apg/modal-dialog",
+    "presentation_number": "30",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "bumpTopEdgeOfNestedModal"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/modal-dialog/dialog.openAddressAddedDialogAndFocusAddressAddedHeading.html",
+  "id": "2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc",
+  "name": "ARIA-AT, Modal Dialog Example: Bump into the top edge of a Nested modal dialog; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Up",
+      "id": "s2",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Up",
+      "id": "s3",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

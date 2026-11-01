@@ -1,0 +1,1482 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Modal Dialog Example - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "df52183210fd7cfc28f8f01a145830a5869474d2388870a1b1b6054d38a828f4",
+    "captured_at_unix_ms": 1793491587065,
+    "node_count": 39,
+    "capture_ms": 281
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Modal Dialog Example",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/modal-dialog/dialog.openAddressAddedDialogAndFocusOKButton.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -68496,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -68399,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          },
+          {
+            "start": 1,
+            "end": 4,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Modal Dialog Example",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -68415,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Modal Dialog Example",
+            "lines": [
+              [
+                0,
+                20
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 20,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Modal Dialog Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -68396,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Modal Dialog Example",
+                "lines": [
+                  [
+                    0,
+                    20
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 20,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "24pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -68431,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "Following is an example implementation of the ￼ The below “Add Delivery Address” button opens a modal dialog that contains two buttons that open other dialogs.",
+            "lines": [
+              [
+                0,
+                135
+              ],
+              [
+                135,
+                159
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 46,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 46,
+                "end": 47,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 47,
+                "end": 159,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Following is an example implementation of the ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -68425,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Following is an example implementation of the ",
+                "lines": [
+                  [
+                    0,
+                    46
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 46,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "design pattern for modal dialogs.",
+                "value": "https://w3c.github.io/aria-practices/#dialog_modal",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -68426,
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "design pattern for modal dialogs.",
+                "lines": [
+                  [
+                    0,
+                    33
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 33,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "design pattern for modal dialogs.",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -68427,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "design pattern for modal dialogs.",
+                    "lines": [
+                      [
+                        0,
+                        33
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 33,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": " The below ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -68412,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": " The below ",
+                "lines": [
+                  [
+                    0,
+                    11
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 11,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "“",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -68500,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "“",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Add Delivery Address",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -68441,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Add Delivery Address",
+                "lines": [
+                  [
+                    0,
+                    20
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 20,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "”",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -68529,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "”",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": " button opens a modal dialog that contains two buttons that open other dialogs.",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -68432,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": " button opens a modal dialog that contains two buttons that open other dialogs.",
+                "lines": [
+                  [
+                    0,
+                    55
+                  ],
+                  [
+                    55,
+                    79
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 79,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -68448,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "18pt",
+                  "font-weight": "bold"
+                }
+              },
+              {
+                "start": 1,
+                "end": 4,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -68446,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Example",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "18pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelFor": [
+                    -68463,
+                    -68401
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -68459,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Example",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "18pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "Start of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -68463,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -68446
+                  ]
+                }
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -68467,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ],
+                  [
+                    3,
+                    4
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  },
+                  {
+                    "start": 1,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(240,240,240)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  },
+                  {
+                    "start": 2,
+                    "end": 3,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 3,
+                    "end": 4,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Navigate forwards from here",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/modal-dialog/dialog.openAddressAddedDialogAndFocusOKButton.html#beforelink",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -68471,
+                    "attributes": {
+                      "display": "inline",
+                      "id": "beforelink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Navigate forwards from here",
+                    "lines": [
+                      [
+                        0,
+                        27
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 27,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Navigate forwards from here",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -68450,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Navigate forwards from here",
+                        "lines": [
+                          [
+                            0,
+                            27
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 27,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 43,
+                    "ia2_role": 43,
+                    "name": "Add Delivery Address",
+                    "msaa_states": 1048576,
+                    "ia2_states": 1024,
+                    "unique_id": -68474,
+                    "attributes": {
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "text": "Add Delivery Address",
+                    "lines": [
+                      [
+                        0,
+                        20
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 20,
+                        "attributes": {
+                          "background-color": "rgb(240,240,240)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "10pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -68484,
+                    "attributes": {
+                      "class": "dialogs",
+                      "display": "block",
+                      "id": "dialog_layer",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "text": "￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(178,178,178)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 20,
+                        "ia2_role": 1060,
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -68541,
+                        "attributes": {
+                          "class": "dialog-backdrop active",
+                          "display": "block",
+                          "tag": "div",
+                          "text-align": "left"
+                        },
+                        "text": "￼￼￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            2
+                          ],
+                          [
+                            2,
+                            3
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 1,
+                            "attributes": {
+                              "background-color": "rgb(178,178,178)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt"
+                            }
+                          },
+                          {
+                            "start": 1,
+                            "end": 2,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt"
+                            }
+                          },
+                          {
+                            "start": 2,
+                            "end": 3,
+                            "attributes": {
+                              "background-color": "rgb(178,178,178)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 20,
+                            "ia2_role": 1060,
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -68535,
+                            "attributes": {
+                              "display": "block",
+                              "tag": "div",
+                              "text-align": "left"
+                            }
+                          },
+                          {
+                            "msaa_role": 18,
+                            "ia2_role": 18,
+                            "name": "Address Added",
+                            "description": "The address you provided has been added to your list of delivery addresses. It is ready for immediate use. If you wish to remove it, you can do so from your profile.",
+                            "msaa_states": 0,
+                            "ia2_states": 1280,
+                            "unique_id": -68539,
+                            "attributes": {
+                              "class": "default_dialog",
+                              "description-from": "aria-describedby",
+                              "display": "block",
+                              "explicit-name": "true",
+                              "id": "dialog3",
+                              "name-from": "related-element",
+                              "tag": "div",
+                              "text-align": "left",
+                              "xml-roles": "dialog"
+                            },
+                            "text": "￼￼￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ],
+                              [
+                                1,
+                                2
+                              ],
+                              [
+                                2,
+                                3
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 1,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "18pt",
+                                  "font-weight": "bold"
+                                }
+                              },
+                              {
+                                "start": 1,
+                                "end": 3,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ],
+                            "relations": {
+                              "describedBy": [
+                                -68453
+                              ],
+                              "labelledBy": [
+                                -68473
+                              ]
+                            },
+                            "children": [
+                              {
+                                "msaa_role": 20,
+                                "ia2_role": 1044,
+                                "name": "Address Added",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -68473,
+                                "attributes": {
+                                  "class": "dialog_label",
+                                  "display": "block",
+                                  "id": "dialog3_label",
+                                  "level": "2",
+                                  "name-from": "contents",
+                                  "tag": "h2",
+                                  "text-align": "center"
+                                },
+                                "group_position": [
+                                  2,
+                                  0,
+                                  0
+                                ],
+                                "text": "Address Added",
+                                "lines": [
+                                  [
+                                    0,
+                                    13
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 13,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "18pt",
+                                      "font-weight": "bold"
+                                    }
+                                  }
+                                ],
+                                "relations": {
+                                  "labelFor": [
+                                    -68539
+                                  ]
+                                },
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Address Added",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -68449,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Address Added",
+                                    "lines": [
+                                      [
+                                        0,
+                                        13
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 13,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "18pt",
+                                          "font-weight": "bold"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 20,
+                                "ia2_role": 1054,
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -68453,
+                                "attributes": {
+                                  "class": "dialog_desc",
+                                  "display": "block",
+                                  "id": "dialog3_desc",
+                                  "tag": "p",
+                                  "text-align": "left"
+                                },
+                                "text": "The address you provided has been added to your list of delivery addresses. It is ready for immediate use. If you wish to remove it, you can do so from ￼",
+                                "lines": [
+                                  [
+                                    0,
+                                    82
+                                  ],
+                                  [
+                                    82,
+                                    153
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 152,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  },
+                                  {
+                                    "start": 152,
+                                    "end": 153,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,238)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt",
+                                      "text-underline-style": "solid"
+                                    }
+                                  }
+                                ],
+                                "relations": {
+                                  "descriptionFor": [
+                                    -68539
+                                  ]
+                                },
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "The address you provided has been added to your list of delivery addresses. It is ready for immediate use. If you wish to remove it, you can do so from ",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -68462,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "The address you provided has been added to your list of delivery addresses. It is ready for immediate use. If you wish to remove it, you can do so from ",
+                                    "lines": [
+                                      [
+                                        0,
+                                        82
+                                      ],
+                                      [
+                                        82,
+                                        152
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 152,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "msaa_role": 30,
+                                    "ia2_role": 30,
+                                    "name": "your profile.",
+                                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/modal-dialog/dialog.openAddressAddedDialogAndFocusOKButton.html#",
+                                    "msaa_states": 5242880,
+                                    "ia2_states": 1024,
+                                    "unique_id": -68452,
+                                    "attributes": {
+                                      "display": "inline",
+                                      "id": "dialog3_profile",
+                                      "name-from": "contents",
+                                      "tag": "a",
+                                      "text-align": "left"
+                                    },
+                                    "text": "your profile.",
+                                    "lines": [
+                                      [
+                                        0,
+                                        13
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 13,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,238)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt",
+                                          "text-underline-style": "solid"
+                                        }
+                                      }
+                                    ],
+                                    "children": [
+                                      {
+                                        "msaa_role": 41,
+                                        "ia2_role": 41,
+                                        "name": "your profile.",
+                                        "msaa_states": 4194304,
+                                        "ia2_states": 1024,
+                                        "unique_id": -68457,
+                                        "attributes": {
+                                          "name-from": "contents"
+                                        },
+                                        "text": "your profile.",
+                                        "lines": [
+                                          [
+                                            0,
+                                            13
+                                          ]
+                                        ],
+                                        "text_runs": [
+                                          {
+                                            "start": 0,
+                                            "end": 13,
+                                            "attributes": {
+                                              "background-color": "rgb(255,255,255)",
+                                              "color": "rgb(0,0,238)",
+                                              "font-family": "Times New Roman",
+                                              "font-size": "12pt",
+                                              "text-underline-style": "solid"
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 20,
+                                "ia2_role": 1060,
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -68536,
+                                "attributes": {
+                                  "class": "dialog_form_actions",
+                                  "display": "block",
+                                  "tag": "div",
+                                  "text-align": "right"
+                                },
+                                "text": "￼",
+                                "lines": [
+                                  [
+                                    0,
+                                    1
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 1,
+                                    "attributes": {
+                                      "background-color": "rgb(240,240,240)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Arial",
+                                      "font-size": "10pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 43,
+                                    "ia2_role": 43,
+                                    "name": "OK",
+                                    "msaa_states": 1048580,
+                                    "ia2_states": 1024,
+                                    "unique_id": -68533,
+                                    "attributes": {
+                                      "display": "inline-block",
+                                      "id": "dialog3_close_btn",
+                                      "name-from": "contents",
+                                      "tag": "button",
+                                      "text-align": "center"
+                                    },
+                                    "text": "OK",
+                                    "lines": [
+                                      [
+                                        0,
+                                        2
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 2,
+                                        "attributes": {
+                                          "background-color": "rgb(240,240,240)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Arial",
+                                          "font-size": "10pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 20,
+                            "ia2_role": 1060,
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -68531,
+                            "attributes": {
+                              "display": "block",
+                              "tag": "div",
+                              "text-align": "left"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Navigate backwards from here",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/modal-dialog/dialog.openAddressAddedDialogAndFocusOKButton.html#afterlink",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -68397,
+                    "attributes": {
+                      "display": "inline",
+                      "id": "afterlink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Navigate backwards from here",
+                    "lines": [
+                      [
+                        0,
+                        28
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 28,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Navigate backwards from here",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -68479,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Navigate backwards from here",
+                        "lines": [
+                          [
+                            0,
+                            28
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 28,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "End of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -68401,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -68446
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -68410,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(250,250,250)",
+                  "color": "rgb(5,5,5)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1,
+                "ia2_states": 1024,
+                "unique_id": -68516,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

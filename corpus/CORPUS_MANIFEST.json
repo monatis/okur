@@ -489,6 +489,54 @@
       "sha256": "d695af6576102b5b4ced5ceb0c405f7c51d764044e951d28e7d0c11600fb6b59",
       "size_bytes": 3103
     },
+    "aria-at/modal-dialog/css/dialog.css": {
+      "sha256": "6d89bb0ab8db5e4195a08e8d016451f516f8dae6ddd28161e30f6fbb77f02494",
+      "size_bytes": 3064
+    },
+    "aria-at/modal-dialog/dialog.html": {
+      "sha256": "1879db81396026bb12b699c4ab759ab907a9204aab3d31c5eca8623274205520",
+      "size_bytes": 8992
+    },
+    "aria-at/modal-dialog/dialog.moveFocusToAddDeliveryAddressButton.html": {
+      "sha256": "d43c4bb6d28adedf3e0b33258adbe6a6f943c22f5d71739e512dd8fc02e5fdcd",
+      "size_bytes": 9646
+    },
+    "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusAddButton.html": {
+      "sha256": "9a43df80c5ab085e33fb02b079c594c3c2c47ee54488f62ca5ab118b4cc12b8b",
+      "size_bytes": 9772
+    },
+    "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusAddDeliveryAddressHeading.html": {
+      "sha256": "8a51901869e776552f973b69034507553b7aa633ed13c8e72390e34c6821dddb",
+      "size_bytes": 9809
+    },
+    "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusCancelButton.html": {
+      "sha256": "ee7b9a41a21cbe4443b0009d38a34e772ad2153225df66ceab0c93b7826c1e79",
+      "size_bytes": 9781
+    },
+    "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusFirstInput.html": {
+      "sha256": "4947a6c5776cb04c368a30a6793b353b9a1eebcf61f476d4337f304f3c2254bf",
+      "size_bytes": 9757
+    },
+    "aria-at/modal-dialog/dialog.openAddressAddedDialogAndFocusAddressAddedHeading.html": {
+      "sha256": "f47a464fbc8bb0be0c576d7d424985dfe175122c02a2e93a65a307c4bbf970b8",
+      "size_bytes": 9934
+    },
+    "aria-at/modal-dialog/dialog.openAddressAddedDialogAndFocusOKButton.html": {
+      "sha256": "df52183210fd7cfc28f8f01a145830a5869474d2388870a1b1b6054d38a828f4",
+      "size_bytes": 9917
+    },
+    "aria-at/modal-dialog/dialog.openVerificationResultDialogAndFocusCloseButton.html": {
+      "sha256": "33857afafed779ae59660052fd9e7e1dabc3820ed38ace89864d83d13719377d",
+      "size_bytes": 9937
+    },
+    "aria-at/modal-dialog/js/dialog.js": {
+      "sha256": "5f7ff4175232f40b6f4ee4b37267ba1f77f4237e89d15f9d4eb2e3eb390b5276",
+      "size_bytes": 10751
+    },
+    "aria-at/modal-dialog/js/utils.js": {
+      "sha256": "d695af6576102b5b4ced5ceb0c405f7c51d764044e951d28e7d0c11600fb6b59",
+      "size_bytes": 3103
+    },
     "aria-at/quantity-spin-button/css/quantity-spinbutton.css": {
       "sha256": "1ff56b53a9cfde02ac8d790d618740123add907302606fd53b36e34a6da1e19c",
       "size_bytes": 3470
@@ -13722,11 +13770,207 @@
       }
     },
     {
+      "scenario_id": "2666-aria-modal-dialog-open-modal-dialog-space-vc",
+      "fixture": "aria-at/modal-dialog/dialog.moveFocusToAddDeliveryAddressButton.html",
+      "evidence": {
+        "sha256": "a73c9a92158b778e008972d14f0dcccd246dbee3b790e67f0384710a22b26e2f",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2667-aria-modal-dialog-open-modal-dialog-enter-vc",
+      "fixture": "aria-at/modal-dialog/dialog.moveFocusToAddDeliveryAddressButton.html",
+      "evidence": {
+        "sha256": "31d706ae9294d8a9453cf114ff079e33ee3d1e25274df00fa41537c64d32355e",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2668-aria-modal-dialog-open-modal-dialog-space-pc",
+      "fixture": "aria-at/modal-dialog/dialog.moveFocusToAddDeliveryAddressButton.html",
+      "evidence": {
+        "sha256": "17ddd594c721962f02c574f976923d12676b4011a41398549afa9db50afe0e82",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2669-aria-modal-dialog-open-modal-dialog-enter-pc",
+      "fixture": "aria-at/modal-dialog/dialog.moveFocusToAddDeliveryAddressButton.html",
+      "evidence": {
+        "sha256": "d64e50d8515b6e5a13c836101a9af133f07f3d77c5ed0c0a3c4dc05d54a7d297",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "267-web-list-lists-none",
       "fixture": "doc-reading.html",
       "evidence": {
         "sha256": "4eaa2cb82e41e2bfd51aaa28347d454c9cc3b46d7900aa05276abd46b0b43c53",
         "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2670-aria-modal-dialog-close-modal-dialog-esc-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusCancelButton.html",
+      "evidence": {
+        "sha256": "a771c623e752d8bc773a4dd056692bf04541c33bdd0dd6f027f35c96a25192da",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2671-aria-modal-dialog-close-modal-dialog-space-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusCancelButton.html",
+      "evidence": {
+        "sha256": "6cd4a5dc739073dfb44380fa6c3555c1c27fe76f222f868e82bd3a74d9cdac69",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2672-aria-modal-dialog-close-modal-dialog-enter-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusCancelButton.html",
+      "evidence": {
+        "sha256": "f241f4d769caaab671284d0647c1226063e8af7b77f8f4f7ae7deb99182cb306",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2673-aria-modal-dialog-close-modal-dialog-space-pc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusCancelButton.html",
+      "evidence": {
+        "sha256": "6037126b44c8d8a2534b6b18b220ba2a95efaf25cf07729ebdee9405aa537850",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2674-aria-modal-dialog-close-modal-dialog-enter-pc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusCancelButton.html",
+      "evidence": {
+        "sha256": "bfe5a7c316b81df044386d368a852c866d9e3b3dc2bb731a1c6c3e9d916cd4bc",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2675-aria-modal-dialog-nav-to-last-focusable-element-modal-dialog-shift-tab-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusFirstInput.html",
+      "evidence": {
+        "sha256": "9da5fca39e3701a2c71613098d0c42913fd8edcf8476407a78b5019861c0d59d",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2676-aria-modal-dialog-nav-to-last-focusable-element-modal-dialog-shift-tab-pc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusFirstInput.html",
+      "evidence": {
+        "sha256": "d3a226c9535ce33b350a94135908fee91b984042e791317e58dfc58c9deab96c",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2677-aria-modal-dialog-nav-to-first-focusable-element-modal-dialog-tab-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusCancelButton.html",
+      "evidence": {
+        "sha256": "04e448baf56a06d0a33bf6940ed2198bc8137459c9d164ff4f5c476c89e25672",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2678-aria-modal-dialog-nav-to-first-focusable-element-modal-dialog-tab-pc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusCancelButton.html",
+      "evidence": {
+        "sha256": "d5a8d2a16036afe8a48877817ea1bf257abc2e2ee88683c5141690ac019edb78",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2679-aria-modal-dialog-nav-to-beginning-modal-dialog-ctrl-home-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusAddButton.html",
+      "evidence": {
+        "sha256": "9bb685e21416b9b0db8b24cff1d3361f0e100aaabfe4c45181ee19ab3b7c71ee",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -13750,11 +13994,207 @@
       }
     },
     {
+      "scenario_id": "2680-aria-modal-dialog-nav-to-end-modal-dialog-ctrl-end-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusAddButton.html",
+      "evidence": {
+        "sha256": "5e0fd773b36736e345c5281d2af9b14f485d0a0eb0ca089cf49c767261f1700c",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2681-aria-modal-dialog-bump-top-edge-up-up-ins-up-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusAddDeliveryAddressHeading.html",
+      "evidence": {
+        "sha256": "2ad79b0f598c35d8eca9e836322b1210ba7e7b734d08bc0db7bab62eb2709a45",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2682-aria-modal-dialog-bump-bottom-edge-down-down-ins-up-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusCancelButton.html",
+      "evidence": {
+        "sha256": "523e05991f2c7f39bd7760ca1a79daff9f76e5813c2277ca226e7cc2fb40fd7e",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2683-aria-modal-dialog-open-nested-modal-dialog-space-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusAddButton.html",
+      "evidence": {
+        "sha256": "893c0082c1d4ce1010c674ecae48eaf6ae976cd0acc346693e6d64b709126db6",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2684-aria-modal-dialog-open-nested-modal-dialog-enter-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusAddButton.html",
+      "evidence": {
+        "sha256": "ea1d6041ae61ed9f2527e0fbc12ede0e07458593db201cd5e723930b3ce7022c",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2685-aria-modal-dialog-open-nested-modal-dialog-space-pc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusAddButton.html",
+      "evidence": {
+        "sha256": "803b5a23b068e001c8ed3b93a3984d83a4474acae1056ec898ceeb71e810bdb8",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2686-aria-modal-dialog-open-nested-modal-dialog-enter-pc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusAddButton.html",
+      "evidence": {
+        "sha256": "48620aebc71bd9eace8e61e9c108e4718aab4077c207df48e05b01b8e8d8537a",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2687-aria-modal-dialog-close-nested-modal-dialog-esc-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openVerificationResultDialogAndFocusCloseButton.html",
+      "evidence": {
+        "sha256": "7b1df3a28008beaed12d8c9b0cbeb5367a940f9f952f0d6cee638a718bd61966",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2688-aria-modal-dialog-close-nested-modal-dialog-space-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openVerificationResultDialogAndFocusCloseButton.html",
+      "evidence": {
+        "sha256": "36e40b634c460c3c042e6901e9c39ca751bb90a3ca88038bf6750a9ee869689d",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2689-aria-modal-dialog-close-nested-modal-dialog-enter-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openVerificationResultDialogAndFocusCloseButton.html",
+      "evidence": {
+        "sha256": "67d9ad298f308443a958924e5fdb0defccce8771cd4ee85a8b1131ecf792b0e6",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "269-web-list-paragraphs-none",
       "fixture": "tables-navigation.html",
       "evidence": {
         "sha256": "9fe021063a8cd13d3d2e5807bf799f440341d0cbb8c0934d5c12983248298bcd",
         "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2690-aria-modal-dialog-close-nested-modal-dialog-space-pc",
+      "fixture": "aria-at/modal-dialog/dialog.openVerificationResultDialogAndFocusCloseButton.html",
+      "evidence": {
+        "sha256": "37a7dcaf335347a5ff64aeae1df7621fb79ff3b743b52d0b2b45094bf2667dca",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2691-aria-modal-dialog-close-nested-modal-dialog-enter-pc",
+      "fixture": "aria-at/modal-dialog/dialog.openVerificationResultDialogAndFocusCloseButton.html",
+      "evidence": {
+        "sha256": "5f91db30186b3a016053c8bcdaaee9a7404d40782302c7fa075a3d3b6c002d66",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddressAddedDialogAndFocusAddressAddedHeading.html",
+      "evidence": {
+        "sha256": "6120ff5550bcb8f237ce75066a798ab4071a4bd9ff0b3f786add0bcc5c956e3d",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2693-aria-modal-dialog-bump-bottom-edge-of-nested-modal-down-down-ins-up-vc",
+      "fixture": "aria-at/modal-dialog/dialog.openAddressAddedDialogAndFocusOKButton.html",
+      "evidence": {
+        "sha256": "b4cb8b7274074816c3fe257d61f4922c99ddd417b9609f403ff965b6082b9503",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -21717,10 +22157,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1458,
-    "scenarios_with_evidence": 1458,
-    "total_trials": 4380,
-    "successful_trials": 4363,
-    "deterministic_scenarios": 1164
+    "scenarios": 1486,
+    "scenarios_with_evidence": 1486,
+    "total_trials": 4464,
+    "successful_trials": 4447,
+    "deterministic_scenarios": 1186
   }
 }

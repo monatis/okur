@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "cursorAtOKButton",
+        "phrase": "position screen reader cursor at 'OK' button|position the {readingCursor} at 'OK' button",
+        "priority": "1"
+      }
+    ],
+    "command": "down down ins+up",
+    "instructions": "Starting at the 'OK' button inside the nested dialog, make multiple attempts to navigate past the bottom edge",
+    "plan": "apg/modal-dialog",
+    "presentation_number": "31",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "bumpBottomEdgeOfNestedModal"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/modal-dialog/dialog.openAddressAddedDialogAndFocusOKButton.html",
+  "id": "2693-aria-modal-dialog-bump-bottom-edge-of-nested-modal-down-down-ins-up-vc",
+  "name": "ARIA-AT, Modal Dialog Example: Bump into the bottom edge of a Nested modal dialog; Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Down",
+      "id": "s2",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Up",
+      "id": "s3",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

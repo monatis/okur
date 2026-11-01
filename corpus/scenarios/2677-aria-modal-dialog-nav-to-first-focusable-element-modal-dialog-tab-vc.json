@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "nameStreet",
+        "phrase": "convey name 'Street'",
+        "priority": "1"
+      },
+      {
+        "id": "theAbilityToEnterOrEditText",
+        "phrase": "convey the ability to enter or edit text",
+        "priority": "1"
+      },
+      {
+        "id": "interactionModeEnabled",
+        "phrase": "switch from reading mode to interaction mode|switch from {readingMode} to {interactionMode}",
+        "priority": "2"
+      }
+    ],
+    "command": "tab",
+    "instructions": "Starting at the last focusable element in the dialog, the 'Cancel' button, navigate forward to the first focusable element, the  'Street' input.",
+    "plan": "apg/modal-dialog",
+    "presentation_number": "10",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToFirstFocusableElementModalDialog"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/modal-dialog/dialog.openAddDeliveryAddressDialogAndFocusCancelButton.html",
+  "id": "2677-aria-modal-dialog-nav-to-first-focusable-element-modal-dialog-tab-vc",
+  "name": "ARIA-AT, Modal Dialog Example: Navigate forward from the last focusable element to the first focusable element in a modal dialog; Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
