@@ -454,6 +454,11 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     {
         set_attr("haspopup", popup);
     }
+    // An ARIA spin button (role="spinbutton"), a text field JAWS calls an "edit spin box"
+    // [obs, round-aria25, 2718/s1].
+    if role == Role::Edit && attr("xml-roles").as_deref() == Some("spinbutton") {
+        set_attr("spinbutton", "true".to_owned());
+    }
     // A name given by aria-label (or title), which a link says in place of its text.
     if attr("name-from").as_deref() == Some("attribute") {
         set_attr("labelled", "true".to_owned());

@@ -1107,6 +1107,11 @@ impl<'a> Builder<'a> {
                 .groups
                 .last()
                 .is_some_and(|(_, name, _)| !name.is_empty()),
+            // A spin button too, in a named group [obs, round-aria25, 2719/s1].
+            Role::Edit if attr(node, "spinbutton") == Some("true") => self
+                .groups
+                .last()
+                .is_some_and(|(_, name, _)| !name.is_empty()),
             _ => false,
         };
         if grouped {
@@ -1140,6 +1145,12 @@ impl<'a> Builder<'a> {
         };
 
         let speech = match &node.role {
+            // An ARIA spin button's line is its value, then its role: "1 edit spin box" [obs,
+            // round-aria25, 2718/s1].
+            Role::Edit if attr(node, "spinbutton") == Some("true") => {
+                let value = node.value.as_deref().map(str::trim).unwrap_or_default();
+                format!("{value}{}", role_marker(msg::role_edit_spin_box().as_str()))
+            }
             Role::Edit => {
                 let kind = if attr(node, "password") == Some("true") {
                     msg::role_edit_password().as_str()

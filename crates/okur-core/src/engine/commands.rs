@@ -732,6 +732,13 @@ impl ScreenReaderEngine {
                     .last_native_focus
                     .as_ref()
                     .is_some_and(|f| matches!(f.role, Role::Edit | Role::Document)))
+            // With the virtual cursor off a page's focused field is edited as a native one:
+            // Up in a spin button says its new value, "2" [obs, round-aria25, 2736/s1].
+            || (self.virtual_cursor_off
+                && self
+                    .last_page_focus
+                    .and_then(|id| self.cursor.buffer.node(id))
+                    .is_some_and(|n| n.role == Role::Edit))
     }
 
     /// Auto Forms Mode: an arrow that lands on a field one types in puts the focus there and
@@ -993,9 +1000,19 @@ impl ScreenReaderEngine {
                         | crate::aom::Role::Tab
                         | crate::aom::Role::MenuButton
                         | crate::aom::Role::MenuItem
+                        | crate::aom::Role::Edit
                 )
             })
         {
+            // A field by its text, as a native one's line: "1" [obs, round-aria25, 2731/s1].
+            if node.role == crate::aom::Role::Edit {
+                return node
+                    .value
+                    .as_deref()
+                    .map(str::trim)
+                    .filter(|v| !v.is_empty())
+                    .map_or_else(|| msg::blank().to_string(), str::to_owned);
+            }
             // A page menu's item by its name and place: "Action 1 | 1 of 4" [obs,
             // round-aria20, 2597/s1].
             if node.role == crate::aom::Role::MenuItem {
@@ -1209,7 +1226,10 @@ impl ScreenReaderEngine {
                 return;
             }
         }
-        if self.editing_text() && say_line {
+        // A page's field with the virtual cursor off says its text alone ([`Self::line_here`]).
+        let page_field_pc =
+            self.virtual_cursor_off && self.app_mode == AppMode::VirtualBuffer && !self.forms_mode;
+        if self.editing_text() && say_line && !page_field_pc {
             // Pressed twice quickly, the line is spelled [obs, 406/s7].
             if self.presses(Press::Command(Command::SayLine), event.time_ms, 2) == 2 {
                 let _ = self.spell(true);

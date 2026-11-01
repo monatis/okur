@@ -885,7 +885,12 @@ impl ScreenReaderEngine {
                         .to_owned()
                 });
             }
-            if by_enter || by_auto_tab {
+            // A spin button has its own hint, with the virtual cursor off only (its focus's,
+            // [`SpeechFormatter::web_focus_hint`]), not an edit's [obs, round-aria25, 2720/s1].
+            let spin_button = target_id
+                .and_then(|id| self.cursor.buffer.node(id))
+                .is_some_and(|n| n.attributes.get("spinbutton").is_some_and(|v| v == "true"));
+            if !spin_button && (by_enter || by_auto_tab) {
                 speech = speech.map(|s| format!("{s}\n{}", msg::hint_type_in_text()));
             }
             // Forms mode turned on by an element list: the regions as with Enter, no hint, and

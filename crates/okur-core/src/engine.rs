@@ -1469,6 +1469,12 @@ impl ScreenReaderEngine {
         // With the virtual cursor off the page's keys are the browser's, and so are the quick
         // keys while they are off [obs, 298].
         if self.virtual_cursor_off || self.quick_key_passes(event) {
+            // A page's focused field is edited as in forms mode: its caret keys read what they
+            // moved over, typed keys are echoed (Up in a spin button: "2") [obs, round-aria25,
+            // 2736/s1].
+            if self.virtual_cursor_off && self.editing_text() {
+                self.edit_key_feedback(event);
+            }
             return KeyAction::PassThrough;
         }
         // 7. In Virtual PC Cursor mode, check if keystroke translates to a command

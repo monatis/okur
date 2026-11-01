@@ -386,6 +386,11 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> okur_core::AomNode {
                 aom.attributes.insert("tag".to_owned(), "th".to_owned());
                 aom.attributes.insert("scope".to_owned(), "row".to_owned());
             }
+            // An ARIA spin button, as IA2's mapping marks it.
+            "spinbutton" if aom.role == okur_core::Role::Edit => {
+                aom.attributes
+                    .insert("spinbutton".to_owned(), "true".to_owned());
+            }
             _ => {}
         }
     }

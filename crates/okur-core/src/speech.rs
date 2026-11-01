@@ -411,6 +411,8 @@ impl SpeechFormatter {
                     msg::role_edit_password().as_str()
                 } else if let Some(description) = node.role_description() {
                     description
+                } else if attr("spinbutton") == Some("true") {
+                    msg::role_edit_spin_box().as_str()
                 } else if attr("readonly") == Some("true") {
                     msg::role_edit_read_only().as_str()
                 } else if attr("multiline") == Some("true") {
@@ -418,10 +420,16 @@ impl SpeechFormatter {
                 } else {
                     msg::role_edit().as_str()
                 };
-                let mut lines = vec![Line::new(vec![
+                // A quick key to a spin button names its group, its focus does not: "Guests
+                // group | Adults edit spin box | 1" [obs, round-aria25, 2719/s1, 2720/s1].
+                let mut lines: Vec<Line> = entered_group()
+                    .filter(|_| attr("spinbutton") == Some("true") && !said.by_focus)
+                    .into_iter()
+                    .collect();
+                lines.push(Line::new(vec![
                     Part::new(PartKind::Name, name),
                     Part::role(kind),
-                ])];
+                ]));
                 if required {
                     lines.push(Line::new(vec![Part::state(msg::state_required())]));
                 }
@@ -574,6 +582,14 @@ impl SpeechFormatter {
             // A menu button with the virtual cursor off: "Press space to activate the menu,
             // then navigate with arrow keys" [obs, round-aria20, 2582/s1].
             Role::MenuButton if virtual_off => Some(msg::hint_menu_button().as_str()),
+            // An ARIA spin button with the virtual cursor off: "To set the value use the Arrow
+            // keys or type the value." [obs, round-aria25, 2721/s1, 2730/s1].
+            Role::Edit
+                if virtual_off
+                    && node.attributes.get("spinbutton").map(String::as_str) == Some("true") =>
+            {
+                Some(msg::hint_set_value_arrows_or_type().as_str())
+            }
             Role::RadioButton if virtual_off => Some(msg::hint_radio_up_down().as_str()),
             Role::Link { .. } | Role::Button => Some(msg::hint_activate_enter().as_str()),
             _ => None,
