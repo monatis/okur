@@ -645,6 +645,7 @@ impl<'a> Builder<'a> {
                     "navigation" => label(msg::region_navigation().as_str()),
                     "complementary" => label(msg::region_complementary().as_str()),
                     "search" => label(msg::region_search().as_str()),
+                    "form" => label(msg::region_form().as_str()),
                     "region" => label(msg::region_region().as_str()),
                     other => label(other),
                 };
@@ -851,9 +852,22 @@ impl<'a> Builder<'a> {
                     // The legend repeats the fieldset name and is not read again; the element
                     // that names an ARIA group is read where it is: a heading as a heading, a
                     // line of text as its line ("group start Rating | Rating") [obs,
-                    // round-aria4, 2079/s2, 2088/s1; round-aria17, 2443/s2, 2462/s1].
+                    // round-aria4, 2079/s2, 2088/s1; round-aria17, 2443/s2, 2462/s1]. A control
+                    // named as the legend is read: ARIA-AT's form's "Add Contact" submit button
+                    // in its "Add Contact" fieldset [obs, round-aria36, 3084/s1].
                     if fieldset
-                        && !matches!(child.role, Role::Heading { .. })
+                        && !matches!(
+                            child.role,
+                            Role::Heading { .. }
+                                | Role::Button
+                                | Role::MenuButton
+                                | Role::Edit
+                                | Role::CheckBox
+                                | Role::RadioButton
+                                | Role::ComboBox
+                                | Role::Slider
+                                | Role::Link { .. }
+                        )
                         && legend.as_deref().is_some_and(|l| text_content(child) == l)
                     {
                         continue;
@@ -1118,7 +1132,9 @@ impl<'a> Builder<'a> {
                 .groups
                 .last()
                 .is_some_and(|(_, name, _)| !name.is_empty()),
-            Role::Edit if attr(node, "spinbutton") == Some("true") => self
+            // An edit and a button too, in a named fieldset: "Add Contact group | Name Edit"
+            // [obs, round-aria36, 3078/s1, 3084/s1].
+            Role::Edit | Role::Button => self
                 .groups
                 .last()
                 .is_some_and(|(_, name, _)| !name.is_empty()),

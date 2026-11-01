@@ -11,6 +11,8 @@ region-main = main region
 region-navigation = navigation region
 region-region = region
 region-search = search region
+# A form landmark (a named form): "Add Contact Form" [obs, round-aria36, 3061/s1].
+region-form = Form
 # A region with a name: "Site navigation region".
 region-named = { $name } { $region }
 

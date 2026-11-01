@@ -482,9 +482,11 @@ impl SpeechFormatter {
                     msg::role_edit().as_str()
                 };
                 // A quick key to a spin button names its group, its focus does not: "Guests
-                // group | Adults edit spin box | 1" [obs, round-aria25, 2719/s1, 2720/s1].
+                // group | Adults edit spin box | 1" [obs, round-aria25, 2719/s1, 2720/s1]; an
+                // edit's quick key and focus both: "Add Contact group | Name Edit | blank" [obs,
+                // round-aria36, 3078/s1, 3080/s1].
                 let mut lines: Vec<Line> = entered_group()
-                    .filter(|_| attr("spinbutton") == Some("true") && !said.by_focus)
+                    .filter(|_| attr("spinbutton") != Some("true") || !said.by_focus)
                     .into_iter()
                     .collect();
                 lines.push(Line::new(vec![
@@ -641,7 +643,11 @@ impl SpeechFormatter {
                     parts.push(Part::new(PartKind::Value, popup));
                 }
                 parts.extend(node.current_phrase().map(Part::state));
-                described(vec![Line::new(parts)])
+                // Its named fieldset as it comes into it: "Add Contact group | Add Contact
+                // Button" [obs, round-aria36, 3084/s1].
+                let mut lines: Vec<Line> = entered_group().into_iter().collect();
+                lines.push(Line::new(parts));
+                described(lines)
             }
             // "Red left right slider | 128", its group named by a quick key to it, not by its
             // focus [obs, round-aria26, 2740/s1, 2741/s1].
