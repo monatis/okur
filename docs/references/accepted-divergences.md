@@ -1469,7 +1469,14 @@ A step can be in more than one entry; all of its entries apply.
 - Steps: `2967-aria-combobox-autocomplete-both-updated-t45-down-pc/s1`,
   `2968-aria-combobox-autocomplete-both-updated-t47-up-pc/s1`,
   `2971-aria-combobox-autocomplete-both-updated-t53-down-pc/s1`,
-  `2972-aria-combobox-autocomplete-both-updated-t55-up-pc/s1`.
+  `2972-aria-combobox-autocomplete-both-updated-t55-up-pc/s1`,
+  `2997-aria-combobox-select-only-t10-alt-down-vc/s1`,
+  `2998-aria-combobox-select-only-t11-down-pc/s1`,
+  `2999-aria-combobox-select-only-t11-alt-down-pc/s1`,
+  `3000-aria-combobox-select-only-t11-up-pc/s1`,
+  `3001-aria-combobox-select-only-t11-enter-pc/s1`,
+  `3002-aria-combobox-select-only-t11-space-pc/s1`,
+  `3004-aria-combobox-select-only-t15-a-pc/s1`.
 - Difference: Okur also says "expanded" before the list box, "Open List Box expanded" after
   Alt+Down.
 - Why: as the focus moves from a combo box into its list box (Down, Up, Home, Alt+Down), JAWS
@@ -1477,6 +1484,23 @@ A step can be in more than one entry; all of its entries apply.
   state [obs, round-aria32, round-aria33]; ARIA-AT's combo box plans require it expanded
   (MUST).
 - Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
+
+### ARIA-AT's select-only combo box
+
+- Steps: `2995-aria-combobox-select-only-t7-ins-up-vc/s1` (Okur also says "collapsed");
+  `3003-aria-combobox-select-only-t13-home-pc/s1`, `3010-aria-combobox-select-only-t27-home-pc/s1`,
+  `3011-aria-combobox-select-only-t28-end-pc/s1`, `3012-aria-combobox-select-only-t31-page-down-pc/s1`,
+  `3013-aria-combobox-select-only-t32-page-up-pc/s1`, `3005-aria-combobox-select-only-t17-end-pc/s1` (whole steps).
+- Difference and why:
+  - Insert+Up with the virtual cursor on: JAWS leaves the state out, as Tab does; ARIA-AT
+    requires it (MUST), and Okur says "collapsed".
+  - Home, End, Page Up and Page Down on the options: JAWS names the list box a group first,
+    "Favorite Fruit group | Grape | 11 of 13", where Down and Up on the same options do not
+    (3007/s1) and the focus is the same; Okur says the option and its place.
+  - End opening the list: JAWS says nothing in every trial, where Home says the list box;
+    Okur says "expanded | Favorite Fruit List box | Huckleberry | 13 of 13".
+- Decided under the owner's rules for the web and on JAWS's accidents (AGENTS.md §1.2),
+  2026-11-01.
 
 ## Considered and not accepted
 

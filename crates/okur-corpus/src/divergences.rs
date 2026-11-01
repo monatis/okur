@@ -1442,12 +1442,49 @@ divergences! {
         "2968-aria-combobox-autocomplete-both-updated-t47-up-pc/s1",
         "2971-aria-combobox-autocomplete-both-updated-t53-down-pc/s1",
         "2972-aria-combobox-autocomplete-both-updated-t55-up-pc/s1",
+        "2997-aria-combobox-select-only-t10-alt-down-vc/s1",
+        "2998-aria-combobox-select-only-t11-down-pc/s1",
+        "2999-aria-combobox-select-only-t11-alt-down-pc/s1",
+        "3000-aria-combobox-select-only-t11-up-pc/s1",
+        "3001-aria-combobox-select-only-t11-enter-pc/s1",
+        "3002-aria-combobox-select-only-t11-space-pc/s1",
+        "3004-aria-combobox-select-only-t15-a-pc/s1",
     ],
     "A combo box's list box the focus comes into from the combo box (Down, Up, Home, Alt+Down): \
      JAWS says the list box, \"States List box | Alabama | 1 of 56\", and nothing of the combo \
      box's state [obs, round-aria32], where ARIA-AT's combo box plans require it expanded \
      (MUST). Okur says it first: \"expanded | States List box | Alabama | 1 of 56\".",
     "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
+
+    Difference::OkurAlsoSays("\u{1d}collapsed\u{1e}") => [
+        "2995-aria-combobox-select-only-t7-ins-up-vc/s1",
+    ],
+    "Insert+Up on a select-only combo box, the virtual cursor on: JAWS says it as Tab does, \
+     without its state, \"Favorite Fruit Combo box | Choose a Fruit\" [obs, round-aria33], where \
+     ARIA-AT's plan requires its state (MUST). Okur says \"collapsed\" too.",
+    "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
+
+    Difference::Step => [
+        "3003-aria-combobox-select-only-t13-home-pc/s1",
+        "3010-aria-combobox-select-only-t27-home-pc/s1",
+        "3011-aria-combobox-select-only-t28-end-pc/s1",
+        "3012-aria-combobox-select-only-t31-page-down-pc/s1",
+        "3013-aria-combobox-select-only-t32-page-up-pc/s1",
+    ],
+    "Home, End, Page Up and Page Down on a select-only combo box's options: JAWS names the \
+     list box a group first, \"Favorite Fruit group | Grape | 11 of 13\", where Down and Up \
+     on the same options say \"Apple | 2 of 13\" [obs, round-aria33, 3007/s1]; the focus is \
+     the same for every key. Okur says the option and its place, and on Home from the combo \
+     box \"expanded | Favorite Fruit List box | ...\" as on Down.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
+
+    Difference::Step => [
+        "3005-aria-combobox-select-only-t17-end-pc/s1",
+    ],
+    "End on a select-only combo box, opening its list on the last option: JAWS says nothing \
+     in every trial [obs, round-aria33], where Home says the list box and its first option \
+     (3003/s1). Okur says \"expanded | Favorite Fruit List box | Huckleberry | 13 of 13\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
 
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
