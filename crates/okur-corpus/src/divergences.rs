@@ -1594,6 +1594,7 @@ divergences! {
         "2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s1",
         "2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s2",
         "2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s3",
+        "1129-web-described-elements/s15",
     ],
     "The first line of a dialog that has a description: JAWS adds \"Use JawsKey+Alt+R to read \
      descriptive text\" [obs, round-aria23b; 1129/s11], where Insert+Alt+R says nothing in every \

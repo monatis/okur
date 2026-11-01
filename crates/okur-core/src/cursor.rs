@@ -191,13 +191,17 @@ impl VirtualCursor {
         let focus_at = focus.and_then(|id| self.buffer.start_of(id));
         let modal: Vec<&crate::buffer::DialogInfo> =
             self.buffer.dialogs.iter().filter(|d| d.is_modal).collect();
+        // A dialog holding the focus keeps the virtual cursor too, aria-modal or not: Ctrl+Home
+        // its heading, Ctrl+End its last button, H wrapping inside it [obs, 1130/s3-s10;
+        // 1129/s15]; an aria-modal one wherever the focus is.
         let around_focus = focus_at.and_then(|at| {
-            modal
+            self.buffer
+                .dialogs
                 .iter()
                 .filter(|d| d.start_offset <= at && at <= d.end_offset)
                 .max_by_key(|d| d.start_offset)
         });
-        self.active_modal_root = around_focus.or(modal.last()).map(|d| d.node_id);
+        self.active_modal_root = around_focus.or(modal.last().copied()).map(|d| d.node_id);
         if let Some((min, max)) = self.active_modal_range() {
             if self.offset < min || self.offset > max {
                 self.offset = min;

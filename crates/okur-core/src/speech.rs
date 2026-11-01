@@ -784,6 +784,73 @@ impl SpeechFormatter {
         }
     }
 
+    /// A dialog's text, said after its name as the focus comes into it where it has no
+    /// description: the static text before the focused element, its label left out, "Settings
+    /// dialog | Choose your options. | Save Button" [obs, 1130/s2]. None where none comes
+    /// before the focus (the delivery address dialog's first field, round-aria23).
+    pub fn dialog_text_before(dialog: &crate::aom::AomNode, focus: usize) -> Option<String> {
+        use crate::aom::{AomNode, Role};
+        fn walk(node: &AomNode, focus: usize, name: &str, out: &mut Vec<String>) -> bool {
+            if node.id == focus {
+                return true;
+            }
+            // A control's label or description is its control's, not the dialog's.
+            if node
+                .attributes
+                .get("labels_control")
+                .is_some_and(|v| v == "true")
+            {
+                return contains(node, focus);
+            }
+            match &node.role {
+                Role::Heading { .. }
+                | Role::Button
+                | Role::MenuButton
+                | Role::Link { .. }
+                | Role::Edit
+                | Role::CheckBox
+                | Role::RadioButton
+                | Role::ComboBox
+                | Role::Slider => return contains(node, focus),
+                Role::Text => {
+                    let text = node
+                        .text
+                        .as_deref()
+                        .or(node.name.as_deref())
+                        .unwrap_or_default()
+                        .split_whitespace()
+                        .collect::<Vec<_>>()
+                        .join(" ");
+                    if !text.is_empty() && text != name {
+                        out.push(text);
+                    }
+                }
+                _ => {}
+            }
+            node.children.iter().any(|c| walk(c, focus, name, out))
+        }
+        fn contains(node: &AomNode, focus: usize) -> bool {
+            node.id == focus || node.children.iter().any(|c| contains(c, focus))
+        }
+        if dialog
+            .attributes
+            .get("description")
+            .is_some_and(|d| !d.trim().is_empty())
+        {
+            return None;
+        }
+        let name = dialog.name.as_deref().unwrap_or_default().trim();
+        let mut text = Vec::new();
+        if !dialog
+            .children
+            .iter()
+            .any(|c| walk(c, focus, name, &mut text))
+        {
+            return None;
+        }
+        (!text.is_empty()).then(|| text.join(" "))
+    }
+
     /// A slider's or spin button's limits, "min 0 max 255", where its value is a number (no
     /// aria-valuetext) and both limits are known. A newer JAWS (2025.2508, ARIA-AT's reports)
     /// says them after the value, which ARIA-AT asks for (SHOULD); JAWS 2025.2505 does not.

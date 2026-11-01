@@ -1591,7 +1591,8 @@ A step can be in more than one entry; all of its entries apply.
 
 - Steps: `2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s1`,
   `2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s2`,
-  `2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s3`.
+  `2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s3`,
+  `1129-web-described-elements/s15`.
 - Difference: JAWS also says "Use JawsKey+Alt+R to read descriptive text" on a described
   dialog's first line.
 - Why: Insert+Alt+R said nothing in every trial of a probe of described elements (1129), and no

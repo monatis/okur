@@ -562,6 +562,19 @@ fn convert(
             set_attr("error_message", message.join(" "));
         }
     }
+    // Text that labels or describes a control (a label, an aria-describedby target): a
+    // dialog's text leaves it out [obs, round-aria23, 2687/s1].
+    if node
+        .relations
+        .get("labelFor")
+        .is_some_and(|t| !t.is_empty())
+        || node
+            .relations
+            .get("descriptionFor")
+            .is_some_and(|t| !t.is_empty())
+    {
+        set_attr("labels_control", "true".to_owned());
+    }
     // aria-flowto: the objects this one flows to, by their IA2 uniqueIDs (Equals follows them).
     if let Some(targets) = node.relations.get("flowsTo").filter(|t| !t.is_empty()) {
         let ids: Vec<String> = targets.iter().map(i32::to_string).collect();

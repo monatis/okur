@@ -491,7 +491,15 @@ impl ScreenReaderEngine {
             .enumerate()
             .filter(|(_, n)| !around_from.contains(&n.id) && n.id != from)
             .filter_map(|(depth, n)| {
-                SpeechFormatter::container_entered(n).map(|line| (depth, line))
+                SpeechFormatter::container_entered(n).map(|mut line| {
+                    if matches!(n.role, Role::Dialog | Role::AlertDialog) {
+                        if let Some(text) = SpeechFormatter::dialog_text_before(n, to) {
+                            line.push_str(&text);
+                            line.push('\n');
+                        }
+                    }
+                    (depth, line)
+                })
             })
             .collect()
     }

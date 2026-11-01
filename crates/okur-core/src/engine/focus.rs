@@ -1098,7 +1098,14 @@ impl ScreenReaderEngine {
                         .ancestors(id)
                         .into_iter()
                         .find(|n| matches!(n.role, Role::Dialog | Role::AlertDialog))
-                        .and_then(SpeechFormatter::container_entered)
+                        .and_then(|dialog| {
+                            let mut line = SpeechFormatter::container_entered(dialog)?;
+                            if let Some(text) = SpeechFormatter::dialog_text_before(dialog, id) {
+                                line.push_str(&text);
+                                line.push('\n');
+                            }
+                            Some(line)
+                        })
                 });
                 if let Some(dialog) = dialog {
                     speech = speech.map(|s| format!("{dialog}{s}"));
