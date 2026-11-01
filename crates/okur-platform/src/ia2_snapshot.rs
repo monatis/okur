@@ -106,6 +106,8 @@ mod msaa_role {
 /// IA2 state bits (`AccessibleStates.idl`).
 mod ia2_state {
     pub const EDITABLE: i32 = 0x8;
+    pub const HORIZONTAL: i32 = 0x10;
+    pub const VERTICAL: i32 = 0x20000;
     pub const MODAL: i32 = 0x100;
     pub const MULTI_LINE: i32 = 0x200;
     pub const REQUIRED: i32 = 0x800;
@@ -314,7 +316,7 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
         Role::Text | Role::Group if is_labelled_empty_generic(node) => {
             aom.text = node.name.clone();
         }
-        Role::Edit | Role::ComboBox => aom.value = node.value.clone(),
+        Role::Edit | Role::ComboBox | Role::Slider => aom.value = node.value.clone(),
         // The document value is its URL; same-page links are resolved against it.
         Role::Document => {
             if let Some(url) = &node.value {
@@ -453,6 +455,15 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
         attr("haspopup").filter(|p| !matches!(p.as_str(), "false" | "true" | "menu"))
     {
         set_attr("haspopup", popup);
+    }
+    // A slider's orientation, which its role word says: "left right slider" [obs,
+    // round-aria26, 2741/s1].
+    if role == Role::Slider {
+        if node.ia2_states & ia2_state::HORIZONTAL != 0 {
+            set_attr("orientation", "horizontal".to_owned());
+        } else if node.ia2_states & ia2_state::VERTICAL != 0 {
+            set_attr("orientation", "vertical".to_owned());
+        }
     }
     // An ARIA spin button (role="spinbutton"), a text field JAWS calls an "edit spin box"
     // [obs, round-aria25, 2718/s1].

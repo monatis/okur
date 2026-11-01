@@ -300,6 +300,9 @@ impl ScreenReaderEngine {
                 return None;
             }
             Role::ComboBox if before.value != control.value => control.value.clone()?,
+            // A slider moved by its keys says its new value: "129" [obs, round-aria26,
+            // 2751/s1].
+            Role::Slider if before.value != control.value => control.value.clone()?,
             // Space on a tab selects it [obs, 29/s4].
             Role::Tab
                 if before.states.selected != control.states.selected

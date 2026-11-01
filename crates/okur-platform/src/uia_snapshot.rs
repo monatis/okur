@@ -337,7 +337,7 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> okur_core::AomNode {
     }
     match role {
         Role::Text => aom.text = node.name.clone(),
-        Role::Edit | Role::ComboBox => aom.value = node.value.clone(),
+        Role::Edit | Role::ComboBox | Role::Slider => aom.value = node.value.clone(),
         // The document value is its URL; same-page links are resolved against it.
         Role::Document => {
             if let Some(url) = &node.value {

@@ -538,6 +538,27 @@ impl SpeechFormatter {
                 parts.extend(node.current_phrase().map(Part::state));
                 Announcement::new(vec![Line::new(parts)])
             }
+            // "Red left right slider | 128", its group named by a quick key to it, not by its
+            // focus [obs, round-aria26, 2740/s1, 2741/s1].
+            Role::Slider => {
+                let mut lines: Vec<Line> = entered_group()
+                    .filter(|_| !said.by_focus)
+                    .into_iter()
+                    .collect();
+                lines.push(Line::new(name_and_role(
+                    name,
+                    Self::slider_role(node).as_str(),
+                )));
+                if let Some(value) = node
+                    .value
+                    .as_deref()
+                    .map(str::trim)
+                    .filter(|v| !v.is_empty())
+                {
+                    lines.push(Line::of(PartKind::Value, value));
+                }
+                Announcement::new(lines)
+            }
             // On focus a menu button says no state (JAWS on the dev box); a quick key to it
             // says it collapsed or expanded: "Actions button menu collapsed" [obs,
             // round-aria20, 2574/s1, 2578/s1].
@@ -558,6 +579,15 @@ impl SpeechFormatter {
                 Announcement::new(vec![Line::new(parts)])
             }
             _ => Announcement::new(vec![Line::of(PartKind::Name, name)]),
+        }
+    }
+
+    /// A slider's role word, by its orientation: "left right slider" for a horizontal one
+    /// [obs, round-aria26, 2741/s1], "slider" where its orientation is not known.
+    pub fn slider_role(node: &crate::aom::AomNode) -> crate::messages::StaticMessage {
+        match node.attributes.get("orientation").map(String::as_str) {
+            Some("horizontal") => msg::role_slider_horizontal(),
+            _ => msg::role_slider(),
         }
     }
 
@@ -582,6 +612,8 @@ impl SpeechFormatter {
             // A menu button with the virtual cursor off: "Press space to activate the menu,
             // then navigate with arrow keys" [obs, round-aria20, 2582/s1].
             Role::MenuButton if virtual_off => Some(msg::hint_menu_button().as_str()),
+            // A slider with the virtual cursor off [obs, round-aria26, 2742/s1].
+            Role::Slider if virtual_off => Some(msg::hint_slider_arrows().as_str()),
             // An ARIA spin button with the virtual cursor off: "To set the value use the Arrow
             // keys or type the value." [obs, round-aria25, 2721/s1, 2730/s1].
             Role::Edit

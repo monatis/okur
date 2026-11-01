@@ -1107,7 +1107,12 @@ impl<'a> Builder<'a> {
                 .groups
                 .last()
                 .is_some_and(|(_, name, _)| !name.is_empty()),
-            // A spin button too, in a named group [obs, round-aria25, 2719/s1].
+            // A spin button and a slider too, in a named group [obs, round-aria25, 2719/s1;
+            // round-aria26, 2740/s1].
+            Role::Slider => self
+                .groups
+                .last()
+                .is_some_and(|(_, name, _)| !name.is_empty()),
             Role::Edit if attr(node, "spinbutton") == Some("true") => self
                 .groups
                 .last()
@@ -1301,7 +1306,16 @@ impl<'a> Builder<'a> {
                 }
                 s
             }
-            Role::Slider => format!("{name}{}", role_marker(msg::role_slider().as_str())),
+            // "Red left right slider 128" [obs, round-aria26, 2739/s2].
+            Role::Slider => {
+                let value = node.value.as_deref().map(str::trim).unwrap_or_default();
+                format!(
+                    "{name}{}{value}",
+                    role_marker(crate::speech::SpeechFormatter::slider_role(node).as_str())
+                )
+                .trim_end()
+                .to_owned()
+            }
             Role::ProgressBar => {
                 format!("{name}{}", role_marker(msg::role_progress_bar().as_str()))
             }
@@ -1373,7 +1387,11 @@ impl<'a> Builder<'a> {
                     self.buffer.edits.push(off);
                 }
             }
-            Role::Slider => self.buffer.sliders.push(off),
+            // F stops on a slider as on a field [obs, round-aria26, 2740/s1].
+            Role::Slider => {
+                self.buffer.sliders.push(off);
+                self.buffer.form_controls.push(off);
+            }
             Role::ProgressBar => self.buffer.progress_bars.push(off),
             Role::Tab => {
                 // F stops on a page's tabs as on its fields [obs, round-aria18, 2497/s1].
