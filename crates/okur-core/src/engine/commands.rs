@@ -959,6 +959,20 @@ impl ScreenReaderEngine {
     }
 
     pub(super) fn line_here(&self) -> String {
+        let line = self.line_here_said();
+        // With the virtual cursor off a table's cell is said without the "clickable" its
+        // line says in the virtual cursor: "01-Jan-16" [obs, round-aria24, 2703/s1, 2705/s1].
+        if !self.virtual_cursor_off {
+            return line;
+        }
+        let clickable = msg::state_clickable();
+        line.lines()
+            .filter(|l| l.trim() != clickable.as_str())
+            .collect::<Vec<_>>()
+            .join("\n")
+    }
+
+    fn line_here_said(&self) -> String {
         use crate::announcement::PartKind;
         // A focused tab's line with its place among its list's tabs: "Advanced Tab 2 of 2"
         // [obs, 260/s4], the place added where the page gives the tab none of its own.

@@ -1552,6 +1552,76 @@ divergences! {
      reads the heading whole, \"Hotel Price Range (in USD)\", and Down goes on to the slider.",
     "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
 
+    Difference::OkurAlsoSays("min 1 max 8") => [
+        "2719-aria-quantity-spin-button-nav-forwards-to-spinbutton-f-vc/s1",
+        "2720-aria-quantity-spin-button-nav-forwards-to-spinbutton-tab-vc/s1",
+        "2721-aria-quantity-spin-button-nav-forwards-to-spinbutton-tab-pc/s1",
+        "2722-aria-quantity-spin-button-nav-forwards-to-spinbutton-e-vc/s1",
+        "2724-aria-quantity-spin-button-nav-back-to-spinbutton-shift-f-vc/s1",
+        "2725-aria-quantity-spin-button-nav-back-to-spinbutton-shift-tab-vc/s1",
+        "2726-aria-quantity-spin-button-nav-back-to-spinbutton-shift-tab-pc/s1",
+        "2727-aria-quantity-spin-button-nav-back-to-spinbutton-shift-e-vc/s1",
+        "2728-aria-quantity-spin-button-req-info-about-spinbutton-ins-tab-vc/s1",
+        "2730-aria-quantity-spin-button-req-info-about-spinbutton-ins-tab-pc/s1",
+    ],
+    "A spin button whose value is a number, on a focus, a quick key and Insert+Tab: JAWS \
+     2025.2505 says \"Adults edit spin box | 1\" [obs, round-aria25]; a newer JAWS \
+     (2025.2508.120, ARIA-AT's reports) says its limits after the value, \"1 | min 1 max 8\", \
+     as Okur does; ARIA-AT's plan asks for them (SHOULD).",
+    "a newer JAWS (2025.2508.120, ARIA-AT's reports) under the owner's rule for the web, 2026-11-01";
+
+    Difference::OkurAlsoSays("min 0 max 255") => [
+        "2739-aria-horizontal-slider-nav-forwards-to-slider-down-down-vc/s2",
+        "2740-aria-horizontal-slider-nav-forwards-to-slider-f-vc/s1",
+        "2741-aria-horizontal-slider-nav-forwards-to-slider-tab-vc/s1",
+        "2742-aria-horizontal-slider-nav-forwards-to-slider-tab-pc/s1",
+        "2743-aria-horizontal-slider-nav-back-to-slider-up-vc/s1",
+        "2744-aria-horizontal-slider-nav-back-to-slider-shift-f-vc/s1",
+        "2745-aria-horizontal-slider-nav-back-to-slider-shift-tab-vc/s1",
+        "2746-aria-horizontal-slider-nav-back-to-slider-shift-tab-pc/s1",
+        "2747-aria-horizontal-slider-req-info-about-slider-ins-tab-vc/s1",
+        "2748-aria-horizontal-slider-req-info-about-slider-ins-up-vc/s1",
+        "2749-aria-horizontal-slider-req-info-about-slider-ins-tab-pc/s1",
+        "2750-aria-horizontal-slider-req-info-about-slider-ins-up-pc/s1",
+    ],
+    "A slider whose value is a number, on its line, a focus, a quick key, Insert+Tab and \
+     Insert+Up: JAWS 2025.2505 says \"Red left right slider | 128\" [obs, round-aria26]; a newer \
+     JAWS (2025.2508.120, ARIA-AT's reports) says \"128 min 0 max 255\", as Okur does; ARIA-AT's \
+     plan asks for the limits (SHOULD).",
+    "a newer JAWS (2025.2508.120, ARIA-AT's reports) under the owner's rule for the web, 2026-11-01";
+
+    Difference::JawsAlsoSays("Use JawsKey+Alt+R to read descriptive text") => [
+        "2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s1",
+        "2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s2",
+        "2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s3",
+    ],
+    "The first line of a dialog that has a description: JAWS adds \"Use JawsKey+Alt+R to read \
+     descriptive text\" [obs, round-aria23b; 1129/s11], where Insert+Alt+R says nothing in every \
+     trial (1129/s4, s6, s9, s12, s14, s16) and no key map of JAWS 2025 binds it. Okur does not \
+     name a key that does nothing; the dialog's description is said as the focus enters it.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
+
+    Difference::OkurAlsoSays("\u{1d}\u{1e}") => [
+        "1127-web-aria-radio-group-labels/s2",
+        "1127-web-aria-radio-group-labels/s3",
+        "1127-web-aria-radio-group-labels/s4",
+        "1127-web-aria-radio-group-labels/s5",
+    ],
+    "A focus into an ARIA radio group: JAWS says an empty state after the group on ARIA-AT's \
+     pages (\"Pizza Crust group | | Regular crust radio button\" [obs, round-aria4]), not on \
+     five groups labelled the same ways (1127), the only difference found a DOM id on the \
+     group. The state is silent; Okur keeps it as ARIA-AT's pages have it.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
+
+    Difference::Step => [
+        "1127-web-aria-radio-group-labels/s1",
+    ],
+    "Tab to the first of five ARIA radio groups, the page's first focus: JAWS says \"Radio Group \
+     Labels | MainRegion | Hotel group | ...\" in one trial and \"Radio Group Labels | Hotel | \
+     ...\" without the group's role in another [obs, 1127/s1]. Okur says the page and the group, \
+     as on the four groups after it.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
+
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
     ],

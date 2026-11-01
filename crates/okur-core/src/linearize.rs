@@ -1582,6 +1582,28 @@ impl<'a> Builder<'a> {
                     None => self.emit(cell.id, Role::TableCell, "", String::new()),
                 };
                 self.end_paragraph_since(before);
+                // One the page answers clicks on says so after its text: "Date | clickable",
+                // and in table navigation "Balance | $999,741.00 | clickable | Column 5 of 5"
+                // [obs, round-aria24, 2695/s2, 2706/s1]. JAWS says it of a table's cell, not
+                // of a clickable division (292/s8), nor of a cell holding a link, which is
+                // what is clicked (2708/s1).
+                fn holds_link(node: &AomNode) -> bool {
+                    node.children
+                        .iter()
+                        .any(|c| matches!(c.role, Role::Link { .. }) || holds_link(c))
+                }
+                if attr(cell, "clickable") == Some("true") && !holds_link(cell) {
+                    let last = self
+                        .buffer
+                        .lines
+                        .len()
+                        .checked_sub(1)
+                        .filter(|&i| i >= before);
+                    if let Some(line) = last.and_then(|i| self.buffer.lines.get_mut(i)) {
+                        line.speech.push('\n');
+                        line.speech.push_str(msg::state_clickable().as_str());
+                    }
+                }
                 let text = self
                     .buffer
                     .lines

@@ -1555,6 +1555,60 @@ A step can be in more than one entry; all of its entries apply.
   [obs, round-aria40]. An accident of the two, not the setting.
 - Decided under the owner's rule on JAWS's accidents, 2026-11-01.
 
+### A slider's and a spin button's limits after a number
+
+- Steps: `2719-aria-quantity-spin-button-nav-forwards-to-spinbutton-f-vc/s1`,
+  `2720-aria-quantity-spin-button-nav-forwards-to-spinbutton-tab-vc/s1`,
+  `2721-aria-quantity-spin-button-nav-forwards-to-spinbutton-tab-pc/s1`,
+  `2722-aria-quantity-spin-button-nav-forwards-to-spinbutton-e-vc/s1`,
+  `2724-aria-quantity-spin-button-nav-back-to-spinbutton-shift-f-vc/s1`,
+  `2725-aria-quantity-spin-button-nav-back-to-spinbutton-shift-tab-vc/s1`,
+  `2726-aria-quantity-spin-button-nav-back-to-spinbutton-shift-tab-pc/s1`,
+  `2727-aria-quantity-spin-button-nav-back-to-spinbutton-shift-e-vc/s1`,
+  `2728-aria-quantity-spin-button-req-info-about-spinbutton-ins-tab-vc/s1`,
+  `2730-aria-quantity-spin-button-req-info-about-spinbutton-ins-tab-pc/s1`,
+  `2739-aria-horizontal-slider-nav-forwards-to-slider-down-down-vc/s2`,
+  `2740-aria-horizontal-slider-nav-forwards-to-slider-f-vc/s1`,
+  `2741-aria-horizontal-slider-nav-forwards-to-slider-tab-vc/s1`,
+  `2742-aria-horizontal-slider-nav-forwards-to-slider-tab-pc/s1`,
+  `2743-aria-horizontal-slider-nav-back-to-slider-up-vc/s1`,
+  `2744-aria-horizontal-slider-nav-back-to-slider-shift-f-vc/s1`,
+  `2745-aria-horizontal-slider-nav-back-to-slider-shift-tab-vc/s1`,
+  `2746-aria-horizontal-slider-nav-back-to-slider-shift-tab-pc/s1`,
+  `2747-aria-horizontal-slider-req-info-about-slider-ins-tab-vc/s1`,
+  `2748-aria-horizontal-slider-req-info-about-slider-ins-up-vc/s1`,
+  `2749-aria-horizontal-slider-req-info-about-slider-ins-tab-pc/s1`,
+  `2750-aria-horizontal-slider-req-info-about-slider-ins-up-pc/s1`.
+- Difference: Okur also says the limits after the value, "1 | min 1 max 8", "128 min 0 max 255".
+- Why: JAWS 2025.2505 says the value alone [obs, round-aria25, round-aria26]; a newer JAWS
+  (2025.2508.120, ARIA-AT's reports) says the limits after a number, none after a text value
+  (see "A slider's limits after a number, not after a text"). ARIA-AT's plans ask for them
+  (SHOULD). The snapshots holding the limits were captured again in round-probe-radio2.
+- Decided under the owner's rule for the web (AGENTS.md §1.2), following a newer JAWS
+  (2025.2508.120) in ARIA-AT's published reports, 2026-11-01.
+
+### A hint for a key that does nothing
+
+- Steps: `2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s1`,
+  `2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s2`,
+  `2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s3`.
+- Difference: JAWS also says "Use JawsKey+Alt+R to read descriptive text" on a described
+  dialog's first line.
+- Why: Insert+Alt+R said nothing in every trial of a probe of described elements (1129), and no
+  key map of JAWS 2025 on old-pc binds it. Okur does not name a key that does nothing.
+- Decided under the owner's rule on JAWS's accidents, 2026-11-01.
+
+### ARIA radio groups' empty state and a first Tab's trials
+
+- Steps: `1127-web-aria-radio-group-labels/s2`, `1127-web-aria-radio-group-labels/s3`,
+  `1127-web-aria-radio-group-labels/s4`, `1127-web-aria-radio-group-labels/s5` (Okur also says
+  an empty state); `1127-web-aria-radio-group-labels/s1` (whole step).
+- Why: JAWS says a silent empty state after an ARIA radio group on ARIA-AT's pages and not on
+  five groups labelled the same ways, the only difference found a DOM id on the group; Okur
+  keeps it as ARIA-AT's pages have it. The first Tab's trials disagree with each other
+  ("MainRegion" in one, no group role in another).
+- Decided under the owner's rule on JAWS's accidents, 2026-11-01.
+
 ## Considered and not accepted
 
 - From a newer JAWS (2025.2508.120, ARIA-AT's reports), not followed: Insert+Up on a menu

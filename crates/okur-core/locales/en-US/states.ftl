@@ -53,3 +53,6 @@ state-current-time = Current Time
 # An edit combo that completes what is typed (aria-autocomplete), said by Insert+Tab with the
 # virtual cursor on [obs, round-aria32, 2925/s1].
 state-supports-autocomplete = Supports AutoComplete
+# A table's cell the page answers clicks on, after its text: "Date | clickable" [obs,
+# round-aria24, 2695/s2].
+state-clickable = clickable
