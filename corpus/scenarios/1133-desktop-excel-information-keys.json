@@ -2,7 +2,7 @@
   "id": "1133-desktop-excel-information-keys",
   "name": "Excel, JAWS's information keys from its help (popapps.chm, JAWS commands for Excel): Right onto B1, the row's cells listed (Insert+Shift+R) and Escape, the cell's font (Insert+F), the next and prior sheet (Ctrl+PageDown, Ctrl+PageUp), the visible cells with data listed (Ctrl+Shift+D) and Escape, then Down",
   "category": "desktop",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
   "target_app": "desktop",
   "trace_headings": true,
@@ -23,7 +23,7 @@
     {"id": "s4", "type": "key", "command": "Insert+F", "settle_max_ms": 30000},
     {"id": "s5", "type": "key", "command": "Ctrl+PageDown"},
     {"id": "s6", "type": "key", "command": "Ctrl+PageUp"},
-    {"id": "s7", "type": "key", "command": "Ctrl+Shift+D"},
+    {"id": "s7", "type": "key", "command": "Ctrl+Shift+D", "onset_ms": 2500, "settle_max_ms": 15000},
     {"id": "s8", "type": "key_ui_access", "command": "Escape"},
     {"id": "s9", "type": "key", "command": "Down"}
   ]
