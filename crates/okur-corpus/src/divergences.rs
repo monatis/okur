@@ -1606,6 +1606,15 @@ divergences! {
         "1127-web-aria-radio-group-labels/s3",
         "1127-web-aria-radio-group-labels/s4",
         "1127-web-aria-radio-group-labels/s5",
+        "2444-aria-rating-radio-group-nav-forwards-in-to-radio-group-where-no-radio-buttons-are-checked-tab-vc/s1",
+        "2449-aria-rating-radio-group-nav-back-in-to-radio-group-where-no-radio-buttons-are-checked-shift-tab-vc/s1",
+        "2454-aria-rating-radio-group-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-tab-vc/s1",
+        "2455-aria-rating-radio-group-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-tab-pc/s1",
+        "2459-aria-rating-radio-group-nav-back-into-radio-group-where-last-radio-checked-shift-tab-vc/s1",
+        "2460-aria-rating-radio-group-nav-back-into-radio-group-where-last-radio-checked-shift-tab-pc/s1",
+        "2488-aria-rating-radio-group-req-info-about-unchecked-radio-ins-tab-vc/s1",
+        "2490-aria-rating-radio-group-req-info-about-unchecked-radio-ins-tab-pc/s1",
+        "2494-aria-rating-radio-group-req-info-about-checked-radio-ins-tab-pc/s1",
     ],
     "A focus into an ARIA radio group: JAWS says an empty state after the group on ARIA-AT's \
      pages (\"Pizza Crust group | | Regular crust radio button\" [obs, round-aria4]), not on \
@@ -1621,6 +1630,34 @@ divergences! {
      ...\" without the group's role in another [obs, 1127/s1]. Okur says the page and the group, \
      as on the four groups after it.",
     "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
+
+    Difference::Step => [
+        "2475-aria-rating-radio-group-nav-to-next-checked-radio-f-vc/s1",
+        "2476-aria-rating-radio-group-nav-to-next-checked-radio-a-vc/s1",
+        "2477-aria-rating-radio-group-nav-to-next-checked-radio-down-vc/s1",
+        "2478-aria-rating-radio-group-nav-to-prev-checked-radio-shift-f-vc/s1",
+        "2479-aria-rating-radio-group-nav-to-prev-checked-radio-shift-a-vc/s1",
+        "2480-aria-rating-radio-group-nav-to-prev-checked-radio-up-vc/s1",
+        "2492-aria-rating-radio-group-req-info-about-checked-radio-ins-tab-vc/s1",
+        "2493-aria-rating-radio-group-req-info-about-checked-radio-ins-up-vc/s1",
+    ],
+    "A checked radio button of ARIA-AT's rating group reached from inside the group (F, A, the \
+     arrows, Insert+Tab and Insert+Up): JAWS says it without its place, \"two stars radio \
+     button checked\" [obs, round-aria17], where on the other ARIA radio groups, Tab into this \
+     one and the probe's groups (1127, 1128) it says the place. Okur says it, as JAWS does \
+     elsewhere; ARIA-AT asks for it (SHOULD).",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
+
+    Difference::Step => [
+        "2521-aria-tabs-manual-activation-nav-to-previous-tab-tablist-up-vc/s1",
+        "2522-aria-tabs-manual-activation-nav-to-previous-tab-tablist-shift-f-vc/s1",
+        "2524-aria-tabs-manual-activation-nav-to-next-selected-tab-tab-list-down-vc/s1",
+        "2525-aria-tabs-manual-activation-nav-to-next-selected-tab-tab-list-f-vc/s1",
+    ],
+    "Up, Down, F and Shift+F from one of a tab list's tabs to another: JAWS says the tab \
+     without its place, \"Maria Ahlefeldt Tab\" [obs, round-aria18], where Tab and F into the \
+     list say it (2502/s1). Okur says it each time; ARIA-AT asks for it (SHOULD).",
+    "the owner's rule for the web: Okur conveys what ARIA-AT asks, 2026-11-01";
 
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",

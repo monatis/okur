@@ -1601,13 +1601,46 @@ A step can be in more than one entry; all of its entries apply.
 ### ARIA radio groups' empty state and a first Tab's trials
 
 - Steps: `1127-web-aria-radio-group-labels/s2`, `1127-web-aria-radio-group-labels/s3`,
-  `1127-web-aria-radio-group-labels/s4`, `1127-web-aria-radio-group-labels/s5` (Okur also says
+  `1127-web-aria-radio-group-labels/s4`, `1127-web-aria-radio-group-labels/s5`,
+  `2444-aria-rating-radio-group-nav-forwards-in-to-radio-group-where-no-radio-buttons-are-checked-tab-vc/s1`,
+  `2449-aria-rating-radio-group-nav-back-in-to-radio-group-where-no-radio-buttons-are-checked-shift-tab-vc/s1`,
+  `2454-aria-rating-radio-group-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-tab-vc/s1`,
+  `2455-aria-rating-radio-group-nav-forwards-in-to-radio-group-where-first-radio-button-is-checked-tab-pc/s1`,
+  `2459-aria-rating-radio-group-nav-back-into-radio-group-where-last-radio-checked-shift-tab-vc/s1`,
+  `2460-aria-rating-radio-group-nav-back-into-radio-group-where-last-radio-checked-shift-tab-pc/s1`,
+  `2488-aria-rating-radio-group-req-info-about-unchecked-radio-ins-tab-vc/s1`,
+  `2490-aria-rating-radio-group-req-info-about-unchecked-radio-ins-tab-pc/s1`,
+  `2494-aria-rating-radio-group-req-info-about-checked-radio-ins-tab-pc/s1` (Okur also says
   an empty state); `1127-web-aria-radio-group-labels/s1` (whole step).
-- Why: JAWS says a silent empty state after an ARIA radio group on ARIA-AT's pages and not on
-  five groups labelled the same ways, the only difference found a DOM id on the group; Okur
-  keeps it as ARIA-AT's pages have it. The first Tab's trials disagree with each other
+- Why: JAWS says a silent empty state after ARIA-AT's radiogroup pages' groups, and not after
+  its rating group nor five groups labelled the same ways (1127); no property of the pages'
+  trees tells them apart (a DOM id, a focusable group, a label inside or out were each tried).
+  Okur keeps it on every ARIA radio group. The first Tab's trials disagree with each other
   ("MainRegion" in one, no group role in another).
 - Decided under the owner's rule on JAWS's accidents, 2026-11-01.
+
+### A checked rating radio button's place, and a tab's within its list
+
+- Steps: `2475-aria-rating-radio-group-nav-to-next-checked-radio-f-vc/s1`,
+  `2476-aria-rating-radio-group-nav-to-next-checked-radio-a-vc/s1`,
+  `2477-aria-rating-radio-group-nav-to-next-checked-radio-down-vc/s1`,
+  `2478-aria-rating-radio-group-nav-to-prev-checked-radio-shift-f-vc/s1`,
+  `2479-aria-rating-radio-group-nav-to-prev-checked-radio-shift-a-vc/s1`,
+  `2480-aria-rating-radio-group-nav-to-prev-checked-radio-up-vc/s1`,
+  `2492-aria-rating-radio-group-req-info-about-checked-radio-ins-tab-vc/s1`,
+  `2493-aria-rating-radio-group-req-info-about-checked-radio-ins-up-vc/s1`,
+  `2521-aria-tabs-manual-activation-nav-to-previous-tab-tablist-up-vc/s1`,
+  `2522-aria-tabs-manual-activation-nav-to-previous-tab-tablist-shift-f-vc/s1`,
+  `2524-aria-tabs-manual-activation-nav-to-next-selected-tab-tab-list-down-vc/s1`,
+  `2525-aria-tabs-manual-activation-nav-to-next-selected-tab-tab-list-f-vc/s1` (whole steps).
+- Difference: Okur says the place, "two stars radio button checked | 2 of 5", "Maria Ahlefeldt
+  Tab | 1 of 4".
+- Why: JAWS leaves the place out for a checked radio button of ARIA-AT's rating group reached
+  from inside the group, where it says it on the other ARIA radio groups and the probe's (1127,
+  1128); and for a tab reached from another tab of its list, where Tab and F into the list say
+  it (2502/s1). ARIA-AT asks for the place (SHOULD).
+- Decided under the owner's rules on JAWS's accidents and for the web (AGENTS.md §1.2),
+  2026-11-01.
 
 ## Considered and not accepted
 
