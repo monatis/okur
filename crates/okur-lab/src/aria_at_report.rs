@@ -21,8 +21,12 @@ pub enum Kind {
     State,
     /// The item's place, "2 of 3".
     Position,
-    /// How many there are, "of 3".
+    /// How many there are, "of 3", "5 columns", "with 4 items".
     Count,
+    /// A cell's row, "row 2".
+    RowNumber,
+    /// A cell's column, "column 1".
+    ColumnNumber,
     HeadingLevel,
 }
 
@@ -51,6 +55,10 @@ pub fn claim(phrase: &str) -> Option<Claim> {
         Kind::Role
     } else if has("position") {
         Kind::Position
+    } else if has("row number") {
+        Kind::RowNumber
+    } else if has("column number") {
+        Kind::ColumnNumber
     } else if has("number of") {
         Kind::Count
     } else if has("state") {
@@ -196,7 +204,17 @@ pub fn conveys(claim: &Claim, speech: &str) -> Option<bool> {
             state => says(speech, state),
         },
         Kind::Position => speech.contains(&format!(" {value} of ")),
-        Kind::Count => speech.contains(&format!(" of {value} ")),
+        Kind::Count => [
+            " of {v} ",
+            " {v} columns ",
+            " {v} rows ",
+            " {v} items ",
+            " with {v} ",
+        ]
+        .iter()
+        .any(|pattern| speech.contains(&pattern.replace("{v}", value))),
+        Kind::RowNumber => speech.contains(&format!(" row {value} ")),
+        Kind::ColumnNumber => speech.contains(&format!(" column {value} ")),
         Kind::HeadingLevel => speech.contains(&format!(" level {value} ")),
     };
     Some(met != claim.negated)
@@ -448,6 +466,25 @@ mod tests {
         assert_eq!(judge(Kind::Name, "Regular crust"), Some(true));
         assert_eq!(judge(Kind::Position, "1"), Some(true));
         assert_eq!(judge(Kind::Count, "3"), Some(true));
+        let grid = plain("grid with 5 columns and 7 rows | Date | column 1 row 2");
+        let on_grid = |kind, value: &str| {
+            conveys(
+                &Claim {
+                    kind,
+                    value: value.to_owned(),
+                    negated: false,
+                    partial: false,
+                },
+                &grid,
+            )
+        };
+        assert_eq!(on_grid(Kind::Count, "5"), Some(true));
+        assert_eq!(on_grid(Kind::RowNumber, "2"), Some(true));
+        assert_eq!(on_grid(Kind::ColumnNumber, "2"), Some(false));
+        assert_eq!(
+            claim("convey row number of the cell, '1'").map(|c| c.kind),
+            Some(Kind::RowNumber)
+        );
         assert_eq!(judge(Kind::Role, "no such role"), None);
     }
 }
