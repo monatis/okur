@@ -1,0 +1,54 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'main' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Role 'link' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Name 'Bottom' is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "UP,UP",
+    "instructions": "With the reading cursor on the 'Navigate backwards from here' link, navigate to the 'Bottom' link.",
+    "plan": "apg/main",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "4"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/main/main.setFocusAfterMain.html",
+  "id": "3092-aria-main-t4-up-up-vc",
+  "name": "ARIA-AT, Main Landmark: Navigate backwards into a main landmark in reading mode; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Up",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

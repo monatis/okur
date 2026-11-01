@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "main landmark boundary is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Role 'link' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Name 'Navigate forwards from here' is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "SHIFT_TAB",
+    "instructions": "With the reading cursor on the 'Top' link, navigate to the 'Navigate forwards from here' link.",
+    "plan": "apg/main",
+    "presentation_number": "commandC",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "10"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/main/main.setFocusOnTopLink.html",
+  "id": "3103-aria-main-t10-shift-tab-vc",
+  "name": "ARIA-AT, Main Landmark: Navigate backwards out of a main landmark in reading mode; Shift+Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

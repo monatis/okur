@@ -1,0 +1,54 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'main' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Role 'heading' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Heading level '1' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Name of the heading, 'Main Landmark', is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "SHIFT_ONE",
+    "instructions": "With the reading cursor on the 'Navigate backwards from here' link, navigate to the 'Main Landmark' heading.",
+    "plan": "apg/main",
+    "presentation_number": "commandB",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "15"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/main/main.setFocusAfterMain.html",
+  "id": "3108-aria-main-t15-shift-one-vc",
+  "name": "ARIA-AT, Main Landmark: Navigate backwards to a heading inside a main landmark in reading mode; Shift+1 in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+1",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

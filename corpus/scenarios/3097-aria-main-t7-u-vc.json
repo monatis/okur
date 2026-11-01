@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "main landmark boundary is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Role 'link' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Name 'Navigate backwards from here' is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "U",
+    "instructions": "With the reading cursor on the 'Bottom' link, navigate to the 'Navigate backwards from here' link.",
+    "plan": "apg/main",
+    "presentation_number": "commandB",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "7"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/main/main.setFocusOnBottomLink.html",
+  "id": "3097-aria-main-t7-u-vc",
+  "name": "ARIA-AT, Main Landmark: Navigate forwards out of a main landmark in reading mode; U in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "U",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
