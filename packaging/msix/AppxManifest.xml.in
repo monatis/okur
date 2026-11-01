@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Okur's MSIX package for the Microsoft Store: a full-trust desktop application
+  (docs/references/microsoft-store-release-research.md §8). build-msix.ps1 fills the @...@ values:
+  the identity from Partner Center's Product identity page (or a test identity), the version,
+  the minimum Windows build, and the uiAccess capability for the variant that declares it.
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap desktop rescap">
+
+  <Identity
+    Name="@NAME@"
+    Publisher="@PUBLISHER@"
+    Version="@VERSION@"
+    ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>Okur</DisplayName>
+    <PublisherDisplayName>@PUBLISHER_DISPLAY_NAME@</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="@MIN_VERSION@" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+
+  <Applications>
+    <!-- The screen reader itself; its window is none, so the tile only starts it. -->
+    <Application Id="Okur" Executable="okur-sr.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="Okur"
+        Description="Okur, a screen reader"
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png" />
+      <Extensions>
+        <!-- Starting after sign-in, which the user turns on or off in Windows' Settings. -->
+        <desktop:Extension Category="windows.startupTask" Executable="okur-sr.exe" EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="OkurAtSignIn" Enabled="true" DisplayName="Okur" />
+        </desktop:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+@UI_ACCESS@
+  </Capabilities>
+</Package>

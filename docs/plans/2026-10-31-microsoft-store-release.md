@@ -51,6 +51,10 @@ Its §8 lists the package's requirements and experiments E1-E7.
 1. Research the questions above into `docs/references/microsoft-store-release-research.md`.
 2. Build the package from CI or a script (`MakeAppx.exe` from the Windows SDK, or a maintained
    Rust packaging tool), with a test certificate for local installs.
+   Done 2026-11-01: `packaging/msix/build-msix.ps1` and `AppxManifest.xml.in` build an unsigned
+   full-trust package (`target/msix/okur-<version>-x64.msix`), with a test identity unless
+   Partner Center's is given, placeholder logos unless real ones are, and `-UiAccess` for the
+   variant experiment E1 needs. On the dev box, scripts run only as an encoded command.
 3. Run the Windows App Certification Kit on it.
 4. Install it on old-pc with the test certificate, which trusting is the owner's to approve
    (a system change), and check there: Okur starts, speaks, reads Chrome, Word and Excel,

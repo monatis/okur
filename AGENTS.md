@@ -170,6 +170,7 @@ These exist because an audit (2026-10-14) found parity claims that no tool had e
 - `skills/jaws-reference/`: Reusable automation skill for JAWS COM and speech extraction.
 - `.agents/`: Antigravity agent configuration (`mcp_config.json`, `hooks.json`) and the shared quality-gate scripts (`scripts/`) used by every harness and by CI.
 - `.github/workflows/`: CI.
+- `packaging/msix/`: the Microsoft Store package (MSIX): its manifest template and build script.
 - `.claude/`, `.mcp.json`, `CLAUDE.md`: Claude Code adapters for the same hooks, MCP servers, and the `jaws-reference` skill.
 
 ---
