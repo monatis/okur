@@ -358,8 +358,32 @@ impl ScreenReaderEngine {
     /// field, the focused control's row in a dialog box, the virtual cursor's line in a page,
     /// before its first character.
     pub(super) fn routed_place(&self) -> Option<OkurPlace> {
-        // The screen model's line with the focus, else where the PC cursor is.
+        // The screen model's line showing a text field's caret line, on the caret's character
+        // (round-1062c: the field's middle, where the PC cursor is, lies below Notepad's only
+        // line); else the line with the focus, else where the PC cursor is.
         if let Some(lines) = self.okur_screen_lines() {
+            let caret = self
+                .last_text
+                .as_ref()
+                .filter(|_| self.editing_text())
+                .and_then(|context| {
+                    let (field_lines, caret_line) = crate::editing::lines_and_caret_line(context);
+                    let text = field_lines
+                        .get(caret_line)
+                        .filter(|t| !t.trim().is_empty())?;
+                    let column = crate::editing::line_around_caret(context).0.chars().count();
+                    lines.iter().enumerate().find_map(|(line, shown)| {
+                        let at = shown.text.find(text.as_str())?;
+                        let before = shown.text.get(..at)?.chars().count();
+                        Some(OkurPlace::Text {
+                            line,
+                            column: Some(before + column),
+                        })
+                    })
+                });
+            if caret.is_some() {
+                return caret;
+            }
             let at = self.pc_cursor_point();
             let line = lines
                 .iter()

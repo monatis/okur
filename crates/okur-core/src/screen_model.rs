@@ -209,8 +209,20 @@ pub fn lines(runs: &[ScreenRun]) -> Vec<ScreenLine> {
                 state: None,
                 focused: false,
             };
+            let mut seen: Vec<&ScreenRun> = Vec::with_capacity(row.len());
             for run in row.into_iter().filter(|r| !r.text.is_empty()) {
                 line.focused |= run.focused;
+                // The same text at the same place twice is one run: UI Automation gave classic
+                // Notepad's line from its edit and again from the edit's text (round-1062c's
+                // screen text, "C:\Users\Ada\Downloads or ..." twice on one row).
+                let place = |r: &ScreenRun| (r.left, r.top, r.right, r.bottom);
+                if seen
+                    .iter()
+                    .any(|s| s.text == run.text && place(s) == place(run))
+                {
+                    continue;
+                }
+                seen.push(run);
                 if !line.text.is_empty() {
                     line.text.push(' ');
                 }
@@ -444,6 +456,19 @@ mod tests {
         ];
         // "Taller" reaches below "Notes", but the row's band is "Notes"'s.
         assert_eq!(texts(&lines(&runs)), ["Notes Taller", "Below"]);
+    }
+
+    /// Classic Notepad's line, given twice at one place (from its edit and the edit's text), is
+    /// on its row once (round-1062c's screen text); the same text elsewhere stays.
+    #[test]
+    fn the_same_text_at_the_same_place_is_one_run() {
+        let runs = vec![
+            accessible(r"C:\Users\Ada", 11, 54, 300, 81),
+            accessible(r"C:\Users\Ada", 11, 54, 300, 81),
+            accessible("OK", 310, 54, 340, 81),
+            accessible("OK", 350, 54, 380, 81),
+        ];
+        assert_eq!(texts(&lines(&runs)), [r"C:\Users\Ada OK OK"]);
     }
 
     /// The fixture of 994-997: the panel's painted text and the picture have no accessible
