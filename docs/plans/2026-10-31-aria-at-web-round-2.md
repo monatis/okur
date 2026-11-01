@@ -110,6 +110,15 @@ cursor's Insert+Up. Next from the open steps: JAWS's descriptive text, Insert+Al
 hint "Use JawsKey+Alt+R to read descriptive text" on a line whose element has a description
 (modal-dialog 2692; Word's open item too): find it in JAWS's documentation, then build it, the
 hint in Okur's name ("Okur Key"), which parity's name rule must learn to compare.
+round-probe-desc (1129, queued after round-probe-radio2) records what Insert+Alt+R does: no key
+map of JAWS 2025 binds it, though its hint names it.
+
+combobox-autocomplete-both-updated (round-aria32, imported): its MUST assertions neither JAWS nor
+Okur conveys yet: a field's text said "selected" where the page selected it (the completion an
+inline autocomplete adds as a letter is typed, "Alabama" after "a", and a focus onto a field
+whose text is selected); the combo box's "expanded" as the arrow moves into its list; the list
+box's name and role on each arrow within it. The first needs the field's selection at the focus
+and after a typed key (IA2 text selection), a feature of its own: plan it next to Say All's.
 
 ## 5. Then
 
