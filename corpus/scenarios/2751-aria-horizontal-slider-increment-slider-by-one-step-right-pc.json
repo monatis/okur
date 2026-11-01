@@ -1,0 +1,45 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "value129",
+        "phrase": "convey value '129'",
+        "priority": "1"
+      }
+    ],
+    "command": "right",
+    "instructions": "Starting at the 'Red' slider, set its value to 129.",
+    "plan": "apg/horizontal-slider",
+    "presentation_number": "10",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "incrementSliderByOneStep"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/horizontal-slider/slider-color-viewer.setFocusOnRedSlider.html",
+  "id": "2751-aria-horizontal-slider-increment-slider-by-one-step-right-pc",
+  "name": "ARIA-AT, Color Viewer Slider: Increment a slider by one step; Right in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Right",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

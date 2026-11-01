@@ -1,0 +1,64 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "0:minimumValue0 0:maximumValue255",
+    "assertions": [
+      {
+        "id": "roleSlider",
+        "phrase": "convey role 'slider'",
+        "priority": "1"
+      },
+      {
+        "id": "nameRed",
+        "phrase": "convey name 'Red'",
+        "priority": "1"
+      },
+      {
+        "id": "value128",
+        "phrase": "convey value '128'",
+        "priority": "1"
+      },
+      {
+        "id": "orientationHorizontal",
+        "phrase": "convey orientation 'horizontal'",
+        "priority": "3"
+      },
+      {
+        "id": "minimumValue0",
+        "phrase": "convey minimum value '0'",
+        "priority": "2"
+      },
+      {
+        "id": "maximumValue255",
+        "phrase": "convey maximum value '255'",
+        "priority": "2"
+      }
+    ],
+    "command": "ins+up",
+    "instructions": "Starting at the 'Red' slider, read information about the slider.",
+    "plan": "apg/horizontal-slider",
+    "presentation_number": "7.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutSlider"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/horizontal-slider/slider-color-viewer.setFocusOnRedSlider.html",
+  "id": "2748-aria-horizontal-slider-req-info-about-slider-ins-up-vc",
+  "name": "ARIA-AT, Color Viewer Slider: Request information about a slider; Insert+Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Up",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

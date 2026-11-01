@@ -1,0 +1,45 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "value138",
+        "phrase": "convey value '138'",
+        "priority": "1"
+      }
+    ],
+    "command": "pageUp",
+    "instructions": "Starting at the 'Red' slider, set its value to 138.",
+    "plan": "apg/horizontal-slider",
+    "presentation_number": "14",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "incrementSliderByTenSteps"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/horizontal-slider/slider-color-viewer.setFocusOnRedSlider.html",
+  "id": "2755-aria-horizontal-slider-increment-slider-by-ten-steps-page-up-pc",
+  "name": "ARIA-AT, Color Viewer Slider: Increment a slider by ten steps; PageUp in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "PageUp",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

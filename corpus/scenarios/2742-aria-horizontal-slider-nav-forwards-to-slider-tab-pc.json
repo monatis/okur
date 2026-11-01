@@ -1,0 +1,75 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleSlider",
+        "phrase": "convey role 'slider'",
+        "priority": "1"
+      },
+      {
+        "id": "nameRed",
+        "phrase": "convey name 'Red'",
+        "priority": "1"
+      },
+      {
+        "id": "value128",
+        "phrase": "convey value '128'",
+        "priority": "1"
+      },
+      {
+        "id": "orientationHorizontal",
+        "phrase": "convey orientation 'horizontal'",
+        "priority": "3"
+      },
+      {
+        "id": "minimumValue0",
+        "phrase": "convey minimum value '0'",
+        "priority": "2"
+      },
+      {
+        "id": "maximumValue255",
+        "phrase": "convey maximum value '255'",
+        "priority": "2"
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "tab",
+    "instructions": "Starting at the 'Navigate forwards from here' link, navigate to the 'Red' slider.",
+    "plan": "apg/horizontal-slider",
+    "presentation_number": "1.3",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToSlider"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/horizontal-slider/slider-color-viewer.setFocusBeforeRedSlider.html",
+  "id": "2742-aria-horizontal-slider-nav-forwards-to-slider-tab-pc",
+  "name": "ARIA-AT, Color Viewer Slider: Navigate forwards to a slider; Tab in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Tab",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

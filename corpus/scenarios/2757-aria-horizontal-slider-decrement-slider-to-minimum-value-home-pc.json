@@ -1,0 +1,45 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "value0",
+        "phrase": "convey value '0'",
+        "priority": "1"
+      }
+    ],
+    "command": "home",
+    "instructions": "Starting at the 'Red' slider, set its value to 0.",
+    "plan": "apg/horizontal-slider",
+    "presentation_number": "18",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "decrementSliderToMinimumValue"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/horizontal-slider/slider-color-viewer.setFocusOnRedSlider.html",
+  "id": "2757-aria-horizontal-slider-decrement-slider-to-minimum-value-home-pc",
+  "name": "ARIA-AT, Color Viewer Slider: Decrement a slider to the minimum value; Home in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Home",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

@@ -1,0 +1,45 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "value127",
+        "phrase": "convey value '127'",
+        "priority": "1"
+      }
+    ],
+    "command": "down",
+    "instructions": "Starting at the 'Red' slider, set its value to 127.",
+    "plan": "apg/horizontal-slider",
+    "presentation_number": "12.1",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "decrementSliderByOneStep"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/horizontal-slider/slider-color-viewer.setFocusOnRedSlider.html",
+  "id": "2754-aria-horizontal-slider-decrement-slider-by-one-step-down-pc",
+  "name": "ARIA-AT, Color Viewer Slider: Decrement a slider by one step; Down in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
