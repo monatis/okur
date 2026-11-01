@@ -1113,6 +1113,18 @@ divergences! {
      Okur says the place.",
     "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
 
+    Difference::OkurAlsoSays("\u{1d} heading level 3 \u{1e}") => [
+        "2128-aria-accordion-nav-forwards-to-expanded-accordion-header-tab-pc/s1",
+        "2134-aria-accordion-nav-back-to-expanded-accordion-header-shift-tab-pc/s1",
+        "2141-aria-accordion-nav-forwards-to-collapsed-accordion-header-tab-pc/s1",
+        "2148-aria-accordion-nav-back-to-collapsed-accordion-header-shift-tab-pc/s1",
+    ],
+    "Tab or Shift+Tab to an accordion's header, the virtual cursor off: JAWS says the button \
+     alone, \"Billing Address Button collapsed\", where ARIA-AT's accordion plan requires its \
+     heading role and level (MUST). Okur says them, as JAWS does in the virtual cursor: \
+     \"Billing Address heading level 3 | Button collapsed\".",
+    "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
+
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
     ],

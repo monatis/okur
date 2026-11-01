@@ -516,11 +516,14 @@ impl SpeechFormatter {
                     .unwrap_or(msg::role_button().as_str());
                 let mut parts = name_and_role(name, role);
                 // A button that is its heading's only content says the heading after its name,
-                // "Billing Address heading level 3 | Button expanded", in the virtual cursor;
-                // with it off, the button alone [obs, round-aria5, 2122/s1, 2126/s1, 2128/s1].
+                // "Billing Address heading level 3 | Button expanded", in the virtual cursor
+                // [obs, round-aria5, 2122/s1, 2126/s1]. With it off JAWS says the button alone
+                // (2128/s1), where ARIA-AT requires the heading and its level: Okur says them
+                // on a focus too (the owner's rule for the web, 2026-11-01); Insert+Up and
+                // Insert+Tab keep JAWS's form.
                 let heading = attr("heading_level")
                     .and_then(|l| l.parse::<u32>().ok())
-                    .filter(|_| !said.virtual_off);
+                    .filter(|_| !said.virtual_off || (said.by_focus && !said.asked));
                 if let Some(level) = heading {
                     parts.insert(1, Part::role(msg::role_heading_level(level).render()));
                 }

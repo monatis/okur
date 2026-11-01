@@ -1222,6 +1222,19 @@ A step can be in more than one entry; all of its entries apply.
   "File menu | New Ctrl+N | To move through items press up or down arrow." [obs, 1084/s5].
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-29.
 
+### An accordion header's heading with the PC cursor
+
+- Steps: `2128-aria-accordion-nav-forwards-to-expanded-accordion-header-tab-pc/s1`,
+  `2134-aria-accordion-nav-back-to-expanded-accordion-header-shift-tab-pc/s1`,
+  `2141-aria-accordion-nav-forwards-to-collapsed-accordion-header-tab-pc/s1`,
+  `2148-aria-accordion-nav-back-to-collapsed-accordion-header-shift-tab-pc/s1`.
+- Difference: Okur also says "heading level 3" after the header's name.
+- Why: Tab or Shift+Tab to an accordion's header with the virtual cursor off, JAWS says the
+  button alone, "Billing Address Button collapsed" [obs, round-aria5], where ARIA-AT's accordion
+  plan requires the heading role and level (MUST). Okur says them, as JAWS does in the virtual
+  cursor.
+- Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row
