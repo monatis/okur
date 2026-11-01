@@ -30,14 +30,14 @@ impl AppModule for WordDocument {
                 .is_some_and(|app| app.eq_ignore_ascii_case(super::word_ribbon::WORD))
     }
 
-    /// Back from Office's own context menu (Shift+F10), the document says "Edit" alone [obs,
-    /// 1125/s4].
+    /// Back from Office's own context menu (Shift+F10), the document says "Edit" alone, nothing
+    /// of leaving menus [obs, 1125/s4].
     fn focus(&mut self, focus: &FocusEvent, cx: &mut AppContext<'_>) -> FocusResponse {
         if !cx.office_menu_closed {
             return FocusResponse::Pass;
         }
         cx.note_window(focus);
-        FocusResponse::Speak(crate::announcement::Announcement::new(vec![
+        FocusResponse::SpeakWhole(crate::announcement::Announcement::new(vec![
             crate::announcement::Line::new(vec![crate::announcement::Part::role(
                 msg::role_edit().as_str(),
             )]),

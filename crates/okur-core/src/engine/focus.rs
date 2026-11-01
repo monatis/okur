@@ -321,19 +321,17 @@ impl ScreenReaderEngine {
         } else {
             self.leaving_menus_message()
         };
-        // Office's own context menu closed: the focus it gives back is said again, with nothing
-        // of leaving menus, JAWS's not having been in them [obs, 1125/s4].
-        let office_menu_closed =
-            !focus.in_document && !in_menu && self.menus.in_office_popup() && self.menus.end();
-        if office_menu_closed {
-            self.native_focus.forget_last();
-        }
+        // Office's own context menu, which the application's module may say its own way of
+        // leaving: Word's document says "Edit" alone [obs, 1125/s4], Excel's cell is left as
+        // any menu, "Leaving menus | Weekdays | B 1" [obs, 1122/s4].
+        let office_popup = self.menus.in_office_popup();
         // A popup the ribbon's menus opened (Word's Styles gallery) is not left by the ribbon's
         // own focus [obs, 1064/s3-s7].
         let leaving_menus =
             (!focus.in_document && !in_menu && self.menus.in_menu_mode() && self.menus.end())
                 || ribbon_left
                 || std::mem::take(&mut self.menus_left_unsaid);
+        let office_menu_closed = office_popup && leaving_menus;
         // The control the menus give the focus back to is said again [obs, 302/s8, 547/s8].
         if leaving_menus {
             self.native_focus.forget_last();

@@ -65,8 +65,8 @@ pub struct AppContext<'a> {
     /// The focus is the one last said, reported again with no key pressed since: Excel's
     /// cell comes back from Go To in four reports, said once [obs, 1124/s3].
     pub repeat: bool,
-    /// Office's own context menu closed, giving the focus back: JAWS says no "Leaving menus",
-    /// and Word's document says "Edit" [obs, 1125/s4].
+    /// Office's own context menu closed, giving the focus back: Word's document says "Edit"
+    /// alone, with nothing of leaving menus [obs, 1125/s4].
     pub office_menu_closed: bool,
 }
 

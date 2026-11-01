@@ -1297,8 +1297,8 @@ pub struct Menus {
     on_bar_item: bool,
     /// What kind of popup just opened, which a context menu is read by.
     popup_kind: PopupKind,
-    /// The context menu is Office's own (NetUI), which JAWS reads as a focus moving, not as
-    /// its menus: closed, it says nothing of leaving them [obs, 1125/s4].
+    /// The context menu is Office's own (NetUI), whose leaving the application's module may say
+    /// its own way (Word's document, "Edit" [obs, 1125/s4]).
     office_popup: bool,
 }
 
@@ -2100,7 +2100,7 @@ Undo  Unavailable"
             m.focus("Paste", true, None).map(|s| norm(&s)),
             Some(norm("Paste  \u{1d}Unavailable\u{1e} "))
         );
-        // It is Office's own, which JAWS does not read as its menus [obs, 1125/s4].
+        // It is Office's own, left as the application says [obs, 1125/s4].
         assert!(m.in_office_popup());
         assert!(m.end());
         assert!(!m.in_office_popup());

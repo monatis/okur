@@ -1139,19 +1139,6 @@ A step can be in more than one entry; all of its entries apply.
   choice comes as the page is drawn; JAWS's wording follows the events' order, which varies.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-11-01.
 
-### Excel's cell menu closed by the recorder
-
-- Steps: `1122-desktop-excel-context-menus/s2`.
-- Difference: Okur also says "Weekdays | B 1" after "Cut | To move through items press up or
-  down arrow.".
-- Why: Shift+F10 on an Excel cell opens Office's own context menu, which closes when the
-  clipboard changes (old-pc, 2026-11-01). In every trial it closed 2.5 s into the step, as the
-  recorder copied JAWS's speech history through the clipboard (the step's speech had settled at
-  2.2 s), and the focus went back to the cell. What JAWS said of that came after the copy, in
-  neither step's transcript. Okur replays the closing the trace holds and says the cell. Recorded
-  again with the menu's steps read from the speech recorder alone (round-1122d).
-- Decided by the agent, 2026-10-31: the recorder's copy of the speech history closed the menu.
-
 ### Word's letter said twice, then phonetically, onto a new page
 
 - Steps: `1119-desktop-word-pages-by-character-and-word/s3`.
