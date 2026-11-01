@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'contentinfo' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Role 'link' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Name 'Top' is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "U",
+    "instructions": "With the reading cursor on the 'Navigate forwards from here' link, navigate to the 'Top' link.",
+    "plan": "apg/contentinfo",
+    "presentation_number": "commandD",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "1"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/contentinfo/contentinfo.setFocusBeforeContentinfo.html",
+  "id": "3045-aria-contentinfo-t1-u-vc",
+  "name": "ARIA-AT, Contentinfo Landmark: Navigate forwards into a contentinfo landmark in reading mode; U in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "U",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

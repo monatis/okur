@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "contentinfo landmark boundary is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Role 'link' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Name 'Navigate forwards from here' is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "UP",
+    "instructions": "With the reading cursor on the 'Top' link, navigate to the 'Navigate forwards from here' link.",
+    "plan": "apg/contentinfo",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "10"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/contentinfo/contentinfo.setFocusOnTopLink.html",
+  "id": "3055-aria-contentinfo-t10-up-vc",
+  "name": "ARIA-AT, Contentinfo Landmark: Navigate backwards out of a contentinfo landmark in reading mode; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

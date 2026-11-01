@@ -1,0 +1,44 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'contentinfo' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Text 'W3C ARIA Authoring Practices Task Force' is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "P",
+    "instructions": "With the reading cursor on the 'Navigate forwards from here' link, navigate to the paragraph inside the contentinfo landmark.",
+    "plan": "apg/contentinfo",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "13"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/contentinfo/contentinfo.setFocusBeforeContentinfo.html",
+  "id": "3059-aria-contentinfo-t13-p-vc",
+  "name": "ARIA-AT, Contentinfo Landmark: Navigate forwards to a paragraph inside a contentinfo landmark in reading mode; P in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "P",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

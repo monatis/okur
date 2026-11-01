@@ -1,0 +1,992 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Contentinfo Landmark Example - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "e3c427e48b5e6a10efada4c0582805c9334f1b6438a8c4dcecaca0ada6fb954e",
+    "captured_at_unix_ms": 1793520998187,
+    "node_count": 25,
+    "capture_ms": 187
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Contentinfo Landmark Example",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/contentinfo/contentinfo.setFocusAfterContentinfo.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -242610,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(245,245,245)",
+          "color": "rgb(51,122,183)",
+          "font-family": "Arial",
+          "font-size": "13.5pt"
+        }
+      },
+      {
+        "start": 1,
+        "end": 2,
+        "attributes": {
+          "background-color": "rgb(245,245,245)",
+          "color": "rgb(51,51,51)",
+          "font-family": "Arial",
+          "font-size": "13.5pt"
+        }
+      },
+      {
+        "start": 2,
+        "end": 3,
+        "attributes": {
+          "background-color": "rgb(245,245,245)",
+          "color": "rgb(35,82,124)",
+          "font-family": "Arial",
+          "font-size": "13.5pt",
+          "text-underline-style": "solid"
+        }
+      },
+      {
+        "start": 3,
+        "end": 4,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(51,51,51)",
+          "font-family": "Arial",
+          "font-size": "13.5pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 30,
+        "ia2_role": 30,
+        "name": "Navigate forwards from here",
+        "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/contentinfo/contentinfo.setFocusAfterContentinfo.html#beforelink",
+        "msaa_states": 5242880,
+        "ia2_states": 1024,
+        "unique_id": -242625,
+        "attributes": {
+          "display": "inline",
+          "id": "beforelink",
+          "name-from": "contents",
+          "tag": "a",
+          "text-align": "left"
+        },
+        "text": "Navigate forwards from here",
+        "lines": [
+          [
+            0,
+            27
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 27,
+            "attributes": {
+              "background-color": "rgb(245,245,245)",
+              "color": "rgb(51,122,183)",
+              "font-family": "Arial",
+              "font-size": "13.5pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Navigate forwards from here",
+            "msaa_states": 4194304,
+            "ia2_states": 1024,
+            "unique_id": -242615,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Navigate forwards from here",
+            "lines": [
+              [
+                0,
+                27
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 27,
+                "attributes": {
+                  "background-color": "rgb(245,245,245)",
+                  "color": "rgb(51,122,183)",
+                  "font-family": "Arial",
+                  "font-size": "13.5pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -242644,
+        "attributes": {
+          "class": "row",
+          "display": "block",
+          "tag": "footer",
+          "text-align": "left",
+          "xml-roles": "contentinfo"
+        },
+        "text": "￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(245,245,245)",
+              "color": "rgb(51,122,183)",
+              "font-family": "Arial",
+              "font-size": "13.5pt"
+            }
+          },
+          {
+            "start": 1,
+            "end": 3,
+            "attributes": {
+              "background-color": "rgb(245,245,245)",
+              "color": "rgb(51,51,51)",
+              "font-family": "Arial",
+              "font-size": "13.5pt"
+            }
+          },
+          {
+            "start": 3,
+            "end": 4,
+            "attributes": {
+              "background-color": "rgb(245,245,245)",
+              "color": "rgb(51,122,183)",
+              "font-family": "Arial",
+              "font-size": "13.5pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 30,
+            "ia2_role": 30,
+            "name": "Top",
+            "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/contentinfo/contentinfo.setFocusAfterContentinfo.html#top",
+            "msaa_states": 5242880,
+            "ia2_states": 1024,
+            "unique_id": -242607,
+            "attributes": {
+              "display": "inline",
+              "id": "top",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "text": "Top",
+            "lines": [
+              [
+                0,
+                3
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 3,
+                "attributes": {
+                  "background-color": "rgb(245,245,245)",
+                  "color": "rgb(51,122,183)",
+                  "font-family": "Arial",
+                  "font-size": "13.5pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Top",
+                "msaa_states": 4194304,
+                "ia2_states": 1024,
+                "unique_id": -242636,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Top",
+                "lines": [
+                  [
+                    0,
+                    3
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 3,
+                    "attributes": {
+                      "background-color": "rgb(245,245,245)",
+                      "color": "rgb(51,122,183)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -242604,
+            "attributes": {
+              "class": "col-xs-12 col-sm-9 col-md-9 col-lg-10",
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "W3C ARIA Authoring Practices Task Force",
+            "lines": [
+              [
+                0,
+                39
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 39,
+                "attributes": {
+                  "background-color": "rgb(245,245,245)",
+                  "color": "rgb(51,51,51)",
+                  "font-family": "Arial",
+                  "font-size": "13.5pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "W3C ARIA Authoring Practices Task Force",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -242600,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "W3C ARIA Authoring Practices Task Force",
+                "lines": [
+                  [
+                    0,
+                    39
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 39,
+                    "attributes": {
+                      "background-color": "rgb(245,245,245)",
+                      "color": "rgb(51,51,51)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -242617,
+            "attributes": {
+              "class": "col-xs-12 col-sm-3 col-md-3 col-lg-2",
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "Copyright 2021",
+            "lines": [
+              [
+                0,
+                14
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 14,
+                "attributes": {
+                  "background-color": "rgb(245,245,245)",
+                  "color": "rgb(51,51,51)",
+                  "font-family": "Arial",
+                  "font-size": "13.5pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Copyright 2021",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -242643,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Copyright 2021",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(245,245,245)",
+                      "color": "rgb(51,51,51)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 30,
+            "ia2_role": 30,
+            "name": "Bottom",
+            "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/contentinfo/contentinfo.setFocusAfterContentinfo.html#bottom",
+            "msaa_states": 5242880,
+            "ia2_states": 1024,
+            "unique_id": -242631,
+            "attributes": {
+              "display": "inline",
+              "id": "bottom",
+              "name-from": "contents",
+              "tag": "a",
+              "text-align": "left"
+            },
+            "text": "Bottom",
+            "lines": [
+              [
+                0,
+                6
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 6,
+                "attributes": {
+                  "background-color": "rgb(245,245,245)",
+                  "color": "rgb(51,122,183)",
+                  "font-family": "Arial",
+                  "font-size": "13.5pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Bottom",
+                "msaa_states": 4194304,
+                "ia2_states": 1024,
+                "unique_id": -242621,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Bottom",
+                "lines": [
+                  [
+                    0,
+                    6
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 6,
+                    "attributes": {
+                      "background-color": "rgb(245,245,245)",
+                      "color": "rgb(51,122,183)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 30,
+        "ia2_role": 30,
+        "name": "Navigate backwards from here",
+        "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/contentinfo/contentinfo.setFocusAfterContentinfo.html#afterlink",
+        "msaa_states": 5242884,
+        "ia2_states": 1024,
+        "unique_id": -242626,
+        "attributes": {
+          "display": "inline",
+          "id": "afterlink",
+          "name-from": "contents",
+          "tag": "a",
+          "text-align": "left"
+        },
+        "text": "Navigate backwards from here",
+        "lines": [
+          [
+            0,
+            28
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 28,
+            "attributes": {
+              "background-color": "rgb(245,245,245)",
+              "color": "rgb(35,82,124)",
+              "font-family": "Arial",
+              "font-size": "13.5pt",
+              "text-underline-style": "solid"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Navigate backwards from here",
+            "msaa_states": 4194304,
+            "ia2_states": 1024,
+            "unique_id": -242614,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Navigate backwards from here",
+            "lines": [
+              [
+                0,
+                28
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 28,
+                "attributes": {
+                  "background-color": "rgb(245,245,245)",
+                  "color": "rgb(35,82,124)",
+                  "font-family": "Arial",
+                  "font-size": "13.5pt",
+                  "text-underline-style": "solid"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1060,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -242603,
+        "attributes": {
+          "class": "col-xs-12 col-sm-9 col-md-6 col-lg-7",
+          "display": "block",
+          "tag": "div",
+          "text-align": "left"
+        },
+        "text": "￼",
+        "lines": [
+          [
+            0,
+            1
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(51,51,51)",
+              "font-family": "Arial",
+              "font-size": "13.5pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1069,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -242602,
+            "attributes": {
+              "display": "block",
+              "tag": "main",
+              "text-align": "left",
+              "xml-roles": "main"
+            },
+            "text": "￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(51,51,51)",
+                  "font-family": "Arial",
+                  "font-size": "23.5pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 3,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(51,51,51)",
+                  "font-family": "Arial",
+                  "font-size": "13.5pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Contentinfo Landmark",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -242611,
+                "attributes": {
+                  "display": "block",
+                  "id": "id1",
+                  "level": "1",
+                  "name-from": "contents",
+                  "tag": "h1",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  1,
+                  0,
+                  0
+                ],
+                "text": "Contentinfo Landmark",
+                "lines": [
+                  [
+                    0,
+                    20
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 20,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(51,51,51)",
+                      "font-family": "Arial",
+                      "font-size": "23.5pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Contentinfo Landmark",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -242601,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Contentinfo Landmark",
+                    "lines": [
+                      [
+                        0,
+                        20
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 20,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "23.5pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -242630,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "A ￼ landmark is a way to identify common information at the bottom of each page within a website, typically called the \"footer\" of the page, including information such as copyrights and links to privacy and accessibility statements.",
+                "lines": [
+                  [
+                    0,
+                    41
+                  ],
+                  [
+                    41,
+                    98
+                  ],
+                  [
+                    98,
+                    151
+                  ],
+                  [
+                    151,
+                    207
+                  ],
+                  [
+                    207,
+                    232
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(51,51,51)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt"
+                    }
+                  },
+                  {
+                    "start": 2,
+                    "end": 3,
+                    "attributes": {
+                      "background-color": "rgb(249,242,244)",
+                      "color": "rgb(199,37,78)",
+                      "font-family": "Consolas",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 3,
+                    "end": 232,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(51,51,51)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "A ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -242634,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "A ",
+                    "lines": [
+                      [
+                        0,
+                        2
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 2,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1065,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -242624,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "code",
+                      "text-align": "left"
+                    },
+                    "text": "contentinfo",
+                    "lines": [
+                      [
+                        0,
+                        11
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 11,
+                        "attributes": {
+                          "background-color": "rgb(249,242,244)",
+                          "color": "rgb(199,37,78)",
+                          "font-family": "Consolas",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "contentinfo",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -242627,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "contentinfo",
+                        "lines": [
+                          [
+                            0,
+                            11
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 11,
+                            "attributes": {
+                              "background-color": "rgb(249,242,244)",
+                              "color": "rgb(199,37,78)",
+                              "font-family": "Consolas",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " landmark is a way to identify common information at the bottom of each page within a website, typically called the \"footer\" of the page, including information such as copyrights and links to privacy and accessibility statements.",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -242632,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " landmark is a way to identify common information at the bottom of each page within a website, typically called the \"footer\" of the page, including information such as copyrights and links to privacy and accessibility statements.",
+                    "lines": [
+                      [
+                        0,
+                        38
+                      ],
+                      [
+                        38,
+                        95
+                      ],
+                      [
+                        95,
+                        148
+                      ],
+                      [
+                        148,
+                        204
+                      ],
+                      [
+                        204,
+                        229
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 229,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -242635,
+                "attributes": {
+                  "display": "block",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(51,51,51)",
+                      "font-family": "Arial",
+                      "font-size": "13.5pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 43,
+                    "ia2_role": 43,
+                    "name": "Run Test Setup",
+                    "msaa_states": 1,
+                    "ia2_states": 1024,
+                    "unique_id": -242606,
+                    "attributes": {
+                      "class": "button-run-test-setup",
+                      "display": "inline-block",
+                      "name-from": "contents",
+                      "tag": "button",
+                      "text-align": "center"
+                    },
+                    "text": "Run Test Setup",
+                    "lines": [
+                      [
+                        0,
+                        14
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 14,
+                        "attributes": {
+                          "background-color": "rgb(250,250,250)",
+                          "color": "rgb(51,51,51)",
+                          "font-family": "Arial",
+                          "font-size": "13.5pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
