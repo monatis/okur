@@ -1235,6 +1235,17 @@ A step can be in more than one entry; all of its entries apply.
   cursor.
 - Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
 
+### A spin button's name and role with the PC cursor's Insert+Up
+
+- Steps: `2731-aria-quantity-spin-button-req-info-about-spinbutton-ins-up-pc/s1`,
+  `2735-aria-quantity-spin-button-req-info-about-invalid-spinbutton-ins-up-pc/s1`.
+- Difference: Okur also says "Adults edit spin box" (and "Has Error | invalid entry" for an
+  invalid value) before the value.
+- Why: Insert+Up on a spin button with the virtual cursor off, JAWS says its value alone, "1",
+  "9" [obs, round-aria25], where ARIA-AT's quantity-spin-button plan requires its name, role and
+  invalid state (MUST). Okur says them, as JAWS's Insert+Up does in the virtual cursor.
+- Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
+
 ## Considered and not accepted
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row

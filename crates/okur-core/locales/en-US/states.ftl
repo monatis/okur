@@ -3,6 +3,10 @@
 
 state-checked = checked
 state-not-checked = not checked
+# A field whose value is invalid (aria-invalid): "Adults edit spin box | invalid entry".
+state-invalid-entry = invalid entry
+# A field with an error message (aria-errormessage), said before its state.
+state-has-error = Has Error
 # A tri-state check box between checked and not [obs, round-aria2, 2000/s1].
 state-partially-checked = partially checked
 # A native tree item that shows its children.

@@ -107,6 +107,7 @@ mod msaa_role {
 mod ia2_state {
     pub const EDITABLE: i32 = 0x8;
     pub const HORIZONTAL: i32 = 0x10;
+    pub const INVALID_ENTRY: i32 = 0x40;
     pub const VERTICAL: i32 = 0x20000;
     pub const MODAL: i32 = 0x100;
     pub const MULTI_LINE: i32 = 0x200;
@@ -491,6 +492,15 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     // aria-roledescription, said in place of some roles.
     if let Some(description) = attr("roledescription") {
         set_attr("roledescription", description);
+    }
+    // A field whose value is invalid (aria-invalid), and one with an error message
+    // (aria-errormessage): "Adults edit spin box | Has Error | invalid entry | 9" [obs,
+    // round-aria25, 2732/s1].
+    if node.ia2_states & ia2_state::INVALID_ENTRY != 0 {
+        set_attr("invalid", "true".to_owned());
+    }
+    if node.relations.get("error").is_some_and(|t| !t.is_empty()) {
+        set_attr("has_error", "true".to_owned());
     }
     // aria-flowto: the objects this one flows to, by their IA2 uniqueIDs (Equals follows them).
     if let Some(targets) = node.relations.get("flowsTo").filter(|t| !t.is_empty()) {

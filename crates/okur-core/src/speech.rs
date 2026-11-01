@@ -430,6 +430,14 @@ impl SpeechFormatter {
                     Part::new(PartKind::Name, name),
                     Part::role(kind),
                 ]));
+                // An invalid value: "Has Error" where it has an error message, then "invalid
+                // entry" [obs, round-aria25, 2732/s1, 2733/s1].
+                if attr("has_error") == Some("true") {
+                    lines.push(Line::of(PartKind::Text, msg::state_has_error()));
+                }
+                if attr("invalid") == Some("true") {
+                    lines.push(Line::new(vec![Part::state(msg::state_invalid_entry())]));
+                }
                 if required {
                     lines.push(Line::new(vec![Part::state(msg::state_required())]));
                 }

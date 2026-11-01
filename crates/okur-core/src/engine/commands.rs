@@ -1004,7 +1004,23 @@ impl ScreenReaderEngine {
                 )
             })
         {
-            // A field by its text, as a native one's line: "1" [obs, round-aria25, 2731/s1].
+            // A spin button whole, its name, role and state with its value, where JAWS says
+            // the value alone ("1") and ARIA-AT requires the rest (MUST): "Adults edit spin box
+            // | 1" (the owner's rule for the web, 2026-11-01) [obs, round-aria25, 2731/s1].
+            if node.role == crate::aom::Role::Edit
+                && node
+                    .attributes
+                    .get("spinbutton")
+                    .is_some_and(|s| s == "true")
+            {
+                let said = crate::speech::FocusSaid {
+                    virtual_off: true,
+                    by_focus: true,
+                    asked: false,
+                };
+                return SpeechFormatter::control_focus(node, |_| true, said).render_all();
+            }
+            // A field by its text, as a native one's line: "1".
             if node.role == crate::aom::Role::Edit {
                 return node
                     .value

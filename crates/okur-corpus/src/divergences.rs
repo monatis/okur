@@ -1125,6 +1125,30 @@ divergences! {
      \"Billing Address heading level 3 | Button collapsed\".",
     "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
 
+    Difference::OkurAlsoSays("Adults \u{1d} edit spin box \u{1e}") => [
+        "2731-aria-quantity-spin-button-req-info-about-spinbutton-ins-up-pc/s1",
+        "2735-aria-quantity-spin-button-req-info-about-invalid-spinbutton-ins-up-pc/s1",
+    ],
+    "Insert+Up on a spin button, the virtual cursor off: JAWS says its value alone, \"1\", where \
+     ARIA-AT's quantity-spin-button plan requires its name and role (MUST). Okur says them: \
+     \"Adults edit spin box | 1\".",
+    "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
+
+    Difference::OkurAlsoSays("Has Error") => [
+        "2735-aria-quantity-spin-button-req-info-about-invalid-spinbutton-ins-up-pc/s1",
+    ],
+    "Insert+Up on a spin button holding an invalid value, the virtual cursor off: JAWS says \
+     its value alone, \"9\", where ARIA-AT's plan requires its invalid state (MUST). Okur says \
+     it as JAWS does in the virtual cursor: \"Adults edit spin box | Has Error | invalid entry \
+     | 9\".",
+    "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
+
+    Difference::OkurAlsoSays("\u{1d}invalid entry\u{1e}") => [
+        "2735-aria-quantity-spin-button-req-info-about-invalid-spinbutton-ins-up-pc/s1",
+    ],
+    "The same step's \"invalid entry\": see the entry above.",
+    "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
+
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
     ],
