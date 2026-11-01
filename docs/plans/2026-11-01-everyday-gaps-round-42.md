@@ -20,6 +20,11 @@ the Okur cursor from screen text routed onto the caret's line
 Next: round-1133b's import, Excel's row list (Insert+Shift+R) and Insert+F, the totals readers;
 §1.3 onwards wait for the owner (a test certificate on old-pc, the identity, Defender's flag).
 
+Later (2026-11-01, night): Excel's Insert+Shift+R, Insert+F and Ctrl+Shift+D (1133, 9 of 9);
+Partner Center's identity, Okur's logo and PRIVACY.md in the package
+([`../handoff/2026-11-01-excel-lists-format-and-store-identity.md`](../handoff/2026-11-01-excel-lists-format-and-store-identity.md)).
+Next: the totals readers, titles from defined names; the Store's experiments wait for the owner.
+
 ## 1. The first Store release (dev box)
 
 [`2026-10-31-microsoft-store-release.md`](2026-10-31-microsoft-store-release.md), its steps in
