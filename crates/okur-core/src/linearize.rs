@@ -925,7 +925,12 @@ impl<'a> Builder<'a> {
                     Some(keys) => format!("{alt} {keys}"),
                     None => alt.clone(),
                 };
-                let speech = format!("{named}\n{}", role_marker(msg::role_graphic().as_str()));
+                // aria-roledescription takes the role's place, as Chrome's "Unlabeled graphic"
+                // for an image without alternative text [obs, round-aria30, 2882/s1].
+                let role = node
+                    .role_description()
+                    .unwrap_or(msg::role_graphic().as_str());
+                let speech = format!("{named}\n{}", role_marker(role));
                 let off = self.emit(node.id, node.role.clone(), &alt, speech);
                 self.buffer.graphics.push(off);
             }

@@ -371,6 +371,25 @@ impl SpeechFormatter {
         use crate::aom::Role;
         let attr = |k: &str| node.attributes.get(k).map(String::as_str);
         let name = node.name.as_deref().unwrap_or_default().trim();
+        // Its aria-keyshortcuts follow its name in the virtual cursor, not with it off: "Skip
+        // To Content Alt+0 button menu" [obs, round-aria30, 2874/s1, 2876/s1; 2877/s1].
+        let keyed;
+        let name = match attr("keyshortcuts").filter(|_| !said.virtual_off && !name.is_empty()) {
+            Some(keys) => {
+                keyed = format!("{name} {keys}");
+                keyed.as_str()
+            }
+            None => name,
+        };
+        // Its description follows what it says, on a quick key and a focus alike: "Show
+        // Headings Button | Visually outline the landmarks…" [obs, round-aria30, 2879/s1,
+        // 2880/s1, 2881/s1].
+        let described = |mut lines: Vec<Line>| {
+            if let Some(d) = attr("description").filter(|d| !d.trim().is_empty()) {
+                lines.push(Line::of(PartKind::Description, d));
+            }
+            Announcement::new(lines)
+        };
         let required = attr("required") == Some("true");
         let checked = |states: &crate::aom::NodeStates| {
             states.check_word().unwrap_or_else(msg::state_not_checked)
@@ -516,7 +535,7 @@ impl SpeechFormatter {
                 };
                 let mut parts = name_and_role(name, msg::role_toggle_button().as_str());
                 parts.push(Part::state(pressed));
-                Announcement::new(vec![Line::new(parts)])
+                described(vec![Line::new(parts)])
             }
             Role::Button => {
                 let role = node
@@ -547,7 +566,7 @@ impl SpeechFormatter {
                     parts.push(Part::new(PartKind::Value, popup));
                 }
                 parts.extend(node.current_phrase().map(Part::state));
-                Announcement::new(vec![Line::new(parts)])
+                described(vec![Line::new(parts)])
             }
             // "Red left right slider | 128", its group named by a quick key to it, not by its
             // focus [obs, round-aria26, 2740/s1, 2741/s1].
@@ -587,7 +606,7 @@ impl SpeechFormatter {
                     parts.push(Part::text(" "));
                     parts.push(Part::state(state));
                 }
-                Announcement::new(vec![Line::new(parts)])
+                described(vec![Line::new(parts)])
             }
             _ => Announcement::new(vec![Line::of(PartKind::Name, name)]),
         }
