@@ -1,0 +1,59 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'meter' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name 'Central Processing Unit (CPU) Usage' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Numeric value '36.166519936288' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Minimum value '0' is conveyed",
+        "priority": "2"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "Maximum value '100' is conveyed",
+        "priority": "2"
+      }
+    ],
+    "command": "DOWN",
+    "instructions": "With the reading cursor on the 'Navigate forwards from here' link, navigate to the meter.",
+    "plan": "apg/meter",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "1"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/meter/meter.setFocusBeforeMeter.html",
+  "id": "3109-aria-meter-t1-down-vc",
+  "name": "ARIA-AT, Meter: Navigate forwards to a meter in reading mode; Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

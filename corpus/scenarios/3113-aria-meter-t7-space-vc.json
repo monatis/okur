@@ -1,0 +1,39 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Updated value is not conveyed; the screen reader stays silent",
+        "priority": "1"
+      }
+    ],
+    "command": "SPACE",
+    "instructions": "With the reading cursor on the 'Change Value' button, activate the button to trigger a meter update.",
+    "plan": "apg/meter",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "7"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/meter/meter.setFocusOnButton.html",
+  "id": "3113-aria-meter-t7-space-vc",
+  "name": "ARIA-AT, Meter: Trigger a meter update in reading mode; Space in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Space",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
