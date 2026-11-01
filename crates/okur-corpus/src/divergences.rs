@@ -1660,6 +1660,13 @@ divergences! {
      list say it (2502/s1). Okur says it each time; ARIA-AT asks for it (SHOULD).",
     "the owner's rule for the web: Okur conveys what ARIA-AT asks, 2026-11-01";
 
+    Difference::JawsSaysBeforeItsDialog => ["1133-desktop-excel-information-keys/s2"],
+    "Before its list of the row's cells in Excel (Insert+Shift+R), JAWS says its main window's \
+     version and the workbook's window, \"JAWS Version 2025.2505.43 | sr-excel-fixture.xlsx - \
+     Excel\", in every trial of round-1133c (in round-1133b, once the cell with a list's hint \
+     instead), as before its lists in Word. Okur's list opens without them.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
+
     Difference::Step => [
         "1124-desktop-excel-dialogs/s4",
         "1124-desktop-excel-dialogs/s5",
