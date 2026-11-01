@@ -1,0 +1,32 @@
+{
+  "id": "1134-desktop-excel-named-titles",
+  "name": "Excel: a workbook whose name \"Title\" on A1 gives its row and column titles (JAWS's help, Excel Row and Column Title Reading), read with no title key pressed: Down to A2, Right to B2, Down to B3, Say Column and Row Title (CapsLock+Alt+Shift+C and R, the laptop layout's), Right to C3, Up to C2. JAWS keeps titles in its settings for the workbook, which each trial starts without (jaws_forget)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel-titles.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-titles.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-titles.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "Right"},
+    {"id": "s3", "type": "key", "command": "Down"},
+    {"id": "s4", "type": "key", "command": "CapsLock+Alt+Shift+C"},
+    {"id": "s5", "type": "key", "command": "CapsLock+Alt+Shift+R"},
+    {"id": "s6", "type": "key", "command": "Right"},
+    {"id": "s7", "type": "key", "command": "Up"}
+  ]
+}
