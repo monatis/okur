@@ -123,4 +123,10 @@ feature of its own: plan it next to Say All's.
 
 ## 5. Then
 
+Status, 2026-11-01, afternoon: every ARIA-AT plan with JAWS commands is imported, and five probes
+(1127-1131) answered what they left
+([`../handoff/2026-11-01-aria-at-complete-and-probes.md`](../handoff/2026-11-01-aria-at-complete-and-probes.md)).
+Open: a dialog's start line (1129/s11, its own slice), the owner's two choices (containers on
+quick keys; a field's selected text on a focus).
+
 Excel's round-1122b (typing in cells, its dialogs, Word's context menu), when Excel resumes.
