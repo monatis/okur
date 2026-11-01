@@ -1125,13 +1125,14 @@ A step can be in more than one entry; all of its entries apply.
   apart. Okur says the place.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-11-01.
 
-### JAWS's version before Excel's row list
+### What JAWS says before Excel's lists
 
-- Steps: `1133-desktop-excel-information-keys/s2`.
-- Difference: before its list of the row's cells (Insert+Shift+R), JAWS says its main window's
-  version and the workbook's window, "JAWS Version 2025.2505.43 | sr-excel-fixture.xlsx - Excel",
-  in every trial of round-1133c (in round-1133b, once the cell with a list's hint instead), as
-  before its lists in Word. Okur's list opens without them.
+- Steps: `1133-desktop-excel-information-keys/s2`, `1133-desktop-excel-information-keys/s7`.
+- Difference: before its lists of the row's cells (Insert+Shift+R) and of the visible cells with
+  data (Ctrl+Shift+D), JAWS says its main window's version and the workbook's window, "JAWS
+  Version 2025.2505.43 | sr-excel-fixture.xlsx - Excel", or the cell with a list's hint,
+  "Weekdays | B 1 | To move to an item press the Arrow keys.", by the trial (rounds 1133b to
+  1133f), as before its lists in Word. Okur's lists open without them.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-11-01.
 
 ### Excel's Format Cells pages said twice
