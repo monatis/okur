@@ -25,6 +25,10 @@ Partner Center's identity, Okur's logo and PRIVACY.md in the package
 ([`../handoff/2026-11-01-excel-lists-format-and-store-identity.md`](../handoff/2026-11-01-excel-lists-format-and-store-identity.md)).
 Next: the totals readers, titles from defined names; the Store's experiments wait for the owner.
 
+Then: titles from the workbook's names (1134) and the totals readers (1132, 13 of 13)
+([`../handoff/2026-11-01-excel-named-titles-and-totals.md`](../handoff/2026-11-01-excel-named-titles-and-totals.md)).
+Next: monitor cells and comments, titles kept across sessions.
+
 ## 1. The first Store release (dev box)
 
 [`2026-10-31-microsoft-store-release.md`](2026-10-31-microsoft-store-release.md), its steps in
