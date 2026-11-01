@@ -1246,7 +1246,21 @@ A step can be in more than one entry; all of its entries apply.
   invalid state (MUST). Okur says them, as JAWS's Insert+Up does in the virtual cursor.
 - Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
 
+### The region a form-field quick key enters
+
+- Steps: `2158-aria-accordion-nav-into-accordion-panel-f-vc/s1`,
+  `2159-aria-accordion-nav-into-accordion-panel-e-vc/s1`.
+- Difference: Okur also says "Personal Information Region" before the field.
+- Why: F or E into a field in an accordion's panel, JAWS says the field alone [obs, round-aria5],
+  where ARIA-AT's accordion plan requires the panel's region and name (MUST). Okur names the
+  named regions (`role="region"` with a name) a form-field quick key enters, outermost first.
+- Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
+
 ## Considered and not accepted
+
+- A spin button's name on its own line (`2718/s1`, `2723/s1`, quantity-spin-button: ARIA-AT
+  requires it, MUST): its label is read on the line before, as every labelled field's is; saying
+  it again on the field's line would change how all fields read. Kept as JAWS reads it.
 
 - `322-desktop-forms-viewer/s15`, `s16`: JAWS's control view of a list view shows its last row
   with its columns ("photo.jpg 1.2 MB"); Okur's shows one row too, another one and without

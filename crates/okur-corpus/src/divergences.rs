@@ -1149,6 +1149,15 @@ divergences! {
     "The same step's \"invalid entry\": see the entry above.",
     "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
 
+    Difference::OkurAlsoSays("Personal Information \u{1d} Region \u{1e}") => [
+        "2158-aria-accordion-nav-into-accordion-panel-f-vc/s1",
+        "2159-aria-accordion-nav-into-accordion-panel-e-vc/s1",
+    ],
+    "F or E into a field in an accordion's panel: JAWS says the field alone, where ARIA-AT's \
+     accordion plan requires the panel's region and its name (MUST). Okur names a named region \
+     a form-field quick key enters: \"Personal Information Region | Name: Edit Required blank\".",
+    "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
+
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
     ],

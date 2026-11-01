@@ -2235,8 +2235,46 @@ impl VirtualCursor {
 
     fn control_nav(&mut self, targets: Vec<usize>, forward: bool, none: &str) -> Option<String> {
         self.quick_nav(&targets, forward, none, |c, o, previous| {
-            c.control_focus_speech(o, previous, GroupNamed::NotFromItsControls)
+            let control = c.control_focus_speech(o, previous, GroupNamed::NotFromItsControls);
+            let regions = c.named_regions_entered(o, previous);
+            if regions.is_empty() {
+                control
+            } else {
+                format!("{}\n{control}", regions.join("\n"))
+            }
         })
+    }
+
+    /// The named regions (`role="region"` with a name) a quick key's move enters, outermost
+    /// first: "Personal Information Region". JAWS names none, where ARIA-AT's accordion plan
+    /// requires the panel's region and name for F and E into it (MUST); Okur names them (the
+    /// owner's rule for the web, 2026-11-01) [obs, round-aria5, 2158/s1, 2159/s1].
+    fn named_regions_entered(&self, target: usize, previous: usize) -> Vec<String> {
+        let mut regions: Vec<&crate::buffer::BufferSpan> = self
+            .buffer
+            .spans
+            .iter()
+            .filter(|s| {
+                matches!(&s.role, Role::Landmark { landmark_type } if landmark_type == "region")
+                    && s.start_offset <= target
+                    && target <= s.end_offset
+                    && !(s.start_offset <= previous && previous <= s.end_offset)
+            })
+            .collect();
+        regions.sort_by_key(|s| s.start_offset);
+        regions.dedup_by_key(|s| s.node_id);
+        regions
+            .iter()
+            .filter_map(|s| {
+                let name = self.buffer.node(s.node_id)?.name.as_deref()?.trim();
+                (!name.is_empty()).then(|| {
+                    format!(
+                        "{name}{}",
+                        crate::linearize::role_marker(msg::role_region().as_str())
+                    )
+                })
+            })
+            .collect()
     }
 
     /// Moves to the next or prior division (`Z`, `Shift+Z`): the page's `div` elements the
