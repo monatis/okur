@@ -1,0 +1,64 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Navigation landmark boundary is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "List boundary is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Role 'link' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Name 'Navigate backwards from here' is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "DOWN,DOWN,DOWN",
+    "instructions": "With the reading cursor on the 'Breadcrumb Example' link, navigate to the 'Navigate backwards from here' link.",
+    "plan": "apg/breadcrumb",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "10"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/breadcrumb/index.setFocusOnLastBreadcrumbLink.html",
+  "id": "2904-aria-breadcrumb-t10-down-down-down-vc",
+  "name": "ARIA-AT, Breadcrumb Example: Navigate forwards out of the Breadcrumb navigation landmark in reading mode; Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Down",
+      "id": "s2",
+      "type": "key"
+    },
+    {
+      "command": "Down",
+      "id": "s3",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

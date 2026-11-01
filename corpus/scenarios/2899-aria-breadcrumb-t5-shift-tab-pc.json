@@ -1,0 +1,75 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role of the landmark region, 'navigation', is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name of the landmark region, 'Breadcrumb', is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Role of the breadcrumbs container, 'list', is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Number of list items, 4, is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "Role 'link' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion6",
+        "phrase": "Name 'Breadcrumb Example' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion7",
+        "phrase": "State 'current page' is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "SHIFT_TAB",
+    "instructions": "With focus on the 'Navigate backwards from here' link, navigate to the 'Breadcrumb Example' link.",
+    "plan": "apg/breadcrumb",
+    "presentation_number": "commandA",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "5"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/breadcrumb/index.setFocusAfterLastBreadcrumbLink.html",
+  "id": "2899-aria-breadcrumb-t5-shift-tab-pc",
+  "name": "ARIA-AT, Breadcrumb Example: Navigate to the last breadcrumb link in interaction mode; Shift+Tab in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+Tab",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
