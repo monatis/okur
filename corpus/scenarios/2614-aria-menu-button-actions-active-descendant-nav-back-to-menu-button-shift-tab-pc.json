@@ -1,0 +1,60 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "nameActions",
+        "phrase": "convey name of the menu button, 'Actions'",
+        "priority": "1"
+      },
+      {
+        "id": "roleMenuButton",
+        "phrase": "convey role 'menu button'",
+        "priority": "1"
+      },
+      {
+        "id": "stateCollapsed",
+        "phrase": "convey state 'collapsed'",
+        "priority": "2"
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "shift+tab",
+    "instructions": "Starting at the 'Navigate backwards from here' link,, navigate to the menu button.",
+    "plan": "apg/menu-button-actions-active-descendant",
+    "presentation_number": "4",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToMenuButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-actions-active-descendant/menu-button-actions-active-descendant.setFocusAfterMenuButton.html",
+  "id": "2614-aria-menu-button-actions-active-descendant-nav-back-to-menu-button-shift-tab-pc",
+  "name": "ARIA-AT, Action Menu Button Example Using aria-activedescendant: Navigate backwards to a menu button; Shift+Tab in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+Tab",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

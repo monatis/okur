@@ -1,0 +1,60 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "nameFocusedItemAction2",
+        "phrase": "convey name of the focused item, 'Action 2'",
+        "priority": "1"
+      },
+      {
+        "id": "3:roleFocusedItemMenuItem",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "positionFocusedItemMenu2",
+        "phrase": "convey position of the focused item in the menu, '2'",
+        "priority": "2"
+      },
+      {
+        "id": "numberItemsMenu4",
+        "phrase": "convey number of items in the menu, '4'",
+        "priority": "2"
+      }
+    ],
+    "command": "a",
+    "instructions": "Starting at the 'Action 1' menu item, type a character to navigate to a different menu item.",
+    "plan": "apg/menu-button-actions-active-descendant",
+    "presentation_number": "21",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToItemMenuByTypingCharacter"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-actions-active-descendant/menu-button-actions-active-descendant.openMenuAndSetFocusToFirstItem.html",
+  "id": "2633-aria-menu-button-actions-active-descendant-nav-to-item-menu-by-typing-character-a-pc",
+  "name": "ARIA-AT, Action Menu Button Example Using aria-activedescendant: Navigate to an item in a menu by typing a character; A in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "A",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

@@ -1,0 +1,60 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "nameFocusedItemAction4",
+        "phrase": "convey name of the focused item, 'Action 4'",
+        "priority": "1"
+      },
+      {
+        "id": "3:roleFocusedItemMenuItem",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "positionFocusedItemMenu4",
+        "phrase": "convey position of the focused item in the menu, '4'",
+        "priority": "2"
+      },
+      {
+        "id": "numberItemsMenu4",
+        "phrase": "convey number of items in the menu, '4'",
+        "priority": "2"
+      }
+    ],
+    "command": "end",
+    "instructions": "Starting at the 'Action 1' menu item, navigate to the last menu item.",
+    "plan": "apg/menu-button-actions-active-descendant",
+    "presentation_number": "19",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToLastItemMenu"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-actions-active-descendant/menu-button-actions-active-descendant.openMenuAndSetFocusToFirstItem.html",
+  "id": "2631-aria-menu-button-actions-active-descendant-nav-to-last-item-menu-end-pc",
+  "name": "ARIA-AT, Action Menu Button Example Using aria-activedescendant: Navigate to the last item in a menu; End in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "End",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

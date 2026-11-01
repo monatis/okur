@@ -1,0 +1,55 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "nameActions",
+        "phrase": "convey name of the menu button, 'Actions'",
+        "priority": "1"
+      },
+      {
+        "id": "roleMenuButton",
+        "phrase": "convey role 'menu button'",
+        "priority": "1"
+      },
+      {
+        "id": "stateCollapsed",
+        "phrase": "convey state 'collapsed'",
+        "priority": "2"
+      }
+    ],
+    "command": "esc",
+    "instructions": "Starting at the 'Action 1' menu item, close the menu.",
+    "plan": "apg/menu-button-actions-active-descendant",
+    "presentation_number": "25",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "closeMenu"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-actions-active-descendant/menu-button-actions-active-descendant.openMenuAndSetFocusToFirstItem.html",
+  "id": "2635-aria-menu-button-actions-active-descendant-close-menu-esc-pc",
+  "name": "ARIA-AT, Action Menu Button Example Using aria-activedescendant: Close a menu; Escape in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Escape",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
