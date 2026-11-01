@@ -1225,6 +1225,7 @@ impl ScreenReaderEngine {
                 .is_some_and(|actions| actions.read_sheet_place())
             {
                 self.sheet_reading_asked = Some(reading);
+                self.key_since_focus = false;
             }
         }
         true
@@ -1296,6 +1297,7 @@ impl ScreenReaderEngine {
                     .is_some_and(|actions| actions.read_sheet_place())
             {
                 self.sheet_reading_asked = Some(reading);
+                self.key_since_focus = false;
                 return;
             }
         }
@@ -1319,6 +1321,7 @@ impl ScreenReaderEngine {
                     .is_some_and(|actions| actions.read_sheet_details())
         }) {
             self.sheet_reading_asked = Some(reading);
+            self.key_since_focus = false;
             return;
         }
         // Excel's Insert+C, the cell's coordinates: "B 2" [obs, 521/s6]; an empty cell's, where
@@ -1336,6 +1339,7 @@ impl ScreenReaderEngine {
                     .is_some_and(|actions| actions.read_sheet_place())
             {
                 self.sheet_reading_asked = Some(crate::apps::windows::excel::SheetReading::Cell);
+                self.key_since_focus = false;
                 return;
             }
         }

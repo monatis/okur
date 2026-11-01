@@ -214,7 +214,9 @@ pub struct ScreenReaderEngine {
     /// The last key pressed and its modifiers, for the application modules.
     last_key: Option<(Key, crate::input::Modifiers)>,
     /// A key was pressed since the last focus event: a focus reported again after it is a
-    /// new one to the application modules.
+    /// new one to the application modules. Okur's own commands that ask the application for
+    /// nothing but a reading clear it: Excel reports the cell again as its readers read the
+    /// sheet, and JAWS says nothing of it [obs, 1132/s11, s12].
     key_since_focus: bool,
     /// Each page's temporary PlaceMarker (Ctrl+Windows+K), by its address, for the session.
     temp_placemarkers: std::collections::HashMap<String, usize>,

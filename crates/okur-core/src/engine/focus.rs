@@ -125,6 +125,9 @@ impl ScreenReaderEngine {
     /// the grid of an empty one, is what Insert+C and the row and column readers read from.
     /// Where the place cannot be read, what the application says without it, said.
     fn ask_sheet_for(&mut self, focus: &crate::event::FocusEvent) -> Option<String> {
+        // The cell is said once the place comes: it is the last focus, which the next report
+        // of it repeats [obs, 1132/s11].
+        let _ = self.native_focus.focus(focus);
         self.last_native_focus = Some(focus.clone());
         if self
             .actions
