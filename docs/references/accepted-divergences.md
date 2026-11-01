@@ -1275,6 +1275,10 @@ A step can be in more than one entry; all of its entries apply.
   `2765-aria-seek-slider-nav-back-to-slider-shift-tab-vc/s1`,
   `2781-aria-vertical-temperature-slider-nav-forwards-to-slider-tab-vc/s1`,
   `2785-aria-vertical-temperature-slider-nav-back-to-slider-shift-tab-vc/s1`,
+  `3118-aria-rating-slider-t1-tab-vc/s1`,
+  `3120-aria-rating-slider-t2-shift-tab-vc/s1`,
+  `3136-aria-slider-multithumb-t1-tab-vc/s1`,
+  `3139-aria-slider-multithumb-t4-shift-tab-vc/s1`,
   `2666-aria-modal-dialog-open-modal-dialog-space-vc/s1`,
   `2667-aria-modal-dialog-open-modal-dialog-enter-vc/s1`,
   `2160-aria-accordion-nav-into-accordion-panel-tab-vc/s1`,
@@ -1538,6 +1542,18 @@ A step can be in more than one entry; all of its entries apply.
   link after it, and Insert+Tab and Insert+Up on the meter the page focused say the link JAWS
   last knew [obs, round-aria38]. ARIA-AT's meter plan requires its role, name and value (MUST).
 - Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
+
+### An abbreviation read by its title, its heading broken
+
+- Steps: `3135-aria-slider-multithumb-t1-down-down-vc/s1`,
+  `3135-aria-slider-multithumb-t1-down-down-vc/s2` (whole steps).
+- Difference: Okur reads "Hotel Price Range (in USD)" as one heading line; JAWS reads "Hotel
+  Price Range (in USD United States Dollars", then ")" as a heading line of its own.
+- Why: JAWS's Expand Abbreviations setting is off on old-pc (Default.JCF,
+  ExpandAbbreviations=0), yet it reads the abbreviation's title: Chromium names the abbr element
+  by its title, and JAWS reads that name as an element of its own, breaking the heading
+  [obs, round-aria40]. An accident of the two, not the setting.
+- Decided under the owner's rule on JAWS's accidents, 2026-11-01.
 
 ## Considered and not accepted
 

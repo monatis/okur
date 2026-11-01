@@ -1193,6 +1193,10 @@ divergences! {
         "2765-aria-seek-slider-nav-back-to-slider-shift-tab-vc/s1",
         "2781-aria-vertical-temperature-slider-nav-forwards-to-slider-tab-vc/s1",
         "2785-aria-vertical-temperature-slider-nav-back-to-slider-shift-tab-vc/s1",
+        "3118-aria-rating-slider-t1-tab-vc/s1",
+        "3120-aria-rating-slider-t2-shift-tab-vc/s1",
+        "3136-aria-slider-multithumb-t1-tab-vc/s1",
+        "3139-aria-slider-multithumb-t4-shift-tab-vc/s1",
     ],
     "Tab to a slider, the virtual cursor on: JAWS 2025.2505 says no hint, with it off \"To \
      increase or decrease use the Arrow keys.\" [obs, round-aria26, round-aria28]. A newer JAWS \
@@ -1535,6 +1539,18 @@ divergences! {
      JAWS last knew [obs, round-aria38], where ARIA-AT's meter plan requires its role, name and \
      value (MUST). Okur reads it, \"Central Processing Unit (CPU) Usage meter 36.1665\".",
     "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
+
+    Difference::Step => [
+        "3135-aria-slider-multithumb-t1-down-down-vc/s1",
+        "3135-aria-slider-multithumb-t1-down-down-vc/s2",
+    ],
+    "A heading holding an abbreviation, \"Hotel Price Range (in <abbr title=United States \
+     Dollars>USD</abbr>)\": JAWS reads \"Hotel Price Range (in USD United States Dollars\", then \
+     the closing parenthesis as a heading line of its own [obs, round-aria40], with its Expand \
+     Abbreviations setting off (old-pc's Default.JCF, ExpandAbbreviations=0): Chromium names \
+     the abbr element by its title, and JAWS reads that name as an element of its own. Okur \
+     reads the heading whole, \"Hotel Price Range (in USD)\", and Down goes on to the slider.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
 
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
