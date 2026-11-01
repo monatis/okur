@@ -1437,6 +1437,18 @@ divergences! {
      each time.",
     "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
 
+    Difference::OkurAlsoSays("\u{1d}expanded\u{1e}") => [
+        "2967-aria-combobox-autocomplete-both-updated-t45-down-pc/s1",
+        "2968-aria-combobox-autocomplete-both-updated-t47-up-pc/s1",
+        "2971-aria-combobox-autocomplete-both-updated-t53-down-pc/s1",
+        "2972-aria-combobox-autocomplete-both-updated-t55-up-pc/s1",
+    ],
+    "A combo box's list box the focus comes into from the combo box (Down, Up, Home, Alt+Down): \
+     JAWS says the list box, \"States List box | Alabama | 1 of 56\", and nothing of the combo \
+     box's state [obs, round-aria32], where ARIA-AT's combo box plans require it expanded \
+     (MUST). Okur says it first: \"expanded | States List box | Alabama | 1 of 56\".",
+    "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
+
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
     ],

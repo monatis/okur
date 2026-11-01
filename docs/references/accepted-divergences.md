@@ -1464,6 +1464,20 @@ A step can be in more than one entry; all of its entries apply.
 - Decided under the owner's rules for the web and on JAWS's accidents (AGENTS.md §1.2),
   2026-11-01.
 
+### A combo box expanded as its list box takes the focus
+
+- Steps: `2967-aria-combobox-autocomplete-both-updated-t45-down-pc/s1`,
+  `2968-aria-combobox-autocomplete-both-updated-t47-up-pc/s1`,
+  `2971-aria-combobox-autocomplete-both-updated-t53-down-pc/s1`,
+  `2972-aria-combobox-autocomplete-both-updated-t55-up-pc/s1`.
+- Difference: Okur also says "expanded" before the list box, "Open List Box expanded" after
+  Alt+Down.
+- Why: as the focus moves from a combo box into its list box (Down, Up, Home, Alt+Down), JAWS
+  says the list box, "States List box | Alabama | 1 of 56", and nothing of the combo box's
+  state [obs, round-aria32, round-aria33]; ARIA-AT's combo box plans require it expanded
+  (MUST).
+- Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
+
 ## Considered and not accepted
 
 - From a newer JAWS (2025.2508.120, ARIA-AT's reports), not followed: Insert+Up on a menu

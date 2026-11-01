@@ -788,6 +788,47 @@ impl ScreenReaderEngine {
                 .as_ref()
                 .map(|option| option.speech(list_box_entered));
             let in_list_box = list_box_option.is_some();
+            // The list box opened by Alt+Down says so first, "Open List Box | Favorite Fruit
+            // List box | ...", and the focus back from it by Alt+Up, "Close List Box | Favorite
+            // Fruit Combo box | Apple" [obs, round-aria33, 2997/s1, 3016/s1]; with short
+            // messages neither [obs, 580/s11].
+            let left_list_box = self.page_list_box.is_some() && !in_list_box;
+            let alt_arrow = self
+                .last_key
+                .filter(|(_, m)| m.alt && !(m.ctrl || m.shift || m.insert || m.win))
+                .map(|(key, _)| key);
+            let list_box_message = match alt_arrow {
+                Some(crate::Key::DownArrow) if list_box_entered => Some(msg::combo_box_opened()),
+                Some(crate::Key::UpArrow) if left_list_box => Some(msg::combo_box_closed()),
+                _ => None,
+            }
+            .map(|message| {
+                self.said(Announcement::new(vec![crate::announcement::Line::of(
+                    PartKind::Message,
+                    message,
+                )
+                .short("")]))
+                    .render()
+            })
+            .filter(|said| !said.trim().is_empty());
+            // A list box entered from its combo box says the combo box expanded, where JAWS
+            // says nothing of its state and ARIA-AT's combo box plans require it (MUST): "Open
+            // List Box expanded | Favorite Fruit List box | Choose a Fruit | 1 of 13" (the
+            // owner's rule for the web, 2026-11-01) [obs, round-aria32, 2967/s1; round-aria33,
+            // 2997/s1, 3003/s1].
+            let from_combo_box = std::mem::replace(
+                &mut self.page_focus_was_combo_box,
+                focus.role == Role::ComboBox || target_role == Some(Role::ComboBox),
+            );
+            let list_box_message = if list_box_entered && from_combo_box {
+                let expanded = crate::linearize::state_marker(msg::state_expanded().as_str());
+                Some(format!(
+                    "{}{expanded}",
+                    list_box_message.unwrap_or_default()
+                ))
+            } else {
+                list_box_message
+            };
             self.page_list_box = list_box_option;
             let mut speech = list_box_speech
                 .or(line)
@@ -844,6 +885,9 @@ impl ScreenReaderEngine {
                     Some(speech).filter(|s| !s.trim().is_empty())
                 })
                 .or_else(|| focus.name.clone());
+            if let Some(message) = list_box_message {
+                speech = speech.map(|s| format!("{message}\n{s}"));
+            }
             // A field holding a spelling error: JAWS's mark before its name and before its
             // value, "‹Misspelled › Full name Edit Required | ‹Misspelled › ada" [obs, 284/s6,
             // s8].
@@ -901,7 +945,14 @@ impl ScreenReaderEngine {
                 .is_some_and(|n| n.attributes.get("editable").is_some_and(|e| e == "true"));
             if target_role == Some(Role::ComboBox) && in_forms_mode && !editable_combo {
                 // In forms mode a combo box gets its usage hint [obs, 205/s8].
-                speech = speech.map(|s| format!("{s}\n{}", msg::hint_change_selection_arrows()));
+                let hint = msg::hint_change_selection_arrows();
+                speech = speech.map(|s| {
+                    if s.trim_end().ends_with(hint.as_str()) {
+                        s
+                    } else {
+                        format!("{s}\n{hint}")
+                    }
+                });
             }
             if target_role == Some(Role::RadioButton) && in_forms_mode {
                 // And a radio button its own [obs, 287/s4].

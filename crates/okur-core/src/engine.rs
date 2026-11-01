@@ -358,6 +358,9 @@ pub struct ScreenReaderEngine {
     /// The page's list box option the focus is on: the list box is named only as the focus
     /// comes into it, and Insert+Tab says it whole.
     page_list_box: Option<crate::speech::ListBoxOption>,
+    /// The page focus before this one was a combo box: a list box the focus comes into from it
+    /// is its list.
+    page_focus_was_combo_box: bool,
     /// A spin button was typed in: its value is read once its text changes, the read of the
     /// text as it was before the key passed over [obs, round-aria25, 2738/s1].
     spin_typed: bool,
@@ -675,6 +678,7 @@ impl ScreenReaderEngine {
             menus_left_unsaid: false,
             page_menu_left: false,
             page_list_box: None,
+            page_focus_was_combo_box: false,
             spin_typed: false,
             sheet_reading_asked: None,
             sheet_list_asked: None,

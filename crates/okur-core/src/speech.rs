@@ -822,14 +822,17 @@ impl SpeechFormatter {
                 Some(msg::hint_set_value_arrows_or_type().as_str())
             }
             Role::RadioButton if virtual_off => Some(msg::hint_radio_up_down().as_str()),
-            // An edit combo with the virtual cursor off, Insert+Tab's too: "To set the value use
-            // the Arrow keys or type the value." [obs, round-aria32, 2927/s1, 2942/s1].
+            // A combo box with the virtual cursor off, Insert+Tab's too: an edit combo's "To set
+            // the value use the Arrow keys or type the value.", another's "To change the
+            // selection use the Arrow keys." [obs, round-aria32, 2927/s1; round-aria33,
+            // 2992/s1, 2996/s1].
             Role::ComboBox
                 if virtual_off
                     && node.attributes.get("editable").map(String::as_str) == Some("true") =>
             {
                 Some(msg::hint_set_value_arrows_or_type().as_str())
             }
+            Role::ComboBox if virtual_off => Some(msg::hint_change_selection_arrows().as_str()),
             Role::Link { .. } | Role::Button => Some(msg::hint_activate_enter().as_str()),
             _ => None,
         }
