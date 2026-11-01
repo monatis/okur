@@ -211,6 +211,7 @@ mod tests {
             key: None,
             ask_view: false,
             ask_sheet: false,
+            repeat: false,
         };
         assert!(matches!(
             switcher.focus(&item, &mut cx),

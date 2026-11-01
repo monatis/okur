@@ -58,6 +58,7 @@ mod tests {
                     key: None,
                     ask_view: false,
                     ask_sheet: false,
+                    repeat: false,
                 }
             ),
             FocusResponse::Silent

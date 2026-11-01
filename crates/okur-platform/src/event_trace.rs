@@ -1073,6 +1073,29 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     {
         return None;
     }
+    // An Office dialog's field reports the focus from its own window too, between its dialog's
+    // two reports of it: MSAA gives the window's client, UI Automation a pane right in the
+    // dialog, both named by the field's text or by nothing. The dialog's report is the field
+    // (MSAA's editable text, below); this one names nothing of it [obs, 1124/s1, s7].
+    const MSAA_CLIENT: i32 = 0x0A;
+    if let Some(client) = event
+        .object
+        .as_ref()
+        .filter(|o| event.event == "focus" && event.id_child == 0 && o.role == Some(MSAA_CLIENT))
+    {
+        const UIA_PANE: i32 = 50033;
+        let text = client.name.as_deref().map(str::trim).unwrap_or_default();
+        let mut chain = event.focus_chain.iter().rev();
+        let (field, around) = (chain.next(), chain.next());
+        if field.is_some_and(|f| {
+            f.control_type == UIA_PANE
+                && f.name.as_deref().map(str::trim).unwrap_or_default() == text
+                && !f.is_control_element
+        }) && around.is_some_and(|w| w.control_type == UIA_WINDOW && w.is_dialog == Some(true))
+        {
+            return None;
+        }
+    }
     // The recorded window text belongs to the focused HWND (an edit's text is its content);
     // the window the user is in is the outermost element of the focus chain.
     // The active window is the innermost window in the chain (the focus itself, when a window
@@ -1146,6 +1169,26 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         focus.text = None;
         focus.container_role = None;
         focus.container_name = None;
+        focus.item_index = None;
+        focus.item_count = None;
+    }
+    // An Office dialog's field (Excel's Go To, a `bosa_sdm` window): UI Automation reaches only
+    // the field's window, a pane named by nothing or by the field's text, where the dialog's
+    // MSAA names the field by its label as editable text, its value the text. JAWS reads MSAA's: "Reference: Edit | A1 |
+    // Type in text." [obs, 1124/s1, s7].
+    const UIA_PANE: i32 = 50033;
+    if let Some(object) = event.object.as_ref().filter(|o| {
+        o.role == Some(MSAA_TEXT)
+            && event.id_child > 0
+            && focused.control_type == UIA_PANE
+            && focused.name.as_deref().map(str::trim).unwrap_or_default()
+                == o.value.as_deref().map(str::trim).unwrap_or_default()
+            && o.name.as_deref().is_some_and(|n| !n.trim().is_empty())
+    }) {
+        focus.role = okur_core::Role::Edit;
+        focus.name = object.name.clone();
+        focus.value = object.value.clone().filter(|v| !v.trim().is_empty());
+        focus.text = None;
         focus.item_index = None;
         focus.item_count = None;
     }
@@ -1896,6 +1939,27 @@ impl EventConverter {
         self.convert_one(event).into_iter().collect()
     }
 
+    /// Whether `event`, UI Automation's own change of a value in the window with the last focus,
+    /// leaves the keyboard focus on that window's own element, where the last focus was another.
+    fn focus_moved_by_change(&self, event: &TraceEvent) -> bool {
+        let Some(focused) = event.focus_chain.last() else {
+            return false;
+        };
+        event.object.is_none()
+            && event.text_context.is_none()
+            && focused.has_keyboard_focus
+            && focused.class_name.is_some()
+            && focused.class_name == event.window_class
+            && self
+                .focused
+                .as_ref()
+                .is_some_and(|(hwnd, ..)| *hwnd == event.hwnd)
+            && self
+                .last_focus
+                .as_ref()
+                .is_some_and(|last| last.name != focused.name)
+    }
+
     fn convert_one(&mut self, event: &TraceEvent) -> Option<okur_core::AccessibilityEvent> {
         use okur_core::{AccessibilityEvent, ChangeKind};
         if let Some(menu) = menu_event_from_trace(event) {
@@ -1909,6 +1973,14 @@ impl EventConverter {
                 .window_title
                 .clone()
                 .map(AccessibilityEvent::WindowRenamed);
+        }
+        // UI Automation's keyboard focus moved within the focused window with no focus event:
+        // Excel's cell emptied by Delete leaves it on the grid, which reports only the change
+        // of its value [obs, 1123/s7]. The focus chain read after the change is the new focus.
+        if event.event == "value_change" && self.focus_moved_by_change(event) {
+            let mut moved = event.clone();
+            moved.event = "focus".to_owned();
+            return self.convert_one(&moved);
         }
         let kind = match event.event.as_str() {
             // A list item selected while the focus stays in a field (Windows search).
@@ -7804,5 +7876,112 @@ mod tests {
             .convert(&switcher("Untitled - Notepad"))
             .is_empty());
         assert_eq!(converter.convert(&switcher("Downloads")).len(), 1);
+    }
+
+    /// Excel's Go To: the dialog's MSAA names its field, "Reference:", where UI Automation has
+    /// only the field's window, a pane named by its text; the field's own report between the
+    /// dialog's two is none [obs, 1124/s1, s7].
+    #[test]
+    fn an_office_dialog_field_is_its_label_as_msaa_has_it() {
+        const PANE: i32 = 50033;
+        let dialog = UiaNode {
+            control_type: UIA_WINDOW,
+            name: Some("Go To".to_owned()),
+            class_name: Some("bosa_sdm_XL9".to_owned()),
+            is_dialog: Some(true),
+            ..UiaNode::default()
+        };
+        let field = |text: &str| UiaNode {
+            control_type: PANE,
+            name: (!text.is_empty()).then(|| text.to_owned()),
+            class_name: Some("EDTBX".to_owned()),
+            has_keyboard_focus: true,
+            ..UiaNode::default()
+        };
+        let reports = |text: &str| {
+            let chain = vec![dialog.clone(), field(text)];
+            let from_dialog = TraceEvent {
+                window_class: Some("bosa_sdm_XL9".to_owned()),
+                window_title: Some("Go To".to_owned()),
+                id_child: 5,
+                object: Some(TraceObject {
+                    role: Some(MSAA_TEXT),
+                    name: Some("Reference:".to_owned()),
+                    value: (!text.is_empty()).then(|| text.to_owned()),
+                    states: 0,
+                    shortcut: Some("Alt+R".to_owned()),
+                }),
+                focus_chain: chain.clone(),
+                ..focus_event(Vec::new())
+            };
+            let from_field = TraceEvent {
+                window_class: Some("EDTBX".to_owned()),
+                object: Some(TraceObject {
+                    role: Some(0x0A),
+                    name: Some(text.to_owned()),
+                    value: None,
+                    states: 0,
+                    shortcut: None,
+                }),
+                focus_chain: chain,
+                ..focus_event(Vec::new())
+            };
+            (from_dialog, from_field)
+        };
+        for text in ["", "A1"] {
+            let (from_dialog, from_field) = reports(text);
+            let converted = EventConverter::default().convert(&from_dialog);
+            let value = (!text.is_empty()).then_some(text);
+            assert!(
+                matches!(converted.as_slice(), [okur_core::AccessibilityEvent::Focus(f)]
+                    if f.role == okur_core::Role::Edit
+                        && f.name.as_deref() == Some("Reference:")
+                        && f.value.as_deref() == value),
+                "{converted:?}"
+            );
+            assert!(EventConverter::default().convert(&from_field).is_empty());
+        }
+    }
+
+    /// Delete empties Excel's cell: UI Automation's focus is the grid then, which reports only
+    /// its value's change; that change is the focus moving to it [obs, 1123/s7].
+    #[test]
+    fn a_value_change_that_moves_the_focus_is_a_focus() {
+        const CELL: i32 = 50029;
+        const TAB: i32 = 50018;
+        let grid = UiaNode {
+            control_type: TAB,
+            name: Some("Book1.xlsx".to_owned()),
+            class_name: Some("EXCEL7".to_owned()),
+            has_keyboard_focus: true,
+            ..UiaNode::default()
+        };
+        let cell = TraceEvent {
+            hwnd: 7,
+            id_object: 412,
+            window_class: Some("EXCEL7".to_owned()),
+            focus_chain: vec![node(CELL, "D1", true)],
+            ..focus_event(Vec::new())
+        };
+        let changed = TraceEvent {
+            event: "value_change".to_owned(),
+            win_event: 0x800E,
+            id_object: 414,
+            focus_chain: vec![grid.clone()],
+            ..cell.clone()
+        };
+        let mut converter = EventConverter::default();
+        assert_eq!(converter.convert(&cell).len(), 1);
+        let moved = converter.convert(&changed);
+        assert!(
+            matches!(moved.as_slice(), [okur_core::AccessibilityEvent::Focus(f)]
+                if f.name.as_deref() == Some("Book1.xlsx")),
+            "{moved:?}"
+        );
+        // The grid's own value changing again moves the focus nowhere.
+        assert!(!converter
+            .convert(&changed)
+            .iter()
+            .any(|e| matches!(e, okur_core::AccessibilityEvent::Focus(_))));
     }
 }

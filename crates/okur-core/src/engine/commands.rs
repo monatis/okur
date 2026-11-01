@@ -1245,8 +1245,7 @@ impl ScreenReaderEngine {
             let in_sheet = self
                 .last_native_focus
                 .as_ref()
-                .and_then(crate::apps::windows::excel::cell)
-                .is_some();
+                .is_some_and(crate::apps::windows::excel::in_sheet);
             if in_sheet
                 && self
                     .actions
@@ -1257,14 +1256,21 @@ impl ScreenReaderEngine {
                 return;
             }
         }
-        // Excel's Insert+C, the cell's coordinates: "B 2" [obs, 521/s6].
+        // Excel's Insert+C, the cell's coordinates: "B 2" [obs, 521/s6]; an empty cell's, where
+        // the grid has the focus, asked of Excel, "D 1" [obs, 1123/s3].
         if event.key == Key::Alpha('C') && !m.ctrl && !m.shift && !m.alt && !m.win {
-            let said = self
-                .last_native_focus
-                .as_ref()
-                .and_then(crate::apps::windows::excel::cell);
-            if let Some(said) = said {
+            let focus = self.last_native_focus.as_ref();
+            if let Some(said) = focus.and_then(crate::apps::windows::excel::cell) {
                 self.speech.speak(&said, true);
+                return;
+            }
+            if focus.is_some_and(crate::apps::windows::excel::in_sheet)
+                && self
+                    .actions
+                    .as_ref()
+                    .is_some_and(|actions| actions.read_sheet_place())
+            {
+                self.sheet_reading_asked = Some(crate::apps::windows::excel::SheetReading::Cell);
                 return;
             }
         }

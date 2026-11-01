@@ -62,6 +62,9 @@ pub struct AppContext<'a> {
     /// empty cell has no UI Automation element): the engine asks for the sheet's active cell
     /// and says it as [`crate::apps::windows::excel::blank_or_cell`] does.
     pub ask_sheet: bool,
+    /// The focus is the one last said, reported again with no key pressed since: Excel's
+    /// cell comes back from Go To in four reports, said once [obs, 1124/s3].
+    pub repeat: bool,
 }
 
 impl AppContext<'_> {

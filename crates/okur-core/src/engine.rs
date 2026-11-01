@@ -213,6 +213,9 @@ pub struct ScreenReaderEngine {
     last_key_letter: bool,
     /// The last key pressed and its modifiers, for the application modules.
     last_key: Option<(Key, crate::input::Modifiers)>,
+    /// A key was pressed since the last focus event: a focus reported again after it is a
+    /// new one to the application modules.
+    key_since_focus: bool,
     /// Each page's temporary PlaceMarker (Ctrl+Windows+K), by its address, for the session.
     temp_placemarkers: std::collections::HashMap<String, usize>,
     /// The PlaceMarkers saved (Ctrl+Shift+K), and where they are kept.
@@ -611,6 +614,7 @@ impl ScreenReaderEngine {
             last_key_escapes: false,
             last_key_letter: false,
             last_key: None,
+            key_since_focus: false,
             temp_placemarkers: std::collections::HashMap::new(),
             placemarkers: crate::placemarkers::PlaceMarkers::default(),
             placemarker_store: None,
@@ -951,6 +955,7 @@ impl ScreenReaderEngine {
         self.last_key_escapes =
             event.key == Key::Escape && event.modifiers == crate::input::Modifiers::none();
         self.last_key = Some((event.key, event.modifiers));
+        self.key_since_focus = true;
         // Excel's selection is the active cell's alone again after any other key.
         if crate::apps::windows::excel::SelectionKey::of(event.key, event.modifiers).is_none() {
             self.sheet_selection = None;
@@ -1745,7 +1750,9 @@ impl ScreenReaderEngine {
                     self.speech.speak(&said, true);
                     return Some(said);
                 }
-                let said = crate::apps::windows::excel::blank_or_cell(place)?;
+                // Delete's emptied cell is not named the active cell [obs, 1123/s7].
+                let deleted = self.last_key == Some((Key::Delete, crate::input::Modifiers::none()));
+                let said = crate::apps::windows::excel::blank_or_cell(place, !deleted)?;
                 self.speech.speak(&said, true);
                 Some(said)
             }

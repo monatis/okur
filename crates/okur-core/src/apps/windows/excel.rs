@@ -13,6 +13,9 @@ use crate::messages::msg;
 const GRID_WINDOW: &str = "EXCEL7";
 /// Excel's cell editor, F2's (and typing's) edit.
 const EDITOR_WINDOW: &str = "EXCEL6";
+/// Excel's main window, which reports the focus back on the cell as a dialog of Excel's closes
+/// [obs, 1124/s6, s8].
+const MAIN_WINDOW: &str = "XLMAIN";
 
 /// Excel's module.
 #[derive(Debug, Default)]
@@ -65,6 +68,13 @@ impl AppModule for Excel {
         let Some(coordinates) = cell(focus) else {
             return FocusResponse::Pass;
         };
+        // The cell reported again with no key between: Go To's Enter gives it back in four
+        // reports, said once, "6 | C 3" [obs, 1124/s3].
+        if cx.repeat {
+            cx.note_window(focus);
+            *cx.app_mode = crate::engine::AppMode::NativeControl;
+            return FocusResponse::Silent;
+        }
         // A selecting key leaves the focus on the active cell: the selection is read from
         // Excel's object model and said for what it changed [obs, 1120, 1121].
         if cx
@@ -90,6 +100,8 @@ impl AppModule for Excel {
         match key {
             Some(Key::End) => lines.push(msg::excel_last_cell().to_string()),
             Some(Key::Home) => lines.push(msg::excel_first_cell().to_string()),
+            // Undo said before the cell it gives back, "Undo | 7 | D 1" [obs, 1123/s8].
+            Some(Key::Alpha('Z')) => lines.push(msg::edit_undo().to_string()),
             _ => {}
         }
         // An empty cell by its coordinates alone [hyp: no empty cell recorded yet].
@@ -133,6 +145,9 @@ pub(crate) enum SheetReading {
     Column,
     ColumnFromTop,
     ColumnToBottom,
+    /// Insert+C where the grid has the focus, an empty cell: the active cell's coordinates,
+    /// "D 1" [obs, 1123/s3].
+    Cell,
 }
 
 impl SheetReading {
@@ -165,6 +180,9 @@ impl SheetReading {
     /// 1114/s4-s9]. Empty cells are left out [hyp: none recorded yet]. `None` with nothing to
     /// read.
     pub(crate) fn said(self, place: &crate::event::SheetPlace) -> Option<String> {
+        if self == Self::Cell {
+            return coordinates(&place.address);
+        }
         let (cells, at, row) = match self {
             Self::Line => (&place.row, place.row_at, false),
             Self::Row | Self::RowFromStart | Self::RowToEnd => (&place.row, place.row_at, true),
@@ -174,6 +192,7 @@ impl SheetReading {
             Self::Line | Self::Row | Self::Column => cells,
             Self::RowFromStart | Self::ColumnFromTop => cells.get(..=at).unwrap_or(cells),
             Self::RowToEnd | Self::ColumnToBottom => cells.get(at..).unwrap_or_default(),
+            Self::Cell => return None,
         };
         let read: Vec<&str> = part
             .iter()
@@ -428,21 +447,27 @@ fn editor(focus: &FocusEvent) -> bool {
 }
 
 /// The active cell read from Excel's object model, where the grid had no cell to focus: an
-/// empty one as JAWS says it, "blank | D 1 | Active Cell: D1" [obs, 1118/s3, s4]; one with a
+/// empty one as JAWS says it, "blank | D 1 | Active Cell: D1" [obs, 1118/s3, s4], or without
+/// naming the active cell where Delete emptied it, "blank | D 1" [obs, 1123/s7]; one with a
 /// value as any cell. `None` without its reference.
-pub(crate) fn blank_or_cell(place: &crate::event::SheetPlace) -> Option<String> {
+pub(crate) fn blank_or_cell(
+    place: &crate::event::SheetPlace,
+    names_active_cell: bool,
+) -> Option<String> {
     let at = coordinates(&place.address)?;
     let value = place
         .row
         .get(place.row_at)
         .map(|v| v.trim())
         .unwrap_or_default();
-    Some(if value.is_empty() {
+    Some(if value.is_empty() && names_active_cell {
         format!(
             "{}\n{at}\n{}",
             msg::blank(),
             msg::excel_active_cell(place.address.trim()).render()
         )
+    } else if value.is_empty() {
+        format!("{}\n{at}", msg::blank())
     } else {
         format!("{value}\n{at}")
     })
@@ -451,8 +476,8 @@ pub(crate) fn blank_or_cell(place: &crate::event::SheetPlace) -> Option<String> 
 /// The coordinates of the cell `focus` is, as JAWS says them, its column's letters apart from
 /// its row's number: "B 2"; `None` for any other focus.
 pub(crate) fn cell(focus: &FocusEvent) -> Option<String> {
-    if focus.role != Role::TableCell || focus.platform.window_class.as_deref() != Some(GRID_WINDOW)
-    {
+    let window = focus.platform.window_class.as_deref();
+    if focus.role != Role::TableCell || !matches!(window, Some(GRID_WINDOW | MAIN_WINDOW)) {
         return None;
     }
     coordinates(focus.name.as_deref()?)
@@ -585,5 +610,86 @@ mod tests {
         let mut other = focus.clone();
         other.platform.window_class = Some("Chrome_RenderWidgetHostHWND".into());
         assert_eq!(cell(&other), None);
+        // Excel's main window reports the cell as a dialog of Excel's closes [obs, 1124/s6].
+        let mut back = focus.clone();
+        back.platform.window_class = Some(MAIN_WINDOW.into());
+        assert_eq!(cell(&back).as_deref(), Some("B 2"));
+    }
+
+    /// What the module says of `focus` after `key`, `repeat` as the engine tells it.
+    fn said(
+        excel: &mut Excel,
+        focus: &FocusEvent,
+        key: Option<(Key, crate::input::Modifiers)>,
+        repeat: bool,
+    ) -> Option<String> {
+        let mut mode = crate::engine::AppMode::NativeControl;
+        let (mut title, mut kind) = (None, None);
+        let mut cx = AppContext {
+            app_mode: &mut mode,
+            window_title: &mut title,
+            window_kind: &mut kind,
+            selecting: false,
+            alt_held: false,
+            letter_key: false,
+            escape_key: false,
+            key,
+            ask_view: false,
+            ask_sheet: false,
+            repeat,
+        };
+        match excel.focus(focus, &mut cx) {
+            FocusResponse::Speak(announcement) => Some(announcement.render()),
+            FocusResponse::Silent => Some(String::new()),
+            _ => None,
+        }
+    }
+
+    /// Ctrl+Z says "Undo" before the cell it gives back, "Undo | 7 | D 1" [obs, 1123/s8]; the
+    /// cell reported again with no key between is said once [obs, 1124/s3].
+    #[test]
+    fn undo_comes_before_the_cell_and_a_repeat_is_silent() {
+        let mut focus = FocusEvent::new(Role::TableCell);
+        focus.name = Some("D1".into());
+        focus.value = Some("7".into());
+        focus.platform.window_class = Some(GRID_WINDOW.into());
+        let ctrl = crate::input::Modifiers {
+            ctrl: true,
+            ..crate::input::Modifiers::none()
+        };
+        let mut excel = Excel::default();
+        let undo = Some((Key::Alpha('Z'), ctrl));
+        assert_eq!(
+            said(&mut excel, &focus, undo, false).as_deref(),
+            Some("Undo\n7\nD 1")
+        );
+        assert_eq!(said(&mut excel, &focus, undo, true).as_deref(), Some(""));
+    }
+
+    /// An empty cell from Excel's object model: "blank | D 1 | Active Cell: D1" reached by a
+    /// key that moves [obs, 1118/s3], "blank | D 1" emptied by Delete [obs, 1123/s7].
+    #[test]
+    fn an_empty_cell_names_the_active_cell_unless_deleted() {
+        let place = crate::event::SheetPlace {
+            address: "D1".into(),
+            selection: "D1".into(),
+            selection_first: String::new(),
+            selection_last: String::new(),
+            row_at: 3,
+            column_at: 0,
+            row: vec![
+                "Branch".into(),
+                "Weekdays".into(),
+                "Weekends".into(),
+                String::new(),
+            ],
+            column: vec![String::new()],
+        };
+        assert_eq!(
+            blank_or_cell(&place, true).as_deref(),
+            Some("blank\nD 1\nActive Cell: D1")
+        );
+        assert_eq!(blank_or_cell(&place, false).as_deref(), Some("blank\nD 1"));
+        assert_eq!(SheetReading::Cell.said(&place).as_deref(), Some("D 1"));
     }
 }

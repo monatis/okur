@@ -349,6 +349,7 @@ impl ScreenReaderEngine {
             }
         };
         // Applications first, as JAWS runs an application's script before the default one.
+        let repeat = !std::mem::take(&mut self.key_since_focus) && self.native_focus.is_last(focus);
         let mut cx = AppContext {
             app_mode: &mut self.app_mode,
             window_title: &mut self.last_window_title,
@@ -360,6 +361,7 @@ impl ScreenReaderEngine {
             key: self.last_key,
             ask_view: false,
             ask_sheet: false,
+            repeat,
         };
         for app in &mut self.apps {
             match app.focus(focus, &mut cx) {
@@ -370,13 +372,17 @@ impl ScreenReaderEngine {
                     return Some(speech);
                 }
                 FocusResponse::Silent => {
-                    if cx.ask_sheet
-                        && self
+                    if cx.ask_sheet {
+                        // The sheet's focus, a cell or the grid of an empty one, is what
+                        // Insert+C and the row and column readers read from.
+                        self.last_native_focus = Some(focus.clone());
+                        if self
                             .actions
                             .as_ref()
                             .is_some_and(|actions| actions.read_sheet_place())
-                    {
-                        self.sheet_cell_asked = true;
+                        {
+                            self.sheet_cell_asked = true;
+                        }
                     }
                     if cx.ask_view
                         && self

@@ -493,7 +493,21 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
             // 1 of 1" (dev box, 2026-10-17); a WinForms tab reports none (303/s12).
             lines.extend(position(focus));
             if !focus.in_ribbon {
-                lines.push(Line::of(PartKind::Hint, msg::hint_switch_pages()));
+                // Office's own dialogs switch their pages with Control+Tab, as JAWS says
+                // [obs, 1124/s4, s5].
+                let office = focus
+                    .platform
+                    .top_window_class
+                    .as_deref()
+                    .is_some_and(|class| class.starts_with(OFFICE_DIALOG_CLASS));
+                lines.push(Line::of(
+                    PartKind::Hint,
+                    if office {
+                        msg::hint_switch_pages_ctrl_tab()
+                    } else {
+                        msg::hint_switch_pages()
+                    },
+                ));
             }
         }
         // File Explorer (JAWS on the dev box, 2026-10-17): a column header, "Name split button";
@@ -681,6 +695,10 @@ impl FocusKey {
     }
 }
 
+/// The start of the window class Office's own dialogs share, their application's after it
+/// (Word's `bosa_sdm_msword`, Excel's `bosa_sdm_XL9`).
+const OFFICE_DIALOG_CLASS: &str = "bosa_sdm_";
+
 /// Focus speech across a sequence of native focus events.
 #[derive(Debug, Default)]
 pub struct NativeFocus {
@@ -702,6 +720,11 @@ impl NativeFocus {
     /// ("Leaving menus | Name: Edit | Ada | Type in text." [obs, 302/s8]).
     pub fn forget_last(&mut self) {
         self.last = None;
+    }
+
+    /// Whether `focus` is the previous one again.
+    pub fn is_last(&self, focus: &FocusEvent) -> bool {
+        self.last.as_ref() == Some(&FocusKey::of(focus))
     }
 
     /// Speech for a focus event, or `None` for a repeat of the previous one.
@@ -2272,6 +2295,13 @@ Undo  Unavailable"
         assert_eq!(
             norm(&focus_speech(&general, None).render()),
             norm("General  \u{1d} Tab \u{1e}   \u{1d}selected\u{1e} \nTo switch pages, press Control+PageDown.")
+        );
+        // An Office dialog's page, Excel's Format Cells [obs, 1124/s4].
+        let mut number = general.clone().with_name("Number".to_owned());
+        number.platform.top_window_class = Some("bosa_sdm_XL9".to_owned());
+        assert_eq!(
+            norm(&focus_speech(&number, None).render()),
+            norm("Number  \u{1d} Tab \u{1e}   \u{1d}selected\u{1e} \nTo switch pages, press Control+Tab.")
         );
         assert_eq!(
             norm(&focus_speech(&event(Role::Button, "OK"), None).render()),
