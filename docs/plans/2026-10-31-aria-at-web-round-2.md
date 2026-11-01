@@ -28,6 +28,11 @@ queued after aria40 (round-probe-radio2: 1127, 1128): rating's "Rating group" ha
 after it where the heading-labelled groups have one, and its checked radio leaves out its place
 after setups that leave the focus on a radio button of the group.
 
+Later on 2026-11-01: tabs-manual-activation (aria18, 60/64), tabs-automatic-activation (aria19),
+menu-button-actions (aria20), menu-button-actions-active-descendant (aria21) and
+menu-button-navigation (aria22) imported, the last four with every step matching; `okur-lab
+aria-at-report` measures the assertions (§4).
+
 ## 1. The plans recording now
 
 As each round finishes: fetch, preview, fix what differs, import. In order: disclosure-faq
