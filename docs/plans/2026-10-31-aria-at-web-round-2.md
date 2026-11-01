@@ -66,11 +66,11 @@ assertion judged by JAWS's words for it, reviewed by hand before it is trusted.
 ## 4b. Beyond JAWS (the owner, 2026-11-01)
 
 Where JAWS does not convey what a plan's assertion requires, Okur conveys it (AGENTS.md §1.2): the
-most accessible screen reader for the web.  lists the
+most accessible screen reader for the web. `okur-lab aria-at-report --unmet <plan>` lists the
 assertions neither conveys (334 on 2026-11-01, MUST first). Each is checked by hand against the
 judge (a value text holding its number is no failure of "not convey numeric value"), then added
 in JAWS's vocabulary with the rest of the utterance JAWS's, and its steps become accepted
-divergences () naming the assertion. In order:
+divergences (`OkurAlsoSays`) naming the assertion. In order:
 
 1. MUST: an accordion header's heading and level on the PC cursor's Tab; a spin button's name,
    role and invalid state on the PC cursor's Insert+Up; a named region a quick key enters (where
