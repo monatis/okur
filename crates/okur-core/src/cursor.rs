@@ -1408,7 +1408,7 @@ impl VirtualCursor {
         let attr = |k: &str| node.attributes.get(k).map(String::as_str);
         let name = node.name.as_deref().unwrap_or_default().trim();
         let mut speech = match &node.role {
-            // Unlike the C quick key, Tab omits the collapsed state.
+            // A combo box says its state, which JAWS leaves out on Tab and ARIA-AT requires.
             // One typed in keeps its state: "Fruit edit combo collapsed | blank" (JAWS on
             // the dev box).
             Role::ComboBox if attr("editable") == Some("true") => {

@@ -1502,6 +1502,33 @@ A step can be in more than one entry; all of its entries apply.
 - Decided under the owner's rules for the web and on JAWS's accidents (AGENTS.md §1.2),
   2026-11-01.
 
+### A combo box's state on a focus
+
+- Steps: `204-form-tab-order/s5`, `205-form-state-changes/s8`, `276-web-select-open/s6`,
+  `287-form-tab-order-auto-forms/s5`, `288-form-state-changes-auto-forms/s8`,
+  `552-web-form-verbosity-intermediate/s7`, `553-web-form-verbosity-advanced/s7`,
+  `555-web-form-verbosity-beginner/s7`, `573-form-tab-order-intermediate/s5`,
+  `574-form-state-changes-intermediate/s8`, `583-form-tab-order-advanced/s5`,
+  `584-form-state-changes-advanced/s8`, `621-web-form-tab-hints-no-key/s7`,
+  `622-form-tab-order-beginner-set/s5`, `714-form-tab-order-forms-mode-2/s5`,
+  `736-form-tab-order-tutor-off/s5`, `737-form-tab-order-control-type-off/s5`,
+  `739-form-tab-order-position-off/s5`, `2986-aria-combobox-select-only-t1-tab-vc/s1`,
+  `2990-aria-combobox-select-only-t2-shift-tab-vc/s1`,
+  `2992-aria-combobox-select-only-t3-tab-pc/s1`,
+  `2993-aria-combobox-select-only-t4-shift-tab-pc/s1`,
+  `2994-aria-combobox-select-only-t7-ins-tab-vc/s1`,
+  `2996-aria-combobox-select-only-t8-ins-tab-pc/s1`,
+  `3014-aria-combobox-select-only-t35-enter-pc/s1`,
+  `3015-aria-combobox-select-only-t35-space-pc/s1`,
+  `3016-aria-combobox-select-only-t35-alt-up-pc/s1`,
+  `3017-aria-combobox-select-only-t37-esc-pc/s1`.
+- Difference: Okur also says "collapsed" (or "expanded") after a combo box's role on a focus.
+- Why: on Tab, Insert+Tab and the focus back from its list, JAWS says a combo box without its
+  state, "Favorite Fruit Combo box | Choose a Fruit", a select and an ARIA select-only one alike,
+  and the state only on the C quick key [obs, 203/s13; round-aria33]. ARIA-AT's select-only
+  combo box plan requires it (MUST). Verbosity without item states leaves it out (738).
+- Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
+
 ## Considered and not accepted
 
 - From a newer JAWS (2025.2508.120, ARIA-AT's reports), not followed: Insert+Up on a menu

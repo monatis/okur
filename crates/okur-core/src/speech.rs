@@ -904,13 +904,20 @@ impl SpeechFormatter {
         Self::link_focus(name, node, false).render_all()
     }
 
-    /// A combo box taking the focus by Tab in a page: its name, role and value, without its
-    /// collapsed state (unlike the C quick key).
+    /// A combo box taking the focus by Tab in a page: its name, role, state and value. JAWS
+    /// leaves the state out, where ARIA-AT requires it (the owner's rule for the web).
     pub fn combo_box_tab_focus(name: &str, node: &AomNode) -> Announcement {
-        let mut lines = vec![Line::new(name_and_role(
-            name,
-            msg::role_combo_box_focus().as_str(),
-        ))];
+        let mut parts = name_and_role(name, msg::role_combo_box_focus().as_str());
+        let state = match node.states.expanded {
+            Some(true) => Some(msg::state_expanded()),
+            Some(false) => Some(msg::state_collapsed()),
+            None => None,
+        };
+        if let Some(state) = state {
+            parts.push(Part::text(" "));
+            parts.push(Part::state(state));
+        }
+        let mut lines = vec![Line::new(parts)];
         if let Some(value) = node.value.as_deref() {
             lines.push(Line::of(PartKind::Value, value));
         }
