@@ -3301,6 +3301,8 @@ impl ScreenReaderEngine {
             let none = match kind {
                 crate::event::SheetListKind::Formulas => msg::excel_no_formulas(),
                 crate::event::SheetListKind::Column => msg::excel_no_column_cells(),
+                // [hyp: not recorded]
+                crate::event::SheetListKind::Row => msg::excel_no_row_cells(),
                 crate::event::SheetListKind::Worksheets => msg::excel_no_worksheets(),
             }
             .to_string();

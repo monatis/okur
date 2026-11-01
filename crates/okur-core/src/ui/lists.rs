@@ -630,8 +630,15 @@ impl ListDialog {
                 .map(|(index, entry)| Entry::sheet_entry(index, entry))
                 .collect(),
         );
-        if kind == crate::event::SheetListKind::Column {
-            dialog.title = Some(msg::list_dialog_column(column).render());
+        match kind {
+            crate::event::SheetListKind::Column => {
+                dialog.title = Some(msg::list_dialog_column(column).render());
+            }
+            // A row's list is titled by its number, "Row 1" [obs, round-1133].
+            crate::event::SheetListKind::Row => {
+                dialog.title = Some(msg::list_dialog_row(column).render());
+            }
+            _ => {}
         }
         dialog
     }
@@ -844,6 +851,7 @@ impl ListDialog {
                 match kind {
                     crate::event::SheetListKind::Formulas => msg::list_dialog_cells_with_formulas(),
                     crate::event::SheetListKind::Column => msg::list_dialog_column_cells(),
+                    crate::event::SheetListKind::Row => msg::list_dialog_row_cells(),
                     crate::event::SheetListKind::Worksheets => msg::list_dialog_move_to_worksheet(),
                 },
                 vec![

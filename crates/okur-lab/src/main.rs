@@ -1358,6 +1358,7 @@ async fn main() {
                     serde_json::json!({
                         "formulas": sheet_list(okur_core::SheetListKind::Formulas),
                         "column": sheet_list(okur_core::SheetListKind::Column),
+                        "row": sheet_list(okur_core::SheetListKind::Row),
                         "worksheets": sheet_list(okur_core::SheetListKind::Worksheets),
                     })
                 });

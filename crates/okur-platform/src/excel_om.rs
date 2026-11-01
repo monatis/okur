@@ -113,6 +113,7 @@ pub fn sheet_list(
     let window = word_window(grid)?;
     let cell = object(&property(&window, "ActiveCell")?)?;
     let column = number(&cell, "Column")?;
+    let row = number(&cell, "Row")?;
     let letters = address(&cell)?
         .chars()
         .take_while(|c| c.is_ascii_alphabetic())
@@ -131,7 +132,9 @@ pub fn sheet_list(
                 .map(|name| entry(name.clone(), name))
                 .collect()
         }
-        okur_core::SheetListKind::Column | okur_core::SheetListKind::Formulas => {
+        okur_core::SheetListKind::Column
+        | okur_core::SheetListKind::Row
+        | okur_core::SheetListKind::Formulas => {
             let used = object(&property(&sheet, "UsedRange")?)?;
             let (top, left) = (number(&used, "Row")?, number(&used, "Column")?);
             let rows = number(&object(&property(&used, "Rows")?)?, "Count")?.clamp(0, MAX_LISTED);
@@ -141,6 +144,12 @@ pub fn sheet_list(
                 (column, column)
             } else {
                 (left, left + columns - 1)
+            };
+            // A row's list: the active cell's row alone.
+            let (top, rows) = if kind == okur_core::SheetListKind::Row {
+                (row, 1)
+            } else {
+                (top, rows)
             };
             let mut found = Vec::new();
             let mut looked = 0;
@@ -156,7 +165,7 @@ pub fn sheet_list(
                     let Some(at) = address(&cell) else {
                         continue;
                     };
-                    if kind == okur_core::SheetListKind::Column {
+                    if kind != okur_core::SheetListKind::Formulas {
                         let shown = text(&cell, "Text").trim().to_owned();
                         if !shown.is_empty() {
                             found.push(entry(format!("{shown}: {at}"), at));
@@ -173,7 +182,13 @@ pub fn sheet_list(
             found
         }
     };
-    Some((letters, entries))
+    // A row's list is titled by its number, the others by the column's letters.
+    let place = if kind == okur_core::SheetListKind::Row {
+        row.to_string()
+    } else {
+        letters
+    };
+    Some((place, entries))
 }
 
 /// Goes to `target` of one of those lists in Excel's grid window `grid`: selects the cell it

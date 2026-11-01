@@ -24,6 +24,10 @@ list-dialog-bookmarks = Bookmark List
 list-dialog-cells-with-formulas = Cells with Formulas
 list-dialog-column = Col { $column }
 list-dialog-column-cells = Col
+# The active cell's row's cells, Insert+Shift+R, titled by the row [obs, round-1133: "Row 1
+# dialog"].
+list-dialog-row = Row { $row }
+list-dialog-row-cells = Row
 list-dialog-move-to-worksheet = Move to Worksheet
 # Word's revisions, Insert+Shift+R in a document [hyp: 1107 records JAWS's title].
 list-dialog-revisions = Revisions

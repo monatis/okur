@@ -9206,3 +9206,50 @@ fn excel_cells_and_the_formula_list() {
         .iter()
         .any(|(action, _)| action == "Formulas B4"));
 }
+
+/// Excel's Insert+Shift+R lists the active cell's row's cells with data, titled by the row,
+/// "Row 1 dialog | List1 List view | Branch: A1 | 1 of 3" [obs, round-1133b].
+#[test]
+fn excel_the_row_list() {
+    use crate::ui::ToUi;
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut cell = FocusEvent::new(Role::TableCell)
+        .with_name("B1")
+        .with_window_title("sr-excel-fixture.xlsx - Excel");
+    cell.value = Some("Weekdays".into());
+    cell.app = Some("EXCEL.EXE".into());
+    cell.platform.window_class = Some("EXCEL7".into());
+    engine.handle_focus_event(&cell);
+    let mut key = KeyEvent::new(Key::Alpha('R'), Modifiers::none(), true);
+    key.modifiers.insert = true;
+    key.modifiers.shift = true;
+    engine.handle_key_event(&key);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "sheet row"));
+    let entry = |label: &str, target: &str| crate::event::SheetEntry {
+        label: label.into(),
+        target: target.into(),
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::SheetList {
+        kind: crate::event::SheetListKind::Row,
+        column: "1".into(),
+        entries: vec![
+            entry("Branch: A1", "A1"),
+            entry("Weekdays: B1", "B1"),
+            entry("Weekends: C1", "C1"),
+        ],
+    });
+    let title = ui.take().into_iter().find_map(|m| match m {
+        ToUi::DialogShow { dialog } => Some(dialog.title),
+        _ => None,
+    });
+    assert_eq!(title.as_deref(), Some("Row 1"));
+}

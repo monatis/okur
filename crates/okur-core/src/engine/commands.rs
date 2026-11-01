@@ -1250,6 +1250,7 @@ impl ScreenReaderEngine {
         let sheet_list = match (event.key, m.shift, m.ctrl, m.alt) {
             (Key::Alpha('F'), true, false, false) => Some(crate::event::SheetListKind::Formulas),
             (Key::Alpha('C'), true, false, false) => Some(crate::event::SheetListKind::Column),
+            (Key::Alpha('R'), true, false, false) => Some(crate::event::SheetListKind::Row),
             _ => None,
         };
         if let Some(kind) = sheet_list.filter(|_| !m.win) {
