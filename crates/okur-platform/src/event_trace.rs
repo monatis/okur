@@ -1076,7 +1076,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     // An Office dialog's field reports the focus from its own window too, between its dialog's
     // two reports of it: MSAA gives the window's client, UI Automation a pane right in the
     // dialog, both named by the field's text or by nothing. The dialog's report is the field
-    // (MSAA's editable text, below); this one names nothing of it [obs, 1124/s1, s7].
+    // (MSAA's editable text, below); this one names nothing of it [obs, 1124/s1, s8].
     const MSAA_CLIENT: i32 = 0x0A;
     if let Some(client) = event
         .object
@@ -1175,7 +1175,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     // An Office dialog's field (Excel's Go To, a `bosa_sdm` window): UI Automation reaches only
     // the field's window, a pane named by nothing or by the field's text, where the dialog's
     // MSAA names the field by its label as editable text, its value the text. JAWS reads MSAA's: "Reference: Edit | A1 |
-    // Type in text." [obs, 1124/s1, s7].
+    // Type in text." [obs, 1124/s1, s8].
     const UIA_PANE: i32 = 50033;
     if let Some(object) = event.object.as_ref().filter(|o| {
         o.role == Some(MSAA_TEXT)
@@ -7880,7 +7880,7 @@ mod tests {
 
     /// Excel's Go To: the dialog's MSAA names its field, "Reference:", where UI Automation has
     /// only the field's window, a pane named by its text; the field's own report between the
-    /// dialog's two is none [obs, 1124/s1, s7].
+    /// dialog's two is none [obs, 1124/s1, s8].
     #[test]
     fn an_office_dialog_field_is_its_label_as_msaa_has_it() {
         const PANE: i32 = 50033;

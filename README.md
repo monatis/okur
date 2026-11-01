@@ -49,8 +49,8 @@ Where to go from here:
 > Microsoft Word's documents, dialog boxes and menus, Notepad, File Explorer, Windows
 > Settings, Windows Terminal, the desktop, Alt+Tab and Windows search are read as JAWS reads
 > them, and the Okur cursor reads any window's screen, pictures included, recognized with
-> Windows' own OCR. It is not yet a replacement for your screen reader: Outlook and Excel are
-> the largest part still missing (see [Not yet](#not-yet)). Those everyday gaps on Windows are being closed first; macOS, whose
+> Windows' own OCR. It is not yet a replacement for your screen reader: Outlook, and Excel's titles and
+> totals, are the largest part still missing (see [Not yet](#not-yet)). Those everyday gaps on Windows are being closed first; macOS, whose
 > accessibility layer is in place, comes after them.
 >
 > **Okur speaks in its own name.** Where JAWS names itself, Okur says Okur: the Okur key
@@ -205,8 +205,11 @@ in [accepted divergences](docs/references/accepted-divergences.md).
   Ctrl+Insert with the same keys the column. Insert+Shift+F lists the cells with formulas,
   Insert+Shift+C the column's cells and Ctrl+Shift+S the worksheets, and OK goes there.
   Selecting with Shift and the arrows says the cells added, Shift+Space and Ctrl+Space the
-  whole row or column. The rows, columns, selections and lists come from Excel's own object
-  model.
+  whole row or column. An empty cell is "blank" with its coordinates; typing in a cell, Delete
+  and Ctrl+Z ("Undo") say the cell as it is after them. Shift+F10 opens the cell's menu and
+  Insert+Shift+S the sheet tabs' menu; Go To (Ctrl+G, F5) and Format Cells (Ctrl+1) read as
+  dialogs, their pages switched with Ctrl+Tab. The rows, columns, selections and lists come
+  from Excel's own object model.
 - **The cursors:** Numpad Minus to the Okur cursor at the mouse, Numpad Plus back to the PC
   cursor, Insert+Numpad Minus to bring the Okur cursor to the PC cursor, Insert+Numpad Plus
   the other way, Insert+R for where the Okur cursor may go, and Alt+Delete for where the
@@ -308,7 +311,8 @@ The [reference documentation](docs/references/) describes these behaviors in det
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- Outlook, not yet supported; in Excel, the sheet tabs' menu (Insert+Shift+S) and editing a cell;
+- Outlook, not yet supported; in Excel, row and column titles and totals, monitor cells,
+  comments and the rest of JAWS's Excel keys;
 - starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
   with UI Access are written and are being tested with a development signature on the lab
   machine, before a signed release;

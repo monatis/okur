@@ -494,7 +494,7 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
             lines.extend(position(focus));
             if !focus.in_ribbon {
                 // Office's own dialogs switch their pages with Control+Tab, as JAWS says
-                // [obs, 1124/s4, s5].
+                // [obs, 1124/s4-s6].
                 let office = focus
                     .platform
                     .top_window_class

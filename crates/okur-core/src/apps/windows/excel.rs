@@ -14,7 +14,7 @@ const GRID_WINDOW: &str = "EXCEL7";
 /// Excel's cell editor, F2's (and typing's) edit.
 const EDITOR_WINDOW: &str = "EXCEL6";
 /// Excel's main window, which reports the focus back on the cell as a dialog of Excel's closes
-/// [obs, 1124/s6, s8].
+/// [obs, 1124/s7, s9].
 const MAIN_WINDOW: &str = "XLMAIN";
 
 /// Excel's module.
@@ -610,7 +610,7 @@ mod tests {
         let mut other = focus.clone();
         other.platform.window_class = Some("Chrome_RenderWidgetHostHWND".into());
         assert_eq!(cell(&other), None);
-        // Excel's main window reports the cell as a dialog of Excel's closes [obs, 1124/s6].
+        // Excel's main window reports the cell as a dialog of Excel's closes [obs, 1124/s7].
         let mut back = focus.clone();
         back.platform.window_class = Some(MAIN_WINDOW.into());
         assert_eq!(cell(&back).as_deref(), Some("B 2"));
