@@ -346,7 +346,7 @@ fn convert(
         Role::Text | Role::Group if is_labelled_empty_generic(node) => {
             aom.text = node.name.clone();
         }
-        Role::Edit | Role::ComboBox | Role::Slider => {
+        Role::Edit | Role::ComboBox | Role::Slider | Role::ProgressBar => {
             aom.value = node.value.clone();
             aom.value_min = node.value_min;
             aom.value_max = node.value_max;
@@ -460,6 +460,10 @@ fn convert(
     }
     // A combo box one types in (an autocomplete), JAWS's "edit combo". Chrome's UIA reports
     // a select's value as writable too, so only IA2's editable state tells them apart.
+    // An ARIA meter, a progress bar to MSAA: "CPU Usage meter 36.1665".
+    if role == Role::ProgressBar && attr("xml-roles").as_deref() == Some("meter") {
+        set_attr("meter", "true".to_owned());
+    }
     if role == Role::ComboBox && node.ia2_states & ia2_state::EDITABLE != 0 {
         set_attr("editable", "true".to_owned());
     }

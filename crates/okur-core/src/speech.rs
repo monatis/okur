@@ -695,6 +695,21 @@ impl SpeechFormatter {
                 }
                 described(vec![Line::new(parts)])
             }
+            // An ARIA meter by its name, role and value, "Central Processing Unit (CPU) Usage
+            // meter | 36.1665", where ARIA-AT's meter plan requires all three (MUST) [obs,
+            // round-aria38, 3111/s1].
+            Role::ProgressBar if attr("meter") == Some("true") => {
+                let mut lines = vec![Line::new(name_and_role(name, msg::role_meter().as_str()))];
+                if let Some(value) = node
+                    .value
+                    .as_deref()
+                    .map(str::trim)
+                    .filter(|v| !v.is_empty())
+                {
+                    lines.push(Line::of(PartKind::Value, value));
+                }
+                Announcement::new(lines)
+            }
             _ => Announcement::new(vec![Line::of(PartKind::Name, name)]),
         }
     }

@@ -75,6 +75,9 @@ role-menu-item = menu item
 # A page of a dialog's tabs (a property sheet's page).
 role-page = page
 role-progress-bar = progress bar
+# An ARIA meter (a gauge, not a task's progress): "CPU Usage meter 36.1665" (ARIA-AT's meter
+# plan; JAWS reads none).
+role-meter = meter
 role-radio-button = radio button
 # The regions (landmarks) a focus is in. JAWS writes each as one word.
 role-region = Region

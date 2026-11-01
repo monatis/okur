@@ -1732,6 +1732,25 @@ thread_local! {
 /// The focus event's MSAA object can be the browser window while the focused control is a page
 /// button (focus left on it, then Space expanded it, GitHub): the control's own name, from the
 /// focus chain, is compared too.
+/// The new value of a page's progress bar or meter (MSAA `ROLE_SYSTEM_PROGRESSBAR`, which
+/// Chromium gives both) a value change event names.
+fn page_progress_value(event: &TraceEvent) -> Option<String> {
+    const ROLE_SYSTEM_PROGRESSBAR: i32 = 0x30;
+    if !WEB_CONTENT_WINDOW_CLASSES.contains(&event.window_class.as_deref()?) {
+        return None;
+    }
+    let object = event.object.as_ref()?;
+    if object.role != Some(ROLE_SYSTEM_PROGRESSBAR) {
+        return None;
+    }
+    object
+        .value
+        .as_deref()
+        .map(str::trim)
+        .filter(|v| !v.is_empty())
+        .map(str::to_owned)
+}
+
 fn concerns_focus(
     (focused, control_name): (&(isize, i32, i32, Option<String>), Option<&String>),
     (hwnd, id_object, id_child): (isize, i32, i32),
@@ -1978,6 +1997,26 @@ impl EventConverter {
             // A select's value changed: it has no text, only the new choice as its value. It is
             // said as a value change [obs, 205/s9, s10].
             "value_change" if is_choice_without_text(event) => ChangeKind::Value,
+            // A page's progress bar or meter changing without the focus says its new value,
+            // "86.0274", the CPU meter as its button changes it [obs, round-aria38, 3113/s1,
+            // 3116/s1].
+            "value_change"
+                if page_progress_value(event).is_some()
+                    && !self.focused.as_ref().is_some_and(|focused| {
+                        concerns_focus(
+                            (focused, self.focused_control.as_ref()),
+                            (event.hwnd, event.id_object, event.id_child),
+                            event.object.as_ref().and_then(|o| o.name.as_ref()),
+                        )
+                    }) =>
+            {
+                return page_progress_value(event).map(|value| {
+                    AccessibilityEvent::LiveRegion(okur_core::LiveRegionEvent::new(
+                        value,
+                        okur_core::Politeness::Polite,
+                    ))
+                });
+            }
             // The focused text field's caret moved or its text changed. A value change of
             // another object is not the field's: Word's ribbon and its Font boxes change as the
             // caret crosses a style, and each was read as the document's text (performance

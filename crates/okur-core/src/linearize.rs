@@ -1349,6 +1349,15 @@ impl<'a> Builder<'a> {
                 .trim_end()
                 .to_owned()
             }
+            // An ARIA meter by its name, role and value, "Central Processing Unit (CPU) Usage
+            // meter 36.1665", where JAWS reads no line for it and ARIA-AT's meter plan requires
+            // all three (MUST; the owner's rule for the web) [obs, round-aria38, 3109/s1].
+            Role::ProgressBar if attr(node, "meter") == Some("true") => {
+                let value = node.value.as_deref().map(str::trim).unwrap_or_default();
+                format!("{name}{}{value}", role_marker(msg::role_meter().as_str()))
+                    .trim_end()
+                    .to_owned()
+            }
             Role::ProgressBar => {
                 format!("{name}{}", role_marker(msg::role_progress_bar().as_str()))
             }
