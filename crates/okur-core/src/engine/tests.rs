@@ -1774,11 +1774,11 @@ fn test_engine_modal_dialog_confinement_and_escape() {
     let tab3 = engine.execute_command("{TAB}").unwrap_or_default();
     assert!(tab3.contains("Confirm"));
 
-    // Escape exits modal dialog
+    // Escape is the page's: it closes the dialog, and the page without it ends the
+    // confinement.
     let esc_event = KeyEvent::new(Key::Escape, Modifiers::none(), true);
     let action = engine.handle_key_event(&esc_event);
-    assert_eq!(action, KeyAction::Consume);
-    assert!(!engine.cursor.is_in_modal());
+    assert_eq!(action, KeyAction::PassThrough);
 }
 
 #[test]

@@ -162,13 +162,11 @@ pub enum Command {
     Activate,
     /// Enter: forms mode in a field, or activate the link or control.
     Enter,
-    /// Escape: collapse, leave forms mode, or leave a modal dialog.
+    /// Escape: collapse, or leave forms mode.
     Escape,
     ExpandComboBox,
     CollapseComboBox,
     EnterMathViewer,
-    EnterModal,
-    ExitModal,
 
     // Selection.
     SelectNextCharacter,
@@ -608,8 +606,6 @@ impl Command {
             "!{DOWN}" | "ExpandComboBox" => ExpandComboBox,
             "!{UP}" | "CollapseComboBox" => CollapseComboBox,
             "EnterMathViewer" | "ShowMathEditor" => EnterMathViewer,
-            "EnterModal" => EnterModal,
-            "ExitModal" => ExitModal,
 
             "+{RIGHT}" | "SelectNextCharacter" => SelectNextCharacter,
             "+{LEFT}" | "SelectPriorCharacter" => SelectPriorCharacter,

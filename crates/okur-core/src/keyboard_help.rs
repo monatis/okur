@@ -248,8 +248,6 @@ fn descriptions(command: &Command) -> Descriptions {
         ExpandComboBox => one(msg::command_expand_combo_box()),
         CollapseComboBox => one(msg::command_collapse_combo_box()),
         EnterMathViewer => one(msg::command_enter_math_viewer()),
-        EnterModal => one(msg::command_enter_modal()),
-        ExitModal => one(msg::command_exit_modal()),
 
         // Selecting.
         SelectNextCharacter => one(msg::command_select_next_character()),
@@ -683,8 +681,6 @@ mod tests {
             ExpandComboBox,
             CollapseComboBox,
             EnterMathViewer,
-            EnterModal,
-            ExitModal,
             SelectNextCharacter,
             SelectPriorCharacter,
             SelectNextLine,

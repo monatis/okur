@@ -167,32 +167,57 @@ impl VirtualCursor {
         self.active_modal_root.is_some()
     }
 
-    /// Returns the offset boundary (start, end) of the active modal dialog if any.
+    /// The active modal dialog's lines, from the start of its first to the start of its last:
+    /// its own "dialog" and "dialog end" lines are outside them, as JAWS's virtual cursor
+    /// keeps to the dialog's content (Ctrl+Home "heading level 2 Add Delivery Address",
+    /// Ctrl+End "Cancel Button") [obs, round-aria23, 2679/s1, 2680/s1].
     pub fn active_modal_range(&self) -> Option<(usize, usize)> {
         let node_id = self.active_modal_root?;
         let dialog = self.buffer.dialog_for_node(node_id)?;
-        Some((dialog.start_offset, dialog.end_offset))
+        let first = self.buffer.next_line_from(dialog.start_offset)?;
+        let end_line = self
+            .buffer
+            .lines
+            .iter()
+            .rfind(|l| l.node_id == node_id && l.start_offset > dialog.start_offset)?;
+        let last = self.buffer.prior_line_from(end_line.start_offset)?;
+        (first.start_offset <= last.start_offset).then_some((first.start_offset, last.start_offset))
+    }
+
+    /// Keeps the virtual cursor in the page's open modal dialog (`aria-modal`), as JAWS does:
+    /// the one `focus` is in, else the page's last; none when the page has none open. The
+    /// cursor outside it goes to its first line.
+    pub fn sync_modal(&mut self, focus: Option<usize>) {
+        let focus_at = focus.and_then(|id| self.buffer.start_of(id));
+        let modal: Vec<&crate::buffer::DialogInfo> =
+            self.buffer.dialogs.iter().filter(|d| d.is_modal).collect();
+        let around_focus = focus_at.and_then(|at| {
+            modal
+                .iter()
+                .filter(|d| d.start_offset <= at && at <= d.end_offset)
+                .max_by_key(|d| d.start_offset)
+        });
+        self.active_modal_root = around_focus.or(modal.last()).map(|d| d.node_id);
+        if let Some((min, max)) = self.active_modal_range() {
+            if self.offset < min || self.offset > max {
+                self.offset = min;
+                self.current_node_id = self.buffer.line_at_offset(min).map(|l| l.node_id);
+            }
+        }
     }
 
     /// Activates modal confinement for a dialog node and emits announcement.
     pub fn enter_modal(&mut self, node_id: usize) -> Option<String> {
         let dialog = self.buffer.dialog_for_node(node_id)?;
+        let name = dialog.name.clone();
         self.active_modal_root = Some(node_id);
-        self.offset = dialog.start_offset;
-        self.current_node_id = Some(node_id);
+        let (min, _) = self
+            .active_modal_range()
+            .unwrap_or((dialog.start_offset, 0));
+        self.offset = min;
+        self.current_node_id = self.buffer.line_at_offset(min).map(|l| l.node_id);
         self.selection = None;
-        Some(SpeechFormatter::format_dialog_entry(&dialog.name))
-    }
-
-    /// Exits modal confinement and returns speech announcement.
-    pub fn exit_modal(&mut self) -> Option<String> {
-        if self.active_modal_root.is_some() {
-            self.active_modal_root = None;
-            self.selection = None;
-            Some(SpeechFormatter::format_dialog_exit())
-        } else {
-            None
-        }
+        Some(SpeechFormatter::format_dialog_entry(&name))
     }
 
     /// Clears active text selection.
@@ -637,8 +662,9 @@ impl VirtualCursor {
         };
 
         if let Some(next_line) = self.buffer.next_line_from(self.offset) {
+            // At a modal dialog's last line, the line again [obs, round-aria23, 2682/s1].
             if next_line.start_offset > max_offset {
-                return None;
+                return Some(self.current_line());
             }
             self.offset = next_line.start_offset;
             self.current_node_id = Some(next_line.node_id);
@@ -659,8 +685,9 @@ impl VirtualCursor {
         };
 
         if let Some(prior_line) = self.buffer.prior_line_from(self.offset) {
+            // At a modal dialog's first line, the line again [obs, round-aria23, 2681/s1].
             if prior_line.start_offset < min_offset {
-                return None;
+                return Some(self.current_line());
             }
             self.offset = prior_line.start_offset;
             self.current_node_id = Some(prior_line.node_id);

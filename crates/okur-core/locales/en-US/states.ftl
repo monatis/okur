@@ -28,6 +28,9 @@ state-required = Required
 # field's name and value as the focus lands on it [obs, 284].
 misspelled = Misspelled
 state-selected = selected
+# A page's modal dialog (aria-modal) entered with the virtual cursor off: "Add Delivery Address
+# Modal dialog".
+state-modal = Modal
 # A link whose page was opened before, said before its role: "visited Link".
 state-visited = visited
 # A menu item that opens another menu.

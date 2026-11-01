@@ -133,7 +133,6 @@ selection-summary = { $count } characters up to
 
 dialog-entered = Dialog
 dialog-entered-named = Dialog { $title }
-dialog-left = Leaving Dialog
 
 ## A property sheet in a dialog box
 

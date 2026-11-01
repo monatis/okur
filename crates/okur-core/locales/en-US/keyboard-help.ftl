@@ -323,10 +323,6 @@ command-expand-combo-box = Opens the combo box's list.
 command-collapse-combo-box = Closes the combo box's list.
 # Entering a math equation.
 command-enter-math-viewer = Opens the math equation at the cursor in the Math Viewer.
-# Entering a page's modal dialog.
-command-enter-modal = Keeps the virtual cursor inside the page's dialog.
-# Leaving a page's modal dialog.
-command-exit-modal = Lets the virtual cursor leave the page's dialog.
 
 ## Selecting
 

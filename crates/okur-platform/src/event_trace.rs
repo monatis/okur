@@ -822,6 +822,10 @@ pub fn focus_event_from_chain(
         ) || (role == Role::Group
             && a.name.as_deref().is_some_and(|n| !n.trim().is_empty()));
         if is_container {
+            if matches!(role, Role::Dialog | Role::AlertDialog) {
+                event.container_description =
+                    a.full_description.clone().filter(|d| !d.trim().is_empty());
+            }
             event.container_name = a.name.clone();
             event.platform.container_class = a.class_name.clone();
             event.container_is_list_view = is_list_view(a.class_name.as_deref());

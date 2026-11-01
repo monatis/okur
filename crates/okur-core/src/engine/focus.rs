@@ -513,15 +513,9 @@ impl ScreenReaderEngine {
                 return Some(msg);
             }
 
-            // If target is inside a modal dialog, ensure modal confinement is active
-            if let Some(id) = target_id {
-                if let Some(dlg) = self.cursor.buffer.dialog_for_node(id) {
-                    if dlg.is_modal && self.cursor.active_modal_root != Some(dlg.node_id) {
-                        let _ = self.cursor.enter_modal(dlg.node_id);
-                    }
-                } else if self.cursor.is_in_modal() {
-                    let _ = self.cursor.exit_modal();
-                }
+            // The virtual cursor kept in the open modal dialog, the focus's if it is in one.
+            if target_id.is_some() {
+                self.cursor.sync_modal(target_id);
             }
 
             // Forms mode follows focus into edits silently: JAWS 2025 signals it with a
@@ -772,11 +766,31 @@ impl ScreenReaderEngine {
                             asked: false,
                         },
                     );
-                    if let Some(hint) =
-                        SpeechFormatter::web_focus_hint(&node, self.virtual_cursor_off)
-                    {
+                    let hint = SpeechFormatter::web_focus_hint(&node, self.virtual_cursor_off)
+                        .or_else(|| {
+                            // An edit with the virtual cursor off: "Type in text." [obs,
+                            // round-aria23, 2668/s1].
+                            (self.virtual_cursor_off && node.role == Role::Edit)
+                                .then(|| msg::hint_type_in_text().as_str())
+                        });
+                    if let Some(hint) = hint {
                         speech.push('\n');
                         speech.push_str(hint);
+                    }
+                    // The dialog it is in, opened with it: "Add Delivery Address dialog |
+                    // Street: Edit | blank", its description after it [obs, round-aria23,
+                    // 2666/s1, 2683/s1].
+                    if matches!(focus.container_role, Some(Role::Dialog | Role::AlertDialog)) {
+                        let mut dialog = format!(
+                            "{} \u{1d} {} \u{1e} \n",
+                            focus.container_name.as_deref().unwrap_or_default().trim(),
+                            msg::role_dialog()
+                        );
+                        if let Some(text) = focus.container_description.as_deref() {
+                            dialog.push_str(text.trim());
+                            dialog.push('\n');
+                        }
+                        speech = format!("{dialog}{speech}");
                     }
                     Some(speech).filter(|s| !s.trim().is_empty())
                 })

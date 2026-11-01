@@ -942,11 +942,6 @@ impl SpeechFormatter {
         }
     }
 
-    /// Formats modal dialog exit announcement.
-    pub fn format_dialog_exit() -> String {
-        msg::dialog_left().to_string()
-    }
-
     /// A form field as Select a Form Field lists it: its name, its type, then its value or
     /// state ("Wrap check box not checked", "Fruit edit combo", "Notes Edit the lazy dog")
     /// [obs, 227]. A button of any kind is a "Button" ("Outline Button" for a button menu).

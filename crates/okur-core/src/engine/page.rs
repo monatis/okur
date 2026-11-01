@@ -474,6 +474,30 @@ impl ScreenReaderEngine {
                         "region" => Some(named(msg::role_region().as_str())),
                         _ => None,
                     },
+                    // A dialog by its name, "Modal" with the virtual cursor off, then its
+                    // description: "Address Added Modal dialog | The address you provided has
+                    // been added..." [obs, round-aria23, 2666/s1, 2668/s1, 2685/s1].
+                    Role::Dialog | Role::AlertDialog => {
+                        let mut line = if self.virtual_cursor_off && n.states.modal {
+                            format!(
+                                "{name} \u{1d}{}\u{1e} \u{1d} {} \u{1e} \n",
+                                msg::state_modal(),
+                                msg::role_dialog()
+                            )
+                        } else {
+                            named(msg::role_dialog().as_str())
+                        };
+                        if let Some(text) = n
+                            .attributes
+                            .get("description")
+                            .map(|d| d.trim())
+                            .filter(|d| !d.is_empty())
+                        {
+                            line.push_str(text);
+                            line.push('\n');
+                        }
+                        Some(line)
+                    }
                     // "Peter Müller TabPanel" [obs, round-aria18, 2531/s1].
                     Role::TabPanel if !name.is_empty() => {
                         Some(named(msg::role_tab_panel().as_str()))
@@ -740,6 +764,7 @@ impl ScreenReaderEngine {
             return false;
         };
         crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, rebuilt));
+        self.cursor.sync_modal(self.last_page_focus);
         // Line numbers changed: a Say All stops following.
         self.say_all = None;
         true
@@ -865,6 +890,7 @@ impl ScreenReaderEngine {
                     })
                     .collect();
             crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, buffer));
+            self.cursor.sync_modal(self.last_page_focus);
             let buffer = &self.cursor.buffer;
             self.field_texts = typed
                 .into_iter()

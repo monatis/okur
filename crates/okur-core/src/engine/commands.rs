@@ -525,8 +525,6 @@ impl ScreenReaderEngine {
                         .map(|_| self.virtual_pc_message());
                     self.forms_mode = false;
                     res
-                } else if self.cursor.is_in_modal() {
-                    self.cursor.exit_modal()
                 } else {
                     None
                 }
@@ -549,23 +547,6 @@ impl ScreenReaderEngine {
             Command::SelectHtmlElement => self.cursor.select_current_element(),
             Command::CopySelection => self.copy_selection(),
             Command::SaySelectedText => Some(self.cursor.say_selection()),
-
-            // Modal dialog commands
-            Command::EnterModal => {
-                let target_dlg = if let Some(node_id) = self.cursor.current_node_id {
-                    self.cursor.buffer.dialog_for_node(node_id)
-                } else {
-                    None
-                }
-                .or_else(|| self.cursor.buffer.dialogs.first());
-
-                if let Some(dlg) = target_dlg {
-                    self.cursor.enter_modal(dlg.node_id)
-                } else {
-                    None
-                }
-            }
-            Command::ExitModal => self.cursor.exit_modal(),
 
             // JAWS Say Scripts
             Command::SayAll => return self.start_say_all(),

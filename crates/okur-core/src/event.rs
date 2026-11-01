@@ -750,6 +750,10 @@ pub struct FocusEvent {
     pub window_title: Option<String>,
     pub folder_name: Option<String>,
     pub help_text: Option<String>,
+    /// The container's own description (a page dialog's `aria-describedby`), said after it
+    /// as the focus enters it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub container_description: Option<String>,
     /// A native control's own description, which JAWS says after its state where MSAA alone
     /// knows the control: an Office command bar's button, "Existing File or Web Page button"
     /// [obs, 1076/s5].
@@ -977,6 +981,7 @@ impl FocusEvent {
             window_title: None,
             folder_name: None,
             help_text: None,
+            container_description: None,
             description: None,
             item_type: None,
             item_size: None,

@@ -772,6 +772,7 @@ impl ScreenReaderEngine {
             VirtualCursor::new(buffer),
         ));
         self.cursor.move_to_start();
+        self.cursor.sync_modal(None);
         self.cursor.verbosity = self.settings.verbosity.clone();
         self.forms_mode = false;
         self.app_mode = AppMode::VirtualBuffer;
@@ -1272,20 +1273,17 @@ impl ScreenReaderEngine {
             return KeyAction::PassThrough;
         }
 
-        // 4. Handle Escape when inside an expanded combobox or modal dialog
-        if event.key == Key::Escape && event.modifiers.is_empty() {
-            if self.cursor.is_combobox_expanded() {
-                if let Some(msg) = self.cursor.collapse_combobox() {
-                    self.speech.speak(&msg, true);
-                }
-                return KeyAction::Consume;
+        // 4. Handle Escape when inside an expanded combobox. In a page's modal dialog it is
+        // the page's: the dialog closes, and the page without it ends the confinement [obs,
+        // round-aria23, 2670/s1].
+        if event.key == Key::Escape
+            && event.modifiers.is_empty()
+            && self.cursor.is_combobox_expanded()
+        {
+            if let Some(msg) = self.cursor.collapse_combobox() {
+                self.speech.speak(&msg, true);
             }
-            if self.cursor.is_in_modal() {
-                if let Some(msg) = self.cursor.exit_modal() {
-                    self.speech.speak(&msg, true);
-                }
-                return KeyAction::Consume;
-            }
+            return KeyAction::Consume;
         }
 
         // 5. In non-VirtualBuffer modes (Desktop, Shell, native controls),
