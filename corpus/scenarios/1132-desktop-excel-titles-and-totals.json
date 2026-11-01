@@ -1,0 +1,38 @@
+{
+  "id": "1132-desktop-excel-titles-and-totals",
+  "name": "Excel: row 1 set as the column titles (Insert+Ctrl+Alt+C) and column A as the row titles (Insert+Ctrl+Alt+R), moves that cross a column or a row, Say Column and Row Title (CapsLock+Alt+Shift+C and R, the laptop layout's), the column's total (Insert+NumPad Enter) and the row's (Insert+Delete). Set Totals Row (Ctrl+Insert+Delete) is left out: JAWS 2025 answers it with \"unknown function call to: settotalsrowtocurrent\" (round-1132). JAWS keeps the titles in its settings for the workbook, which each trial starts without (jaws_forget)",
+  "category": "desktop",
+  "version": "1.1.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-fixture.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Insert+Ctrl+Alt+C"},
+    {"id": "s2", "type": "key", "command": "Insert+Ctrl+Alt+R"},
+    {"id": "s3", "type": "key", "command": "Down"},
+    {"id": "s4", "type": "key", "command": "Right"},
+    {"id": "s5", "type": "key", "command": "Down"},
+    {"id": "s6", "type": "key", "command": "Right"},
+    {"id": "s7", "type": "key", "command": "CapsLock+Alt+Shift+C"},
+    {"id": "s8", "type": "key", "command": "CapsLock+Alt+Shift+R"},
+    {"id": "s9", "type": "key", "command": "Down"},
+    {"id": "s10", "type": "key", "command": "Up"},
+    {"id": "s11", "type": "key", "command": "Insert+NumpadEnter"},
+    {"id": "s12", "type": "key", "command": "Insert+Delete"},
+    {"id": "s13", "type": "key", "command": "Left"}
+  ]
+}
