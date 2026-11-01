@@ -61,6 +61,18 @@ its keeper workbook; keep it running.
     and an Office popup is named as JAWS names it, "Ply pop-up menu";
   - Insert+C on an empty cell (the grid's focus has no cell: the sheet place gives it);
   - typing into a cell, Delete, and Excel's own dialogs (Format Cells, Go To).
+  - round-1122b, fetched and replayed 2026-11-01 (9/23; not imported): an empty cell takes no
+    cell in UI Automation's focus (the focus is the EXCEL7 window, then "selection_within"),
+    where JAWS says "blank | D 1 | Active Cell: D1" (1123/s2, s5, s9) and Delete's "blank | D
+    1" (s7): the tracer must record the grid's selected cell (UIA Selection of the grid, or
+    Excel's ActiveCell) for a focus without one, then the round is recorded again. Ctrl+Z's
+    "Undo" (s8). The Go To dialog's first focus, "Reference: Edit | Type in text." (1124/s1,
+    s7); Enter back in the grid said three times (s3); Format Cells' tabs as JAWS says them,
+    its hint "Control+Tab" where Okur says "Control+PageDown" (s4, s5), JAWS's trials varying;
+    Escape back to the sheet, "6 C 3", where Okur says the window and "C3 selected 6" (s6, s8).
+    Word's context menu: "Leaving menus" said with the menu's first item (1125/s1).
+  - The dialog lines' slice from ARIA-AT (a page dialog's start line JAWS does not read,
+    1129/s11) waits beside these.
 - **Word, open:** 1069/s4 (record again); 1119/s3 (the phonetic name after the page);
   Insert+Alt+R; one revision and other changes in the viewer.
 - **Outlook:** old-pc's does not open without an account: it starts "Welcome to Microsoft
