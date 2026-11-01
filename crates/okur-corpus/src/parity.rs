@@ -445,6 +445,10 @@ fn replay_scenario(
     if !desktop && !stamped {
         press_reset(&mut engine)?;
     }
+    // What the setup asked for is answered within it, with nothing (no step's snapshot is the
+    // setup's): Excel's cell after the reset's Ctrl+Home, waiting for its titles, said in step 1
+    // otherwise (2026-11-01).
+    screen_reads.answer_document(&mut engine, &actions, None, &spoken);
     spoken.take();
     spoken.take_spoken();
 
@@ -1444,7 +1448,11 @@ impl ScreenReads {
         snapshot: Option<&ScreenSnapshot>,
         spoken: &RecordingSpeech,
     ) {
+        // Without the step's snapshot (recordings before it was saved), the reads the step's
+        // events made are answered with nothing now, not at the next key: Excel's cell waiting
+        // for its titles said the step before's (1115, 2026-11-01).
         let Some(snapshot) = snapshot else {
+            self.answer_document(engine, actions, None, spoken);
             return;
         };
         let requests = actions.requests();

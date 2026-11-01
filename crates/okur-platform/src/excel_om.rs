@@ -86,6 +86,7 @@ pub fn sheet_place(grid: HWND) -> Option<okur_core::SheetPlace> {
             .map(|cell| text(&cell, "Text").trim().to_owned())
             .unwrap_or_default()
     };
+    let (title_row, title_column) = named_titles(&sheet);
     Some(okur_core::SheetPlace {
         address: address(&cell).unwrap_or_default(),
         selection: selected.as_ref().and_then(address).unwrap_or_default(),
@@ -95,8 +96,63 @@ pub fn sheet_place(grid: HWND) -> Option<okur_core::SheetPlace> {
         column_at: at(top, row)?,
         row: row_cells,
         column: column_cells,
+        title_row,
+        title_column,
         format: None,
     })
+}
+
+/// The row of column titles and the column of row titles the workbook's names give `sheet`, as
+/// JAWS's help describes them (popapps.chm, Excel Row and Column Title Reading): "Title" on the
+/// cell where they meet, "ColumnTitle" on the row of column titles, "RowTitle" on the column of
+/// row titles, each maybe followed by the worksheet's number or a region ("ColumnTitle4",
+/// "ColumnTitle1..N9"; a region's bounds not kept yet [hyp]). A name on another sheet is not
+/// this sheet's.
+fn named_titles(sheet: &IDispatch) -> (Option<u32>, Option<u32>) {
+    let (mut row, mut column) = (None, None);
+    let Some(names) = property(sheet, "Parent")
+        .as_ref()
+        .and_then(object)
+        .and_then(|book| property(&book, "Names"))
+        .as_ref()
+        .and_then(object)
+    else {
+        return (row, column);
+    };
+    let sheet_name = text(sheet, "Name");
+    let count = number(&names, "Count").unwrap_or(0).clamp(0, MAX_CELLS);
+    for index in 1..=count {
+        let Some(name) = crate::word_om::item(&names, index) else {
+            continue;
+        };
+        let full = text(&name, "Name");
+        // A sheet's own name comes as "Hours!Title".
+        let base = full
+            .rsplit('!')
+            .next()
+            .unwrap_or_default()
+            .to_ascii_lowercase();
+        let Some(range) = property(&name, "RefersToRange").as_ref().and_then(object) else {
+            continue;
+        };
+        let on_sheet = property(&range, "Worksheet")
+            .as_ref()
+            .and_then(object)
+            .is_some_and(|ws| text(&ws, "Name") == sheet_name);
+        if !on_sheet {
+            continue;
+        }
+        let at = |name: &str| number(&range, name).and_then(|n| u32::try_from(n).ok());
+        if base.starts_with("columntitle") {
+            row = row.or_else(|| at("Row"));
+        } else if base.starts_with("rowtitle") {
+            column = column.or_else(|| at("Column"));
+        } else if base.starts_with("title") {
+            row = row.or_else(|| at("Row"));
+            column = column.or_else(|| at("Column"));
+        }
+    }
+    (row, column)
 }
 
 /// The active cell's font and formatting in Excel's grid window `grid`, for Insert+F: its

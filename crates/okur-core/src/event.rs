@@ -208,6 +208,12 @@ pub struct SheetPlace {
     pub column: Vec<String>,
     pub row_at: usize,
     pub column_at: usize,
+    /// The row of column titles and the column of row titles the workbook's names give the
+    /// sheet ("Title", "ColumnTitle", "RowTitle", JAWS's help) [obs, 1134].
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub title_row: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub title_column: Option<u32>,
     /// The active cell's font and formatting, where it was asked for
     /// ([`crate::actions::ApplicationActions::read_sheet_format`]).
     #[serde(default, skip_serializing_if = "Option::is_none")]

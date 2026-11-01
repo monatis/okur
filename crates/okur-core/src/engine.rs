@@ -1751,6 +1751,16 @@ impl ScreenReaderEngine {
             } => self.sheet_list(*kind, column, entries),
             AccessibilityEvent::SheetPlace(place) if self.sheet_cell_asked => {
                 self.sheet_cell_asked = false;
+                // The workbook's titles are known now: its names' where none were set.
+                let window = self
+                    .last_native_focus
+                    .as_ref()
+                    .and_then(|focus| focus.window_title.clone());
+                if let (Some(place), Some(window)) = (place.as_ref(), window) {
+                    self.sheet_titles
+                        .entry(window)
+                        .or_insert_with(|| crate::apps::windows::excel::named_titles(place));
+                }
                 // A cell its application waited to say with the place (its titles).
                 if let Some(said) = self
                     .apps

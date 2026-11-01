@@ -68,8 +68,9 @@ pub struct AppContext<'a> {
     /// Office's own context menu closed, giving the focus back: Word's document says "Edit"
     /// alone, with nothing of leaving menus [obs, 1125/s4].
     pub office_menu_closed: bool,
-    /// The titles set for the workbook in front (Excel's Insert+Ctrl+Alt+C and R).
-    pub sheet_titles: crate::apps::windows::excel::SheetTitles,
+    /// The titles of the workbook in front, set with Excel's Insert+Ctrl+Alt+C and R or given by
+    /// its names; `None` before they are known.
+    pub sheet_titles: Option<crate::apps::windows::excel::SheetTitles>,
 }
 
 impl AppContext<'_> {

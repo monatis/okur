@@ -377,8 +377,7 @@ impl ScreenReaderEngine {
             .window_title
             .as_ref()
             .and_then(|window| self.sheet_titles.get(window))
-            .copied()
-            .unwrap_or_default();
+            .copied();
         let mut cx = AppContext {
             app_mode: &mut self.app_mode,
             window_title: &mut self.last_window_title,

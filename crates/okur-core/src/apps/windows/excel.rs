@@ -34,8 +34,25 @@ pub struct Excel {
 #[derive(Debug)]
 struct PendingTitles {
     lines: Vec<String>,
-    titles_row: Option<u32>,
-    titles_column: Option<u32>,
+    /// The cell, and the one before it.
+    at: (u32, u32),
+    before: (u32, u32),
+    /// The workbook's titles where known; else the place's, from the workbook's names.
+    titles: Option<SheetTitles>,
+}
+
+/// The row of column titles and the column of row titles a move from `before` to `at` says:
+/// into another column, the column's title; into another row, the row's; not the title of a
+/// title cell itself, "Central | A 2" [obs, 1132/s3-s6, s9-s13].
+fn titles_entered(
+    titles: SheetTitles,
+    (column, row): (u32, u32),
+    (was_column, was_row): (u32, u32),
+) -> (Option<u32>, Option<u32>) {
+    (
+        titles.row.filter(|&r| column != was_column && row != r),
+        titles.column.filter(|&c| row != was_row && column != c),
+    )
 }
 
 /// A workbook's titles, as Insert+Ctrl+Alt+C and R set them: the row holding the column titles
@@ -101,7 +118,11 @@ impl AppModule for Excel {
     fn sheet_place(&mut self, place: Option<&crate::event::SheetPlace>) -> Option<String> {
         let pending = self.pending.take()?;
         let mut lines: Vec<String> = place
-            .map(|place| titles_of(place, pending.titles_row, pending.titles_column))
+            .map(|place| {
+                let titles = pending.titles.unwrap_or_else(|| named_titles(place));
+                let (row, column) = titles_entered(titles, pending.at, pending.before);
+                titles_of(place, row, column)
+            })
             .unwrap_or_default();
         lines.extend(pending.lines);
         Some(lines.join("\n"))
@@ -168,18 +189,18 @@ impl AppModule for Excel {
         cx.note_window(focus);
         // A native control's keys are the application's, as for any cell the engine reads.
         *cx.app_mode = crate::engine::AppMode::NativeControl;
-        // Into another column, the column's title first; into another row, the row's; not the
-        // title of a title cell itself, "Central | A 2" [obs, 1132/s3-s6, s9-s13].
+        // A move's titles ([`titles_entered`]): where the workbook's are not known yet, its
+        // names may give them [obs, 1134], and the cell waits for the place to tell.
         let at = cell_at(focus);
         let before = std::mem::replace(&mut self.last_cell, at);
-        let titles = cx.sheet_titles;
-        let (titles_row, titles_column) = match (at, before) {
-            (Some((column, row)), Some((was_column, was_row))) => (
-                titles.row.filter(|&r| column != was_column && row != r),
-                titles.column.filter(|&c| row != was_row && column != c),
-            ),
-            _ => (None, None),
-        };
+        let moved = at.zip(before);
+        let waits = moved.is_some_and(|(at, before)| match cx.sheet_titles {
+            Some(titles) => {
+                let (row, column) = titles_entered(titles, at, before);
+                row.is_some() || column.is_some()
+            }
+            None => true,
+        });
         let value = focus.value.as_deref().map(str::trim).unwrap_or_default();
         let mut lines = Vec::new();
         let ctrl = cx
@@ -215,11 +236,12 @@ impl AppModule for Excel {
             );
         }
         self.from_blank = value.is_empty();
-        if titles_row.is_some() || titles_column.is_some() {
+        if let Some((at, before)) = moved.filter(|_| waits) {
             self.pending = Some(PendingTitles {
                 lines,
-                titles_row,
-                titles_column,
+                at,
+                before,
+                titles: cx.sheet_titles,
             });
             cx.ask_sheet = true;
             return FocusResponse::Silent;
@@ -527,6 +549,15 @@ pub(crate) fn cell_at(focus: &FocusEvent) -> Option<(u32, u32)> {
     Some((column?, row?))
 }
 
+/// The titles the workbook's names give the place's sheet
+/// ([`crate::event::SheetPlace::title_row`]).
+pub(crate) fn named_titles(place: &crate::event::SheetPlace) -> SheetTitles {
+    SheetTitles {
+        row: place.title_row,
+        column: place.title_column,
+    }
+}
+
 /// The titles of the active cell of `place`: its column's, in `titles_row`, then its row's, in
 /// `titles_column`, each where the active cell's row or column holds it and not empty.
 fn titles_of(
@@ -736,6 +767,8 @@ mod tests {
             column: vec!["Weekdays".into(), "12".into(), "10".into(), "22".into()],
             row_at: 1,
             column_at: 2,
+            title_row: None,
+            title_column: None,
             format: None,
         };
         let said = |reading: SheetReading| reading.said(&place);
@@ -775,6 +808,8 @@ mod tests {
             column: vec!["Weekdays".into(), "12".into(), "10".into(), "22".into()],
             row_at: 1,
             column_at: 1,
+            title_row: None,
+            title_column: None,
             format: None,
         };
         let said = |before: Option<&str>, now: crate::event::SheetPlace, key| {
@@ -867,7 +902,7 @@ mod tests {
             ask_sheet: false,
             repeat,
             office_menu_closed: false,
-            sheet_titles: Default::default(),
+            sheet_titles: Some(SheetTitles::default()),
         };
         match excel.focus(focus, &mut cx) {
             FocusResponse::Speak(announcement) => Some(announcement.render()),
@@ -915,6 +950,8 @@ mod tests {
                 String::new(),
             ],
             column: vec![String::new()],
+            title_row: None,
+            title_column: None,
             format: None,
         };
         assert_eq!(
@@ -965,7 +1002,7 @@ mod tests {
                 ask_sheet: false,
                 repeat: false,
                 office_menu_closed: false,
-                sheet_titles: titles,
+                sheet_titles: Some(titles),
             };
             let said = match excel.focus(focus, &mut cx) {
                 FocusResponse::Speak(announcement) => announcement.render(),
@@ -991,6 +1028,8 @@ mod tests {
             column_at: 1,
             row: vec!["Central".into(), "12".into(), "8".into()],
             column: vec!["Weekdays".into(), "12".into(), "10".into(), "22".into()],
+            title_row: None,
+            title_column: None,
             format: None,
         };
         assert_eq!(
@@ -1040,6 +1079,70 @@ Vertical alignment is Bottom.
 Number format is general.
 Normal
 Cell dimensions are 48 points wide by 14 points high."
+        );
+    }
+
+    /// A workbook whose name "Title" sits on A1: its titles, not known before, come with the
+    /// first move's place, "Weekdays | 12 | B 2" [obs, 1134/s2].
+    #[test]
+    fn titles_come_from_the_workbooks_names() {
+        let mut focus = FocusEvent::new(Role::TableCell);
+        focus.platform.window_class = Some(GRID_WINDOW.into());
+        let mut excel = Excel::default();
+        let mut step = |name: &str, value: &str| {
+            focus.name = Some(name.into());
+            focus.value = Some(value.into());
+            let mut mode = crate::engine::AppMode::NativeControl;
+            let (mut title, mut kind) = (None, None);
+            let mut cx = AppContext {
+                app_mode: &mut mode,
+                window_title: &mut title,
+                window_kind: &mut kind,
+                selecting: false,
+                alt_held: false,
+                letter_key: false,
+                escape_key: false,
+                key: None,
+                ask_view: false,
+                ask_sheet: false,
+                repeat: false,
+                office_menu_closed: false,
+                sheet_titles: None,
+            };
+            let said = match excel.focus(&focus, &mut cx) {
+                FocusResponse::Speak(announcement) => announcement.render(),
+                _ => String::new(),
+            };
+            (said, cx.ask_sheet)
+        };
+        assert_eq!(
+            step("A1", "Branch"),
+            (
+                "Branch
+A 1"
+                .to_owned(),
+                false
+            )
+        );
+        assert_eq!(step("B2", "12"), (String::new(), true));
+        let place = crate::event::SheetPlace {
+            address: "B2".into(),
+            row_at: 1,
+            column_at: 1,
+            row: vec!["Central".into(), "12".into(), "8".into()],
+            column: vec!["Weekdays".into(), "12".into(), "10".into(), "22".into()],
+            title_row: Some(1),
+            title_column: Some(1),
+            ..Default::default()
+        };
+        assert_eq!(
+            excel.sheet_place(Some(&place)).as_deref(),
+            Some(
+                "Weekdays
+Central
+12
+B 2"
+            )
         );
     }
 }
