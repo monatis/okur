@@ -1369,16 +1369,21 @@ impl VirtualCursor {
             return Some(lines.join("\n"));
         }
         // A tab panel taking the focus itself: "Peter Müller TabPanel" [obs, round-aria19,
-        // 2567/s1].
-        if node.role == Role::TabPanel {
+        // 2567/s1]; a named region likewise, "Mythical University sample page content Region"
+        // [obs, round-aria29, 2856/s1].
+        let container_role = match &node.role {
+            Role::TabPanel => Some(msg::role_tab_panel()),
+            Role::Landmark { landmark_type } if landmark_type == "region" => {
+                Some(msg::role_region())
+            }
+            _ => None,
+        };
+        if let Some(role) = container_role {
             let name = node.name.as_deref().unwrap_or_default().trim();
             return Some(
-                format!(
-                    "{name}{}",
-                    crate::linearize::role_marker(msg::role_tab_panel().as_str())
-                )
-                .trim()
-                .to_owned(),
+                format!("{name}{}", crate::linearize::role_marker(role.as_str()))
+                    .trim()
+                    .to_owned(),
             );
         }
         if !self.buffer.shows(node_id) {

@@ -705,10 +705,18 @@ impl ScreenReaderEngine {
                         && focus.states.selected.is_some()
                         && n.states.selected != focus.states.selected
                 };
+                // A disclosure the page closed as the focus came back to it (Escape out of its
+                // dropdown): "About Button collapsed" [obs, round-aria29, 2854/s1].
+                let disclosure_changed = |n: &crate::aom::AomNode| {
+                    matches!(n.role, Role::Button | Role::MenuButton)
+                        && focus.states.expanded.is_some()
+                        && n.states.expanded != focus.states.expanded
+                };
                 let stale = self.cursor.buffer.node(id).is_some_and(|n| {
                     (focus.states.checked.is_some() && n.states.checked != focus.states.checked)
                         || combo_changed(n)
                         || tab_changed(n)
+                        || disclosure_changed(n)
                 });
                 if stale {
                     self.change_page_node(id, |n| {
@@ -717,6 +725,9 @@ impl ScreenReaderEngine {
                         }
                         if tab_changed(n) {
                             n.states.selected = focus.states.selected;
+                        }
+                        if disclosure_changed(n) {
+                            n.states.expanded = focus.states.expanded;
                         }
                         if n.role == Role::ComboBox {
                             n.states.expanded = focus.states.expanded.or(n.states.expanded);
