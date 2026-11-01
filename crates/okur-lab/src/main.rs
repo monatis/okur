@@ -215,6 +215,12 @@ enum Commands {
         /// Also list the assertions Okur leaves unmet in this plan ("apg/tabs-manual-activation")
         #[arg(long)]
         unmet: Option<String>,
+
+        /// Also list, from ARIA-AT's published reports (the file `aria-at-reports.sh` saves),
+        /// each command where the newest JAWS said otherwise than the recorded one, with Okur's
+        /// speech beside both
+        #[arg(long)]
+        newer_jaws: Option<String>,
     },
     /// Make one of W3C ARIA-AT's test plans into pending scenarios: its test pages copied with
     /// their files, a scenario per JAWS command of each test
@@ -1759,7 +1765,11 @@ async fn main() {
                 std::process::exit(1);
             }
         }
-        Some(Commands::AriaAtReport { corpus_dir, unmet }) => {
+        Some(Commands::AriaAtReport {
+            corpus_dir,
+            unmet,
+            newer_jaws,
+        }) => {
             let dir = Path::new(&corpus_dir);
             // The ARIA-AT scenarios alone are replayed; their ids carry "-aria-".
             let only: Vec<String> = fs::read_dir(dir.join("scenarios"))
@@ -1780,8 +1790,7 @@ async fn main() {
                     if let Some(plan) = unmet {
                         for (_, u) in measure.unmet.iter().filter(|(p, _)| *p == plan) {
                             println!(
-                                "{} [{}] {}{}
-    okur: {}",
+                                "{} [{}] {}{}\n    okur: {}",
                                 u.scenario,
                                 u.priority,
                                 u.phrase,
@@ -1793,6 +1802,45 @@ async fn main() {
                                 u.okur
                             );
                         }
+                    }
+                    if let Some(file) = newer_jaws {
+                        let reports = fs::read_to_string(&file)
+                            .map_err(|e| format!("{file}: {e}"))
+                            .and_then(|t| {
+                                serde_json::from_str::<serde_json::Value>(&t)
+                                    .map_err(|e| format!("{file}: {e}"))
+                            });
+                        let reports = match reports {
+                            Ok(r) => r,
+                            Err(e) => {
+                                eprintln!("{e}");
+                                std::process::exit(1);
+                            }
+                        };
+                        let newest = aria_at_report::newest_jaws(&reports);
+                        let (mut compared, mut differ) = (0, 0);
+                        for judged in &measure.judged {
+                            let Some((version, output)) = newest.get(&judged.key) else {
+                                continue;
+                            };
+                            compared += 1;
+                            let newer = aria_at_report::plain(output);
+                            if newer == judged.jaws {
+                                continue;
+                            }
+                            differ += 1;
+                            println!(
+                                "{} (JAWS {version}){}\n    newer: {}\n    lab:   {}\n    okur:  {}",
+                                judged.scenario,
+                                if newer == judged.okur { "  okur says it" } else { "" },
+                                newer.trim(),
+                                judged.jaws.trim(),
+                                judged.okur.trim()
+                            );
+                        }
+                        println!(
+                            "{differ} of {compared} commands in ARIA-AT's reports: the newest JAWS said otherwise",
+                        );
                     }
                 }
                 Err(e) => {

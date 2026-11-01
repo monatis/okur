@@ -197,6 +197,17 @@ pub fn conveys(claim: &Claim, speech: &str) -> Option<bool> {
                 .join(" ");
             speech.contains(&format!(" {start} "))
         }
+        // "Not convey numeric value, '25.0'": the number said bare, not only within its text
+        // value ("25.0 degrees Celsius").
+        Kind::Name if claim.negated => {
+            let needle = format!(" {} ", plain(value).trim());
+            speech.match_indices(&needle).any(|(at, _)| {
+                speech
+                    .get(at + needle.len()..)
+                    .and_then(|rest| rest.chars().next())
+                    .is_none_or(|next| !next.is_alphabetic())
+            })
+        }
         Kind::Name => speech.contains(&format!(" {} ", plain(value).trim())),
         Kind::State => match value {
             "unchecked" | "not checked" => says(speech, "not checked"),
@@ -250,6 +261,92 @@ pub struct Unmet {
 pub struct Measure {
     pub plans: BTreeMap<String, PlanFigures>,
     pub unmet: Vec<(String, Unmet)>,
+    pub judged: Vec<Judged>,
+}
+
+/// One ARIA-AT scenario's command as judged: what Okur and the recorded JAWS said, as
+/// [`plain`] made them.
+#[derive(Debug, Clone)]
+pub struct Judged {
+    pub scenario: String,
+    /// Where ARIA-AT's reports have it: plan, test, command ("ins+tab"), setting.
+    pub key: ReportKey,
+    pub okur: String,
+    pub jaws: String,
+}
+
+/// An ARIA-AT command as its reports name it: plan ("apg/horizontal-slider"), test
+/// ("navForwardsToSlider"), command ids joined by spaces ("down down"), setting
+/// ("virtualCursor").
+pub type ReportKey = (String, String, String, String);
+
+/// The newest JAWS's output for each command in ARIA-AT's published reports: the response of
+/// their GraphQL API (`skills/jaws-reference/scripts/aria-at-reports.sh` saves it), JAWS with
+/// Chrome. Each key's output comes from the highest JAWS version that ran it.
+pub fn newest_jaws(reports: &Value) -> BTreeMap<ReportKey, (String, String)> {
+    let version = |v: &str| -> Vec<u64> { v.split('.').map(|p| p.parse().unwrap_or(0)).collect() };
+    let list = |v: &Value, key: &str| v.get(key).and_then(Value::as_array).cloned();
+    let text = |v: &Value, path: &[&str]| {
+        path.iter()
+            .try_fold(v, |v, k| v.get(*k))
+            .and_then(Value::as_str)
+            .map(str::to_owned)
+    };
+    let mut newest: BTreeMap<ReportKey, (String, String)> = BTreeMap::new();
+    let plans = reports
+        .pointer("/data/testPlanVersions")
+        .and_then(Value::as_array)
+        .cloned()
+        .unwrap_or_default();
+    for plan_version in &plans {
+        let Some(plan) = text(plan_version, &["testPlan", "directory"]) else {
+            continue;
+        };
+        for report in list(plan_version, "testPlanReports").unwrap_or_default() {
+            if text(&report, &["at", "key"]).as_deref() != Some("jaws")
+                || text(&report, &["browser", "name"]).as_deref() != Some("Chrome")
+            {
+                continue;
+            }
+            for result in list(&report, "finalizedTestResults").unwrap_or_default() {
+                let at_version = text(&result, &["atVersion", "name"]).unwrap_or_default();
+                // ".../test-05-navForwardsToSlider-jaws.collected.html" names the test.
+                let Some(test) = text(&result, &["test", "renderedUrl"]).and_then(|url| {
+                    let file = url.rsplit('/').next()?;
+                    let rest = file.strip_prefix("test-")?;
+                    let (_, named) = rest.split_once('-')?;
+                    Some(named.split_once("-jaws")?.0.to_owned())
+                }) else {
+                    continue;
+                };
+                for scenario_result in list(&result, "scenarioResults").unwrap_or_default() {
+                    let commands = scenario_result
+                        .pointer("/scenario/commands")
+                        .and_then(Value::as_array)
+                        .cloned()
+                        .unwrap_or_default();
+                    let ids: Vec<String> =
+                        commands.iter().filter_map(|c| text(c, &["id"])).collect();
+                    let Some(setting) =
+                        commands.first().and_then(|c| text(c, &["atOperatingMode"]))
+                    else {
+                        continue;
+                    };
+                    let Some(output) = text(&scenario_result, &["output"]) else {
+                        continue;
+                    };
+                    let key = (plan.clone(), test.clone(), ids.join(" "), setting);
+                    let newer = newest
+                        .get(&key)
+                        .is_none_or(|(seen, _)| version(&at_version) > version(seen));
+                    if newer {
+                        newest.insert(key, (at_version.clone(), output));
+                    }
+                }
+            }
+        }
+    }
+    newest
 }
 
 /// Judges every ARIA-AT scenario of the corpus with recorded evidence: the command's steps (a
@@ -264,6 +361,7 @@ pub fn measure(corpus: &Path, steps: &[StepParity]) -> Result<Measure, String> {
     }
     let mut plans: BTreeMap<String, PlanFigures> = BTreeMap::new();
     let mut unmet = Vec::new();
+    let mut judged = Vec::new();
     let dir = corpus.join("scenarios");
     let entries = std::fs::read_dir(&dir).map_err(|e| format!("{dir:?}: {e}"))?;
     let mut files: Vec<_> = entries.filter_map(Result::ok).map(|e| e.path()).collect();
@@ -320,6 +418,23 @@ pub fn measure(corpus: &Path, steps: &[StepParity]) -> Result<Measure, String> {
             .and_then(Value::as_str)
             .unwrap_or_default()
             .to_owned();
+        let field = |k: &str| {
+            meta.get(k)
+                .and_then(Value::as_str)
+                .unwrap_or_default()
+                .to_owned()
+        };
+        judged.push(Judged {
+            scenario: id.to_owned(),
+            key: (
+                plan.clone(),
+                field("test"),
+                field("command"),
+                field("setting"),
+            ),
+            okur: okur.clone(),
+            jaws: jaws.clone(),
+        });
         let figures = plans.entry(plan.clone()).or_default();
         let assertions = meta
             .get("assertions")
@@ -370,7 +485,11 @@ pub fn measure(corpus: &Path, steps: &[StepParity]) -> Result<Measure, String> {
             }
         }
     }
-    Ok(Measure { plans, unmet })
+    Ok(Measure {
+        plans,
+        unmet,
+        judged,
+    })
 }
 
 /// The measure as a table, a line per plan and the total.
@@ -486,5 +605,18 @@ mod tests {
             Some(Kind::RowNumber)
         );
         assert_eq!(judge(Kind::Role, "no such role"), None);
+    }
+
+    #[test]
+    fn a_number_within_its_text_value_is_not_said_bare() {
+        let bare = |speech: &str| {
+            claim("not convey numeric value, '25.0'").and_then(|c| conveys(&c, &plain(speech)))
+        };
+        assert_eq!(
+            bare("Temperature up down slider | 25.0 degrees Celsius"),
+            Some(true)
+        );
+        assert_eq!(bare("Temperature up down slider | 25.0"), Some(false));
+        assert_eq!(bare("25.0 | 25.0 degrees Celsius"), Some(false));
     }
 }
