@@ -1,0 +1,55 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "listBoundary",
+        "phrase": "convey list boundary",
+        "priority": "3"
+      },
+      {
+        "id": "roleLink",
+        "phrase": "convey role 'link'",
+        "priority": "1"
+      },
+      {
+        "id": "nameCampusTours",
+        "phrase": "convey name of the link, 'Campus Tours'",
+        "priority": "1"
+      }
+    ],
+    "command": "shift+tab",
+    "instructions": "With focus on the 'Admissions' disclosure button, navigate to the 'Campus Tours' link.",
+    "plan": "apg/disclosure-navigation",
+    "presentation_number": "55",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navFromCollapsedDisclosureButtonToLinkDropdown"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.moveFocusToSecondDisclosureAndExpandFirstDisclosure.html",
+  "id": "2848-aria-disclosure-navigation-nav-from-collapsed-disclosure-button-to-link-dropdown-shift-tab-pc",
+  "name": "ARIA-AT, Disclosure Navigation Menu Example: Navigate from a collapsed disclosure button to a link in a dropdown; Shift+Tab in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+Tab",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

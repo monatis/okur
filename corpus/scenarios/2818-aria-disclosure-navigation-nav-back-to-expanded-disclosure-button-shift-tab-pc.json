@@ -1,0 +1,70 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "3:roleNavigationLandmark",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "3:nameMythicalUniversity",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "3:listBoundary",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameAcademics",
+        "phrase": "convey name of the button, 'Academics'",
+        "priority": "1"
+      },
+      {
+        "id": "stateExpanded",
+        "phrase": "convey state of the button, 'expanded'",
+        "priority": "1"
+      }
+    ],
+    "command": "shift+tab",
+    "instructions": "With focus on the 'Navigate backwards from here' link, navigate to the 'Academics' disclosure button.",
+    "plan": "apg/disclosure-navigation",
+    "presentation_number": "11",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToExpandedDisclosureButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.expandThirdDisclosureHideDropdownAndMoveFocusAfterDisclosure.html",
+  "id": "2818-aria-disclosure-navigation-nav-back-to-expanded-disclosure-button-shift-tab-pc",
+  "name": "ARIA-AT, Disclosure Navigation Menu Example: Navigate backwards to an expanded disclosure button; Shift+Tab in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+Tab",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

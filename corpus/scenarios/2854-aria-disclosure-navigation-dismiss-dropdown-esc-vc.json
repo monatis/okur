@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameAbout",
+        "phrase": "convey name of the button, 'About'",
+        "priority": "1"
+      },
+      {
+        "id": "stateCollapsed",
+        "phrase": "convey state of the button, 'collapsed'",
+        "priority": "1"
+      }
+    ],
+    "command": "esc",
+    "instructions": "With focus on the 'Overview' link, close the dropdown.",
+    "plan": "apg/disclosure-navigation",
+    "presentation_number": "60",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "dismissDropdown"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.expandFirstDisclosureAndMoveFocusToOverviewLink.html",
+  "id": "2854-aria-disclosure-navigation-dismiss-dropdown-esc-vc",
+  "name": "ARIA-AT, Disclosure Navigation Menu Example: Dismiss a dropdown; Escape in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Escape",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

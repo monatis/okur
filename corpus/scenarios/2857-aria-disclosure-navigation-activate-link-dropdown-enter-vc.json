@@ -1,0 +1,44 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleRegion",
+        "phrase": "convey role 'Region'",
+        "priority": "1"
+      },
+      {
+        "id": "nameMythicalUniversitySamplePageContent",
+        "phrase": "convey name of the region, 'Mythical University sample page content'",
+        "priority": "1"
+      }
+    ],
+    "command": "enter",
+    "instructions": "With focus on the 'Overview' link, activate the link.",
+    "plan": "apg/disclosure-navigation",
+    "presentation_number": "63.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "activateLinkDropdown"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.expandFirstDisclosureAndMoveFocusToOverviewLink.html",
+  "id": "2857-aria-disclosure-navigation-activate-link-dropdown-enter-vc",
+  "name": "ARIA-AT, Disclosure Navigation Menu Example: Activate a link in a dropdown; Enter in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Enter",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

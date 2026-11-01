@@ -1,0 +1,59 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "1:listBoundary",
+    "assertions": [
+      {
+        "id": "0:listBoundary",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameAbout",
+        "phrase": "convey name of the button, 'About'",
+        "priority": "1"
+      },
+      {
+        "id": "stateExpanded",
+        "phrase": "convey state of the button, 'expanded'",
+        "priority": "1"
+      }
+    ],
+    "command": "up up",
+    "instructions": "With focus on the 'Overview' link, navigate to the 'About' disclosure button.",
+    "plan": "apg/disclosure-navigation",
+    "presentation_number": "51.3",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToExpandedDisclosureButtonFromLinkAssociatedDropdown"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.expandFirstDisclosureAndMoveFocusToOverviewLink.html",
+  "id": "2843-aria-disclosure-navigation-nav-to-expanded-disclosure-button-from-link-associated-dropdown-up-up-vc",
+  "name": "ARIA-AT, Disclosure Navigation Menu Example: Navigate to an expanded disclosure button from a link in the associated dropdown; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Up",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

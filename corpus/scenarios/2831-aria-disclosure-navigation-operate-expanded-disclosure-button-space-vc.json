@@ -1,0 +1,39 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "stateChangeToCollapsed",
+        "phrase": "convey change in state, to 'collapsed'",
+        "priority": "1"
+      }
+    ],
+    "command": "space",
+    "instructions": "With focus on the 'About' disclosure button, change its state to 'collapsed'.",
+    "plan": "apg/disclosure-navigation",
+    "presentation_number": "42",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "operateExpandedDisclosureButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.moveFocusToAndExpandFirstDisclosure.html",
+  "id": "2831-aria-disclosure-navigation-operate-expanded-disclosure-button-space-vc",
+  "name": "ARIA-AT, Disclosure Navigation Menu Example: Operate an expanded disclosure button; Space in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Space",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

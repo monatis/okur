@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameAbout",
+        "phrase": "convey name of the button, 'About'",
+        "priority": "1"
+      },
+      {
+        "id": "stateCollapsed",
+        "phrase": "convey state of the button, 'collapsed'",
+        "priority": "1"
+      }
+    ],
+    "command": "ins+tab",
+    "instructions": "With focus on the 'About' disclosure button, read information about the disclosure button.",
+    "plan": "apg/disclosure-navigation",
+    "presentation_number": "33",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutCollapsedDisclosureButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.moveFocusToFirstDisclosure.html",
+  "id": "2819-aria-disclosure-navigation-req-info-about-collapsed-disclosure-button-ins-tab-vc",
+  "name": "ARIA-AT, Disclosure Navigation Menu Example: Request information about a collapsed disclosure button; Insert+Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

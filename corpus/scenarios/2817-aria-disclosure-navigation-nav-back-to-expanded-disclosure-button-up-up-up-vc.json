@@ -1,0 +1,74 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "1:listBoundary 1:nameMythicalUniversity 1:roleNavigationLandmark",
+    "assertions": [
+      {
+        "id": "3:roleNavigationLandmark",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "3:nameMythicalUniversity",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "3:listBoundary",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameAcademics",
+        "phrase": "convey name of the button, 'Academics'",
+        "priority": "1"
+      },
+      {
+        "id": "stateExpanded",
+        "phrase": "convey state of the button, 'expanded'",
+        "priority": "1"
+      }
+    ],
+    "command": "up up up",
+    "instructions": "With focus on the 'Navigate backwards from here' link, navigate to the 'Academics' disclosure button.",
+    "plan": "apg/disclosure-navigation",
+    "presentation_number": "10.4",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToExpandedDisclosureButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.expandThirdDisclosureHideDropdownAndMoveFocusAfterDisclosure.html",
+  "id": "2817-aria-disclosure-navigation-nav-back-to-expanded-disclosure-button-up-up-up-vc",
+  "name": "ARIA-AT, Disclosure Navigation Menu Example: Navigate backwards to an expanded disclosure button; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Up",
+      "id": "s2",
+      "type": "key"
+    },
+    {
+      "command": "Up",
+      "id": "s3",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

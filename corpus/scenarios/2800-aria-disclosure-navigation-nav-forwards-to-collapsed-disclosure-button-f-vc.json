@@ -1,0 +1,64 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "3:roleNavigationLandmark",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "3:nameMythicalUniversity",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "3:listBoundary",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "roleButton",
+        "phrase": "convey role 'button'",
+        "priority": "1"
+      },
+      {
+        "id": "nameAbout",
+        "phrase": "convey name of the button, 'About'",
+        "priority": "1"
+      },
+      {
+        "id": "stateCollapsed",
+        "phrase": "convey state of the button, 'collapsed'",
+        "priority": "1"
+      }
+    ],
+    "command": "f",
+    "instructions": "With focus on the 'Navigate forwards from here' link, navigate to the 'About' disclosure button.",
+    "plan": "apg/disclosure-navigation",
+    "presentation_number": "1.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToCollapsedDisclosureButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.moveFocusBeforeFirstDisclosure.html",
+  "id": "2800-aria-disclosure-navigation-nav-forwards-to-collapsed-disclosure-button-f-vc",
+  "name": "ARIA-AT, Disclosure Navigation Menu Example: Navigate forwards to a collapsed disclosure button; F in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "F",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

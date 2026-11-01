@@ -1,0 +1,39 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "stateChangeToExpanded",
+        "phrase": "convey change in state, to 'expanded'",
+        "priority": "1"
+      }
+    ],
+    "command": "enter",
+    "instructions": "With focus on the 'About' disclosure button, change its state to 'expanded'.",
+    "plan": "apg/disclosure-navigation",
+    "presentation_number": "39.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "operateCollapsedDisclosureButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/disclosure-navigation/disclosure-navigation.moveFocusToFirstDisclosure.html",
+  "id": "2828-aria-disclosure-navigation-operate-collapsed-disclosure-button-enter-vc",
+  "name": "ARIA-AT, Disclosure Navigation Menu Example: Operate a collapsed disclosure button; Enter in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Enter",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
