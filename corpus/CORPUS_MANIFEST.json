@@ -2221,6 +2221,10 @@
       "sha256": "fe70a7dbabf4fe783cb7dbe20fb3d819ba982d25a6b3cea9896338003fbbcbab",
       "size_bytes": 612
     },
+    "selected-text-fields.html": {
+      "sha256": "de915086b6952066baa348ff61b65adfcb20ca1fc90ae28bb29fbc00a9289271",
+      "size_bytes": 818
+    },
     "selection-sizes.html": {
       "sha256": "6410ceb02b6220c87d511509c9ccc573311c7dce1eff21af3f6a497b80cfca61",
       "size_bytes": 1479
@@ -4268,6 +4272,20 @@
       "fixture": "nonmodal-dialog.html",
       "evidence": {
         "sha256": "54be132c1e3cbbd32614201750c353f7788cadf5687b238f0ba2a371e47cdc79",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1131-web-selected-text-fields",
+      "fixture": "selected-text-fields.html",
+      "evidence": {
+        "sha256": "91066f9b6834f6db4f0d7f3fae3befc82d6a4faf727f5e77042f622172279b83",
         "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
@@ -28947,10 +28965,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1905,
-    "scenarios_with_evidence": 1905,
-    "total_trials": 5721,
-    "successful_trials": 5704,
+    "scenarios": 1906,
+    "scenarios_with_evidence": 1906,
+    "total_trials": 5724,
+    "successful_trials": 5707,
     "deterministic_scenarios": 1592
   }
 }

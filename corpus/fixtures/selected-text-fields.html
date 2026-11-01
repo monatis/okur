@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Selected Text Fields</title>
+</head>
+<body>
+  <main>
+    <h1>Selected text in fields</h1>
+    <p>
+      <label for="state">State</label>
+      <input id="state" type="text" value="Alabama">
+    </p>
+    <p>
+      <label for="city">City</label>
+      <input id="city" type="text" value="Montgomery">
+    </p>
+    <p>
+      <label for="zip">Zip</label>
+      <input id="zip" type="text" value="36104">
+    </p>
+  </main>
+  <script>
+    // The page selects a field's text as it takes the focus: all of State's, part of Zip's.
+    document.getElementById('state').addEventListener('focus', (e) => e.target.select());
+    document.getElementById('zip').addEventListener('focus', (e) => e.target.setSelectionRange(2, 5));
+  </script>
+</body>
+</html>

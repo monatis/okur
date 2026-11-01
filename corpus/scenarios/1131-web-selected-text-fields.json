@@ -1,0 +1,55 @@
+{
+  "id": "1131-web-selected-text-fields",
+  "name": "Tab into fields whose text the page selects as they take the focus (all of one, part of another, none of a third), Say Selected Text (Insert+Shift+Down) on two, back with Shift+Tab, then Insert+Up: what JAWS says of a field focused with its text selected",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/selected-text-fields.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Shift+Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Tab"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Insert+Shift+Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Shift+Tab"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Shift+Tab"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Insert+Up"
+    }
+  ]
+}
