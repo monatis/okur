@@ -1256,6 +1256,96 @@ A step can be in more than one entry; all of its entries apply.
   named regions (`role="region"` with a name) a form-field quick key enters, outermost first.
 - Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
 
+### Hints a newer JAWS says with the virtual cursor on
+
+- Steps: `225-web-form-fields-list/s10`, `922-web-form-fields-list-intermediate/s10`,
+  `923-web-form-fields-list-advanced/s10`,
+  `2576-aria-menu-button-actions-nav-forwards-to-menu-button-tab-vc/s1`,
+  `2580-aria-menu-button-actions-nav-back-to-menu-button-shift-tab-vc/s1`,
+  `2607-aria-menu-button-actions-active-descendant-nav-forwards-to-menu-button-tab-vc/s1`,
+  `2611-aria-menu-button-actions-active-descendant-nav-back-to-menu-button-shift-tab-vc/s1`,
+  `2638-aria-menu-button-navigation-nav-forwards-to-menu-button-tab-vc/s1`,
+  `2642-aria-menu-button-navigation-nav-back-to-menu-button-shift-tab-vc/s1`,
+  `2876-aria-banner-t13-tab-vc/s1`,
+  `2720-aria-quantity-spin-button-nav-forwards-to-spinbutton-tab-vc/s1`,
+  `2725-aria-quantity-spin-button-nav-back-to-spinbutton-shift-tab-vc/s1`,
+  `2741-aria-horizontal-slider-nav-forwards-to-slider-tab-vc/s1`,
+  `2745-aria-horizontal-slider-nav-back-to-slider-shift-tab-vc/s1`,
+  `2760-aria-seek-slider-nav-forwards-to-slider-tab-vc/s1`,
+  `2765-aria-seek-slider-nav-back-to-slider-shift-tab-vc/s1`,
+  `2781-aria-vertical-temperature-slider-nav-forwards-to-slider-tab-vc/s1`,
+  `2785-aria-vertical-temperature-slider-nav-back-to-slider-shift-tab-vc/s1`,
+  `2666-aria-modal-dialog-open-modal-dialog-space-vc/s1`,
+  `2667-aria-modal-dialog-open-modal-dialog-enter-vc/s1`.
+- Difference: Okur also says the control's hint after a focus onto it: a menu button's "Press
+  space to activate the menu, then navigate with arrow keys", a spin button's "To set the value
+  use the Arrow keys or type the value.", a slider's "To increase or decrease use the Arrow
+  keys.", and "Type in text." for the field a dialog's opening focuses.
+- Why: JAWS 2025.2505 on old-pc says these hints with the virtual cursor off only [obs,
+  round-aria20, round-aria23, round-aria25, round-aria26, round-aria28]. A newer JAWS
+  (2025.2508.120), in ARIA-AT's published reports, says them with it on too.
+- Decided under the owner's rule for the web (AGENTS.md §1.2), following a newer JAWS
+  (2025.2508.120) in ARIA-AT's published reports, 2026-11-01.
+
+### A slider's limits after a number, not after a text
+
+- Steps: `2760-aria-seek-slider-nav-forwards-to-slider-tab-vc/s1`,
+  `2765-aria-seek-slider-nav-back-to-slider-shift-tab-vc/s1`,
+  `2767-aria-seek-slider-req-info-about-slider-ins-tab-vc/s1`,
+  `2768-aria-seek-slider-req-info-about-slider-ins-up-vc/s1`.
+- Difference: JAWS also says "min 0 max 300" after the seek slider's text value.
+- Why: JAWS 2025.2505 says a slider's limits after a text value (aria-valuetext) with the
+  virtual cursor on, "1 Minute 30 Seconds of 5 Minutes min 0 max 300" [obs, round-aria27], and
+  none after a number. A newer JAWS (2025.2508.120, ARIA-AT's reports) does the reverse: "128
+  min 0 max 255", none after a text, which says its own range. Okur follows the newer JAWS: a
+  slider's and a spin button's limits after a number, on a focus, a quick key, Insert+Tab and
+  (a slider's) Insert+Up and its line.
+- Decided under the owner's rule for the web (AGENTS.md §1.2), following a newer JAWS
+  (2025.2508.120) in ARIA-AT's published reports, 2026-11-01.
+
+### "Modal" with the virtual cursor on
+
+- Steps: `2666-aria-modal-dialog-open-modal-dialog-space-vc/s1`,
+  `2667-aria-modal-dialog-open-modal-dialog-enter-vc/s1`,
+  `2683-aria-modal-dialog-open-nested-modal-dialog-space-vc/s1`,
+  `2684-aria-modal-dialog-open-nested-modal-dialog-enter-vc/s1`,
+  `2687-aria-modal-dialog-close-nested-modal-dialog-esc-vc/s1`,
+  `2688-aria-modal-dialog-close-nested-modal-dialog-space-vc/s1`,
+  `2689-aria-modal-dialog-close-nested-modal-dialog-enter-vc/s1`.
+- Difference: Okur also says "Modal" before "dialog".
+- Why: JAWS 2025.2505 says "Modal" with the virtual cursor off only [obs, round-aria23]; a
+  newer JAWS (2025.2508.120, ARIA-AT's reports) with it on too, and ARIA-AT's modal-dialog plan
+  asks for it (SHOULD).
+- Decided under the owner's rule for the web (AGENTS.md §1.2), following a newer JAWS
+  (2025.2508.120) in ARIA-AT's published reports, 2026-11-01.
+
+### A page menu's item and its place on Insert+Tab and Insert+Up
+
+- Steps: `2594-aria-menu-button-actions-req-info-about-menu-item-ins-tab-vc/s1`,
+  `2595-aria-menu-button-actions-req-info-about-menu-item-ins-up-vc/s1`,
+  `2625-aria-menu-button-actions-active-descendant-req-info-about-menu-item-ins-tab-vc/s1`,
+  `2626-aria-menu-button-actions-active-descendant-req-info-about-menu-item-ins-up-vc/s1`,
+  `2656-aria-menu-button-navigation-req-info-about-menu-item-ins-tab-vc/s1`,
+  `2657-aria-menu-button-navigation-req-info-about-menu-item-ins-up-vc/s1` (whole steps).
+- Difference: Okur says "Action 1 | 1 of 4" where JAWS says "Action 1 menu".
+- Why: JAWS 2025.2505 says the item with the role word "menu" with the virtual cursor on, and
+  its place only with it off [obs, round-aria20]. A newer JAWS (2025.2508.120, ARIA-AT's
+  reports) says the place with it on too; ARIA-AT's menu button plans ask for it (SHOULD). A
+  menu bar's item keeps its line.
+- Decided under the owner's rule for the web (AGENTS.md §1.2), following a newer JAWS
+  (2025.2508.120) in ARIA-AT's published reports, 2026-11-01.
+
+### An ARIA grid's name said once on Tab
+
+- Steps: `2696-aria-minimal-data-grid-nav-forwards-to-grid-tab-vc/s1`,
+  `2700-aria-minimal-data-grid-nav-back-to-grid-shift-tab-vc/s1` (whole steps).
+- Difference: Okur says the grid's name once, before its size; JAWS says it again before the
+  cell.
+- Why: JAWS 2025.2505 says the name twice [obs, round-aria24]; a newer JAWS (2025.2508.120,
+  ARIA-AT's reports) once.
+- Decided under the owner's rule for the web (AGENTS.md §1.2), following a newer JAWS
+  (2025.2508.120) in ARIA-AT's published reports, 2026-11-01.
+
 ## Considered and not accepted
 
 - A spin button's name on its own line (`2718/s1`, `2723/s1`, quantity-spin-button: ARIA-AT

@@ -1339,9 +1339,10 @@ impl VirtualCursor {
         // into) is said by its name, not by the cursor's line, which is some other element's;
         // a group adds its role (Google Sheets' grid, back from a cell's editor: JAWS on the
         // dev box said "group", 2026-10-16).
-        // Insert+Tab on a page menu's item names its menu first: "Actions menu | Action 1
-        // menu", its line, with the virtual cursor on; "Actions menu | Action 1 | 1 of 4" with
-        // it off [obs, round-aria20, 2595/s1, 2596/s1].
+        // Insert+Tab on a page menu's item names its menu first, then the item and its place:
+        // "Actions menu | Action 1 | 1 of 4" [obs, round-aria20, 2596/s1]. With the virtual
+        // cursor on JAWS 2025.2505 says the item's line, "Action 1 menu" (2594/s1); a newer
+        // JAWS (2025.2508, ARIA-AT's reports) says its place there too, as Okur does.
         if matches!(group, GroupNamed::Asked) && node.role == Role::MenuItem {
             let mut lines = Vec::new();
             if let Some(menu) = self
@@ -1357,14 +1358,20 @@ impl VirtualCursor {
                     crate::linearize::role_marker(msg::role_menu().as_str())
                 ));
             }
-            if self.virtual_off {
+            // A menu bar's item keeps its line in the virtual cursor.
+            let in_menu_bar = self
+                .buffer
+                .ancestors(node_id)
+                .first()
+                .is_some_and(|parent| parent.role == Role::MenuBar);
+            if in_menu_bar && !self.virtual_off {
+                lines.push(self.current_line());
+            } else {
                 lines.push(node.name.as_deref().unwrap_or_default().trim().to_owned());
                 let attr = |k: &str| node.attributes.get(k).map(String::as_str);
                 if let (Some(p), Some(n)) = (attr("posinset"), attr("setsize")) {
                     lines.push(msg::position(p, n).render());
                 }
-            } else {
-                lines.push(self.current_line());
             }
             return Some(lines.join("\n"));
         }
@@ -1433,9 +1440,11 @@ impl VirtualCursor {
         // Such a cell says its position only entering the grid: JAWS said no row moving on.
         let focused_cell = node.role == Role::TableCell && !name.is_empty();
         // An ARIA grid's cell focused from outside the grid says the grid first: its name and
-        // size, then with the virtual cursor its name again, the column and the place, "Date |
-        // 01-Jan-16 | column 1 row 2"; without it the cell alone. Insert+Tab says the cell
-        // alone [obs, round-aria24, 2696/s1, 2697/s1, 2702/s1, 2704/s1].
+        // size, then with the virtual cursor the column and the place, "Date | 01-Jan-16 |
+        // column 1 row 2"; without it the cell alone. Insert+Tab says the cell alone [obs,
+        // round-aria24, 2696/s1, 2697/s1, 2702/s1, 2704/s1]. JAWS 2025.2505 says the grid's
+        // name again before the column; a newer JAWS (2025.2508, ARIA-AT's reports) once, as
+        // Okur does.
         let entered_grid = self
             .buffer
             .table_at_offset(self.offset)
@@ -1460,9 +1469,8 @@ impl VirtualCursor {
         {
             if let Some((caption, size)) = entered_grid {
                 let mut parts: Vec<String> = Vec::new();
-                parts.extend(caption.clone());
-                parts.push(size);
                 parts.extend(caption);
+                parts.push(size);
                 parts.extend(header);
                 parts.push(speech);
                 parts.push(position);
@@ -1628,6 +1636,7 @@ impl VirtualCursor {
             virtual_off: self.virtual_off,
             by_focus: matches!(group, GroupNamed::Entered | GroupNamed::Asked),
             asked: group == GroupNamed::Asked,
+            line: false,
         };
         let mut said = SpeechFormatter::control_focus(
             node,

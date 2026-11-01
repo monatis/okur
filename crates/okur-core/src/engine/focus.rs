@@ -775,14 +775,15 @@ impl ScreenReaderEngine {
                             virtual_off: self.virtual_cursor_off,
                             by_focus: true,
                             asked: false,
+                            line: false,
                         },
                     );
                     let hint = SpeechFormatter::web_focus_hint(&node, self.virtual_cursor_off)
                         .or_else(|| {
-                            // An edit with the virtual cursor off: "Type in text." [obs,
-                            // round-aria23, 2668/s1].
-                            (self.virtual_cursor_off && node.role == Role::Edit)
-                                .then(|| msg::hint_type_in_text().as_str())
+                            // An edit: "Type in text." [obs, round-aria23, 2668/s1]. JAWS
+                            // 2025.2505 says it with the virtual cursor off only, a newer JAWS
+                            // (2025.2508, ARIA-AT's reports) with it on too, as Okur does.
+                            (node.role == Role::Edit).then(|| msg::hint_type_in_text().as_str())
                         });
                     if let Some(hint) = hint {
                         speech.push('\n');
@@ -793,8 +794,10 @@ impl ScreenReaderEngine {
                     // 2666/s1, 2683/s1].
                     if matches!(focus.container_role, Some(Role::Dialog | Role::AlertDialog)) {
                         let name = focus.container_name.as_deref().unwrap_or_default().trim();
-                        // "Modal" with the virtual cursor off [obs, round-aria23, 2668/s1].
-                        let mut dialog = if self.virtual_cursor_off && focus.container_modal {
+                        // "Modal" [obs, round-aria23, 2668/s1]: JAWS 2025.2505 says it with the
+                        // virtual cursor off only, a newer JAWS (2025.2508, ARIA-AT's reports)
+                        // with it on too, as Okur does.
+                        let mut dialog = if focus.container_modal {
                             format!(
                                 "{name} \u{1d}{}\u{1e} \u{1d} {} \u{1e} \n",
                                 msg::state_modal(),

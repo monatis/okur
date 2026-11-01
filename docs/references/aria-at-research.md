@@ -52,6 +52,32 @@ SHOULD), switch-checkbox (4 MUST), and SHOULD gaps in the menu buttons (14 of 81
 groups and tabs. Per command, each report holds the tester's transcript of JAWS's output: leads
 for what JAWS says, never evidence (AGENTS.md §3).
 
+### A newer JAWS in the reports
+
+The reports hold what newer builds of JAWS say than old-pc's (2025.2505.43): most plans have a
+report of **JAWS 2025.2508.120**. `skills/jaws-reference/scripts/aria-at-reports.sh <json>` saves
+every final report's outputs from the report app's GraphQL API (`https://aria-at.w3.org/api/graphql`,
+no sign-in), and `okur-lab aria-at-report --newer-jaws <json>` lines up, for each imported
+scenario, the newest JAWS's output for its plan, test, command and setting beside the recorded
+JAWS's and Okur's, listing where the two JAWS differ. On 2026-11-01: 142 of 792 commands. Most
+were the testers' settings or timing (a hint said before the group, no group on a quick key);
+what a newer JAWS does on purpose, Okur follows (accepted divergences, "following a newer JAWS"):
+
+- a slider's and a spin button's limits after a number, "Red left right slider | 128 min 0 max
+  255", "Adults edit spin box | 1 | min 1 max 8"; none after a text value (the seek slider's
+  "1 Minute 30 Seconds of 5 Minutes"), where JAWS 2025.2505 says them; a spin button's not on
+  Insert+Up;
+- the hints of a menu button, a slider, a spin button and a dialog's first field with the
+  virtual cursor on, not only with it off;
+- "Modal" before a modal dialog with the virtual cursor on;
+- a page menu's item and its place on Insert+Tab and Insert+Up with the virtual cursor on,
+  "Action 1 | 1 of 4", not "Action 1 menu";
+- an ARIA grid's name once on Tab, not again before the cell.
+
+Not followed: Insert+Up on a menu button without its state (JAWS 2025.2505 says "collapsed",
+which ARIA-AT asks for), and a radio button's hint with the virtual cursor on (said before the
+group in some outputs and after it in others; on old-pc's forms pages JAWS says none).
+
 ## Licenses
 
 - The repository: "All documents in this Repository are licensed by contributors under the W3C
@@ -97,6 +123,9 @@ digits only ("cant" is "can't"); a place as "2 of 3"; "some or all" of a text by
 words. An assertion it cannot read (a list's boundary, the ability to edit text) is unjudged.
 Priority 1 is MUST, 2 SHOULD, 3 MAY; a command's exceptions lower an assertion's priority
 (the tab list's role is MAY for JAWS's commands).
+
+A negative assertion, "not convey numeric value, '25.0'", is met when the number is said only
+within its text ("25.0 degrees Celsius"), never bare.
 
 Its figures are a judge's, read by hand before they are trusted: the unmet MUST assertions of
 2026-11-01 were all real, and JAWS leaves the same ones (an accordion header's heading level

@@ -80,6 +80,14 @@ divergences (`OkurAlsoSays`) naming the assertion. In order:
    checkbox-tri-state's group.
 3. MAY: the tab list as a tab list, a tab's "not selected".
 
+Status, 2026-11-01: 1 is done. Of 2, a menu item's place, a slider's and a spin button's limits
+follow what a newer JAWS (2025.2508.120) says in ARIA-AT's reports
+(`okur-lab aria-at-report --newer-jaws`, `docs/references/aria-at-research.md`); the limits show
+in parity once the slider and spin button pages' snapshots are captured again with their limits
+(round-probe-radio2). menu-button-navigation's "number of items, '4'" contradicts its own page,
+which has 6 items ("1 of 6"): not Okur's gap. Next: the menu button's state on opening and
+checkbox-tri-state's group, then 3.
+
 ## 5. Then
 
 Excel's round-1122b (typing in cells, its dialogs, Word's context menu), when Excel resumes.

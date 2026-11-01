@@ -16,12 +16,15 @@ fn name_and_role(name: &str, role: &str) -> Vec<Part> {
 pub struct SpeechFormatter;
 
 /// How a page control's focus speech is said: with the virtual cursor off (Insert+Z), by a
-/// focus moving onto it (Tab) rather than a quick key, and asked for (Insert+Tab).
+/// focus moving onto it (Tab) rather than a quick key, asked for (Insert+Tab), and as its line
+/// (Insert+Up).
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct FocusSaid {
     pub virtual_off: bool,
     pub by_focus: bool,
     pub asked: bool,
+    /// Said as the line it is on (Insert+Up), not as a focus.
+    pub line: bool,
 }
 
 impl SpeechFormatter {
@@ -475,6 +478,13 @@ impl SpeechFormatter {
                         },
                     ));
                 }
+                // A spin button's limits follow its value, not on Insert+Up: "Adults edit spin
+                // box | 1 | min 1 max 8" (a newer JAWS, 2025.2508, ARIA-AT's reports).
+                if attr("spinbutton") == Some("true") && !said.line {
+                    if let Some(limits) = Self::range_limits(node) {
+                        lines.push(Line::of(PartKind::Text, limits));
+                    }
+                }
                 if let Some(d) = attr("description") {
                     lines.push(Line::of(PartKind::Description, d));
                 }
@@ -585,7 +595,12 @@ impl SpeechFormatter {
                     .map(str::trim)
                     .filter(|v| !v.is_empty())
                 {
-                    lines.push(Line::of(PartKind::Value, value));
+                    let mut parts = vec![Part::new(PartKind::Value, value)];
+                    if let Some(limits) = Self::range_limits(node) {
+                        parts.push(Part::text(" "));
+                        parts.push(Part::text(limits));
+                    }
+                    lines.push(Line::new(parts));
                 }
                 Announcement::new(lines)
             }
@@ -610,6 +625,22 @@ impl SpeechFormatter {
             }
             _ => Announcement::new(vec![Line::of(PartKind::Name, name)]),
         }
+    }
+
+    /// A slider's or spin button's limits, "min 0 max 255", where its value is a number (no
+    /// aria-valuetext) and both limits are known. A newer JAWS (2025.2508, ARIA-AT's reports)
+    /// says them after the value, which ARIA-AT asks for (SHOULD); JAWS 2025.2505 does not.
+    pub fn range_limits(node: &crate::aom::AomNode) -> Option<String> {
+        let number = |n: f64| {
+            if n.fract() == 0.0 && n.abs() < 1e15 {
+                format!("{n:.0}")
+            } else {
+                format!("{n}")
+            }
+        };
+        node.value.as_deref()?.trim().parse::<f64>().ok()?;
+        let (min, max) = (node.value_min?, node.value_max?);
+        Some(msg::range_limits(number(min), number(max)).render())
     }
 
     /// A slider's role word, by its orientation: "left right slider" for a horizontal one
@@ -641,17 +672,17 @@ impl SpeechFormatter {
             // round-aria3, 2035/s1, 2040/s1], and a radio button moved through with the arrows
             // [obs, round-aria4, 2081/s1, 2086/s1].
             Role::Button if virtual_off => Some(msg::hint_activate_spacebar().as_str()),
-            // A menu button with the virtual cursor off: "Press space to activate the menu,
-            // then navigate with arrow keys" [obs, round-aria20, 2582/s1].
-            Role::MenuButton if virtual_off => Some(msg::hint_menu_button().as_str()),
-            // A slider with the virtual cursor off [obs, round-aria26, 2742/s1].
-            Role::Slider if virtual_off => Some(msg::hint_slider_arrows().as_str()),
-            // An ARIA spin button with the virtual cursor off: "To set the value use the Arrow
-            // keys or type the value." [obs, round-aria25, 2721/s1, 2730/s1].
-            Role::Edit
-                if virtual_off
-                    && node.attributes.get("spinbutton").map(String::as_str) == Some("true") =>
-            {
+            // The controls a focus takes the keys to say how to use them, with the virtual
+            // cursor on or off. JAWS 2025.2505 says these with it off only; a newer JAWS
+            // (2025.2508, ARIA-AT's reports) with it on too, as Okur does.
+            // A menu button: "Press space to activate the menu, then navigate with arrow keys"
+            // [obs, round-aria20, 2582/s1].
+            Role::MenuButton => Some(msg::hint_menu_button().as_str()),
+            // A slider [obs, round-aria26, 2742/s1].
+            Role::Slider => Some(msg::hint_slider_arrows().as_str()),
+            // An ARIA spin button: "To set the value use the Arrow keys or type the value."
+            // [obs, round-aria25, 2721/s1, 2730/s1].
+            Role::Edit if node.attributes.get("spinbutton").map(String::as_str) == Some("true") => {
                 Some(msg::hint_set_value_arrows_or_type().as_str())
             }
             Role::RadioButton if virtual_off => Some(msg::hint_radio_up_down().as_str()),
@@ -1359,5 +1390,56 @@ mod kind_tests {
             said.render_all(),
             "Email \u{1d} Edit \u{1e} \n \u{1d}Required\u{1e} \na@b.c\nWork address"
         );
+    }
+
+    /// A slider's and a spin button's limits follow a number, never a text; a spin button's
+    /// not on Insert+Up (a newer JAWS, 2025.2508, ARIA-AT's reports).
+    #[test]
+    fn range_limits_follow_a_number() {
+        let slider = with(
+            AomNode::new(7, Role::Slider)
+                .with_name("Red")
+                .with_value("128")
+                .with_range(0.0, 255.0, 128.0),
+            &[("orientation", "horizontal")],
+        );
+        let said = SpeechFormatter::control_focus(&slider, |_| false, FocusSaid::default());
+        assert!(
+            said.render_all().ends_with("128 min 0 max 255"),
+            "{}",
+            said.render_all()
+        );
+        let text = AomNode::new(8, Role::Slider)
+            .with_name("Temperature")
+            .with_value("25.0 degrees Celsius")
+            .with_range(10.0, 38.0, 25.0);
+        assert_eq!(SpeechFormatter::range_limits(&text), None);
+        let half = AomNode::new(9, Role::Slider)
+            .with_value("2.5")
+            .with_range(0.5, 10.0, 2.5);
+        assert_eq!(
+            SpeechFormatter::range_limits(&half).as_deref(),
+            Some("min 0.5 max 10")
+        );
+
+        let spin = with(
+            AomNode::new(10, Role::Edit)
+                .with_name("Adults")
+                .with_value("1")
+                .with_range(1.0, 8.0, 1.0),
+            &[("spinbutton", "true")],
+        );
+        let focus = SpeechFormatter::control_focus(&spin, |_| false, FocusSaid::default());
+        assert!(
+            focus.render_all().ends_with("\n1\nmin 1 max 8"),
+            "{}",
+            focus.render_all()
+        );
+        let line = FocusSaid {
+            line: true,
+            ..FocusSaid::default()
+        };
+        let said = SpeechFormatter::control_focus(&spin, |_| false, line).render_all();
+        assert!(!said.contains("min 1"), "{said}");
     }
 }

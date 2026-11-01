@@ -1158,6 +1158,108 @@ divergences! {
      a form-field quick key enters: \"Personal Information Region | Name: Edit Required blank\".",
     "the owner's rule for the web: Okur conveys what ARIA-AT requires, 2026-11-01";
 
+    Difference::OkurAlsoSays("Press space to activate the menu, then navigate with arrow keys") => [
+        "225-web-form-fields-list/s10",
+        "922-web-form-fields-list-intermediate/s10",
+        "923-web-form-fields-list-advanced/s10",
+        "2576-aria-menu-button-actions-nav-forwards-to-menu-button-tab-vc/s1",
+        "2580-aria-menu-button-actions-nav-back-to-menu-button-shift-tab-vc/s1",
+        "2607-aria-menu-button-actions-active-descendant-nav-forwards-to-menu-button-tab-vc/s1",
+        "2611-aria-menu-button-actions-active-descendant-nav-back-to-menu-button-shift-tab-vc/s1",
+        "2638-aria-menu-button-navigation-nav-forwards-to-menu-button-tab-vc/s1",
+        "2642-aria-menu-button-navigation-nav-back-to-menu-button-shift-tab-vc/s1",
+        "2876-aria-banner-t13-tab-vc/s1",
+    ],
+    "A focus onto a menu button, the virtual cursor on: JAWS 2025.2505 says no hint; with it \
+     off it says \"Press space to activate the menu, then navigate with arrow keys\" [obs, \
+     round-aria20]. A newer JAWS (2025.2508.120 in ARIA-AT's published reports) says the hint \
+     with the virtual cursor on too, as Okur does.",
+    "a newer JAWS (2025.2508.120, ARIA-AT's reports) under the owner's rule for the web, 2026-11-01";
+
+    Difference::OkurAlsoSays("To set the value use the Arrow keys or type the value.") => [
+        "2720-aria-quantity-spin-button-nav-forwards-to-spinbutton-tab-vc/s1",
+        "2725-aria-quantity-spin-button-nav-back-to-spinbutton-shift-tab-vc/s1",
+    ],
+    "Tab to a spin button, the virtual cursor on: JAWS 2025.2505 says no hint, with it off \
+     \"To set the value use the Arrow keys or type the value.\" [obs, round-aria25]. A newer \
+     JAWS (2025.2508.120, ARIA-AT's reports) says it with the virtual cursor on too, as Okur \
+     does.",
+    "a newer JAWS (2025.2508.120, ARIA-AT's reports) under the owner's rule for the web, 2026-11-01";
+
+    Difference::OkurAlsoSays("To increase or decrease use the Arrow keys.") => [
+        "2741-aria-horizontal-slider-nav-forwards-to-slider-tab-vc/s1",
+        "2745-aria-horizontal-slider-nav-back-to-slider-shift-tab-vc/s1",
+        "2760-aria-seek-slider-nav-forwards-to-slider-tab-vc/s1",
+        "2765-aria-seek-slider-nav-back-to-slider-shift-tab-vc/s1",
+        "2781-aria-vertical-temperature-slider-nav-forwards-to-slider-tab-vc/s1",
+        "2785-aria-vertical-temperature-slider-nav-back-to-slider-shift-tab-vc/s1",
+    ],
+    "Tab to a slider, the virtual cursor on: JAWS 2025.2505 says no hint, with it off \"To \
+     increase or decrease use the Arrow keys.\" [obs, round-aria26, round-aria28]. A newer JAWS \
+     (2025.2508.120, ARIA-AT's reports) says it with the virtual cursor on too, as Okur does.",
+    "a newer JAWS (2025.2508.120, ARIA-AT's reports) under the owner's rule for the web, 2026-11-01";
+
+    Difference::JawsAlsoSays("min 0 max 300") => [
+        "2760-aria-seek-slider-nav-forwards-to-slider-tab-vc/s1",
+        "2765-aria-seek-slider-nav-back-to-slider-shift-tab-vc/s1",
+        "2767-aria-seek-slider-req-info-about-slider-ins-tab-vc/s1",
+        "2768-aria-seek-slider-req-info-about-slider-ins-up-vc/s1",
+    ],
+    "A slider whose value is a text, the virtual cursor on: JAWS 2025.2505 says its limits \
+     after the text, \"1 Minute 30 Seconds of 5 Minutes min 0 max 300\" [obs, round-aria27], and \
+     none for a slider whose value is a number. A newer JAWS (2025.2508.120, ARIA-AT's reports) \
+     does the reverse: the limits after a number, \"128 min 0 max 255\", none after a text, \
+     which says its own range. Okur follows the newer JAWS.",
+    "a newer JAWS (2025.2508.120, ARIA-AT's reports) under the owner's rule for the web, 2026-11-01";
+
+    Difference::OkurAlsoSays("\u{1d}Modal\u{1e}") => [
+        "2666-aria-modal-dialog-open-modal-dialog-space-vc/s1",
+        "2667-aria-modal-dialog-open-modal-dialog-enter-vc/s1",
+        "2683-aria-modal-dialog-open-nested-modal-dialog-space-vc/s1",
+        "2684-aria-modal-dialog-open-nested-modal-dialog-enter-vc/s1",
+        "2687-aria-modal-dialog-close-nested-modal-dialog-esc-vc/s1",
+        "2688-aria-modal-dialog-close-nested-modal-dialog-space-vc/s1",
+        "2689-aria-modal-dialog-close-nested-modal-dialog-enter-vc/s1",
+    ],
+    "A modal dialog the focus comes into, the virtual cursor on: JAWS 2025.2505 says \"Add \
+     Delivery Address dialog\", and \"Modal\" only with the virtual cursor off [obs, \
+     round-aria23]. A newer JAWS (2025.2508.120, ARIA-AT's reports) says \"modal dialog\" with \
+     it on too, as Okur does; ARIA-AT's plan asks for it (SHOULD).",
+    "a newer JAWS (2025.2508.120, ARIA-AT's reports) under the owner's rule for the web, 2026-11-01";
+
+    Difference::OkurAlsoSays("Type in text.") => [
+        "2666-aria-modal-dialog-open-modal-dialog-space-vc/s1",
+        "2667-aria-modal-dialog-open-modal-dialog-enter-vc/s1",
+    ],
+    "The field a dialog's opening focuses, the virtual cursor on: JAWS 2025.2505 says no hint, \
+     with it off \"Type in text.\" [obs, round-aria23, 2668/s1]. A newer JAWS (2025.2508.120, \
+     ARIA-AT's reports) says it with the virtual cursor on too, as Okur does.",
+    "a newer JAWS (2025.2508.120, ARIA-AT's reports) under the owner's rule for the web, 2026-11-01";
+
+    Difference::Step => [
+        "2594-aria-menu-button-actions-req-info-about-menu-item-ins-tab-vc/s1",
+        "2595-aria-menu-button-actions-req-info-about-menu-item-ins-up-vc/s1",
+        "2625-aria-menu-button-actions-active-descendant-req-info-about-menu-item-ins-tab-vc/s1",
+        "2626-aria-menu-button-actions-active-descendant-req-info-about-menu-item-ins-up-vc/s1",
+        "2656-aria-menu-button-navigation-req-info-about-menu-item-ins-tab-vc/s1",
+        "2657-aria-menu-button-navigation-req-info-about-menu-item-ins-up-vc/s1",
+    ],
+    "Insert+Tab or Insert+Up on a page menu's item, the virtual cursor on: JAWS 2025.2505 says \
+     the item with the role word \"menu\", \"Action 1 menu\" [obs, round-aria20], and its \
+     place only with the virtual cursor off. A newer JAWS (2025.2508.120, ARIA-AT's reports) \
+     says its place with it on too, \"Action 1 | 1 of 4\", as Okur does; ARIA-AT's plans ask \
+     for the place (SHOULD).",
+    "a newer JAWS (2025.2508.120, ARIA-AT's reports) under the owner's rule for the web, 2026-11-01";
+
+    Difference::Step => [
+        "2696-aria-minimal-data-grid-nav-forwards-to-grid-tab-vc/s1",
+        "2700-aria-minimal-data-grid-nav-back-to-grid-shift-tab-vc/s1",
+    ],
+    "Tab into an ARIA grid, the virtual cursor on: JAWS 2025.2505 says the grid's name twice, \
+     before its size and again before the cell [obs, round-aria24]. A newer JAWS \
+     (2025.2508.120, ARIA-AT's reports) says it once, as Okur does.",
+    "a newer JAWS (2025.2508.120, ARIA-AT's reports) under the owner's rule for the web, 2026-11-01";
+
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
     ],

@@ -231,6 +231,7 @@ impl ScreenReaderEngine {
                         virtual_off: self.virtual_cursor_off || self.forms_mode,
                         by_focus: false,
                         asked: false,
+                        line: false,
                     },
                 )
                 .render_all()
@@ -477,11 +478,13 @@ impl ScreenReaderEngine {
                         "region" => Some(named(msg::role_region().as_str())),
                         _ => None,
                     },
-                    // A dialog by its name, "Modal" with the virtual cursor off, then its
-                    // description: "Address Added Modal dialog | The address you provided has
-                    // been added..." [obs, round-aria23, 2666/s1, 2668/s1, 2685/s1].
+                    // A dialog by its name, "Modal" where it is one, then its description:
+                    // "Address Added Modal dialog | The address you provided has been
+                    // added..." [obs, round-aria23, 2666/s1, 2668/s1, 2685/s1]. JAWS 2025.2505
+                    // says "Modal" with the virtual cursor off only, a newer JAWS (2025.2508,
+                    // ARIA-AT's reports) with it on too, as Okur does.
                     Role::Dialog | Role::AlertDialog => {
-                        let mut line = if self.virtual_cursor_off && n.states.modal {
+                        let mut line = if n.states.modal {
                             format!(
                                 "{name} \u{1d}{}\u{1e} \u{1d} {} \u{1e} \n",
                                 msg::state_modal(),

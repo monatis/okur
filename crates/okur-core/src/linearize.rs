@@ -1311,11 +1311,15 @@ impl<'a> Builder<'a> {
                 }
                 s
             }
-            // "Red left right slider 128" [obs, round-aria26, 2739/s2].
+            // "Red left right slider 128" [obs, round-aria26, 2739/s2], its limits after a
+            // number: "128 min 0 max 255" (a newer JAWS, 2025.2508, ARIA-AT's reports).
             Role::Slider => {
                 let value = node.value.as_deref().map(str::trim).unwrap_or_default();
+                let limits = crate::speech::SpeechFormatter::range_limits(node)
+                    .map(|l| format!(" {l}"))
+                    .unwrap_or_default();
                 format!(
-                    "{name}{}{value}",
+                    "{name}{}{value}{limits}",
                     role_marker(crate::speech::SpeechFormatter::slider_role(node).as_str())
                 )
                 .trim_end()
@@ -2619,9 +2623,13 @@ mod tests {
         );
         assert_eq!(buffer.tab_stops.len(), 2);
         let mut cursor = crate::cursor::VirtualCursor::new(buffer);
+        // Its hint with the virtual cursor on, as a newer JAWS (2025.2508, ARIA-AT's reports).
         assert_eq!(
             cursor.focus_node(1).as_deref(),
-            Some("Actions  \u{1d} button menu \u{1e} ")
+            Some(
+                "Actions  \u{1d} button menu \u{1e} \nPress space to activate the menu, then \
+                 navigate with arrow keys"
+            )
         );
     }
 

@@ -2,6 +2,9 @@
 
 # An item's place among its siblings: "2 of 5".
 position = { $index } of { $total }
+# A slider's or spin button's limits after its value, where its value is a number: "128 min 0
+# max 255" (a newer JAWS, 2025.2508, in ARIA-AT's reports).
+range-limits = min { $min } max { $max }
 # An empty list's size, where a place would be: a combo box with no items in Say Window,
 # "blank | 0 items" [obs, 544/s13].
 items-count = { $count } items

@@ -317,7 +317,11 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
         Role::Text | Role::Group if is_labelled_empty_generic(node) => {
             aom.text = node.name.clone();
         }
-        Role::Edit | Role::ComboBox | Role::Slider => aom.value = node.value.clone(),
+        Role::Edit | Role::ComboBox | Role::Slider => {
+            aom.value = node.value.clone();
+            aom.value_min = node.value_min;
+            aom.value_max = node.value_max;
+        }
         // The document value is its URL; same-page links are resolved against it.
         Role::Document => {
             if let Some(url) = &node.value {

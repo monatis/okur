@@ -984,6 +984,30 @@ impl ScreenReaderEngine {
             }
             return format!("{current}\n{place}");
         }
+        // A focused page menu's item by its name and place: "Action 1 | 1 of 4" [obs,
+        // round-aria20, 2597/s1]. With the virtual cursor on JAWS 2025.2505 says "Action 1 |
+        // menu" (2595/s1); a newer JAWS (2025.2508, ARIA-AT's reports) its place, as Okur does.
+        // A menu bar's item keeps its line.
+        if let Some(node) = line
+            .filter(|line| Some(line.node_id) == self.last_page_focus)
+            .and_then(|line| self.cursor.buffer.node(line.node_id))
+            .filter(|node| {
+                node.role == crate::aom::Role::MenuItem
+                    && self
+                        .cursor
+                        .buffer
+                        .ancestors(node.id)
+                        .first()
+                        .is_none_or(|parent| parent.role != crate::aom::Role::MenuBar)
+            })
+        {
+            let name = node.name.as_deref().unwrap_or_default().trim().to_owned();
+            let attr = |k: &str| node.attributes.get(k).map(String::as_str);
+            return match (attr("posinset"), attr("setsize")) {
+                (Some(p), Some(n)) => format!("{name}\n{}", msg::position(p, n)),
+                _ => name,
+            };
+        }
         // With the virtual cursor off the focused control is said as its focus says it, its
         // hint and group left out: a button in a heading without the heading [obs, round-aria5,
         // 2152/s1, 2156/s1].
@@ -1017,6 +1041,7 @@ impl ScreenReaderEngine {
                     virtual_off: true,
                     by_focus: true,
                     asked: false,
+                    line: true,
                 };
                 return SpeechFormatter::control_focus(node, |_| true, said).render_all();
             }
@@ -1028,16 +1053,6 @@ impl ScreenReaderEngine {
                     .map(str::trim)
                     .filter(|v| !v.is_empty())
                     .map_or_else(|| msg::blank().to_string(), str::to_owned);
-            }
-            // A page menu's item by its name and place: "Action 1 | 1 of 4" [obs,
-            // round-aria20, 2597/s1].
-            if node.role == crate::aom::Role::MenuItem {
-                let name = node.name.as_deref().unwrap_or_default().trim().to_owned();
-                let attr = |k: &str| node.attributes.get(k).map(String::as_str);
-                return match (attr("posinset"), attr("setsize")) {
-                    (Some(p), Some(n)) => format!("{name}\n{}", msg::position(p, n)),
-                    _ => name,
-                };
             }
             // A menu button by its name and role, no state: "Actions button menu" [obs,
             // round-aria20, 2587/s1].
@@ -1080,6 +1095,7 @@ impl ScreenReaderEngine {
                 virtual_off: true,
                 by_focus: false,
                 asked: false,
+                line: true,
             };
             return SpeechFormatter::control_focus(node, |_| true, said).render_all();
         }
