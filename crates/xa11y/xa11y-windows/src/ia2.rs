@@ -110,6 +110,16 @@ pub struct Ia2Node {
     pub value: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// MSAA's default action (`accDefaultAction`): Chromium's "click" for an element with a
+    /// click handler, "click ancestor" inside one, which JAWS may call "clickable".
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub default_action: Option<String>,
+    /// A range control's limits (`IAccessibleValue`): a slider's or spin button's minimum and
+    /// maximum, which JAWS may say after its value ("min 0 max 300").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub value_min: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub value_max: Option<f64>,
     /// MSAA state bits (`STATE_SYSTEM_*`).
     pub msaa_states: u32,
     /// IA2 state bits (`IA2_STATE_*`).
@@ -247,6 +257,7 @@ mod com {
     use std::ffi::c_void;
     use windows::core::{BSTR, HRESULT};
     use windows::Win32::Foundation::HWND;
+    use windows::Win32::System::Variant::VARIANT;
     use windows::Win32::UI::Accessibility::{IAccessible, IAccessible_Impl, IAccessible_Vtbl};
     use windows_core::{IUnknown, IUnknown_Vtbl};
 
@@ -280,6 +291,14 @@ mod com {
         fn get_indexInParent(&self, index: *mut i32) -> HRESULT;
         fn get_locale(&self, locale: *mut c_void) -> HRESULT;
         fn get_attributes(&self, attributes: *mut BSTR) -> HRESULT;
+    }
+
+    #[windows_core::interface("35855B5B-C566-4fd0-A7B1-E65465600394")]
+    pub unsafe trait IAccessibleValue: IUnknown {
+        fn get_currentValue(&self, value: *mut VARIANT) -> HRESULT;
+        fn setCurrentValue(&self, value: VARIANT) -> HRESULT;
+        fn get_maximumValue(&self, value: *mut VARIANT) -> HRESULT;
+        fn get_minimumValue(&self, value: *mut VARIANT) -> HRESULT;
     }
 
     #[windows_core::interface("24FD2FFB-3AAD-4a08-8335-A3AD89C0FB4B")]
@@ -368,7 +387,7 @@ mod com {
             TextRuns, EMBEDDED_OBJECT_CHAR, FONT_ATTRIBUTES, IA2_TEXT_BOUNDARY_LINE,
             IA2_TEXT_OFFSET_LENGTH,
         };
-        use super::{IAccessible2, IAccessibleRelation, IAccessibleText};
+        use super::{IAccessible2, IAccessibleRelation, IAccessibleText, IAccessibleValue};
         use windows::core::{Interface, BSTR, PCWSTR};
         use windows::Win32::Foundation::HWND;
         use windows::Win32::System::Com::{IDispatch, IServiceProvider};
@@ -569,6 +588,7 @@ mod com {
                 node.name = string(acc.get_accName(&me));
                 node.value = string(acc.get_accValue(&me));
                 node.description = string(acc.get_accDescription(&me));
+                node.default_action = string(acc.get_accDefaultAction(&me));
                 if let Ok(state) = acc.get_accState(&me) {
                     node.msaa_states = i32::try_from(&state).map(|s| s as u32).unwrap_or(0);
                 }
@@ -588,6 +608,17 @@ mod com {
                     let mut unique_id = 0i32;
                     if ia2.get_uniqueID(&mut unique_id).is_ok() {
                         node.unique_id = Some(unique_id);
+                    }
+                    if let Ok(value) = ia2.cast::<IAccessibleValue>() {
+                        let limit = |read: &dyn Fn(*mut VARIANT) -> windows::core::HRESULT| {
+                            let mut v = VARIANT::default();
+                            read(&mut v)
+                                .is_ok()
+                                .then(|| f64::try_from(&v).ok())
+                                .flatten()
+                        };
+                        node.value_min = limit(&|v| value.get_minimumValue(v));
+                        node.value_max = limit(&|v| value.get_maximumValue(v));
                     }
                     let mut attrs = BSTR::default();
                     if ia2.get_attributes(&mut attrs).is_ok() {
