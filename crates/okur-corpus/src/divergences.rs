@@ -1260,6 +1260,47 @@ divergences! {
      (2025.2508.120, ARIA-AT's reports) says it once, as Okur does.",
     "a newer JAWS (2025.2508.120, ARIA-AT's reports) under the owner's rule for the web, 2026-11-01";
 
+    Difference::OkurAlsoSays("\u{1d}collapsed\u{1e}") => [
+        "225-web-form-fields-list/s10",
+        "922-web-form-fields-list-intermediate/s10",
+        "923-web-form-fields-list-advanced/s10",
+        "2576-aria-menu-button-actions-nav-forwards-to-menu-button-tab-vc/s1",
+        "2580-aria-menu-button-actions-nav-back-to-menu-button-shift-tab-vc/s1",
+        "2582-aria-menu-button-actions-nav-forwards-to-menu-button-tab-pc/s1",
+        "2583-aria-menu-button-actions-nav-back-to-menu-button-shift-tab-pc/s1",
+        "2584-aria-menu-button-actions-req-info-about-menu-button-ins-tab-vc/s1",
+        "2586-aria-menu-button-actions-req-info-about-menu-button-ins-tab-pc/s1",
+        "2587-aria-menu-button-actions-req-info-about-menu-button-ins-up-pc/s1",
+        "2603-aria-menu-button-actions-activate-menu-item-enter-pc/s1",
+        "2604-aria-menu-button-actions-close-menu-esc-pc/s1",
+        "2607-aria-menu-button-actions-active-descendant-nav-forwards-to-menu-button-tab-vc/s1",
+        "2611-aria-menu-button-actions-active-descendant-nav-back-to-menu-button-shift-tab-vc/s1",
+        "2613-aria-menu-button-actions-active-descendant-nav-forwards-to-menu-button-tab-pc/s1",
+        "2614-aria-menu-button-actions-active-descendant-nav-back-to-menu-button-shift-tab-pc/s1",
+        "2615-aria-menu-button-actions-active-descendant-req-info-about-menu-button-ins-tab-vc/s1",
+        "2617-aria-menu-button-actions-active-descendant-req-info-about-menu-button-ins-tab-pc/s1",
+        "2618-aria-menu-button-actions-active-descendant-req-info-about-menu-button-ins-up-pc/s1",
+        "2634-aria-menu-button-actions-active-descendant-activate-menu-item-enter-pc/s1",
+        "2635-aria-menu-button-actions-active-descendant-close-menu-esc-pc/s1",
+        "2638-aria-menu-button-navigation-nav-forwards-to-menu-button-tab-vc/s1",
+        "2642-aria-menu-button-navigation-nav-back-to-menu-button-shift-tab-vc/s1",
+        "2644-aria-menu-button-navigation-nav-forwards-to-menu-button-tab-pc/s1",
+        "2645-aria-menu-button-navigation-nav-back-to-menu-button-shift-tab-pc/s1",
+        "2646-aria-menu-button-navigation-req-info-about-menu-button-ins-tab-vc/s1",
+        "2648-aria-menu-button-navigation-req-info-about-menu-button-ins-tab-pc/s1",
+        "2649-aria-menu-button-navigation-req-info-about-menu-button-ins-up-pc/s1",
+        "2665-aria-menu-button-navigation-close-menu-esc-pc/s1",
+        "2876-aria-banner-t13-tab-vc/s1",
+        "2877-aria-banner-t14-tab-pc/s1",
+    ],
+    "A focus onto a menu button, and Insert+Up on it with the virtual cursor off: JAWS says \
+     \"Actions button menu\" without its state [obs, round-aria20, round-aria30], and says \
+     \"collapsed\" only on a quick key to it (B, F) and on Insert+Up with the virtual cursor \
+     on; a newer JAWS (2025.2508.120, ARIA-AT's reports) as well. ARIA-AT's menu button plans \
+     ask for the state (SHOULD). Okur says it on a focus too: \"Actions button menu \
+     collapsed\".",
+    "the owner's rule for the web: Okur conveys what ARIA-AT asks, 2026-11-01";
+
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
     ],

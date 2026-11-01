@@ -2623,12 +2623,13 @@ mod tests {
         );
         assert_eq!(buffer.tab_stops.len(), 2);
         let mut cursor = crate::cursor::VirtualCursor::new(buffer);
-        // Its hint with the virtual cursor on, as a newer JAWS (2025.2508, ARIA-AT's reports).
+        // Its state, which ARIA-AT asks for, and its hint with the virtual cursor on, as a newer
+        // JAWS (2025.2508, ARIA-AT's reports).
         assert_eq!(
             cursor.focus_node(1).as_deref(),
             Some(
-                "Actions  \u{1d} button menu \u{1e} \nPress space to activate the menu, then \
-                 navigate with arrow keys"
+                "Actions  \u{1d} button menu \u{1e}   \u{1d}collapsed\u{1e} \nPress space to \
+                 activate the menu, then navigate with arrow keys"
             )
         );
     }

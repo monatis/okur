@@ -1054,16 +1054,25 @@ impl ScreenReaderEngine {
                     .filter(|v| !v.is_empty())
                     .map_or_else(|| msg::blank().to_string(), str::to_owned);
             }
-            // A menu button by its name and role, no state: "Actions button menu" [obs,
-            // round-aria20, 2587/s1].
+            // A menu button by its name, role and state, "Actions button menu collapsed", as
+            // with the virtual cursor on; JAWS leaves the state out here [obs, round-aria20,
+            // 2587/s1], where ARIA-AT asks for it (the owner's rule for the web, 2026-11-01).
             if node.role == crate::aom::Role::MenuButton {
                 let name = node.name.as_deref().unwrap_or_default().trim();
                 let role = node
                     .role_description()
                     .unwrap_or(msg::role_button_menu().as_str());
-                return format!("{name}{}", crate::linearize::role_marker(role))
-                    .trim()
-                    .to_owned();
+                let mut said = format!("{name}{}", crate::linearize::role_marker(role));
+                match node.states.expanded {
+                    Some(true) => said.push_str(&crate::linearize::state_marker(
+                        msg::state_expanded().as_str(),
+                    )),
+                    Some(false) => said.push_str(&crate::linearize::state_marker(
+                        msg::state_collapsed().as_str(),
+                    )),
+                    None => {}
+                }
+                return said.trim().to_owned();
             }
             // A tab by its name, role and selection, without its place: "Maria Ahlefeldt Tab
             // selected" [obs, round-aria18, 2511/s1, 2515/s1].

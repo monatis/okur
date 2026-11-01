@@ -604,9 +604,10 @@ impl SpeechFormatter {
                 }
                 Announcement::new(lines)
             }
-            // On focus a menu button says no state (JAWS on the dev box); a quick key to it
-            // says it collapsed or expanded: "Actions button menu collapsed" [obs,
-            // round-aria20, 2574/s1, 2578/s1].
+            // A menu button says it collapsed or expanded: "Actions button menu collapsed".
+            // JAWS says it on a quick key [obs, round-aria20, 2574/s1, 2578/s1] and not on a
+            // focus, where ARIA-AT's menu button plans ask for it (SHOULD): Okur says it on a
+            // focus too (the owner's rule for the web, 2026-11-01).
             Role::MenuButton => {
                 let role = node
                     .role_description()
@@ -617,7 +618,7 @@ impl SpeechFormatter {
                     Some(false) => Some(msg::state_collapsed()),
                     None => None,
                 };
-                if let Some(state) = state.filter(|_| !said.by_focus) {
+                if let Some(state) = state {
                     parts.push(Part::text(" "));
                     parts.push(Part::state(state));
                 }

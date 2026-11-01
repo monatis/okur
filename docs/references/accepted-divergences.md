@@ -1346,7 +1346,55 @@ A step can be in more than one entry; all of its entries apply.
 - Decided under the owner's rule for the web (AGENTS.md §1.2), following a newer JAWS
   (2025.2508.120) in ARIA-AT's published reports, 2026-11-01.
 
+### A menu button's state on a focus
+
+- Steps: `225-web-form-fields-list/s10`, `922-web-form-fields-list-intermediate/s10`,
+  `923-web-form-fields-list-advanced/s10`,
+  `2576-aria-menu-button-actions-nav-forwards-to-menu-button-tab-vc/s1`,
+  `2580-aria-menu-button-actions-nav-back-to-menu-button-shift-tab-vc/s1`,
+  `2582-aria-menu-button-actions-nav-forwards-to-menu-button-tab-pc/s1`,
+  `2583-aria-menu-button-actions-nav-back-to-menu-button-shift-tab-pc/s1`,
+  `2584-aria-menu-button-actions-req-info-about-menu-button-ins-tab-vc/s1`,
+  `2586-aria-menu-button-actions-req-info-about-menu-button-ins-tab-pc/s1`,
+  `2587-aria-menu-button-actions-req-info-about-menu-button-ins-up-pc/s1`,
+  `2603-aria-menu-button-actions-activate-menu-item-enter-pc/s1`,
+  `2604-aria-menu-button-actions-close-menu-esc-pc/s1`,
+  `2607-aria-menu-button-actions-active-descendant-nav-forwards-to-menu-button-tab-vc/s1`,
+  `2611-aria-menu-button-actions-active-descendant-nav-back-to-menu-button-shift-tab-vc/s1`,
+  `2613-aria-menu-button-actions-active-descendant-nav-forwards-to-menu-button-tab-pc/s1`,
+  `2614-aria-menu-button-actions-active-descendant-nav-back-to-menu-button-shift-tab-pc/s1`,
+  `2615-aria-menu-button-actions-active-descendant-req-info-about-menu-button-ins-tab-vc/s1`,
+  `2617-aria-menu-button-actions-active-descendant-req-info-about-menu-button-ins-tab-pc/s1`,
+  `2618-aria-menu-button-actions-active-descendant-req-info-about-menu-button-ins-up-pc/s1`,
+  `2634-aria-menu-button-actions-active-descendant-activate-menu-item-enter-pc/s1`,
+  `2635-aria-menu-button-actions-active-descendant-close-menu-esc-pc/s1`,
+  `2638-aria-menu-button-navigation-nav-forwards-to-menu-button-tab-vc/s1`,
+  `2642-aria-menu-button-navigation-nav-back-to-menu-button-shift-tab-vc/s1`,
+  `2644-aria-menu-button-navigation-nav-forwards-to-menu-button-tab-pc/s1`,
+  `2645-aria-menu-button-navigation-nav-back-to-menu-button-shift-tab-pc/s1`,
+  `2646-aria-menu-button-navigation-req-info-about-menu-button-ins-tab-vc/s1`,
+  `2648-aria-menu-button-navigation-req-info-about-menu-button-ins-tab-pc/s1`,
+  `2649-aria-menu-button-navigation-req-info-about-menu-button-ins-up-pc/s1`,
+  `2665-aria-menu-button-navigation-close-menu-esc-pc/s1`, `2876-aria-banner-t13-tab-vc/s1`,
+  `2877-aria-banner-t14-tab-pc/s1`.
+- Difference: Okur also says "collapsed" (or "expanded") after a menu button's role.
+- Why: on a focus onto a menu button, and on Insert+Up with the virtual cursor off, JAWS says
+  "Actions button menu" without its state [obs, round-aria20, round-aria30]; it says the state
+  on a quick key to it and on Insert+Up with the virtual cursor on. A newer JAWS (2025.2508.120,
+  ARIA-AT's reports) does the same. ARIA-AT's menu button plans ask for the state (SHOULD).
+- Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
+
 ## Considered and not accepted
+
+- From a newer JAWS (2025.2508.120, ARIA-AT's reports), not followed: Insert+Up on a menu
+  button without its state (JAWS 2025.2505 says it, and ARIA-AT asks for it), and a radio
+  button's hint with the virtual cursor on (before the group in some of the reports' outputs,
+  after it in others; on old-pc's forms pages JAWS says none).
+
+- A menu item's role, "menu item" (ARIA-AT, SHOULD on Insert+Tab and Insert+Up): JAWS has no
+  such word; it names the menu, "Actions menu | Action 1 | 1 of 4", and Okur keeps its
+  vocabulary. A tri-state check box's group on Insert+Up (SHOULD): Insert+Up says the line;
+  Insert+Tab names the group.
 
 - A spin button's name on its own line (`2718/s1`, `2723/s1`, quantity-spin-button: ARIA-AT
   requires it, MUST): its label is read on the line before, as every labelled field's is; saying
