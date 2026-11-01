@@ -1125,6 +1125,20 @@ A step can be in more than one entry; all of its entries apply.
   apart. Okur says the place.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-11-01.
 
+### Excel's Format Cells pages said twice
+
+- Steps: `1124-desktop-excel-dialogs/s4`, `1124-desktop-excel-dialogs/s5`,
+  `1124-desktop-excel-dialogs/s6`.
+- Difference: JAWS says the page's tab twice, the page's name alone before it ("Alignment |
+  Alignment Tab selected | To switch pages, press Control+Tab."), and on the Number page its
+  Category list's choice, "General", before or after the tab by the trial. Opening on that page,
+  it left out the dialog's name in every trial of round-1124b, where it said the name opening on
+  other pages (round-1122b). Okur says the dialog as it opens, then the page's tab once: "Format
+  Cells dialog | Number Tab selected | To switch pages, press Control+Tab.".
+- Why: the page's name comes twice, from the page list's value and from its tab, and the list's
+  choice comes as the page is drawn; JAWS's wording follows the events' order, which varies.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-11-01.
+
 ### Excel's cell menu closed by the recorder
 
 - Steps: `1122-desktop-excel-context-menus/s2`.

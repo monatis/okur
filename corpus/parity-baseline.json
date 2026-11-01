@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
   "matched_steps": 11339,
-  "total_steps": 11911,
-  "accepted_divergences": 362,
+  "total_steps": 11908,
+  "accepted_divergences": 365,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -1725,9 +1725,9 @@
     "1124-desktop-excel-dialogs/s1": "match",
     "1124-desktop-excel-dialogs/s2": "match",
     "1124-desktop-excel-dialogs/s3": "match",
-    "1124-desktop-excel-dialogs/s4": "mismatch",
-    "1124-desktop-excel-dialogs/s5": "mismatch",
-    "1124-desktop-excel-dialogs/s6": "mismatch",
+    "1124-desktop-excel-dialogs/s4": "accepted divergence",
+    "1124-desktop-excel-dialogs/s5": "accepted divergence",
+    "1124-desktop-excel-dialogs/s6": "accepted divergence",
     "1124-desktop-excel-dialogs/s7": "match",
     "1124-desktop-excel-dialogs/s8": "match",
     "1124-desktop-excel-dialogs/s9": "match",

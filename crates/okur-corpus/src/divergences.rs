@@ -1660,6 +1660,20 @@ divergences! {
      list say it (2502/s1). Okur says it each time; ARIA-AT asks for it (SHOULD).",
     "the owner's rule for the web: Okur conveys what ARIA-AT asks, 2026-11-01";
 
+    Difference::Step => [
+        "1124-desktop-excel-dialogs/s4",
+        "1124-desktop-excel-dialogs/s5",
+        "1124-desktop-excel-dialogs/s6",
+    ],
+    "Excel's Format Cells, its pages switched with Ctrl+Tab and Ctrl+Shift+Tab: JAWS says the \
+     page's tab twice, the page's name alone before it, \"Alignment | Alignment Tab selected | \
+     To switch pages, press Control+Tab.\", and on the Number page its Category list's choice, \
+     \"General\", before or after the tab by the trial. Opening on that page, it left out the \
+     dialog's name in every trial of round-1124b, where it said the name opening on other pages \
+     (round-1122b). Okur says the dialog as it opens, then the page's tab once: \"Format Cells \
+     dialog | Number Tab selected | To switch pages, press Control+Tab.\"",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
+
     Difference::OkurAlsoSays("Weekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
     ],
