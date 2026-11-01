@@ -2,6 +2,8 @@
 
 # Entering a table (T).
 table-entry = table with { $columns } columns and { $rows } rows
+# An ARIA grid (role="grid"), as JAWS calls it: "grid with 5 columns and 7 rows".
+grid-entry = grid with { $columns } columns and { $rows } rows
 # With short messages (Intermediate and Advanced verbosity) [obs, 578/s1].
 table-entry-short = { $columns } columns and { $rows } rows
 table-cell = Column { $column }, Row { $row }

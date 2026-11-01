@@ -710,20 +710,13 @@ impl SpeechFormatter {
     /// Format: "table with {cols} columns and {rows} rows\n{caption}\nColumn 1, Row 1\n{FirstCellText}";
     /// with short messages "{cols} columns and {rows} rows" [obs, 578/s1].
     pub fn format_table_entry(
-        cols: usize,
-        rows: usize,
+        entry: String,
         caption: Option<&str>,
         col: usize,
         row: usize,
         cell_text: &str,
-        short: bool,
     ) -> String {
-        let mut parts = Vec::new();
-        parts.push(if short {
-            msg::table_entry_short(cols, rows).render()
-        } else {
-            msg::table_entry(cols, rows).render()
-        });
+        let mut parts = vec![entry];
         if let Some(cap) = caption {
             if !cap.is_empty() {
                 parts.push(cap.to_string());
@@ -734,6 +727,19 @@ impl SpeechFormatter {
             parts.push(cell_text.to_string());
         }
         parts.join("\n")
+    }
+
+    /// A table's size as T says it entering it: "table with 3 columns and 4 rows", an ARIA
+    /// grid's "grid with 5 columns and 7 rows" [obs, round-aria24, 2694/s1], with short
+    /// messages "3 columns and 4 rows" [obs, 578/s1].
+    pub fn table_entry_line(cols: usize, rows: usize, short: bool, aria_grid: bool) -> String {
+        if short {
+            msg::table_entry_short(cols, rows).render()
+        } else if aria_grid {
+            msg::grid_entry(cols, rows).render()
+        } else {
+            msg::table_entry(cols, rows).render()
+        }
     }
 
     /// Formats speech when moving horizontally to a cell in the same row (`Ctrl+Alt+Left/Right`).

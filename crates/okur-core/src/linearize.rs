@@ -1433,14 +1433,23 @@ impl<'a> Builder<'a> {
             })
             .max()
             .unwrap_or(0);
-        let start = msg::table_entry(cols, rows.len()).render();
+        let aria_grid = attr(node, "aria_role") == Some("grid");
+        let start = if aria_grid {
+            msg::grid_entry(cols, rows.len()).render()
+        } else {
+            msg::table_entry(cols, rows.len()).render()
+        };
         let start_offset = self.emit_boundary(node.id, node.role.clone(), &start);
 
         let mut caption = None;
         // UIA names a table by its caption; without a caption element, the name is the caption.
+        // A name from outside the table (aria-labelledby) has no line of its own in it; T
+        // still says it [obs, round-aria24, 2694/s1, 2695/s2].
         if node.children.iter().all(|c| c.role == Role::TableRow) {
             if let Some(name) = node.name.as_deref().map(squash).filter(|n| !n.is_empty()) {
-                self.emit_boundary(node.id, Role::Text, &name);
+                if attr(node, "named_outside") != Some("true") {
+                    self.emit_boundary(node.id, Role::Text, &name);
+                }
                 caption = Some(name);
             }
         }
@@ -1542,7 +1551,12 @@ impl<'a> Builder<'a> {
         }
 
         self.flush();
-        let end_line = self.emit_boundary(node.id, node.role.clone(), msg::table_end().as_str());
+        let end = if aria_grid {
+            msg::grid_end()
+        } else {
+            msg::table_end()
+        };
+        let end_line = self.emit_boundary(node.id, node.role.clone(), end.as_str());
         self.buffer.bounded.push((start_offset, end_line));
         let end_offset = self.offset();
         self.buffer.table_offsets.push(start_offset);
@@ -1554,6 +1568,7 @@ impl<'a> Builder<'a> {
             start_offset,
             end_offset,
             cells: grid,
+            aria_grid,
         });
         self.buffer.spans.push(BufferSpan {
             start_offset,

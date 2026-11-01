@@ -458,6 +458,16 @@ fn convert(node: &Ia2Node, next_id: &mut usize) -> okur_core::AomNode {
     if attr("name-from").as_deref() == Some("attribute") {
         set_attr("labelled", "true".to_owned());
     }
+    // A table named from outside it (aria-labelledby, aria-label), not by a caption of its
+    // own: JAWS reads no caption line for it [obs, round-aria24, 2695/s2].
+    if role == Role::Table
+        && matches!(
+            attr("name-from").as_deref(),
+            Some("related-element" | "attribute")
+        )
+    {
+        set_attr("named_outside", "true".to_owned());
+    }
     // aria-keyshortcuts, said after a link's or graphic's name ("Alt+ArrowUp").
     if let Some(keys) = attr("keyshortcuts").filter(|k| !k.trim().is_empty()) {
         set_attr("keyshortcuts", keys);

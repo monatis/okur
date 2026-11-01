@@ -1427,9 +1427,42 @@ impl VirtualCursor {
         }
         // Such a cell says its position only entering the grid: JAWS said no row moving on.
         let focused_cell = node.role == Role::TableCell && !name.is_empty();
+        // An ARIA grid's cell focused from outside the grid says the grid first: its name and
+        // size, then with the virtual cursor its name again, the column and the place, "Date |
+        // 01-Jan-16 | column 1 row 2"; without it the cell alone. Insert+Tab says the cell
+        // alone [obs, round-aria24, 2696/s1, 2697/s1, 2702/s1, 2704/s1].
+        let entered_grid = self
+            .buffer
+            .table_at_offset(self.offset)
+            .filter(|t| t.aria_grid && focused_cell)
+            .filter(|t| {
+                from.offset(previous)
+                    .is_none_or(|p| p < t.start_offset || p > t.end_offset)
+            })
+            .map(|t| (t.caption.clone(), msg::grid_entry(t.cols, t.rows).render()));
+        if matches!(group, GroupNamed::Asked) && entered_grid.is_some() {
+            return Some(speech);
+        }
+        if let Some((caption, size)) = entered_grid.as_ref().filter(|_| self.virtual_off) {
+            let caption = caption
+                .as_deref()
+                .map(|c| format!("{c}\n"))
+                .unwrap_or_default();
+            return Some(format!("{caption}{size}\n{speech}"));
+        }
         if let Some((header, position, whole)) =
             self.table_focus_context(self.offset, from.offset(previous))
         {
+            if let Some((caption, size)) = entered_grid {
+                let mut parts: Vec<String> = Vec::new();
+                parts.extend(caption.clone());
+                parts.push(size);
+                parts.extend(caption);
+                parts.extend(header);
+                parts.push(speech);
+                parts.push(position);
+                return Some(parts.join("\n"));
+            }
             if let Some(header) = header {
                 speech = format!("{header}\n{speech}");
             }
@@ -3142,13 +3175,16 @@ impl VirtualCursor {
         let first_cell_text = first_cell.map(|c| c.speech.as_str()).unwrap_or("");
 
         let speech = SpeechFormatter::format_table_entry(
-            table.cols,
-            table.rows,
+            SpeechFormatter::table_entry_line(
+                table.cols,
+                table.rows,
+                self.short_messages(),
+                table.aria_grid,
+            ),
             table.caption.as_deref(),
             1,
             1,
             first_cell_text,
-            self.short_messages(),
         );
         Some(speech)
     }
@@ -3181,13 +3217,16 @@ impl VirtualCursor {
             .unwrap_or("");
 
         let speech = SpeechFormatter::format_table_entry(
-            table.cols,
-            table.rows,
+            SpeechFormatter::table_entry_line(
+                table.cols,
+                table.rows,
+                self.short_messages(),
+                table.aria_grid,
+            ),
             table.caption.as_deref(),
             1,
             1,
             first_cell_text,
-            self.short_messages(),
         );
         Some(if wrapped {
             format!("{}\n{speech}", msg::quicknav_wrap_bottom())

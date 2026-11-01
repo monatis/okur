@@ -132,6 +132,9 @@ pub struct TableGrid {
     pub start_offset: usize,
     pub end_offset: usize,
     pub cells: Vec<Vec<TableCellInfo>>,
+    /// An ARIA grid (`role="grid"`), which JAWS calls a grid: "grid with 5 columns and 7
+    /// rows", "grid end" [obs, round-aria24, 2694/s1, 2699/s1].
+    pub aria_grid: bool,
 }
 
 impl TableGrid {

@@ -39,3 +39,4 @@ list-start-nested = list of { $items } items nesting level { $level }
 list-end = list end
 list-end-nested = list end nesting level { $level }
 table-end = table end
+grid-end = grid end
