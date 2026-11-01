@@ -1299,6 +1299,24 @@ impl ScreenReaderEngine {
                 return;
             }
         }
+        // Excel's Insert+F, the active cell's font and formatting, asked of Excel [obs, 1133/s4].
+        if event.key == Key::Alpha('F')
+            && !m.ctrl
+            && !m.shift
+            && !m.alt
+            && !m.win
+            && self
+                .last_native_focus
+                .as_ref()
+                .is_some_and(crate::apps::windows::excel::in_sheet)
+            && self
+                .actions
+                .as_ref()
+                .is_some_and(|actions| actions.read_sheet_format())
+        {
+            self.sheet_reading_asked = Some(crate::apps::windows::excel::SheetReading::Format);
+            return;
+        }
         // Excel's Insert+C, the cell's coordinates: "B 2" [obs, 521/s6]; an empty cell's, where
         // the grid has the focus, asked of Excel, "D 1" [obs, 1123/s3].
         if event.key == Key::Alpha('C') && !m.ctrl && !m.shift && !m.alt && !m.win {

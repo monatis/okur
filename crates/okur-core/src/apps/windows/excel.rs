@@ -251,6 +251,8 @@ pub(crate) enum SheetReading {
     /// "Weekends"; its row's, in the column given, "Northside" [obs, 1132/s7, s8].
     ColumnTitle(u32),
     RowTitle(u32),
+    /// Insert+F: the active cell's font and formatting ([`format_said`]) [obs, 1133/s4].
+    Format,
 }
 
 impl SheetReading {
@@ -287,6 +289,7 @@ impl SheetReading {
             Self::Cell => return coordinates(&place.address),
             Self::ColumnTitle(row) => return titles_of(place, Some(row), None).pop(),
             Self::RowTitle(column) => return titles_of(place, None, Some(column)).pop(),
+            Self::Format => return place.format.as_ref().map(format_said),
             _ => {}
         }
         let (cells, at, row) = match self {
@@ -298,7 +301,7 @@ impl SheetReading {
             Self::Line | Self::Row | Self::Column => cells,
             Self::RowFromStart | Self::ColumnFromTop => cells.get(..=at).unwrap_or(cells),
             Self::RowToEnd | Self::ColumnToBottom => cells.get(at..).unwrap_or_default(),
-            Self::Cell | Self::ColumnTitle(_) | Self::RowTitle(_) => return None,
+            Self::Cell | Self::ColumnTitle(_) | Self::RowTitle(_) | Self::Format => return None,
         };
         let read: Vec<&str> = part
             .iter()
@@ -423,6 +426,98 @@ fn reference_end(end: &str) -> Option<(Option<u32>, Option<u32>)> {
         .flatten();
     let row = (!digits.is_empty()).then(|| digits.parse().ok()).flatten();
     (column.is_some() || row.is_some()).then_some((column, row))
+}
+
+/// What Insert+F says of the active cell's font and formatting, line by line: "Cell Font and
+/// Formatting: | text color Black | background color White | Calibri | Regular | 11 point |
+/// highlighted | Horizontal alignment is General. | Vertical alignment is Bottom. | Number
+/// format is general. | Normal | Cell dimensions are 48 points wide by 14 points high." [obs,
+/// 1133/s4]. A cell without fill is white, as Excel shows it.
+pub(crate) fn format_said(format: &crate::event::SheetFormat) -> String {
+    use crate::color::{name_of, Rgb};
+    // The color table's name, capitalized as JAWS says it here, "Black" [obs, 1133/s4].
+    let color = |rgb: Rgb| {
+        let name = name_of(rgb).unwrap_or_default();
+        let mut chars = name.chars();
+        chars
+            .next()
+            .map(|first| first.to_uppercase().chain(chars).collect::<String>())
+            .unwrap_or_default()
+    };
+    // A size in points: whole, or with its fraction ("10.5").
+    let points = |hundredths: u32| {
+        if hundredths.is_multiple_of(100) {
+            (hundredths / 100).to_string()
+        } else {
+            (f64::from(hundredths) / 100.0).to_string()
+        }
+    };
+    let mut lines = vec![
+        msg::excel_cell_format().to_string(),
+        msg::excel_text_color(color(format.color.unwrap_or(Rgb::new(0, 0, 0)))).render(),
+        msg::excel_background_color(color(format.fill.unwrap_or(Rgb::new(255, 255, 255)))).render(),
+    ];
+    lines.extend(
+        [&format.font, &format.style]
+            .into_iter()
+            .filter(|text| !text.is_empty())
+            .cloned(),
+    );
+    lines.push(msg::font_size(points(format.size)).render());
+    lines.push(msg::excel_highlighted().to_string());
+    if let Some(alignment) = horizontal_alignment(format.horizontal) {
+        lines.push(msg::excel_horizontal_alignment(alignment).render());
+    }
+    if let Some(alignment) = vertical_alignment(format.vertical) {
+        lines.push(msg::excel_vertical_alignment(alignment).render());
+    }
+    if !format.number_format.is_empty() {
+        lines.push(msg::excel_number_format(format.number_format.to_lowercase()).render());
+    }
+    if !format.cell_style.is_empty() {
+        lines.push(format.cell_style.clone());
+    }
+    lines.push(
+        msg::excel_cell_dimensions(
+            (format.width / 100).to_string(),
+            (format.height / 100).to_string(),
+        )
+        .render(),
+    );
+    lines.join("\n")
+}
+
+/// Excel's horizontal alignment (`XlHAlign`) by its name.
+fn horizontal_alignment(value: i32) -> Option<String> {
+    Some(
+        match value {
+            1 => msg::excel_align_general(),
+            -4131 => msg::excel_align_left(),
+            -4108 => msg::excel_align_center(),
+            -4152 => msg::excel_align_right(),
+            5 => msg::excel_align_fill(),
+            -4130 => msg::excel_align_justify(),
+            7 => msg::excel_align_center_across(),
+            -4117 => msg::excel_align_distributed(),
+            _ => return None,
+        }
+        .to_string(),
+    )
+}
+
+/// Excel's vertical alignment (`XlVAlign`) by its name.
+fn vertical_alignment(value: i32) -> Option<String> {
+    Some(
+        match value {
+            -4160 => msg::excel_align_top(),
+            -4108 => msg::excel_align_center(),
+            -4107 => msg::excel_align_bottom(),
+            -4130 => msg::excel_align_justify(),
+            -4117 => msg::excel_align_distributed(),
+            _ => return None,
+        }
+        .to_string(),
+    )
 }
 
 /// The cell `focus` is, as (column, row) from 1.
@@ -641,6 +736,7 @@ mod tests {
             column: vec!["Weekdays".into(), "12".into(), "10".into(), "22".into()],
             row_at: 1,
             column_at: 2,
+            format: None,
         };
         let said = |reading: SheetReading| reading.said(&place);
         assert_eq!(
@@ -679,6 +775,7 @@ mod tests {
             column: vec!["Weekdays".into(), "12".into(), "10".into(), "22".into()],
             row_at: 1,
             column_at: 1,
+            format: None,
         };
         let said = |before: Option<&str>, now: crate::event::SheetPlace, key| {
             selection_said(before, &now, key)
@@ -818,6 +915,7 @@ mod tests {
                 String::new(),
             ],
             column: vec![String::new()],
+            format: None,
         };
         assert_eq!(
             blank_or_cell(&place, true).as_deref(),
@@ -893,6 +991,7 @@ mod tests {
             column_at: 1,
             row: vec!["Central".into(), "12".into(), "8".into()],
             column: vec!["Weekdays".into(), "12".into(), "10".into(), "22".into()],
+            format: None,
         };
         assert_eq!(
             excel.sheet_place(Some(&place)).as_deref(),
@@ -909,5 +1008,38 @@ mod tests {
         // Without the place, the cell alone.
         assert_eq!(step(&mut excel, &cell("B3", "10")), (String::new(), true));
         assert_eq!(excel.sheet_place(None).as_deref(), Some("10\nB 3"));
+    }
+
+    /// Insert+F on the fixture's B1: Calibri 11, no fill, General and Bottom [obs, 1133/s4].
+    #[test]
+    fn insert_f_says_the_cells_font_and_formatting() {
+        let format = crate::event::SheetFormat {
+            font: "Calibri".into(),
+            style: "Regular".into(),
+            size: 1100,
+            color: Some(crate::color::Rgb::new(0, 0, 0)),
+            fill: None,
+            horizontal: 1,
+            vertical: -4107,
+            number_format: "General".into(),
+            cell_style: "Normal".into(),
+            width: 4800,
+            height: 1440,
+        };
+        assert_eq!(
+            format_said(&format),
+            "Cell Font and Formatting:
+text color Black
+background color White
+Calibri
+Regular
+11 point
+highlighted
+Horizontal alignment is General.
+Vertical alignment is Bottom.
+Number format is general.
+Normal
+Cell dimensions are 48 points wide by 14 points high."
+        );
     }
 }

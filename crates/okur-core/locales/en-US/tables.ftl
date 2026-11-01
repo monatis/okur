@@ -203,6 +203,28 @@ excel-active-cell = Active Cell: { $cell }
 # Insert+Ctrl+Alt+C and R: the active cell's row set as the column titles, its column as the row
 # titles [obs, 1132/s1, s2].
 excel-column-titles-set = Setting column titles row range to { $row }
+# Insert+F: the active cell's font and formatting, line by line, its size with font-size;
+# a cell without fill is White, and the active cell "highlighted" [obs, 1133/s4].
+excel-cell-format = Cell Font and Formatting:
+excel-text-color = text color { $color }
+excel-background-color = background color { $color }
+excel-highlighted = highlighted
+excel-horizontal-alignment = Horizontal alignment is { $alignment }.
+excel-vertical-alignment = Vertical alignment is { $alignment }.
+excel-number-format = Number format is { $format }.
+excel-cell-dimensions = Cell dimensions are { $width } points wide by { $height } points high.
+# Excel's alignments by their names in its Format Cells dialog; General and Bottom [obs,
+# 1133/s4], the others [hyp: not recorded].
+excel-align-general = General
+excel-align-left = Left
+excel-align-center = Center
+excel-align-right = Right
+excel-align-fill = Fill
+excel-align-justify = Justify
+excel-align-center-across = Center Across Selection
+excel-align-distributed = Distributed
+excel-align-top = Top
+excel-align-bottom = Bottom
 excel-row-titles-set = Setting row titles column range to { $column }
 # Excel's selections: a cell taken in or out, or the selection's corners after "select"; whole
 # rows and columns first, in JAWS's capitals [obs, 1120, 1121, 1117].

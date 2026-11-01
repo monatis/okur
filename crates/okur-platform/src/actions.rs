@@ -119,6 +119,8 @@ mod windows_actions {
         DocumentView,
         StatusBar,
         SheetPlace,
+        /// The place with the active cell's font and formatting.
+        SheetFormat,
         SheetList(okur_core::SheetListKind),
         SheetEntry(okur_core::SheetListKind, String),
         /// The sheet tabs' context menu of the spreadsheet in front opened.
@@ -204,6 +206,7 @@ mod windows_actions {
                 Request::DocumentView => "document view",
                 Request::StatusBar => "status bar",
                 Request::SheetPlace => "sheet place",
+                Request::SheetFormat => "sheet format",
                 Request::SheetList(_) => "sheet list",
                 Request::SheetEntry(..) => "sheet entry",
                 Request::SheetTabsMenu => "sheet tabs menu",
@@ -542,6 +545,14 @@ mod windows_actions {
                                 };
                                 let place = crate::actions::sheet_place_now(None);
                                 tracing::debug!(read = place.is_some(), "sheet place read");
+                                let _ = events.send(AccessibilityEvent::SheetPlace(place));
+                            }
+                            Request::SheetFormat => {
+                                let Some(events) = events.as_ref() else {
+                                    return;
+                                };
+                                let place = crate::actions::sheet_place_with_format_now(None);
+                                tracing::debug!(read = place.is_some(), "sheet format read");
                                 let _ = events.send(AccessibilityEvent::SheetPlace(place));
                             }
                             Request::SheetList(kind) => {
@@ -1107,6 +1118,10 @@ mod windows_actions {
             self.send(Request::SheetPlace)
         }
 
+        fn read_sheet_format(&self) -> bool {
+            self.send(Request::SheetFormat)
+        }
+
         fn read_sheet_list(&self, kind: okur_core::SheetListKind) -> bool {
             self.send(Request::SheetList(kind))
         }
@@ -1397,13 +1412,29 @@ pub fn document_view_now(window_title: Option<&str>) -> Option<String> {
 /// the window in front, or the top-level window titled `window_title`.
 #[cfg(windows)]
 pub fn sheet_place_now(window_title: Option<&str>) -> Option<okur_core::SheetPlace> {
+    crate::excel_om::sheet_place(sheet_grid(window_title)?)
+}
+
+/// The same, with the active cell's font and formatting (Insert+F).
+#[cfg(windows)]
+pub fn sheet_place_with_format_now(window_title: Option<&str>) -> Option<okur_core::SheetPlace> {
+    let grid = sheet_grid(window_title)?;
+    let mut place = crate::excel_om::sheet_place(grid)?;
+    place.format = crate::excel_om::cell_format(grid);
+    Some(place)
+}
+
+/// Excel's grid window in the window in front, or in the top-level window titled
+/// `window_title`.
+#[cfg(windows)]
+fn sheet_grid(window_title: Option<&str>) -> Option<windows::Win32::Foundation::HWND> {
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
     let top = match window_title {
         Some(title) => crate::harness::window_titled(title)?,
         // SAFETY: a plain query.
         None => unsafe { GetForegroundWindow() },
     };
-    crate::excel_om::sheet_place(crate::excel_om::grid_window(top)?)
+    crate::excel_om::grid_window(top)
 }
 
 /// One of JAWS's lists of Excel's window, with the active cell's column's letters, read right

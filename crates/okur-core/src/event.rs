@@ -206,6 +206,32 @@ pub struct SheetPlace {
     pub column: Vec<String>,
     pub row_at: usize,
     pub column_at: usize,
+    /// The active cell's font and formatting, where it was asked for
+    /// ([`crate::actions::ApplicationActions::read_sheet_format`]).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub format: Option<SheetFormat>,
+}
+
+/// A spreadsheet's active cell's font and formatting (Excel's `Range` properties), for JAWS's
+/// Insert+F there.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct SheetFormat {
+    /// The font's name, "Calibri", its style, "Regular", and its size in hundredths of a point.
+    pub font: String,
+    pub style: String,
+    pub size: u32,
+    /// The text's color; the cell's fill, none where it has none.
+    pub color: Option<crate::color::Rgb>,
+    pub fill: Option<crate::color::Rgb>,
+    /// Excel's alignment constants (`XlHAlign`, `XlVAlign`).
+    pub horizontal: i32,
+    pub vertical: i32,
+    /// The number format, "General", and the cell's style, "Normal".
+    pub number_format: String,
+    pub cell_style: String,
+    /// The cell's width and height in hundredths of a point.
+    pub width: u32,
+    pub height: u32,
 }
 
 /// The caret's place on a word processor's pages (Word's `Selection.Information`): its page and

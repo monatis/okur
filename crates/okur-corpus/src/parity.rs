@@ -1417,6 +1417,7 @@ struct ScreenReads {
     views: usize,
     status_bars: usize,
     sheet_places: usize,
+    sheet_formats: usize,
     /// Excel's lists asked for and answered, by kind.
     sheet_lists: [usize; 4],
     paragraphs: usize,
@@ -1641,6 +1642,12 @@ impl ScreenReads {
             }
         }
         // Excel's row and column, always answered: none where the step saved none.
+        while self.sheet_formats < count("sheet format") {
+            self.sheet_formats += 1;
+            deliver(okur_core::AccessibilityEvent::SheetPlace(
+                snapshot.and_then(|s| s.sheet_place.clone()),
+            ));
+        }
         while self.sheet_places < count("sheet place") {
             self.sheet_places += 1;
             deliver(okur_core::AccessibilityEvent::SheetPlace(

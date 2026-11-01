@@ -165,6 +165,11 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// The same, with the active cell's font and formatting ([`crate::event::SheetPlace::format`]).
+    fn read_sheet_format(&self) -> bool {
+        false
+    }
+
     /// Asks for one of JAWS's lists of the spreadsheet in front, which arrives later as
     /// [`crate::event::AccessibilityEvent::SheetList`], always. Returns false when
     /// unsupported.
@@ -570,6 +575,13 @@ impl ApplicationActions for RecordingActions {
     fn read_sheet_place(&self) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push(("sheet place".to_owned(), 0));
+        }
+        true
+    }
+
+    fn read_sheet_format(&self) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("sheet format".to_owned(), 0));
         }
         true
     }

@@ -1347,7 +1347,8 @@ async fn main() {
                 // Word's status bar, for Say Bottom Line of Window.
                 let status_bar = okur_platform::actions::status_bar_now(window_title.as_deref());
                 // Excel's active cell's row and column, for its row and column readers.
-                let sheet_place = okur_platform::actions::sheet_place_now(window_title.as_deref());
+                let sheet_place =
+                    okur_platform::actions::sheet_place_with_format_now(window_title.as_deref());
                 // Excel's lists: its cells with formulas, the column's cells, its worksheets.
                 let sheet_list = |kind: okur_core::SheetListKind| {
                     okur_platform::actions::sheet_list_now(window_title.as_deref(), kind).map(

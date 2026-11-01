@@ -95,7 +95,63 @@ pub fn sheet_place(grid: HWND) -> Option<okur_core::SheetPlace> {
         column_at: at(top, row)?,
         row: row_cells,
         column: column_cells,
+        format: None,
     })
+}
+
+/// The active cell's font and formatting in Excel's grid window `grid`, for Insert+F: its
+/// font (`Font.Name`, `FontStyle`, `Size`, `Color`), its fill (`Interior`, none for
+/// `xlColorIndexNone`), its alignments, number format and style, and its size in points.
+/// `None` where Excel's object model does not answer.
+pub fn cell_format(grid: HWND) -> Option<okur_core::SheetFormat> {
+    /// `Interior.ColorIndex` of a cell with no fill.
+    const NO_FILL: i64 = -4142;
+    let window = word_window(grid)?;
+    let cell = object(&property(&window, "ActiveCell")?)?;
+    let font = object(&property(&cell, "Font")?)?;
+    let interior = object(&property(&cell, "Interior")?)?;
+    let style = property(&cell, "Style").as_ref().and_then(object);
+    let hundredths = |object: &IDispatch, name: &str| {
+        real(object, name)
+            .map(|points| (points * 100.0).round().clamp(0.0, f64::from(u32::MAX)) as u32)
+    };
+    let fill = (whole(&interior, "ColorIndex") != Some(NO_FILL))
+        .then(|| whole(&interior, "Color").map(bgr))
+        .flatten();
+    Some(okur_core::SheetFormat {
+        font: text(&font, "Name").trim().to_owned(),
+        style: text(&font, "FontStyle").trim().to_owned(),
+        size: hundredths(&font, "Size").unwrap_or_default(),
+        color: whole(&font, "Color").map(bgr),
+        fill,
+        horizontal: number(&cell, "HorizontalAlignment").unwrap_or_default(),
+        vertical: number(&cell, "VerticalAlignment").unwrap_or_default(),
+        number_format: text(&cell, "NumberFormat").trim().to_owned(),
+        cell_style: style
+            .map(|style| text(&style, "Name").trim().to_owned())
+            .unwrap_or_default(),
+        width: hundredths(&cell, "Width").unwrap_or_default(),
+        height: hundredths(&cell, "Height").unwrap_or_default(),
+    })
+}
+
+/// The number property `name` of `object`, whole or not.
+fn real(object: &IDispatch, name: &str) -> Option<f64> {
+    let value = property(object, name)?;
+    f64::try_from(&value)
+        .ok()
+        .or_else(|| i32::try_from(&value).ok().map(f64::from))
+}
+
+/// The whole number property `name` of `object`: Excel gives colors as doubles.
+fn whole(object: &IDispatch, name: &str) -> Option<i64> {
+    real(object, name).map(|value| value.round() as i64)
+}
+
+/// An Office color (red, green and blue from the low byte up) as RGB.
+fn bgr(value: i64) -> okur_core::color::Rgb {
+    let byte = |shift: u32| u8::try_from((value >> shift) & 0xFF).unwrap_or(0);
+    okur_core::color::Rgb::new(byte(0), byte(8), byte(16))
 }
 
 /// The most cells looked through for a sheet's list of cells with formulas.
