@@ -1,0 +1,39 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Change in state (to expanded) is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "ALT_DOWN",
+    "instructions": "With the reading cursor on the combobox, open the combobox without moving into the listbox popup.",
+    "plan": "apg/combobox-autocomplete-both-updated",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "22"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-autocomplete-both-updated/combobox-autocomplete-both.moveFocusToComboboxAndSetValueToAlabama.html",
+  "id": "2947-aria-combobox-autocomplete-both-updated-t22-alt-down-vc",
+  "name": "ARIA-AT, Combobox with Both List and Inline Autocomplete Example: Open a filled in, collapsed combobox in reading mode; Alt+Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Alt+Down",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

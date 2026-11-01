@@ -1,0 +1,75 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'combobox' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name of the combobox ('State') is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "State of the combobox (expanded) is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Text of the selected option ('Alabama') is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "The ability to enter or edit text is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion6",
+        "phrase": "The presence of autocomplete behavior is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion7",
+        "phrase": "Cursor position (on the character 'a') is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "LEFT",
+    "instructions": "With focus on an option in the listbox popup, navigate back to the textbox by moving the editing cursor to the left.",
+    "plan": "apg/combobox-autocomplete-both-updated",
+    "presentation_number": "commandA",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "68"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-autocomplete-both-updated/combobox-autocomplete-both.moveFocusToAlabamaInListboxAndSetInputCursorAtEnd.html",
+  "id": "2979-aria-combobox-autocomplete-both-updated-t68-left-pc",
+  "name": "ARIA-AT, Combobox with Both List and Inline Autocomplete Example: Navigate out of a listbox popup by moving the editing cursor to the left in interaction mode; Left in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Left",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

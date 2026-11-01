@@ -1,0 +1,3754 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Editable Combobox With Both List and Inline Autocomplete Example - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "3b4d4f235a16d1c0a3dd254674023729bb1f0fc1d78d8098d66e055433a3af59",
+    "captured_at_unix_ms": 1793511716962,
+    "node_count": 84,
+    "capture_ms": 598
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Editable Combobox With Both List and Inline Autocomplete Example",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-autocomplete-both-updated/combobox-autocomplete-both.moveFocusToAlaskaInListbox.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -190346,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -190356,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          },
+          {
+            "start": 1,
+            "end": 4,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Editable Combobox With Both List and Inline Autocomplete Example",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -190367,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Editable Combobox With Both List and Inline Autocomplete Example",
+            "lines": [
+              [
+                0,
+                64
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 64,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Editable Combobox With Both List and Inline Autocomplete Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -190370,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Editable Combobox With Both List and Inline Autocomplete Example",
+                "lines": [
+                  [
+                    0,
+                    64
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 64,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "24pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -190361,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "The below combobox for choosing the name of a US state or territory demonstrates the ￼ The design pattern describes four types of autocomplete behavior. This example illustrates the autocomplete behavior referred to in the pattern as list with inline completion. If the user types one or more characters in the edit box and the typed characters match the beginning of the name of one or more states or territories, a listbox popup appears containing the matching names, and the first match is automatically selected. In addition, the portion of the selected suggestion that has not been typed by the user, a completion string, appears inline after the input cursor in the textbox. The automatically selected suggestion becomes the value of the textbox when the combobox loses focus unless the user chooses a different suggestion or changes the character string in the textbox. Note that this implementation enables users to input the name of a state or territory, but it does not prevent input of any other arbitrary value.",
+            "lines": [
+              [
+                0,
+                143
+              ],
+              [
+                143,
+                320
+              ],
+              [
+                320,
+                493
+              ],
+              [
+                493,
+                672
+              ],
+              [
+                672,
+                844
+              ],
+              [
+                844,
+                1023
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 85,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 85,
+                "end": 86,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 86,
+                "end": 1023,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "The below combobox for choosing the name of a US state or territory demonstrates the ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -190363,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "The below combobox for choosing the name of a US state or territory demonstrates the ",
+                "lines": [
+                  [
+                    0,
+                    85
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 85,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "design pattern for combobox.",
+                "value": "https://w3c.github.io/aria-practices/#combobox",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -190338,
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "design pattern for combobox.",
+                "lines": [
+                  [
+                    0,
+                    28
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 28,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "design pattern for combobox.",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -190352,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "design pattern for combobox.",
+                    "lines": [
+                      [
+                        0,
+                        28
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 28,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": " The design pattern describes four types of autocomplete behavior. This example illustrates the autocomplete behavior referred to in the pattern as list with inline completion. If the user types one or more characters in the edit box and the typed characters match the beginning of the name of one or more states or territories, a listbox popup appears containing the matching names, and the first match is automatically selected. In addition, the portion of the selected suggestion that has not been typed by the user, a completion string, appears inline after the input cursor in the textbox. The automatically selected suggestion becomes the value of the textbox when the combobox loses focus unless the user chooses a different suggestion or changes the character string in the textbox. Note that this implementation enables users to input the name of a state or territory, but it does not prevent input of any other arbitrary value.",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -190353,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": " The design pattern describes four types of autocomplete behavior. This example illustrates the autocomplete behavior referred to in the pattern as list with inline completion. If the user types one or more characters in the edit box and the typed characters match the beginning of the name of one or more states or territories, a listbox popup appears containing the matching names, and the first match is automatically selected. In addition, the portion of the selected suggestion that has not been typed by the user, a completion string, appears inline after the input cursor in the textbox. The automatically selected suggestion becomes the value of the textbox when the combobox loses focus unless the user chooses a different suggestion or changes the character string in the textbox. Note that this implementation enables users to input the name of a state or territory, but it does not prevent input of any other arbitrary value.",
+                "lines": [
+                  [
+                    0,
+                    57
+                  ],
+                  [
+                    57,
+                    234
+                  ],
+                  [
+                    234,
+                    407
+                  ],
+                  [
+                    407,
+                    586
+                  ],
+                  [
+                    586,
+                    758
+                  ],
+                  [
+                    758,
+                    937
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 937,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -190350,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ],
+              [
+                5,
+                6
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "18pt",
+                  "font-weight": "bold"
+                }
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 2,
+                "end": 3,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 3,
+                "end": 4,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 4,
+                "end": 5,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 5,
+                "end": 6,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -190373,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Example",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "18pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelFor": [
+                    -190342,
+                    -190364
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -190341,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Example",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "18pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "Start of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -190342,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -190373
+                  ]
+                }
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "Navigate forwards from here",
+                "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-autocomplete-both-updated/combobox-autocomplete-both.moveFocusToAlaskaInListbox.html#beforelink",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -190337,
+                "attributes": {
+                  "display": "inline",
+                  "id": "beforelink",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "Navigate forwards from here",
+                "lines": [
+                  [
+                    0,
+                    27
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 27,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Navigate forwards from here",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -190375,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Navigate forwards from here",
+                    "lines": [
+                      [
+                        0,
+                        27
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 27,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -190357,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1049,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -190365,
+                    "attributes": {
+                      "display": "inline",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "text": "State",
+                    "lines": [
+                      [
+                        0,
+                        5
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 5,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "labelFor": [
+                        -190344
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "State",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -190371,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "State",
+                        "lines": [
+                          [
+                            0,
+                            5
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 5,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -190359,
+                    "attributes": {
+                      "class": "combobox combobox-list",
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "text": "￼￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      },
+                      {
+                        "start": 1,
+                        "end": 2,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "10.5pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 20,
+                        "ia2_role": 1060,
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -190376,
+                        "attributes": {
+                          "class": "group",
+                          "display": "inline-flex",
+                          "tag": "div",
+                          "text-align": "left"
+                        },
+                        "text": "￼￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            2
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 1,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "10.5pt"
+                            }
+                          },
+                          {
+                            "start": 1,
+                            "end": 2,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "10pt"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 46,
+                            "ia2_role": 46,
+                            "name": "State",
+                            "value": "Alaska",
+                            "msaa_states": 1074790912,
+                            "ia2_states": 46088,
+                            "unique_id": -190344,
+                            "attributes": {
+                              "autocomplete": "both",
+                              "class": "cb_edit",
+                              "display": "block",
+                              "explicit-name": "true",
+                              "haspopup": "listbox",
+                              "id": "cb1-input",
+                              "name-from": "related-element",
+                              "tag": "input",
+                              "text-align": "left",
+                              "text-input-type": "text",
+                              "text-model": "a1",
+                              "xml-roles": "combobox"
+                            },
+                            "text": "Alaska",
+                            "lines": [
+                              [
+                                0,
+                                6
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 6,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ],
+                            "relations": {
+                              "controllerFor": [
+                                -190452
+                              ],
+                              "labelledBy": [
+                                -190365
+                              ]
+                            }
+                          },
+                          {
+                            "msaa_role": 43,
+                            "ia2_role": 43,
+                            "name": "States",
+                            "msaa_states": 1049088,
+                            "ia2_states": 1024,
+                            "unique_id": -190348,
+                            "attributes": {
+                              "display": "block",
+                              "explicit-name": "true",
+                              "id": "cb1-button",
+                              "name-from": "attribute",
+                              "tag": "button",
+                              "text-align": "center"
+                            },
+                            "relations": {
+                              "controllerFor": [
+                                -190452
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 33,
+                        "ia2_role": 33,
+                        "name": "States",
+                        "msaa_states": 1048576,
+                        "ia2_states": 132096,
+                        "unique_id": -190452,
+                        "attributes": {
+                          "class": "focus",
+                          "display": "block",
+                          "explicit-name": "true",
+                          "id": "cb1-listbox",
+                          "name-from": "attribute",
+                          "setsize": "56",
+                          "tag": "ul",
+                          "text-align": "left",
+                          "xml-roles": "listbox"
+                        },
+                        "group_position": [
+                          0,
+                          56,
+                          0
+                        ],
+                        "text": "￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            2
+                          ],
+                          [
+                            2,
+                            3
+                          ],
+                          [
+                            3,
+                            4
+                          ],
+                          [
+                            4,
+                            5
+                          ],
+                          [
+                            5,
+                            6
+                          ],
+                          [
+                            6,
+                            7
+                          ],
+                          [
+                            7,
+                            8
+                          ],
+                          [
+                            8,
+                            9
+                          ],
+                          [
+                            9,
+                            10
+                          ],
+                          [
+                            10,
+                            11
+                          ],
+                          [
+                            11,
+                            12
+                          ],
+                          [
+                            12,
+                            13
+                          ],
+                          [
+                            13,
+                            14
+                          ],
+                          [
+                            14,
+                            15
+                          ],
+                          [
+                            15,
+                            16
+                          ],
+                          [
+                            16,
+                            17
+                          ],
+                          [
+                            17,
+                            18
+                          ],
+                          [
+                            18,
+                            19
+                          ],
+                          [
+                            19,
+                            20
+                          ],
+                          [
+                            20,
+                            21
+                          ],
+                          [
+                            21,
+                            22
+                          ],
+                          [
+                            22,
+                            23
+                          ],
+                          [
+                            23,
+                            24
+                          ],
+                          [
+                            24,
+                            25
+                          ],
+                          [
+                            25,
+                            26
+                          ],
+                          [
+                            26,
+                            27
+                          ],
+                          [
+                            27,
+                            28
+                          ],
+                          [
+                            28,
+                            29
+                          ],
+                          [
+                            29,
+                            30
+                          ],
+                          [
+                            30,
+                            31
+                          ],
+                          [
+                            31,
+                            32
+                          ],
+                          [
+                            32,
+                            33
+                          ],
+                          [
+                            33,
+                            34
+                          ],
+                          [
+                            34,
+                            35
+                          ],
+                          [
+                            35,
+                            36
+                          ],
+                          [
+                            36,
+                            37
+                          ],
+                          [
+                            37,
+                            38
+                          ],
+                          [
+                            38,
+                            39
+                          ],
+                          [
+                            39,
+                            40
+                          ],
+                          [
+                            40,
+                            41
+                          ],
+                          [
+                            41,
+                            42
+                          ],
+                          [
+                            42,
+                            43
+                          ],
+                          [
+                            43,
+                            44
+                          ],
+                          [
+                            44,
+                            45
+                          ],
+                          [
+                            45,
+                            46
+                          ],
+                          [
+                            46,
+                            47
+                          ],
+                          [
+                            47,
+                            48
+                          ],
+                          [
+                            48,
+                            49
+                          ],
+                          [
+                            49,
+                            50
+                          ],
+                          [
+                            50,
+                            51
+                          ],
+                          [
+                            51,
+                            52
+                          ],
+                          [
+                            52,
+                            53
+                          ],
+                          [
+                            53,
+                            54
+                          ],
+                          [
+                            54,
+                            55
+                          ],
+                          [
+                            55,
+                            56
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 1,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "10.5pt"
+                            }
+                          },
+                          {
+                            "start": 1,
+                            "end": 2,
+                            "attributes": {
+                              "background-color": "rgb(221,238,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "10.5pt"
+                            }
+                          },
+                          {
+                            "start": 2,
+                            "end": 56,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "10.5pt"
+                            }
+                          }
+                        ],
+                        "relations": {
+                          "controlledBy": [
+                            -190344,
+                            -190348
+                          ]
+                        },
+                        "children": [
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Alabama",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -190539,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-al",
+                              "name-from": "contents",
+                              "posinset": "1",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              1
+                            ],
+                            "text": "Alabama",
+                            "lines": [
+                              [
+                                0,
+                                7
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 7,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Alaska",
+                            "msaa_states": 3145734,
+                            "ia2_states": 1024,
+                            "unique_id": -190517,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ak",
+                              "name-from": "contents",
+                              "posinset": "2",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              2
+                            ],
+                            "text": "Alaska",
+                            "lines": [
+                              [
+                                0,
+                                6
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 6,
+                                "attributes": {
+                                  "background-color": "rgb(221,238,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "American Samoa",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -190492,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-as",
+                              "name-from": "contents",
+                              "posinset": "3",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              3
+                            ],
+                            "text": "American Samoa",
+                            "lines": [
+                              [
+                                0,
+                                14
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 14,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Arizona",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -190462,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-az",
+                              "name-from": "contents",
+                              "posinset": "4",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              4
+                            ],
+                            "text": "Arizona",
+                            "lines": [
+                              [
+                                0,
+                                7
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 7,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Arkansas",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -190442,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ar",
+                              "name-from": "contents",
+                              "posinset": "5",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              5
+                            ],
+                            "text": "Arkansas",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "California",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -190431,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ca",
+                              "name-from": "contents",
+                              "posinset": "6",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              6
+                            ],
+                            "text": "California",
+                            "lines": [
+                              [
+                                0,
+                                10
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 10,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Colorado",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -190407,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-co",
+                              "name-from": "contents",
+                              "posinset": "7",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              7
+                            ],
+                            "text": "Colorado",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Connecticut",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -190384,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ct",
+                              "name-from": "contents",
+                              "posinset": "8",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              8
+                            ],
+                            "text": "Connecticut",
+                            "lines": [
+                              [
+                                0,
+                                11
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 11,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Delaware",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190536,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-de",
+                              "name-from": "contents",
+                              "posinset": "9",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              9
+                            ],
+                            "text": "Delaware",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "District of Columbia",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190511,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-dc",
+                              "name-from": "contents",
+                              "posinset": "10",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              10
+                            ],
+                            "text": "District of Columbia",
+                            "lines": [
+                              [
+                                0,
+                                20
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 20,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Florida",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190495,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-fl",
+                              "name-from": "contents",
+                              "posinset": "11",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              11
+                            ],
+                            "text": "Florida",
+                            "lines": [
+                              [
+                                0,
+                                7
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 7,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Georgia",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190457,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ga",
+                              "name-from": "contents",
+                              "posinset": "12",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              12
+                            ],
+                            "text": "Georgia",
+                            "lines": [
+                              [
+                                0,
+                                7
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 7,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Guam",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190425,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-gm",
+                              "name-from": "contents",
+                              "posinset": "13",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              13
+                            ],
+                            "text": "Guam",
+                            "lines": [
+                              [
+                                0,
+                                4
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 4,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Hawaii",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190406,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-hi",
+                              "name-from": "contents",
+                              "posinset": "14",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              14
+                            ],
+                            "text": "Hawaii",
+                            "lines": [
+                              [
+                                0,
+                                6
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 6,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Idaho",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190383,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-id",
+                              "name-from": "contents",
+                              "posinset": "15",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              15
+                            ],
+                            "text": "Idaho",
+                            "lines": [
+                              [
+                                0,
+                                5
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 5,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Illinois",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190540,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-il",
+                              "name-from": "contents",
+                              "posinset": "16",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              16
+                            ],
+                            "text": "Illinois",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Indiana",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190518,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-in",
+                              "name-from": "contents",
+                              "posinset": "17",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              17
+                            ],
+                            "text": "Indiana",
+                            "lines": [
+                              [
+                                0,
+                                7
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 7,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Iowa",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190481,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ia",
+                              "name-from": "contents",
+                              "posinset": "18",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              18
+                            ],
+                            "text": "Iowa",
+                            "lines": [
+                              [
+                                0,
+                                4
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 4,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Kansas",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190460,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ks",
+                              "name-from": "contents",
+                              "posinset": "19",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              19
+                            ],
+                            "text": "Kansas",
+                            "lines": [
+                              [
+                                0,
+                                6
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 6,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Kentucky",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190446,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ky",
+                              "name-from": "contents",
+                              "posinset": "20",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              20
+                            ],
+                            "text": "Kentucky",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Louisiana",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190433,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-la",
+                              "name-from": "contents",
+                              "posinset": "21",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              21
+                            ],
+                            "text": "Louisiana",
+                            "lines": [
+                              [
+                                0,
+                                9
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 9,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Maine",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190403,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-me",
+                              "name-from": "contents",
+                              "posinset": "22",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              22
+                            ],
+                            "text": "Maine",
+                            "lines": [
+                              [
+                                0,
+                                5
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 5,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Maryland",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190414,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-md",
+                              "name-from": "contents",
+                              "posinset": "23",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              23
+                            ],
+                            "text": "Maryland",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Massachusetts",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190522,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ma",
+                              "name-from": "contents",
+                              "posinset": "24",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              24
+                            ],
+                            "text": "Massachusetts",
+                            "lines": [
+                              [
+                                0,
+                                13
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 13,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Michigan",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190545,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-mi",
+                              "name-from": "contents",
+                              "posinset": "25",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              25
+                            ],
+                            "text": "Michigan",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Minnesota",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190482,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-mn",
+                              "name-from": "contents",
+                              "posinset": "26",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              26
+                            ],
+                            "text": "Minnesota",
+                            "lines": [
+                              [
+                                0,
+                                9
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 9,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Mississippi",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190504,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ms",
+                              "name-from": "contents",
+                              "posinset": "27",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              27
+                            ],
+                            "text": "Mississippi",
+                            "lines": [
+                              [
+                                0,
+                                11
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 11,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Missouri",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190423,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-mo",
+                              "name-from": "contents",
+                              "posinset": "28",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              28
+                            ],
+                            "text": "Missouri",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Montana",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190443,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-mt",
+                              "name-from": "contents",
+                              "posinset": "29",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              29
+                            ],
+                            "text": "Montana",
+                            "lines": [
+                              [
+                                0,
+                                7
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 7,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Nebraska",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190382,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ne",
+                              "name-from": "contents",
+                              "posinset": "30",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              30
+                            ],
+                            "text": "Nebraska",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Nevada",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190400,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-nv",
+                              "name-from": "contents",
+                              "posinset": "31",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              31
+                            ],
+                            "text": "Nevada",
+                            "lines": [
+                              [
+                                0,
+                                6
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 6,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "New Hampshire",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190506,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-nh",
+                              "name-from": "contents",
+                              "posinset": "32",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              32
+                            ],
+                            "text": "New Hampshire",
+                            "lines": [
+                              [
+                                0,
+                                13
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 13,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "New Jersey",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190528,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-nj",
+                              "name-from": "contents",
+                              "posinset": "33",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              33
+                            ],
+                            "text": "New Jersey",
+                            "lines": [
+                              [
+                                0,
+                                10
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 10,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "New Mexico",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190475,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-nm",
+                              "name-from": "contents",
+                              "posinset": "34",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              34
+                            ],
+                            "text": "New Mexico",
+                            "lines": [
+                              [
+                                0,
+                                10
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 10,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "New York",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190496,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ny",
+                              "name-from": "contents",
+                              "posinset": "35",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              35
+                            ],
+                            "text": "New York",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "North Carolina",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190429,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-nc",
+                              "name-from": "contents",
+                              "posinset": "36",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              36
+                            ],
+                            "text": "North Carolina",
+                            "lines": [
+                              [
+                                0,
+                                14
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 14,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "North Dakota",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190451,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-nd",
+                              "name-from": "contents",
+                              "posinset": "37",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              37
+                            ],
+                            "text": "North Dakota",
+                            "lines": [
+                              [
+                                0,
+                                12
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 12,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Northern Marianas Islands",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190390,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-mp",
+                              "name-from": "contents",
+                              "posinset": "38",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              38
+                            ],
+                            "text": "Northern Marianas Islands",
+                            "lines": [
+                              [
+                                0,
+                                25
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 25,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Ohio",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190412,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-oh",
+                              "name-from": "contents",
+                              "posinset": "39",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              39
+                            ],
+                            "text": "Ohio",
+                            "lines": [
+                              [
+                                0,
+                                4
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 4,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Oklahoma",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190521,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ok",
+                              "name-from": "contents",
+                              "posinset": "40",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              40
+                            ],
+                            "text": "Oklahoma",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Oregon",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190543,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-or",
+                              "name-from": "contents",
+                              "posinset": "41",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              41
+                            ],
+                            "text": "Oregon",
+                            "lines": [
+                              [
+                                0,
+                                6
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 6,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Pennsylvania",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190477,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-pa",
+                              "name-from": "contents",
+                              "posinset": "42",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              42
+                            ],
+                            "text": "Pennsylvania",
+                            "lines": [
+                              [
+                                0,
+                                12
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 12,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Puerto Rico",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190500,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-pr",
+                              "name-from": "contents",
+                              "posinset": "43",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              43
+                            ],
+                            "text": "Puerto Rico",
+                            "lines": [
+                              [
+                                0,
+                                11
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 11,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Rhode Island",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190440,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ri",
+                              "name-from": "contents",
+                              "posinset": "44",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              44
+                            ],
+                            "text": "Rhode Island",
+                            "lines": [
+                              [
+                                0,
+                                12
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 12,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "South Carolina",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190378,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-sc",
+                              "name-from": "contents",
+                              "posinset": "45",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              45
+                            ],
+                            "text": "South Carolina",
+                            "lines": [
+                              [
+                                0,
+                                14
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 14,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "South Dakota",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190437,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-sd",
+                              "name-from": "contents",
+                              "posinset": "46",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              46
+                            ],
+                            "text": "South Dakota",
+                            "lines": [
+                              [
+                                0,
+                                12
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 12,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Tennessee",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190502,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-tn",
+                              "name-from": "contents",
+                              "posinset": "47",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              47
+                            ],
+                            "text": "Tennessee",
+                            "lines": [
+                              [
+                                0,
+                                9
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 9,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Texas",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190480,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-tx",
+                              "name-from": "contents",
+                              "posinset": "48",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              48
+                            ],
+                            "text": "Texas",
+                            "lines": [
+                              [
+                                0,
+                                5
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 5,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Utah",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190380,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ut",
+                              "name-from": "contents",
+                              "posinset": "49",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              49
+                            ],
+                            "text": "Utah",
+                            "lines": [
+                              [
+                                0,
+                                4
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 4,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Vermont",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190527,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-ve",
+                              "name-from": "contents",
+                              "posinset": "50",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              50
+                            ],
+                            "text": "Vermont",
+                            "lines": [
+                              [
+                                0,
+                                7
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 7,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Virginia",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190413,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-va",
+                              "name-from": "contents",
+                              "posinset": "51",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              51
+                            ],
+                            "text": "Virginia",
+                            "lines": [
+                              [
+                                0,
+                                8
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 8,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Virgin Islands",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190397,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-vi",
+                              "name-from": "contents",
+                              "posinset": "52",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              52
+                            ],
+                            "text": "Virgin Islands",
+                            "lines": [
+                              [
+                                0,
+                                14
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 14,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Washington",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190465,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-wa",
+                              "name-from": "contents",
+                              "posinset": "53",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              53
+                            ],
+                            "text": "Washington",
+                            "lines": [
+                              [
+                                0,
+                                10
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 10,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "West Virginia",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190434,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-wv",
+                              "name-from": "contents",
+                              "posinset": "54",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              54
+                            ],
+                            "text": "West Virginia",
+                            "lines": [
+                              [
+                                0,
+                                13
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 13,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Wisconsin",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190497,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-wi",
+                              "name-from": "contents",
+                              "posinset": "55",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              55
+                            ],
+                            "text": "Wisconsin",
+                            "lines": [
+                              [
+                                0,
+                                9
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 9,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 34,
+                            "ia2_role": 34,
+                            "name": "Wyoming",
+                            "msaa_states": 1114112,
+                            "ia2_states": 1024,
+                            "unique_id": -190487,
+                            "attributes": {
+                              "display": "block",
+                              "id": "lb1-wy",
+                              "name-from": "contents",
+                              "posinset": "56",
+                              "setsize": "56",
+                              "tag": "li",
+                              "text-align": "left",
+                              "xml-roles": "option"
+                            },
+                            "group_position": [
+                              0,
+                              56,
+                              56
+                            ],
+                            "text": "Wyoming",
+                            "lines": [
+                              [
+                                0,
+                                7
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 7,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "10.5pt"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "Navigate backwards from here",
+                "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-autocomplete-both-updated/combobox-autocomplete-both.moveFocusToAlaskaInListbox.html#afterlink",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -190347,
+                "attributes": {
+                  "display": "inline",
+                  "id": "afterlink",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "Navigate backwards from here",
+                "lines": [
+                  [
+                    0,
+                    28
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 28,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Navigate backwards from here",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -190362,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Navigate backwards from here",
+                    "lines": [
+                      [
+                        0,
+                        28
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 28,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "End of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -190364,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -190373
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -190331,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(250,250,250)",
+                  "color": "rgb(5,5,5)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1,
+                "ia2_states": 1024,
+                "unique_id": -190334,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

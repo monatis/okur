@@ -1,0 +1,59 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'combobox' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name of the combobox ('State') is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "State of the combobox (expanded) is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "The ability to enter or edit text is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "The presence of autocomplete behavior is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "INS_UP",
+    "instructions": "With the reading cursor on the combobox, read information about the combobox.",
+    "plan": "apg/combobox-autocomplete-both-updated",
+    "presentation_number": "commandB",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "29"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-autocomplete-both-updated/combobox-autocomplete-both.moveFocusToAndExpandCombobox.html",
+  "id": "2954-aria-combobox-autocomplete-both-updated-t29-ins-up-vc",
+  "name": "ARIA-AT, Combobox with Both List and Inline Autocomplete Example: Read information about an empty, expanded combobox in reading mode; Insert+Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Up",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

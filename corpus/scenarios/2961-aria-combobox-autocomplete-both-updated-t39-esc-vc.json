@@ -1,0 +1,39 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Change in state (to collapsed) is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "ESC",
+    "instructions": "With the reading cursor on the combobox, close the combobox.",
+    "plan": "apg/combobox-autocomplete-both-updated",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "39"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-autocomplete-both-updated/combobox-autocomplete-both.moveFocusToAndExpandCombobox.html",
+  "id": "2961-aria-combobox-autocomplete-both-updated-t39-esc-vc",
+  "name": "ARIA-AT, Combobox with Both List and Inline Autocomplete Example: Close an empty combobox in reading mode; Escape in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Escape",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

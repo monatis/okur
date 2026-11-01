@@ -1,0 +1,69 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'combobox' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name of the combobox ('State') is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "State of the combobox (collapsed) is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Text of the selected option ('Alabama') is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "The ability to enter or edit text is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion6",
+        "phrase": "State of the text in the input (selected) is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion7",
+        "phrase": "The presence of autocomplete behavior is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "SHIFT_E",
+    "instructions": "With the reading cursor on the 'Navigate backwards from here' link, navigate to the 'State' Combobox.",
+    "plan": "apg/combobox-autocomplete-both-updated",
+    "presentation_number": "commandB",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "11"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-autocomplete-both-updated/combobox-autocomplete-both.moveFocusAfterComboboxAndSetValueToAlabama.html",
+  "id": "2934-aria-combobox-autocomplete-both-updated-t11-shift-e-vc",
+  "name": "ARIA-AT, Combobox with Both List and Inline Autocomplete Example: Navigate backwards to a filled in, collapsed combobox in reading mode; Shift+E in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+E",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

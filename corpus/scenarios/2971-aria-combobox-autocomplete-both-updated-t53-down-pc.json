@@ -1,0 +1,70 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role of the popup ('listbox') is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name of the popup ('States') is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Text of the focused option in the popup ('Alabama') is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "State of the focused option in the popup (selected) is conveyed",
+        "priority": "2"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "Position of the focused option in the popup (1) is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion6",
+        "phrase": "Number of options in the popup (56) is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "DOWN",
+    "instructions": "With focus on the combobox, navigate to the first option in the listbox popup.",
+    "plan": "apg/combobox-autocomplete-both-updated",
+    "presentation_number": "commandA",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "53"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-autocomplete-both-updated/combobox-autocomplete-both.moveFocusToAndExpandCombobox.html",
+  "id": "2971-aria-combobox-autocomplete-both-updated-t53-down-pc",
+  "name": "ARIA-AT, Combobox with Both List and Inline Autocomplete Example: Navigate from an empty, expanded combobox to the first option in a listbox popup in interaction mode; Down in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

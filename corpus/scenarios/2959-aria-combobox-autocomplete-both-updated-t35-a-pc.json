@@ -1,0 +1,50 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Text of the automatically completed option ('Alabama') is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "State of the text in the input (selected) is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "A",
+    "instructions": "With focus on the combobox, type a character to narrow down the number of matching options in the listbox popup.",
+    "plan": "apg/combobox-autocomplete-both-updated",
+    "presentation_number": "commandA",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "35"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-autocomplete-both-updated/combobox-autocomplete-both.moveFocusToAndExpandCombobox.html",
+  "id": "2959-aria-combobox-autocomplete-both-updated-t35-a-pc",
+  "name": "ARIA-AT, Combobox with Both List and Inline Autocomplete Example: Narrow down the matching options in an empty, expanded combobox in interaction mode; A in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "A",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
