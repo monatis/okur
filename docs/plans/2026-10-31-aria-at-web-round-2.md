@@ -33,6 +33,10 @@ menu-button-actions (aria20), menu-button-actions-active-descendant (aria21) and
 menu-button-navigation (aria22) imported, the last four with every step matching; `okur-lab
 aria-at-report` measures the assertions (§4).
 
+Later still: modal-dialog (recorded again as aria23b with the tracer reading IA2's modal state),
+minimal-data-grid, quantity-spin-button, horizontal-slider and seek-slider imported
+([`../handoff/2026-11-01-aria-at-widgets.md`](../handoff/2026-11-01-aria-at-widgets.md)).
+
 ## 1. The plans recording now
 
 As each round finishes: fetch, preview, fix what differs, import. In order: disclosure-faq
