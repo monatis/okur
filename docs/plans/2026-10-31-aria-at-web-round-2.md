@@ -37,6 +37,11 @@ Later still: modal-dialog (recorded again as aria23b with the tracer reading IA2
 minimal-data-grid, quantity-spin-button, horizontal-slider and seek-slider imported
 ([`../handoff/2026-11-01-aria-at-widgets.md`](../handoff/2026-11-01-aria-at-widgets.md)).
 
+Then: vertical-temperature-slider (aria28), disclosure-navigation (aria29), banner (aria30)
+and breadcrumb (aria31) imported, every step of the last two matching; a newer JAWS's words
+from ARIA-AT's reports followed where it changed on purpose (§4b)
+([`../handoff/2026-11-01-aria-at-newer-jaws.md`](../handoff/2026-11-01-aria-at-newer-jaws.md)).
+
 ## 1. The plans recording now
 
 As each round finishes: fetch, preview, fix what differs, import. In order: disclosure-faq
@@ -87,6 +92,17 @@ in parity once the slider and spin button pages' snapshots are captured again wi
 (round-probe-radio2). menu-button-navigation's "number of items, '4'" contradicts its own page,
 which has 6 items ("1 of 6"): not Okur's gap. Next: the menu button's state on opening and
 checkbox-tri-state's group, then 3.
+
+Later: a menu button's state on a focus (done). **Waiting for the owner**: the containers a quick
+key enters. ARIA-AT's landmark and breadcrumb plans (drafts) require a quick key into a landmark
+or list to say it (MUST: "BannerRegion" before B's button, "Breadcrumb NavigationRegion | list
+with 4 items" before U's link). JAWS says them on Tab, not on quick keys. Saying them on quick
+keys too (`SpeechFormatter::container_entered`, as a focus does) changed 215 steps on
+2026-11-01, 180 of them outside ARIA-AT: H, U, L and the rest on every page ("MainRegion | City
+Library Expands Evening Hours heading level 1"). It is the everyday sound of the reader, so it
+waits for the owner's choice: always, never (JAWS), or a setting. Also not taken: arrows into a
+landmark saying its first line with it (JAWS's "banner" line of its own, ARIA-AT MUST in the
+banner plan), which would change JAWS's line model.
 
 ## 5. Then
 
