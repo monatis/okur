@@ -1,8 +1,8 @@
 {
   "id": "1122-desktop-excel-context-menus",
-  "name": "Excel: Right onto B1, Shift+F10 for the cell's context menu, Down, Escape, then Insert+Shift+S for the sheet tabs' menu, Down twice, Escape, and Down to B2",
+  "name": "Excel: Right onto B1, Shift+F10 for the cell's context menu, Down, Escape, then Insert+Shift+S for the sheet tabs' menu, Down twice, Escape, and Down to B2. Inside the cell's menu no step reads JAWS's speech history, which the harness copies through the clipboard: a change of the clipboard closes Office's own menus (old-pc, 2026-11-01). The speech recorder's text is kept",
   "category": "desktop",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
   "target_app": "desktop",
   "trace_headings": true,
@@ -18,8 +18,8 @@
   },
   "steps": [
     {"id": "s1", "type": "key", "command": "Right"},
-    {"id": "s2", "type": "key", "command": "Shift+F10"},
-    {"id": "s3", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "Shift+F10", "history": false},
+    {"id": "s3", "type": "key", "command": "Down", "history": false},
     {"id": "s4", "type": "key", "command": "Escape"},
     {"id": "s5", "type": "key", "command": "Insert+Shift+S"},
     {"id": "s6", "type": "key", "command": "Down"},
