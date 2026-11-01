@@ -71,19 +71,46 @@ pub enum OkurPlace {
     Text { line: usize, column: Option<usize> },
 }
 
-/// Where the words of `text` start, as JAWS splits words: letters and digits apart from
-/// other marks, "main" and "()" [obs, 754/s11] ([`crate::editing::web_word_at`]).
-fn word_starts(text: &[char]) -> Vec<usize> {
+/// The word of `text` around `at`, as JAWS's cursor splits words: letters and digits apart
+/// from other marks, "main" and "()" [obs, 754/s11] ([`crate::editing::web_word_at`]), but
+/// colons right after a word are part of it, "C:", then the backslash [obs, 1062/s2-s9].
+fn okur_word_at(text: &[char], at: usize) -> Option<(usize, usize)> {
     let line: String = text.iter().collect();
+    let (start, end) = crate::editing::web_word_at(&line, at)?;
+    let is_word = |i: usize| {
+        text.get(i)
+            .is_some_and(|c| c.is_alphanumeric() || *c == '_')
+    };
+    let colons_from = |from: usize, to: usize| {
+        (from..to)
+            .find(|&i| text.get(i) != Some(&':'))
+            .unwrap_or(to)
+    };
+    if is_word(start) {
+        return Some((start, colons_from(end, text.len())));
+    }
+    // A run of marks starting with colons after a word: the colons are that word's.
+    let Some(before) = start.checked_sub(1).filter(|&b| is_word(b)) else {
+        return Some((start, end));
+    };
+    let colons_end = colons_from(start, end);
+    if at < colons_end {
+        let (word_start, _) = crate::editing::web_word_at(&line, before)?;
+        return Some((word_start, colons_end));
+    }
+    Some((colons_end, end))
+}
+
+/// Where the words of `text` start ([`okur_word_at`]).
+fn word_starts(text: &[char]) -> Vec<usize> {
     (0..text.len())
-        .filter(|&i| crate::editing::web_word_at(&line, i).is_some_and(|(start, _)| start == i))
+        .filter(|&i| okur_word_at(text, i).is_some_and(|(start, _)| start == i))
         .collect()
 }
 
 /// The word of `text` starting at `start`.
 fn word_at(text: &[char], start: usize) -> String {
-    let line: String = text.iter().collect();
-    let end = crate::editing::web_word_at(&line, start).map_or(start, |(_, end)| end);
+    let end = okur_word_at(text, start).map_or(start, |(_, end)| end);
     text.get(start..end).unwrap_or_default().iter().collect()
 }
 
@@ -155,8 +182,10 @@ impl ScreenReaderEngine {
     }
 
     /// Insert+Numpad Minus: the mouse goes to the PC cursor, "Route Okur to PC" (JAWS: "Route
-    /// JAWS to PC") [obs, 516/s3].
+    /// JAWS to PC") [obs, 516/s3], and the Okur cursor is the active one: the next Ctrl+Right
+    /// moves it, not the caret [obs, 1062/s2].
     pub(super) fn route_okur_to_pc(&mut self) -> Option<String> {
+        self.set_active_cursor(ActiveCursor::Okur);
         self.request_screen();
         if let Some((x, y)) = self.pc_cursor_point() {
             if let Some(actions) = &self.actions {
@@ -345,23 +374,32 @@ impl ScreenReaderEngine {
                 column: None,
             });
         }
-        let line = if self.app_mode == super::AppMode::VirtualBuffer {
-            let at = self.cursor.current_line_index();
-            let screen: Vec<usize> = self
-                .cursor
-                .buffer
-                .lines
-                .iter()
-                .filter(|line| screen_line(line))
-                .map(|line| line.line_index)
-                .collect();
-            screen
-                .iter()
-                .position(|&index| index >= at)
-                .unwrap_or(screen.len().saturating_sub(1))
-        } else {
-            crate::editing::lines_and_caret_line(self.last_text.as_ref()?).1
-        };
+        // A text field's caret: its line and the character it is on, where the next word key
+        // goes on from: "C:\Users" routed at its start, Ctrl+Right says the backslash [obs,
+        // 1062/s2].
+        if self.app_mode != super::AppMode::VirtualBuffer {
+            let context = self.last_text.as_ref()?;
+            let line = crate::editing::lines_and_caret_line(context).1;
+            let column = crate::editing::line_around_caret(context).0.chars().count();
+            return Some(OkurPlace::Text {
+                line,
+                column: Some(column),
+            });
+        }
+        // A page: the virtual cursor's line among those its screen shows.
+        let at = self.cursor.current_line_index();
+        let screen: Vec<usize> = self
+            .cursor
+            .buffer
+            .lines
+            .iter()
+            .filter(|line| screen_line(line))
+            .map(|line| line.line_index)
+            .collect();
+        let line = screen
+            .iter()
+            .position(|&index| index >= at)
+            .unwrap_or(screen.len().saturating_sub(1));
         Some(OkurPlace::Text { line, column: None })
     }
 
@@ -777,5 +815,32 @@ impl ScreenReaderEngine {
     pub(super) fn pc_cursor_point(&self) -> Option<(i32, i32)> {
         let [left, top, right, bottom] = self.focus_bounds?;
         Some(((left + right - 1) / 2, (top + bottom - 1) / 2))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn words(line: &str) -> Vec<String> {
+        let text: Vec<char> = line.chars().collect();
+        word_starts(&text)
+            .into_iter()
+            .map(|start| word_at(&text, start))
+            .collect()
+    }
+
+    /// JAWS's cursor through a path: a colon after a word is the word's, each backslash a word
+    /// of its own [obs, 1062/s2-s9]; letters apart from other marks, "main" and "()" [obs,
+    /// 754/s11].
+    #[test]
+    fn the_okur_cursor_keeps_a_colon_with_its_word() {
+        assert_eq!(words(r"C:\Users\Ada"), ["C:", r"\", "Users", r"\", "Ada"]);
+        assert_eq!(words("main() {"), ["main", "()", "{"]);
+        assert_eq!(words("std::fmt"), ["std::", "fmt"]);
+        // On the colons, the word is the one before them.
+        let text: Vec<char> = r"C:\U".chars().collect();
+        assert_eq!(okur_word_at(&text, 1), Some((0, 2)));
+        assert_eq!(okur_word_at(&text, 2), Some((2, 3)));
     }
 }
