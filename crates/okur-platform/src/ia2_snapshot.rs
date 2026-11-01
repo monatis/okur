@@ -112,6 +112,7 @@ mod ia2_state {
     pub const MODAL: i32 = 0x100;
     pub const MULTI_LINE: i32 = 0x200;
     pub const REQUIRED: i32 = 0x800;
+    pub const SUPPORTS_AUTOCOMPLETION: i32 = 0x8000;
 }
 
 /// ARIA landmark roles, as Chromium reports them in `xml-roles`.
@@ -461,6 +462,11 @@ fn convert(
     // a select's value as writable too, so only IA2's editable state tells them apart.
     if role == Role::ComboBox && node.ia2_states & ia2_state::EDITABLE != 0 {
         set_attr("editable", "true".to_owned());
+    }
+    // One that completes what is typed (aria-autocomplete): "Supports AutoComplete" [obs,
+    // round-aria32, 2925/s1].
+    if role == Role::ComboBox && node.ia2_states & ia2_state::SUPPORTS_AUTOCOMPLETION != 0 {
+        set_attr("autocomplete", "true".to_owned());
     }
     if node.ia2_states & ia2_state::MULTI_LINE != 0 {
         set_attr("multiline", "true".to_owned());

@@ -165,6 +165,9 @@ tree-level-changed = level { $level }
 tree-level-changed-short = { $level }
 # A combo box's list opened (Alt+Down); with short messages nothing [obs, 580/s11].
 combo-box-opened = Open List Box
+# A page combo box's list closed (Alt+Up), its list's own message as it opened [obs, round-aria32,
+# 2946/s1].
+combo-box-closed = Close List Box
 # Keys pressed one after another, as an access key "Alt, I" is said: "Alt followed by I".
 key-followed-by = { $keys } followed by { $key }
 # The access key of a control whose own text holds the letter: "alt+S".

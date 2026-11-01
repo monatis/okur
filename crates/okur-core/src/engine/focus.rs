@@ -761,7 +761,36 @@ impl ScreenReaderEngine {
             });
             let line = first_link.and_then(|id| self.cursor.focus_line(id));
             self.focus_table_unsaid = line.is_some();
-            let mut speech = line
+            // An option of a page's list box is said from its focus, held in the buffer or not
+            // (a combo box's list shown by the arrow that moves into it): the list box named
+            // as the focus comes into it, "States List box | Alabama | 1 of 56 | To move to an
+            // item press the Arrow keys.", then each option with its place, "Alaska | 2 of 56"
+            // [obs, round-aria32, 2967/s1, 2975/s1]. JAWS says "list | with 5 items" for a list
+            // box its buffer already holds (2969/s1); Okur says "List box" every time.
+            let list_box_option = (focus.container_is_list_box && focus.role == Role::ListItem)
+                .then(|| crate::speech::ListBoxOption {
+                    list: focus
+                        .container_name
+                        .as_deref()
+                        .unwrap_or_default()
+                        .trim()
+                        .to_owned(),
+                    option: focus.name.as_deref().unwrap_or_default().trim().to_owned(),
+                    index: focus.item_index,
+                    count: focus.item_count,
+                });
+            let list_box_entered = list_box_option.as_ref().is_some_and(|option| {
+                self.page_list_box
+                    .as_ref()
+                    .is_none_or(|before| before.list != option.list)
+            });
+            let list_box_speech = list_box_option
+                .as_ref()
+                .map(|option| option.speech(list_box_entered));
+            let in_list_box = list_box_option.is_some();
+            self.page_list_box = list_box_option;
+            let mut speech = list_box_speech
+                .or(line)
                 .or_else(|| target_id.and_then(|id| self.cursor.focus_node_from(id, from)))
                 .or_else(|| {
                     let mut node = crate::aom::AomNode::new(usize::MAX, focus.role.clone());
@@ -948,7 +977,14 @@ impl ScreenReaderEngine {
             // A select box back from its own list has no such hint: "Home branch Combo box |
             // Northside | To change the selection use the Arrow keys." [obs, 276/s6].
             if editable_combo && target_role == Some(Role::ComboBox) {
-                speech = speech.map(|s| format!("{s}\n{}", msg::hint_set_value_arrows_or_type()));
+                let hint = msg::hint_set_value_arrows_or_type();
+                speech = speech.map(|s| {
+                    if s.trim_end().ends_with(hint.as_str()) {
+                        s
+                    } else {
+                        format!("{s}\n{hint}")
+                    }
+                });
             }
             if entering_application {
                 let name = focus.web_application.clone().unwrap_or_default();
@@ -959,7 +995,7 @@ impl ScreenReaderEngine {
             // Lists and landmarks the focus entered from where the virtual cursor was, as
             // JAWS says them (dev box, GitHub's README tab from its section's heading:
             // "Repository files NavigationRegion | list | with 1 items | README ...").
-            if !entering_page {
+            if !entering_page && !in_list_box {
                 if let (Some(from), Some(to)) = (cursor_node, target_id) {
                     // Outermost first, the control's group among them where its speech names
                     // it: "Sandwich Condiments group | list with 5 items | Lettuce check box"

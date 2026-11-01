@@ -613,6 +613,10 @@ pub struct FocusEvent {
     /// The container is a list view, a list of items with columns (JAWS's "List view"),
     /// not a list box.
     pub container_is_list_view: bool,
+    /// The container is a page's list box (ARIA `listbox`): its options are said as the
+    /// focus moves among them, whether or not the buffer holds them yet.
+    #[serde(default)]
+    pub container_is_list_box: bool,
     /// The focus is a list view itself, not an item of it: an empty one, as JAWS's
     /// PlaceMarker List without PlaceMarkers [obs, 699/s6].
     #[serde(default)]
@@ -946,6 +950,7 @@ impl FocusEvent {
             container_role: None,
             container_name: None,
             container_is_list_view: false,
+            container_is_list_box: false,
             list_view: false,
             list_edits_labels: false,
             list_label_edit: false,

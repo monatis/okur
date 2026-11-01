@@ -211,6 +211,9 @@ impl ScreenReaderEngine {
     fn page_change(&mut self, control: &FocusEvent) -> Option<String> {
         let id = self.page_node_for(control)?;
         let before = self.cursor.buffer.node(id)?;
+        // The state a key gave an editable combo box's list, where Chrome reports the one
+        // before it as the change arrives.
+        let mut expanded_by_key = None;
         let speech = match control.role {
             // An ARIA radio button checked (Space, Enter) is said whole, its place as its
             // focus gives it: "Regular crust radio button checked", "... | 1 of 3" with the
@@ -276,19 +279,47 @@ impl ScreenReaderEngine {
                     .get("editable")
                     .is_some_and(|e| e == "true") =>
             {
-                if control.states.expanded.is_none()
-                    || before.states.expanded == control.states.expanded
-                {
+                // Opened by Alt+Down, closed by Alt+Up, the list's own message first: "Open
+                // List Box | expanded" [obs, round-aria32, 2945/s1, 2949/s1], "Close List Box |
+                // collapsed"; with short messages none [obs, 580/s11]. As Alt+Up's change
+                // arrives Chrome still reports the list expanded, and JAWS says "Close List Box
+                // | expanded" (2946/s1, every trial): the state is the key's.
+                let alt_arrow = self
+                    .last_key
+                    .filter(|(_, m)| m.alt && !(m.ctrl || m.shift || m.insert || m.win))
+                    .map(|(key, _)| key);
+                let (message, expanded) = match alt_arrow {
+                    Some(crate::Key::DownArrow) => (Some(msg::combo_box_opened()), Some(true)),
+                    Some(crate::Key::UpArrow) => (Some(msg::combo_box_closed()), Some(false)),
+                    _ => (None, control.states.expanded),
+                };
+                if expanded.is_none() || (message.is_none() && before.states.expanded == expanded) {
                     return None;
                 }
-                crate::linearize::state_marker(
-                    if control.states.expanded == Some(true) {
+                expanded_by_key = message.and(expanded);
+                let state = crate::linearize::state_marker(
+                    if expanded == Some(true) {
                         msg::state_expanded()
                     } else {
                         msg::state_collapsed()
                     }
                     .as_str(),
-                )
+                );
+                match message {
+                    Some(message) => {
+                        let said = self
+                            .said(crate::announcement::Announcement::new(vec![
+                                crate::announcement::Line::of(
+                                    crate::announcement::PartKind::Message,
+                                    message,
+                                )
+                                .short(""),
+                            ]))
+                            .render();
+                        format!("{said}{state}")
+                    }
+                    None => state,
+                }
             }
             // A select box opened from the focus it already had (Space after Enter closed its
             // list): "expanded", said with its list as the list takes the focus [obs, 276/s7].
@@ -338,7 +369,9 @@ impl ScreenReaderEngine {
         // nodes; responsiveness review, 2026-10-19), and the change is known already.
         self.speech.speak(&speech, true);
         let changed = self.change_page_node(id, |node| {
-            node.states.expanded = control.states.expanded.or(node.states.expanded);
+            node.states.expanded = expanded_by_key
+                .or(control.states.expanded)
+                .or(node.states.expanded);
             node.states.checked = control.states.checked;
             node.states.mixed = control.states.mixed;
             node.states.selected = control.states.selected;

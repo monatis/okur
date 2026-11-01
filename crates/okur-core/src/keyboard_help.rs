@@ -245,8 +245,6 @@ fn descriptions(command: &Command) -> Descriptions {
         Activate => two(msg::command_activate(), msg::command_activate_long()),
         Enter => two(msg::command_enter(), msg::command_enter_long()),
         Escape => one(msg::command_escape()),
-        ExpandComboBox => one(msg::command_expand_combo_box()),
-        CollapseComboBox => one(msg::command_collapse_combo_box()),
         EnterMathViewer => one(msg::command_enter_math_viewer()),
 
         // Selecting.
@@ -678,8 +676,6 @@ mod tests {
             Activate,
             Enter,
             Escape,
-            ExpandComboBox,
-            CollapseComboBox,
             EnterMathViewer,
             SelectNextCharacter,
             SelectPriorCharacter,

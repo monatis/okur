@@ -1412,7 +1412,23 @@ impl VirtualCursor {
             // One typed in keeps its state: "Fruit edit combo collapsed | blank" (JAWS on
             // the dev box).
             Role::ComboBox if attr("editable") == Some("true") => {
-                SpeechFormatter::format_edit_combo(name, node)
+                let mut said = SpeechFormatter::edit_combo(name, node);
+                // Insert+Tab with the virtual cursor on adds that it completes what is typed:
+                // "State edit combo collapsed Supports AutoComplete | blank" [obs,
+                // round-aria32, 2925/s1, 2940/s1]; with it off, and on Tab, not (2927/s1,
+                // 2916/s1).
+                if matches!(group, GroupNamed::Asked)
+                    && !self.virtual_off
+                    && attr("autocomplete") == Some("true")
+                {
+                    if let Some(first) = said.lines.first_mut() {
+                        first.parts.push(crate::announcement::Part::text(" "));
+                        first.parts.push(crate::announcement::Part::state(
+                            msg::state_supports_autocomplete(),
+                        ));
+                    }
+                }
+                said.render_all()
             }
             Role::ComboBox => self.with_verbosity(SpeechFormatter::combo_box_tab_focus(name, node)),
             Role::Link { .. } => {
@@ -2769,103 +2785,6 @@ impl VirtualCursor {
             Role::Button => Some(SpeechFormatter::format_button(&name)),
             _ => None,
         }
-    }
-
-    /// Expands the active combobox (`Alt+DownArrow`).
-    pub fn expand_combobox(&mut self) -> Option<String> {
-        let node_id = self.current_node()?.id;
-        if self.buffer.node(node_id)?.role == Role::ComboBox {
-            self.buffer.node_state_mut(node_id)?.states.expanded = Some(true);
-            Some(msg::state_expanded().to_string())
-        } else {
-            None
-        }
-    }
-
-    /// Collapses the active combobox (`Escape` or `Alt+UpArrow`).
-    pub fn collapse_combobox(&mut self) -> Option<String> {
-        let node_id = self.current_node()?.id;
-        if self.buffer.node(node_id)?.role == Role::ComboBox {
-            self.buffer.node_state_mut(node_id)?.states.expanded = Some(false);
-            Some(msg::state_collapsed().to_string())
-        } else {
-            None
-        }
-    }
-
-    /// Returns whether the cursor is on an expanded combobox.
-    pub fn is_combobox_expanded(&self) -> bool {
-        if let Some(node) = self.current_node() {
-            node.role == Role::ComboBox && node.states.expanded == Some(true)
-        } else {
-            false
-        }
-    }
-
-    /// Selects the next option in an active combobox popup (`{DOWN}`).
-    pub fn combobox_next_option(&mut self) -> Option<String> {
-        let node_id = self.current_node()?.id;
-        let node = self.buffer.node(node_id)?.clone();
-        if node.role != Role::ComboBox || node.children.is_empty() {
-            return None;
-        }
-
-        let current_val = node.value.as_deref().unwrap_or("");
-        let current_idx = node
-            .children
-            .iter()
-            .position(|c| {
-                c.name.as_deref().unwrap_or("") == current_val
-                    || c.text.as_deref().unwrap_or("") == current_val
-            })
-            .unwrap_or(0);
-
-        let next_idx = (current_idx + 1).min(node.children.len().saturating_sub(1));
-        let next_child = node.children.get(next_idx)?;
-        let next_val = next_child
-            .name
-            .clone()
-            .or_else(|| next_child.text.clone())
-            .unwrap_or_default();
-
-        if let Some(mut_node) = self.buffer.node_state_mut(node_id) {
-            *mut_node.value = Some(next_val.clone());
-        }
-
-        Some(next_val)
-    }
-
-    /// Selects the prior option in an active combobox popup (`{UP}`).
-    pub fn combobox_prior_option(&mut self) -> Option<String> {
-        let node_id = self.current_node()?.id;
-        let node = self.buffer.node(node_id)?.clone();
-        if node.role != Role::ComboBox || node.children.is_empty() {
-            return None;
-        }
-
-        let current_val = node.value.as_deref().unwrap_or("");
-        let current_idx = node
-            .children
-            .iter()
-            .position(|c| {
-                c.name.as_deref().unwrap_or("") == current_val
-                    || c.text.as_deref().unwrap_or("") == current_val
-            })
-            .unwrap_or(0);
-
-        let prior_idx = current_idx.saturating_sub(1);
-        let prior_child = node.children.get(prior_idx)?;
-        let prior_val = prior_child
-            .name
-            .clone()
-            .or_else(|| prior_child.text.clone())
-            .unwrap_or_default();
-
-        if let Some(mut_node) = self.buffer.node_state_mut(node_id) {
-            *mut_node.value = Some(prior_val.clone());
-        }
-
-        Some(prior_val)
     }
 
     /// Expands a collapsed tree item or jumps to its first child if already expanded (`{RIGHT}`).

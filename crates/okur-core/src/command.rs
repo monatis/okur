@@ -164,8 +164,6 @@ pub enum Command {
     Enter,
     /// Escape: collapse, or leave forms mode.
     Escape,
-    ExpandComboBox,
-    CollapseComboBox,
     EnterMathViewer,
 
     // Selection.
@@ -603,8 +601,6 @@ impl Command {
             "{SPACE}" => Activate,
             "{ENTER}" | "EnterFormsMode" | "ActivateLink" => Enter,
             "{ESC}" | "ExitFormsMode" => Escape,
-            "!{DOWN}" | "ExpandComboBox" => ExpandComboBox,
-            "!{UP}" | "CollapseComboBox" => CollapseComboBox,
             "EnterMathViewer" | "ShowMathEditor" => EnterMathViewer,
 
             "+{RIGHT}" | "SelectNextCharacter" => SelectNextCharacter,
@@ -958,9 +954,6 @@ static BINDINGS: &[Binding] = &{
         // The start and the end of the element (Default.JKM's [virtual keys]) [obs, 294].
         bind(Home, WIN_ALT, StepToStartOfElement),
         bind(End, WIN_ALT, StepToEndOfElement),
-        // Combo boxes.
-        bind(DownArrow, ANY.alt(Yes).ctrl(No).shift(No), ExpandComboBox),
-        bind(UpArrow, ANY.alt(Yes).ctrl(No).shift(No), CollapseComboBox),
         // Selecting by word, before the word keys that would take it [obs, 501/s5].
         bind(RightArrow, CTRL_SHIFT, SelectNextWord),
         bind(LeftArrow, CTRL_SHIFT, SelectPriorWord),

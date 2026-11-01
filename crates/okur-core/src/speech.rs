@@ -15,6 +15,45 @@ fn name_and_role(name: &str, role: &str) -> Vec<Part> {
 /// Formats virtual buffer elements and reading events into canonical JAWS speech tokens.
 pub struct SpeechFormatter;
 
+/// A page's list box option as its focus says it, from the focus itself: a combo box's list
+/// may not be in the buffer yet when the arrow that opens it moves to its first option.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ListBoxOption {
+    /// The list box's name: "States".
+    pub list: String,
+    pub option: String,
+    pub index: Option<usize>,
+    pub count: Option<usize>,
+}
+
+impl ListBoxOption {
+    /// Coming into the list box, and on Insert+Tab: "States List box | Alabama | 1 of 56 | To
+    /// move to an item press the Arrow keys."; moving in it: "Alaska | 2 of 56" [obs,
+    /// round-aria32, 2967/s1, 2975/s1, 2977/s1].
+    pub fn speech(&self, entering: bool) -> String {
+        let mut lines = Vec::new();
+        if entering {
+            lines.push(
+                format!(
+                    "{}{}",
+                    self.list,
+                    crate::linearize::role_marker(msg::role_list_box().as_str())
+                )
+                .trim()
+                .to_owned(),
+            );
+        }
+        lines.push(self.option.clone());
+        if let (Some(index), Some(count)) = (self.index, self.count) {
+            lines.push(msg::position(index.to_string(), count.to_string()).render());
+        }
+        if entering {
+            lines.push(msg::hint_move_to_an_item_arrows().to_string());
+        }
+        lines.join("\n")
+    }
+}
+
 /// How a page control's focus speech is said: with the virtual cursor off (Insert+Z), by a
 /// focus moving onto it (Tab) rather than a quick key, asked for (Insert+Tab), and as its line
 /// (Insert+Up).
@@ -768,6 +807,14 @@ impl SpeechFormatter {
                 Some(msg::hint_set_value_arrows_or_type().as_str())
             }
             Role::RadioButton if virtual_off => Some(msg::hint_radio_up_down().as_str()),
+            // An edit combo with the virtual cursor off, Insert+Tab's too: "To set the value use
+            // the Arrow keys or type the value." [obs, round-aria32, 2927/s1, 2942/s1].
+            Role::ComboBox
+                if virtual_off
+                    && node.attributes.get("editable").map(String::as_str) == Some("true") =>
+            {
+                Some(msg::hint_set_value_arrows_or_type().as_str())
+            }
             Role::Link { .. } | Role::Button => Some(msg::hint_activate_enter().as_str()),
             _ => None,
         }
@@ -1472,6 +1519,22 @@ mod kind_tests {
             said.render_all(),
             "Email \u{1d} Edit \u{1e} \n \u{1d}Required\u{1e} \na@b.c\nWork address"
         );
+    }
+
+    /// A list box's option names its list box only as the focus comes into it.
+    #[test]
+    fn a_list_box_option_names_its_list_box_on_the_way_in() {
+        let option = ListBoxOption {
+            list: "States".to_owned(),
+            option: "Alabama".to_owned(),
+            index: Some(1),
+            count: Some(56),
+        };
+        assert_eq!(
+            option.speech(true),
+            "States \u{1d} List box \u{1e}\nAlabama\n1 of 56\nTo move to an item press the Arrow keys."
+        );
+        assert_eq!(option.speech(false), "Alabama\n1 of 56");
     }
 
     /// A slider's and a spin button's limits follow a number, never a text; a spin button's

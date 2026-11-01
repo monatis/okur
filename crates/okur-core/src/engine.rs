@@ -355,6 +355,9 @@ pub struct ScreenReaderEngine {
     /// A page's menu was left since the last key: its menu button's collapse, which follows
     /// the focus back to it, is not said [obs, round-aria20, 2604/s1].
     page_menu_left: bool,
+    /// The page's list box option the focus is on: the list box is named only as the focus
+    /// comes into it, and Insert+Tab says it whole.
+    page_list_box: Option<crate::speech::ListBoxOption>,
     /// A spin button was typed in: its value is read once its text changes, the read of the
     /// text as it was before the key passed over [obs, round-aria25, 2738/s1].
     spin_typed: bool,
@@ -671,6 +674,7 @@ impl ScreenReaderEngine {
             status_bar_asked: false,
             menus_left_unsaid: false,
             page_menu_left: false,
+            page_list_box: None,
             spin_typed: false,
             sheet_reading_asked: None,
             sheet_list_asked: None,
@@ -1258,6 +1262,17 @@ impl ScreenReaderEngine {
             // Numpad Plus leaves forms mode as Escape does (JAWS 2025 Settings Center help, Forms
             // Mode Options; Surf's Up, Forms).
             let numpad_plus = event.key == Key::NumpadPlus && event.modifiers.is_empty();
+            // Escape on a combo box whose list is open is the page's: the list closes, forms
+            // mode stays [obs, round-aria32, 2961/s1, 2964/s1].
+            let list_open = self
+                .last_page_focus
+                .and_then(|id| self.cursor.buffer.node(id))
+                .is_some_and(|n| {
+                    n.role == crate::aom::Role::ComboBox && n.states.expanded == Some(true)
+                });
+            if event.key == Key::Escape && event.modifiers.is_empty() && list_open {
+                return KeyAction::PassThrough;
+            }
             if event.key == Key::Escape || numpad_plus {
                 self.forms_mode = false;
                 let _ = self.cursor.exit_forms_mode();
@@ -1275,19 +1290,6 @@ impl ScreenReaderEngine {
                 self.edit_key_feedback(event);
             }
             return KeyAction::PassThrough;
-        }
-
-        // 4. Handle Escape when inside an expanded combobox. In a page's modal dialog it is
-        // the page's: the dialog closes, and the page without it ends the confinement [obs,
-        // round-aria23, 2670/s1].
-        if event.key == Key::Escape
-            && event.modifiers.is_empty()
-            && self.cursor.is_combobox_expanded()
-        {
-            if let Some(msg) = self.cursor.collapse_combobox() {
-                self.speech.speak(&msg, true);
-            }
-            return KeyAction::Consume;
         }
 
         // 5. In non-VirtualBuffer modes (Desktop, Shell, native controls),

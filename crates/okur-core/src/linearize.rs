@@ -1194,16 +1194,24 @@ impl<'a> Builder<'a> {
                 if !labelled {
                     s.push_str(&name);
                 }
-                // One typed in is an "edit combo" (JAWS on the dev box).
-                let kind = if attr(node, "editable") == Some("true") {
+                // One typed in is an "edit combo" (JAWS on the dev box), its text first:
+                // "Alabama edit combo collapsed" [obs, round-aria32, 2932/s2].
+                let editable = attr(node, "editable") == Some("true");
+                let kind = if editable {
                     msg::role_edit_combo()
                 } else {
                     msg::role_combo_box_focus()
                 }
                 .as_str();
+                let value = node.value.as_deref().unwrap_or_default();
+                if editable {
+                    s.push_str(value.trim());
+                }
                 s.push_str(&role_marker(kind));
                 s.push_str(&state_marker(state));
-                s.push_str(node.value.as_deref().unwrap_or_default());
+                if !editable {
+                    s.push_str(value);
+                }
                 s
             }
             Role::CheckBox => match switch_state(node) {

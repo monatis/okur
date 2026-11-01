@@ -316,11 +316,7 @@ command-enter = Uses the link or the control at the cursor.
 # The same, the longer description.
 command-enter-long = { command-enter } On an edit field or a combo box, it turns forms mode on, so that keys type into the field.
 # Escape with the virtual cursor.
-command-escape = Closes an open list, leaves forms mode, or leaves a dialog.
-# Alt+Down Arrow.
-command-expand-combo-box = Opens the combo box's list.
-# Alt+Up Arrow.
-command-collapse-combo-box = Closes the combo box's list.
+command-escape = Leaves forms mode; elsewhere the page answers Escape, closing its open list or dialog.
 # Entering a math equation.
 command-enter-math-viewer = Opens the math equation at the cursor in the Math Viewer.
 

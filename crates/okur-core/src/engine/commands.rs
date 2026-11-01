@@ -125,6 +125,16 @@ impl ScreenReaderEngine {
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }
+            // A page's list box option whole, its list box named: "States List box | Alabama
+            // | 1 of 56 | To move to an item press the Arrow keys." [obs, round-aria32,
+            // 2977/s1].
+            Command::SayCurrentFocus
+                if self.app_mode == AppMode::VirtualBuffer && self.page_list_box.is_some() =>
+            {
+                let speech = self.page_list_box.as_ref()?.speech(true);
+                self.speech.speak(&speech, true);
+                return Some(speech);
+            }
             Command::SayCurrentFocus if self.app_mode == AppMode::VirtualBuffer => {
                 let id = self.last_page_focus?;
                 let (offset, node) = (self.cursor.offset, self.cursor.current_node_id);
@@ -327,20 +337,8 @@ impl ScreenReaderEngine {
         }
 
         let speech = match &command {
-            Command::SayNextLine => {
-                if self.cursor.is_combobox_expanded() {
-                    self.cursor.combobox_next_option()
-                } else {
-                    self.cursor.move_next_line()
-                }
-            }
-            Command::SayPriorLine => {
-                if self.cursor.is_combobox_expanded() {
-                    self.cursor.combobox_prior_option()
-                } else {
-                    self.cursor.move_prior_line()
-                }
-            }
+            Command::SayNextLine => self.cursor.move_next_line(),
+            Command::SayPriorLine => self.cursor.move_prior_line(),
             Command::SayNextWord => self.cursor.move_next_word(),
             Command::SayPriorWord => self.cursor.move_prior_word(),
             Command::SayNextCharacter => {
@@ -431,8 +429,6 @@ impl ScreenReaderEngine {
             Command::SayRowHeader => self.cursor.read_current_row_header(),
 
             Command::EnterMathViewer => self.cursor.enter_math_viewer(),
-            Command::ExpandComboBox => self.cursor.expand_combobox(),
-            Command::CollapseComboBox => self.cursor.collapse_combobox(),
 
             // Interactive navigation & actions
             Command::NextTabStop => self.cursor.move_next_tab_stop(),
@@ -515,10 +511,10 @@ impl ScreenReaderEngine {
                     res
                 }
             }
+            // Escape is the page's, unless it leaves forms mode: a combo box's open list closes
+            // as the page answers it, and says "collapsed" then [obs, round-aria32, 2961/s1].
             Command::Escape => {
-                if self.cursor.is_combobox_expanded() {
-                    self.cursor.collapse_combobox()
-                } else if self.forms_mode {
+                if self.forms_mode {
                     let res = self
                         .cursor
                         .exit_forms_mode()

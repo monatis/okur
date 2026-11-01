@@ -835,6 +835,8 @@ pub fn focus_event_from_chain(
             event.container_name = a.name.clone();
             event.platform.container_class = a.class_name.clone();
             event.container_is_list_view = is_list_view(a.class_name.as_deref());
+            event.container_is_list_box =
+                role == Role::List && a.aria_role.as_deref() == Some("listbox");
             event.container_role = Some(role);
             break;
         }
