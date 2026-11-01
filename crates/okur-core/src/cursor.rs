@@ -1437,14 +1437,13 @@ impl VirtualCursor {
         if speech.trim().is_empty() {
             speech = name.to_owned();
         }
-        // Such a cell says its position only entering the grid: JAWS said no row moving on.
+        // A focused cell of its own (an ARIA grid's).
         let focused_cell = node.role == Role::TableCell && !name.is_empty();
         // An ARIA grid's cell focused from outside the grid says the grid first: its name and
         // size, then with the virtual cursor the column and the place, "Date | 01-Jan-16 |
-        // column 1 row 2"; without it the cell alone. Insert+Tab says the cell alone [obs,
-        // round-aria24, 2696/s1, 2697/s1, 2702/s1, 2704/s1]. JAWS 2025.2505 says the grid's
-        // name again before the column; a newer JAWS (2025.2508, ARIA-AT's reports) once, as
-        // Okur does.
+        // column 1 row 2"; without it the cell alone [obs, round-aria24, 2696/s1, 2697/s1].
+        // JAWS 2025.2505 says the grid's name again before the column; a newer JAWS
+        // (2025.2508, ARIA-AT's reports) once, as Okur does.
         let entered_grid = self
             .buffer
             .table_at_offset(self.offset)
@@ -1454,8 +1453,18 @@ impl VirtualCursor {
                     .is_none_or(|p| p < t.start_offset || p > t.end_offset)
             })
             .map(|t| (t.caption.clone(), msg::grid_entry(t.cols, t.rows).render()));
+        // Insert+Tab on such a cell says where it is: "Date | 01-Jan-16 | column 1 row 2".
+        // JAWS says the cell alone [obs, round-aria24, 2702/s1, 2704/s1], where ARIA-AT's
+        // minimal-data-grid plan asks for its header (MUST) and its column and row (SHOULD)
+        // (the owner's rule for the web, 2026-11-01).
         if matches!(group, GroupNamed::Asked) && entered_grid.is_some() {
-            return Some(speech);
+            let Some((header, position)) = self.table_focus_context(self.offset, None) else {
+                return Some(speech);
+            };
+            let mut parts: Vec<String> = header.into_iter().collect();
+            parts.push(speech);
+            parts.push(position);
+            return Some(parts.join("\n"));
         }
         if let Some((caption, size)) = entered_grid.as_ref().filter(|_| self.virtual_off) {
             let caption = caption
@@ -1464,7 +1473,7 @@ impl VirtualCursor {
                 .unwrap_or_default();
             return Some(format!("{caption}{size}\n{speech}"));
         }
-        if let Some((header, position, whole)) =
+        if let Some((header, position)) =
             self.table_focus_context(self.offset, from.offset(previous))
         {
             if let Some((caption, size)) = entered_grid {
@@ -1479,10 +1488,14 @@ impl VirtualCursor {
             if let Some(header) = header {
                 speech = format!("{header}\n{speech}");
             }
-            if !focused_cell || whole {
-                speech.push('\n');
-                speech.push_str(&position);
-            }
+            // Its column or row as the focus moves along the grid: "Balance | $999,741.00 |
+            // column 5", "$88.00 | row 5". JAWS's arrows in an ARIA grid say a coordinate in
+            // some trials and none or a stale one in others ("$999,741.00 | Row 3" on row 4)
+            // [obs, round-aria24, 2707/s1, 2711/s1, 2713/s1]; ARIA-AT's minimal-data-grid
+            // plan asks for it (SHOULD): Okur says it every time (the owner's rule for the web,
+            // 2026-11-01).
+            speech.push('\n');
+            speech.push_str(&position);
         }
         if let Some(hint) = self.focus_hint(node).filter(|_| hint) {
             speech.push('\n');
@@ -1506,13 +1519,12 @@ impl VirtualCursor {
     /// A focus in a table cell, as JAWS says it on Tab (dev box, 2026-10-16): the column
     /// header when the column changed, and the position that changed after the control:
     /// "Name | alpha.rs same page link | column 1 row 2", then "Message | first commit ... |
-    /// Column 2", or "gamma.rs ... | Row 4" further down the same column. The flag says the
-    /// position names both the column and the row.
+    /// Column 2", or "gamma.rs ... | Row 4" further down the same column.
     fn table_focus_context(
         &self,
         offset: usize,
         previous: Option<usize>,
-    ) -> Option<(Option<String>, String, bool)> {
+    ) -> Option<(Option<String>, String)> {
         let cell_at = |at: usize| {
             let table = self.buffer.table_at_offset(at)?;
             let cell = table
@@ -1532,14 +1544,14 @@ impl VirtualCursor {
             Some((_, c)) if c == col => None,
             _ => header.filter(|h| !h.trim().is_empty()),
         };
-        let (position, whole) = match before {
-            Some((r, _)) if r == row => (msg::table_column(col).render(), false),
-            Some((_, c)) if c == col => (msg::table_row(row).render(), false),
+        let position = match before {
+            Some((r, _)) if r == row => msg::table_column(col).render(),
+            Some((_, c)) if c == col => msg::table_row(row).render(),
             // With short messages "col 2 row 2" [obs, 593/s11, s12; 603/s11, s12].
-            _ if self.short_messages() => (msg::table_focus_cell_short(col, row).render(), true),
-            _ => (msg::table_focus_cell(col, row).render(), true),
+            _ if self.short_messages() => msg::table_focus_cell_short(col, row).render(),
+            _ => msg::table_focus_cell(col, row).render(),
         };
-        Some((header, position, whole))
+        Some((header, position))
     }
 
     /// The control at the virtual cursor as its quick key says it, its label with it; the line

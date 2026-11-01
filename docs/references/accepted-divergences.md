@@ -1397,6 +1397,29 @@ A step can be in more than one entry; all of its entries apply.
   for it (SHOULD).
 - Decided under the owner's rule for the web (AGENTS.md §1.2), 2026-11-01.
 
+### An ARIA grid's cell: where it is
+
+- Steps: `2702-aria-minimal-data-grid-req-info-about-grid-cell-ins-tab-vc/s1`,
+  `2704-aria-minimal-data-grid-req-info-about-grid-cell-ins-tab-pc/s1` (Okur also says "Date"
+  and "column 1 row 2"); `2707-aria-minimal-data-grid-nav-to-next-column-grid-right-pc/s1`,
+  `2709-aria-minimal-data-grid-nav-to-prev-column-grid-left-pc/s1`,
+  `2711-aria-minimal-data-grid-nav-to-next-row-grid-down-pc/s1`,
+  `2713-aria-minimal-data-grid-nav-to-prev-row-grid-up-pc/s1`,
+  `2714-aria-minimal-data-grid-nav-to-first-cell-row-grid-home-pc/s1`,
+  `2715-aria-minimal-data-grid-nav-to-last-cell-row-grid-end-pc/s1`,
+  `2716-aria-minimal-data-grid-nav-to-first-cell-grid-ctrl-home-pc/s1`,
+  `2717-aria-minimal-data-grid-nav-to-last-cell-grid-ctrl-end-pc/s1` (whole steps).
+- Difference: Insert+Tab on a focused cell says "Date | 01-Jan-16 | column 1 row 2" where JAWS
+  says "01-Jan-16"; the virtual cursor off, the arrows say the header when the column changes,
+  the cell, then the column or row that changed ("Balance | $999,741.00 | Column 5", "$88.00 |
+  Row 5"), both after Ctrl+Home and Ctrl+End.
+- Why: JAWS says the cell alone on Insert+Tab, and on the arrows a coordinate in some trials
+  and none, or the previous cell's, in others ("$999,741.00 | Row 3" on row 4) [obs,
+  round-aria24]; a newer JAWS (2025.2508.120, ARIA-AT's reports) says the cell alone. ARIA-AT's
+  minimal-data-grid plan asks for the header (MUST) and the column and row (SHOULD).
+- Decided under the owner's rules on JAWS's accidents and for the web (AGENTS.md §1.2),
+  2026-11-01.
+
 ## Considered and not accepted
 
 - From a newer JAWS (2025.2508.120, ARIA-AT's reports), not followed: Insert+Up on a menu

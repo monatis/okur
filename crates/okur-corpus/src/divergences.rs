@@ -1319,6 +1319,44 @@ divergences! {
     "The same for a tab that is not selected: see the entry above.",
     "the owner's rule for the web: Okur conveys what ARIA-AT asks, 2026-11-01";
 
+    Difference::OkurAlsoSays("Date") => [
+        "2702-aria-minimal-data-grid-req-info-about-grid-cell-ins-tab-vc/s1",
+        "2704-aria-minimal-data-grid-req-info-about-grid-cell-ins-tab-pc/s1",
+    ],
+    "Insert+Tab on an ARIA grid's focused cell: JAWS says the cell alone, \"01-Jan-16\" \
+     [obs, round-aria24], as a newer JAWS (2025.2508.120, ARIA-AT's reports) does, where \
+     ARIA-AT's minimal-data-grid plan asks for its column header (MUST) and its column and \
+     row (SHOULD). Okur says where the cell is: \"Date | 01-Jan-16 | column 1 row 2\".",
+    "the owner's rule for the web: Okur conveys what ARIA-AT asks, 2026-11-01";
+
+    Difference::OkurAlsoSays("column 1 row 2") => [
+        "2702-aria-minimal-data-grid-req-info-about-grid-cell-ins-tab-vc/s1",
+        "2704-aria-minimal-data-grid-req-info-about-grid-cell-ins-tab-pc/s1",
+    ],
+    "The same step's column and row: see the entry above.",
+    "the owner's rule for the web: Okur conveys what ARIA-AT asks, 2026-11-01";
+
+    Difference::Step => [
+        "2707-aria-minimal-data-grid-nav-to-next-column-grid-right-pc/s1",
+        "2709-aria-minimal-data-grid-nav-to-prev-column-grid-left-pc/s1",
+        "2711-aria-minimal-data-grid-nav-to-next-row-grid-down-pc/s1",
+        "2713-aria-minimal-data-grid-nav-to-prev-row-grid-up-pc/s1",
+        "2714-aria-minimal-data-grid-nav-to-first-cell-row-grid-home-pc/s1",
+        "2715-aria-minimal-data-grid-nav-to-last-cell-row-grid-end-pc/s1",
+        "2716-aria-minimal-data-grid-nav-to-first-cell-grid-ctrl-home-pc/s1",
+        "2717-aria-minimal-data-grid-nav-to-last-cell-grid-ctrl-end-pc/s1",
+    ],
+    "The arrows, Home, End, Ctrl+Home and Ctrl+End in an ARIA grid, the virtual cursor off: \
+     JAWS says the cell with a coordinate in some trials and none, or one of the cell before, \
+     in others (\"$999,741.00 | Row 3\" on row 4, \"column 2 row 3\" on column 3), the column \
+     header now and then, and Ctrl+Home \"top of file\" with the cell twice [obs, \
+     round-aria24]; a newer JAWS (2025.2508.120, ARIA-AT's reports) says the cell alone. \
+     ARIA-AT's minimal-data-grid plan asks for the header (MUST) and the column or row \
+     (SHOULD). Okur says them as a focus along a table does: the header when the column \
+     changes, then the cell, then what changed, \"Balance | $999,741.00 | Column 5\", \
+     \"$88.00 | Row 5\", both after Ctrl+Home and Ctrl+End.",
+    "the agent under the owner's rules on JAWS's accidents and for the web, 2026-11-01";
+
     Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
     ],
