@@ -12,6 +12,14 @@ the tool ran; old-pc always has a round queued; the dev box is shared (cargo on 
 heavy job at a time, no swarms of subagents). Steps taken inside Office's own menus are
 `"history": false` (troubleshooting §10).
 
+## Status (2026-11-01, evening)
+
+Done: the Store research and the package build (§1.1, §1.2), Excel's titles (§2.1-§2.3, 1132),
+the Okur cursor from screen text routed onto the caret's line
+([`../handoff/2026-11-01-excel-titles-and-store-package.md`](../handoff/2026-11-01-excel-titles-and-store-package.md)).
+Next: round-1133b's import, Excel's row list (Insert+Shift+R) and Insert+F, the totals readers;
+§1.3 onwards wait for the owner (a test certificate on old-pc, the identity, Defender's flag).
+
 ## 1. The first Store release (dev box)
 
 [`2026-10-31-microsoft-store-release.md`](2026-10-31-microsoft-store-release.md), its steps in
