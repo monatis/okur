@@ -1,0 +1,34 @@
+{
+  "id": "1062-desktop-notepad-jaws-cursor-words-punctuation",
+  "name": "Notepad, a path and punctuation: the JAWS cursor at the caret (Insert+Numpad Minus), moved by words (Ctrl+Right, Ctrl+Left), Say Word, then the PC cursor again",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad-paths.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-paths.txt - Notepad",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Insert+NumpadMinus"},
+    {"id": "s2", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s3", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s4", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s5", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s6", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s7", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s8", "type": "key", "command": "Insert+Numpad5"},
+    {"id": "s9", "type": "key", "command": "Ctrl+Left"},
+    {"id": "s10", "type": "key", "command": "Down"},
+    {"id": "s11", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s12", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s13", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s14", "type": "key", "command": "NumpadPlus"}
+  ]
+}
