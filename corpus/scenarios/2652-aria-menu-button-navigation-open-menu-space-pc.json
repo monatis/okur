@@ -1,0 +1,75 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "nameFocusedItemHome",
+        "phrase": "convey name of the focused item, 'W3C Home Page'",
+        "priority": "1"
+      },
+      {
+        "id": "3:roleFocusedItemMenuItem",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "positionFocusedItemMenu1",
+        "phrase": "convey position of the focused item in the menu, '1'",
+        "priority": "2"
+      },
+      {
+        "id": "numberItemsMenu6",
+        "phrase": "convey number of items in the menu, '4'",
+        "priority": "2"
+      },
+      {
+        "id": "nameMenuLinks",
+        "phrase": "convey name of the menu, 'WAI-ARIA Quick Links'",
+        "priority": "3"
+      },
+      {
+        "id": "roleMenu",
+        "phrase": "convey role 'menu'",
+        "priority": "3"
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "space",
+    "instructions": "Starting at the 'WAI-ARIA Quick Links' menu button, open the menu.",
+    "plan": "apg/menu-button-navigation",
+    "presentation_number": "11",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "openMenu"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-navigation/menu-button-links.setFocusOnMenuButton.html",
+  "id": "2652-aria-menu-button-navigation-open-menu-space-pc",
+  "name": "ARIA-AT, Navigation Menu Button: Open a menu; Space in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Space",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

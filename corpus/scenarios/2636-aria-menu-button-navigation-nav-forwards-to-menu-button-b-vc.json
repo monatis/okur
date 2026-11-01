@@ -1,0 +1,54 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "nameLinks",
+        "phrase": "convey name of the menu button, 'WAI-ARIA Quick Links'",
+        "priority": "1"
+      },
+      {
+        "id": "roleMenuButton",
+        "phrase": "convey role 'menu button'",
+        "priority": "1"
+      },
+      {
+        "id": "stateCollapsed",
+        "phrase": "convey state 'collapsed'",
+        "priority": "2"
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "b",
+    "instructions": "Starting at the 'Navigate forwards from here' link,, navigate to the menu button.",
+    "plan": "apg/menu-button-navigation",
+    "presentation_number": "1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToMenuButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-navigation/menu-button-links.setFocusBeforeMenuButton.html",
+  "id": "2636-aria-menu-button-navigation-nav-forwards-to-menu-button-b-vc",
+  "name": "ARIA-AT, Navigation Menu Button: Navigate forwards to a menu button; B in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "B",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

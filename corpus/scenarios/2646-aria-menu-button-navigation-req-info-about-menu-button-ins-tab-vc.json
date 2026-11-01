@@ -1,0 +1,49 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "nameLinks",
+        "phrase": "convey name of the menu button, 'WAI-ARIA Quick Links'",
+        "priority": "1"
+      },
+      {
+        "id": "roleMenuButton",
+        "phrase": "convey role 'menu button'",
+        "priority": "1"
+      },
+      {
+        "id": "stateCollapsed",
+        "phrase": "convey state 'collapsed'",
+        "priority": "2"
+      }
+    ],
+    "command": "ins+tab",
+    "instructions": "Starting at the 'WAI-ARIA Quick Links' menu button, read information about the menu button.",
+    "plan": "apg/menu-button-navigation",
+    "presentation_number": "7",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutMenuButton"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-navigation/menu-button-links.setFocusOnMenuButton.html",
+  "id": "2646-aria-menu-button-navigation-req-info-about-menu-button-ins-tab-vc",
+  "name": "ARIA-AT, Navigation Menu Button: Request information about a menu button; Insert+Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

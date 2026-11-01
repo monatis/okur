@@ -1,0 +1,60 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "nameFocusedItemIniciative",
+        "phrase": "convey name of the focused item, 'W3C Web Accessibility Initiative'",
+        "priority": "1"
+      },
+      {
+        "id": "3:roleFocusedItemMenuItem",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "positionFocusedItemMenu2",
+        "phrase": "convey position of the focused item in the menu, '2'",
+        "priority": "2"
+      },
+      {
+        "id": "numberItemsMenu6",
+        "phrase": "convey number of items in the menu, '4'",
+        "priority": "2"
+      }
+    ],
+    "command": "w",
+    "instructions": "Starting at the 'W3C Home Page' menu item, type a character to navigate to a different menu item.",
+    "plan": "apg/menu-button-navigation",
+    "presentation_number": "21",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToItemMenuByTypingCharacter"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-navigation/menu-button-links.openMenuAndSetFocusToFirstItem.html",
+  "id": "2664-aria-menu-button-navigation-nav-to-item-menu-by-typing-character-w-pc",
+  "name": "ARIA-AT, Navigation Menu Button: Navigate to an item in a menu by typing a character; W in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "W",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

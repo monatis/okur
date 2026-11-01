@@ -1,0 +1,1343 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Navigation Menu Button Example - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "82868e2da4253a67efa18af91c2e6f82f58155531117a4980ec59213e40001a9",
+    "captured_at_unix_ms": 1793489323815,
+    "node_count": 33,
+    "capture_ms": 234
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Navigation Menu Button Example",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-navigation/menu-button-links.openMenuAndSetFocusToLastItem.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -58494,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Arial",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -58507,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,90,156)",
+              "font-family": "Arial",
+              "font-size": "20.5pt"
+            }
+          },
+          {
+            "start": 1,
+            "end": 4,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Arial",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Navigation Menu Button Example",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -58515,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Navigation Menu Button Example",
+            "lines": [
+              [
+                0,
+                30
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 30,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "20.5pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Navigation Menu Button Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -58519,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Navigation Menu Button Example",
+                "lines": [
+                  [
+                    0,
+                    30
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 30,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "20.5pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -58495,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1054,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -58531,
+                "attributes": {
+                  "display": "block",
+                  "tag": "p",
+                  "text-align": "left"
+                },
+                "text": "This example demonstrates the ￼ for a button that displays a menu of link targets. The menu items are made from HTML links, so they maintain their HTML link behaviors. That is, activating a menuitem loads the link target, and the browser's link context menu and associated actions are available.",
+                "lines": [
+                  [
+                    0,
+                    92
+                  ],
+                  [
+                    92,
+                    199
+                  ],
+                  [
+                    199,
+                    295
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 30,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 30,
+                    "end": 31,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  },
+                  {
+                    "start": 31,
+                    "end": 295,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "This example demonstrates the ",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -58501,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "This example demonstrates the ",
+                    "lines": [
+                      [
+                        0,
+                        30
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 30,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Menu Button Pattern",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-pattern.html",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -58502,
+                    "attributes": {
+                      "display": "inline",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Menu Button Pattern",
+                    "lines": [
+                      [
+                        0,
+                        19
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 19,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Menu Button Pattern",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -58529,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Menu Button Pattern",
+                        "lines": [
+                          [
+                            0,
+                            19
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 19,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": " for a button that displays a menu of link targets. The menu items are made from HTML links, so they maintain their HTML link behaviors. That is, activating a menuitem loads the link target, and the browser's link context menu and associated actions are available.",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -58532,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": " for a button that displays a menu of link targets. The menu items are made from HTML links, so they maintain their HTML link behaviors. That is, activating a menuitem loads the link target, and the browser's link context menu and associated actions are available.",
+                    "lines": [
+                      [
+                        0,
+                        61
+                      ],
+                      [
+                        61,
+                        168
+                      ],
+                      [
+                        168,
+                        264
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 264,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -58506,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,90,156)",
+                  "font-family": "Arial",
+                  "font-size": "17pt"
+                }
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 2,
+                "end": 3,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(3,69,117)",
+                  "font-family": "Arial",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 3,
+                "end": 5,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -58526,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Example",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,90,156)",
+                      "font-family": "Arial",
+                      "font-size": "17pt"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelFor": [
+                    -58525,
+                    -58522
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -58523,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Example",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,90,156)",
+                          "font-family": "Arial",
+                          "font-size": "17pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "Start of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -58525,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -58526
+                  ]
+                }
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "Navigate forwards from here",
+                "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-navigation/menu-button-links.openMenuAndSetFocusToLastItem.html#beforelink",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -58499,
+                "attributes": {
+                  "display": "inline",
+                  "id": "beforelink",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "Navigate forwards from here",
+                "lines": [
+                  [
+                    0,
+                    27
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 27,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Navigate forwards from here",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -58511,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Navigate forwards from here",
+                    "lines": [
+                      [
+                        0,
+                        27
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 27,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -58503,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Arial",
+                      "font-size": "13pt"
+                    }
+                  },
+                  {
+                    "start": 1,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(3,69,117)",
+                      "font-family": "Arial",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -58509,
+                    "attributes": {
+                      "class": "menu-button-links focus",
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "text": "￼￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(238,238,238)",
+                          "color": "rgb(34,34,34)",
+                          "font-family": "Arial",
+                          "font-size": "12pt"
+                        }
+                      },
+                      {
+                        "start": 1,
+                        "end": 2,
+                        "attributes": {
+                          "background-color": "rgb(238,238,238)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Arial",
+                          "font-size": "13pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 57,
+                        "ia2_role": 57,
+                        "name": "WAI-ARIA Quick Links ",
+                        "msaa_states": 1074790912,
+                        "ia2_states": 1024,
+                        "unique_id": -58516,
+                        "attributes": {
+                          "display": "inline-block",
+                          "haspopup": "menu",
+                          "id": "menubutton",
+                          "name-from": "contents",
+                          "setsize": "6",
+                          "tag": "button",
+                          "text-align": "center"
+                        },
+                        "group_position": [
+                          0,
+                          6,
+                          0
+                        ],
+                        "text": "WAI-ARIA Quick Links ￼",
+                        "lines": [
+                          [
+                            0,
+                            22
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 22,
+                            "attributes": {
+                              "background-color": "rgb(238,238,238)",
+                              "color": "rgb(34,34,34)",
+                              "font-family": "Arial",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "relations": {
+                          "controllerFor": [
+                            -58492
+                          ],
+                          "labelFor": [
+                            -58492
+                          ]
+                        },
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "WAI-ARIA Quick Links ",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -58513,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "WAI-ARIA Quick Links ",
+                            "lines": [
+                              [
+                                0,
+                                21
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 21,
+                                "attributes": {
+                                  "background-color": "rgb(238,238,238)",
+                                  "color": "rgb(34,34,34)",
+                                  "font-family": "Arial",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 40,
+                            "ia2_role": 40,
+                            "msaa_states": 64,
+                            "ia2_states": 1024,
+                            "unique_id": -58524,
+                            "attributes": {
+                              "class": "down",
+                              "display": "inline",
+                              "tag": "svg",
+                              "text-align": "center"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 11,
+                        "ia2_role": 11,
+                        "name": "WAI-ARIA Quick Links ",
+                        "msaa_states": 0,
+                        "ia2_states": 132096,
+                        "unique_id": -58492,
+                        "attributes": {
+                          "display": "block",
+                          "explicit-name": "true",
+                          "id": "menu2",
+                          "name-from": "related-element",
+                          "setsize": "6",
+                          "tag": "ul",
+                          "text-align": "left",
+                          "xml-roles": "menu"
+                        },
+                        "group_position": [
+                          0,
+                          6,
+                          0
+                        ],
+                        "text": "￼￼￼￼￼￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            2
+                          ],
+                          [
+                            2,
+                            3
+                          ],
+                          [
+                            3,
+                            4
+                          ],
+                          [
+                            4,
+                            5
+                          ],
+                          [
+                            5,
+                            6
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 5,
+                            "attributes": {
+                              "background-color": "rgb(238,238,238)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Arial",
+                              "font-size": "13pt",
+                              "text-underline-style": "solid"
+                            }
+                          },
+                          {
+                            "start": 5,
+                            "end": 6,
+                            "attributes": {
+                              "background-color": "rgb(3,69,117)",
+                              "color": "rgb(255,255,255)",
+                              "font-family": "Arial",
+                              "font-size": "13pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ],
+                        "relations": {
+                          "controlledBy": [
+                            -58516
+                          ],
+                          "labelledBy": [
+                            -58516
+                          ]
+                        },
+                        "children": [
+                          {
+                            "msaa_role": 12,
+                            "ia2_role": 12,
+                            "name": "W3C Home Page",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -58548,
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "posinset": "1",
+                              "setsize": "6",
+                              "tag": "a",
+                              "text-align": "left",
+                              "xml-roles": "menuitem"
+                            },
+                            "group_position": [
+                              0,
+                              6,
+                              1
+                            ],
+                            "text": "W3C Home Page",
+                            "lines": [
+                              [
+                                0,
+                                13
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 13,
+                                "attributes": {
+                                  "background-color": "rgb(238,238,238)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "13pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 12,
+                            "ia2_role": 12,
+                            "name": "W3C Web Accessibility Initiative",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -58539,
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "posinset": "2",
+                              "setsize": "6",
+                              "tag": "a",
+                              "text-align": "left",
+                              "xml-roles": "menuitem"
+                            },
+                            "group_position": [
+                              0,
+                              6,
+                              2
+                            ],
+                            "text": "W3C Web Accessibility Initiative",
+                            "lines": [
+                              [
+                                0,
+                                32
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 32,
+                                "attributes": {
+                                  "background-color": "rgb(238,238,238)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "13pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 12,
+                            "ia2_role": 12,
+                            "name": "Accessible Rich Internet Application Specification",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -58547,
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "posinset": "3",
+                              "setsize": "6",
+                              "tag": "a",
+                              "text-align": "left",
+                              "xml-roles": "menuitem"
+                            },
+                            "group_position": [
+                              0,
+                              6,
+                              3
+                            ],
+                            "text": "Accessible Rich Internet Application Specification",
+                            "lines": [
+                              [
+                                0,
+                                50
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 50,
+                                "attributes": {
+                                  "background-color": "rgb(238,238,238)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "13pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 12,
+                            "ia2_role": 12,
+                            "name": "WAI-ARIA Authoring Practices",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -58546,
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "posinset": "4",
+                              "setsize": "6",
+                              "tag": "a",
+                              "text-align": "left",
+                              "xml-roles": "menuitem"
+                            },
+                            "group_position": [
+                              0,
+                              6,
+                              4
+                            ],
+                            "text": "WAI-ARIA Authoring Practices",
+                            "lines": [
+                              [
+                                0,
+                                28
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 28,
+                                "attributes": {
+                                  "background-color": "rgb(238,238,238)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "13pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 12,
+                            "ia2_role": 12,
+                            "name": "WAI-ARIA Implementation Guide",
+                            "msaa_states": 1048576,
+                            "ia2_states": 1024,
+                            "unique_id": -58540,
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "posinset": "5",
+                              "setsize": "6",
+                              "tag": "a",
+                              "text-align": "left",
+                              "xml-roles": "menuitem"
+                            },
+                            "group_position": [
+                              0,
+                              6,
+                              5
+                            ],
+                            "text": "WAI-ARIA Implementation Guide",
+                            "lines": [
+                              [
+                                0,
+                                29
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 29,
+                                "attributes": {
+                                  "background-color": "rgb(238,238,238)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Arial",
+                                  "font-size": "13pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 12,
+                            "ia2_role": 12,
+                            "name": "Accessible Name and Description",
+                            "msaa_states": 1048580,
+                            "ia2_states": 1024,
+                            "unique_id": -58541,
+                            "attributes": {
+                              "display": "block",
+                              "name-from": "contents",
+                              "posinset": "6",
+                              "setsize": "6",
+                              "tag": "a",
+                              "text-align": "left",
+                              "xml-roles": "menuitem"
+                            },
+                            "group_position": [
+                              0,
+                              6,
+                              6
+                            ],
+                            "text": "Accessible Name and Description",
+                            "lines": [
+                              [
+                                0,
+                                31
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 31,
+                                "attributes": {
+                                  "background-color": "rgb(3,69,117)",
+                                  "color": "rgb(255,255,255)",
+                                  "font-family": "Arial",
+                                  "font-size": "13pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 30,
+                    "ia2_role": 30,
+                    "name": "Navigate backwards from here",
+                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/menu-button-navigation/menu-button-links.openMenuAndSetFocusToLastItem.html#afterlink",
+                    "msaa_states": 5242880,
+                    "ia2_states": 1024,
+                    "unique_id": -58521,
+                    "attributes": {
+                      "display": "inline",
+                      "id": "afterlink",
+                      "name-from": "contents",
+                      "tag": "a",
+                      "text-align": "left"
+                    },
+                    "text": "Navigate backwards from here",
+                    "lines": [
+                      [
+                        0,
+                        28
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 28,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(3,69,117)",
+                          "font-family": "Arial",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Navigate backwards from here",
+                        "msaa_states": 4194304,
+                        "ia2_states": 1024,
+                        "unique_id": -58498,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Navigate backwards from here",
+                        "lines": [
+                          [
+                            0,
+                            28
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 28,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(3,69,117)",
+                              "font-family": "Arial",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "End of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -58522,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -58526
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -58514,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(250,250,250)",
+                  "color": "rgb(5,5,5)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1,
+                "ia2_states": 1024,
+                "unique_id": -58500,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
