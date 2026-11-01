@@ -1297,6 +1297,9 @@ pub struct Menus {
     on_bar_item: bool,
     /// What kind of popup just opened, which a context menu is read by.
     popup_kind: PopupKind,
+    /// The context menu is Office's own (NetUI), which JAWS reads as a focus moving, not as
+    /// its menus: closed, it says nothing of leaving them [obs, 1125/s4].
+    office_popup: bool,
 }
 
 /// A popup menu's kind, by the window it opens in.
@@ -1327,6 +1330,11 @@ impl Menus {
     /// Whether a menu item has been said since menus became active.
     pub fn is_active(&self) -> bool {
         self.active
+    }
+
+    /// Whether the menu open is Office's own context menu (NetUI).
+    pub fn in_office_popup(&self) -> bool {
+        self.office_popup && self.in_menu_mode()
     }
 
     /// Whether a menu is open, its items said yet or not: a menu then takes the keys,
@@ -1401,6 +1409,16 @@ impl Menus {
             .filter(|key| !key.is_empty())
             .map(str::to_owned);
         let switching = self.closed.take().is_some() && self.open.is_empty();
+        // An unavailable item says so after its name, the first as the next: "Cut Unavailable",
+        // then Down, "Copy Unavailable" [obs, 756/s15, 1125/s1, s2].
+        let said = if unavailable {
+            format!(
+                "{name}  {}",
+                crate::linearize::state_marker(msg::state_unavailable().as_str())
+            )
+        } else {
+            name.to_owned()
+        };
         let speech = if !self.active && self.popup_pending {
             // A menu that opened before any item had the focus, with no menu bar above it, is
             // a context menu: the item is its popup's first. It says how to move in it before
@@ -1411,17 +1429,11 @@ impl Menus {
             self.active = true;
             self.popup_pending = false;
             self.popup_shown = true;
-            let said = if unavailable {
-                format!(
-                    "{name}  {}",
-                    crate::linearize::state_marker(msg::state_unavailable().as_str())
-                )
-            } else {
-                name.to_owned()
-            };
             let context_menu = role_marker(msg::role_context_menu().as_str());
             let items_hint = msg::hint_menu_items_up_down();
-            Some(match std::mem::take(&mut self.popup_kind) {
+            let kind = std::mem::take(&mut self.popup_kind);
+            self.office_popup = kind == PopupKind::NetUi;
+            Some(match kind {
                 // An Office command bar's popup says its name first, then the item and how to
                 // move ("Context Menu | | Ply pop-up menu | Insert... | To move through items
                 // ..." [obs, 1116/s5]).
@@ -1478,7 +1490,7 @@ impl Menus {
             self.closed_key = letter.clone();
             None
         } else {
-            Some(name.to_owned())
+            Some(said)
         };
         self.current = Some(name.to_owned());
         self.on_bar_item = self.open.is_empty();
@@ -2083,6 +2095,15 @@ Undo  Unavailable"
         );
         assert!(!m.awaiting_first_item());
         assert_eq!(m.focus("Copy", false, None).as_deref(), Some("Copy"));
+        // An unavailable item after the first says so too, "Copy Unavailable" [obs, 1125/s2].
+        assert_eq!(
+            m.focus("Paste", true, None).map(|s| norm(&s)),
+            Some(norm("Paste  \u{1d}Unavailable\u{1e} "))
+        );
+        // It is Office's own, which JAWS does not read as its menus [obs, 1125/s4].
+        assert!(m.in_office_popup());
+        assert!(m.end());
+        assert!(!m.in_office_popup());
     }
 
     /// A menu whose popup opens before any item has the focus, with no menu bar item open

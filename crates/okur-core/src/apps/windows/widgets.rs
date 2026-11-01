@@ -59,6 +59,7 @@ mod tests {
                     ask_view: false,
                     ask_sheet: false,
                     repeat: false,
+                    office_menu_closed: false,
                 }
             ),
             FocusResponse::Silent

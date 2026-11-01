@@ -1660,15 +1660,16 @@ divergences! {
      list say it (2502/s1). Okur says it each time; ARIA-AT asks for it (SHOULD).",
     "the owner's rule for the web: Okur conveys what ARIA-AT asks, 2026-11-01";
 
-    Difference::OkurAlsoSays("Leaving menus\nWeekdays\nB 1") => [
+    Difference::OkurAlsoSays("Weekdays\nB 1") => [
         "1122-desktop-excel-context-menus/s2",
     ],
-    "Shift+F10 on an Excel cell opens Office's own context menu, in a window of its own that \
-     closes when it loses the foreground: in every trial it closed 2.5 s into the step, while \
-     the recorder copied JAWS's speech history (after the step's speech had settled at 2.2 s), \
-     and the focus went back to the cell. What JAWS said of that came after the copy, in \
-     neither step. Okur, replaying the closing the trace holds, says it: \"Leaving menus | \
-     Weekdays | B 1\".",
+    "Shift+F10 on an Excel cell opens Office's own context menu, which closes when the clipboard \
+     changes (old-pc, 2026-11-01): in every trial it closed 2.5 s into the step, as the recorder \
+     copied JAWS's speech history through the clipboard (after the step's speech had settled \
+     at 2.2 s), and the focus went back to the cell. What JAWS said of that came after the \
+     copy, in neither step. Okur, replaying the closing the trace holds, says the cell: \
+     \"Weekdays | B 1\". Recorded again with the menu's steps read from the speech recorder \
+     alone (round-1122d).",
     "the agent, 2026-10-31: the recorder's copy of the speech history closed the menu";
 
     Difference::Step => ["1119-desktop-word-pages-by-character-and-word/s3"],

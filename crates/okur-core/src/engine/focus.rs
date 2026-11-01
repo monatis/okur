@@ -321,6 +321,13 @@ impl ScreenReaderEngine {
         } else {
             self.leaving_menus_message()
         };
+        // Office's own context menu closed: the focus it gives back is said again, with nothing
+        // of leaving menus, JAWS's not having been in them [obs, 1125/s4].
+        let office_menu_closed =
+            !focus.in_document && !in_menu && self.menus.in_office_popup() && self.menus.end();
+        if office_menu_closed {
+            self.native_focus.forget_last();
+        }
         // A popup the ribbon's menus opened (Word's Styles gallery) is not left by the ribbon's
         // own focus [obs, 1064/s3-s7].
         let leaving_menus =
@@ -362,6 +369,7 @@ impl ScreenReaderEngine {
             ask_view: false,
             ask_sheet: false,
             repeat,
+            office_menu_closed,
         };
         for app in &mut self.apps {
             match app.focus(focus, &mut cx) {

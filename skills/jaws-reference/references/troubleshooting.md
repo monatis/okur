@@ -83,3 +83,17 @@
   the first round named left the old aria18 waiter (after round-aria17) beside the new one
   (after the probe), and aria18 would have run beside the probe (2026-10-31). After any
   requeue, list the waiting processes with their `-After` and check each round has one.
+
+## 10. Office's Own Menus Close Between Steps
+- **Symptom**: a scenario's Shift+F10 in Word or Excel reads the context menu's first item, and
+  its next steps act on the document or the sheet: the menu closed 2.5 s into the first step
+  (1122/s2, 1125/s1 in round-1122b).
+- **Cause**: Office's own context menus (NetUI, in a `Net UI Tool Window`) close as soon as the
+  clipboard changes, and every step that reads JAWS's speech history changes it (the sentinel,
+  then `CopySpeechHistoryToClipboard`). Shown on old-pc, 2026-11-01, with
+  `menu-clip.ps1`-style checks: `Set-Clipboard` closed the menu, `Get-Clipboard`,
+  `ClearSpeechHistory` and `StopSpeech` did not. Office's command bar popups (Excel's sheet tabs'
+  menu, `MsoCommandBarPopup`) stay open.
+- **Fix**: mark each step taken inside such a menu `"history": false`, the key that closes it
+  (Escape, Enter) reading the history as usual: those steps keep the speech recorder's text and
+  are compared on the spoken layer (1125, 1122 v1.1).

@@ -212,6 +212,7 @@ mod tests {
             ask_view: false,
             ask_sheet: false,
             repeat: false,
+            office_menu_closed: false,
         };
         assert!(matches!(
             switcher.focus(&item, &mut cx),

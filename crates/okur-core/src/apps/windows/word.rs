@@ -5,7 +5,7 @@
 //! before it [obs, 518].
 
 use crate::aom::Role;
-use crate::apps::AppModule;
+use crate::apps::{AppContext, AppModule, FocusResponse};
 use crate::editing::EditKey;
 use crate::event::{
     DocumentFormField, DocumentParagraph, FocusEvent, FormFieldKind, LineSpacing, LineStructure,
@@ -28,6 +28,20 @@ impl AppModule for WordDocument {
                 .app
                 .as_deref()
                 .is_some_and(|app| app.eq_ignore_ascii_case(super::word_ribbon::WORD))
+    }
+
+    /// Back from Office's own context menu (Shift+F10), the document says "Edit" alone [obs,
+    /// 1125/s4].
+    fn focus(&mut self, focus: &FocusEvent, cx: &mut AppContext<'_>) -> FocusResponse {
+        if !cx.office_menu_closed {
+            return FocusResponse::Pass;
+        }
+        cx.note_window(focus);
+        FocusResponse::Speak(crate::announcement::Announcement::new(vec![
+            crate::announcement::Line::new(vec![crate::announcement::Part::role(
+                msg::role_edit().as_str(),
+            )]),
+        ]))
     }
 
     /// The Links List and List Fields with nothing in them: "no links | Check for link type

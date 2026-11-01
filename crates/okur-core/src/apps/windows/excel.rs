@@ -637,6 +637,7 @@ mod tests {
             ask_view: false,
             ask_sheet: false,
             repeat,
+            office_menu_closed: false,
         };
         match excel.focus(focus, &mut cx) {
             FocusResponse::Speak(announcement) => Some(announcement.render()),
