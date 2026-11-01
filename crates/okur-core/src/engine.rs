@@ -355,6 +355,9 @@ pub struct ScreenReaderEngine {
     /// A page's menu was left since the last key: its menu button's collapse, which follows
     /// the focus back to it, is not said [obs, round-aria20, 2604/s1].
     page_menu_left: bool,
+    /// A spin button was typed in: its value is read once its text changes, the read of the
+    /// text as it was before the key passed over [obs, round-aria25, 2738/s1].
+    spin_typed: bool,
     /// Excel's active cell was asked for, to say it, its grid focused without a cell, or the
     /// selection a selecting key changed.
     sheet_cell_asked: bool,
@@ -668,6 +671,7 @@ impl ScreenReaderEngine {
             status_bar_asked: false,
             menus_left_unsaid: false,
             page_menu_left: false,
+            spin_typed: false,
             sheet_reading_asked: None,
             sheet_list_asked: None,
             sheet_cell_asked: false,

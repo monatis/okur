@@ -128,6 +128,11 @@ impl ScreenReaderEngine {
             self.expect_text_change(key);
         } else if event.key == crate::Key::Enter && event.modifiers.is_empty() {
             self.echo_enter();
+        } else if event.text.is_some() && self.in_page_spin_button() {
+            // A spin button typed in with the virtual cursor off says its new value, whatever
+            // the typing echo: "9" [obs, round-aria25, 2738/s1].
+            self.spin_typed = true;
+            self.expect_text_change(crate::editing::EditKey::Line);
         } else if let Some(c) = event.text {
             self.echo_typed(c);
             // Keep the field's known text current (no speech follows), so the next edit key
@@ -139,6 +144,15 @@ impl ScreenReaderEngine {
                 );
             }
         }
+    }
+
+    /// Whether the focus is a page's spin button, edited with the virtual cursor off.
+    fn in_page_spin_button(&self) -> bool {
+        self.virtual_cursor_off
+            && self
+                .last_page_focus
+                .and_then(|id| self.cursor.buffer.node(id))
+                .is_some_and(|n| n.attributes.get("spinbutton").is_some_and(|s| s == "true"))
     }
 
     /// Whether the caret is in a table of a document whose structure the platform reads
@@ -322,6 +336,17 @@ impl ScreenReaderEngine {
             } else {
                 context.caret
             };
+        }
+        // A spin button typed in: the read of its text as it was before the key is not its
+        // new value.
+        if std::mem::take(&mut self.spin_typed)
+            && self
+                .last_text
+                .as_ref()
+                .is_some_and(|l| l.text == context.text)
+        {
+            self.spin_typed = true;
+            return None;
         }
         let context = &context;
         let before = self.last_text.replace(context.clone());

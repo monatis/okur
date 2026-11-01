@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 10718,
+  "matched_steps": 10719,
   "total_steps": 11334,
   "accepted_divergences": 308,
   "errors": [],
@@ -3619,7 +3619,7 @@
     "2736-aria-quantity-spin-button-increment-spinbutton-by-one-step-up-pc/s2": "match",
     "2737-aria-quantity-spin-button-decrement-spinbutton-by-one-step-down-pc/s1": "match",
     "2737-aria-quantity-spin-button-decrement-spinbutton-by-one-step-down-pc/s2": "match",
-    "2738-aria-quantity-spin-button-type-invalid-value-into-spin-button-nine-pc/s1": "mismatch",
+    "2738-aria-quantity-spin-button-type-invalid-value-into-spin-button-nine-pc/s1": "match",
     "2738-aria-quantity-spin-button-type-invalid-value-into-spin-button-nine-pc/s2": "match",
     "2739-aria-horizontal-slider-nav-forwards-to-slider-down-down-vc/s1": "match",
     "2739-aria-horizontal-slider-nav-forwards-to-slider-down-down-vc/s2": "match",
