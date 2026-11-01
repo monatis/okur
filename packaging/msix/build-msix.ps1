@@ -11,14 +11,14 @@
     restricted capability, which experiment E1 on old-pc must show working before a submission
     declares it.
 
-    The identity comes from Partner Center's Product identity page (-Name, -Publisher,
-    -PublisherDisplayName); without them the package carries a test identity, for local
-    installs only. The Store signs what it publishes; -CertificateThumbprint signs a local test
-    package with a certificate from the current user's store, whose subject must equal
-    -Publisher. Trusting that certificate on a machine is a system change, its owner's.
+    The identity is Partner Center's, from its Product identity page (the owner, 2026-11-01:
+    Monatis.okur, published by Monatis; the package family name Monatis.okur_rfy6yt361pz56,
+    Store ID 9NV0FM5H54X8). The Store signs what it publishes; -CertificateThumbprint signs a
+    local test package with a certificate from the current user's store, whose subject must
+    equal the publisher. Trusting that certificate on a machine is a system change, its owner's.
 
-    Logos: Okur has none yet (the owner's to choose); placeholder squares are drawn into the
-    package's Assets unless -AssetsDir gives real ones.
+    Logos: Okur's mark (draw-logo.ps1, okur-logo.svg) is drawn into the package's Assets at the
+    sizes the manifest names, unless -AssetsDir gives others.
 
 .EXAMPLE
     powershell -NoProfile -File packaging\msix\build-msix.ps1 -Version 1.0.0.0
@@ -27,9 +27,9 @@ param(
     # Four numbers, each up to 65535: the first not 0 and the last 0, as the Store requires
     # (research R-store-23).
     [Parameter(Mandatory = $true)][string]$Version,
-    [string]$Name = 'Okur.Test',
-    [string]$Publisher = 'CN=Okur Test',
-    [string]$PublisherDisplayName = 'Okur (test package)',
+    [string]$Name = 'Monatis.okur',
+    [string]$Publisher = 'CN=4A33A3E2-13C6-458B-B8DF-B58C4CA3CA30',
+    [string]$PublisherDisplayName = 'Monatis',
     [switch]$UiAccess,
     [string]$AssetsDir,
     [string]$OutDir,
@@ -78,25 +78,20 @@ Copy-Item (Join-Path $release $reader) (Join-Path $stage 'okur-sr.exe')
 Copy-Item (Join-Path $release 'okur-ui.exe') $stage
 Copy-Item (Join-Path $repo 'LICENSE'), (Join-Path $repo 'NOTICE') $stage
 
-# The logos the manifest names, at their sizes.
+# The logos the manifest names, at their sizes: Okur's mark (draw-logo.ps1), run as a script
+# block, as this script may be where script files do not run; and the Store listing's logos
+# beside the package.
 $logos = [ordered]@{ 'StoreLogo.png' = 50; 'Square44x44Logo.png' = 44; 'Square150x150Logo.png' = 150 }
+$drawLogo = [scriptblock]::Create((Get-Content -Raw -Encoding UTF8 (Join-Path $here 'draw-logo.ps1')))
 if ($AssetsDir) {
     foreach ($logo in $logos.Keys) { Copy-Item (Join-Path $AssetsDir $logo) (Join-Path $stage 'Assets') }
 } else {
-    Add-Type -AssemblyName System.Drawing
     foreach ($logo in $logos.Keys) {
-        $size = $logos[$logo]
-        $bitmap = New-Object System.Drawing.Bitmap $size, $size
-        $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
-        $graphics.Clear([System.Drawing.Color]::FromArgb(255, 32, 64, 96))
-        $font = New-Object System.Drawing.Font 'Segoe UI', ([float]($size * 0.55)), ([System.Drawing.FontStyle]::Bold), ([System.Drawing.GraphicsUnit]::Pixel)
-        $format = New-Object System.Drawing.StringFormat
-        $format.Alignment = 'Center'
-        $format.LineAlignment = 'Center'
-        $graphics.DrawString('O', $font, [System.Drawing.Brushes]::White, (New-Object System.Drawing.RectangleF 0, 0, $size, $size), $format)
-        $bitmap.Save((Join-Path $stage "Assets\$logo"), [System.Drawing.Imaging.ImageFormat]::Png)
-        $graphics.Dispose(); $bitmap.Dispose(); $font.Dispose()
+        & $drawLogo -Size $logos[$logo] -Path (Join-Path $stage "Assets\$logo")
     }
+}
+foreach ($size in 300, 1080) {
+    & $drawLogo -Size $size -Path (Join-Path $OutDir "listing\okur-logo-$size.png")
 }
 
 # The manifest. UI Access in a package needs Windows 10 build 18990 or later (R-store-10);

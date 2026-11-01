@@ -2,7 +2,7 @@
 <!--
   Okur's MSIX package for the Microsoft Store: a full-trust desktop application
   (docs/references/microsoft-store-release-research.md §8). build-msix.ps1 fills the @...@ values:
-  the identity from Partner Center's Product identity page (or a test identity), the version,
+  the identity from Partner Center's Product identity page, the version,
   the minimum Windows build, and the uiAccess capability for the variant that declares it.
 -->
 <Package

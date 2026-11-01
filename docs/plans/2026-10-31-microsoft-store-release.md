@@ -55,6 +55,13 @@ Its §8 lists the package's requirements and experiments E1-E7.
    full-trust package (`target/msix/okur-<version>-x64.msix`), with a test identity unless
    Partner Center's is given, placeholder logos unless real ones are, and `-UiAccess` for the
    variant experiment E1 needs. On the dev box, scripts run only as an encoded command.
+   Then (the owner, 2026-11-01): Partner Center's identity, `Monatis.okur` published by
+   `Monatis` (`CN=4A33A3E2-13C6-458B-B8DF-B58C4CA3CA30`; package family name
+   `Monatis.okur_rfy6yt361pz56`, Store ID 9NV0FM5H54X8), is the build's; and Okur's mark,
+   asked for minimal, modern and elegant: a white letter O with two amber arcs spreading from
+   its right like sound, on a deep navy rounded square (`packaging/msix/okur-logo.svg`, drawn
+   at the package's sizes by `draw-logo.ps1`; the listing's 300 and 1080 pixel logos land in
+   `target/msix/listing/`).
 3. Run the Windows App Certification Kit on it.
 4. Install it on old-pc with the test certificate, which trusting is the owner's to approve
    (a system change), and check there: Okur starts, speaks, reads Chrome, Word and Excel,

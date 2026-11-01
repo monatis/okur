@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1080" height="1080" role="img" aria-labelledby="title desc">
+  <title id="title">Okur</title>
+  <desc id="desc">A white letter O with two amber arcs spreading from its right like sound, on a deep navy rounded square.</desc>
+  <!-- The geometry draw-logo.ps1 draws: the ring centered at (36, 50), radius 21; the arcs on
+       the same center, radius 35 from -30 to 30 degrees and radius 47.5 from -26 to 26. -->
+  <rect x="0" y="0" width="100" height="100" rx="22" ry="22" fill="#14213D"/>
+  <circle cx="36" cy="50" r="21" fill="none" stroke="#FFFFFF" stroke-width="10"/>
+  <path d="M 66.311 32.500 A 35 35 0 0 1 66.311 67.500" fill="none" stroke="#FCA311" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 78.693 29.177 A 47.5 47.5 0 0 1 78.693 70.823" fill="none" stroke="#FCA311" stroke-width="7" stroke-linecap="round"/>
+</svg>
