@@ -1,0 +1,69 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "State of the combobox (expanded) is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Role of the popup ('listbox') is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Name of the popup ('Favorite Fruit') is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Text of the focused option in the popup ('Choose a Fruit') is not conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "State of the focused option in the popup (selected) is conveyed",
+        "priority": "2"
+      },
+      {
+        "id": "assertion6",
+        "phrase": "Position of the focused option in the popup (1) is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion7",
+        "phrase": "Number of options in the popup (13) is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "ALT_DOWN",
+    "instructions": "With the reading cursor on the combobox, open the combobox.",
+    "plan": "apg/combobox-select-only",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "10"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-select-only/combobox-select-only.moveFocusToCombobox.html",
+  "id": "2997-aria-combobox-select-only-t10-alt-down-vc",
+  "name": "ARIA-AT, Select Only Combobox Example: Open a collapsed select-only combobox in reading mode; Alt+Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Alt+Down",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

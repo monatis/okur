@@ -1,0 +1,60 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'combobox' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Name 'Favorite Fruit' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Text of the selected option ('Choose a Fruit') is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "State of the combobox (collapsed) is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "TAB",
+    "instructions": "With focus on the 'Navigate forwards from here' link, navigate to the 'Favorite Fruit' Combobox.",
+    "plan": "apg/combobox-select-only",
+    "presentation_number": "commandA",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "3"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-select-only/combobox-select-only.moveFocusBeforeCombobox.html",
+  "id": "2992-aria-combobox-select-only-t3-tab-pc",
+  "name": "ARIA-AT, Select Only Combobox Example: Navigate forwards to a collapsed select-only combobox in interaction mode; Tab in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Tab",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

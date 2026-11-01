@@ -1,0 +1,1378 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Select-Only Combobox Example - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "c359878b9729768002a2798428c97c837d27b34ea08ec310a1b32c9b0772baba",
+    "captured_at_unix_ms": 1793516791042,
+    "node_count": 35,
+    "capture_ms": 246
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Select-Only Combobox Example",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-select-only/combobox-select-only.moveFocusAfterCombobox.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -220227,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -220251,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          },
+          {
+            "start": 1,
+            "end": 4,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Select-Only Combobox Example",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -220257,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Select-Only Combobox Example",
+            "lines": [
+              [
+                0,
+                28
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 28,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Select-Only Combobox Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -220216,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Select-Only Combobox Example",
+                "lines": [
+                  [
+                    0,
+                    28
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 28,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "24pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -220213,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "The following example implementation of the ￼ demonstrates a single-select combobox widget that is functionally similar to an HTML ￼ element. Unlike the editable combobox examples, this select-only combobox is not made with an ￼ element, and it does not accept freeform user input. However, like an HTML ￼, users can type characters to select matching options.",
+            "lines": [
+              [
+                0,
+                131
+              ],
+              [
+                131,
+                282
+              ],
+              [
+                282,
+                360
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 44,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 44,
+                "end": 45,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 45,
+                "end": 131,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 131,
+                "end": 132,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Consolas",
+                  "font-size": "10pt"
+                }
+              },
+              {
+                "start": 132,
+                "end": 227,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 227,
+                "end": 228,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Consolas",
+                  "font-size": "10pt"
+                }
+              },
+              {
+                "start": 228,
+                "end": 304,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 304,
+                "end": 305,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Consolas",
+                  "font-size": "10pt"
+                }
+              },
+              {
+                "start": 305,
+                "end": 360,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "The following example implementation of the ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -220259,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "The following example implementation of the ",
+                "lines": [
+                  [
+                    0,
+                    44
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 44,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "ARIA design pattern for combobox",
+                "value": "https://w3c.github.io/aria-practices/#combobox",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -220221,
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "ARIA design pattern for combobox",
+                "lines": [
+                  [
+                    0,
+                    32
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 32,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "ARIA design pattern for combobox",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -220209,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "ARIA design pattern for combobox",
+                    "lines": [
+                      [
+                        0,
+                        32
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 32,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": " demonstrates a single-select combobox widget that is functionally similar to an HTML ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -220247,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": " demonstrates a single-select combobox widget that is functionally similar to an HTML ",
+                "lines": [
+                  [
+                    0,
+                    86
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 86,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 42,
+                "ia2_role": 1065,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -220235,
+                "attributes": {
+                  "display": "inline",
+                  "tag": "code",
+                  "text-align": "left"
+                },
+                "text": "select",
+                "lines": [
+                  [
+                    0,
+                    6
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 6,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Consolas",
+                      "font-size": "10pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "select",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -220222,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "select",
+                    "lines": [
+                      [
+                        0,
+                        6
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 6,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Consolas",
+                          "font-size": "10pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": " element. Unlike the editable combobox examples, this select-only combobox is not made with an ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -220211,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": " element. Unlike the editable combobox examples, this select-only combobox is not made with an ",
+                "lines": [
+                  [
+                    0,
+                    95
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 95,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 42,
+                "ia2_role": 1065,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -220236,
+                "attributes": {
+                  "display": "inline",
+                  "tag": "code",
+                  "text-align": "left"
+                },
+                "text": "<input>",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Consolas",
+                      "font-size": "10pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "<input>",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -220233,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "<input>",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Consolas",
+                          "font-size": "10pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": " element, and it does not accept freeform user input. However, like an HTML ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -220248,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": " element, and it does not accept freeform user input. However, like an HTML ",
+                "lines": [
+                  [
+                    0,
+                    54
+                  ],
+                  [
+                    54,
+                    76
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 76,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 42,
+                "ia2_role": 1065,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -220246,
+                "attributes": {
+                  "display": "inline",
+                  "tag": "code",
+                  "text-align": "left"
+                },
+                "text": "<select>",
+                "lines": [
+                  [
+                    0,
+                    8
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 8,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Consolas",
+                      "font-size": "10pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "<select>",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -220238,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "<select>",
+                    "lines": [
+                      [
+                        0,
+                        8
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 8,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Consolas",
+                          "font-size": "10pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": ", users can type characters to select matching options.",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -220255,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": ", users can type characters to select matching options.",
+                "lines": [
+                  [
+                    0,
+                    55
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 55,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -220214,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                5
+              ],
+              [
+                5,
+                6
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "18pt",
+                  "font-weight": "bold"
+                }
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 2,
+                "end": 3,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 3,
+                "end": 4,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 4,
+                "end": 5,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 5,
+                "end": 6,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -220218,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Example",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "18pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelFor": [
+                    -220231,
+                    -220219
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -220223,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Example",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "18pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "Start of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -220231,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -220218
+                  ]
+                }
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "Navigate forwards from here",
+                "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-select-only/combobox-select-only.moveFocusAfterCombobox.html#beforelink",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -220239,
+                "attributes": {
+                  "display": "inline",
+                  "id": "beforelink",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "Navigate forwards from here",
+                "lines": [
+                  [
+                    0,
+                    27
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 27,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Navigate forwards from here",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -220212,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Navigate forwards from here",
+                    "lines": [
+                      [
+                        0,
+                        27
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 27,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -220228,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "15pt"
+                    }
+                  },
+                  {
+                    "start": 1,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 42,
+                    "ia2_role": 1049,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -220225,
+                    "attributes": {
+                      "class": "combo-label",
+                      "display": "block",
+                      "id": "combo1-label",
+                      "tag": "label",
+                      "text-align": "left"
+                    },
+                    "text": "Favorite Fruit",
+                    "lines": [
+                      [
+                        0,
+                        14
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 14,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "15pt"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "labelFor": [
+                        -220253
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Favorite Fruit",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -220226,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Favorite Fruit",
+                        "lines": [
+                          [
+                            0,
+                            14
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 14,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "15pt"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -220262,
+                    "attributes": {
+                      "class": "combo js-select",
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "text": "￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(245,245,245)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 46,
+                        "ia2_role": 46,
+                        "name": "Favorite Fruit",
+                        "value": "Choose a Fruit",
+                        "msaa_states": 1074791424,
+                        "ia2_states": 1024,
+                        "unique_id": -220253,
+                        "attributes": {
+                          "class": "combo-input",
+                          "display": "block",
+                          "explicit-name": "true",
+                          "haspopup": "listbox",
+                          "id": "combo1",
+                          "name-from": "related-element",
+                          "tag": "div",
+                          "text-align": "left",
+                          "valuetext": "Choose a Fruit",
+                          "xml-roles": "combobox"
+                        },
+                        "text": "Choose a Fruit",
+                        "lines": [
+                          [
+                            0,
+                            14
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 14,
+                            "attributes": {
+                              "background-color": "rgb(245,245,245)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "relations": {
+                          "labelledBy": [
+                            -220225
+                          ]
+                        },
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Choose a Fruit",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -220250,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Choose a Fruit",
+                            "lines": [
+                              [
+                                0,
+                                14
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 14,
+                                "attributes": {
+                                  "background-color": "rgb(245,245,245)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "Navigate backwards from here",
+                "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-select-only/combobox-select-only.moveFocusAfterCombobox.html#afterlink",
+                "msaa_states": 5242884,
+                "ia2_states": 1024,
+                "unique_id": -220217,
+                "attributes": {
+                  "display": "inline",
+                  "id": "afterlink",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "Navigate backwards from here",
+                "lines": [
+                  [
+                    0,
+                    28
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 28,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Navigate backwards from here",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -220243,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Navigate backwards from here",
+                    "lines": [
+                      [
+                        0,
+                        28
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 28,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "End of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -220219,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -220218
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -220263,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(250,250,250)",
+                  "color": "rgb(5,5,5)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1,
+                "ia2_states": 1024,
+                "unique_id": -220244,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

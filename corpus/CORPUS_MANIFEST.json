@@ -341,6 +341,46 @@
       "sha256": "5b734d1f4144c5f92dc7e308167b42d8d3fdd247096f9ecfe86151250250acce",
       "size_bytes": 14705
     },
+    "aria-at/combobox-select-only/combobox-select-only.html": {
+      "sha256": "3893d9637d8437a00c5ef36ab6ca0aa4e010bf05bcf06515024d0c55d031b100",
+      "size_bytes": 2177
+    },
+    "aria-at/combobox-select-only/combobox-select-only.moveFocusAfterCombobox.html": {
+      "sha256": "c359878b9729768002a2798428c97c837d27b34ea08ec310a1b32c9b0772baba",
+      "size_bytes": 2979
+    },
+    "aria-at/combobox-select-only/combobox-select-only.moveFocusBeforeCombobox.html": {
+      "sha256": "ecbd93e5b31628e3a37c807f845d12025f29abad126188b3cd8871dbd68c31b6",
+      "size_bytes": 2982
+    },
+    "aria-at/combobox-select-only/combobox-select-only.moveFocusToCombobox.html": {
+      "sha256": "727665c1d4b774999641b14f65636dc0dd010f9551512adc623e0d79886e63fa",
+      "size_bytes": 2970
+    },
+    "aria-at/combobox-select-only/combobox-select-only.openListbox.html": {
+      "sha256": "ad6b294b8d2335db855ac7f2fbca901773ba36a3f015229860c94ed465739c32",
+      "size_bytes": 3049
+    },
+    "aria-at/combobox-select-only/combobox-select-only.openListboxToApple.html": {
+      "sha256": "d71b679aee9fec35f7e4a7c5cc0e67669b46d992a526afa0d24f33cc258943ec",
+      "size_bytes": 3167
+    },
+    "aria-at/combobox-select-only/combobox-select-only.openListboxToGuava.html": {
+      "sha256": "026c863a3d613fe035a9f15be0b61f5a4d16f5e7dca9a2e193dd7705fe2637b8",
+      "size_bytes": 3168
+    },
+    "aria-at/combobox-select-only/combobox-select-only.openListboxToHuckleberry.html": {
+      "sha256": "eb714cccd02d78d592331a0da067ddf2d8cd7221ff7b00247f1bcb0f1cff12fd",
+      "size_bytes": 3180
+    },
+    "aria-at/combobox-select-only/css/select-only.css": {
+      "sha256": "189a43ee3a2f792edb5c679693e775695b2c055ab89d794da7d927fca74e6e2a",
+      "size_bytes": 1816
+    },
+    "aria-at/combobox-select-only/js/select-only.js": {
+      "sha256": "696d25bad9eaa82a080191c2ebe767c71826201eba5d6ed715adbecc80604f78",
+      "size_bytes": 11021
+    },
     "aria-at/command-button/button.html": {
       "sha256": "99ebd008dd716eab2a866e84b42b4fb21d87ae01f43e90741079ca75c757ed85",
       "size_bytes": 1229
@@ -19200,6 +19240,90 @@
       }
     },
     {
+      "scenario_id": "2984-aria-combobox-select-only-t1-f-vc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusBeforeCombobox.html",
+      "evidence": {
+        "sha256": "2f4633a632a7bab51dc13729eb30d3823e49023230e54c8268c5055c59219149",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2985-aria-combobox-select-only-t1-c-vc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusBeforeCombobox.html",
+      "evidence": {
+        "sha256": "a0658d0fa4c6f6db0b26e08463cf680beb860fe8e57fdce3570f77e283849bc5",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2986-aria-combobox-select-only-t1-tab-vc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusBeforeCombobox.html",
+      "evidence": {
+        "sha256": "0e36ea5b5f07808b61cc9ba58e0658c81c377c892cbe0e9f0f39caa9aad14ac8",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2987-aria-combobox-select-only-t1-down-down-down-vc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusBeforeCombobox.html",
+      "evidence": {
+        "sha256": "f2eb390de70c089e2e92958c4c301e08e80e41b7208fa45d5f1a707aea3941d5",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2988-aria-combobox-select-only-t2-shift-f-vc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusAfterCombobox.html",
+      "evidence": {
+        "sha256": "f7c89707471996e4e8a875be19ed9d774d0e8a8df7c2b1d5d4604c1c79d6db5c",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2989-aria-combobox-select-only-t2-shift-c-vc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusAfterCombobox.html",
+      "evidence": {
+        "sha256": "49c751ae8854e9a99917c839c21da6dbd9567814c24bf985c204e7240e7e7b30",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "299-web-jump-to-line-and-words",
       "fixture": "news-article.html",
       "evidence": {
@@ -19210,6 +19334,146 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2990-aria-combobox-select-only-t2-shift-tab-vc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusAfterCombobox.html",
+      "evidence": {
+        "sha256": "3fdeca774c3bf84f1ddd1fca8044b41e122535ab3bfdbb4c022a1a549397a27f",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2991-aria-combobox-select-only-t2-up-up-vc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusAfterCombobox.html",
+      "evidence": {
+        "sha256": "2e7423e8c57a771a6b052cd94d48abada1a6516e9929610df34a31919fa87ab8",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2992-aria-combobox-select-only-t3-tab-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusBeforeCombobox.html",
+      "evidence": {
+        "sha256": "30498df43133318a27599c687a587a1a074e7a83157400db07986cb57868ec35",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2993-aria-combobox-select-only-t4-shift-tab-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusAfterCombobox.html",
+      "evidence": {
+        "sha256": "ad1d3054a616f1ed9b231b479e9bef1e1217d9d4441cdb3539e5bfd876e8d23b",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2994-aria-combobox-select-only-t7-ins-tab-vc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusToCombobox.html",
+      "evidence": {
+        "sha256": "3cc4734d9e0eab547a2da464ce04bc41d449b58b8c080d03cb07c186a91476ef",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2995-aria-combobox-select-only-t7-ins-up-vc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusToCombobox.html",
+      "evidence": {
+        "sha256": "b08050ec34b125fcd1cf21ed1e7e796797361858d71f55e01d15e0e0560fd2e2",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2996-aria-combobox-select-only-t8-ins-tab-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusToCombobox.html",
+      "evidence": {
+        "sha256": "47a3d112499e26c52c539f97a02b7fb47fead3e21d47b27e07c9c2f25825761d",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2997-aria-combobox-select-only-t10-alt-down-vc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusToCombobox.html",
+      "evidence": {
+        "sha256": "523908686dfc1281f8790d4b1b8d7f8c9094b41c44fe82591b94def7c2db2f35",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2998-aria-combobox-select-only-t11-down-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusToCombobox.html",
+      "evidence": {
+        "sha256": "5826faf893720cfc4610aed8947a01ee692007e6734bb640749ce2fafb695da6",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2999-aria-combobox-select-only-t11-alt-down-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusToCombobox.html",
+      "evidence": {
+        "sha256": "d6d647171763940b331f7ad0547eb0cbe4d9572e9964f43191d4de722b744c97",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -19228,11 +19492,263 @@
       }
     },
     {
+      "scenario_id": "3000-aria-combobox-select-only-t11-up-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusToCombobox.html",
+      "evidence": {
+        "sha256": "56c2ca7d96ecb43110e2f5d5a7011c52330452ffd6a308a2b24dce866e13826f",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3001-aria-combobox-select-only-t11-enter-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusToCombobox.html",
+      "evidence": {
+        "sha256": "769a62a67c13b5ec43b7e5427e74f5f71a0e5b643693c182c39cd718d5f6e29b",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3002-aria-combobox-select-only-t11-space-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusToCombobox.html",
+      "evidence": {
+        "sha256": "7175127b28c37e28fd8d7e9911c3f827e427a76d923af6a9f742e3a6700b00df",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3003-aria-combobox-select-only-t13-home-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusToCombobox.html",
+      "evidence": {
+        "sha256": "14e5e037aa3320d72fbec191b6c16dd7066ce36781fca2adb9453da54cdfd5d3",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3004-aria-combobox-select-only-t15-a-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusToCombobox.html",
+      "evidence": {
+        "sha256": "8d8a5f8dfee608ebe03093b68c498f0e10a5ba4cb6f362abefe12e430385cc85",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3005-aria-combobox-select-only-t17-end-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.moveFocusToCombobox.html",
+      "evidence": {
+        "sha256": "52769fc8cda8dc604dc42d251f91de138ee9aaeef308ac1fc2cdddafc333f3af",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3006-aria-combobox-select-only-t19-ins-tab-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.openListbox.html",
+      "evidence": {
+        "sha256": "dfe710b664070f0f4bae9f7a630165400a91612790d93a79604945079da79101",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3007-aria-combobox-select-only-t21-down-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.openListbox.html",
+      "evidence": {
+        "sha256": "bb091207ecadfa07034320f8f72f09983a37ca34b7dfffe5a065ce2f69c7f340",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3008-aria-combobox-select-only-t22-up-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.openListboxToApple.html",
+      "evidence": {
+        "sha256": "b5fe15396816f9bcc870c8ebaca86de84199a1d2a84eb8eae6ac08f57020f6b3",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3009-aria-combobox-select-only-t25-a-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.openListbox.html",
+      "evidence": {
+        "sha256": "f570fcbf2d6c18d5d1abe0680b5305d07a01cc76715178bf21d159d229284110",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "301-desktop-tab-order",
       "fixture": "desktop-forms.ps1",
       "evidence": {
         "sha256": "3324aefc29ddef4f4e06606d34c28961e8150cbc196ff73900d0261b9c795ef4",
         "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3010-aria-combobox-select-only-t27-home-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.openListboxToApple.html",
+      "evidence": {
+        "sha256": "73cac9f99de29fa657dbdd0c0b643c8a00f9a9a5eb999df98ea2e307ed21083b",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3011-aria-combobox-select-only-t28-end-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.openListboxToGuava.html",
+      "evidence": {
+        "sha256": "881fbba0ce285c7020506978897bae7de6fcbccec984e82171cdaabf6bc5f82f",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3012-aria-combobox-select-only-t31-page-down-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.openListbox.html",
+      "evidence": {
+        "sha256": "3128859c78ea704adb5f5d2600e2fcfe9748d1c29d6b32255a499b1c14c21a09",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3013-aria-combobox-select-only-t32-page-up-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.openListboxToHuckleberry.html",
+      "evidence": {
+        "sha256": "1d6c5f7d23fda15f7e4c228073c0061a49b6791a9d3465867b65ee9425a6c85a",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3014-aria-combobox-select-only-t35-enter-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.openListboxToApple.html",
+      "evidence": {
+        "sha256": "9a774dd0375a285c8939e794648832dfbb0971b4462375fc511a5c6118cc0338",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3015-aria-combobox-select-only-t35-space-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.openListboxToApple.html",
+      "evidence": {
+        "sha256": "bce293fd4e9a09a967df1806808927fc9f6aa558a85389c679374473a14f8635",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3016-aria-combobox-select-only-t35-alt-up-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.openListboxToApple.html",
+      "evidence": {
+        "sha256": "ee914730b1a652a78d6eaeff725b07cead7d0cd025a12b1a48ab9bd409770106",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3017-aria-combobox-select-only-t37-esc-pc",
+      "fixture": "aria-at/combobox-select-only/combobox-select-only.openListboxToApple.html",
+      "evidence": {
+        "sha256": "6799a4ac88303f198d241fb33213f0d35343427fdc16cfe34e641c075b39265d",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -26411,10 +26927,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1755,
-    "scenarios_with_evidence": 1755,
-    "total_trials": 5271,
-    "successful_trials": 5254,
-    "deterministic_scenarios": 1453
+    "scenarios": 1789,
+    "scenarios_with_evidence": 1789,
+    "total_trials": 5373,
+    "successful_trials": 5356,
+    "deterministic_scenarios": 1486
   }
 }

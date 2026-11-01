@@ -1,0 +1,60 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Text of the focused option in the popup ('Huckleberry') is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "State of the focused option in the popup (not selected) is conveyed",
+        "priority": "2"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Position of the focused option in the popup (13) is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Number of options in the popup (13) is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "END",
+    "instructions": "With focus on the listbox popup, navigate to the last option.",
+    "plan": "apg/combobox-select-only",
+    "presentation_number": "commandA",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "28"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/combobox-select-only/combobox-select-only.openListboxToGuava.html",
+  "id": "3011-aria-combobox-select-only-t28-end-pc",
+  "name": "ARIA-AT, Select Only Combobox Example: Navigate to the last option in a listbox popup in interaction mode; End in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "End",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
