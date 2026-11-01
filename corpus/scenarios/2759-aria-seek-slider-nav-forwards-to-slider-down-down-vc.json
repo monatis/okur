@@ -1,0 +1,79 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleSlider",
+        "phrase": "convey role 'slider'",
+        "priority": "1"
+      },
+      {
+        "id": "nameSeek",
+        "phrase": "convey name 'Seek'",
+        "priority": "1"
+      },
+      {
+        "id": "textualValue1Minute30Seconds5Minutes",
+        "phrase": "convey text value, '1 Minute 30 Seconds of 5 Minutes'",
+        "priority": "1"
+      },
+      {
+        "id": "numericValue90IsNotConveyed",
+        "phrase": "not convey numeric value, '90'",
+        "priority": "2"
+      },
+      {
+        "id": "orientationHorizontal",
+        "phrase": "convey orientation 'horizontal'",
+        "priority": "2"
+      },
+      {
+        "id": "minimumValue0IsNotConveyed",
+        "phrase": "not convey minimum value, '0'",
+        "priority": "2"
+      },
+      {
+        "id": "maximumValue300IsNotConveyed",
+        "phrase": "not convey maximum value, '300'",
+        "priority": "2"
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "down down",
+    "instructions": "With focus on the 'Navigate forwards from here' link, navigate to the 'Seek' slider.",
+    "plan": "apg/seek-slider",
+    "presentation_number": "1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToSlider"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/seek-slider/slider-seek.setFocusBeforeSlider.html",
+  "id": "2759-aria-seek-slider-nav-forwards-to-slider-down-down-vc",
+  "name": "ARIA-AT, Media Seek Slider: Navigate forwards to a slider; Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Down",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

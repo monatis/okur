@@ -1,0 +1,80 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleSlider",
+        "phrase": "convey role 'slider'",
+        "priority": "1"
+      },
+      {
+        "id": "nameSeek",
+        "phrase": "convey name 'Seek'",
+        "priority": "1"
+      },
+      {
+        "id": "textualValue1Minute30Seconds5Minutes",
+        "phrase": "convey text value, '1 Minute 30 Seconds of 5 Minutes'",
+        "priority": "1"
+      },
+      {
+        "id": "numericValue90IsNotConveyed",
+        "phrase": "not convey numeric value, '90'",
+        "priority": "2"
+      },
+      {
+        "id": "orientationHorizontal",
+        "phrase": "convey orientation 'horizontal'",
+        "priority": "2"
+      },
+      {
+        "id": "minimumValue0IsNotConveyed",
+        "phrase": "not convey minimum value, '0'",
+        "priority": "2"
+      },
+      {
+        "id": "maximumValue300IsNotConveyed",
+        "phrase": "not convey maximum value, '300'",
+        "priority": "2"
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "shift+tab",
+    "instructions": "With focus on the 'Navigate backwards from here' link, navigate to the 'Seek' slider.",
+    "plan": "apg/seek-slider",
+    "presentation_number": "4",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToSlider"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/seek-slider/slider-seek.setFocusAfterSlider.html",
+  "id": "2766-aria-seek-slider-nav-back-to-slider-shift-tab-pc",
+  "name": "ARIA-AT, Media Seek Slider: Navigate backwards to a slider; Shift+Tab in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+Tab",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

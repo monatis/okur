@@ -1,0 +1,50 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "textualValue1Minute31Seconds",
+        "phrase": "convey text value, '1 Minute 31 Seconds'",
+        "priority": "1"
+      },
+      {
+        "id": "numericValue91IsNotConveyed",
+        "phrase": "not convey numeric value, '91'",
+        "priority": "2"
+      }
+    ],
+    "command": "right",
+    "instructions": "With focus on the 'Seek' slider, set its value to 1 Minute 31 Seconds.",
+    "plan": "apg/seek-slider",
+    "presentation_number": "10",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "incrementSliderByOneStep"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/seek-slider/slider-seek.setFocusOnSlider.html",
+  "id": "2771-aria-seek-slider-increment-slider-by-one-step-right-pc",
+  "name": "ARIA-AT, Media Seek Slider: Increment a slider by one step; Right in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Right",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

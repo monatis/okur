@@ -1,0 +1,50 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "textualValue5Minutes",
+        "phrase": "convey text value, '5 Minutes'",
+        "priority": "1"
+      },
+      {
+        "id": "numericValue300IsNotConveyed",
+        "phrase": "not convey numeric value, '300'",
+        "priority": "2"
+      }
+    ],
+    "command": "end",
+    "instructions": "With focus on the 'Seek' slider, set its value to 5 Minutes.",
+    "plan": "apg/seek-slider",
+    "presentation_number": "20",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "incrementSliderToMaximumValue"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/seek-slider/slider-seek.setFocusOnSlider.html",
+  "id": "2778-aria-seek-slider-increment-slider-to-maximum-value-end-pc",
+  "name": "ARIA-AT, Media Seek Slider: Increment a slider to the maximum value; End in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "End",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

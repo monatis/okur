@@ -1,0 +1,50 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "textualValue1Minute29Seconds",
+        "phrase": "convey text value, '1 Minute 29 Seconds'",
+        "priority": "1"
+      },
+      {
+        "id": "numericValue89IsNotConveyed",
+        "phrase": "not convey numeric value, '89'",
+        "priority": "2"
+      }
+    ],
+    "command": "left",
+    "instructions": "With focus on the 'Seek' slider, set its value to 1 Minute 29 Seconds.",
+    "plan": "apg/seek-slider",
+    "presentation_number": "12",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "decrementSliderByOneStep"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/seek-slider/slider-seek.setFocusOnSlider.html",
+  "id": "2773-aria-seek-slider-decrement-slider-by-one-step-left-pc",
+  "name": "ARIA-AT, Media Seek Slider: Decrement a slider by one step; Left in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Left",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
