@@ -1,0 +1,55 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Banner landmark boundary is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Role 'link' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Name 'Navigate forwards from here' is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "SHIFT_TAB",
+    "instructions": "With focus on the 'Top' link, navigate to the 'Navigate forwards from here' link.",
+    "plan": "apg/banner",
+    "presentation_number": "commandA",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "11"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/banner/banner.setFocusOnTopLink.html",
+  "id": "2873-aria-banner-t11-shift-tab-pc",
+  "name": "ARIA-AT, Banner Landmark: Navigate backwards out of a banner landmark in interaction mode; Shift+Tab in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+Tab",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

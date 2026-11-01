@@ -1,0 +1,843 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Banner Landmark Example - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "bff94858ae90b74b90ffe1ed4ec442dfc092bf511e91d79876f2be125f3861ed",
+    "captured_at_unix_ms": 1793507927618,
+    "node_count": 32,
+    "capture_ms": 63
+  },
+  "root": {
+    "control_type": 50030,
+    "localized_control_type": "document",
+    "name": "Banner Landmark Example",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/banner/banner.setFocusOnBottomLink.html",
+    "value_is_read_only": true,
+    "aria_role": "document",
+    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+    "automation_id": "RootWebArea",
+    "runtime_id": [
+      42,
+      110626936,
+      4,
+      556,
+      5,
+      25
+    ],
+    "heading_level": 80050,
+    "is_enabled": true,
+    "is_offscreen": false,
+    "is_password": false,
+    "is_required_for_form": false,
+    "is_keyboard_focusable": true,
+    "has_keyboard_focus": false,
+    "is_control_element": true,
+    "is_content_element": true,
+    "children": [
+      {
+        "control_type": 50005,
+        "localized_control_type": "link",
+        "name": "Navigate forwards from here",
+        "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/banner/banner.setFocusOnBottomLink.html#beforelink",
+        "value_is_read_only": true,
+        "aria_role": "link",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "automation_id": "beforelink",
+        "runtime_id": [
+          42,
+          110626936,
+          4,
+          556,
+          5,
+          41
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": true,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Navigate forwards from here",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              110626936,
+              4,
+              556,
+              5,
+              10
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "header",
+        "aria_role": "banner",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "class_name": "row",
+        "runtime_id": [
+          42,
+          110626936,
+          4,
+          556,
+          5,
+          42
+        ],
+        "heading_level": 80050,
+        "landmark_type": 80000,
+        "localized_landmark_type": "banner",
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50005,
+            "localized_control_type": "link",
+            "name": "Top",
+            "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/banner/banner.setFocusOnBottomLink.html#top",
+            "value_is_read_only": true,
+            "aria_role": "link",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "automation_id": "top",
+            "runtime_id": [
+              42,
+              110626936,
+              4,
+              556,
+              5,
+              43
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "Top",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  110626936,
+                  4,
+                  556,
+                  5,
+                  16
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false
+              }
+            ]
+          },
+          {
+            "control_type": 50026,
+            "localized_control_type": "group",
+            "aria_role": "group",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "class_name": "col-xs-12 col-sm-3 col-md-3 col-lg-2",
+            "automation_id": "skip-to-attach",
+            "runtime_id": [
+              42,
+              110626936,
+              4,
+              556,
+              5,
+              44
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false,
+            "children": [
+              {
+                "control_type": 50026,
+                "localized_control_type": "group",
+                "aria_role": "group",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "class_name": "skip-to",
+                "runtime_id": [
+                  42,
+                  110626936,
+                  4,
+                  556,
+                  5,
+                  45
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false,
+                "children": [
+                  {
+                    "control_type": 50000,
+                    "localized_control_type": "button",
+                    "name": "Skip To Content",
+                    "aria_role": "button",
+                    "aria_properties": "readonly=true;expanded=false;haspopup=menu;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      110626936,
+                      4,
+                      556,
+                      5,
+                      46
+                    ],
+                    "heading_level": 80050,
+                    "accelerator_key": "Alt+0",
+                    "access_key": "0",
+                    "expand_collapse_state": 0,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": true,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true
+                  }
+                ]
+              },
+              {
+                "control_type": 50006,
+                "localized_control_type": "Unlabeled graphic",
+                "name": "W3C Logo. To get missing image descriptions, open the context menu.",
+                "aria_role": "img",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  110626936,
+                  4,
+                  556,
+                  5,
+                  49
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true
+              }
+            ]
+          },
+          {
+            "control_type": 50026,
+            "localized_control_type": "group",
+            "aria_role": "group",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "class_name": "col-xs-12 col-sm-9 col-md-9 col-lg-10",
+            "runtime_id": [
+              42,
+              110626936,
+              4,
+              556,
+              5,
+              50
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "heading",
+                "name": "ARIA Landmarks Example",
+                "aria_role": "heading",
+                "aria_properties": "readonly=true;expanded=false;level=1;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  110626936,
+                  4,
+                  556,
+                  5,
+                  51
+                ],
+                "heading_level": 80051,
+                "level": 1,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50020,
+                    "localized_control_type": "text",
+                    "name": "ARIA Landmarks Example",
+                    "aria_role": "description",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      110626936,
+                      4,
+                      556,
+                      5,
+                      11
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": false,
+                    "is_content_element": false
+                  }
+                ]
+              },
+              {
+                "control_type": 50026,
+                "localized_control_type": "group",
+                "aria_role": "group",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "class_name": "inst",
+                "automation_id": "inst",
+                "runtime_id": [
+                  42,
+                  110626936,
+                  4,
+                  556,
+                  5,
+                  52
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false,
+                "children": [
+                  {
+                    "control_type": 50020,
+                    "localized_control_type": "text",
+                    "name": "Visually outline the landmarks and/or headings on the page using the following buttons.",
+                    "aria_role": "description",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      110626936,
+                      4,
+                      556,
+                      5,
+                      12
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true
+                  }
+                ]
+              },
+              {
+                "control_type": 50000,
+                "localized_control_type": "button",
+                "name": "Show Landmarks",
+                "aria_role": "button",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  110626936,
+                  4,
+                  556,
+                  5,
+                  53
+                ],
+                "heading_level": 80050,
+                "full_description": "Visually outline the landmarks and/or headings on the page using the following buttons.",
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": true,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true
+              },
+              {
+                "control_type": 50000,
+                "localized_control_type": "button",
+                "name": "Show Headings",
+                "aria_role": "button",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  110626936,
+                  4,
+                  556,
+                  5,
+                  54
+                ],
+                "heading_level": 80050,
+                "full_description": "Visually outline the landmarks and/or headings on the page using the following buttons.",
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": true,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true
+              }
+            ]
+          },
+          {
+            "control_type": 50005,
+            "localized_control_type": "link",
+            "name": "Bottom",
+            "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/banner/banner.setFocusOnBottomLink.html#bottom",
+            "value_is_read_only": true,
+            "aria_role": "link",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "automation_id": "bottom",
+            "runtime_id": [
+              42,
+              110626936,
+              4,
+              556,
+              5,
+              55
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": true,
+            "has_keyboard_focus": true,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "text",
+                "name": "Bottom",
+                "aria_role": "description",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  110626936,
+                  4,
+                  556,
+                  5,
+                  18
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "control_type": 50005,
+        "localized_control_type": "link",
+        "name": "Navigate backwards from here",
+        "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/banner/banner.setFocusOnBottomLink.html#afterlink",
+        "value_is_read_only": true,
+        "aria_role": "link",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "automation_id": "afterlink",
+        "runtime_id": [
+          42,
+          110626936,
+          4,
+          556,
+          5,
+          56
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": true,
+        "has_keyboard_focus": false,
+        "is_control_element": true,
+        "is_content_element": true,
+        "children": [
+          {
+            "control_type": 50020,
+            "localized_control_type": "text",
+            "name": "Navigate backwards from here",
+            "aria_role": "description",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              110626936,
+              4,
+              556,
+              5,
+              19
+            ],
+            "heading_level": 80050,
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": false,
+            "is_content_element": false
+          }
+        ]
+      },
+      {
+        "control_type": 50026,
+        "localized_control_type": "group",
+        "aria_role": "group",
+        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+        "class_name": "col-xs-12 col-sm-9 col-md-6 col-lg-7",
+        "runtime_id": [
+          42,
+          110626936,
+          4,
+          556,
+          5,
+          58
+        ],
+        "heading_level": 80050,
+        "is_enabled": true,
+        "is_offscreen": false,
+        "is_password": false,
+        "is_required_for_form": false,
+        "is_keyboard_focusable": false,
+        "has_keyboard_focus": false,
+        "is_control_element": false,
+        "is_content_element": false,
+        "children": [
+          {
+            "control_type": 50026,
+            "localized_control_type": "main",
+            "aria_role": "main",
+            "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+            "runtime_id": [
+              42,
+              110626936,
+              4,
+              556,
+              5,
+              59
+            ],
+            "heading_level": 80050,
+            "landmark_type": 80002,
+            "localized_landmark_type": "main",
+            "is_enabled": true,
+            "is_offscreen": false,
+            "is_password": false,
+            "is_required_for_form": false,
+            "is_keyboard_focusable": false,
+            "has_keyboard_focus": false,
+            "is_control_element": true,
+            "is_content_element": true,
+            "children": [
+              {
+                "control_type": 50020,
+                "localized_control_type": "heading",
+                "name": "Banner Landmark",
+                "aria_role": "heading",
+                "aria_properties": "readonly=true;expanded=false;level=1;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "automation_id": "id1",
+                "runtime_id": [
+                  42,
+                  110626936,
+                  4,
+                  556,
+                  5,
+                  60
+                ],
+                "heading_level": 80051,
+                "level": 1,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": true,
+                "is_content_element": true,
+                "children": [
+                  {
+                    "control_type": 50020,
+                    "localized_control_type": "text",
+                    "name": "Banner Landmark",
+                    "aria_role": "description",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      110626936,
+                      4,
+                      556,
+                      5,
+                      20
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": false,
+                    "is_content_element": false
+                  }
+                ]
+              },
+              {
+                "control_type": 50026,
+                "localized_control_type": "group",
+                "aria_role": "group",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  110626936,
+                  4,
+                  556,
+                  5,
+                  61
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false,
+                "children": [
+                  {
+                    "control_type": 50020,
+                    "localized_control_type": "text",
+                    "name": "A ",
+                    "aria_role": "description",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      110626936,
+                      4,
+                      556,
+                      5,
+                      21
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true
+                  },
+                  {
+                    "control_type": 50020,
+                    "localized_control_type": "code",
+                    "aria_role": "code",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      110626936,
+                      4,
+                      556,
+                      5,
+                      62
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": false,
+                    "is_content_element": false,
+                    "children": [
+                      {
+                        "control_type": 50020,
+                        "localized_control_type": "text",
+                        "name": "banner",
+                        "aria_role": "description",
+                        "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                        "runtime_id": [
+                          42,
+                          110626936,
+                          4,
+                          556,
+                          5,
+                          22
+                        ],
+                        "heading_level": 80050,
+                        "is_enabled": true,
+                        "is_offscreen": false,
+                        "is_password": false,
+                        "is_required_for_form": false,
+                        "is_keyboard_focusable": false,
+                        "has_keyboard_focus": false,
+                        "is_control_element": true,
+                        "is_content_element": true
+                      }
+                    ]
+                  },
+                  {
+                    "control_type": 50020,
+                    "localized_control_type": "text",
+                    "name": " landmark identifies site-oriented content at the beginning of each page within a website. Site-oriented content typically includes things such as the logo or identity of the site sponsor, and site-specific search tool. A banner usually appears at the top of the page and typically spans the full width.",
+                    "aria_role": "description",
+                    "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "runtime_id": [
+                      42,
+                      110626936,
+                      4,
+                      556,
+                      5,
+                      23
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": true,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true
+                  }
+                ]
+              },
+              {
+                "control_type": 50026,
+                "localized_control_type": "group",
+                "aria_role": "group",
+                "aria_properties": "readonly=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                "runtime_id": [
+                  42,
+                  110626936,
+                  4,
+                  556,
+                  5,
+                  63
+                ],
+                "heading_level": 80050,
+                "is_enabled": true,
+                "is_offscreen": false,
+                "is_password": false,
+                "is_required_for_form": false,
+                "is_keyboard_focusable": false,
+                "has_keyboard_focus": false,
+                "is_control_element": false,
+                "is_content_element": false,
+                "children": [
+                  {
+                    "control_type": 50000,
+                    "localized_control_type": "button",
+                    "name": "Run Test Setup",
+                    "aria_role": "button",
+                    "aria_properties": "disabled=true;expanded=false;multiline=false;multiselectable=false;required=false;hasactions=false",
+                    "class_name": "button-run-test-setup",
+                    "runtime_id": [
+                      42,
+                      110626936,
+                      4,
+                      556,
+                      5,
+                      64
+                    ],
+                    "heading_level": 80050,
+                    "is_enabled": false,
+                    "is_offscreen": false,
+                    "is_password": false,
+                    "is_required_for_form": false,
+                    "is_keyboard_focusable": false,
+                    "has_keyboard_focus": false,
+                    "is_control_element": true,
+                    "is_content_element": true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

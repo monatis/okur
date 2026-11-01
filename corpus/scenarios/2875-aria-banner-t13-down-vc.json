@@ -1,0 +1,59 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'banner' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Role 'menu button' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Name 'Skip To Content' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "State 'collapsed' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion5",
+        "phrase": "Access key '0' is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "DOWN",
+    "instructions": "With the reading cursor on the 'Navigate forwards from here' link, navigate to the 'Skip To Content' button.",
+    "plan": "apg/banner",
+    "presentation_number": "commandB",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "13"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/banner/banner.setFocusBeforeBannerAndHideTopLink.html",
+  "id": "2875-aria-banner-t13-down-vc",
+  "name": "ARIA-AT, Banner Landmark: Navigate forwards to a button inside a banner landmark in reading mode; Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

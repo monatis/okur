@@ -1,0 +1,54 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "assertion1",
+        "phrase": "Role 'banner' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion2",
+        "phrase": "Role 'heading' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion3",
+        "phrase": "Heading level '1' is conveyed",
+        "priority": "1"
+      },
+      {
+        "id": "assertion4",
+        "phrase": "Name 'ARIA Landmarks Example' is conveyed",
+        "priority": "1"
+      }
+    ],
+    "command": "SHIFT_H",
+    "instructions": "With the reading cursor on the 'Navigate backwards from here' link, navigate to the 'ARIA Landmarks Example' heading.",
+    "plan": "apg/banner",
+    "presentation_number": "commandA",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "25"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/banner/banner.setFocusAfterBanner.html",
+  "id": "2886-aria-banner-t25-shift-h-vc",
+  "name": "ARIA-AT, Banner Landmark: Navigate backwards to a heading inside a banner landmark in reading mode; Shift+H in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Shift+H",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
