@@ -449,6 +449,46 @@
       "sha256": "e3ca183207ba59b35481c1c74837bb5dbbfb85c3ef45a200d3f9059e8986e699",
       "size_bytes": 4135
     },
+    "aria-at/minimal-data-grid/css/dataGrids.css": {
+      "sha256": "295ed4b8837a7343c2af1db0960d9b9f3be4591a576fa5e82a2f1507517c6da7",
+      "size_bytes": 1342
+    },
+    "aria-at/minimal-data-grid/dataGrids.html": {
+      "sha256": "a580e357595b7036e7c92ea0b35913e1793c620a52baaf33144b4045840795cb",
+      "size_bytes": 3768
+    },
+    "aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html": {
+      "sha256": "476fc1a208524a689e3e75f508209da125b734aa19a285dadb1bb678e75630cf",
+      "size_bytes": 4561
+    },
+    "aria-at/minimal-data-grid/dataGrids.setFocusBeforeGrid.html": {
+      "sha256": "cb27d7e8a67a6d2e754879505718f95e27d8b217266a37139ddda13bdbfacbcc",
+      "size_bytes": 4564
+    },
+    "aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html": {
+      "sha256": "59464157f54b453a5cb0049bfc7b50bb4d397f8dbcf3cc4886b69a73d6b8ccea",
+      "size_bytes": 4656
+    },
+    "aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html": {
+      "sha256": "d1fc599bbf502fe01b827b52e2f48bd3099c10342f39d7d6a4636fa040361bee",
+      "size_bytes": 4658
+    },
+    "aria-at/minimal-data-grid/imgs/black_keys.png": {
+      "sha256": "d91366c2e583a87e27dc7b4c421c0f4ad417d6feb3927794dc8548d6fdba705e",
+      "size_bytes": 8414
+    },
+    "aria-at/minimal-data-grid/js/dataGrid.js": {
+      "sha256": "7b27fd500a7b4d295299b952836453838dae575beb72f93d0332520ee7e6428c",
+      "size_bytes": 22929
+    },
+    "aria-at/minimal-data-grid/js/dataGrids.js": {
+      "sha256": "5ebc5dfe7be53681586cd1547866c41506d54eb289bdbcedfaa9b7bf98845d25",
+      "size_bytes": 1432
+    },
+    "aria-at/minimal-data-grid/js/utils.js": {
+      "sha256": "d695af6576102b5b4ced5ceb0c405f7c51d764044e951d28e7d0c11600fb6b59",
+      "size_bytes": 3103
+    },
     "aria-at/radiogroup-aria-activedescendant/css/radio.css": {
       "sha256": "5652a091b391cd1c4c3356a5b19a4686bda175c688f4924d4d2b2aa13bdbdff4",
       "size_bytes": 1219
@@ -13688,6 +13728,90 @@
       }
     },
     {
+      "scenario_id": "2694-aria-minimal-data-grid-nav-forwards-to-grid-t-vc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusBeforeGrid.html",
+      "evidence": {
+        "sha256": "2c5887e0c2c9ed4479095d11845bf2f27e3fcb8a5d8db68a38a2bda45522c751",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2695-aria-minimal-data-grid-nav-forwards-to-grid-down-down-vc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusBeforeGrid.html",
+      "evidence": {
+        "sha256": "17857d7c0e0401c556a7b333c62ad1c8432a0948755562325d78e043b6fc3abb",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2696-aria-minimal-data-grid-nav-forwards-to-grid-tab-vc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusBeforeGrid.html",
+      "evidence": {
+        "sha256": "d4f1d634b7ee23b92f9e1a351ff0c38dd9c8ce12b0d4f421a28efddddf31ef3d",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2697-aria-minimal-data-grid-nav-forwards-to-grid-tab-pc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusBeforeGrid.html",
+      "evidence": {
+        "sha256": "017109429c24a8e5cd6b63289010f5866acca663d901de29e175f1d4558d7b53",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2698-aria-minimal-data-grid-nav-back-to-grid-shift-t-vc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html",
+      "evidence": {
+        "sha256": "27bb3e9b6dbfc49f6c65f99b6a2b40e31ece4aea7b43c583879724adb2edd851",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2699-aria-minimal-data-grid-nav-back-to-grid-up-up-vc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html",
+      "evidence": {
+        "sha256": "63fcbb61c9c055c3e6402111d9dba1791fd2d0a81616e2dba1ddccf96e4ef553",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "27-boundary-no-tables",
       "fixture": "boundaries-dynamic.html",
       "evidence": {
@@ -13716,6 +13840,146 @@
       }
     },
     {
+      "scenario_id": "2700-aria-minimal-data-grid-nav-back-to-grid-shift-tab-vc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html",
+      "evidence": {
+        "sha256": "8e786a93136807d5a451bcb463743d530f4d6aa67f0378267e0a49b78f3d2ef7",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2701-aria-minimal-data-grid-nav-back-to-grid-shift-tab-pc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html",
+      "evidence": {
+        "sha256": "9b8b4df5ec48c9d61abbc76280315a124ea153ce36ce2cf034bcb1f2887f7c24",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2702-aria-minimal-data-grid-req-info-about-grid-cell-ins-tab-vc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html",
+      "evidence": {
+        "sha256": "85db277ad0f9892ab9daccba6eccda995038b9d4ac4232c713140a32042249bc",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2703-aria-minimal-data-grid-req-info-about-grid-cell-ins-up-vc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html",
+      "evidence": {
+        "sha256": "ef1413e8ada217ff3dbb4aeb0ee0f580bf3e53f22cce8ad3e4a081d4a9754763",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2704-aria-minimal-data-grid-req-info-about-grid-cell-ins-tab-pc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html",
+      "evidence": {
+        "sha256": "9ecdc893edadec1bb613e1421edc79d57f88f060661135e5719de2bc15dac949",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2705-aria-minimal-data-grid-req-info-about-grid-cell-ins-up-pc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html",
+      "evidence": {
+        "sha256": "14e5c8387eede81dc1050a755b33aea5e1476300a807bbdf970b840e317dc2f5",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2706-aria-minimal-data-grid-nav-to-next-column-grid-ctrl-alt-right-vc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+      "evidence": {
+        "sha256": "7b0c256b2141e2222615ee82bfc02f691c402ea0988a94d63dd11826e5c99dba",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2707-aria-minimal-data-grid-nav-to-next-column-grid-right-pc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+      "evidence": {
+        "sha256": "b39e2365cb4c7d7359dba5811cd45b81398a3dd8c2242ac8a6a5f3be3bd6358f",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2708-aria-minimal-data-grid-nav-to-prev-column-grid-ctrl-alt-left-vc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+      "evidence": {
+        "sha256": "2368a5cfd7449978a648a6b23dc662dff7b69638079a69b92b386d470ccbaa57",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2709-aria-minimal-data-grid-nav-to-prev-column-grid-left-pc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+      "evidence": {
+        "sha256": "52d4a6aafc7018e2774fafd5ba76ee2336585f981d46944d0e2b774c8b200bdd",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "271-web-list-tables-none",
       "fixture": "doc-reading.html",
       "evidence": {
@@ -13726,6 +13990,118 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2710-aria-minimal-data-grid-nav-to-next-row-grid-ctrl-alt-down-vc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+      "evidence": {
+        "sha256": "441c4bb5c46254619ae2114f9feb353f9d65eba4051f15f0253377854a033659",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2711-aria-minimal-data-grid-nav-to-next-row-grid-down-pc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+      "evidence": {
+        "sha256": "4c4c94f40ae221b648a9d249ff1e40d4646e5be81029ea926fdd5ccfd3cdb16b",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2712-aria-minimal-data-grid-nav-to-prev-row-grid-ctrl-alt-up-vc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+      "evidence": {
+        "sha256": "7dbf1b4d4e3c94a7ac06511648f636d696bfd56c25e93765aba02bfe00abbc96",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2713-aria-minimal-data-grid-nav-to-prev-row-grid-up-pc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+      "evidence": {
+        "sha256": "de10a3ae5c9d22d3a9db9ee801b507b75db777b20e380cc70295050d504fb36e",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2714-aria-minimal-data-grid-nav-to-first-cell-row-grid-home-pc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+      "evidence": {
+        "sha256": "1c0d9c149d7617cb75bf97f16cee8b434e3c975ed5156831233f8a02db1b5008",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2715-aria-minimal-data-grid-nav-to-last-cell-row-grid-end-pc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+      "evidence": {
+        "sha256": "7f278ce6eac86d8570bf98344d2bcde9177a7b5143b432dc9399baef2df585f4",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2716-aria-minimal-data-grid-nav-to-first-cell-grid-ctrl-home-pc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+      "evidence": {
+        "sha256": "b0b7fb4e099fb8f14b3bc718ec4d68e3da0c6a236022472283181f39099d9167",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2717-aria-minimal-data-grid-nav-to-last-cell-grid-ctrl-end-pc",
+      "fixture": "aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+      "evidence": {
+        "sha256": "54d0f7041f20ae4e1186ed38464ec01d493e2546917e2aee29fb0538627bfe8f",
+        "capture_script_sha256": "c72340d836efbdda26c418c04466d6c3d15c19b7b0ee28e478cb98dde5dd9ff1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
         "summary_consistent": true
       }
     },
@@ -21011,10 +21387,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1413,
-    "scenarios_with_evidence": 1413,
-    "total_trials": 4245,
-    "successful_trials": 4228,
-    "deterministic_scenarios": 1125
+    "scenarios": 1437,
+    "scenarios_with_evidence": 1437,
+    "total_trials": 4317,
+    "successful_trials": 4300,
+    "deterministic_scenarios": 1144
   }
 }

@@ -1,0 +1,60 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "columnHeaderContentBalance",
+        "phrase": "convey content of the column header, 'Balance'",
+        "priority": "1"
+      },
+      {
+        "id": "cellContent99553200",
+        "phrase": "convey content of the cell, '$995,532.00'",
+        "priority": "1"
+      },
+      {
+        "id": "columnNumber5",
+        "phrase": "convey column number of the cell, '5'",
+        "priority": "2"
+      },
+      {
+        "id": "rowNumber7",
+        "phrase": "convey row number of the cell, '7'",
+        "priority": "2"
+      }
+    ],
+    "command": "ctrl+end",
+    "instructions": "Starting at the '$9.00' cell, navigate to the last cell in the grid.",
+    "plan": "apg/minimal-data-grid",
+    "presentation_number": "54",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToLastCellGrid"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+  "id": "2717-aria-minimal-data-grid-nav-to-last-cell-grid-ctrl-end-pc",
+  "name": "ARIA-AT, Minimal Data Grid: Navigate to the last cell in a grid; Ctrl+End in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Ctrl+End",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

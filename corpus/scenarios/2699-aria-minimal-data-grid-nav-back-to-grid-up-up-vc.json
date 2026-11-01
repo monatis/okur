@@ -1,0 +1,114 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "1:gridBoundary 3:nameGrid 3:numberColumns5 3:numberRows7 2:columnHeaderContentBalance",
+    "assertions": [
+      {
+        "id": "roleGrid",
+        "phrase": "convey role 'grid'",
+        "priority": "1"
+      },
+      {
+        "id": "0:gridBoundary",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "nameGrid",
+        "phrase": "convey name of the grid, 'Transactions January 1 through January 6'",
+        "priority": "1"
+      },
+      {
+        "id": "numberColumns5",
+        "phrase": "convey number of columns, '5'",
+        "priority": "2"
+      },
+      {
+        "id": "numberRows7",
+        "phrase": "convey number of rows, '7'",
+        "priority": "2"
+      },
+      {
+        "id": "columnHeaderContentBalance",
+        "phrase": "convey content of the column header, 'Balance'",
+        "priority": "1"
+      },
+      {
+        "id": "0:columnHeaderContentDate",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "cellContent99553200",
+        "phrase": "convey content of the cell, '$995,532.00'",
+        "priority": "1"
+      },
+      {
+        "id": "0:cellContent01Jan16",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "rowNumber7",
+        "phrase": "convey row number of the cell, '7'",
+        "priority": "2"
+      },
+      {
+        "id": "0:rowNumber1",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "0:rowNumber2",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "3:columnNumber5",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "0:columnNumber1",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "up up",
+    "instructions": "Starting at the 'Navigate backwards from here' link, navigate into the grid.",
+    "plan": "apg/minimal-data-grid",
+    "presentation_number": "2.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navBackToGrid"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusAfterGrid.html",
+  "id": "2699-aria-minimal-data-grid-nav-back-to-grid-up-up-vc",
+  "name": "ARIA-AT, Minimal Data Grid: Navigate backwards into a grid; Up in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Up",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

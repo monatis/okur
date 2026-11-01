@@ -1,0 +1,65 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "columnHeaderContentDescription",
+        "phrase": "convey content of the column header, 'Description'",
+        "priority": "1"
+      },
+      {
+        "id": "roleLink",
+        "phrase": "convey role 'link'",
+        "priority": "1"
+      },
+      {
+        "id": "nameLinkHotCoffee",
+        "phrase": "convey name of the link, 'Hot Coffee'",
+        "priority": "1"
+      },
+      {
+        "id": "columnNumber3",
+        "phrase": "convey column number of the cell, '3'",
+        "priority": "2"
+      },
+      {
+        "id": "3:rowNumber4",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "left",
+    "instructions": "Starting at the '$9.00' cell, navigate to the previous column in the grid.",
+    "plan": "apg/minimal-data-grid",
+    "presentation_number": "22",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToPrevColumnGrid"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+  "id": "2709-aria-minimal-data-grid-nav-to-prev-column-grid-left-pc",
+  "name": "ARIA-AT, Minimal Data Grid: Navigate to the previous column in a grid; Left in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Left",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

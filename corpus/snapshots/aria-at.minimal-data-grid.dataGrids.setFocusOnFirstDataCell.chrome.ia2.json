@@ -1,0 +1,4032 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Data Grid Examples - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "59464157f54b453a5cb0049bfc7b50bb4d397f8dbcf3cc4886b69a73d6b8ccea",
+    "captured_at_unix_ms": 1793493742463,
+    "node_count": 111,
+    "capture_ms": 678
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Data Grid Examples",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -90340,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -90435,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          },
+          {
+            "start": 1,
+            "end": 5,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Data Grid Examples",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -90424,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Data Grid Examples",
+            "lines": [
+              [
+                0,
+                18
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 18,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Data Grid Examples",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -90353,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Data Grid Examples",
+                "lines": [
+                  [
+                    0,
+                    18
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 18,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "24pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -90416,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "Following is an example implementation of the ￼ that demonstrate the keyboard interactions and ARIA features that enable accessible, interactive presentation of tabular information. The following grid presents a set of financial transactions via a simple grid with minimum ARIA markup and keyboard support.",
+            "lines": [
+              [
+                0,
+                145
+              ],
+              [
+                145,
+                306
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 46,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 46,
+                "end": 47,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              },
+              {
+                "start": 47,
+                "end": 306,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Following is an example implementation of the ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -90345,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Following is an example implementation of the ",
+                "lines": [
+                  [
+                    0,
+                    46
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 46,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "design pattern for grid",
+                "value": "https://w3c.github.io/aria-practices/#grid",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -90419,
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "design pattern for grid",
+                "lines": [
+                  [
+                    0,
+                    23
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 23,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "design pattern for grid",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -90377,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "design pattern for grid",
+                    "lines": [
+                      [
+                        0,
+                        23
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 23,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": " that demonstrate the keyboard interactions and ARIA features that enable accessible, interactive presentation of tabular information. The following grid presents a set of financial transactions via a simple grid with minimum ARIA markup and keyboard support.",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -90382,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": " that demonstrate the keyboard interactions and ARIA features that enable accessible, interactive presentation of tabular information. The following grid presents a set of financial transactions via a simple grid with minimum ARIA markup and keyboard support.",
+                "lines": [
+                  [
+                    0,
+                    98
+                  ],
+                  [
+                    98,
+                    259
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 259,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -90408,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "18pt",
+                  "font-weight": "bold"
+                }
+              },
+              {
+                "start": 1,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Examples",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -90393,
+                "attributes": {
+                  "display": "block",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Examples",
+                "lines": [
+                  [
+                    0,
+                    8
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 8,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "18pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Examples",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -90360,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Examples",
+                    "lines": [
+                      [
+                        0,
+                        8
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 8,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "18pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -90391,
+                "attributes": {
+                  "display": "block",
+                  "tag": "section",
+                  "text-align": "left"
+                },
+                "text": "￼￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ],
+                  [
+                    3,
+                    4
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "14pt",
+                      "font-weight": "bold"
+                    }
+                  },
+                  {
+                    "start": 1,
+                    "end": 4,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1044,
+                    "name": "Example 1: Minimal Data Grid",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -90375,
+                    "attributes": {
+                      "display": "block",
+                      "id": "ex1_label",
+                      "level": "3",
+                      "name-from": "contents",
+                      "tag": "h3",
+                      "text-align": "left"
+                    },
+                    "group_position": [
+                      3,
+                      0,
+                      0
+                    ],
+                    "text": "Example 1: Minimal Data Grid",
+                    "lines": [
+                      [
+                        0,
+                        28
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 28,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "14pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "labelFor": [
+                        -90367,
+                        -90486
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Example 1: Minimal Data Grid",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -90395,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Example 1: Minimal Data Grid",
+                        "lines": [
+                          [
+                            0,
+                            28
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 28,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "14pt",
+                              "font-weight": "bold"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 21,
+                    "ia2_role": 21,
+                    "name": "Start of Example 1: Minimal Data Grid",
+                    "msaa_states": 0,
+                    "ia2_states": 1040,
+                    "unique_id": -90367,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "ex1_start_sep",
+                      "name-from": "related-element",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "separator"
+                    },
+                    "relations": {
+                      "labelledBy": [
+                        -90375
+                      ]
+                    }
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -90361,
+                    "attributes": {
+                      "display": "block",
+                      "id": "ex1",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "text": "￼￼￼￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ],
+                      [
+                        1,
+                        2
+                      ],
+                      [
+                        2,
+                        3
+                      ],
+                      [
+                        3,
+                        4
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "font-weight": "bold"
+                        }
+                      },
+                      {
+                        "start": 1,
+                        "end": 2,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      },
+                      {
+                        "start": 2,
+                        "end": 3,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      },
+                      {
+                        "start": 3,
+                        "end": 4,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 20,
+                        "ia2_role": 1044,
+                        "name": "Transactions January 1 through January 6",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -90352,
+                        "attributes": {
+                          "display": "block",
+                          "id": "grid1Label",
+                          "level": "4",
+                          "name-from": "contents",
+                          "tag": "h4",
+                          "text-align": "left"
+                        },
+                        "group_position": [
+                          4,
+                          0,
+                          0
+                        ],
+                        "text": "Transactions January 1 through January 6",
+                        "lines": [
+                          [
+                            0,
+                            40
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 40,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt",
+                              "font-weight": "bold"
+                            }
+                          }
+                        ],
+                        "relations": {
+                          "labelFor": [
+                            -90492
+                          ]
+                        },
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Transactions January 1 through January 6",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -90398,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Transactions January 1 through January 6",
+                            "lines": [
+                              [
+                                0,
+                                40
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 40,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt",
+                                  "font-weight": "bold"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Navigate forwards from here",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#beforelink",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "unique_id": -90338,
+                        "attributes": {
+                          "display": "inline",
+                          "id": "beforelink",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Navigate forwards from here",
+                        "lines": [
+                          [
+                            0,
+                            27
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 27,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Navigate forwards from here",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "unique_id": -90385,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Navigate forwards from here",
+                            "lines": [
+                              [
+                                0,
+                                27
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 27,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,238)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 24,
+                        "ia2_role": 24,
+                        "name": "Transactions January 1 through January 6",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -90492,
+                        "attributes": {
+                          "class": "data",
+                          "display": "table",
+                          "explicit-name": "true",
+                          "id": "ex1-grid",
+                          "name-from": "related-element",
+                          "tag": "table",
+                          "text-align": "left",
+                          "xml-roles": "grid"
+                        },
+                        "text": "￼￼￼￼￼￼￼",
+                        "lines": [
+                          [
+                            0,
+                            1
+                          ],
+                          [
+                            1,
+                            2
+                          ],
+                          [
+                            2,
+                            3
+                          ],
+                          [
+                            3,
+                            4
+                          ],
+                          [
+                            4,
+                            5
+                          ],
+                          [
+                            5,
+                            6
+                          ],
+                          [
+                            6,
+                            7
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 7,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt"
+                            }
+                          }
+                        ],
+                        "relations": {
+                          "labelledBy": [
+                            -90352
+                          ]
+                        },
+                        "children": [
+                          {
+                            "msaa_role": 28,
+                            "ia2_role": 28,
+                            "name": "Date Type Description Amount Balance",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -90479,
+                            "attributes": {
+                              "display": "table-row",
+                              "name-from": "contents",
+                              "tag": "tr",
+                              "text-align": "left"
+                            },
+                            "text": "￼￼￼￼￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ],
+                              [
+                                1,
+                                2
+                              ],
+                              [
+                                2,
+                                3
+                              ],
+                              [
+                                3,
+                                4
+                              ],
+                              [
+                                4,
+                                5
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 5,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt",
+                                  "font-weight": "bold"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 25,
+                                "ia2_role": 25,
+                                "name": "Date",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -90471,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "0",
+                                  "tag": "th",
+                                  "text-align": "center"
+                                },
+                                "text": "Date",
+                                "lines": [
+                                  [
+                                    0,
+                                    4
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 4,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt",
+                                      "font-weight": "bold"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Date",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90417,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Date",
+                                    "lines": [
+                                      [
+                                        0,
+                                        4
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 4,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt",
+                                          "font-weight": "bold"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 25,
+                                "ia2_role": 25,
+                                "name": "Type",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -90473,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "1",
+                                  "tag": "th",
+                                  "text-align": "center"
+                                },
+                                "text": "Type",
+                                "lines": [
+                                  [
+                                    0,
+                                    4
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 4,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt",
+                                      "font-weight": "bold"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Type",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90428,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Type",
+                                    "lines": [
+                                      [
+                                        0,
+                                        4
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 4,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt",
+                                          "font-weight": "bold"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 25,
+                                "ia2_role": 25,
+                                "name": "Description",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -90468,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "2",
+                                  "tag": "th",
+                                  "text-align": "center"
+                                },
+                                "text": "Description",
+                                "lines": [
+                                  [
+                                    0,
+                                    11
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 11,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt",
+                                      "font-weight": "bold"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Description",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90413,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Description",
+                                    "lines": [
+                                      [
+                                        0,
+                                        11
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 11,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt",
+                                          "font-weight": "bold"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 25,
+                                "ia2_role": 25,
+                                "name": "Amount",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -90461,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "3",
+                                  "tag": "th",
+                                  "text-align": "center"
+                                },
+                                "text": "Amount",
+                                "lines": [
+                                  [
+                                    0,
+                                    6
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 6,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt",
+                                      "font-weight": "bold"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Amount",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90436,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Amount",
+                                    "lines": [
+                                      [
+                                        0,
+                                        6
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 6,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt",
+                                          "font-weight": "bold"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 25,
+                                "ia2_role": 25,
+                                "name": "Balance",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -90465,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "4",
+                                  "tag": "th",
+                                  "text-align": "center"
+                                },
+                                "text": "Balance",
+                                "lines": [
+                                  [
+                                    0,
+                                    7
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 7,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt",
+                                      "font-weight": "bold"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Balance",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90443,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Balance",
+                                    "lines": [
+                                      [
+                                        0,
+                                        7
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 7,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt",
+                                          "font-weight": "bold"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 28,
+                            "ia2_role": 28,
+                            "name": "01-Jan-16 Deposit Cash Deposit $1,000,000.00 $1,000,000.00",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -90450,
+                            "attributes": {
+                              "display": "table-row",
+                              "name-from": "contents",
+                              "tag": "tr",
+                              "text-align": "left"
+                            },
+                            "text": "￼￼￼￼￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ],
+                              [
+                                1,
+                                2
+                              ],
+                              [
+                                2,
+                                3
+                              ],
+                              [
+                                3,
+                                4
+                              ],
+                              [
+                                4,
+                                5
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 5,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "01-Jan-16",
+                                "msaa_states": 1048580,
+                                "ia2_states": 1024,
+                                "unique_id": -90441,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "5",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "01-Jan-16",
+                                "lines": [
+                                  [
+                                    0,
+                                    9
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 9,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "01-Jan-16",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90430,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "01-Jan-16",
+                                    "lines": [
+                                      [
+                                        0,
+                                        9
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 9,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "Deposit",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90446,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "6",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "Deposit",
+                                "lines": [
+                                  [
+                                    0,
+                                    7
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 7,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Deposit",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90457,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Deposit",
+                                    "lines": [
+                                      [
+                                        0,
+                                        7
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 7,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "Cash Deposit",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -90426,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "7",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "￼",
+                                "lines": [
+                                  [
+                                    0,
+                                    1
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 1,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,238)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt",
+                                      "text-underline-style": "solid"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 30,
+                                    "ia2_role": 30,
+                                    "name": "Cash Deposit",
+                                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#",
+                                    "msaa_states": 5242880,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90415,
+                                    "attributes": {
+                                      "display": "inline",
+                                      "name-from": "contents",
+                                      "tag": "a",
+                                      "text-align": "left"
+                                    },
+                                    "text": "Cash Deposit",
+                                    "lines": [
+                                      [
+                                        0,
+                                        12
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 12,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,238)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt",
+                                          "text-underline-style": "solid"
+                                        }
+                                      }
+                                    ],
+                                    "children": [
+                                      {
+                                        "msaa_role": 41,
+                                        "ia2_role": 41,
+                                        "name": "Cash Deposit",
+                                        "msaa_states": 4194304,
+                                        "ia2_states": 1024,
+                                        "unique_id": -90458,
+                                        "attributes": {
+                                          "name-from": "contents"
+                                        },
+                                        "text": "Cash Deposit",
+                                        "lines": [
+                                          [
+                                            0,
+                                            12
+                                          ]
+                                        ],
+                                        "text_runs": [
+                                          {
+                                            "start": 0,
+                                            "end": 12,
+                                            "attributes": {
+                                              "background-color": "rgb(255,255,255)",
+                                              "color": "rgb(0,0,238)",
+                                              "font-family": "Times New Roman",
+                                              "font-size": "12pt",
+                                              "text-underline-style": "solid"
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "$1,000,000.00",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90403,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "8",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "$1,000,000.00",
+                                "lines": [
+                                  [
+                                    0,
+                                    13
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 13,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "$1,000,000.00",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90453,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "$1,000,000.00",
+                                    "lines": [
+                                      [
+                                        0,
+                                        13
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 13,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "$1,000,000.00",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90411,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "9",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "$1,000,000.00",
+                                "lines": [
+                                  [
+                                    0,
+                                    13
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 13,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "$1,000,000.00",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90469,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "$1,000,000.00",
+                                    "lines": [
+                                      [
+                                        0,
+                                        13
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 13,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 28,
+                            "ia2_role": 28,
+                            "name": "02-Jan-16 Debit Down Town Grocery $250.00 $999,750.00",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -90397,
+                            "attributes": {
+                              "display": "table-row",
+                              "name-from": "contents",
+                              "tag": "tr",
+                              "text-align": "left"
+                            },
+                            "text": "￼￼￼￼￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ],
+                              [
+                                1,
+                                2
+                              ],
+                              [
+                                2,
+                                3
+                              ],
+                              [
+                                3,
+                                4
+                              ],
+                              [
+                                4,
+                                5
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 5,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "02-Jan-16",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90401,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "10",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "02-Jan-16",
+                                "lines": [
+                                  [
+                                    0,
+                                    9
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 9,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "02-Jan-16",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90475,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "02-Jan-16",
+                                    "lines": [
+                                      [
+                                        0,
+                                        9
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 9,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "Debit",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90394,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "11",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "Debit",
+                                "lines": [
+                                  [
+                                    0,
+                                    5
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 5,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Debit",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90470,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Debit",
+                                    "lines": [
+                                      [
+                                        0,
+                                        5
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 5,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "Down Town Grocery",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -90369,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "12",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "￼",
+                                "lines": [
+                                  [
+                                    0,
+                                    1
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 1,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,238)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt",
+                                      "text-underline-style": "solid"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 30,
+                                    "ia2_role": 30,
+                                    "name": "Down Town Grocery",
+                                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#",
+                                    "msaa_states": 5242880,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90381,
+                                    "attributes": {
+                                      "display": "inline",
+                                      "name-from": "contents",
+                                      "tag": "a",
+                                      "text-align": "left"
+                                    },
+                                    "text": "Down Town Grocery",
+                                    "lines": [
+                                      [
+                                        0,
+                                        17
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 17,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,238)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt",
+                                          "text-underline-style": "solid"
+                                        }
+                                      }
+                                    ],
+                                    "children": [
+                                      {
+                                        "msaa_role": 41,
+                                        "ia2_role": 41,
+                                        "name": "Down Town Grocery",
+                                        "msaa_states": 4194304,
+                                        "ia2_states": 1024,
+                                        "unique_id": -90483,
+                                        "attributes": {
+                                          "name-from": "contents"
+                                        },
+                                        "text": "Down Town Grocery",
+                                        "lines": [
+                                          [
+                                            0,
+                                            17
+                                          ]
+                                        ],
+                                        "text_runs": [
+                                          {
+                                            "start": 0,
+                                            "end": 17,
+                                            "attributes": {
+                                              "background-color": "rgb(255,255,255)",
+                                              "color": "rgb(0,0,238)",
+                                              "font-family": "Times New Roman",
+                                              "font-size": "12pt",
+                                              "text-underline-style": "solid"
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "$250.00",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90371,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "13",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "$250.00",
+                                "lines": [
+                                  [
+                                    0,
+                                    7
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 7,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "$250.00",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90339,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "$250.00",
+                                    "lines": [
+                                      [
+                                        0,
+                                        7
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 7,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "$999,750.00",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90343,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "14",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "$999,750.00",
+                                "lines": [
+                                  [
+                                    0,
+                                    11
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 11,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "$999,750.00",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90488,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "$999,750.00",
+                                    "lines": [
+                                      [
+                                        0,
+                                        11
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 11,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 28,
+                            "ia2_role": 28,
+                            "name": "03-Jan-16 Debit Hot Coffee $9.00 $999,741.00",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -90359,
+                            "attributes": {
+                              "display": "table-row",
+                              "name-from": "contents",
+                              "tag": "tr",
+                              "text-align": "left"
+                            },
+                            "text": "￼￼￼￼￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ],
+                              [
+                                1,
+                                2
+                              ],
+                              [
+                                2,
+                                3
+                              ],
+                              [
+                                3,
+                                4
+                              ],
+                              [
+                                4,
+                                5
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 5,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "03-Jan-16",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90354,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "15",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "03-Jan-16",
+                                "lines": [
+                                  [
+                                    0,
+                                    9
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 9,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "03-Jan-16",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90347,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "03-Jan-16",
+                                    "lines": [
+                                      [
+                                        0,
+                                        9
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 9,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "Debit",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90478,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "16",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "Debit",
+                                "lines": [
+                                  [
+                                    0,
+                                    5
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 5,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Debit",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90363,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Debit",
+                                    "lines": [
+                                      [
+                                        0,
+                                        5
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 5,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "Hot Coffee",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -90341,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "17",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "￼",
+                                "lines": [
+                                  [
+                                    0,
+                                    1
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 1,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,238)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt",
+                                      "text-underline-style": "solid"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 30,
+                                    "ia2_role": 30,
+                                    "name": "Hot Coffee",
+                                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#",
+                                    "msaa_states": 5242880,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90497,
+                                    "attributes": {
+                                      "display": "inline",
+                                      "name-from": "contents",
+                                      "tag": "a",
+                                      "text-align": "left"
+                                    },
+                                    "text": "Hot Coffee",
+                                    "lines": [
+                                      [
+                                        0,
+                                        10
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 10,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,238)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt",
+                                          "text-underline-style": "solid"
+                                        }
+                                      }
+                                    ],
+                                    "children": [
+                                      {
+                                        "msaa_role": 41,
+                                        "ia2_role": 41,
+                                        "name": "Hot Coffee",
+                                        "msaa_states": 4194304,
+                                        "ia2_states": 1024,
+                                        "unique_id": -90355,
+                                        "attributes": {
+                                          "name-from": "contents"
+                                        },
+                                        "text": "Hot Coffee",
+                                        "lines": [
+                                          [
+                                            0,
+                                            10
+                                          ]
+                                        ],
+                                        "text_runs": [
+                                          {
+                                            "start": 0,
+                                            "end": 10,
+                                            "attributes": {
+                                              "background-color": "rgb(255,255,255)",
+                                              "color": "rgb(0,0,238)",
+                                              "font-family": "Times New Roman",
+                                              "font-size": "12pt",
+                                              "text-underline-style": "solid"
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "$9.00",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90462,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "18",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "$9.00",
+                                "lines": [
+                                  [
+                                    0,
+                                    5
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 5,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "$9.00",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90364,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "$9.00",
+                                    "lines": [
+                                      [
+                                        0,
+                                        5
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 5,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "$999,741.00",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90476,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "19",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "$999,741.00",
+                                "lines": [
+                                  [
+                                    0,
+                                    11
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 11,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "$999,741.00",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90378,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "$999,741.00",
+                                    "lines": [
+                                      [
+                                        0,
+                                        11
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 11,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 28,
+                            "ia2_role": 28,
+                            "name": "04-Jan-16 Debit The Filling Station $88.00 $999,653.00",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -90449,
+                            "attributes": {
+                              "display": "table-row",
+                              "name-from": "contents",
+                              "tag": "tr",
+                              "text-align": "left"
+                            },
+                            "text": "￼￼￼￼￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ],
+                              [
+                                1,
+                                2
+                              ],
+                              [
+                                2,
+                                3
+                              ],
+                              [
+                                3,
+                                4
+                              ],
+                              [
+                                4,
+                                5
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 5,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "04-Jan-16",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90454,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "20",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "04-Jan-16",
+                                "lines": [
+                                  [
+                                    0,
+                                    9
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 9,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "04-Jan-16",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90376,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "04-Jan-16",
+                                    "lines": [
+                                      [
+                                        0,
+                                        9
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 9,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "Debit",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90464,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "21",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "Debit",
+                                "lines": [
+                                  [
+                                    0,
+                                    5
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 5,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Debit",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90384,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Debit",
+                                    "lines": [
+                                      [
+                                        0,
+                                        5
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 5,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "The Filling Station",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -90433,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "22",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "￼",
+                                "lines": [
+                                  [
+                                    0,
+                                    1
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 1,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,238)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt",
+                                      "text-underline-style": "solid"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 30,
+                                    "ia2_role": 30,
+                                    "name": "The Filling Station",
+                                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#",
+                                    "msaa_states": 5242880,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90429,
+                                    "attributes": {
+                                      "display": "inline",
+                                      "name-from": "contents",
+                                      "tag": "a",
+                                      "text-align": "left"
+                                    },
+                                    "text": "The Filling Station",
+                                    "lines": [
+                                      [
+                                        0,
+                                        19
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 19,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,238)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt",
+                                          "text-underline-style": "solid"
+                                        }
+                                      }
+                                    ],
+                                    "children": [
+                                      {
+                                        "msaa_role": 41,
+                                        "ia2_role": 41,
+                                        "name": "The Filling Station",
+                                        "msaa_states": 4194304,
+                                        "ia2_states": 1024,
+                                        "unique_id": -90400,
+                                        "attributes": {
+                                          "name-from": "contents"
+                                        },
+                                        "text": "The Filling Station",
+                                        "lines": [
+                                          [
+                                            0,
+                                            19
+                                          ]
+                                        ],
+                                        "text_runs": [
+                                          {
+                                            "start": 0,
+                                            "end": 19,
+                                            "attributes": {
+                                              "background-color": "rgb(255,255,255)",
+                                              "color": "rgb(0,0,238)",
+                                              "font-family": "Times New Roman",
+                                              "font-size": "12pt",
+                                              "text-underline-style": "solid"
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "$88.00",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90434,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "23",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "$88.00",
+                                "lines": [
+                                  [
+                                    0,
+                                    6
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 6,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "$88.00",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90396,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "$88.00",
+                                    "lines": [
+                                      [
+                                        0,
+                                        6
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 6,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "$999,653.00",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90407,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "24",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "$999,653.00",
+                                "lines": [
+                                  [
+                                    0,
+                                    11
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 11,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "$999,653.00",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90404,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "$999,653.00",
+                                    "lines": [
+                                      [
+                                        0,
+                                        11
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 11,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 28,
+                            "ia2_role": 28,
+                            "name": "05-Jan-16 Debit Tinker's Hardware $3,421.00 $996,232.00",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -90410,
+                            "attributes": {
+                              "display": "table-row",
+                              "name-from": "contents",
+                              "tag": "tr",
+                              "text-align": "left"
+                            },
+                            "text": "￼￼￼￼￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ],
+                              [
+                                1,
+                                2
+                              ],
+                              [
+                                2,
+                                3
+                              ],
+                              [
+                                3,
+                                4
+                              ],
+                              [
+                                4,
+                                5
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 5,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "05-Jan-16",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90421,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "25",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "05-Jan-16",
+                                "lines": [
+                                  [
+                                    0,
+                                    9
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 9,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "05-Jan-16",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90422,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "05-Jan-16",
+                                    "lines": [
+                                      [
+                                        0,
+                                        9
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 9,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "Debit",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90387,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "26",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "Debit",
+                                "lines": [
+                                  [
+                                    0,
+                                    5
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 5,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Debit",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90427,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Debit",
+                                    "lines": [
+                                      [
+                                        0,
+                                        5
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 5,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "Tinker's Hardware",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -90390,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "27",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "￼",
+                                "lines": [
+                                  [
+                                    0,
+                                    1
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 1,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,238)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt",
+                                      "text-underline-style": "solid"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 30,
+                                    "ia2_role": 30,
+                                    "name": "Tinker's Hardware",
+                                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#",
+                                    "msaa_states": 5242880,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90402,
+                                    "attributes": {
+                                      "display": "inline",
+                                      "name-from": "contents",
+                                      "tag": "a",
+                                      "text-align": "left"
+                                    },
+                                    "text": "Tinker's Hardware",
+                                    "lines": [
+                                      [
+                                        0,
+                                        17
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 17,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,238)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt",
+                                          "text-underline-style": "solid"
+                                        }
+                                      }
+                                    ],
+                                    "children": [
+                                      {
+                                        "msaa_role": 41,
+                                        "ia2_role": 41,
+                                        "name": "Tinker's Hardware",
+                                        "msaa_states": 4194304,
+                                        "ia2_states": 1024,
+                                        "unique_id": -90432,
+                                        "attributes": {
+                                          "name-from": "contents"
+                                        },
+                                        "text": "Tinker's Hardware",
+                                        "lines": [
+                                          [
+                                            0,
+                                            17
+                                          ]
+                                        ],
+                                        "text_runs": [
+                                          {
+                                            "start": 0,
+                                            "end": 17,
+                                            "attributes": {
+                                              "background-color": "rgb(255,255,255)",
+                                              "color": "rgb(0,0,238)",
+                                              "font-family": "Times New Roman",
+                                              "font-size": "12pt",
+                                              "text-underline-style": "solid"
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "$3,421.00",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90366,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "28",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "$3,421.00",
+                                "lines": [
+                                  [
+                                    0,
+                                    9
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 9,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "$3,421.00",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90438,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "$3,421.00",
+                                    "lines": [
+                                      [
+                                        0,
+                                        9
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 9,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "$996,232.00",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90372,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "29",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "$996,232.00",
+                                "lines": [
+                                  [
+                                    0,
+                                    11
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 11,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "$996,232.00",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90448,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "$996,232.00",
+                                    "lines": [
+                                      [
+                                        0,
+                                        11
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 11,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "msaa_role": 28,
+                            "ia2_role": 28,
+                            "name": "06-Jan-16 Debit Cutey's Salon $700.00 $995,532.00",
+                            "msaa_states": 0,
+                            "ia2_states": 1024,
+                            "unique_id": -90383,
+                            "attributes": {
+                              "display": "table-row",
+                              "name-from": "contents",
+                              "tag": "tr",
+                              "text-align": "left"
+                            },
+                            "text": "￼￼￼￼￼",
+                            "lines": [
+                              [
+                                0,
+                                1
+                              ],
+                              [
+                                1,
+                                2
+                              ],
+                              [
+                                2,
+                                3
+                              ],
+                              [
+                                3,
+                                4
+                              ],
+                              [
+                                4,
+                                5
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 5,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,0)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt"
+                                }
+                              }
+                            ],
+                            "children": [
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "06-Jan-16",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90344,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "30",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "06-Jan-16",
+                                "lines": [
+                                  [
+                                    0,
+                                    9
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 9,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "06-Jan-16",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90452,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "06-Jan-16",
+                                    "lines": [
+                                      [
+                                        0,
+                                        9
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 9,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "Debit",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90349,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "31",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "Debit",
+                                "lines": [
+                                  [
+                                    0,
+                                    5
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 5,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "Debit",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90455,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "Debit",
+                                    "lines": [
+                                      [
+                                        0,
+                                        5
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 5,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "Cutey's Salon",
+                                "msaa_states": 0,
+                                "ia2_states": 1024,
+                                "unique_id": -90358,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "32",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "￼",
+                                "lines": [
+                                  [
+                                    0,
+                                    1
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 1,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,238)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt",
+                                      "text-underline-style": "solid"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 30,
+                                    "ia2_role": 30,
+                                    "name": "Cutey's Salon",
+                                    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#",
+                                    "msaa_states": 5242880,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90484,
+                                    "attributes": {
+                                      "display": "inline",
+                                      "name-from": "contents",
+                                      "tag": "a",
+                                      "text-align": "left"
+                                    },
+                                    "text": "Cutey's Salon",
+                                    "lines": [
+                                      [
+                                        0,
+                                        13
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 13,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,238)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt",
+                                          "text-underline-style": "solid"
+                                        }
+                                      }
+                                    ],
+                                    "children": [
+                                      {
+                                        "msaa_role": 41,
+                                        "ia2_role": 41,
+                                        "name": "Cutey's Salon",
+                                        "msaa_states": 4194304,
+                                        "ia2_states": 1024,
+                                        "unique_id": -90466,
+                                        "attributes": {
+                                          "name-from": "contents"
+                                        },
+                                        "text": "Cutey's Salon",
+                                        "lines": [
+                                          [
+                                            0,
+                                            13
+                                          ]
+                                        ],
+                                        "text_runs": [
+                                          {
+                                            "start": 0,
+                                            "end": 13,
+                                            "attributes": {
+                                              "background-color": "rgb(255,255,255)",
+                                              "color": "rgb(0,0,238)",
+                                              "font-family": "Times New Roman",
+                                              "font-size": "12pt",
+                                              "text-underline-style": "solid"
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "$700.00",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90490,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "33",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "$700.00",
+                                "lines": [
+                                  [
+                                    0,
+                                    7
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 7,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "$700.00",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90467,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "$700.00",
+                                    "lines": [
+                                      [
+                                        0,
+                                        7
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 7,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "msaa_role": 29,
+                                "ia2_role": 29,
+                                "name": "$995,532.00",
+                                "msaa_states": 1048576,
+                                "ia2_states": 1024,
+                                "unique_id": -90496,
+                                "attributes": {
+                                  "display": "table-cell",
+                                  "name-from": "contents",
+                                  "table-cell-index": "34",
+                                  "tag": "td",
+                                  "text-align": "left"
+                                },
+                                "text": "$995,532.00",
+                                "lines": [
+                                  [
+                                    0,
+                                    11
+                                  ]
+                                ],
+                                "text_runs": [
+                                  {
+                                    "start": 0,
+                                    "end": 11,
+                                    "attributes": {
+                                      "background-color": "rgb(255,255,255)",
+                                      "color": "rgb(0,0,0)",
+                                      "font-family": "Times New Roman",
+                                      "font-size": "12pt"
+                                    }
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "msaa_role": 41,
+                                    "ia2_role": 41,
+                                    "name": "$995,532.00",
+                                    "msaa_states": 0,
+                                    "ia2_states": 1024,
+                                    "unique_id": -90474,
+                                    "attributes": {
+                                      "name-from": "contents"
+                                    },
+                                    "text": "$995,532.00",
+                                    "lines": [
+                                      [
+                                        0,
+                                        11
+                                      ]
+                                    ],
+                                    "text_runs": [
+                                      {
+                                        "start": 0,
+                                        "end": 11,
+                                        "attributes": {
+                                          "background-color": "rgb(255,255,255)",
+                                          "color": "rgb(0,0,0)",
+                                          "font-family": "Times New Roman",
+                                          "font-size": "12pt"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Navigate backwards from here",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html#afterlink",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "unique_id": -90494,
+                        "attributes": {
+                          "display": "inline",
+                          "id": "afterlink",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Navigate backwards from here",
+                        "lines": [
+                          [
+                            0,
+                            28
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 28,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Navigate backwards from here",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "unique_id": -90477,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Navigate backwards from here",
+                            "lines": [
+                              [
+                                0,
+                                28
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 28,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,238)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 21,
+                    "ia2_role": 21,
+                    "name": "End of Example 1: Minimal Data Grid",
+                    "msaa_states": 0,
+                    "ia2_states": 1040,
+                    "unique_id": -90486,
+                    "attributes": {
+                      "display": "block",
+                      "explicit-name": "true",
+                      "id": "ex1_end_sep",
+                      "name-from": "related-element",
+                      "tag": "div",
+                      "text-align": "left",
+                      "xml-roles": "separator"
+                    },
+                    "relations": {
+                      "labelledBy": [
+                        -90375
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -90498,
+            "attributes": {
+              "display": "block",
+              "id": "arrow-keys-indicator",
+              "tag": "div",
+              "text-align": "left"
+            }
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -90444,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(250,250,250)",
+                  "color": "rgb(5,5,5)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1,
+                "ia2_states": 1024,
+                "unique_id": -90442,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

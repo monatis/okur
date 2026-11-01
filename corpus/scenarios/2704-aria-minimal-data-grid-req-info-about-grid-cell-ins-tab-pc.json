@@ -1,0 +1,60 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "columnHeaderContentDate",
+        "phrase": "convey content of the column header, 'Date'",
+        "priority": "1"
+      },
+      {
+        "id": "cellContent01Jan16",
+        "phrase": "convey content of the cell, '01-Jan-16'",
+        "priority": "1"
+      },
+      {
+        "id": "columnNumber1",
+        "phrase": "convey column number of the cell, '1'",
+        "priority": "2"
+      },
+      {
+        "id": "rowNumber2",
+        "phrase": "convey row number of the cell, '2'",
+        "priority": "2"
+      }
+    ],
+    "command": "ins+tab",
+    "instructions": "Starting at the '01-Jan-16' cell, request information about the cell.",
+    "plan": "apg/minimal-data-grid",
+    "presentation_number": "12.2",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutGridCell"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFirstDataCell.html",
+  "id": "2704-aria-minimal-data-grid-req-info-about-grid-cell-ins-tab-pc",
+  "name": "ARIA-AT, Minimal Data Grid: Request information about a grid cell; Insert+Tab in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Tab",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

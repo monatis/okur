@@ -1,0 +1,55 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "cellContent2500",
+        "phrase": "convey content of the cell, '$250.00'",
+        "priority": "1"
+      },
+      {
+        "id": "3:columnNumber4",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "rowNumber3",
+        "phrase": "convey row number of the cell, '3'",
+        "priority": "2"
+      }
+    ],
+    "command": "up",
+    "instructions": "Starting at the '$9.00' cell, navigate to the previous row in the grid.",
+    "plan": "apg/minimal-data-grid",
+    "presentation_number": "40",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToPrevRowGrid"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+  "id": "2713-aria-minimal-data-grid-nav-to-prev-row-grid-up-pc",
+  "name": "ARIA-AT, Minimal Data Grid: Navigate to the previous row in a grid; Up in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Up",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

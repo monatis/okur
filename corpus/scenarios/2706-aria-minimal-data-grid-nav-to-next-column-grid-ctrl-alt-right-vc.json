@@ -1,0 +1,54 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "columnHeaderContentBalance",
+        "phrase": "convey content of the column header, 'Balance'",
+        "priority": "1"
+      },
+      {
+        "id": "cellContent99974100",
+        "phrase": "convey content of the cell, '$999,741.00'",
+        "priority": "1"
+      },
+      {
+        "id": "columnNumber5",
+        "phrase": "convey column number of the cell, '5'",
+        "priority": "2"
+      },
+      {
+        "id": "3:rowNumber4",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "ctrl+alt+right",
+    "instructions": "Starting at the '$9.00' cell, navigate to the next column in the grid.",
+    "plan": "apg/minimal-data-grid",
+    "presentation_number": "18",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToNextColumnGrid"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+  "id": "2706-aria-minimal-data-grid-nav-to-next-column-grid-ctrl-alt-right-vc",
+  "name": "ARIA-AT, Minimal Data Grid: Navigate to the next column in a grid; Ctrl+Alt+Right in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Ctrl+Alt+Right",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

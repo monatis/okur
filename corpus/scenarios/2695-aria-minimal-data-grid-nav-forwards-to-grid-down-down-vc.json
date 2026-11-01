@@ -1,0 +1,89 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleGrid",
+        "phrase": "convey role 'grid'",
+        "priority": "1"
+      },
+      {
+        "id": "nameGrid",
+        "phrase": "convey name of the grid, 'Transactions January 1 through January 6'",
+        "priority": "1"
+      },
+      {
+        "id": "numberColumns5",
+        "phrase": "convey number of columns, '5'",
+        "priority": "2"
+      },
+      {
+        "id": "numberRows7",
+        "phrase": "convey number of rows, '7'",
+        "priority": "2"
+      },
+      {
+        "id": "columnHeaderContentDate",
+        "phrase": "convey content of the column header, 'Date'",
+        "priority": "1"
+      },
+      {
+        "id": "0:cellContent01Jan16",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "rowNumber1",
+        "phrase": "convey row number of the cell, '1'",
+        "priority": "2"
+      },
+      {
+        "id": "0:rowNumber2",
+        "phrase": "",
+        "priority": ""
+      },
+      {
+        "id": "columnNumber1",
+        "phrase": "convey column number of the cell, '1'",
+        "priority": "2"
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "down down",
+    "instructions": "Starting at the 'Navigate forwards from here' link, navigate into the grid.",
+    "plan": "apg/minimal-data-grid",
+    "presentation_number": "1.1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToGrid"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusBeforeGrid.html",
+  "id": "2695-aria-minimal-data-grid-nav-forwards-to-grid-down-down-vc",
+  "name": "ARIA-AT, Minimal Data Grid: Navigate forwards into a grid; Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Down",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

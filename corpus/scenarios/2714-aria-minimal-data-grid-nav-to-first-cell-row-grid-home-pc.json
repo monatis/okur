@@ -1,0 +1,60 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "columnHeaderContentDate",
+        "phrase": "convey content of the column header, 'Date'",
+        "priority": "1"
+      },
+      {
+        "id": "cellContent03Jan16",
+        "phrase": "convey content of the cell, '03-Jan-16'",
+        "priority": "1"
+      },
+      {
+        "id": "columnNumber1",
+        "phrase": "convey column number of the cell, '1'",
+        "priority": "2"
+      },
+      {
+        "id": "3:rowNumber4",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "home",
+    "instructions": "Starting at the '$9.00' cell, navigate to the first cell of the current row in the grid.",
+    "plan": "apg/minimal-data-grid",
+    "presentation_number": "48",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navToFirstCellRowGrid"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/minimal-data-grid/dataGrids.setFocusOnFourthDataCell.html",
+  "id": "2714-aria-minimal-data-grid-nav-to-first-cell-row-grid-home-pc",
+  "name": "ARIA-AT, Minimal Data Grid: Navigate to the first cell of a row in a grid; Home in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Home",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
