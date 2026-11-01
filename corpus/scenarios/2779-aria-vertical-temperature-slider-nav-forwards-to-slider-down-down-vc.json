@@ -1,0 +1,79 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleSlider",
+        "phrase": "convey role, 'slider'",
+        "priority": "1"
+      },
+      {
+        "id": "nameTemperature",
+        "phrase": "convey name, 'Temperature'",
+        "priority": "1"
+      },
+      {
+        "id": "textualValue250DegreesCelsius",
+        "phrase": "convey text value, '25.0 degrees Celsius'",
+        "priority": "1"
+      },
+      {
+        "id": "numericValue250IsNotConveyed",
+        "phrase": "not convey numeric value, '25.0'",
+        "priority": "2"
+      },
+      {
+        "id": "orientationVertical",
+        "phrase": "convey orientation, 'vertical'",
+        "priority": "2"
+      },
+      {
+        "id": "minimumValue100IsNotConveyed",
+        "phrase": "not convey minimum value, '10.0'",
+        "priority": "2"
+      },
+      {
+        "id": "maximumValue380IsNotConveyed",
+        "phrase": "not convey maximum value, '38.0'",
+        "priority": "2"
+      },
+      {
+        "id": "0:interactionModeEnabled",
+        "phrase": "",
+        "priority": ""
+      }
+    ],
+    "command": "down down",
+    "instructions": "Starting at the 'Navigate forwards from here' link, navigate to the 'Temperature' slider.",
+    "plan": "apg/vertical-temperature-slider",
+    "presentation_number": "1",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "navForwardsToSlider"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/vertical-temperature-slider/slider-temperature.setFocusBeforeSlider.html",
+  "id": "2779-aria-vertical-temperature-slider-nav-forwards-to-slider-down-down-vc",
+  "name": "ARIA-AT, Vertical Temperature Slider: Navigate forwards to a slider; Down in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Down",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

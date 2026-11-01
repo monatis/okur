@@ -1,0 +1,948 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Vertical Temperature Slider Example - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "eb6ec88e44376d63b2982c5dae6e7c6b8fd13fe9c3a96b571fad6b698e0ddceb",
+    "captured_at_unix_ms": 1793502087679,
+    "node_count": 25,
+    "capture_ms": 192
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Vertical Temperature Slider Example",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/vertical-temperature-slider/slider-temperature.setFocusAfterSlider.html",
+    "msaa_states": 1048640,
+    "ia2_states": 1024,
+    "unique_id": -147189,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼",
+    "lines": [
+      [
+        0,
+        1
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1069,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -147187,
+        "attributes": {
+          "display": "block",
+          "tag": "main",
+          "text-align": "left",
+          "xml-roles": "main"
+        },
+        "text": "￼￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          },
+          {
+            "start": 1,
+            "end": 4,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1044,
+            "name": "Vertical Temperature Slider Example",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -147192,
+            "attributes": {
+              "display": "block",
+              "level": "1",
+              "name-from": "contents",
+              "tag": "h1",
+              "text-align": "left"
+            },
+            "group_position": [
+              1,
+              0,
+              0
+            ],
+            "text": "Vertical Temperature Slider Example",
+            "lines": [
+              [
+                0,
+                35
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 35,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Vertical Temperature Slider Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -147221,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Vertical Temperature Slider Example",
+                "lines": [
+                  [
+                    0,
+                    35
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 35,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "24pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1054,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -147204,
+            "attributes": {
+              "display": "block",
+              "tag": "p",
+              "text-align": "left"
+            },
+            "text": "The following example is a vertically oriented temperature control that implements the ￼",
+            "lines": [
+              [
+                0,
+                88
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 87,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              },
+              {
+                "start": 87,
+                "end": 88,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,238)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "text-underline-style": "solid"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "The following example is a vertically oriented temperature control that implements the ",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -147218,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "The following example is a vertically oriented temperature control that implements the ",
+                "lines": [
+                  [
+                    0,
+                    87
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 87,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "msaa_role": 30,
+                "ia2_role": 30,
+                "name": "slider design pattern.",
+                "value": "https://w3c.github.io/aria-practices/#slider",
+                "msaa_states": 5242880,
+                "ia2_states": 1024,
+                "unique_id": -147210,
+                "attributes": {
+                  "display": "inline",
+                  "name-from": "contents",
+                  "tag": "a",
+                  "text-align": "left"
+                },
+                "text": "slider design pattern.",
+                "lines": [
+                  [
+                    0,
+                    22
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 22,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,238)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "text-underline-style": "solid"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "slider design pattern.",
+                    "msaa_states": 4194304,
+                    "ia2_states": 1024,
+                    "unique_id": -147231,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "slider design pattern.",
+                    "lines": [
+                      [
+                        0,
+                        22
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 22,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -147217,
+            "attributes": {
+              "display": "block",
+              "tag": "section",
+              "text-align": "left"
+            },
+            "text": "￼￼￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "18pt",
+                  "font-weight": "bold"
+                }
+              },
+              {
+                "start": 1,
+                "end": 4,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 20,
+                "ia2_role": 1044,
+                "name": "Example",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -147190,
+                "attributes": {
+                  "display": "block",
+                  "id": "ex_label",
+                  "level": "2",
+                  "name-from": "contents",
+                  "tag": "h2",
+                  "text-align": "left"
+                },
+                "group_position": [
+                  2,
+                  0,
+                  0
+                ],
+                "text": "Example",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "18pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ],
+                "relations": {
+                  "labelFor": [
+                    -147229,
+                    -147207
+                  ]
+                },
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Example",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -147199,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Example",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "18pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "Start of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -147229,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_start_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -147190
+                  ]
+                }
+              },
+              {
+                "msaa_role": 20,
+                "ia2_role": 1060,
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -147219,
+                "attributes": {
+                  "class": "example",
+                  "display": "block",
+                  "id": "ex1",
+                  "tag": "div",
+                  "text-align": "left"
+                },
+                "text": "￼￼￼￼",
+                "lines": [
+                  [
+                    0,
+                    1
+                  ],
+                  [
+                    1,
+                    2
+                  ],
+                  [
+                    2,
+                    3
+                  ],
+                  [
+                    3,
+                    4
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 1,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  },
+                  {
+                    "start": 1,
+                    "end": 2,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "15pt",
+                      "font-weight": "bold"
+                    }
+                  },
+                  {
+                    "start": 2,
+                    "end": 4,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -147205,
+                    "attributes": {
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "text": "￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Navigate forwards from here",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/vertical-temperature-slider/slider-temperature.setFocusAfterSlider.html#beforelink",
+                        "msaa_states": 5242880,
+                        "ia2_states": 1024,
+                        "unique_id": -147203,
+                        "attributes": {
+                          "display": "inline",
+                          "id": "beforelink",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Navigate forwards from here",
+                        "lines": [
+                          [
+                            0,
+                            27
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 27,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Navigate forwards from here",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "unique_id": -147191,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Navigate forwards from here",
+                            "lines": [
+                              [
+                                0,
+                                27
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 27,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,238)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -147230,
+                    "attributes": {
+                      "class": "label",
+                      "display": "block",
+                      "id": "id-temp-label",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "text": "Temperature",
+                    "lines": [
+                      [
+                        0,
+                        11
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 11,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "15pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ],
+                    "relations": {
+                      "labelFor": [
+                        -147227
+                      ]
+                    },
+                    "children": [
+                      {
+                        "msaa_role": 41,
+                        "ia2_role": 41,
+                        "name": "Temperature",
+                        "msaa_states": 0,
+                        "ia2_states": 1024,
+                        "unique_id": -147212,
+                        "attributes": {
+                          "name-from": "contents"
+                        },
+                        "text": "Temperature",
+                        "lines": [
+                          [
+                            0,
+                            11
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 11,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,0)",
+                              "font-family": "Times New Roman",
+                              "font-size": "15pt",
+                              "font-weight": "bold"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "msaa_role": 51,
+                    "ia2_role": 51,
+                    "name": "Temperature",
+                    "value": "25.0 degrees Celsius",
+                    "msaa_states": 1048576,
+                    "ia2_states": 132096,
+                    "unique_id": -147227,
+                    "attributes": {
+                      "display": "inline",
+                      "explicit-name": "true",
+                      "id": "id-temp-slider",
+                      "name-from": "related-element",
+                      "tag": "g",
+                      "text-align": "left",
+                      "valuetext": "25.0 degrees Celsius",
+                      "xml-roles": "slider"
+                    },
+                    "relations": {
+                      "labelledBy": [
+                        -147230
+                      ]
+                    }
+                  },
+                  {
+                    "msaa_role": 20,
+                    "ia2_role": 1060,
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -147214,
+                    "attributes": {
+                      "display": "block",
+                      "tag": "div",
+                      "text-align": "left"
+                    },
+                    "text": "￼",
+                    "lines": [
+                      [
+                        0,
+                        1
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 1,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,238)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "text-underline-style": "solid"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "msaa_role": 30,
+                        "ia2_role": 30,
+                        "name": "Navigate backwards from here",
+                        "value": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/vertical-temperature-slider/slider-temperature.setFocusAfterSlider.html#afterlink",
+                        "msaa_states": 5242884,
+                        "ia2_states": 1024,
+                        "unique_id": -147206,
+                        "attributes": {
+                          "display": "inline",
+                          "id": "afterlink",
+                          "name-from": "contents",
+                          "tag": "a",
+                          "text-align": "left"
+                        },
+                        "text": "Navigate backwards from here",
+                        "lines": [
+                          [
+                            0,
+                            24
+                          ],
+                          [
+                            24,
+                            28
+                          ]
+                        ],
+                        "text_runs": [
+                          {
+                            "start": 0,
+                            "end": 28,
+                            "attributes": {
+                              "background-color": "rgb(255,255,255)",
+                              "color": "rgb(0,0,238)",
+                              "font-family": "Times New Roman",
+                              "font-size": "12pt",
+                              "text-underline-style": "solid"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "msaa_role": 41,
+                            "ia2_role": 41,
+                            "name": "Navigate backwards from here",
+                            "msaa_states": 4194304,
+                            "ia2_states": 1024,
+                            "unique_id": -147224,
+                            "attributes": {
+                              "name-from": "contents"
+                            },
+                            "text": "Navigate backwards from here",
+                            "lines": [
+                              [
+                                0,
+                                24
+                              ],
+                              [
+                                24,
+                                28
+                              ]
+                            ],
+                            "text_runs": [
+                              {
+                                "start": 0,
+                                "end": 28,
+                                "attributes": {
+                                  "background-color": "rgb(255,255,255)",
+                                  "color": "rgb(0,0,238)",
+                                  "font-family": "Times New Roman",
+                                  "font-size": "12pt",
+                                  "text-underline-style": "solid"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 21,
+                "ia2_role": 21,
+                "name": "End of Example",
+                "msaa_states": 0,
+                "ia2_states": 1040,
+                "unique_id": -147207,
+                "attributes": {
+                  "display": "block",
+                  "explicit-name": "true",
+                  "id": "ex_end_sep",
+                  "name-from": "related-element",
+                  "tag": "div",
+                  "text-align": "left",
+                  "xml-roles": "separator"
+                },
+                "relations": {
+                  "labelledBy": [
+                    -147190
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -147201,
+            "attributes": {
+              "display": "block",
+              "tag": "div",
+              "text-align": "left"
+            },
+            "text": "￼",
+            "lines": [
+              [
+                0,
+                1
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 1,
+                "attributes": {
+                  "background-color": "rgb(250,250,250)",
+                  "color": "rgb(5,5,5)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 43,
+                "ia2_role": 43,
+                "name": "Run Test Setup",
+                "msaa_states": 1,
+                "ia2_states": 1024,
+                "unique_id": -147228,
+                "attributes": {
+                  "class": "button-run-test-setup",
+                  "display": "inline-block",
+                  "name-from": "contents",
+                  "tag": "button",
+                  "text-align": "center"
+                },
+                "text": "Run Test Setup",
+                "lines": [
+                  [
+                    0,
+                    14
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 14,
+                    "attributes": {
+                      "background-color": "rgb(250,250,250)",
+                      "color": "rgb(5,5,5)",
+                      "font-family": "Arial",
+                      "font-size": "10pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "roleSlider",
+        "phrase": "convey role, 'slider'",
+        "priority": "1"
+      },
+      {
+        "id": "nameTemperature",
+        "phrase": "convey name, 'Temperature'",
+        "priority": "1"
+      },
+      {
+        "id": "textualValue250DegreesCelsius",
+        "phrase": "convey text value, '25.0 degrees Celsius'",
+        "priority": "1"
+      },
+      {
+        "id": "numericValue250IsNotConveyed",
+        "phrase": "not convey numeric value, '25.0'",
+        "priority": "2"
+      },
+      {
+        "id": "orientationVertical",
+        "phrase": "convey orientation, 'vertical'",
+        "priority": "2"
+      },
+      {
+        "id": "minimumValue100IsNotConveyed",
+        "phrase": "not convey minimum value, '10.0'",
+        "priority": "2"
+      },
+      {
+        "id": "maximumValue380IsNotConveyed",
+        "phrase": "not convey maximum value, '38.0'",
+        "priority": "2"
+      }
+    ],
+    "command": "ins+tab",
+    "instructions": "Starting at the 'Temperature' slider, read information about the slider.",
+    "plan": "apg/vertical-temperature-slider",
+    "presentation_number": "7",
+    "setting": "virtualCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "reqInfoAboutSlider"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html",
+  "id": "2787-aria-vertical-temperature-slider-req-info-about-slider-ins-tab-vc",
+  "name": "ARIA-AT, Vertical Temperature Slider: Request information about a slider; Insert+Tab in the virtual cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Insert+Tab",
+      "id": "s1",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}

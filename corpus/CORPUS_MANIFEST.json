@@ -1113,6 +1113,94 @@
       "sha256": "f71e2ac605bdc457aa03f68997f221d59e262b9ae39b9b11965ca4d54a4584db",
       "size_bytes": 3097
     },
+    "aria-at/vertical-temperature-slider/css/slider-color-viewer.css": {
+      "sha256": "707c2f403e4daf0e6a7666152a9844f1cc56ddf14de75e584e7d99cc425615f9",
+      "size_bytes": 1759
+    },
+    "aria-at/vertical-temperature-slider/css/slider-rating.css": {
+      "sha256": "b256579dacbd25a0c7ec39abf4b9b51a4a2d20571ae92e5a06151a3aa13607be",
+      "size_bytes": 1560
+    },
+    "aria-at/vertical-temperature-slider/css/slider-seek.css": {
+      "sha256": "2429beb017bcca895c5f0217378a301f4cc09240de37449c47c2bc52f4b41b9a",
+      "size_bytes": 1189
+    },
+    "aria-at/vertical-temperature-slider/css/slider-temperature.css": {
+      "sha256": "16acc6c19302cde0bdba589f5ac25f23e400213cbe70bc0ba3e74101ca29f576",
+      "size_bytes": 1763
+    },
+    "aria-at/vertical-temperature-slider/images/arrow-down-a.png": {
+      "sha256": "57cde7188966858f970b40449f1ab36b71affbbd8eb4564c9473bea2313d292c",
+      "size_bytes": 987
+    },
+    "aria-at/vertical-temperature-slider/images/arrow-up-a.png": {
+      "sha256": "d64ac1e94b89e876115d39f7841208229f2a664de0c64cc857b7c3da225ed8d6",
+      "size_bytes": 977
+    },
+    "aria-at/vertical-temperature-slider/images/max-arrow-2.png": {
+      "sha256": "105201eec07e9674d7a6e23be6868d4f33132700ac54bfcf511a029fc4d31afb",
+      "size_bytes": 282
+    },
+    "aria-at/vertical-temperature-slider/images/max-arrow.paint": {
+      "sha256": "2b29d8699121928e21937f742b940cc4a24d5f2327f2a0375ad8945fa59daae1",
+      "size_bytes": 11004
+    },
+    "aria-at/vertical-temperature-slider/images/max-arrow.png": {
+      "sha256": "b4c906c27ffe3c0b17609aebc28128ac60866d9724b517191cad79763bd3a7ab",
+      "size_bytes": 1369
+    },
+    "aria-at/vertical-temperature-slider/images/max-arrow.svg": {
+      "sha256": "d790b60a4b7e16aa6a79402dc58ebff38a161b514fbfa774aa06514f76133164",
+      "size_bytes": 583
+    },
+    "aria-at/vertical-temperature-slider/images/min-arow.svg": {
+      "sha256": "05e8287c0c61960b5e1f4d0f2f3813fbbb4c06d96b267ac8ae5792beda63db3c",
+      "size_bytes": 566
+    },
+    "aria-at/vertical-temperature-slider/images/min-arrow-2.png": {
+      "sha256": "81464149f89ec1e6d9736c22890206aafa89f31f9fa78365c83f78d1c25d9c8f",
+      "size_bytes": 716
+    },
+    "aria-at/vertical-temperature-slider/images/min-arrow.png": {
+      "sha256": "0a4bb651ac3ddbcf4395aebd17a36e55efdb01d3bc59ed848e00071271e6e6b0",
+      "size_bytes": 1381
+    },
+    "aria-at/vertical-temperature-slider/images/min-arrow.svg": {
+      "sha256": "05e8287c0c61960b5e1f4d0f2f3813fbbb4c06d96b267ac8ae5792beda63db3c",
+      "size_bytes": 566
+    },
+    "aria-at/vertical-temperature-slider/js/slider-color-viewer.js": {
+      "sha256": "f6929a9aa76da05fbd71fd2ba415743d716d5dca3edf55a3ec81eac520ff74c0",
+      "size_bytes": 10469
+    },
+    "aria-at/vertical-temperature-slider/js/slider-rating.js": {
+      "sha256": "88c9dfd6352c8fe61f458f29215492c551ac0eeaebdd623fb97a72cc1f498ab5",
+      "size_bytes": 11355
+    },
+    "aria-at/vertical-temperature-slider/js/slider-seek.js": {
+      "sha256": "0397258245abd2259d71525b5817101016ec54c8747c573563f8ecb326bdea05",
+      "size_bytes": 9724
+    },
+    "aria-at/vertical-temperature-slider/js/slider-temperature.js": {
+      "sha256": "6824077e53cfceeaf5633ce2ba9c250855d6f773f13f1326c6b5e0fb37a72594",
+      "size_bytes": 7258
+    },
+    "aria-at/vertical-temperature-slider/slider-temperature.html": {
+      "sha256": "3c21a028343ab6a1ec69aefe0b781b2de9bb407b00fbd8f8ca539ddece71d5d1",
+      "size_bytes": 2147
+    },
+    "aria-at/vertical-temperature-slider/slider-temperature.setFocusAfterSlider.html": {
+      "sha256": "eb6ec88e44376d63b2982c5dae6e7c6b8fd13fe9c3a96b571fad6b698e0ddceb",
+      "size_bytes": 2889
+    },
+    "aria-at/vertical-temperature-slider/slider-temperature.setFocusBeforeSlider.html": {
+      "sha256": "c111a2410550f3a2753a5f76ad6f1ed2f0ef3807c426eb64f880613e9c370688",
+      "size_bytes": 2892
+    },
+    "aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html": {
+      "sha256": "cab89d10c3286135f6dc413d2c23b814123807c8d1657130e1b58559c7b2393c",
+      "size_bytes": 2878
+    },
     "aria-radio-place.html": {
       "sha256": "c074ae9edb3e8353813ebea09f72136e1f6fb88e818e8266edb5dae156360ae9",
       "size_bytes": 3120
@@ -15568,6 +15656,20 @@
       }
     },
     {
+      "scenario_id": "2779-aria-vertical-temperature-slider-nav-forwards-to-slider-down-down-vc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusBeforeSlider.html",
+      "evidence": {
+        "sha256": "d824376c0c4c8c89b0a171dcb095afca816bcbf2d97235ee8515a3bc82d04301",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "278-web-forms-arrows-patterns",
       "fixture": "web-app-patterns.html",
       "evidence": {
@@ -15582,11 +15684,277 @@
       }
     },
     {
+      "scenario_id": "2780-aria-vertical-temperature-slider-nav-forwards-to-slider-f-vc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusBeforeSlider.html",
+      "evidence": {
+        "sha256": "451ebd9571cc56634f498235af7ffa87c12bde19af1e536517a72a4e2ce98c45",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2781-aria-vertical-temperature-slider-nav-forwards-to-slider-tab-vc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusBeforeSlider.html",
+      "evidence": {
+        "sha256": "a19a82e87729ec73fedcc5823203ebe3831883e5e924aa313ce94d90d92ee1a4",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2782-aria-vertical-temperature-slider-nav-forwards-to-slider-tab-pc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusBeforeSlider.html",
+      "evidence": {
+        "sha256": "d51a7ffcf93e6cf7247d7f67e474e76a0d333f804a7da040ffa88ee8dd0d90a4",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2783-aria-vertical-temperature-slider-nav-back-to-slider-up-vc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusAfterSlider.html",
+      "evidence": {
+        "sha256": "fcac5f8aee34b92fd3e40d5cf9c03676300edca59616d4640767978cfd8dbd5f",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2784-aria-vertical-temperature-slider-nav-back-to-slider-shift-f-vc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusAfterSlider.html",
+      "evidence": {
+        "sha256": "b4aedda7f7ca117c0ddce0a8fae6073f0deab41eb1483afd8ed04fbc9bebb3fd",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2785-aria-vertical-temperature-slider-nav-back-to-slider-shift-tab-vc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusAfterSlider.html",
+      "evidence": {
+        "sha256": "84783ea41167786dd1b24a73c2e0f5bcaef8cc280b03294a1ec75adb0004bbe0",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2786-aria-vertical-temperature-slider-nav-back-to-slider-shift-tab-pc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusAfterSlider.html",
+      "evidence": {
+        "sha256": "1801140e15d58f7e47ae1242f68edc3b843e3a4784f2aaa318a0e57b792a7502",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2787-aria-vertical-temperature-slider-req-info-about-slider-ins-tab-vc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "fbae2b01cf95006c4cb228659d12bc2ccdf1d83a67a5d4448ef68007de95226c",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2788-aria-vertical-temperature-slider-req-info-about-slider-ins-up-vc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "cdc4bd58fa921bdec231fc8d226ae61ffab321d54b887c80566412548a000bc9",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2789-aria-vertical-temperature-slider-req-info-about-slider-ins-tab-pc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "1c145c064bf14e93251a9f97065b9b81205b08117d6176cdce6f6cf24725a55a",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "279-web-forms-arrows-interaction",
       "fixture": "forms-interaction.html",
       "evidence": {
         "sha256": "203b26a34519e72552823ebbf256a03b25a4b4fbbb6b54133b9be9985d7355f6",
         "capture_script_sha256": "805c1f07134eff88a46fe169bfe538af3268175e3b2874127e04a528c09bf68b",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2790-aria-vertical-temperature-slider-req-info-about-slider-ins-up-pc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "44937f9443ae4d02ed023d0f5e0b091a37b461852a88f3677b2f02282ff03bcc",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2791-aria-vertical-temperature-slider-increment-slider-by-one-step-right-pc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "9999e05284f8c19f015b186d9fa4a323426309a87205819050c78d95606f0408",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2792-aria-vertical-temperature-slider-increment-slider-by-one-step-up-pc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "f9d658adbf08e7e9abe25c9e57fa917e1c036393d3bf032d62ce07e2a05a57af",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2793-aria-vertical-temperature-slider-decrement-slider-by-one-step-left-pc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "ebee5e1c0f813cb9c28728d655177abee3a7809dd3854e9702f976d4fecd941e",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2794-aria-vertical-temperature-slider-decrement-slider-by-one-step-down-pc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "5a80817fe88e65bf2fa85a0c380f06353cdb3c4f259a220d486128960460c21e",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2795-aria-vertical-temperature-slider-increment-slider-by-twenty-steps-page-up-pc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "7ae797ee57e340ebbbb5d08e3fc81571d2e1908d81e05f6974146bbbec7c13cd",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2796-aria-vertical-temperature-slider-decrement-slider-by-twenty-steps-page-down-pc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "879d5e960f76a63bf6141dba7d293d27e57c9e3db1024f79cd59f8121a866800",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2797-aria-vertical-temperature-slider-decrement-slider-to-minimum-value-home-pc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "7059c7c24c073a4affd80fdfbf83b83f16fa24ab454049f9af07448d7eb2ac0a",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "2798-aria-vertical-temperature-slider-increment-slider-to-maximum-value-end-pc",
+      "fixture": "aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html",
+      "evidence": {
+        "sha256": "bb85f1e55630f8fa3be1220d223fc0b7013f742603a6d0ae185afbcc25f54678",
+        "capture_script_sha256": "08b86deb087028464326e7f1ec1ec60ea3023abfbb4c9d2aa57274db1b7fa942",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -22765,10 +23133,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1526,
-    "scenarios_with_evidence": 1526,
-    "total_trials": 4584,
-    "successful_trials": 4567,
-    "deterministic_scenarios": 1225
+    "scenarios": 1546,
+    "scenarios_with_evidence": 1546,
+    "total_trials": 4644,
+    "successful_trials": 4627,
+    "deterministic_scenarios": 1245
   }
 }

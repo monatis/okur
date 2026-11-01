@@ -1,0 +1,50 @@
+{
+  "aria_at": {
+    "assertion_exceptions": "",
+    "assertions": [
+      {
+        "id": "textualValue249DegreesCelsius",
+        "phrase": "convey text value, '24.9 degrees Celsius'",
+        "priority": "1"
+      },
+      {
+        "id": "numericValue249IsNotConveyed",
+        "phrase": "not convey numeric value, '24.9'",
+        "priority": "2"
+      }
+    ],
+    "command": "down",
+    "instructions": "Starting at the 'Temperature' slider, set its value to 24.9 degrees Celsius.",
+    "plan": "apg/vertical-temperature-slider",
+    "presentation_number": "12.1",
+    "setting": "pcCursor",
+    "source": "w3c/aria-at@6c0044502636c8fa6452579f6e10a0d7ca80b3b1",
+    "test": "decrementSliderByOneStep"
+  },
+  "category": "aria-at",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/aria-at/vertical-temperature-slider/slider-temperature.setFocusOnSlider.html",
+  "id": "2794-aria-vertical-temperature-slider-decrement-slider-by-one-step-down-pc",
+  "name": "ARIA-AT, Vertical Temperature Slider: Decrement a slider by one step; Down in the PC cursor",
+  "reset": {
+    "keys": [
+      "Ctrl+End",
+      "Shift+B",
+      "Enter",
+      "Insert+Z"
+    ]
+  },
+  "steps": [
+    {
+      "command": "Down",
+      "id": "s1",
+      "type": "key"
+    },
+    {
+      "command": "Insert+Z",
+      "id": "s2",
+      "type": "key"
+    }
+  ],
+  "target_app": "chrome",
+  "version": "1.0.0"
+}
