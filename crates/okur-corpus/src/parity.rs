@@ -1403,6 +1403,9 @@ struct SnapshotSheetLists {
     /// The active cell's row's (none before 1133).
     #[serde(default)]
     row: Option<SnapshotSheetList>,
+    /// The window's visible cells with data (none before 1133's fourth recording).
+    #[serde(default)]
+    visible: Option<SnapshotSheetList>,
     #[serde(default)]
     worksheets: Option<SnapshotSheetList>,
 }
@@ -1419,7 +1422,7 @@ struct ScreenReads {
     sheet_places: usize,
     sheet_formats: usize,
     /// Excel's lists asked for and answered, by kind.
-    sheet_lists: [usize; 4],
+    sheet_lists: [usize; 5],
     paragraphs: usize,
     links: usize,
     spacings: usize,
@@ -1622,6 +1625,7 @@ impl ScreenReads {
             SheetListKind::Column,
             SheetListKind::Worksheets,
             SheetListKind::Row,
+            SheetListKind::Visible,
         ]) {
             while *answered < count(kind.read_name()) {
                 *answered += 1;
@@ -1632,6 +1636,7 @@ impl ScreenReads {
                         SheetListKind::Column => lists.column.clone(),
                         SheetListKind::Worksheets => lists.worksheets.clone(),
                         SheetListKind::Row => lists.row.clone(),
+                        SheetListKind::Visible => lists.visible.clone(),
                     })
                     .unwrap_or_default();
                 deliver(okur_core::AccessibilityEvent::SheetList {

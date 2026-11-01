@@ -236,6 +236,7 @@ excel-selected-column = Selected entire column
 # worksheets' [hyp: not recorded].
 excel-no-column-cells = No cells with data in current column.
 excel-no-row-cells = No cells with data in current row.
+excel-no-visible-cells = No cells with data.
 excel-no-formulas = No cells with formulas.
 excel-no-worksheets = No worksheets.
 # Say Window Title in Web Layout and Read Mode: JAWS's lower case "reading layout" [obs,

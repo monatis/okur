@@ -638,6 +638,14 @@ impl ListDialog {
             crate::event::SheetListKind::Row => {
                 dialog.title = Some(msg::list_dialog_row(column).render());
             }
+            // The visible cells, the active one's entry selected, "B1: Weekdays | 2 of 12" [obs,
+            // round-1133c's trace]: here the place is the active cell's reference.
+            crate::event::SheetListKind::Visible => {
+                dialog.selected = entries
+                    .iter()
+                    .position(|entry| entry.target == column)
+                    .unwrap_or(0);
+            }
             _ => {}
         }
         dialog
@@ -852,6 +860,7 @@ impl ListDialog {
                     crate::event::SheetListKind::Formulas => msg::list_dialog_cells_with_formulas(),
                     crate::event::SheetListKind::Column => msg::list_dialog_column_cells(),
                     crate::event::SheetListKind::Row => msg::list_dialog_row_cells(),
+                    crate::event::SheetListKind::Visible => msg::list_dialog_cells_with_data(),
                     crate::event::SheetListKind::Worksheets => msg::list_dialog_move_to_worksheet(),
                 },
                 vec![

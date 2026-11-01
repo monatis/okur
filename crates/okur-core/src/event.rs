@@ -154,13 +154,14 @@ pub struct LineStructure {
 }
 
 /// Which of JAWS's lists of a spreadsheet's (Excel's): its cells with formulas (Insert+Shift+F),
-/// the active cell's column's cells with data (Insert+Shift+C), its row's (Insert+Shift+R), or
-/// its worksheets (Ctrl+Shift+S).
+/// the active cell's column's cells with data (Insert+Shift+C), its row's (Insert+Shift+R), the
+/// window's visible cells with data (Ctrl+Shift+D), or its worksheets (Ctrl+Shift+S).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum SheetListKind {
     Formulas,
     Column,
     Row,
+    Visible,
     Worksheets,
 }
 
@@ -171,6 +172,7 @@ impl SheetListKind {
             Self::Formulas => "sheet formulas",
             Self::Column => "sheet column",
             Self::Row => "sheet row",
+            Self::Visible => "sheet visible",
             Self::Worksheets => "worksheets",
         }
     }

@@ -1342,6 +1342,18 @@ impl ScreenReaderEngine {
             {
                 return KeyAction::Consume;
             }
+            // Excel's Ctrl+Shift+D: the window's visible cells with data listed, JAWS's Cells with
+            // Data [obs, round-1133c's trace].
+            if event.key == Key::Alpha('D')
+                && m.ctrl
+                && m.shift
+                && !m.alt
+                && !m.insert
+                && !m.win
+                && self.open_sheet_list(crate::event::SheetListKind::Visible)
+            {
+                return KeyAction::Consume;
+            }
             // Windows+Semicolon in Word's document: Items to Display in Virtual Viewer [obs,
             // 1094/s1]; elsewhere the key is Windows'.
             if event.key == Key::Semicolon
@@ -3303,6 +3315,8 @@ impl ScreenReaderEngine {
                 crate::event::SheetListKind::Column => msg::excel_no_column_cells(),
                 // [hyp: not recorded]
                 crate::event::SheetListKind::Row => msg::excel_no_row_cells(),
+                // [hyp: not recorded]
+                crate::event::SheetListKind::Visible => msg::excel_no_visible_cells(),
                 crate::event::SheetListKind::Worksheets => msg::excel_no_worksheets(),
             }
             .to_string();

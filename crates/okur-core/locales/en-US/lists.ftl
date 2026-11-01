@@ -28,6 +28,9 @@ list-dialog-column-cells = Col
 # dialog"].
 list-dialog-row = Row { $row }
 list-dialog-row-cells = Row
+# The window's visible cells with data, Ctrl+Shift+D, the active cell's selected [obs, round-1133c's
+# trace of JAWS's dialog].
+list-dialog-cells-with-data = Cells with Data
 list-dialog-move-to-worksheet = Move to Worksheet
 # Word's revisions, Insert+Shift+R in a document [hyp: 1107 records JAWS's title].
 list-dialog-revisions = Revisions

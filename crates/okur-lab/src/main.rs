@@ -1360,6 +1360,7 @@ async fn main() {
                         "formulas": sheet_list(okur_core::SheetListKind::Formulas),
                         "column": sheet_list(okur_core::SheetListKind::Column),
                         "row": sheet_list(okur_core::SheetListKind::Row),
+                        "visible": sheet_list(okur_core::SheetListKind::Visible),
                         "worksheets": sheet_list(okur_core::SheetListKind::Worksheets),
                     })
                 });

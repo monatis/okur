@@ -188,6 +188,30 @@ pub fn sheet_list(
                 .map(|name| entry(name.clone(), name))
                 .collect()
         }
+        // The window's visible cells with data, row by row, "B1: Weekdays".
+        okur_core::SheetListKind::Visible => {
+            let visible = object(&property(&window, "VisibleRange")?)?;
+            let (top, left) = (number(&visible, "Row")?, number(&visible, "Column")?);
+            let rows = number(&object(&property(&visible, "Rows")?)?, "Count")?.clamp(0, MAX_CELLS);
+            let columns =
+                number(&object(&property(&visible, "Columns")?)?, "Count")?.clamp(0, MAX_CELLS);
+            let mut found = Vec::new();
+            for r in top..top + rows {
+                for c in left..left + columns {
+                    let Some(cell) = sheet_cell(&sheet, r, c) else {
+                        continue;
+                    };
+                    let shown = text(&cell, "Text").trim().to_owned();
+                    if shown.is_empty() {
+                        continue;
+                    }
+                    if let Some(at) = address(&cell) {
+                        found.push(entry(format!("{at}: {shown}"), at));
+                    }
+                }
+            }
+            found
+        }
         okur_core::SheetListKind::Column
         | okur_core::SheetListKind::Row
         | okur_core::SheetListKind::Formulas => {
@@ -239,10 +263,11 @@ pub fn sheet_list(
         }
     };
     // A row's list is titled by its number, the others by the column's letters.
-    let place = if kind == okur_core::SheetListKind::Row {
-        row.to_string()
-    } else {
-        letters
+    // The visible cells' list selects the active cell's entry, so it carries its reference.
+    let place = match kind {
+        okur_core::SheetListKind::Row => row.to_string(),
+        okur_core::SheetListKind::Visible => address(&cell).unwrap_or_default(),
+        _ => letters,
     };
     Some((place, entries))
 }

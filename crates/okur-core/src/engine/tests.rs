@@ -9253,3 +9253,57 @@ fn excel_the_row_list() {
     });
     assert_eq!(title.as_deref(), Some("Row 1"));
 }
+
+/// Excel's Ctrl+Shift+D lists the window's visible cells with data, "B1: Weekdays", the active
+/// cell's entry selected, "2 of 12" [obs, round-1133c's trace of JAWS's Cells with Data].
+#[test]
+fn excel_the_visible_cells_list() {
+    use crate::ui::{ControlKind, ToUi};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut cell = FocusEvent::new(Role::TableCell)
+        .with_name("B1")
+        .with_window_title("sr-excel-fixture.xlsx - Excel");
+    cell.value = Some("Weekdays".into());
+    cell.app = Some("EXCEL.EXE".into());
+    cell.platform.window_class = Some("EXCEL7".into());
+    engine.handle_focus_event(&cell);
+    let mut key = KeyEvent::new(Key::Alpha('D'), Modifiers::none(), true);
+    key.modifiers.ctrl = true;
+    key.modifiers.shift = true;
+    engine.handle_key_event(&key);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "sheet visible"));
+    let entry = |label: &str, target: &str| crate::event::SheetEntry {
+        label: label.into(),
+        target: target.into(),
+    };
+    engine.handle_accessibility_event(&AccessibilityEvent::SheetList {
+        kind: crate::event::SheetListKind::Visible,
+        column: "B1".into(),
+        entries: vec![
+            entry("A1: Branch", "A1"),
+            entry("B1: Weekdays", "B1"),
+            entry("C1: Weekends", "C1"),
+        ],
+    });
+    let dialog = ui.take().into_iter().find_map(|m| match m {
+        ToUi::DialogShow { dialog } => Some(dialog),
+        _ => None,
+    });
+    assert_eq!(
+        dialog.as_ref().map(|d| d.title.as_str()),
+        Some("Cells with Data")
+    );
+    assert!(dialog.is_some_and(|d| d
+        .controls
+        .iter()
+        .any(|c| matches!(&c.kind, ControlKind::List { selected: 1, .. }))));
+}
