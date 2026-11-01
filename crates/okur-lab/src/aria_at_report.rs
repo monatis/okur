@@ -49,7 +49,11 @@ pub fn claim(phrase: &str) -> Option<Claim> {
     let (value, outside) = quoted_value(&lower)?;
     let negated = lower.starts_with("not convey") || lower.contains(" not conveyed");
     let has = |word: &str| outside.contains(word);
-    let kind = if has("heading level") {
+    // "Position screen reader cursor at heading 'Add Delivery Address'": the cursor's line
+    // says it, not a place.
+    let kind = if has("cursor at") || has("readingcursor") {
+        Kind::Name
+    } else if has("heading level") {
         Kind::HeadingLevel
     } else if has("role") {
         Kind::Role
@@ -97,6 +101,8 @@ fn quoted_value(phrase: &str) -> Option<(String, String)> {
             return Some((value, phrase.get(..open)?.to_owned()));
         }
     }
+    // "Number of list items, 4, is conveyed": the value before the closing words.
+    let phrase = phrase.strip_suffix(", is conveyed").unwrap_or(phrase);
     let comma = phrase.rfind(',')?;
     let value = phrase.get(comma + 1..)?;
     let outside = phrase.get(..comma)?.to_owned();
@@ -141,16 +147,17 @@ fn role_words(role: &str) -> Vec<&'static str> {
         "grid" => vec!["grid", "table"],
         "spin button" => vec!["spin button", "spin box"],
         "slider" => vec!["slider"],
-        "banner" => vec!["banner"],
+        // A landmark entered by a focus is "BannerRegion", one word.
+        "banner" => vec!["banner", "bannerregion"],
         "image" => vec!["graphic", "image"],
-        "navigation" => vec!["navigation"],
+        "navigation" => vec!["navigation", "navigationregion"],
         "list" => vec!["list"],
         "combobox" => vec!["combo box", "edit combo"],
         "listbox" => vec!["list box"],
-        "complementary" => vec!["complementary"],
-        "contentinfo" => vec!["content info", "contentinfo"],
-        "form" => vec!["form"],
-        "main" => vec!["main"],
+        "complementary" => vec!["complementary", "complementaryregion"],
+        "contentinfo" => vec!["content info", "contentinfo", "contentinforegion"],
+        "form" => vec!["form", "formregion"],
+        "main" => vec!["main", "mainregion"],
         "meter" => vec!["meter"],
         _ => Vec::new(),
     }
@@ -539,6 +546,18 @@ mod tests {
         assert_eq!(
             c("convey state of the radio button, 'checked'"),
             Some((Kind::State, "checked".to_owned(), false))
+        );
+        assert_eq!(
+            c("Number of list items, 4, is conveyed"),
+            Some((Kind::Count, "4".to_owned(), false))
+        );
+        assert_eq!(
+            c(
+                "position screen reader cursor at heading 'Address Added'|position the \
+               {readingCursor} at heading 'Address Added'"
+            )
+            .map(|(kind, _, _)| kind),
+            Some(Kind::Name)
         );
         assert_eq!(
             c("Name of the combobox ('State') is conveyed"),
