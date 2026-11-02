@@ -1,0 +1,17 @@
+{
+  "id": "3154-web-table-click-handlers",
+  "name": "Tables and click handlers: T and the table keys in a table under a document-wide click listener (as GitHub's), then in one with a listener of its own",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/table-click-handlers.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "T" },
+    { "id": "s2", "type": "key", "command": "Ctrl+Alt+Down" },
+    { "id": "s3", "type": "key", "command": "Ctrl+Alt+Right" },
+    { "id": "s4", "type": "key", "command": "T" },
+    { "id": "s5", "type": "key", "command": "Ctrl+Alt+Down" },
+    { "id": "s6", "type": "key", "command": "Ctrl+Alt+Right" }
+  ]
+}

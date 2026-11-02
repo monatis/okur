@@ -1,0 +1,1622 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Branch Tables - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.76",
+    "fixture_sha256": "c981e3e7d9cce53b8fd1909dd9b278ef9676ab85c48b23ca53ca7fe7b3a788c7",
+    "captured_at_unix_ms": 1793614829214,
+    "node_count": 43,
+    "capture_ms": 401
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Branch Tables",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/table-click-handlers.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "unique_id": -7468,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼￼￼￼￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        7
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "24pt",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "start": 1,
+        "end": 2,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      },
+      {
+        "start": 2,
+        "end": 3,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "18pt",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "start": 3,
+        "end": 4,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      },
+      {
+        "start": 4,
+        "end": 5,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "18pt",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "start": 5,
+        "end": 7,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1044,
+        "name": "Branch tables",
+        "default_action": "click ancestor",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -7501,
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "group_position": [
+          1,
+          0,
+          0
+        ],
+        "text": "Branch tables",
+        "lines": [
+          [
+            0,
+            13
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 13,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Branch tables",
+            "default_action": "click ancestor",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -7502,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Branch tables",
+            "lines": [
+              [
+                0,
+                13
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 13,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "default_action": "click ancestor",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -7507,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Two plain tables. The page answers clicks anywhere, as many sites do; the second table also answers clicks itself.",
+        "lines": [
+          [
+            0,
+            114
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 114,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Two plain tables. The page answers clicks anywhere, as many sites do; the second table also answers clicks itself.",
+            "default_action": "click ancestor",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -7509,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Two plain tables. The page answers clicks anywhere, as many sites do; the second table also answers clicks itself.",
+            "lines": [
+              [
+                0,
+                114
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 114,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1044,
+        "name": "Branch hours",
+        "default_action": "click ancestor",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -7513,
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "group_position": [
+          2,
+          0,
+          0
+        ],
+        "text": "Branch hours",
+        "lines": [
+          [
+            0,
+            12
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 12,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "18pt",
+              "font-weight": "bold"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Branch hours",
+            "default_action": "click ancestor",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -7518,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Branch hours",
+            "lines": [
+              [
+                0,
+                12
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 12,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "18pt",
+                  "font-weight": "bold"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 24,
+        "ia2_role": 24,
+        "default_action": "click ancestor",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -7523,
+        "attributes": {
+          "display": "table",
+          "tag": "table",
+          "text-align": "left"
+        },
+        "text": "￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 3,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 28,
+            "ia2_role": 28,
+            "default_action": "click ancestor",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -7466,
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 25,
+                "ia2_role": 25,
+                "name": "Branch",
+                "default_action": "click ancestor",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -7469,
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "0",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "text": "Branch",
+                "lines": [
+                  [
+                    0,
+                    6
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 6,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Branch",
+                    "default_action": "click ancestor",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -7516,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Branch",
+                    "lines": [
+                      [
+                        0,
+                        6
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 6,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 25,
+                "ia2_role": 25,
+                "name": "Opens",
+                "default_action": "click ancestor",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -7476,
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "1",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "text": "Opens",
+                "lines": [
+                  [
+                    0,
+                    5
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 5,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Opens",
+                    "default_action": "click ancestor",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -7527,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Opens",
+                    "lines": [
+                      [
+                        0,
+                        5
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 5,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 28,
+            "ia2_role": 28,
+            "default_action": "click ancestor",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -7484,
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 29,
+                "ia2_role": 29,
+                "name": "Central",
+                "default_action": "click ancestor",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -7508,
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "2",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "text": "Central",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Central",
+                    "default_action": "click ancestor",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -7475,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Central",
+                    "lines": [
+                      [
+                        0,
+                        7
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 7,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 29,
+                "ia2_role": 29,
+                "name": "9 am",
+                "default_action": "click ancestor",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -7504,
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "3",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "text": "9 am",
+                "lines": [
+                  [
+                    0,
+                    4
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 4,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "9 am",
+                    "default_action": "click ancestor",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -7467,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "9 am",
+                    "lines": [
+                      [
+                        0,
+                        4
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 4,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 28,
+            "ia2_role": 28,
+            "default_action": "click ancestor",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -7500,
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 29,
+                "ia2_role": 29,
+                "name": "Riverside",
+                "default_action": "click ancestor",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -7493,
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "4",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "text": "Riverside",
+                "lines": [
+                  [
+                    0,
+                    9
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 9,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Riverside",
+                    "default_action": "click ancestor",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -7480,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Riverside",
+                    "lines": [
+                      [
+                        0,
+                        9
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 9,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 29,
+                "ia2_role": 29,
+                "name": "10 am",
+                "default_action": "click ancestor",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -7489,
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "5",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "text": "10 am",
+                "lines": [
+                  [
+                    0,
+                    5
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 5,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "10 am",
+                    "default_action": "click ancestor",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -7487,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "10 am",
+                    "lines": [
+                      [
+                        0,
+                        5
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 5,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1044,
+        "name": "Book returns",
+        "default_action": "click ancestor",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -7481,
+        "attributes": {
+          "display": "block",
+          "level": "2",
+          "name-from": "contents",
+          "tag": "h2",
+          "text-align": "left"
+        },
+        "group_position": [
+          2,
+          0,
+          0
+        ],
+        "text": "Book returns",
+        "lines": [
+          [
+            0,
+            12
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 12,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "18pt",
+              "font-weight": "bold"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Book returns",
+            "default_action": "click ancestor",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -7485,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Book returns",
+            "lines": [
+              [
+                0,
+                12
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 12,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "18pt",
+                  "font-weight": "bold"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 24,
+        "ia2_role": 24,
+        "default_action": "click",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -7474,
+        "attributes": {
+          "display": "table",
+          "id": "returns",
+          "tag": "table",
+          "text-align": "left"
+        },
+        "text": "￼￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 3,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 28,
+            "ia2_role": 28,
+            "default_action": "click ancestor",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -7526,
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt",
+                  "font-weight": "bold"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 25,
+                "ia2_role": 25,
+                "name": "Book",
+                "default_action": "click ancestor",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -7524,
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "0",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "text": "Book",
+                "lines": [
+                  [
+                    0,
+                    4
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 4,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Book",
+                    "default_action": "click ancestor",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -7492,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Book",
+                    "lines": [
+                      [
+                        0,
+                        4
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 4,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 25,
+                "ia2_role": 25,
+                "name": "Due",
+                "default_action": "click ancestor",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -7514,
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "1",
+                  "tag": "th",
+                  "text-align": "center"
+                },
+                "text": "Due",
+                "lines": [
+                  [
+                    0,
+                    3
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 3,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt",
+                      "font-weight": "bold"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Due",
+                    "default_action": "click ancestor",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -7503,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Due",
+                    "lines": [
+                      [
+                        0,
+                        3
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 3,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt",
+                          "font-weight": "bold"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 28,
+            "ia2_role": 28,
+            "default_action": "click ancestor",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -7510,
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 29,
+                "ia2_role": 29,
+                "name": "Atlas",
+                "default_action": "click ancestor",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -7512,
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "2",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "text": "Atlas",
+                "lines": [
+                  [
+                    0,
+                    5
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 5,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Atlas",
+                    "default_action": "click ancestor",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -7505,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Atlas",
+                    "lines": [
+                      [
+                        0,
+                        5
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 5,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 29,
+                "ia2_role": 29,
+                "name": "Monday",
+                "default_action": "click ancestor",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -7498,
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "3",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "text": "Monday",
+                "lines": [
+                  [
+                    0,
+                    6
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 6,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Monday",
+                    "default_action": "click ancestor",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -7506,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Monday",
+                    "lines": [
+                      [
+                        0,
+                        6
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 6,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 28,
+            "ia2_role": 28,
+            "default_action": "click ancestor",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -7495,
+            "attributes": {
+              "display": "table-row",
+              "tag": "tr",
+              "text-align": "left"
+            },
+            "text": "￼￼",
+            "lines": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 2,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "children": [
+              {
+                "msaa_role": 29,
+                "ia2_role": 29,
+                "name": "Poems",
+                "default_action": "click ancestor",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -7494,
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "4",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "text": "Poems",
+                "lines": [
+                  [
+                    0,
+                    5
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 5,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Poems",
+                    "default_action": "click ancestor",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -7520,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Poems",
+                    "lines": [
+                      [
+                        0,
+                        5
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 5,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "msaa_role": 29,
+                "ia2_role": 29,
+                "name": "Friday",
+                "default_action": "click ancestor",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -7482,
+                "attributes": {
+                  "display": "table-cell",
+                  "name-from": "contents",
+                  "table-cell-index": "5",
+                  "tag": "td",
+                  "text-align": "left"
+                },
+                "text": "Friday",
+                "lines": [
+                  [
+                    0,
+                    6
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 6,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "msaa_role": 41,
+                    "ia2_role": 41,
+                    "name": "Friday",
+                    "default_action": "click ancestor",
+                    "msaa_states": 0,
+                    "ia2_states": 1024,
+                    "unique_id": -7521,
+                    "attributes": {
+                      "name-from": "contents"
+                    },
+                    "text": "Friday",
+                    "lines": [
+                      [
+                        0,
+                        6
+                      ]
+                    ],
+                    "text_runs": [
+                      {
+                        "start": 0,
+                        "end": 6,
+                        "attributes": {
+                          "background-color": "rgb(255,255,255)",
+                          "color": "rgb(0,0,0)",
+                          "font-family": "Times New Roman",
+                          "font-size": "12pt"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "default_action": "click ancestor",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -7477,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "End of tables.",
+        "lines": [
+          [
+            0,
+            14
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 14,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "End of tables.",
+            "default_action": "click ancestor",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -7528,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "End of tables.",
+            "lines": [
+              [
+                0,
+                14
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 14,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

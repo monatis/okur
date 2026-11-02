@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 11377,
-  "total_steps": 11949,
+  "matched_steps": 11380,
+  "total_steps": 11955,
   "accepted_divergences": 365,
   "errors": [],
   "steps": {
@@ -5156,6 +5156,12 @@
     "3153-aria-slider-multithumb-t22-up-tab-pc/s1": "match",
     "3153-aria-slider-multithumb-t22-up-tab-pc/s2": "match",
     "3153-aria-slider-multithumb-t22-up-tab-pc/s3": "match",
+    "3154-web-table-click-handlers/s1": "mismatch",
+    "3154-web-table-click-handlers/s2": "mismatch",
+    "3154-web-table-click-handlers/s3": "mismatch",
+    "3154-web-table-click-handlers/s4": "match",
+    "3154-web-table-click-handlers/s5": "match",
+    "3154-web-table-click-handlers/s6": "match",
     "316-desktop-show-desktop/s1": "match",
     "316-desktop-show-desktop/s2": "match",
     "316-desktop-show-desktop/s3": "match",

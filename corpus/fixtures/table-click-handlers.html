@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Branch Tables</title>
+</head>
+<body>
+  <h1>Branch tables</h1>
+  <p>Two plain tables. The page answers clicks anywhere, as many sites do; the second table
+  also answers clicks itself.</p>
+  <h2>Branch hours</h2>
+  <table border="1">
+    <tr><th>Branch</th><th>Opens</th></tr>
+    <tr><td>Central</td><td>9 am</td></tr>
+    <tr><td>Riverside</td><td>10 am</td></tr>
+  </table>
+  <h2>Book returns</h2>
+  <table border="1" id="returns">
+    <tr><th>Book</th><th>Due</th></tr>
+    <tr><td>Atlas</td><td>Monday</td></tr>
+    <tr><td>Poems</td><td>Friday</td></tr>
+  </table>
+  <p>End of tables.</p>
+  <script>
+    // A listener on the document, as GitHub's delegated events: every element is in Chromium's
+    // "click ancestor" state.
+    document.addEventListener('click', function () {});
+    // A listener on the second table itself: its cells' click ancestor is the table.
+    document.getElementById('returns').addEventListener('click', function () {});
+  </script>
+</body>
+</html>

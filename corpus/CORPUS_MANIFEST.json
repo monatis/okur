@@ -2245,6 +2245,10 @@
       "sha256": "dd74a3e0285db898ce8a785a5da59a730a7a0e95bc6e1396d2e21e0c91d9948d",
       "size_bytes": 1314
     },
+    "table-click-handlers.html": {
+      "sha256": "c981e3e7d9cce53b8fd1909dd9b278ef9676ab85c48b23ca53ca7fe7b3a788c7",
+      "size_bytes": 1058
+    },
     "tables-navigation.html": {
       "sha256": "685ca0b777b5b0184d58c505d3161eb348ec6356d7f5b27ad25eddaccdc03c86",
       "size_bytes": 887
@@ -22416,6 +22420,20 @@
       }
     },
     {
+      "scenario_id": "3154-web-table-click-handlers",
+      "fixture": "table-click-handlers.html",
+      "evidence": {
+        "sha256": "d780e8ae9b3fb9bfb6abfb9bae6539481f7abef6baee883ecbd117c48696006e",
+        "capture_script_sha256": "41e350f3ce9858c307e7fa922cdab691acf373303e36b8a0c5727d6ab5f0d620",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "316-desktop-show-desktop",
       "fixture": "desktop-editor.ps1",
       "evidence": {
@@ -29067,10 +29085,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1913,
-    "scenarios_with_evidence": 1913,
-    "total_trials": 5745,
-    "successful_trials": 5728,
+    "scenarios": 1914,
+    "scenarios_with_evidence": 1914,
+    "total_trials": 5748,
+    "successful_trials": 5731,
     "deterministic_scenarios": 1596
   }
 }
