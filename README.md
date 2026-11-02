@@ -6,7 +6,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Rust 1.99.0](https://img.shields.io/badge/rust-1.99.0-orange.svg?logo=rust)](rust-toolchain.toml)
 [![Platforms: Windows; macOS in progress](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%28in%20progress%29-lightgrey.svg)](#platforms)
-[![JAWS parity: 11377 of 11949 recorded steps](https://img.shields.io/badge/JAWS%20parity-11377%2F11949%20steps-brightgreen.svg)](#where-it-stands)
+[![JAWS parity: 11,377 of 11,949 recorded steps](https://img.shields.io/badge/JAWS%20parity-11%2C377%2F11%2C949%20steps-brightgreen.svg)](#where-it-stands)
 [![Privacy: no data collected](https://img.shields.io/badge/privacy-no%20data%20collected-brightgreen.svg)](PRIVACY.md)
 
 **An open screen reader that keeps your JAWS muscle memory.**
@@ -53,7 +53,7 @@ Where to go from here:
 > macOS comes after it.
 
 - **Parity with JAWS, measured.** Every behavior is recorded from JAWS on a lab machine and
-  replayed through Okur step by step: 11377 of 11949 recorded steps match JAWS's speech word
+  replayed through Okur step by step: 11,377 of 11,949 recorded steps match JAWS's speech word
   for word.
 - **Beyond JAWS on the web.** W3C's [ARIA-AT](https://aria-at.w3.org/) test plans say what a
   screen reader must convey for each ARIA pattern. Where JAWS falls short of a plan, Okur
@@ -74,12 +74,12 @@ Every figure is tool output, rerun for this README at commit `6996c926` (2026-11
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **11377 of 11949** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **11119 of 12015** | `okur-lab parity` |
+| Steps matching JAWS's speech history, word for word | **11,377 of 11,949** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **11,119 of 12,015** | `okur-lab parity` |
 | Steps left out on purpose (accepted divergences, each a written decision) | **365** | `okur-lab parity` |
-| ARIA-AT's required (MUST) assertions conveyed, in 39 test plans | **Okur 2934 of 3110**, JAWS 2858 | `okur-lab aria-at-report` |
-| Recorded JAWS scenarios, trials | **1913, 5745** (5728 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1608 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
+| ARIA-AT's required (MUST) assertions conveyed, in 39 test plans | **Okur 2,934 of 3,110**, JAWS 2,858 | `okur-lab aria-at-report` |
+| Recorded JAWS scenarios and trials | **1,913 scenarios, 5,745 trials** (5,728 succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1,608 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 

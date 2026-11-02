@@ -593,6 +593,12 @@ mod tests {
         );
         assert_eq!(most("1,000,000 $1,250.50"), "1,000,000 dollar 1,250.50");
         assert_eq!(spoken_symbols("$1,250.50"), "dollar 1,250.50");
+        // Five digits are read one by one; with a thousands separator the number stays whole
+        // for the synthesizer to say in words (README's figures, 2026-11-02).
+        assert_eq!(
+            most("11377 of 11,949, JAWS 2,858"),
+            "1 1 3 7 7 of 11,949, JAWS 2,858"
+        );
     }
 
     #[test]
