@@ -121,10 +121,38 @@ impl SettingsFolder {
         if let Some(folder) = path.parent() {
             std::fs::create_dir_all(folder)?;
         }
-        let temporary = path.with_extension("toml.tmp");
-        std::fs::write(&temporary, text)?;
-        std::fs::rename(&temporary, path)
+        write_whole(path, &text)
     }
+}
+
+/// Writes `text` as the file at `path` through a temporary file, on the disk before it takes
+/// the file's name: renamed with its data still in the cache, a power cut could leave the new
+/// name on a file that does not parse, which the next save then replaced (performance review
+/// 2026-11-02, speech finding 7).
+fn write_whole(path: &Path, text: &str) -> std::io::Result<()> {
+    use std::io::Write;
+    let temporary = path.with_extension("toml.tmp");
+    {
+        let mut file = std::fs::File::create(&temporary)?;
+        file.write_all(text.as_bytes())?;
+        file.sync_all()?;
+    }
+    std::fs::rename(&temporary, path)
+}
+
+/// Moves a file that does not parse aside, beside it with `.unreadable` and the time in its
+/// name, so that the next save does not write over what it holds: one hand-edit's typo, then
+/// one PlaceMarker added, and every PlaceMarker saved was gone. The name is returned.
+fn set_aside(path: &Path) -> Option<PathBuf> {
+    let seconds = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_secs())
+        .unwrap_or_default();
+    let mut name = path.file_name()?.to_os_string();
+    name.push(format!(".unreadable-{seconds}"));
+    let aside = path.with_file_name(name);
+    std::fs::rename(path, &aside).ok()?;
+    Some(aside)
 }
 
 impl SettingsStore for SettingsFolder {
@@ -302,15 +330,18 @@ impl SettingsFolder {
         self.load_own(LAST_CHANGED)
     }
 
-    /// One of the files Okur writes itself; none when missing or unreadable (logged).
+    /// One of the files Okur writes itself; none when missing or unreadable. One that does not
+    /// parse is set aside, logged, and kept ([`set_aside`]).
     fn load_own<T: serde::de::DeserializeOwned + Default>(&self, name: &str) -> T {
         let path = self.folder.join(name);
         let Ok(text) = std::fs::read_to_string(&path) else {
             return T::default();
         };
-        toml::from_str(&text)
-            .map_err(|e| tracing::warn!(?path, error = %e, "file not read"))
-            .unwrap_or_default()
+        toml::from_str(&text).unwrap_or_else(|e| {
+            let aside = set_aside(&path);
+            tracing::warn!(?path, ?aside, error = %e, "file not read; set aside");
+            T::default()
+        })
     }
 
     /// Writes one of Okur's own files whole, through a temporary one: they are Okur's to
@@ -319,10 +350,7 @@ impl SettingsFolder {
         let write = || -> std::io::Result<()> {
             let text = toml::to_string(value).map_err(std::io::Error::other)?;
             std::fs::create_dir_all(&self.folder)?;
-            let path = self.folder.join(name);
-            let temporary = path.with_extension("toml.tmp");
-            std::fs::write(&temporary, format!("# {header}\n{text}"))?;
-            std::fs::rename(&temporary, path)
+            write_whole(&self.folder.join(name), &format!("# {header}\n{text}"))
         };
         if let Err(e) = write() {
             tracing::warn!(folder = ?self.folder, file = name, error = %e, "not saved");
@@ -556,6 +584,44 @@ mod tests {
             std::env::temp_dir().join(format!("okur-settings-{name}-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&folder);
         folder
+    }
+
+    /// One of Okur's own files that does not parse is set aside as it is read, and the next
+    /// save writes a new one beside it.
+    #[test]
+    fn an_unreadable_own_file_is_kept_aside() {
+        let root = folder("unreadable");
+        let files = SettingsFolder::at(&root);
+        assert!(std::fs::create_dir_all(&root).is_ok());
+        let labels = root.join(LABELS);
+        assert!(std::fs::write(&labels, "[sites\nbroken = ").is_ok());
+        assert_eq!(
+            files.load_labels(),
+            okur_core::labels::CustomLabels::default()
+        );
+        okur_core::labels::LabelStore::save(&files, &okur_core::labels::CustomLabels::default());
+        let entries: Vec<String> = std::fs::read_dir(&root)
+            .map(|dir| {
+                dir.flatten()
+                    .map(|e| e.file_name().to_string_lossy().into_owned())
+                    .collect()
+            })
+            .unwrap_or_default();
+        let aside: Vec<&String> = entries
+            .iter()
+            .filter(|name| name.starts_with("labels.toml.unreadable-"))
+            .collect();
+        assert_eq!(aside.len(), 1, "{entries:?}");
+        let kept = aside
+            .first()
+            .map(|name| std::fs::read_to_string(root.join(name)).unwrap_or_default());
+        assert_eq!(kept.as_deref(), Some("[sites\nbroken = "));
+        assert!(entries.contains(&LABELS.to_owned()), "{entries:?}");
+        assert!(
+            !entries.iter().any(|name| name.ends_with(".tmp")),
+            "{entries:?}"
+        );
+        let _ = std::fs::remove_dir_all(&root);
     }
 
     /// The settings handed to the background store are in the files once it is flushed, the

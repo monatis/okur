@@ -307,6 +307,39 @@ pub fn message_box(title: &str, text: &str) {
     }
 }
 
+/// Whether Windows started this process from its package's startup task (Okur from the Store,
+/// at sign-in), which names no argument (`packaging/msix/AppxManifest.xml.in`): taken for the
+/// user's own start, it replaced a copy running, and ignored both Shift keys and the Startup
+/// Wizard's Never (performance review 2026-11-02, speech finding 2). False outside a package.
+pub fn started_by_startup_task() -> bool {
+    #[cfg(windows)]
+    {
+        use windows::ApplicationModel::Activation::ActivationKind;
+        windows::ApplicationModel::AppInstance::GetActivatedEventArgs()
+            .and_then(|args| args.Kind())
+            .is_ok_and(|kind| kind == ActivationKind::StartupTask)
+    }
+    #[cfg(not(windows))]
+    {
+        false
+    }
+}
+
+/// Asks Windows to start this program again, with no argument, after a crash or a hang ended
+/// it or an installer closed it for an update (Restart Manager), not after Windows restarts,
+/// where the sign-in start brings it: a screen reader gone silently leaves its user with
+/// nothing. Windows restarts after a crash only a program that ran for a minute.
+pub fn restart_when_ended() {
+    #[cfg(windows)]
+    {
+        use windows::Win32::System::Recovery::{RegisterApplicationRestart, RESTART_NO_REBOOT};
+        // SAFETY: a plain call; no command line is passed.
+        if let Err(e) = unsafe { RegisterApplicationRestart(None, RESTART_NO_REBOOT) } {
+            tracing::warn!(error = %e, "no restart registered");
+        }
+    }
+}
+
 /// Attaches a program without a console of its own (`okur-sr.exe`) to the console of the
 /// program that started it, so that what it prints is seen there; false when there is none.
 pub fn attach_parent_console() -> bool {
@@ -458,6 +491,12 @@ mod windows_impl {
             WM_QUERYENDSESSION => LRESULT(1),
             WM_ENDSESSION => {
                 if wparam.0 != 0 {
+                    // An installer's Restart Manager closing Okur for an update; Windows
+                    // starts it again after ([`super::restart_when_ended`]).
+                    const ENDSESSION_CLOSEAPP: isize = 0x1;
+                    if lparam.0 & ENDSESSION_CLOSEAPP != 0 {
+                        tracing::warn!("closed for an update: Okur stops, to be started again");
+                    }
                     tracing::info!("the session is ending: Okur stops");
                     if let Ok(on_end) = ON_END.lock() {
                         if let Some(on_end) = on_end.as_ref() {

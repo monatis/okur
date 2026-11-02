@@ -62,6 +62,8 @@ windows = { version = "0.62", features = [
     "Storage_Streams",
     "Foundation_Collections",
     "ApplicationModel",
+    "ApplicationModel_Activation",
+    "Win32_System_Recovery",
     "UI_Notifications",
     "UI_Notifications_Management",
 ] }

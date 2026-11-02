@@ -65,6 +65,16 @@ pub fn parse<I: IntoIterator<Item = String>>(args: I) -> Result<Action, String> 
     })
 }
 
+/// How Okur was started: as its arguments say, but at sign-in where Windows started the
+/// package's startup task, which passes none.
+fn start_kind(parsed: StartKind, by_startup_task: bool) -> StartKind {
+    if parsed == StartKind::Manual && by_startup_task {
+        StartKind::SignIn
+    } else {
+        parsed
+    }
+}
+
 /// `okur-sr.exe`'s whole program; its exit code.
 pub async fn main() -> i32 {
     let action = match parse(std::env::args().skip(1)) {
@@ -115,8 +125,10 @@ pub async fn main() -> i32 {
             }
         }
         Action::Run { start, debug_log } => {
-            crate::run::init_logging(debug_log.as_deref());
+            crate::run::init_logging(debug_log.as_deref(), true);
             okur_platform::init();
+            let start = start_kind(start, okur_platform::process::started_by_startup_task());
+            okur_platform::process::restart_when_ended();
             crate::run::run(RunConfig {
                 options: RunOptions::default(),
                 fixture: None,
@@ -174,6 +186,18 @@ mod tests {
                 debug_log: Some("C:\\okur.log".into())
             })
         );
+    }
+
+    /// The Store package's startup task names no argument: its start is the sign-in's.
+    #[test]
+    fn the_startup_task_is_a_sign_in_start() {
+        assert_eq!(start_kind(StartKind::Manual, true), StartKind::SignIn);
+        assert_eq!(start_kind(StartKind::Manual, false), StartKind::Manual);
+        assert_eq!(
+            start_kind(StartKind::EaseOfAccess, true),
+            StartKind::EaseOfAccess
+        );
+        assert!(!okur_platform::process::started_by_startup_task());
     }
 
     #[test]

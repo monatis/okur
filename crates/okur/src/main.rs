@@ -107,7 +107,7 @@ fn init_logging(cli: &Cli) {
         Some(Commands::Run { debug_log, .. }) => debug_log.as_deref(),
         _ => None,
     };
-    okur::run::init_logging(debug_log);
+    okur::run::init_logging(debug_log, false);
 }
 
 #[tokio::main]
