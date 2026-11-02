@@ -224,6 +224,51 @@ fn splice_off_engine(
 /// and the key went to the application (responsiveness review, 2026-10-19).
 static KEYS_WAITING: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
 
+/// The keys acting as the Okur key, as the engine's keyboard settings last said ([`okur_keys`]):
+/// the hook decides by them alone when the engine is busy.
+static OKUR_KEYS: std::sync::atomic::AtomicU8 = std::sync::atomic::AtomicU8::new(OKUR_INSERT);
+const OKUR_INSERT: u8 = 1;
+const OKUR_CAPS_LOCK: u8 = 2;
+const OKUR_SCROLL_LOCK: u8 = 4;
+
+/// Which keys act as the Okur key under `keyboard`, as [`OKUR_KEYS`] keeps them.
+fn okur_keys(keyboard: &okur_core::settings::KeyboardSettings) -> u8 {
+    use okur_core::input::Key;
+    [
+        (Key::Insert, OKUR_INSERT),
+        (Key::CapsLock, OKUR_CAPS_LOCK),
+        (Key::ScrollLock, OKUR_SCROLL_LOCK),
+    ]
+    .into_iter()
+    .filter(|(key, _)| keyboard.is_okur_key(*key))
+    .fold(0, |keys, (_, bit)| keys | bit)
+}
+
+/// What becomes of a key the engine was too busy to take: the Okur key and every chord with it
+/// are Okur's, never the application's, as the engine has them (Insert reaching Word toggled
+/// its overtype, Insert+T typed "t"; performance review 2026-11-02, live path finding 5);
+/// any other key goes on to the application.
+fn busy_key_action(event: &okur_core::input::KeyEvent, okur: u8) -> KeyAction {
+    use okur_core::input::Key;
+    let held = |bit: u8, down: bool| down && okur & bit != 0;
+    let okur_key = match event.key {
+        Key::Insert => okur & OKUR_INSERT != 0,
+        Key::CapsLock => okur & OKUR_CAPS_LOCK != 0,
+        Key::ScrollLock => okur & OKUR_SCROLL_LOCK != 0,
+        _ => false,
+    };
+    let m = &event.modifiers;
+    if okur_key
+        || held(OKUR_INSERT, m.insert)
+        || held(OKUR_CAPS_LOCK, m.caps_lock)
+        || held(OKUR_SCROLL_LOCK, m.scroll_lock)
+    {
+        KeyAction::Consume
+    } else {
+        KeyAction::PassThrough
+    }
+}
+
 /// Takes `engine` for a key that arrived at `arrived`: at once, or as soon as the event loop
 /// gives way, within 150 ms; `None` after that, and the key goes to the application.
 fn take_for_key<T>(
@@ -537,9 +582,7 @@ pub async fn run(config: RunConfig) {
     );
     let engine_type = TtsEngineType::from(settings.voice.synthesizer);
 
-    let mut tts = TtsManager::new(engine_type).unwrap_or_else(|e| {
-        fail(console, &format!("Failed to initialize TTS engine: {e}"));
-    });
+    let mut tts = TtsManager::starting(engine_type);
     if let Some(ref path) = speech_log {
         match SpeechLog::open(path) {
             Ok(log) => tts = tts.with_speech_log(log),
@@ -721,17 +764,24 @@ pub async fn run(config: RunConfig) {
     if let Err(e) = hook.start(Box::new(move |event| {
         // Windows silently removes a low-level keyboard hook that once exceeds
         // LowLevelHooksTimeout, so the hook never waits long for the engine: a key
-        // that finds it busy for 150 ms passes to the application.
+        // that finds it busy for 150 ms passes to the application, unless it is Okur's.
         let arrived = std::time::Instant::now();
         let guard = take_for_key(&engine_cb, arrived);
-        if guard.is_none() {
-            tracing::warn!(key = ?event.key, "engine busy: key passed through");
-        }
-        if let Some(mut eng) = guard {
+        let Some(mut eng) = guard else {
+            let action =
+                busy_key_action(&event, OKUR_KEYS.load(std::sync::atomic::Ordering::Relaxed));
+            tracing::warn!(key = ?event.key, ?action, "engine busy: key not handled");
+            return action;
+        };
+        {
             let waited = arrived.elapsed();
             let started = std::time::Instant::now();
             let action = unless_it_panics("key", || eng.handle_key_event(&event))
                 .unwrap_or(KeyAction::PassThrough);
+            OKUR_KEYS.store(
+                okur_keys(&eng.settings.keyboard),
+                std::sync::atomic::Ordering::Relaxed,
+            );
             let held = started.elapsed();
             if waited > SLOW_ENGINE || held > SLOW_ENGINE {
                 tracing::warn!(
@@ -758,8 +808,6 @@ pub async fn run(config: RunConfig) {
                 );
             }
             action
-        } else {
-            KeyAction::PassThrough
         }
     })) {
         fail(console, &format!("Failed to install keyboard hook: {e}"));
@@ -798,34 +846,35 @@ pub async fn run(config: RunConfig) {
             // generation: installed unless another change came meanwhile.
             let (rebuilt_tx, mut rebuilt_rx) =
                 tokio::sync::mpsc::unbounded_channel::<(u64, VirtualBuffer)>();
+            // Every engine call in this loop runs in `unless_it_panics`: a panic unwinding
+            // out of it would end the task, and Okur would hear no event again, keys still
+            // working (performance review 2026-11-02, live path finding 6).
             loop {
                 let received = tokio::select! {
                     biased;
                     Some(mark) = marks_rx.recv() => {
                         give_way_to_keys();
-                        {
-                            let mut eng = lock_engine(&engine_events);
-                            eng.speech_reached(mark);
-                        }
+                        let mut eng = lock_engine(&engine_events);
+                        unless_it_panics("speech mark", || eng.speech_reached(mark));
                         continue;
                     }
                     Some((number, title, buffer)) = built_rx.recv() => {
                         if number > refresh_applied {
                             refresh_applied = number;
                             give_way_to_keys();
-                            {
-                                let mut eng = lock_engine(&engine_events);
+                            let mut eng = lock_engine(&engine_events);
+                            unless_it_panics("page refreshed", || {
                                 eng.handle_page_refreshed(&title, buffer);
-                            }
+                            });
                         }
                         continue;
                     }
                     Some((generation, buffer)) = rebuilt_rx.recv() => {
                         give_way_to_keys();
-                        {
-                            let mut eng = lock_engine(&engine_events);
+                        let mut eng = lock_engine(&engine_events);
+                        unless_it_panics("page rebuilt", || {
                             eng.install_page_build(generation, buffer);
-                        }
+                        });
                         continue;
                     }
                     // Installed if the page is still the one they were spliced into;
@@ -833,10 +882,11 @@ pub async fn run(config: RunConfig) {
                     Some(BuiltParts { base, buffer, parts, attempt }) = parts_rx.recv() => {
                         give_way_to_keys();
                         let mut eng = lock_engine(&engine_events);
-                        let taken = match buffer {
+                        let taken = unless_it_panics("page parts", || match buffer {
                             Some(buffer) => eng.install_page_parts(&base, buffer),
                             None => eng.page_parts_not_found(&base),
-                        };
+                        })
+                        .unwrap_or(true);
                         if taken {
                             continue;
                         }
@@ -844,12 +894,14 @@ pub async fn run(config: RunConfig) {
                         // the engine again (performance review P3 step 3); after a few
                         // tries, under it.
                         if attempt >= PARTS_ATTEMPTS {
-                            let _ = eng.handle_accessibility_event(
-                                &AccessibilityEvent::PagePartsLoaded(parts),
-                            );
+                            unless_it_panics("page parts", || {
+                                eng.handle_accessibility_event(
+                                    &AccessibilityEvent::PagePartsLoaded(parts),
+                                )
+                            });
                             continue;
                         }
-                        let base = eng.page_for_parts();
+                        let base = unless_it_panics("page parts", || eng.page_for_parts()).flatten();
                         drop(eng);
                         if let Some(base) = base {
                             splice_off_engine(base, parts, attempt + 1, parts_tx.clone());
@@ -877,12 +929,17 @@ pub async fn run(config: RunConfig) {
                     Some(AccessibilityEvent::DocumentLoaded { title, root }) => {
                         let url = root.attributes.get("url").cloned();
                         give_way_to_keys();
-                        let (refresh, marks) = {
+                        let read = {
                             let eng = lock_engine(&engine_events);
-                            (
-                                eng.is_page_in_front(title, url.as_deref()),
-                                eng.reading_marks(),
-                            )
+                            unless_it_panics("page loaded", || {
+                                (
+                                    eng.is_page_in_front(title, url.as_deref()),
+                                    eng.reading_marks(),
+                                )
+                            })
+                        };
+                        let Some((refresh, marks)) = read else {
+                            continue;
                         };
                         let mut root = std::mem::replace(
                             root,
@@ -890,7 +947,9 @@ pub async fn run(config: RunConfig) {
                         );
                         // Built as the reading choices read it, so the engine need not build
                         // it again.
-                        marks.mark(&mut root);
+                        if unless_it_panics("page marked", || marks.mark(&mut root)).is_none() {
+                            continue;
+                        }
                         if refresh {
                             refreshes_sent += 1;
                             let (number, title) = (refreshes_sent, std::mem::take(title));
@@ -908,7 +967,11 @@ pub async fn run(config: RunConfig) {
                             continue;
                         }
                         let started = std::time::Instant::now();
-                        let buffer = VirtualBuffer::from_aom_owned(root);
+                        let Some(buffer) =
+                            unless_it_panics("page built", || VirtualBuffer::from_aom_owned(root))
+                        else {
+                            continue;
+                        };
                         tracing::debug!(
                             lines = buffer.lines.len(),
                             ms = started.elapsed().as_millis(),
@@ -922,7 +985,10 @@ pub async fn run(config: RunConfig) {
                 // blocking pool, the engine taken only a moment to share its page.
                 if let Some(AccessibilityEvent::PagePartsLoaded(parts)) = &mut event {
                     give_way_to_keys();
-                    let base = lock_engine(&engine_events).page_for_parts();
+                    let base = {
+                        let eng = lock_engine(&engine_events);
+                        unless_it_panics("page parts", || eng.page_for_parts()).flatten()
+                    };
                     if let Some(base) = base {
                         splice_off_engine(base, std::mem::take(parts), 1, parts_tx.clone());
                         continue;
@@ -963,7 +1029,9 @@ pub async fn run(config: RunConfig) {
                     // A control the event changed: its page is built again off the engine.
                     // The page is copied first and let go, so that a change meanwhile does
                     // not copy it under the lock.
-                    if let Some((generation, page)) = eng.take_page_build() {
+                    if let Some((generation, page)) =
+                        unless_it_panics("page build", || eng.take_page_build()).flatten()
+                    {
                         let rebuilt = rebuilt_tx.clone();
                         tokio::task::spawn_blocking(move || {
                             let started = std::time::Instant::now();
@@ -1127,6 +1195,48 @@ mod tests {
         stop.store(true, std::sync::atomic::Ordering::SeqCst);
         let _ = events.join();
         assert!(longest < Duration::from_millis(100), "{longest:?}");
+    }
+
+    /// A key the busy engine could not take: the Okur key and its chords stay Okur's, with the
+    /// keys that act as it in each layout; other keys go to the application.
+    #[test]
+    fn a_busy_engine_keeps_the_okur_keys_from_the_application() {
+        use okur_core::input::{Key, KeyEvent, Modifiers};
+        use okur_core::settings::{KeyboardLayout, KeyboardSettings, OkurKey};
+        let key = |key: Key, modifiers: Modifiers| KeyEvent {
+            key,
+            modifiers,
+            is_down: true,
+            is_repeat: false,
+            text: None,
+            time_ms: 0,
+            caps_lock_on: None,
+        };
+        let insert = Modifiers {
+            insert: true,
+            ..Modifiers::none()
+        };
+        let caps = Modifiers {
+            caps_lock: true,
+            ..Modifiers::none()
+        };
+        let desktop = okur_keys(&KeyboardSettings::default());
+        assert_eq!(desktop, OKUR_INSERT);
+        let consumed = |event: &KeyEvent, okur| busy_key_action(event, okur) == KeyAction::Consume;
+        assert!(consumed(&key(Key::Insert, Modifiers::none()), desktop));
+        assert!(consumed(&key(Key::Alpha('t'), insert), desktop));
+        assert!(consumed(&key(Key::DownArrow, insert), desktop));
+        assert!(!consumed(&key(Key::Alpha('t'), Modifiers::none()), desktop));
+        assert!(!consumed(&key(Key::CapsLock, Modifiers::none()), desktop));
+        assert!(!consumed(&key(Key::Alpha('t'), caps), desktop));
+        // The laptop layout: CapsLock is the Okur key, Insert still one.
+        let laptop = okur_keys(&KeyboardSettings {
+            layout: KeyboardLayout::Laptop,
+            okur_key: OkurKey::CapsLock,
+        });
+        assert!(consumed(&key(Key::Alpha('t'), caps), laptop));
+        assert!(consumed(&key(Key::CapsLock, Modifiers::none()), laptop));
+        assert!(consumed(&key(Key::Alpha('t'), insert), laptop));
     }
 
     #[test]

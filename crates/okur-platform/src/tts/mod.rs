@@ -180,6 +180,9 @@ pub struct TtsManager {
     /// The synthesizer's calls that failed in a row: after [`RESTART_AFTER`] it is started
     /// anew.
     pub(crate) failed_in_a_row: u32,
+    /// The synthesizer chosen that did not start, another speaking instead ([`Self::starting`]):
+    /// the settings applied next do not try it again at once.
+    not_started: Option<TtsEngineType>,
 }
 
 /// A synthesizer whose calls failed this many times in a row is started anew: a dead one (a
@@ -190,8 +193,50 @@ pub(crate) const RESTART_AFTER: u32 = 5;
 impl TtsManager {
     /// Creates a new TTS manager with the specified engine driver.
     pub fn new(engine_type: TtsEngineType) -> Result<Self, TtsError> {
-        Ok(Self {
-            engine: Self::create_engine(engine_type)?,
+        Ok(Self::with_engine(
+            Self::create_engine(engine_type)?,
+            engine_type,
+        ))
+    }
+
+    /// The synthesizer chosen, or, when it does not start, the first that does (OneCore, SAPI
+    /// 5, no speech): Okur started at sign-in with OneCore chosen, whose start can take longer
+    /// than its 5 s, ended at once, mute and with no word of why (performance review
+    /// 2026-11-02, speech finding 1).
+    pub fn starting(engine_type: TtsEngineType) -> Self {
+        Self::starting_with(engine_type, Self::create_engine)
+    }
+
+    fn starting_with(
+        engine_type: TtsEngineType,
+        create: impl Fn(TtsEngineType) -> Result<Box<dyn TtsEngine>, TtsError>,
+    ) -> Self {
+        let error = match create(engine_type) {
+            Ok(engine) => return Self::with_engine(engine, engine_type),
+            Err(e) => e,
+        };
+        tracing::warn!(%error, kind = ?engine_type, "the synthesizer chosen did not start");
+        let (engine, kind) = match create(TtsEngineType::Auto) {
+            Ok(engine) => (engine, TtsEngineType::Auto),
+            Err(error) => {
+                tracing::warn!(%error, "no synthesizer started");
+                let none: Box<dyn TtsEngine> = Box::new(NoSpeechEngine::new());
+                (none, TtsEngineType::NoSpeech)
+            }
+        };
+        tracing::warn!(
+            speaking = engine.name(),
+            "speaking with another synthesizer"
+        );
+        Self {
+            not_started: Some(engine_type),
+            ..Self::with_engine(engine, kind)
+        }
+    }
+
+    fn with_engine(engine: Box<dyn TtsEngine>, engine_type: TtsEngineType) -> Self {
+        Self {
+            engine,
             kind: engine_type,
             voice: None,
             speech_log: None,
@@ -205,7 +250,8 @@ impl TtsManager {
             cursor: okur_core::settings::VoiceContext::PcCursor,
             voice_list: None,
             failed_in_a_row: 0,
-        })
+            not_started: None,
+        }
     }
 
     /// Starts the synthesizer anew, of the kind it is, with the voice the settings give the
@@ -518,7 +564,8 @@ impl TtsManager {
         let back_to_default = voice.voice.is_none() && self.voice.is_some();
         let default = self.engine.default_voice().filter(|_| back_to_default);
         let mut started = false;
-        if kind != self.kind || (back_to_default && default.is_none()) {
+        let not_started = self.not_started.take() == Some(kind);
+        if !not_started && (kind != self.kind || (back_to_default && default.is_none())) {
             match Self::create_engine(kind) {
                 Ok(engine) => {
                     self.engine = engine;
@@ -621,6 +668,31 @@ impl SpeechLog {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// A synthesizer chosen that does not start: the first that does speaks instead, and the
+    /// settings applied right after do not wait for the chosen one again; later ones try it.
+    #[test]
+    fn a_synthesizer_that_does_not_start_gives_way() {
+        let tries = std::sync::Mutex::new(Vec::new());
+        let create = |kind: TtsEngineType| -> Result<Box<dyn TtsEngine>, TtsError> {
+            if let Ok(mut tries) = tries.lock() {
+                tries.push(kind);
+            }
+            match kind {
+                TtsEngineType::OneCore => Err(TtsError::InitFailed("timed out".into())),
+                _ => Ok(Box::new(NoSpeechEngine::new())),
+            }
+        };
+        let tts = TtsManager::starting_with(TtsEngineType::OneCore, create);
+        assert_eq!(tts.kind, TtsEngineType::Auto);
+        assert_eq!(tts.not_started, Some(TtsEngineType::OneCore));
+        let tried = tries.lock().map(|t| t.clone()).unwrap_or_default();
+        assert_eq!(tried, vec![TtsEngineType::OneCore, TtsEngineType::Auto]);
+        // One that starts is the one chosen.
+        let tts = TtsManager::starting_with(TtsEngineType::Sapi5, create);
+        assert_eq!(tts.kind, TtsEngineType::Sapi5);
+        assert_eq!(tts.not_started, None);
+    }
 
     #[test]
     fn test_no_speech_engine_lifecycle() {
