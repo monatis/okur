@@ -25,6 +25,12 @@ heavy job at a time, no swarms of subagents). A fix replay cannot reach is check
      the Store, to learn whether the Store's signature counts for the program;
    - a code-signing certificate of Okur's own (`build-msix.ps1 -ProgramCertificateThumbprint`);
    - or the first release without UI Access, UI Access in an update.
+   The owner chose the Private-audience submission: **certified and available to the private
+   group on 2026-11-02** ([`../handoff/2026-11-02-store-submission-reading-highlight-demo.md`](../handoff/2026-11-02-store-submission-reading-highlight-demo.md)).
+   Next, with the owner: install it on old-pc from the Store
+   (https://apps.microsoft.com/detail/restricted/9NV0FM5H54X8) and answer E1's question there:
+   does `okur-sr.exe` start with UI Access (`okur doctor`, a password dialog, an elevated
+   window).
 3. The other Store experiments (E2-E7) with the test identity `Okur.LabTest` and October's
    development certificate (already trusted on old-pc), now with the startup task's start and
    the restart after an update (review S2) among them.
@@ -53,6 +59,10 @@ heavy job at a time, no swarms of subagents). A fix replay cannot reach is check
 - round-1135 (Excel's monitor cells), recorded, not imported; comments; titles kept across
   sessions.
 - 1125/s3, 1062/s10-s13, 1129/s11, 1130/s11, 2857/s1.
+- Found while recording the demo (2026-11-02, the handoff above): Chrome's address bar says its
+  accelerator twice ("Ctrl+L Ctrl+L"); F5 on a page in the virtual cursor said nothing once;
+  the page-load wait (`e5fc8df0`) still to be seen catching a busy page; the reading
+  highlight's line-level frame, UIA pages, and its Settings Center control.
 
 ## 4. Waiting for the owner
 
