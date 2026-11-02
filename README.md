@@ -1,10 +1,13 @@
 # Okur
 
+<img src="packaging/msix/okur-logo.svg" alt="Okur's logo: a white letter O with two amber arcs spreading from it like sound" width="120">
+
 [![CI status](https://github.com/monatis/okur/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/monatis/okur/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Rust 1.99.0](https://img.shields.io/badge/rust-1.99.0-orange.svg?logo=rust)](rust-toolchain.toml)
 [![Platforms: Windows; macOS in progress](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%28in%20progress%29-lightgrey.svg)](#platforms)
-[![JAWS parity: 9111 of 9675 recorded steps](https://img.shields.io/badge/JAWS%20parity-9111%2F9675%20steps-brightgreen.svg)](#where-it-stands)
+[![JAWS parity: 11377 of 11949 recorded steps](https://img.shields.io/badge/JAWS%20parity-11377%2F11949%20steps-brightgreen.svg)](#where-it-stands)
+[![Privacy: no data collected](https://img.shields.io/badge/privacy-no%20data%20collected-brightgreen.svg)](PRIVACY.md)
 
 **An open screen reader that keeps your JAWS muscle memory.**
 
@@ -44,36 +47,45 @@ Where to go from here:
 
 ## Where it stands
 
-> **Status (October 2026): a preview on Windows.** Web pages in Chrome (the Virtual PC
-> Cursor, the lists of links, headings and other elements, tables, selecting and copying),
-> Microsoft Word's documents, dialog boxes and menus, Notepad, File Explorer, Windows
-> Settings, Windows Terminal, the desktop, Alt+Tab and Windows search are read as JAWS reads
-> them, and the Okur cursor reads any window's screen, pictures included, recognized with
-> Windows' own OCR. It is not yet a replacement for your screen reader: Outlook, and the rest of Excel's
-> keys, are the largest part still missing (see [Not yet](#not-yet)). Those everyday gaps on Windows are being closed first; macOS, whose
-> accessibility layer is in place, comes after them.
->
-> **Okur speaks in its own name.** Where JAWS names itself, Okur says Okur: the Okur key
-> (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
-> know.
+> **Status (November 2026): ready for most everyday use on Windows.** Web pages in Chrome,
+> Microsoft Word and Excel, and Windows itself are read as JAWS 2025 reads them, with the same
+> keys and the same words. The first release, through the Microsoft Store, is being prepared;
+> macOS comes after it.
 
-Every figure is tool output, rerun for this README at commit `b2f2c2c5` (2026-10-31).
+- **Parity with JAWS, measured.** Every behavior is recorded from JAWS on a lab machine and
+  replayed through Okur step by step: 11377 of 11949 recorded steps match JAWS's speech word
+  for word.
+- **Beyond JAWS on the web.** W3C's [ARIA-AT](https://aria-at.w3.org/) test plans say what a
+  screen reader must convey for each ARIA pattern. Where JAWS falls short of a plan, Okur
+  conveys what it requires, in JAWS's own words.
+- **Different from JAWS on purpose.** Where JAWS fails or is unreliable, Okur does not copy
+  it: in a data grid, JAWS adds "Column 65535, Row 65535", a place it failed to find. JAWS's
+  help texts are Freedom Scientific's writing, so Okur says its help in its own words. Each
+  difference is written down with its reason in
+  [accepted divergences](docs/references/accepted-divergences.md).
+- **Yours to set.** Settings Center and Quick Settings with JAWS's groups, for all
+  applications or for one application or web site; verbosity levels, punctuation, typing
+  echo and voice profiles; PlaceMarkers, custom labels and Flexible Web.
+- **Okur speaks in its own name.** Where JAWS names itself, Okur says Okur: the Okur key
+  (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
+  know.
+
+Every figure is tool output, rerun for this README at commit `6996c926` (2026-11-02).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **9577 of 10149** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **9455 of 10210** | `okur-lab parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **284** | `okur-lab parity` |
-| Recorded JAWS scenarios, trials | **743, 2235** (2218 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1560 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
+| Steps matching JAWS's speech history, word for word | **11377 of 11949** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **11119 of 12015** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **365** | `okur-lab parity` |
+| ARIA-AT's required (MUST) assertions conveyed, in 39 test plans | **Okur 2934 of 3110**, JAWS 2858 | `okur-lab aria-at-report` |
+| Recorded JAWS scenarios, trials | **1913, 5745** (5728 trials succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1608 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
-The 284 steps left out are where Okur differs from JAWS on purpose. Some are JAWS's own
-accidents, which Okur does not copy: in a data grid, JAWS adds "Column 65535, Row 65535", a
-place it failed to find. Others are JAWS's help texts, which are Freedom Scientific's writing;
-Okur says its help in its own words. Each one is listed, with the reason and who decided it,
-in [accepted divergences](docs/references/accepted-divergences.md).
+The ARIA-AT figures are an automatic judge's, reading Okur's speech and JAWS's recorded speech
+for each assertion's role, name and state the same way
+([ARIA-AT research](docs/references/aria-at-research.md)).
 
 ---
 
@@ -81,254 +93,55 @@ in [accepted divergences](docs/references/accepted-divergences.md).
 
 ### What works today (Windows)
 
-- **Web pages in browse mode** with the Virtual PC Cursor:
-  - reading by character, word, line, sentence and paragraph; Home, End, PageUp and
-    PageDown; Say All by line, sentence or paragraph (Say All Reads, in Okur Settings), where
-    Right and Left skip and go back by that unit, PageUp and PageDown change the rate, and the
-    cursor stays where you stopped it; skim reading (Ctrl+Insert+Down), each paragraph by its
-    first line or its first sentence, the lines, sentences or paragraphs a text rule finds, or
-    the lines with bold, italic, underlined, struck, raised or lowered text or text in a color,
-    as chosen in Skim Reading (Ctrl+Shift+Insert+Down), whose Create Summary lists them, each a
-    link to its place;
-  - deleted text said between "Deletion" and "end Deletion", and a raised or lowered number
-    after a number between "superscript" or "subscript" and their end ("10 superscript 23");
-  - the Word List (Ctrl+Insert+W): the page's words, most used first, W and Shift+W to the
-    next and prior line with the word chosen, and its Summary: the sentences holding the word,
-    each a link to its place;
-  - quick navigation keys: headings and their levels, links, form fields, edits, buttons,
-    check boxes, radio buttons, combo boxes, lists and list items, tables, graphics, regions,
-    articles, divisions, separators, tabs and mail links; N past a run of links; the first
-    and last heading or form field; V and U to the next visited and unvisited link; a
-    temporary PlaceMarker (Ctrl+Windows+K) and saved ones to come back to with K and Shift+K,
-    and 7 to 0 for the first four; Shift+Comma and Shift+Period
-    to the start and end of a list, table or region; Equals to where the page says reading goes
-    next (aria-flowto); S and D to the next element of the same or of another type (and
-    Ctrl+Insert with Up, Right and Left); Jump to Line (J, and Shift+J back);
-  - the lists of links, headings and form fields (Insert+F7, Insert+F6, Insert+F5), Virtual
-    HTML Features (Insert+F3), the element lists on Ctrl+Insert and a letter (buttons, edits,
-    check boxes, radio buttons, combo boxes, graphics, lists, articles, paragraphs, block
-    quotes, tables, divisions and tabs), and Document Regions (Insert+Ctrl+R);
-  - the PlaceMarker List (Ctrl+Shift+K): PlaceMarkers added with the line at the cursor as
-    their name, kept for the page (or every page of its site) from one visit to the next,
-    moved to, renamed and removed; custom labels (Insert+Ctrl+Tab): a name of your own for a
-    field, button, link or graphic, read in its place on the site's pages;
-  - tables: Ctrl+Alt and the arrows, a whole row or column with Windows+Alt and the arrows,
-    and the table layer (Insert+Space, then T);
-  - selecting with Shift and the arrows, Ctrl+A or F8, and copying with Ctrl+C;
-  - Okur Find (Ctrl+F or Insert+Ctrl+F, then F3 and Shift+F3), with its history kept per
-    site, as JAWS Find keeps it;
-  - forms mode, turned on by Tab or the arrows (Auto Forms Mode), by Tab only (Semi-Auto) or
-    with Enter (Manual), as Okur Settings chooses, and off with Escape or Numpad Plus; Space
-    clicks the control at the cursor, as JAWS does;
-  - routing the cursors (Insert+Delete, Ctrl+Insert+Delete), a click with Numpad Slash, a
-    link's address (Ctrl+Insert+F7), and the virtual cursor and the quick keys turned off and
-    on (Insert+Z, Insert+N);
-  - a page that loads says its title and a summary of its regions, headings and links, then
-    is read from the top, as JAWS does by default (Document and Web Pages Automatically Read
-    When Loaded, in Okur Settings, turns that reading off);
-  - frames, and single-page apps changing route; Tab moves on from where you are reading.
-- **Web apps:** autocompletes and command palettes read their suggestions ("Apple, 1 of 3");
-  regions with role "application" (such as VS Code's) get every key; GitHub's code view reads
-  line by line; Google Docs (with its braille support turned on) reads as a document, Google
-  Sheets by cell, and WhatsApp Web's chat list and messages as lists.
-- **Live regions** announced as JAWS announces them. A streamed chat reply is read once, as
-  it arrives, not again from the start on every update; `--live-region-whole-text` gives
-  JAWS's own behavior.
-- **Windows applications:**
-  - dialog boxes: Say Window (Insert+B) with their group boxes, the default button (Insert+E),
-    a control's hot key (Shift+Numpad 5), a property sheet's page on Ctrl+Tab;
-  - menus, the menu bar and context menus; lists, list views and their columns (Ctrl+Insert
-    and a number), trees, combo boxes and data grids;
-  - Notepad and its dialogs, WordPad's and Paint's ribbons (Alt to the tabs, their places and
-    the lower ribbon's groups, as JAWS reads them), File Explorer, Windows Settings,
-    Windows Terminal, the desktop, the Alt+Tab switcher and Windows search;
-  - the Window List (Insert+F10), to switch to another window, and the system tray list
-    (Insert+F11), to open or click an icon.
-- **Editing** in text fields: characters, words, lines, sentences and paragraphs; selections
-  said as JAWS says them, and Say Selected Text (Insert+Shift+Down); cut, paste and undo; a
-  field of several lines read as a document; the window's top and bottom line (Insert+End,
-  Insert+PageDown); Say Font; misspelled words marked; and text analysis on Insert+Tab, as
-  JAWS does it (runs of spaces, stray or unspaced punctuation, a missing capital, brackets and
-  quotes left open, each with its column).
-- **Microsoft Word:** a document read as JAWS reads it: each line as Word lays it out, a
-  heading with its level ("heading level 1 Library Hours"), a list entered and left ("Entering
-  List", "exit list"), a table entered, its cells and left ("table 1, uniform Table, new
-  cell"). In a table, JAWS's table keys (Ctrl+Alt+arrows, Home and End) go from cell to cell
-  and say its column's or row's title, Tab moves and selects as Word does, and Ctrl+Alt+Numpad
-  5 and Insert+Tab say the cell and where it is. A table's column titles come from its first
-  row, its row titles from its first column where the table marks it ("Row 1 no title" where
-  not). Say All (Insert+Down) reads the document paragraph by paragraph and says what changes
-  as it goes: a heading's level, "Entering List", "exit list", "table 1, uniform Table", "Row
-  2", "out of table". Insert+F6 lists the document's headings to move to; Say Font gives bold,
-  italic and underline ("bolded", "italicized"), the size, colors, font, style, alignment,
-  outline level and line spacing ("Line spacing: Double"); Ctrl+Alt+N, O and P say the view
-  they switch to ("Draft View"), and Insert+T the title and the view; Read Mode is named with
-  JAWS's warning, in Okur's name, and Insert+F1 there says how to leave it. A line marks its
-  links ("See the link opening hours"). Form fields are read as controls named by the text
-  before them ("Name: Edit", "Member: check box not checked", "Branch: Combo box, Central, 1
-  of 3"), by the arrows and by Tab in a protected form; Space toggles a check box, Alt+Down
-  opens a drop-down's list. Its ribbon is read as JAWS reads it: Alt to its tabs ("Upper
-  Ribbon, Ribbon, Home Tab"), Down into a tab's commands with their group's name, each
-  command's ScreenTip where it says more than the name ("Grow Font Button, Increase Font
-  Size"), toggle buttons and check boxes with their state ("Format Painter Button not
-  checked"), the Quick Access Toolbar and the buttons beside the tabs with their hints
-  ("Leaving menus, Can't Repeat Button Unavailable"), and Escape back ("Leaving ribbons,
-  Edit"). The Styles gallery says each style with its place ("Heading 2, Button, 2 of 17"),
-  and the Font and Font Size boxes' lists the font or size the arrows choose. Its own dialogs
-  (Font, Paragraph, Find and Replace) read their fields as edit combos ("Font:, edit combo,
-  Calibri"); back from Find and Replace, which stays open beside the document, the window is
-  named again. Ctrl+Shift+E says whether Track Changes is on, Ctrl+E, R, J and L the alignment
-  they leave ("Centered", "Aligned left"), Ctrl+Shift+Period and Comma the font size, Ctrl+M
-  and Ctrl+Shift+M the indent from the page's edge ("indent, 1.5 inches"), and Shift+F3 the
-  selection in its new case. A line marks a comment ("has comment") and says a footnote or
-  endnote by its mark ("every day, footnote 1"); Alt+Shift+Apostrophe reads the comment at the
-  caret with its author, Alt+Shift+E the footnote or endnote. Ctrl+Shift+Apostrophe,
-  Insert+Shift+F, Insert+Shift+E and Insert+Alt+B list the document's comments, footnotes,
-  endnotes and bookmarks, and OK moves to one; Windows+Semicolon shows them, or the
-  revisions, in the Virtual Viewer ("There are 2 Comments in this document."), and
-  Alt+Shift+Apostrophe pressed twice the comment at the caret. Tracked changes: a deleted word
-  is not read, as Word's view does not show it; Insert+Shift+R lists the revisions and
-  Ctrl+Insert+R says the one at the caret ("eight, inserted text revised by Lab on Sun, Jan 04,
-  26"), both only while Word tracks changes, as JAWS's; then a word read in one says its change
-  ("eight, Inserted"). Moving onto another page says it, and the section where it changes
-  ("page 3, Section 2"); Ctrl+PageDown and Ctrl+PageUp say "Next page" and "Previous page",
-  Insert+Delete the line and column, and Insert+PageDown reads Word's status bar ("Page Number
-  Page 3 of 3, Word Count 26 words, ..."). Task panes (the Spelling pane) read their
-  controls as controls, and Escape back names the document. The Links List (Insert+F7) lists the document's hyperlinks, Move To Link moves to
-  one and Activate Link follows it; List Fields (Insert+F5) lists its fields ("HYPERLINK
-  opening hours", "FORMTEXT") and OK moves to one; with none, each says so in Word's words.
-  The line spacing and the fields come from Word's own object model.
-- **Microsoft Excel:** a cell is read as JAWS reads it, its value and then its coordinates
-  ("12, B 2"), and Insert+C says the coordinates alone. Ctrl+Home and Ctrl+End name the first
-  and last cell, the Ctrl arrows the edge of the data region they stop at. Say Line reads the
-  row; Shift+Insert+Up, Home and PageUp read the row whole, from its start or to its end, and
-  Ctrl+Insert with the same keys the column. Insert+Shift+F lists the cells with formulas,
-  Insert+Shift+C the column's cells, Insert+Shift+R the row's and Ctrl+Shift+S the worksheets,
-  and OK goes there; Ctrl+Shift+D lists the visible cells with data. Insert+Ctrl+Alt+C and R set
-  a row as the column titles and a column as the row titles, or the workbook's names give them
-  ("Title", "ColumnTitle", "RowTitle"), and they are said on entering another column or row;
-  Insert+NumPad Enter and Insert+Delete read the column's and the row's total, and Insert+F the
-  cell's font and formatting.
-  Selecting with Shift and the arrows says the cells added, Shift+Space and Ctrl+Space the
-  whole row or column. An empty cell is "blank" with its coordinates; typing in a cell, Delete
-  and Ctrl+Z ("Undo") say the cell as it is after them. Shift+F10 opens the cell's menu and
-  Insert+Shift+S the sheet tabs' menu; Go To (Ctrl+G, F5) and Format Cells (Ctrl+1) read as
-  dialogs, their pages switched with Ctrl+Tab. The rows, columns, selections and lists come
-  from Excel's own object model.
-- **The cursors:** Numpad Minus to the Okur cursor at the mouse, Numpad Plus back to the PC
-  cursor, Insert+Numpad Minus to bring the Okur cursor to the PC cursor, Insert+Numpad Plus
-  the other way, Insert+R for where the Okur cursor may go, and Alt+Delete for where the
-  active cursor is. The Okur cursor reads a page as its screen shows it, a dialog's rows, and
-  any other window by its screen rows, where UI Automation places its text. In WPF, UWP and
-  WinUI windows it is the Okur scan cursor, one element a line with its role and state, as
-  JAWS's Scan Cursor reads them. It moves by line, word and character, with Page Up and Page
-  Down to the window's top and bottom, and the mouse goes with it.
-- **The screen's pictures, recognized** (Convenient OCR): Insert+Space, O, then W, S or C
-  recognizes the window, the screen or the focused control with Windows' own OCR. Okur says
-  "OCR started using Microsoft OCR.", "finished." and "Okur Cursor". The recognized words then
-  stand among the window's lines where they are drawn, Numpad Slash clicks them, and they go
-  when the PC cursor comes back. B keeps recognizing the window as it changes (Background
-  OCR), and Q stops it.
-- **Pictures and scanned PDFs, recognized:** in File Explorer, Insert+Space, O, F (or Enter)
-  reads the selected picture or PDF, page by page, into the Results Viewer, titled by the file;
-  nothing selected, or a file that is neither, gets JAWS's message box. ? lists the layer's
-  keys.
-- **The mouse:** Numpad Slash and Numpad Star click the left and right buttons, with Ctrl,
-  Shift or Alt for a click with that key held; Insert+Numpad Slash and Star hold a button down
-  and let it go; Ctrl+Insert+Numpad Slash drags and drops; Alt+Shift and the arrows move the
-  mouse a little. Mouse echo says what the mouse rests on, by character, word, line or
-  paragraph, set in Okur Settings or with Insert+Space, E (O turns it on and off, C, W, L and P
-  choose the unit).
-- **Information keys:** the time and date (Insert+F12), the settings in use (Insert+Q), the
-  application's version (Ctrl+Insert+V), and the colors of a page's text or a text field by the
-  names JAWS gives them (Insert+5: "blue2 on white").
-- **Help** in Okur's own words: Insert+F1 for the control or the page element you are on,
-  Insert+H for Okur's keys there, Insert+W for Windows' keys, and Keyboard Help (Insert+1),
-  where each key is named and described instead of run.
-- **The classic console** (Command Prompt, PowerShell): a command's output is read as the
-  console writes it (Screen Echo, Insert+S, as JAWS reads it); Windows Terminal's not yet.
-- **The Virtual Viewer** (Insert+Alt+W) on screen as JAWS shows it, for windows, controls and
-  consoles, Windows Terminal included; the Speech History (Insert+Space, then H; Ctrl+H
-  copies it and Shift+H clears it).
-- **The clipboard keys**: Windows+Insert+X says the clipboard's text, Insert+Space, then C
-  shows it in a viewer, and Insert+Windows+C adds the selection to it; Ctrl+C or Ctrl+X after
-  that asks before overwriting it, as JAWS does.
-- **Windows' notifications** (toasts), and applications' own (as Teams sends them), said as
-  they come, whatever is in front; Insert+Space, then Shift+N says the last one again,
-  Insert+Space, then Ctrl+N stops and starts saying toasts, and Insert+Space, then N opens the
-  Notification History, each listed with the program it came from, with the rules that mute a
-  notification, say a shorter text or play a sound in its place, or leave it out of the
-  history (Create Rule..., Manage Rules...).
-- **Okur's own dialogs** are real Windows dialogs: the lists above, Okur Find and the Window
-  List, with the same controls and labels as JAWS's, and Okur's settings, below.
-- **Settings, as JAWS's:**
-  - Settings Center (Insert+6) and Quick Settings (Insert+V) are trees of JAWS's groups with a
-    search box (Ctrl+E); what a search finds is a list in the tree's place, each setting with
-    its value and its group ("Typing Echo Off, User"). Space changes a setting and says its new
-    value. F6 goes to the setting's control in the pane beside the tree ("User Page").
-    Changes are kept for all applications, the application in front or the page's site.
-    Settings Center asks before Cancel drops a change; Quick Settings can keep one only until
-    Okur exits or the focus moves (Shift+F10). Their last group, Last Changed Settings, holds
-    the latest changes from one run to the next (Shift+F10: Remove, Remove All).
-  - Okur's window (Insert+J) has JAWS's menus: Options for Basics, Voices, Manage Application
-    Settings (an application's settings turned off or removed) and Restore to Factory
-    Settings; Utilities for Settings Center and the Notification History; Help for the Startup
-    Wizard, the most common settings a page at a time, which also opens the first time Okur
-    starts. Basics and the wizard offer JAWS's Access Key choices (all, menus only, dialogs
-    only, off): a menu item then ends with its letter, a dialog's control with its key.
-- **Speech:** punctuation levels and symbol names as JAWS has them (Insert+Shift+2); typing
-  echo by characters, words, both or none (Insert+2); a reading key pressed twice quickly
-  spells, with capitals at a higher pitch; the rate on the fly (Ctrl+Alt+PageUp and
-  PageDown); Speech On Demand (Insert+Space, then S), where only the reading commands speak,
-  and muted speech (Insert+Space, then Shift+S), as JAWS has them, what is not spoken still
-  written to the Speech History.
-- **Settings** declared in one table, so the settings dialog, the command line (`okur run --set
-  <setting>=<value>`) and the import of JAWS's own settings files offer the same values. Among
-  them, as JAWS has them: Caps Indicate, mixed case, numbers read as digits, dollar amounts
-  left to the voice, same page links, graphics shown or not, how a heading is said, and which
-  parts of a control verbosity says (its type, its state, its position, its hints).
-- **Flexible Web** (Insert+Space, then X): JAWS's wizard, page for page, hides an element of a
-  page (a region, a heading, a list) found by its kind, its text, its id or its place; Undo
-  takes it back. Customizations are saved as named rules for the page, its site or every
-  site, and hold whenever such a page loads; leaving a page with unsaved ones asks first.
-  View or Change Where Rules are Applied turns each rule on or off for an area and deletes
-  rules. Starting the reading at an element, and renaming a rule, are not done yet.
-- **Verbosity levels:** Beginner, Intermediate and Advanced, as JAWS has them. Above
-  Beginner Okur says the short messages JAWS says there ("Last row", "3 columns and 3 rows",
-  "virtual PC", "Copied", "Appended", "Off", "No more headings at level2 in section", the
-  page's summary without "Page has"); at Advanced it leaves out what JAWS leaves out, such as a
-  list's positions, a field's description, a group box's name and JAWS's own messages
-  ("Copied", "Screen updated"). Recorded at both levels on the web, in desktop dialogs, with
-  the Okur cursor, in Notepad and in the Notification History. Each level's spoken items and
-  message length are chosen in Okur Settings' Verbosity Levels, as JAWS's Settings Center
-  customizes a level.
-- **Quitting with Insert+F4,** after asking first, as JAWS does (Enter quits, Escape stays).
-- **Both keyboard layouts,** desktop and laptop, with Insert or CapsLock as the Okur key
-  (JAWS's JAWS key).
-- **OneCore and SAPI 5 voices,** with JAWS's voice contexts and profiles: the PC cursor, the
-  Okur cursor, the keyboard and Okur's own messages each speak with their own person, rate,
-  punctuation and pitch (Voice Adjustment); a voice is saved as a profile by name, and Select a
-  Voice Profile (Insert+Ctrl+S) chooses one for all applications or for the one in front.
+- **Web pages in Chrome:** the Virtual PC Cursor by character, word, line, sentence and
+  paragraph; Say All; quick navigation keys (H for headings, T for tables, F for form fields
+  and many more); the lists of links, headings and form fields; tables; forms mode; Okur Find.
+- **Web apps:** ARIA widgets, autocompletes and live regions; GitHub's code view, Google Docs
+  and Sheets, WhatsApp Web.
+- **Microsoft Word:** documents with their headings, lists, tables, comments, notes and
+  revisions; Say All; the ribbon, Word's dialogs and its form fields.
+- **Microsoft Excel:** cells with their coordinates, row and column titles and totals;
+  selections; the lists of cells and worksheets.
+- **Windows itself:** dialog boxes, menus, lists and trees, File Explorer, Windows Settings,
+  Notepad, the console and Windows Terminal, the desktop, Alt+Tab, the Window List, the system
+  tray and notifications.
+- **Editing** in any text field, with selections said as JAWS says them, Say Font and text
+  analysis.
+- **The Okur cursor and OCR:** any window's screen, pictures included, recognized with
+  Windows' own OCR; pictures and scanned PDFs read from File Explorer; mouse keys.
+- **Settings as JAWS has them:** Settings Center (Insert+6), Quick Settings (Insert+V) and
+  Okur's window (Insert+J) with the Startup Wizard; settings per application and per web site;
+  verbosity levels, punctuation, typing echo and voice profiles; Flexible Web, PlaceMarkers
+  and custom labels.
+- **Help in Okur's own words:** Insert+F1, Insert+H and Keyboard Help (Insert+1); the Virtual
+  Viewer and the Speech History.
+- **Both keyboard layouts,** desktop and laptop, with Insert or CapsLock as the Okur key, and
+  the OneCore and SAPI 5 voices installed in Windows.
 
+Every key and phrase, item by item: [What Okur does today](docs/references/what-works-today.md).
 The [reference documentation](docs/references/) describes these behaviors in detail.
 
 ### Not yet
 
 The [everyday-use gaps](docs/backlog/everyday-use-gaps-2026-10-19.md) list what JAWS's
 documentation describes and Okur lacks, most important first. Among them:
-- Outlook, not yet supported; in Excel, titles kept across sessions, monitor cells, comments and
-  the rest of JAWS's Excel keys;
-- starting by itself at sign-in and on Windows' sign-in screen: the installer and a build
-  with UI Access are written and are being tested with a development signature on the lab
-  machine, before a signed release;
-- on macOS, the keyboard and speech.
+- **Outlook is not checked yet:** the lab machine has no mail account. Okur reads modern
+  Windows applications through UI Automation, so Outlook is expected to work, but JAWS's own
+  Outlook keys (a message's header fields on Alt+1 to Alt+9, its attachments on Insert+A) are
+  not built yet.
+- In Excel: titles kept from one session to the next, monitor cells, comments and the rest of
+  JAWS's Excel keys.
+- Windows' sign-in and lock screens and User Account Control prompts: a Microsoft Store app
+  cannot run there. Okur's own installer can, and waits for a code-signing certificate.
+- On macOS, the keyboard and speech.
 
 Braille and Picture Smart come later, and from Convenient OCR: a PDF open in a reader (D), a
 scanner or camera (A), and the Results Viewer's Open in Word.
 
 ### Trying it
 
-There are no ready-made downloads yet: Okur is built from its source code.
+There are no ready-made downloads yet: Okur is built from its source code. The first release
+will come through the Microsoft Store.
 
 1. Install [Rust](https://www.rust-lang.org/tools/install) and the Visual Studio C++ build
    tools it asks for, on Windows 10 or 11.
@@ -597,6 +410,11 @@ JAWS, Freedom Scientific and Vispero are trademarks of Vispero. Okur is independ
 not affiliated with or endorsed by them. Okur never uses these names as its own: its
 messages, dialogs, settings, command-line options and installer say "Okur" where JAWS names
 itself, and name JAWS only to compare with it.
+
+## Privacy
+
+Okur collects nothing and makes no network connections. What it reads, and its settings and
+logs, stay on your computer. See the [privacy policy](PRIVACY.md).
 
 ## License
 
