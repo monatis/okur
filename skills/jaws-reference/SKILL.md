@@ -136,6 +136,10 @@ For a quick look at what JAWS says, and what ours says, on a machine where that 
   `CopySpeechHistoryToClipboard`), empties it, and puts the clipboard's text back.
 - `okur run --engine no-speech --speech-log <file> --debug-log <file>` gives ours. Stop it
   when done: it reads whatever is in front.
+- `scripts/side-by-side.ps1 -Open ms-settings:appsfeatures -Steps 'Tab;Tab;Down'` does all three
+  on old-pc: Okur runs silently beside JAWS (ScrollLock as its key), and each key prints what
+  JAWS said and what Okur said. `-Outline` adds the window's UI Automation outline. Its output
+  can hold the lab machine's own data: keep it out of the repository.
 
 - JAWS's own dialogs run elevated: `scripts/jaws-ui-walk.ps1 -Process QuickSettings -Chords
   'Tab,Down*40' -AutoExpand` sends navigation keys through `okur-lab-keys` (UI Access) and
