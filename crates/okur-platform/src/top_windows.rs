@@ -90,13 +90,16 @@ pub fn list() -> Vec<TopWindow> {
 pub fn switch_to(id: u64) {
     use windows::Win32::Foundation::HWND;
     use windows::Win32::UI::WindowsAndMessaging::{
-        IsIconic, SetForegroundWindow, ShowWindow, SwitchToThisWindow, SW_RESTORE,
+        IsIconic, SetForegroundWindow, ShowWindowAsync, SwitchToThisWindow, SW_RESTORE,
     };
     let hwnd = HWND(id as usize as *mut core::ffi::c_void);
     // SAFETY: plain Win32 calls on a window handle, which may be gone by now.
     unsafe {
+        // Asked, not waited for: ShowWindow on another thread's window waits for it, and a
+        // hung application held the actions worker and every key it sends (performance
+        // review 2026-11-02, live path finding 13).
         if IsIconic(hwnd).as_bool() {
-            let _ = ShowWindow(hwnd, SW_RESTORE);
+            let _ = ShowWindowAsync(hwnd, SW_RESTORE);
         }
         // SwitchToThisWindow does what Alt+Tab does, which a process without the foreground
         // (Okur, its dialog just closed) may do where SetForegroundWindow is refused.

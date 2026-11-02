@@ -1538,13 +1538,26 @@ const CLIPBOARD_WAIT: std::time::Duration = std::time::Duration::from_millis(150
 /// on its own thread.
 #[cfg(windows)]
 pub fn clipboard_text() -> Option<String> {
+    use std::sync::atomic::{AtomicBool, Ordering};
+    // One read at a time: a hung owner kept each read's thread, and the clipboard open in it,
+    // for every press (performance review 2026-11-02, live path finding 13).
+    static READING: AtomicBool = AtomicBool::new(false);
+    if READING.swap(true, Ordering::SeqCst) {
+        tracing::warn!("the clipboard's last read has not ended");
+        return None;
+    }
     let (tx, rx) = std::sync::mpsc::channel();
-    std::thread::Builder::new()
+    let spawned = std::thread::Builder::new()
         .name("clipboard read".to_owned())
         .spawn(move || {
-            let _ = tx.send(read_clipboard_text());
-        })
-        .ok()?;
+            let text = read_clipboard_text();
+            READING.store(false, Ordering::SeqCst);
+            let _ = tx.send(text);
+        });
+    if spawned.is_err() {
+        READING.store(false, Ordering::SeqCst);
+        return None;
+    }
     match rx.recv_timeout(CLIPBOARD_WAIT) {
         Ok(text) => text,
         Err(_) => {
@@ -1736,7 +1749,7 @@ pub fn set_clipboard_text(text: &str) -> Result<(), String> {
 /// [`capture_foreground_page`]'s when that is done.
 #[cfg(windows)]
 pub fn capture_foreground_page_quick() -> Result<okur_core::AomNode, crate::PlatformError> {
-    let snapshot = crate::uia_snapshot::capture_foreground_document(None, None)?;
+    let snapshot = crate::uia_snapshot::capture_foreground_document_quick()?;
     Ok(crate::uia_snapshot::to_aom(&snapshot.root))
 }
 

@@ -396,6 +396,28 @@ fn unless_it_panics<R>(what: &'static str, work: impl FnOnce() -> R) -> Option<R
     }
 }
 
+/// How long Okur's exit waits for the engine before it goes without it.
+const EXIT_WAIT: std::time::Duration = std::time::Duration::from_secs(2);
+
+/// `engine`, taken within `wait`, as it is after a panic too; `None` where it stays held.
+fn take_within<T>(
+    engine: &std::sync::Mutex<T>,
+    wait: std::time::Duration,
+) -> Option<std::sync::MutexGuard<'_, T>> {
+    use std::sync::TryLockError;
+    let until = std::time::Instant::now() + wait;
+    loop {
+        match engine.try_lock() {
+            Ok(guard) => return Some(guard),
+            Err(TryLockError::Poisoned(poisoned)) => return Some(recovered(engine, poisoned)),
+            Err(TryLockError::WouldBlock) if std::time::Instant::now() >= until => return None,
+            Err(TryLockError::WouldBlock) => {
+                std::thread::sleep(std::time::Duration::from_millis(5));
+            }
+        }
+    }
+}
+
 /// Waits while a key waits for the engine: at most 200 ms, in case a key never takes it.
 fn give_way_to_keys() {
     let until = std::time::Instant::now() + std::time::Duration::from_millis(200);
@@ -1171,18 +1193,28 @@ pub async fn run(config: RunConfig) {
     if let Some(task) = event_task {
         task.abort();
     }
-    {
-        let mut eng = lock_engine(&engine);
-        // The settings applied last are kept before Okur goes.
-        eng.flush_settings();
-        if reason == ExitReason::EndSession {
-            eng.speech.stop();
-        } else {
-            let words = eng.exit_words();
-            eng.speech.speak(&words, true);
+    // The engine, within a while: a handler stuck holding it left a process with no keyboard
+    // and no speech that held the desktop's lock, until a new start ended it (performance
+    // review 2026-11-02, speech finding 11).
+    let said = match take_within(&engine, EXIT_WAIT) {
+        Some(mut eng) => {
+            // The settings applied last are kept before Okur goes.
+            eng.flush_settings();
+            if reason == ExitReason::EndSession {
+                eng.speech.stop();
+                false
+            } else {
+                let words = eng.exit_words();
+                eng.speech.speak(&words, true);
+                true
+            }
         }
-    }
-    if reason != ExitReason::EndSession {
+        None => {
+            tracing::error!("the engine is held: Okur goes without its last words");
+            false
+        }
+    };
+    if said {
         let _ = speech_idle.wait(std::time::Duration::from_millis(1500));
     }
     if let Some(ui) = ui_closer {
@@ -1218,6 +1250,26 @@ mod tests {
         assert_eq!(take_for_key(&engine, Instant::now()).map(|e| *e), Some(7));
         assert_eq!(*lock_engine(&engine), 7);
         assert!(!engine.is_poisoned());
+    }
+
+    /// Okur's exit takes the engine when it is free, and goes without it when a handler holds
+    /// it past the wait.
+    #[test]
+    fn the_exit_does_not_wait_for_a_held_engine_for_good() {
+        let engine = Arc::new(Mutex::new(7_u32));
+        assert_eq!(
+            take_within(&engine, Duration::from_millis(50)).map(|e| *e),
+            Some(7)
+        );
+        let held = engine.lock();
+        let started = Instant::now();
+        let other = Arc::clone(&engine);
+        let taken =
+            std::thread::spawn(move || take_within(&other, Duration::from_millis(50)).is_some())
+                .join();
+        assert_eq!(taken.ok(), Some(false));
+        assert!(started.elapsed() < Duration::from_secs(2));
+        drop(held);
     }
 
     /// A panic in a key's or an event's handling is caught, and nothing comes of it.

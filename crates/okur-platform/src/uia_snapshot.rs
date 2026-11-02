@@ -454,7 +454,7 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> okur_core::AomNode {
 }
 
 #[cfg(windows)]
-pub use capture::capture_foreground_document;
+pub use capture::{capture_foreground_document, capture_foreground_document_quick};
 
 /// The element UIA reports as having keyboard focus, for the harness: one JSON line with its
 /// name, control type and class, and whether it is inside a document (a web page's).
@@ -1592,7 +1592,17 @@ pub(crate) mod capture {
         /// Each capturing thread's UIA client: one was made for every capture.
         static CLIENT: std::cell::RefCell<Option<IUIAutomation>> =
             const { std::cell::RefCell::new(None) };
+        /// The same for the quick capture of a page new to the buffer
+        /// ([`capture_foreground_document_quick`]).
+        static QUICK_CLIENT: std::cell::RefCell<Option<IUIAutomation>> =
+            const { std::cell::RefCell::new(None) };
     }
+
+    /// How long the quick capture waits for the browser's answer: it runs on the thread every
+    /// focus and change event waits on, and with UIA's default a busy browser held them for up
+    /// to 20 s (performance review 2026-11-02, live path finding 9). A page not captured by
+    /// then is the page worker's, as a capture that fails.
+    const QUICK_ANSWER_MS: u32 = 2000;
 
     /// This thread's UIA client for page captures, made on its first. Without
     /// [`automation`]'s timeouts: capturing a big page's tree in one request takes seconds.
@@ -1614,11 +1624,34 @@ pub(crate) mod capture {
         fixture_sha256: Option<String>,
         process_version: Option<String>,
     ) -> Result<UiaSnapshot, PlatformError> {
-        let started = std::time::Instant::now();
         // SAFETY: standard COM initialization; S_FALSE/RPC_E_CHANGED_MODE are tolerated
         // because UIA client calls work from either apartment for this one-shot capture.
         let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-        let uia = capture_client()?;
+        capture_document_with(&capture_client()?, fixture_sha256, process_version)
+    }
+
+    /// The same, waiting for the browser's answer at most [`QUICK_ANSWER_MS`]: the quick
+    /// capture of a page new to the buffer, on the thread events wait on.
+    pub fn capture_foreground_document_quick() -> Result<UiaSnapshot, PlatformError> {
+        // SAFETY: as in [`capture_foreground_document`].
+        let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+        let uia = match QUICK_CLIENT.with(|c| c.borrow().clone()) {
+            Some(uia) => uia,
+            None => {
+                let uia = automation_within(1000, QUICK_ANSWER_MS)?;
+                QUICK_CLIENT.with(|c| *c.borrow_mut() = Some(uia.clone()));
+                uia
+            }
+        };
+        capture_document_with(&uia, None, None)
+    }
+
+    fn capture_document_with(
+        uia: &IUIAutomation,
+        fixture_sha256: Option<String>,
+        process_version: Option<String>,
+    ) -> Result<UiaSnapshot, PlatformError> {
+        let started = std::time::Instant::now();
 
         // SAFETY: plain Win32 call with no preconditions.
         let hwnd = unsafe { GetForegroundWindow() };
@@ -1627,7 +1660,7 @@ pub(crate) mod capture {
         }
         let (window_title, window_class) = window_text(hwnd);
 
-        let document = page_document(&uia, hwnd).ok_or(PlatformError::NoDocumentFound)?;
+        let document = page_document(uia, hwnd).ok_or(PlatformError::NoDocumentFound)?;
 
         let request = unsafe { uia.CreateCacheRequest() }.map_err(|e| err("cache", e))?;
         for &prop in PROPERTIES {
