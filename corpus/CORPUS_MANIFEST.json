@@ -2085,6 +2085,10 @@
       "sha256": "347dab25f1e16215aea71d5878ab114601849fe95a0aa20afcb2d39358684551",
       "size_bytes": 5518
     },
+    "desktop-programs-and-features.ps1": {
+      "sha256": "662ddf2ebb65a7273929bac2a9bbccb72ed4f8e14e5b894d1d75538ed3c1ea19",
+      "size_bytes": 758
+    },
     "desktop-proofing-2.ps1": {
       "sha256": "a8cc85bb752f60b31edb99912c325b9ae684366fe4c489d8c0597ab4060e270a",
       "size_bytes": 1300
@@ -2108,6 +2112,10 @@
     "desktop-richedit.ps1": {
       "sha256": "bbfd2f6841d36f3ac7e31861ec6ac337e33cb99107c523fd711c05a3f8097660",
       "size_bytes": 1627
+    },
+    "desktop-settings-apps.ps1": {
+      "sha256": "fa77292b942aadf9bf5bf6e7a619a9e35dbf43d8c8223f34a96017b2d4c957bf",
+      "size_bytes": 715
     },
     "desktop-uia-notifications.ps1": {
       "sha256": "18d4da2576d2c567cebd11a6a6c206b97edece3380042547e8bc7a519c34a57b",
@@ -22434,6 +22442,34 @@
       }
     },
     {
+      "scenario_id": "3155-desktop-settings-apps-list",
+      "fixture": "desktop-settings-apps.ps1",
+      "evidence": {
+        "sha256": "74ab95e7a4d79b9c6e227b3e67faa9ee953c4a1bbafac60763e3b2a5cf3adeb8",
+        "capture_script_sha256": "d69800ff332382d97cd717deef8d56c9d6b996cbb5409282f0afc608a2647876",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3156-desktop-programs-and-features",
+      "fixture": "desktop-programs-and-features.ps1",
+      "evidence": {
+        "sha256": "ad217948667070bf0a6fa28a10e9856e868db1abaa3b1488144f5ba8f42b1ba6",
+        "capture_script_sha256": "b3b3a06d53e082108b7410c4752072650fd66c6af022a73b3128265a04546a9c",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "316-desktop-show-desktop",
       "fixture": "desktop-editor.ps1",
       "evidence": {
@@ -29085,10 +29121,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1914,
-    "scenarios_with_evidence": 1914,
-    "total_trials": 5748,
-    "successful_trials": 5731,
-    "deterministic_scenarios": 1596
+    "scenarios": 1916,
+    "scenarios_with_evidence": 1916,
+    "total_trials": 5754,
+    "successful_trials": 5737,
+    "deterministic_scenarios": 1597
   }
 }

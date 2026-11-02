@@ -1,0 +1,36 @@
+{
+  "id": "3156-desktop-programs-and-features",
+  "name": "Control Panel's Programs and Features: Insert+Tab on the first control, Tab through the page, the column headers, the toolbars and the search box, Down into the programs list, arrows in it, Say Line and Insert+Tab there, Shift+Tab back to the command bar; Insert+T",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-programs-and-features.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "Control Panel\\All Control Panel Items\\Programs and Features",
+    "shell_window": true,
+    "focus_selected": false,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": []
+  },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Tab" },
+    { "id": "s2", "type": "key", "command": "Tab" },
+    { "id": "s3", "type": "key", "command": "Tab" },
+    { "id": "s4", "type": "key", "command": "Tab" },
+    { "id": "s5", "type": "key", "command": "Tab" },
+    { "id": "s6", "type": "key", "command": "Tab" },
+    { "id": "s7", "type": "key", "command": "Tab" },
+    { "id": "s8", "type": "key", "command": "Tab" },
+    { "id": "s9", "type": "key", "command": "Tab" },
+    { "id": "s10", "type": "key", "command": "Down" },
+    { "id": "s11", "type": "key", "command": "Down" },
+    { "id": "s12", "type": "key", "command": "Up" },
+    { "id": "s13", "type": "key", "command": "Insert+Up" },
+    { "id": "s14", "type": "key", "command": "Insert+Tab" },
+    { "id": "s15", "type": "key", "command": "Shift+Tab" },
+    { "id": "s16", "type": "key", "command": "Shift+Tab" },
+    { "id": "s17", "type": "key", "command": "Insert+T" }
+  ]
+}

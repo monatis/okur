@@ -93,7 +93,15 @@ and JAWS is started again; they are never read into the evidence.
 Files: "trace_file": true saves, with -TraceDir, what Okur's recognizer reads in the file
 selected in the fixture's File Explorer window after each step (okur-lab file-text), to the same
 file: replay gives it to Okur's Insert+Space, O, F. Such a fixture's launch has "shell_window":
-its window is File Explorer's, found by its class and title and closed, never killed.
+its window is File Explorer's, found by its class and title and closed, never killed; its
+selected item is given the focus, unless "focus_selected": false (a Control Panel page, which
+selects nothing and keeps its own first focus).
+Store apps: a launch with "app_frame": true is a Store app's window (Windows Settings), a frame
+of ApplicationFrameHost's, which shows every Store app: found by its class and title and closed
+as its Close button does, its process never killed.
+A launch's "settle_ms" waits that long after the window is in front, before the setup's silence
+wait: Settings fills its apps list for seconds after it shows, and JAWS said "154 apps found"
+into the first step, or nothing on an arrow key, when the steps began before (3155).
 
 Settling: after each action the default audio endpoint is metered (okur wait-silence; JAWS is
 the only audio source on the reference machine) until it has been silent for quiet_ms (default
@@ -854,6 +862,15 @@ function Stop-DesktopFixture {
             [void][SrKeyInput]::PostMessage($window, 0x10, [IntPtr]::Zero, [IntPtr]::Zero)
             Start-Sleep -Milliseconds 200
         }
+    } elseif ($launch.app_frame) {
+        # A Store app's frame, closed as its Close button does (WM_SYSCOMMAND SC_CLOSE):
+        # ApplicationFrameHost shows every Store app, and is never killed.
+        for ($i = 0; $i -lt 20; $i++) {
+            $window = [SrKeyInput]::FindWindow('ApplicationFrameWindow', $launch.window_title)
+            if ($window -eq [IntPtr]::Zero) { break }
+            [void][SrKeyInput]::PostMessage($window, 0x112, [IntPtr]0xF060, [IntPtr]::Zero)
+            Start-Sleep -Milliseconds 300
+        }
     } elseif ($launch.close_window) {
         # The application's process can hold the user's own documents (Word's windows are one
         # process): the fixture's window is closed, as its Close button does, never the process.
@@ -910,8 +927,9 @@ function Stop-DesktopFixture {
 if ($launch) { $expectedTitle = $launch.window_title }
 
 function Find-WindowByTitle([string]$title) {
-    if ($launch.shell_window) {
-        $window = [SrKeyInput]::FindWindow('CabinetWClass', $title)
+    if ($launch.shell_window -or $launch.app_frame) {
+        $class = if ($launch.app_frame) { 'ApplicationFrameWindow' } else { 'CabinetWClass' }
+        $window = [SrKeyInput]::FindWindow($class, $title)
         if ($window -eq [IntPtr]::Zero) { return $null }
         return [pscustomobject]@{ Id = 0; MainWindowHandle = $window }
     }
@@ -1050,7 +1068,9 @@ function Start-DesktopFixture {
                 [void][SrKeyInput]::SetForegroundWindow($handle)
                 Start-Sleep -Milliseconds 100
                 if ([SrKeyInput]::GetForegroundWindow() -eq $handle) {
-                    if ($launch.shell_window) { return (Set-ShellItemFocus $handle) }
+                    if ($launch.shell_window -and $launch.focus_selected -ne $false) {
+                        return (Set-ShellItemFocus $handle)
+                    }
                     return $true
                 }
             }
@@ -1177,6 +1197,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     if ($cleared) { $trialResult.lab_state_cleared = $cleared }
     if ($launch) {
         if (-not (Start-DesktopFixture)) { $trialResult.trial_success = $false }
+        if ($launch.settle_ms) { Start-Sleep -Milliseconds ([int]$launch.settle_ms) }
         # A launch reads the window and the focused control, which takes long for a full edit.
         $loadQuiet = Wait-Silence -OnsetMs 1500 -QuietMs 700 -MaxMs 20000
     } else {
