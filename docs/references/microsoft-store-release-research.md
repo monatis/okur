@@ -753,6 +753,50 @@ machine-wide trust change; remove it afterwards):
   by itself after the update, and speech returns without the user doing anything.
 - **E7, WACK.** `appcert.exe test -appxpackagepath` on the package passes; keep the report.
 
+**E1's results** (old-pc, Windows 10 19045.6456, 2026-11-02, with the owner's leave to trust a
+test certificate; scripts and logs in `C:\Users\ailabs\sr-harness\store-e1`; everything undone
+after: packages removed, the test certificate taken out of the Trusted Root store and deleted
+on the dev box). The release binaries of `5f22ae21`.
+
+1. **Partner Center's identity cannot run sideloaded.** A package with `Monatis.okur` and its
+   publisher, signed with a test certificate of that subject, installs, but Windows never
+   starts it, with or without UI Access. Each launch re-registers the package ("Getting
+   registration status ... statusFound: false"), and the activation API answers `0x80270254`
+   (`E_APPLICATION_ACTIVATION_EXEC_FAILURE`) with no process created. The same package under a
+   test identity (`Okur.LabTest`, the development certificate's subject) starts. So the real
+   identity is tested only as the Store installs it; the experiments use a test identity.
+2. **Installing a UI Access package needs an administrator** (R-store-10 holds): unelevated,
+   `0x80073CF6`, "the system failed to register the windows.uiAccess extension due to the
+   following error: Access is denied"; elevated, it installs.
+3. **Windows checks the program's own signature, not the package's.** With only the package
+   signed, the launch fails with `0x8007202B`, "A referral was returned from the server", as an
+   unsigned UI Access program does unpackaged (E1 of 2026-10-20).
+4. **With `okur-sr.exe` signed by a trusted certificate, packaged UI Access works.** Launched as
+   the Start menu does, `okur-sr.exe --doctor-exit` reported:
+
+   ```
+   executable                           C:\Program Files\WindowsApps\Okur.LabTest_1.0.2.0_x64__85p8zkww4b41e\okur-sr.exe
+   integrity                            High (0x3000)
+   TokenUIAccess                        1
+   reads elevated windows               yes
+   signature                            valid
+   manifest                             level=asInvoker uiAccess=true
+   ```
+
+   Started normally, with an elevated Notepad in front, its log said
+   `spoken for event msg=e1-check.txt - Notepad | edit | Type in text.`
+5. The package without UI Access, test identity, installs unelevated and starts at Medium
+   integrity with `TokenUIAccess 0` (E2's start, nothing more checked).
+
+What this leaves for the Store: whether the Store's own signature makes the program count as
+signed (the Store signs the package; NVDA's Store programs carried NV Access's signature), or
+whether `okur-sr.exe` needs a publicly trusted code-signing certificate of Okur's own
+(§5.12: none affordable found for an individual in Turkey). Only a Store install can tell the
+first: a Private-audience submission of the UI Access package, installed on old-pc from the
+Store, then `okur-sr.exe --doctor-exit`. `build-msix.ps1 -ProgramCertificateThumbprint` signs
+the programs before packing when a certificate exists, and warns when a UI Access package is
+built without it.
+
 **Before the owner submits:**
 
 1. Defender's `Bearfoos.A!ml` detection is resolved, or the built binaries are confirmed not

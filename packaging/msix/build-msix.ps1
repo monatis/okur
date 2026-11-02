@@ -34,6 +34,11 @@ param(
     [string]$AssetsDir,
     [string]$OutDir,
     [string]$CertificateThumbprint,
+    # Signs the programs in the package (Authenticode) with this certificate from the current
+    # user's store before packing. UI Access needs it: Windows checks okur-sr.exe's own
+    # signature, and with only the package signed it refuses to start it ("A referral was
+    # returned from the server", E1 on old-pc, 2026-11-02).
+    [string]$ProgramCertificateThumbprint,
     # Use the release binaries already built.
     [switch]$SkipBuild
 )
@@ -77,6 +82,18 @@ New-Item -ItemType Directory -Force (Join-Path $stage 'Assets') | Out-Null
 Copy-Item (Join-Path $release $reader) (Join-Path $stage 'okur-sr.exe')
 Copy-Item (Join-Path $release 'okur-ui.exe') $stage
 Copy-Item (Join-Path $repo 'LICENSE'), (Join-Path $repo 'NOTICE') $stage
+
+# The programs' own signatures, in the staged copies (the release binaries stay as built).
+if ($ProgramCertificateThumbprint) {
+    $signTool = Join-Path $makeAppx.Directory.FullName 'signtool.exe'
+    & $signTool sign /fd SHA256 /sha1 $ProgramCertificateThumbprint /s My `
+        (Join-Path $stage 'okur-sr.exe') (Join-Path $stage 'okur-ui.exe') | Out-Host
+    if ($LASTEXITCODE -ne 0) { throw 'SignTool failed on the programs' }
+} elseif ($UiAccess) {
+    Write-Warning ('okur-sr.exe is not signed: Windows starts a UI Access program only with a ' +
+        'trusted signature of its own, which the package''s signature was not on old-pc ' +
+        '(E1, 2026-11-02). Whether the Store''s signature counts is not known yet.')
+}
 
 # The logos the manifest names, at their sizes: Okur's mark (draw-logo.ps1), run as a script
 # block, as this script may be where script files do not run; and the Store listing's logos

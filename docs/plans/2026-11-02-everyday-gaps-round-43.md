@@ -17,10 +17,18 @@ heavy job at a time, no swarms of subagents). A fix replay cannot reach is check
 
 1. The owner submits the release binaries to Microsoft's malware analysis (the handoff names
    them and their SHA-256), and Defender's flag is settled.
-2. With the owner's leave to trust a test certificate on old-pc: the Store experiments E1-E7
-   of [`2026-10-31-microsoft-store-release.md`](2026-10-31-microsoft-store-release.md), now with
-   the startup task's start and the restart after an update (review S2) among them.
-3. The release's text; the owner submits in Partner Center.
+2. E1 is done (2026-11-02, the research's §8 "E1's results"): packaged UI Access works on
+   Windows 10 19045 when `okur-sr.exe` carries a trusted signature of its own and the package
+   is installed by an administrator; with the package's signature alone Windows refuses to
+   start it; Partner Center's identity cannot run sideloaded at all. The owner's choice:
+   - a Private-audience Store submission of the UI Access package, installed on old-pc from
+     the Store, to learn whether the Store's signature counts for the program;
+   - a code-signing certificate of Okur's own (`build-msix.ps1 -ProgramCertificateThumbprint`);
+   - or the first release without UI Access, UI Access in an update.
+3. The other Store experiments (E2-E7) with the test identity `Okur.LabTest` and October's
+   development certificate (already trusted on old-pc), now with the startup task's start and
+   the restart after an update (review S2) among them.
+4. The release's text; the owner submits in Partner Center.
 
 ## 2. The review's open items, by user impact
 
