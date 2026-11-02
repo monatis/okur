@@ -1031,8 +1031,18 @@ impl ScreenReaderEngine {
             event.key == Key::Escape && event.modifiers == crate::input::Modifiers::none();
         self.last_key = Some((event.key, event.modifiers));
         self.key_since_focus = true;
-        // Excel's selection is the active cell's alone again after any other key.
-        if crate::apps::windows::excel::SelectionKey::of(event.key, event.modifiers).is_none() {
+        // Excel's selection is the active cell's alone again after any other key; not after
+        // a modifier pressed alone, which comes before each chord: Shift pressed for the
+        // second Shift+Right had cleared it, and one cell more was said as a new selection,
+        // "select A 1 Branch C 1 Weekends" for "select Weekends C 1" (live, 1120/s2,
+        // 1121/s4; replay sends no modifier alone).
+        let modifier = matches!(
+            event.key,
+            Key::Control | Key::Alt | Key::Shift | Key::Windows | Key::Insert | Key::CapsLock
+        );
+        if !modifier
+            && crate::apps::windows::excel::SelectionKey::of(event.key, event.modifiers).is_none()
+        {
             self.sheet_selection = None;
         }
         self.last_key_letter = matches!(event.key, Key::Alpha(_))

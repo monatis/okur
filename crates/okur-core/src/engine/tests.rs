@@ -9480,3 +9480,55 @@ fn the_cursor_inside_a_character_moves_on() {
     cursor.move_to(start + 2);
     assert_eq!(cursor.offset, start + 1);
 }
+
+/// Excel's selection extended a cell at a time, Shift pressed alone before each chord as a
+/// hand presses it: each press says the one cell more, "select | Weekends | C 1"; the modifier
+/// alone does not forget the selection read before (live, 1120/s2).
+#[test]
+fn excel_a_selection_grows_a_cell_at_a_time_with_shift_pressed_again() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let window = "Hours.xlsx - Excel";
+    let mut cell = FocusEvent::new(Role::TableCell)
+        .with_name("A1")
+        .with_window_title(window);
+    cell.value = Some("Branch".into());
+    cell.app = Some("EXCEL.EXE".into());
+    cell.platform.window_class = Some("EXCEL7".into());
+    engine.handle_focus_event(&cell);
+    let shift = Modifiers {
+        shift: true,
+        ..Modifiers::none()
+    };
+    let place = |selection: &str, column: u32, text: &str| {
+        AccessibilityEvent::SheetPlace(Some(crate::event::SheetPlace {
+            address: "A1".into(),
+            selection: selection.into(),
+            row: vec!["Branch".into()],
+            column: vec!["Branch".into()],
+            cells: vec![crate::event::SheetCell {
+                column,
+                row: 1,
+                text: text.into(),
+            }],
+            ..crate::event::SheetPlace::default()
+        }))
+    };
+    let mut extend = |selection: &str, column: u32, text: &str| {
+        engine.handle_key_event(&KeyEvent::new(Key::Shift, shift, true));
+        engine.handle_key_event(&KeyEvent::new(Key::RightArrow, shift, true));
+        engine.handle_focus_event(&cell);
+        engine.handle_accessibility_event(&place(selection, column, text))
+    };
+    assert_eq!(
+        extend("A1:B1", 2, "Weekdays").as_deref(),
+        Some("select\nWeekdays\nB 1")
+    );
+    assert_eq!(
+        extend("A1:C1", 3, "Weekends").as_deref(),
+        Some("select\nWeekends\nC 1")
+    );
+}
