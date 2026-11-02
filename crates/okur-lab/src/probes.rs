@@ -209,7 +209,7 @@ pub fn perform_now(node: &okur_core::AomNode, activate: bool) -> Result<(), Stri
     use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
     use xa11y_windows::ia2::{perform_chromium_action, Ia2Action};
-    let id = okur_windows::actions::unique_id(node).ok_or("node has no IA2 uniqueID")?;
+    let id = okur_windows_model::node_ids::unique_id(node).ok_or("node has no IA2 uniqueID")?;
     let action = if activate {
         Ia2Action::DefaultAction
     } else {
@@ -228,8 +228,8 @@ pub fn tray_icons_now() -> Vec<okur_core::event::TrayIcon> {
     use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
     // SAFETY: COM initialization for this thread.
     let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-    okur_windows::uia_snapshot::capture::automation()
-        .map(|uia| okur_windows::uia_snapshot::capture::tray_icons(&uia))
+    okur_windows::uia_capture::automation()
+        .map(|uia| okur_windows::uia_capture::tray_icons(&uia))
         .unwrap_or_default()
 }
 
@@ -241,12 +241,12 @@ pub fn taskbar_dump_now() -> Vec<String> {
     // SAFETY: COM initialization for this thread.
     let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
     let (Ok(uia), Some((taskbar, _))) = (
-        okur_windows::uia_snapshot::capture::automation(),
-        okur_windows::uia_snapshot::capture::taskbar_windows(),
+        okur_windows::uia_capture::automation(),
+        okur_windows::uia_capture::taskbar_windows(),
     ) else {
         return Vec::new();
     };
-    okur_windows::uia_snapshot::capture::taskbar_elements(&uia, taskbar)
+    okur_windows::uia_capture::taskbar_elements(&uia, taskbar)
         .into_iter()
         .map(|e| {
             let rect = e

@@ -48,15 +48,6 @@ pub fn recognizes(path: &Path) -> bool {
         })
 }
 
-/// Whether a window of class `class` shows files to select: File Explorer's, or the desktop's
-/// (its icons are the shell's `Progman` or `WorkerW`).
-pub fn is_file_view(class: &str) -> bool {
-    matches!(
-        class,
-        "CabinetWClass" | "ExploreWClass" | "Progman" | "WorkerW"
-    )
-}
-
 /// What is selected in a window of files.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Selection {

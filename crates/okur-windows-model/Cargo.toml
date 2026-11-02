@@ -1,0 +1,17 @@
+[package]
+name = "okur-windows-model"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+# Windows' accessibility data as data: the trace and snapshot formats, their conversion into
+# the engine's events and AOM, and the privacy rules of what the harness records. No call to
+# Windows: the live driver (okur-windows) and parity replay (okur-corpus) share it, and it
+# builds and is tested on every OS.
+
+[dependencies]
+okur-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+xa11y-windows = { workspace = true }

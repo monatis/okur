@@ -1,12 +1,12 @@
 //! Captured document snapshots (`corpus/snapshots/<fixture>.chrome.<api>.json`) as AOM trees.
 //!
 //! The same fixture load is captured through more than one accessibility API. Both map into
-//! the engine's AOM through production code (`okur_windows::uia_snapshot::to_aom`,
-//! `okur_windows::ia2_snapshot::ia2_to_aom`), so the harness can measure each API's parity.
+//! the engine's AOM through production code (`okur_windows_model::uia_snapshot::to_aom`,
+//! `okur_windows_model::ia2_snapshot::ia2_to_aom`), so the harness can measure each API's parity.
 
 use okur_core::AomNode;
-use okur_windows::ia2_snapshot::{ia2_to_aom, Ia2Snapshot};
-use okur_windows::uia_snapshot::{to_aom, UiaSnapshot};
+use okur_windows_model::ia2_snapshot::{ia2_to_aom, Ia2Snapshot};
+use okur_windows_model::uia_snapshot::{to_aom, UiaSnapshot};
 use std::path::{Path, PathBuf};
 
 /// The accessibility API a snapshot was captured through.

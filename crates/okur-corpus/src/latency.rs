@@ -220,7 +220,7 @@ mod tests {
     const LOG: &str = "\
 2026-10-15T07:34:25.053673Z DEBUG okur: key key=Insert text=None ctrl=false action=Consume mode=NativeControl forms=false waited_us=120 held_us=380
 2026-10-15T07:34:25.084453Z DEBUG okur: key key=Down text=None ctrl=false action=Consume mode=NativeControl forms=false waited_us=0 held_us=1500
-2026-10-15T07:34:25.090000Z DEBUG okur_windows::event_trace::capture: event read event=\"focus\" us=48000
+2026-10-15T07:34:25.090000Z DEBUG okur_windows::event_capture: event read event=\"focus\" us=48000
 2026-10-15T07:34:25.091000Z DEBUG okur: event handled event=\"focus\" us=900
 2026-10-15T07:34:25.092000Z DEBUG okur_windows::events::windows: page loaded title=Inbox - Mail ms=820
 2026-10-15T07:34:25.093000Z DEBUG okur: spoken for event msg=Inbox
@@ -251,7 +251,7 @@ mod tests {
     #[test]
     fn an_event_reads_stages_are_timed_each() {
         let log = concat!(
-            "2026-10-20T19:00:00.000000Z DEBUG okur_windows::event_trace: event read ",
+            "2026-10-20T19:00:00.000000Z DEBUG okur_windows::event_capture: event read ",
             "event=\"focus\" us=161000 stages=[(\"chain\", 3), (\"position\", 4), ",
             "(\"context\", 10), (\"window\", 160)]\n"
         );

@@ -878,7 +878,7 @@ Change for a screen reader (proposal §9):
   a remote session becomes its first step. Layers are planned (helper dialogs plan step 10,
   SDK M3).
 - **Password fields** are read only by harness tools today (`IsPassword` in
-  `crates/okur-windows/src/uia_snapshot.rs:552` and `window_text.rs:185`, which leaves their
+  `crates/okur-windows/src/uia_capture.rs` and `window_text.rs:185`, which leaves their
   value out); Okur's object model has no protected state yet.
 - **WinRT from Rust**: `okur-windows` already uses the `windows` crate's WinRT namespaces for
   OneCore voices (`Media_SpeechSynthesis` in its `Cargo.toml`); Windows.Media.Ocr and

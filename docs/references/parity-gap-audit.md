@@ -773,7 +773,7 @@ takes, what proves it, and whether old-pc must record anything new.
    - What: map `haspopup=menu` to a menu button; read preformatted text with its lines (UIA
      TextPattern); accept that block quotes cannot be seen through UIA. Measure how long users
      stay on the UIA buffer with `okur-lab latency` on real pages before doing more (section 4).
-   - Where: `crates/okur-windows/src/uia_snapshot.rs:274-370`.
+   - Where: `crates/okur-windows-model/src/uia_snapshot.rs:274-370`.
    - Effort: half a day for haspopup; about a day for preformatted text.
    - Proof: `okur-lab parity --api uia` (210: up to 2 steps; 207: up to 19).
    - Recording: none.

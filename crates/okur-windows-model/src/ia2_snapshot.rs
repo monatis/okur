@@ -26,49 +26,6 @@ impl Ia2Snapshot {
     }
 }
 
-/// Captures the document of the foreground Chromium window through MSAA + IA2.
-#[cfg(windows)]
-pub fn capture_foreground_document(
-    fixture_sha256: Option<String>,
-    process_version: Option<String>,
-) -> Result<Ia2Snapshot, crate::PlatformError> {
-    use crate::uia_snapshot::capture::{os_version, window_text};
-    use crate::uia_snapshot::SNAPSHOT_FORMAT_VERSION;
-    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
-    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
-
-    let started = std::time::Instant::now();
-    // SAFETY: standard COM initialization; repeated initialization is tolerated.
-    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-    // SAFETY: plain Win32 call with no preconditions.
-    let hwnd = unsafe { GetForegroundWindow() };
-    if hwnd.is_invalid() {
-        return Err(crate::PlatformError::NoWindowFound);
-    }
-    let (window_title, window_class) = window_text(hwnd);
-    let root = xa11y_windows::ia2::capture_chromium_document(hwnd)
-        .map_err(|e| crate::PlatformError::EventListenerError(e.to_string()))?;
-    Ok(Ia2Snapshot {
-        provenance: SnapshotProvenance {
-            format_version: SNAPSHOT_FORMAT_VERSION,
-            tool_version: env!("CARGO_PKG_VERSION").to_owned(),
-            host: std::env::var("COMPUTERNAME").unwrap_or_default(),
-            os_version: os_version(),
-            window_title,
-            window_class,
-            process_version,
-            fixture_sha256,
-            captured_at_unix_ms: std::time::SystemTime::now()
-                .duration_since(std::time::UNIX_EPOCH)
-                .map(|d| d.as_millis())
-                .unwrap_or(0),
-            node_count: root.node_count(),
-            capture_ms: started.elapsed().as_millis(),
-        },
-        root,
-    })
-}
-
 /// MSAA roles (`ROLE_SYSTEM_*` in `oleacc.h`) that Chromium reports for web content.
 mod msaa_role {
     pub const MENUBAR: i32 = 0x02;
@@ -586,7 +543,7 @@ fn convert(
     }
     // The live object behind the node, for actions (focus, default action).
     if let Some(unique_id) = node.unique_id {
-        set_attr(crate::actions::UNIQUE_ID_ATTR, unique_id.to_string());
+        set_attr(okur_core::aom::UNIQUE_ID_ATTR, unique_id.to_string());
     }
     if let (Some(pos), Some(size)) = (attr("posinset"), attr("setsize")) {
         if size != "0" {

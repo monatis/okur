@@ -41,6 +41,7 @@ bench = false
 okur = { path = "../okur" }
 okur-core = { workspace = true }
 okur-windows = { workspace = true }
+okur-windows-model = { workspace = true }
 okur-corpus = { workspace = true }
 clap = { workspace = true }
 tokio = { workspace = true }

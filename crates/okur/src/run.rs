@@ -219,8 +219,8 @@ fn open_kept_log(path: &Path) -> std::io::Result<std::fs::File> {
 /// Loads a page from a UIA snapshot (`okur-lab snapshot` output) through the production
 /// UIA-to-AOM mapping.
 pub fn load_aom_from_path(path: &Path) -> Result<AomNode, Box<dyn std::error::Error>> {
-    let snapshot = okur_windows::uia_snapshot::UiaSnapshot::load(path)?;
-    Ok(okur_windows::uia_snapshot::to_aom(&snapshot.root))
+    let snapshot = okur_windows_model::uia_snapshot::UiaSnapshot::load(path)?;
+    Ok(okur_windows_model::uia_snapshot::to_aom(&snapshot.root))
 }
 
 /// Engine work longer than this, on a key or an event, is logged as slow: the keyboard hook

@@ -1087,7 +1087,7 @@ What exists:
   ([`docs/handoff/2026-10-17-whatsapp-web.md`](../handoff/2026-10-17-whatsapp-web.md),
   "Verification").
 - Traces are Windows event streams (MSAA and UIA, format version 7,
-  `crates/okur-windows/src/event_trace.rs:38`) converted to `FocusEvent`s in okur-windows.
+  `crates/okur-windows-model/src/event_trace.rs:38`) converted to `FocusEvent`s in okur-windows.
   `AccessibilityEvent` itself is serializable (`event.rs:393-394`).
 - Evidence records the JAWS version, keyboard layout, culture and UTC offset
   (`corpus/evidence/308-desktop-time-and-date-evidence.json`, lines 11-16). The newer

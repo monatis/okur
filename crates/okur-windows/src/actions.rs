@@ -1,30 +1,10 @@
 //! [`okur_core::actions::ApplicationActions`] for Chromium pages, through MSAA/IA2.
 //!
 //! Buffer nodes mapped from IA2 carry the object's IA2 `uniqueID`
-//! ([`UNIQUE_ID_ATTR`]). An action resolves it with `accChild(uniqueID)` on the foreground
+//! (`okur_core::aom::UNIQUE_ID_ATTR`, read by `okur_windows_model::node_ids`). An action resolves it with `accChild(uniqueID)` on the foreground
 //! window's document (Chromium's IDs are negative, which makes them valid child ids) and
 //! calls `accSelect(SELFLAG_TAKEFOCUS)` or `accDoDefaultAction`. The calls cross into the browser process, so they run on a worker
 //! thread: the engine calls actions from the keyboard hook, which must return at once.
-
-pub use okur_core::aom::UNIQUE_ID_ATTR;
-
-/// AOM attribute holding a node's UIA RuntimeId (comma-separated), for a page read through
-/// UIA, whose nodes have no IA2 `uniqueID`.
-pub const UIA_RUNTIME_ID_ATTR: &str = "uia_runtime_id";
-
-/// The UIA RuntimeId recorded on a node, if any.
-pub fn runtime_id(node: &okur_core::AomNode) -> Option<Vec<i32>> {
-    node.attributes
-        .get(UIA_RUNTIME_ID_ATTR)?
-        .split(',')
-        .map(|part| part.parse().ok())
-        .collect()
-}
-
-/// The IA2 `uniqueID` recorded on a node, if any.
-pub fn unique_id(node: &okur_core::AomNode) -> Option<i32> {
-    node.attributes.get(UNIQUE_ID_ATTR)?.parse().ok()
-}
 
 /// Whether two reads of a field have the same text, caret and selection: what a key
 /// changes. The font is left out: the read the engine knows can carry what a poll does not
@@ -42,11 +22,11 @@ pub use windows_actions::WindowsActions;
 
 #[cfg(windows)]
 mod windows_actions {
-    use super::{runtime_id, unique_id};
     use crate::text_context::{
         focus_has_taken_its_keys, read_focused, read_focused_outside_page, read_place_outside_page,
     };
     use okur_core::{AccessibilityEvent, TextContext};
+    use okur_windows_model::node_ids::{runtime_id, unique_id};
     use std::sync::mpsc::{channel, Receiver, Sender};
     use std::sync::Mutex;
     use std::time::{Duration, Instant};
@@ -290,8 +270,7 @@ mod windows_actions {
             // UI Automation's default lets an application take 20 s over an answer, and
             // every read and injected key queued behind it waited (performance review
             // 2026-10-23, P6); 5 s is long enough for a big window's whole tree.
-            let uia: Option<IUIAutomation> =
-                crate::uia_snapshot::capture::automation_within(2000, 5000).ok();
+            let uia: Option<IUIAutomation> = crate::uia_capture::automation_within(2000, 5000).ok();
             while let Ok(first) = rx.recv() {
                 // Keys arrive faster than a read settles (key repeat): of the text reads
                 // queued meanwhile only the newest matters, since the engine speaks for
@@ -681,12 +660,10 @@ mod windows_actions {
                                 let started = Instant::now();
                                 let elements: Vec<okur_core::AomNode> = uia
                                     .as_ref()
-                                    .map(|uia| {
-                                        crate::uia_snapshot::capture::page_elements(uia, &ids)
-                                    })
+                                    .map(|uia| crate::uia_capture::page_elements(uia, &ids))
                                     .unwrap_or_default()
                                     .iter()
-                                    .map(crate::uia_snapshot::to_aom)
+                                    .map(okur_windows_model::uia_snapshot::to_aom)
                                     .collect();
                                 tracing::debug!(
                                     asked = ids.len(),
@@ -843,9 +820,15 @@ mod windows_actions {
                                     ms = started.elapsed().as_millis(),
                                     "mouse point read"
                                 );
-                                let point = crate::event_trace::TracePoint { at: [x, y], texts };
-                                let _ = events
-                                    .send(crate::event_trace::mouse_point_event(&chain, &point));
+                                let point = okur_windows_model::event_trace::TracePoint {
+                                    at: [x, y],
+                                    texts,
+                                };
+                                let _ = events.send(
+                                    okur_windows_model::event_trace::mouse_point_event(
+                                        &chain, &point,
+                                    ),
+                                );
                             }
                             Request::ListTray => {
                                 let Some(events) = events.as_ref() else {
@@ -854,7 +837,7 @@ mod windows_actions {
                                 };
                                 let icons = uia
                                     .as_ref()
-                                    .map(crate::uia_snapshot::capture::tray_icons)
+                                    .map(crate::uia_capture::tray_icons)
                                     .unwrap_or_default();
                                 tracing::debug!(icons = icons.len(), "tray icons listed");
                                 let _ = events.send(AccessibilityEvent::TrayIcons(icons));
@@ -1310,25 +1293,25 @@ fn sheet_list_now(kind: okur_core::SheetListKind) -> Option<(String, Vec<okur_co
 }
 
 /// Captures the foreground Chromium window's page through IA2 and maps it with
-/// [`crate::ia2_snapshot::ia2_to_aom`]: the same pipeline the parity harness verifies.
+/// [`okur_windows_model::ia2_snapshot::ia2_to_aom`]: the same pipeline the parity harness verifies.
 ///
 /// When IA2 yields no page (only Chrome's "Chrome Legacy Window" placeholder), the UIA
-/// capture and [`crate::uia_snapshot::to_aom`] are used instead. Page actions need IA2
+/// capture and [`okur_windows_model::uia_snapshot::to_aom`] are used instead. Page actions need IA2
 /// uniqueIDs, so a UIA page can be read but not acted on.
 #[cfg(windows)]
 pub fn capture_foreground_page() -> Result<okur_core::AomNode, crate::PlatformError> {
-    let ia2 = crate::ia2_snapshot::capture_foreground_document(None, None);
+    let ia2 = crate::ia2_capture::capture_foreground_document(None, None);
     match ia2 {
         Ok(snapshot) if snapshot.root.node_count() > 1 => {
-            Ok(crate::ia2_snapshot::ia2_to_aom(&snapshot.root))
+            Ok(okur_windows_model::ia2_snapshot::ia2_to_aom(&snapshot.root))
         }
         other => {
             tracing::warn!(
                 "IA2 page capture unusable ({} node(s)); falling back to UIA",
                 other.as_ref().map(|s| s.root.node_count()).unwrap_or(0)
             );
-            let snapshot = crate::uia_snapshot::capture_foreground_document(None, None)?;
-            Ok(crate::uia_snapshot::to_aom(&snapshot.root))
+            let snapshot = crate::uia_capture::capture_foreground_document(None, None)?;
+            Ok(okur_windows_model::uia_snapshot::to_aom(&snapshot.root))
         }
     }
 }
@@ -1513,8 +1496,8 @@ pub fn set_clipboard_text(text: &str) -> Result<(), String> {
 /// [`capture_foreground_page`]'s when that is done.
 #[cfg(windows)]
 pub fn capture_foreground_page_quick() -> Result<okur_core::AomNode, crate::PlatformError> {
-    let snapshot = crate::uia_snapshot::capture_foreground_document_quick()?;
-    Ok(crate::uia_snapshot::to_aom(&snapshot.root))
+    let snapshot = crate::uia_capture::capture_foreground_document_quick()?;
+    Ok(okur_windows_model::uia_snapshot::to_aom(&snapshot.root))
 }
 
 #[cfg(test)]

@@ -4,13 +4,15 @@ pub mod clock;
 pub mod desktop;
 pub mod ease_of_access;
 pub mod elevation;
-pub mod event_trace;
+#[cfg(windows)]
+pub mod event_capture;
 pub mod events;
 #[cfg(windows)]
 pub mod excel_om;
 pub mod file_text;
 pub mod hook;
-pub mod ia2_snapshot;
+#[cfg(windows)]
+pub mod ia2_capture;
 pub mod instance;
 pub mod key_input;
 #[cfg(windows)]
@@ -18,7 +20,6 @@ pub mod lowered_process;
 pub mod mouse_point;
 pub mod notification_listener;
 pub mod ocr;
-pub mod privacy;
 pub mod process;
 pub mod registry;
 pub mod screen_lines;
@@ -30,7 +31,8 @@ pub mod text_context;
 pub mod top_windows;
 pub mod tts;
 pub mod ui_host;
-pub mod uia_snapshot;
+#[cfg(windows)]
+pub mod uia_capture;
 pub mod virtual_desktop;
 pub mod window_text;
 #[cfg(windows)]

@@ -476,7 +476,7 @@ fn capture_snapshot(
 ) -> Result<(), String> {
     let (json, nodes, title, ms) = match api {
         "uia" => {
-            let s = okur_windows::uia_snapshot::capture_foreground_document(
+            let s = okur_windows::uia_capture::capture_foreground_document(
                 fixture_sha256,
                 process_version,
             )
@@ -490,7 +490,7 @@ fn capture_snapshot(
             )
         }
         "ia2" => {
-            let s = okur_windows::ia2_snapshot::capture_foreground_document(
+            let s = okur_windows::ia2_capture::capture_foreground_document(
                 fixture_sha256,
                 process_version,
             )
@@ -532,7 +532,7 @@ fn visible(speech: &str) -> String {
 
 /// One traced event as a line: its time into the step, kind, window, and the focus chain's
 /// innermost elements (`control type:class:name`).
-fn trace_line(event: &okur_windows::event_trace::TraceEvent, start_ms: u128) -> String {
+fn trace_line(event: &okur_windows_model::event_trace::TraceEvent, start_ms: u128) -> String {
     let chain: Vec<String> = event
         .focus_chain
         .iter()
@@ -616,7 +616,7 @@ fn print_evidence(
             .and_then(Path::parent)
             .unwrap_or(Path::new("corpus"));
         let (header, events) =
-            okur_windows::event_trace::read_trace(corpus.join("traces").join(file))?;
+            okur_windows_model::event_trace::read_trace(corpus.join("traces").join(file))?;
         println!(
             "trace {file} (format {}, {} events)",
             header.trace_format_version,
@@ -628,7 +628,7 @@ fn print_evidence(
     };
     // What replay's converter makes of each event, converted in order as replay does, its
     // state carried from one to the next.
-    let mut converter = okur_windows::event_trace::EventConverter::default();
+    let mut converter = okur_windows_model::event_trace::EventConverter::default();
     let converted: Vec<Vec<String>> = events
         .iter()
         .map(|event| {
@@ -1293,7 +1293,7 @@ async fn main() {
                 fn find<'a>(node: &'a AomNode, name: &str) -> Option<&'a AomNode> {
                     if node.name.as_deref().map(str::trim) == Some(name)
                         && node.role != Role::Text
-                        && okur_windows::actions::unique_id(node).is_some()
+                        && okur_windows_model::node_ids::unique_id(node).is_some()
                     {
                         return Some(node);
                     }
@@ -1319,7 +1319,7 @@ async fn main() {
                     }
                 };
                 std::thread::sleep(std::time::Duration::from_millis(500));
-                let focused = okur_windows::uia_snapshot::focused_element_summary();
+                let focused = okur_windows::uia_capture::focused_element_summary();
                 println!(
                     "{action} {name:?} ({:?}): {requested:?}; keyboard focus now: {focused}",
                     target.role
@@ -1701,7 +1701,7 @@ async fn main() {
         }
         Some(Commands::Focus) => {
             #[cfg(windows)]
-            println!("{}", okur_windows::uia_snapshot::focused_element_json());
+            println!("{}", okur_windows::uia_capture::focused_element_json());
             #[cfg(not(windows))]
             {
                 eprintln!("the focus is only read on Windows");

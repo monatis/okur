@@ -9,8 +9,8 @@ pub use reader::read;
 
 #[cfg(windows)]
 mod reader {
-    use crate::uia_snapshot::UiaNode;
     use okur_core::UnitTexts;
+    use okur_windows_model::uia_snapshot::UiaNode;
     use windows::Win32::Foundation::POINT;
     use windows::Win32::UI::Accessibility::{
         IUIAutomation, IUIAutomationTextPattern, TextPatternRangeEndpoint_End,
@@ -28,9 +28,8 @@ mod reader {
         // SAFETY: UIA client calls on valid objects.
         unsafe {
             let element = uia.ElementFromPoint(point).ok()?;
-            let element =
-                crate::uia_snapshot::capture::with_properties(uia, &element).unwrap_or(element);
-            let chain = crate::uia_snapshot::capture::focus_chain_from(uia, &element);
+            let element = crate::uia_capture::with_properties(uia, &element).unwrap_or(element);
+            let chain = crate::uia_capture::focus_chain_from(uia, &element);
             let texts = element
                 .GetCurrentPatternAs::<IUIAutomationTextPattern>(UIA_TextPatternId)
                 .ok()

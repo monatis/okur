@@ -8,6 +8,8 @@
 //! `Run` | `Type the name of a program, folder, document, or` |
 //! `Internet resource, and Windows will open it for you.` | `Open: C:` | `OK Cancel Browse...`
 
+use okur_windows_model::text::without_accelerators;
+
 /// One piece of text at its place on screen.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Run {
@@ -68,24 +70,6 @@ pub fn wrap(text: &str, width: i32, measure: impl Fn(&str) -> i32) -> Vec<String
         }
     }
     lines
-}
-
-/// A control's text without its keyboard accelerator marks (`&Open:` is shown as `Open:`;
-/// `&&` is a literal ampersand).
-pub fn without_accelerators(text: &str) -> String {
-    let mut out = String::with_capacity(text.len());
-    let mut chars = text.chars().peekable();
-    while let Some(c) = chars.next() {
-        if c == '&' {
-            if chars.peek() == Some(&'&') {
-                out.push('&');
-                chars.next();
-            }
-            continue;
-        }
-        out.push(c);
-    }
-    out
 }
 
 /// A dialog box as read from its controls.

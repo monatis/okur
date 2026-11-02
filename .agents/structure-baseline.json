@@ -32,7 +32,7 @@
       "why": "application state belongs to its module (step 5)"
     },
     "platform_cfg_sites": {
-      "count": 196,
+      "count": 191,
       "mode": "report",
       "why": "the Windows crate is gated once, at its root (step 4)"
     }
@@ -52,11 +52,11 @@
       "crates/okur-core/src/ui/settings_tree.rs": 1784,
       "crates/okur-corpus/src/divergences.rs": 1872,
       "crates/okur-corpus/src/parity.rs": 1857,
-      "crates/okur-lab/src/main.rs": 2019,
-      "crates/okur-windows/src/actions.rs": 1799,
-      "crates/okur-windows/src/event_trace.rs": 6060,
+      "crates/okur-lab/src/main.rs": 2014,
+      "crates/okur-windows/src/actions.rs": 1502,
+      "crates/okur-windows/src/event_capture.rs": 2956,
+      "crates/okur-windows-model/src/event_trace.rs": 3056,
       "crates/okur-windows/src/text_context.rs": 1958,
-      "crates/okur-windows/src/uia_snapshot.rs": 1769,
       "crates/okur-ui/src/dialog.rs": 2101
     }
   }

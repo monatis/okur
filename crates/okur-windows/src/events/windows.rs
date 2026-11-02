@@ -1,14 +1,15 @@
 //! Windows accessibility events for the live screen reader.
 //!
 //! Events come from the WinEvent capture that `okur-lab trace` records
-//! ([`crate::event_trace::run_live`]). They are converted by the converter parity replay uses
+//! ([`crate::event_capture::run_live`]). They are converted by the converter parity replay uses
 //! ([`EventConverter`]), so the live screen reader consumes
 //! the event stream the harness records, replays and verifies against JAWS.
 
 use super::AccessibilityEventListener;
-use crate::event_trace::{run_live, EventConverter, TraceEvent};
+use crate::event_capture::run_live;
 use crate::PlatformError;
 use okur_core::AccessibilityEvent;
+use okur_windows_model::event_trace::{EventConverter, TraceEvent};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use tokio::sync::mpsc::UnboundedSender;
@@ -66,8 +67,8 @@ const MAX_CHANGED_PARTS: usize = 8;
 /// Notes a change the hook passed on. Chromium reorders the parent of every object shown or
 /// hidden, and raises IA2's text events on the block whose text changed in place, so these
 /// name each changed part; shows and hides alone add nothing to read (old-pc, 2026-10-18).
-fn note_page_change(change: crate::event_trace::PageChange) {
-    use crate::event_trace::{IA2_EVENT_TEXT_INSERTED, IA2_EVENT_TEXT_REMOVED};
+fn note_page_change(change: crate::event_capture::PageChange) {
+    use crate::event_capture::{IA2_EVENT_TEXT_INSERTED, IA2_EVENT_TEXT_REMOVED};
     const EVENT_OBJECT_REORDER: u32 = 0x8004;
     if !matches!(
         change.event,
@@ -111,7 +112,7 @@ fn read_changed_parts(
     let mut parts = Vec::with_capacity(objects.len());
     for &object in objects {
         match xa11y_windows::ia2::capture_chromium_object(top, object) {
-            Ok(node) => parts.push(crate::ia2_snapshot::ia2_to_aom(&node)),
+            Ok(node) => parts.push(okur_windows_model::ia2_snapshot::ia2_to_aom(&node)),
             Err(e) => {
                 tracing::debug!(object, "page part not read again ({e}): the whole page is");
                 return false;
@@ -211,7 +212,7 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
                 let mut page: Option<String> = None;
                 let mut converter = EventConverter::default();
                 let changes = sender.clone();
-                let page_changed = move |change: crate::event_trace::PageChange| {
+                let page_changed = move |change: crate::event_capture::PageChange| {
                     note_page_change(change);
                     if change.notify {
                         let _ = changes.send(AccessibilityEvent::PageChanged);
@@ -256,7 +257,7 @@ fn deliver(
     pages: &std::sync::mpsc::Sender<PageRequest>,
 ) {
     let events = converter.convert(event);
-    if events.is_empty() && crate::event_trace::is_focus(event) {
+    if events.is_empty() && okur_windows_model::event_trace::is_focus(event) {
         tracing::debug!(class = ?event.window_class, "focus event without a usable focus chain");
     }
     for converted in events {

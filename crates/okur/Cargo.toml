@@ -40,6 +40,7 @@ bench = false
 [dependencies]
 okur-core = { workspace = true }
 okur-windows = { workspace = true }
+okur-windows-model = { workspace = true }
 clap = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }

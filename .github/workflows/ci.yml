@@ -84,5 +84,7 @@ jobs:
       - name: Rust (the version rust-toolchain.toml pins)
         run: rustup toolchain install
       - uses: Swatinem/rust-cache@v2
-      - name: Tests of the engine and the accessibility types
-        run: cargo test -p okur-core -p xa11y-core
+      # okur-windows-model converts Windows' recorded data without calling Windows, so parity
+      # replay (okur-corpus) runs here too.
+      - name: Tests of the engine, the accessibility types and parity replay
+        run: cargo test -p okur-core -p xa11y-core -p okur-windows-model -p okur-corpus

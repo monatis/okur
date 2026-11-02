@@ -22,17 +22,28 @@
   "crates": {
     "okur-ui-model": { "kind": "neutral", "allow": [] },
     "okur-core": { "kind": "neutral", "allow": ["okur-ui-model"] },
+    "okur-windows-model": { "kind": "neutral", "allow": ["okur-core", "xa11y-windows"] },
     "okur-windows": {
       "kind": "platform",
-      "allow": ["okur-core", "okur-ui-model", "xa11y", "xa11y-windows"]
+      "allow": ["okur-core", "okur-ui-model", "okur-windows-model", "xa11y", "xa11y-windows"]
     },
-    "okur-corpus": { "kind": "lab", "allow": ["okur-core"] },
-    "okur": { "kind": "program", "allow": ["okur-core", "okur-windows", "okur-ui-model"] },
+    "okur-corpus": { "kind": "lab", "allow": ["okur-core", "okur-windows-model"] },
+    "okur": {
+      "kind": "program",
+      "allow": ["okur-core", "okur-windows", "okur-windows-model", "okur-ui-model"]
+    },
     "okur-setup": { "kind": "program", "allow": ["okur-windows"] },
     "okur-ui": { "kind": "program", "allow": ["okur-ui-model"] },
     "okur-lab": {
       "kind": "lab",
-      "allow": ["okur-core", "okur-windows", "okur-corpus", "okur-ui-model", "xa11y-windows"]
+      "allow": [
+        "okur-core",
+        "okur-windows",
+        "okur-windows-model",
+        "okur-corpus",
+        "okur-ui-model",
+        "xa11y-windows"
+      ]
     },
     "okur-speech-recorder": { "kind": "lab", "allow": [] },
     "xa11y": {
@@ -45,11 +56,6 @@
     "xa11y-linux": { "kind": "vendored", "allow": ["xa11y-core"] }
   },
   "known_edges": [
-    {
-      "from": "okur-corpus",
-      "to": "okur-windows",
-      "until": "step 3: parity replays through okur-windows-model"
-    },
     {
       "from": "okur-lab",
       "to": "okur",

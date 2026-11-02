@@ -877,7 +877,7 @@ output_types = ["whatsapp.message"]
   Okur's own types (`AccessibilityEvent` is already serializable, `event.rs:393-394`).
 - It is platform-neutral: recorded on Windows, replayed on Linux CI.
 - It sits beside the platform trace that parity uses today
-  (`crates/okur-windows/src/event_trace.rs`), and is written by the developer interface or
+  (`crates/okur-windows-model/src/event_trace.rs`), and is written by the developer interface or
   by `okur-lab trace`.
 - Personal content (messages, names) never enters a test committed to a public registry; the
   developer interface offers to replace text with placeholders before saving.

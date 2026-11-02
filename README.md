@@ -263,6 +263,9 @@ from the [performance review](docs/backlog/performance-review-2026-10-20.md) of 
 - [`crates/okur-windows`](crates/okur-windows): the Windows driver: the event tracer, keyboard
   hook, speech engines, application actions and the settings files. A macOS driver will sit
   beside it.
+- [`crates/okur-windows-model`](crates/okur-windows-model): Windows' accessibility data as
+  data: the trace and snapshot formats and their conversion into the engine's events, shared
+  by the live driver and parity replay, and built on every OS.
 - [`crates/okur-corpus`](crates/okur-corpus): parity replay, accepted divergences,
   invariants, the corpus manifest and the latency summary.
 - [`crates/okur`](crates/okur): the screen reader (`okur.exe`: `run`, `quit`, `doctor`,

@@ -162,6 +162,7 @@ These exist because an audit (2026-10-14) found parity claims that no tool had e
 
 - `crates/okur-core/`: AOM, virtual buffer, virtual cursor, reading commands, mode transitions.
 - `crates/okur-windows/`: the live Windows driver: keyboard hook, accessibility events and reads (UIA, IA2, MSAA, through `crates/xa11y/` where it covers them), application actions, SAPI 5 and OneCore speech, OCR, the Office object models, and the installer's plumbing. A macOS driver will be `okur-macos`, beside it.
+- `crates/okur-windows-model/`: Windows' accessibility data as data, with no call to Windows: the trace and snapshot formats (UIA, IA2), their conversion into the engine's events and AOM, and what a recording keeps out (`privacy`). The live driver and parity replay share it, so parity runs on every OS.
 - `crates/okur-corpus/`: Test harness, normalizer, differential comparison engine.
 - `crates/okur/`: the screen reader's programs: `okur` (`okur run`, `quit`, `doctor`, `voices`), and `okur-sr`, the installed reader.
 - `crates/okur-lab/`: the verification harness's programs, never installed for users: `okur-lab` (`parity`, `trace`, `snapshot`, `wait-silence`, `keys`, `jaws-history`, ...) and `okur-lab-keys`. What sends keys, reads the clipboard and traces every window stays out of `okur.exe`, which antivirus classifiers flagged while it held all of this.

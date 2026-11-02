@@ -493,7 +493,7 @@ mod tests {
         assert!(!controls.is_empty());
         assert!(controls
             .iter()
-            .all(|n| okur_windows::actions::unique_id(n).is_some()));
+            .all(|n| okur_windows_model::node_ids::unique_id(n).is_some()));
     }
 
     /// The buffer's index of where each node starts gives what gathering the node's subtree
@@ -584,7 +584,7 @@ mod tests {
     /// the live reader skips them (performance review, 2026-10-20, P5).
     #[test]
     fn caret_events_without_their_text_give_nothing() {
-        use okur_windows::event_trace::{read_trace, EventConverter};
+        use okur_windows_model::event_trace::{read_trace, EventConverter};
         let entries = std::fs::read_dir(corpus_dir().join("traces"));
         assert!(entries.is_ok(), "{entries:?}");
         let Ok(entries) = entries else {
@@ -620,7 +620,7 @@ mod tests {
     /// performance review 2026-11-02, live path finding 1).
     #[test]
     fn live_prefilter_keeps_what_the_converter_uses() {
-        use okur_windows::event_trace::{live_change_kept, read_trace, EventConverter};
+        use okur_windows_model::event_trace::{live_change_kept, read_trace, EventConverter};
         let entries = std::fs::read_dir(corpus_dir().join("traces"));
         assert!(entries.is_ok(), "{entries:?}");
         let Ok(entries) = entries else {
@@ -748,9 +748,9 @@ mod tests {
     /// live listener build them: the radio button inside the "Membership type" fieldset.
     #[test]
     fn focus_event_from_chrome_focus_chain() {
-        use okur_windows::uia_snapshot::UiaNode;
+        use okur_windows_model::uia_snapshot::UiaNode;
         let path = corpus_dir().join("snapshots/signup-form.chrome.uia.json");
-        let snapshot = okur_windows::uia_snapshot::UiaSnapshot::load(&path);
+        let snapshot = okur_windows_model::uia_snapshot::UiaSnapshot::load(&path);
         assert!(snapshot.is_ok(), "{snapshot:?}");
         let Ok(snapshot) = snapshot else { return };
 
@@ -774,7 +774,7 @@ mod tests {
             .collect();
         assert!(chain.len() >= 3, "radio button not found");
 
-        let event = okur_windows::event_trace::focus_event_from_chain(
+        let event = okur_windows_model::event_trace::focus_event_from_chain(
             &chain,
             Some("Chrome_RenderWidgetHostHWND"),
             None,

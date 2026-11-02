@@ -190,7 +190,7 @@ Block quotes cannot be seen through UIA. Measure first how long users stay on th
   Shift+End (".").
 
 - **The signup fixture's `help@riverside-library.org`** is not at a reserved example domain, so
-  the tracer would blank it out of a trace (`crates/okur-windows/src/privacy.rs`). It has never
+  the tracer would blank it out of a trace (`crates/okur-windows-model/src/privacy.rs`). It has never
   appeared in one; move it to `example.org` the next time `signup-form.html` is re-recorded.
 - **Known-gap tests** (AGENTS.md rule 6): `crates/okur-corpus/src/lib.rs` replays the step and
   asserts JAWS's speech (`parity::run_one`). Add one for each gap whose behavior is recorded;

@@ -6,27 +6,14 @@
 #[cfg(windows)]
 pub use reader::{control_lines, window_lines, window_runs};
 
-/// Whether a window of class `class` (its top-level window's), drawn by `framework` (UI
-/// Automation's FrameworkId, empty when unknown), is read element by element: a modern app's
-/// (UWP, WinUI, WPF), as JAWS's viewer lists its elements and its Scan Cursor walks them
-/// [obs, 1002/s2]; a classic window by its screen rows.
-pub fn reads_by_elements(class: &str, framework: &str) -> bool {
-    matches!(
-        class,
-        "ApplicationFrameWindow" | "Windows.UI.Core.CoreWindow" | "WinUIDesktopWin32WindowClass"
-    ) || class.starts_with("HwndWrapper[")
-        || matches!(framework, "XAML" | "WPF" | "WinUI")
-}
-
 #[cfg(windows)]
 mod reader {
-    use crate::screen_lines::{
-        class_of, control_text, owner_drawn, static_lines, symbol_font, without_accelerators,
-    };
-    use crate::uia_snapshot::capture::{boolean, int, string};
+    use crate::screen_lines::{class_of, control_text, owner_drawn, static_lines, symbol_font};
+    use crate::uia_capture::{boolean, int, string};
     use okur_core::aom::Role;
     use okur_core::screen_model::WindowText;
     use okur_core::viewer_text::{lines, ScreenItem, ViewerLayout};
+    use okur_windows_model::text::without_accelerators;
     use windows::Win32::Foundation::HWND;
     use windows::Win32::UI::Accessibility::*;
 
@@ -118,7 +105,7 @@ mod reader {
     fn layout_of(root: &IUIAutomationElement) -> ViewerLayout {
         let class = string(root, UIA_ClassNamePropertyId).unwrap_or_default();
         let framework = string(root, UIA_FrameworkIdPropertyId).unwrap_or_default();
-        if super::reads_by_elements(&class, &framework) {
+        if okur_windows_model::classes::reads_by_elements(&class, &framework) {
             ViewerLayout::Elements
         } else {
             ViewerLayout::Rows
@@ -618,7 +605,7 @@ pub fn foreground_screen(
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
     // SAFETY: COM for this thread's UIA client.
     let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-    let uia = crate::uia_snapshot::capture::automation()?;
+    let uia = crate::uia_capture::automation()?;
     // SAFETY: plain Win32 call with no preconditions.
     let accessible = window_runs(&uia, unsafe { GetForegroundWindow() }).ok_or_else(|| {
         crate::PlatformError::EventListenerError("the window could not be read".to_owned())
@@ -640,7 +627,7 @@ pub fn foreground_lines(control: bool) -> Result<Vec<String>, crate::PlatformErr
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
     // SAFETY: COM for this thread's UIA client.
     let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-    let uia = crate::uia_snapshot::capture::automation()?;
+    let uia = crate::uia_capture::automation()?;
     let lines = if control {
         control_lines(&uia)
     } else {

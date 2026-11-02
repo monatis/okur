@@ -615,7 +615,7 @@ mod windows_harness {
                 );
             }
             let child_id = i32::try_from(&child).unwrap_or(0);
-            uia = match okur_windows::uia_snapshot::capture::automation() {
+            uia = match okur_windows::uia_capture::automation() {
                 // SAFETY: a UIA read on a valid automation object.
                 Ok(automation) => match unsafe { automation.ElementFromIAccessible(acc, child_id) }
                 {
@@ -625,15 +625,15 @@ mod windows_harness {
                 Err(e) => serde_json::json!({ "error": e.to_string() }),
             };
         }
-        let uia_focus = okur_windows::uia_snapshot::capture::automation()
+        let uia_focus = okur_windows::uia_capture::automation()
             .ok()
-            .map(|automation| okur_windows::uia_snapshot::capture::focus_chain(&automation))
+            .map(|automation| okur_windows::uia_capture::focus_chain(&automation))
             .and_then(|chain| chain.last().cloned())
             .map(|n| serde_json::json!({ "name": n.name, "class_name": n.class_name }));
         // Office's own UIA tree below the window: the element with the keyboard focus, or
         // else the first one with the MSAA object's name.
         let msaa_name = msaa.get("name").and_then(|n| n.as_str()).map(str::to_owned);
-        let uia_native = okur_windows::uia_snapshot::capture::automation()
+        let uia_native = okur_windows::uia_capture::automation()
             .ok()
             .and_then(|automation| {
                 // SAFETY: UIA reads on a valid automation object and its elements.
