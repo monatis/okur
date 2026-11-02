@@ -373,8 +373,13 @@ unsafe extern "system" fn low_level_keyboard_proc(
     event.time_ms = u64::from(kbd.time);
     event.is_repeat = is_repeat;
     event.caps_lock_on = Some(GetKeyState(i32::from(VK_CAPITAL.0)) & 1 != 0);
-    if !ctrl && !alt && !win && !insert {
-        event.text = typed_char(vk_code, kbd.scanCode, shift);
+    // Ctrl with Alt is AltGr (right Alt, which Windows reports with a left Ctrl): it types a
+    // layout's third characters, the at sign on Turkish Q and German, braces and brackets on
+    // German, which were never echoed (performance review 2026-11-02, live path finding 3).
+    // Where Ctrl+Alt types nothing (a US layout), there is no character.
+    let alt_gr = ctrl && alt;
+    if (alt_gr || (!ctrl && !alt)) && !win && !insert {
+        event.text = typed_char(vk_code, kbd.scanCode, shift, alt_gr);
     }
 
     let mut action = KeyAction::PassThrough;
@@ -441,27 +446,54 @@ fn reset_held_state() {
 /// The character a key press types in the foreground window's keyboard layout, for typing
 /// echo. Flag 0x4 keeps `ToUnicodeEx` from changing the keyboard state, so dead keys still
 /// compose in the application.
-fn typed_char(vk: u32, scan: u32, shift: bool) -> Option<char> {
+fn typed_char(vk: u32, scan: u32, shift: bool, alt_gr: bool) -> Option<char> {
     use windows::Win32::UI::Input::KeyboardAndMouse::{GetKeyboardLayout, ToUnicodeEx};
     use windows::Win32::UI::WindowsAndMessaging::{GetForegroundWindow, GetWindowThreadProcessId};
-    let mut state = [0u8; 256];
-    if shift {
-        state[0x10] = 0x80; // VK_SHIFT
-    }
     // SAFETY: plain Win32 state and layout queries with valid arguments.
     unsafe {
-        if GetKeyState(0x14) & 1 != 0 {
-            state[0x14] = 0x01; // VK_CAPITAL toggled
-        }
+        let state = key_state(shift, alt_gr, GetKeyState(0x14) & 1 != 0);
         let thread = GetWindowThreadProcessId(GetForegroundWindow(), None);
         let layout = GetKeyboardLayout(thread);
         let mut buf = [0u16; 8];
         let n = ToUnicodeEx(vk, scan, &state, &mut buf, 0x4, Some(layout));
-        if n != 1 {
-            return None;
-        }
-        char::from_u32(u32::from(buf[0])).filter(|c| !c.is_control())
+        typed_text(&buf, n)
     }
+}
+
+/// The keyboard state `ToUnicodeEx` is given for a key: Shift, AltGr (both Ctrl and Alt, and
+/// the right Alt and left Ctrl Windows reports for it) and Caps Lock toggled.
+fn key_state(shift: bool, alt_gr: bool, caps_lock: bool) -> [u8; 256] {
+    let mut state = [0u8; 256];
+    if shift {
+        state[0x10] = 0x80; // VK_SHIFT
+    }
+    if alt_gr {
+        state[0x11] = 0x80; // VK_CONTROL
+        state[0x12] = 0x80; // VK_MENU
+        state[0xA2] = 0x80; // VK_LCONTROL
+        state[0xA5] = 0x80; // VK_RMENU
+    }
+    if caps_lock {
+        state[0x14] = 0x01; // VK_CAPITAL toggled
+    }
+    state
+}
+
+/// The one character `ToUnicodeEx` wrote (`written` UTF-16 units): two units are one
+/// character beyond the Basic Multilingual Plane; a dead key (negative), none or more than one
+/// character, and control characters (Ctrl+letters), type nothing echoed.
+fn typed_text(buf: &[u16], written: i32) -> Option<char> {
+    let units = buf.get(
+        ..usize::try_from(written)
+            .ok()
+            .filter(|n| (1..=2).contains(n))?,
+    )?;
+    let mut chars = char::decode_utf16(units.iter().copied());
+    let first = chars.next()?.ok()?;
+    if chars.next().is_some() {
+        return None;
+    }
+    Some(first).filter(|c| !c.is_control())
 }
 
 fn translate_vk_code(vk: u32, scan: u32, extended: bool) -> Key {
@@ -538,6 +570,29 @@ fn translate_vk_code(vk: u32, scan: u32, extended: bool) -> Key {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// AltGr's state holds Ctrl and Alt, and the right Alt and left Ctrl Windows reports for
+    /// it; a character beyond the Basic Multilingual Plane comes in two units; dead keys,
+    /// several characters and control characters echo nothing.
+    #[test]
+    fn altgr_and_surrogate_pairs_type_their_characters() {
+        let state = key_state(false, true, false);
+        let held = |vk: usize| state.get(vk).copied();
+        assert_eq!(
+            [held(0x11), held(0x12), held(0xA2), held(0xA5), held(0x10)],
+            [Some(0x80), Some(0x80), Some(0x80), Some(0x80), Some(0)]
+        );
+        assert_eq!(key_state(true, false, true).get(0x14).copied(), Some(1));
+        let at = [u16::from(b'@'), 0];
+        assert_eq!(typed_text(&at, 1), Some('@'));
+        let laugh: Vec<u16> = "😀".encode_utf16().collect();
+        assert_eq!(typed_text(&laugh, 2), Some('😀'));
+        assert_eq!(typed_text(&at, -1), None);
+        assert_eq!(typed_text(&at, 0), None);
+        let two = [u16::from(b'a'), u16::from(b'b')];
+        assert_eq!(typed_text(&two, 2), None);
+        assert_eq!(typed_text(&[0x11, 0], 1), None);
+    }
 
     /// Installing the hook again forgets the keys thought held and taken.
     #[test]
