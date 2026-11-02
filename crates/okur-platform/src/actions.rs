@@ -118,9 +118,7 @@ mod windows_actions {
         /// The view Word's window in front shows its document in, answered always.
         DocumentView,
         StatusBar,
-        SheetPlace,
-        /// The place with the active cell's font and formatting and its column's and row's sums.
-        SheetDetails,
+        SheetPlace(okur_core::actions::SheetCells),
         SheetList(okur_core::SheetListKind),
         SheetEntry(okur_core::SheetListKind, String),
         /// The sheet tabs' context menu of the spreadsheet in front opened.
@@ -205,8 +203,7 @@ mod windows_actions {
                 Request::DocumentParagraphs => "document paragraphs",
                 Request::DocumentView => "document view",
                 Request::StatusBar => "status bar",
-                Request::SheetPlace => "sheet place",
-                Request::SheetDetails => "sheet details",
+                Request::SheetPlace(_) => "sheet place",
                 Request::SheetList(_) => "sheet list",
                 Request::SheetEntry(..) => "sheet entry",
                 Request::SheetTabsMenu => "sheet tabs menu",
@@ -312,6 +309,9 @@ mod windows_actions {
                 });
                 for request in batch {
                     let kind = request.kind();
+                    // Each sheet place asked for is answered, in turn: the engine pairs the
+                    // answers with its asks by their order.
+                    let answers_sheet = matches!(request, Request::SheetPlace(_));
                     let served = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
                         match request {
                             Request::Keys(keys) => {
@@ -539,20 +539,12 @@ mod windows_actions {
                                 tracing::debug!(items = items.len(), "status bar read");
                                 let _ = events.send(AccessibilityEvent::StatusBar(items));
                             }
-                            Request::SheetPlace => {
+                            Request::SheetPlace(cells) => {
                                 let Some(events) = events.as_ref() else {
                                     return;
                                 };
-                                let place = crate::actions::sheet_place_now(None);
-                                tracing::debug!(read = place.is_some(), "sheet place read");
-                                let _ = events.send(AccessibilityEvent::SheetPlace(place));
-                            }
-                            Request::SheetDetails => {
-                                let Some(events) = events.as_ref() else {
-                                    return;
-                                };
-                                let place = crate::actions::sheet_place_with_details_now(None);
-                                tracing::debug!(read = place.is_some(), "sheet details read");
+                                let place = crate::actions::sheet_place_now(None, cells);
+                                tracing::debug!(read = place.is_some(), ?cells, "sheet place read");
                                 let _ = events.send(AccessibilityEvent::SheetPlace(place));
                             }
                             Request::SheetList(kind) => {
@@ -830,6 +822,9 @@ mod windows_actions {
                     }));
                     if served.is_err() {
                         tracing::error!(kind, "an action's work panicked; the next goes on");
+                        if let Some(events) = events.filter(|_| answers_sheet) {
+                            let _ = events.send(AccessibilityEvent::SheetPlace(None));
+                        }
                     }
                 }
             }
@@ -1114,12 +1109,8 @@ mod windows_actions {
             self.send(Request::StatusBar)
         }
 
-        fn read_sheet_place(&self) -> bool {
-            self.send(Request::SheetPlace)
-        }
-
-        fn read_sheet_details(&self) -> bool {
-            self.send(Request::SheetDetails)
+        fn read_sheet_place(&self, cells: okur_core::actions::SheetCells) -> bool {
+            self.send(Request::SheetPlace(cells))
         }
 
         fn read_sheet_list(&self, kind: okur_core::SheetListKind) -> bool {
@@ -1408,19 +1399,28 @@ pub fn document_view_now(window_title: Option<&str>) -> Option<String> {
     crate::text_context::word_view(&uia, window)
 }
 
-/// The active cell's row and column of Excel's window, read right away on the calling thread:
-/// the window in front, or the top-level window titled `window_title`.
+/// The active cell of Excel's window and `cells` around it, read right away on the calling
+/// thread: the window in front, or the top-level window titled `window_title`.
 #[cfg(windows)]
-pub fn sheet_place_now(window_title: Option<&str>) -> Option<okur_core::SheetPlace> {
-    crate::excel_om::sheet_place(sheet_grid(window_title)?)
+pub fn sheet_place_now(
+    window_title: Option<&str>,
+    cells: okur_core::actions::SheetCells,
+) -> Option<okur_core::SheetPlace> {
+    crate::excel_om::sheet_place(sheet_grid(window_title)?, cells)
 }
 
-/// The same, with the active cell's font and formatting (Insert+F) and its column's and row's
-/// sums (the totals readers).
+/// Everything any ask of the place reads, for a recording's snapshot that answers them all in
+/// replay: the active cell's row and column, the workbook's named titles, the active cell's
+/// font and formatting (Insert+F) and its column's and row's sums (the totals readers).
 #[cfg(windows)]
-pub fn sheet_place_with_details_now(window_title: Option<&str>) -> Option<okur_core::SheetPlace> {
+pub fn sheet_place_complete_now(window_title: Option<&str>) -> Option<okur_core::SheetPlace> {
+    use okur_core::actions::SheetCells;
     let grid = sheet_grid(window_title)?;
-    let mut place = crate::excel_om::sheet_place(grid)?;
+    let mut place = crate::excel_om::sheet_place(grid, SheetCells::Lines)?;
+    let around = crate::excel_om::sheet_place(grid, SheetCells::Around(None));
+    if let Some(around) = around {
+        (place.title_row, place.title_column) = (around.title_row, around.title_column);
+    }
     place.format = crate::excel_om::cell_format(grid);
     (place.column_sum, place.row_sum) = crate::excel_om::cell_sums(grid);
     Some(place)

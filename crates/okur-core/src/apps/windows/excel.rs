@@ -162,6 +162,7 @@ impl AppModule for Excel {
             *cx.app_mode = crate::engine::AppMode::NativeControl;
             cx.ask_sheet = true;
             self.from_blank = true;
+            self.pending = None;
             return FocusResponse::Silent;
         }
         let Some(coordinates) = cell(focus) else {
@@ -174,6 +175,9 @@ impl AppModule for Excel {
             *cx.app_mode = crate::engine::AppMode::NativeControl;
             return FocusResponse::Silent;
         }
+        // Another cell: one still waiting for its titles has gone by, and the place answering
+        // for it is not this one's (said after it, it had repeated the cell left).
+        self.pending = None;
         // A selecting key leaves the focus on the active cell: the selection is read from
         // Excel's object model and said for what it changed [obs, 1120, 1121].
         if cx
@@ -281,7 +285,37 @@ pub(crate) enum SheetReading {
     RowTotal,
 }
 
+/// What one of Excel's places was asked for: a cell to say (its grid focused without a cell, a
+/// cell waiting for its titles, the selection a selecting key changed) or a reader. Excel's
+/// worker answers each ask in turn, and the engine keeps them in order: two quick moves had
+/// said the second cell with the first one's place, its titles the column before's
+/// (performance review 2026-11-02, engine finding 5).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum SheetAsk {
+    Cell,
+    Reading(SheetReading),
+}
+
 impl SheetReading {
+    /// The cells the reading needs read around the active cell.
+    pub(crate) fn cells(self) -> crate::actions::SheetCells {
+        use crate::actions::SheetCells;
+        match self {
+            Self::Line
+            | Self::Row
+            | Self::RowFromStart
+            | Self::RowToEnd
+            | Self::Column
+            | Self::ColumnFromTop
+            | Self::ColumnToBottom => SheetCells::Lines,
+            Self::Cell => SheetCells::Around(Some((None, None))),
+            Self::ColumnTitle(row) => SheetCells::Around(Some((Some(row), None))),
+            Self::RowTitle(column) => SheetCells::Around(Some((None, Some(column)))),
+            Self::Format => SheetCells::Format,
+            Self::ColumnTotal | Self::RowTotal => SheetCells::Sums,
+        }
+    }
+
     /// The reader an Okur-key chord is, if any.
     pub(crate) fn of(event: &crate::input::KeyEvent) -> Option<Self> {
         let m = &event.modifiers;
@@ -634,7 +668,17 @@ fn known_text(place: &crate::event::SheetPlace, active: (u32, u32), cell: (u32, 
     } else {
         None
     };
-    found.map(|t| t.trim().to_owned()).unwrap_or_default()
+    // Else among the cells read around the active cell.
+    found
+        .or_else(|| {
+            place
+                .cells
+                .iter()
+                .find(|c| (c.column, c.row) == cell)
+                .map(|c| &c.text)
+        })
+        .map(|t| t.trim().to_owned())
+        .unwrap_or_default()
 }
 
 /// What a selecting key changed, as JAWS says it [obs, 1120, 1121, 1117]:
@@ -793,6 +837,7 @@ mod tests {
             column_sum: None,
             row_sum: None,
             format: None,
+            cells: Vec::new(),
         };
         let said = |reading: SheetReading| reading.said(&place);
         assert_eq!(
@@ -836,6 +881,7 @@ mod tests {
             column_sum: None,
             row_sum: None,
             format: None,
+            cells: Vec::new(),
         };
         let said = |before: Option<&str>, now: crate::event::SheetPlace, key| {
             selection_said(before, &now, key)
@@ -980,6 +1026,7 @@ mod tests {
             column_sum: None,
             row_sum: None,
             format: None,
+            cells: Vec::new(),
         };
         assert_eq!(
             blank_or_cell(&place, true).as_deref(),
@@ -1060,6 +1107,7 @@ mod tests {
             column_sum: None,
             row_sum: None,
             format: None,
+            cells: Vec::new(),
         };
         assert_eq!(
             excel.sheet_place(Some(&place)).as_deref(),

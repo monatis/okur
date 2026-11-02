@@ -9371,3 +9371,88 @@ fn a_reload_key_that_reloads_nothing_is_forgotten() {
     assert!(engine.pending_page.is_some());
     assert!(engine.reload_asked.is_none());
 }
+
+/// Excel's places are answered in the order asked: two quick moves into titled columns say the
+/// newer cell with its own place and titles, the older answer passed over; a reader asked
+/// before a move is answered as the reader (performance review 2026-11-02, engine finding 5).
+#[test]
+fn excel_answers_go_to_their_asks_in_turn() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let window = "Hours.xlsx - Excel";
+    engine.sheet_titles.insert(
+        window.to_owned(),
+        crate::apps::windows::excel::SheetTitles {
+            row: Some(1),
+            column: None,
+        },
+    );
+    let cell = |name: &str, value: &str| {
+        let mut cell = FocusEvent::new(Role::TableCell)
+            .with_name(name)
+            .with_window_title(window);
+        cell.value = Some(value.into());
+        cell.app = Some("EXCEL.EXE".into());
+        cell.platform.window_class = Some("EXCEL7".into());
+        cell
+    };
+    // The place of `address`, with its column's title read around it.
+    let place = |address: &str, column: u32, title: &str| {
+        AccessibilityEvent::SheetPlace(Some(crate::event::SheetPlace {
+            address: address.into(),
+            selection: address.into(),
+            row: vec![String::new()],
+            column: vec![String::new()],
+            cells: vec![crate::event::SheetCell {
+                column,
+                row: 1,
+                text: title.into(),
+            }],
+            ..crate::event::SheetPlace::default()
+        }))
+    };
+    let places_asked = || {
+        actions
+            .requests()
+            .iter()
+            .filter(|(read, _)| read == "sheet place")
+            .count()
+    };
+    engine.handle_focus_event(&cell("A2", "Central"));
+    let _ = speech.take();
+    engine.handle_focus_event(&cell("B2", "12"));
+    engine.handle_focus_event(&cell("C2", "8"));
+    assert_eq!(places_asked(), 2);
+    assert_eq!(speech.take(), Vec::<String>::new());
+    // The first answer is the first move's, gone by.
+    assert_eq!(
+        engine.handle_accessibility_event(&place("B2", 2, "Weekdays")),
+        None
+    );
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&place("C2", 3, "Weekends"))
+            .as_deref(),
+        Some("Weekends\n8\nC 2")
+    );
+    // Insert+C's place asked, then a move: the first answer is the reader's.
+    let mut insert_c = KeyEvent::new(Key::Alpha('C'), Modifiers::none(), true);
+    insert_c.modifiers.insert = true;
+    let mut grid = FocusEvent::new(Role::Table).with_window_title(window);
+    grid.app = Some("EXCEL.EXE".into());
+    grid.platform.window_class = Some("EXCEL7".into());
+    engine.handle_focus_event(&grid);
+    let _ = engine.handle_accessibility_event(&place("D2", 4, "Total"));
+    let _ = speech.take();
+    engine.handle_key_event(&insert_c);
+    engine.handle_focus_event(&cell("D3", "20"));
+    assert_eq!(
+        engine
+            .handle_accessibility_event(&place("D2", 4, "Total"))
+            .as_deref(),
+        Some("D 2")
+    );
+}

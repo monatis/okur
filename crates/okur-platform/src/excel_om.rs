@@ -43,65 +43,150 @@ pub fn grid_window(top: HWND) -> Option<HWND> {
 /// The most cells of a row or a column read for the row's and column's readers.
 const MAX_CELLS: i32 = 256;
 
-/// The active cell of the sheet in Excel's grid window `grid`, with the cells of its row and
-/// its column within the sheet's used range, each as Excel shows it (`Range.Text`); `None`
-/// where Excel's object model does not answer.
-pub fn sheet_place(grid: HWND) -> Option<okur_core::SheetPlace> {
+/// The cells of a row or a column read for its readers: from `from`, `count` cells of it in
+/// the sheet's used range, at most [`MAX_CELLS`] always holding the active cell's `at`, as the
+/// first and how many. The used range's first cells where they hold it; else those around it:
+/// read from the used range's start, a cell past its 256th was not read, and a cell before the
+/// used range gave no place at all (performance review 2026-11-02, engine finding 10).
+fn line_window(from: i32, count: i32, at: i32) -> (i32, i32) {
+    let end = from.saturating_add(count.max(0));
+    let start = if at < from {
+        at
+    } else if at - from < MAX_CELLS {
+        from
+    } else {
+        at - MAX_CELLS / 2
+    };
+    let stop = end.min(start + MAX_CELLS).max(at + 1);
+    (start, stop - start)
+}
+
+/// The cells beside a selection's edges in the active cell's row or column, `low` to `high`
+/// along it: a selecting key's added cell is at an edge, a removed one just past it.
+fn edge_cells(low: i32, high: i32) -> [i32; 4] {
+    [low - 1, low, high, high + 1]
+}
+
+/// The active cell of the sheet in Excel's grid window `grid` and the cells `cells` asks for
+/// around it, each as Excel shows it (`Range.Text`); `None` where Excel's object model does
+/// not answer. Each cell costs a few cross-process calls: a move reads only the cells it says
+/// ([`okur_core::actions::SheetCells`]).
+pub fn sheet_place(
+    grid: HWND,
+    cells: okur_core::actions::SheetCells,
+) -> Option<okur_core::SheetPlace> {
+    use okur_core::actions::SheetCells;
     let window = word_window(grid)?;
     let cell = object(&property(&window, "ActiveCell")?)?;
     let (row, column) = (number(&cell, "Row")?, number(&cell, "Column")?);
     let sheet = object(&property(&window, "ActiveSheet")?)?;
-    let used = object(&property(&sheet, "UsedRange")?)?;
-    let (top, left) = (number(&used, "Row")?, number(&used, "Column")?);
-    let rows = number(&object(&property(&used, "Rows")?)?, "Count")?.clamp(0, MAX_CELLS);
-    let columns = number(&object(&property(&used, "Columns")?)?, "Count")?.clamp(0, MAX_CELLS);
     let shown = |r: i32, c: i32| -> String {
         sheet_cell(&sheet, r, c)
             .map(|cell| text(&cell, "Text").trim().to_owned())
             .unwrap_or_default()
     };
-    // The active cell within its row and column, outside the used range at either end.
-    let row_cells: Vec<String> = (left..left + columns).map(|c| shown(row, c)).collect();
-    let column_cells: Vec<String> = (top..top + rows).map(|r| shown(r, column)).collect();
-    let at = |from: i32, here: i32| usize::try_from(here.saturating_sub(from)).ok();
-    // The selection's corners, as Excel shows them (`Selection.Cells(1, 1)` and its last).
+    // The selection's bounds and corners, as Excel shows them (`Selection.Cells(1, 1)` and
+    // its last).
     let selected = property(&window, "Selection").as_ref().and_then(object);
+    let count = |range: &IDispatch, name: &str| {
+        property(range, name)
+            .as_ref()
+            .and_then(object)
+            .and_then(|lines| number(&lines, "Count"))
+            .unwrap_or(1)
+    };
+    let span = selected
+        .as_ref()
+        .map(|range| (count(range, "Rows"), count(range, "Columns")));
     let corner = |last: bool| -> String {
-        let Some(selected) = selected.as_ref() else {
+        let (Some(selected), Some((rows, columns))) = (selected.as_ref(), span) else {
             return String::new();
         };
-        let count = |name: &str| {
-            property(selected, name)
-                .as_ref()
-                .and_then(object)
-                .and_then(|range| number(&range, "Count"))
-                .unwrap_or(1)
-        };
-        let (r, c) = if last {
-            (count("Rows"), count("Columns"))
-        } else {
-            (1, 1)
-        };
+        let (r, c) = if last { (rows, columns) } else { (1, 1) };
         sheet_cell(selected, r, c)
             .map(|cell| text(&cell, "Text").trim().to_owned())
             .unwrap_or_default()
     };
-    let (title_row, title_column) = named_titles(&sheet);
-    Some(okur_core::SheetPlace {
+    let mut place = okur_core::SheetPlace {
         address: address(&cell).unwrap_or_default(),
         selection: selected.as_ref().and_then(address).unwrap_or_default(),
         selection_first: corner(false),
         selection_last: corner(true),
-        row_at: at(left, column)?,
-        column_at: at(top, row)?,
-        row: row_cells,
-        column: column_cells,
-        title_row,
-        title_column,
-        column_sum: None,
-        row_sum: None,
-        format: None,
-    })
+        ..okur_core::SheetPlace::default()
+    };
+    if cells == SheetCells::Lines {
+        let used = object(&property(&sheet, "UsedRange")?)?;
+        let (top, left) = (number(&used, "Row")?, number(&used, "Column")?);
+        let rows = number(&object(&property(&used, "Rows")?)?, "Count")?;
+        let columns = number(&object(&property(&used, "Columns")?)?, "Count")?;
+        let (first_column, row_count) = line_window(left, columns, column);
+        let (first_row, column_count) = line_window(top, rows, row);
+        place.row = (first_column..first_column + row_count)
+            .map(|c| shown(row, c))
+            .collect();
+        place.column = (first_row..first_row + column_count)
+            .map(|r| shown(r, column))
+            .collect();
+        place.row_at = usize::try_from(column - first_column).ok()?;
+        place.column_at = usize::try_from(row - first_row).ok()?;
+        return Some(place);
+    }
+    let active = shown(row, column);
+    place.row = vec![active.clone()];
+    place.column = vec![active];
+    match cells {
+        SheetCells::Format => place.format = cell_format(grid),
+        SheetCells::Sums => (place.column_sum, place.row_sum) = cell_sums(grid),
+        SheetCells::Around(titles) => {
+            let (title_row, title_column) = titles.unwrap_or_else(|| {
+                let named = named_titles(&sheet);
+                (place.title_row, place.title_column) = named;
+                named
+            });
+            let as_index = |n: u32| i32::try_from(n).ok();
+            let mut wanted: Vec<(i32, i32)> = Vec::new();
+            if let Some(r) = title_row.and_then(as_index) {
+                wanted.push((column, r));
+            }
+            if let Some(c) = title_column.and_then(as_index) {
+                wanted.push((c, row));
+            }
+            let bounds = selected
+                .as_ref()
+                .zip(span)
+                .and_then(|(range, (rows, columns))| {
+                    Some((
+                        number(range, "Row")?,
+                        number(range, "Column")?,
+                        rows,
+                        columns,
+                    ))
+                });
+            if let Some((top, left, rows, columns)) = bounds {
+                for c in edge_cells(left, left + columns - 1) {
+                    wanted.push((c, row));
+                }
+                for r in edge_cells(top, top + rows - 1) {
+                    wanted.push((column, r));
+                }
+            }
+            wanted.sort_unstable();
+            wanted.dedup();
+            place.cells = wanted
+                .into_iter()
+                .filter(|&(c, r)| c >= 1 && r >= 1 && (c, r) != (column, row))
+                .filter_map(|(c, r)| {
+                    Some(okur_core::SheetCell {
+                        column: u32::try_from(c).ok()?,
+                        row: u32::try_from(r).ok()?,
+                        text: shown(r, c),
+                    })
+                })
+                .collect();
+        }
+        SheetCells::Lines => {}
+    }
+    Some(place)
 }
 
 /// The row of column titles and the column of row titles the workbook's names give `sheet`, as
@@ -434,4 +519,34 @@ fn sheet_cell(sheet: &IDispatch, row: i32, column: i32) -> Option<IDispatch> {
         DISPATCH_PROPERTYGET,
         &mut [VARIANT::from(row), VARIANT::from(column)],
     )?)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// A row's or column's cells read always hold the active cell: the used range's first ones
+    /// where they hold it, else the 256 around it; before the used range, from the active cell.
+    #[test]
+    fn a_line_read_holds_the_active_cell() {
+        assert_eq!(line_window(1, 10, 3), (1, 10));
+        assert_eq!(line_window(1, 1000, 3), (1, 256));
+        assert_eq!(line_window(1, 1000, 600), (472, 256));
+        assert_eq!(line_window(1, 1000, 999), (871, 130));
+        // Past the used range's end, up to the active cell; before its start, from it.
+        assert_eq!(line_window(1, 3, 26), (1, 26));
+        assert_eq!(line_window(2, 5, 1), (1, 6));
+        assert_eq!(line_window(1, 0, 1), (1, 1));
+        for (from, count, at) in [(1, 1000, 600), (1, 3, 26), (5, 100, 2), (1, 70_000, 65_000)] {
+            let (start, cells) = line_window(from, count, at);
+            assert!(start <= at && at < start + cells, "{from} {count} {at}");
+            assert!(cells <= MAX_CELLS, "{from} {count} {at}");
+        }
+    }
+
+    #[test]
+    fn a_selections_edges_and_the_cells_past_them() {
+        assert_eq!(edge_cells(2, 2), [1, 2, 2, 3]);
+        assert_eq!(edge_cells(2, 5), [1, 2, 5, 6]);
+    }
 }

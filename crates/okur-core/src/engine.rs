@@ -369,9 +369,9 @@ pub struct ScreenReaderEngine {
     /// A spin button was typed in: its value is read once its text changes, the read of the
     /// text as it was before the key passed over [obs, round-aria25, 2738/s1].
     spin_typed: bool,
-    /// Excel's active cell was asked for, to say it, its grid focused without a cell, or the
-    /// selection a selecting key changed.
-    sheet_cell_asked: bool,
+    /// Excel's places asked for and not answered yet, in the order asked
+    /// ([`crate::apps::windows::excel::SheetAsk`]).
+    sheet_asks: std::collections::VecDeque<crate::apps::windows::excel::SheetAsk>,
     /// Excel's selection as last read, before the next selecting key; none after any other key
     /// (the selection is then the active cell alone).
     sheet_selection: Option<String>,
@@ -380,9 +380,6 @@ pub struct ScreenReaderEngine {
     sheet_titles: std::collections::HashMap<String, crate::apps::windows::excel::SheetTitles>,
     /// One of Excel's lists was asked for, and is awaited.
     sheet_list_asked: Option<crate::event::SheetListKind>,
-    /// One of Excel's row or column readers asked for the active cell's row and column, and
-    /// awaits them.
-    sheet_reading_asked: Option<crate::apps::windows::excel::SheetReading>,
     /// A key for Word's revisions asked whether the document tracks its changes, which it
     /// needs, and awaits the answer.
     revisions_asked: Option<crate::apps::windows::word::RevisionKey>,
@@ -689,9 +686,8 @@ impl ScreenReaderEngine {
             page_list_box: None,
             page_focus_was_combo_box: false,
             spin_typed: false,
-            sheet_reading_asked: None,
             sheet_list_asked: None,
-            sheet_cell_asked: false,
+            sheet_asks: std::collections::VecDeque::new(),
             sheet_selection: None,
             sheet_titles: std::collections::HashMap::new(),
             say_all_paragraphs_asked: false,
@@ -899,6 +895,59 @@ impl ScreenReaderEngine {
             .iter()
             .find(|app| app.owns_page(url))
             .map(|app| app.as_ref())
+    }
+
+    /// Excel's place for a cell asked for: a cell waiting for its titles, said with them; the
+    /// selection a selecting key changed; an empty cell where the grid has the focus.
+    fn sheet_cell_said(&mut self, place: Option<&crate::event::SheetPlace>) -> Option<String> {
+        // The workbook's titles are known now: its names' where none were set.
+        let window = self
+            .last_native_focus
+            .as_ref()
+            .and_then(|focus| focus.window_title.clone());
+        if let (Some(place), Some(window)) = (place, window) {
+            self.sheet_titles
+                .entry(window)
+                .or_insert_with(|| crate::apps::windows::excel::named_titles(place));
+        }
+        // A cell its application waited to say with the place (its titles).
+        if let Some(said) = self.apps.iter_mut().find_map(|app| app.sheet_place(place)) {
+            self.speech.speak(&said, true);
+            return Some(said);
+        }
+        let place = place?;
+        // A selecting key's change, "select | 8 | C 2" [obs, 1120, 1121].
+        let selecting = self
+            .last_key
+            .and_then(|(key, m)| crate::apps::windows::excel::SelectionKey::of(key, m));
+        if let Some(kind) = selecting {
+            let before = self.sheet_selection.replace(place.selection.clone());
+            let said = crate::apps::windows::excel::selection_said(before.as_deref(), place, kind)?;
+            self.speech.speak(&said, true);
+            return Some(said);
+        }
+        // Delete's emptied cell is not named the active cell [obs, 1123/s7].
+        let deleted = self.last_key == Some((Key::Delete, crate::input::Modifiers::none()));
+        let said = crate::apps::windows::excel::blank_or_cell(place, !deleted)?;
+        self.speech.speak(&said, true);
+        Some(said)
+    }
+
+    /// Asks Excel for its place, `cells` around the active cell, for `ask`; false where it
+    /// cannot be asked.
+    pub(crate) fn ask_sheet(
+        &mut self,
+        cells: crate::actions::SheetCells,
+        ask: crate::apps::windows::excel::SheetAsk,
+    ) -> bool {
+        let asked = self
+            .actions
+            .as_ref()
+            .is_some_and(|actions| actions.read_sheet_place(cells));
+        if asked {
+            self.sheet_asks.push_back(ask);
+        }
+        asked
     }
 
     /// Runs `work` with speech going nowhere, then gives speech back, also when `work` panics:
@@ -1761,53 +1810,18 @@ impl ScreenReaderEngine {
                 column,
                 entries,
             } => self.sheet_list(*kind, column, entries),
-            AccessibilityEvent::SheetPlace(place) if self.sheet_cell_asked => {
-                self.sheet_cell_asked = false;
-                // The workbook's titles are known now: its names' where none were set.
-                let window = self
-                    .last_native_focus
-                    .as_ref()
-                    .and_then(|focus| focus.window_title.clone());
-                if let (Some(place), Some(window)) = (place.as_ref(), window) {
-                    self.sheet_titles
-                        .entry(window)
-                        .or_insert_with(|| crate::apps::windows::excel::named_titles(place));
-                }
-                // A cell its application waited to say with the place (its titles).
-                if let Some(said) = self
-                    .apps
-                    .iter_mut()
-                    .find_map(|app| app.sheet_place(place.as_ref()))
-                {
-                    self.speech.speak(&said, true);
-                    return Some(said);
-                }
-                let place = place.as_ref()?;
-                // A selecting key's change, "select | 8 | C 2" [obs, 1120, 1121].
-                let selecting = self
-                    .last_key
-                    .and_then(|(key, m)| crate::apps::windows::excel::SelectionKey::of(key, m));
-                if let Some(kind) = selecting {
-                    let before = self.sheet_selection.replace(place.selection.clone());
-                    let said = crate::apps::windows::excel::selection_said(
-                        before.as_deref(),
-                        place,
-                        kind,
-                    )?;
-                    self.speech.speak(&said, true);
-                    return Some(said);
-                }
-                // Delete's emptied cell is not named the active cell [obs, 1123/s7].
-                let deleted = self.last_key == Some((Key::Delete, crate::input::Modifiers::none()));
-                let said = crate::apps::windows::excel::blank_or_cell(place, !deleted)?;
-                self.speech.speak(&said, true);
-                Some(said)
-            }
             AccessibilityEvent::SheetPlace(place) => {
-                let reading = self.sheet_reading_asked.take()?;
-                let said = reading.said(place.as_ref()?)?;
-                self.speech.speak(&said, true);
-                Some(said)
+                use crate::apps::windows::excel::SheetAsk;
+                match self.sheet_asks.pop_front()? {
+                    SheetAsk::Reading(reading) => {
+                        let said = reading.said(place.as_ref()?)?;
+                        self.speech.speak(&said, true);
+                        Some(said)
+                    }
+                    // A newer cell asked for behind this one: this place has gone by.
+                    SheetAsk::Cell if self.sheet_asks.contains(&SheetAsk::Cell) => None,
+                    SheetAsk::Cell => self.sheet_cell_said(place.as_ref()),
+                }
             }
             AccessibilityEvent::DocumentNotes(kind, notes)
                 if self.notes_viewer_asked == Some(*kind) =>

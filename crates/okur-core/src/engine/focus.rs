@@ -129,12 +129,16 @@ impl ScreenReaderEngine {
         // of it repeats [obs, 1132/s11].
         let _ = self.native_focus.focus(focus);
         self.last_native_focus = Some(focus.clone());
-        if self
-            .actions
+        // The titles' cells where the workbook's titles are known; else its named titles.
+        let titles = focus
+            .window_title
             .as_ref()
-            .is_some_and(|actions| actions.read_sheet_place())
-        {
-            self.sheet_cell_asked = true;
+            .and_then(|window| self.sheet_titles.get(window))
+            .map(|titles| (titles.row, titles.column));
+        if self.ask_sheet(
+            crate::actions::SheetCells::Around(titles),
+            crate::apps::windows::excel::SheetAsk::Cell,
+        ) {
             return None;
         }
         let said = self.apps.iter_mut().find_map(|app| app.sheet_place(None))?;

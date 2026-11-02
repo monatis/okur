@@ -221,9 +221,22 @@ pub struct SheetPlace {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub row_sum: Option<String>,
     /// The active cell's font and formatting, where it was asked for
-    /// ([`crate::actions::ApplicationActions::read_sheet_details`]).
+    /// ([`crate::actions::SheetCells::Format`]).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub format: Option<SheetFormat>,
+    /// Cells read beside the active cell's row and column, where only the cells said around
+    /// the active cell were asked for ([`crate::actions::SheetCells::Around`]): its titles' and
+    /// those at the selection's edges.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub cells: Vec<SheetCell>,
+}
+
+/// One of a sheet's cells, by its column and row from 1, and the text it shows.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct SheetCell {
+    pub column: u32,
+    pub row: u32,
+    pub text: String,
 }
 
 /// A spreadsheet's active cell's font and formatting (Excel's `Range` properties), for JAWS's
@@ -1273,7 +1286,7 @@ pub enum AccessibilityEvent {
     /// ([`crate::actions::ApplicationActions::read_status_bar`]); none where it could not be
     /// read.
     StatusBar(Vec<String>),
-    /// The active cell's row and column of the spreadsheet in front
+    /// The active cell of the spreadsheet in front and the cells asked for around it
     /// ([`crate::actions::ApplicationActions::read_sheet_place`]); `None` where they could
     /// not be read.
     SheetPlace(Option<SheetPlace>),

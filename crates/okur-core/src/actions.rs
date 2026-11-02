@@ -31,6 +31,24 @@ pub enum RecognitionArea {
     Rect(i32, i32, i32, i32),
 }
 
+/// What a read of a spreadsheet's place brings beside its active cell
+/// ([`ApplicationActions::read_sheet_place`]): Excel's object model answers each cell in a few
+/// cross-process calls, and a move read whole rows and columns of up to 512 cells where it said
+/// two (performance review 2026-11-02, live path finding 2).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum SheetCells {
+    /// The cells said around the active cell: its titles', in the row of column titles and the
+    /// column of row titles given (the workbook's named titles, read with them, where `None`),
+    /// and those at the selection's edges in its row and column, which a selecting key says.
+    Around(Option<(Option<u32>, Option<u32>)>),
+    /// The active cell's row and column, for the row and column readers.
+    Lines,
+    /// The active cell's font and formatting (Insert+F).
+    Format,
+    /// The first SUM formulas of the active cell's column and row (the totals readers).
+    Sums,
+}
+
 /// Platform actions on the live element a buffer node was captured from.
 pub trait ApplicationActions: Send {
     /// Requests keyboard focus on the node's element. Returns false when the node has no
@@ -158,16 +176,11 @@ pub trait ApplicationActions: Send {
         false
     }
 
-    /// Asks for the active cell's row and column of the spreadsheet in front (Excel's), which
-    /// arrive later as [`crate::event::AccessibilityEvent::SheetPlace`], always. Returns false
-    /// when unsupported.
-    fn read_sheet_place(&self) -> bool {
-        false
-    }
-
-    /// The same, with the active cell's font and formatting and its column's and row's sums
-    /// ([`crate::event::SheetPlace::format`], [`crate::event::SheetPlace::column_sum`]).
-    fn read_sheet_details(&self) -> bool {
+    /// Asks for the active cell of the spreadsheet in front (Excel's) and `cells` around it,
+    /// which arrive later as [`crate::event::AccessibilityEvent::SheetPlace`], one for each
+    /// ask, in turn, always. Returns false when unsupported.
+    fn read_sheet_place(&self, cells: SheetCells) -> bool {
+        let _ = cells;
         false
     }
 
@@ -573,16 +586,13 @@ impl ApplicationActions for RecordingActions {
         true
     }
 
-    fn read_sheet_place(&self) -> bool {
+    fn read_sheet_place(&self, cells: SheetCells) -> bool {
+        let read = match cells {
+            SheetCells::Format | SheetCells::Sums => "sheet details",
+            SheetCells::Around(_) | SheetCells::Lines => "sheet place",
+        };
         if let Ok(mut log) = self.log.lock() {
-            log.push(("sheet place".to_owned(), 0));
-        }
-        true
-    }
-
-    fn read_sheet_details(&self) -> bool {
-        if let Ok(mut log) = self.log.lock() {
-            log.push(("sheet details".to_owned(), 0));
+            log.push((read.to_owned(), 0));
         }
         true
     }

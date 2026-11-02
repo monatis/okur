@@ -1219,12 +1219,7 @@ impl ScreenReaderEngine {
         };
         // Without the titles set, nothing to say [hyp: not recorded].
         if let Some(reading) = reading {
-            if self
-                .actions
-                .as_ref()
-                .is_some_and(|actions| actions.read_sheet_place())
-            {
-                self.sheet_reading_asked = Some(reading);
+            if self.ask_sheet(reading.cells(), excel::SheetAsk::Reading(reading)) {
                 self.key_since_focus = false;
             }
         }
@@ -1291,12 +1286,11 @@ impl ScreenReaderEngine {
                 .as_ref()
                 .is_some_and(crate::apps::windows::excel::in_sheet);
             if in_sheet
-                && self
-                    .actions
-                    .as_ref()
-                    .is_some_and(|actions| actions.read_sheet_place())
+                && self.ask_sheet(
+                    reading.cells(),
+                    crate::apps::windows::excel::SheetAsk::Reading(reading),
+                )
             {
-                self.sheet_reading_asked = Some(reading);
                 self.key_since_focus = false;
                 return;
             }
@@ -1315,14 +1309,14 @@ impl ScreenReaderEngine {
             self.last_native_focus
                 .as_ref()
                 .is_some_and(crate::apps::windows::excel::in_sheet)
-                && self
-                    .actions
-                    .as_ref()
-                    .is_some_and(|actions| actions.read_sheet_details())
         }) {
-            self.sheet_reading_asked = Some(reading);
-            self.key_since_focus = false;
-            return;
+            if self.ask_sheet(
+                reading.cells(),
+                crate::apps::windows::excel::SheetAsk::Reading(reading),
+            ) {
+                self.key_since_focus = false;
+                return;
+            }
         }
         // Excel's Insert+C, the cell's coordinates: "B 2" [obs, 521/s6]; an empty cell's, where
         // the grid has the focus, asked of Excel, "D 1" [obs, 1123/s3].
@@ -1332,13 +1326,13 @@ impl ScreenReaderEngine {
                 self.speech.speak(&said, true);
                 return;
             }
+            let cell = crate::apps::windows::excel::SheetReading::Cell;
             if focus.is_some_and(crate::apps::windows::excel::in_sheet)
-                && self
-                    .actions
-                    .as_ref()
-                    .is_some_and(|actions| actions.read_sheet_place())
+                && self.ask_sheet(
+                    cell.cells(),
+                    crate::apps::windows::excel::SheetAsk::Reading(cell),
+                )
             {
-                self.sheet_reading_asked = Some(crate::apps::windows::excel::SheetReading::Cell);
                 self.key_since_focus = false;
                 return;
             }
