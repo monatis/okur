@@ -437,6 +437,14 @@ fn carry_out(
             Request::Spelled(text, interrupt) => {
                 let parts = okur_core::pronounce::spelled_parts(&text, indicate_caps);
                 for (i, (part, raise)) in parts.into_iter().enumerate() {
+                    // A stop sent meanwhile ends the spelling between characters, as a long
+                    // speech's parts: a large selection spelled was one call per character
+                    // before a stop was read (performance review 2026-11-02, speech finding
+                    // 10).
+                    if i > 0 && interruptions.load(Ordering::SeqCst) != generation {
+                        tracing::debug!(part = i, "spelling cut off");
+                        break;
+                    }
                     let first = interrupt && i == 0;
                     logged(
                         &mut tts.failed_in_a_row,

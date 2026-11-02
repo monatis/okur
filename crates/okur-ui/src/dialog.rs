@@ -30,12 +30,12 @@ use windows::Win32::UI::Input::KeyboardAndMouse::{
 use windows::Win32::UI::WindowsAndMessaging::{
     BringWindowToTop, CreateDialogIndirectParamW, DestroyWindow, GetClientRect, GetDlgCtrlID,
     GetDlgItem, GetForegroundWindow, GetWindowTextLengthW, GetWindowTextW,
-    GetWindowThreadProcessId, IsDialogMessageW, IsWindow, SendMessageW, SetForegroundWindow,
-    SetWindowTextW, ShowWindow, BM_GETCHECK, BM_SETCHECK, BN_CLICKED, CBN_EDITCHANGE,
-    CBN_SELCHANGE, CB_ADDSTRING, CB_GETCURSEL, CB_GETLBTEXT, CB_GETLBTEXTLEN, CB_RESETCONTENT,
-    CB_SETCURSEL, DLGTEMPLATE, EN_CHANGE, LBN_SELCHANGE, LB_ADDSTRING, LB_DELETESTRING,
-    LB_GETCURSEL, LB_INSERTSTRING, LB_RESETCONTENT, LB_SETCURSEL, MSG, SW_SHOW, WM_COMMAND,
-    WM_HSCROLL, WM_INITDIALOG, WM_NCDESTROY, WM_NOTIFY,
+    GetWindowThreadProcessId, IsDialogMessageW, IsHungAppWindow, IsWindow, SendMessageW,
+    SetForegroundWindow, SetWindowTextW, ShowWindow, BM_GETCHECK, BM_SETCHECK, BN_CLICKED,
+    CBN_EDITCHANGE, CBN_SELCHANGE, CB_ADDSTRING, CB_GETCURSEL, CB_GETLBTEXT, CB_GETLBTEXTLEN,
+    CB_RESETCONTENT, CB_SETCURSEL, DLGTEMPLATE, EN_CHANGE, LBN_SELCHANGE, LB_ADDSTRING,
+    LB_DELETESTRING, LB_GETCURSEL, LB_INSERTSTRING, LB_RESETCONTENT, LB_SETCURSEL, MSG, SW_SHOW,
+    WM_COMMAND, WM_HSCROLL, WM_INITDIALOG, WM_NCDESTROY, WM_NOTIFY,
 };
 
 use crate::template::{self, IDCANCEL};
@@ -1567,14 +1567,18 @@ pub fn is_dialog_message(msg: &MSG) -> bool {
 
 /// Brings `window` to the front. Windows lets only the foreground thread give the
 /// foreground away, so the input of the window in front is attached for the switch, as
-/// `okur-lab front` does.
+/// `okur-lab front` does; not a hung window's, whose thread answers nothing, and okur-ui's
+/// own could wait with it (performance review 2026-11-02, speech finding 8).
 pub(crate) fn bring_forward(window: HWND) {
     // SAFETY: plain window calls; the thread input is detached again below.
     unsafe {
-        let front = GetWindowThreadProcessId(GetForegroundWindow(), None);
+        let foreground = GetForegroundWindow();
+        let front = GetWindowThreadProcessId(foreground, None);
         let ours = GetCurrentThreadId();
-        let attached =
-            front != 0 && front != ours && AttachThreadInput(ours, front, true).as_bool();
+        let attached = front != 0
+            && front != ours
+            && !IsHungAppWindow(foreground).as_bool()
+            && AttachThreadInput(ours, front, true).as_bool();
         let _ = ShowWindow(window, SW_SHOW);
         let _ = BringWindowToTop(window);
         let _ = SetForegroundWindow(window);

@@ -218,6 +218,7 @@ impl SettingsStore for SettingsFolder {
 /// on, and the files are written behind them, the newest of what waits only. They were written
 /// on the engine's thread, which the keyboard hook waits on: 100 ms with 300 site files
 /// (performance review 2026-10-25, finding 7).
+#[derive(Clone)]
 pub struct BackgroundStore {
     writes: std::sync::mpsc::Sender<Write>,
     /// The folder itself, for the writes the thread could not take (it could not start).
@@ -228,9 +229,16 @@ pub struct BackgroundStore {
 enum Write {
     Layers(SettingsLayers),
     History(okur_core::ui::settings_tree::SavedHistory),
+    /// One of Okur's own files, by its name, written by the job: custom labels, PlaceMarkers,
+    /// Flexible Web and notification rules, which were serialized and written on the
+    /// engine's thread too (performance review 2026-11-02, speech finding 9).
+    Own(&'static str, OwnWrite),
     /// Answered once everything handed before it is written.
     Flush(std::sync::mpsc::Sender<()>),
 }
+
+/// Writes one of Okur's own files into the folder.
+type OwnWrite = Box<dyn FnOnce(&SettingsFolder) + Send>;
 
 /// How long Okur's exit waits for the settings to be written.
 const FLUSH_WAIT: std::time::Duration = std::time::Duration::from_secs(2);
@@ -244,10 +252,16 @@ impl BackgroundStore {
             .spawn(move || {
                 while let Ok(first) = waiting.recv() {
                     let (mut layers, mut history, mut flushes) = (None, None, Vec::new());
+                    let mut own: Vec<(&str, OwnWrite)> = Vec::new();
                     for write in std::iter::once(first).chain(waiting.try_iter()) {
                         match write {
                             Write::Layers(newer) => layers = Some(newer),
                             Write::History(newer) => history = Some(newer),
+                            // The newest of each file only.
+                            Write::Own(name, job) => {
+                                own.retain(|(waiting, _)| *waiting != name);
+                                own.push((name, job));
+                            }
                             Write::Flush(done) => flushes.push(done),
                         }
                     }
@@ -256,6 +270,9 @@ impl BackgroundStore {
                     }
                     if let Some(history) = history {
                         writer.save_history(&history);
+                    }
+                    for (_, job) in own {
+                        job(&writer);
                     }
                     for done in flushes {
                         let _ = done.send(());
@@ -266,6 +283,49 @@ impl BackgroundStore {
             tracing::warn!(error = %e, "settings writer not started: settings written at once");
         }
         Self { writes, folder }
+    }
+
+    /// Hands one of Okur's own files to the writer: `value`, written by `write`; at once
+    /// where the writer did not start.
+    fn own<T: Send + 'static>(&self, name: &'static str, value: T, write: fn(&SettingsFolder, &T)) {
+        let job: OwnWrite = Box::new(move |folder| write(folder, &value));
+        if let Err(std::sync::mpsc::SendError(Write::Own(_, job))) =
+            self.writes.send(Write::Own(name, job))
+        {
+            job(&self.folder);
+        }
+    }
+}
+
+impl okur_core::labels::LabelStore for BackgroundStore {
+    fn save(&self, labels: &okur_core::labels::CustomLabels) {
+        self.own(LABELS, labels.clone(), |folder, labels| {
+            okur_core::labels::LabelStore::save(folder, labels)
+        });
+    }
+}
+
+impl okur_core::placemarkers::PlaceMarkerStore for BackgroundStore {
+    fn save(&self, markers: &okur_core::placemarkers::PlaceMarkers) {
+        self.own(PLACEMARKERS, markers.clone(), |folder, markers| {
+            okur_core::placemarkers::PlaceMarkerStore::save(folder, markers)
+        });
+    }
+}
+
+impl okur_core::flexible_web::RuleStore for BackgroundStore {
+    fn save(&self, rules: &okur_core::flexible_web::Rules) {
+        self.own(FLEXIBLE_WEB, rules.clone(), |folder, rules| {
+            okur_core::flexible_web::RuleStore::save(folder, rules)
+        });
+    }
+}
+
+impl okur_core::ui::notifications::NotificationRuleStore for BackgroundStore {
+    fn save(&self, rules: &okur_core::ui::notifications::NotificationRules) {
+        self.own(NOTIFICATION_RULES, rules.clone(), |folder, rules| {
+            okur_core::ui::notifications::NotificationRuleStore::save(folder, rules)
+        });
     }
 }
 
@@ -621,6 +681,22 @@ mod tests {
             !entries.iter().any(|name| name.ends_with(".tmp")),
             "{entries:?}"
         );
+        let _ = std::fs::remove_dir_all(&root);
+    }
+
+    /// Okur's own files handed to the background store are written off the caller's thread,
+    /// the newest of each, and are in the folder once it is flushed.
+    #[test]
+    fn the_background_store_writes_own_files() {
+        use okur_core::labels::LabelStore;
+        let root = folder("background-own");
+        let store = BackgroundStore::new(SettingsFolder::at(&root));
+        let empty = okur_core::labels::CustomLabels::default();
+        LabelStore::save(&store, &empty);
+        LabelStore::save(&store, &empty);
+        SettingsStore::flush(&store);
+        assert!(root.join(LABELS).exists());
+        assert_eq!(SettingsFolder::at(&root).load_labels(), empty);
         let _ = std::fs::remove_dir_all(&root);
     }
 

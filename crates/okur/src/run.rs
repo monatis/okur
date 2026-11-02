@@ -734,15 +734,18 @@ pub async fn run(config: RunConfig) {
     // The settings dialog keeps what it changes in the settings folder, and so do custom
     // labels.
     if let Some(folder) = settings_folder {
-        engine.set_custom_labels(folder.load_labels(), Some(Box::new(folder.clone())));
-        engine.set_placemarkers(folder.load_placemarkers(), Some(Box::new(folder.clone())));
+        // Written on a thread of its own, off the engine's, which the keyboard hook waits on
+        // (performance review 2026-10-25, finding 7; 2026-11-02, speech finding 9).
+        let store = okur_platform::settings_file::BackgroundStore::new(folder.clone());
+        engine.set_custom_labels(folder.load_labels(), Some(Box::new(store.clone())));
+        engine.set_placemarkers(folder.load_placemarkers(), Some(Box::new(store.clone())));
         engine.set_flexible_web_rules(
             folder.load_flexible_web_rules(),
-            Some(Box::new(folder.clone())),
+            Some(Box::new(store.clone())),
         );
         engine.set_notification_rules(
             folder.load_notification_rules(),
-            Some(Box::new(folder.clone())),
+            Some(Box::new(store.clone())),
         );
         engine.set_settings_history(&folder.load_settings_history());
         engine.set_start_options(Box::new(start_options));
@@ -752,11 +755,7 @@ pub async fn run(config: RunConfig) {
             }
             engine.open_startup_wizard();
         }
-        // Written on a thread of its own, off the engine's (performance review 2026-10-25,
-        // finding 7).
-        engine.set_settings_store(Box::new(
-            okur_platform::settings_file::BackgroundStore::new(folder),
-        ));
+        engine.set_settings_store(Box::new(store));
     }
     // Say System Time (Insert+F12) in the user's locale formats.
     #[cfg(windows)]
