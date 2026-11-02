@@ -822,8 +822,9 @@ pub struct FocusEvent {
     pub container_modal: bool,
     /// A native control's own description, which JAWS says after its state where MSAA alone
     /// knows the control: an Office command bar's button, "Existing File or Web Page button"
-    /// [obs, 1076/s5]; and after an edit's role where the platform knows it is said: File
-    /// Explorer's search box's prompt [obs, 3156/s5].
+    /// [obs, 1076/s5]; after an edit's role where the platform knows it is said: File
+    /// Explorer's search box's prompt [obs, 3156/s5]; and after a list item's position, its
+    /// further texts outside a list view (Windows Settings' home [obs, 3157/s4]).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// What kind of item it is, where the application says (UIA `ItemType`: File Explorer's

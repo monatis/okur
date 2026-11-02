@@ -1668,6 +1668,12 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
                 && !focus.columns.is_empty()
             {
                 focus.name = Some(focus.columns.remove(0));
+            } else if !focus.container_is_list_view && !focus.columns.is_empty() {
+                // An item with a name of its own, outside a list view, has its further texts
+                // as its description, said after its position: Windows Settings' home,
+                // "Devices | 2 of 13 | Bluetooth, printers, mouse" [obs, 3157/s4].
+                focus.description = Some(focus.columns.join(" "));
+                focus.columns.clear();
             }
         }
         // A shell item's columns are its cells' values, not their headers' names: "SR OCR
@@ -6489,6 +6495,42 @@ mod tests {
         assert!(!names_its_texts("notes.txt", &texts(&["2 KB"])));
         assert!(!names_its_texts("notes.txt 2 KB", &texts(&["2 KB"])));
         assert!(!names_its_texts("notes.txt", &[]));
+    }
+
+    /// An item with a name of its own and a further text, outside a list view, has the text
+    /// as its description: Windows Settings' home [obs, 3157/s4]. In a list view it is a
+    /// column.
+    #[test]
+    fn an_items_further_text_outside_a_list_view_is_its_description() {
+        let mut event = focus_event(Vec::new());
+        let devices = node(UIA_LISTITEM, "Devices", true);
+        event.focus_chain = vec![
+            node(UIA_WINDOW, "Settings", false),
+            node(UIA_LIST, "", false),
+            devices.clone(),
+        ];
+        event.focus_subtree = Some(UiaNode {
+            children: vec![
+                node(UIA_TEXT, "Devices", false),
+                node(UIA_TEXT, "Bluetooth, printers, mouse", false),
+            ],
+            ..devices
+        });
+        let focus = focus_event_from_trace(&event);
+        assert_eq!(
+            focus
+                .as_ref()
+                .map(|f| (f.description.as_deref(), f.columns.len())),
+            Some((Some("Bluetooth, printers, mouse"), 0))
+        );
+        if let Some(list) = event.focus_chain.get_mut(1) {
+            list.class_name = Some("SysListView32".to_owned());
+        }
+        let focus = focus_event_from_trace(&event);
+        assert_eq!(
+            focus.map(|f| (f.description, f.columns)),
+            Some((None, vec!["Bluetooth, printers, mouse".to_owned()]))
+        );
     }
 
     /// A toast, as the shell reports it opening: its view, then the window around it, once

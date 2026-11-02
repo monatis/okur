@@ -404,6 +404,14 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
             lines.extend(access_key(focus, false));
         }
         Role::ListItem => {
+            // Its description, said after its position: "Devices | 2 of 13 | Bluetooth,
+            // printers, mouse" [obs, 3157/s4].
+            let description = focus
+                .description
+                .as_deref()
+                .map(str::trim)
+                .filter(|d| !d.is_empty() && *d != name.trim())
+                .map(|d| Line::of(PartKind::Description, d));
             // A list view's item with the focus but not selected: "Not Selected Temporary"
             // [obs, 687/s11].
             let mut first = if focus.container_is_list_view && focus.states.selected == Some(false)
@@ -456,6 +464,7 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                     Line::of(PartKind::ListPosition, line.render().trim().to_owned())
                 }
             }));
+            lines.extend(description);
             if entering && !focus.own_hints.is_empty() {
                 lines.extend(
                     focus
@@ -2388,6 +2397,24 @@ Undo  Unavailable"
         assert_eq!(
             norm(&focus_speech(&app, list.as_ref()).render()),
             norm("3D Builder Microsoft Corporation 28.0 KB \n2 of 154")
+        );
+
+        // An item's description after its position, entering the list and within it: Windows
+        // Settings' home [obs, 3157/s2, s4].
+        let mut devices = at(
+            in_container(event(Role::ListItem, "Devices"), Role::List, "", "GridView"),
+            2,
+            13,
+        );
+        devices.description = Some("Bluetooth, printers, mouse".to_owned());
+        assert_eq!(
+            norm(&focus_speech(&devices, None).render()),
+            norm(" \u{1d} List box \u{1e} \nDevices \n2 of 13\nBluetooth, printers, mouse\nTo move to an item press the Arrow keys.")
+        );
+        let grid = ContainerKey::of(&devices);
+        assert_eq!(
+            norm(&focus_speech(&devices, grid.as_ref()).render()),
+            norm("Devices \n2 of 13\nBluetooth, printers, mouse")
         );
 
         let mut docs = at(
