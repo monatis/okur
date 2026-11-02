@@ -30,6 +30,7 @@ const UIA_EDIT: i32 = 50004;
 const UIA_COMBOBOX: i32 = 50003;
 const UIA_MENUITEM: i32 = 50011;
 const UIA_TOOLBAR: i32 = 50021;
+const UIA_HEADER: i32 = 50034;
 /// The window class of Win32 dialog boxes (message boxes, common dialogs).
 const WIN32_DIALOG_CLASS: &str = "#32770";
 /// A Win32 popup menu's window.
@@ -1148,6 +1149,16 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         }
     }
     toolbar_button(event, focused, &mut focus);
+    // A Win32 toolbar's own focus, which its hot button's follows at once: JAWS says the
+    // button alone, in its toolbar [obs, 3156/s3, s4]. Said, the toolbar's name ("Up band
+    // toolbar") was cut off by the button's a moment later.
+    if focused.control_type == UIA_TOOLBAR
+        && event.window_class.as_deref() == Some("ToolbarWindow32")
+        && event.id_child == 0
+    {
+        return None;
+    }
+    header_bar(event, focused, &mut focus);
     // A Win32 combo box's own focus while UI Automation's chain is still on the edit before
     // it: Tab from Save As's File name to Save as type gives the MSAA object "Save as type:"
     // with the chain on File name's edit, and JAWS reads the combo box, "Save as type: Combo
@@ -1243,6 +1254,25 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     // "Name Your Rule dialog" [obs, 783/s7].
     focus.in_dialog_box =
         focus.platform.top_window_class.as_deref() == Some(WIN32_DIALOG_CLASS) || dialog.is_some();
+    // A Win32 list view outside a dialog box is named by its window's text: Programs and
+    // Features' "FolderView List view" [obs, 3156/s1], where UI Automation and MSAA say "Folder
+    // View". In a dialog box it is named by its label, as its accessible name has it: the
+    // Print dialog's "Folder View List view" [obs, 546].
+    let list_view_text = event
+        .window_title
+        .as_deref()
+        .filter(|t| !t.trim().is_empty())
+        .filter(|_| !focus.in_dialog_box && event.window_class.as_deref() == Some("SysListView32"))
+        .map(str::to_owned);
+    if let Some(text) = list_view_text
+        .as_ref()
+        .filter(|_| focus.container_is_list_view)
+    {
+        focus.container_name = Some(text.clone());
+        if let Some(list) = focus.groups.iter_mut().rev().find(|g| g.list) {
+            list.name.clone_from(text);
+        }
+    }
     focus.multi_line = multi_line_edit(
         event
             .focus_window_class
@@ -1601,12 +1631,27 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             .collect();
         // A list-view item's further columns are its text children after the name.
         if focus.role == okur_core::Role::ListItem {
+            // Without the marks that steer a date's direction, which JAWS's speech has none of:
+            // "Igor Pavlov | 11/7/2020" [obs, 3156/s11]. Its texts only: the buttons an opened
+            // item shows (Settings' "Advanced options", "Uninstall") are controls of their own
+            // [obs, 3155/s11].
             focus.columns = subtree
                 .children
                 .iter()
+                .filter(|c| matches!(c.control_type, UIA_TEXT | UIA_EDIT))
                 .filter_map(|c| c.name.clone())
                 .filter(|n| !n.trim().is_empty() && Some(n) != focused.name.as_ref())
+                .map(|n| okur_core::viewer_text::without_marks(&n))
                 .collect();
+            // A XAML list item is named after its texts, joined: Windows Settings' "7-Zip 18.05
+            // (x64) 4.93 MB 11/7/2020" over three texts, which JAWS says once [obs, 3155/s7].
+            if focused
+                .name
+                .as_deref()
+                .is_some_and(|name| names_its_texts(name, &focus.columns))
+            {
+                focus.columns.clear();
+            }
             focus.column_headers = event.column_headers.clone();
             // A WPF list item with no name of its own is named after its data object's type
             // ("NotificationViewer.Services.NotificationData"), which JAWS leaves out: it reads
@@ -1698,6 +1743,10 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         focus.list_view = true;
         if focus.name.as_deref().is_none_or(|n| n.trim().is_empty()) {
             focus.name.clone_from(&focused.label);
+        }
+        // Outside a dialog box, by its window's text, as its items' list is [obs, 3156/s1].
+        if list_view_text.is_some() {
+            focus.name.clone_from(&list_view_text);
         }
         focus.item_index = None;
         focus.item_count = focused
@@ -2285,6 +2334,19 @@ fn is_type_name(name: &str) -> bool {
             part.chars().next().is_some_and(|c| c.is_ascii_uppercase())
                 && part.chars().all(|c| c.is_ascii_alphanumeric() || c == '_')
         })
+}
+
+/// Whether an item's `name` is its `texts` joined by spaces, the marks that steer a date's
+/// direction left out of both (XAML puts them in the texts and the name alike).
+fn names_its_texts(name: &str, texts: &[String]) -> bool {
+    use okur_core::viewer_text::without_marks;
+    let words = |text: &str| {
+        without_marks(text)
+            .split_whitespace()
+            .map(str::to_owned)
+            .collect::<Vec<_>>()
+    };
+    !texts.is_empty() && words(name) == words(&texts.join(" "))
 }
 
 /// A toast's text and sender, in a window of the shell that opened: its view's name
@@ -2875,7 +2937,9 @@ fn address_band(node: &UiaNode) -> Option<String> {
 /// A Win32 toolbar's button with the focus: UI Automation's focus stays on the toolbar
 /// (`ToolbarWindow32`), and the MSAA event's object is the button, a child of it. The focus is
 /// the button, in the toolbar: "Tool bar | Hide Folders Button | To activate press spacebar."
-/// [obs, 524/s6].
+/// [obs, 524/s6]. The toolbar is said by its role alone, its window's name unsaid: Programs
+/// and Features' "Tool bar Up to "All Control Panel Items" (Alt + Up Arrow) Button", in its
+/// "Up band toolbar" [obs, 3156/s3].
 fn toolbar_button(event: &TraceEvent, toolbar: &UiaNode, focus: &mut okur_core::FocusEvent) {
     use okur_core::Role;
     const PUSHBUTTON: i32 = 0x2B;
@@ -2905,7 +2969,7 @@ fn toolbar_button(event: &TraceEvent, toolbar: &UiaNode, focus: &mut okur_core::
         _ => return,
     };
     focus.container_role = Some(Role::ToolBar);
-    focus.container_name = focus.name.take();
+    focus.container_name = None;
     focus.platform.container_class = toolbar.class_name.clone();
     focus.role = role;
     focus.name = Some(name.to_owned());
@@ -2914,6 +2978,35 @@ fn toolbar_button(event: &TraceEvent, toolbar: &UiaNode, focus: &mut okur_core::
     apply_msaa_states(focus, object.states);
     focus.item_index = None;
     focus.item_count = None;
+}
+
+/// A Win32 header control's item with the focus (`SysHeader32`: a list view's column title):
+/// JAWS's header bar, at its place among the titles, without the list around it: "Name Header
+/// bar | 1 of 5 | Select column title to sort by that category." [obs, 3156/s2].
+fn header_bar(event: &TraceEvent, focused: &UiaNode, focus: &mut okur_core::FocusEvent) {
+    let in_header = event.focus_chain.iter().rev().nth(1).is_some_and(|parent| {
+        parent.control_type == UIA_HEADER && parent.class_name.as_deref() == Some("SysHeader32")
+    });
+    if !in_header {
+        return;
+    }
+    focus.header_bar = true;
+    focus.container_role = None;
+    focus.container_name = None;
+    focus.container_is_list_view = false;
+    let titles: Vec<&UiaNode> = event
+        .focus_siblings
+        .iter()
+        .filter(|s| s.control_type == focused.control_type)
+        .collect();
+    let index = titles
+        .iter()
+        .position(|s| s.has_keyboard_focus)
+        .or_else(|| titles.iter().position(|s| s.name == focused.name));
+    if let Some(index) = index {
+        focus.item_index = Some(index + 1);
+        focus.item_count = Some(titles.len());
+    }
 }
 
 /// Updates the states a change can carry from MSAA state bits (`STATE_SYSTEM_*`).
@@ -3695,17 +3788,30 @@ mod capture {
 
     /// Whether `hwnd` belongs to the process of the foreground window.
     fn in_foreground_process(hwnd: HWND) -> bool {
+        in_front_application(hwnd) == Some(true)
+    }
+
+    /// Whether `hwnd` is the application in front's: a window of its process, of the UWP app
+    /// its frame shows ([`foreground_processes`]), or a window of another process inside the
+    /// one in front. Windows Settings' controls are its own process's core window, inside a
+    /// frame of ApplicationFrameHost's: a focus there taken for a process behind left Okur
+    /// silent in all of Settings (old-pc, 2026-11-02). None while either is unknown (the
+    /// window in front is briefly none while windows switch).
+    fn in_front_application(hwnd: HWND) -> Option<bool> {
         use windows::Win32::UI::WindowsAndMessaging::{
-            GetForegroundWindow, GetWindowThreadProcessId,
+            GetAncestor, GetForegroundWindow, GetWindowThreadProcessId, GA_ROOT,
         };
         let mut event_pid = 0u32;
-        let mut foreground_pid = 0u32;
-        // SAFETY: plain Win32 queries with valid out-pointers.
-        unsafe {
+        // SAFETY: plain Win32 queries with a valid out-pointer.
+        let (foreground, root) = unsafe {
             GetWindowThreadProcessId(hwnd, Some(&mut event_pid));
-            GetWindowThreadProcessId(GetForegroundWindow(), Some(&mut foreground_pid));
+            (GetForegroundWindow(), GetAncestor(hwnd, GA_ROOT))
+        };
+        let [frame, app] = processes_of_front(foreground);
+        if event_pid == 0 || frame == 0 {
+            return None;
         }
-        event_pid != 0 && event_pid == foreground_pid
+        Some(event_pid == frame || event_pid == app || root == foreground)
     }
 
     /// Whether `hwnd` is inside a file dialog's navigation pane (Windows'
@@ -3729,17 +3835,7 @@ mod capture {
     /// Whether `hwnd` belongs to an application other than the one in front, both known (a
     /// window in front is briefly none while windows switch).
     fn in_background_process(hwnd: HWND) -> bool {
-        use windows::Win32::UI::WindowsAndMessaging::{
-            GetForegroundWindow, GetWindowThreadProcessId,
-        };
-        let mut event_pid = 0u32;
-        let mut foreground_pid = 0u32;
-        // SAFETY: plain Win32 queries with valid out-pointers.
-        unsafe {
-            GetWindowThreadProcessId(hwnd, Some(&mut event_pid));
-            GetWindowThreadProcessId(GetForegroundWindow(), Some(&mut foreground_pid));
-        }
-        event_pid != 0 && foreground_pid != 0 && event_pid != foreground_pid
+        in_front_application(hwnd) == Some(false)
     }
 
     fn msaa_object(hwnd: HWND, id_object: i32, id_child: i32) -> Option<TraceObject> {
@@ -4456,6 +4552,18 @@ mod capture {
             {
                 return Ok(());
             }
+            // The application in front's own selections only: the taskbar's news feed turns its
+            // headlines with selections of its own, and with Settings in front its MSN page's
+            // address reached a trace (3155, old-pc, 2026-11-02).
+            // SAFETY: a property read on the element UIA passed in.
+            let pid = sender
+                .as_ref()
+                .and_then(|e| unsafe { e.CurrentProcessId() }.ok())
+                .and_then(|p| u32::try_from(p).ok())
+                .unwrap_or(0);
+            if pid == 0 || !foreground_processes().contains(&pid) {
+                return Ok(());
+            }
             if let (Some(element), Ok(mut queue)) = (sender.as_ref(), UIA_SELECTED.lock()) {
                 if queue.len() >= MAX_UIA_FOCUSED {
                     queue.pop_front();
@@ -4510,13 +4618,19 @@ mod capture {
     }
 
     fn foreground_processes() -> [u32; 2] {
+        use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+        // SAFETY: plain Win32 call with no preconditions.
+        processes_of_front(unsafe { GetForegroundWindow() })
+    }
+
+    /// [`foreground_processes`] of the window `foreground`.
+    fn processes_of_front(foreground: HWND) -> [u32; 2] {
         use windows::core::w;
-        use windows::Win32::UI::WindowsAndMessaging::{FindWindowExW, GetForegroundWindow};
+        use windows::Win32::UI::WindowsAndMessaging::FindWindowExW;
         let mut frame = 0u32;
         let mut app = 0u32;
         // SAFETY: plain Win32 queries with valid out-pointers and a static class name.
         unsafe {
-            let foreground = GetForegroundWindow();
             GetWindowThreadProcessId(foreground, Some(&mut frame));
             if let Ok(core) = FindWindowExW(
                 Some(foreground),
@@ -5459,6 +5573,15 @@ mod capture {
                     .then(|| msaa_object(hwnd, id_object, id_child))
                     .flatten(),
             };
+            // A list's rows changing as it draws them are not recorded: the reference machine's
+            // own lists (its installed programs) stay out of the public corpus.
+            if change
+                && object
+                    .as_ref()
+                    .is_some_and(crate::privacy::unvisited_list_item)
+            {
+                return;
+            }
             // A NetUI window's focus, or an Office command bar's: its MSAA objects, which UI
             // Automation does not reach.
             let netui = match object.as_ref().and_then(|o| o.role) {
@@ -6341,6 +6464,24 @@ mod tests {
         assert!(!is_type_name("Report.final"));
         assert!(!is_type_name("Notes"));
         assert!(!is_type_name("Mr. Smith"));
+    }
+
+    /// A XAML item named after its texts has no further columns; a list view's row does
+    /// [obs, 3155/s7].
+    #[test]
+    fn an_item_named_after_its_texts() {
+        let texts = |t: &[&str]| t.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>();
+        assert!(names_its_texts(
+            "7-Zip 18.05 (x64) 4.93 MB \u{200E}11/\u{200E}7/\u{200E}2020",
+            &texts(&[
+                "7-Zip 18.05 (x64)",
+                "4.93 MB",
+                "\u{200E}11/\u{200E}7/\u{200E}2020"
+            ])
+        ));
+        assert!(!names_its_texts("notes.txt", &texts(&["2 KB"])));
+        assert!(!names_its_texts("notes.txt 2 KB", &texts(&["2 KB"])));
+        assert!(!names_its_texts("notes.txt", &[]));
     }
 
     /// A toast, as the shell reports it opening: its view, then the window around it, once
@@ -7736,12 +7877,59 @@ mod tests {
                     && f.container_role == Some(okur_core::Role::ToolBar)),
             "{focus:?}"
         );
-        // The toolbar's own focus (no child) stays the toolbar's.
+        // The toolbar's own focus (no child), which the button's follows, is not one; the
+        // toolbar is said by its role alone [obs, 3156/s3].
         let own = TraceEvent {
             id_child: 0,
+            ..toolbar.clone()
+        };
+        assert!(focus_event_from_trace(&own).is_none());
+        let named = TraceEvent {
+            focus_chain: vec![
+                node(UIA_WINDOW, "Programs and Features", false),
+                node(50021, "Up band toolbar", true),
+            ],
             ..toolbar
         };
-        assert!(focus_event_from_trace(&own).is_some_and(|f| f.role != okur_core::Role::Button));
+        assert!(focus_event_from_trace(&named).is_some_and(|f| f.container_name.is_none()));
+    }
+
+    /// Tab onto a list view's column title: a header bar at its place among the titles, not
+    /// in the list [obs, 3156/s2].
+    #[test]
+    fn a_column_title_is_a_header_bar() {
+        const SPLIT_BUTTON: i32 = 50031;
+        let titles: Vec<UiaNode> = ["Name", "Publisher", "Installed On"]
+            .iter()
+            .map(|name| node(SPLIT_BUTTON, name, false))
+            .collect();
+        let header = UiaNode {
+            class_name: Some("SysHeader32".to_owned()),
+            ..node(UIA_HEADER, "Header Control", false)
+        };
+        let list = UiaNode {
+            class_name: Some("SysListView32".to_owned()),
+            ..node(UIA_LIST, "Folder View", false)
+        };
+        let event = TraceEvent {
+            window_class: Some("SysHeader32".to_owned()),
+            focus_chain: vec![
+                node(UIA_WINDOW, "Programs and Features", false),
+                list,
+                header,
+                node(SPLIT_BUTTON, "Publisher", true),
+            ],
+            focus_siblings: titles,
+            ..focus_event(Vec::new())
+        };
+        let focus = focus_event_from_trace(&event);
+        assert!(
+            focus.as_ref().is_some_and(|f| f.header_bar
+                && f.item_index == Some(2)
+                && f.item_count == Some(3)
+                && f.container_role.is_none()),
+            "{focus:?}"
+        );
     }
 
     /// Down in the Font dialog's font field: its open list's item takes the WinEvent focus

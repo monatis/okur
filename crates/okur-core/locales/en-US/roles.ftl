@@ -61,6 +61,8 @@ role-link-same-page = same page link
 role-link-viewer = link
 # A link inside a line of Word's document, marked before its text [obs, 1055/s1].
 role-link-in-line = link
+# A Win32 header control's item: a list view's column title [obs, 3156/s2].
+role-header-bar = Header bar
 role-list = list
 role-list-box = List box
 # File Explorer's file list. JAWS's spelling.

@@ -710,6 +710,10 @@ pub struct FocusEvent {
     /// A list-view item's column headers, in order ("Name", "Size") [obs, 514/s5].
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub column_headers: Vec<String>,
+    /// The focus is a Win32 header control's item, a list view's column title, which JAWS
+    /// calls a header bar [obs, 3156/s2].
+    #[serde(default)]
+    pub header_bar: bool,
     /// The focus is on a ribbon (a NetUI ribbon: WordPad's, Paint's), whose tabs JAWS reads
     /// without a property sheet's page hint [obs, 523/s2, s3].
     #[serde(default)]
@@ -1016,6 +1020,7 @@ impl FocusEvent {
             groups: Vec::new(),
             columns: Vec::new(),
             column_headers: Vec::new(),
+            header_bar: false,
             in_ribbon: false,
             ribbon_menu: false,
             opens_menu: false,

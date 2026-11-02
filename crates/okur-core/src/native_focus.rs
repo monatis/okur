@@ -197,6 +197,16 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
         .map(|v| Line::of(PartKind::Value, v));
     let mut lines = Vec::new();
     match focus.role {
+        // A Win32 header control's item, a list view's column title: "Name Header bar | 1 of 5 |
+        // Select column title to sort by that category." [obs, 3156/s2].
+        _ if focus.header_bar => {
+            lines.push(Line::new(vec![
+                name_part(name),
+                role(msg::role_header_bar().as_str()),
+            ]));
+            lines.extend(position(focus));
+            lines.push(Line::of(PartKind::Hint, msg::hint_header_bar()));
+        }
         // A combo box's text field. JAWS 2025 on the Run dialog's Open field, observed on the
         // dev box (2026-10-15; research): "Open: edit combo | C: | 1 of 6 | To set the
         // value use the Arrow keys or type the value. | Alt+o".
@@ -315,11 +325,25 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                 ]));
                 lines.extend(value);
             } else {
+                // File Explorer's search box says its prompt, which UI Automation gives as its
+                // help: Programs and Features', "Search Box Edit | Search Programs and Features |
+                // Type in text." [obs, 3156/s5]. Other fields' help is not said: Chrome's
+                // address bar's [obs, 204/s13], Excel's cell editor's.
+                let description = focus
+                    .help_text
+                    .as_deref()
+                    .map(str::trim)
+                    .filter(|h| !h.is_empty() && *h != name.trim())
+                    .filter(|_| {
+                        focus.platform.element_class.as_deref() == Some(EXPLORER_SEARCH_BOX)
+                    })
+                    .map(|h| Line::of(PartKind::Description, h));
                 lines.push(Line::new(vec![
                     name_part(name),
                     role(msg::role_edit().as_str()),
                 ]));
                 lines.extend(value);
+                lines.extend(description);
             }
             lines.push(Line::of(
                 PartKind::Hint,
@@ -386,14 +410,24 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
         Role::ListItem => {
             // A list view's item with the focus but not selected: "Not Selected Temporary"
             // [obs, 687/s11].
-            if focus.container_is_list_view && focus.states.selected == Some(false) {
-                lines.push(Line::of(
-                    PartKind::Name,
-                    msg::list_item_not_selected(name).render(),
-                ));
+            let mut first = if focus.container_is_list_view && focus.states.selected == Some(false)
+            {
+                Line::of(PartKind::Name, msg::list_item_not_selected(name).render())
             } else {
-                lines.push(Line::of(PartKind::Name, name));
+                Line::of(PartKind::Name, name)
+            };
+            // An item that opens to show more says so as the list is entered, not as the
+            // arrows move through it: Windows Settings' apps, "3B Görüntüleyici ... 16.0 KB
+            // 2/14/2026 collapsed | 1 of 154", then "3D Builder ... | 2 of 154" [obs, 3155/s6,
+            // s7].
+            if entering {
+                match focus.states.expanded {
+                    Some(true) => first.parts.push(state(msg::state_expanded().as_str())),
+                    Some(false) => first.parts.push(state(msg::state_collapsed().as_str())),
+                    None => {}
+                }
             }
+            lines.push(first);
             lines.extend(
                 focus
                     .columns
@@ -698,6 +732,8 @@ impl FocusKey {
 /// The start of the window class Office's own dialogs share, their application's after it
 /// (Word's `bosa_sdm_msword`, Excel's `bosa_sdm_XL9`).
 const OFFICE_DIALOG_CLASS: &str = "bosa_sdm_";
+/// File Explorer's search box (its Control Panel pages' too).
+const EXPLORER_SEARCH_BOX: &str = "SearchEditBox";
 
 /// Focus speech across a sequence of native focus events.
 #[derive(Debug, Default)]
@@ -1072,11 +1108,22 @@ pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> Announceme
 /// spacebar.", "Text editor edit"; on old-pc "Read-only check box | not checked | To check
 /// press Spacebar. | alt+R" [obs, 323/s1].
 pub fn say_focus(focus: &FocusEvent) -> String {
-    let mut lines: Vec<String> = control_lines(focus, false)
-        .iter()
-        .filter(|l| !l.on_arrival)
-        .map(Line::render)
-        .collect();
+    // A list's item is said as the list is entered: its state, its place and how to move in
+    // the list, with a list view's name and kind before it: "FolderView List view | 7-Zip
+    // 18.05 (x64) | ... | 1 of 119 | To move to items use the Arrow keys. | To edit the selected
+    // item press f2." [obs, 3156/s14]; Settings' apps, "3D Builder ... expanded | 2 of 154 | To
+    // move to an item press the Arrow keys." [obs, 3155/s11].
+    let list_item = focus.role == Role::ListItem;
+    let mut lines: Vec<String> = Vec::new();
+    if list_item && focus.container_is_list_view {
+        lines.extend(container_entry(focus).map(|line| line.render()));
+    }
+    lines.extend(
+        control_lines(focus, list_item)
+            .iter()
+            .filter(|l| !l.on_arrival)
+            .map(Line::render),
+    );
     // A file dialog's file name field ends with the folder it saves to or opens from:
     // "File name: edit combo | sr-dialog-copy.txt | Address: C:\Users\…" [obs, 524/s3].
     if focus.role == Role::Edit && focus.container_role == Some(Role::ComboBox) {
@@ -1233,6 +1280,23 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<Announce
                 // Closing it re-announces the combo box as on focus [obs, 304/s13].
                 Some(Announcement::from_text(&focus_speech(after, None).render()))
             }
+        }
+        // An item that opens, opened or closed with Space: the states that changed, without its
+        // name: Windows Settings' apps, " selected expanded" [obs, 3155/s10].
+        Role::ListItem
+            if before.states.expanded != after.states.expanded
+                && after.states.expanded.is_some() =>
+        {
+            let mut parts = vec![Part::text(" ")];
+            if before.states.selected != Some(true) && after.states.selected == Some(true) {
+                parts.push(state(msg::state_selected().as_str()));
+            }
+            parts.push(state(if after.states.expanded == Some(true) {
+                msg::state_expanded().as_str()
+            } else {
+                msg::state_collapsed().as_str()
+            }));
+            Some(Announcement::new(vec![Line::new(parts)]))
         }
         Role::ComboBox if before.value != after.value => {
             let mut lines: Vec<Line> = after
@@ -2284,6 +2348,53 @@ Undo  Unavailable"
         assert_eq!(
             norm(&focus_speech(&file, None).render()),
             norm(" \u{1d} List view \u{1e} \nbudget.xlsx\n24 KB \n1 of 3\nTo move to items use the Arrow keys.")
+        );
+
+        // A list view's column title, a header bar, with no list said around it [obs, 3156/s2].
+        let mut title = at(event(Role::SplitButton, "Name"), 1, 5);
+        title.header_bar = true;
+        assert_eq!(
+            norm(&focus_speech(&title, None).render()),
+            norm("Name  \u{1d} Header bar \u{1e} \n1 of 5\nSelect column title to sort by that category.")
+        );
+        // File Explorer's search box says its prompt after its role [obs, 3156/s5]; another
+        // field's help is not said: Chrome's address bar [obs, 204/s13].
+        let mut search =
+            event(Role::Edit, "Search Box").with_help_text(" Search Programs and Features");
+        search.platform.element_class = Some("SearchEditBox".to_owned());
+        assert_eq!(
+            norm(&focus_speech(&search, None).render()),
+            norm("Search Box  \u{1d} Edit \u{1e} \nSearch Programs and Features\nType in text.")
+        );
+        let mut omnibox = event(Role::Edit, "Address and search bar")
+            .with_help_text("Press up or down arrow for auto completions.");
+        omnibox.platform.element_class = Some("OmniboxViewViews".to_owned());
+        assert_eq!(
+            norm(&focus_speech(&omnibox, None).render()),
+            norm("Address and search bar  \u{1d} Edit \u{1e} \nType in text.")
+        );
+
+        // An item that opens says its state as the list is entered, not on the arrows
+        // [obs, 3155/s6, s7].
+        let mut app = at(
+            in_container(
+                event(Role::ListItem, "3D Builder Microsoft Corporation 28.0 KB"),
+                Role::List,
+                "154 apps found",
+                "ListView",
+            ),
+            2,
+            154,
+        );
+        app.states.expanded = Some(false);
+        assert_eq!(
+            norm(&focus_speech(&app, None).render()),
+            norm("154 apps found  \u{1d} List box \u{1e} \n3D Builder Microsoft Corporation 28.0 KB  \u{1d}collapsed\u{1e} \n2 of 154\nTo move to an item press the Arrow keys.")
+        );
+        let list = ContainerKey::of(&app);
+        assert_eq!(
+            norm(&focus_speech(&app, list.as_ref()).render()),
+            norm("3D Builder Microsoft Corporation 28.0 KB \n2 of 154")
         );
 
         let mut docs = at(

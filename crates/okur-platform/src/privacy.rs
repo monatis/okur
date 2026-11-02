@@ -10,6 +10,18 @@ pub fn internet_feed(event: &crate::event_trace::TraceEvent) -> bool {
     event.process.as_deref() == Some("msedgewebview2.exe") && event.focus_chain.is_empty()
 }
 
+/// Whether a change event's object is a list item neither focused nor selected: a list's row
+/// changing as the list draws it. Windows Settings' Apps & features reports one for each app it
+/// shows as it opens, and a trace of scenario 3155 held the reference machine's installed
+/// programs (2026-11-02). Nothing reads them: the engine takes a change only for the focus, and
+/// live they are dropped before they are read.
+pub fn unvisited_list_item(object: &crate::event_trace::TraceObject) -> bool {
+    const ROLE_LISTITEM: i32 = 0x22;
+    const STATE_SELECTED: u32 = 0x2;
+    const STATE_FOCUSED: u32 = 0x4;
+    object.role == Some(ROLE_LISTITEM) && object.states & (STATE_SELECTED | STATE_FOCUSED) == 0
+}
+
 /// What an e-mail address is replaced with.
 pub const ADDRESS_MARK: &str = "<address>";
 
@@ -80,6 +92,24 @@ mod tests {
         );
         let event: Option<crate::event_trace::TraceEvent> = serde_json::from_str(&focused).ok();
         assert_eq!(event.as_ref().map(internet_feed), Some(false));
+    }
+
+    /// A list's rows drawn are left out; its focused and selected items stay, as does
+    /// anything not a list item.
+    #[test]
+    fn a_lists_rows_drawn_are_left_out() {
+        let item = |role: i32, states: u32| crate::event_trace::TraceObject {
+            role: Some(role),
+            name: Some("Some Program 36.1 MB".to_owned()),
+            value: None,
+            states,
+            shortcut: None,
+        };
+        // Selectable, focusable, collapsed (Settings' apps as the page opens).
+        assert!(unvisited_list_item(&item(0x22, 0x0030_0400)));
+        assert!(!unvisited_list_item(&item(0x22, 0x0030_0402)));
+        assert!(!unvisited_list_item(&item(0x22, 0x0030_0404)));
+        assert!(!unvisited_list_item(&item(0x2B, 0x0010_0000)));
     }
 
     #[test]

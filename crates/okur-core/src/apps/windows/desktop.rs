@@ -33,7 +33,10 @@ impl Desktop {
         let top = focus.platform.top_window_class.as_deref();
         let in_desktop_window = |w: &str| DESKTOP_WINDOWS.contains(&w);
         !super::explorer::is_explorer_window(focus)
-            && (focus.container_name.as_deref() == Some("FolderView")
+            // The desktop's list, not another shell view's of the same name: Programs and
+            // Features' is "FolderView" too, in a File Explorer window [obs, 3156/s10].
+            && ((focus.container_name.as_deref() == Some("FolderView")
+                && top.is_none_or(in_desktop_window))
                 || window_class.is_some_and(in_desktop_window)
                 // A list view in the desktop's window, not one in a dialog (Okur's Links
                 // List, dev box, 2026-10-17).

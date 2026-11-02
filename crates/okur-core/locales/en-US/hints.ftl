@@ -27,6 +27,8 @@ hint-menu-items-up-down = To move through items press up or down arrow.
 hint-move-to-an-item-arrows = To move to an item press the Arrow keys.
 # A list view's items.
 hint-move-to-items-arrows = To move to items use the Arrow keys.
+# A list view's column title (a header bar).
+hint-header-bar = Select column title to sort by that category.
 # A radio button in a native dialog.
 hint-radio-up-down = To change the selection press Up or Down Arrow.
 # A combo box one can type into.
