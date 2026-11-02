@@ -43,7 +43,9 @@ pub use windows_actions::WindowsActions;
 #[cfg(windows)]
 mod windows_actions {
     use super::{runtime_id, unique_id};
-    use crate::text_context::{focus_has_taken_its_keys, read_focused, read_focused_outside_page};
+    use crate::text_context::{
+        focus_has_taken_its_keys, read_focused, read_focused_outside_page, read_place_outside_page,
+    };
     use okur_core::{AccessibilityEvent, TextContext};
     use std::sync::mpsc::{channel, Receiver, Sender};
     use std::sync::Mutex;
@@ -994,13 +996,15 @@ mod windows_actions {
         known: Option<TextContext>,
     ) -> Option<TextContext> {
         let started = Instant::now();
+        // Until the key has acted, only the text, the caret and the selection are compared
+        // (`same_place`): each poll reads them alone, and the place settled is read whole once.
         let (before, mut now) = match known {
             Some(known) => {
                 std::thread::sleep(HEAD_START);
-                (Some(known), read_focused_outside_page(uia))
+                (Some(known), read_place_outside_page(uia))
             }
             None => {
-                let before = read_focused_outside_page(uia);
+                let before = read_place_outside_page(uia);
                 (before.clone(), before)
             }
         };
@@ -1011,7 +1015,7 @@ mod windows_actions {
         let mut unchanged_after_taken = 0;
         while super::same_place(&now, &before) && started.elapsed() < SETTLE {
             if unchanged_after_taken < 2 && focus_has_taken_its_keys() {
-                now = read_focused_outside_page(uia);
+                now = read_place_outside_page(uia);
                 if super::same_place(&now, &before) {
                     unchanged_after_taken += 1;
                     if unchanged_after_taken == 2 {
@@ -1025,7 +1029,7 @@ mod windows_actions {
                 continue;
             }
             std::thread::sleep(POLL);
-            now = read_focused_outside_page(uia);
+            now = read_place_outside_page(uia);
         }
         // A selection still being extended (Ctrl+Shift+End over many lines) is read once two
         // reads agree; a caret move is read at once.
@@ -1033,14 +1037,15 @@ mod windows_actions {
         {
             loop {
                 std::thread::sleep(POLL);
-                let again = read_focused_outside_page(uia);
+                let again = read_place_outside_page(uia);
                 if super::same_place(&again, &now) || started.elapsed() >= SETTLE * 2 {
                     break;
                 }
                 now = again;
             }
         }
-        now
+        // The place settled, read whole: its font, its word and Word's structure.
+        now.and_then(|_| read_focused_outside_page(uia))
     }
 
     impl okur_core::actions::ApplicationActions for WindowsActions {

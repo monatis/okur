@@ -38,9 +38,10 @@ pub(crate) use reader::{activate_word_document_link, forget_form_fields, forget_
 pub use reader::{
     focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
     move_caret_in_edit, move_to_cell, move_to_paragraph, read_focused, read_focused_outside_page,
-    visible_text, with_paragraph_alignment, word_document_fields, word_document_headings,
-    word_document_links, word_document_notes, word_document_paragraphs, word_key_state,
-    word_line_spacing, word_select_field, word_select_note, word_status_bar, word_view,
+    read_place_outside_page, visible_text, with_paragraph_alignment, word_document_fields,
+    word_document_headings, word_document_links, word_document_notes, word_document_paragraphs,
+    word_key_state, word_line_spacing, word_select_field, word_select_note, word_status_bar,
+    word_view,
 };
 
 #[cfg(windows)]
@@ -104,6 +105,15 @@ mod reader {
     /// address bar), whose page still names a focus of its own, which is not the one typed in.
     pub fn read_focused_outside_page(uia: &IUIAutomation) -> Option<TextContext> {
         read_uia(uia).map(with_edit_font).or_else(read_win32_edit)
+    }
+
+    /// The focused field's text, caret and selection alone, which the reads after a key
+    /// compare until the key has acted: without the font, the caret's word and Word's
+    /// structure, which cost Word about 60 cross-process calls a read, every 15 ms after each
+    /// key (performance review 2026-11-02, live path finding 7). Read whole once settled
+    /// ([`read_focused_outside_page`]).
+    pub fn read_place_outside_page(uia: &IUIAutomation) -> Option<TextContext> {
+        read_uia_with(uia, false).or_else(read_win32_edit)
     }
 
     /// The text the focused element shows on the screen, through UIA's visible ranges: a
@@ -1716,6 +1726,12 @@ mod reader {
     }
 
     fn read_uia(uia: &IUIAutomation) -> Option<TextContext> {
+        read_uia_with(uia, true)
+    }
+
+    /// The focused element's text through UIA; with `whole`, the font, the caret's word and
+    /// Word's structure too.
+    fn read_uia_with(uia: &IUIAutomation, whole: bool) -> Option<TextContext> {
         // SAFETY: UIA client calls on valid objects.
         unsafe {
             let focused = uia.GetFocusedElement().ok()?;
@@ -1730,6 +1746,17 @@ mod reader {
             // poll after a key (performance review 2026-10-23, P3).
             let start = offset_of(&document, &selection, TextPatternRangeEndpoint_Start)?;
             let end = start + chars_of(&selection)?;
+            if !whole {
+                return Some(TextContext {
+                    text,
+                    caret: start,
+                    selection: (start < end).then_some((start, end)),
+                    font: None,
+                    word: None,
+                    misspelled: Vec::new(),
+                    structure: None,
+                });
+            }
             // The caret, as a range of its own.
             let caret = selection.Clone().ok()?;
             caret
