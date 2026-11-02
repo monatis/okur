@@ -422,6 +422,11 @@ function Reset-JawsFiles([string[]]$names) {
     $found = @($names | Where-Object { $_ } | ForEach-Object { Join-Path $root $_ } |
         Where-Object { Test-Path -LiteralPath $_ })
     if ($found.Count -eq 0) { return }
+    # Okur's run has JAWS stopped already: the files go, and JAWS stays stopped.
+    if ($Reader -eq 'okur') {
+        $found | ForEach-Object { Remove-Item -LiteralPath $_ -Force }
+        return
+    }
     Invoke-JawsProcess -Stop
     Start-Sleep -Seconds 3
     $found | ForEach-Object { Remove-Item -LiteralPath $_ -Force }
