@@ -101,6 +101,19 @@ pub fn speech_chunks(text: &str) -> Vec<String> {
     chunks
 }
 
+/// What an utterance handed to OneCore's worker answers, by the utterances in a row before it
+/// that the worker could not speak: an error while it fails, counted toward the
+/// synthesizer's restart.
+#[cfg_attr(not(windows), allow(dead_code))]
+fn failures_told(failures: u32) -> Result<(), crate::tts::TtsError> {
+    match failures {
+        0 => Ok(()),
+        failed => Err(crate::tts::TtsError::SynthesisFailed(format!(
+            "OneCore could not speak {failed} utterances in a row"
+        ))),
+    }
+}
+
 /// Our -10..10 rate scale as OneCore's speaking rate (0.5 to 6, 1 is normal).
 pub fn speaking_rate(rate: i32) -> f64 {
     let rate = f64::from(rate.clamp(-10, 10));
@@ -126,19 +139,21 @@ mod engine {
         audio_pitch, parse_wav, speaking_rate, speech_chunks, trim_leading_silence, WavFormat,
     };
     use crate::tts::{TtsEngine, TtsError, VoiceInfo};
-    use std::sync::atomic::{AtomicU64, AtomicUsize, Ordering};
+    use std::sync::atomic::{AtomicBool, AtomicU32, AtomicU64, AtomicUsize, Ordering};
     use std::sync::mpsc::{channel, Receiver, Sender};
     use std::sync::{Arc, Mutex};
     use std::time::{Duration, Instant};
-    use windows::core::HSTRING;
+    use windows::core::{implement, HSTRING, PCWSTR};
     use windows::Media::SpeechSynthesis::{
         SpeechAppendedSilence, SpeechPunctuationSilence, SpeechSynthesisStream, SpeechSynthesizer,
     };
     use windows::Storage::Streams::DataReader;
+    use windows::Win32::Foundation::PROPERTYKEY;
     use windows::Win32::Media::Audio::{
-        eConsole, eRender, IAudioClient, IAudioRenderClient, IMMDeviceEnumerator,
-        MMDeviceEnumerator, AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_AUTOCONVERTPCM,
-        AUDCLNT_STREAMFLAGS_SRC_DEFAULT_QUALITY, WAVEFORMATEX,
+        eConsole, eRender, EDataFlow, ERole, IAudioClient, IAudioRenderClient, IMMDeviceEnumerator,
+        IMMNotificationClient, IMMNotificationClient_Impl, MMDeviceEnumerator,
+        AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_AUTOCONVERTPCM,
+        AUDCLNT_STREAMFLAGS_SRC_DEFAULT_QUALITY, DEVICE_STATE, WAVEFORMATEX,
     };
     use windows::Win32::System::Com::{
         CoCreateInstance, CoInitializeEx, CLSCTX_ALL, COINIT_MULTITHREADED,
@@ -177,6 +192,48 @@ mod engine {
         pending: AtomicUsize,
         /// The latest Say All part started, plus one (0: none since it was last read).
         reached: AtomicU64,
+        /// Windows' default output changed: the next utterance opens a stream on it.
+        device_changed: AtomicBool,
+        /// Utterances in a row the worker could not speak (synthesis, its stream or the
+        /// device failed); none since the last one spoken.
+        failures: AtomicU32,
+    }
+
+    /// Tells the worker that Windows' default output changed. Its stream stayed on the device
+    /// it first opened: plugged-in headphones or a Bluetooth headset made the new default,
+    /// and Okur went on speaking through the speakers, in an office or a meeting (performance
+    /// review 2026-11-02, speech finding 3; 2026-10-25 item 14).
+    #[implement(IMMNotificationClient)]
+    struct DeviceWatch(Arc<Shared>);
+
+    impl IMMNotificationClient_Impl for DeviceWatch_Impl {
+        fn OnDeviceStateChanged(&self, _: &PCWSTR, _: DEVICE_STATE) -> windows::core::Result<()> {
+            Ok(())
+        }
+
+        fn OnDeviceAdded(&self, _: &PCWSTR) -> windows::core::Result<()> {
+            Ok(())
+        }
+
+        fn OnDeviceRemoved(&self, _: &PCWSTR) -> windows::core::Result<()> {
+            Ok(())
+        }
+
+        fn OnDefaultDeviceChanged(
+            &self,
+            flow: EDataFlow,
+            role: ERole,
+            _: &PCWSTR,
+        ) -> windows::core::Result<()> {
+            if flow == eRender && role == eConsole {
+                self.0.device_changed.store(true, Ordering::SeqCst);
+            }
+            Ok(())
+        }
+
+        fn OnPropertyValueChanged(&self, _: &PCWSTR, _: &PROPERTYKEY) -> windows::core::Result<()> {
+            Ok(())
+        }
     }
 
     /// What the worker reports as it starts: the voices, and the one it started with.
@@ -256,7 +313,12 @@ mod engine {
             if sent.is_err() {
                 self.shared.pending.fetch_sub(1, Ordering::SeqCst);
             }
-            sent
+            sent?;
+            // The worker speaks after this returns: its failures are told with the next
+            // utterances, counted toward the synthesizer's restart. They were only logged, and
+            // a synthesizer that kept failing was silent for the session (performance review
+            // 2026-11-02, speech finding 4).
+            super::failures_told(self.shared.failures.load(Ordering::SeqCst))
         }
 
         fn send(&self, command: Command) -> Result<(), TtsError> {
@@ -329,20 +391,24 @@ mod engine {
 
     /// Speaks an utterance chunk by chunk: the next chunk is synthesized while the current
     /// one plays, and an interruption stops playback and cancels the synthesis in flight.
+    /// False where it could not be spoken (an interruption is no failure).
     fn speak_chunks(
         synth: &SpeechSynthesizer,
         output: &mut Option<Output>,
         chunks: &[String],
         cancelled: &dyn Fn() -> bool,
         asked: Instant,
-    ) {
+    ) -> bool {
         let started = Instant::now();
+        let mut spoken = true;
         let mut next = chunks.first().and_then(|c| start(synth, c));
         for index in 0..chunks.len() {
             let Some(op) = next.take() else {
+                spoken = cancelled();
                 break;
             };
             let Some(wav) = finish(&op, cancelled) else {
+                spoken = cancelled();
                 break;
             };
             next = chunks.get(index + 1).and_then(|c| start(synth, c));
@@ -359,6 +425,7 @@ mod engine {
                     .ok();
             }
             let Some(out) = output.as_ref() else {
+                spoken = false;
                 break;
             };
             if index == 0 {
@@ -374,6 +441,7 @@ mod engine {
             if let Err(e) = out.play(pcm, cancelled, last) {
                 tracing::warn!("audio playback: {e}");
                 *output = None;
+                spoken = false;
                 break;
             }
             if cancelled() {
@@ -386,6 +454,7 @@ mod engine {
         if let Some(out) = output.as_ref() {
             out.stop();
         }
+        spoken
     }
 
     /// A WASAPI shared-mode stream on the default output, for one PCM format.
@@ -533,6 +602,16 @@ mod engine {
             }
         };
         let mut output: Option<Output> = None;
+        // SAFETY: COM calls on this thread's apartment; the watch is removed below.
+        let watch: IMMNotificationClient = DeviceWatch(shared.clone()).into();
+        let devices: Option<IMMDeviceEnumerator> =
+            unsafe { CoCreateInstance(&MMDeviceEnumerator, None, CLSCTX_ALL) }.ok();
+        let watching = devices.as_ref().is_some_and(|devices| {
+            // SAFETY: a valid enumerator and client, alive while registered.
+            unsafe { devices.RegisterEndpointNotificationCallback(&watch) }
+                .map_err(|e| tracing::warn!("default output not watched: {e}"))
+                .is_ok()
+        });
         for command in commands {
             match command {
                 Command::Speak {
@@ -559,13 +638,34 @@ mod engine {
                     if pitch != 0 {
                         set_pitch(audio_pitch(pitch));
                     }
-                    speak_chunks(
-                        &synth,
-                        &mut output,
-                        &speech_chunks(&text),
-                        &cancelled,
-                        asked,
-                    );
+                    // Another default output: the stream opens anew on it.
+                    if shared.device_changed.swap(false, Ordering::SeqCst) {
+                        if let Some(old) = output.take() {
+                            old.stop();
+                        }
+                        tracing::debug!("default output changed: the stream opens anew");
+                    }
+                    // A panic in a WinRT or WASAPI call left the utterance pending, and
+                    // Okur seemed to speak for good: it counts as one not spoken.
+                    let spoken = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                        speak_chunks(
+                            &synth,
+                            &mut output,
+                            &speech_chunks(&text),
+                            &cancelled,
+                            asked,
+                        )
+                    }))
+                    .unwrap_or_else(|_| {
+                        tracing::error!("OneCore speech panicked");
+                        output = None;
+                        false
+                    });
+                    if spoken {
+                        shared.failures.store(0, Ordering::SeqCst);
+                    } else {
+                        shared.failures.fetch_add(1, Ordering::SeqCst);
+                    }
                     if pitch != 0 {
                         set_pitch(1.0);
                     }
@@ -597,6 +697,10 @@ mod engine {
                     }
                 }
             }
+        }
+        if let Some(devices) = devices.filter(|_| watching) {
+            // SAFETY: the client registered above.
+            let _ = unsafe { devices.UnregisterEndpointNotificationCallback(&watch) };
         }
     }
 
@@ -760,6 +864,15 @@ impl TtsEngine for OneCoreEngine {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// The worker's failures in a row are told with the next utterances, as errors the
+    /// synthesizer's restart counts; one spoken clears them.
+    #[test]
+    fn onecores_failures_are_told() {
+        assert!(failures_told(0).is_ok());
+        assert!(failures_told(1).is_err());
+        assert!(failures_told(7).is_err());
+    }
 
     fn wav(samples: &[i16]) -> Vec<u8> {
         let data: Vec<u8> = samples.iter().flat_map(|s| s.to_le_bytes()).collect();
