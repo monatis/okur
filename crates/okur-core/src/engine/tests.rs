@@ -1573,7 +1573,7 @@ fn a_flexible_web_rule_is_saved_and_holds_when_the_page_loads() {
     };
     let reload = |engine: &mut ScreenReaderEngine| {
         let _ = speech.take();
-        engine.reload_asked = true;
+        engine.reload_asked = Some(std::time::Instant::now());
         engine.handle_document_loaded("Weekend Events", VirtualBuffer::from_aom(&page))
     };
     let reads_advertisement =
@@ -9306,4 +9306,68 @@ fn excel_the_visible_cells_list() {
         .controls
         .iter()
         .any(|c| matches!(&c.kind, ControlKind::List { selected: 1, .. }))));
+}
+
+/// A panic while speech is set aside (a focus taken in quietly, a report during Say All) gives
+/// the real speech back: it had stayed dropped, and Okur mute for the session (performance
+/// review 2026-11-02, engine finding 7).
+#[test]
+fn speech_comes_back_after_a_panic_while_quiet() {
+    #[derive(Default, Clone)]
+    struct Heard(std::sync::Arc<std::sync::Mutex<Vec<String>>>);
+    impl crate::speech::SpeechOutput for Heard {
+        fn speak(&mut self, text: &str, _interrupt: bool) {
+            if let Ok(mut heard) = self.0.lock() {
+                heard.push(text.to_owned());
+            }
+        }
+        fn stop(&mut self) {}
+    }
+    let heard = Heard::default();
+    let page =
+        AomNode::new(0, Role::Document)
+            .with_children(vec![AomNode::new(1, Role::Paragraph).with_text("Text")]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(heard.clone()));
+    let caught = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        engine.quietly(|engine| {
+            engine.speech.speak("unheard", false);
+            std::panic::resume_unwind(Box::new("a bug while quiet"))
+        })
+    }));
+    assert!(caught.is_err());
+    engine.speech.speak("heard", false);
+    let heard = heard.0.lock().map(|h| h.clone()).unwrap_or_default();
+    assert_eq!(heard, vec!["heard".to_owned()]);
+}
+
+/// Ctrl+R in forms mode is the web application's (Google Docs aligns right), and one that
+/// brought no load within its wait is forgotten: the page's next refresh had been taken for a
+/// reload, forms mode left and the place lost (performance review 2026-11-02, engine
+/// finding 2). Out of forms mode it still asks for a reload.
+#[test]
+fn a_reload_key_that_reloads_nothing_is_forgotten() {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Docs")
+        .with_children(vec![AomNode::new(1, Role::Paragraph).with_text("Text")]);
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    engine.app_mode = AppMode::VirtualBuffer;
+    let ctrl = Modifiers {
+        ctrl: true,
+        ..Modifiers::none()
+    };
+    let ctrl_r = KeyEvent::new(Key::Alpha('R'), ctrl, true);
+    engine.forms_mode = true;
+    let _ = engine.handle_key_event(&ctrl_r);
+    assert!(engine.reload_asked.is_none());
+    engine.forms_mode = false;
+    let _ = engine.handle_key_event(&ctrl_r);
+    assert!(engine.reload_asked.is_some());
+    // Long ago: the page's next refresh is one, kept for the next quiet moment.
+    engine.reload_asked = std::time::Instant::now().checked_sub(std::time::Duration::from_secs(11));
+    assert!(engine.reload_asked.is_some());
+    engine.handle_page_refreshed("Docs", VirtualBuffer::from_aom(&page));
+    assert!(engine.pending_page.is_some());
+    assert!(engine.reload_asked.is_none());
 }

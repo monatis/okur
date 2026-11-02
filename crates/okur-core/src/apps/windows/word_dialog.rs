@@ -91,6 +91,16 @@ impl AppModule for WordDialog {
     }
 
     fn focus(&mut self, focus: &FocusEvent, cx: &mut AppContext<'_>) -> FocusResponse {
+        // Another application's focus ends what a task pane or dialog left Word to say: a
+        // page's document after Alt+Tab from the Navigation pane had been said "<name> | Edit",
+        // and the page was not taken in (performance review 2026-11-02, engine finding 3).
+        if focus.app.is_some() && !in_word(focus) {
+            self.in_pane = false;
+            self.in_dialog = false;
+            self.modeless = false;
+            self.said = None;
+            return FocusResponse::Pass;
+        }
         if in_task_pane(focus) {
             self.in_pane = true;
             return FocusResponse::Pass;
@@ -329,6 +339,27 @@ mod tests {
 
     /// Back in the document from a modeless dialog (Find and Replace, by Ctrl+Tab or Escape),
     /// the window's title is said before "Edit" [obs, 1065/s6, s8].
+    /// A task pane, then another application's page: the page is the engine's, and back in
+    /// Word later its document is no longer said as back from the pane.
+    #[test]
+    fn another_application_after_a_task_pane_is_not_words() {
+        let mut dialog = WordDialog::default();
+        let mut title = Some("sr-word-fixture.docx - Word".to_owned());
+        let mut pane = FocusEvent::new(Role::Button).with_name("Ignore All");
+        pane.app = Some("WINWORD.EXE".into());
+        pane.platform.window_class = Some("NetUIHWND".into());
+        assert_eq!(said(&mut dialog, &pane, &mut title), None);
+        let mut page = FocusEvent::new(Role::Document).with_name("Weekend Events");
+        page.app = Some("chrome.exe".into());
+        assert_eq!(said(&mut dialog, &page, &mut title), None);
+        let mut window = FocusEvent::new(Role::Window);
+        window.app = Some("chrome.exe".into());
+        assert_eq!(said(&mut dialog, &window, &mut title), None);
+        let mut document = FocusEvent::new(Role::Document).with_name("sr-word-fixture.docx");
+        document.app = Some("WINWORD.EXE".into());
+        assert_eq!(said(&mut dialog, &document, &mut title), None);
+    }
+
     #[test]
     fn the_document_after_a_modeless_dialog_names_its_window() {
         let mut dialog = WordDialog::default();

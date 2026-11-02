@@ -33,7 +33,9 @@ impl AppModule for WordDocument {
     /// Back from Office's own context menu (Shift+F10), the document says "Edit" alone, nothing
     /// of leaving menus [obs, 1125/s4].
     fn focus(&mut self, focus: &FocusEvent, cx: &mut AppContext<'_>) -> FocusResponse {
-        if !cx.office_menu_closed {
+        // Only Word's document: Outlook's or Excel's focus after Office's context menu is
+        // theirs (performance review 2026-11-02, engine finding 3).
+        if !cx.office_menu_closed || !self.owns(focus) {
             return FocusResponse::Pass;
         }
         cx.note_window(focus);
@@ -1317,6 +1319,41 @@ mod tests {
         let mut wordpad = document;
         wordpad.app = Some("wordpad.exe".into());
         assert!(!WordDocument.owns(&wordpad));
+    }
+
+    /// Back from Office's context menu, Word's document says "Edit"; another Office
+    /// application's focus is not Word's to say.
+    #[test]
+    fn only_words_document_says_edit_after_offices_menu() {
+        let said = |focus: &FocusEvent| {
+            let (mut mode, mut title, mut kind) =
+                (crate::engine::AppMode::NativeControl, None, None);
+            let mut cx = AppContext {
+                app_mode: &mut mode,
+                window_title: &mut title,
+                window_kind: &mut kind,
+                selecting: false,
+                alt_held: false,
+                letter_key: false,
+                escape_key: true,
+                key: None,
+                ask_view: false,
+                ask_sheet: false,
+                repeat: false,
+                office_menu_closed: true,
+                sheet_titles: None,
+            };
+            match WordDocument.focus(focus, &mut cx) {
+                FocusResponse::SpeakWhole(announcement) => Some(announcement.render()),
+                _ => None,
+            }
+        };
+        let mut document = FocusEvent::new(Role::Document);
+        document.app = Some("WINWORD.EXE".into());
+        assert_eq!(said(&document).as_deref(), Some(" \u{1d} Edit \u{1e} "));
+        let mut message = FocusEvent::new(Role::ListItem).with_name("Weekly report");
+        message.app = Some("OUTLOOK.EXE".into());
+        assert_eq!(said(&message), None);
     }
 
     fn at(

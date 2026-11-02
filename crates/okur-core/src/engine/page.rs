@@ -26,6 +26,9 @@ pub(super) struct PageBuilds {
     base: std::sync::Weak<AomNode>,
 }
 
+/// How long after Ctrl+R or F5 the page's load is taken for the reload they asked for.
+const RELOAD_WAIT: std::time::Duration = std::time::Duration::from_secs(10);
+
 impl ScreenReaderEngine {
     /// Handles client-side SPA routing transitions: announces new page title and retargets cursor.
     pub fn handle_route_transition(&mut self, new_title: &str, target_id: Option<&str>) -> String {
@@ -78,7 +81,7 @@ impl ScreenReaderEngine {
     pub fn handle_page_refreshed(&mut self, title: &str, buffer: VirtualBuffer) {
         // After Ctrl+R or F5 the page comes back as a refresh: it is a new load, announced
         // and read [obs, 507/s1; live9, where the reload came as "page refreshed"].
-        if self.reload_asked && self.is_page_in_front(title, buffer.document_url()) {
+        if self.reload_pending() && self.is_page_in_front(title, buffer.document_url()) {
             let _ = self.handle_document_loaded(title, buffer);
             return;
         }
@@ -91,6 +94,18 @@ impl ScreenReaderEngine {
         }
     }
 
+    /// Whether Ctrl+R or F5 asked for a reload that has not come yet; one asked longer ago than
+    /// [`RELOAD_WAIT`] is forgotten (a page that took the key for itself).
+    fn reload_pending(&mut self) -> bool {
+        let pending = self
+            .reload_asked
+            .is_some_and(|asked| asked.elapsed() < RELOAD_WAIT);
+        if !pending {
+            self.reload_asked = None;
+        }
+        pending
+    }
+
     pub fn handle_document_loaded(&mut self, title: &str, buffer: VirtualBuffer) -> Option<String> {
         // The page already in the buffer, captured again (the first focus in it after
         // start-up): refresh it without announcing it or leaving forms mode.
@@ -98,7 +113,8 @@ impl ScreenReaderEngine {
         // on the page (WhatsApp's counts unread chats, "(8) WhatsApp"), and JAWS keeps its
         // place then (dev box, 2026-10-17).
         // After Ctrl+R or F5 the same page is loaded anew, and announced [obs, 507/s1].
-        let reloaded = std::mem::take(&mut self.reload_asked);
+        let reloaded = self.reload_pending();
+        self.reload_asked = None;
         if self.is_page_in_front(title, buffer.document_url()) && !reloaded {
             // Applied once the events of this change are handled: several live regions can
             // change at once, and each is compared with the page before the change

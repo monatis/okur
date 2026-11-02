@@ -440,9 +440,9 @@ pub struct ScreenReaderEngine {
     /// Jump To Line while it is open, and where the last jump was made from (Shift+J).
     jump_dialog: Option<crate::ui::jump::JumpDialog>,
     jump_return: Option<usize>,
-    /// Ctrl+R or F5 was pressed in a page: its next load is a new one, announced, not a
-    /// capture of the page again [obs, 507/s1].
-    reload_asked: bool,
+    /// When Ctrl+R or F5 was pressed in a page: its next load within `RELOAD_WAIT` (`engine/page.rs`) is a new
+    /// one, announced, not a capture of the page again [obs, 507/s1].
+    reload_asked: Option<std::time::Instant>,
     /// JAWS Find's check boxes and direction, kept between openings.
     find_options: crate::ui::find::FindOptions,
     /// JAWS Find's searches, the latest first, by site ("" for every site).
@@ -717,7 +717,7 @@ impl ScreenReaderEngine {
             tray_asked: false,
             jump_dialog: None,
             jump_return: None,
-            reload_asked: false,
+            reload_asked: None,
             find_options: crate::ui::find::FindOptions::default(),
             find_histories: std::collections::HashMap::new(),
             quiet_focus_until: None,
@@ -901,6 +901,22 @@ impl ScreenReaderEngine {
             .map(|app| app.as_ref())
     }
 
+    /// Runs `work` with speech going nowhere, then gives speech back, also when `work` panics:
+    /// the panic, caught further out, had left the real synthesizer dropped and Okur mute for
+    /// the session (performance review 2026-11-02, engine finding 7).
+    pub(crate) fn quietly<R>(&mut self, work: impl FnOnce(&mut Self) -> R) -> R {
+        let speech = std::mem::replace(
+            &mut self.speech,
+            Box::new(crate::speech::MockSpeechOutput::new()),
+        );
+        let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| work(self)));
+        self.speech = speech;
+        match result {
+            Ok(result) => result,
+            Err(panic) => std::panic::resume_unwind(panic),
+        }
+    }
+
     /// Handles a live keyboard event from the low-level hook.
     /// Intercepts navigation keys, manages forms mode transitions, silences ongoing speech,
     /// and returns whether the key was consumed or should pass through to the OS.
@@ -946,13 +962,17 @@ impl ScreenReaderEngine {
                 return action;
             }
         }
-        if self.app_mode == AppMode::VirtualBuffer {
+        // Not in forms mode, where a web application takes these keys for itself (Ctrl+R
+        // aligns right in Google Docs, replies in Outlook on the web): no load follows, and the
+        // page's next refresh was taken for a reload, forms mode left and the place lost
+        // (performance review 2026-11-02, engine finding 2).
+        if self.app_mode == AppMode::VirtualBuffer && !self.forms_mode && event.is_down {
             let m = &event.modifiers;
             let plain = !m.alt && !m.shift && !m.insert && !m.win;
             if plain
                 && ((m.ctrl && event.key == Key::Alpha('R')) || (!m.ctrl && event.key == Key::F(5)))
             {
-                self.reload_asked = true;
+                self.reload_asked = Some(std::time::Instant::now());
             }
         }
         self.last_typed = event.text;
@@ -1008,12 +1028,7 @@ impl ScreenReaderEngine {
         if self.say_all.is_some() && !self.settings.reading_interrupt && event.is_down {
             if let Some(command) = crate::command::command_for(event) {
                 if command.only_reports() {
-                    let speech = std::mem::replace(
-                        &mut self.speech,
-                        Box::new(crate::speech::MockSpeechOutput::new()),
-                    );
-                    let said = self.execute(command);
-                    self.speech = speech;
+                    let said = self.quietly(|engine| engine.execute(command));
                     if let Some(said) = said.filter(|s| !s.trim().is_empty()) {
                         self.speech.speak(&said, false);
                     }
@@ -1703,12 +1718,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::Focus(focus)
                 if self.quiet_return() && !self.reaches_dialog_focus_target(focus) =>
             {
-                let speech = std::mem::replace(
-                    &mut self.speech,
-                    Box::new(crate::speech::MockSpeechOutput::new()),
-                );
-                self.handle_focus_event(focus);
-                self.speech = speech;
+                self.quietly(|engine| engine.handle_focus_event(focus));
                 None
             }
             AccessibilityEvent::Focus(focus) => {
