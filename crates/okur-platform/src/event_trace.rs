@@ -1770,20 +1770,11 @@ thread_local! {
         const { std::cell::RefCell::new(None) };
 }
 
-/// Whether a change event, by its MSAA identity and object's name, concerns the focused
-/// control, as the converter passes changes on: the focus's own object, or one of its name.
-/// The focus event's MSAA object can be the browser window while the focused control is a page
-/// button (focus left on it, then Space expanded it, GitHub): the control's own name, from the
-/// focus chain, is compared too.
 /// The new value of a page's progress bar or meter (MSAA `ROLE_SYSTEM_PROGRESSBAR`, which
 /// Chromium gives both) a value change event names.
 fn page_progress_value(event: &TraceEvent) -> Option<String> {
-    const ROLE_SYSTEM_PROGRESSBAR: i32 = 0x30;
-    if !WEB_CONTENT_WINDOW_CLASSES.contains(&event.window_class.as_deref()?) {
-        return None;
-    }
     let object = event.object.as_ref()?;
-    if object.role != Some(ROLE_SYSTEM_PROGRESSBAR) {
+    if !is_page_progress(event.window_class.as_deref()?, Some(object)) {
         return None;
     }
     object
@@ -1794,6 +1785,20 @@ fn page_progress_value(event: &TraceEvent) -> Option<String> {
         .map(str::to_owned)
 }
 
+/// MSAA's `ROLE_SYSTEM_PROGRESSBAR`.
+const ROLE_SYSTEM_PROGRESSBAR: i32 = 0x30;
+
+/// Whether an object in a window of this class is a page's progress bar or meter.
+fn is_page_progress(window_class: &str, object: Option<&TraceObject>) -> bool {
+    WEB_CONTENT_WINDOW_CLASSES.contains(&window_class)
+        && object.is_some_and(|o| o.role == Some(ROLE_SYSTEM_PROGRESSBAR))
+}
+
+/// Whether a change event, by its MSAA identity and object's name, concerns the focused
+/// control, as the converter passes changes on: the focus's own object, or one of its name.
+/// The focus event's MSAA object can be the browser window while the focused control is a page
+/// button (focus left on it, then Space expanded it, GitHub): the control's own name, from the
+/// focus chain, is compared too.
 fn concerns_focus(
     (focused, control_name): (&(isize, i32, i32, Option<String>), Option<&String>),
     (hwnd, id_object, id_child): (isize, i32, i32),
@@ -1807,17 +1812,42 @@ fn concerns_focus(
     same_object || same_name
 }
 
-/// Whether the converter on this thread would pass on a change of this object: none before a
-/// focus.
-#[cfg(windows)]
-fn change_concerns_converter_focus(
-    identity: (isize, i32, i32),
-    object_name: Option<&String>,
+/// Whether the converter on this thread may make something of a state, selection or value
+/// change, judged from the event and its MSAA object only, before anything else is read: live,
+/// the WinEvent thread reads no further a change this refuses. None before a focus.
+///
+/// Kept: a change of the focused control, and two value changes that are not the focus's:
+/// UI Automation's own, which names no MSAA object, in the window of the last focus or the
+/// window with the keyboard focus (`in_focus_window`: Excel's grid after Delete,
+/// [`EventConverter::focus_moved_by_change`]; Word's document after Space on a check box form
+/// field, the frame having had the last focus event), and a page's progress bar or meter, said
+/// without the focus. Every change the
+/// converter makes something of in the corpus's traces is kept (the corpus test
+/// `live_prefilter_keeps_what_the_converter_uses`); the three it once refused were said only
+/// in replay (performance review 2026-11-02, live path finding 1).
+pub fn live_change_kept(
+    event: &str,
+    (hwnd, id_object, id_child): (isize, i32, i32),
+    object: Option<&TraceObject>,
+    window_class: &str,
+    in_focus_window: bool,
 ) -> bool {
     CONVERTER_FOCUS.with(|focus| {
-        focus.borrow().as_ref().is_some_and(|(focused, control)| {
-            concerns_focus((focused, control.as_ref()), identity, object_name)
-        })
+        let focus = focus.borrow();
+        let Some((focused, control)) = focus.as_ref() else {
+            return false;
+        };
+        let object_name = object.and_then(|o| o.name.as_ref());
+        if concerns_focus(
+            (focused, control.as_ref()),
+            (hwnd, id_object, id_child),
+            object_name,
+        ) {
+            return true;
+        }
+        event == "value_change"
+            && ((object.is_none() && (hwnd == focused.0 || in_focus_window))
+                || is_page_progress(window_class, object))
     })
 }
 
@@ -5106,10 +5136,14 @@ mod capture {
             let mut object_read: Option<Option<TraceObject>> = None;
             if state.live && matches!(name, "state_change" | "selection" | "value_change") {
                 let object = msaa_object(hwnd, id_object, id_child);
-                let object_name = object.as_ref().and_then(|o| o.name.as_ref());
-                if !super::change_concerns_converter_focus(
+                let in_focus_window =
+                    name == "value_change" && object.is_none() && keyboard_focus_window() == hwnd;
+                if !super::live_change_kept(
+                    name,
                     (hwnd.0 as isize, id_object, id_child),
-                    object_name,
+                    object.as_ref(),
+                    &class,
+                    in_focus_window,
                 ) {
                     return;
                 }
@@ -7564,24 +7598,50 @@ mod tests {
         assert!(converter.convert(&change("Pricing")).is_empty());
         // Live, the reader decides from the same focus before reading the change further
         // (performance review P5, step 2): the converter's focus is the one it checks.
-        #[cfg(windows)]
-        {
-            let name = |n: &str| Some(n.to_owned());
-            let identity = (7, focus.id_object, -16936);
-            assert!(super::change_concerns_converter_focus(
-                identity,
-                name("Solutions").as_ref()
-            ));
-            assert!(!super::change_concerns_converter_focus(
-                identity,
-                name("Pricing").as_ref()
-            ));
-            // The focus's own object, whatever its name now.
-            assert!(super::change_concerns_converter_focus(
-                (focus.hwnd, focus.id_object, focus.id_child),
-                None
-            ));
-        }
+        let named = |n: &str| TraceObject {
+            name: Some(n.to_owned()),
+            ..TraceObject::default()
+        };
+        let identity = (7, focus.id_object, -16936);
+        let page = "Chrome_RenderWidgetHostHWND";
+        let kept = |event: &str, identity, object: Option<&TraceObject>| {
+            super::live_change_kept(event, identity, object, page, false)
+        };
+        assert!(kept("state_change", identity, Some(&named("Solutions"))));
+        assert!(!kept("state_change", identity, Some(&named("Pricing"))));
+        // The focus's own object, whatever its name now.
+        assert!(kept(
+            "state_change",
+            (focus.hwnd, focus.id_object, focus.id_child),
+            None
+        ));
+        // UI Automation's own value change in the focused window names no MSAA object; one in
+        // another window, or a state change, is not kept.
+        assert!(kept("value_change", (focus.hwnd, 414, 0), None));
+        assert!(!kept("state_change", (focus.hwnd, 414, 0), None));
+        assert!(!kept("value_change", (focus.hwnd + 1, 414, 0), None));
+        // ... unless that window has the keyboard focus.
+        assert!(super::live_change_kept(
+            "value_change",
+            (focus.hwnd + 1, 414, 0),
+            None,
+            page,
+            true
+        ));
+        // A page's progress bar or meter, anywhere in the page.
+        let meter = TraceObject {
+            role: Some(super::ROLE_SYSTEM_PROGRESSBAR),
+            ..named("CPU")
+        };
+        assert!(kept("value_change", identity, Some(&meter)));
+        assert!(!kept("state_change", identity, Some(&meter)));
+        assert!(!super::live_change_kept(
+            "value_change",
+            identity,
+            Some(&meter),
+            "Notepad",
+            false
+        ));
     }
 
     /// Space on a select with the focus: its state change is read after its list has taken

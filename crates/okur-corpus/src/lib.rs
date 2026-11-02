@@ -612,6 +612,88 @@ mod tests {
         assert!(carets > 1000, "{carets} caret events");
     }
 
+    /// Live, the WinEvent thread reads a state, selection or value change no further when
+    /// `live_change_kept` refuses it, judging from the event's MSAA object and the converter's
+    /// last focus. Every such change the converter makes something of in the corpus's traces,
+    /// which are recorded without that filter, must be kept: one it refused was said in replay
+    /// and never live (Excel's grid after Delete, a page's meter, Word's check box form field;
+    /// performance review 2026-11-02, live path finding 1).
+    #[test]
+    fn live_prefilter_keeps_what_the_converter_uses() {
+        use okur_platform::event_trace::{live_change_kept, read_trace, EventConverter};
+        let entries = std::fs::read_dir(corpus_dir().join("traces"));
+        assert!(entries.is_ok(), "{entries:?}");
+        let Ok(entries) = entries else {
+            return;
+        };
+        let (mut changes, mut refused, mut used) = (0, 0, 0);
+        let mut lost = Vec::new();
+        for path in entries.flatten().map(|e| e.path()) {
+            let Ok((_, events)) = read_trace(&path) else {
+                continue;
+            };
+            let mut converter = EventConverter::default();
+            for event in events {
+                let change = matches!(
+                    event.event.as_str(),
+                    "state_change" | "selection" | "value_change"
+                );
+                // Live, whether the event's window has the keyboard focus is Win32's answer;
+                // recorded, UI Automation's focus read after the event tells it by its class.
+                let in_focus_window = event.window_class.is_some()
+                    && event
+                        .focus_chain
+                        .last()
+                        .and_then(|n| n.class_name.as_deref())
+                        == event.window_class.as_deref();
+                let kept = !change
+                    || live_change_kept(
+                        &event.event,
+                        (event.hwnd, event.id_object, event.id_child),
+                        event.object.as_ref(),
+                        event.window_class.as_deref().unwrap_or_default(),
+                        in_focus_window,
+                    );
+                let converted = converter.convert(&event);
+                if change {
+                    changes += 1;
+                    refused += usize::from(!kept);
+                    used += usize::from(!converted.is_empty());
+                }
+                if !kept && !converted.is_empty() {
+                    let kinds: Vec<String> = converted
+                        .iter()
+                        .map(|e| format!("{e:?}").chars().take(60).collect())
+                        .collect();
+                    lost.push(format!(
+                        "{} {} class={:?} object={:?} ({}, {}, {}): {kinds:?}",
+                        path.file_name()
+                            .map(|n| n.to_string_lossy())
+                            .unwrap_or_default(),
+                        event.event,
+                        event.window_class,
+                        event.object.as_ref().map(|o| (o.role, o.name.clone())),
+                        event.hwnd,
+                        event.id_object,
+                        event.id_child
+                    ));
+                }
+            }
+        }
+        assert!(
+            lost.is_empty(),
+            "{} lost live:\n{}",
+            lost.len(),
+            lost.join("\n")
+        );
+        // The filter still does its work: most changes recorded are not the converter's.
+        assert!(changes > 10_000, "{changes} changes");
+        assert!(
+            refused * 2 > changes,
+            "{refused} of {changes} refused, {used} used"
+        );
+    }
+
     /// Semantics only IA2 carries without localization: block quotes (UIA gives only a
     /// localized control type), inline versus block elements, and the IA2 form states.
     #[test]
