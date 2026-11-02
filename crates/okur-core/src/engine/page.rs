@@ -1222,14 +1222,48 @@ impl ScreenReaderEngine {
         let old = self.region_old_lines(live);
         self.note_live_text(live);
         let new: Vec<&str> = live.text.lines().collect();
-        let added = if old.len() <= new.len() && old.iter().zip(&new).all(|(o, n)| o.as_str() == *n)
-        {
-            new.get(old.len()..).unwrap_or_default().to_vec()
-        } else {
-            new
-        };
-        added.join("\n")
+        added_lines(&old, &new).join("\n")
     }
+}
+
+/// The lines a live region's change added, from its lines before (`old`) and after (`new`):
+/// past the old lines where they still begin it; past those of its old end that begin it now,
+/// as a log that drops its oldest line as it adds one; else the lines between what its start
+/// and end kept, a line changed or put in; all of them where nothing was kept. A log of 50
+/// messages that dropped one as it added one was read whole at each message (performance
+/// review 2026-11-02, engine finding 4).
+fn added_lines<'a>(old: &[String], new: &[&'a str]) -> Vec<&'a str> {
+    let same = |old: &[String], new: &[&str]| {
+        old.len() == new.len() && old.iter().zip(new).all(|(o, n)| o.as_str() == *n)
+    };
+    if old.len() <= new.len() && same(old, new.get(..old.len()).unwrap_or_default()) {
+        return new.get(old.len()..).unwrap_or_default().to_vec();
+    }
+    // The longest end of the old lines that begins the new ones.
+    let kept = (1..old.len().min(new.len()).saturating_add(1))
+        .rev()
+        .find(|&k| {
+            same(
+                old.get(old.len() - k..).unwrap_or_default(),
+                new.get(..k).unwrap_or_default(),
+            )
+        });
+    if let Some(kept) = kept {
+        return new.get(kept..).unwrap_or_default().to_vec();
+    }
+    let start = old
+        .iter()
+        .zip(new)
+        .take_while(|(o, n)| o.as_str() == **n)
+        .count();
+    let end = old
+        .iter()
+        .rev()
+        .zip(new.iter().rev())
+        .take(old.len().min(new.len()) - start)
+        .take_while(|(o, n)| o.as_str() == **n)
+        .count();
+    new.get(start..new.len() - end).unwrap_or_default().to_vec()
 }
 
 /// Quiet ticks (the live screen reader's are 150 ms apart) before a growing live region's
@@ -1501,5 +1535,33 @@ mod tests {
                 .min();
             assert_eq!(found, scan(&role, name), "{role:?} {name}");
         }
+    }
+}
+
+#[cfg(test)]
+mod live_region_tests {
+    use super::added_lines;
+
+    fn lines(text: &[&str]) -> Vec<String> {
+        text.iter().map(|l| (*l).to_owned()).collect()
+    }
+
+    /// What a live region's change added: a line appended; a log that dropped its oldest line
+    /// as it added one; a line changed in the middle; a line put in at the start; a region
+    /// replaced whole; a line taken away, nothing.
+    #[test]
+    fn a_live_regions_change_says_what_it_added() {
+        let old = lines(&["a", "b", "c"]);
+        assert_eq!(added_lines(&old, &["a", "b", "c", "d"]), vec!["d"]);
+        assert_eq!(added_lines(&old, &["b", "c", "d"]), vec!["d"]);
+        assert_eq!(added_lines(&old, &["c", "d", "e"]), vec!["d", "e"]);
+        assert_eq!(added_lines(&old, &["a", "x", "c"]), vec!["x"]);
+        assert_eq!(
+            added_lines(&old, &["typing", "a", "b", "c"]),
+            vec!["typing"]
+        );
+        assert_eq!(added_lines(&old, &["x", "y"]), vec!["x", "y"]);
+        assert_eq!(added_lines(&old, &["a", "c"]), Vec::<&str>::new());
+        assert_eq!(added_lines(&[], &["a"]), vec!["a"]);
     }
 }
