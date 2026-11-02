@@ -371,6 +371,15 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Scrolls a page element into view and asks where it is on the screen, for the reading
+    /// highlight that frames what the virtual cursor read (JAWS's visual tracking). The place
+    /// arrives later as [`crate::event::AccessibilityEvent::TrackedPlace`]. Returns false
+    /// when unsupported.
+    fn track_node(&self, node: &AomNode) -> bool {
+        let _ = node;
+        false
+    }
+
     /// Sends a key chord to the application, pressed in order and released in reverse: a
     /// reading command that moves the caret is the application's own key (the laptop
     /// layout's CapsLock+O is Down). The keys come back through the keyboard hook marked as
@@ -413,6 +422,8 @@ pub struct RecordingActions {
     page_elements: bool,
     /// Takes `refresh_page`, as a live platform does; replay leaves it off too.
     pages: bool,
+    /// Takes `track_node`, as a live platform does; replay leaves it off too.
+    tracking: bool,
     /// What the clipboard holds: what `copy_text` put there, or what a replay recorded.
     clipboard: std::sync::Arc<std::sync::Mutex<Option<String>>>,
 }
@@ -439,6 +450,14 @@ impl RecordingActions {
     pub fn refreshing_pages() -> Self {
         Self {
             pages: true,
+            ..Self::default()
+        }
+    }
+
+    /// Records actions and takes `track_node` requests; the test delivers the place.
+    pub fn tracking() -> Self {
+        Self {
+            tracking: true,
             ..Self::default()
         }
     }
@@ -719,6 +738,10 @@ impl ApplicationActions for RecordingActions {
 
     fn move_mouse_to_node(&self, node: &AomNode) -> bool {
         self.record("mouse to node", node)
+    }
+
+    fn track_node(&self, node: &AomNode) -> bool {
+        self.tracking && self.record("track", node)
     }
 
     fn copy_text(&self, text: &str) -> bool {

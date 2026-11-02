@@ -175,6 +175,9 @@ purpose, the reason is in [accepted divergences](accepted-divergences.md).
 - **The Virtual Viewer** (Insert+Alt+W) on screen as JAWS shows it, for windows, controls and
   consoles, Windows Terminal included; the Speech History (Insert+Space, then H; Ctrl+H
   copies it and Shift+H clears it).
+- **The reading highlight**, for a sighted person following along: on a web page, what the
+  virtual cursor reads is framed in red and scrolled into view, as JAWS's visual tracking does
+  (the element; JAWS frames a line's text). `--set visual_tracking=false` turns it off.
 - **The clipboard keys**: Windows+Insert+X says the clipboard's text, Insert+Space, then C
   shows it in a viewer, and Insert+Windows+C adds the selection to it; Ctrl+C or Ctrl+X after
   that asks before overwriting it, as JAWS does.

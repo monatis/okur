@@ -28,6 +28,7 @@ mod find;
 mod flexible_web;
 mod focus;
 mod help;
+mod highlight;
 mod information;
 mod jump;
 mod key_help;
@@ -168,6 +169,10 @@ pub struct ScreenReaderEngine {
     /// A key has moved the virtual cursor since the page loaded: without Auto Forms Mode, Tab
     /// onto a field turns forms mode on only then [obs, 629, 630, 631].
     cursor_moved_since_load: bool,
+    /// The buffer node the reading highlight frames, or whose place it waits for.
+    highlight_node: Option<usize>,
+    /// The reading highlight is on the screen.
+    highlight_shown: bool,
     /// Keyboard Help (Insert+1) is on: keys are described, not run.
     keyboard_help: bool,
     /// The field an arrow last left in forms mode, and whether it went down, while the page's
@@ -599,6 +604,8 @@ impl ScreenReaderEngine {
             option_said: None,
             arrow_focus: None,
             cursor_moved_since_load: false,
+            highlight_node: None,
+            highlight_shown: false,
             keyboard_help: false,
             field_left: None,
             field_texts: std::collections::HashMap::new(),
@@ -977,10 +984,12 @@ impl ScreenReaderEngine {
         }
         let offset = self.cursor.offset;
         let action = self.handle_key(event);
-        if self.app_mode == AppMode::VirtualBuffer && self.cursor.offset != offset {
+        let moved = self.app_mode == AppMode::VirtualBuffer && self.cursor.offset != offset;
+        if moved {
             self.cursor_moved_since_load = true;
         }
         self.refresh_stale_page();
+        self.update_reading_highlight(moved);
         action
     }
 
@@ -1802,6 +1811,10 @@ impl ScreenReaderEngine {
             AccessibilityEvent::TopWindows(windows) => self.open_window_list(windows),
             AccessibilityEvent::TrayIcons(icons) => self.open_tray_list(icons),
             AccessibilityEvent::PageElements(elements) => self.say_page_font(elements),
+            AccessibilityEvent::TrackedPlace { node, rect } => {
+                self.show_reading_highlight(*node, *rect);
+                None
+            }
             AccessibilityEvent::DocumentHeadings(headings) => self.document_headings(headings),
             AccessibilityEvent::DocumentLinks(links) => self.document_links(links),
             AccessibilityEvent::LineSpacing(spacing) => self.word_font(*spacing),
@@ -1914,6 +1927,7 @@ impl ScreenReaderEngine {
             }
         };
         self.refresh_stale_page();
+        self.update_reading_highlight(false);
         spoken
     }
 

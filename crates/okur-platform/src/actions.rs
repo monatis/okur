@@ -67,6 +67,9 @@ mod windows_actions {
     const HEAD_START: Duration = Duration::from_millis(3);
     /// How long a page action waits for a page to be in front.
     const PAGE_WAIT: Duration = Duration::from_millis(500);
+    /// How long Chromium takes to scroll a page object into view and report its new bounds,
+    /// before the reading highlight asks where it is.
+    const TRACK_SETTLE: Duration = Duration::from_millis(80);
 
     /// The window in front, for a page action. An action asked for as one of Okur's own
     /// windows closes (OK in Select a Form Field) finds that window still in front for some
@@ -156,6 +159,9 @@ mod windows_actions {
         /// RuntimeId (the Okur cursor on a page).
         MouseToObject(i32),
         MouseToUiaObject(Vec<i32>),
+        /// A page object scrolled into view by its IA2 uniqueID, then its place on the screen
+        /// sent for the reading highlight, with the buffer node it frames.
+        Track(i32, usize),
         /// A drag with the left button. Not done in the keyboard hook: it moves the pointer in
         /// steps a hand would take, 120 ms in all (performance review 2026-10-23, T3).
         Drag((i32, i32), (i32, i32)),
@@ -184,6 +190,7 @@ mod windows_actions {
                     | Request::ListWindows
                     | Request::ListTray
                     | Request::Drag(..)
+                    | Request::Track(..)
             )
         }
 
@@ -223,6 +230,7 @@ mod windows_actions {
                 | Request::MouseToObject(_)
                 | Request::MouseToUiaObject(_) => "mouse move",
                 Request::Drag(..) => "drag",
+                Request::Track(..) => "reading highlight",
                 Request::Screen => "screen read",
                 Request::Recognize(..) => "recognition",
                 Request::RecognizeFile(_) => "file recognition",
@@ -298,6 +306,8 @@ mod windows_actions {
                     last(|r| matches!(r, Request::Point(..))),
                     last(|r| matches!(r, Request::Screen)),
                     last(|r| matches!(r, Request::Recognize(..))),
+                    // H pressed in quick succession: the highlight frames the last heading.
+                    last(|r| matches!(r, Request::Track(..))),
                 ];
                 let batch = batch.into_iter().enumerate().filter_map(|(i, r)| {
                     let coalesced = matches!(
@@ -306,6 +316,7 @@ mod windows_actions {
                             | Request::Point(..)
                             | Request::Screen
                             | Request::Recognize(..)
+                            | Request::Track(..)
                     );
                     (!coalesced || newest.contains(&Some(i))).then_some(r)
                 });
@@ -775,6 +786,34 @@ mod windows_actions {
                                     }
                                 }
                             }
+                            Request::Track(id, node) => {
+                                let Some(events) = events else {
+                                    return;
+                                };
+                                let window = page_in_front();
+                                let started = Instant::now();
+                                if let Err(e) =
+                                    xa11y_windows::ia2::chromium_scroll_to_object(window, id)
+                                {
+                                    tracing::debug!("IA2 object {id} not scrolled to: {e}");
+                                }
+                                // Chromium scrolls in the page's own process: the place is
+                                // asked for once the page has moved and told its new bounds.
+                                std::thread::sleep(TRACK_SETTLE);
+                                match xa11y_windows::ia2::chromium_object_location(window, id) {
+                                    Ok(rect) => {
+                                        tracing::debug!(
+                                            node,
+                                            ?rect,
+                                            ms = started.elapsed().as_millis(),
+                                            "reading highlight placed"
+                                        );
+                                        let _ = events
+                                            .send(AccessibilityEvent::TrackedPlace { node, rect });
+                                    }
+                                    Err(e) => tracing::debug!("no place for IA2 object {id}: {e}"),
+                                }
+                            }
                             Request::Caret(text, offset) => {
                                 if !crate::text_context::move_caret_in_edit(&text, offset) {
                                     tracing::debug!(offset, "caret not moved: not a Win32 edit");
@@ -1155,6 +1194,11 @@ mod windows_actions {
                 return self.send(Request::MouseToObject(id));
             }
             runtime_id(node).is_some_and(|id| self.send(Request::MouseToUiaObject(id)))
+        }
+
+        /// A page read through IA2 (Chromium's); not yet one read through UIA.
+        fn track_node(&self, node: &okur_core::AomNode) -> bool {
+            unique_id(node).is_some_and(|id| self.send(Request::Track(id, node.id)))
         }
 
         fn read_window(&self, window: bool) -> bool {

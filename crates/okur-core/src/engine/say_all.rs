@@ -641,6 +641,7 @@ impl ScreenReaderEngine {
         reading.queued.drain(..at);
         if let Some(&(_, line)) = reading.queued.front() {
             self.follow_reading(&reading, line);
+            self.track_virtual_cursor();
         }
         let _ = self.hand_over(&mut reading, AHEAD + 1, false);
         // The last word said: the reading is over.

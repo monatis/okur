@@ -342,6 +342,12 @@ pub enum ToUi {
     ViewerMark { mark: TextSpan },
     /// Close the viewer's window.
     ViewerClose,
+    /// Frame what the virtual cursor read with the reading highlight, a red rectangle over
+    /// everything that takes neither the focus nor the mouse (JAWS's visual tracking):
+    /// `[left, top, width, height]` in screen pixels.
+    HighlightShow { rect: [i32; 4] },
+    /// Take the reading highlight away.
+    HighlightHide,
 }
 
 /// What `okur-ui` tells Okur.

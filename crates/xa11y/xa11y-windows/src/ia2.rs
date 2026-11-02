@@ -246,8 +246,9 @@ pub struct Ia2Probe {
 #[cfg(target_os = "windows")]
 pub use com::capture::{
     capture_chromium_document, capture_chromium_object, chromium_caret_text,
-    chromium_modal_dialog_of, chromium_object_location, chromium_text_state, has_chromium_document,
-    perform_chromium_action, probe_window, ChromiumTextField, Ia2Action, Ia2CaptureError,
+    chromium_modal_dialog_of, chromium_object_location, chromium_scroll_to_object,
+    chromium_text_state, has_chromium_document, perform_chromium_action, probe_window,
+    ChromiumTextField, Ia2Action, Ia2CaptureError,
 };
 
 #[cfg(target_os = "windows")]
@@ -862,6 +863,30 @@ mod com {
             unsafe { target.accLocation(&mut x, &mut y, &mut width, &mut height, &self_child()) }
                 .map_err(|e| err("accLocation", e))?;
             Ok([x, y, width, height])
+        }
+
+        /// Scrolls a live object of a Chromium window's page into view, by its IA2
+        /// `uniqueID`: as little as it takes to show it (`IA2_SCROLL_TYPE_ANYWHERE`), as a
+        /// screen reader's highlight follows what it reads.
+        pub fn chromium_scroll_to_object(
+            top_level: HWND,
+            unique_id: i32,
+        ) -> Result<(), Ia2CaptureError> {
+            // IA2_SCROLL_TYPE_ANYWHERE (IA2CommonTypes.idl).
+            const ANYWHERE: i32 = 6;
+            let document = chromium_document(top_level)?;
+            let child_id = if unique_id < 0 { unique_id } else { -unique_id };
+            let child = VARIANT::from(child_id);
+            // SAFETY: MSAA child lookup on a valid IAccessible; Chromium returns an object.
+            let target: IAccessible = unsafe { document.get_accChild(&child) }
+                .map_err(|e| err("accChild", e))?
+                .cast()
+                .map_err(|e| err("IAccessible of the target", e))?;
+            let ia2 = ia2_of(&target).ok_or_else(|| Ia2CaptureError("no IAccessible2".into()))?;
+            // SAFETY: a plain IA2 call on a valid interface.
+            unsafe { ia2.scrollTo(ANYWHERE) }
+                .ok()
+                .map_err(|e| err("scrollTo", e))
         }
 
         /// The caret of the focused object in a Chromium window's page: `(caret offset,

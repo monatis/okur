@@ -81,6 +81,12 @@ Insert+Ctrl+F outside documents; F3 and Shift+F3 exist.
 
 ### 5. The reading highlight
 
+**Status (2026-11-02):** the element, on pages read through IA2: scrolled into view and framed
+after each move of the virtual cursor, by `okur-ui`'s frame window, in the platform's bulk
+lane (about 90 ms from the move to the frame, the scroll's 80 ms settle included). Open: the
+line's and the word's text ranges, UIA pages, its control in Settings Center (JAWS's own not
+yet observed).
+
 - `VisualTracking` in okur-platform, Windows first: one layered, click-through, never
   activated, topmost window.
 - Rectangles of the unit just read: the line, the word (also after a character move), the

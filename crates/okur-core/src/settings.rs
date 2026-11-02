@@ -1078,6 +1078,10 @@ pub struct Settings {
     /// (Options > Basics), checked by default: "When cleared, JAWS immediately closes when you
     /// use any of the commands to exit the program including INSERT+F4" (JAWS 2025 help).
     pub confirm_exit: bool,
+    /// The reading highlight: a red rectangle around what the virtual cursor read, the page
+    /// scrolled to show it, for a sighted person following along, as JAWS's visual tracking
+    /// draws it by default [the guide's chapters 5 and 9; old-pc, 2026-11-02].
+    pub visual_tracking: bool,
     pub mouse_echo: MouseEcho,
     /// The language Insert+Space, O recognizes the screen in, a BCP 47 tag ("tr-TR"): JAWS's
     /// Microsoft OCR Language (`[OCR] MicrosoftOcrLanguage`, a locale number, 1033 by
@@ -1114,6 +1118,7 @@ impl Default for Settings {
             smart_navigation: SmartNavigation::default(),
             reading_interrupt: true,
             confirm_exit: true,
+            visual_tracking: true,
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),
             voice_profiles: std::collections::BTreeMap::new(),
@@ -1255,6 +1260,7 @@ impl Settings {
             smart_navigation: SmartNavigation::default(),
             reading_interrupt: true,
             confirm_exit: true,
+            visual_tracking: true,
             // Not in old-pc's user JCF: the shared one's, JAWS's defaults.
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),

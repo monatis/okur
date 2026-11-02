@@ -1248,6 +1248,15 @@ pub enum AccessibilityEvent {
     /// Page elements asked for by DOM id, each with its subtree, as they are now; empty when
     /// none was found ([`crate::actions::ApplicationActions::read_page_elements`]).
     PageElements(Vec<crate::aom::AomNode>),
+    /// Where a page element the virtual cursor read is on the screen, once scrolled into
+    /// view, asked for by [`crate::actions::ApplicationActions::track_node`]: the reading
+    /// highlight frames it.
+    TrackedPlace {
+        /// The buffer node's id.
+        node: usize,
+        /// `[left, top, width, height]` in screen pixels.
+        rect: [i32; 4],
+    },
     /// The focused document's headings, in order, asked for by its Heading List (Insert+F6
     /// in Word; [`crate::actions::ApplicationActions::read_document_headings`]); empty when it
     /// has none or could not be read.

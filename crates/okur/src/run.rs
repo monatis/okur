@@ -447,6 +447,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::TopWindows(_)) => "top windows",
         Some(AccessibilityEvent::TrayIcons(_)) => "tray icons",
         Some(AccessibilityEvent::PageElements(_)) => "page elements",
+        Some(AccessibilityEvent::TrackedPlace { .. }) => "tracked place",
         Some(AccessibilityEvent::DocumentHeadings(_)) => "document headings",
         Some(AccessibilityEvent::DocumentLinks(_)) => "document links",
         Some(AccessibilityEvent::LineSpacing(_)) => "line spacing",

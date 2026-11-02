@@ -505,6 +505,9 @@ pub static SETTINGS: &[SettingSpec] = &[
             off: Literal::Bool(false),
         },
     ),
+    // The reading highlight (JAWS's visual tracking), on as JAWS draws it; in no dialog of
+    // Okur's until JAWS's own control for it is observed: the settings file and --set.
+    spec("visual_tracking", Group::Reading, None, CHECK),
     // JAWS's Mouse Echo group (Settings Center help), in its order.
     SettingSpec {
         jaws: default_jcf("Options", "MouseSpeechEnabled", |v| {

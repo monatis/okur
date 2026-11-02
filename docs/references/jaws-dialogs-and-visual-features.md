@@ -288,6 +288,6 @@ they belong in Okur's key state machine, beside menu mode and forms mode.
 | PlaceMarkers, custom labels, Flexible Web, skim reading | none | all |
 | Quick Settings, Settings Center | none; settings come from the command line and JAWS's `.jcf` (`TypingEcho::from_jcf`) | all |
 | Virtual Viewer | on screen since 2026-10-17, drawn by `okur-ui` as JAWS's | none known |
-| Visual tracking | none | all |
+| Visual tracking | since 2026-11-02: after each move of the virtual cursor (a key, Say All's next line) on a page read through IA2 (Chromium's), its element scrolled into view (`IAccessible2::scrollTo`) and framed in the viewer's red by `okur-ui`; gone with the page or the focus; `visual_tracking = false` turns it off | the line's or the word's text (a whole paragraph is framed; a known-gap test), pages read through UIA, a Settings Center entry |
 | Routing and mouse keys | none | all |
 | Layers | none | all |

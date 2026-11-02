@@ -90,6 +90,76 @@ struct Viewer {
 
 thread_local! {
     static VIEWER: RefCell<Option<Viewer>> = const { RefCell::new(None) };
+    /// The reading highlight over a page, made the first time it is shown.
+    static PAGE_HIGHLIGHT: std::cell::Cell<Option<HWND>> = const { std::cell::Cell::new(None) };
+}
+
+/// Frames what the virtual cursor read on a page (`[left, top, width, height]`, screen
+/// pixels): the same red frame as the viewer's, over every window, taking neither the focus
+/// nor the mouse, as JAWS's visual tracking draws it.
+fn show_page_highlight(rect: [i32; 4]) {
+    let hwnd = match PAGE_HIGHLIGHT.with(|h| h.get()) {
+        Some(hwnd) => hwnd,
+        None => {
+            // SAFETY: a window of the class registered in `run`, its colour key set at once.
+            let made = unsafe {
+                let Ok(module) = GetModuleHandleW(None) else {
+                    return;
+                };
+                let made = CreateWindowExW(
+                    WS_EX_LAYERED
+                        | WS_EX_TRANSPARENT
+                        | WS_EX_TOPMOST
+                        | WS_EX_TOOLWINDOW
+                        | WS_EX_NOACTIVATE,
+                    w!("OkurHighlight"),
+                    PCWSTR::null(),
+                    WS_POPUP,
+                    0,
+                    0,
+                    0,
+                    0,
+                    None,
+                    None,
+                    Some(HINSTANCE::from(module)),
+                    None,
+                );
+                if let Ok(hwnd) = made {
+                    let _ = SetLayeredWindowAttributes(hwnd, TRANSPARENT_KEY, 0, LWA_COLORKEY);
+                }
+                made
+            };
+            let Ok(hwnd) = made else {
+                return;
+            };
+            PAGE_HIGHLIGHT.with(|h| h.set(Some(hwnd)));
+            hwnd
+        }
+    };
+    let [left, top, width, height] = rect;
+    // A pixel's margin, so that the frame surrounds the text instead of crossing its edge.
+    // SAFETY: placing and repainting our own window.
+    unsafe {
+        let _ = SetWindowPos(
+            hwnd,
+            Some(HWND_TOPMOST),
+            left - 1,
+            top - 1,
+            width + 2,
+            height + 2,
+            SWP_NOACTIVATE | SWP_SHOWWINDOW,
+        );
+        let _ = InvalidateRect(Some(hwnd), None, true);
+    }
+}
+
+fn hide_page_highlight() {
+    if let Some(hwnd) = PAGE_HIGHLIGHT.with(|h| h.get()) {
+        // SAFETY: hiding our own window.
+        unsafe {
+            let _ = ShowWindow(hwnd, SW_HIDE);
+        }
+    }
 }
 
 /// The viewer's window handles, copied out so that no borrow is held while Windows calls
@@ -371,6 +441,8 @@ fn handle(message: ToUi) {
             apply_mark();
         }
         ToUi::ViewerClose => hide_viewer(),
+        ToUi::HighlightShow { rect } => show_page_highlight(rect),
+        ToUi::HighlightHide => hide_page_highlight(),
         ToUi::DialogShow { dialog } => crate::dialog::show(&dialog),
         ToUi::DialogPane { id, page } => crate::dialog::show_pane(id, &page),
         ToUi::DialogSet { id, control, value } => crate::dialog::set_value(id, &control, value),
