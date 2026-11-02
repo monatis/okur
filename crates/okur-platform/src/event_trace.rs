@@ -686,6 +686,13 @@ pub fn focus_event_from_chain(
         .full_description
         .clone()
         .or_else(|| focused.help_text.clone());
+    // File Explorer's search box (its Control Panel pages' too) says its prompt, which UI
+    // Automation gives as its help: "Search Box Edit | Search Programs and Features | Type in
+    // text." [obs, 3156/s5]. Another field's help is not said: Chrome's address bar [obs,
+    // 204/s13], Excel's cell editor.
+    if focused.class_name.as_deref() == Some("SearchEditBox") {
+        event.description.clone_from(&event.help_text);
+    }
     event.item_type = focused.item_type.clone().filter(|t| !t.trim().is_empty());
     event.platform.window_class = window_class.map(str::to_owned);
     event.window_title = window_title.map(str::to_owned);

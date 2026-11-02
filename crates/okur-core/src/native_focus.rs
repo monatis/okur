@@ -325,19 +325,15 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                 ]));
                 lines.extend(value);
             } else {
-                // File Explorer's search box says its prompt, which UI Automation gives as its
-                // help: Programs and Features', "Search Box Edit | Search Programs and Features |
-                // Type in text." [obs, 3156/s5]. Other fields' help is not said: Chrome's
-                // address bar's [obs, 204/s13], Excel's cell editor's.
+                // Its own description, where the platform gives one to say: File Explorer's
+                // search box's prompt, "Search Box Edit | Search Programs and Features | Type in
+                // text." [obs, 3156/s5].
                 let description = focus
-                    .help_text
+                    .description
                     .as_deref()
                     .map(str::trim)
-                    .filter(|h| !h.is_empty() && *h != name.trim())
-                    .filter(|_| {
-                        focus.platform.element_class.as_deref() == Some(EXPLORER_SEARCH_BOX)
-                    })
-                    .map(|h| Line::of(PartKind::Description, h));
+                    .filter(|d| !d.is_empty() && *d != name.trim())
+                    .map(|d| Line::of(PartKind::Description, d));
                 lines.push(Line::new(vec![
                     name_part(name),
                     role(msg::role_edit().as_str()),
@@ -732,8 +728,6 @@ impl FocusKey {
 /// The start of the window class Office's own dialogs share, their application's after it
 /// (Word's `bosa_sdm_msword`, Excel's `bosa_sdm_XL9`).
 const OFFICE_DIALOG_CLASS: &str = "bosa_sdm_";
-/// File Explorer's search box (its Control Panel pages' too).
-const EXPLORER_SEARCH_BOX: &str = "SearchEditBox";
 
 /// Focus speech across a sequence of native focus events.
 #[derive(Debug, Default)]
@@ -2357,18 +2351,17 @@ Undo  Unavailable"
             norm(&focus_speech(&title, None).render()),
             norm("Name  \u{1d} Header bar \u{1e} \n1 of 5\nSelect column title to sort by that category.")
         );
-        // File Explorer's search box says its prompt after its role [obs, 3156/s5]; another
-        // field's help is not said: Chrome's address bar [obs, 204/s13].
-        let mut search =
-            event(Role::Edit, "Search Box").with_help_text(" Search Programs and Features");
-        search.platform.element_class = Some("SearchEditBox".to_owned());
+        // An edit's description, which the platform gives to say, after its role (File
+        // Explorer's search box's prompt [obs, 3156/s5]); its help alone is not said: Chrome's
+        // address bar [obs, 204/s13].
+        let mut search = event(Role::Edit, "Search Box");
+        search.description = Some(" Search Programs and Features".to_owned());
         assert_eq!(
             norm(&focus_speech(&search, None).render()),
             norm("Search Box  \u{1d} Edit \u{1e} \nSearch Programs and Features\nType in text.")
         );
-        let mut omnibox = event(Role::Edit, "Address and search bar")
+        let omnibox = event(Role::Edit, "Address and search bar")
             .with_help_text("Press up or down arrow for auto completions.");
-        omnibox.platform.element_class = Some("OmniboxViewViews".to_owned());
         assert_eq!(
             norm(&focus_speech(&omnibox, None).render()),
             norm("Address and search bar  \u{1d} Edit \u{1e} \nType in text.")
