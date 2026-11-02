@@ -30,6 +30,19 @@ enum PageRequest {
     /// The page's changes at once, now that they are over (they came while forms mode was on):
     /// the changed parts when they are known, else the whole page.
     Changes(ForegroundWindow),
+    /// A new page focused while it still loads: read as a focus's once Chromium no longer
+    /// marks it busy, so that its summary and reading are the whole page's.
+    Load(ForegroundWindow),
+}
+
+/// The longest a new page is waited for while it loads: a page whose last pictures or
+/// scripts never finish is read as it is then.
+const LOAD_MAX: std::time::Duration = std::time::Duration::from_secs(5);
+
+/// Whether the page in `window` is still loading (Chromium's document busy).
+fn page_loading(window: ForegroundWindow) -> bool {
+    let hwnd = windows::Win32::Foundation::HWND(window.0 as *mut core::ffi::c_void);
+    xa11y_windows::ia2::chromium_document_busy(hwnd).unwrap_or(false)
 }
 
 /// The objects of the page in front whose children changed since its last capture
@@ -309,7 +322,7 @@ impl PageRequest {
             PageRequest::Refresh(_) => 0,
             PageRequest::Refine(_) => 1,
             PageRequest::Changes(_) => 2,
-            PageRequest::Focus(_) => 3,
+            PageRequest::Focus(_) | PageRequest::Load(_) => 3,
         }
     }
 }
@@ -332,10 +345,23 @@ fn start_page_worker(
                         Err(()) => break,
                     }
                 }
+                if let PageRequest::Load(window) = request {
+                    let started = std::time::Instant::now();
+                    while page_loading(window) && started.elapsed() < LOAD_MAX {
+                        std::thread::sleep(std::time::Duration::from_millis(100));
+                    }
+                    tracing::debug!(
+                        ms = started.elapsed().as_millis(),
+                        "page waited for while it loaded"
+                    );
+                    // Read as a focus's: quickly first, then in full.
+                    request = PageRequest::Focus(window);
+                }
                 let (PageRequest::Refresh(window)
                 | PageRequest::Refine(window)
                 | PageRequest::Focus(window)
-                | PageRequest::Changes(window)) = request;
+                | PageRequest::Changes(window)
+                | PageRequest::Load(window)) = request;
                 // Each request in a panic guard: a dead page worker would leave pages unread
                 // for the session (performance review 2026-10-24, 5).
                 let served = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -386,7 +412,9 @@ fn start_page_worker(
                                 PageRequest::Refresh(_) | PageRequest::Changes(_) => {
                                     tracing::debug!(%title, ms, "page refreshed")
                                 }
-                                PageRequest::Refine(_) | PageRequest::Focus(_) => {
+                                PageRequest::Refine(_)
+                                | PageRequest::Focus(_)
+                                | PageRequest::Load(_) => {
                                     tracing::debug!(%title, ms, "page refined")
                                 }
                             }
@@ -458,6 +486,17 @@ fn load_page_if_new(
     }
     *page = key;
     let title = document.and_then(|d| d.name.clone()).unwrap_or_default();
+    // Chromium gives a new page the focus before the page has loaded (GitHub's repository
+    // page: 6 lines read of its 596, "Page has 1 Region, 1 heading and 2 links", old-pc,
+    // 2026-11-02); the page worker reads it once it has.
+    let window = ForegroundWindow::now();
+    let loading = page_loading(window);
+    tracing::debug!(%title, loading, "new page focused");
+    if loading {
+        tracing::debug!(%title, "page still loading: the page worker reads it once loaded");
+        let _ = pages.send(PageRequest::Load(window));
+        return;
+    }
     let started = std::time::Instant::now();
     match crate::actions::capture_foreground_page_quick() {
         Ok(root) => {

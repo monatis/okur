@@ -51,6 +51,8 @@ pub mod msaa_states {
     pub const STATE_SYSTEM_READONLY: u32 = 0x40;
     pub const STATE_SYSTEM_EXPANDED: u32 = 0x200;
     pub const STATE_SYSTEM_COLLAPSED: u32 = 0x400;
+    /// A document still loading (Chromium's, until its page has loaded).
+    pub const STATE_SYSTEM_BUSY: u32 = 0x800;
     pub const STATE_SYSTEM_INVISIBLE: u32 = 0x8000;
     pub const STATE_SYSTEM_OFFSCREEN: u32 = 0x10000;
     pub const STATE_SYSTEM_FOCUSABLE: u32 = 0x100000;
@@ -246,9 +248,9 @@ pub struct Ia2Probe {
 #[cfg(target_os = "windows")]
 pub use com::capture::{
     capture_chromium_document, capture_chromium_object, chromium_caret_text,
-    chromium_modal_dialog_of, chromium_object_location, chromium_scroll_to_object,
-    chromium_text_state, has_chromium_document, perform_chromium_action, probe_window,
-    ChromiumTextField, Ia2Action, Ia2CaptureError,
+    chromium_document_busy, chromium_modal_dialog_of, chromium_object_location,
+    chromium_scroll_to_object, chromium_text_state, has_chromium_document, perform_chromium_action,
+    probe_window, ChromiumTextField, Ia2Action, Ia2CaptureError,
 };
 
 #[cfg(target_os = "windows")]
@@ -863,6 +865,17 @@ mod com {
             unsafe { target.accLocation(&mut x, &mut y, &mut width, &mut height, &self_child()) }
                 .map_err(|e| err("accLocation", e))?;
             Ok([x, y, width, height])
+        }
+
+        /// Whether the page in a Chromium window is still loading: Chromium marks its document
+        /// busy (`STATE_SYSTEM_BUSY`) until the page has loaded, its focus coming before that.
+        pub fn chromium_document_busy(top_level: HWND) -> Result<bool, Ia2CaptureError> {
+            let document = chromium_document(top_level)?;
+            // SAFETY: a plain MSAA query on a valid IAccessible.
+            let state =
+                unsafe { document.get_accState(&self_child()) }.map_err(|e| err("accState", e))?;
+            let bits = i32::try_from(&state).map(|s| s as u32).unwrap_or(0);
+            Ok(bits & super::super::msaa_states::STATE_SYSTEM_BUSY != 0)
         }
 
         /// Scrolls a live object of a Chromium window's page into view, by its IA2
