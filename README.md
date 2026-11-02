@@ -93,33 +93,15 @@ for each assertion's role, name and state the same way
 
 ### What works today (Windows)
 
-- **Web pages in Chrome:** the Virtual PC Cursor by character, word, line, sentence and
-  paragraph; Say All; quick navigation keys (H for headings, T for tables, F for form fields
-  and many more); the lists of links, headings and form fields; tables; forms mode; Okur Find.
-- **Web apps:** ARIA widgets, autocompletes and live regions; GitHub's code view, Google Docs
-  and Sheets, WhatsApp Web.
-- **Microsoft Word:** documents with their headings, lists, tables, comments, notes and
-  revisions; Say All; the ribbon, Word's dialogs and its form fields.
-- **Microsoft Excel:** cells with their coordinates, row and column titles and totals;
-  selections; the lists of cells and worksheets.
-- **Windows itself:** dialog boxes, menus, lists and trees, File Explorer, Windows Settings,
-  Notepad, the console and Windows Terminal, the desktop, Alt+Tab, the Window List, the system
-  tray and notifications.
-- **Editing** in any text field, with selections said as JAWS says them, Say Font and text
-  analysis.
-- **The Okur cursor and OCR:** any window's screen, pictures included, recognized with
-  Windows' own OCR; pictures and scanned PDFs read from File Explorer; mouse keys.
-- **Settings as JAWS has them:** Settings Center (Insert+6), Quick Settings (Insert+V) and
-  Okur's window (Insert+J) with the Startup Wizard; settings per application and per web site;
-  verbosity levels, punctuation, typing echo and voice profiles; Flexible Web, PlaceMarkers
-  and custom labels.
-- **Help in Okur's own words:** Insert+F1, Insert+H and Keyboard Help (Insert+1); the Virtual
-  Viewer and the Speech History.
-- **Both keyboard layouts,** desktop and laptop, with Insert or CapsLock as the Okur key, and
-  the OneCore and SAPI 5 voices installed in Windows.
+Okur reads web pages in Chrome with the Virtual PC Cursor, the quick navigation keys and the
+lists of links, headings and form fields, and web apps built with ARIA. It reads Microsoft
+Word's documents and Excel's spreadsheets as JAWS reads them, and Windows itself: dialog boxes,
+menus, File Explorer, Windows Settings, the console, the desktop and notifications. The Okur
+cursor reads any window's screen, pictures included, with Windows' own OCR. Its settings, help
+and voices follow JAWS's, for all applications or for one application or web site, on a
+desktop or a laptop keyboard.
 
 Every key and phrase, item by item: [What Okur does today](docs/references/what-works-today.md).
-The [reference documentation](docs/references/) describes these behaviors in detail.
 
 ### Not yet
 
