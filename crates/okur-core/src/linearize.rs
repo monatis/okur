@@ -1586,13 +1586,19 @@ impl<'a> Builder<'a> {
                 // and in table navigation "Balance | $999,741.00 | clickable | Column 5 of 5"
                 // [obs, round-aria24, 2695/s2, 2706/s1]. JAWS says it of a table's cell, not
                 // of a clickable division (292/s8), nor of a cell holding a link, which is
-                // what is clicked (2708/s1).
+                // what is clicked (2708/s1). Clicks it takes from a listener above it count
+                // when the listener is its row's or table's, not the page's (GitHub's tables)
+                // [obs, 3154/s1-s6].
                 fn holds_link(node: &AomNode) -> bool {
                     node.children
                         .iter()
                         .any(|c| matches!(c.role, Role::Link { .. }) || holds_link(c))
                 }
-                if attr(cell, "clickable") == Some("true") && !holds_link(cell) {
+                let clickable = attr(cell, "clickable") == Some("true")
+                    || (attr(cell, "click_ancestor") == Some("true")
+                        && (attr(child, "clickable") == Some("true")
+                            || attr(node, "clickable") == Some("true")));
+                if clickable && !holds_link(cell) {
                     let last = self
                         .buffer
                         .lines

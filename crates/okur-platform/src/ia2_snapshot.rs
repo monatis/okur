@@ -460,15 +460,19 @@ fn convert(
     }
     // A combo box one types in (an autocomplete), JAWS's "edit combo". Chrome's UIA reports
     // a select's value as writable too, so only IA2's editable state tells them apart.
-    // A table's cell the page answers clicks on (its default action Chromium's "click" or
-    // "click ancestor"): "Date | clickable" [obs, round-aria24, 2695/s2].
-    if role == Role::TableCell
-        && matches!(
-            node.default_action.as_deref(),
-            Some("click" | "click ancestor")
-        )
-    {
-        set_attr("clickable", "true".to_owned());
+    // Clicks a table answers: a cell, row or table with a click listener of its own
+    // (Chromium's default action "click") is clickable; a cell under a listener elsewhere
+    // ("click ancestor") is clickable when its row or table is, which the reading decides.
+    // JAWS says "clickable" in a table answering clicks itself, not in one under a listener
+    // on the whole page, as GitHub's [obs, round-aria24, 2695/s2; 3154/s4, s1].
+    if matches!(role, Role::TableCell | Role::TableRow | Role::Table) {
+        match node.default_action.as_deref() {
+            Some("click") => set_attr("clickable", "true".to_owned()),
+            Some("click ancestor") if role == Role::TableCell => {
+                set_attr("click_ancestor", "true".to_owned())
+            }
+            _ => {}
+        }
     }
     // An ARIA meter, a progress bar to MSAA: "CPU Usage meter 36.1665".
     if role == Role::ProgressBar && attr("xml-roles").as_deref() == Some("meter") {
