@@ -29,6 +29,10 @@ Then: titles from the workbook's names (1134) and the totals readers (1132, 13 o
 ([`../handoff/2026-11-01-excel-named-titles-and-totals.md`](../handoff/2026-11-01-excel-named-titles-and-totals.md)).
 Next: monitor cells and comments, titles kept across sessions.
 
+Then (2026-11-02): the owner's performance and reliability review before the release
+([`../handoff/2026-11-02-performance-review-fixes.md`](../handoff/2026-11-02-performance-review-fixes.md)).
+Next: [`2026-11-02-everyday-gaps-round-43.md`](2026-11-02-everyday-gaps-round-43.md).
+
 ## 1. The first Store release (dev box)
 
 [`2026-10-31-microsoft-store-release.md`](2026-10-31-microsoft-store-release.md), its steps in
