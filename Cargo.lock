@@ -969,6 +969,9 @@ dependencies = [
  "serde_json",
  "tokio",
  "tracing",
+ "windows",
+ "windows-core",
+ "xa11y-windows",
 ]
 
 [[package]]

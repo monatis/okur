@@ -1,5 +1,4 @@
 pub mod actions;
-pub mod audio;
 pub mod bridge;
 pub mod clock;
 pub mod desktop;
@@ -10,7 +9,6 @@ pub mod events;
 #[cfg(windows)]
 pub mod excel_om;
 pub mod file_text;
-pub mod harness;
 pub mod hook;
 pub mod ia2_snapshot;
 pub mod instance;
@@ -32,14 +30,11 @@ pub mod text_context;
 pub mod top_windows;
 pub mod tts;
 pub mod ui_host;
-pub mod uia_probe;
 pub mod uia_snapshot;
 pub mod virtual_desktop;
 pub mod window_text;
 #[cfg(windows)]
 pub mod word_om;
-
-pub use audio::{AudioActivityReport, AudioEndpointMeter, SilenceReport};
 
 pub use bridge::{PlatformBridge, PlatformError};
 pub use events::{

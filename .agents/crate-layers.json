@@ -32,7 +32,7 @@
     "okur-ui": { "kind": "program", "allow": ["okur-ui-model"] },
     "okur-lab": {
       "kind": "lab",
-      "allow": ["okur-core", "okur-platform", "okur-corpus", "okur-ui-model"]
+      "allow": ["okur-core", "okur-platform", "okur-corpus", "okur-ui-model", "xa11y-windows"]
     },
     "okur-speech-recorder": { "kind": "lab", "allow": [] },
     "xa11y": {

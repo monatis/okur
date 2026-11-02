@@ -38,9 +38,9 @@ fn main() {
     }
     let result = steps
         .iter()
-        .map(|s| okur_platform::harness::parse_step(s))
+        .map(|s| okur_lab::harness::parse_step(s))
         .collect::<Result<Vec<_>, _>>()
-        .and_then(|steps| okur_platform::harness::send_steps(&steps, &allow, title.as_deref()));
+        .and_then(|steps| okur_lab::harness::send_steps(&steps, &allow, title.as_deref()));
     if let Err(e) = result {
         eprintln!("{e}");
         std::process::exit(1);

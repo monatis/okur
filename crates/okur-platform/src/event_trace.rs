@@ -1771,7 +1771,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
 
 #[cfg(windows)]
 pub use capture::{
-    run_live, run_trace, PageChange, IA2_EVENT_TEXT_INSERTED, IA2_EVENT_TEXT_REMOVED,
+    run_live, run_recording, PageChange, IA2_EVENT_TEXT_INSERTED, IA2_EVENT_TEXT_REMOVED,
 };
 
 /// The menu mode transition a recorded event reports, if any.
@@ -3063,16 +3063,14 @@ fn keeps_dialog_read(event: &str, push_button: bool) -> bool {
 #[cfg(windows)]
 mod capture {
     use super::{
-        event_name, in_dialog_box, keeps_dialog_read, reports_position, TraceEvent, TraceHeader,
-        TraceObject, TracePoint, TRACE_FORMAT_VERSION, UIA_FOCUS_WINDOWS, UIA_SELECTION_PROCESSES,
+        event_name, in_dialog_box, keeps_dialog_read, reports_position, TraceEvent, TraceObject,
+        TracePoint, UIA_FOCUS_WINDOWS, UIA_SELECTION_PROCESSES,
     };
     use crate::uia_snapshot::capture::{
         automation, column_headers_of, focus_chain_from, focus_context_of, focus_subtree_of,
         focused_element, window_subtree, window_text, with_properties,
     };
-    use crate::PlatformError;
     use std::cell::{Cell, RefCell};
-    use std::io::Write;
     use windows::core::implement;
     use windows::Win32::Foundation::{CloseHandle, HWND};
     use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
@@ -5710,48 +5708,21 @@ mod capture {
         });
     }
 
-    /// Records accessibility events to `out` (JSON Lines) until `stop_file` exists or
-    /// `max_ms` elapses. Returns the number of events recorded. With `page_changes`, the page
-    /// in front's objects shown, hidden and reordered are recorded too, as `page_change`
-    /// events with their object ids and nothing read.
-    pub fn run_trace(
-        out: &std::path::Path,
-        stop_file: Option<&std::path::Path>,
-        max_ms: u64,
+    /// Delivers accessibility events to `sink` until `keep_running` says to stop, as the
+    /// harness records them (`okur-lab trace` writes them to a trace file). Returns the number
+    /// of events delivered. With `page_changes`, the page in front's objects shown, hidden and
+    /// reordered are delivered too, as `page_change` events with their object ids and nothing
+    /// read.
+    pub fn run_recording(
+        sink: Box<dyn FnMut(TraceEvent)>,
         page_changes: bool,
-    ) -> Result<usize, PlatformError> {
-        let io_err = |e: std::io::Error| PlatformError::EventListenerError(format!("{out:?}: {e}"));
-        let mut file = std::fs::File::create(out).map_err(io_err)?;
-        let header = TraceHeader {
-            trace_format_version: TRACE_FORMAT_VERSION,
-            tool_version: env!("CARGO_PKG_VERSION").to_owned(),
-            host: std::env::var("COMPUTERNAME").unwrap_or_default(),
-            started_unix_ms: now_ms(),
-        };
-        let header = serde_json::to_string(&header)
-            .map_err(|e| PlatformError::EventListenerError(e.to_string()))?;
-        file.write_all(format!("{header}\n").as_bytes())
-            .map_err(io_err)?;
-
-        // A trace goes into the public corpus: no one's e-mail address goes with it.
-        let sink = move |event: TraceEvent| {
-            if crate::privacy::internet_feed(&event) {
-                return;
-            }
-            if let Ok(line) = serde_json::to_string(&event) {
-                let mut line = crate::privacy::redact_addresses(&line);
-                line.push('\n');
-                let _ = file.write_all(line.as_bytes());
-            }
-        };
-        let deadline = std::time::Instant::now() + std::time::Duration::from_millis(max_ms);
-        Ok(run_hooks(Box::new(sink), None, page_changes, || {
-            std::time::Instant::now() < deadline && !stop_file.is_some_and(|p| p.exists())
-        }))
+        keep_running: impl Fn() -> bool,
+    ) -> usize {
+        run_hooks(sink, None, page_changes, keep_running)
     }
 
     /// Delivers accessibility events to `sink` as they happen, with the same capture as
-    /// [`run_trace`], until `stop` is set. This is the live screen reader's event source,
+    /// [`run_recording`], until `stop` is set. This is the live screen reader's event source,
     /// so the engine consumes exactly the event stream the harness records and replays.
     /// `page_changed` is told of each change to the page in front outside live regions.
     pub fn run_live(

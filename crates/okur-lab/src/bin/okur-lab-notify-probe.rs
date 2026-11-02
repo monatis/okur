@@ -28,7 +28,7 @@ fn main() {
         eprintln!("usage: okur-lab-notify-probe --window <title> [--millis <n>] --out <file>");
         std::process::exit(2);
     };
-    let lines = match okur_platform::uia_probe::notification_registrations(&window, millis) {
+    let lines = match okur_lab::uia_probe::notification_registrations(&window, millis) {
         Ok(lines) => lines,
         Err(e) => vec![format!("failed: {e}")],
     };

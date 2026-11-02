@@ -1,4 +1,4 @@
-use crate::PlatformError;
+use okur_platform::PlatformError;
 use std::time::{Duration, Instant};
 
 /// Audio activity report captured directly from the hardware audio endpoint / soundcard.
@@ -236,7 +236,7 @@ mod tests {
         let _lock = crate::TEST_AUDIO_LOCK
             .lock()
             .unwrap_or_else(|poisoned| poisoned.into_inner());
-        use crate::tts::{Sapi5Engine, TtsEngine};
+        use okur_platform::tts::{Sapi5Engine, TtsEngine};
 
         let sapi = Sapi5Engine::new();
         assert!(sapi.is_ok(), "SAPI 5 must initialize for this live test");

@@ -556,7 +556,7 @@ mod windows_actions {
                                 let Some(events) = events.as_ref() else {
                                     return;
                                 };
-                                let place = crate::actions::sheet_place_now(None, cells);
+                                let place = crate::actions::sheet_place_now(cells);
                                 tracing::debug!(read = place.is_some(), ?cells, "sheet place read");
                                 let _ = events.send(AccessibilityEvent::SheetPlace(place));
                             }
@@ -565,7 +565,7 @@ mod windows_actions {
                                     return;
                                 };
                                 let (column, entries) =
-                                    crate::actions::sheet_list_now(None, kind).unwrap_or_default();
+                                    crate::actions::sheet_list_now(kind).unwrap_or_default();
                                 tracing::debug!(?kind, entries = entries.len(), "sheet list read");
                                 let _ = events.send(AccessibilityEvent::SheetList {
                                     kind,
@@ -1287,263 +1287,26 @@ mod windows_actions {
     }
 }
 
-/// Every UI Automation text attribute of the focused text at its caret, by `unit` around it
-/// (0 character, 1 format, 2 word, 3 line, 4 paragraph): "id name: value" lines, for research
-/// (`okur-lab text-attributes`). Empty without a text pattern.
+/// The active cell of Excel's window in front and `cells` around it, read right away on the
+/// calling thread.
 #[cfg(windows)]
-pub fn text_attributes_now(unit: i32) -> Vec<String> {
-    use windows::Win32::System::Com::{
-        CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
-    };
-    use windows::Win32::System::Variant::VARIANT;
-    use windows::Win32::UI::Accessibility::{
-        CUIAutomation8, IUIAutomation, IUIAutomationTextPattern, TextUnit, UIA_TextPatternId,
-        UIA_TEXTATTRIBUTE_ID,
-    };
-    /// UI Automation's text attribute ids run from 40000 (AnimationStyle) to 40042
-    /// (AfterParagraphSpacing) as of Windows 10.
-    const FIRST: i32 = 40_000;
-    const LAST: i32 = 40_042;
-    let read = || -> Option<Vec<String>> {
-        // SAFETY: COM initialization, in-process activation and UIA client calls on valid
-        // objects.
-        unsafe {
-            let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
-            let uia: IUIAutomation =
-                CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER).ok()?;
-            let pattern: IUIAutomationTextPattern = uia
-                .GetFocusedElement()
-                .ok()?
-                .GetCurrentPatternAs(UIA_TextPatternId)
-                .ok()?;
-            let range = pattern.GetSelection().ok()?.GetElement(0).ok()?;
-            range.ExpandToEnclosingUnit(TextUnit(unit)).ok()?;
-            let mixed = uia.ReservedMixedAttributeValue().ok();
-            let unsupported = uia.ReservedNotSupportedValue().ok();
-            Some(
-                (FIRST..=LAST)
-                    .filter_map(|id| {
-                        let value: VARIANT =
-                            range.GetAttributeValue(UIA_TEXTATTRIBUTE_ID(id)).ok()?;
-                        let shown = match windows::core::IUnknown::try_from(&value) {
-                            Ok(object) if Some(&object) == unsupported.as_ref() => return None,
-                            Ok(object) if Some(&object) == mixed.as_ref() => "(mixed)".to_owned(),
-                            _ => value.to_string(),
-                        };
-                        Some(format!("{id}: {shown}"))
-                    })
-                    .collect(),
-            )
-        }
-    };
-    read().unwrap_or_default()
+fn sheet_place_now(cells: okur_core::actions::SheetCells) -> Option<okur_core::SheetPlace> {
+    crate::excel_om::sheet_place(front_sheet_grid()?, cells)
 }
 
-/// The focused text field's text context right now, for harness checks (`okur-lab caret`).
+/// Excel's grid window in the window in front.
 #[cfg(windows)]
-pub fn read_text_now() -> Option<okur_core::TextContext> {
-    use windows::Win32::System::Com::{
-        CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
-    };
-    use windows::Win32::UI::Accessibility::{CUIAutomation8, IUIAutomation};
-    // SAFETY: COM initialization and in-process activation.
-    let uia: IUIAutomation = unsafe {
-        let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
-        CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
-    }
-    .ok()?;
-    // As the tracer decides: a page's field only with a document above the focus.
-    if crate::text_context::focus_is_in_page(&uia) {
-        crate::text_context::read_focused(&uia)
-    } else {
-        crate::text_context::read_focused_outside_page(&uia)
-    }
-}
-/// The headings of Word's document, read right away on the calling thread: the focused one,
-/// or the one in the top-level window titled `window_title`. For harness checks and the
-/// recorder; the engine goes through `WindowsActions`. `None` without Word's document.
-#[cfg(windows)]
-pub fn document_headings_now(
-    window_title: Option<&str>,
-) -> Option<Vec<okur_core::DocumentHeading>> {
-    use windows::Win32::System::Com::{
-        CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
-    };
-    use windows::Win32::UI::Accessibility::{CUIAutomation8, IUIAutomation};
-    let window = match window_title {
-        Some(title) => Some(crate::harness::window_titled(title)?),
-        None => None,
-    };
-    // SAFETY: COM initialization and in-process activation.
-    let uia: IUIAutomation = unsafe {
-        let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
-        CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
-    }
-    .ok()?;
-    crate::text_context::word_document_headings(&uia, window)
-}
-
-/// The links of Word's document, read right away on the calling thread, as
-/// [`document_headings_now`] reads its headings. For the recorder.
-#[cfg(windows)]
-pub fn document_links_now(window_title: Option<&str>) -> Option<Vec<okur_core::DocumentLink>> {
-    use windows::Win32::System::Com::{
-        CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
-    };
-    use windows::Win32::UI::Accessibility::{CUIAutomation8, IUIAutomation};
-    let window = match window_title {
-        Some(title) => Some(crate::harness::window_titled(title)?),
-        None => None,
-    };
-    // SAFETY: COM initialization and in-process activation.
-    let uia: IUIAutomation = unsafe {
-        let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
-        CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
-    }
-    .ok()?;
-    crate::text_context::word_document_links(&uia, window)
-}
-
-/// The paragraphs of Word's document, read right away on the calling thread, as
-/// [`document_headings_now`] reads its headings. For the recorder.
-#[cfg(windows)]
-pub fn document_paragraphs_now(
-    window_title: Option<&str>,
-) -> Option<Vec<okur_core::DocumentParagraph>> {
-    use windows::Win32::System::Com::{
-        CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
-    };
-    use windows::Win32::UI::Accessibility::{CUIAutomation8, IUIAutomation};
-    let window = match window_title {
-        Some(title) => Some(crate::harness::window_titled(title)?),
-        None => None,
-    };
-    // SAFETY: COM initialization and in-process activation.
-    let uia: IUIAutomation = unsafe {
-        let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
-        CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
-    }
-    .ok()?;
-    crate::text_context::word_document_paragraphs(&uia, window)
-}
-
-/// The view Word's window shows its document in, read right away on the calling thread: the
-/// window in front, or the top-level window titled `window_title`. For the recorder.
-#[cfg(windows)]
-pub fn document_view_now(window_title: Option<&str>) -> Option<String> {
-    use windows::Win32::System::Com::{
-        CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
-    };
-    use windows::Win32::UI::Accessibility::{CUIAutomation8, IUIAutomation};
-    let window = match window_title {
-        Some(title) => Some(crate::harness::window_titled(title)?),
-        None => None,
-    };
-    // SAFETY: COM initialization and in-process activation.
-    let uia: IUIAutomation = unsafe {
-        let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
-        CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
-    }
-    .ok()?;
-    crate::text_context::word_view(&uia, window)
-}
-
-/// The active cell of Excel's window and `cells` around it, read right away on the calling
-/// thread: the window in front, or the top-level window titled `window_title`.
-#[cfg(windows)]
-pub fn sheet_place_now(
-    window_title: Option<&str>,
-    cells: okur_core::actions::SheetCells,
-) -> Option<okur_core::SheetPlace> {
-    crate::excel_om::sheet_place(sheet_grid(window_title)?, cells)
-}
-
-/// Everything any ask of the place reads, for a recording's snapshot that answers them all in
-/// replay: the active cell's row and column, the workbook's named titles, the active cell's
-/// font and formatting (Insert+F) and its column's and row's sums (the totals readers).
-#[cfg(windows)]
-pub fn sheet_place_complete_now(window_title: Option<&str>) -> Option<okur_core::SheetPlace> {
-    use okur_core::actions::SheetCells;
-    let grid = sheet_grid(window_title)?;
-    let mut place = crate::excel_om::sheet_place(grid, SheetCells::Lines)?;
-    let around = crate::excel_om::sheet_place(grid, SheetCells::Around(None));
-    if let Some(around) = around {
-        (place.title_row, place.title_column) = (around.title_row, around.title_column);
-    }
-    place.format = crate::excel_om::cell_format(grid);
-    (place.column_sum, place.row_sum) = crate::excel_om::cell_sums(grid);
-    Some(place)
-}
-
-/// Excel's grid window in the window in front, or in the top-level window titled
-/// `window_title`.
-#[cfg(windows)]
-fn sheet_grid(window_title: Option<&str>) -> Option<windows::Win32::Foundation::HWND> {
+fn front_sheet_grid() -> Option<windows::Win32::Foundation::HWND> {
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
-    let top = match window_title {
-        Some(title) => crate::harness::window_titled(title)?,
-        // SAFETY: a plain query.
-        None => unsafe { GetForegroundWindow() },
-    };
-    crate::excel_om::grid_window(top)
+    // SAFETY: a plain query.
+    crate::excel_om::grid_window(unsafe { GetForegroundWindow() })
 }
 
-/// One of JAWS's lists of Excel's window, with the active cell's column's letters, read right
-/// away on the calling thread: the window in front, or the top-level window titled
-/// `window_title`.
+/// One of JAWS's lists of Excel's window in front, with the active cell's column's letters,
+/// read right away on the calling thread.
 #[cfg(windows)]
-pub fn sheet_list_now(
-    window_title: Option<&str>,
-    kind: okur_core::SheetListKind,
-) -> Option<(String, Vec<okur_core::SheetEntry>)> {
-    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
-    let top = match window_title {
-        Some(title) => crate::harness::window_titled(title)?,
-        // SAFETY: a plain query.
-        None => unsafe { GetForegroundWindow() },
-    };
-    crate::excel_om::sheet_list(crate::excel_om::grid_window(top)?, kind)
-}
-
-/// The items of the status bar of Word's window, read right away on the calling thread: the
-/// window in front, or the top-level window titled `window_title`. For the recorder.
-#[cfg(windows)]
-pub fn status_bar_now(window_title: Option<&str>) -> Option<Vec<String>> {
-    use windows::Win32::System::Com::{
-        CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
-    };
-    use windows::Win32::UI::Accessibility::{CUIAutomation8, IUIAutomation};
-    let window = match window_title {
-        Some(title) => Some(crate::harness::window_titled(title)?),
-        None => None,
-    };
-    // SAFETY: COM initialization and in-process activation.
-    let uia: IUIAutomation = unsafe {
-        let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
-        CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
-    }
-    .ok()?;
-    crate::text_context::word_status_bar(&uia, window)
-}
-
-/// Performs an action on a node's live object right away, on the calling thread, reporting
-/// why it failed. For harness checks; the engine goes through `WindowsActions`.
-#[cfg(windows)]
-pub fn perform_now(node: &okur_core::AomNode, activate: bool) -> Result<(), String> {
-    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
-    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
-    use xa11y_windows::ia2::{perform_chromium_action, Ia2Action};
-    let id = unique_id(node).ok_or("node has no IA2 uniqueID")?;
-    let action = if activate {
-        Ia2Action::DefaultAction
-    } else {
-        Ia2Action::Focus
-    };
-    // SAFETY: COM initialization; repeated initialization is tolerated.
-    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-    // SAFETY: plain Win32 call with no preconditions.
-    let window = unsafe { GetForegroundWindow() };
-    perform_chromium_action(window, id, action).map_err(|e| format!("IA2 object {id}: {e}"))
+fn sheet_list_now(kind: okur_core::SheetListKind) -> Option<(String, Vec<okur_core::SheetEntry>)> {
+    crate::excel_om::sheet_list(front_sheet_grid()?, kind)
 }
 
 /// Captures the foreground Chromium window's page through IA2 and maps it with
@@ -1638,49 +1401,6 @@ fn read_clipboard_text() -> Option<String> {
         let _ = CloseClipboard();
         text
     }
-}
-
-/// The notification area's icons now, for harness checks (`okur-lab tray`).
-#[cfg(windows)]
-pub fn tray_icons_now() -> Vec<okur_core::event::TrayIcon> {
-    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
-    // SAFETY: COM initialization for this thread.
-    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-    crate::uia_snapshot::capture::automation()
-        .map(|uia| crate::uia_snapshot::capture::tray_icons(&uia))
-        .unwrap_or_default()
-}
-
-/// The taskbar's control tree, one element a line (indented by depth: control type, class,
-/// name, rectangle), for finding its notification area on a new Windows (`okur-lab tray --dump`).
-#[cfg(windows)]
-pub fn taskbar_dump_now() -> Vec<String> {
-    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
-    // SAFETY: COM initialization for this thread.
-    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-    let (Ok(uia), Some((taskbar, _))) = (
-        crate::uia_snapshot::capture::automation(),
-        crate::uia_snapshot::capture::taskbar_windows(),
-    ) else {
-        return Vec::new();
-    };
-    crate::uia_snapshot::capture::taskbar_elements(&uia, taskbar)
-        .into_iter()
-        .map(|e| {
-            let rect = e
-                .rect
-                .map(|r| format!("[{}, {}, {}, {}]", r.left, r.top, r.right, r.bottom))
-                .unwrap_or_default();
-            format!(
-                "{}{} {} {:?} {rect}{}",
-                "  ".repeat(e.depth),
-                e.control_type,
-                e.class_name.unwrap_or_default(),
-                e.name.unwrap_or_default(),
-                if e.offscreen { " offscreen" } else { "" }
-            )
-        })
-        .collect()
 }
 
 /// Clicks the mouse at `x`, `y` (real pixels, the process being DPI aware): the pointer moves

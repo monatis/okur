@@ -799,7 +799,7 @@ async fn main() {
                 std::process::exit(1);
             }
             if measure_latency {
-                match okur_platform::audio::AudioEndpointMeter::time_to_sound(
+                match okur_lab::audio::AudioEndpointMeter::time_to_sound(
                     started,
                     0.01,
                     std::time::Duration::from_secs(5),
@@ -890,9 +890,9 @@ async fn main() {
         }) => {
             #[cfg(windows)]
             let other_window = append_to.is_some()
-                && window_title.as_deref().is_some_and(|title| {
-                    !okur_platform::harness::foreground_title().starts_with(title)
-                });
+                && window_title
+                    .as_deref()
+                    .is_some_and(|title| !okur_lab::harness::foreground_title().starts_with(title));
             #[cfg(windows)]
             let screen = if other_window {
                 Ok(okur_core::screen_model::ScreenModel::default())
@@ -977,7 +977,7 @@ async fn main() {
                     ),
                     (None, Some(title)) => {
                         use okur_platform::file_text::Selection;
-                        let selection = okur_platform::harness::shell_window(&title)
+                        let selection = okur_lab::harness::shell_window(&title)
                             .and_then(|window| {
                                 okur_platform::file_text::selected_file(window)
                                     .inspect_err(|e| eprintln!("the selected file: {e}"))
@@ -1079,7 +1079,7 @@ async fn main() {
                 "Sampling hardware soundcard / default playback endpoint for {} ms...",
                 duration_ms
             );
-            let report = okur_platform::AudioEndpointMeter::monitor_activity(
+            let report = okur_lab::AudioEndpointMeter::monitor_activity(
                 std::time::Duration::from_millis(duration_ms),
                 std::time::Duration::from_millis(25),
                 0.001,
@@ -1313,8 +1313,8 @@ async fn main() {
                     std::process::exit(1);
                 };
                 let requested = match action.as_str() {
-                    "focus" => okur_platform::actions::perform_now(target, false),
-                    "activate" => okur_platform::actions::perform_now(target, true),
+                    "focus" => okur_lab::probes::perform_now(target, false),
+                    "activate" => okur_lab::probes::perform_now(target, true),
                     other => {
                         eprintln!("--action must be focus or activate, not {other:?}");
                         std::process::exit(2);
@@ -1341,17 +1341,16 @@ async fn main() {
         }) => {
             #[cfg(windows)]
             {
-                let headings =
-                    okur_platform::actions::document_headings_now(window_title.as_deref());
-                let view = okur_platform::actions::document_view_now(window_title.as_deref());
+                let headings = okur_lab::probes::document_headings_now(window_title.as_deref());
+                let view = okur_lab::probes::document_view_now(window_title.as_deref());
                 // Word's status bar, for Say Bottom Line of Window.
-                let status_bar = okur_platform::actions::status_bar_now(window_title.as_deref());
+                let status_bar = okur_lab::probes::status_bar_now(window_title.as_deref());
                 // Excel's active cell's row and column, for its row and column readers.
                 let sheet_place =
-                    okur_platform::actions::sheet_place_complete_now(window_title.as_deref());
+                    okur_lab::probes::sheet_place_complete_now(window_title.as_deref());
                 // Excel's lists: its cells with formulas, the column's cells, its worksheets.
                 let sheet_list = |kind: okur_core::SheetListKind| {
-                    okur_platform::actions::sheet_list_now(window_title.as_deref(), kind).map(
+                    okur_lab::probes::sheet_list_now(window_title.as_deref(), kind).map(
                         |(column, entries)| serde_json::json!({ "column": column, "entries": entries }),
                     )
                 };
@@ -1364,13 +1363,12 @@ async fn main() {
                         "worksheets": sheet_list(okur_core::SheetListKind::Worksheets),
                     })
                 });
-                let paragraphs =
-                    okur_platform::actions::document_paragraphs_now(window_title.as_deref());
-                let links = okur_platform::actions::document_links_now(window_title.as_deref());
+                let paragraphs = okur_lab::probes::document_paragraphs_now(window_title.as_deref());
+                let links = okur_lab::probes::document_links_now(window_title.as_deref());
                 // The line spacing of the selection's paragraph, from Word's object model.
                 let document = window_title
                     .as_deref()
-                    .and_then(okur_platform::harness::window_titled)
+                    .and_then(okur_lab::harness::window_titled)
                     .and_then(okur_platform::word_om::document_window);
                 let line_spacing =
                     document.and_then(okur_platform::word_om::selection_line_spacing);
@@ -1521,7 +1519,7 @@ async fn main() {
         }
         Some(Commands::TextAttributes { unit }) => {
             #[cfg(windows)]
-            for line in okur_platform::actions::text_attributes_now(unit) {
+            for line in okur_lab::probes::text_attributes_now(unit) {
                 println!("{line}");
             }
             #[cfg(not(windows))]
@@ -1543,7 +1541,7 @@ async fn main() {
             };
             #[cfg(windows)]
             {
-                let context = okur_platform::actions::read_text_now();
+                let context = okur_lab::probes::read_text_now();
                 let spoken = context
                     .as_ref()
                     .and_then(|c| okur_core::editing::speech(key, None, c, ""));
@@ -1558,11 +1556,11 @@ async fn main() {
         Some(Commands::Tray { dump }) => {
             #[cfg(windows)]
             if dump {
-                for line in okur_platform::actions::taskbar_dump_now() {
+                for line in okur_lab::probes::taskbar_dump_now() {
                     println!("{line}");
                 }
             } else {
-                for icon in okur_platform::actions::tray_icons_now() {
+                for icon in okur_lab::probes::tray_icons_now() {
                     println!("{} @ {}, {}", icon.name, icon.x, icon.y);
                 }
             }
@@ -1580,7 +1578,7 @@ async fn main() {
             debug_log: _,
         }) => {
             #[cfg(windows)]
-            match okur_platform::event_trace::run_trace(
+            match okur_lab::trace::run_trace(
                 Path::new(&out),
                 stop_file.as_deref().map(Path::new),
                 max_ms,
@@ -1606,12 +1604,12 @@ async fn main() {
         }) => {
             let parsed: Result<Vec<_>, _> = steps
                 .iter()
-                .map(|s| okur_platform::harness::parse_step(s))
+                .map(|s| okur_lab::harness::parse_step(s))
                 .collect();
             let result = parsed.and_then(|steps| {
                 #[cfg(windows)]
                 {
-                    okur_platform::harness::send_steps(&steps, &allow, title.as_deref())
+                    okur_lab::harness::send_steps(&steps, &allow, title.as_deref())
                 }
                 #[cfg(not(windows))]
                 {
@@ -1626,7 +1624,7 @@ async fn main() {
         }
         Some(Commands::Front { title }) => {
             #[cfg(windows)]
-            let result = okur_platform::harness::bring_to_front(&title);
+            let result = okur_lab::harness::bring_to_front(&title);
             #[cfg(not(windows))]
             let result: Result<String, String> = {
                 let _ = title;
@@ -1642,7 +1640,7 @@ async fn main() {
         }
         Some(Commands::Ia2Probe) => {
             #[cfg(windows)]
-            okur_platform::harness::ia2_probe_focus()
+            okur_lab::harness::ia2_probe_focus()
                 .iter()
                 .for_each(|line| println!("{line}"));
             #[cfg(not(windows))]
@@ -1653,7 +1651,7 @@ async fn main() {
         }
         Some(Commands::WordFields) => {
             #[cfg(windows)]
-            okur_platform::harness::word_fields_probe()
+            okur_lab::harness::word_fields_probe()
                 .iter()
                 .for_each(|line| println!("{line}"));
             #[cfg(not(windows))]
@@ -1664,7 +1662,7 @@ async fn main() {
         }
         Some(Commands::WordFormFields) => {
             #[cfg(windows)]
-            println!("{}", okur_platform::harness::word_form_fields_probe());
+            println!("{}", okur_lab::harness::word_form_fields_probe());
             #[cfg(not(windows))]
             {
                 eprintln!("Word is only read on Windows");
@@ -1673,7 +1671,7 @@ async fn main() {
         }
         Some(Commands::WordDiscard { title }) => {
             #[cfg(windows)]
-            if okur_platform::harness::word_discard_changes(&title) {
+            if okur_lab::harness::word_discard_changes(&title) {
                 println!("saved");
             } else {
                 eprintln!("no Word document in a window titled {title:?}");
@@ -1688,7 +1686,7 @@ async fn main() {
         }
         Some(Commands::WordLineSpacing) => {
             #[cfg(windows)]
-            println!("{}", okur_platform::harness::word_line_spacing_probe());
+            println!("{}", okur_lab::harness::word_line_spacing_probe());
             #[cfg(not(windows))]
             {
                 eprintln!("Word is only read on Windows");
@@ -1697,7 +1695,7 @@ async fn main() {
         }
         Some(Commands::MsaaFocus) => {
             #[cfg(windows)]
-            println!("{}", okur_platform::harness::msaa_focus_probe());
+            println!("{}", okur_lab::harness::msaa_focus_probe());
             #[cfg(not(windows))]
             {
                 eprintln!("MSAA is only read on Windows");
@@ -1714,7 +1712,7 @@ async fn main() {
             }
         }
         Some(Commands::ProbeNotifications { window, millis }) => {
-            match okur_platform::uia_probe::notification_registrations(&window, millis) {
+            match okur_lab::uia_probe::notification_registrations(&window, millis) {
                 Ok(lines) => lines.iter().for_each(|line| println!("{line}")),
                 Err(e) => {
                     eprintln!("{e}");
@@ -1754,7 +1752,7 @@ async fn main() {
         }
         Some(Commands::JawsHistory { clear }) => {
             #[cfg(windows)]
-            match okur_platform::harness::jaws_history(clear) {
+            match okur_lab::harness::jaws_history(clear) {
                 Ok(history) => println!("{history}"),
                 Err(e) => {
                     eprintln!("{e}");
@@ -1886,7 +1884,7 @@ async fn main() {
             threshold,
         }) => {
             use std::time::Duration;
-            match okur_platform::AudioEndpointMeter::wait_for_silence(
+            match okur_lab::AudioEndpointMeter::wait_for_silence(
                 Duration::from_millis(onset_ms),
                 Duration::from_millis(quiet_ms),
                 Duration::from_millis(max_ms),

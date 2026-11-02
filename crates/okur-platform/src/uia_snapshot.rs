@@ -494,7 +494,7 @@ pub fn focused_element_summary() -> String {
 }
 
 #[cfg(windows)]
-pub(crate) mod capture {
+pub mod capture {
     use super::{SnapshotProvenance, UiaNode, UiaSnapshot, SNAPSHOT_FORMAT_VERSION};
     use crate::PlatformError;
     use windows::core::BSTR;
@@ -669,7 +669,7 @@ pub(crate) mod capture {
     /// Creates the UIA client object (the caller must have initialized COM). A busy or hung
     /// application fails its calls after a second instead of UIA's long defaults, so one
     /// application cannot stall the reader's event thread.
-    pub(crate) fn automation() -> Result<IUIAutomation, PlatformError> {
+    pub fn automation() -> Result<IUIAutomation, PlatformError> {
         automation_within(1000, 1000)
     }
 
@@ -731,7 +731,7 @@ pub(crate) mod capture {
         unsafe { uia.GetFocusedElement() }.ok()
     }
 
-    pub(crate) fn focus_chain(uia: &IUIAutomation) -> Vec<UiaNode> {
+    pub fn focus_chain(uia: &IUIAutomation) -> Vec<UiaNode> {
         // SAFETY: UIA client query on a valid automation object.
         unsafe { uia.GetFocusedElement() }
             .ok()
@@ -1307,7 +1307,7 @@ pub(crate) mod capture {
     }
 
     /// An element of the taskbar met by [`taskbar_elements`].
-    pub(crate) struct TaskbarElement {
+    pub struct TaskbarElement {
         pub depth: usize,
         pub control_type: i32,
         pub class_name: Option<String>,
@@ -1318,7 +1318,7 @@ pub(crate) mod capture {
 
     /// The control-view tree under window `root`, in order, to depth 8 and 600 elements: the
     /// taskbar's is small, and a hung shell's is not read on.
-    pub(crate) fn taskbar_elements(
+    pub fn taskbar_elements(
         uia: &IUIAutomation,
         root: windows::Win32::Foundation::HWND,
     ) -> Vec<TaskbarElement> {
@@ -1367,7 +1367,7 @@ pub(crate) mod capture {
     }
 
     /// The taskbar's window and its notification area's (`TrayNotifyWnd`, Windows 10).
-    pub(crate) fn taskbar_windows() -> Option<(
+    pub fn taskbar_windows() -> Option<(
         windows::Win32::Foundation::HWND,
         Option<windows::Win32::Foundation::HWND>,
     )> {
@@ -1392,7 +1392,7 @@ pub(crate) mod capture {
     /// end, is not an icon: JAWS's list of six leaves it out. A name of several lines is said
     /// as one (an application's tooltip of a name and a status line), without direction marks
     /// (the clock's date).
-    pub(crate) fn tray_icons(uia: &IUIAutomation) -> Vec<okur_core::event::TrayIcon> {
+    pub fn tray_icons(uia: &IUIAutomation) -> Vec<okur_core::event::TrayIcon> {
         const BUTTON: i32 = 50000;
         const MENU_ITEM: i32 = 50011;
         const SPLIT_BUTTON: i32 = 50031;
