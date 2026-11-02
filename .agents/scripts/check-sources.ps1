@@ -2,7 +2,9 @@
 # - no .unwrap() or .expect(), and no panic!, todo!, unimplemented! or dbg!, in the screen
 #   reader's own crates, tests included (comments excepted);
 # - the vendored xa11y crates (crates\xa11y) may only lose such calls: their counts are
-#   ratcheted by crates\xa11y\gate-baseline.json.
+#   ratcheted by crates\xa11y\gate-baseline.json;
+# - the crates' layers and the structure's ratchets (check-crate-layers.ps1,
+#   check-structure.ps1).
 # Prints each failure and exits 1; prints nothing and exits 0 when the sources are clean.
 param(
     [string]$WorkspaceRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
@@ -85,6 +87,20 @@ if (Test-Path $cratesDir) {
             }
         }
     }
+}
+
+# -----------------------------------------------------------------------------
+# Checks 6 and 7: the workspace's layers (.agents/crate-layers.json) and the structure's
+# ratchets (.agents/structure-baseline.json): docs/references/crate-structure-proposal.md,
+# section 10.
+# -----------------------------------------------------------------------------
+$layerReport = & (Join-Path $PSScriptRoot 'check-crate-layers.ps1') -WorkspaceRoot $workspaceRoot
+if ($LASTEXITCODE -ne 0) {
+    $failureReasons += ($layerReport -join "`n")
+}
+$structureReport = & (Join-Path $PSScriptRoot 'check-structure.ps1') -WorkspaceRoot $workspaceRoot
+if ($LASTEXITCODE -ne 0) {
+    $failureReasons += ($structureReport -join "`n")
 }
 
 if ($failureReasons.Count -gt 0) {

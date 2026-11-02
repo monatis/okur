@@ -1,0 +1,63 @@
+{
+  "_about": [
+    "Counts .agents/scripts/check-structure.ps1 holds the sources to (crate-structure-proposal.md,",
+    "section 10, R4 to R6). A count in block mode may only fall, and is lowered here when it",
+    "does; one in report mode is printed by check-structure.ps1 -Report. Taken 2026-11-03."
+  ],
+  "platform_crate": "okur-platform",
+  "ratchets": {
+    "neutral_platform_cfg": {
+      "count": 0,
+      "mode": "block",
+      "why": "a neutral crate is the same on every OS: put platform code in a platform crate"
+    },
+    "platform_literals_in_core": {
+      "count": 4,
+      "mode": "report",
+      "why": "the engine knows no window class or process: say it in the platform or an app module"
+    },
+    "engine_app_references": {
+      "count": 82,
+      "mode": "block",
+      "why": "the engine reaches application modules through the AppModule contract only"
+    },
+    "uia_outside_xa11y": {
+      "count": 250,
+      "mode": "block",
+      "why": "UI Automation is read through crates/xa11y (VENDORED.md, phase 4)"
+    },
+    "engine_fields": {
+      "count": 200,
+      "mode": "report",
+      "why": "application state belongs to its module (step 5)"
+    },
+    "platform_cfg_sites": {
+      "count": 226,
+      "mode": "report",
+      "why": "the Windows crate is gated once, at its root (step 4)"
+    }
+  },
+  "large_files": {
+    "limit": 1500,
+    "mode": "report",
+    "files": {
+      "crates/okur-core/src/buffer.rs": 1631,
+      "crates/okur-core/src/cursor.rs": 3896,
+      "crates/okur-core/src/engine.rs": 3931,
+      "crates/okur-core/src/linearize.rs": 1917,
+      "crates/okur-core/src/native_focus.rs": 1765,
+      "crates/okur-core/src/speech.rs": 1543,
+      "crates/okur-core/src/engine/commands.rs": 2070,
+      "crates/okur-core/src/engine/focus.rs": 1583,
+      "crates/okur-core/src/ui/settings_tree.rs": 1784,
+      "crates/okur-corpus/src/divergences.rs": 1872,
+      "crates/okur-corpus/src/parity.rs": 1857,
+      "crates/okur-lab/src/main.rs": 2019,
+      "crates/okur-platform/src/actions.rs": 1799,
+      "crates/okur-platform/src/event_trace.rs": 6060,
+      "crates/okur-platform/src/text_context.rs": 1958,
+      "crates/okur-platform/src/uia_snapshot.rs": 1769,
+      "crates/okur-ui/src/dialog.rs": 2101
+    }
+  }
+}

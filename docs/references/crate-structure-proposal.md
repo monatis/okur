@@ -1,6 +1,8 @@
 # Crate Structure: Review and Proposal (2026-11-02)
 
-**Status**: proposal for the owner's decision. Nothing here is built yet.
+**Status**: accepted by the owner (2026-11-03), with the default answer to each question of
+section 12. Steps 0 to 3 are built first
+([`2026-11-02-windows-ui-round-2.md`](../plans/2026-11-02-windows-ui-round-2.md)).
 **Why**: the owner, 2026-11-02: before any cross-platform work, the workspace needs a
 refactoring; "okur-core contains windows-specific and application code", and the crates have
 no discipline.
@@ -388,7 +390,9 @@ With four cores on a shared machine, P1 needs a release build of `okur-lab`. Eac
 is one P1 and one P2 at its start and end, not one per commit. The gate's
 `cargo test --workspace` still runs on every commit.
 
-## 12. Open questions for the owner
+## 12. Questions for the owner, and the answers
+
+The owner, 2026-11-03: the default, for each of the six.
 
 1. **Names**: `okur-apps`, `okur-runtime`, `okur-windows`, `okur-windows-model`? Default: yes.
 2. **Word and Excel queries**: make them document and spreadsheet capabilities in `okur-core`

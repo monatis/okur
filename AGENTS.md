@@ -169,7 +169,7 @@ These exist because an audit (2026-10-14) found parity claims that no tool had e
 - `crates/xa11y/`: our accessibility-API layer, vendored from xa11y 0.15.2 (MIT) and extended in-tree. See `crates/xa11y/VENDORED.md` for import changes, the hardening ratchet, and planned extensions.
 - `corpus/`: Reference speech corpus (manifest, fixtures, scenarios, evidence, quality report). `corpus/pending/` holds scenarios written but not yet recorded; the manifest and parity ignore it.
 - `skills/jaws-reference/`: Reusable automation skill for JAWS COM and speech extraction.
-- `.agents/`: Antigravity agent configuration (`mcp_config.json`, `hooks.json`) and the shared quality-gate scripts (`scripts/`) used by every harness and by CI.
+- `.agents/`: Antigravity agent configuration (`mcp_config.json`, `hooks.json`) and the shared quality-gate scripts (`scripts/`) used by every harness and by CI. `crate-layers.json` gives each crate its kind and the crates it may depend on, and `structure-baseline.json` the structure's ratchets; the gate checks both (`check-crate-layers.ps1`, `check-structure.ps1 -Report`), as [`docs/references/crate-structure-proposal.md`](docs/references/crate-structure-proposal.md) §10 sets out.
 - `.github/workflows/`: CI.
 - `packaging/msix/`: the Microsoft Store package (MSIX): its manifest template and build script.
 - `.claude/`, `.mcp.json`, `CLAUDE.md`: Claude Code adapters for the same hooks, MCP servers, and the `jaws-reference` skill.

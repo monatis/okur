@@ -1,0 +1,59 @@
+{
+  "_about": [
+    "The workspace's layers (docs/references/crate-structure-proposal.md, sections 9 and 10).",
+    "Each crate has a kind and the internal crates it may depend on (normal, build and dev",
+    "dependencies alike). .agents/scripts/check-crate-layers.ps1 checks them on cargo metadata;",
+    "check-sources.ps1 checks the sources of the neutral crates. A dependency the target layout",
+    "forbids but the migration has not yet removed is listed under known_edges, with the step",
+    "that removes it; a known edge that is gone must be taken out of the list.",
+    "Kinds: neutral (no platform API, no cfg on the platform: tested on every OS), platform (one",
+    "OS's driver), program (what users run), lab (the verification harness, never in a",
+    "program's dependencies), vendored (crates/xa11y, VENDORED.md's rules)."
+  ],
+  "forbidden_in_neutral": [
+    "windows",
+    "windows-core",
+    "windows-sys",
+    "windows-future",
+    "core-foundation",
+    "objc2",
+    "zbus"
+  ],
+  "crates": {
+    "okur-ui-model": { "kind": "neutral", "allow": [] },
+    "okur-core": { "kind": "neutral", "allow": ["okur-ui-model"] },
+    "okur-platform": {
+      "kind": "platform",
+      "allow": ["okur-core", "okur-ui-model", "xa11y", "xa11y-windows"]
+    },
+    "okur-corpus": { "kind": "lab", "allow": ["okur-core"] },
+    "okur": { "kind": "program", "allow": ["okur-core", "okur-platform", "okur-ui-model"] },
+    "okur-setup": { "kind": "program", "allow": ["okur-platform"] },
+    "okur-ui": { "kind": "program", "allow": ["okur-ui-model"] },
+    "okur-lab": {
+      "kind": "lab",
+      "allow": ["okur-core", "okur-platform", "okur-corpus", "okur-ui-model"]
+    },
+    "okur-speech-recorder": { "kind": "lab", "allow": [] },
+    "xa11y": {
+      "kind": "vendored",
+      "allow": ["xa11y-core", "xa11y-windows", "xa11y-macos", "xa11y-linux"]
+    },
+    "xa11y-core": { "kind": "neutral", "allow": [] },
+    "xa11y-windows": { "kind": "vendored", "allow": ["xa11y-core"] },
+    "xa11y-macos": { "kind": "vendored", "allow": ["xa11y-core"] },
+    "xa11y-linux": { "kind": "vendored", "allow": ["xa11y-core"] }
+  },
+  "known_edges": [
+    {
+      "from": "okur-corpus",
+      "to": "okur-platform",
+      "until": "step 3: parity replays through okur-windows-model"
+    },
+    {
+      "from": "okur-lab",
+      "to": "okur",
+      "until": "step 4: logging and the AOM loader in okur-runtime"
+    }
+  ]
+}
