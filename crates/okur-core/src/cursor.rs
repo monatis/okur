@@ -1086,6 +1086,7 @@ impl VirtualCursor {
             return None;
         }
 
+        self.offset = self.buffer.text.floor_char_boundary(self.offset);
         let current_char = self.buffer.char_at(self.offset)?;
         let next_offset = self.offset + current_char.len_utf8();
 
@@ -1131,9 +1132,10 @@ impl VirtualCursor {
 
     /// Speaks current character without moving cursor (`SayCharacter`).
     pub fn current_char(&self) -> String {
-        if let Some(ch) = self.buffer.char_at(self.offset) {
+        let offset = self.buffer.text.floor_char_boundary(self.offset);
+        if let Some(ch) = self.buffer.char_at(offset) {
             self.buffer
-                .marked_char(self.offset, SpeechFormatter::format_char(ch))
+                .marked_char(offset, SpeechFormatter::format_char(ch))
         } else {
             String::new()
         }
@@ -2003,6 +2005,10 @@ impl VirtualCursor {
 
     /// Moves to `offset`, as Say All reaches the piece that starts there.
     pub fn move_to(&mut self, offset: usize) {
+        // On a character's start: inside one (a column kept in bytes across a page whose line
+        // changed before it), Right said nothing and did not move (performance review
+        // 2026-11-02, engine finding 8).
+        let offset = self.buffer.text.floor_char_boundary(offset);
         self.offset = offset;
         self.current_node_id = self.buffer.line_at_offset(offset).map(|l| l.node_id);
         self.selection = None;

@@ -116,7 +116,124 @@ enum Source {
     PageSkim(Vec<usize>),
 }
 
+/// A page's line as found again in the page captured anew: by its object (IA2 captures) and
+/// its text, nearest where it started.
+#[derive(Debug)]
+struct LineAnchor {
+    object: Option<String>,
+    text: String,
+    start: usize,
+}
+
+/// A Say All reading the page, held while the page is captured anew
+/// ([`ScreenReaderEngine::hold_say_all`]): where its first piece, each piece with the
+/// synthesizer and the next one started, by their lines and the column in them.
+pub(super) struct HeldSayAll {
+    reading: SayAll,
+    places: Vec<Option<(LineAnchor, usize)>>,
+}
+
 impl ScreenReaderEngine {
+    /// Takes the Say All reading the page, to read on in the page captured anew
+    /// ([`Self::say_all_after_refresh`]): a refresh ended it, and a news page whose time
+    /// stamps or advertisements change as it is read stopped mid-article, after the lines
+    /// already with the synthesizer (performance review 2026-11-02, engine finding 1). A text
+    /// field's reading is not the page's and stays; a skim ends.
+    pub(super) fn hold_say_all(&mut self) -> Option<HeldSayAll> {
+        let reading = self.say_all.take()?;
+        if matches!(reading.source, Source::Field(_)) {
+            self.say_all = Some(reading);
+            return None;
+        }
+        let buffer = &self.cursor.buffer;
+        let place = |index: usize| -> Option<(LineAnchor, usize)> {
+            let at = match &reading.source {
+                Source::PageLines => buffer.lines.get(index).map(|l| l.start_offset),
+                Source::PageUnits(units) => units.get(index).map(|&(at, _)| at),
+                Source::PageSkim(_) | Source::Field(_) => None,
+            }?;
+            let line = buffer.line_at_offset(at)?;
+            let object = buffer
+                .node(line.node_id)
+                .and_then(|n| n.attributes.get(crate::aom::UNIQUE_ID_ATTR))
+                .cloned();
+            let anchor = LineAnchor {
+                object,
+                text: line.text.clone(),
+                start: line.start_offset,
+            };
+            Some((anchor, at.saturating_sub(line.start_offset)))
+        };
+        if matches!(reading.source, Source::PageSkim(_)) {
+            return None;
+        }
+        let places = std::iter::once(reading.start_line)
+            .chain(reading.queued.iter().map(|&(_, index)| index))
+            .chain([reading.next_line])
+            .map(place)
+            .collect();
+        Some(HeldSayAll { reading, places })
+    }
+
+    /// The held Say All in the page captured anew: its pieces found again, and reading on from
+    /// the next one; over where neither it nor any piece before it is found.
+    pub(super) fn say_all_after_refresh(&mut self, held: HeldSayAll) {
+        let HeldSayAll {
+            mut reading,
+            places,
+        } = held;
+        if matches!(reading.source, Source::PageUnits(_)) {
+            let Some(units) = self.cursor.say_all_units(self.settings.say_all_unit) else {
+                return;
+            };
+            reading.source = Source::PageUnits(units);
+        }
+        let buffer = &self.cursor.buffer;
+        let found: Vec<Option<usize>> = places
+            .iter()
+            .map(|place| {
+                let (anchor, column) = place.as_ref()?;
+                let start = anchor
+                    .object
+                    .as_deref()
+                    .and_then(|object| super::page::same_object_line(buffer, object, &anchor.text))
+                    .map(|(start, _)| start)
+                    .or_else(|| super::page::same_line(buffer, &anchor.text, anchor.start))?;
+                let line = buffer.line_at_offset(start)?;
+                let length = line.end_offset.saturating_sub(line.start_offset);
+                let offset = line.start_offset + (*column).min(length);
+                match &reading.source {
+                    Source::PageLines => Some(line.line_index),
+                    Source::PageUnits(units) => units.iter().rposition(|&(at, _)| at <= offset),
+                    Source::PageSkim(_) | Source::Field(_) => None,
+                }
+            })
+            .collect();
+        let Some((start, rest)) = found.split_first() else {
+            return;
+        };
+        let Some((next, queued)) = rest.split_last() else {
+            return;
+        };
+        // The next piece where it is found; else the one after the last piece found that
+        // was with the synthesizer.
+        let Some(next) = next.or_else(|| queued.iter().rev().flatten().next().map(|i| i + 1))
+        else {
+            return;
+        };
+        // A piece with the synthesizer not found again is followed to the one before the next.
+        let before_next = next.saturating_sub(1);
+        reading.queued = reading
+            .queued
+            .iter()
+            .zip(queued)
+            .map(|(&(mark, _), found)| (mark, found.unwrap_or(before_next)))
+            .collect();
+        reading.next_line = next;
+        reading.start_line = start.unwrap_or(before_next).min(next);
+        self.say_all = Some(reading);
+    }
+
     /// Starts reading from the virtual cursor's line, or its sentence or paragraph, to the
     /// end of the page.
     pub(super) fn start_say_all(&mut self) -> Option<String> {
@@ -972,6 +1089,50 @@ mod tests {
             .find(|(t, _)| t == text)
             .map(|(_, m)| *m)
             .unwrap_or_default()
+    }
+
+    /// A page captured anew under a Say All, a line added above the one read: reading goes
+    /// on to the page's end, the cursor on each line found again; a page whose lines are all
+    /// gone ends it (performance review 2026-11-02, engine finding 1).
+    #[test]
+    fn say_all_reads_on_across_a_refresh() {
+        let speech = Progress::default();
+        let mut engine = engine(8, speech.clone());
+        let _ = engine.start_say_all();
+        let paragraphs = |first: &str| {
+            let doc =
+                AomNode::new(0, Role::Document).with_children(
+                    std::iter::once(AomNode::new(100, Role::Paragraph).with_text(first))
+                        .chain((1..=8).map(|i| {
+                            AomNode::new(i, Role::Paragraph).with_text(format!("Line {i}"))
+                        }))
+                        .collect(),
+                );
+            VirtualBuffer::from_aom(&doc)
+        };
+        engine.pending_page = Some(paragraphs("Advertisement"));
+        engine.apply_pending_page();
+        assert!(engine.say_all.is_some());
+        engine.speech_reached(mark_of(&speech, "Line 2"));
+        assert_eq!(engine.cursor.current_line(), "Line 2");
+        for i in 3..=8 {
+            engine.speech_reached(mark_of(&speech, &format!("Line {i}")));
+        }
+        assert_eq!(engine.cursor.current_line(), "Line 8");
+        let read: Vec<String> = marks(&speech).into_iter().map(|(t, _)| t).collect();
+        assert!(read.iter().any(|t| t == "Line 8"), "{read:?}");
+        assert!(!read.iter().any(|t| t == "Advertisement"), "{read:?}");
+
+        // Another page altogether: nothing to read on from.
+        let speech = Progress::default();
+        let mut engine = self::engine(8, speech.clone());
+        let _ = engine.start_say_all();
+        let other =
+            AomNode::new(0, Role::Document)
+                .with_children(vec![AomNode::new(1, Role::Paragraph).with_text("Elsewhere")]);
+        engine.pending_page = Some(VirtualBuffer::from_aom(&other));
+        engine.apply_pending_page();
+        assert!(engine.say_all.is_none());
     }
 
     #[test]

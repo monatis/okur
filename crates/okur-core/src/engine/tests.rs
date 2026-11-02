@@ -9456,3 +9456,27 @@ fn excel_answers_go_to_their_asks_in_turn() {
         Some("D 2")
     );
 }
+
+/// The virtual cursor left inside a character (a column kept in bytes across a refresh of a
+/// Turkish line) is on that character: Say Character says it, Right moves on to the next
+/// (performance review 2026-11-02, engine finding 8).
+#[test]
+fn the_cursor_inside_a_character_moves_on() {
+    let page =
+        AomNode::new(0, Role::Document)
+            .with_children(vec![AomNode::new(1, Role::Paragraph).with_text("Işık")]);
+    let mut cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+    cursor.move_to_start();
+    let start = cursor.offset;
+    // "I" is one byte, "ş" two: one byte into "ş".
+    cursor.offset = start + 2;
+    assert!(
+        cursor.current_char().contains('ş'),
+        "{}",
+        cursor.current_char()
+    );
+    let next = cursor.move_next_char();
+    assert!(next.as_deref().is_some_and(|c| c.contains('ı')), "{next:?}");
+    cursor.move_to(start + 2);
+    assert_eq!(cursor.offset, start + 1);
+}

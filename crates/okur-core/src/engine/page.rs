@@ -762,10 +762,13 @@ impl ScreenReaderEngine {
         let Some(rebuilt) = self.cursor.buffer.with_node_changed(id, change) else {
             return false;
         };
+        let held = self.hold_say_all();
         crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, rebuilt));
         self.cursor.sync_modal(self.last_page_focus);
-        // Line numbers changed: a Say All stops following.
-        self.say_all = None;
+        // Line numbers changed: a Say All reads on from its lines found again.
+        if let Some(held) = held {
+            self.say_all_after_refresh(held);
+        }
         true
     }
 
@@ -888,6 +891,7 @@ impl ScreenReaderEngine {
                         (id, attribute(UNIQUE_ID_ATTR), attribute("id"), text)
                     })
                     .collect();
+            let held = self.hold_say_all();
             crate::retire::retire(std::mem::replace(&mut self.cursor.buffer, buffer));
             self.cursor.sync_modal(self.last_page_focus);
             let buffer = &self.cursor.buffer;
@@ -905,8 +909,6 @@ impl ScreenReaderEngine {
                     Some((id, text))
                 })
                 .collect();
-            // Line numbers changed: a Say All stops following.
-            self.say_all = None;
             // Node ids are the capture's own: the focus is found again as the same object (IA2
             // captures), else by its DOM id, else as the focused node with its role and name,
             // else by its state alone. A page can
@@ -953,12 +955,22 @@ impl ScreenReaderEngine {
                 (None, None) => offset,
             }
             .min(self.cursor.buffer.len());
+            // The column is kept in bytes: on a character's start in the line as it is now.
+            self.cursor.offset = self
+                .cursor
+                .buffer
+                .text
+                .floor_char_boundary(self.cursor.offset);
             // The cursor's node, as the new capture numbers it.
             self.cursor.current_node_id = self
                 .cursor
                 .buffer
                 .line_at_offset(self.cursor.offset)
                 .map(|l| l.node_id);
+            // Line numbers changed: a Say All reads on from its lines found again.
+            if let Some(held) = held {
+                self.say_all_after_refresh(held);
+            }
         }
     }
 
@@ -1270,7 +1282,7 @@ fn same_role(node: &Role, focus: &Role) -> bool {
 /// Where a line with `text` starts in `buffer`, the one nearest to `near`: the cursor's line in
 /// a page captured again, whose lines can shift (a live region grew above it, or the page was
 /// first read quickly and then in full). `None` when no line has that text.
-fn same_line(buffer: &VirtualBuffer, text: &str, near: usize) -> Option<usize> {
+pub(super) fn same_line(buffer: &VirtualBuffer, text: &str, near: usize) -> Option<usize> {
     buffer
         .lines
         .iter()
@@ -1281,7 +1293,11 @@ fn same_line(buffer: &VirtualBuffer, text: &str, near: usize) -> Option<usize> {
 
 /// The line of the object with IA2 uniqueID `object`, preferring one with `text` (an object
 /// can have several lines), as its start offset and length.
-fn same_object_line(buffer: &VirtualBuffer, object: &str, text: &str) -> Option<(usize, usize)> {
+pub(super) fn same_object_line(
+    buffer: &VirtualBuffer,
+    object: &str,
+    text: &str,
+) -> Option<(usize, usize)> {
     let id = buffer.node_with_object(object)?;
     let mut lines = buffer.lines.iter().filter(|line| line.node_id == id);
     let first = lines.next()?;
