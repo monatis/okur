@@ -5,8 +5,8 @@
 
 use std::path::{Path, PathBuf};
 
-use okur_platform::ease_of_access::{self, ACCESSIBILITY_KEY, AT_NAME, CONFIGURATION};
-use okur_platform::registry::{Hive, RegValue, Registry};
+use okur_windows::ease_of_access::{self, ACCESSIBILITY_KEY, AT_NAME, CONFIGURATION};
+use okur_windows::registry::{Hive, RegValue, Registry};
 
 use crate::plan::{self, InstallDir};
 
@@ -240,18 +240,18 @@ pub struct ThisMachine;
 
 impl Machine for ThisMachine {
     fn signature_valid(&self, program: &Path) -> bool {
-        okur_platform::signature::verify_file(program).is_valid()
+        okur_windows::signature::verify_file(program).is_valid()
     }
 
     fn stop_okur(&mut self, dir: &InstallDir) {
-        for pipe in okur_platform::instance::all_pipes() {
+        for pipe in okur_windows::instance::all_pipes() {
             let _ =
-                okur_platform::instance::request(&pipe, "quit", std::time::Duration::from_secs(2));
+                okur_windows::instance::request(&pipe, "quit", std::time::Duration::from_secs(2));
         }
         let names = [plan::SCREEN_READER, plan::UI, "okur.exe"];
         let deadline = std::time::Instant::now() + std::time::Duration::from_secs(4);
         loop {
-            let ours: Vec<u32> = okur_platform::process::processes_named(&names)
+            let ours: Vec<u32> = okur_windows::process::processes_named(&names)
                 .into_iter()
                 .filter(|(_, path)| {
                     path.as_deref()
@@ -264,7 +264,7 @@ impl Machine for ThisMachine {
             }
             if std::time::Instant::now() >= deadline {
                 for pid in ours {
-                    let _ = okur_platform::process::terminate(pid);
+                    let _ = okur_windows::process::terminate(pid);
                 }
                 return;
             }
@@ -273,14 +273,14 @@ impl Machine for ThisMachine {
     }
 
     fn delete_at_reboot(&mut self, path: &Path) -> Result<(), String> {
-        okur_platform::process::delete_at_reboot(path)
+        okur_windows::process::delete_at_reboot(path)
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use okur_platform::registry::MemoryRegistry;
+    use okur_windows::registry::MemoryRegistry;
 
     /// A machine that records what it was asked, with a signature verdict and files that
     /// cannot be deleted.

@@ -110,7 +110,7 @@ From what JAWS does, what Okur must be, and what was measured on 2026-10-17:
   - Okur starts `okur-ui` at launch and restarts it if it exits. It talks over a named pipe
     (Windows) or a Unix socket (macOS, Linux). Opening a dialog is then a message and a
     window, with no process start.
-- **okur-platform**: the overlay output and the routing primitives.
+- **okur-windows**: the overlay output and the routing primitives.
   - `VisualTracking`: show rectangles, hide.
     - Windows: one layered, click-through, never-activated, topmost window over the virtual
       screen, as JAWS's.

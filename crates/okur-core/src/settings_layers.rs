@@ -7,7 +7,7 @@
 //!
 //! The layers are kept as setting values by name (the shape [`Settings`] serializes to), so a
 //! layer can hold any one setting; where and how they are stored is the platform's concern
-//! (`okur-platform`'s settings files).
+//! (`okur-windows`'s settings files).
 
 use std::collections::BTreeMap;
 

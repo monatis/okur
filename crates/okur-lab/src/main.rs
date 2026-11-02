@@ -11,7 +11,7 @@ mod aria_at_report;
 use clap::{Parser, Subcommand};
 use okur::run::load_aom_from_path;
 use okur_core::{AomNode, Role, VirtualBuffer, VirtualCursor};
-use okur_platform::{SpeechLog, TtsEngineType, TtsManager};
+use okur_windows::{SpeechLog, TtsEngineType, TtsManager};
 use std::fs;
 use std::path::Path;
 use std::str::FromStr;
@@ -476,7 +476,7 @@ fn capture_snapshot(
 ) -> Result<(), String> {
     let (json, nodes, title, ms) = match api {
         "uia" => {
-            let s = okur_platform::uia_snapshot::capture_foreground_document(
+            let s = okur_windows::uia_snapshot::capture_foreground_document(
                 fixture_sha256,
                 process_version,
             )
@@ -490,7 +490,7 @@ fn capture_snapshot(
             )
         }
         "ia2" => {
-            let s = okur_platform::ia2_snapshot::capture_foreground_document(
+            let s = okur_windows::ia2_snapshot::capture_foreground_document(
                 fixture_sha256,
                 process_version,
             )
@@ -532,7 +532,7 @@ fn visible(speech: &str) -> String {
 
 /// One traced event as a line: its time into the step, kind, window, and the focus chain's
 /// innermost elements (`control type:class:name`).
-fn trace_line(event: &okur_platform::event_trace::TraceEvent, start_ms: u128) -> String {
+fn trace_line(event: &okur_windows::event_trace::TraceEvent, start_ms: u128) -> String {
     let chain: Vec<String> = event
         .focus_chain
         .iter()
@@ -616,7 +616,7 @@ fn print_evidence(
             .and_then(Path::parent)
             .unwrap_or(Path::new("corpus"));
         let (header, events) =
-            okur_platform::event_trace::read_trace(corpus.join("traces").join(file))?;
+            okur_windows::event_trace::read_trace(corpus.join("traces").join(file))?;
         println!(
             "trace {file} (format {}, {} events)",
             header.trace_format_version,
@@ -628,7 +628,7 @@ fn print_evidence(
     };
     // What replay's converter makes of each event, converted in order as replay does, its
     // state carried from one to the next.
-    let mut converter = okur_platform::event_trace::EventConverter::default();
+    let mut converter = okur_windows::event_trace::EventConverter::default();
     let converted: Vec<Vec<String>> = events
         .iter()
         .map(|event| {
@@ -758,7 +758,7 @@ fn init_logging(cli: &Cli) {
 async fn main() {
     let cli = Cli::parse();
     init_logging(&cli);
-    okur_platform::init();
+    okur_windows::init();
 
     match cli.command {
         Some(Commands::Speak {
@@ -862,7 +862,7 @@ async fn main() {
         }
         Some(Commands::WindowText { control }) => {
             #[cfg(windows)]
-            match okur_platform::window_text::foreground_lines(control) {
+            match okur_windows::window_text::foreground_lines(control) {
                 Ok(lines) => {
                     for line in lines {
                         println!("{line}");
@@ -897,9 +897,7 @@ async fn main() {
             let screen = if other_window {
                 Ok(okur_core::screen_model::ScreenModel::default())
             } else {
-                okur_platform::window_text::foreground_screen(
-                    recognize.then_some(language.as_str()),
-                )
+                okur_windows::window_text::foreground_screen(recognize.then_some(language.as_str()))
             };
             #[cfg(windows)]
             match screen {
@@ -970,22 +968,22 @@ async fn main() {
                 use okur_core::recognized_file::FileRecognition;
                 let cancel = std::sync::atomic::AtomicBool::new(false);
                 let recognition = match (path, window_title) {
-                    (Some(path), _) => okur_platform::file_text::recognize_file(
+                    (Some(path), _) => okur_windows::file_text::recognize_file(
                         std::path::Path::new(&path),
                         &language,
                         &cancel,
                     ),
                     (None, Some(title)) => {
-                        use okur_platform::file_text::Selection;
+                        use okur_windows::file_text::Selection;
                         let selection = okur_lab::harness::shell_window(&title)
                             .and_then(|window| {
-                                okur_platform::file_text::selected_file(window)
+                                okur_windows::file_text::selected_file(window)
                                     .inspect_err(|e| eprintln!("the selected file: {e}"))
                                     .ok()
                             })
                             .unwrap_or(Selection::Nothing);
                         match selection {
-                            Selection::File(path) => okur_platform::file_text::recognize_found(
+                            Selection::File(path) => okur_windows::file_text::recognize_found(
                                 &path,
                                 &language,
                                 &cancel,
@@ -996,7 +994,7 @@ async fn main() {
                         }
                     }
                     (None, None) => {
-                        okur_platform::file_text::recognize_selected_file(&language, || {})
+                        okur_windows::file_text::recognize_selected_file(&language, || {})
                     }
                 };
                 if let Some(path) = append_to {
@@ -1190,7 +1188,7 @@ async fn main() {
             let layers = okur_core::settings_layers::SettingsLayers::with_global(
                 &okur_core::settings::Settings::reference_machine(),
             );
-            let folder = okur_platform::settings_file::SettingsFolder::at(&path);
+            let folder = okur_windows::settings_file::SettingsFolder::at(&path);
             folder.save(&layers);
             if folder.load() != layers {
                 eprintln!("Error: {path}: the settings were not written");
@@ -1295,13 +1293,13 @@ async fn main() {
                 fn find<'a>(node: &'a AomNode, name: &str) -> Option<&'a AomNode> {
                     if node.name.as_deref().map(str::trim) == Some(name)
                         && node.role != Role::Text
-                        && okur_platform::actions::unique_id(node).is_some()
+                        && okur_windows::actions::unique_id(node).is_some()
                     {
                         return Some(node);
                     }
                     node.children.iter().find_map(|c| find(c, name))
                 }
-                let page = match okur_platform::actions::capture_foreground_page() {
+                let page = match okur_windows::actions::capture_foreground_page() {
                     Ok(page) => page,
                     Err(e) => {
                         eprintln!("No foreground page: {e}");
@@ -1321,7 +1319,7 @@ async fn main() {
                     }
                 };
                 std::thread::sleep(std::time::Duration::from_millis(500));
-                let focused = okur_platform::uia_snapshot::focused_element_summary();
+                let focused = okur_windows::uia_snapshot::focused_element_summary();
                 println!(
                     "{action} {name:?} ({:?}): {requested:?}; keyboard focus now: {focused}",
                     target.role
@@ -1369,28 +1367,27 @@ async fn main() {
                 let document = window_title
                     .as_deref()
                     .and_then(okur_lab::harness::window_titled)
-                    .and_then(okur_platform::word_om::document_window);
-                let line_spacing =
-                    document.and_then(okur_platform::word_om::selection_line_spacing);
+                    .and_then(okur_windows::word_om::document_window);
+                let line_spacing = document.and_then(okur_windows::word_om::selection_line_spacing);
                 // Whether the document tracks its changes, for Ctrl+Shift+E.
-                let track_changes = document.and_then(okur_platform::word_om::track_revisions);
+                let track_changes = document.and_then(okur_windows::word_om::track_revisions);
                 // The caret's paragraph's alignment, for Ctrl+E, R, J and L.
-                let alignment = document.and_then(okur_platform::word_om::paragraph_alignment);
+                let alignment = document.and_then(okur_windows::word_om::paragraph_alignment);
                 // The selection's font size, for Ctrl+Shift+Period and Comma.
-                let font_size = document.and_then(okur_platform::word_om::selection_font_size);
+                let font_size = document.and_then(okur_windows::word_om::selection_font_size);
                 // Where the caret's paragraph starts from the page's edge, for Ctrl+M and
                 // Ctrl+Shift+M.
-                let left_edge = document.and_then(okur_platform::word_om::paragraph_left_edge);
+                let left_edge = document.and_then(okur_windows::word_om::paragraph_left_edge);
                 // The document's fields, for its list of fields (Insert+F5).
                 let fields = document
-                    .and_then(okur_platform::word_om::document_fields)
+                    .and_then(okur_windows::word_om::document_fields)
                     .unwrap_or_default();
                 // The document's comments, footnotes, endnotes, bookmarks and revisions, for
                 // JAWS's lists of them (Ctrl+Shift+Apostrophe, Insert+Shift+F) and its Virtual
                 // Viewer of them (Windows+Semicolon).
                 let notes = |kind: okur_core::NoteKind| {
                     document
-                        .and_then(|d| okur_platform::word_om::document_notes(d, kind))
+                        .and_then(|d| okur_windows::word_om::document_notes(d, kind))
                         .unwrap_or_default()
                         .into_iter()
                         .map(|note| {
@@ -1416,9 +1413,9 @@ async fn main() {
                 // The form fields at the caret and on its paragraph, for reading them as
                 // controls.
                 let (selected_form_fields, paragraph_form_fields) = document
-                    .and_then(okur_platform::word_om::selection_form_fields)
+                    .and_then(okur_windows::word_om::selection_form_fields)
                     .unwrap_or_default();
-                let form_json = |fields: &[okur_platform::word_om::FormField]| {
+                let form_json = |fields: &[okur_windows::word_om::FormField]| {
                     fields
                         .iter()
                         .map(|f| {
@@ -1704,7 +1701,7 @@ async fn main() {
         }
         Some(Commands::Focus) => {
             #[cfg(windows)]
-            println!("{}", okur_platform::uia_snapshot::focused_element_json());
+            println!("{}", okur_windows::uia_snapshot::focused_element_json());
             #[cfg(not(windows))]
             {
                 eprintln!("the focus is only read on Windows");
@@ -1723,7 +1720,7 @@ async fn main() {
         Some(Commands::ListNotifications { only }) => {
             #[cfg(windows)]
             {
-                use okur_platform::notification_listener as listener;
+                use okur_windows::notification_listener as listener;
                 match listener::access() {
                     Ok(access) => println!("access: {access}"),
                     Err(e) => println!("access: {e}"),

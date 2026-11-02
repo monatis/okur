@@ -15,7 +15,7 @@
 //! Windows adds `/hardwarebuttonlaunch` when a hardware button started the assistive
 //! technology; it is taken as `--ease-of-access`. `--sign-in` starts Okur as this user chose
 //! in the Startup Wizard (Always, Never, Using the All Users Setting), Always when they chose
-//! nothing ([`okur_platform::start_options`]).
+//! nothing ([`okur_windows::start_options`]).
 
 use crate::run::{RunConfig, RunOptions};
 use crate::startup::StartKind;
@@ -80,7 +80,7 @@ pub async fn main() -> i32 {
     let action = match parse(std::env::args().skip(1)) {
         Ok(action) => action,
         Err(e) => {
-            if okur_platform::process::attach_parent_console() {
+            if okur_windows::process::attach_parent_console() {
                 eprintln!("okur-sr: {e}");
             }
             return 2;
@@ -88,7 +88,7 @@ pub async fn main() -> i32 {
     };
     match action {
         Action::Quit => {
-            let console = okur_platform::process::attach_parent_console();
+            let console = okur_windows::process::attach_parent_console();
             match crate::control::quit_this_desktop() {
                 Ok(said) => {
                     if console {
@@ -106,8 +106,8 @@ pub async fn main() -> i32 {
         }
         Action::Doctor(file) => {
             // Never on the secure desktop: a file written there could hold what was typed.
-            let desktop = okur_platform::desktop::thread_desktop().unwrap_or_default();
-            if okur_platform::desktop::is_secure_desktop(&desktop) {
+            let desktop = okur_windows::desktop::thread_desktop().unwrap_or_default();
+            if okur_windows::desktop::is_secure_desktop(&desktop) {
                 return 1;
             }
             let report = crate::doctor::render(&crate::doctor::gather(None));
@@ -117,7 +117,7 @@ pub async fn main() -> i32 {
                     Err(_) => 1,
                 },
                 None => {
-                    if okur_platform::process::attach_parent_console() {
+                    if okur_windows::process::attach_parent_console() {
                         print!("{report}");
                     }
                     0
@@ -126,9 +126,9 @@ pub async fn main() -> i32 {
         }
         Action::Run { start, debug_log } => {
             crate::run::init_logging(debug_log.as_deref(), true);
-            okur_platform::init();
-            let start = start_kind(start, okur_platform::process::started_by_startup_task());
-            okur_platform::process::restart_when_ended();
+            okur_windows::init();
+            let start = start_kind(start, okur_windows::process::started_by_startup_task());
+            okur_windows::process::restart_when_ended();
             crate::run::run(RunConfig {
                 options: RunOptions::default(),
                 fixture: None,
@@ -197,7 +197,7 @@ mod tests {
             start_kind(StartKind::EaseOfAccess, true),
             StartKind::EaseOfAccess
         );
-        assert!(!okur_platform::process::started_by_startup_task());
+        assert!(!okur_windows::process::started_by_startup_task());
     }
 
     #[test]

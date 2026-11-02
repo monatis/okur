@@ -6,7 +6,7 @@ This reference document outlines the Text-To-Speech (TTS) architecture, synthesi
 
 ## 1. Synthesizer Driver Architecture
 
-The TTS subsystem is designed with a cross-platform driver abstraction ([`TtsEngine`](file:///c:/Users/Gigabyte/screen-reader/crates/okur-platform/src/tts/mod.rs)), allowing transparent switching between operating system native voices, synthetic audio pipelines, and silent testing drivers.
+The TTS subsystem is designed with a cross-platform driver abstraction ([`TtsEngine`](file:///c:/Users/Gigabyte/screen-reader/crates/okur-windows/src/tts/mod.rs)), allowing transparent switching between operating system native voices, synthetic audio pipelines, and silent testing drivers.
 
 ```
                       +-------------------+
@@ -47,7 +47,7 @@ The TTS subsystem is designed with a cross-platform driver abstraction ([`TtsEng
 
 ## 2. Synthesizer Control API (`TtsEngine`)
 
-The [`TtsEngine`](file:///c:/Users/Gigabyte/screen-reader/crates/okur-platform/src/tts/mod.rs) trait exposes core screen reader synthesizer primitives:
+The [`TtsEngine`](file:///c:/Users/Gigabyte/screen-reader/crates/okur-windows/src/tts/mod.rs) trait exposes core screen reader synthesizer primitives:
 
 ```rust
 pub trait TtsEngine: Send + Sync {

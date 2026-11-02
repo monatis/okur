@@ -550,7 +550,7 @@ Rust [N29]. Who runs nvdaremote.com today was not confirmed [N30].
   process. So Windows' OCR reads Turkish, and a missing English pack is a real case Okur must
   handle (inferred).
 - From Rust: `windows::Media::Ocr::OcrEngine` in the `windows` crate [M4], which
-  `okur-platform` already uses for OneCore voices (§12).
+  `okur-windows` already uses for OneCore voices (§12).
 - **Windows' newer `TextRecognizer`** needs a Copilot+ PC's NPU (40 TOPS or more, 16 GB) and an
   app with package identity; no languages were found [S4], [S6].
 - **Apple Vision**: `VNRecognizeTextRequest` is reachable from Rust through `objc2-vision`
@@ -871,16 +871,16 @@ Change for a screen reader (proposal §9):
   announcements are typed parts; output types switch parts and messages per level. Remote
   speech can travel as typed parts and be rendered in the listener's language.
 - **Speech output** is text with role marks and an interrupt flag (`TtsEngine`,
-  `crates/okur-platform/src/tts/mod.rs:32`; `SpeechOutput`, `crates/okur-core/src/speech.rs:898`):
+  `crates/okur-windows/src/tts/mod.rs:32`; `SpeechOutput`, `crates/okur-core/src/speech.rs:898`):
   enough to forward speech now; speech sequences with index marks come with SDK M6.
 - **Key routing** has a fixed order of owners
   ([`forms-and-interaction-modes.md`](forms-and-interaction-modes.md), "Who takes a key");
   a remote session becomes its first step. Layers are planned (helper dialogs plan step 10,
   SDK M3).
 - **Password fields** are read only by harness tools today (`IsPassword` in
-  `crates/okur-platform/src/uia_snapshot.rs:552` and `window_text.rs:185`, which leaves their
+  `crates/okur-windows/src/uia_snapshot.rs:552` and `window_text.rs:185`, which leaves their
   value out); Okur's object model has no protected state yet.
-- **WinRT from Rust**: `okur-platform` already uses the `windows` crate's WinRT namespaces for
+- **WinRT from Rust**: `okur-windows` already uses the `windows` crate's WinRT namespaces for
   OneCore voices (`Media_SpeechSynthesis` in its `Cargo.toml`); Windows.Media.Ocr and
   Windows.Data.Pdf are further namespaces of the same crate (inferred).
 - **The lab**: OpenDesk to old-pc, `okur-lab trace`, `okur-lab parity`, `okur-lab live-parity` (in

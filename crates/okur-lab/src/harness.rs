@@ -84,7 +84,7 @@ pub fn virtual_key(name: &str) -> Option<u16> {
     Some(named)
 }
 
-pub use okur_platform::key_input::{is_extended, KEYPAD};
+pub use okur_windows::key_input::{is_extended, KEYPAD};
 
 /// The modifier keys, left and right apart, and Insert (the JAWS key): the keys a chord holds
 /// while the others are pressed, so a lost key-up leaves one of them down for every
@@ -123,7 +123,7 @@ pub fn parse_step(text: &str) -> Result<KeyStep, String> {
 }
 
 #[cfg(windows)]
-pub use okur_platform::key_input::send_key;
+pub use okur_windows::key_input::send_key;
 #[cfg(windows)]
 pub use windows_harness::{
     bring_to_front, foreground_process, foreground_title, ia2_probe_focus, jaws_history,
@@ -185,11 +185,11 @@ mod windows_harness {
 
     /// A chord, then the pause run-scenario.ps1 leaves after one.
     fn chord(keys: &[u16]) {
-        okur_platform::key_input::send_chord(keys);
+        okur_windows::key_input::send_chord(keys);
         std::thread::sleep(KEY_GAP);
     }
 
-    use okur_platform::key_input::send_key;
+    use okur_windows::key_input::send_key;
 
     /// Whether the foreground window's process runs at a higher integrity level than ours
     /// (JAWS's dialogs, an elevated application). Windows refuses our input to it and hides
@@ -337,7 +337,7 @@ mod windows_harness {
     }
 
     /// The line spacing of the selection's paragraph in the focused Word document, from Word's
-    /// own object model (`okur_platform::word_om`), with the time the read took. One JSON line.
+    /// own object model (`okur_windows::word_om`), with the time the read took. One JSON line.
     /// Research: whether Word's object model answers on the lab's Office, and how fast.
     pub fn word_line_spacing_probe() -> String {
         use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
@@ -346,19 +346,19 @@ mod windows_harness {
         let (front, focus) = front_and_focus_windows();
         let window = focus.unwrap_or(front);
         let clock = Instant::now();
-        let spacing = okur_platform::word_om::selection_line_spacing(window);
+        let spacing = okur_windows::word_om::selection_line_spacing(window);
         serde_json::json!({
             "window_class": class_of(window),
             "rule": spacing.map(|s| s.rule),
             "points": spacing.map(|s| s.points),
             "ms": u64::try_from(clock.elapsed().as_millis()).unwrap_or(u64::MAX),
-            "stages": spacing.is_none().then(|| okur_platform::word_om::line_spacing_stages(window)),
+            "stages": spacing.is_none().then(|| okur_windows::word_om::line_spacing_stages(window)),
         })
         .to_string()
     }
 
     /// The fields of the focused Word document, from Word's own object model
-    /// (`okur_platform::word_om::document_fields`): one JSON line each, then the read's time.
+    /// (`okur_windows::word_om::document_fields`): one JSON line each, then the read's time.
     /// Research: what Insert+F5's list can be built from.
     pub fn word_fields_probe() -> Vec<String> {
         use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
@@ -366,7 +366,7 @@ mod windows_harness {
         let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
         let (front, focus) = front_and_focus_windows();
         let clock = Instant::now();
-        let fields = okur_platform::word_om::document_fields(focus.unwrap_or(front));
+        let fields = okur_windows::word_om::document_fields(focus.unwrap_or(front));
         let ms = u64::try_from(clock.elapsed().as_millis()).unwrap_or(u64::MAX);
         let mut lines: Vec<String> = fields
             .iter()
@@ -381,7 +381,7 @@ mod windows_harness {
     }
 
     /// The form fields at the focused Word document's selection and on its paragraph, from
-    /// Word's own object model (`okur_platform::word_om::selection_form_fields`): one JSON line, with
+    /// Word's own object model (`okur_windows::word_om::selection_form_fields`): one JSON line, with
     /// the read's time. Research: what a form field read as a control can be built from.
     pub fn word_form_fields_probe() -> String {
         use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
@@ -389,9 +389,9 @@ mod windows_harness {
         let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
         let (front, focus) = front_and_focus_windows();
         let clock = Instant::now();
-        let fields = okur_platform::word_om::selection_form_fields(focus.unwrap_or(front));
+        let fields = okur_windows::word_om::selection_form_fields(focus.unwrap_or(front));
         let ms = u64::try_from(clock.elapsed().as_millis()).unwrap_or(u64::MAX);
-        let json = |fields: &[okur_platform::word_om::FormField]| {
+        let json = |fields: &[okur_windows::word_om::FormField]| {
             fields.iter().map(|f| format!("{f:?}")).collect::<Vec<_>>()
         };
         serde_json::json!({
@@ -403,14 +403,14 @@ mod windows_harness {
     }
 
     /// Marks the Word document in the window titled `title` saved, so that the recorder closes
-    /// a fixture a scenario changed without Word's question (`okur_platform::word_om::mark_saved`).
+    /// a fixture a scenario changed without Word's question (`okur_windows::word_om::mark_saved`).
     pub fn word_discard_changes(title: &str) -> bool {
         use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
         // SAFETY: COM on this thread; repeated initialization is tolerated.
         let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
         window_titled(title)
-            .and_then(okur_platform::word_om::document_window)
-            .is_some_and(okur_platform::word_om::mark_saved)
+            .and_then(okur_windows::word_om::document_window)
+            .is_some_and(okur_windows::word_om::mark_saved)
     }
 
     /// The window in front, and the window with the keyboard focus in its thread.
@@ -615,7 +615,7 @@ mod windows_harness {
                 );
             }
             let child_id = i32::try_from(&child).unwrap_or(0);
-            uia = match okur_platform::uia_snapshot::capture::automation() {
+            uia = match okur_windows::uia_snapshot::capture::automation() {
                 // SAFETY: a UIA read on a valid automation object.
                 Ok(automation) => match unsafe { automation.ElementFromIAccessible(acc, child_id) }
                 {
@@ -625,15 +625,15 @@ mod windows_harness {
                 Err(e) => serde_json::json!({ "error": e.to_string() }),
             };
         }
-        let uia_focus = okur_platform::uia_snapshot::capture::automation()
+        let uia_focus = okur_windows::uia_snapshot::capture::automation()
             .ok()
-            .map(|automation| okur_platform::uia_snapshot::capture::focus_chain(&automation))
+            .map(|automation| okur_windows::uia_snapshot::capture::focus_chain(&automation))
             .and_then(|chain| chain.last().cloned())
             .map(|n| serde_json::json!({ "name": n.name, "class_name": n.class_name }));
         // Office's own UIA tree below the window: the element with the keyboard focus, or
         // else the first one with the MSAA object's name.
         let msaa_name = msaa.get("name").and_then(|n| n.as_str()).map(str::to_owned);
-        let uia_native = okur_platform::uia_snapshot::capture::automation()
+        let uia_native = okur_windows::uia_snapshot::capture::automation()
             .ok()
             .and_then(|automation| {
                 // SAFETY: UIA reads on a valid automation object and its elements.
@@ -892,17 +892,16 @@ mod windows_harness {
     /// `RunScript`); the clipboard's text is put back afterwards. `clear` empties the history
     /// after reading, so the next read holds only what follows.
     pub fn jaws_history(clear: bool) -> Result<String, String> {
-        let saved = okur_platform::actions::clipboard_text();
+        let saved = okur_windows::actions::clipboard_text();
         let sentinel = format!("__sr_history_{}__", std::process::id());
-        okur_platform::actions::set_clipboard_text(&sentinel)?;
+        okur_windows::actions::set_clipboard_text(&sentinel)?;
         let jaws = Fsapi::connect()?;
         jaws.run_script("CopySpeechHistoryToClipboard")?;
         let deadline = Instant::now() + Duration::from_secs(1);
         let mut history = None;
         while Instant::now() < deadline {
             std::thread::sleep(Duration::from_millis(25));
-            if let Some(text) = okur_platform::actions::clipboard_text().filter(|t| *t != sentinel)
-            {
+            if let Some(text) = okur_windows::actions::clipboard_text().filter(|t| *t != sentinel) {
                 history = Some(text);
                 break;
             }
@@ -910,7 +909,7 @@ mod windows_harness {
         if clear {
             jaws.run_script("ClearSpeechHistory")?;
         }
-        okur_platform::actions::set_clipboard_text(saved.as_deref().unwrap_or_default())?;
+        okur_windows::actions::set_clipboard_text(saved.as_deref().unwrap_or_default())?;
         // JAWS leaves the clipboard alone when its history is empty.
         Ok(history.unwrap_or_default())
     }

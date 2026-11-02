@@ -107,7 +107,7 @@ What is not known:
 Read from the code at `38055533` (2026-10-24).
 
 **Two speech calls.** `speak` gives the synthesizer the text at the punctuation level
-(`crates/okur-platform/src/tts/mod.rs:219-246`, `pronounce::spoken_with`); `speak_symbols` gives
+(`crates/okur-windows/src/tts/mod.rs:219-246`, `pronounce::spoken_with`); `speak_symbols` gives
 it every symbol named (`tts/mod.rs:224-231`, `tts/thread.rs:353-356`, `pronounce::spoken_symbols`
 at `pronounce.rs:158-160`).
 
@@ -126,7 +126,7 @@ Word reading, by path:
    named whatever the level, as JAWS does at Most (510/s7 matches). The word read runs from the
    caret to the end of the field's own word, or to the next space in a Win32 edit read by
    window messages, which reports no word unit (`crates/okur-core/src/editing.rs:434-451`;
-   `crates/okur-platform/src/text_context.rs:381` for page fields, `:939-943` for UIA fields).
+   `crates/okur-windows/src/text_context.rs:381` for page fields, `:939-943` for UIA fields).
    Inf: where the application stops at `\` but reports no word unit, Okur reads
    `\Users\Ada\Downloads` to the next space where JAWS reads `\`. Not silent, so this is
    probably not the owner's path.

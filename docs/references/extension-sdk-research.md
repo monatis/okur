@@ -911,7 +911,7 @@ Gaps:
 What exists:
 - The whole engine runs inside the low-level keyboard hook's callback, under one mutex
   (`crates/okur/src/main.rs:853-902`; the hook procedure calls the callback directly,
-  `crates/okur-platform/src/hook/windows.rs:230`). A key that waits 150 ms for the engine
+  `crates/okur-windows/src/hook/windows.rs:230`). A key that waits 150 ms for the engine
   passes to the application unread (`main.rs:858-867`). Engine work over 20 ms is logged as
   slow (`main.rs:604`).
 - Accessibility events are handled on a tokio task under the same mutex
@@ -974,7 +974,7 @@ Gaps:
   final period where the others have one (`cursor.rs:970`). A message catalog must key words
   by context and keep each message exact, never compose them.
 - **Some formats are already the system's.** Say System Time takes month and day names,
-  patterns and AM/PM from the Windows locale (`crates/okur-platform/src/clock.rs:44-68`); the
+  patterns and AM/PM from the Windows locale (`crates/okur-windows/src/clock.rs:44-68`); the
   English table in `clock.rs:107` is the fallback for tests. "Week {}" is still English.
 - **Case folding is ASCII.** Finding a heading, link or field by text compares with
   `eq_ignore_ascii_case` (`engine/commands.rs:155`, `164`, `173`), which does not fold
@@ -989,7 +989,7 @@ What exists:
 - `Settings` (`crates/okur-core/src/settings.rs:175-183`): voice, keyboard (layout and JAWS
   key), live region append mode, typing echo, viewer display. One global set, saved as JSON at
   `%APPDATA%\Okur\settings.json` and the macOS and XDG equivalents
-  (`crates/okur-platform/src/settings_file.rs:13-28`), through the `SettingsStore` trait
+  (`crates/okur-windows/src/settings_file.rs:13-28`), through the `SettingsStore` trait
   (`settings.rs:186-188`).
 - The reference machine's JAWS settings are a constructor (`settings.rs:218-226`), and parity
   replay reads each evidence file's recorded `DEFAULT.JCF` options
@@ -1021,7 +1021,7 @@ What exists:
   ([`helper-ui-architecture.md`](helper-ui-architecture.md) §3). The architecture page names
   extensions as a reason for this design (requirement 13).
 - The transport is the child process's standard input and output, one JSON message per line
-  (`lib.rs:1-6`; `crates/okur-platform/src/ui_host.rs:1-5`). The architecture page says named
+  (`lib.rs:1-6`; `crates/okur-windows/src/ui_host.rs:1-5`). The architecture page says named
   pipe or Unix socket; the code uses stdio, which is simpler and serves the same purpose.
 
 Gaps:
@@ -1035,7 +1035,7 @@ Gaps:
 ### 7.7 Speech engines and braille
 
 What exists:
-- `TtsEngine` (`crates/okur-platform/src/tts/mod.rs:32-80`): speak text, stop, pause,
+- `TtsEngine` (`crates/okur-windows/src/tts/mod.rs:32-80`): speak text, stop, pause,
   resume, rate, volume, voices, a pitch change for capitals (`mod.rs:41-46`). Drivers:
   OneCore, SAPI 5, no speech, chosen by a closed enum (`mod.rs:83-89`; `settings.rs:136-147`)
   in a factory `match` (`mod.rs:141-180`).
@@ -1075,7 +1075,7 @@ Gaps:
   the snapshot left out. NVDA app modules walk live objects synchronously (§3.4); Okur's
   asynchronous request model is safer for latency and should be kept, with a richer query.
 - macOS input and events are stubs of about 45 lines each
-  (`crates/okur-platform/src/hook/macos.rs`, `events/macos.rs`).
+  (`crates/okur-windows/src/hook/macos.rs`, `events/macos.rs`).
 
 ### 7.9 Verification harness
 
@@ -1087,7 +1087,7 @@ What exists:
   ([`docs/handoff/2026-10-17-whatsapp-web.md`](../handoff/2026-10-17-whatsapp-web.md),
   "Verification").
 - Traces are Windows event streams (MSAA and UIA, format version 7,
-  `crates/okur-platform/src/event_trace.rs:38`) converted to `FocusEvent`s in okur-platform.
+  `crates/okur-windows/src/event_trace.rs:38`) converted to `FocusEvent`s in okur-windows.
   `AccessibilityEvent` itself is serializable (`event.rs:393-394`).
 - Evidence records the JAWS version, keyboard layout, culture and UTC offset
   (`corpus/evidence/308-desktop-time-and-date-evidence.json`, lines 11-16). The newer
@@ -1474,7 +1474,7 @@ JAWS parity measurable.
    today; §9.5 compares them.
 5. **Locale data from CLDR through ICU4X** (plural rules, list and number formatting), and from
    the operating system for dates and times, as Say System Time already does
-   (`okur-platform/src/clock.rs:44-68`).
+   (`okur-windows/src/clock.rs:44-68`).
 6. **Okur's language is a setting**, defaulting to the operating system's display language
    only when a catalog for it exists, otherwise English. Parity tests pin the English catalog.
 7. **Speech language follows content.** Parts carry a language tag when the content has one
@@ -1931,7 +1931,7 @@ Freedom Scientific Script Manual pages share the prefix
   `aom.rs`, `actions.rs`, `settings.rs`, `clock.rs`, `pronounce.rs`, `editing.rs`, `ui.rs`,
   `ui/settings.rs`, `lib.rs`, `Cargo.toml`
 - `crates/okur-ui-model/src/lib.rs`, `crates/okur-ui/src/main.rs`
-- `crates/okur-platform/src/`: `lib.rs`, `hook/mod.rs`, `hook/windows.rs`, `hook/macos.rs`,
+- `crates/okur-windows/src/`: `lib.rs`, `hook/mod.rs`, `hook/windows.rs`, `hook/macos.rs`,
   `events/mod.rs`, `tts/mod.rs`, `settings_file.rs`, `ui_host.rs`, `clock.rs`,
   `event_trace.rs` (header)
 - `crates/okur/src/main.rs`; `crates/okur-corpus/src/parity.rs`, `latency.rs`

@@ -260,9 +260,9 @@ from the [performance review](docs/backlog/performance-review-2026-10-20.md) of 
 - [`crates/okur-core`](crates/okur-core): the engine. The accessibility object model, the
   virtual buffer, keys, focus, live regions, speech phrased as JAWS phrases it, settings,
   and what Okur's dialogs hold. Platform-neutral.
-- [`crates/okur-platform`](crates/okur-platform): Windows bindings (and the future macOS and
-  Linux ones): the event tracer, keyboard hook, speech engines, application actions and the
-  settings files.
+- [`crates/okur-windows`](crates/okur-windows): the Windows driver: the event tracer, keyboard
+  hook, speech engines, application actions and the settings files. A macOS driver will sit
+  beside it.
 - [`crates/okur-corpus`](crates/okur-corpus): parity replay, accepted divergences,
   invariants, the corpus manifest and the latency summary.
 - [`crates/okur`](crates/okur): the screen reader (`okur.exe`: `run`, `quit`, `doctor`,

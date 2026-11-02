@@ -3,7 +3,7 @@
 //! lists the synthesizers' voices. The verification harness is `okur-lab.exe` (crates/okur-lab).
 
 use clap::{Parser, Subcommand};
-use okur_platform::{TtsEngineType, TtsManager};
+use okur_windows::{TtsEngineType, TtsManager};
 use std::str::FromStr;
 
 #[derive(Parser, Debug)]
@@ -114,7 +114,7 @@ fn init_logging(cli: &Cli) {
 async fn main() {
     let cli = Cli::parse();
     init_logging(&cli);
-    okur_platform::init();
+    okur_windows::init();
 
     match cli.command {
         Some(Commands::Run {

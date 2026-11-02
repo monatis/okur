@@ -11,7 +11,7 @@ use crate::scenario::Scenario;
 use crate::snapshots::{self, Api};
 use okur_core::clock::{FixedClock, LocalDateTime, LocaleFormats};
 use okur_core::{Modifiers, ScreenReaderEngine, VirtualBuffer, VirtualCursor};
-use okur_platform::event_trace::{
+use okur_windows::event_trace::{
     is_focus, is_window_renamed, menu_event_from_trace, EventConverter, TraceEvent,
 };
 use serde::Serialize;
@@ -644,9 +644,9 @@ fn replay_scenario(
         // Okur read a redacted one from the trace, JAWS's transcript is redacted the same way
         // (news-article.html's address [239/s3]).
         let redacted = |okur: &str, jaws: Vec<String>| -> Vec<String> {
-            if okur.contains(okur_platform::privacy::ADDRESS_MARK) {
+            if okur.contains(okur_windows::privacy::ADDRESS_MARK) {
                 jaws.iter()
-                    .map(|t| okur_platform::privacy::redact_addresses(t))
+                    .map(|t| okur_windows::privacy::redact_addresses(t))
                     .collect()
             } else {
                 jaws
@@ -1201,8 +1201,8 @@ fn replayable(event: &TraceEvent) -> bool {
 /// read while the caret had not moved yet, and the caret event after it tells where it went
 /// [1035/s1 traces]; after Tab in a protected form it fires none [1056 traces].
 fn selection_alone(
-    event: &okur_platform::event_trace::TraceEvent,
-    step: &[&okur_platform::event_trace::TraceEvent],
+    event: &okur_windows::event_trace::TraceEvent,
+    step: &[&okur_windows::event_trace::TraceEvent],
     at: usize,
 ) -> bool {
     let bare = event.event == "text_selection_change"
@@ -1219,11 +1219,11 @@ fn selection_alone(
 /// (`corpus/traces/<trace_file>`, recorded with `run-scenario.ps1 -TraceDir`).
 #[derive(Default)]
 struct StepEvents {
-    by_step: std::collections::HashMap<String, Vec<okur_platform::event_trace::TraceEvent>>,
+    by_step: std::collections::HashMap<String, Vec<okur_windows::event_trace::TraceEvent>>,
     /// Focus events before the first step (launch and reset), and the window in front with
     /// its renaming (a console titled by what runs in it), and the caret's moves, replayed
     /// silently so the engine knows the window, focus and caret JAWS had when step 1 began.
-    setup: Vec<okur_platform::event_trace::TraceEvent>,
+    setup: Vec<okur_windows::event_trace::TraceEvent>,
     /// The reset keys and when the recorder sent each (unix ms), where it stamped them, so that
     /// they are pressed among the setup events in the order they came.
     reset_times: Vec<(String, u128)>,
@@ -1704,7 +1704,7 @@ impl StepEvents {
             return Ok(Self::default());
         };
         let trace_path = corpus_dir.join("traces").join(trace_file);
-        let (_, events) = okur_platform::event_trace::read_trace(&trace_path)?;
+        let (_, events) = okur_windows::event_trace::read_trace(&trace_path)?;
         let mut by_step = std::collections::HashMap::new();
         let mut starts = std::collections::HashMap::new();
         let mut clipboards = std::collections::HashMap::new();
@@ -1755,7 +1755,7 @@ impl StepEvents {
             // step before it ended.
             let from = u128::from(start).saturating_sub(TICK_MS);
             let from = previous_end.map_or(from, |end| from.max(end + 1));
-            let in_step: Vec<&okur_platform::event_trace::TraceEvent> = events
+            let in_step: Vec<&okur_windows::event_trace::TraceEvent> = events
                 .iter()
                 .filter(|e| e.t_ms >= from && e.t_ms <= u128::from(end))
                 .collect();
@@ -1820,7 +1820,7 @@ impl StepEvents {
         self.screens.get(step_id)
     }
 
-    fn for_step(&self, step_id: &str) -> Vec<okur_platform::event_trace::TraceEvent> {
+    fn for_step(&self, step_id: &str) -> Vec<okur_windows::event_trace::TraceEvent> {
         self.by_step.get(step_id).cloned().unwrap_or_default()
     }
 

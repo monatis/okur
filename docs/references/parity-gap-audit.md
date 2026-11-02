@@ -232,7 +232,7 @@ Root causes:
 
 - Class: different handling. Causes 1 and 2 are defects. Causes 3 and 4 are dev-box rules that
   old-pc contradicts. Part of it is a replay artifact: live Okur reads a changed part of the page
-  again when a focus is not in its buffer (`crates/okur-platform/src/events/windows.rs:316-330`),
+  again when a focus is not in its buffer (`crates/okur-windows/src/events/windows.rs:316-330`),
   which replay cannot do.
 - Verified: parity output; `okur-lab evidence 219-web-chat-patterns --trace`; `okur-lab lines` on the
   snapshot; the fixture (labels set on focus, `corpus/fixtures/web-chat.html:76-81`).
@@ -268,7 +268,7 @@ and on the way back "General Page | Read-only ...". Okur says only the focused c
 **The tab row in the window view (323/s4-s7).** JAWS's Virtualize Window shows "General Security
 Details Previous Versions" as its second line. Okur's view has no tab row, so the next three
 steps are one line off.
-- Root: `crates/okur-platform/src/screen_lines.rs:377-455` (`read_layout`) builds a dialog's rows
+- Root: `crates/okur-windows/src/screen_lines.rs:377-455` (`read_layout`) builds a dialog's rows
   from each child window's Win32 text. A tab control has no window text; its tabs are items. The
   tracer uses the same function, so the replayed view is what live Okur shows (inferred).
 - The same function keeps the left-to-right marks Windows puts around the dates (U+200E, visible
@@ -299,7 +299,7 @@ arrival, and access keys are such lines (`native_focus.rs:95`, `116`).
 **WinForms window view (322).**
 - s3, s4: a replay artifact. In replay `read_window` returns false
   (`crates/okur-core/src/actions.rs:45-48`), so the viewer shows only the title and the field.
-  Live Okur reads the window through UIA (`crates/okur-platform/src/window_text.rs`), which is
+  Live Okur reads the window through UIA (`crates/okur-windows/src/window_text.rs`), which is
   not measured. JAWS's own view has screen-capture errors ("DocumentsPlan", and "Documennts" in a
   second trial) that Okur deliberately avoids (`viewer_text.rs:14-16`).
 - s15, s16: JAWS's Virtualize Current Control on a list view shows one row, the last one
@@ -519,7 +519,7 @@ What JAWS sent its synthesizer at punctuation Most, the level old-pc's voice pro
 
 What Okur does:
 - Its spoken text is the history text with the role marks removed (`pronounce.rs:62-66`).
-- Live, the synthesizer gets the text as it is (`crates/okur-platform/src/tts/mod.rs:183-189`).
+- Live, the synthesizer gets the text as it is (`crates/okur-windows/src/tts/mod.rs:183-189`).
 - Only a character read alone gets JAWS's names (`pronounce.rs:26-37`, `68-125`, measured in
   307).
 - There is no punctuation setting in `settings.rs`.
@@ -773,7 +773,7 @@ takes, what proves it, and whether old-pc must record anything new.
    - What: map `haspopup=menu` to a menu button; read preformatted text with its lines (UIA
      TextPattern); accept that block quotes cannot be seen through UIA. Measure how long users
      stay on the UIA buffer with `okur-lab latency` on real pages before doing more (section 4).
-   - Where: `crates/okur-platform/src/uia_snapshot.rs:274-370`.
+   - Where: `crates/okur-windows/src/uia_snapshot.rs:274-370`.
    - Effort: half a day for haspopup; about a day for preformatted text.
    - Proof: `okur-lab parity --api uia` (210: up to 2 steps; 207: up to 19).
    - Recording: none.

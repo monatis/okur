@@ -62,7 +62,7 @@ box: only `okur doctor` (read only) and the test suite ran here.
 
 | Item | State | Where | Tests |
 | --- | --- | --- | --- |
-| `okur doctor [--pid N]`: session, desktop and input desktop, account and SID, integrity, `TokenUIAccess`, elevation and its type, whether the executable is under Program Files, its signature (`WinVerifyTrust`), its embedded manifest, the screen-reader flag, the copy running on this desktop, the AT key and both `Configuration` lists | done | `crates/okur/src/doctor.rs`; `okur-platform`'s `elevation.rs`, `desktop.rs`, `signature.rs`, `registry.rs`, `ease_of_access.rs` | `doctor::tests` (the report, Program Files), `elevation::tests`, `signature::tests`, `desktop::tests`, `ease_of_access::tests`, `registry::tests` |
+| `okur doctor [--pid N]`: session, desktop and input desktop, account and SID, integrity, `TokenUIAccess`, elevation and its type, whether the executable is under Program Files, its signature (`WinVerifyTrust`), its embedded manifest, the screen-reader flag, the copy running on this desktop, the AT key and both `Configuration` lists | done | `crates/okur/src/doctor.rs`; `okur-windows`'s `elevation.rs`, `desktop.rs`, `signature.rs`, `registry.rs`, `ease_of_access.rs` | `doctor::tests` (the report, Program Files), `elevation::tests`, `signature::tests`, `desktop::tests`, `ease_of_access::tests`, `registry::tests` |
 | `okur-sr.exe --doctor-exit [file]`: the report of the UI Access process itself, to the console that started it or to a file (never on the secure desktop) | done | `crates/okur/src/sr.rs` | `sr::tests` |
 | E1 without a certificate (case (a)) | done on old-pc, 2026-10-20 (`startup-checks.ps1`, log below): an unsigned `okur-sr.exe` with `uiAccess="true"` does not start, "A referral was returned from the server" | old-pc | `checks.log` |
 | E1 with the certificate, E0, and §4's C9 and C14 verdicts | not done | old-pc | needs the owner's certificate steps (Q1: yes) |
@@ -72,13 +72,13 @@ box: only `okur doctor` (read only) and the test suite ran here.
 | Item | State | Where | Tests |
 | --- | --- | --- | --- |
 | The library split: `crates/okur` is a library (`run`, `startup`, `control`, `doctor`, `sr`) with `okur.exe` (console, no UI Access, runs from `target\` as before), `okur-sr.exe` (no console, `uiAccess="true"`) and `okur-sr-no-uiaccess.exe` (for installs whose signature does not verify) | done | `crates/okur/{build.rs,manifests/,src/}` | build; `mt.exe` above. `okur-sr` has no test binary of its own (a test program with its manifest would not start) |
-| The keyboard hook on its own thread's desktop; the forced `OpenDesktopW("default")` is gone | done | `okur-platform/src/hook/windows.rs` | live only |
-| The mutex `Local\Okur-<desktop>`, held by a thread of its own; an automatic start steps aside for a running copy, a manual start asks it to quit (4 s) and ends it if it stays | done | `okur-platform/src/instance.rs`, `crates/okur/src/startup.rs` | `startup::tests` (the instance rules against a stand-in), `instance::tests::one_copy_holds_the_lock_at_a_time` (a real mutex) |
+| The keyboard hook on its own thread's desktop; the forced `OpenDesktopW("default")` is gone | done | `okur-windows/src/hook/windows.rs` | live only |
+| The mutex `Local\Okur-<desktop>`, held by a thread of its own; an automatic start steps aside for a running copy, a manual start asks it to quit (4 s) and ends it if it stays | done | `okur-windows/src/instance.rs`, `crates/okur/src/startup.rs` | `startup::tests` (the instance rules against a stand-in), `instance::tests::one_copy_holds_the_lock_at_a_time` (a real mutex) |
 | The control pipe `\\.\pipe\okur-<session>-<desktop>` (DACL: the user, SYSTEM, Administrators; local clients only; first instance only): `ping`, `status`, `quit`. `okur quit` and `okur-sr.exe --quit` | done | `instance.rs`, `crates/okur/src/control.rs` | `instance::tests::the_control_pipe_answers_one_line` (a real pipe), `control::tests` |
-| `SPI_SETSCREENREADER` on while Okur runs (only when it was off, and cleared only then: JAWS may have it on), `SetProcessShutdownParameters(0x100, SHUTDOWN_NORETRY)`, a hidden top-level window for `WM_QUERYENDSESSION`/`WM_ENDSESSION`, and one exit path for every way out | done | `okur-platform/src/process.rs`, `crates/okur/src/run.rs` | live only |
+| `SPI_SETSCREENREADER` on while Okur runs (only when it was off, and cleared only then: JAWS may have it on), `SetProcessShutdownParameters(0x100, SHUTDOWN_NORETRY)`, a hidden top-level window for `WM_QUERYENDSESSION`/`WM_ENDSESSION`, and one exit path for every way out | done | `okur-windows/src/process.rs`, `crates/okur/src/run.rs` | live only |
 | The Shift+Shift escape at `--ease-of-access` and `--sign-in` | done | `process.rs`, `startup.rs` | `process::tests` (a mock key state), `startup::tests::both_shifts_stop_an_automatic_start_only` |
-| `elevation.rs` reads `TokenUIAccess` and the integrity level; the startup note about elevated windows depends on both | done | `okur-platform/src/elevation.rs` | `elevation::tests` |
-| `okur-ui` started with a copy of Okur's token, UI Access cleared and integrity Medium, and allowed the foreground for each dialog | done, **only when Okur has UI Access**: an `okur run` started from an administrator terminal keeps its `okur-ui` at its own level, as before | `okur-platform/src/lowered_process.rs`, `ui_host.rs` | live only (`okur doctor --pid <okur-ui's pid>`) |
+| `elevation.rs` reads `TokenUIAccess` and the integrity level; the startup note about elevated windows depends on both | done | `okur-windows/src/elevation.rs` | `elevation::tests` |
+| `okur-ui` started with a copy of Okur's token, UI Access cleared and integrity Medium, and allowed the foreground for each dialog | done, **only when Okur has UI Access**: an `okur run` started from an administrator terminal keeps its `okur-ui` at its own level, as before | `okur-windows/src/lowered_process.rs`, `ui_host.rs` | live only (`okur doctor --pid <okur-ui's pid>`) |
 | Argument handling | done | `sr.rs` | `sr::tests` |
 
 Decisions made on the way, for the owner to confirm or reverse:
@@ -89,7 +89,7 @@ Decisions made on the way, for the owner to confirm or reverse:
 - **M4's Run-key resolver is built** (2026-10-25): `--sign-in` reads the user's choice in
   `HKCU\SOFTWARE\Okur\StartAfterSignIn` (none is Always) and the machine's
   `StartAfterSignInAllUsers`, and ends silently where they say not to start
-  (`okur_platform::start_options`; `SilentExit::NotAfterSignIn`). The Startup Wizard's Run
+  (`okur_windows::start_options`; `SilentExit::NotAfterSignIn`). The Startup Wizard's Run
   Okur Settings sets the user's choice, "Start Okur after logon for this user: Always, Never,
   Using the All Users Setting". Not built yet: Always's Ease of Access start (Okur's name in
   HKCU `Configuration`, waiting for E6), and the administrators' options.
@@ -460,7 +460,7 @@ chooses its voice and rate on the sign-in screen is not in its help; experiment 
   - none in HKCU.
 - **Audio.** Narrator speaks on the sign-in screen with OneCore voices, so WinRT speech and a
   shared-mode audio stream work for SYSTEM in the user's session (**inferred** from Narrator's
-  behavior). Okur's OneCore engine and its WASAPI stream (`crates/okur-platform/src/tts/onecore.rs`)
+  behavior). Okur's OneCore engine and its WASAPI stream (`crates/okur-windows/src/tts/onecore.rs`)
   must still be tested there (E3).
 
 ### 2.6 uiAccess: what it gives, what it needs
@@ -749,13 +749,13 @@ options with Windows' own mechanism.
 
 It is a console program: it uses `println!` throughout.
 
-**Settings** (`crates/okur-platform/src/settings_file.rs`):
+**Settings** (`crates/okur-windows/src/settings_file.rs`):
 
 - TOML files in `%APPDATA%\Okur`: `settings.toml`, `applications/*.toml`, `sites/*.toml`;
 - the engine writes through `set_settings_store`;
 - as SYSTEM, `%APPDATA%` would resolve to the system profile.
 
-**`crates/okur-platform/src/hook/windows.rs:148-156`.** The hook thread calls
+**`crates/okur-windows/src/hook/windows.rs:148-156`.** The hook thread calls
 `OpenDesktopW("default")` and `SetThreadDesktop` before `SetWindowsHookExW(WH_KEYBOARD_LL)`.
 This came in with commit `05732dd` (2026-10-13, before the audit), with no reason given. On the
 secure desktop this would hook the user's desktop instead of `Winlogon`. It must go.
@@ -1226,7 +1226,7 @@ after the certificate expires.
   business.
 - **After login.** A LaunchAgent in the Aqua session, or `SMAppService` (macOS 13+). Each user
   grants Accessibility and Input Monitoring once.
-- **Design consequence.** Two platform traits in `okur-platform`:
+- **Design consequence.** Two platform traits in `okur-windows`:
   - `Autostart`. Windows implements all three of JAWS's options. On macOS the sign-in-screen
     option is reported unavailable, and Okur's settings say so ("VoiceOver reads the login
     window").

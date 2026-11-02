@@ -167,13 +167,13 @@ Every OCR and description command takes the same five steps:
 
 - **`okur-vision`** (new, platform-neutral): requests and results, the two engine traits, the
   guard, the engine registry, mocks. No platform or network code.
-- **`okur-platform`** gains capture traits, each with Windows and macOS drivers and a mock
+- **`okur-windows`** gains capture traits, each with Windows and macOS drivers and a mock
   that returns fixture images:
   - `ScreenCapture`, over xa11y's `ScreenshotProvider` (research §12) and the element and
     window rectangles Okur already reads;
   - `DocumentRender`: a PDF page to pixels (Windows.Data.Pdf [research O9]; PDFKit on macOS);
   - `CameraCapture`: one frame (Media Foundation; AVFoundation).
-- **OS OCR drivers** in `okur-platform`: Windows.Media.Ocr, Apple Vision.
+- **OS OCR drivers** in `okur-windows`: Windows.Media.Ocr, Apple Vision.
 - **`okur-models`** (new program): the process host for local models (§7.2).
 - **`okur-providers`** (new, V4): the cloud clients, Sign in with ChatGPT, the credential
   store, the consent records. The only crate that opens connections for descriptions.
@@ -534,7 +534,7 @@ everything (research §7.4).
   rendezvous, so one relay can serve both programs.
 - **`okur-core`**: the remote session as step 0 of key routing ("Who takes a key"); forwarding
   announcements; rendering remote ones with a "remote" voice context (SDK §6.4).
-- **`okur-platform`**: key injection by scan code (SendInput on Windows, CGEvent on macOS);
+- **`okur-windows`**: key injection by scan code (SendInput on Windows, CGEvent on macOS);
   SendSAS through Okur's service; the curtain.
 - **`okur-ui`**: Get help, Give help, Allow, Paired computers.
 

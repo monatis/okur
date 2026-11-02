@@ -2,7 +2,7 @@
 resolver = "2"
 members= [
     "crates/okur-core",
-    "crates/okur-platform",
+    "crates/okur-windows",
     "crates/okur-corpus",
     "crates/okur",
     "crates/okur-lab",
@@ -25,7 +25,7 @@ license = "Apache-2.0"
 
 [workspace.dependencies]
 okur-core = { path = "crates/okur-core" }
-okur-platform = { path = "crates/okur-platform" }
+okur-windows = { path = "crates/okur-windows" }
 okur-corpus = { path = "crates/okur-corpus" }
 okur-ui-model = { path = "crates/okur-ui-model" }
 serde = { version = "1.0", features = ["derive"] }

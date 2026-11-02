@@ -86,7 +86,7 @@ Its screen capture shows these faults, on the dev box unless cited:
 
 Okur reads the window through UI Automation when the key is pressed, on the actions worker
 thread, never in the keyboard hook. The viewer opens when the text arrives.
-- `okur-platform::window_text` reads the elements and where they are.
+- `okur-windows::window_text` reads the elements and where they are.
 - `okur-core::viewer_text` lays them out.
 - `okur-lab window-text [--control]` prints the same lines for the window in front, for
   comparing with JAWS.

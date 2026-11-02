@@ -37,11 +37,8 @@ pub mod window_text;
 pub mod word_om;
 
 pub use bridge::{PlatformBridge, PlatformError};
-pub use events::{
-    create_event_listener, AccessibilityEvent, AccessibilityEventListener, FocusEvent,
-    LiveRegionEvent, Politeness,
-};
-pub use hook::{create_keyboard_hook, Key, KeyAction, KeyEvent, KeyboardHook, Modifiers};
+pub use events::{create_event_listener, AccessibilityEventListener};
+pub use hook::{create_keyboard_hook, KeyboardHook};
 pub use tts::{
     NoSpeechEngine, Sapi5Engine, SpeechLog, SpeechLogEntry, SpeechLogKind, TtsEngine,
     TtsEngineType, TtsError, TtsManager, VoiceInfo,
@@ -70,7 +67,7 @@ pub fn init() {
         // 2 is per-monitor: positions and sizes are real pixels.
         tracing::info!(set = set.is_ok(), awareness = awareness.0, "DPI awareness");
     }
-    tracing::info!("okur-platform initialized");
+    tracing::info!("okur-windows initialized");
 }
 
 #[cfg(test)]

@@ -181,7 +181,7 @@ Write down what JAWS should say before writing code.
 - **Where code goes:**
   - `okur-core`: the engine, editing, speech, and `apps::*` for application-specific behavior,
     like JAWS app scripts;
-  - `okur-platform`: the tracer, UIA/IA2/MSAA reads, TTS, the keyboard hook;
+  - `okur-windows`: the tracer, UIA/IA2/MSAA reads, TTS, the keyboard hook;
   - `xa11y`: the vendored accessibility layer.
 - **No fixture-shaped special cases.** Code must not branch on fixture text or window titles.
 - **Known gaps** become `#[ignore = "known gap: ..."]` tests that assert JAWS's behavior.

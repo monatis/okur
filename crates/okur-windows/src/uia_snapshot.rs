@@ -143,7 +143,7 @@ impl UiaNode {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SnapshotProvenance {
     pub format_version: u32,
-    /// `okur-platform` crate version that performed the capture.
+    /// `okur-windows` crate version that performed the capture.
     pub tool_version: String,
     pub host: String,
     pub os_version: String,

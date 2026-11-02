@@ -10,10 +10,10 @@
 
 use std::path::Path;
 
-use okur_platform::registry::SystemRegistry;
 use okur_setup::args::{self, Args, Task};
 use okur_setup::plan::InstallDir;
 use okur_setup::setup::{self, InstallOptions, Outcome, ThisMachine};
+use okur_windows::registry::SystemRegistry;
 
 const TITLE: &str = "Okur Setup";
 
@@ -82,7 +82,7 @@ fn machine_part(args: &Args, dir: &InstallDir) -> Result<String, String> {
 fn elevated_part(args: &Args) -> Result<String, String> {
     let report = std::env::temp_dir().join(format!("okur-setup-{}.txt", std::process::id()));
     let exe = std::env::current_exe().map_err(|e| e.to_string())?;
-    let started = okur_platform::process::shell_execute(
+    let started = okur_windows::process::shell_execute(
         &exe,
         &args::worker_line(args, &report),
         Some("runas"),
@@ -101,7 +101,7 @@ fn elevated_part(args: &Args) -> Result<String, String> {
 }
 
 fn run() -> i32 {
-    let console = okur_platform::process::attach_parent_console();
+    let console = okur_windows::process::attach_parent_console();
     let args = match args::parse(std::env::args().skip(1)) {
         Ok(args) => args,
         Err(e) => {
@@ -127,7 +127,7 @@ fn run() -> i32 {
         let _ = std::fs::write(report, text);
         return code;
     }
-    let elevated = okur_platform::elevation::is_elevated();
+    let elevated = okur_windows::elevation::is_elevated();
     let result = if elevated {
         machine_part(&args, &dir)
     } else {
@@ -141,7 +141,7 @@ fn run() -> i32 {
             Task::Install { start: true, .. } if !elevated => {
                 // Through the shell, as a UI Access program must be started, as the user.
                 if let Err(e) =
-                    okur_platform::process::shell_execute(&dir.screen_reader(), "", None, false)
+                    okur_windows::process::shell_execute(&dir.screen_reader(), "", None, false)
                 {
                     text.push_str(&format!("\nOkur did not start: {e}"));
                 }
@@ -168,6 +168,6 @@ fn say(console: bool, silent: bool, text: &str) {
     if console {
         println!("{text}");
     } else if !silent {
-        okur_platform::process::message_box(TITLE, text);
+        okur_windows::process::message_box(TITLE, text);
     }
 }

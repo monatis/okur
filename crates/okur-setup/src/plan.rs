@@ -5,8 +5,8 @@
 
 use std::path::{Path, PathBuf};
 
-use okur_platform::ease_of_access;
-use okur_platform::registry::{Hive, RegValue};
+use okur_windows::ease_of_access;
+use okur_windows::registry::{Hive, RegValue};
 
 /// The product's folder name, under Program Files.
 pub const FOLDER: &str = "Okur";

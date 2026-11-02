@@ -5,7 +5,7 @@ pub mod mock;
 pub mod windows;
 
 use crate::PlatformError;
-pub use okur_core::event::{AccessibilityEvent, FocusEvent, LiveRegionEvent, Politeness};
+use okur_core::event::AccessibilityEvent;
 use tokio::sync::mpsc::UnboundedSender;
 
 /// Common cross-platform abstraction for OS-level accessibility event listeners.

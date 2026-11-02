@@ -917,7 +917,7 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "okur-core",
- "okur-platform",
+ "okur-windows",
  "serde",
  "serde_json",
  "tokio",
@@ -946,7 +946,7 @@ name = "okur-corpus"
 version = "0.1.0"
 dependencies = [
  "okur-core",
- "okur-platform",
+ "okur-windows",
  "serde",
  "serde_json",
  "sha2",
@@ -963,7 +963,7 @@ dependencies = [
  "okur",
  "okur-core",
  "okur-corpus",
- "okur-platform",
+ "okur-windows",
  "regex",
  "serde",
  "serde_json",
@@ -975,30 +975,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "okur-platform"
-version = "0.1.0"
-dependencies = [
- "okur-core",
- "okur-ui-model",
- "serde",
- "serde_json",
- "thiserror",
- "tokio",
- "toml",
- "toml_edit",
- "tracing",
- "windows",
- "windows-core",
- "windows-future",
- "xa11y",
- "xa11y-windows",
-]
-
-[[package]]
 name = "okur-setup"
 version = "0.1.0"
 dependencies = [
- "okur-platform",
+ "okur-windows",
 ]
 
 [[package]]
@@ -1025,6 +1005,26 @@ version = "0.1.0"
 dependencies = [
  "serde",
  "serde_json",
+]
+
+[[package]]
+name = "okur-windows"
+version = "0.1.0"
+dependencies = [
+ "okur-core",
+ "okur-ui-model",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tokio",
+ "toml",
+ "toml_edit",
+ "tracing",
+ "windows",
+ "windows-core",
+ "windows-future",
+ "xa11y",
+ "xa11y-windows",
 ]
 
 [[package]]

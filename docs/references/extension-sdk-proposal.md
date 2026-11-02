@@ -365,7 +365,7 @@ any other window, through the same code that reads its own dialogs.
 
 ### 5.6 Drivers
 
-**Speech synthesizer drivers** replace the closed enum (`crates/okur-platform/src/tts/mod.rs:83-89`):
+**Speech synthesizer drivers** replace the closed enum (`crates/okur-windows/src/tts/mod.rs:83-89`):
 
 ```
 trait SpeechDriver {
@@ -502,7 +502,7 @@ pass-key-through = Enter key to pass through
 **Choosing the language:** a setting, `speech.language`, English by default (D3). Okur's words
 use it; the application's words are spoken as the application gives them. Dates and times keep
 coming from the system's locale, as Say System Time does now
-(`crates/okur-platform/src/clock.rs:44-68`).
+(`crates/okur-windows/src/clock.rs:44-68`).
 
 ### 6.3 Symbols and punctuation
 
@@ -662,7 +662,7 @@ Stage 1 is required for extensions. Stage 2 follows Microsoft's advice and is do
   keys. On Turkish Q the `;` key types "ş", and JAWS ran its onMouseOver command for it
   ([`jaws-quick-navigation-keys.md`](jaws-quick-navigation-keys.md), evidence 110/s8).
 - Okur already maps Windows virtual keys, not typed characters (`VK_OEM_1` becomes `Semicolon`,
-  `crates/okur-platform/src/hook/windows.rs:415`). The key file names keys as JAWS does
+  `crates/okur-windows/src/hook/windows.rs:415`). The key file names keys as JAWS does
   (`SemiColon`, `Apostrophe`, `Comma`).
 - On macOS, key codes are positions, which fits the same model.
 - Key help says the character the user's layout produces for each key, in the user's language.
@@ -709,7 +709,7 @@ front, as JAWS's does; Settings Center chooses the scope with an Application com
 
 Storage: one TOML file per scope under Okur's settings folder (`settings.toml`,
 `applications/<id>.toml`, `sites/<host>.toml`), built in the reading-settings round
-(`crates/okur-core/src/settings_layers.rs`, `crates/okur-platform/src/settings_file.rs`);
+(`crates/okur-core/src/settings_layers.rs`, `crates/okur-windows/src/settings_file.rs`);
 extensions' values will go under their own id. The format can change freely while AGENTS.md's
 notice stands.
 
@@ -877,7 +877,7 @@ output_types = ["whatsapp.message"]
   Okur's own types (`AccessibilityEvent` is already serializable, `event.rs:393-394`).
 - It is platform-neutral: recorded on Windows, replayed on Linux CI.
 - It sits beside the platform trace that parity uses today
-  (`crates/okur-platform/src/event_trace.rs`), and is written by the developer interface or
+  (`crates/okur-windows/src/event_trace.rs`), and is written by the developer interface or
   by `okur-lab trace`.
 - Personal content (messages, names) never enters a test committed to a public registry; the
   developer interface offers to replace text with placeholders before saving.

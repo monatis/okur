@@ -6,11 +6,11 @@
 //! - `quit`: `quitting`, and the copy exits without asking (the installer, `okur quit`,
 //!   `okur-sr.exe --quit`, and a manual start taking over).
 //!
-//! The transport, the pipe and its security, is `okur_platform::instance`'s.
+//! The transport, the pipe and its security, is `okur_windows::instance`'s.
 
 use std::time::Duration;
 
-use okur_platform::instance;
+use okur_windows::instance;
 
 use crate::startup::Instances;
 
@@ -118,14 +118,14 @@ pub fn answer(line: &str, status: &Status, on_quit: &dyn Fn()) -> String {
 
 /// The control pipe of the copy on this process's desktop.
 pub fn this_desktop_pipe() -> String {
-    let session = okur_platform::desktop::session_id().unwrap_or(0);
-    let desktop = okur_platform::desktop::thread_desktop().unwrap_or_else(|| "Default".into());
+    let session = okur_windows::desktop::session_id().unwrap_or(0);
+    let desktop = okur_windows::desktop::thread_desktop().unwrap_or_else(|| "Default".into());
     instance::pipe_name(session, &desktop)
 }
 
 /// The lock of this process's desktop.
 pub fn this_desktop_lock() -> String {
-    let desktop = okur_platform::desktop::thread_desktop().unwrap_or_else(|| "Default".into());
+    let desktop = okur_windows::desktop::thread_desktop().unwrap_or_else(|| "Default".into());
     instance::lock_name(&desktop)
 }
 
@@ -180,7 +180,7 @@ impl Instances for SystemInstances {
 
     fn terminate(&mut self, pid: u32) {
         tracing::warn!(pid, "the running copy did not quit: it is ended");
-        if let Err(e) = okur_platform::process::terminate(pid) {
+        if let Err(e) = okur_windows::process::terminate(pid) {
             tracing::warn!(pid, error = %e, "the running copy could not be ended");
         }
     }

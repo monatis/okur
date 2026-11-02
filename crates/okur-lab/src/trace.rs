@@ -12,8 +12,8 @@ pub fn run_trace(
     max_ms: u64,
     page_changes: bool,
 ) -> Result<usize, String> {
-    use okur_platform::event_trace::{TraceEvent, TraceHeader, TRACE_FORMAT_VERSION};
-    use okur_platform::privacy;
+    use okur_windows::event_trace::{TraceEvent, TraceHeader, TRACE_FORMAT_VERSION};
+    use okur_windows::privacy;
     use std::io::Write;
     let io_err = |e: std::io::Error| format!("{out:?}: {e}");
     let mut file = std::fs::File::create(out).map_err(io_err)?;
@@ -42,7 +42,7 @@ pub fn run_trace(
         }
     };
     let deadline = std::time::Instant::now() + std::time::Duration::from_millis(max_ms);
-    Ok(okur_platform::event_trace::run_recording(
+    Ok(okur_windows::event_trace::run_recording(
         Box::new(sink),
         page_changes,
         || std::time::Instant::now() < deadline && !stop_file.is_some_and(|p| p.exists()),

@@ -1,5 +1,6 @@
-use super::{HookCallback, Key, KeyAction, KeyEvent, KeyboardHook, Modifiers};
+use super::{HookCallback, KeyboardHook};
 use crate::PlatformError;
+use okur_core::input::{Key, KeyAction, KeyEvent, Modifiers};
 use std::collections::HashSet;
 use std::sync::atomic::{AtomicBool, AtomicU32, AtomicUsize, Ordering};
 use std::sync::Mutex;

@@ -69,10 +69,10 @@ pub fn read_text_now() -> Option<okur_core::TextContext> {
     }
     .ok()?;
     // As the tracer decides: a page's field only with a document above the focus.
-    if okur_platform::text_context::focus_is_in_page(&uia) {
-        okur_platform::text_context::read_focused(&uia)
+    if okur_windows::text_context::focus_is_in_page(&uia) {
+        okur_windows::text_context::read_focused(&uia)
     } else {
-        okur_platform::text_context::read_focused_outside_page(&uia)
+        okur_windows::text_context::read_focused_outside_page(&uia)
     }
 }
 /// The headings of Word's document, read right away on the calling thread: the focused one,
@@ -96,7 +96,7 @@ pub fn document_headings_now(
         CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
     }
     .ok()?;
-    okur_platform::text_context::word_document_headings(&uia, window)
+    okur_windows::text_context::word_document_headings(&uia, window)
 }
 
 /// The links of Word's document, read right away on the calling thread, as
@@ -117,7 +117,7 @@ pub fn document_links_now(window_title: Option<&str>) -> Option<Vec<okur_core::D
         CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
     }
     .ok()?;
-    okur_platform::text_context::word_document_links(&uia, window)
+    okur_windows::text_context::word_document_links(&uia, window)
 }
 
 /// The paragraphs of Word's document, read right away on the calling thread, as
@@ -140,7 +140,7 @@ pub fn document_paragraphs_now(
         CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
     }
     .ok()?;
-    okur_platform::text_context::word_document_paragraphs(&uia, window)
+    okur_windows::text_context::word_document_paragraphs(&uia, window)
 }
 
 /// The view Word's window shows its document in, read right away on the calling thread: the
@@ -161,7 +161,7 @@ pub fn document_view_now(window_title: Option<&str>) -> Option<String> {
         CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
     }
     .ok()?;
-    okur_platform::text_context::word_view(&uia, window)
+    okur_windows::text_context::word_view(&uia, window)
 }
 
 /// Everything any ask of the place reads, for a recording's snapshot that answers them all in
@@ -171,13 +171,13 @@ pub fn document_view_now(window_title: Option<&str>) -> Option<String> {
 pub fn sheet_place_complete_now(window_title: Option<&str>) -> Option<okur_core::SheetPlace> {
     use okur_core::actions::SheetCells;
     let grid = sheet_grid(window_title)?;
-    let mut place = okur_platform::excel_om::sheet_place(grid, SheetCells::Lines)?;
-    let around = okur_platform::excel_om::sheet_place(grid, SheetCells::Around(None));
+    let mut place = okur_windows::excel_om::sheet_place(grid, SheetCells::Lines)?;
+    let around = okur_windows::excel_om::sheet_place(grid, SheetCells::Around(None));
     if let Some(around) = around {
         (place.title_row, place.title_column) = (around.title_row, around.title_column);
     }
-    place.format = okur_platform::excel_om::cell_format(grid);
-    (place.column_sum, place.row_sum) = okur_platform::excel_om::cell_sums(grid);
+    place.format = okur_windows::excel_om::cell_format(grid);
+    (place.column_sum, place.row_sum) = okur_windows::excel_om::cell_sums(grid);
     Some(place)
 }
 
@@ -199,7 +199,7 @@ pub fn status_bar_now(window_title: Option<&str>) -> Option<Vec<String>> {
         CoCreateInstance(&CUIAutomation8, None, CLSCTX_INPROC_SERVER)
     }
     .ok()?;
-    okur_platform::text_context::word_status_bar(&uia, window)
+    okur_windows::text_context::word_status_bar(&uia, window)
 }
 
 /// Performs an action on a node's live object right away, on the calling thread, reporting
@@ -209,7 +209,7 @@ pub fn perform_now(node: &okur_core::AomNode, activate: bool) -> Result<(), Stri
     use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
     use xa11y_windows::ia2::{perform_chromium_action, Ia2Action};
-    let id = okur_platform::actions::unique_id(node).ok_or("node has no IA2 uniqueID")?;
+    let id = okur_windows::actions::unique_id(node).ok_or("node has no IA2 uniqueID")?;
     let action = if activate {
         Ia2Action::DefaultAction
     } else {
@@ -228,8 +228,8 @@ pub fn tray_icons_now() -> Vec<okur_core::event::TrayIcon> {
     use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
     // SAFETY: COM initialization for this thread.
     let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
-    okur_platform::uia_snapshot::capture::automation()
-        .map(|uia| okur_platform::uia_snapshot::capture::tray_icons(&uia))
+    okur_windows::uia_snapshot::capture::automation()
+        .map(|uia| okur_windows::uia_snapshot::capture::tray_icons(&uia))
         .unwrap_or_default()
 }
 
@@ -241,12 +241,12 @@ pub fn taskbar_dump_now() -> Vec<String> {
     // SAFETY: COM initialization for this thread.
     let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
     let (Ok(uia), Some((taskbar, _))) = (
-        okur_platform::uia_snapshot::capture::automation(),
-        okur_platform::uia_snapshot::capture::taskbar_windows(),
+        okur_windows::uia_snapshot::capture::automation(),
+        okur_windows::uia_snapshot::capture::taskbar_windows(),
     ) else {
         return Vec::new();
     };
-    okur_platform::uia_snapshot::capture::taskbar_elements(&uia, taskbar)
+    okur_windows::uia_snapshot::capture::taskbar_elements(&uia, taskbar)
         .into_iter()
         .map(|e| {
             let rect = e
@@ -275,7 +275,7 @@ fn sheet_grid(window_title: Option<&str>) -> Option<windows::Win32::Foundation::
         // SAFETY: a plain query.
         None => unsafe { GetForegroundWindow() },
     };
-    okur_platform::excel_om::grid_window(top)
+    okur_windows::excel_om::grid_window(top)
 }
 
 /// One of JAWS's lists of Excel's window, with the active cell's column's letters, read right
@@ -286,5 +286,5 @@ pub fn sheet_list_now(
     window_title: Option<&str>,
     kind: okur_core::SheetListKind,
 ) -> Option<(String, Vec<okur_core::SheetEntry>)> {
-    okur_platform::excel_om::sheet_list(sheet_grid(window_title)?, kind)
+    okur_windows::excel_om::sheet_list(sheet_grid(window_title)?, kind)
 }

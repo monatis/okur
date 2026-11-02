@@ -5,7 +5,7 @@ pub mod mock;
 pub mod windows;
 
 use crate::PlatformError;
-pub use okur_core::input::{Key, KeyAction, KeyEvent, Modifiers};
+use okur_core::input::{KeyAction, KeyEvent};
 
 /// Type alias for keyboard hook event callbacks.
 pub type HookCallback = Box<dyn FnMut(KeyEvent) -> KeyAction + Send>;

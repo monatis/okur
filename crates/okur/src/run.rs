@@ -8,11 +8,12 @@
 //! `quit`, the end of the session) goes down one exit path ([`ExitReason`]).
 
 use okur_core::{
-    AccessibilityEvent, AomNode, Role, ScreenReaderEngine, VirtualBuffer, VirtualCursor,
+    input::KeyAction, AccessibilityEvent, AomNode, Role, ScreenReaderEngine, VirtualBuffer,
+    VirtualCursor,
 };
-use okur_platform::{
-    create_event_listener, create_keyboard_hook, KeyAction, PlatformBridge, SpeechLog,
-    TtsEngineType, TtsManager,
+use okur_windows::{
+    create_event_listener, create_keyboard_hook, PlatformBridge, SpeechLog, TtsEngineType,
+    TtsManager,
 };
 use std::path::Path;
 use std::str::FromStr;
@@ -152,7 +153,7 @@ pub fn init_logging(debug_log: Option<&str>, kept: bool) {
                     .with_writer(move || LogLines(lines.clone()))
                     .with_ansi(false)
                     .with_env_filter(tracing_subscriber::EnvFilter::new(
-                        "okur_core=debug,okur_platform=debug,okur=debug",
+                        "okur_core=debug,okur_windows=debug,okur=debug",
                     ))
                     .init();
                 return;
@@ -218,8 +219,8 @@ fn open_kept_log(path: &Path) -> std::io::Result<std::fs::File> {
 /// Loads a page from a UIA snapshot (`okur-lab snapshot` output) through the production
 /// UIA-to-AOM mapping.
 pub fn load_aom_from_path(path: &Path) -> Result<AomNode, Box<dyn std::error::Error>> {
-    let snapshot = okur_platform::uia_snapshot::UiaSnapshot::load(path)?;
-    Ok(okur_platform::uia_snapshot::to_aom(&snapshot.root))
+    let snapshot = okur_windows::uia_snapshot::UiaSnapshot::load(path)?;
+    Ok(okur_windows::uia_snapshot::to_aom(&snapshot.root))
 }
 
 /// Engine work longer than this, on a key or an event, is logged as slow: the keyboard hook
@@ -562,12 +563,12 @@ fn serve_control(
     desktop: &str,
     status: &crate::control::Status,
     exit: &tokio::sync::mpsc::UnboundedSender<ExitReason>,
-) -> Option<okur_platform::instance::ControlServer> {
-    let name = okur_platform::instance::pipe_name(session, desktop);
+) -> Option<okur_windows::instance::ControlServer> {
+    let name = okur_windows::instance::pipe_name(session, desktop);
     let mut last_error = String::new();
     for _ in 0..10 {
         let (status, exit) = (status.clone(), exit.clone());
-        match okur_platform::instance::ControlServer::start(
+        match okur_windows::instance::ControlServer::start(
             &name,
             Box::new(move |line| {
                 crate::control::answer(line, &status, &|| {
@@ -587,15 +588,15 @@ fn serve_control(
 /// Takes this desktop for the screen reader, or says why it ends without a sound.
 fn take_desktop(
     start: StartKind,
-) -> Result<okur_platform::instance::InstanceLock, startup::SilentExit> {
-    let desktop = okur_platform::desktop::thread_desktop().unwrap_or_default();
+) -> Result<okur_windows::instance::InstanceLock, startup::SilentExit> {
+    let desktop = okur_windows::desktop::thread_desktop().unwrap_or_default();
     let facts = StartFacts {
         kind: start,
-        both_shifts_held: okur_platform::process::both_shifts_held(
-            &okur_platform::process::SystemKeyState,
+        both_shifts_held: okur_windows::process::both_shifts_held(
+            &okur_windows::process::SystemKeyState,
         ),
-        secure_desktop: okur_platform::desktop::is_secure_desktop(&desktop),
-        system_account: okur_platform::elevation::current()
+        secure_desktop: okur_windows::desktop::is_secure_desktop(&desktop),
+        system_account: okur_windows::elevation::current()
             .sid
             .is_some_and(|sid| sid == "S-1-5-18"),
     };
@@ -623,7 +624,7 @@ pub async fn run(config: RunConfig) {
     } = config;
     log_panics();
     // The sign-in start goes on only as the user, or the machine, chose.
-    let start_options = okur_platform::start_options::RegistryStartOptions::system();
+    let start_options = okur_windows::start_options::RegistryStartOptions::system();
     if start == crate::startup::StartKind::SignIn && !start_options.starts_after_sign_in() {
         let why = crate::startup::SilentExit::NotAfterSignIn;
         tracing::info!(reason = why.describe(), "not started");
@@ -641,18 +642,18 @@ pub async fn run(config: RunConfig) {
             return;
         }
     };
-    okur_platform::process::shut_down_last();
+    okur_windows::process::shut_down_last();
 
     // The first start for this user, before Okur has a settings folder of theirs, opens the
     // Startup Wizard, as JAWS's runs once it is installed; the folder is made then, so the
     // wizard opens once. A folder given with --settings-folder (the lab's runs) never opens it.
     let first_start = settings_folder.is_none()
-        && okur_platform::settings_file::SettingsFolder::user()
+        && okur_windows::settings_file::SettingsFolder::user()
             .is_some_and(|folder| !folder.folder().exists());
     // The saved settings, then this run's options over them, for this run only.
     let settings_folder = match settings_folder {
-        Some(path) => Some(okur_platform::settings_file::SettingsFolder::at(path)),
-        None => okur_platform::settings_file::SettingsFolder::user(),
+        Some(path) => Some(okur_windows::settings_file::SettingsFolder::at(path)),
+        None => okur_windows::settings_file::SettingsFolder::user(),
     };
     let mut layers = settings_folder
         .as_ref()
@@ -729,7 +730,7 @@ pub async fn run(config: RunConfig) {
     // OS accessibility events and caret text both reach the engine through this channel.
     let (event_tx, mut event_rx) = tokio::sync::mpsc::unbounded_channel();
     // Speech on its own thread: the keyboard hook never waits for a synthesizer.
-    let speech = okur_platform::tts::SpeechThread::start(tts);
+    let speech = okur_windows::tts::SpeechThread::start(tts);
     // What tells the exit path that Okur's last words were said.
     let speech_idle = speech.idle();
     // Say All's progress: the mark of each part the synthesizer starts comes back to
@@ -741,12 +742,12 @@ pub async fn run(config: RunConfig) {
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech));
     // Enter on an edit focuses it in the page, Enter/Space on a control activates it.
     #[cfg(windows)]
-    engine.set_actions(Box::new(okur_platform::actions::WindowsActions::start(
+    engine.set_actions(Box::new(okur_windows::actions::WindowsActions::start(
         Some(event_tx.clone()),
     )));
     // Okur's own windows (the Virtual Viewer on screen), drawn by okur-ui.
     let mut ui_closer = None;
-    if let Some(ui) = okur_platform::ui_host::ProcessUiHost::start(event_tx.clone()) {
+    if let Some(ui) = okur_windows::ui_host::ProcessUiHost::start(event_tx.clone()) {
         ui_closer = Some(ui.closer());
         engine.set_ui(Box::new(ui));
     }
@@ -759,7 +760,7 @@ pub async fn run(config: RunConfig) {
     if let Some(folder) = settings_folder {
         // Written on a thread of its own, off the engine's, which the keyboard hook waits on
         // (performance review 2026-10-25, finding 7; 2026-11-02, speech finding 9).
-        let store = okur_platform::settings_file::BackgroundStore::new(folder.clone());
+        let store = okur_windows::settings_file::BackgroundStore::new(folder.clone());
         engine.set_custom_labels(folder.load_labels(), Some(Box::new(store.clone())));
         engine.set_placemarkers(folder.load_placemarkers(), Some(Box::new(store.clone())));
         engine.set_flexible_web_rules(
@@ -782,8 +783,8 @@ pub async fn run(config: RunConfig) {
     }
     // Say System Time (Insert+F12) in the user's locale formats.
     #[cfg(windows)]
-    engine.set_clock(Box::new(okur_platform::clock::WindowsClock));
-    engine.set_sounds(Box::new(okur_platform::sound::WindowsSounds));
+    engine.set_clock(Box::new(okur_windows::clock::WindowsClock));
+    engine.set_sounds(Box::new(okur_windows::sound::WindowsSounds));
     // Every way out comes here: the exit path below takes it from the first.
     let (exit_tx, mut exit_rx) = tokio::sync::mpsc::unbounded_channel::<ExitReason>();
     // Insert+F4: the engine asks; this host ends Okur.
@@ -794,8 +795,8 @@ pub async fn run(config: RunConfig) {
     let engine = Arc::new(Mutex::new(engine));
 
     // The control pipe: `quit` from the installer, `okur quit`, or a copy taking over.
-    let session = okur_platform::desktop::session_id().unwrap_or(0);
-    let desktop = okur_platform::desktop::thread_desktop().unwrap_or_default();
+    let session = okur_windows::desktop::session_id().unwrap_or(0);
+    let desktop = okur_windows::desktop::thread_desktop().unwrap_or_default();
     let status = crate::control::Status::of_this_process(session, &desktop);
     let _control = serve_control(session, &desktop, &status, &exit_tx);
     // Windows ending the session: the window's thread waits, briefly, for the exit path,
@@ -803,7 +804,7 @@ pub async fn run(config: RunConfig) {
     let (ended_tx, ended_rx) = std::sync::mpsc::channel::<()>();
     let ended_rx = Mutex::new(ended_rx);
     let session_exit = exit_tx.clone();
-    let session_end = okur_platform::process::EndSessionWatcher::start(Box::new(move || {
+    let session_end = okur_windows::process::EndSessionWatcher::start(Box::new(move || {
         let _ = session_exit.send(ExitReason::EndSession);
         if let Ok(ended) = ended_rx.lock() {
             let _ = ended.recv_timeout(std::time::Duration::from_secs(3));
@@ -835,7 +836,7 @@ pub async fn run(config: RunConfig) {
     }
     // An application running as administrator shows nothing to an Okur below High integrity
     // (Windows Settings' Rename dialog); JAWS runs elevated, the installed Okur with UI Access.
-    if !okur_platform::elevation::reads_elevated_windows() {
+    if !okur_windows::elevation::reads_elevated_windows() {
         let note = "Okur is not running as administrator: windows of applications \
                     that are (Settings' \"Rename this PC\", an elevated terminal) cannot \
                     be read. Start Okur from an administrator terminal to read them.";
@@ -901,7 +902,7 @@ pub async fn run(config: RunConfig) {
         fail(console, &format!("Failed to install keyboard hook: {e}"));
     }
     // Applications that adapt to a screen reader know one runs.
-    let screen_reader_flag = okur_platform::process::ScreenReaderFlag::raise();
+    let screen_reader_flag = okur_windows::process::ScreenReaderFlag::raise();
 
     // Start OS-level accessibility event listener
     let mut event_listener = create_event_listener();

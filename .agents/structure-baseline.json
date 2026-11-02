@@ -4,7 +4,7 @@
     "section 10, R4 to R6). A count in block mode may only fall, and is lowered here when it",
     "does; one in report mode is printed by check-structure.ps1 -Report. Taken 2026-11-03."
   ],
-  "platform_crate": "okur-platform",
+  "platform_crate": "okur-windows",
   "ratchets": {
     "neutral_platform_cfg": {
       "count": 0,
@@ -53,10 +53,10 @@
       "crates/okur-corpus/src/divergences.rs": 1872,
       "crates/okur-corpus/src/parity.rs": 1857,
       "crates/okur-lab/src/main.rs": 2019,
-      "crates/okur-platform/src/actions.rs": 1799,
-      "crates/okur-platform/src/event_trace.rs": 6060,
-      "crates/okur-platform/src/text_context.rs": 1958,
-      "crates/okur-platform/src/uia_snapshot.rs": 1769,
+      "crates/okur-windows/src/actions.rs": 1799,
+      "crates/okur-windows/src/event_trace.rs": 6060,
+      "crates/okur-windows/src/text_context.rs": 1958,
+      "crates/okur-windows/src/uia_snapshot.rs": 1769,
       "crates/okur-ui/src/dialog.rs": 2101
     }
   }

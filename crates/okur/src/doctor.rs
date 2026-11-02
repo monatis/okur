@@ -14,10 +14,10 @@
 
 use std::path::{Path, PathBuf};
 
-use okur_platform::ease_of_access::{self, AtRegistration};
-use okur_platform::elevation::{integrity, ElevationType, TokenFacts};
-use okur_platform::registry::SystemRegistry;
-use okur_platform::signature::{ManifestFacts, SignatureStatus};
+use okur_windows::ease_of_access::{self, AtRegistration};
+use okur_windows::elevation::{integrity, ElevationType, TokenFacts};
+use okur_windows::registry::SystemRegistry;
+use okur_windows::signature::{ManifestFacts, SignatureStatus};
 
 /// Everything `okur doctor` reports.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -66,17 +66,17 @@ pub fn gather(pid: Option<u32>) -> Report {
     let executable = if own {
         std::env::current_exe().ok()
     } else {
-        okur_platform::process::image_path(pid)
+        okur_windows::process::image_path(pid)
     };
     let token = if own {
-        Ok(okur_platform::elevation::current())
+        Ok(okur_windows::elevation::current())
     } else {
-        okur_platform::elevation::of_process(pid)
+        okur_windows::elevation::of_process(pid)
     };
     let desktop = own
         .then(|| {
-            let desktop = okur_platform::desktop::thread_desktop()?;
-            Some(match okur_platform::desktop::window_station() {
+            let desktop = okur_windows::desktop::thread_desktop()?;
+            Some(match okur_windows::desktop::window_station() {
                 Some(station) => format!("{station}\\{desktop}"),
                 None => desktop,
             })
@@ -84,11 +84,11 @@ pub fn gather(pid: Option<u32>) -> Report {
         .flatten();
     let signature = executable.as_deref().map_or(
         SignatureStatus::Unavailable,
-        okur_platform::signature::verify_file,
+        okur_windows::signature::verify_file,
     );
     let manifest = executable
         .as_deref()
-        .and_then(okur_platform::signature::embedded_manifest)
+        .and_then(okur_windows::signature::embedded_manifest)
         .map(|text| ManifestFacts::parse(&text));
     Report {
         pid,
@@ -98,10 +98,10 @@ pub fn gather(pid: Option<u32>) -> Report {
         executable,
         token,
         desktop,
-        input_desktop: okur_platform::desktop::input_desktop(),
+        input_desktop: okur_windows::desktop::input_desktop(),
         signature,
         manifest,
-        screen_reader_flag: okur_platform::process::screen_reader_flag(),
+        screen_reader_flag: okur_windows::process::screen_reader_flag(),
         running: crate::control::send(crate::control::Request::Status),
         registration: AtRegistration::read(&SystemRegistry),
     }
@@ -252,7 +252,7 @@ pub fn render(report: &Report) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use okur_platform::registry::RegValue;
+    use okur_windows::registry::RegValue;
 
     #[test]
     fn program_files_is_a_folder_prefix_in_any_case() {

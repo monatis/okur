@@ -97,7 +97,7 @@ messages, Prompt to Confirm When Exiting Okur.
 | `Settings::reference_machine` | old-pc's JAWS configuration, for parity replay | `settings.rs:563-581` |
 | Layers | Defaults, all applications, one application, one site, the session. Looked up from the most specific down; each layer keeps only what it changes, as serde values by path | `crates/okur-core/src/settings_layers.rs:21-149` |
 | Application and site keys | `chrome.exe` is `chrome`; a site is the page's whole host; a `file:` page has none | `settings_layers.rs:206-238` |
-| Files | `settings.toml`, `applications/<app>.toml`, `sites/<host>.toml` in `%APPDATA%\Okur` (macOS: Application Support; Linux: XDG). Only changed values are rewritten, comments stay | `crates/okur-platform/src/settings_file.rs:1-148` |
+| Files | `settings.toml`, `applications/<app>.toml`, `sites/<host>.toml` in `%APPDATA%\Okur` (macOS: Application Support; Linux: XDG). Only changed values are rewritten, comments stay | `crates/okur-windows/src/settings_file.rs:1-148` |
 | Own stores | `labels.toml` (custom labels, per site), `placemarkers.toml` (per page address) | `settings_file.rs:150-213` |
 | Okur Settings dialog | One dialog for Insert+V and Insert+6: Settings for (all applications, the application in front, its site), then Speech, Keyboard and Reading groups; OK, Cancel, Apply | `crates/okur-core/src/ui/settings.rs:184-318`; keys `crates/okur-core/src/command.rs:939-940` |
 | Places | The dialog opens on the application in front; the site is offered when the focus is on a page | `crates/okur-core/src/engine.rs:1205-1232` |
@@ -115,7 +115,7 @@ messages, Prompt to Confirm When Exiting Okur.
 | `voice.voice` | a voice name | yes | `--voice` | | | `settings.rs:259-261` |
 | `voice.rate` | -10 to 10 | yes (slider) | `--rate` | Ctrl+Alt+PageUp/PageDown, session only, outside the layers | | `settings.rs:262-263`; `toggles.rs` |
 | `voice.volume` | 0 to 100 | yes (slider) | `--volume` | | | `settings.rs:264-265` |
-| `voice.punctuation` | none, some, most, all | yes | | Insert+Shift+2 (session) | no (the VPF's `Punctuation` is not read) | `settings.rs:217-253`; applied to running text in `crates/okur-platform/src/tts/thread.rs:296` |
+| `voice.punctuation` | none, some, most, all | yes | | Insert+Shift+2 (session) | no (the VPF's `Punctuation` is not read) | `settings.rs:217-253`; applied to running text in `crates/okur-windows/src/tts/thread.rs:296` |
 | `keyboard.layout` | desktop, laptop | yes | `--keyboard-layout` | | `KeyboardType` | `settings.rs:12-22` |
 | `keyboard.okur_key` | insert, caps_lock, scroll_lock | yes | `--okur-key` | | (follows the layout) | `settings.rs:24-41` |
 | `typing_echo` | characters, words, both, none | **2 of 4** (Off, Characters) | **2 of 4** | Insert+2 (session, all 4) | `TypingEcho` (only "0" understood) | `settings.rs:126-187`; dialog `ui/settings.rs:40-44`; CLI `run.rs:68-77` |
@@ -197,7 +197,7 @@ with no way to change it), **Missing** (neither). §4.13 and §4.14 list setting
 | 31a | Volume layer (Insert+Space, V): JAWS's own volume, the sound splitter or balance (JAWS in one ear), the sound card | | session | [S-splitter] | Missing | |
 | 32 | Keep audio devices awake by playing silence | **off** | | [F6] | Missing | |
 | 33 | Detect Language (based on markup, on text, on AI predictions, off); Generalize Dialect; Detect Keyboard Language; Ctrl+Windows+L | **based on markup** | all, per application (off by default in some) | [F1], [F6], [KS], [TAG]; [R] §8.7 | Missing | |
-| 34 | Enable Speech History | **on**; 50 items in one help topic, 500 in another and in the 2021 notes | | [R] §7; [`everyday-use-gaps-2026-10-19.md`](../backlog/everyday-use-gaps-2026-10-19.md); [SE-2021] | Partial | Always on, 50 items (`crates/okur-platform/src/tts/thread.rs:32-33`) |
+| 34 | Enable Speech History | **on**; 50 items in one help topic, 500 in another and in the 2021 notes | | [R] §7; [`everyday-use-gaps-2026-10-19.md`](../backlog/everyday-use-gaps-2026-10-19.md); [SE-2021] | Partial | Always on, 50 items (`crates/okur-windows/src/tts/thread.rs:32-33`) |
 
 ### 4.3 Punctuation, symbols and pronunciation
 
@@ -395,7 +395,7 @@ JAWS user can change it and an Okur user cannot. The row numbers point into §4.
 | "spacebar" is respelled "space Bar" | `pronounce.rs:282` (`RESPELLINGS`) | Dictionary Manager (39) |
 | "Misspelled" is said in a text field on a marked word | `editing.rs:170-188` | Detect Spelling While Navigating (67) |
 | Hints ("To activate press Enter.") at every level unless the settings file turns the `hint` type off | `settings.rs:381-393` | Tutor messages (75) |
-| The Speech History keeps 50 utterances | `crates/okur-platform/src/tts/thread.rs:32-33` | Enable Speech History (34) |
+| The Speech History keeps 50 utterances | `crates/okur-windows/src/tts/thread.rs:32-33` | Enable Speech History (34) |
 | Quick keys mode, the virtual cursor and speech on or off last until Okur exits and start "on" | `engine/toggles.rs:10-56`; `engine/layer.rs:48-53` | Navigation Quick Keys (84); Speech Mode (29) |
 | The rate set with Alt+Ctrl+PageUp/PageDown is never saved | `engine/toggles.rs` (`change_rate`) | saved rate change (28) |
 | JAWS Find's history is forgotten when Okur exits | `ui/find.rs:13`; `engine/find.rs` | Maintain History (114) |

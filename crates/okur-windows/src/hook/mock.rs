@@ -1,5 +1,6 @@
-use super::{HookCallback, KeyAction, KeyEvent, KeyboardHook};
+use super::{HookCallback, KeyboardHook};
 use crate::PlatformError;
+use okur_core::input::{KeyAction, KeyEvent};
 use std::sync::{Arc, Mutex};
 
 type SharedCallback = Arc<Mutex<HookCallback>>;
@@ -48,7 +49,7 @@ impl KeyboardHook for MockKeyboardHook {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::hook::{Key, Modifiers};
+    use okur_core::input::{Key, Modifiers};
 
     #[test]
     fn test_mock_hook_lifecycle_and_injection() {
