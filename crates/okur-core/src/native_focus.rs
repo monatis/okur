@@ -577,6 +577,15 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
         // A button says the position its application reports (Windows Settings' breadcrumb:
         // "Home Button | 1 of 1 | To activate press spacebar."; JAWS on the dev box,
         // 2026-10-16); the platform counts none for buttons (a dialog's say none, 306).
+        // A button that drops a grid down, by its MSAA role, with no hint: File Explorer's
+        // "File tab button dropdown grid Has Popup" [obs, 3161/s1, s6].
+        Role::Button if focus.drop_down_grid => {
+            lines.push(Line::new(vec![
+                name_part(name),
+                role(msg::role_button_dropdown_grid().as_str()),
+                state(msg::state_has_popup().as_str()),
+            ]));
+        }
         Role::Button => {
             // An expander's button says its state: Windows Settings' "Show more settings Button
             // collapsed" (JAWS on the dev box, 2026-10-16).

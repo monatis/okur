@@ -163,6 +163,25 @@ impl ScreenReaderEngine {
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }
+            // An application can say its focus otherwise: File Explorer's file, "SR OCR Sign.png
+            // | ... | 3 of 3 | To move to an item press the Arrow keys." [obs, 3161/s10].
+            Command::SayCurrentFocus
+                if matches!(
+                    self.app_mode,
+                    AppMode::NativeControl | AppMode::NativeExplorer
+                ) && self
+                    .last_native_focus
+                    .as_ref()
+                    .and_then(|f| self.app_for(f)?.say_focus(f))
+                    .is_some() =>
+            {
+                let speech = self
+                    .last_native_focus
+                    .as_ref()
+                    .and_then(|f| self.app_for(f)?.say_focus(f))?;
+                self.speech.speak(&speech, true);
+                return Some(speech);
+            }
             Command::SayCurrentFocus => {
                 // Native controls.
                 let speech = self

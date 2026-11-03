@@ -50,6 +50,9 @@ const NETUI_RIBBON_GROUP_CLASS: &str = "NetUIChunk";
 /// The class of Office's panes as UI Automation reaches them: the row of ribbon tabs, where its
 /// search box is, is the one that is a tab control.
 const NETUI_RIBBON_TABS_CLASS: &str = "NetUIPanViewer";
+/// The pane the Windows Ribbon framework (File Explorer's, WordPad's, Paint's ribbon) puts its
+/// ribbon in, where Office's is `MsoWorkPane`.
+const WINDOWS_RIBBON_PANE_CLASS: &str = "UIRibbonWorkPane";
 
 /// Bumped whenever the recorded fields or their meaning change.
 pub const TRACE_FORMAT_VERSION: u32 = 11;

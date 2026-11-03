@@ -172,6 +172,20 @@ pub fn spoken_symbols_with(text: &str, processing: TextProcessing) -> String {
     )
 }
 
+/// `text` without the marks that set the direction of what follows: File Explorer wraps a
+/// file's date in them ("\u{200E}1/\u{200E}2/\u{200E}2026 \u{200F}\u{200E}3:04 AM"). JAWS's
+/// history keeps them; its voice is given the text without them [obs, 3161/s9].
+fn without_direction_marks(text: &str) -> String {
+    text.chars()
+        .filter(|c| {
+            !matches!(
+                c,
+                '\u{061C}' | '\u{200E}' | '\u{200F}' | '\u{202A}'..='\u{202E}' | '\u{2066}'..='\u{2069}'
+            )
+        })
+        .collect()
+}
+
 /// `spoken`'s work; `point_digits`: a decimal point is "point" and the digits after it are
 /// read one by one, as at All.
 fn render(
@@ -183,7 +197,9 @@ fn render(
     let digits = processing.numbers_as_digits;
     let text = single_digits(
         &split_words(
-            &respelled(&repeats_filtered(&text.replace(['\u{1d}', '\u{1e}'], " "))),
+            &respelled(&repeats_filtered(
+                &without_direction_marks(text).replace(['\u{1d}', '\u{1e}'], " "),
+            )),
             processing.mixed_case,
         ),
         digits,
@@ -782,5 +798,18 @@ mod tests {
         assert_eq!(character_pitch("B", false), 0);
         assert_eq!(pitched("B", 4), "[pitch +4] B");
         assert_eq!(pitched("b", 0), "b");
+    }
+
+    /// File Explorer's date reaches the voice without its direction marks [obs, 3161/s9].
+    #[test]
+    fn direction_marks_do_not_reach_the_voice() {
+        assert_eq!(
+            spoken(
+                "\u{200e}1/\u{200e}2/\u{200e}2026 \u{200f}\u{200e}3:04 AM",
+                Punctuation::Most
+            ),
+            "1 slash 2 slash 2026 3:04 AM"
+        );
+        assert_eq!(spoken_symbols("\u{2067}a\u{2069}"), spoken_symbols("a"));
     }
 }

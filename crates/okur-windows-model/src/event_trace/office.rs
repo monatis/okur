@@ -87,9 +87,19 @@ pub(super) fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
         _ => return None,
     };
     let tab = role == Role::Tab;
+    let tab_free_button = role == Role::Button;
     let mut focus = okur_core::FocusEvent::new(role).with_name(name.to_owned());
-    focus.opens_menu =
-        uia_button && matches!(object.role, Some(BUTTONDROPDOWN | BUTTONDROPDOWNGRID));
+    // The Windows Ribbon framework's (File Explorer's, WordPad's) drop-down grid is said by its
+    // MSAA role: "File tab button dropdown grid Has Popup" [obs, 3161/s1]. Word's opens a menu.
+    let windows_ribbon = event
+        .focus_chain
+        .iter()
+        .any(|n| n.class_name.as_deref() == Some(WINDOWS_RIBBON_PANE_CLASS));
+    focus.drop_down_grid =
+        windows_ribbon && tab_free_button && object.role == Some(BUTTONDROPDOWNGRID);
+    focus.opens_menu = uia_button
+        && !focus.drop_down_grid
+        && matches!(object.role, Some(BUTTONDROPDOWN | BUTTONDROPDOWNGRID));
     // Its value: a split button's "Paste (Ctrl+V)" [obs, 970/s4].
     focus.value = object.value.clone().filter(|v| !v.trim().is_empty());
     if tab {
@@ -161,6 +171,14 @@ pub(super) fn netui_focus(event: &TraceEvent) -> Option<okur_core::FocusEvent> {
         .filter(|a| a.role == Some(PROPERTYPAGE))
         .count();
     focus.ribbon_menu = tab || pages >= 2;
+    // A command beside the ribbon's menus, in the Quick Access Toolbar or the File tab, is said
+    // alone: no panes, no toolbar, no place: "Properties Button", "File tab button dropdown
+    // grid Has Popup" in File Explorer [obs, 3161/s1, s7, s8].
+    if focus.in_ribbon && !focus.ribbon_menu {
+        focus.groups.retain(|g| !(g.tool_bar || g.pane));
+        focus.item_index = None;
+        focus.item_count = None;
+    }
     Some(focus)
 }
 
@@ -288,6 +306,21 @@ pub(super) fn gallery_item(
     focus.in_ribbon = true;
     focus.ribbon_menu = true;
     focus
+}
+
+/// Whether a focus is the Windows Ribbon framework's ribbon itself with no tab selected: File
+/// Explorer's ribbon, minimized, takes the focus on Alt and gives it to its File tab at once,
+/// and JAWS says only the File tab [obs, 3161/s1]. Office's ribbon page is said ("Ribbon",
+/// 1051/s12); WordPad's ribbon, not minimized, is its selected tab (`ribbon_tab`).
+pub(super) fn minimized_windows_ribbon(event: &TraceEvent) -> bool {
+    event.event == "focus"
+        && event.window_class.as_deref() == Some("NetUIHWND")
+        && event
+            .focus_chain
+            .iter()
+            .any(|n| n.class_name.as_deref() == Some(WINDOWS_RIBBON_PANE_CLASS))
+        && ribbon_tab(event).is_none()
+        && ribbon_page(event).is_some()
 }
 
 /// The ribbon's own property page with the focus and no tab focused in it (`ribbon_tab` finds

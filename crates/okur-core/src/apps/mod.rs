@@ -134,6 +134,12 @@ pub trait AppModule: Send {
         None
     }
 
+    /// What Say Current Focus (Insert+Tab) says of `focus`, where the application says it
+    /// otherwise than the engine: File Explorer's file. `None` for the engine's.
+    fn say_focus(&self, _focus: &FocusEvent) -> Option<String> {
+        None
+    }
+
     /// Whether arriving in one of the application's windows announces the window's title.
     fn names_window(&self, _focus: &FocusEvent) -> bool {
         true

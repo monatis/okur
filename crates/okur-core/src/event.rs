@@ -728,6 +728,11 @@ pub struct FocusEvent {
     /// [obs, 1051/s17].
     #[serde(default)]
     pub opens_menu: bool,
+    /// A button that drops a grid down, said by its MSAA role, as the Windows Ribbon
+    /// framework's are: File Explorer's "File tab button dropdown grid Has Popup" [obs,
+    /// 3161/s1].
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub drop_down_grid: bool,
     /// The ribbon's own name, as its MSAA property page gives it: Word's "Ribbon", which JAWS
     /// says as the focus enters it [obs, 1043/s1].
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -1037,6 +1042,7 @@ impl FocusEvent {
             in_ribbon: false,
             ribbon_menu: false,
             opens_menu: false,
+            drop_down_grid: false,
             ribbon_name: None,
             in_document: false,
             dom_id: None,

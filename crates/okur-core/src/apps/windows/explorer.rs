@@ -38,6 +38,10 @@ pub struct Explorer {
 const FOLDER_VIEW_CLASS: &str = "SHELLDLL_DefView";
 
 impl AppModule for Explorer {
+    fn owns(&self, focus: &FocusEvent) -> bool {
+        is_explorer_window(focus)
+    }
+
     fn focus(&mut self, focus: &FocusEvent, cx: &mut AppContext<'_>) -> FocusResponse {
         if focus.role == Role::Generic
             && focus.platform.window_class.as_deref() == Some(FOLDER_VIEW_CLASS)
@@ -87,16 +91,7 @@ impl AppModule for Explorer {
                 let folder = focus.folder_name.as_deref().or(self.folder_name.as_deref());
                 (title, folder)
             });
-            // The item's row after its name, else its type and size.
-            let kind = if focus.item_details.is_empty() {
-                [focus.item_type.as_deref(), focus.item_size.as_deref()]
-                    .into_iter()
-                    .flatten()
-                    .collect::<Vec<_>>()
-                    .join(" ")
-            } else {
-                focus.item_details.join(" ")
-            };
+            let kind = item_kind(focus);
             entry(&Entry {
                 window,
                 selected: focus.states.selected,
@@ -113,6 +108,52 @@ impl AppModule for Explorer {
         } else {
             Announcement::from_text(&format!("{name}\n{}", msg::position(index, total)))
         })
+    }
+
+    /// Insert+Tab on a file: the item as entering the list says it, without the window and the
+    /// list: "SR OCR Sign.png | 1/2/2026 3:04 AM PNG File 11 KB | 3 of 3 | To move to an item
+    /// press the Arrow keys." [obs, 3161/s10].
+    fn say_focus(&self, focus: &FocusEvent) -> Option<String> {
+        if !(is_explorer_window(focus) && focus.role == Role::ListItem) {
+            return None;
+        }
+        let name = focus
+            .name
+            .as_deref()
+            .unwrap_or(msg::explorer_item_unnamed().as_str());
+        let kind = item_kind(focus);
+        let mut lines = vec![Line::of(
+            PartKind::Name,
+            if focus.states.selected == Some(false) {
+                msg::list_item_not_selected(name).render()
+            } else {
+                name.to_owned()
+            },
+        )];
+        lines.extend(
+            Some(kind.as_str())
+                .filter(|k| !k.is_empty())
+                .map(|k| Line::of(PartKind::Value, k)),
+        );
+        lines.push(Line::of(
+            PartKind::Position,
+            msg::position(focus.item_index.unwrap_or(1), focus.item_count.unwrap_or(1)),
+        ));
+        lines.push(Line::of(PartKind::Hint, msg::hint_move_to_an_item_arrows()));
+        Some(Announcement::new(lines).render())
+    }
+}
+
+/// An item's row after its name, else its type and size.
+fn item_kind(focus: &FocusEvent) -> String {
+    if focus.item_details.is_empty() {
+        [focus.item_type.as_deref(), focus.item_size.as_deref()]
+            .into_iter()
+            .flatten()
+            .collect::<Vec<_>>()
+            .join(" ")
+    } else {
+        focus.item_details.join(" ")
     }
 }
 

@@ -295,7 +295,10 @@ impl EventConverter {
         // A focus that had moved on before it was read is not said: the focus after it is.
         // Tab from File Explorer's search box passes its list for 30 ms on the way to the
         // first link, and JAWS says only "Control Panel Home Link" [obs, 3156/s6].
-        if left_before_read(event) || combo_box_passed_to_its_edit(event) {
+        if left_before_read(event)
+            || combo_box_passed_to_its_edit(event)
+            || minimized_windows_ribbon(event)
+        {
             return Vec::new();
         }
         if let Some(window) = menu_bar_return(event) {
