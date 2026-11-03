@@ -1464,11 +1464,11 @@ mod reader {
         }
     }
 
-    /// The paragraphs of Word's document, the focused one or with `window` the one in that
-    /// top-level window, for Say All: each one's start in the document's text (the sum of the
-    /// paragraphs' lengths before it, as the document's text is theirs one after another), its
-    /// heading level and list from its style, and its table cell. `None` without Word's
-    /// document.
+    /// The paragraphs of Word's document from the caret's on, the focused one or with `window`
+    /// the one in that top-level window, for Say All: each one's start in the document's text
+    /// (the length of the text before it, as the document's text is the paragraphs' one after
+    /// another), its heading level and list from its style, and its table cell. `None` without
+    /// Word's document.
     pub fn word_document_paragraphs(
         uia: &IUIAutomation,
         window: Option<windows::Win32::Foundation::HWND>,
@@ -1514,6 +1514,32 @@ mod reader {
                 .ok()?;
             let tables = document.FindAll(TreeScope_Descendants, &condition).ok()?;
             let at = pattern.DocumentRange().ok()?;
+            // From the caret's paragraph, where Say All starts: its start is the length of the
+            // text before it. The paragraphs before it were each read for nothing, about 13 ms
+            // each (second review, 2026-11-03, P1).
+            let mut start = 0;
+            let caret = pattern
+                .GetSelection()
+                .ok()
+                .and_then(|ranges| ranges.GetElement(0).ok())
+                .filter(|caret| caret.ExpandToEnclosingUnit(TextUnit_Paragraph).is_ok());
+            if let Some(caret) = caret {
+                let before = at.Clone().ok()?;
+                before
+                    .MoveEndpointByRange(
+                        TextPatternRangeEndpoint_End,
+                        &caret,
+                        TextPatternRangeEndpoint_Start,
+                    )
+                    .ok()?;
+                start = chars_of(&before)?;
+                at.MoveEndpointByRange(
+                    TextPatternRangeEndpoint_Start,
+                    &caret,
+                    TextPatternRangeEndpoint_Start,
+                )
+                .ok()?;
+            }
             at.MoveEndpointByRange(
                 TextPatternRangeEndpoint_End,
                 &at,
@@ -1521,7 +1547,6 @@ mod reader {
             )
             .ok()?;
             let mut paragraphs = Vec::new();
-            let mut start = 0;
             for _ in 0..MAX_PARAGRAPHS {
                 let range = at.Clone().ok()?;
                 range.ExpandToEnclosingUnit(TextUnit_Paragraph).ok()?;
