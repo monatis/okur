@@ -10,7 +10,7 @@ mod aria_at_report;
 
 use clap::{Parser, Subcommand};
 use okur_core::{AomNode, Role, VirtualBuffer, VirtualCursor};
-use okur_windows::{SpeechLog, TtsManager};
+use okur_runtime::{SpeechLog, TtsManager};
 use std::fs;
 use std::path::Path;
 
@@ -772,7 +772,11 @@ async fn main() {
                 std::process::exit(1);
             });
 
-            let mut tts = TtsManager::new(engine_type).unwrap_or_else(|e| {
+            let mut tts = TtsManager::new(
+                std::sync::Arc::new(okur_windows::WindowsSynthesizers),
+                engine_type,
+            )
+            .unwrap_or_else(|e| {
                 eprintln!("Failed to initialize TTS engine: {}", e);
                 std::process::exit(1);
             });
@@ -846,7 +850,11 @@ async fn main() {
                 std::process::exit(1);
             });
 
-            let mut tts = TtsManager::new(engine_type).unwrap_or_else(|e| {
+            let mut tts = TtsManager::new(
+                std::sync::Arc::new(okur_windows::WindowsSynthesizers),
+                engine_type,
+            )
+            .unwrap_or_else(|e| {
                 eprintln!("Failed to initialize TTS engine: {}", e);
                 std::process::exit(1);
             });

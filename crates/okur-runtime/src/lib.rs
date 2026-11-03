@@ -6,9 +6,14 @@
 pub mod error;
 pub mod events;
 pub mod hook;
+pub mod speech;
 pub mod synthesizer;
 
 pub use error::RuntimeError;
 pub use events::{EventSink, EventSource, MockEventSource};
 pub use hook::{HookCallback, KeyboardHook, MockKeyboardHook};
+pub use speech::{
+    SilentSynthesizers, SpeechIdle, SpeechLog, SpeechLogEntry, SpeechLogKind, SpeechThread,
+    TtsManager,
+};
 pub use synthesizer::{NoSpeechEngine, SynthesizerFactory, TtsEngine, TtsError, VoiceInfo};

@@ -11,8 +11,8 @@ use okur_core::{
     input::KeyAction, AccessibilityEvent, AomNode, Role, ScreenReaderEngine, VirtualBuffer,
     VirtualCursor,
 };
-use okur_runtime::{EventSink, EventSource, KeyboardHook};
-use okur_windows::{PlatformBridge, SpeechLog, TtsManager};
+use okur_runtime::{EventSink, EventSource, KeyboardHook, SpeechLog, SpeechThread, TtsManager};
+use okur_windows::PlatformBridge;
 use std::path::Path;
 
 use std::sync::{Arc, Mutex};
@@ -146,7 +146,7 @@ pub fn init_logging(debug_log: Option<&str>, kept: bool) {
                     .with_writer(move || LogLines(lines.clone()))
                     .with_ansi(false)
                     .with_env_filter(tracing_subscriber::EnvFilter::new(
-                        "okur_core=debug,okur_windows=debug,okur=debug",
+                        "okur_core=debug,okur_runtime=debug,okur_windows=debug,okur=debug",
                     ))
                     .init();
                 return;
@@ -670,8 +670,12 @@ pub async fn run(config: RunConfig) {
     // Speech on its own thread, which makes the synthesizer it calls: the keyboard hook never
     // waits for a synthesizer.
     let synthesizer = settings.voice.synthesizer;
-    let mut speech =
-        okur_windows::tts::SpeechThread::start(log, move || TtsManager::starting(synthesizer));
+    let mut speech = SpeechThread::start(log, move || {
+        TtsManager::starting(
+            std::sync::Arc::new(okur_windows::WindowsSynthesizers),
+            synthesizer,
+        )
+    });
     okur_core::speech::SpeechOutput::configure(&mut speech, &settings.voice);
 
     if console {

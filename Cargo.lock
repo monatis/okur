@@ -965,6 +965,7 @@ dependencies = [
  "okur",
  "okur-core",
  "okur-corpus",
+ "okur-runtime",
  "okur-windows",
  "okur-windows-model",
  "regex",
@@ -983,6 +984,7 @@ version = "0.1.0"
 dependencies = [
  "okur-core",
  "serde",
+ "serde_json",
  "thiserror",
  "tokio",
  "tracing",

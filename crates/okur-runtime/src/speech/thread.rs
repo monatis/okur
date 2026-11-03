@@ -171,10 +171,7 @@ impl SpeechThread {
     ) -> Self {
         let voices = Arc::new(Mutex::new(Vec::new()));
         // Silent until the thread has made its synthesizer.
-        let tts = Arc::new(Mutex::new(TtsManager::with_engine(
-            Box::new(super::NoSpeechEngine::new()),
-            okur_core::settings::Synthesizer::NoSpeech,
-        )));
+        let tts = Arc::new(Mutex::new(TtsManager::silent()));
         let (made_tx, made_rx) = channel::<()>();
         let pending = Arc::new(AtomicUsize::new(0));
         let interruptions = Arc::new(AtomicU64::new(0));
@@ -499,7 +496,7 @@ fn carry_out(
                 }
             }
         }
-        if tts.failed_in_a_row >= crate::tts::RESTART_AFTER {
+        if tts.failed_in_a_row >= super::RESTART_AFTER {
             tts.restart();
         }
     }
@@ -509,7 +506,7 @@ fn carry_out(
 /// in `in_a_row` (a call that worked starts the count again): each was dropped unseen, so a
 /// synthesizer that died left nothing in the log and was never started anew (performance
 /// review 2026-10-25, finding 13).
-fn logged(in_a_row: &mut u32, result: Result<(), crate::tts::TtsError>, call: &'static str) {
+fn logged(in_a_row: &mut u32, result: Result<(), crate::TtsError>, call: &'static str) {
     static FAILURES: AtomicU64 = AtomicU64::new(0);
     match result {
         Ok(()) => *in_a_row = 0,
@@ -687,7 +684,10 @@ mod tests {
             std::env::temp_dir().join(format!("okur-speech-thread-{}.jsonl", std::process::id()));
         let log = SpeechLog::open(&path);
         assert!(log.is_ok(), "{:?}", log.as_ref().err());
-        let manager = TtsManager::new(Synthesizer::NoSpeech);
+        let manager = TtsManager::new(
+            Arc::new(crate::speech::SilentSynthesizers),
+            Synthesizer::NoSpeech,
+        );
         assert!(manager.is_ok());
         let (Ok(log), Ok(manager)) = (log, manager) else {
             return;
@@ -766,7 +766,7 @@ mod tests {
 #[cfg(test)]
 mod mark_tests {
     use super::*;
-    use crate::tts::{TtsEngine, TtsError, VoiceInfo};
+    use crate::{TtsEngine, TtsError, VoiceInfo};
     use okur_core::settings::Synthesizer;
     use std::collections::VecDeque;
     use std::time::Duration;
@@ -845,7 +845,11 @@ mod mark_tests {
     fn thread(
         engine: Option<Box<dyn TtsEngine>>,
     ) -> Option<(SpeechThread, std::sync::mpsc::Receiver<u64>)> {
-        let mut manager = TtsManager::new(Synthesizer::NoSpeech).ok()?;
+        let mut manager = TtsManager::new(
+            Arc::new(crate::speech::SilentSynthesizers),
+            Synthesizer::NoSpeech,
+        )
+        .ok()?;
         if let Some(engine) = engine {
             manager.engine = engine;
         }
@@ -891,7 +895,10 @@ mod mark_tests {
     /// No mark comes back before a synthesizer reports progress at all.
     #[test]
     fn marks_are_not_reported_without_a_listener() {
-        let Ok(manager) = TtsManager::new(Synthesizer::NoSpeech) else {
+        let Ok(manager) = TtsManager::new(
+            Arc::new(crate::speech::SilentSynthesizers),
+            Synthesizer::NoSpeech,
+        ) else {
             return;
         };
         let speech = SpeechThread::start(None, move || manager);
@@ -959,7 +966,10 @@ mod mark_tests {
         for stopped in [true, false] {
             let parts_spoken = Arc::new(AtomicUsize::new(0));
             let interruptions = Arc::new(AtomicU64::new(0));
-            let Ok(mut manager) = TtsManager::new(Synthesizer::NoSpeech) else {
+            let Ok(mut manager) = TtsManager::new(
+                Arc::new(crate::speech::SilentSynthesizers),
+                Synthesizer::NoSpeech,
+            ) else {
                 return;
             };
             manager.engine = Box::new(StoppedAfterFirst {
@@ -1010,7 +1020,7 @@ mod mark_tests {
 #[cfg(test)]
 mod panic_tests {
     use super::*;
-    use crate::tts::{TtsEngine, TtsError, VoiceInfo};
+    use crate::{TtsEngine, TtsError, VoiceInfo};
     use okur_core::settings::Synthesizer;
     use std::time::{Duration, Instant};
 
@@ -1108,7 +1118,10 @@ mod panic_tests {
     /// works again starts the count over (performance review 2026-10-25, finding 13).
     #[test]
     fn a_synthesizer_failing_in_a_row_is_started_anew() {
-        let Ok(mut manager) = TtsManager::new(Synthesizer::NoSpeech) else {
+        let Ok(mut manager) = TtsManager::new(
+            Arc::new(crate::speech::SilentSynthesizers),
+            Synthesizer::NoSpeech,
+        ) else {
             return;
         };
         manager.engine = Box::new(Failing);
@@ -1149,7 +1162,10 @@ mod panic_tests {
     /// live regions and its exit waiting on it (performance review 2026-10-25, finding 5).
     #[test]
     fn speech_that_panicked_is_not_speaking() {
-        let Ok(mut manager) = TtsManager::new(Synthesizer::NoSpeech) else {
+        let Ok(mut manager) = TtsManager::new(
+            Arc::new(crate::speech::SilentSynthesizers),
+            Synthesizer::NoSpeech,
+        ) else {
             return;
         };
         manager.engine = Box::new(Panicking);
@@ -1172,10 +1188,7 @@ mod panic_tests {
             if let Ok(mut on) = on.lock() {
                 *on = std::thread::current().name().map(str::to_owned);
             }
-            let mut manager = TtsManager::with_engine(
-                Box::new(crate::tts::NoSpeechEngine::new()),
-                Synthesizer::NoSpeech,
-            );
+            let mut manager = TtsManager::silent();
             manager.engine = Box::new(Panicking);
             manager
         });
@@ -1204,7 +1217,7 @@ mod panic_tests {
 #[cfg(test)]
 mod context_tests {
     use super::*;
-    use crate::tts::{TtsEngine, TtsError, VoiceInfo};
+    use crate::{TtsEngine, TtsError, VoiceInfo};
     use okur_core::settings::{Synthesizer, VoiceContext, VoiceSettings};
 
     /// A synthesizer that keeps the rates it was set to.
@@ -1329,7 +1342,10 @@ mod context_tests {
     #[test]
     fn a_context_back_to_the_default_voice_keeps_the_synthesizer() {
         let asked = std::sync::Arc::new(Mutex::new(Asked::default()));
-        let Ok(mut manager) = TtsManager::new(Synthesizer::NoSpeech) else {
+        let Ok(mut manager) = TtsManager::new(
+            Arc::new(crate::speech::SilentSynthesizers),
+            Synthesizer::NoSpeech,
+        ) else {
             return;
         };
         manager.engine = Box::new(Voices(asked.clone()));
@@ -1365,7 +1381,10 @@ mod context_tests {
     #[test]
     fn a_voice_context_speaks_with_its_own_rate() {
         let rates = std::sync::Arc::new(Mutex::new(Vec::new()));
-        let Ok(mut manager) = TtsManager::new(Synthesizer::NoSpeech) else {
+        let Ok(mut manager) = TtsManager::new(
+            Arc::new(crate::speech::SilentSynthesizers),
+            Synthesizer::NoSpeech,
+        ) else {
             return;
         };
         manager.engine = Box::new(Rates(rates.clone()));

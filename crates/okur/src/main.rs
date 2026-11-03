@@ -3,7 +3,7 @@
 //! lists the synthesizers' voices. The verification harness is `okur-lab.exe` (crates/okur-lab).
 
 use clap::{Parser, Subcommand};
-use okur_windows::TtsManager;
+use okur_runtime::TtsManager;
 
 #[derive(Parser, Debug)]
 #[command(
@@ -168,7 +168,11 @@ async fn main() {
                 std::process::exit(1);
             });
 
-            let tts = TtsManager::new(engine_type).unwrap_or_else(|e| {
+            let tts = TtsManager::new(
+                std::sync::Arc::new(okur_windows::WindowsSynthesizers),
+                engine_type,
+            )
+            .unwrap_or_else(|e| {
                 eprintln!("Failed to initialize TTS engine: {}", e);
                 std::process::exit(1);
             });

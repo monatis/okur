@@ -42,8 +42,8 @@ pub mod word_om;
 
 pub use bridge::{PlatformBridge, PlatformError};
 pub use tts::{
-    synthesizer_named, NoSpeechEngine, Sapi5Engine, SpeechLog, SpeechLogEntry, SpeechLogKind,
-    TtsEngine, TtsError, TtsManager, VoiceInfo,
+    synthesizer_named, NoSpeechEngine, Sapi5Engine, TtsEngine, TtsError, VoiceInfo,
+    WindowsSynthesizers,
 };
 
 /// Process-wide setup, before any thread reads the screen. On Windows the process is aware of
