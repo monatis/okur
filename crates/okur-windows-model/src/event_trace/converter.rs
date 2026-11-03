@@ -19,6 +19,31 @@ pub(super) fn left_before_read(event: &TraceEvent) -> bool {
             .is_some_and(|o| o.states & STATE_FOCUSED == 0)
 }
 
+/// Whether a WinEvent focus is an editable combo box's, which gave the focus to its edit
+/// before the event was read while UI Automation still gave the combo box: MSAA does not say
+/// the combo box is focused, the keyboard focus is in an edit, and the focus chain ends at the
+/// combo box. The edit's own focus follows, and JAWS says only it: "Open: edit combo | C: | 1
+/// of 26" in the Run dialog [obs, 3159/s6]. A chain that reaches the edit is the edit's focus,
+/// and no other follows: the Font dialog's "Font style: edit combo" [obs, 541/s5].
+pub(super) fn combo_box_passed_to_its_edit(event: &TraceEvent) -> bool {
+    const ROLE_COMBOBOX: i32 = 0x2E;
+    const STATE_FOCUSED: u32 = 0x4;
+    event.event == "focus"
+        && event
+            .object
+            .as_ref()
+            .is_some_and(|o| o.role == Some(ROLE_COMBOBOX) && o.states & STATE_FOCUSED == 0)
+        && event
+            .focus_window_class
+            .as_deref()
+            .is_some_and(|c| c.eq_ignore_ascii_case("Edit"))
+        && event.window_class != event.focus_window_class
+        && event
+            .focus_chain
+            .last()
+            .is_some_and(|n| n.control_type == UIA_COMBOBOX)
+}
+
 /// Whether a value change is a choice's, not text's: its object has a value (a select's new
 /// option, "Eastgate") while the focused element has no text. A text field's value is its
 /// text.
@@ -270,7 +295,7 @@ impl EventConverter {
         // A focus that had moved on before it was read is not said: the focus after it is.
         // Tab from File Explorer's search box passes its list for 30 ms on the way to the
         // first link, and JAWS says only "Control Panel Home Link" [obs, 3156/s6].
-        if left_before_read(event) {
+        if left_before_read(event) || combo_box_passed_to_its_edit(event) {
             return Vec::new();
         }
         if let Some(window) = menu_bar_return(event) {

@@ -434,6 +434,34 @@ fn an_item_named_after_its_texts() {
     assert!(!names_its_texts("notes.txt", &[]));
 }
 
+/// An editable combo box's focus, read once the combo box gave the focus to its edit, is not
+/// said while UI Automation still gives the combo box; its edit's focus follows. Read at the
+/// edit, it is the edit's focus.
+#[test]
+fn an_editable_combo_boxs_focus_given_to_its_edit_is_the_edits() {
+    let combo = node(UIA_COMBOBOX, "Open:", false);
+    let mut event = focus_event(Vec::new());
+    event.window_class = Some("ComboBox".to_owned());
+    event.focus_window_class = Some("Edit".to_owned());
+    event.object = Some(TraceObject {
+        role: Some(0x2E),
+        name: Some("Open:".to_owned()),
+        value: Some("C:".to_owned()),
+        states: 0x0010_0400,
+        shortcut: None,
+    });
+    // UI Automation still gives the combo box: its edit's focus follows [obs, 3159/s6].
+    event.focus_chain = vec![node(UIA_WINDOW, "Run", false), combo.clone()];
+    assert!(EventConverter::default().convert(&event).is_empty());
+    // The chain reaches the edit: this is the edit's focus [obs, 541/s5].
+    event.focus_chain = vec![
+        node(UIA_WINDOW, "Font", false),
+        combo,
+        node(UIA_EDIT, "Font style:", true),
+    ];
+    assert!(!EventConverter::default().convert(&event).is_empty());
+}
+
 /// A focus read after the keyboard focus had left its window, its object no longer
 /// focused, is not said; the focus that follows is [obs, 3156/s6]. The same object still
 /// focused is said.
