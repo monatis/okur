@@ -1195,7 +1195,7 @@ async fn main() {
             let layers = okur_core::settings_layers::SettingsLayers::with_global(
                 &okur_core::settings::Settings::reference_machine(),
             );
-            let folder = okur_windows::settings_file::SettingsFolder::at(&path);
+            let folder = okur_runtime::settings_file::SettingsFolder::at(&path);
             folder.save(&layers);
             if folder.load() != layers {
                 eprintln!("Error: {path}: the settings were not written");

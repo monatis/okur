@@ -22,7 +22,7 @@
   "crates": {
     "okur-ui-model": { "kind": "neutral", "allow": [] },
     "okur-core": { "kind": "neutral", "allow": ["okur-ui-model"] },
-    "okur-runtime": { "kind": "neutral", "allow": ["okur-core"] },
+    "okur-runtime": { "kind": "neutral", "allow": ["okur-core", "okur-ui-model"] },
     "okur-windows-model": { "kind": "neutral", "allow": ["okur-core", "xa11y-windows"] },
     "okur-windows": {
       "kind": "platform",

@@ -217,6 +217,18 @@ fn event_listener() -> Box<dyn EventSource> {
     }
 }
 
+/// How the platform starts `okur-ui`: on Windows below UI Access when Okur has it.
+fn ui_spawner() -> Box<dyn okur_runtime::ui_host::UiSpawner> {
+    #[cfg(windows)]
+    {
+        Box::new(okur_windows::ui_spawner::WindowsUiSpawner::for_this_process())
+    }
+    #[cfg(not(windows))]
+    {
+        Box::new(okur_runtime::ui_host::PlainSpawner)
+    }
+}
+
 /// Engine work longer than this, on a key or an event, is logged as slow: the keyboard hook
 /// waits on the engine, and a key that waits 150 ms passes to the application unread.
 const SLOW_ENGINE: std::time::Duration = std::time::Duration::from_millis(20);
@@ -645,8 +657,8 @@ pub async fn run(config: RunConfig) {
         && crate::folders::settings().is_some_and(|folder| !folder.exists());
     // The saved settings, then this run's options over them, for this run only.
     let settings_folder = match settings_folder {
-        Some(path) => Some(okur_windows::settings_file::SettingsFolder::at(path)),
-        None => crate::folders::settings().map(okur_windows::settings_file::SettingsFolder::at),
+        Some(path) => Some(okur_runtime::settings_file::SettingsFolder::at(path)),
+        None => crate::folders::settings().map(okur_runtime::settings_file::SettingsFolder::at),
     };
     let mut layers = settings_folder
         .as_ref()
@@ -741,7 +753,9 @@ pub async fn run(config: RunConfig) {
     )));
     // Okur's own windows (the Virtual Viewer on screen), drawn by okur-ui.
     let mut ui_closer = None;
-    if let Some(ui) = okur_windows::ui_host::ProcessUiHost::start(event_tx.clone()) {
+    if let Some(ui) =
+        okur_runtime::ui_host::ProcessUiHost::start(EventSink::new(event_tx.clone()), ui_spawner())
+    {
         ui_closer = Some(ui.closer());
         engine.set_ui(Box::new(ui));
     }
@@ -754,7 +768,7 @@ pub async fn run(config: RunConfig) {
     if let Some(folder) = settings_folder {
         // Written on a thread of its own, off the engine's, which the keyboard hook waits on
         // (performance review 2026-10-25, finding 7; 2026-11-02, speech finding 9).
-        let store = okur_windows::settings_file::BackgroundStore::new(folder.clone());
+        let store = okur_runtime::settings_file::BackgroundStore::new(folder.clone());
         engine.set_custom_labels(folder.load_labels(), Some(Box::new(store.clone())));
         engine.set_placemarkers(folder.load_placemarkers(), Some(Box::new(store.clone())));
         engine.set_flexible_web_rules(

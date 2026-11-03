@@ -6,20 +6,87 @@
 //! windows it showed are reported closed, as each one's own closing is: Okur no longer believes
 //! them open (performance review 2026-10-25, finding 9).
 //!
-//! An Okur with UI Access (the installed `okur-sr.exe`) starts it with a lowered token, UI
-//! Access cleared and the integrity Medium, so that it stays the normal process
-//! `docs/references/helper-ui-architecture.md` decided it is; and lets it take the foreground
-//! for each dialog it shows, which a Medium process could not do by itself.
+//! The platform starts it ([`UiSpawner`]): Windows' Okur with UI Access (the installed
+//! `okur-sr.exe`) with a lowered token, UI Access cleared and the integrity Medium, so that it
+//! stays the normal process `docs/references/helper-ui-architecture.md` decided it is, letting
+//! it take the foreground for each dialog it shows, which a Medium process could not do by
+//! itself.
 
 use std::io::{BufRead, BufReader, Read, Write};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::{Child, Command, Stdio};
 use std::sync::{mpsc, Arc, Mutex};
 use std::time::Duration;
 
 use okur_core::event::AccessibilityEvent;
 use okur_core::ui::{FromUi, ToUi, UiHost};
-use tokio::sync::mpsc::UnboundedSender;
+
+use crate::EventSink;
+
+/// A started `okur-ui`, as the host asks after it.
+pub trait UiChild: Send {
+    fn has_exited(&mut self) -> bool;
+    fn id(&self) -> u32;
+}
+
+impl UiChild for Child {
+    fn has_exited(&mut self) -> bool {
+        matches!(self.try_wait(), Ok(Some(_)))
+    }
+
+    fn id(&self) -> u32 {
+        Child::id(self)
+    }
+}
+
+/// A started `okur-ui`: the process, and its standard input, output and error.
+pub struct UiProcess {
+    pub child: Box<dyn UiChild>,
+    pub input: Box<dyn Write + Send>,
+    pub output: Box<dyn Read + Send>,
+    pub error: Box<dyn Read + Send>,
+}
+
+/// How a system starts `okur-ui` and lets the windows it shows come to the front.
+pub trait UiSpawner: Send + Sync {
+    /// Starts the program at `program`, its standard streams piped; `None` when it does not.
+    fn spawn(&self, program: &Path) -> Option<UiProcess>;
+
+    /// Lets the process `pid` bring the window it shows next to the front.
+    fn allow_foreground(&self, pid: u32) {
+        let _ = pid;
+    }
+}
+
+/// Starts `okur-ui` as an ordinary child process, at Okur's own level.
+#[derive(Debug, Default, Clone, Copy)]
+pub struct PlainSpawner;
+
+impl UiSpawner for PlainSpawner {
+    fn spawn(&self, program: &Path) -> Option<UiProcess> {
+        spawn_plain(program)
+    }
+}
+
+/// `program` started as an ordinary child process, its standard streams piped.
+pub fn spawn_plain(program: &Path) -> Option<UiProcess> {
+    let mut child = Command::new(program)
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .map_err(|e| tracing::warn!(error = %e, "okur-ui did not start"))
+        .ok()?;
+    let input = child.stdin.take()?;
+    let output = child.stdout.take()?;
+    let error = child.stderr.take()?;
+    Some(UiProcess {
+        child: Box::new(child),
+        input: Box::new(input),
+        output: Box::new(output),
+        error: Box::new(error),
+    })
+}
 
 /// What the writer thread is asked to do.
 enum Message {
@@ -100,22 +167,19 @@ impl UiCloser {
 }
 
 impl ProcessUiHost {
-    /// Starts `okur-ui` from Okur's own folder; `None` when it is not there.
-    pub fn start(events: UnboundedSender<AccessibilityEvent>) -> Option<Self> {
+    /// Starts `okur-ui` from Okur's own folder with `spawner`; `None` when it is not there.
+    pub fn start(events: EventSink, spawner: Box<dyn UiSpawner>) -> Option<Self> {
         let program = program_path()?;
         if !program.exists() {
             tracing::warn!(?program, "okur-ui not found: Okur's windows will not show");
             return None;
         }
-        // Lowered only below UI Access: an Okur started as administrator from a terminal
-        // keeps its okur-ui at its own level, as before.
-        let lowered = crate::elevation::has_ui_access();
         let (messages, received) = mpsc::channel::<Message>();
         let open = Arc::new(Mutex::new(OpenWindows::default()));
         std::thread::Builder::new()
             .name("okur-ui writer".to_owned())
             .spawn(move || {
-                let mut running = Running::start(&program, &events, lowered, &open);
+                let mut running = Running::start(&program, &events, spawner.as_ref(), &open);
                 for message in received {
                     let message = match message {
                         Message::Send(message) => message,
@@ -133,9 +197,8 @@ impl ProcessUiHost {
                     if let Ok(mut open) = open.lock() {
                         open.told(&message);
                     }
-                    // A window coming to the front: a lowered okur-ui may take the foreground
-                    // only when Okur lets it (the wizard and the main window were left to the
-                    // thread-attach trick alone: performance review 2026-10-25, finding 10).
+                    // A window coming to the front, which the spawner may have to let okur-ui
+                    // bring there.
                     let shows_dialog = matches!(
                         message,
                         ToUi::DialogShow { .. }
@@ -148,12 +211,12 @@ impl ProcessUiHost {
                     // A process that exited is started again, once per message.
                     if !running
                         .as_mut()
-                        .is_some_and(|r| r.write(&line, shows_dialog))
+                        .is_some_and(|r| r.write(&line, shows_dialog, spawner.as_ref()))
                     {
-                        running = Running::start(&program, &events, lowered, &open);
+                        running = Running::start(&program, &events, spawner.as_ref(), &open);
                         if !running
                             .as_mut()
-                            .is_some_and(|r| r.write(&line, shows_dialog))
+                            .is_some_and(|r| r.write(&line, shows_dialog, spawner.as_ref()))
                         {
                             tracing::warn!("okur-ui did not take a message");
                         }
@@ -183,58 +246,25 @@ fn program_path() -> Option<PathBuf> {
     Some(std::env::current_exe().ok()?.with_file_name(name))
 }
 
-/// The `okur-ui` process, started the plain way or with the lowered token.
-enum Process {
-    Plain(Child),
-    #[cfg(windows)]
-    Lowered(crate::lowered_process::LoweredChild),
-}
-
-impl Process {
-    fn has_exited(&mut self) -> bool {
-        match self {
-            Process::Plain(child) => matches!(child.try_wait(), Ok(Some(_))),
-            #[cfg(windows)]
-            Process::Lowered(child) => child.has_exited(),
-        }
-    }
-
-    fn id(&self) -> u32 {
-        match self {
-            Process::Plain(child) => child.id(),
-            #[cfg(windows)]
-            Process::Lowered(child) => child.id(),
-        }
-    }
-}
-
-/// A started `okur-ui`: the process, its standard input, output and error.
-type Spawned = (
-    Process,
-    Box<dyn Write + Send>,
-    Box<dyn Read + Send>,
-    Box<dyn Read + Send>,
-);
-
 /// A running `okur-ui` and its input.
 struct Running {
-    process: Process,
+    process: Box<dyn UiChild>,
     input: Box<dyn Write + Send>,
-    lowered: bool,
 }
 
 impl Running {
     fn start(
-        program: &PathBuf,
-        events: &UnboundedSender<AccessibilityEvent>,
-        lowered: bool,
+        program: &Path,
+        events: &EventSink,
+        spawner: &dyn UiSpawner,
         open: &Arc<Mutex<OpenWindows>>,
     ) -> Option<Self> {
-        let (process, input, output, error) = if lowered {
-            Self::spawn_lowered(program)?
-        } else {
-            Self::spawn_plain(program)?
-        };
+        let UiProcess {
+            child: process,
+            input,
+            output,
+            error,
+        } = spawner.spawn(program)?;
         // What okur-ui writes to its standard error (a panic's message) goes into Okur's log.
         let _ = std::thread::Builder::new()
             .name("okur-ui errors".to_owned())
@@ -256,7 +286,7 @@ impl Running {
                             if let Ok(mut open) = open.lock() {
                                 open.heard(&message);
                             }
-                            let _ = events.send(AccessibilityEvent::Ui(message));
+                            events.send(AccessibilityEvent::Ui(message));
                         }
                         Err(e) => {
                             tracing::warn!(%line, error = %e, "unreadable okur-ui message")
@@ -269,67 +299,21 @@ impl Running {
                     tracing::warn!(windows = gone.len(), "okur-ui exited with windows open");
                 }
                 for message in gone {
-                    let _ = events.send(AccessibilityEvent::Ui(message));
+                    events.send(AccessibilityEvent::Ui(message));
                 }
             });
-        tracing::debug!(pid = process.id(), lowered, "okur-ui started");
-        Some(Self {
-            process,
-            input,
-            lowered,
-        })
-    }
-
-    fn spawn_plain(program: &PathBuf) -> Option<Spawned> {
-        let mut child = Command::new(program)
-            .stdin(Stdio::piped())
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .spawn()
-            .map_err(|e| tracing::warn!(error = %e, "okur-ui did not start"))
-            .ok()?;
-        let input = child.stdin.take()?;
-        let output = child.stdout.take()?;
-        let error = child.stderr.take()?;
-        Some((
-            Process::Plain(child),
-            Box::new(input),
-            Box::new(output),
-            Box::new(error),
-        ))
-    }
-
-    fn spawn_lowered(program: &PathBuf) -> Option<Spawned> {
-        #[cfg(windows)]
-        {
-            match crate::lowered_process::spawn(program) {
-                Ok((child, pipes)) => Some((
-                    Process::Lowered(child),
-                    Box::new(pipes.input),
-                    Box::new(pipes.output),
-                    Box::new(pipes.error),
-                )),
-                // Okur's windows still show, at Okur's own level.
-                Err(e) => {
-                    tracing::warn!(error = %e, "okur-ui not started lowered; started as Okur");
-                    Self::spawn_plain(program)
-                }
-            }
-        }
-        #[cfg(not(windows))]
-        {
-            Self::spawn_plain(program)
-        }
+        tracing::debug!(pid = process.id(), "okur-ui started");
+        Some(Self { process, input })
     }
 
     /// Writes one message; false when the process is gone. A dialog to show is first
     /// allowed to take the foreground.
-    fn write(&mut self, line: &str, shows_dialog: bool) -> bool {
+    fn write(&mut self, line: &str, shows_dialog: bool, spawner: &dyn UiSpawner) -> bool {
         if self.process.has_exited() {
             return false;
         }
-        if shows_dialog && self.lowered {
-            crate::process::allow_foreground(self.process.id());
+        if shows_dialog {
+            spawner.allow_foreground(self.process.id());
         }
         writeln!(self.input, "{line}").is_ok() && self.input.flush().is_ok()
     }

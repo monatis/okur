@@ -983,10 +983,13 @@ name = "okur-runtime"
 version = "0.1.0"
 dependencies = [
  "okur-core",
+ "okur-ui-model",
  "serde",
  "serde_json",
  "thiserror",
  "tokio",
+ "toml",
+ "toml_edit",
  "tracing",
 ]
 
@@ -1035,8 +1038,6 @@ dependencies = [
  "serde_json",
  "thiserror",
  "tokio",
- "toml",
- "toml_edit",
  "tracing",
  "windows",
  "windows-core",

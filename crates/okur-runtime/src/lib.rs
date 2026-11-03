@@ -6,8 +6,10 @@
 pub mod error;
 pub mod events;
 pub mod hook;
+pub mod settings_file;
 pub mod speech;
 pub mod synthesizer;
+pub mod ui_host;
 
 pub use error::RuntimeError;
 pub use events::{EventSink, EventSource, MockEventSource};

@@ -33,7 +33,7 @@ pub struct SettingsFolder {
 }
 
 impl SettingsFolder {
-    /// The settings files in `folder` (the program says where: `okur::folders::settings`).
+    /// The settings files in `folder` (the program says where).
     pub fn at(folder: impl Into<PathBuf>) -> Self {
         Self {
             folder: folder.into(),
@@ -347,7 +347,7 @@ const NOTIFICATION_RULES: &str = "notification-rules.toml";
 const LAST_CHANGED: &str = "last-changed.toml";
 
 impl SettingsFolder {
-    /// The settings files in `folder` (the program says where: `okur::folders::settings`).
+    /// The settings files in `folder` (the program says where).
     /// The custom labels kept (Insert+Ctrl+Tab). A missing or unreadable file is none, the
     /// second logged.
     pub fn load_labels(&self) -> okur_core::labels::CustomLabels {

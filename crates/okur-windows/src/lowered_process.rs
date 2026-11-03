@@ -48,6 +48,10 @@ pub struct LoweredChild {
     pid: u32,
 }
 
+// SAFETY: the child's process handle is a kernel handle, waited on and closed from any thread;
+// nothing in it belongs to the thread that started the child.
+unsafe impl Send for LoweredChild {}
+
 impl LoweredChild {
     pub fn id(&self) -> u32 {
         self.pid

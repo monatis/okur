@@ -25,14 +25,14 @@ pub mod ocr;
 pub mod process;
 pub mod registry;
 pub mod screen_lines;
-pub mod settings_file;
 pub mod signature;
 pub mod sound;
 pub mod start_options;
 pub mod text_context;
 pub mod top_windows;
 pub mod tts;
-pub mod ui_host;
+#[cfg(windows)]
+pub mod ui_spawner;
 #[cfg(windows)]
 pub mod uia_capture;
 pub mod virtual_desktop;
