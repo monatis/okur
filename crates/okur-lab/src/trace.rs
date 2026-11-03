@@ -32,7 +32,7 @@ pub fn run_trace(
 
     // A trace goes into the public corpus: no one's e-mail address goes with it.
     let sink = move |event: TraceEvent| {
-        if privacy::internet_feed(&event) {
+        if privacy::internet_feed(&event) || privacy::unvisited_row_under_mouse(&event) {
             return;
         }
         if let Ok(line) = serde_json::to_string(&event) {

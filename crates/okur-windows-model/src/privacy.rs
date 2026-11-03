@@ -22,6 +22,24 @@ pub fn unvisited_list_item(object: &crate::event_trace::TraceObject) -> bool {
     object.role == Some(ROLE_LISTITEM) && object.states & (STATE_SELECTED | STATE_FOCUSED) == 0
 }
 
+/// Whether a mouse read (where the mouse rests, read as a trace starts) is over a list's row
+/// that is not selected: the reference machine's installed programs, in a trace of scenario
+/// 3156 (round-ui2a, 2026-11-03), where Programs and Features lay under the mouse. A row
+/// selected is one a scenario visits, and stays.
+pub fn unvisited_row_under_mouse(event: &crate::event_trace::TraceEvent) -> bool {
+    const UIA_LISTITEM: i32 = 50007;
+    const UIA_DATAITEM: i32 = 50029;
+    event.point.is_some()
+        && event.focus_chain.iter().any(|node| {
+            (matches!(node.control_type, UIA_LISTITEM | UIA_DATAITEM)
+                || node
+                    .automation_id
+                    .as_deref()
+                    .is_some_and(|id| id.starts_with("ListViewSubItem")))
+                && node.is_selected != Some(true)
+        })
+}
+
 /// What an e-mail address is replaced with.
 pub const ADDRESS_MARK: &str = "<address>";
 
@@ -110,6 +128,24 @@ mod tests {
         assert!(!unvisited_list_item(&item(0x22, 0x0030_0402)));
         assert!(!unvisited_list_item(&item(0x22, 0x0030_0404)));
         assert!(!unvisited_list_item(&item(0x2B, 0x0010_0000)));
+    }
+
+    /// A mouse read over a list's row nobody selected is left out; over a selected row, or
+    /// over anything else, it stays.
+    #[test]
+    fn a_mouse_read_over_an_unvisited_row_is_left_out() {
+        let read = r#"{"t_ms":1,"event":"mouse_point","win_event":0,"hwnd":0,"id_object":0,"id_child":0,"focus_chain":[{"control_type":50020,"localized_control_type":"text","name":"Some Publisher","automation_id":"ListViewSubItem-1","is_enabled":true,"is_offscreen":false,"is_password":false,"is_required_for_form":false,"is_keyboard_focusable":true,"has_keyboard_focus":false,"is_control_element":false,"is_content_element":false}],"point":{"at":[960,540],"texts":{}}}"#;
+        let event: Option<crate::event_trace::TraceEvent> = serde_json::from_str(read).ok();
+        assert_eq!(event.as_ref().map(unvisited_row_under_mouse), Some(true));
+        let selected = read.replace(
+            r#""is_enabled":true"#,
+            r#""is_selected":true,"is_enabled":true"#,
+        );
+        let event: Option<crate::event_trace::TraceEvent> = serde_json::from_str(&selected).ok();
+        assert_eq!(event.as_ref().map(unvisited_row_under_mouse), Some(false));
+        let overlay = read.replace(r#","automation_id":"ListViewSubItem-1""#, "");
+        let event: Option<crate::event_trace::TraceEvent> = serde_json::from_str(&overlay).ok();
+        assert_eq!(event.as_ref().map(unvisited_row_under_mouse), Some(false));
     }
 
     #[test]
