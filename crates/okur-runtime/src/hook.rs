@@ -1,7 +1,23 @@
-use super::{HookCallback, KeyboardHook};
-use crate::PlatformError;
+//! The keyboard hook: every key, before the application has it.
+
+use crate::RuntimeError;
 use okur_core::input::{KeyAction, KeyEvent};
 use std::sync::{Arc, Mutex};
+
+/// What the hook calls with each key, and whether the key goes on to the application.
+pub type HookCallback = Box<dyn FnMut(KeyEvent) -> KeyAction + Send>;
+
+/// A system's low-level keyboard hook.
+pub trait KeyboardHook: Send + Sync {
+    /// Starts intercepting keyboard events, invoking the given callback for each event.
+    fn start(&mut self, callback: HookCallback) -> Result<(), RuntimeError>;
+
+    /// Stops intercepting keyboard events and removes OS hooks.
+    fn stop(&mut self) -> Result<(), RuntimeError>;
+
+    /// Returns whether the hook is currently listening.
+    fn is_active(&self) -> bool;
+}
 
 type SharedCallback = Arc<Mutex<HookCallback>>;
 
@@ -29,13 +45,13 @@ impl MockKeyboardHook {
 }
 
 impl KeyboardHook for MockKeyboardHook {
-    fn start(&mut self, callback: HookCallback) -> Result<(), PlatformError> {
+    fn start(&mut self, callback: HookCallback) -> Result<(), RuntimeError> {
         self.active = true;
         self.callback = Some(Arc::new(Mutex::new(callback)));
         Ok(())
     }
 
-    fn stop(&mut self) -> Result<(), PlatformError> {
+    fn stop(&mut self) -> Result<(), RuntimeError> {
         self.active = false;
         self.callback = None;
         Ok(())

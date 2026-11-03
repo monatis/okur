@@ -39,6 +39,7 @@ bench = false
 
 [dependencies]
 okur-core = { workspace = true }
+okur-runtime = { workspace = true }
 okur-windows = { workspace = true }
 okur-windows-model = { workspace = true }
 clap = { workspace = true }

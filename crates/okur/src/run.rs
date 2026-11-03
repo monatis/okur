@@ -11,9 +11,8 @@ use okur_core::{
     input::KeyAction, AccessibilityEvent, AomNode, Role, ScreenReaderEngine, VirtualBuffer,
     VirtualCursor,
 };
-use okur_windows::{
-    AccessibilityEventListener, KeyboardHook, PlatformBridge, SpeechLog, TtsManager,
-};
+use okur_runtime::{EventSink, EventSource, KeyboardHook};
+use okur_windows::{PlatformBridge, SpeechLog, TtsManager};
 use std::path::Path;
 
 use std::sync::{Arc, Mutex};
@@ -201,20 +200,20 @@ fn keyboard_hook() -> Box<dyn KeyboardHook> {
     }
     #[cfg(not(windows))]
     {
-        Box::new(okur_windows::hook::mock::MockKeyboardHook::new())
+        Box::new(okur_runtime::MockKeyboardHook::new())
     }
 }
 
 /// The platform's accessibility event listener: Windows' own, or the headless mock where no
 /// driver is built yet.
-fn event_listener() -> Box<dyn AccessibilityEventListener> {
+fn event_listener() -> Box<dyn EventSource> {
     #[cfg(windows)]
     {
         Box::new(okur_windows::events::windows::WindowsAccessibilityEventListener::new())
     }
     #[cfg(not(windows))]
     {
-        Box::new(okur_windows::events::mock::MockAccessibilityEventListener::new())
+        Box::new(okur_runtime::MockEventSource::new())
     }
 }
 
@@ -900,7 +899,7 @@ pub async fn run(config: RunConfig) {
     // Start OS-level accessibility event listener
     let mut event_listener = event_listener();
     let mut event_task = None;
-    if let Err(e) = event_listener.start(event_tx) {
+    if let Err(e) = event_listener.start(EventSink::new(event_tx)) {
         tracing::warn!("Could not start OS accessibility event listener: {}", e);
     } else {
         let engine_events = Arc::clone(&engine);

@@ -5,14 +5,12 @@
 //! ([`EventConverter`]), so the live screen reader consumes
 //! the event stream the harness records, replays and verifies against JAWS.
 
-use super::AccessibilityEventListener;
 use crate::event_capture::run_live;
-use crate::PlatformError;
 use okur_core::AccessibilityEvent;
+use okur_runtime::{EventSink, EventSource, RuntimeError};
 use okur_windows_model::event_trace::{EventConverter, TraceEvent};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
-use tokio::sync::mpsc::UnboundedSender;
 
 /// UIA `Document` control type.
 const UIA_DOCUMENT: i32 = 50030;
@@ -101,11 +99,7 @@ fn take_changed_parts() -> Option<Vec<i32>> {
 /// Reads the changed parts of the page in `window` again, through IA2, and sends them together
 /// as [`AccessibilityEvent::PagePartsLoaded`], spliced with one rebuild. False when one cannot be read: the caller reads the
 /// whole page.
-fn read_changed_parts(
-    window: ForegroundWindow,
-    objects: &[i32],
-    sender: &UnboundedSender<AccessibilityEvent>,
-) -> bool {
+fn read_changed_parts(window: ForegroundWindow, objects: &[i32], sender: &EventSink) -> bool {
     use windows::Win32::Foundation::HWND;
     let started = std::time::Instant::now();
     let top = HWND(window.0 as *mut core::ffi::c_void);
@@ -195,8 +189,8 @@ impl Default for WindowsAccessibilityEventListener {
     }
 }
 
-impl AccessibilityEventListener for WindowsAccessibilityEventListener {
-    fn start(&mut self, sender: UnboundedSender<AccessibilityEvent>) -> Result<(), PlatformError> {
+impl EventSource for WindowsAccessibilityEventListener {
+    fn start(&mut self, sender: EventSink) -> Result<(), RuntimeError> {
         if self.thread.is_some() {
             return Ok(());
         }
@@ -224,12 +218,12 @@ impl AccessibilityEventListener for WindowsAccessibilityEventListener {
                 let count = run_live(Box::new(sink), Box::new(page_changed), &stop);
                 tracing::debug!(count, "WinEvent listener stopped");
             })
-            .map_err(|e| PlatformError::EventListenerError(e.to_string()))?;
+            .map_err(|e| RuntimeError::EventSource(e.to_string()))?;
         self.thread = Some(thread);
         Ok(())
     }
 
-    fn stop(&mut self) -> Result<(), PlatformError> {
+    fn stop(&mut self) -> Result<(), RuntimeError> {
         self.stop.store(true, Ordering::Relaxed);
         if let Some(thread) = self.thread.take() {
             crate::join_within(thread, std::time::Duration::from_secs(2));
@@ -253,7 +247,7 @@ fn deliver(
     event: &TraceEvent,
     converter: &mut EventConverter,
     page: &mut Option<String>,
-    sender: &UnboundedSender<AccessibilityEvent>,
+    sender: &EventSink,
     pages: &std::sync::mpsc::Sender<PageRequest>,
 ) {
     let events = converter.convert(event);
@@ -329,8 +323,8 @@ impl PageRequest {
 }
 
 fn start_page_worker(
-    sender: UnboundedSender<AccessibilityEvent>,
-) -> Result<std::sync::mpsc::Sender<PageRequest>, PlatformError> {
+    sender: EventSink,
+) -> Result<std::sync::mpsc::Sender<PageRequest>, RuntimeError> {
     let (tx, rx) = std::sync::mpsc::channel::<PageRequest>();
     std::thread::Builder::new()
         .name("okur-page-refresh".to_owned())
@@ -427,7 +421,7 @@ fn start_page_worker(
                 }
             }
         })
-        .map_err(|e| PlatformError::EventListenerError(e.to_string()))?;
+        .map_err(|e| RuntimeError::EventSource(e.to_string()))?;
     Ok(tx)
 }
 
@@ -435,7 +429,7 @@ fn deliver_one(
     event: &TraceEvent,
     converted: AccessibilityEvent,
     page: &mut Option<String>,
-    sender: &UnboundedSender<AccessibilityEvent>,
+    sender: &EventSink,
     pages: &std::sync::mpsc::Sender<PageRequest>,
 ) {
     match &converted {
@@ -467,7 +461,7 @@ fn deliver_one(
 fn load_page_if_new(
     event: &TraceEvent,
     page: &mut Option<String>,
-    sender: &UnboundedSender<AccessibilityEvent>,
+    sender: &EventSink,
     pages: &std::sync::mpsc::Sender<PageRequest>,
 ) {
     let document = event

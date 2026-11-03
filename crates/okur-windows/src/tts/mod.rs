@@ -1,9 +1,8 @@
-pub mod no_speech;
 pub mod onecore;
 pub mod sapi5;
 pub mod thread;
 
-pub use no_speech::NoSpeechEngine;
+pub use okur_runtime::{NoSpeechEngine, SynthesizerFactory, TtsEngine, TtsError, VoiceInfo};
 pub use onecore::OneCoreEngine;
 pub use sapi5::Sapi5Engine;
 pub use thread::{SpeechIdle, SpeechThread};
@@ -24,107 +23,45 @@ pub fn synthesizer_named(name: &str) -> Result<Synthesizer, String> {
     }
 }
 
-#[derive(Debug, thiserror::Error)]
-pub enum TtsError {
-    #[error("Synthesis failed: {0}")]
-    SynthesisFailed(String),
-    #[error("Initialization failed: {0}")]
-    InitFailed(String),
-    #[error("Voice not found: {0}")]
-    VoiceNotFound(String),
-    #[error("Unsupported operation: {0}")]
-    Unsupported(String),
-}
+/// Windows' synthesizers: OneCore's voices, SAPI 5's, or none.
+#[derive(Debug, Default, Clone, Copy)]
+pub struct WindowsSynthesizers;
 
-/// Metadata description for an installed synthesizer voice.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct VoiceInfo {
-    pub id: String,
-    pub name: String,
-    pub language: Option<String>,
-}
-
-/// Common abstraction for Text-To-Speech synthesizers.
-pub trait TtsEngine: Send + Sync {
-    /// The human-readable name of the synthesizer (e.g., "SAPI 5", "No Speech").
-    fn name(&self) -> &str;
-
-    /// The voice the synthesizer started with, its system default, by id: a voice context
-    /// without a voice of its own goes back to it. `None` where the synthesizer cannot tell,
-    /// and it is then started anew.
-    fn default_voice(&self) -> Option<String> {
-        None
+impl SynthesizerFactory for WindowsSynthesizers {
+    fn make(&self, kind: Synthesizer) -> Result<Box<dyn TtsEngine>, TtsError> {
+        let engine: Box<dyn TtsEngine> = match kind {
+            Synthesizer::NoSpeech => Box::new(NoSpeechEngine::new()),
+            Synthesizer::Sapi5 => {
+                let sapi = Sapi5Engine::new()?;
+                Box::new(sapi)
+            }
+            Synthesizer::OneCore => Box::new(OneCoreEngine::new()?),
+            Synthesizer::Auto => {
+                // OneCore voices respond fastest; SAPI 5 where they are missing.
+                #[cfg(windows)]
+                {
+                    match OneCoreEngine::new() {
+                        Ok(onecore) => Box::new(onecore),
+                        Err(e) => {
+                            tracing::warn!("OneCore unavailable ({e}), trying SAPI 5");
+                            match Sapi5Engine::new() {
+                                Ok(sapi) => Box::new(sapi),
+                                Err(e) => {
+                                    tracing::warn!("SAPI 5 unavailable ({e}), no speech");
+                                    Box::new(NoSpeechEngine::new())
+                                }
+                            }
+                        }
+                    }
+                }
+                #[cfg(not(windows))]
+                {
+                    Box::new(NoSpeechEngine::new())
+                }
+            }
+        };
+        Ok(engine)
     }
-
-    /// Synthesizes and outputs speech.
-    /// If `interrupt` is true, cancels any ongoing speech immediately before speaking.
-    fn speak(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError>;
-
-    /// Speaks `text` with its pitch changed by `pitch` on SAPI's scale (-10 to 10): a capital
-    /// letter read alone. Synthesizers without pitch control speak it unchanged.
-    fn speak_pitched(&mut self, text: &str, pitch: i32, interrupt: bool) -> Result<(), TtsError> {
-        let _ = pitch;
-        self.speak(text, interrupt)
-    }
-
-    /// Speaks one part of a continuous reading (Say All) behind what is speaking, at the voice
-    /// context's `pitch`; [`TtsEngine::reached`] gives `mark` back once the synthesizer starts
-    /// it.
-    fn speak_marked(
-        &mut self,
-        text: &str,
-        mark: u64,
-        pitch: i32,
-        interrupt: bool,
-    ) -> Result<(), TtsError> {
-        let _ = mark;
-        self.speak_pitched(text, pitch, interrupt)
-    }
-
-    /// The mark of the latest part the synthesizer has started since the last call, for a
-    /// synthesizer that [`TtsEngine::follows_marks`].
-    fn reached(&mut self) -> Option<u64> {
-        None
-    }
-
-    /// Whether [`TtsEngine::reached`] follows the parts as they are spoken. Otherwise a part
-    /// counts as reached once it is handed over.
-    fn follows_marks(&self) -> bool {
-        false
-    }
-
-    /// Cancels/stops any ongoing speech immediately.
-    fn stop(&mut self) -> Result<(), TtsError>;
-
-    /// Pauses ongoing speech.
-    fn pause(&mut self) -> Result<(), TtsError>;
-
-    /// Resumes paused speech.
-    fn resume(&mut self) -> Result<(), TtsError>;
-
-    /// Sets speech rate (-10 to 10 for SAPI 5, or normalized scale).
-    fn set_rate(&mut self, rate: i32) -> Result<(), TtsError>;
-
-    /// Gets the current speech rate.
-    fn get_rate(&self) -> i32;
-
-    /// Sets volume (0 to 100).
-    fn set_volume(&mut self, volume: u16) -> Result<(), TtsError>;
-
-    /// Gets the current volume (0 to 100).
-    fn get_volume(&self) -> u16;
-
-    /// Returns whether the synthesizer is currently speaking audio.
-    fn is_speaking(&self) -> bool;
-
-    /// Retrieves available voices.
-    fn get_voices(&self) -> Vec<VoiceInfo>;
-
-    /// Sets active voice by ID or name.
-    fn set_voice(&mut self, voice_id: &str) -> Result<(), TtsError>;
-
-    /// Blocks until any ongoing speech is completely rendered or until timeout.
-    fn wait_until_done(&mut self, timeout_ms: u32) -> Result<(), TtsError>;
 }
 
 /// Synthesizer manager managing the active TTS engine and runtime fallback.
@@ -262,38 +199,7 @@ impl TtsManager {
 
     /// A synthesizer of the given type.
     fn create_engine(engine_type: Synthesizer) -> Result<Box<dyn TtsEngine>, TtsError> {
-        let engine: Box<dyn TtsEngine> = match engine_type {
-            Synthesizer::NoSpeech => Box::new(NoSpeechEngine::new()),
-            Synthesizer::Sapi5 => {
-                let sapi = Sapi5Engine::new()?;
-                Box::new(sapi)
-            }
-            Synthesizer::OneCore => Box::new(OneCoreEngine::new()?),
-            Synthesizer::Auto => {
-                // OneCore voices respond fastest; SAPI 5 where they are missing.
-                #[cfg(windows)]
-                {
-                    match OneCoreEngine::new() {
-                        Ok(onecore) => Box::new(onecore),
-                        Err(e) => {
-                            tracing::warn!("OneCore unavailable ({e}), trying SAPI 5");
-                            match Sapi5Engine::new() {
-                                Ok(sapi) => Box::new(sapi),
-                                Err(e) => {
-                                    tracing::warn!("SAPI 5 unavailable ({e}), no speech");
-                                    Box::new(NoSpeechEngine::new())
-                                }
-                            }
-                        }
-                    }
-                }
-                #[cfg(not(windows))]
-                {
-                    Box::new(NoSpeechEngine::new())
-                }
-            }
-        };
-        Ok(engine)
+        WindowsSynthesizers.make(engine_type)
     }
 
     /// Speaks text using the active synthesizer, given it as JAWS gives its own, at the

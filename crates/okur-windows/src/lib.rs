@@ -41,8 +41,6 @@ pub mod window_text;
 pub mod word_om;
 
 pub use bridge::{PlatformBridge, PlatformError};
-pub use events::AccessibilityEventListener;
-pub use hook::KeyboardHook;
 pub use tts::{
     synthesizer_named, NoSpeechEngine, Sapi5Engine, SpeechLog, SpeechLogEntry, SpeechLogKind,
     TtsEngine, TtsError, TtsManager, VoiceInfo,

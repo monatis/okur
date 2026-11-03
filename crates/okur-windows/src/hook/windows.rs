@@ -1,6 +1,5 @@
-use super::{HookCallback, KeyboardHook};
-use crate::PlatformError;
 use okur_core::input::{Key, KeyAction, KeyEvent, Modifiers};
+use okur_runtime::{HookCallback, KeyboardHook, RuntimeError};
 use std::collections::HashSet;
 use std::sync::atomic::{AtomicBool, AtomicU32, AtomicUsize, Ordering};
 use std::sync::Mutex;
@@ -124,7 +123,7 @@ impl Default for WindowsKeyboardHook {
 }
 
 impl KeyboardHook for WindowsKeyboardHook {
-    fn start(&mut self, callback: HookCallback) -> Result<(), PlatformError> {
+    fn start(&mut self, callback: HookCallback) -> Result<(), RuntimeError> {
         if self.running.load(Ordering::SeqCst) {
             return Ok(());
         }
@@ -161,7 +160,7 @@ impl KeyboardHook for WindowsKeyboardHook {
                     h
                 }
                 Err(e) => {
-                    let _ = init_tx.send(Err(PlatformError::HookError(e.to_string())));
+                    let _ = init_tx.send(Err(RuntimeError::Hook(e.to_string())));
                     running_clone.store(false, Ordering::SeqCst);
                     return;
                 }
@@ -212,13 +211,13 @@ impl KeyboardHook for WindowsKeyboardHook {
                 Ok(())
             }
             Ok(Err(e)) => Err(e),
-            Err(_) => Err(PlatformError::HookError(
+            Err(_) => Err(RuntimeError::Hook(
                 "Failed to initialize hook thread".into(),
             )),
         }
     }
 
-    fn stop(&mut self) -> Result<(), PlatformError> {
+    fn stop(&mut self) -> Result<(), RuntimeError> {
         if !self.running.load(Ordering::SeqCst) {
             return Ok(());
         }

@@ -13,8 +13,6 @@ pub enum PlatformError {
     NoDocumentFound,
     #[error("Application not found: {0}")]
     AppNotFound(String),
-    #[error("Keyboard hook error: {0}")]
-    HookError(String),
     #[error("Event listener error: {0}")]
     EventListenerError(String),
     #[error("Audio error: {0}")]

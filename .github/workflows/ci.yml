@@ -87,7 +87,7 @@ jobs:
       # okur-windows-model converts Windows' recorded data without calling Windows, so parity
       # replay (okur-corpus) runs here too.
       - name: Tests of the engine, the accessibility types and parity replay
-        run: cargo test -p okur-core -p okur-ui-model -p xa11y-core -p okur-windows-model -p okur-corpus
+        run: cargo test -p okur-core -p okur-runtime -p okur-ui-model -p xa11y-core -p okur-windows-model -p okur-corpus
       # Whether the whole workspace still builds here (the programs, the Windows driver's
       # stubs): informational until the driver is gated at its root (crate-structure-proposal
       # step 4); it shows a break that the tests above cannot.

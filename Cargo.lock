@@ -917,6 +917,7 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "okur-core",
+ "okur-runtime",
  "okur-windows",
  "okur-windows-model",
  "serde",
@@ -977,6 +978,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "okur-runtime"
+version = "0.1.0"
+dependencies = [
+ "okur-core",
+ "serde",
+ "thiserror",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
 name = "okur-setup"
 version = "0.1.0"
 dependencies = [
@@ -1014,6 +1026,7 @@ name = "okur-windows"
 version = "0.1.0"
 dependencies = [
  "okur-core",
+ "okur-runtime",
  "okur-ui-model",
  "okur-windows-model",
  "serde",

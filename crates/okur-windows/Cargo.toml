@@ -7,6 +7,7 @@ license.workspace = true
 
 [dependencies]
 okur-core = { workspace = true }
+okur-runtime = { workspace = true }
 okur-ui-model = { workspace = true }
 okur-windows-model = { workspace = true }
 serde = { workspace = true }
