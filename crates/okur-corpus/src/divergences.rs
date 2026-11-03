@@ -627,6 +627,19 @@ divergences! {
     "the agent under the owner's rule on JAWS's accidents, 2026-10-23";
 
     Difference::Step => [
+        "3161-desktop-explorer-ribbon/s2",
+        "3161-desktop-explorer-ribbon/s3",
+        "3161-desktop-explorer-ribbon/s4",
+        "3161-desktop-explorer-ribbon/s5",
+    ],
+    "In File Explorer's ribbon, the same framework as WordPad's, JAWS gives each tab the place \
+     of the one the focus left, counting the File tab beside them: Home first with no place, \
+     then Share \"1 of 4\", View \"2 of 4\", Left back to Share \"3 of 4\", in every trial. \
+     The ribbon's MSAA objects make Home, Share and View the three tabs shown. Okur says those \
+     places: Home \"1 of 3\", Share \"2 of 3\", View \"3 of 3\".",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-03";
+
+    Difference::Step => [
         "1011-desktop-screen-text-ocr-window/s4",
         "1015-desktop-screen-text-ocr-window-english/s4",
     ],

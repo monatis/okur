@@ -186,6 +186,17 @@ A step can be in more than one entry; all of its entries apply.
   of the two tabs shown and Copy third of its group's three.
 - Decided by the agent under the owner's rule on JAWS's accidents, 2026-10-23.
 
+### File Explorer's ribbon tabs' places, a key behind and counting the File tab
+
+- Steps: `3161-desktop-explorer-ribbon/s2`, `3161-desktop-explorer-ribbon/s3`,
+  `3161-desktop-explorer-ribbon/s4`, `3161-desktop-explorer-ribbon/s5`.
+- Difference: JAWS says Home with no place, then Share "1 of 4", View "2 of 4", and Left back
+  to Share "3 of 4". Okur says Home "1 of 3", Share "2 of 3", View "3 of 3".
+- Why: the place of the tab the focus left, as in WordPad's ribbon (the same framework), and
+  counted among four, the File tab beside the tabs with them, in every trial of round-ui2j.
+  The ribbon's MSAA objects make Home, Share and View the three tabs shown.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-11-03.
+
 ### A radio button's place after JAWS's mouse click
 
 - Step: `534-web-numpad-slash-check-box/s10`.
