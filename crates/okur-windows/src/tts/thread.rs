@@ -178,14 +178,9 @@ impl SpeechThread {
         let started = std::thread::Builder::new()
             .name("okur-speech".to_owned())
             .spawn(move || {
+                // This thread calls the synthesizer.
                 #[cfg(windows)]
-                // SAFETY: COM initialization for this thread, which calls the synthesizer.
-                let _ = unsafe {
-                    windows::Win32::System::Com::CoInitializeEx(
-                        None,
-                        windows::Win32::System::Com::COINIT_MULTITHREADED,
-                    )
-                };
+                crate::com::init_mta();
                 // Say All parts whose start the synthesizer reports are out, and the polls
                 // since it last made progress.
                 let mut following = false;

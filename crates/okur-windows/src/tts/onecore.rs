@@ -155,9 +155,7 @@ mod engine {
         AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_AUTOCONVERTPCM,
         AUDCLNT_STREAMFLAGS_SRC_DEFAULT_QUALITY, DEVICE_STATE, WAVEFORMATEX,
     };
-    use windows::Win32::System::Com::{
-        CoCreateInstance, CoInitializeEx, CLSCTX_ALL, COINIT_MULTITHREADED,
-    };
+    use windows::Win32::System::Com::{CoCreateInstance, CLSCTX_ALL};
     use windows_future::AsyncStatus;
 
     /// The playback buffer: 60 ms, in 100 ns units.
@@ -570,8 +568,7 @@ mod engine {
         shared: Arc<Shared>,
         ready: Sender<Result<Started, TtsError>>,
     ) {
-        // SAFETY: COM (and so WinRT) initialization for this worker thread.
-        let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+        crate::com::init_mta();
         let started = SpeechSynthesizer::new().and_then(|synth| {
             let voices = voice_list(SpeechSynthesizer::AllVoices()?);
             Ok((synth, voices))

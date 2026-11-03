@@ -335,9 +335,7 @@ fn start_page_worker(
     std::thread::Builder::new()
         .name("okur-page-refresh".to_owned())
         .spawn(move || {
-            use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
-            // SAFETY: COM initialization for this worker thread.
-            let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+            crate::com::init_mta();
             while let Ok(mut request) = rx.recv() {
                 if matches!(request, PageRequest::Refresh(_)) {
                     match settle(&rx, REFRESH_QUIET, REFRESH_MAX_DELAY) {

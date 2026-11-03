@@ -1,6 +1,8 @@
 pub mod actions;
 pub mod bridge;
 pub mod clock;
+#[cfg(windows)]
+pub mod com;
 pub mod desktop;
 pub mod ease_of_access;
 pub mod elevation;
@@ -39,8 +41,8 @@ pub mod window_text;
 pub mod word_om;
 
 pub use bridge::{PlatformBridge, PlatformError};
-pub use events::{create_event_listener, AccessibilityEventListener};
-pub use hook::{create_keyboard_hook, KeyboardHook};
+pub use events::AccessibilityEventListener;
+pub use hook::KeyboardHook;
 pub use tts::{
     synthesizer_named, NoSpeechEngine, Sapi5Engine, SpeechLog, SpeechLogEntry, SpeechLogKind,
     TtsEngine, TtsError, TtsManager, VoiceInfo,

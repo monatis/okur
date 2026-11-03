@@ -33,23 +33,7 @@ pub struct SettingsFolder {
 }
 
 impl SettingsFolder {
-    /// The user's settings folder: `%APPDATA%\Okur` on Windows,
-    /// `~/Library/Application Support/Okur` on macOS, and `$XDG_CONFIG_HOME/okur` (else
-    /// `~/.config/okur`) elsewhere.
-    pub fn user() -> Option<Self> {
-        let env = |name: &str| std::env::var_os(name).map(PathBuf::from);
-        let folder = if cfg!(windows) {
-            env("APPDATA")?.join("Okur")
-        } else if cfg!(target_os = "macos") {
-            env("HOME")?.join("Library/Application Support/Okur")
-        } else {
-            env("XDG_CONFIG_HOME")
-                .or_else(|| env("HOME").map(|home| home.join(".config")))?
-                .join("okur")
-        };
-        Some(Self::at(folder))
-    }
-
+    /// The settings files in `folder` (the program says where: `okur::folders::settings`).
     pub fn at(folder: impl Into<PathBuf>) -> Self {
         Self {
             folder: folder.into(),
@@ -363,6 +347,7 @@ const NOTIFICATION_RULES: &str = "notification-rules.toml";
 const LAST_CHANGED: &str = "last-changed.toml";
 
 impl SettingsFolder {
+    /// The settings files in `folder` (the program says where: `okur::folders::settings`).
     /// The custom labels kept (Insert+Ctrl+Tab). A missing or unreadable file is none, the
     /// second logged.
     pub fn load_labels(&self) -> okur_core::labels::CustomLabels {

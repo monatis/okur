@@ -320,6 +320,12 @@ pub fn to_aom(root: &UiaNode) -> okur_core::AomNode {
     convert(root, &mut next_id)
 }
 
+/// The page in the UIA snapshot at `path` (`okur-lab snapshot`'s output), through the same
+/// mapping to the AOM as a live page.
+pub fn load_aom(path: impl AsRef<std::path::Path>) -> Result<okur_core::AomNode, String> {
+    Ok(to_aom(&UiaSnapshot::load(path)?.root))
+}
+
 fn convert(node: &UiaNode, next_id: &mut usize) -> okur_core::AomNode {
     use okur_core::{AomNode, NodeStates, Role};
     let id = *next_id;

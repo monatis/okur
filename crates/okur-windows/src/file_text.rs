@@ -138,9 +138,7 @@ mod recognizer {
     use windows::Storage::Streams::{IRandomAccessStream, InMemoryRandomAccessStream};
     use windows::Storage::{FileAccessMode, StorageFile};
     use windows::Win32::Foundation::HWND;
-    use windows::Win32::System::Com::{
-        CoCreateInstance, CoInitializeEx, IServiceProvider, CLSCTX_ALL, COINIT_MULTITHREADED,
-    };
+    use windows::Win32::System::Com::{CoCreateInstance, IServiceProvider, CLSCTX_ALL};
     use windows::Win32::System::Variant::VARIANT;
     use windows::Win32::UI::Shell::{
         IFolderView, IShellBrowser, IShellItemArray, IShellWindows, IWebBrowserApp,
@@ -291,8 +289,7 @@ mod recognizer {
     /// is the desktop's: nothing as well when `window` is no window of files.
     pub fn selected_file(window: HWND) -> Result<super::Selection, PlatformError> {
         use super::Selection;
-        // SAFETY: COM for this thread's shell calls; a thread already in COM keeps its own.
-        let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+        crate::com::init_mta();
         // SAFETY: the shell's window list, an out-of-process COM server.
         let windows: IShellWindows = unsafe { CoCreateInstance(&ShellWindows, None, CLSCTX_ALL) }
             .map_err(at("window list"))?;

@@ -32,7 +32,7 @@
       "why": "application state belongs to its module (step 5)"
     },
     "platform_cfg_sites": {
-      "count": 186,
+      "count": 185,
       "mode": "report",
       "why": "the Windows crate is gated once, at its root (step 4)"
     }

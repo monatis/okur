@@ -11,6 +11,7 @@
 
 pub mod control;
 pub mod doctor;
+pub mod folders;
 pub mod run;
 pub mod sr;
 pub mod startup;

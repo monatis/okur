@@ -12,7 +12,7 @@ use okur_core::{
     VirtualCursor,
 };
 use okur_windows::{
-    create_event_listener, create_keyboard_hook, PlatformBridge, SpeechLog, TtsManager,
+    AccessibilityEventListener, KeyboardHook, PlatformBridge, SpeechLog, TtsManager,
 };
 use std::path::Path;
 
@@ -135,8 +135,8 @@ pub enum ExitReason {
 
 /// Logs to stderr at the RUST_LOG level, or, with `debug_log`, everything from the screen
 /// reader's crates at debug level to that file. The installed reader (`kept`), which has no
-/// stderr, keeps its warnings and errors in [`kept_log_path`] instead: without it a caught
-/// panic, a synthesizer that failed or settings not saved left no trace in the field
+/// stderr, keeps its warnings and errors in [`crate::folders::kept_log`] instead: without it a
+/// caught panic, a synthesizer that failed or settings not saved left no trace in the field
 /// (performance review 2026-11-02, speech finding 6).
 pub fn init_logging(debug_log: Option<&str>, kept: bool) {
     if let Some(path) = debug_log {
@@ -156,7 +156,7 @@ pub fn init_logging(debug_log: Option<&str>, kept: bool) {
         }
     }
     let kept_log = kept
-        .then(kept_log_path)
+        .then(crate::folders::kept_log)
         .flatten()
         .and_then(|path| Some((open_kept_log(&path).ok()?, path)));
     if let Some((file, path)) = kept_log {
@@ -172,24 +172,6 @@ pub fn init_logging(debug_log: Option<&str>, kept: bool) {
         return;
     }
     tracing_subscriber::fmt::init();
-}
-
-/// The installed reader's own log: `%LOCALAPPDATA%\Okur\okur.log` on Windows (the package's
-/// own folder when Okur comes from the Store), `~/Library/Logs/Okur/okur.log` on macOS,
-/// `$XDG_STATE_HOME/okur/okur.log` (else `~/.local/state`) elsewhere.
-pub fn kept_log_path() -> Option<std::path::PathBuf> {
-    use std::path::PathBuf;
-    let env = |name: &str| std::env::var_os(name).map(PathBuf::from);
-    let folder = if cfg!(windows) {
-        env("LOCALAPPDATA")?.join("Okur")
-    } else if cfg!(target_os = "macos") {
-        env("HOME")?.join("Library/Logs/Okur")
-    } else {
-        env("XDG_STATE_HOME")
-            .or_else(|| env("HOME").map(|home| home.join(".local/state")))?
-            .join("okur")
-    };
-    Some(folder.join("okur.log"))
 }
 
 /// The most of the kept log written before it starts again, the one before kept beside it
@@ -210,11 +192,30 @@ fn open_kept_log(path: &Path) -> std::io::Result<std::fs::File> {
         .open(path)
 }
 
-/// Loads a page from a UIA snapshot (`okur-lab snapshot` output) through the production
-/// UIA-to-AOM mapping.
-pub fn load_aom_from_path(path: &Path) -> Result<AomNode, Box<dyn std::error::Error>> {
-    let snapshot = okur_windows_model::uia_snapshot::UiaSnapshot::load(path)?;
-    Ok(okur_windows_model::uia_snapshot::to_aom(&snapshot.root))
+/// The platform's keyboard hook: Windows' low-level hook, or the headless mock where no driver
+/// is built yet.
+fn keyboard_hook() -> Box<dyn KeyboardHook> {
+    #[cfg(windows)]
+    {
+        Box::new(okur_windows::hook::windows::WindowsKeyboardHook::new())
+    }
+    #[cfg(not(windows))]
+    {
+        Box::new(okur_windows::hook::mock::MockKeyboardHook::new())
+    }
+}
+
+/// The platform's accessibility event listener: Windows' own, or the headless mock where no
+/// driver is built yet.
+fn event_listener() -> Box<dyn AccessibilityEventListener> {
+    #[cfg(windows)]
+    {
+        Box::new(okur_windows::events::windows::WindowsAccessibilityEventListener::new())
+    }
+    #[cfg(not(windows))]
+    {
+        Box::new(okur_windows::events::mock::MockAccessibilityEventListener::new())
+    }
 }
 
 /// Engine work longer than this, on a key or an event, is logged as slow: the keyboard hook
@@ -642,12 +643,11 @@ pub async fn run(config: RunConfig) {
     // Startup Wizard, as JAWS's runs once it is installed; the folder is made then, so the
     // wizard opens once. A folder given with --settings-folder (the lab's runs) never opens it.
     let first_start = settings_folder.is_none()
-        && okur_windows::settings_file::SettingsFolder::user()
-            .is_some_and(|folder| !folder.folder().exists());
+        && crate::folders::settings().is_some_and(|folder| !folder.exists());
     // The saved settings, then this run's options over them, for this run only.
     let settings_folder = match settings_folder {
         Some(path) => Some(okur_windows::settings_file::SettingsFolder::at(path)),
-        None => okur_windows::settings_file::SettingsFolder::user(),
+        None => crate::folders::settings().map(okur_windows::settings_file::SettingsFolder::at),
     };
     let mut layers = settings_folder
         .as_ref()
@@ -684,7 +684,7 @@ pub async fn run(config: RunConfig) {
     // Determine active buffer
     let (buffer, is_fixture) = if let Some(ref f) = fixture {
         let fixture_path = Path::new(f);
-        match load_aom_from_path(fixture_path) {
+        match okur_windows_model::uia_snapshot::load_aom(fixture_path) {
             Ok(aom) => {
                 say_to_console(
                     console,
@@ -841,7 +841,7 @@ pub async fn run(config: RunConfig) {
     }
 
     // Install low-level keyboard hook
-    let mut hook = create_keyboard_hook();
+    let mut hook = keyboard_hook();
     let engine_cb = Arc::clone(&engine);
 
     if let Err(e) = hook.start(Box::new(move |event| {
@@ -899,7 +899,7 @@ pub async fn run(config: RunConfig) {
     let screen_reader_flag = okur_windows::process::ScreenReaderFlag::raise();
 
     // Start OS-level accessibility event listener
-    let mut event_listener = create_event_listener();
+    let mut event_listener = event_listener();
     let mut event_task = None;
     if let Err(e) = event_listener.start(event_tx) {
         tracing::warn!("Could not start OS accessibility event listener: {}", e);

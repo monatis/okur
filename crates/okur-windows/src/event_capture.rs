@@ -15,7 +15,6 @@ use okur_windows_model::event_trace::{
 use std::cell::{Cell, RefCell};
 use windows::core::implement;
 use windows::Win32::Foundation::{CloseHandle, HWND};
-use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
 use windows::Win32::System::Threading::GetCurrentThreadId;
 use windows::Win32::System::Threading::{
     OpenProcess, QueryFullProcessImageNameW, PROCESS_NAME_WIN32, PROCESS_QUERY_LIMITED_INFORMATION,
@@ -2840,8 +2839,7 @@ fn run_hooks(
     keep_running: impl Fn() -> bool,
 ) -> usize {
     let live = page_changed.is_some();
-    // SAFETY: COM for UIA queries on this thread, which also pumps the hook's messages.
-    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+    crate::com::init_mta();
     STATE.with(|s| {
         *s.borrow_mut() = Some(TraceState {
             sink,

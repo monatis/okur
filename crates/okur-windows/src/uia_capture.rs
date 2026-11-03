@@ -6,9 +6,7 @@ use okur_windows_model::uia_snapshot::{
     SnapshotProvenance, UiaNode, UiaSnapshot, SNAPSHOT_FORMAT_VERSION,
 };
 use windows::core::BSTR;
-use windows::Win32::System::Com::{
-    CoCreateInstance, CoInitializeEx, CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED,
-};
+use windows::Win32::System::Com::{CoCreateInstance, CLSCTX_INPROC_SERVER};
 use windows::Win32::System::Variant::VARIANT;
 use windows::Win32::UI::Accessibility::*;
 use windows::Win32::UI::WindowsAndMessaging::{GetClassNameW, GetForegroundWindow, GetWindowTextW};
@@ -1170,17 +1168,14 @@ pub fn capture_foreground_document(
     fixture_sha256: Option<String>,
     process_version: Option<String>,
 ) -> Result<UiaSnapshot, PlatformError> {
-    // SAFETY: standard COM initialization; S_FALSE/RPC_E_CHANGED_MODE are tolerated
-    // because UIA client calls work from either apartment for this one-shot capture.
-    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+    crate::com::init_mta();
     capture_document_with(&capture_client()?, fixture_sha256, process_version)
 }
 
 /// The same, waiting for the browser's answer at most [`QUICK_ANSWER_MS`]: the quick
 /// capture of a page new to the buffer, on the thread events wait on.
 pub fn capture_foreground_document_quick() -> Result<UiaSnapshot, PlatformError> {
-    // SAFETY: as in [`capture_foreground_document`].
-    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+    crate::com::init_mta();
     let uia = match QUICK_CLIENT.with(|c| c.borrow().clone()) {
         Some(uia) => uia,
         None => {
@@ -1315,10 +1310,8 @@ pub(crate) fn os_version() -> String {
 /// The element UIA reports as having keyboard focus, for the harness: one JSON line with its
 /// name, control type and class, and whether it is inside a document (a web page's).
 pub fn focused_element_json() -> String {
-    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
     const UIA_DOCUMENT: i32 = 50030;
-    // SAFETY: COM initialization; repeated initialization is tolerated.
-    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+    crate::com::init_mta();
     let chain = automation()
         .map(|uia| focus_chain(&uia))
         .unwrap_or_default();
@@ -1335,9 +1328,7 @@ pub fn focused_element_json() -> String {
 /// The element UIA reports as having keyboard focus, as `"name" (control type N)`, for
 /// harness checks.
 pub fn focused_element_summary() -> String {
-    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
-    // SAFETY: COM initialization; repeated initialization is tolerated.
-    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+    crate::com::init_mta();
     let Ok(uia) = automation() else {
         return "unknown (UIA unavailable)".to_owned();
     };

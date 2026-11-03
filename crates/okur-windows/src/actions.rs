@@ -32,7 +32,6 @@ mod windows_actions {
     use std::time::{Duration, Instant};
     use tokio::sync::mpsc::UnboundedSender;
     use windows::Win32::Foundation::HWND;
-    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
     use windows::Win32::UI::Accessibility::IUIAutomation;
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
     use xa11y_windows::ia2::{has_chromium_document, perform_chromium_action, Ia2Action};
@@ -321,8 +320,7 @@ mod windows_actions {
         /// One lane of the worker: its requests in order, each in a panic guard, so one that
         /// panics is logged and the lane goes on (performance review 2026-10-24, 5).
         fn serve(rx: &Receiver<Request>, events: Option<&UnboundedSender<AccessibilityEvent>>) {
-            // SAFETY: COM initialization for this worker thread.
-            let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+            crate::com::init_mta();
             // UI Automation's default lets an application take 20 s over an answer, and
             // every read and injected key queued behind it waited (performance review
             // 2026-10-23, P6); 5 s is long enough for a big window's whole tree.
@@ -632,9 +630,7 @@ mod windows_actions {
                                 let spawned = std::thread::Builder::new()
                                     .name("sheet tabs menu".to_owned())
                                     .spawn(move || {
-                                        // SAFETY: COM initialization for this thread.
-                                        let _ =
-                                            unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+                                        crate::com::init_mta();
                                         let shown = crate::excel_om::show_sheet_tabs_menu(HWND(
                                             grid as *mut core::ffi::c_void,
                                         ));

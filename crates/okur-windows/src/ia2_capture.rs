@@ -10,12 +10,10 @@ pub fn capture_foreground_document(
     fixture_sha256: Option<String>,
     process_version: Option<String>,
 ) -> Result<Ia2Snapshot, crate::PlatformError> {
-    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
 
     let started = std::time::Instant::now();
-    // SAFETY: standard COM initialization; repeated initialization is tolerated.
-    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+    crate::com::init_mta();
     // SAFETY: plain Win32 call with no preconditions.
     let hwnd = unsafe { GetForegroundWindow() };
     if hwnd.is_invalid() {

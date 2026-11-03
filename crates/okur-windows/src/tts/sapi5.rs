@@ -8,7 +8,7 @@ use windows::{
             ISpVoice, SpVoice, SPF_ASYNC, SPF_IS_NOT_XML, SPF_IS_XML, SPF_PURGEBEFORESPEAK,
             SPVOICESTATUS,
         },
-        System::Com::{CoCreateInstance, CoInitializeEx, CLSCTX_ALL, COINIT_MULTITHREADED},
+        System::Com::{CoCreateInstance, CLSCTX_ALL},
     },
 };
 
@@ -40,8 +40,7 @@ impl Sapi5Engine {
         #[cfg(windows)]
         {
             unsafe {
-                // Initialize COM library on the calling thread (ignoring RPC_E_CHANGED_MODE if already initialized)
-                let _ = CoInitializeEx(None, COINIT_MULTITHREADED);
+                crate::com::init_mta();
 
                 let voice: ISpVoice =
                     CoCreateInstance(&SpVoice, None, CLSCTX_ALL).map_err(|e| {

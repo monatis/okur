@@ -601,10 +601,8 @@ mod reader {
 pub fn foreground_screen(
     recognize: Option<&str>,
 ) -> Result<okur_core::screen_model::ScreenModel, crate::PlatformError> {
-    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
-    // SAFETY: COM for this thread's UIA client.
-    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+    crate::com::init_mta();
     let uia = crate::uia_capture::automation()?;
     // SAFETY: plain Win32 call with no preconditions.
     let accessible = window_runs(&uia, unsafe { GetForegroundWindow() }).ok_or_else(|| {
@@ -623,10 +621,8 @@ pub fn foreground_screen(
 /// control: `okur-lab window-text`, to compare with JAWS's viewer.
 #[cfg(windows)]
 pub fn foreground_lines(control: bool) -> Result<Vec<String>, crate::PlatformError> {
-    use windows::Win32::System::Com::{CoInitializeEx, COINIT_MULTITHREADED};
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
-    // SAFETY: COM for this thread's UIA client.
-    let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+    crate::com::init_mta();
     let uia = crate::uia_capture::automation()?;
     let lines = if control {
         control_lines(&uia)

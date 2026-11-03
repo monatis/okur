@@ -9,7 +9,6 @@ mod aria_at;
 mod aria_at_report;
 
 use clap::{Parser, Subcommand};
-use okur::run::load_aom_from_path;
 use okur_core::{AomNode, Role, VirtualBuffer, VirtualCursor};
 use okur_windows::{SpeechLog, TtsManager};
 use std::fs;
@@ -818,10 +817,11 @@ async fn main() {
             mode,
         }) => {
             let fixture_path = Path::new(&fixture);
-            let aom = load_aom_from_path(fixture_path).unwrap_or_else(|e| {
-                eprintln!("Failed to load fixture AOM: {}", e);
-                std::process::exit(1);
-            });
+            let aom =
+                okur_windows_model::uia_snapshot::load_aom(fixture_path).unwrap_or_else(|e| {
+                    eprintln!("Failed to load fixture AOM: {}", e);
+                    std::process::exit(1);
+                });
 
             let buffer = VirtualBuffer::from_aom(&aom);
             let mut cursor = VirtualCursor::new(buffer);

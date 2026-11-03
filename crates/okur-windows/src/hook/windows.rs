@@ -7,7 +7,7 @@ use std::sync::Mutex;
 use std::thread::{self, JoinHandle};
 
 use windows::Win32::Foundation::{LPARAM, LRESULT, WPARAM};
-use windows::Win32::System::Com::{CoInitializeEx, CoUninitialize, COINIT_MULTITHREADED};
+use windows::Win32::System::Com::CoUninitialize;
 use windows::Win32::System::Threading::GetCurrentThreadId;
 use windows::Win32::UI::Input::KeyboardAndMouse::{
     GetAsyncKeyState, GetKeyState, VIRTUAL_KEY, VK_ADD, VK_BACK, VK_CAPITAL, VK_CLEAR, VK_CONTROL,
@@ -147,7 +147,7 @@ impl KeyboardHook for WindowsKeyboardHook {
         // to the desktop named "default", which would have hooked the user's desktop from the
         // secure one (startup-and-secure-screens-proposal.md, §5.1).
         let handle = thread::spawn(move || {
-            let _ = unsafe { CoInitializeEx(None, COINIT_MULTITHREADED) };
+            crate::com::init_mta();
 
             let hook = unsafe {
                 SetWindowsHookExW(WH_KEYBOARD_LL, Some(low_level_keyboard_proc), None, 0)

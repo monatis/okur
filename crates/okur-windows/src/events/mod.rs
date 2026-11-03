@@ -18,26 +18,16 @@ pub trait AccessibilityEventListener: Send + Sync {
     fn is_active(&self) -> bool;
 }
 
-/// The accessibility event listener: Windows' own on Windows, the headless mock elsewhere
-/// (the macOS driver will be a crate of its own, `okur-macos`).
-pub fn create_event_listener() -> Box<dyn AccessibilityEventListener> {
-    #[cfg(target_os = "windows")]
-    {
-        Box::new(windows::WindowsAccessibilityEventListener::new())
-    }
-    #[cfg(not(target_os = "windows"))]
-    {
-        Box::new(mock::MockAccessibilityEventListener::new())
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_create_event_listener() {
-        let listener = create_event_listener();
+        #[cfg(target_os = "windows")]
+        let listener = windows::WindowsAccessibilityEventListener::new();
+        #[cfg(not(target_os = "windows"))]
+        let listener = mock::MockAccessibilityEventListener::new();
         assert!(!listener.is_active());
     }
 }
