@@ -1,5 +1,3 @@
-#[cfg(target_os = "macos")]
-pub mod macos;
 pub mod mock;
 #[cfg(target_os = "windows")]
 pub mod windows;
@@ -22,17 +20,14 @@ pub trait KeyboardHook: Send + Sync {
     fn is_active(&self) -> bool;
 }
 
-/// Creates the platform-appropriate keyboard hook implementation.
+/// The keyboard hook: Windows' low-level hook on Windows, the headless mock elsewhere (the
+/// macOS driver will be a crate of its own, `okur-macos`).
 pub fn create_keyboard_hook() -> Box<dyn KeyboardHook> {
     #[cfg(target_os = "windows")]
     {
         Box::new(windows::WindowsKeyboardHook::new())
     }
-    #[cfg(target_os = "macos")]
-    {
-        Box::new(macos::MacKeyboardHook::new())
-    }
-    #[cfg(not(any(target_os = "windows", target_os = "macos")))]
+    #[cfg(not(target_os = "windows"))]
     {
         Box::new(mock::MockKeyboardHook::new())
     }

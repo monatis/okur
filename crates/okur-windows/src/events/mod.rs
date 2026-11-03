@@ -1,5 +1,3 @@
-#[cfg(target_os = "macos")]
-pub mod macos;
 pub mod mock;
 #[cfg(target_os = "windows")]
 pub mod windows;
@@ -20,17 +18,14 @@ pub trait AccessibilityEventListener: Send + Sync {
     fn is_active(&self) -> bool;
 }
 
-/// Factory creating the platform-appropriate accessibility event listener.
+/// The accessibility event listener: Windows' own on Windows, the headless mock elsewhere
+/// (the macOS driver will be a crate of its own, `okur-macos`).
 pub fn create_event_listener() -> Box<dyn AccessibilityEventListener> {
     #[cfg(target_os = "windows")]
     {
         Box::new(windows::WindowsAccessibilityEventListener::new())
     }
-    #[cfg(target_os = "macos")]
-    {
-        Box::new(macos::MacAccessibilityEventListener::new())
-    }
-    #[cfg(not(any(target_os = "windows", target_os = "macos")))]
+    #[cfg(not(target_os = "windows"))]
     {
         Box::new(mock::MockAccessibilityEventListener::new())
     }
