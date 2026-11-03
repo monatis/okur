@@ -22478,6 +22478,34 @@
       }
     },
     {
+      "scenario_id": "3157-desktop-settings-home",
+      "fixture": "desktop-settings-home.ps1",
+      "evidence": {
+        "sha256": "55912db424b6aa97195b5709aa36ccb15478fc1fb2b0e40d6be4b70393f553a1",
+        "capture_script_sha256": "d69800ff332382d97cd717deef8d56c9d6b996cbb5409282f0afc608a2647876",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "3158-desktop-settings-display",
+      "fixture": "desktop-settings-display.ps1",
+      "evidence": {
+        "sha256": "5ec41a667fd50f1cf123bdf0804453bdf264b8e660791569d73a057f0b8774f9",
+        "capture_script_sha256": "d69800ff332382d97cd717deef8d56c9d6b996cbb5409282f0afc608a2647876",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "316-desktop-show-desktop",
       "fixture": "desktop-editor.ps1",
       "evidence": {
@@ -29129,10 +29157,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1916,
-    "scenarios_with_evidence": 1916,
-    "total_trials": 5754,
-    "successful_trials": 5737,
-    "deterministic_scenarios": 1597
+    "scenarios": 1918,
+    "scenarios_with_evidence": 1918,
+    "total_trials": 5760,
+    "successful_trials": 5743,
+    "deterministic_scenarios": 1599
   }
 }
