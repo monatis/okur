@@ -549,11 +549,18 @@ pub(crate) fn column_headers_of(
             // The header is among the list's first children, before its items. Searching all
             // of them for it realized every item of a XAML list: 1.1 s for each focus in
             // Windows Settings' 155 apps (old-pc, 2026-11-03).
-            let mut child = walker.GetFirstChildElement(&parent).ok();
+            // Each step brings its child's type with it (second review, 2026-11-03, P10).
+            let types = request_for(
+                uia,
+                AutomationElementMode_Full,
+                &[UIA_ControlTypePropertyId],
+            )
+            .ok_or_else(|| windows::core::Error::from(windows::Win32::Foundation::E_FAIL))?;
+            let mut child = walker.GetFirstChildElementBuildCache(&parent, &types).ok();
             let mut found = None;
             for _ in 0..HEADER_SEARCH {
                 let Some(element) = child else { break };
-                let kind = element.CurrentControlType()?;
+                let kind = element.CachedControlType()?;
                 if kind == UIA_HeaderControlTypeId {
                     found = Some(element);
                     break;
@@ -561,7 +568,9 @@ pub(crate) fn column_headers_of(
                 if kind == UIA_ListItemControlTypeId || kind == UIA_DataItemControlTypeId {
                     break;
                 }
-                child = walker.GetNextSiblingElement(&element).ok();
+                child = walker
+                    .GetNextSiblingElementBuildCache(&element, &types)
+                    .ok();
             }
             let Some(header) = found else {
                 return Ok(Vec::new());
