@@ -1,0 +1,33 @@
+{
+  "id": "3160-desktop-settings-sound",
+  "name": "Windows Settings, System > Sound: Tab through the page (the output device, its properties, mute and the master volume slider, troubleshooting, the input device), Insert+Tab in the Advanced group, Insert+T",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-settings-sound.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "Settings",
+    "app_frame": true,
+    "settle_ms": 8000,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": []
+  },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Tab" },
+    { "id": "s2", "type": "key", "command": "Tab" },
+    { "id": "s3", "type": "key", "command": "Tab" },
+    { "id": "s4", "type": "key", "command": "Tab" },
+    { "id": "s5", "type": "key", "command": "Tab" },
+    { "id": "s6", "type": "key", "command": "Tab" },
+    { "id": "s7", "type": "key", "command": "Tab" },
+    { "id": "s8", "type": "key", "command": "Tab" },
+    { "id": "s9", "type": "key", "command": "Tab" },
+    { "id": "s10", "type": "key", "command": "Tab" },
+    { "id": "s11", "type": "key", "command": "Tab" },
+    { "id": "s12", "type": "key", "command": "Tab" },
+    { "id": "s13", "type": "key", "command": "Insert+Tab" },
+    { "id": "s14", "type": "key", "command": "Insert+T" }
+  ]
+}

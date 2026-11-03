@@ -1,0 +1,22 @@
+{
+  "id": "3159-desktop-run-dialog-tab",
+  "name": "The Run dialog (Win+R): Tab through its buttons back to its editable combo box, Shift+Tab, Insert+Tab on a button and on the combo box, Insert+B, then Escape to the editor; its list of earlier commands is never opened",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-editor.ps1",
+  "target_app": "desktop",
+  "launch": { "window_title": "SR Editor Fixture" },
+  "reset": { "keys": [] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Win+R", "settle_max_ms": 15000 },
+    { "id": "s2", "type": "key", "command": "Tab" },
+    { "id": "s3", "type": "key", "command": "Tab" },
+    { "id": "s4", "type": "key", "command": "Tab" },
+    { "id": "s5", "type": "key", "command": "Insert+Tab" },
+    { "id": "s6", "type": "key", "command": "Tab" },
+    { "id": "s7", "type": "key", "command": "Insert+Tab" },
+    { "id": "s8", "type": "key", "command": "Shift+Tab" },
+    { "id": "s9", "type": "key", "command": "Insert+B", "settle_max_ms": 25000 },
+    { "id": "s10", "type": "key", "command": "Escape", "settle_max_ms": 15000 }
+  ]
+}

@@ -66,7 +66,7 @@ Live path (L), engine (E), speech, windows and lifecycle (S).
 | S9 | Stall | Labels, PlaceMarkers, Flexible Web and notification rules were written on the engine's thread. | fixed `d04218e3` (the settings writer thread) |
 | S10 | Speech | Spelling had no stop between characters; OneCore polls every 2-4 ms while speaking; a rule's sound plays on the engine thread. | spelling fixed `d04218e3`. Open: the polls, the sound |
 | S11 | Robustness | Exit took the engine with no deadline; the control pipe's read has no timeout; okur-ui's windows shared across its restarts; no restart backoff; okur-ui's threads without panic guards. | exit fixed `5f22ae21` (2 s). Open: the rest |
-| S12 | Diagnosis, performance | okur-ui's stderr is null; its notifications clone a list's items. | open |
+| S12 | Diagnosis, performance | okur-ui's stderr is null; its notifications clone a list's items. | stderr fixed (2026-11-03: into Okur's log, both starts; the lowered one not checked live). Open: the clone |
 | S13 | Store | Settings under the package's file virtualization; okur-ui's foreground over an elevated window without UI Access. | open (Store experiments E2, E5) |
 
 **Found by the live check** (not by the reviews):
