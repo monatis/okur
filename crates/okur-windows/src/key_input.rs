@@ -18,10 +18,8 @@ pub fn is_extended(vk: u16) -> bool {
     )
 }
 
-#[cfg(windows)]
 pub use windows_input::{send_chord, send_key};
 
-#[cfg(windows)]
 mod windows_input {
     use super::is_extended;
     use windows::Win32::UI::Input::KeyboardAndMouse::{

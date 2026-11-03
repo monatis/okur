@@ -1,6 +1,5 @@
 use super::{TtsEngine, TtsError, VoiceInfo};
 
-#[cfg(windows)]
 use windows::{
     core::PCWSTR,
     Win32::{
@@ -15,13 +14,10 @@ use windows::{
 /// Genuine Windows SAPI 5 Text-To-Speech driver using COM `ISpVoice`.
 #[derive(Debug)]
 pub struct Sapi5Engine {
-    #[cfg(windows)]
     voice: ISpVoice,
     /// The Say All parts queued: each one's SAPI stream number and mark, oldest first.
-    #[cfg(windows)]
     marks: std::collections::VecDeque<(u32, u64)>,
     /// The current stream last logged, so the debug log shows its changes only.
-    #[cfg(windows)]
     last_stream: u32,
     rate: i32,
     volume: u16,
@@ -37,47 +33,33 @@ unsafe impl Sync for Sapi5Engine {}
 impl Sapi5Engine {
     /// Creates and initializes a new Windows SAPI 5 voice instance.
     pub fn new() -> Result<Self, TtsError> {
-        #[cfg(windows)]
-        {
-            unsafe {
-                crate::com::init_mta();
+        unsafe {
+            crate::com::init_mta();
 
-                let voice: ISpVoice =
-                    CoCreateInstance(&SpVoice, None, CLSCTX_ALL).map_err(|e| {
-                        TtsError::InitFailed(format!(
-                            "Failed to create SAPI 5 SpVoice COM object: {}",
-                            e
-                        ))
-                    })?;
+            let voice: ISpVoice = CoCreateInstance(&SpVoice, None, CLSCTX_ALL).map_err(|e| {
+                TtsError::InitFailed(format!("Failed to create SAPI 5 SpVoice COM object: {}", e))
+            })?;
 
-                let mut rate = 0;
-                let _ = voice.GetRate(&mut rate);
-                let mut volume = 100;
-                let _ = voice.GetVolume(&mut volume);
-                let default_voice = voice
-                    .GetVoice()
-                    .ok()
-                    .and_then(|token| token.GetId().ok())
-                    .map(owned)
-                    .filter(|id| !id.is_empty());
+            let mut rate = 0;
+            let _ = voice.GetRate(&mut rate);
+            let mut volume = 100;
+            let _ = voice.GetVolume(&mut volume);
+            let default_voice = voice
+                .GetVoice()
+                .ok()
+                .and_then(|token| token.GetId().ok())
+                .map(owned)
+                .filter(|id| !id.is_empty());
 
-                Ok(Self {
-                    voice,
-                    marks: std::collections::VecDeque::new(),
-                    last_stream: 0,
-                    rate,
-                    volume,
-                    is_paused: false,
-                    default_voice,
-                })
-            }
-        }
-
-        #[cfg(not(windows))]
-        {
-            Err(TtsError::Unsupported(
-                "SAPI 5 is only supported on Windows platforms.".to_string(),
-            ))
+            Ok(Self {
+                voice,
+                marks: std::collections::VecDeque::new(),
+                last_stream: 0,
+                rate,
+                volume,
+                is_paused: false,
+                default_voice,
+            })
         }
     }
 }
@@ -92,65 +74,43 @@ impl TtsEngine for Sapi5Engine {
     }
 
     fn speak(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError> {
-        #[cfg(windows)]
-        {
-            if interrupt {
-                self.marks.clear();
-            }
-            let clean = text.replace(['\u{001d}', '\u{001e}'], "");
-            let mut flags = SPF_ASYNC.0 | SPF_IS_NOT_XML.0;
-            if interrupt {
-                flags |= SPF_PURGEBEFORESPEAK.0;
-            }
-
-            let wide: Vec<u16> = clean.encode_utf16().chain(std::iter::once(0)).collect();
-            unsafe {
-                self.voice
-                    .Speak(PCWSTR(wide.as_ptr()), flags as u32, None)
-                    .map_err(|e| {
-                        TtsError::SynthesisFailed(format!("SAPI 5 Speak failed: {}", e))
-                    })?;
-            }
-            Ok(())
+        if interrupt {
+            self.marks.clear();
+        }
+        let clean = text.replace(['\u{001d}', '\u{001e}'], "");
+        let mut flags = SPF_ASYNC.0 | SPF_IS_NOT_XML.0;
+        if interrupt {
+            flags |= SPF_PURGEBEFORESPEAK.0;
         }
 
-        #[cfg(not(windows))]
-        {
-            let _ = (text, interrupt);
-            Err(TtsError::Unsupported(
-                "SAPI 5 is only supported on Windows.".to_string(),
-            ))
+        let wide: Vec<u16> = clean.encode_utf16().chain(std::iter::once(0)).collect();
+        unsafe {
+            self.voice
+                .Speak(PCWSTR(wide.as_ptr()), flags as u32, None)
+                .map_err(|e| TtsError::SynthesisFailed(format!("SAPI 5 Speak failed: {}", e)))?;
         }
+        Ok(())
     }
 
     fn speak_pitched(&mut self, text: &str, pitch: i32, interrupt: bool) -> Result<(), TtsError> {
-        #[cfg(windows)]
-        {
-            if pitch == 0 {
-                return self.speak(text, interrupt);
-            }
-            let xml = pitched_xml(text, pitch);
-            let mut flags = SPF_ASYNC.0 | SPF_IS_XML.0;
-            if interrupt {
-                flags |= SPF_PURGEBEFORESPEAK.0;
-                self.marks.clear();
-            }
-            let wide: Vec<u16> = xml.encode_utf16().chain(std::iter::once(0)).collect();
-            // SAFETY: a null-terminated string that outlives the asynchronous call (SAPI
-            // copies it before returning).
-            unsafe {
-                self.voice
-                    .Speak(PCWSTR(wide.as_ptr()), flags as u32, None)
-                    .map_err(|e| TtsError::SynthesisFailed(format!("SAPI 5 Speak failed: {e}")))?;
-            }
-            Ok(())
+        if pitch == 0 {
+            return self.speak(text, interrupt);
         }
-
-        #[cfg(not(windows))]
-        {
-            let _ = pitch;
-            self.speak(text, interrupt)
+        let xml = pitched_xml(text, pitch);
+        let mut flags = SPF_ASYNC.0 | SPF_IS_XML.0;
+        if interrupt {
+            flags |= SPF_PURGEBEFORESPEAK.0;
+            self.marks.clear();
         }
+        let wide: Vec<u16> = xml.encode_utf16().chain(std::iter::once(0)).collect();
+        // SAFETY: a null-terminated string that outlives the asynchronous call (SAPI
+        // copies it before returning).
+        unsafe {
+            self.voice
+                .Speak(PCWSTR(wide.as_ptr()), flags as u32, None)
+                .map_err(|e| TtsError::SynthesisFailed(format!("SAPI 5 Speak failed: {e}")))?;
+        }
+        Ok(())
     }
 
     /// SAPI numbers every asynchronous Speak call's stream; the part's stream number is kept
@@ -162,163 +122,105 @@ impl TtsEngine for Sapi5Engine {
         pitch: i32,
         interrupt: bool,
     ) -> Result<(), TtsError> {
-        #[cfg(windows)]
-        {
-            if interrupt {
-                self.marks.clear();
-            }
-            let (clean, kind) = if pitch == 0 {
-                (text.replace(['\u{001d}', '\u{001e}'], ""), SPF_IS_NOT_XML.0)
-            } else {
-                (pitched_xml(text, pitch), SPF_IS_XML.0)
-            };
-            let mut flags = SPF_ASYNC.0 | kind;
-            if interrupt {
-                flags |= SPF_PURGEBEFORESPEAK.0;
-            }
-            let wide: Vec<u16> = clean.encode_utf16().chain(std::iter::once(0)).collect();
-            let mut stream = 0u32;
-            // SAFETY: a null-terminated string SAPI copies before returning, and a stream
-            // number written before it returns.
-            unsafe {
-                self.voice
-                    .Speak(PCWSTR(wide.as_ptr()), flags as u32, Some(&mut stream))
-                    .map_err(|e| TtsError::SynthesisFailed(format!("SAPI 5 Speak failed: {e}")))?;
-            }
-            tracing::debug!(stream, mark, "SAPI Say All part queued");
-            self.marks.push_back((stream, mark));
-            Ok(())
+        if interrupt {
+            self.marks.clear();
         }
-
-        #[cfg(not(windows))]
-        {
-            let _ = (mark, pitch);
-            self.speak(text, interrupt)
+        let (clean, kind) = if pitch == 0 {
+            (text.replace(['\u{001d}', '\u{001e}'], ""), SPF_IS_NOT_XML.0)
+        } else {
+            (pitched_xml(text, pitch), SPF_IS_XML.0)
+        };
+        let mut flags = SPF_ASYNC.0 | kind;
+        if interrupt {
+            flags |= SPF_PURGEBEFORESPEAK.0;
         }
+        let wide: Vec<u16> = clean.encode_utf16().chain(std::iter::once(0)).collect();
+        let mut stream = 0u32;
+        // SAFETY: a null-terminated string SAPI copies before returning, and a stream
+        // number written before it returns.
+        unsafe {
+            self.voice
+                .Speak(PCWSTR(wide.as_ptr()), flags as u32, Some(&mut stream))
+                .map_err(|e| TtsError::SynthesisFailed(format!("SAPI 5 Speak failed: {e}")))?;
+        }
+        tracing::debug!(stream, mark, "SAPI Say All part queued");
+        self.marks.push_back((stream, mark));
+        Ok(())
     }
 
     /// The latest part whose stream SAPI has started (`SPVOICESTATUS::ulCurrentStream`).
     fn reached(&mut self) -> Option<u64> {
-        #[cfg(windows)]
-        {
-            let front = self.marks.front()?.0;
-            let mut status = SPVOICESTATUS::default();
-            // SAFETY: plain COM call writing into a local status.
-            unsafe { self.voice.GetStatus(&mut status, std::ptr::null_mut()) }.ok()?;
-            if status.ulCurrentStream != self.last_stream {
-                self.last_stream = status.ulCurrentStream;
-                tracing::debug!(
-                    current = status.ulCurrentStream,
-                    last_queued = status.ulLastStreamQueued,
-                    running = status.dwRunningState,
-                    front,
-                    "SAPI stream"
-                );
-            }
-            if status.ulCurrentStream < front {
-                return None;
-            }
-            let mut latest = None;
-            while let Some(&(stream, mark)) = self.marks.front() {
-                if stream > status.ulCurrentStream {
-                    break;
-                }
-                latest = Some(mark);
-                self.marks.pop_front();
-            }
-            latest
+        let front = self.marks.front()?.0;
+        let mut status = SPVOICESTATUS::default();
+        // SAFETY: plain COM call writing into a local status.
+        unsafe { self.voice.GetStatus(&mut status, std::ptr::null_mut()) }.ok()?;
+        if status.ulCurrentStream != self.last_stream {
+            self.last_stream = status.ulCurrentStream;
+            tracing::debug!(
+                current = status.ulCurrentStream,
+                last_queued = status.ulLastStreamQueued,
+                running = status.dwRunningState,
+                front,
+                "SAPI stream"
+            );
         }
-
-        #[cfg(not(windows))]
-        {
-            None
+        if status.ulCurrentStream < front {
+            return None;
         }
+        let mut latest = None;
+        while let Some(&(stream, mark)) = self.marks.front() {
+            if stream > status.ulCurrentStream {
+                break;
+            }
+            latest = Some(mark);
+            self.marks.pop_front();
+        }
+        latest
     }
 
     fn follows_marks(&self) -> bool {
-        cfg!(windows)
+        true
     }
 
     fn stop(&mut self) -> Result<(), TtsError> {
-        #[cfg(windows)]
-        {
-            self.marks.clear();
-            let empty: [u16; 1] = [0];
-            let flags = (SPF_PURGEBEFORESPEAK.0 | SPF_ASYNC.0) as u32;
-            unsafe {
-                let _ = self.voice.Speak(PCWSTR(empty.as_ptr()), flags, None);
-            }
-            Ok(())
+        self.marks.clear();
+        let empty: [u16; 1] = [0];
+        let flags = (SPF_PURGEBEFORESPEAK.0 | SPF_ASYNC.0) as u32;
+        unsafe {
+            let _ = self.voice.Speak(PCWSTR(empty.as_ptr()), flags, None);
         }
-
-        #[cfg(not(windows))]
-        {
-            Err(TtsError::Unsupported(
-                "SAPI 5 is only supported on Windows.".to_string(),
-            ))
-        }
+        Ok(())
     }
 
     fn pause(&mut self) -> Result<(), TtsError> {
-        #[cfg(windows)]
-        {
-            unsafe {
-                self.voice.Pause().map_err(|e| {
-                    TtsError::SynthesisFailed(format!("SAPI 5 Pause failed: {}", e))
-                })?;
-            }
-            self.is_paused = true;
-            Ok(())
+        unsafe {
+            self.voice
+                .Pause()
+                .map_err(|e| TtsError::SynthesisFailed(format!("SAPI 5 Pause failed: {}", e)))?;
         }
-
-        #[cfg(not(windows))]
-        {
-            Err(TtsError::Unsupported(
-                "SAPI 5 is only supported on Windows.".to_string(),
-            ))
-        }
+        self.is_paused = true;
+        Ok(())
     }
 
     fn resume(&mut self) -> Result<(), TtsError> {
-        #[cfg(windows)]
-        {
-            unsafe {
-                self.voice.Resume().map_err(|e| {
-                    TtsError::SynthesisFailed(format!("SAPI 5 Resume failed: {}", e))
-                })?;
-            }
-            self.is_paused = false;
-            Ok(())
+        unsafe {
+            self.voice
+                .Resume()
+                .map_err(|e| TtsError::SynthesisFailed(format!("SAPI 5 Resume failed: {}", e)))?;
         }
-
-        #[cfg(not(windows))]
-        {
-            Err(TtsError::Unsupported(
-                "SAPI 5 is only supported on Windows.".to_string(),
-            ))
-        }
+        self.is_paused = false;
+        Ok(())
     }
 
     fn set_rate(&mut self, rate: i32) -> Result<(), TtsError> {
-        #[cfg(windows)]
-        {
-            let clamped = rate.clamp(-10, 10);
-            unsafe {
-                self.voice.SetRate(clamped).map_err(|e| {
-                    TtsError::SynthesisFailed(format!("SAPI 5 SetRate failed: {}", e))
-                })?;
-            }
-            self.rate = clamped;
-            Ok(())
+        let clamped = rate.clamp(-10, 10);
+        unsafe {
+            self.voice
+                .SetRate(clamped)
+                .map_err(|e| TtsError::SynthesisFailed(format!("SAPI 5 SetRate failed: {}", e)))?;
         }
-
-        #[cfg(not(windows))]
-        {
-            let _ = rate;
-            Err(TtsError::Unsupported(
-                "SAPI 5 is only supported on Windows.".to_string(),
-            ))
-        }
+        self.rate = clamped;
+        Ok(())
     }
 
     fn get_rate(&self) -> i32 {
@@ -326,25 +228,14 @@ impl TtsEngine for Sapi5Engine {
     }
 
     fn set_volume(&mut self, volume: u16) -> Result<(), TtsError> {
-        #[cfg(windows)]
-        {
-            let clamped = volume.min(100);
-            unsafe {
-                self.voice.SetVolume(clamped).map_err(|e| {
-                    TtsError::SynthesisFailed(format!("SAPI 5 SetVolume failed: {}", e))
-                })?;
-            }
-            self.volume = clamped;
-            Ok(())
+        let clamped = volume.min(100);
+        unsafe {
+            self.voice.SetVolume(clamped).map_err(|e| {
+                TtsError::SynthesisFailed(format!("SAPI 5 SetVolume failed: {}", e))
+            })?;
         }
-
-        #[cfg(not(windows))]
-        {
-            let _ = volume;
-            Err(TtsError::Unsupported(
-                "SAPI 5 is only supported on Windows.".to_string(),
-            ))
-        }
+        self.volume = clamped;
+        Ok(())
     }
 
     fn get_volume(&self) -> u16 {
@@ -352,90 +243,58 @@ impl TtsEngine for Sapi5Engine {
     }
 
     fn is_speaking(&self) -> bool {
-        #[cfg(windows)]
-        {
-            unsafe {
-                let mut status = SPVOICESTATUS::default();
-                if self
-                    .voice
-                    .GetStatus(&mut status, std::ptr::null_mut())
-                    .is_ok()
-                {
-                    // dwRunningState == 2 indicates SPRS_IS_SPEAKING
-                    return status.dwRunningState == 2;
-                }
+        unsafe {
+            let mut status = SPVOICESTATUS::default();
+            if self
+                .voice
+                .GetStatus(&mut status, std::ptr::null_mut())
+                .is_ok()
+            {
+                // dwRunningState == 2 indicates SPRS_IS_SPEAKING
+                return status.dwRunningState == 2;
             }
-            false
         }
-
-        #[cfg(not(windows))]
-        {
-            false
-        }
+        false
     }
 
     /// The voices SAPI lists (its voice tokens): the token id, and the description as the
     /// name. On the reference machine this is where the speech recorder voice is chosen, so
     /// that a live run of Okur records what it sends its synthesizer, as JAWS's runs do.
     fn get_voices(&self) -> Vec<VoiceInfo> {
-        #[cfg(windows)]
-        {
-            voice_tokens()
-                .into_iter()
-                .map(|(id, name, _)| VoiceInfo {
-                    id,
-                    name,
-                    language: None,
-                })
-                .collect()
-        }
-        #[cfg(not(windows))]
-        {
-            Vec::new()
-        }
+        voice_tokens()
+            .into_iter()
+            .map(|(id, name, _)| VoiceInfo {
+                id,
+                name,
+                language: None,
+            })
+            .collect()
     }
 
     /// The voice whose token id or name is `voice_id`.
     fn set_voice(&mut self, voice_id: &str) -> Result<(), TtsError> {
-        #[cfg(windows)]
-        {
-            let found = voice_tokens()
-                .into_iter()
-                .find(|(id, name, _)| id == voice_id || name == voice_id);
-            let Some((_, _, token)) = found else {
-                return Err(TtsError::VoiceNotFound(voice_id.to_string()));
-            };
-            // SAFETY: a voice token SAPI enumerated, handed to the voice that uses it.
-            unsafe { self.voice.SetVoice(&token) }
-                .map_err(|e| TtsError::SynthesisFailed(format!("SAPI 5 SetVoice failed: {}", e)))
-        }
-        #[cfg(not(windows))]
-        {
-            Err(TtsError::VoiceNotFound(voice_id.to_string()))
-        }
+        let found = voice_tokens()
+            .into_iter()
+            .find(|(id, name, _)| id == voice_id || name == voice_id);
+        let Some((_, _, token)) = found else {
+            return Err(TtsError::VoiceNotFound(voice_id.to_string()));
+        };
+        // SAFETY: a voice token SAPI enumerated, handed to the voice that uses it.
+        unsafe { self.voice.SetVoice(&token) }
+            .map_err(|e| TtsError::SynthesisFailed(format!("SAPI 5 SetVoice failed: {}", e)))
     }
 
     fn wait_until_done(&mut self, timeout_ms: u32) -> Result<(), TtsError> {
-        #[cfg(windows)]
-        {
-            unsafe {
-                self.voice.WaitUntilDone(timeout_ms).map_err(|e| {
-                    TtsError::SynthesisFailed(format!("SAPI 5 WaitUntilDone failed: {}", e))
-                })?;
-            }
-            Ok(())
+        unsafe {
+            self.voice.WaitUntilDone(timeout_ms).map_err(|e| {
+                TtsError::SynthesisFailed(format!("SAPI 5 WaitUntilDone failed: {}", e))
+            })?;
         }
-
-        #[cfg(not(windows))]
-        {
-            let _ = timeout_ms;
-            Ok(())
-        }
+        Ok(())
     }
 }
 
 /// SAPI's voice tokens: id, description and the token, in SAPI's order.
-#[cfg(windows)]
 fn voice_tokens() -> Vec<(
     String,
     String,
@@ -483,7 +342,6 @@ fn voice_tokens() -> Vec<(
 }
 
 /// A string SAPI allocated, copied and freed.
-#[cfg(windows)]
 fn owned(value: windows::core::PWSTR) -> String {
     use windows::Win32::System::Com::CoTaskMemFree;
     // SAFETY: SAPI returns a CoTaskMemAlloc'd string, freed here after copying.
@@ -496,7 +354,6 @@ fn owned(value: windows::core::PWSTR) -> String {
 
 /// `text` in SAPI's pitch element, which changes the voice's middle pitch, as JAWS's own
 /// fragments carry it (SPVPITCH::MiddleAdj); the text escaped for XML.
-#[cfg(windows)]
 fn pitched_xml(text: &str, pitch: i32) -> String {
     let mut escaped = String::new();
     for c in text.replace(['\u{001d}', '\u{001e}'], "").chars() {

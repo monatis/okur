@@ -38,25 +38,18 @@ impl SynthesizerFactory for WindowsSynthesizers {
             Synthesizer::OneCore => Box::new(OneCoreEngine::new()?),
             Synthesizer::Auto => {
                 // OneCore voices respond fastest; SAPI 5 where they are missing.
-                #[cfg(windows)]
-                {
-                    match OneCoreEngine::new() {
-                        Ok(onecore) => Box::new(onecore),
-                        Err(e) => {
-                            tracing::warn!("OneCore unavailable ({e}), trying SAPI 5");
-                            match Sapi5Engine::new() {
-                                Ok(sapi) => Box::new(sapi),
-                                Err(e) => {
-                                    tracing::warn!("SAPI 5 unavailable ({e}), no speech");
-                                    Box::new(NoSpeechEngine::new())
-                                }
+                match OneCoreEngine::new() {
+                    Ok(onecore) => Box::new(onecore),
+                    Err(e) => {
+                        tracing::warn!("OneCore unavailable ({e}), trying SAPI 5");
+                        match Sapi5Engine::new() {
+                            Ok(sapi) => Box::new(sapi),
+                            Err(e) => {
+                                tracing::warn!("SAPI 5 unavailable ({e}), no speech");
+                                Box::new(NoSpeechEngine::new())
                             }
                         }
                     }
-                }
-                #[cfg(not(windows))]
-                {
-                    Box::new(NoSpeechEngine::new())
                 }
             }
         };
@@ -79,7 +72,6 @@ mod tests {
     }
 
     #[test]
-    #[cfg(windows)]
     #[ignore = "live: speaks aloud through SAPI 5"]
     fn test_sapi5_engine_initialization_and_speech() {
         let _lock = crate::TEST_AUDIO_LOCK

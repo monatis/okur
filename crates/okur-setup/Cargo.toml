@@ -19,4 +19,6 @@ test = false
 bench = false
 
 [dependencies]
+
+[target.'cfg(windows)'.dependencies]
 okur-windows = { workspace = true }

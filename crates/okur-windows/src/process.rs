@@ -6,30 +6,21 @@
 /// are blocking shutdown" screen: "If it were, the user would have no way of reading the
 /// dialog" (NVDA's design notes, which make the same call).
 pub fn shut_down_last() {
-    #[cfg(windows)]
-    {
-        /// `SHUTDOWN_NORETRY`: no retry dialog for this process.
-        const SHUTDOWN_NORETRY: u32 = 0x1;
-        // SAFETY: a process-wide setting with constant arguments; 0x100 is the lowest level an
-        // application may take, so it is shut down after the others.
-        if let Err(e) = unsafe {
-            windows::Win32::System::Threading::SetProcessShutdownParameters(0x100, SHUTDOWN_NORETRY)
-        } {
-            tracing::warn!("shutdown order not set: {e}");
-        }
+    /// `SHUTDOWN_NORETRY`: no retry dialog for this process.
+    const SHUTDOWN_NORETRY: u32 = 0x1;
+    // SAFETY: a process-wide setting with constant arguments; 0x100 is the lowest level an
+    // application may take, so it is shut down after the others.
+    if let Err(e) = unsafe {
+        windows::Win32::System::Threading::SetProcessShutdownParameters(0x100, SHUTDOWN_NORETRY)
+    } {
+        tracing::warn!("shutdown order not set: {e}");
     }
 }
 
-/// Whether the system's screen-reader flag (`SPI_GETSCREENREADER`) is on; `None` off Windows.
+/// Whether the system's screen-reader flag (`SPI_GETSCREENREADER`) is on; `None` when it cannot
+/// be read.
 pub fn screen_reader_flag() -> Option<bool> {
-    #[cfg(windows)]
-    {
-        windows_impl::flag()
-    }
-    #[cfg(not(windows))]
-    {
-        None
-    }
+    windows_impl::flag()
 }
 
 /// The system's screen-reader flag, on while this is alive. Applications read it to adapt
@@ -45,7 +36,6 @@ impl ScreenReaderFlag {
     pub fn raise() -> Self {
         let was_on = screen_reader_flag().unwrap_or(false);
         // Applications are told only of a change.
-        #[cfg(windows)]
         if !was_on {
             windows_impl::set_flag(true);
         }
@@ -56,7 +46,6 @@ impl ScreenReaderFlag {
 impl Drop for ScreenReaderFlag {
     fn drop(&mut self) {
         if !self.was_on {
-            #[cfg(windows)]
             windows_impl::set_flag(false);
         }
     }
@@ -75,17 +64,9 @@ pub struct EndSessionWatcher {
 impl EndSessionWatcher {
     /// Starts the window on a thread of its own; `None` when it could not be made.
     pub fn start(on_end: OnSessionEnd) -> Option<Self> {
-        #[cfg(windows)]
-        {
-            windows_impl::watch(on_end).map(|thread| Self {
-                _thread: Some(thread),
-            })
-        }
-        #[cfg(not(windows))]
-        {
-            let _ = on_end;
-            Some(Self { _thread: None })
-        }
+        windows_impl::watch(on_end).map(|thread| Self {
+            _thread: Some(thread),
+        })
     }
 }
 
@@ -109,25 +90,11 @@ pub struct SystemKeyState;
 
 impl KeyState for SystemKeyState {
     fn left_shift_down(&self) -> bool {
-        #[cfg(windows)]
-        {
-            windows_impl::key_down(0xA0) // VK_LSHIFT
-        }
-        #[cfg(not(windows))]
-        {
-            false
-        }
+        windows_impl::key_down(0xA0) // VK_LSHIFT
     }
 
     fn right_shift_down(&self) -> bool {
-        #[cfg(windows)]
-        {
-            windows_impl::key_down(0xA1) // VK_RSHIFT
-        }
-        #[cfg(not(windows))]
-        {
-            false
-        }
+        windows_impl::key_down(0xA1) // VK_RSHIFT
     }
 }
 
@@ -152,73 +119,50 @@ impl KeyState for MockKeyState {
 /// the foreground, and passes that on to the lowered `okur-ui` as it shows a dialog. Fails
 /// harmlessly when Okur may not.
 pub fn allow_foreground(pid: u32) {
-    #[cfg(windows)]
+    // SAFETY: a plain call with a process id.
+    if let Err(e) =
+        unsafe { windows::Win32::UI::WindowsAndMessaging::AllowSetForegroundWindow(pid) }
     {
-        // SAFETY: a plain call with a process id.
-        if let Err(e) =
-            unsafe { windows::Win32::UI::WindowsAndMessaging::AllowSetForegroundWindow(pid) }
-        {
-            tracing::debug!(pid, "foreground not passed on: {e}");
-        }
-    }
-    #[cfg(not(windows))]
-    {
-        let _ = pid;
+        tracing::debug!(pid, "foreground not passed on: {e}");
     }
 }
 
 /// Ends a process: an Okur that did not quit when asked.
 pub fn terminate(pid: u32) -> Result<(), String> {
-    #[cfg(windows)]
-    {
-        use windows::Win32::System::Threading::{OpenProcess, TerminateProcess, PROCESS_TERMINATE};
-        // SAFETY: opens the process to end it; the handle is closed by `Owned`.
-        let process = unsafe { OpenProcess(PROCESS_TERMINATE, false, pid) }
-            .map(crate::elevation::windows_impl::Owned)
-            .map_err(|e| format!("process {pid}: {e}"))?;
-        // SAFETY: the process opened above.
-        unsafe { TerminateProcess(process.0, 1) }.map_err(|e| format!("process {pid}: {e}"))
-    }
-    #[cfg(not(windows))]
-    {
-        let _ = pid;
-        Err("processes are ended only on Windows".to_owned())
-    }
+    use windows::Win32::System::Threading::{OpenProcess, TerminateProcess, PROCESS_TERMINATE};
+    // SAFETY: opens the process to end it; the handle is closed by `Owned`.
+    let process = unsafe { OpenProcess(PROCESS_TERMINATE, false, pid) }
+        .map(crate::elevation::windows_impl::Owned)
+        .map_err(|e| format!("process {pid}: {e}"))?;
+    // SAFETY: the process opened above.
+    unsafe { TerminateProcess(process.0, 1) }.map_err(|e| format!("process {pid}: {e}"))
 }
 
 /// A process's executable, by process id.
 pub fn image_path(pid: u32) -> Option<std::path::PathBuf> {
-    #[cfg(windows)]
-    {
-        use windows::core::PWSTR;
-        use windows::Win32::System::Threading::{
-            OpenProcess, QueryFullProcessImageNameW, PROCESS_NAME_WIN32,
-            PROCESS_QUERY_LIMITED_INFORMATION,
-        };
-        // SAFETY: opens the process for a query; the handle is closed by `Owned`.
-        let process = unsafe { OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, pid) }
-            .map(crate::elevation::windows_impl::Owned)
-            .ok()?;
-        let mut path = [0u16; 1024];
-        let mut len = u32::try_from(path.len()).ok()?;
-        // SAFETY: a buffer of `len` characters.
-        unsafe {
-            QueryFullProcessImageNameW(
-                process.0,
-                PROCESS_NAME_WIN32,
-                PWSTR(path.as_mut_ptr()),
-                &mut len,
-            )
-        }
+    use windows::core::PWSTR;
+    use windows::Win32::System::Threading::{
+        OpenProcess, QueryFullProcessImageNameW, PROCESS_NAME_WIN32,
+        PROCESS_QUERY_LIMITED_INFORMATION,
+    };
+    // SAFETY: opens the process for a query; the handle is closed by `Owned`.
+    let process = unsafe { OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, pid) }
+        .map(crate::elevation::windows_impl::Owned)
         .ok()?;
-        let path = String::from_utf16_lossy(path.get(..usize::try_from(len).ok()?)?);
-        Some(std::path::PathBuf::from(path))
+    let mut path = [0u16; 1024];
+    let mut len = u32::try_from(path.len()).ok()?;
+    // SAFETY: a buffer of `len` characters.
+    unsafe {
+        QueryFullProcessImageNameW(
+            process.0,
+            PROCESS_NAME_WIN32,
+            PWSTR(path.as_mut_ptr()),
+            &mut len,
+        )
     }
-    #[cfg(not(windows))]
-    {
-        let _ = pid;
-        None
-    }
+    .ok()?;
+    let path = String::from_utf16_lossy(path.get(..usize::try_from(len).ok()?)?);
+    Some(std::path::PathBuf::from(path))
 }
 
 /// Starts a program through the shell (`ShellExecuteExW`), as Windows requires of a UI Access
@@ -231,80 +175,49 @@ pub fn shell_execute(
     verb: Option<&str>,
     wait: bool,
 ) -> Result<Option<u32>, String> {
-    #[cfg(windows)]
-    {
-        windows_impl::shell_execute(program, parameters, verb, wait)
-    }
-    #[cfg(not(windows))]
-    {
-        let _ = (program, parameters, verb, wait);
-        Err("programs are started through the shell only on Windows".to_owned())
-    }
+    windows_impl::shell_execute(program, parameters, verb, wait)
 }
 
 /// The running processes whose executable is one of `names` (file names, any case), with
 /// their executables' paths where they can be read.
 pub fn processes_named(names: &[&str]) -> Vec<(u32, Option<std::path::PathBuf>)> {
-    #[cfg(windows)]
-    {
-        windows_impl::processes_named(names)
-    }
-    #[cfg(not(windows))]
-    {
-        let _ = names;
-        Vec::new()
-    }
+    windows_impl::processes_named(names)
 }
 
 /// Asks Windows to delete a file, or an empty folder, when it next starts: a running program
 /// cannot be deleted (it can be renamed first).
 pub fn delete_at_reboot(path: &std::path::Path) -> Result<(), String> {
-    #[cfg(windows)]
-    {
-        use windows::core::{HSTRING, PCWSTR};
-        use windows::Win32::Storage::FileSystem::{MoveFileExW, MOVEFILE_DELAY_UNTIL_REBOOT};
-        let wide = HSTRING::from(path.as_os_str());
-        // SAFETY: a valid path; no new name means delete.
-        unsafe {
-            MoveFileExW(
-                PCWSTR(wide.as_ptr()),
-                PCWSTR::null(),
-                MOVEFILE_DELAY_UNTIL_REBOOT,
-            )
-        }
-        .map_err(|e| format!("{}: {e}", path.display()))
+    use windows::core::{HSTRING, PCWSTR};
+    use windows::Win32::Storage::FileSystem::{MoveFileExW, MOVEFILE_DELAY_UNTIL_REBOOT};
+    let wide = HSTRING::from(path.as_os_str());
+    // SAFETY: a valid path; no new name means delete.
+    unsafe {
+        MoveFileExW(
+            PCWSTR(wide.as_ptr()),
+            PCWSTR::null(),
+            MOVEFILE_DELAY_UNTIL_REBOOT,
+        )
     }
-    #[cfg(not(windows))]
-    {
-        let _ = path;
-        Err("deleting at the next start is Windows'".to_owned())
-    }
+    .map_err(|e| format!("{}: {e}", path.display()))
 }
 
 /// Shows a message in a standard message box and waits for OK: the installer's word where
 /// no console started it. Screen readers read it as any message box.
 pub fn message_box(title: &str, text: &str) {
-    #[cfg(windows)]
-    {
-        use windows::core::{HSTRING, PCWSTR};
-        use windows::Win32::UI::WindowsAndMessaging::{
-            MessageBoxW, MB_ICONINFORMATION, MB_OK, MB_SETFOREGROUND,
-        };
-        let (title, text) = (HSTRING::from(title), HSTRING::from(text));
-        // SAFETY: the strings outlive the call.
-        let _ = unsafe {
-            MessageBoxW(
-                None,
-                PCWSTR(text.as_ptr()),
-                PCWSTR(title.as_ptr()),
-                MB_OK | MB_ICONINFORMATION | MB_SETFOREGROUND,
-            )
-        };
-    }
-    #[cfg(not(windows))]
-    {
-        println!("{title}: {text}");
-    }
+    use windows::core::{HSTRING, PCWSTR};
+    use windows::Win32::UI::WindowsAndMessaging::{
+        MessageBoxW, MB_ICONINFORMATION, MB_OK, MB_SETFOREGROUND,
+    };
+    let (title, text) = (HSTRING::from(title), HSTRING::from(text));
+    // SAFETY: the strings outlive the call.
+    let _ = unsafe {
+        MessageBoxW(
+            None,
+            PCWSTR(text.as_ptr()),
+            PCWSTR(title.as_ptr()),
+            MB_OK | MB_ICONINFORMATION | MB_SETFOREGROUND,
+        )
+    };
 }
 
 /// Whether Windows started this process from its package's startup task (Okur from the Store,
@@ -312,17 +225,10 @@ pub fn message_box(title: &str, text: &str) {
 /// user's own start, it replaced a copy running, and ignored both Shift keys and the Startup
 /// Wizard's Never (performance review 2026-11-02, speech finding 2). False outside a package.
 pub fn started_by_startup_task() -> bool {
-    #[cfg(windows)]
-    {
-        use windows::ApplicationModel::Activation::ActivationKind;
-        windows::ApplicationModel::AppInstance::GetActivatedEventArgs()
-            .and_then(|args| args.Kind())
-            .is_ok_and(|kind| kind == ActivationKind::StartupTask)
-    }
-    #[cfg(not(windows))]
-    {
-        false
-    }
+    use windows::ApplicationModel::Activation::ActivationKind;
+    windows::ApplicationModel::AppInstance::GetActivatedEventArgs()
+        .and_then(|args| args.Kind())
+        .is_ok_and(|kind| kind == ActivationKind::StartupTask)
 }
 
 /// Asks Windows to start this program again, with no argument, after a crash or a hang ended
@@ -330,32 +236,21 @@ pub fn started_by_startup_task() -> bool {
 /// where the sign-in start brings it: a screen reader gone silently leaves its user with
 /// nothing. Windows restarts after a crash only a program that ran for a minute.
 pub fn restart_when_ended() {
-    #[cfg(windows)]
-    {
-        use windows::Win32::System::Recovery::{RegisterApplicationRestart, RESTART_NO_REBOOT};
-        // SAFETY: a plain call; no command line is passed.
-        if let Err(e) = unsafe { RegisterApplicationRestart(None, RESTART_NO_REBOOT) } {
-            tracing::warn!(error = %e, "no restart registered");
-        }
+    use windows::Win32::System::Recovery::{RegisterApplicationRestart, RESTART_NO_REBOOT};
+    // SAFETY: a plain call; no command line is passed.
+    if let Err(e) = unsafe { RegisterApplicationRestart(None, RESTART_NO_REBOOT) } {
+        tracing::warn!(error = %e, "no restart registered");
     }
 }
 
 /// Attaches a program without a console of its own (`okur-sr.exe`) to the console of the
 /// program that started it, so that what it prints is seen there; false when there is none.
 pub fn attach_parent_console() -> bool {
-    #[cfg(windows)]
-    {
-        use windows::Win32::System::Console::{AttachConsole, ATTACH_PARENT_PROCESS};
-        // SAFETY: a plain call; it fails harmlessly when there is no parent console.
-        unsafe { AttachConsole(ATTACH_PARENT_PROCESS) }.is_ok()
-    }
-    #[cfg(not(windows))]
-    {
-        false
-    }
+    use windows::Win32::System::Console::{AttachConsole, ATTACH_PARENT_PROCESS};
+    // SAFETY: a plain call; it fails harmlessly when there is no parent console.
+    unsafe { AttachConsole(ATTACH_PARENT_PROCESS) }.is_ok()
 }
 
-#[cfg(windows)]
 mod windows_impl {
     use super::OnSessionEnd;
     use std::sync::Mutex;

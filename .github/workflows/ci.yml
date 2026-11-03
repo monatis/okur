@@ -88,9 +88,8 @@ jobs:
       # replay (okur-corpus) runs here too.
       - name: Tests of the engine, the accessibility types and parity replay
         run: cargo test -p okur-core -p okur-runtime -p okur-ui-model -p xa11y-core -p okur-windows-model -p okur-corpus
-      # Whether the whole workspace still builds here (the programs, the Windows driver's
-      # stubs): informational until the driver is gated at its root (crate-structure-proposal
-      # step 4); it shows a break that the tests above cannot.
+      # Whether the whole workspace builds here: the Windows driver is gated at its root
+      # (crate-structure-proposal step 4.6), the programs say they run on Windows, and the
+      # lab's neutral commands build everywhere. It shows a break the tests above cannot.
       - name: The whole workspace builds
-        continue-on-error: true
         run: cargo check --workspace --all-targets

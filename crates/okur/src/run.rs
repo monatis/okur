@@ -10,7 +10,7 @@
 
 use okur_core::{AomNode, Role, VirtualBuffer};
 use okur_runtime::host::{say_to_console, Config, ExitSender, Exits, Platform};
-use okur_runtime::{EventSource, KeyboardHook, SpeechLog};
+use okur_runtime::SpeechLog;
 use okur_windows::PlatformBridge;
 use std::path::Path;
 use std::sync::Mutex;
@@ -125,44 +125,6 @@ pub struct RunConfig {
 pub fn init_logging(debug_log: Option<&str>, kept: bool) {
     let kept = kept.then(crate::folders::kept_log).flatten();
     okur_runtime::logging::init_logging(debug_log, kept, &["okur_windows", "okur"]);
-}
-
-/// The platform's keyboard hook: Windows' low-level hook, or the headless mock where no driver
-/// is built yet.
-fn keyboard_hook() -> Box<dyn KeyboardHook> {
-    #[cfg(windows)]
-    {
-        Box::new(okur_windows::hook::windows::WindowsKeyboardHook::new())
-    }
-    #[cfg(not(windows))]
-    {
-        Box::new(okur_runtime::MockKeyboardHook::new())
-    }
-}
-
-/// The platform's accessibility event listener: Windows' own, or the headless mock where no
-/// driver is built yet.
-fn event_listener() -> Box<dyn EventSource> {
-    #[cfg(windows)]
-    {
-        Box::new(okur_windows::events::windows::WindowsAccessibilityEventListener::new())
-    }
-    #[cfg(not(windows))]
-    {
-        Box::new(okur_runtime::MockEventSource::new())
-    }
-}
-
-/// How the platform starts `okur-ui`: on Windows below UI Access when Okur has it.
-fn ui_spawner() -> Box<dyn okur_runtime::ui_host::UiSpawner> {
-    #[cfg(windows)]
-    {
-        Box::new(okur_windows::ui_spawner::WindowsUiSpawner::for_this_process())
-    }
-    #[cfg(not(windows))]
-    {
-        Box::new(okur_runtime::ui_host::PlainSpawner)
-    }
 }
 
 /// Ends the process after an error before the screen reader ran.
@@ -360,14 +322,21 @@ pub async fn run(config: RunConfig) {
     // Applications that adapt to a screen reader know one runs.
     let screen_reader_flag = okur_windows::process::ScreenReaderFlag::raise();
 
+    // Windows' own: the low-level keyboard hook, WinEvents and UI Automation, OneCore's and
+    // SAPI 5's voices, okur-ui below UI Access when Okur has it, the application actions, Say
+    // System Time (Insert+F12) in the user's locale formats and a notification rule's sound.
     let platform = Platform {
-        keyboard_hook: keyboard_hook(),
-        event_source: event_listener(),
+        keyboard_hook: Box::new(okur_windows::hook::windows::WindowsKeyboardHook::new()),
+        event_source: Box::new(
+            okur_windows::events::windows::WindowsAccessibilityEventListener::new(),
+        ),
         synthesizers: std::sync::Arc::new(okur_windows::WindowsSynthesizers),
-        ui_spawner: ui_spawner(),
-        actions: windows_actions(),
-        clock: windows_clock(),
-        sounds: windows_sounds(),
+        ui_spawner: Box::new(okur_windows::ui_spawner::WindowsUiSpawner::for_this_process()),
+        actions: Some(Box::new(|events| {
+            Box::new(okur_windows::actions::WindowsActions::start(Some(events)))
+        })),
+        clock: Some(Box::new(okur_windows::clock::WindowsClock)),
+        sounds: Some(Box::new(okur_windows::sound::WindowsSounds)),
         start_options: Some(Box::new(start_options)),
     };
     let config = Config {
@@ -392,45 +361,6 @@ pub async fn run(config: RunConfig) {
         println!("Okur stopped.");
     }
     std::process::exit(0);
-}
-
-/// Windows' application actions, started with where their answers go.
-fn windows_actions() -> Option<okur_runtime::host::ActionsStart> {
-    #[cfg(windows)]
-    {
-        Some(Box::new(|events| {
-            Box::new(okur_windows::actions::WindowsActions::start(Some(events)))
-                as Box<dyn okur_core::actions::ApplicationActions>
-        }))
-    }
-    #[cfg(not(windows))]
-    {
-        None
-    }
-}
-
-/// Say System Time (Insert+F12) in the user's locale formats.
-fn windows_clock() -> Option<Box<dyn okur_core::clock::Clock>> {
-    #[cfg(windows)]
-    {
-        Some(Box::new(okur_windows::clock::WindowsClock))
-    }
-    #[cfg(not(windows))]
-    {
-        None
-    }
-}
-
-/// A notification rule's sound.
-fn windows_sounds() -> Option<Box<dyn okur_core::sound::SoundOutput>> {
-    #[cfg(windows)]
-    {
-        Some(Box::new(okur_windows::sound::WindowsSounds))
-    }
-    #[cfg(not(windows))]
-    {
-        None
-    }
 }
 
 #[cfg(test)]

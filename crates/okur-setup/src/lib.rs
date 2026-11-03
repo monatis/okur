@@ -5,7 +5,11 @@
 //! `signing/dev-signing.ps1`.
 
 pub mod args;
+#[cfg(windows)]
 pub mod plan;
+#[cfg(windows)]
+pub mod program;
+#[cfg(windows)]
 pub mod setup;
 
 #[cfg(test)]

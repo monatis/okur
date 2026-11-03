@@ -17,54 +17,25 @@ pub fn is_secure_desktop(name: &str) -> bool {
 /// The desktop the calling thread is on: a process started on `Winlogon` has `Winlogon` for
 /// its threads, one started by the user `Default`.
 pub fn thread_desktop() -> Option<String> {
-    #[cfg(windows)]
-    {
-        windows_impl::thread_desktop()
-    }
-    #[cfg(not(windows))]
-    {
-        Some("Default".to_owned())
-    }
+    windows_impl::thread_desktop()
 }
 
 /// The process's window station ("WinSta0" for an interactive session).
 pub fn window_station() -> Option<String> {
-    #[cfg(windows)]
-    {
-        windows_impl::window_station()
-    }
-    #[cfg(not(windows))]
-    {
-        None
-    }
+    windows_impl::window_station()
 }
 
 /// The desktop that receives the user's input now; `None` when it cannot be opened, which is
 /// what a user's process gets while the secure desktop has the input.
 pub fn input_desktop() -> Option<String> {
-    #[cfg(windows)]
-    {
-        windows_impl::input_desktop()
-    }
-    #[cfg(not(windows))]
-    {
-        Some("Default".to_owned())
-    }
+    windows_impl::input_desktop()
 }
 
-/// The Windows session this process runs in (0 off Windows).
+/// The Windows session this process runs in.
 pub fn session_id() -> Option<u32> {
-    #[cfg(windows)]
-    {
-        windows_impl::session_id()
-    }
-    #[cfg(not(windows))]
-    {
-        Some(0)
-    }
+    windows_impl::session_id()
 }
 
-#[cfg(windows)]
 mod windows_impl {
     use windows::Win32::Foundation::HANDLE;
     use windows::Win32::System::RemoteDesktop::ProcessIdToSessionId;

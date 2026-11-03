@@ -9,8 +9,12 @@ mod aria_at;
 mod aria_at_report;
 
 use clap::{Parser, Subcommand};
-use okur_core::{AomNode, Role, VirtualBuffer, VirtualCursor};
-use okur_runtime::{SpeechLog, TtsManager};
+use okur_core::VirtualBuffer;
+#[cfg(windows)]
+use okur_core::{AomNode, Role, VirtualCursor};
+use okur_runtime::SpeechLog;
+#[cfg(windows)]
+use okur_runtime::TtsManager;
 use std::fs;
 use std::path::Path;
 
@@ -512,11 +516,6 @@ fn capture_snapshot(
     Ok(())
 }
 
-#[cfg(not(windows))]
-fn capture_snapshot(_: &str, _: &str, _: Option<String>, _: Option<String>) -> Result<(), String> {
-    Err("Accessibility snapshots are only available on Windows".to_owned())
-}
-
 /// Makes JAWS speech-history structure visible on one line: `\u{1d}`/`\u{1e}` role markers
 /// become `‹ ›`, line breaks become ` | `, and no-break spaces become `·`.
 fn visible(speech: &str) -> String {
@@ -746,6 +745,7 @@ fn converted_line(event: &okur_core::AccessibilityEvent) -> String {
 /// that file.
 fn init_logging(cli: &Cli) {
     let debug_log = match &cli.command {
+        #[cfg(windows)]
         Some(Commands::Trace { debug_log, .. }) => debug_log.as_deref(),
         _ => None,
     };
@@ -756,9 +756,11 @@ fn init_logging(cli: &Cli) {
 async fn main() {
     let cli = Cli::parse();
     init_logging(&cli);
+    #[cfg(windows)]
     okur_windows::init();
 
     match cli.command {
+        #[cfg(windows)]
         Some(Commands::Speak {
             text,
             engine,
@@ -815,6 +817,7 @@ async fn main() {
             // Wait for audio rendering to finish
             let _ = tts.wait_until_done(15000);
         }
+        #[cfg(windows)]
         Some(Commands::Read {
             fixture,
             engine,
@@ -867,8 +870,8 @@ async fn main() {
 
             let _ = tts.wait_until_done(30000);
         }
+        #[cfg(windows)]
         Some(Commands::WindowText { control }) => {
-            #[cfg(windows)]
             match okur_windows::window_text::foreground_lines(control) {
                 Ok(lines) => {
                     for line in lines {
@@ -880,13 +883,8 @@ async fn main() {
                     std::process::exit(1);
                 }
             }
-            #[cfg(not(windows))]
-            {
-                let _ = control;
-                eprintln!("window-text is only available on Windows");
-                std::process::exit(1);
-            }
         }
+        #[cfg(windows)]
         Some(Commands::ScreenText {
             recognize,
             pieces,
@@ -895,18 +893,15 @@ async fn main() {
             language,
             window_title,
         }) => {
-            #[cfg(windows)]
             let other_window = append_to.is_some()
                 && window_title
                     .as_deref()
                     .is_some_and(|title| !okur_lab::harness::foreground_title().starts_with(title));
-            #[cfg(windows)]
             let screen = if other_window {
                 Ok(okur_core::screen_model::ScreenModel::default())
             } else {
                 okur_windows::window_text::foreground_screen(recognize.then_some(language.as_str()))
             };
-            #[cfg(windows)]
             match screen {
                 Ok(model) if append_to.is_some() => {
                     let t_ms = std::time::SystemTime::now()
@@ -956,13 +951,8 @@ async fn main() {
                     std::process::exit(1);
                 }
             }
-            #[cfg(not(windows))]
-            {
-                let _ = (recognize, pieces, append_to, step, language, window_title);
-                eprintln!("screen-text is only available on Windows");
-                std::process::exit(1);
-            }
         }
+        #[cfg(windows)]
         Some(Commands::FileText {
             path,
             language,
@@ -970,85 +960,74 @@ async fn main() {
             append_to,
             step,
         }) => {
-            #[cfg(windows)]
-            {
-                use okur_core::recognized_file::FileRecognition;
-                let cancel = std::sync::atomic::AtomicBool::new(false);
-                let recognition = match (path, window_title) {
-                    (Some(path), _) => okur_windows::file_text::recognize_file(
-                        std::path::Path::new(&path),
-                        &language,
-                        &cancel,
-                    ),
-                    (None, Some(title)) => {
-                        use okur_windows::file_text::Selection;
-                        let selection = okur_lab::harness::shell_window(&title)
-                            .and_then(|window| {
-                                okur_windows::file_text::selected_file(window)
-                                    .inspect_err(|e| eprintln!("the selected file: {e}"))
-                                    .ok()
-                            })
-                            .unwrap_or(Selection::Nothing);
-                        match selection {
-                            Selection::File(path) => okur_windows::file_text::recognize_found(
-                                &path,
-                                &language,
-                                &cancel,
-                                || {},
-                            ),
-                            Selection::Files => FileRecognition::MultipleFiles,
-                            Selection::Nothing => FileRecognition::NoFile,
-                        }
+            use okur_core::recognized_file::FileRecognition;
+            let cancel = std::sync::atomic::AtomicBool::new(false);
+            let recognition = match (path, window_title) {
+                (Some(path), _) => okur_windows::file_text::recognize_file(
+                    std::path::Path::new(&path),
+                    &language,
+                    &cancel,
+                ),
+                (None, Some(title)) => {
+                    use okur_windows::file_text::Selection;
+                    let selection = okur_lab::harness::shell_window(&title)
+                        .and_then(|window| {
+                            okur_windows::file_text::selected_file(window)
+                                .inspect_err(|e| eprintln!("the selected file: {e}"))
+                                .ok()
+                        })
+                        .unwrap_or(Selection::Nothing);
+                    match selection {
+                        Selection::File(path) => okur_windows::file_text::recognize_found(
+                            &path,
+                            &language,
+                            &cancel,
+                            || {},
+                        ),
+                        Selection::Files => FileRecognition::MultipleFiles,
+                        Selection::Nothing => FileRecognition::NoFile,
                     }
-                    (None, None) => {
-                        okur_windows::file_text::recognize_selected_file(&language, || {})
-                    }
-                };
-                if let Some(path) = append_to {
-                    let t_ms = std::time::SystemTime::now()
-                        .duration_since(std::time::UNIX_EPOCH)
-                        .map(|d| d.as_millis())
-                        .unwrap_or_default();
-                    let snapshot = serde_json::json!({
-                        "step": step,
-                        "t_ms": t_ms,
-                        "file": recognition,
+                }
+                (None, None) => okur_windows::file_text::recognize_selected_file(&language, || {}),
+            };
+            if let Some(path) = append_to {
+                let t_ms = std::time::SystemTime::now()
+                    .duration_since(std::time::UNIX_EPOCH)
+                    .map(|d| d.as_millis())
+                    .unwrap_or_default();
+                let snapshot = serde_json::json!({
+                    "step": step,
+                    "t_ms": t_ms,
+                    "file": recognition,
+                });
+                let written = std::fs::OpenOptions::new()
+                    .create(true)
+                    .append(true)
+                    .open(&path)
+                    .and_then(|mut file| {
+                        use std::io::Write as _;
+                        writeln!(file, "{snapshot}")
                     });
-                    let written = std::fs::OpenOptions::new()
-                        .create(true)
-                        .append(true)
-                        .open(&path)
-                        .and_then(|mut file| {
-                            use std::io::Write as _;
-                            writeln!(file, "{snapshot}")
-                        });
-                    if let Err(e) = written {
-                        eprintln!("{path}: {e}");
-                        std::process::exit(1);
-                    }
-                    return;
+                if let Err(e) = written {
+                    eprintln!("{path}: {e}");
+                    std::process::exit(1);
                 }
-                match recognition {
-                    okur_core::recognized_file::FileRecognition::Read { name, pages } => {
-                        println!("{name}");
-                        for (number, page) in pages.iter().enumerate() {
-                            println!("-- page {}", number + 1);
-                            for line in page {
-                                println!("{line}");
-                            }
+                return;
+            }
+            match recognition {
+                okur_core::recognized_file::FileRecognition::Read { name, pages } => {
+                    println!("{name}");
+                    for (number, page) in pages.iter().enumerate() {
+                        println!("-- page {}", number + 1);
+                        for line in page {
+                            println!("{line}");
                         }
                     }
-                    other => {
-                        eprintln!("{other:?}");
-                        std::process::exit(1);
-                    }
                 }
-            }
-            #[cfg(not(windows))]
-            {
-                let _ = (path, language, window_title, append_to, step);
-                eprintln!("file-text is only available on Windows");
-                std::process::exit(1);
+                other => {
+                    eprintln!("{other:?}");
+                    std::process::exit(1);
+                }
             }
         }
         Some(Commands::Latency { path }) => match fs::read_to_string(&path) {
@@ -1079,6 +1058,7 @@ async fn main() {
                 std::process::exit(1);
             }
         },
+        #[cfg(windows)]
         Some(Commands::Meter { duration_ms }) => {
             println!(
                 "Sampling hardware soundcard / default playback endpoint for {} ms...",
@@ -1294,244 +1274,223 @@ async fn main() {
                 println!("Wrote {:?}", dir.join(okur_corpus::parity::BASELINE_FILE));
             }
         }
+        #[cfg(windows)]
         Some(Commands::Act { name, action }) => {
-            #[cfg(windows)]
-            {
-                fn find<'a>(node: &'a AomNode, name: &str) -> Option<&'a AomNode> {
-                    if node.name.as_deref().map(str::trim) == Some(name)
-                        && node.role != Role::Text
-                        && okur_windows_model::node_ids::unique_id(node).is_some()
-                    {
-                        return Some(node);
-                    }
-                    node.children.iter().find_map(|c| find(c, name))
+            fn find<'a>(node: &'a AomNode, name: &str) -> Option<&'a AomNode> {
+                if node.name.as_deref().map(str::trim) == Some(name)
+                    && node.role != Role::Text
+                    && okur_windows_model::node_ids::unique_id(node).is_some()
+                {
+                    return Some(node);
                 }
-                let page = match okur_windows::actions::capture_foreground_page() {
-                    Ok(page) => page,
-                    Err(e) => {
-                        eprintln!("No foreground page: {e}");
-                        std::process::exit(1);
-                    }
-                };
-                let Some(target) = find(&page, &name) else {
-                    eprintln!("No control named {name:?} with an IA2 uniqueID in the page");
+                node.children.iter().find_map(|c| find(c, name))
+            }
+            let page = match okur_windows::actions::capture_foreground_page() {
+                Ok(page) => page,
+                Err(e) => {
+                    eprintln!("No foreground page: {e}");
                     std::process::exit(1);
-                };
-                let requested = match action.as_str() {
-                    "focus" => okur_lab::probes::perform_now(target, false),
-                    "activate" => okur_lab::probes::perform_now(target, true),
-                    other => {
-                        eprintln!("--action must be focus or activate, not {other:?}");
-                        std::process::exit(2);
-                    }
-                };
-                std::thread::sleep(std::time::Duration::from_millis(500));
-                let focused = okur_windows::uia_capture::focused_element_summary();
-                println!(
-                    "{action} {name:?} ({:?}): {requested:?}; keyboard focus now: {focused}",
-                    target.role
-                );
-            }
-            #[cfg(not(windows))]
-            {
-                let _ = (name, action);
-                eprintln!("act is only available on Windows");
+                }
+            };
+            let Some(target) = find(&page, &name) else {
+                eprintln!("No control named {name:?} with an IA2 uniqueID in the page");
                 std::process::exit(1);
-            }
+            };
+            let requested = match action.as_str() {
+                "focus" => okur_lab::probes::perform_now(target, false),
+                "activate" => okur_lab::probes::perform_now(target, true),
+                other => {
+                    eprintln!("--action must be focus or activate, not {other:?}");
+                    std::process::exit(2);
+                }
+            };
+            std::thread::sleep(std::time::Duration::from_millis(500));
+            let focused = okur_windows::uia_capture::focused_element_summary();
+            println!(
+                "{action} {name:?} ({:?}): {requested:?}; keyboard focus now: {focused}",
+                target.role
+            );
         }
+        #[cfg(windows)]
         Some(Commands::DocumentHeadings {
             window_title,
             append_to,
             step,
         }) => {
-            #[cfg(windows)]
-            {
-                let headings = okur_lab::probes::document_headings_now(window_title.as_deref());
-                let view = okur_lab::probes::document_view_now(window_title.as_deref());
-                // Word's status bar, for Say Bottom Line of Window.
-                let status_bar = okur_lab::probes::status_bar_now(window_title.as_deref());
-                // Excel's active cell's row and column, for its row and column readers.
-                let sheet_place =
-                    okur_lab::probes::sheet_place_complete_now(window_title.as_deref());
-                // Excel's lists: its cells with formulas, the column's cells, its worksheets.
-                let sheet_list = |kind: okur_core::SheetListKind| {
-                    okur_lab::probes::sheet_list_now(window_title.as_deref(), kind).map(
-                        |(column, entries)| serde_json::json!({ "column": column, "entries": entries }),
-                    )
-                };
-                let sheet_lists = sheet_place.as_ref().map(|_| {
-                    serde_json::json!({
-                        "formulas": sheet_list(okur_core::SheetListKind::Formulas),
-                        "column": sheet_list(okur_core::SheetListKind::Column),
-                        "row": sheet_list(okur_core::SheetListKind::Row),
-                        "visible": sheet_list(okur_core::SheetListKind::Visible),
-                        "worksheets": sheet_list(okur_core::SheetListKind::Worksheets),
+            let headings = okur_lab::probes::document_headings_now(window_title.as_deref());
+            let view = okur_lab::probes::document_view_now(window_title.as_deref());
+            // Word's status bar, for Say Bottom Line of Window.
+            let status_bar = okur_lab::probes::status_bar_now(window_title.as_deref());
+            // Excel's active cell's row and column, for its row and column readers.
+            let sheet_place = okur_lab::probes::sheet_place_complete_now(window_title.as_deref());
+            // Excel's lists: its cells with formulas, the column's cells, its worksheets.
+            let sheet_list = |kind: okur_core::SheetListKind| {
+                okur_lab::probes::sheet_list_now(window_title.as_deref(), kind).map(
+                    |(column, entries)| serde_json::json!({ "column": column, "entries": entries }),
+                )
+            };
+            let sheet_lists = sheet_place.as_ref().map(|_| {
+                serde_json::json!({
+                    "formulas": sheet_list(okur_core::SheetListKind::Formulas),
+                    "column": sheet_list(okur_core::SheetListKind::Column),
+                    "row": sheet_list(okur_core::SheetListKind::Row),
+                    "visible": sheet_list(okur_core::SheetListKind::Visible),
+                    "worksheets": sheet_list(okur_core::SheetListKind::Worksheets),
+                })
+            });
+            let paragraphs = okur_lab::probes::document_paragraphs_now(window_title.as_deref());
+            let links = okur_lab::probes::document_links_now(window_title.as_deref());
+            // The line spacing of the selection's paragraph, from Word's object model.
+            let document = window_title
+                .as_deref()
+                .and_then(okur_lab::harness::window_titled)
+                .and_then(okur_windows::word_om::document_window);
+            let line_spacing = document.and_then(okur_windows::word_om::selection_line_spacing);
+            // Whether the document tracks its changes, for Ctrl+Shift+E.
+            let track_changes = document.and_then(okur_windows::word_om::track_revisions);
+            // The caret's paragraph's alignment, for Ctrl+E, R, J and L.
+            let alignment = document.and_then(okur_windows::word_om::paragraph_alignment);
+            // The selection's font size, for Ctrl+Shift+Period and Comma.
+            let font_size = document.and_then(okur_windows::word_om::selection_font_size);
+            // Where the caret's paragraph starts from the page's edge, for Ctrl+M and
+            // Ctrl+Shift+M.
+            let left_edge = document.and_then(okur_windows::word_om::paragraph_left_edge);
+            // The document's fields, for its list of fields (Insert+F5).
+            let fields = document
+                .and_then(okur_windows::word_om::document_fields)
+                .unwrap_or_default();
+            // The document's comments, footnotes, endnotes, bookmarks and revisions, for
+            // JAWS's lists of them (Ctrl+Shift+Apostrophe, Insert+Shift+F) and its Virtual
+            // Viewer of them (Windows+Semicolon).
+            let notes = |kind: okur_core::NoteKind| {
+                document
+                    .and_then(|d| okur_windows::word_om::document_notes(d, kind))
+                    .unwrap_or_default()
+                    .into_iter()
+                    .map(|note| {
+                        serde_json::json!({
+                            "text": note.text,
+                            "author": note.author,
+                            "date": note.date,
+                            "number": note.number,
+                            "mark": note.mark,
+                            "name": note.name,
+                            "revision": note.revision,
+                        })
                     })
-                });
-                let paragraphs = okur_lab::probes::document_paragraphs_now(window_title.as_deref());
-                let links = okur_lab::probes::document_links_now(window_title.as_deref());
-                // The line spacing of the selection's paragraph, from Word's object model.
-                let document = window_title
-                    .as_deref()
-                    .and_then(okur_lab::harness::window_titled)
-                    .and_then(okur_windows::word_om::document_window);
-                let line_spacing = document.and_then(okur_windows::word_om::selection_line_spacing);
-                // Whether the document tracks its changes, for Ctrl+Shift+E.
-                let track_changes = document.and_then(okur_windows::word_om::track_revisions);
-                // The caret's paragraph's alignment, for Ctrl+E, R, J and L.
-                let alignment = document.and_then(okur_windows::word_om::paragraph_alignment);
-                // The selection's font size, for Ctrl+Shift+Period and Comma.
-                let font_size = document.and_then(okur_windows::word_om::selection_font_size);
-                // Where the caret's paragraph starts from the page's edge, for Ctrl+M and
-                // Ctrl+Shift+M.
-                let left_edge = document.and_then(okur_windows::word_om::paragraph_left_edge);
-                // The document's fields, for its list of fields (Insert+F5).
-                let fields = document
-                    .and_then(okur_windows::word_om::document_fields)
-                    .unwrap_or_default();
-                // The document's comments, footnotes, endnotes, bookmarks and revisions, for
-                // JAWS's lists of them (Ctrl+Shift+Apostrophe, Insert+Shift+F) and its Virtual
-                // Viewer of them (Windows+Semicolon).
-                let notes = |kind: okur_core::NoteKind| {
-                    document
-                        .and_then(|d| okur_windows::word_om::document_notes(d, kind))
-                        .unwrap_or_default()
-                        .into_iter()
-                        .map(|note| {
-                            serde_json::json!({
-                                "text": note.text,
-                                "author": note.author,
-                                "date": note.date,
-                                "number": note.number,
-                                "mark": note.mark,
-                                "name": note.name,
-                                "revision": note.revision,
-                            })
+                    .collect::<Vec<_>>()
+            };
+            let (comments, footnotes, endnotes, bookmarks, revisions) = (
+                notes(okur_core::NoteKind::Comment),
+                notes(okur_core::NoteKind::Footnote),
+                notes(okur_core::NoteKind::Endnote),
+                notes(okur_core::NoteKind::Bookmark),
+                notes(okur_core::NoteKind::Revision),
+            );
+            // The form fields at the caret and on its paragraph, for reading them as
+            // controls.
+            let (selected_form_fields, paragraph_form_fields) = document
+                .and_then(okur_windows::word_om::selection_form_fields)
+                .unwrap_or_default();
+            let form_json = |fields: &[okur_windows::word_om::FormField]| {
+                fields
+                    .iter()
+                    .map(|f| {
+                        serde_json::json!({
+                            "kind": f.kind,
+                            "name": f.name,
+                            "result": f.result,
+                            "checked": f.checked,
+                            "entries": f.entries,
+                            "chosen": f.chosen,
+                            "help": f.help,
+                            "status": f.status,
                         })
-                        .collect::<Vec<_>>()
-                };
-                let (comments, footnotes, endnotes, bookmarks, revisions) = (
-                    notes(okur_core::NoteKind::Comment),
-                    notes(okur_core::NoteKind::Footnote),
-                    notes(okur_core::NoteKind::Endnote),
-                    notes(okur_core::NoteKind::Bookmark),
-                    notes(okur_core::NoteKind::Revision),
-                );
-                // The form fields at the caret and on its paragraph, for reading them as
-                // controls.
-                let (selected_form_fields, paragraph_form_fields) = document
-                    .and_then(okur_windows::word_om::selection_form_fields)
+                    })
+                    .collect::<Vec<_>>()
+            };
+            if let Some(path) = append_to {
+                let t_ms = std::time::SystemTime::now()
+                    .duration_since(std::time::UNIX_EPOCH)
+                    .map(|d| d.as_millis())
                     .unwrap_or_default();
-                let form_json = |fields: &[okur_windows::word_om::FormField]| {
-                    fields
+                // Without the document (the window gone), no headings are saved, and replay
+                // answers the Heading List with none.
+                let snapshot = serde_json::json!({
+                    "step": step,
+                    "t_ms": t_ms,
+                    "headings": headings.unwrap_or_default(),
+                    "view": view,
+                    "status_bar": status_bar,
+                    "sheet_place": sheet_place,
+                    "sheet_lists": sheet_lists,
+                    "paragraphs": paragraphs.unwrap_or_default(),
+                    "links": links.unwrap_or_default(),
+                    "line_spacing": line_spacing.map(|s| serde_json::json!({
+                        "rule": s.rule,
+                        "points": s.points,
+                    })),
+                    "track_changes": track_changes,
+                    "alignment": alignment,
+                    "font_size": font_size,
+                    "left_edge": left_edge,
+                    "selected_form_fields": form_json(&selected_form_fields),
+                    "paragraph_form_fields": form_json(&paragraph_form_fields),
+                    "comments": comments,
+                    "footnotes": footnotes,
+                    "endnotes": endnotes,
+                    "bookmarks": bookmarks,
+                    "revisions": revisions,
+                    "fields": fields
                         .iter()
-                        .map(|f| {
-                            serde_json::json!({
-                                "kind": f.kind,
-                                "name": f.name,
-                                "result": f.result,
-                                "checked": f.checked,
-                                "entries": f.entries,
-                                "chosen": f.chosen,
-                                "help": f.help,
-                                "status": f.status,
-                            })
-                        })
-                        .collect::<Vec<_>>()
-                };
-                if let Some(path) = append_to {
-                    let t_ms = std::time::SystemTime::now()
-                        .duration_since(std::time::UNIX_EPOCH)
-                        .map(|d| d.as_millis())
-                        .unwrap_or_default();
-                    // Without the document (the window gone), no headings are saved, and replay
-                    // answers the Heading List with none.
-                    let snapshot = serde_json::json!({
-                        "step": step,
-                        "t_ms": t_ms,
-                        "headings": headings.unwrap_or_default(),
-                        "view": view,
-                        "status_bar": status_bar,
-                        "sheet_place": sheet_place,
-                        "sheet_lists": sheet_lists,
-                        "paragraphs": paragraphs.unwrap_or_default(),
-                        "links": links.unwrap_or_default(),
-                        "line_spacing": line_spacing.map(|s| serde_json::json!({
-                            "rule": s.rule,
-                            "points": s.points,
-                        })),
-                        "track_changes": track_changes,
-                        "alignment": alignment,
-                        "font_size": font_size,
-                        "left_edge": left_edge,
-                        "selected_form_fields": form_json(&selected_form_fields),
-                        "paragraph_form_fields": form_json(&paragraph_form_fields),
-                        "comments": comments,
-                        "footnotes": footnotes,
-                        "endnotes": endnotes,
-                        "bookmarks": bookmarks,
-                        "revisions": revisions,
-                        "fields": fields
-                            .iter()
-                            .map(|f| serde_json::json!({
-                                "kind": f.kind,
-                                "code": f.code,
-                                "result": f.result,
-                            }))
-                            .collect::<Vec<_>>(),
+                        .map(|f| serde_json::json!({
+                            "kind": f.kind,
+                            "code": f.code,
+                            "result": f.result,
+                        }))
+                        .collect::<Vec<_>>(),
+                });
+                let written = std::fs::OpenOptions::new()
+                    .create(true)
+                    .append(true)
+                    .open(&path)
+                    .and_then(|mut file| {
+                        use std::io::Write as _;
+                        writeln!(file, "{snapshot}")
                     });
-                    let written = std::fs::OpenOptions::new()
-                        .create(true)
-                        .append(true)
-                        .open(&path)
-                        .and_then(|mut file| {
-                            use std::io::Write as _;
-                            writeln!(file, "{snapshot}")
-                        });
-                    if let Err(e) = written {
-                        eprintln!("{path}: {e}");
-                        std::process::exit(1);
-                    }
-                    return;
-                }
-                println!("view: {view:?}");
-                let Some(headings) = headings else {
-                    eprintln!("no document of Word's to read");
+                if let Err(e) = written {
+                    eprintln!("{path}: {e}");
                     std::process::exit(1);
-                };
-                for heading in headings {
-                    println!(
-                        "{} : {} (paragraph {})",
-                        heading.text, heading.level, heading.paragraph
-                    );
                 }
-                for link in links.unwrap_or_default() {
-                    println!(
-                        "link {} -> {} (paragraph {})",
-                        link.text,
-                        link.url.unwrap_or_default(),
-                        link.paragraph
-                    );
-                }
+                return;
             }
-            #[cfg(not(windows))]
-            {
-                let _ = (window_title, append_to, step);
-                eprintln!("document-headings is only available on Windows");
+            println!("view: {view:?}");
+            let Some(headings) = headings else {
+                eprintln!("no document of Word's to read");
                 std::process::exit(1);
+            };
+            for heading in headings {
+                println!(
+                    "{} : {} (paragraph {})",
+                    heading.text, heading.level, heading.paragraph
+                );
+            }
+            for link in links.unwrap_or_default() {
+                println!(
+                    "link {} -> {} (paragraph {})",
+                    link.text,
+                    link.url.unwrap_or_default(),
+                    link.paragraph
+                );
             }
         }
+        #[cfg(windows)]
         Some(Commands::TextAttributes { unit }) => {
-            #[cfg(windows)]
             for line in okur_lab::probes::text_attributes_now(unit) {
                 println!("{line}");
             }
-            #[cfg(not(windows))]
-            {
-                let _ = unit;
-                eprintln!("text-attributes is only available on Windows");
-            }
         }
+        #[cfg(windows)]
         Some(Commands::Caret { unit }) => {
             use okur_core::editing::EditKey;
             let key = match unit.as_str() {
@@ -1543,22 +1502,14 @@ async fn main() {
                     std::process::exit(2);
                 }
             };
-            #[cfg(windows)]
-            {
-                let context = okur_lab::probes::read_text_now();
-                let spoken = context
-                    .as_ref()
-                    .and_then(|c| okur_core::editing::speech(key, None, c, ""));
-                println!("{key:?}: {spoken:?} (field: {context:?})");
-            }
-            #[cfg(not(windows))]
-            {
-                let _ = key;
-                eprintln!("caret is only available on Windows");
-            }
+            let context = okur_lab::probes::read_text_now();
+            let spoken = context
+                .as_ref()
+                .and_then(|c| okur_core::editing::speech(key, None, c, ""));
+            println!("{key:?}: {spoken:?} (field: {context:?})");
         }
+        #[cfg(windows)]
         Some(Commands::Tray { dump }) => {
-            #[cfg(windows)]
             if dump {
                 for line in okur_lab::probes::taskbar_dump_now() {
                     println!("{line}");
@@ -1568,12 +1519,8 @@ async fn main() {
                     println!("{} @ {}, {}", icon.name, icon.x, icon.y);
                 }
             }
-            #[cfg(not(windows))]
-            {
-                let _ = dump;
-                eprintln!("tray is only available on Windows");
-            }
         }
+        #[cfg(windows)]
         Some(Commands::Trace {
             out,
             stop_file,
@@ -1581,7 +1528,6 @@ async fn main() {
             page_changes,
             debug_log: _,
         }) => {
-            #[cfg(windows)]
             match okur_lab::trace::run_trace(
                 Path::new(&out),
                 stop_file.as_deref().map(Path::new),
@@ -1594,13 +1540,8 @@ async fn main() {
                     std::process::exit(1);
                 }
             }
-            #[cfg(not(windows))]
-            {
-                let _ = (out, stop_file, max_ms);
-                eprintln!("Event traces are only available on Windows");
-                std::process::exit(1);
-            }
         }
+        #[cfg(windows)]
         Some(Commands::Keys {
             allow,
             title,
@@ -1610,30 +1551,16 @@ async fn main() {
                 .iter()
                 .map(|s| okur_lab::harness::parse_step(s))
                 .collect();
-            let result = parsed.and_then(|steps| {
-                #[cfg(windows)]
-                {
-                    okur_lab::harness::send_steps(&steps, &allow, title.as_deref())
-                }
-                #[cfg(not(windows))]
-                {
-                    let _ = (steps, allow, title);
-                    Err("sending keys is only available on Windows".to_owned())
-                }
-            });
+            let result = parsed
+                .and_then(|steps| okur_lab::harness::send_steps(&steps, &allow, title.as_deref()));
             if let Err(e) = result {
                 eprintln!("{e}");
                 std::process::exit(1);
             }
         }
+        #[cfg(windows)]
         Some(Commands::Front { title }) => {
-            #[cfg(windows)]
             let result = okur_lab::harness::bring_to_front(&title);
-            #[cfg(not(windows))]
-            let result: Result<String, String> = {
-                let _ = title;
-                Err("bringing a window to the front is only available on Windows".to_owned())
-            };
             match result {
                 Ok(title) => println!("{title}"),
                 Err(e) => {
@@ -1642,79 +1569,44 @@ async fn main() {
                 }
             }
         }
+        #[cfg(windows)]
         Some(Commands::Ia2Probe) => {
-            #[cfg(windows)]
             okur_lab::harness::ia2_probe_focus()
                 .iter()
                 .for_each(|line| println!("{line}"));
-            #[cfg(not(windows))]
-            {
-                eprintln!("IA2 is only read on Windows");
-                std::process::exit(1);
-            }
         }
+        #[cfg(windows)]
         Some(Commands::WordFields) => {
-            #[cfg(windows)]
             okur_lab::harness::word_fields_probe()
                 .iter()
                 .for_each(|line| println!("{line}"));
-            #[cfg(not(windows))]
-            {
-                eprintln!("Word is only read on Windows");
-                std::process::exit(1);
-            }
         }
+        #[cfg(windows)]
         Some(Commands::WordFormFields) => {
-            #[cfg(windows)]
             println!("{}", okur_lab::harness::word_form_fields_probe());
-            #[cfg(not(windows))]
-            {
-                eprintln!("Word is only read on Windows");
-                std::process::exit(1);
-            }
         }
+        #[cfg(windows)]
         Some(Commands::WordDiscard { title }) => {
-            #[cfg(windows)]
             if okur_lab::harness::word_discard_changes(&title) {
                 println!("saved");
             } else {
                 eprintln!("no Word document in a window titled {title:?}");
                 std::process::exit(1);
             }
-            #[cfg(not(windows))]
-            {
-                let _ = title;
-                eprintln!("Word is only reached on Windows");
-                std::process::exit(1);
-            }
         }
+        #[cfg(windows)]
         Some(Commands::WordLineSpacing) => {
-            #[cfg(windows)]
             println!("{}", okur_lab::harness::word_line_spacing_probe());
-            #[cfg(not(windows))]
-            {
-                eprintln!("Word is only read on Windows");
-                std::process::exit(1);
-            }
         }
+        #[cfg(windows)]
         Some(Commands::MsaaFocus) => {
-            #[cfg(windows)]
             println!("{}", okur_lab::harness::msaa_focus_probe());
-            #[cfg(not(windows))]
-            {
-                eprintln!("MSAA is only read on Windows");
-                std::process::exit(1);
-            }
         }
+        #[cfg(windows)]
         Some(Commands::Focus) => {
-            #[cfg(windows)]
             println!("{}", okur_windows::uia_capture::focused_element_json());
-            #[cfg(not(windows))]
-            {
-                eprintln!("the focus is only read on Windows");
-                std::process::exit(1);
-            }
         }
+        #[cfg(windows)]
         Some(Commands::ProbeNotifications { window, millis }) => {
             match okur_lab::uia_probe::notification_registrations(&window, millis) {
                 Ok(lines) => lines.iter().for_each(|line| println!("{line}")),
@@ -1724,52 +1616,36 @@ async fn main() {
                 }
             }
         }
+        #[cfg(windows)]
         Some(Commands::ListNotifications { only }) => {
-            #[cfg(windows)]
-            {
-                use okur_windows::notification_listener as listener;
-                match listener::access() {
-                    Ok(access) => println!("access: {access}"),
-                    Err(e) => println!("access: {e}"),
-                }
-                match listener::toasts() {
-                    Ok(toasts) => {
-                        println!("toasts: {}", toasts.len());
-                        for toast in toasts.iter().filter(|t| {
-                            t.app.contains(&only) || t.texts.iter().any(|x| x.contains(&only))
-                        }) {
-                            println!("{} {}: {}", toast.id, toast.app, toast.texts.join(" | "));
-                        }
-                    }
-                    Err(e) => {
-                        eprintln!("{e}");
-                        std::process::exit(1);
+            use okur_windows::notification_listener as listener;
+            match listener::access() {
+                Ok(access) => println!("access: {access}"),
+                Err(e) => println!("access: {e}"),
+            }
+            match listener::toasts() {
+                Ok(toasts) => {
+                    println!("toasts: {}", toasts.len());
+                    for toast in toasts.iter().filter(|t| {
+                        t.app.contains(&only) || t.texts.iter().any(|x| x.contains(&only))
+                    }) {
+                        println!("{} {}: {}", toast.id, toast.app, toast.texts.join(" | "));
                     }
                 }
-            }
-            #[cfg(not(windows))]
-            {
-                let _ = only;
-                eprintln!("list-notifications is for Windows");
-                std::process::exit(1);
-            }
-        }
-        Some(Commands::JawsHistory { clear }) => {
-            #[cfg(windows)]
-            match okur_lab::harness::jaws_history(clear) {
-                Ok(history) => println!("{history}"),
                 Err(e) => {
                     eprintln!("{e}");
                     std::process::exit(1);
                 }
             }
-            #[cfg(not(windows))]
-            {
-                let _ = clear;
-                eprintln!("JAWS runs only on Windows");
+        }
+        #[cfg(windows)]
+        Some(Commands::JawsHistory { clear }) => match okur_lab::harness::jaws_history(clear) {
+            Ok(history) => println!("{history}"),
+            Err(e) => {
+                eprintln!("{e}");
                 std::process::exit(1);
             }
-        }
+        },
         Some(Commands::AriaAtReport {
             corpus_dir,
             unmet,
@@ -1881,6 +1757,7 @@ async fn main() {
                 std::process::exit(1);
             }
         }
+        #[cfg(windows)]
         Some(Commands::WaitSilence {
             onset_ms,
             quiet_ms,
@@ -1973,6 +1850,7 @@ async fn main() {
                 );
             }
         }
+        #[cfg(windows)]
         Some(Commands::Snapshot {
             out,
             api,
@@ -2013,6 +1891,11 @@ async fn main() {
                     std::process::exit(1);
                 }
             }
+        }
+        #[cfg(not(windows))]
+        Some(_) => {
+            eprintln!("This command runs on Windows.");
+            std::process::exit(2);
         }
         None => {
             println!("No command specified. Use `okur-lab --help` for available options.");

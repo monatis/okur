@@ -3,11 +3,9 @@
 
 /// Windows' own sound playing (`PlaySoundW`, a file, asynchronously, nothing in its place when
 /// the file is missing).
-#[cfg(windows)]
 #[derive(Debug, Default)]
 pub struct WindowsSounds;
 
-#[cfg(windows)]
 impl okur_core::sound::SoundOutput for WindowsSounds {
     fn play_file(&mut self, path: &str) -> bool {
         use windows::core::PCWSTR;

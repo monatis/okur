@@ -1,9 +1,7 @@
 //! The system clock and the user's locale formats ([`okur_core::clock::Clock`]).
 
-#[cfg(windows)]
 pub use windows_clock::WindowsClock;
 
-#[cfg(windows)]
 mod windows_clock {
     use okur_core::clock::{Clock, FirstWeek, LocalDateTime, LocaleFormats};
     use windows::core::PCWSTR;

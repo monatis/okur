@@ -7,9 +7,6 @@
 //! resets the stream's buffer at once. A generation counter makes an interrupting utterance or
 //! a stop discard everything queued or playing before it.
 
-#[cfg(not(windows))]
-use super::{TtsEngine, TtsError, VoiceInfo};
-
 /// A WAV stream's PCM format and samples.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct WavFormat {
@@ -104,7 +101,6 @@ pub fn speech_chunks(text: &str) -> Vec<String> {
 /// What an utterance handed to OneCore's worker answers, by the utterances in a row before it
 /// that the worker could not speak: an error while it fails, counted toward the
 /// synthesizer's restart.
-#[cfg_attr(not(windows), allow(dead_code))]
 fn failures_told(failures: u32) -> Result<(), crate::tts::TtsError> {
     match failures {
         0 => Ok(()),
@@ -130,10 +126,8 @@ pub fn audio_pitch(pitch: i32) -> f64 {
     1.0 + f64::from(pitch.clamp(-10, 10)) / 10.0
 }
 
-#[cfg(windows)]
 pub use engine::OneCoreEngine;
 
-#[cfg(windows)]
 mod engine {
     use super::{
         audio_pitch, parse_wav, speaking_rate, speech_chunks, trim_leading_silence, WavFormat,
@@ -799,62 +793,6 @@ mod engine {
             }
             Ok(())
         }
-    }
-}
-
-/// Stand-in on other platforms, where OneCore does not exist.
-#[cfg(not(windows))]
-pub struct OneCoreEngine;
-
-#[cfg(not(windows))]
-impl OneCoreEngine {
-    pub fn new() -> Result<Self, TtsError> {
-        Err(TtsError::Unsupported(
-            "OneCore voices exist only on Windows".into(),
-        ))
-    }
-}
-
-#[cfg(not(windows))]
-impl TtsEngine for OneCoreEngine {
-    fn name(&self) -> &str {
-        "OneCore"
-    }
-    fn speak(&mut self, _text: &str, _interrupt: bool) -> Result<(), TtsError> {
-        Err(TtsError::Unsupported("OneCore".into()))
-    }
-    fn stop(&mut self) -> Result<(), TtsError> {
-        Ok(())
-    }
-    fn pause(&mut self) -> Result<(), TtsError> {
-        Ok(())
-    }
-    fn resume(&mut self) -> Result<(), TtsError> {
-        Ok(())
-    }
-    fn set_rate(&mut self, _rate: i32) -> Result<(), TtsError> {
-        Ok(())
-    }
-    fn get_rate(&self) -> i32 {
-        0
-    }
-    fn set_volume(&mut self, _volume: u16) -> Result<(), TtsError> {
-        Ok(())
-    }
-    fn get_volume(&self) -> u16 {
-        100
-    }
-    fn is_speaking(&self) -> bool {
-        false
-    }
-    fn get_voices(&self) -> Vec<VoiceInfo> {
-        Vec::new()
-    }
-    fn set_voice(&mut self, voice_id: &str) -> Result<(), TtsError> {
-        Err(TtsError::VoiceNotFound(voice_id.to_owned()))
-    }
-    fn wait_until_done(&mut self, _timeout_ms: u32) -> Result<(), TtsError> {
-        Ok(())
     }
 }
 

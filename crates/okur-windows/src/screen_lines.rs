@@ -97,16 +97,12 @@ pub fn standalone(mut statics: Vec<(i32, i32, String)>, fields: &[(i32, i32)]) -
         .collect()
 }
 
-#[cfg(windows)]
 pub(crate) use windows_lines::text_of as control_text;
-#[cfg(windows)]
 pub(crate) use windows_lines::{class_of, owner_drawn, static_lines, symbol_font};
-#[cfg(windows)]
 pub use windows_lines::{
     default_button_of, dialog_layout, group_box_of, page_of, page_window, window_bars,
 };
 
-#[cfg(windows)]
 mod windows_lines {
     use super::{rows, standalone, without_accelerators, wrap, DialogLayout, Run};
     use windows::core::BOOL;

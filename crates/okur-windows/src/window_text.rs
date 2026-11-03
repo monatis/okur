@@ -3,10 +3,8 @@
 //! Current Control is pressed. [`okur_core::viewer_text`] lays them out as JAWS does: by
 //! screen rows for classic windows, one element per line for modern apps.
 
-#[cfg(windows)]
 pub use reader::{control_lines, window_lines, window_runs};
 
-#[cfg(windows)]
 mod reader {
     use crate::screen_lines::{class_of, control_text, owner_drawn, static_lines, symbol_font};
     use crate::uia_capture::{boolean, int, string};
@@ -597,7 +595,6 @@ mod reader {
 
 /// The Okur cursor's model of the window in front, with the words recognized in it in the
 /// language `recognize` names: `okur-lab screen-text`, to see what the screen text reads.
-#[cfg(windows)]
 pub fn foreground_screen(
     recognize: Option<&str>,
 ) -> Result<okur_core::screen_model::ScreenModel, crate::PlatformError> {
@@ -619,7 +616,6 @@ pub fn foreground_screen(
 
 /// The Virtual Viewer's lines for the window in front, or with `control`, its focused
 /// control: `okur-lab window-text`, to compare with JAWS's viewer.
-#[cfg(windows)]
 pub fn foreground_lines(control: bool) -> Result<Vec<String>, crate::PlatformError> {
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
     crate::com::init_mta();

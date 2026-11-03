@@ -487,7 +487,6 @@ mod tests {
 
     /// A file that can be neither removed nor renamed (held open without delete sharing) is
     /// an error that names it, with nothing scheduled; a file put aside gets a free name.
-    #[cfg(windows)]
     #[test]
     fn a_file_held_open_is_an_error_and_aside_names_are_free() {
         use std::os::windows::fs::OpenOptionsExt;

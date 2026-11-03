@@ -17,10 +17,8 @@ fn same_place(a: &Option<okur_core::TextContext>, b: &Option<okur_core::TextCont
     }
 }
 
-#[cfg(windows)]
 pub use windows_actions::WindowsActions;
 
-#[cfg(windows)]
 mod windows_actions {
     use crate::text_context::{
         focus_has_taken_its_keys, read_focused, read_focused_outside_page, read_place_outside_page,
@@ -1338,13 +1336,11 @@ mod windows_actions {
 
 /// The active cell of Excel's window in front and `cells` around it, read right away on the
 /// calling thread.
-#[cfg(windows)]
 fn sheet_place_now(cells: okur_core::actions::SheetCells) -> Option<okur_core::SheetPlace> {
     crate::excel_om::sheet_place(front_sheet_grid()?, cells)
 }
 
 /// Excel's grid window in the window in front.
-#[cfg(windows)]
 fn front_sheet_grid() -> Option<windows::Win32::Foundation::HWND> {
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
     // SAFETY: a plain query.
@@ -1353,7 +1349,6 @@ fn front_sheet_grid() -> Option<windows::Win32::Foundation::HWND> {
 
 /// One of JAWS's lists of Excel's window in front, with the active cell's column's letters,
 /// read right away on the calling thread.
-#[cfg(windows)]
 fn sheet_list_now(kind: okur_core::SheetListKind) -> Option<(String, Vec<okur_core::SheetEntry>)> {
     crate::excel_om::sheet_list(front_sheet_grid()?, kind)
 }
@@ -1364,7 +1359,6 @@ fn sheet_list_now(kind: okur_core::SheetListKind) -> Option<(String, Vec<okur_co
 /// When IA2 yields no page (only Chrome's "Chrome Legacy Window" placeholder), the UIA
 /// capture and [`okur_windows_model::uia_snapshot::to_aom`] are used instead. Page actions need IA2
 /// uniqueIDs, so a UIA page can be read but not acted on.
-#[cfg(windows)]
 pub fn capture_foreground_page() -> Result<okur_core::AomNode, crate::PlatformError> {
     let ia2 = crate::ia2_capture::capture_foreground_document(None, None);
     match ia2 {
@@ -1384,7 +1378,6 @@ pub fn capture_foreground_page() -> Result<okur_core::AomNode, crate::PlatformEr
 
 /// How long [`clipboard_text`] waits for the clipboard: well within the time the keyboard
 /// hook, which asks for it, may take over a key.
-#[cfg(windows)]
 const CLIPBOARD_WAIT: std::time::Duration = std::time::Duration::from_millis(150);
 
 /// The clipboard's Unicode text (CF_UNICODETEXT), if it holds any and answers within
@@ -1392,7 +1385,6 @@ const CLIPBOARD_WAIT: std::time::Duration = std::time::Duration::from_millis(150
 /// rendering is asked of its owner (`WM_RENDERFORMAT`), and a hung owner would hold the
 /// keyboard hook that asks (performance review 2026-10-23, P2); such a read finishes, or not,
 /// on its own thread.
-#[cfg(windows)]
 pub fn clipboard_text() -> Option<String> {
     use std::sync::atomic::{AtomicBool, Ordering};
     // One read at a time: a hung owner kept each read's thread, and the clipboard open in it,
@@ -1424,7 +1416,6 @@ pub fn clipboard_text() -> Option<String> {
 }
 
 /// The clipboard's Unicode text, read on the calling thread.
-#[cfg(windows)]
 fn read_clipboard_text() -> Option<String> {
     use windows::Win32::Foundation::HGLOBAL;
     use windows::Win32::System::DataExchange::{CloseClipboard, GetClipboardData, OpenClipboard};
@@ -1455,7 +1446,6 @@ fn read_clipboard_text() -> Option<String> {
 /// Clicks the mouse at `x`, `y` (real pixels, the process being DPI aware): the pointer moves
 /// there, then the buttons are pressed and released in one `SendInput` call, twice for a
 /// double click.
-#[cfg(windows)]
 fn click_at(x: i32, y: i32, click: okur_core::actions::MouseClick) {
     use okur_core::actions::MouseClick;
     use windows::Win32::UI::Input::KeyboardAndMouse::{
@@ -1503,7 +1493,6 @@ fn click_at(x: i32, y: i32, click: okur_core::actions::MouseClick) {
 
 /// A drag with the left button: pressed at `from`, moved to `to` in steps, as a hand would,
 /// let go there.
-#[cfg(windows)]
 fn drag(from: (i32, i32), to: (i32, i32)) {
     use okur_core::actions::MouseClick;
     use windows::Win32::UI::WindowsAndMessaging::SetCursorPos;
@@ -1520,7 +1509,6 @@ fn drag(from: (i32, i32), to: (i32, i32)) {
 }
 
 /// Puts `text` on the clipboard as Unicode text (CF_UNICODETEXT).
-#[cfg(windows)]
 pub fn set_clipboard_text(text: &str) -> Result<(), String> {
     use windows::Win32::Foundation::{GlobalFree, HANDLE};
     use windows::Win32::System::DataExchange::{
@@ -1560,7 +1548,6 @@ pub fn set_clipboard_text(text: &str) -> Result<(), String> {
 /// objects: 160 ms against 3 s), without IA2's rendered line breaks and formatting runs.
 /// The live screen reader reads this first and replaces it with
 /// [`capture_foreground_page`]'s when that is done.
-#[cfg(windows)]
 pub fn capture_foreground_page_quick() -> Result<okur_core::AomNode, crate::PlatformError> {
     let snapshot = crate::uia_capture::capture_foreground_document_quick()?;
     Ok(okur_windows_model::uia_snapshot::to_aom(&snapshot.root))

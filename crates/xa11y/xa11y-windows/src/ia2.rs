@@ -78,6 +78,7 @@ pub struct Ia2TextState {
 
 /// What one walk over a text's formatting runs finds: its misspellings, and the colors of
 /// the run at one offset.
+#[cfg(windows)]
 #[derive(Debug, Default)]
 struct TextRuns {
     misspelled: Vec<(i32, i32)>,

@@ -46,10 +46,8 @@ pub fn guid_string(bytes: &[u8; 16]) -> String {
     )
 }
 
-#[cfg(windows)]
 pub use reader::current_name;
 
-#[cfg(windows)]
 mod reader {
     use super::{desktop_name, guid_string};
     use windows::core::{HSTRING, PCWSTR};

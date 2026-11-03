@@ -10,6 +10,8 @@ mod dialog;
 #[cfg(windows)]
 mod main_window;
 #[cfg(any(windows, test))]
+// Off Windows only its tests use it.
+#[cfg_attr(not(windows), allow(dead_code))]
 mod template;
 #[cfg(windows)]
 mod win32;

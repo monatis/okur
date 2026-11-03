@@ -6,13 +6,19 @@
 //! clipboard, writes traces and meters the sound card stays out of `okur.exe`, which users run
 //! (check-crate-layers.ps1, rule R3).
 
+#[cfg(windows)]
 pub mod audio;
+#[cfg(windows)]
 pub mod harness;
+#[cfg(windows)]
 pub mod probes;
+#[cfg(windows)]
 pub mod trace;
+#[cfg(windows)]
 pub mod uia_probe;
 
+#[cfg(windows)]
 pub use audio::{AudioActivityReport, AudioEndpointMeter, SilenceReport};
 
-#[cfg(test)]
+#[cfg(all(test, windows))]
 pub(crate) static TEST_AUDIO_LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());

@@ -92,12 +92,10 @@ fn file_name(path: &Path) -> String {
         .unwrap_or_else(|| path.to_string_lossy().into_owned())
 }
 
-#[cfg(windows)]
 pub use recognizer::{recognize_file, selected_file};
 
 /// What recognizing the file selected in the window in front comes to; [`cancel`] stops it.
 /// `started` is called once a picture or PDF is found and its recognition begins.
-#[cfg(windows)]
 pub fn recognize_selected_file(language: &str, started: impl FnOnce()) -> FileRecognition {
     CANCEL.store(false, Ordering::Relaxed);
     recognizer::recognize_selected_file(language, &CANCEL, started)
@@ -105,7 +103,6 @@ pub fn recognize_selected_file(language: &str, started: impl FnOnce()) -> FileRe
 
 /// What recognizing the file at `path`, found selected, comes to: refused when it is no
 /// picture or PDF, else recognized, `started` called first.
-#[cfg(windows)]
 pub fn recognize_found(
     path: &Path,
     language: &str,
@@ -121,7 +118,6 @@ pub fn recognize_found(
     recognizer::recognize_file(path, language, cancel)
 }
 
-#[cfg(windows)]
 mod recognizer {
     use super::{file_name, is_pdf, page_pixels, picture_pixels, FileRecognition, MAX_PAGES};
     use crate::ocr::{engine_for, failed};

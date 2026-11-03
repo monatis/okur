@@ -25,7 +25,7 @@ pub enum SignatureStatus {
     Distrusted,
     /// Any other answer, as its HRESULT.
     Other(i32),
-    /// Not checked: off Windows.
+    /// Not checked: no file to check.
     Unavailable,
 }
 
@@ -58,7 +58,7 @@ impl SignatureStatus {
             Self::BadDigest => "signed, but the file changed after signing".to_owned(),
             Self::Distrusted => "signed, certificate explicitly distrusted".to_owned(),
             Self::Other(hr) => format!("not verified (0x{:08X})", hr as u32),
-            Self::Unavailable => "not checked on this platform".to_owned(),
+            Self::Unavailable => "not checked".to_owned(),
         }
     }
 }
@@ -124,32 +124,15 @@ fn attribute(element: &str, name: &str) -> Option<String> {
 /// Verifies a file's Authenticode signature against the machine's trusted roots, without
 /// any user interface and without revocation checks.
 pub fn verify_file(path: &Path) -> SignatureStatus {
-    #[cfg(windows)]
-    {
-        windows_impl::verify_file(path)
-    }
-    #[cfg(not(windows))]
-    {
-        let _ = path;
-        SignatureStatus::Unavailable
-    }
+    windows_impl::verify_file(path)
 }
 
 /// The text of an executable's embedded manifest (resource 1 of type `RT_MANIFEST`), loaded
 /// as data only.
 pub fn embedded_manifest(path: &Path) -> Option<String> {
-    #[cfg(windows)]
-    {
-        windows_impl::embedded_manifest(path)
-    }
-    #[cfg(not(windows))]
-    {
-        let _ = path;
-        None
-    }
+    windows_impl::embedded_manifest(path)
 }
 
-#[cfg(windows)]
 mod windows_impl {
     use super::SignatureStatus;
     use std::path::Path;

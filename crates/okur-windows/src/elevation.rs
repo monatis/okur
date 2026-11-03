@@ -82,69 +82,32 @@ impl TokenFacts {
     }
 }
 
-/// Whether this process runs elevated (always true off Windows, where nothing is kept out).
+/// Whether this process runs elevated.
 pub fn is_elevated() -> bool {
-    #[cfg(windows)]
-    {
-        current().elevated.unwrap_or(false)
-    }
-    #[cfg(not(windows))]
-    {
-        true
-    }
+    current().elevated.unwrap_or(false)
 }
 
-/// Whether this process has UI Access (never off Windows).
+/// Whether this process has UI Access.
 pub fn has_ui_access() -> bool {
-    #[cfg(windows)]
-    {
-        current().ui_access.unwrap_or(false)
-    }
-    #[cfg(not(windows))]
-    {
-        false
-    }
+    current().ui_access.unwrap_or(false)
 }
 
 /// Whether this process can read the windows of applications running as administrator
-/// ([`TokenFacts::reads_elevated_windows`]; always true off Windows).
+/// ([`TokenFacts::reads_elevated_windows`]).
 pub fn reads_elevated_windows() -> bool {
-    #[cfg(windows)]
-    {
-        current().reads_elevated_windows()
-    }
-    #[cfg(not(windows))]
-    {
-        true
-    }
+    current().reads_elevated_windows()
 }
 
 /// This process's token.
 pub fn current() -> TokenFacts {
-    #[cfg(windows)]
-    {
-        windows_impl::current()
-    }
-    #[cfg(not(windows))]
-    {
-        TokenFacts::default()
-    }
+    windows_impl::current()
 }
 
 /// Another process's token, by process id: an error names what could not be opened.
 pub fn of_process(pid: u32) -> Result<TokenFacts, String> {
-    #[cfg(windows)]
-    {
-        windows_impl::of_process(pid)
-    }
-    #[cfg(not(windows))]
-    {
-        let _ = pid;
-        Err("process tokens are only read on Windows".to_owned())
-    }
+    windows_impl::of_process(pid)
 }
 
-#[cfg(windows)]
 pub(crate) mod windows_impl {
     use super::{ElevationType, TokenFacts};
     use windows::core::PWSTR;
@@ -382,7 +345,6 @@ mod tests {
     }
 
     /// This process's own token can be read (whatever its rights).
-    #[cfg(windows)]
     #[test]
     fn the_current_token_is_read() {
         let facts = current();

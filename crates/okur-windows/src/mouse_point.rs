@@ -4,10 +4,8 @@
 //! it where the mouse comes to rest, and the live worker reads it when the engine asks, so
 //! replay and live use the same data.
 
-#[cfg(windows)]
 pub use reader::read;
 
-#[cfg(windows)]
 mod reader {
     use okur_core::UnitTexts;
     use okur_windows_model::uia_snapshot::UiaNode;

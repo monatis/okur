@@ -32,9 +32,7 @@ pub fn css_alignment(align: &str) -> Option<&'static str> {
     })
 }
 
-#[cfg(windows)]
 pub(crate) use reader::{activate_word_document_link, forget_form_fields, forget_form_fields_of};
-#[cfg(windows)]
 pub use reader::{
     focus_has_taken_its_keys, focus_is_in_page, from_ia2, ia2_position, mouse_to_character_in_edit,
     move_caret_in_edit, move_to_cell, move_to_paragraph, read_focused, read_focused_outside_page,
@@ -44,7 +42,6 @@ pub use reader::{
     word_view,
 };
 
-#[cfg(windows)]
 mod reader {
     use super::{utf16_to_chars, MAX_TEXT_CHARS};
     use okur_core::TextContext;
@@ -1995,7 +1992,6 @@ mod tests {
     }
 
     /// A COLORREF holds blue, green and red from its high byte down.
-    #[cfg(windows)]
     #[test]
     fn a_colorref_is_a_color() {
         assert_eq!(
@@ -2025,7 +2021,6 @@ mod tests {
     }
 
     /// A context's position is polled against a page field's IA2 offsets (UTF-16 units).
-    #[cfg(windows)]
     #[test]
     fn a_contexts_position_is_in_utf16_units() {
         let context = okur_core::TextContext {

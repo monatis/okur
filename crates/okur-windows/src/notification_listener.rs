@@ -16,7 +16,6 @@ pub struct ListedToast {
 
 /// Whether this program may read the list, as Windows answers without asking the user:
 /// "allowed", "denied" or "unspecified".
-#[cfg(windows)]
 pub fn access() -> Result<&'static str, String> {
     use windows::UI::Notifications::Management::{
         UserNotificationListener, UserNotificationListenerAccessStatus,
@@ -32,7 +31,6 @@ pub fn access() -> Result<&'static str, String> {
 }
 
 /// The toasts Windows keeps, in its order.
-#[cfg(windows)]
 pub fn toasts() -> Result<Vec<ListedToast>, String> {
     use windows::UI::Notifications::Management::UserNotificationListener;
     use windows::UI::Notifications::{

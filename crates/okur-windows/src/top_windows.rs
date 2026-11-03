@@ -6,7 +6,6 @@ use okur_core::event::{TopWindow, WindowState};
 /// The visible application windows, front to back: each one's title, state, and whether it is
 /// kept on top. Owned and tool windows, cloaked ones (a suspended Store app's) and the desktop
 /// are left out, as the taskbar leaves them out.
-#[cfg(windows)]
 pub fn list() -> Vec<TopWindow> {
     use windows::core::BOOL;
     use windows::Win32::Foundation::{HWND, LPARAM};
@@ -80,13 +79,7 @@ pub fn list() -> Vec<TopWindow> {
     windows
 }
 
-#[cfg(not(windows))]
-pub fn list() -> Vec<TopWindow> {
-    Vec::new()
-}
-
 /// Brings window `id` to the front, restored first if it is minimized, as Alt+Tab does.
-#[cfg(windows)]
 pub fn switch_to(id: u64) {
     use windows::Win32::Foundation::HWND;
     use windows::Win32::UI::WindowsAndMessaging::{
@@ -106,9 +99,4 @@ pub fn switch_to(id: u64) {
         SwitchToThisWindow(hwnd, true);
         let _ = SetForegroundWindow(hwnd);
     }
-}
-
-#[cfg(not(windows))]
-pub fn switch_to(id: u64) {
-    let _ = id;
 }

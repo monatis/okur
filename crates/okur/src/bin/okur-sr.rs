@@ -5,5 +5,8 @@
 
 #[tokio::main]
 async fn main() {
+    #[cfg(windows)]
     std::process::exit(okur::sr::main().await);
+    #[cfg(not(windows))]
+    std::process::exit(okur::not_on_this_system());
 }

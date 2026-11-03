@@ -141,30 +141,6 @@ impl Registry for MemoryRegistry {
 #[derive(Debug, Clone, Copy, Default)]
 pub struct SystemRegistry;
 
-#[cfg(not(windows))]
-impl Registry for SystemRegistry {
-    fn value(&self, _: Hive, _: &str, _: &str) -> Option<RegValue> {
-        None
-    }
-
-    fn values(&self, _: Hive, _: &str) -> Option<Vec<(String, RegValue)>> {
-        None
-    }
-
-    fn set(&mut self, _: Hive, _: &str, _: &str, _: &RegValue) -> Result<(), String> {
-        Err("the registry is Windows'".to_owned())
-    }
-
-    fn delete_value(&mut self, _: Hive, _: &str, _: &str) -> Result<(), String> {
-        Err("the registry is Windows'".to_owned())
-    }
-
-    fn delete_tree(&mut self, _: Hive, _: &str) -> Result<(), String> {
-        Err("the registry is Windows'".to_owned())
-    }
-}
-
-#[cfg(windows)]
 mod windows_impl {
     use super::{Hive, RegValue, Registry, SystemRegistry};
     use windows::core::{HSTRING, PCWSTR, PWSTR};

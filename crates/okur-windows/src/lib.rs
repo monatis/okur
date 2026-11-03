@@ -1,23 +1,24 @@
+//! Okur's driver for Windows: its keyboard hook, its accessibility events and reads (UI
+//! Automation, IAccessible2, MSAA), application actions, SAPI 5 and OneCore speech, OCR, the
+//! Office object models and the installer's plumbing. It is built on Windows alone; elsewhere
+//! the crate is empty, and the programs take it as a Windows-only dependency.
+#![cfg(windows)]
+
 pub mod actions;
 pub mod bridge;
 pub mod clock;
-#[cfg(windows)]
 pub mod com;
 pub mod desktop;
 pub mod ease_of_access;
 pub mod elevation;
-#[cfg(windows)]
 pub mod event_capture;
 pub mod events;
-#[cfg(windows)]
 pub mod excel_om;
 pub mod file_text;
 pub mod hook;
-#[cfg(windows)]
 pub mod ia2_capture;
 pub mod instance;
 pub mod key_input;
-#[cfg(windows)]
 pub mod lowered_process;
 pub mod mouse_point;
 pub mod notification_listener;
@@ -31,13 +32,10 @@ pub mod start_options;
 pub mod text_context;
 pub mod top_windows;
 pub mod tts;
-#[cfg(windows)]
 pub mod ui_spawner;
-#[cfg(windows)]
 pub mod uia_capture;
 pub mod virtual_desktop;
 pub mod window_text;
-#[cfg(windows)]
 pub mod word_om;
 
 pub use bridge::{PlatformBridge, PlatformError};
@@ -51,24 +49,19 @@ pub use tts::{
 /// active | 1045, 544" for a button whose middle a DPI-unaware process read as 668, 348 at
 /// 125% [obs, 516/s8]), and the mouse goes where the element is.
 pub fn init() {
-    #[cfg(windows)]
-    {
-        use windows::Win32::UI::HiDpi::{
-            GetAwarenessFromDpiAwarenessContext, GetThreadDpiAwarenessContext,
-        };
-        use windows::Win32::UI::HiDpi::{
-            SetProcessDpiAwarenessContext, DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2,
-        };
-        // SAFETY: a process-wide setting with a constant argument, made at startup; it fails
-        // harmlessly when the awareness is already set (the programs' manifests set it).
-        let set =
-            unsafe { SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2) };
-        // SAFETY: reads of this thread's own awareness; no preconditions.
-        let awareness =
-            unsafe { GetAwarenessFromDpiAwarenessContext(GetThreadDpiAwarenessContext()) };
-        // 2 is per-monitor: positions and sizes are real pixels.
-        tracing::info!(set = set.is_ok(), awareness = awareness.0, "DPI awareness");
-    }
+    use windows::Win32::UI::HiDpi::{
+        GetAwarenessFromDpiAwarenessContext, GetThreadDpiAwarenessContext,
+    };
+    use windows::Win32::UI::HiDpi::{
+        SetProcessDpiAwarenessContext, DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2,
+    };
+    // SAFETY: a process-wide setting with a constant argument, made at startup; it fails
+    // harmlessly when the awareness is already set (the programs' manifests set it).
+    let set = unsafe { SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2) };
+    // SAFETY: reads of this thread's own awareness; no preconditions.
+    let awareness = unsafe { GetAwarenessFromDpiAwarenessContext(GetThreadDpiAwarenessContext()) };
+    // 2 is per-monitor: positions and sizes are real pixels.
+    tracing::info!(set = set.is_ok(), awareness = awareness.0, "DPI awareness");
     tracing::info!("okur-windows initialized");
 }
 

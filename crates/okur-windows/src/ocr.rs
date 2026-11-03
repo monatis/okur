@@ -64,12 +64,9 @@ fn desktop_word(
     )
 }
 
-#[cfg(windows)]
 pub use recognizer::recognize;
-#[cfg(windows)]
 pub(crate) use recognizer::{engine_for, failed};
 
-#[cfg(windows)]
 mod recognizer {
     use super::{desktop_word, enlargement, recognizer_pixels};
     use crate::PlatformError;

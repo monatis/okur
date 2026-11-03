@@ -40,7 +40,6 @@ bench = false
 [dependencies]
 okur-core = { workspace = true }
 okur-runtime = { workspace = true }
-okur-windows = { workspace = true }
 okur-windows-model = { workspace = true }
 okur-corpus = { workspace = true }
 clap = { workspace = true }
@@ -53,6 +52,7 @@ regex = { workspace = true }
 
 # The lab's own Windows tools (src/harness.rs, uia_probe.rs, audio.rs, probes.rs).
 [target.'cfg(windows)'.dependencies]
+okur-windows = { workspace = true }
 xa11y-windows = { workspace = true }
 windows = { version = "0.62", features = [
     "Win32_Foundation",

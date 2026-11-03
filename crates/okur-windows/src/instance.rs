@@ -54,18 +54,7 @@ impl InstanceLock {
     /// go; `None` when another copy keeps it. A copy that ended without letting it go (it
     /// was killed) left it abandoned, and it is taken.
     pub fn acquire(name: &str, wait: Duration) -> Option<Self> {
-        #[cfg(windows)]
-        {
-            windows_impl::acquire(name, wait)
-        }
-        #[cfg(not(windows))]
-        {
-            let _ = (name, wait);
-            Some(Self {
-                release: None,
-                holder: None,
-            })
-        }
+        windows_impl::acquire(name, wait)
     }
 
     /// Lets the lock go now (dropping it does the same).
@@ -101,47 +90,23 @@ impl ControlServer {
     /// Serves the pipe `name`, each request answered by `answer`. Fails when another process
     /// already serves a pipe of that name.
     pub fn start(name: &str, answer: Answer) -> Result<Self, String> {
-        #[cfg(windows)]
-        {
-            windows_impl::serve(name, answer).map(|thread| Self {
-                _thread: Some(thread),
-            })
-        }
-        #[cfg(not(windows))]
-        {
-            let _ = (name, answer);
-            Ok(Self { _thread: None })
-        }
+        windows_impl::serve(name, answer).map(|thread| Self {
+            _thread: Some(thread),
+        })
     }
 }
 
 /// Sends one request to the pipe `name` and returns the reply; an error when nothing serves
 /// it (no copy runs there) or it did not answer within `timeout`.
 pub fn request(name: &str, request: &str, timeout: Duration) -> Result<String, String> {
-    #[cfg(windows)]
-    {
-        windows_impl::request(name, request, timeout)
-    }
-    #[cfg(not(windows))]
-    {
-        let _ = (name, request, timeout);
-        Err("no control pipes off Windows".to_owned())
-    }
+    windows_impl::request(name, request, timeout)
 }
 
 /// Every Okur control pipe on the machine, by full name: the installer asks each to quit.
 pub fn all_pipes() -> Vec<String> {
-    #[cfg(windows)]
-    {
-        windows_impl::all_pipes()
-    }
-    #[cfg(not(windows))]
-    {
-        Vec::new()
-    }
+    windows_impl::all_pipes()
 }
 
-#[cfg(windows)]
 mod windows_impl {
     use super::{Answer, InstanceLock, PIPE_PREFIX};
     use std::time::Duration;
@@ -400,7 +365,6 @@ mod tests {
     }
 
     /// A second copy cannot take a lock the first holds; once it is let go, it can.
-    #[cfg(windows)]
     #[test]
     fn one_copy_holds_the_lock_at_a_time() {
         let name = format!(r"Local\Okur-test-{}-lock", std::process::id());
@@ -415,7 +379,6 @@ mod tests {
 
     /// A request reaches the server and its reply comes back; a pipe nobody serves is an
     /// error, as is serving a pipe twice.
-    #[cfg(windows)]
     #[test]
     fn the_control_pipe_answers_one_line() {
         let name = format!(r"\\.\pipe\okur-test-{}-pipe", std::process::id());
