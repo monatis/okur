@@ -1,0 +1,32 @@
+{
+  "id": "3157-desktop-settings-home",
+  "name": "Windows Settings' home: Insert+Tab, Tab into the categories, arrows across and down the grid, Insert+Tab on a category, Tab to the search box and back, Home and End, Insert+Up, Insert+T",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-settings-home.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "Settings",
+    "app_frame": true,
+    "settle_ms": 8000,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": []
+  },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+Tab" },
+    { "id": "s2", "type": "key", "command": "Tab" },
+    { "id": "s3", "type": "key", "command": "Right" },
+    { "id": "s4", "type": "key", "command": "Right" },
+    { "id": "s5", "type": "key", "command": "Down" },
+    { "id": "s6", "type": "key", "command": "Left" },
+    { "id": "s7", "type": "key", "command": "Insert+Tab" },
+    { "id": "s8", "type": "key", "command": "Tab" },
+    { "id": "s9", "type": "key", "command": "Shift+Tab" },
+    { "id": "s10", "type": "key", "command": "End" },
+    { "id": "s11", "type": "key", "command": "Home" },
+    { "id": "s12", "type": "key", "command": "Insert+Up" },
+    { "id": "s13", "type": "key", "command": "Insert+T" }
+  ]
+}
