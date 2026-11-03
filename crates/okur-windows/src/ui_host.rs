@@ -212,6 +212,14 @@ impl Process {
     }
 }
 
+/// A started `okur-ui`: the process, its standard input, output and error.
+type Spawned = (
+    Process,
+    Box<dyn Write + Send>,
+    Box<dyn Read + Send>,
+    Box<dyn Read + Send>,
+);
+
 /// A running `okur-ui` and its input.
 struct Running {
     process: Process,
@@ -226,11 +234,20 @@ impl Running {
         lowered: bool,
         open: &Arc<Mutex<OpenWindows>>,
     ) -> Option<Self> {
-        let (process, input, output) = if lowered {
+        let (process, input, output, error) = if lowered {
             Self::spawn_lowered(program)?
         } else {
             Self::spawn_plain(program)?
         };
+        // What okur-ui writes to its standard error (a panic's message) goes into Okur's log.
+        let _ = std::thread::Builder::new()
+            .name("okur-ui errors".to_owned())
+            .spawn(move || {
+                for line in BufReader::new(error).lines() {
+                    let Ok(line) = line else { break };
+                    tracing::warn!(%line, "okur-ui error output");
+                }
+            });
         let events = events.clone();
         let open = Arc::clone(open);
         let _ = std::thread::Builder::new()
@@ -267,26 +284,26 @@ impl Running {
         })
     }
 
-    #[allow(clippy::type_complexity)]
-    fn spawn_plain(
-        program: &PathBuf,
-    ) -> Option<(Process, Box<dyn Write + Send>, Box<dyn Read + Send>)> {
+    fn spawn_plain(program: &PathBuf) -> Option<Spawned> {
         let mut child = Command::new(program)
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
-            .stderr(Stdio::null())
+            .stderr(Stdio::piped())
             .spawn()
             .map_err(|e| tracing::warn!(error = %e, "okur-ui did not start"))
             .ok()?;
         let input = child.stdin.take()?;
         let output = child.stdout.take()?;
-        Some((Process::Plain(child), Box::new(input), Box::new(output)))
+        let error = child.stderr.take()?;
+        Some((
+            Process::Plain(child),
+            Box::new(input),
+            Box::new(output),
+            Box::new(error),
+        ))
     }
 
-    #[allow(clippy::type_complexity)]
-    fn spawn_lowered(
-        program: &PathBuf,
-    ) -> Option<(Process, Box<dyn Write + Send>, Box<dyn Read + Send>)> {
+    fn spawn_lowered(program: &PathBuf) -> Option<Spawned> {
         #[cfg(windows)]
         {
             match crate::lowered_process::spawn(program) {
@@ -294,6 +311,7 @@ impl Running {
                     Process::Lowered(child),
                     Box::new(pipes.input),
                     Box::new(pipes.output),
+                    Box::new(pipes.error),
                 )),
                 // Okur's windows still show, at Okur's own level.
                 Err(e) => {

@@ -60,10 +60,11 @@ impl LoweredChild {
     }
 }
 
-/// A child's standard input to write and its standard output to read.
+/// A child's standard input to write, and its standard output and error to read.
 pub struct ChildPipes {
     pub input: File,
     pub output: File,
+    pub error: File,
 }
 
 /// A copy of this process's token, for a child: UI Access cleared and the integrity Medium.
@@ -158,12 +159,14 @@ fn pipe(child_reads: bool) -> Result<(Owned, Owned), String> {
 }
 
 /// Starts `program` with the lowered token, its standard input and output piped to the
-/// caller, its standard error closed. Only the two pipe ends are inherited.
+/// caller, and its standard error to be read (a panic's message). Only the three pipe ends
+/// are inherited.
 pub fn spawn(program: &Path) -> Result<(LoweredChild, ChildPipes), String> {
     let token = lowered_token()?;
     let (child_input, parent_input) = pipe(true)?;
     let (child_output, parent_output) = pipe(false)?;
-    let inherited = [child_input.0, child_output.0];
+    let (child_error, parent_error) = pipe(false)?;
+    let inherited = [child_input.0, child_output.0, child_error.0];
 
     let mut size = 0usize;
     // SAFETY: a size query for a list of one attribute (it fails with the size).
@@ -194,7 +197,7 @@ pub fn spawn(program: &Path) -> Result<(LoweredChild, ChildPipes), String> {
                     dwFlags: STARTF_USESTDHANDLES,
                     hStdInput: child_input.0,
                     hStdOutput: child_output.0,
-                    hStdError: HANDLE::default(),
+                    hStdError: child_error.0,
                     ..Default::default()
                 },
                 lpAttributeList: list,
@@ -230,14 +233,20 @@ pub fn spawn(program: &Path) -> Result<(LoweredChild, ChildPipes), String> {
     let info = created?;
     // SAFETY: the new process's thread handle, not needed.
     let _ = unsafe { CloseHandle(info.hThread) };
-    drop((child_input, child_output));
+    drop((child_input, child_output, child_error));
     // SAFETY: the parent's pipe ends, handed to the files that own them from here.
     let pipes = unsafe {
         let input = File::from_raw_handle(parent_input.0 .0);
         let output = File::from_raw_handle(parent_output.0 .0);
+        let error = File::from_raw_handle(parent_error.0 .0);
         std::mem::forget(parent_input);
         std::mem::forget(parent_output);
-        ChildPipes { input, output }
+        std::mem::forget(parent_error);
+        ChildPipes {
+            input,
+            output,
+            error,
+        }
     };
     Ok((
         LoweredChild {
