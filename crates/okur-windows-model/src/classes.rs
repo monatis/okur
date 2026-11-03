@@ -54,7 +54,8 @@ pub fn add_class_facts(event: &mut okur_core::AccessibilityEvent) {
         AccessibilityEvent::Focus(focus)
         | AccessibilityEvent::Change { control: focus, .. }
         | AccessibilityEvent::Selected(focus)
-        | AccessibilityEvent::WindowShown(focus) => focus,
+        | AccessibilityEvent::WindowShown(focus)
+        | AccessibilityEvent::ProgressChanged { bar: focus, .. } => focus,
         AccessibilityEvent::MousePoint(point) => match point.control.as_mut() {
             Some(focus) => focus,
             None => return,

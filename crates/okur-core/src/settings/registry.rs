@@ -508,6 +508,22 @@ pub static SETTINGS: &[SettingSpec] = &[
     // The reading highlight (JAWS's visual tracking), on as JAWS draws it; in no dialog of
     // Okur's until JAWS's own control for it is observed: the settings file and --set.
     spec("visual_tracking", Group::Reading, None, CHECK),
+    // How often a page's progress bars are said as they change; in no dialog of Okur's until
+    // JAWS's own control for it is observed: the settings file and --set.
+    SettingSpec {
+        jaws: default_jcf("Options", "ProgressBarUpdateInterval", |v| {
+            v.trim().parse::<u32>().map_or(Value::Null, Value::from)
+        }),
+        ..spec(
+            "progress_bar_interval_ms",
+            Group::Reading,
+            None,
+            Kind::Range {
+                min: 0,
+                max: 60_000,
+            },
+        )
+    },
     // JAWS's Mouse Echo group (Settings Center help), in its order.
     SettingSpec {
         jaws: default_jcf("Options", "MouseSpeechEnabled", |v| {

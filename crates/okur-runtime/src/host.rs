@@ -321,6 +321,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::ConsoleText(_)) => "console text",
         Some(AccessibilityEvent::Selected(_)) => "selected",
         Some(AccessibilityEvent::LiveRegion(_)) => "live region",
+        Some(AccessibilityEvent::ProgressChanged { .. }) => "progress changed",
         Some(AccessibilityEvent::ViewerText(_)) => "viewer text",
         Some(AccessibilityEvent::ScreenText(_)) => "screen text",
         Some(AccessibilityEvent::Recognized(_)) => "recognized",

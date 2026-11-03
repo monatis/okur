@@ -1278,6 +1278,13 @@ pub enum AccessibilityEvent {
     /// as the search box's text changes, or as Down moves through them.
     Selected(FocusEvent),
     LiveRegion(LiveRegionEvent),
+    /// A page's progress bar or meter changed while the focus is elsewhere: the bar with its new
+    /// value, and when the change came, in milliseconds on the platform's clock, which the
+    /// interval between progress bar announcements is measured on (in replay too).
+    ProgressChanged {
+        bar: FocusEvent,
+        at_ms: u64,
+    },
     /// The Virtual Viewer's lines for the window or control in front, read for Virtualize
     /// Window or Virtualize Current Control; empty when nothing could be read.
     ViewerText(Vec<String>),

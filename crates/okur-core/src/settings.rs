@@ -1082,6 +1082,10 @@ pub struct Settings {
     /// scrolled to show it, for a sighted person following along, as JAWS's visual tracking
     /// draws it by default [the guide's chapters 5 and 9; old-pc, 2026-11-02].
     pub visual_tracking: bool,
+    /// The least time between two of a page's progress bar changes said while the focus is
+    /// elsewhere, in milliseconds: JAWS's `[Options] ProgressBarUpdateInterval` (5000 by
+    /// default; 0, none said). A change within it is not said, nor later [obs, 793/s2].
+    pub progress_bar_interval_ms: u32,
     pub mouse_echo: MouseEcho,
     /// The language Insert+Space, O recognizes the screen in, a BCP 47 tag ("tr-TR"): JAWS's
     /// Microsoft OCR Language (`[OCR] MicrosoftOcrLanguage`, a locale number, 1033 by
@@ -1119,6 +1123,7 @@ impl Default for Settings {
             reading_interrupt: true,
             confirm_exit: true,
             visual_tracking: true,
+            progress_bar_interval_ms: 5000,
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),
             voice_profiles: std::collections::BTreeMap::new(),
@@ -1261,6 +1266,8 @@ impl Settings {
             reading_interrupt: true,
             confirm_exit: true,
             visual_tracking: true,
+            // Not in old-pc's user JCF: the shared one's (`ProgressBarUpdateInterval=5000`).
+            progress_bar_interval_ms: 5000,
             // Not in old-pc's user JCF: the shared one's, JAWS's defaults.
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),

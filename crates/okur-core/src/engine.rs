@@ -562,6 +562,9 @@ pub struct ScreenReaderEngine {
     apps: Vec<Box<dyn crate::apps::AppModule>>,
     /// Each live region's lines when it last changed, by DOM id.
     last_live_text: std::collections::HashMap<String, Vec<String>>,
+    /// When a page's progress bar change was last said, on the platform's clock: the next is
+    /// said once `progress_bar_interval_ms` has passed ([`AccessibilityEvent::ProgressChanged`]).
+    progress_said_at: Option<u64>,
     /// Live regions being read as they grow, by DOM id (`LiveRegionAppend::Appended`).
     live_streams: std::collections::HashMap<String, page::LiveStream>,
     /// The question before Okur exits, while it is open (Insert+F4).
@@ -776,6 +779,7 @@ impl ScreenReaderEngine {
             pending_word_font: false,
             apps: crate::apps::builtin(),
             last_live_text: std::collections::HashMap::new(),
+            progress_said_at: None,
             live_streams: std::collections::HashMap::new(),
             quit_dialog: None,
             message_box: None,
@@ -1769,6 +1773,7 @@ impl ScreenReaderEngine {
         if !matches!(
             event,
             AccessibilityEvent::LiveRegion(_)
+                | AccessibilityEvent::ProgressChanged { .. }
                 | AccessibilityEvent::DocumentLoaded { .. }
                 | AccessibilityEvent::PageChanged
                 | AccessibilityEvent::PagePartsLoaded(_)
@@ -1798,6 +1803,9 @@ impl ScreenReaderEngine {
             AccessibilityEvent::ConsoleText(text) => self.console_text(text),
             AccessibilityEvent::Selected(item) => self.handle_selected(item),
             AccessibilityEvent::LiveRegion(live) => self.handle_live_region_event(live),
+            AccessibilityEvent::ProgressChanged { bar, at_ms } => {
+                self.handle_progress_changed(bar, *at_ms)
+            }
             AccessibilityEvent::ViewerText(lines) => self.open_screen_viewer(lines),
             AccessibilityEvent::ScreenText(text) => self.screen_text(text),
             AccessibilityEvent::Recognized(words) => self.recognized(words),

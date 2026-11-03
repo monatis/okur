@@ -426,6 +426,55 @@ fn test_engine_live_region_announcements() {
     assert_eq!(engine.handle_live_region_event(&off), None);
 }
 
+/// A page's progress bars as they change, two moving together: the first change is said at
+/// once; the next within five seconds of it is not said, nor later; one after them is; none
+/// at an interval of 0 [obs, 793/s2].
+#[test]
+fn a_progress_bars_changes_are_said_at_most_every_interval() {
+    let new_engine = || {
+        ScreenReaderEngine::new(
+            VirtualCursor::new(create_test_buffer()),
+            Box::new(MockSpeechOutput::new()),
+        )
+    };
+    let change = |value: &str, at_ms: u64| AccessibilityEvent::ProgressChanged {
+        bar: FocusEvent {
+            value: Some(value.into()),
+            in_document: true,
+            ..FocusEvent::new(Role::ProgressBar).with_name("Upload")
+        },
+        at_ms,
+    };
+    let mut engine = new_engine();
+    let said: Vec<Option<String>> = [
+        ("10", 500),
+        ("10", 501),
+        ("20", 1_000),
+        ("30", 1_500),
+        ("40", 8_000),
+        ("40", 8_001),
+        ("100", 14_000),
+    ]
+    .into_iter()
+    .map(|(value, at)| engine.handle_accessibility_event(&change(value, at)))
+    .collect();
+    assert_eq!(
+        said,
+        [
+            Some("10".into()),
+            None,
+            None,
+            None,
+            Some("40".into()),
+            None,
+            Some("100".into())
+        ]
+    );
+    let mut engine = new_engine();
+    engine.settings.progress_bar_interval_ms = 0;
+    assert_eq!(engine.handle_accessibility_event(&change("10", 500)), None);
+}
+
 #[test]
 fn a_page_is_already_a_virtual_view() {
     let aom = AomNode::new(0, Role::Document)

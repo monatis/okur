@@ -466,10 +466,21 @@ impl EventConverter {
                     }) =>
             {
                 return page_progress_value(event).map(|value| {
-                    AccessibilityEvent::LiveRegion(okur_core::LiveRegionEvent::new(
-                        value,
-                        okur_core::Politeness::Polite,
-                    ))
+                    // The bar, found in the page by its live object (Chromium's unique id, the
+                    // event's negative child id), else by its name.
+                    let mut bar = okur_core::FocusEvent::new(okur_core::Role::ProgressBar);
+                    bar.name = event
+                        .object
+                        .as_ref()
+                        .and_then(|o| o.name.clone())
+                        .filter(|name| !name.trim().is_empty());
+                    bar.value = Some(value);
+                    bar.in_document = true;
+                    bar.unique_id = (event.id_child < 0).then(|| event.id_child.to_string());
+                    AccessibilityEvent::ProgressChanged {
+                        bar,
+                        at_ms: u64::try_from(event.t_ms).unwrap_or(u64::MAX),
+                    }
                 });
             }
             // The focused text field's caret moved or its text changed. A value change of

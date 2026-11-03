@@ -1021,6 +1021,55 @@ impl ScreenReaderEngine {
                 }))
     }
 
+    /// A page's progress bar or meter changed at `at_ms` while the focus is elsewhere. The
+    /// page's bar takes its new value, which the virtual cursor then reads, "100 Progress bar"
+    /// [obs, 793/s4]. The value is said as a polite live region's text, "10", the first change
+    /// at once; a change within `progress_bar_interval_ms` of the last one said is not said,
+    /// nor later; none at an interval of 0 (JAWS's `ProgressBarUpdateInterval`). The interval
+    /// is one for all the page's bars: two moving together are said once [obs, 793/s2].
+    pub(super) fn handle_progress_changed(
+        &mut self,
+        bar: &FocusEvent,
+        at_ms: u64,
+    ) -> Option<String> {
+        let value = bar.value.as_deref().unwrap_or_default();
+        // By its live object where that is a progress bar (a page read in another session, as
+        // replay's, can give the id to another node), else by its name.
+        let buffer = &self.cursor.buffer;
+        let found = bar
+            .unique_id
+            .as_deref()
+            .and_then(|object| buffer.node_with_object(object))
+            .filter(|&id| buffer.node(id).is_some_and(|n| n.role == Role::ProgressBar))
+            .or_else(|| {
+                let name = bar.name.as_deref()?;
+                buffer.node_with_role_and_name(&Role::ProgressBar, name)
+            });
+        if let Some(id) = found {
+            let stale = self
+                .cursor
+                .buffer
+                .node(id)
+                .is_some_and(|node| node.value.as_deref() != Some(value));
+            if stale {
+                let _ = self.change_page_node(id, |node| node.value = Some(value.to_owned()));
+            }
+        }
+        let interval = u64::from(self.settings.progress_bar_interval_ms);
+        let within = self
+            .progress_said_at
+            .is_some_and(|said| at_ms.saturating_sub(said) < interval);
+        if interval == 0 || within {
+            return None;
+        }
+        let spoken =
+            self.handle_live_region_event(&LiveRegionEvent::new(value, Politeness::Polite));
+        if spoken.is_some() {
+            self.progress_said_at = Some(at_ms);
+        }
+        spoken
+    }
+
     /// Handles an ARIA live region announcement event with politeness consideration.
     pub fn handle_live_region_event(&mut self, live: &LiveRegionEvent) -> Option<String> {
         if live.politeness == Politeness::Off {

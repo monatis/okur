@@ -1389,8 +1389,13 @@ impl<'a> Builder<'a> {
                     .trim_end()
                     .to_owned()
             }
+            // A progress bar by its value and role, "100 Progress bar", its label on its own line
+            // before it [obs, 793/s3, s4].
             Role::ProgressBar => {
-                format!("{name}{}", role_marker(msg::role_progress_bar().as_str()))
+                let value = node.value.as_deref().map(str::trim).unwrap_or_default();
+                format!("{value}{}", role_marker(msg::role_progress_bar().as_str()))
+                    .trim_start()
+                    .to_owned()
             }
             _ => name.clone(),
         };
