@@ -64,9 +64,13 @@ purpose, the reason is in [accepted divergences](accepted-divergences.md).
     a control's hot key (Shift+Numpad 5), a property sheet's page on Ctrl+Tab;
   - menus, the menu bar and context menus; lists, list views and their columns (Ctrl+Insert
     and a number), trees, combo boxes and data grids;
-  - Notepad and its dialogs, WordPad's and Paint's ribbons (Alt to the tabs, their places and
-    the lower ribbon's groups, as JAWS reads them), File Explorer, Windows Settings,
-    Windows Terminal, the desktop, the Alt+Tab switcher and Windows search;
+  - Notepad and its dialogs, WordPad's, Paint's and File Explorer's ribbons (Alt to the tabs,
+    their places and the lower ribbon's groups, as JAWS reads them), File Explorer (Insert+Tab
+    on a file as moving to it says it), Windows Terminal, the desktop, the Alt+Tab switcher,
+    Windows search and the Run dialog;
+  - Windows Settings and the apps from the Microsoft Store: Settings' pages (Insert+T says the
+    page), a control's group on Insert+Tab, and its list of apps, each said once with its
+    state; Control Panel's Programs and Features, its column titles and programs;
   - the Window List (Insert+F10), to switch to another window, and the system tray list
     (Insert+F11), to open or click an icon.
 - **Editing** in text fields: characters, words, lines, sentences and paragraphs; selections

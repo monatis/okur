@@ -1,12 +1,77 @@
-# The first Store submission: what goes on each Partner Center page
+# The Store submissions: what goes on each Partner Center page
+
+Product: Okur, Store ID 9NV0FM5H54X8, `Monatis.okur` published by Monatis.
+
+## Submission 2: Okur 1.1.0.0, public (2026-11-03)
+
+The owner, 2026-11-03: "after this round of fixes, we can make a new release on microsoft
+store, this time public." Submission 1 (below) answered what it was for: certified, and the
+Store-installed program runs with UI Access (the research's §8). Submission 2 is a new
+submission of the same product; Partner Center starts it as a copy of submission 1, so only
+the pages below change. Everything else stays as submission 1 has it.
+
+### Packages
+
+Remove 1.0.0.0's package and upload
+`target/submission-1.1.0.0-9e9af731/okur-1.1.0.0-x64-uiaccess.msix`, unsigned (the Store signs
+it), SHA-256 `d46537433ebb8bcc877335345e221b677faea8e717c48f19b3c673eeb997cf76`. Built from
+`9e9af731` by `build-msix.ps1 -Version 1.1.0.0 -UiAccess`, with the same capabilities as
+1.0.0.0 (`runFullTrust`, `uiAccess`) and the same minimum Windows (10.0.18990.0). Defender on
+the dev box: "found no threats" (`MpCmdRun -Scan -ScanType 3`, the package's folder).
+
+### Pricing and availability
+
+- **Visibility: Public audience**, and discoverable in the Store ("Make this product available
+  and discoverable in the Microsoft Store"). **This cannot be undone:** a product made public
+  can never be made private again (research R-store-32). The private customer group then no
+  longer applies.
+- Markets: all. Pricing: free. As in submission 1.
+
+### Store listing (English, United States)
+
+"What's new in this version" (new; at most 1,500 characters):
+
+```
+Okur 1.1, the first public release.
+
+- Windows Settings and the apps from the Microsoft Store are heard again: in 1.0 they were silent. In Settings, Insert+Tab names the group of the focused control and Insert+T the page.
+- Windows' lists of programs: Apps in Settings, and Programs and Features in Control Panel, with their column titles, each program said once, and its state and place.
+- File Explorer: its ribbon, from Alt through its tabs and commands; Insert+Tab on a file says it as moving to it does.
+- A combo box you can type in, such as the Run dialog's, is said once, not twice; Say Window (Insert+B) reads it as its box, field and button.
+- A window that opens with its focus already set, such as Programs and Features, is read when it comes to the front.
+- Web pages: the virtual cursor's place is framed on screen and scrolled into view as it reads; a page still loading is read once it has loaded; "clickable" is said only in a table that answers clicks itself.
+- Okur's own windows report their errors in Okur's log.
+```
+
+In the description, the line on Windows names the Store's apps and the lists of programs:
+
+```
+- Windows itself: menus, dialog boxes, the desktop, the taskbar, Alt+Tab, File Explorer and its ribbon, Windows Settings and its list of apps, Programs and Features, the Run dialog, the apps from the Microsoft Store, Windows Terminal, Notepad and notifications.
+```
+
+The rest of the description, the short description, keywords, screenshot and logos stay.
+
+### Submission options
+
+As in submission 1: published as soon as it passes certification, now to everyone; the
+restricted capabilities' reasons and the certification notes unchanged.
+
+### After certification
+
+- The listing at `https://apps.microsoft.com/detail/9NV0FM5H54X8`: the README's install
+  instructions point there.
+- On old-pc, where 1.0.0.0 is installed from the Store: the Store updates it to 1.1.0.0.
+  That is experiment E6: Okur, running, closes for the update and restarts by itself
+  (`RegisterApplicationRestart`), and speech returns without the user doing anything; its log
+  (`%LOCALAPPDATA%\Okur\okur.log`, the package's redirected copy) says the update's close.
+
+## Submission 1: Okur 1.0.0.0, private audience (2026-11-02)
 
 For the owner's Private-audience submission of Okur 1.0.0.0 with UI Access (decided
 2026-11-02), whose purpose is to learn how Microsoft treats it: the malware scan, the review of
 the `uiAccess` restricted capability, and whether the Store-signed program gets UI Access on
 old-pc (the research's §8, "E1's results"). Each section below is one page of the submission,
 in Partner Center's order; texts in blocks are ready to paste.
-
-Product: Okur, Store ID 9NV0FM5H54X8, `Monatis.okur` published by Monatis.
 
 ## Where the draft stands (2026-11-02)
 

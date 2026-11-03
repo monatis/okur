@@ -89,10 +89,12 @@ if ($ProgramCertificateThumbprint) {
     & $signTool sign /fd SHA256 /sha1 $ProgramCertificateThumbprint /s My `
         (Join-Path $stage 'okur-sr.exe') (Join-Path $stage 'okur-ui.exe') | Out-Host
     if ($LASTEXITCODE -ne 0) { throw 'SignTool failed on the programs' }
-} elseif ($UiAccess) {
-    Write-Warning ('okur-sr.exe is not signed: Windows starts a UI Access program only with a ' +
-        'trusted signature of its own, which the package''s signature was not on old-pc ' +
-        '(E1, 2026-11-02). Whether the Store''s signature counts is not known yet.')
+} elseif ($UiAccess -and $CertificateThumbprint) {
+    # For the Store the program stays unsigned: the Store's signature of the package is enough
+    # for UI Access (the Store install on old-pc, 2026-11-03). A package signed here is not.
+    Write-Warning ('okur-sr.exe is not signed: from a package signed with a local certificate, ' +
+        'Windows starts a UI Access program only with a trusted signature of its own (E1 on ' +
+        'old-pc, 2026-11-02). Give -ProgramCertificateThumbprint as well.')
 }
 
 # The logos the manifest names, at their sizes: Okur's mark (draw-logo.ps1), run as a script
