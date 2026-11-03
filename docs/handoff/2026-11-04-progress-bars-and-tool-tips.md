@@ -52,11 +52,15 @@ JAWS parity (Ia2): 11472/12058 steps match exactly; 370 accepted divergences not
 
 ## Next
 
-1. The setting as Settings Center has it: a choice of the seven, with JAWS's labels, in Okur's
-   settings tree and search; first read what "Announce All" writes to the JCF (save it in
-   Settings Center with old-pc's user `DEFAULT.JCF` copied aside, then put the copy back).
-2. Say Window in a window that is not a dialog box: Okur says nothing at 1136/s3, where JAWS
-   reads the window's controls.
+1. Done after this handoff's figures (`6292eb7a`): the setting in Settings Center's tree and
+   search as Progress Bar Updates Announcement, its seven choices by JAWS's names; Announce All
+   writes `ProgressBarUpdateInterval=1` (saved in Settings Center on old-pc, its own file put
+   back after, hash checked).
+2. Say Window in a window that is not a dialog box: Okur says nothing where JAWS walks the
+   whole window, every control by name, lowercase type and state ("SR Desktop Fixture | window
+   | menu bar | File | menu item | ... | status bar | Ready") [548/s14, 554/s14, 1136/s3]. It
+   needs a window walk on demand in the driver, the walk recorded in traces for replay, and
+   JAWS's format.
 3. A comctl32 tool tip (`tooltips_class32` itself), shown by a fixture without the mouse, for
    JAWS's tool tip events; then the tracer records tool tips shown, and Okur says them as JAWS
    does.
