@@ -12,7 +12,7 @@
 
 use crate::announcement::{Announcement, Line, Part, PartKind};
 use crate::aom::Role;
-use crate::event::FocusEvent;
+use crate::event::{FocusEvent, PopupKind};
 use crate::linearize::{role_marker, state_marker};
 use crate::messages::msg;
 
@@ -532,16 +532,9 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
             // 1 of 1" (dev box, 2026-10-17); a WinForms tab reports none (303/s12).
             lines.extend(position(focus));
             if !focus.in_ribbon {
-                // Office's own dialogs switch their pages with Control+Tab, as JAWS says
-                // [obs, 1124/s4-s6].
-                let office = focus
-                    .platform
-                    .top_window_class
-                    .as_deref()
-                    .is_some_and(|class| class.starts_with(OFFICE_DIALOG_CLASS));
                 lines.push(Line::of(
                     PartKind::Hint,
-                    if office {
+                    if focus.pages_by_control_tab {
                         msg::hint_switch_pages_ctrl_tab()
                     } else {
                         msg::hint_switch_pages()
@@ -610,9 +603,8 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
             {
                 lines.push(Line::of(PartKind::Description, description));
             }
-            // A WinUI toggle switch is a button with a toggle state, said as its switch
-            // reads: Windows Settings' "Night light Button | Off" (JAWS, dev box 2026-10-16).
-            if focus.platform.element_class.as_deref() == Some("ToggleSwitch") {
+            // A switch is a button with a toggle state, said as its switch reads.
+            if focus.switch {
                 match focus.states.checked {
                     Some(true) => lines.push(Line::of(PartKind::Value, msg::toggle_on())),
                     Some(false) => lines.push(Line::of(PartKind::Value, msg::toggle_off())),
@@ -742,10 +734,6 @@ impl FocusKey {
         }
     }
 }
-
-/// The start of the window class Office's own dialogs share, their application's after it
-/// (Word's `bosa_sdm_msword`, Excel's `bosa_sdm_XL9`).
-const OFFICE_DIALOG_CLASS: &str = "bosa_sdm_";
 
 /// Focus speech across a sequence of native focus events.
 #[derive(Debug, Default)]
@@ -1389,19 +1377,6 @@ pub struct Menus {
     office_popup: bool,
 }
 
-/// A popup menu's kind, by the window it opens in.
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
-pub enum PopupKind {
-    #[default]
-    Plain,
-    /// An Office command bar's (`MsoCommandBarPopup`), by its name: "Ply", Excel's sheet tabs'
-    /// menu. A context menu of one says the name before its first item [obs, 1116/s5].
-    CommandBar(String),
-    /// Office's own menu (`NetUIHWND`): the cell's context menu in Excel. A context menu of one
-    /// says its first item and how to move, with no role [obs, 1122/s2].
-    NetUi,
-}
-
 /// Where a page's menu item is ([`Menus::page_focus`]).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum PageMenuPlace {
@@ -1519,7 +1494,7 @@ impl Menus {
             let context_menu = role_marker(msg::role_context_menu().as_str());
             let items_hint = msg::hint_menu_items_up_down();
             let kind = std::mem::take(&mut self.popup_kind);
-            self.office_popup = kind == PopupKind::NetUi;
+            self.office_popup = kind == PopupKind::Office;
             Some(match kind {
                 // An Office command bar's popup says its name first, then the item and how to
                 // move ("Context Menu | | Ply pop-up menu | Insert... | To move through items
@@ -1529,7 +1504,7 @@ impl Menus {
                     msg::menu_pop_up_named(bar)
                 ),
                 // Office's own menu says only the item and how to move [obs, 1122/s2].
-                PopupKind::NetUi => format!("{said}\n{items_hint}"),
+                PopupKind::Office => format!("{said}\n{items_hint}"),
                 PopupKind::Plain if self.launcher => {
                     format!("{context_menu}\n\n{said}\n{items_hint}")
                 }
@@ -1914,6 +1889,7 @@ mod tests {
             &["Brightness & color", "Night light"],
         );
         toggle.platform.element_class = Some("ToggleSwitch".to_owned());
+        toggle.switch = true;
         toggle.states.checked = Some(false);
         assert_eq!(
             say(&toggle),
@@ -2174,7 +2150,7 @@ Undo  Unavailable"
     #[test]
     fn an_office_netui_context_menu_says_its_item_and_how_to_move() {
         let mut m = Menus::default();
-        m.popup_start(PopupKind::NetUi);
+        m.popup_start(PopupKind::Office);
         assert!(m.awaiting_first_item());
         assert_eq!(
             m.focus("Cut", false, None).as_deref(),
@@ -2470,7 +2446,7 @@ Undo  Unavailable"
         );
         // An Office dialog's page, Excel's Format Cells [obs, 1124/s4].
         let mut number = general.clone().with_name("Number".to_owned());
-        number.platform.top_window_class = Some("bosa_sdm_XL9".to_owned());
+        number.pages_by_control_tab = true;
         assert_eq!(
             norm(&focus_speech(&number, None).render()),
             norm("Number  \u{1d} Tab \u{1e}   \u{1d}selected\u{1e} \nTo switch pages, press Control+Tab.")

@@ -3748,8 +3748,7 @@ fn a_page_menu_is_left_when_the_focus_returns_to_the_page() {
         AccessibilityEvent::Focus(focus)
     };
     let popup = AccessibilityEvent::Menu(crate::event::MenuEvent::PopupStart {
-        window_class: None,
-        window_title: None,
+        kind: crate::event::PopupKind::Plain,
     });
     engine.handle_accessibility_event(&popup);
     engine.handle_accessibility_event(&item("Accessibility", true));
@@ -3831,8 +3830,7 @@ fn a_page_menu_opened_from_a_field_takes_its_keys() {
 
     engine.handle_accessibility_event(&AccessibilityEvent::Menu(
         crate::event::MenuEvent::PopupStart {
-            window_class: None,
-            window_title: None,
+            kind: crate::event::PopupKind::Plain,
         },
     ));
     engine.handle_accessibility_event(&AccessibilityEvent::Focus(
@@ -5113,12 +5111,11 @@ fn a_menu_takes_the_keys_before_any_item_is_focused() {
     let down = key(Key::DownArrow);
     assert_eq!(engine.handle_key_event(&down), KeyAction::Consume);
     engine.handle_accessibility_event(&AccessibilityEvent::Menu(crate::event::MenuEvent::Start {
-        window_class: None,
+        launcher: false,
     }));
     engine.handle_accessibility_event(&AccessibilityEvent::Menu(
         crate::event::MenuEvent::PopupStart {
-            window_class: None,
-            window_title: None,
+            kind: crate::event::PopupKind::Plain,
         },
     ));
     assert_eq!(engine.handle_key_event(&down), KeyAction::PassThrough);
@@ -5872,7 +5869,7 @@ fn notepads_edit_and_its_menu_bar() {
     );
     assert!(!arrival.contains("Text Editor"), "{arrival:?}");
     engine.handle_accessibility_event(&AccessibilityEvent::Menu(crate::event::MenuEvent::Start {
-        window_class: None,
+        launcher: false,
     }));
     let mut file = FocusEvent::new(Role::MenuItem).with_name("File");
     file.in_menu_bar = true;
@@ -7661,8 +7658,7 @@ fn an_edit_combos_list_keeps_the_keys_on_the_field() {
     });
     engine.handle_focus_event(&font);
     engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::PopupStart {
-        window_class: None,
-        window_title: None,
+        kind: crate::event::PopupKind::Plain,
     }));
     let before = actions.requests().len();
     engine.handle_key_event(&key(Key::DownArrow));
@@ -7801,15 +7797,14 @@ fn a_word_drop_down_fields_list_is_opened_and_closed() {
         Some("Open List Box")
     );
     engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::Start {
-        window_class: None,
+        launcher: false,
     }));
     engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::PopupStart {
-        window_class: None,
-        window_title: None,
+        kind: crate::event::PopupKind::Plain,
     }));
     let mut item = FocusEvent::new(Role::MenuItem).with_name("Northside");
     item.app = Some("WINWORD.EXE".into());
-    item.platform.window_class = Some("#32768".into());
+    item.on_menu_window = true;
     engine.handle_focus_event(&item);
     speech.take();
     engine.handle_accessibility_event(&AccessibilityEvent::Menu(MenuEvent::PopupEnd));

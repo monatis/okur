@@ -2310,3 +2310,21 @@ fn a_value_change_that_moves_the_focus_is_a_focus() {
         .iter()
         .any(|e| matches!(e, okur_core::AccessibilityEvent::Focus(_))));
 }
+
+/// The converter adds what a focus's classes tell to every focus it passes on: a WinUI toggle
+/// switch is said by its state, "Night light Button | Off" (JAWS, dev box 2026-10-16).
+#[test]
+fn a_converted_focus_carries_its_class_facts() {
+    let event = TraceEvent {
+        focus_chain: vec![UiaNode {
+            class_name: Some("ToggleSwitch".to_owned()),
+            ..node(UIA_BUTTON, "Night light", true)
+        }],
+        ..focus_event(Vec::new())
+    };
+    let converted = EventConverter::default().convert(&event);
+    assert!(
+        matches!(converted.as_slice(), [okur_core::AccessibilityEvent::Focus(focus)] if focus.switch),
+        "{converted:?}"
+    );
+}

@@ -34,7 +34,7 @@ const UIA_HEADER: i32 = 50034;
 /// The window class of Win32 dialog boxes (message boxes, common dialogs).
 pub const WIN32_DIALOG_CLASS: &str = "#32770";
 /// A Win32 popup menu's window.
-const WIN32_MENU_CLASS: &str = "#32768";
+const WIN32_MENU_CLASS: &str = crate::classes::MENU;
 /// The top window class of a focus on the desktop (`PlatformIds::top_window_class`).
 pub const DESKTOP_KIND: &str = "Progman";
 /// MSAA `ROLE_SYSTEM_MENUITEM`.

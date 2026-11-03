@@ -10,9 +10,6 @@ use crate::messages::msg;
 use crate::speech::SpeechFormatter;
 use crate::ui::settings_tree::ResultFocus;
 
-/// The window class of a Win32 popup menu (a Word form field's drop-down list is one).
-const MENU_WINDOW_CLASS: &str = "#32768";
-
 impl ScreenReaderEngine {
     /// Whether the focus landing on a field turns forms mode on by itself: always with Auto
     /// Forms Mode, when Tab or Shift+Tab brought it with Semi-Auto, never with Manual.
@@ -214,10 +211,7 @@ impl ScreenReaderEngine {
         // A form field's drop-down list closing: its menu window's last focus, which is no item,
         // says nothing; the field is said with its new choice once the document is read [obs,
         // 1057/s9].
-        if self.word_list_from_field
-            && focus.platform.window_class.as_deref() == Some(MENU_WINDOW_CLASS)
-            && focus.role != Role::MenuItem
-        {
+        if self.word_list_from_field && focus.on_menu_window && focus.role != Role::MenuItem {
             return None;
         }
         self.note_screen_rows(focus);
@@ -1229,13 +1223,13 @@ impl ScreenReaderEngine {
         if window_changed {
             self.native_focus.reset();
         }
-        // Escape presses a dialog's Cancel button (IDCANCEL, control id 2), and a dialog that
-        // moves the focus there as it closes is gone a moment later: JAWS says nothing of the
-        // button, only the window the focus returns to [obs, 544/s14, 674/s14, 675/s14].
+        // Escape presses a dialog's Cancel button, and a dialog that moves the focus there as
+        // it closes is gone a moment later: JAWS says nothing of the button, only the window
+        // the focus returns to [obs, 544/s14, 674/s14, 675/s14].
         if self.last_key_escapes
             && focus.in_dialog_box
             && focus.role == Role::Button
-            && focus.platform.automation_id.as_deref() == Some("2")
+            && focus.cancel_button
         {
             self.last_native_focus = Some(focus.clone());
             return None;
@@ -1484,10 +1478,8 @@ impl ScreenReaderEngine {
     pub fn handle_menu_event(&mut self, event: crate::event::MenuEvent) -> Option<String> {
         use crate::event::MenuEvent;
         match event {
-            MenuEvent::Start { window_class } => {
-                // Windows' Win+X menu, from its launcher, is read its own way [obs, 520/s3].
-                self.menus
-                    .start(window_class.as_deref() == Some("LauncherTipWnd"));
+            MenuEvent::Start { launcher } => {
+                self.menus.start(launcher);
                 None
             }
             // An edit combo's own list dropping down (Word's Font box, Alt+Down) is no menu:
@@ -1501,21 +1493,7 @@ impl ScreenReaderEngine {
                 self.combo_list_open = true;
                 None
             }
-            MenuEvent::PopupStart {
-                window_class,
-                window_title,
-            } => {
-                use crate::native_focus::PopupKind;
-                // An Office command bar's popup is named by its command bar [obs, 1116/s5];
-                // Office's own menus are read their own way [obs, 1122/s2].
-                let title = window_title
-                    .map(|title| title.trim().to_owned())
-                    .filter(|title| !title.is_empty());
-                let kind = match (window_class.as_deref(), title) {
-                    (Some("MsoCommandBarPopup"), Some(bar)) => PopupKind::CommandBar(bar),
-                    (Some(crate::apps::windows::word_ribbon::NETUI_CLASS), _) => PopupKind::NetUi,
-                    _ => PopupKind::Plain,
-                };
+            MenuEvent::PopupStart { kind } => {
                 self.menus.popup_start(kind);
                 None
             }

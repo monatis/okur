@@ -610,24 +610,35 @@ pub enum ChangeKind {
 /// events on [`Role::MenuItem`].
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum MenuEvent {
-    /// Menu mode started, from this window (its class): the menu bar became active, or a
-    /// popup menu is about to open.
+    /// Menu mode started: the menu bar became active, or a popup menu is about to open.
     Start {
+        /// From the system's launcher (Windows' Win+X menu), whose menu JAWS reads its own
+        /// way [obs, 520/s3].
         #[serde(default)]
-        window_class: Option<String>,
+        launcher: bool,
     },
     /// Menu mode ended; focus returns to the application.
     End,
-    /// A popup menu opened, in this window (its class and caption: Office's command bar
-    /// popups are `MsoCommandBarPopup` windows captioned with the command bar's name, "Ply").
+    /// A popup menu opened, of this kind.
     PopupStart {
         #[serde(default)]
-        window_class: Option<String>,
-        #[serde(default)]
-        window_title: Option<String>,
+        kind: PopupKind,
     },
     /// A popup menu closed.
     PopupEnd,
+}
+
+/// A popup menu's kind, which the platform tells by the window it opens in.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub enum PopupKind {
+    #[default]
+    Plain,
+    /// An Office command bar's, by its name: "Ply", Excel's sheet tabs' menu. A context menu
+    /// of one says the name before its first item [obs, 1116/s5].
+    CommandBar(String),
+    /// Office's own menu: the cell's context menu in Excel. A context menu of one says its
+    /// first item and how to move, with no role [obs, 1122/s2].
+    Office,
 }
 
 /// One control of a window, as Say Window (Insert+B) reads it.
@@ -815,6 +826,22 @@ pub struct FocusEvent {
     pub file_dialog_address: Option<String>,
     /// The window in front is a dialog box.
     pub in_dialog_box: bool,
+    /// The focused button is a switch, said "On" or "Off" by its toggle state: a WinUI
+    /// toggle switch, Windows Settings' "Night light Button | Off" (JAWS, dev box 2026-10-16).
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub switch: bool,
+    /// The focused control is its dialog's Cancel button (Win32's IDCANCEL), which Escape
+    /// presses.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub cancel_button: bool,
+    /// The focus was reported on a popup menu's own window, not on a control: a field's
+    /// drop-down list leaves its last focus there as it closes [obs, 1057/s9].
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub on_menu_window: bool,
+    /// The dialog's tabs switch its pages with Control+Tab (Office's own dialogs [obs,
+    /// 1124/s4-s6]), not Control+PageDown.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub pages_by_control_tab: bool,
     pub window_title: Option<String>,
     /// The texts directly in the application's own window, in order, where the platform
     /// reads them (a Store app's core window): Windows Settings' "Settings", "System", whose
@@ -1065,6 +1092,10 @@ impl FocusEvent {
             window_items: Vec::new(),
             file_dialog_address: None,
             in_dialog_box: false,
+            switch: false,
+            cancel_button: false,
+            on_menu_window: false,
+            pages_by_control_tab: false,
             window_title: None,
             app_window_texts: Vec::new(),
             folder_name: None,

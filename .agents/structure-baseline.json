@@ -12,12 +12,12 @@
       "why": "a neutral crate is the same on every OS: put platform code in a platform crate"
     },
     "platform_literals_in_core": {
-      "count": 5,
-      "mode": "report",
+      "count": 0,
+      "mode": "block",
       "why": "the engine knows no window class or process: say it in the platform or an app module"
     },
     "engine_app_references": {
-      "count": 24,
+      "count": 23,
       "mode": "block",
       "why": "the engine reaches application modules through the AppModule contract only"
     },
@@ -45,10 +45,10 @@
       "crates/okur-core/src/cursor.rs": 3896,
       "crates/okur-core/src/engine.rs": 3931,
       "crates/okur-core/src/linearize.rs": 1917,
-      "crates/okur-core/src/native_focus.rs": 1765,
+      "crates/okur-core/src/native_focus.rs": 1760,
       "crates/okur-core/src/speech.rs": 1543,
       "crates/okur-core/src/engine/commands.rs": 2070,
-      "crates/okur-core/src/engine/focus.rs": 1583,
+      "crates/okur-core/src/engine/focus.rs": 1557,
       "crates/okur-core/src/ui/settings_tree.rs": 1784,
       "crates/okur-corpus/src/divergences.rs": 1872,
       "crates/okur-corpus/src/parity.rs": 1857,

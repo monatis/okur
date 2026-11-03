@@ -65,12 +65,14 @@ pub fn menu_event_from_trace(event: &TraceEvent) -> Option<okur_core::MenuEvent>
     use okur_core::MenuEvent;
     match event.event.as_str() {
         "menu_start" => Some(MenuEvent::Start {
-            window_class: event.window_class.clone(),
+            launcher: crate::classes::is_launcher(event.window_class.as_deref()),
         }),
         "menu_end" => Some(MenuEvent::End),
         "menu_popup_start" => Some(MenuEvent::PopupStart {
-            window_class: event.window_class.clone(),
-            window_title: event.window_title.clone(),
+            kind: crate::classes::popup_kind(
+                event.window_class.as_deref(),
+                event.window_title.as_deref(),
+            ),
         }),
         "menu_popup_end" => Some(MenuEvent::PopupEnd),
         _ => None,
@@ -221,6 +223,13 @@ pub(super) const NOTIFICATION_REPEAT_MS: u128 = 2000;
 impl EventConverter {
     /// The engine events for one captured event, in order (usually one, or none).
     pub fn convert(&mut self, event: &TraceEvent) -> Vec<okur_core::AccessibilityEvent> {
+        let mut events = self.converted(event);
+        events.iter_mut().for_each(crate::classes::add_class_facts);
+        events
+    }
+
+    /// The engine events `event` gives, before the facts its classes tell are added.
+    fn converted(&mut self, event: &TraceEvent) -> Vec<okur_core::AccessibilityEvent> {
         if let Some(point) = &event.point {
             return vec![mouse_point_event(&event.focus_chain, point)];
         }
