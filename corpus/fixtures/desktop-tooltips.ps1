@@ -7,9 +7,10 @@
     Launched by run-scenario.ps1 for desktop scenarios (scenario "launch" block). Left to right:
     a "Save" button, which has the focus, its tool tip "Save the document (Ctrl+S)"; a "Print"
     button, its tool tip "Print the document". A button taking the focus shows its tool tip
-    (tooltips_class32, the system's own) 300 ms later, below it, for four seconds, wherever the
-    mouse is. The file is ASCII only. Do not change it without re-recording every scenario that
-    uses it (the manifest pins its SHA-256).
+    300 ms later, below it, for four seconds, wherever the mouse is: WinForms' own tool tip
+    window ("WindowsForms10.tooltips_class32..."), not comctl32's tooltips_class32 itself. The
+    file is ASCII only. Do not change it without re-recording every scenario that uses it (the
+    manifest pins its SHA-256).
 #>
 param([int]$ExitAfterSeconds = 900)
 

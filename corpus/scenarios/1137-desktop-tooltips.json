@@ -1,6 +1,6 @@
 {
   "id": "1137-desktop-tooltips",
-  "name": "Tool tips (WinForms, tooltips_class32) that an application shows below a button 300 ms after it takes the focus, with JAWS's tool tip events on (ProcessToolTipEvent=1): Tab to Print, its tool tip; Shift+Tab to Save, its tool tip",
+  "name": "Tool tips that a WinForms application shows below a button 300 ms after it takes the focus (WinForms' own window class, WindowsForms10.tooltips_class32...), with JAWS's tool tip events on (ProcessToolTipEvent=1): Tab to Print, its tool tip; Shift+Tab to Save, its tool tip",
   "category": "desktop",
   "version": "1.0.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-tooltips.ps1",

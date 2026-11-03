@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 11470,
-  "total_steps": 12056,
+  "matched_steps": 11472,
+  "total_steps": 12058,
   "accepted_divergences": 370,
   "errors": [],
   "steps": {
@@ -1879,6 +1879,8 @@
     "1136-desktop-progress-bar/s1": "match",
     "1136-desktop-progress-bar/s2": "match",
     "1136-desktop-progress-bar/s3": "mismatch",
+    "1137-desktop-tooltips/s1": "match",
+    "1137-desktop-tooltips/s2": "match",
     "114-article-list-items/s1": "match",
     "114-article-list-items/s10": "match",
     "114-article-list-items/s11": "match",
