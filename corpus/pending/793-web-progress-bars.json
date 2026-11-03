@@ -1,0 +1,16 @@
+{
+  "id": "793-web-progress-bars",
+  "name": "A page's progress bars (a progress element and an ARIA progressbar) moving while the focus stays on the button that started them, with JAWS's progress bar announcements at their default (ProgressBarUpdateInterval=5000): Tab to the button, Enter starts 10, 20 and 30 within 1.5 s, 40 at 8 s and 100 at 14 s, the button renamed Done; then the virtual cursor down over both bars",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/progress-bars.html",
+  "target_app": "chrome",
+  "reset": { "keys": ["Escape", "Ctrl+Home"] },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Tab" },
+    { "id": "s2", "type": "key", "command": "Enter", "onset_ms": 16000, "quiet_ms": 7000, "settle_max_ms": 30000 },
+    { "id": "s3", "type": "key", "command": "Down" },
+    { "id": "s4", "type": "key", "command": "Down" },
+    { "id": "s5", "type": "key", "command": "Down" }
+  ]
+}

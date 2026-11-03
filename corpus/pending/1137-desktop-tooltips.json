@@ -1,0 +1,16 @@
+{
+  "id": "1137-desktop-tooltips",
+  "name": "Tool tips (WinForms, tooltips_class32) shown as the mouse comes to rest on a button, with JAWS's tool tip events on (ProcessToolTipEvent=1): the mouse routed to the focused Save button (Insert+NumpadMinus), Tab to Print, the mouse routed there",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-tooltips.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Tool Tip Fixture"
+  },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Insert+NumpadMinus", "onset_ms": 1500, "quiet_ms": 1500, "settle_max_ms": 8000 },
+    { "id": "s2", "type": "key", "command": "Tab" },
+    { "id": "s3", "type": "key", "command": "Insert+NumpadMinus", "onset_ms": 1500, "quiet_ms": 1500, "settle_max_ms": 8000 }
+  ]
+}

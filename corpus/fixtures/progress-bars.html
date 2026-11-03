@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Progress Bars Fixture</title>
+</head>
+<body>
+  <h1>Progress bars</h1>
+  <p>A button starts both bars below on one schedule.</p>
+  <p><button type="button" id="start">Start upload</button></p>
+  <p><label for="upload">Upload</label> <progress id="upload" max="100" value="0"></progress></p>
+  <p><span id="sync-label">Sync</span>
+    <span role="progressbar" id="sync" aria-labelledby="sync-label" aria-valuemin="0"
+      aria-valuemax="100" aria-valuenow="0" style="display:inline-block;width:200px;height:12px;border:1px solid"></span></p>
+  <p>Text after the bars.</p>
+  <script>
+    // From the button's activation: 10 at 0.5 s, 20 at 1.0 s and 30 at 1.5 s (a burst within
+    // five seconds), 40 at 8 s and 100 at 14 s, both bars alike. The button then reads "Done".
+    // A second activation does nothing more. No live region: only the bars change.
+    const schedule = [[500, 10], [1000, 20], [1500, 30], [8000, 40], [14000, 100]];
+    let started = false;
+    document.getElementById('start').addEventListener('click', () => {
+      if (started) return;
+      started = true;
+      for (const [at, value] of schedule) {
+        setTimeout(() => {
+          document.getElementById('upload').value = value;
+          document.getElementById('sync').setAttribute('aria-valuenow', String(value));
+          if (value === 100) document.getElementById('start').textContent = 'Done';
+        }, at);
+      }
+    });
+  </script>
+</body>
+</html>

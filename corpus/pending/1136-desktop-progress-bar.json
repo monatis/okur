@@ -1,0 +1,16 @@
+{
+  "id": "1136-desktop-progress-bar",
+  "name": "A native progress bar (WinForms, msctls_progress32) moving while the focus stays on the button that started it, with JAWS's progress bar announcements at their default (ProgressBarUpdateInterval=5000): Space starts 10, 20 and 30 within 1.5 s, 40 at 8 s and 100 at 14 s, the button renamed Done; then Say Focus and Say Window",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-progress.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Progress Fixture"
+  },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Space", "onset_ms": 16000, "quiet_ms": 7000, "settle_max_ms": 30000 },
+    { "id": "s2", "type": "key", "command": "Insert+Tab" },
+    { "id": "s3", "type": "key", "command": "Insert+B" }
+  ]
+}

@@ -406,17 +406,20 @@ the morning. This is how it was done; it needs fresh permission each time.
   Document Recovery's files ("Yes, I want to view these files later"), which are the owner's
   to remove. Before a round of Word or Excel scenarios, check that no `WINWORD` or `EXCEL` is
   left running.
-- **A second voice, with a bookmark between every word.** In some of Okur's live runs on
-  old-pc, the speech recorder hears an announcement Okur has already made said again a few
-  seconds later, split into words with a SAPI bookmark between each, which Okur never sends
-  and Okur's own log does not have (2026-11-03: 3159 and 1113 before that day's changes, 3155
-  after; in 3155 at the same offset, 5.7 s after Tab, at both of its list steps). The step
-  then waits out its 10 s for silence and the trial fails (`settled: false`). Who speaks is
-  not found yet. The runner stops JAWS for such runs, but JAWS on old-pc speaks through SAPI 5,
-  and a bookmark per word is how a screen reader follows its own speech: whether `jfw` comes
-  back during the run is the first thing to look at (not checked). It was heard again on
-  2026-11-04 in 3155, 3158 and 510. Count `bookmark` actions in the run's file before reading
-  a slow or failed live trial as Okur's.
+- **JAWS speaking during an Okur run.** In some of Okur's live runs on old-pc, the speech
+  recorder hears an announcement Okur has already made said again a few seconds later, with a
+  numbered SAPI bookmark between every word, which Okur never sends and Okur's own log does
+  not have (2026-11-03: 3159 and 1113 before that day's changes, 3155 after; in 3155 at the
+  same offset, 5.7 s after Tab, at both of its list steps; 2026-11-04: 3155, 3158, 510). It
+  is JAWS: its own recordings speak with the same numbered bookmarks (round-progress, 1136),
+  so JAWS is running during those runs although the runner stops it at their start (whether
+  it comes back by itself, or is not stopped, is not yet known). The step then waits out its
+  10 s for silence and the trial fails (`settled: false`). Count `bookmark` actions in the
+  run's file before reading a slow or failed live trial as Okur's.
+- **A step whose speech comes late settles at once.** A step settles when no speech starts
+  within its `onset_ms` (800 ms by default), whatever its `quiet_ms`: a progress bar's
+  announcements seconds after Space were never waited for (1136's first recording, and
+  likely 533/s8). Give such a step an `onset_ms` as long as the wait for its first words.
 
 ## 9. Open questions to settle on old-pc
 
