@@ -1,0 +1,29 @@
+{
+  "id": "3161-desktop-explorer-ribbon",
+  "name": "File Explorer's ribbon over the OCR fixture folder: Alt onto the File tab, Right along the tabs and Left back, Down, Tab to the Quick Access Toolbar's buttons, Escape back to the files, Insert+Tab there; no pane is turned on or off",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-ocr-files.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "C:\\Users\\ailabs\\AppData\\Local\\Temp\\SR OCR Files",
+    "shell_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": []
+  },
+  "trace_file": true,
+  "steps": [
+    { "id": "s1", "type": "key", "command": "Alt" },
+    { "id": "s2", "type": "key", "command": "Right" },
+    { "id": "s3", "type": "key", "command": "Right" },
+    { "id": "s4", "type": "key", "command": "Right" },
+    { "id": "s5", "type": "key", "command": "Left" },
+    { "id": "s6", "type": "key", "command": "Down" },
+    { "id": "s7", "type": "key", "command": "Tab" },
+    { "id": "s8", "type": "key", "command": "Tab" },
+    { "id": "s9", "type": "key", "command": "Escape" },
+    { "id": "s10", "type": "key", "command": "Insert+Tab" }
+  ]
+}
