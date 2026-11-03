@@ -10,6 +10,9 @@ use crate::event::FocusEvent;
 /// The desktop's windows, by class.
 const DESKTOP_WINDOWS: [&str; 2] = ["Progman", "WorkerW"];
 
+/// The mode the desktop reads the focus in: the system's shell's, by this module's name.
+const MODE: AppMode = AppMode::Shell(module_path!());
+
 /// An icon read on the desktop.
 #[derive(Debug, Clone, PartialEq, Eq)]
 struct Item {
@@ -52,7 +55,7 @@ impl Desktop {
                 // An item still on the desktop; not one in another window (the task
                 // switcher's, after Win+M then Alt+Tab).
                 || (focus.role == Role::ListItem
-                    && app_mode == AppMode::NativeDesktop
+                    && app_mode == MODE
                     && top.is_none_or(in_desktop_window)))
     }
 }
@@ -70,8 +73,8 @@ impl AppModule for Desktop {
         if !Self::is_desktop(focus, *cx.app_mode) {
             return FocusResponse::Pass;
         }
-        let first_entry = *cx.app_mode != AppMode::NativeDesktop;
-        *cx.app_mode = AppMode::NativeDesktop;
+        let first_entry = *cx.app_mode != MODE;
+        *cx.app_mode = MODE;
         // Insert+T on the desktop speaks the virtual desktop's name, not the window focused
         // before it (user report).
         cx.note_window(focus);

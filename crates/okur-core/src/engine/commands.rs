@@ -168,7 +168,7 @@ impl ScreenReaderEngine {
             Command::SayCurrentFocus
                 if matches!(
                     self.app_mode,
-                    AppMode::NativeControl | AppMode::NativeExplorer
+                    AppMode::NativeControl | AppMode::Application(_)
                 ) && self
                     .last_native_focus
                     .as_ref()
@@ -323,7 +323,7 @@ impl ScreenReaderEngine {
         }
         // On the desktop and the taskbar, Windows moves and the focus is read: the page
         // commands below have nothing to act on.
-        if matches!(self.app_mode, AppMode::NativeDesktop | AppMode::NativeShell) {
+        if matches!(self.app_mode, AppMode::Shell(_)) {
             return None;
         }
         match &command {

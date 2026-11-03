@@ -5,6 +5,9 @@ use crate::apps::{AppContext, AppModule, FocusResponse};
 use crate::engine::AppMode;
 use crate::event::FocusEvent;
 
+/// The mode the taskbar reads the focus in: the system's shell's, by this module's name.
+const MODE: AppMode = AppMode::Shell(module_path!());
+
 /// The Windows taskbar.
 pub struct Taskbar;
 
@@ -15,8 +18,8 @@ impl AppModule for Taskbar {
         if !on_taskbar {
             return FocusResponse::Pass;
         }
-        let entering = *cx.app_mode != AppMode::NativeShell;
-        *cx.app_mode = AppMode::NativeShell;
+        let entering = *cx.app_mode != MODE;
+        *cx.app_mode = MODE;
         let name = focus.name.as_deref().unwrap_or("Start Button");
         let container = entering.then(|| focus.container_name.as_deref().unwrap_or("Taskbar"));
         FocusResponse::Speak(Announcement::from_text(&button(

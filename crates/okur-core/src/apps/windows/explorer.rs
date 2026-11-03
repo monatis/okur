@@ -37,6 +37,9 @@ pub struct Explorer {
 /// to an item: JAWS says nothing for it (dev box, 2026-10-17; an empty folder not checked).
 const FOLDER_VIEW_CLASS: &str = "SHELLDLL_DefView";
 
+/// The mode File Explorer's list reads the focus in, by this module's name.
+const MODE: AppMode = AppMode::Application(module_path!());
+
 impl AppModule for Explorer {
     fn owns(&self, focus: &FocusEvent) -> bool {
         is_explorer_window(focus)
@@ -56,8 +59,8 @@ impl AppModule for Explorer {
         // application the list's hint is left out.
         let window_changed = focus.window_title.is_some()
             && cx.window_title.as_deref() != focus.window_title.as_deref();
-        let first_entry = *cx.app_mode != AppMode::NativeExplorer || window_changed;
-        *cx.app_mode = AppMode::NativeExplorer;
+        let first_entry = *cx.app_mode != MODE || window_changed;
+        *cx.app_mode = MODE;
         let from_other_app = cx.window_kind.is_none()
             || cx.window_kind.as_deref() != focus.platform.top_window_class.as_deref();
         cx.note_window(focus);
