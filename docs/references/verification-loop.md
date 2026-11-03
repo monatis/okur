@@ -385,6 +385,17 @@ the morning. This is how it was done; it needs fresh permission each time.
 - **`opendesk exec` can hang past its `--timeout`.** A deploy waited ten minutes on its first
   remote call (2026-10-21); stopping the hung `opendesk.exe` let the script go on. List them
   with `Get-Process opendesk` when a lab command takes far longer than it should.
+- **A hidden JAWS window can hold the foreground.** After JAWS restarted (`fix-rate.ps1`,
+  2026-11-03), a titleless window of `jfw.exe` (class `ConsoleNewText`, elevated) kept the
+  foreground: `okur-lab keys` refused every key ("jfw is in front"), and took it back after a
+  click on the desktop, so `side-by-side.ps1` heard nothing in the Start menu. Recording rounds
+  are not affected: the runner brings its fixture's window to the front. Check the foreground
+  window before a side-by-side session that opens no window of its own.
+- **Windows' elevated tools refuse plain keys.** Device Manager and Services (`mmc.exe`) and
+  Task Manager run elevated: `okur-lab keys` cannot reach them, and in a research trial
+  (2026-11-03) Device Manager's arrows sent with UI Access (`okur-lab-keys`) gave no speech
+  either; Insert chords, which JAWS's hook takes, did. Not settled: whether the key reaches
+  `mmc` and JAWS stays silent, or the key is lost.
 
 ## 9. Open questions to settle on old-pc
 

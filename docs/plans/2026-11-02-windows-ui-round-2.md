@@ -11,8 +11,12 @@ the Store install on old-pc with the owner, the review's open items) stay open a
 [`../handoff/2026-11-03-windows-ui-round-2-recordings.md`](../handoff/2026-11-03-windows-ui-round-2-recordings.md)):**
 old-pc back; §1's items 2 (but for the empty list at the window's opening), 3 and 4 done and
 recorded; §2's Settings pages (home, Display, Sound) and the Run dialog recorded; Settings' app
-list made fast. Next: 3159/s9 (Say Window's editable combo box), §1's item 5, then §2's rest
-(the Start menu, Task Manager, Device Manager, Services, File Explorer's ribbon).
+list made fast. Next: 3159/s9 (Say Window's editable combo box; its structure done, JAWS's
+lowercase type words there not), §1's item 5, then §2's rest: the Start menu (side by side
+blocked while a hidden JAWS window holds the foreground: record it as a scenario from the
+editor fixture with a Win step), the elevated tools, Task Manager, Device Manager and Services
+(the harness has to deliver their keys first: verification-loop.md §8), File Explorer's
+ribbon.
 
 **Status (2026-11-03,
 [`../handoff/2026-11-03-crate-structure-steps-0-3.md`](../handoff/2026-11-03-crate-structure-steps-0-3.md)):**
