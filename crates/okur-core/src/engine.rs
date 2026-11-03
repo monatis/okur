@@ -375,14 +375,14 @@ pub struct ScreenReaderEngine {
     /// text as it was before the key passed over [obs, round-aria25, 2738/s1].
     spin_typed: bool,
     /// Excel's places asked for and not answered yet, in the order asked
-    /// ([`crate::apps::windows::excel::SheetAsk`]).
-    sheet_asks: std::collections::VecDeque<crate::apps::windows::excel::SheetAsk>,
+    /// ([`crate::spreadsheet::SheetAsk`]).
+    sheet_asks: std::collections::VecDeque<crate::spreadsheet::SheetAsk>,
     /// Excel's selection as last read, before the next selecting key; none after any other key
     /// (the selection is then the active cell alone).
     sheet_selection: Option<String>,
     /// Each workbook's row and column titles, by its window's title, for the session (Excel's
     /// Insert+Ctrl+Alt+C and R).
-    sheet_titles: std::collections::HashMap<String, crate::apps::windows::excel::SheetTitles>,
+    sheet_titles: std::collections::HashMap<String, crate::spreadsheet::SheetTitles>,
     /// One of Excel's lists was asked for, and is awaited.
     sheet_list_asked: Option<crate::event::SheetListKind>,
     /// A key for Word's revisions asked whether the document tracks its changes, which it
@@ -915,7 +915,7 @@ impl ScreenReaderEngine {
         if let (Some(place), Some(window)) = (place, window) {
             self.sheet_titles
                 .entry(window)
-                .or_insert_with(|| crate::apps::windows::excel::named_titles(place));
+                .or_insert_with(|| crate::spreadsheet::named_titles(place));
         }
         // A cell its application waited to say with the place (its titles).
         if let Some(said) = self.apps.iter_mut().find_map(|app| app.sheet_place(place)) {
@@ -926,10 +926,10 @@ impl ScreenReaderEngine {
         // A selecting key's change, "select | 8 | C 2" [obs, 1120, 1121].
         let selecting = self
             .last_key
-            .and_then(|(key, m)| crate::apps::windows::excel::SelectionKey::of(key, m));
+            .and_then(|(key, m)| crate::spreadsheet::SelectionKey::of(key, m));
         if let Some(kind) = selecting {
             let before = self.sheet_selection.replace(place.selection.clone());
-            let said = crate::apps::windows::excel::selection_said(before.as_deref(), place, kind)?;
+            let said = crate::spreadsheet::selection_said(before.as_deref(), place, kind)?;
             self.speech.speak(&said, true);
             return Some(said);
         }
@@ -945,7 +945,7 @@ impl ScreenReaderEngine {
     pub(crate) fn ask_sheet(
         &mut self,
         cells: crate::actions::SheetCells,
-        ask: crate::apps::windows::excel::SheetAsk,
+        ask: crate::spreadsheet::SheetAsk,
     ) -> bool {
         let asked = self
             .actions
@@ -1049,9 +1049,7 @@ impl ScreenReaderEngine {
             event.key,
             Key::Control | Key::Alt | Key::Shift | Key::Windows | Key::Insert | Key::CapsLock
         );
-        if !modifier
-            && crate::apps::windows::excel::SelectionKey::of(event.key, event.modifiers).is_none()
-        {
+        if !modifier && crate::spreadsheet::SelectionKey::of(event.key, event.modifiers).is_none() {
             self.sheet_selection = None;
         }
         self.last_key_letter = matches!(event.key, Key::Alpha(_))
@@ -1831,7 +1829,7 @@ impl ScreenReaderEngine {
                 entries,
             } => self.sheet_list(*kind, column, entries),
             AccessibilityEvent::SheetPlace(place) => {
-                use crate::apps::windows::excel::SheetAsk;
+                use crate::spreadsheet::SheetAsk;
                 match self.sheet_asks.pop_front()? {
                     SheetAsk::Reading(reading) => {
                         let said = reading.said(place.as_ref()?)?;

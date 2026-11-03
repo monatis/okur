@@ -1224,8 +1224,9 @@ impl ScreenReaderEngine {
     /// An Okur key command (Insert+…). In a text field the reading commands read the field;
     /// elsewhere they run as virtual cursor or application commands.
     /// One of Excel's title keys in a sheet; false elsewhere, the key left to the rest.
-    fn sheet_title_key(&mut self, key: crate::apps::windows::excel::TitleKey) -> bool {
-        use crate::apps::windows::excel::{self, SheetReading, TitleKey};
+    fn sheet_title_key(&mut self, key: crate::spreadsheet::TitleKey) -> bool {
+        use crate::apps::windows::excel;
+        use crate::spreadsheet::{SheetReading, TitleKey};
         let Some(focus) = self.last_native_focus.clone().filter(excel::in_sheet) else {
             return false;
         };
@@ -1247,7 +1248,10 @@ impl ScreenReaderEngine {
         };
         // Without the titles set, nothing to say [hyp: not recorded].
         if let Some(reading) = reading {
-            if self.ask_sheet(reading.cells(), excel::SheetAsk::Reading(reading)) {
+            if self.ask_sheet(
+                reading.cells(),
+                crate::spreadsheet::SheetAsk::Reading(reading),
+            ) {
                 self.key_since_focus = false;
             }
         }
@@ -1302,13 +1306,13 @@ impl ScreenReaderEngine {
         }
         // Excel's titles: Insert+Ctrl+Alt+C and R set them, the Okur key with Alt+Shift and C or
         // R says them [obs, 1132/s1, s2, s7, s8].
-        if let Some(key) = crate::apps::windows::excel::TitleKey::of(event.key, m) {
+        if let Some(key) = crate::spreadsheet::TitleKey::of(event.key, m) {
             if self.sheet_title_key(key) {
                 return;
             }
         }
         // Excel's row and column readers, the active cell's row and column asked for first.
-        if let Some(reading) = crate::apps::windows::excel::SheetReading::of(event) {
+        if let Some(reading) = crate::spreadsheet::SheetReading::of(event) {
             let in_sheet = self
                 .last_native_focus
                 .as_ref()
@@ -1316,7 +1320,7 @@ impl ScreenReaderEngine {
             if in_sheet
                 && self.ask_sheet(
                     reading.cells(),
-                    crate::apps::windows::excel::SheetAsk::Reading(reading),
+                    crate::spreadsheet::SheetAsk::Reading(reading),
                 )
             {
                 self.key_since_focus = false;
@@ -1328,9 +1332,9 @@ impl ScreenReaderEngine {
         // of Excel. Insert+Delete is Word's line and column elsewhere.
         let details = match event.key {
             _ if m.ctrl || m.shift || m.alt || m.win => None,
-            Key::Alpha('F') => Some(crate::apps::windows::excel::SheetReading::Format),
-            Key::Enter => Some(crate::apps::windows::excel::SheetReading::ColumnTotal),
-            Key::Delete => Some(crate::apps::windows::excel::SheetReading::RowTotal),
+            Key::Alpha('F') => Some(crate::spreadsheet::SheetReading::Format),
+            Key::Enter => Some(crate::spreadsheet::SheetReading::ColumnTotal),
+            Key::Delete => Some(crate::spreadsheet::SheetReading::RowTotal),
             _ => None,
         };
         if let Some(reading) = details.filter(|_| {
@@ -1340,7 +1344,7 @@ impl ScreenReaderEngine {
         }) {
             if self.ask_sheet(
                 reading.cells(),
-                crate::apps::windows::excel::SheetAsk::Reading(reading),
+                crate::spreadsheet::SheetAsk::Reading(reading),
             ) {
                 self.key_since_focus = false;
                 return;
@@ -1354,12 +1358,9 @@ impl ScreenReaderEngine {
                 self.speech.speak(&said, true);
                 return;
             }
-            let cell = crate::apps::windows::excel::SheetReading::Cell;
+            let cell = crate::spreadsheet::SheetReading::Cell;
             if focus.is_some_and(crate::apps::windows::excel::in_sheet)
-                && self.ask_sheet(
-                    cell.cells(),
-                    crate::apps::windows::excel::SheetAsk::Reading(cell),
-                )
+                && self.ask_sheet(cell.cells(), crate::spreadsheet::SheetAsk::Reading(cell))
             {
                 self.key_since_focus = false;
                 return;

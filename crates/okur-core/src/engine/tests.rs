@@ -9385,7 +9385,7 @@ fn excel_answers_go_to_their_asks_in_turn() {
     let window = "Hours.xlsx - Excel";
     engine.sheet_titles.insert(
         window.to_owned(),
-        crate::apps::windows::excel::SheetTitles {
+        crate::spreadsheet::SheetTitles {
             row: Some(1),
             column: None,
         },

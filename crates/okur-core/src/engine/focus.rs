@@ -137,7 +137,7 @@ impl ScreenReaderEngine {
             .map(|titles| (titles.row, titles.column));
         if self.ask_sheet(
             crate::actions::SheetCells::Around(titles),
-            crate::apps::windows::excel::SheetAsk::Cell,
+            crate::spreadsheet::SheetAsk::Cell,
         ) {
             return None;
         }

@@ -30,6 +30,7 @@ pub mod settings;
 pub mod settings_layers;
 pub mod sound;
 pub mod speech;
+pub mod spreadsheet;
 pub mod text_analysis;
 pub mod ui;
 pub mod viewer;

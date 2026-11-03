@@ -70,7 +70,7 @@ pub struct AppContext<'a> {
     pub office_menu_closed: bool,
     /// The titles of the workbook in front, set with Excel's Insert+Ctrl+Alt+C and R or given by
     /// its names; `None` before they are known.
-    pub sheet_titles: Option<crate::apps::windows::excel::SheetTitles>,
+    pub sheet_titles: Option<crate::spreadsheet::SheetTitles>,
 }
 
 impl AppContext<'_> {

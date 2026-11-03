@@ -17,7 +17,7 @@
       "why": "the engine knows no window class or process: say it in the platform or an app module"
     },
     "engine_app_references": {
-      "count": 45,
+      "count": 24,
       "mode": "block",
       "why": "the engine reaches application modules through the AppModule contract only"
     },
