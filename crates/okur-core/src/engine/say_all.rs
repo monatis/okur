@@ -265,7 +265,7 @@ impl ScreenReaderEngine {
     }
 
     /// Say All in Word's document, once its paragraphs came: from the caret's paragraph to the
-    /// end, each said with its structure ([`crate::apps::windows::word::say_all_pieces`]).
+    /// end, each said with its structure ([`crate::document::say_all_pieces`]).
     pub(super) fn say_all_by_paragraphs(
         &mut self,
         paragraphs: &[crate::event::DocumentParagraph],
@@ -277,7 +277,7 @@ impl ScreenReaderEngine {
         let pieces = if paragraphs.is_empty() {
             crate::editing::lines_from_caret(context)
         } else {
-            crate::apps::windows::word::say_all_pieces(context, paragraphs)
+            crate::document::say_all_pieces(context, paragraphs)
         };
         self.begin_say_all(0, Source::Field(pieces), true)
     }

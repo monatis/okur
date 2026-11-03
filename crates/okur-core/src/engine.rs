@@ -1470,7 +1470,7 @@ impl ScreenReaderEngine {
                     .last_text
                     .as_ref()
                     .filter(|_| self.editing_text())
-                    .and_then(crate::apps::windows::word::note_at_caret)
+                    .and_then(crate::document::note_at_caret)
                 {
                     self.speech.speak(&said, true);
                     return KeyAction::Consume;
@@ -1480,16 +1480,13 @@ impl ScreenReaderEngine {
             // is the application's elsewhere.
             if event.key == Key::Apostrophe && m.alt && m.shift && !m.ctrl && !m.insert {
                 let context = self.last_text.clone().filter(|_| self.editing_text());
-                if let Some(said) = context
-                    .as_ref()
-                    .and_then(crate::apps::windows::word::comment_at_caret)
-                {
+                if let Some(said) = context.as_ref().and_then(crate::document::comment_at_caret) {
                     // Twice quickly, the comment in the Virtual Viewer with the text it is on,
                     // read whole [obs, 1095/s6].
                     let twice = self.pressed_twice(Press::Application(event.key, m), event.time_ms);
                     let viewer = context
                         .as_ref()
-                        .and_then(crate::apps::windows::word::comment_viewer)
+                        .and_then(crate::document::comment_viewer)
                         .filter(|_| twice && self.viewer.is_none());
                     let said = match viewer {
                         Some(lines) => {
@@ -1797,7 +1794,7 @@ impl ScreenReaderEngine {
             AccessibilityEvent::Menu(menu) => self.handle_menu_event(menu.clone()),
             AccessibilityEvent::Change { kind, control } => self.handle_change(*kind, control),
             AccessibilityEvent::TextContext(context) => {
-                let shown = crate::apps::windows::word::as_shown(context);
+                let shown = crate::document::as_shown(context);
                 self.handle_text_context(shown.as_ref().unwrap_or(context))
             }
             AccessibilityEvent::ConsoleText(text) => self.console_text(text),
@@ -3293,8 +3290,7 @@ impl ScreenReaderEngine {
                     None
                 }
                 crate::apps::windows::word::RevisionKey::Announce => {
-                    let said =
-                        crate::apps::windows::word::announce_revision(self.last_text.as_ref()?);
+                    let said = crate::document::announce_revision(self.last_text.as_ref()?);
                     self.speech.speak(&said, true);
                     Some(said)
                 }
@@ -3415,7 +3411,7 @@ impl ScreenReaderEngine {
             self.speech.speak(&speech, false);
             return Some(speech);
         }
-        let lines = crate::apps::windows::word::notes_viewer_lines(kind, notes)?;
+        let lines = crate::document::notes_viewer_lines(kind, notes)?;
         let viewer = crate::viewer::VirtualViewer::new(lines);
         let speech = format!("{}\n{edit}", viewer.line_text());
         self.viewer = Some(viewer);
@@ -3470,7 +3466,7 @@ impl ScreenReaderEngine {
         let said = self
             .last_text
             .as_ref()
-            .and_then(|text| crate::apps::windows::word::font(text, spacing.as_ref()))?;
+            .and_then(|text| crate::document::font(text, spacing.as_ref()))?;
         self.speech.speak(&said, true);
         Some(said)
     }
@@ -3565,9 +3561,7 @@ impl ScreenReaderEngine {
                                 .get(entry.node_id)
                                 .and_then(|(_, kind)| *kind);
                             if let Some(kind) = kind {
-                                if let Some(processing) =
-                                    crate::apps::windows::word::notes_processing(kind)
-                                {
+                                if let Some(processing) = crate::document::notes_processing(kind) {
                                     self.speech.speak(&processing, true);
                                 }
                                 if actions.read_document_notes(kind) {
@@ -3595,9 +3589,7 @@ impl ScreenReaderEngine {
                                     .map(|n| {
                                         let mark = n
                                             .revision
-                                            .and_then(
-                                                crate::apps::windows::word::revision_kind_mark,
-                                            )
+                                            .and_then(crate::document::revision_kind_mark)
                                             .unwrap_or_default();
                                         format!("{} {mark}", n.text.trim()).trim().to_owned()
                                     })

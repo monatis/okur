@@ -5,7 +5,6 @@
 //! and pairs the next one with the key that was pressed. Observations are from
 //! `305-desktop-edit-review` (a WinForms edit, 5 trials), cited as `305/sN`.
 
-use crate::apps::windows::word;
 use crate::event::TextContext;
 use crate::input::{Key, KeyEvent};
 use crate::messages::msg;
@@ -61,7 +60,7 @@ pub enum EditKey {
     BottomOfFile,
     /// Tab, or JAWS's table keys (Ctrl+Alt+arrows, Home, End), in a table of Word's: the cell
     /// moved to, said for the way it was reached [obs, 1034/s10-s12; 518/s15; 1035].
-    TableCell(word::CellMove),
+    TableCell(crate::document::CellMove),
     /// Tab or Shift+Tab among a document's form fields (a form of Word's protected for filling
     /// in): the field moved to, "Member: check box not checked" [obs, 1056/s2-s4].
     FormField,
@@ -683,13 +682,13 @@ pub fn speech_in(
     // A character key onto a footnote's or endnote's reference in Word says it, "end note i"
     // [obs, 1092/s6, s13].
     if key == EditKey::Character {
-        if let Some(reference) = word::reference_at_caret(after) {
+        if let Some(reference) = crate::document::reference_at_caret(after) {
             return Some(reference);
         }
     }
     // A form field of Word's at the caret is said as a control, "Name: Edit", whatever key
     // brought the caret there [obs, 1055/s4, s7; 1056].
-    if let Some(field) = word::form_field_at(after).filter(|_| {
+    if let Some(field) = crate::document::form_field_at(after).filter(|_| {
         matches!(
             key,
             EditKey::Character
@@ -705,18 +704,18 @@ pub fn speech_in(
                 | EditKey::BottomOfFile
         )
     }) {
-        return word::around_line(
+        return crate::document::around_line(
             key,
             before,
             after,
-            word::form_field_speech(after, field, key == EditKey::FormField),
+            crate::document::form_field_speech(after, field, key == EditKey::FormField),
         );
     }
     let said = match key {
         EditKey::Silent => return None,
-        EditKey::TableCell(how) => return word::cell_speech(before, after, how),
+        EditKey::TableCell(how) => return crate::document::cell_speech(before, after, how),
         EditKey::FormField => return None,
-        EditKey::FormFieldState => return word::form_field_state(after),
+        EditKey::FormFieldState => return crate::document::form_field_state(after),
         EditKey::Character | EditKey::DeleteForward => {
             char_at(after).map_or_else(|| msg::blank().to_string(), |c| c.to_string())
         }
@@ -728,7 +727,7 @@ pub fn speech_in(
             "{}{}{}",
             misspelled_word_mark(after).unwrap_or_default(),
             or_line_break(word_at(after, plain_edit)),
-            word::revision_mark(after)
+            crate::document::revision_mark(after)
                 .map(|mark| format!(
                     "
 {mark}"
@@ -738,11 +737,11 @@ pub fn speech_in(
         EditKey::Line | EditKey::BrowsePage { .. } => format!(
             "{}{}",
             misspelled_mark(after).unwrap_or_default(),
-            or_line_break(word::spoken_line(after, line_at(after)))
+            or_line_break(crate::document::spoken_line(after, line_at(after)))
         ),
         EditKey::SelectCharacter | EditKey::SelectWord => {
             // A note's reference of Word's taken in, which the text does not show.
-            if let Some(said) = word::reference_selection(before, after) {
+            if let Some(said) = crate::document::reference_selection(before, after) {
                 return Some(said);
             }
             // The text, then the word: "Hello, selected", "world. Unselected" [obs, 529/s12,
@@ -781,14 +780,14 @@ pub fn speech_in(
                 msg::text_top_of_file().to_string(),
                 msg::text_top_of_file_short().to_string(),
             ),
-            &word::spoken_line(after, line_at(after)),
+            &crate::document::spoken_line(after, line_at(after)),
         )?,
         EditKey::BottomOfFile => edge_of_file(
             wording.message(
                 msg::text_bottom_of_file().to_string(),
                 msg::text_bottom_of_file_short().to_string(),
             ),
-            &word::spoken_line(after, line_at(after)),
+            &crate::document::spoken_line(after, line_at(after)),
         )?,
         EditKey::DeleteBackward => {
             let deleted = deleted_before_caret(before, after);
@@ -847,7 +846,7 @@ pub fn speech_in(
         }
         EditKey::SayLine => {
             // A heading of Word's with its level [obs, 518/s1].
-            let line = word::spoken_line(after, line_at(after).trim().to_owned());
+            let line = crate::document::spoken_line(after, line_at(after).trim().to_owned());
             if line.trim().is_empty() {
                 field.to_owned()
             } else {
@@ -860,7 +859,7 @@ pub fn speech_in(
             }
         }
     };
-    word::around_line(key, before, after, said)
+    crate::document::around_line(key, before, after, said)
 }
 
 #[cfg(test)]

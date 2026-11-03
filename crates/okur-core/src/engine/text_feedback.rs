@@ -21,7 +21,7 @@ impl ScreenReaderEngine {
             && self
                 .last_text
                 .as_ref()
-                .and_then(crate::apps::windows::word::form_field_at)
+                .and_then(crate::document::form_field_at)
                 .is_some_and(|f| f.kind == crate::event::FormFieldKind::DropDown)
         {
             self.word_list_from_field = true;
@@ -64,7 +64,7 @@ impl ScreenReaderEngine {
             && !m.win
             && self.in_document_table())
         .then_some(crate::editing::EditKey::TableCell(
-            crate::apps::windows::word::CellMove::Next,
+            crate::document::CellMove::Next,
         ));
         // Tab among a form's fields, Space on its check box [obs, 1056, 1057].
         let form_key = self
@@ -174,8 +174,8 @@ impl ScreenReaderEngine {
         &mut self,
         event: &KeyEvent,
     ) -> Option<crate::input::KeyAction> {
-        use crate::apps::windows::word::CellMove;
         use crate::command::Command;
+        use crate::document::CellMove;
         let command = crate::command::command_for(event)?;
         let (rows, columns): (isize, isize) = match command {
             Command::TableCellRight => (0, 1),
@@ -196,7 +196,7 @@ impl ScreenReaderEngine {
         };
         let (row, column, how) = match command {
             Command::SayCurrentCell => {
-                if let Some(said) = crate::apps::windows::word::cell_focus(context, false) {
+                if let Some(said) = crate::document::cell_focus(context, false) {
                     self.speech.speak(&said, true);
                 }
                 return Some(crate::input::KeyAction::Consume);
@@ -370,14 +370,14 @@ impl ScreenReaderEngine {
         // box's hint, "Branch: Combo box | Northside | 2 of 3 | To change the selection use
         // the Arrow keys." [obs, 1057/s9].
         if self.word_list_from_field && !self.menus.in_menu_mode() {
-            if let Some(field) = crate::apps::windows::word::form_field_at(context)
+            if let Some(field) = crate::document::form_field_at(context)
                 .filter(|f| f.kind == crate::event::FormFieldKind::DropDown)
             {
                 self.word_list_from_field = false;
                 self.pending_edit = None;
                 let said = format!(
                     "{}\n{}",
-                    crate::apps::windows::word::form_field_speech(context, field, false),
+                    crate::document::form_field_speech(context, field, false),
                     msg::hint_change_selection_arrows()
                 );
                 self.speech.speak(&said, true);

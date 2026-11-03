@@ -153,13 +153,13 @@ impl ScreenReaderEngine {
                     && self
                         .last_text
                         .as_ref()
-                        .and_then(crate::apps::windows::word::document_focus)
+                        .and_then(crate::document::document_focus)
                         .is_some() =>
             {
                 let speech = self
                     .last_text
                     .as_ref()
-                    .and_then(crate::apps::windows::word::document_focus)?;
+                    .and_then(crate::document::document_focus)?;
                 self.speech.speak(&speech, true);
                 return Some(speech);
             }
@@ -1371,7 +1371,7 @@ impl ScreenReaderEngine {
                 .last_text
                 .as_ref()
                 .filter(|_| self.in_word_document())
-                .and_then(crate::apps::windows::word::line_and_column);
+                .and_then(crate::document::line_and_column);
             if let Some(said) = said {
                 self.speech.speak(&said, true);
                 return;
@@ -1428,14 +1428,10 @@ impl ScreenReaderEngine {
                     let speech = if document {
                         // A form field of Word's at the caret, as a control [obs, 1056/s1];
                         // a heading of Word's with its level [obs, 518/s1].
-                        crate::apps::windows::word::form_field_at(&context)
-                            .map(|field| {
-                                crate::apps::windows::word::form_field_speech(
-                                    &context, field, false,
-                                )
-                            })
+                        crate::document::form_field_at(&context)
+                            .map(|field| crate::document::form_field_speech(&context, field, false))
                             .or_else(|| {
-                                Some(crate::apps::windows::word::spoken_line(
+                                Some(crate::document::spoken_line(
                                     &context,
                                     crate::editing::line_at(&context)
                                         .trim_matches(|c: char| c.is_whitespace() || c == '﻿')
@@ -1721,7 +1717,7 @@ impl ScreenReaderEngine {
             .filter(|_| {
                 !in_viewer && self.app_mode != AppMode::VirtualBuffer && self.editing_text()
             })
-            .and_then(|text| crate::apps::windows::word::font(text, None))
+            .and_then(|text| crate::document::font(text, None))
         {
             if self
                 .actions
@@ -2062,7 +2058,7 @@ impl ScreenReaderEngine {
                         .to_owned();
                     format!(
                         "{}\n{}",
-                        crate::apps::windows::word::spoken_line(t, line),
+                        crate::document::spoken_line(t, line),
                         crate::linearize::role_marker(msg::role_edit().as_str())
                     )
                 });
