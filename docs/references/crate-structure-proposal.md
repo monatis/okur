@@ -407,3 +407,80 @@ The owner, 2026-11-03: the default, for each of the six.
 5. **Size ratchet**: should files over 1,500 lines that may not grow block commits, or only
    report? Default: report until step 5 ends, then block.
 6. **`cargo-deny` or the metadata script** for R1–R3? Default: the script.
+
+## 13. Second pass (2026-11-03), before steps 4 to 6
+
+A second, read-only review of the structure at `ceb00ead`, asked for by the owner before
+cross-platform work ([`../backlog/performance-review-2026-11-03.md`](../backlog/performance-review-2026-11-03.md),
+T1 to T11). Its quick wins are in `153a5c4d`. What it changes in this proposal:
+
+### 13.1 Step 4, revised, as seven commits
+
+Each with P1, P2 and P5; 4.2 and 4.5 also with P4.
+
+1. **4.1 (S), clean in place.** Delete the macOS stubs (`hook/macos.rs`, `events/macos.rs`
+   report success while doing nothing) and the `cfg` factories that choose an implementation
+   inside the driver (the composition root chooses); the program passes the settings and log
+   folders; `load_aom_from_path` (`run.rs`) moves to the core's `aom`; one `com::init_mta()`
+   for the 16 copies of the same `CoInitializeEx` call in `okur-windows`.
+2. **4.2 (S, live path), speech built on its own thread.** `SpeechThread::start` takes a
+   factory, and `TtsManager` a `SynthesizerFactory` the platform supplies: the first
+   synthesizer is built on the main thread today and its restarts on the speech thread. No COM
+   hook is needed (the synthesizers start COM themselves).
+3. **4.3 (S-M), create `okur-runtime`.** Neutral; it depends on `okur-core`, `okur-ui-model`,
+   tokio, tracing and the serialization crates, **not** on the `xa11y` facade (which pulls every
+   platform's backend into its dependency closure). Its ports: `KeyboardHook`, `EventSource`
+   with an `EventSink` (not tokio's sender in the signature), `TtsEngine`, `SynthesizerFactory`,
+   `UiSpawner` (the lowered-token start and the foreground grant), `RuntimeError`; with the
+   mocks.
+4. **4.4 (M), the neutral runtime code moves:** `TtsManager`, `SpeechLog`, `SpeechThread`,
+   `settings_file`, `ui_host`, with their 30 tests; the portable CI job adds `okur-runtime`.
+5. **4.5 (L, live path), the event loop.** `okur_runtime::run(Platform, Config)` takes
+   `run.rs`'s loop, the hook callback with its key deadlines and the exit order, and
+   `init_logging` (which removes the known edge `okur-lab -> okur`). A new
+   `crates/okur/src/windows.rs` keeps Windows' start-up: DPI awareness, the desktop taken, the
+   control pipe, the session-end watcher, the elevation note, the screen reader flag, the
+   console. The program owns the instance lock and the flag and drops them after `run`
+   returns, as today.
+6. **4.6 (S), the driver gated once** (`#![cfg(windows)]` at its root, its per-item stubs
+   gone); `okur`, `okur-setup` and `okur-lab` take it as a `cfg(windows)` dependency; the lab's
+   neutral subcommands (parity, invariants, corpus-manifest, evidence, aria-at-report, latency)
+   build everywhere.
+7. **4.7 (S), `bridge.rs` and the non-Windows start branch deleted** (the third converter to
+   the AOM).
+
+Rule R2 gains R2b: a neutral crate's resolved dependency closure, per target, holds no
+platform API crate (R2 checks declared dependencies only).
+
+### 13.2 Step 5, split
+
+- **5a (M, mechanical, proved by parity; before or beside step 4):** Word's and Excel's
+  renderers, pure functions of neutral types, move to `okur-core/src/document/` and
+  `okur-core/src/spreadsheet.rs` (about 40 of the 85 references); `AppMode`'s shell variants
+  become module state; the six window-class literals become converter-supplied kinds; the
+  `AppModule` contract names capabilities, not `excel::SheetTitles`.
+- **5b (XL, SDK M2):** Word's and Excel's commands, keys and asynchronous state, the
+  `*_asked` flags replaced by request ids carried on the answers.
+
+### 13.3 Before macOS, not in the steps above
+
+- **The key model** (T5): the hook reports physical modifiers; `resolve` gives a chord with the
+  Okur key apart; a host key table per platform maps chords to edit keys (Windows' is today's
+  code, macOS's Cocoa's text bindings); the platform gives the default Okur key.
+- **`FocusEvent` and `PlatformIds`** (T8): facts only modules read in a section of their own;
+  the dialog facts as a dialog context; `PlatformIds` per OS.
+- **`ApplicationActions`** split into capability traits (T9).
+- **The synthesizer an id from the platform's registry**, rates documented as Okur's own scale,
+  locale formats as tokens (T10).
+- **Parity through a `PlatformModel` trait** (load a snapshot, read a trace), so a macOS model
+  plugs in beside `okur-windows-model`; the portable job's crate list from a `portable` flag in
+  `crate-layers.json`; `engine/tests.rs` split by area (T11).
+
+### 13.4 Order
+
+1. Done: the quick wins and honest ratchets (`153a5c4d`).
+2. Step 5a.
+3. Step 4 as 4.1 to 4.7.
+4. The key model, `FocusEvent` and `PlatformIds`, the synthesizer id and locale tokens.
+5. `ApplicationActions` split and request ids, with step 5b (SDK M2) and M3a.
+6. Step 6 (`okur-apps`, the caller choosing modules by the data's platform), then step 7.
