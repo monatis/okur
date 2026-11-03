@@ -12,6 +12,14 @@ refactored better to support cross-platform functionality. after that work, you 
 other JAWS features. that you can discover from the settings center or help / user manuals.
 I'll let you know when the update goes live."
 
+**Status (2026-11-03,
+[`../handoff/2026-11-03-review-round-2-first-fixes.md`](../handoff/2026-11-03-review-round-2-first-fixes.md)):**
+§1 done (the review in
+[`../backlog/performance-review-2026-11-03.md`](../backlog/performance-review-2026-11-03.md), the
+structure's revision in the proposal's §13); §2.1 begun: P1 (in part), P2, P5, P6, P7, P9, P10,
+P11, P14 and T1 to T3 fixed, the macOS stubs deleted. Next: the review's open items (P4, P8,
+P3, P1's pieces, P15), then step 5a, then step 4 as 4.1 to 4.7.
+
 Rules as before: a finding is checked against the code before it is fixed; a fix has a test
 that fails without it; a refactor changes nothing a user hears (the proposal's proofs P1 to P5,
 §11.1); figures are copied from tools; the dev box is shared (cargo on 4 cores, one heavy job

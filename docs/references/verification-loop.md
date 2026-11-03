@@ -396,6 +396,16 @@ the morning. This is how it was done; it needs fresh permission each time.
   (2026-11-03) Device Manager's arrows sent with UI Access (`okur-lab-keys`) gave no speech
   either; Insert chords, which JAWS's hook takes, did. Not settled: whether the key reaches
   `mmc` and JAWS stays silent, or the key is lost.
+- **Office's Activation Wizard blocks its windows from closing.** Office on old-pc is not
+  activated: now and then Word or Excel opens "Microsoft Office Activation Wizard" over the
+  fixture, and every close then answers "Word can't do this because a dialog box is open"
+  (2026-11-03). The fixture window stays ("did not close"), the next scenario of the same
+  application starts in it, and the focus can land on the message bar's "Learn more about how
+  to activate this Office product" link. Live runs of 1113 and 1115 that day were spoiled by
+  it. Dismiss the wizard (Close), then close the window ("Don't Save" for a fixture); keep
+  Document Recovery's files ("Yes, I want to view these files later"), which are the owner's
+  to remove. Before a round of Word or Excel scenarios, check that no `WINWORD` or `EXCEL` is
+  left running.
 
 ## 9. Open questions to settle on old-pc
 
