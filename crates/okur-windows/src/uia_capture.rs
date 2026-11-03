@@ -531,10 +531,31 @@ pub(crate) fn column_headers_of(
         let by_type = |id: UIA_CONTROLTYPE_ID| {
             uia.CreatePropertyCondition(UIA_ControlTypePropertyId, &VARIANT::from(id.0))
         };
+        /// Children looked at for the header, which comes before a list's items.
+        const HEADER_SEARCH: usize = 4;
         let headers = || -> windows::core::Result<Vec<String>> {
-            let parent = uia.ControlViewWalker()?.GetParentElement(focused)?;
-            let header =
-                parent.FindFirst(TreeScope_Children, &by_type(UIA_HeaderControlTypeId)?)?;
+            let walker = uia.ControlViewWalker()?;
+            let parent = walker.GetParentElement(focused)?;
+            // The header is among the list's first children, before its items. Searching all
+            // of them for it realized every item of a XAML list: 1.1 s for each focus in
+            // Windows Settings' 155 apps (old-pc, 2026-11-03).
+            let mut child = walker.GetFirstChildElement(&parent).ok();
+            let mut found = None;
+            for _ in 0..HEADER_SEARCH {
+                let Some(element) = child else { break };
+                let kind = element.CurrentControlType()?;
+                if kind == UIA_HeaderControlTypeId {
+                    found = Some(element);
+                    break;
+                }
+                if kind == UIA_ListItemControlTypeId || kind == UIA_DataItemControlTypeId {
+                    break;
+                }
+                child = walker.GetNextSiblingElement(&element).ok();
+            }
+            let Some(header) = found else {
+                return Ok(Vec::new());
+            };
             // The headers' names come with them, in one call: asked of each header, a
             // list's every focus made a call per column (performance review 2026-10-23,
             // P14).
