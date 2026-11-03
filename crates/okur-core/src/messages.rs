@@ -132,11 +132,20 @@ impl StaticMessage {
     /// The catalog's `<name>-<suffix>`, without variables, where it has one: its short form
     /// and description, and a setting's name in the settings tree (`-tree`, `-quick`).
     pub fn suffixed(self, suffix: &str) -> Option<StaticMessage> {
+        // The messages without variables by their names, made once: Settings Center's search
+        // asks for each setting's name and description at every letter typed, and a scan of
+        // the whole catalog for each (second review, 2026-11-03, P14).
+        static PLAIN: std::sync::OnceLock<std::collections::HashMap<&'static str, MessageId>> =
+            std::sync::OnceLock::new();
+        let plain = PLAIN.get_or_init(|| {
+            MessageId::ALL
+                .iter()
+                .filter(|id| id.variables().is_empty())
+                .map(|id| (id.id(), *id))
+                .collect()
+        });
         let name = format!("{}-{suffix}", self.0.id());
-        MessageId::ALL
-            .iter()
-            .find(|id| id.id() == name && id.variables().is_empty())
-            .map(|id| StaticMessage::new(*id))
+        plain.get(name.as_str()).map(|id| StaticMessage::new(*id))
     }
 }
 
