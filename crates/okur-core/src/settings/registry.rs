@@ -508,20 +508,18 @@ pub static SETTINGS: &[SettingSpec] = &[
     // The reading highlight (JAWS's visual tracking), on as JAWS draws it; in no dialog of
     // Okur's until JAWS's own control for it is observed: the settings file and --set.
     spec("visual_tracking", Group::Reading, None, CHECK),
-    // How often a page's progress bars are said as they change; in no dialog of Okur's until
-    // JAWS's own control for it is observed: the settings file and --set.
+    // How often a page's progress bars are said as they change: Settings Center's Progress Bar
+    // Updates Announcement, in its tree and search; no access key is left for the dialog.
     SettingSpec {
         jaws: default_jcf("Options", "ProgressBarUpdateInterval", |v| {
             v.trim().parse::<u32>().map_or(Value::Null, Value::from)
         }),
+        tree_label: Some(msg::settings_tree_progress_bar_updates),
         ..spec(
             "progress_bar_interval_ms",
             Group::Reading,
             None,
-            Kind::Range {
-                min: 0,
-                max: 60_000,
-            },
+            Kind::Choice(progress_bar_updates),
         )
     },
     // JAWS's Mouse Echo group (Settings Center help), in its order.
@@ -963,6 +961,27 @@ impl Choices for MouseEchoUnit {
     }
 }
 
+/// Settings Center's choices for Progress Bar Updates Announcement, as the milliseconds JAWS keeps
+/// in `ProgressBarUpdateInterval`: Off is 0 and Announce All is 1 (both saved and read on old-pc,
+/// 2026-11-04), 5 Second Intervals the default.
+fn progress_bar_updates() -> Vec<Choice> {
+    [
+        (0_u32, msg::settings_progress_bar_updates_off()),
+        (1, msg::settings_progress_bar_updates_all()),
+        (5_000, msg::settings_progress_bar_updates_5_seconds()),
+        (10_000, msg::settings_progress_bar_updates_10_seconds()),
+        (30_000, msg::settings_progress_bar_updates_30_seconds()),
+        (60_000, msg::settings_progress_bar_updates_1_minute()),
+        (300_000, msg::settings_progress_bar_updates_5_minutes()),
+    ]
+    .into_iter()
+    .map(|(ms, label)| Choice {
+        value: Value::from(ms),
+        label,
+    })
+    .collect()
+}
+
 /// JAWS's user verbosity levels.
 impl Choices for VerbosityLevel {
     const ALL: &'static [Self] = &[Self::Beginner, Self::Intermediate, Self::Advanced];
@@ -1061,6 +1080,22 @@ mod tests {
     }
 
     /// Every enum setting offers all of its values: typing echo's four, not two.
+    /// Progress Bar Updates Announcement offers Settings Center's seven choices, by the
+    /// milliseconds JAWS keeps: Off 0, Announce All 1, and 5 Second Intervals, the default.
+    #[test]
+    fn progress_bar_updates_offer_settings_centers_seven_choices() {
+        let choices = progress_bar_updates();
+        let values: Vec<Value> = choices.iter().map(|c| c.value.clone()).collect();
+        assert_eq!(
+            values,
+            [0, 1, 5_000, 10_000, 30_000, 60_000, 300_000].map(Value::from)
+        );
+        let label = |at: usize| choices.get(at).map(|c| c.label.to_string());
+        assert_eq!(label(1).as_deref(), Some("Announce All"));
+        assert_eq!(label(2).as_deref(), Some("5 Second Intervals"));
+        assert_eq!(Settings::default().progress_bar_interval_ms, 5_000);
+    }
+
     #[test]
     fn choices_offer_every_value() {
         assert_eq!(choices::<TypingEcho>().len(), 4);

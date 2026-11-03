@@ -495,6 +495,17 @@ settings-tree-indentation = Say Indented Characters
 settings-tree-indentation-description = Whether a line's indentation is said as it is read.
 settings-tree-mouse-echo-interrupt = Mouse Echo Interrupt
 settings-tree-mouse-echo-interrupt-description = Whether the mouse moving onto text stops what is being said.
+# Settings Center's Progress Bar Updates Announcement (JAWS 2025 on old-pc, 2026-11-04), its seven
+# choices by their names there.
+settings-tree-progress-bar-updates = Progress Bar Updates Announcement
+settings-tree-progress-bar-updates-description = How often a progress bar's changes are said while the focus is elsewhere: never, every change, or at most once in each interval.
+settings-progress-bar-updates-off = Off
+settings-progress-bar-updates-all = Announce All
+settings-progress-bar-updates-5-seconds = 5 Second Intervals
+settings-progress-bar-updates-10-seconds = 10 Second Intervals
+settings-progress-bar-updates-30-seconds = 30 Second Intervals
+settings-progress-bar-updates-1-minute = 1 Minute Intervals
+settings-progress-bar-updates-5-minutes = 5 Minute Intervals
 settings-tree-mouse-echo-description = Speak description of item
 settings-tree-mouse-echo-description-description = Whether the mouse's item is read with its description.
 settings-tree-mouse-echo-control = Speak control type and state of item
