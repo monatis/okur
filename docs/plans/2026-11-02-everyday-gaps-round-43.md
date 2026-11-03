@@ -30,7 +30,12 @@ heavy job at a time, no swarms of subagents). A fix replay cannot reach is check
    Next, with the owner: install it on old-pc from the Store
    (https://apps.microsoft.com/detail/restricted/9NV0FM5H54X8) and answer E1's question there:
    does `okur-sr.exe` start with UI Access (`okur doctor`, a password dialog, an elevated
-   window).
+   window). **Answered 2026-11-03**: the owner installed it from the Store on old-pc, and
+   `okur-sr.exe --doctor-exit` there reports `TokenUIAccess 1` and "reads elevated windows
+   yes" with the program itself unsigned: the Store's signature is enough
+   ([`../references/microsoft-store-release-research.md`](../references/microsoft-store-release-research.md),
+   §8). Still to see: the Store's Okur reading an elevated window, and its Ease of Access
+   registration.
 3. The other Store experiments (E2-E7) with the test identity `Okur.LabTest` and October's
    development certificate (already trusted on old-pc), now with the startup task's start and
    the restart after an update (review S2) among them.

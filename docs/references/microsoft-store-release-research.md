@@ -797,6 +797,34 @@ Store, then `okur-sr.exe --doctor-exit`. `build-msix.ps1 -ProgramCertificateThum
 the programs before packing when a certificate exists, and warns when a UI Access package is
 built without it.
 
+**The Store install answers it (old-pc, 2026-11-03).** The owner installed the Private-audience
+submission from the Store on old-pc (`Monatis.okur` 1.0.0.0,
+`C:\Program Files\WindowsApps\Monatis.okur_1.0.0.0_x64__rfy6yt361pz56`), signed in to the
+Store. Activated as the Start menu does
+(`store-e1\activate.ps1 -App 'Monatis.okur_rfy6yt361pz56!Okur' -Arguments '--doctor-exit
+<file>'`: `hr 0x00000000`), `okur-sr.exe` reported:
+
+```
+executable                           C:\Program Files\WindowsApps\Monatis.okur_1.0.0.0_x64__rfy6yt361pz56\okur-sr.exe
+integrity                            High (0x3000)
+TokenUIAccess                        1
+elevated                             no (limited token)
+reads elevated windows               yes
+signature                            not signed
+manifest                             level=asInvoker uiAccess=true
+```
+
+So the Store's signature of the package is enough: the program itself carries no signature,
+and Windows started it with UI Access, which a sideloaded package signed the same way did not
+get (result 3 above). Okur needs no code-signing certificate of its own for UI Access through
+the Store. Not yet checked: Okur started normally from the Store reading an elevated window
+(it needs a UAC consent on old-pc), and a standard user's install.
+
+The `AT key` the report shows (`StartExe C:\Program Files\Okur\okur-sr.exe`) is left from an
+earlier `okur-setup` install on old-pc, not the package's: a Store install writes no HKLM key,
+so registering the Store's Okur for Ease of Access is still to design (§5, "The sign-in screen
+and secure desktops: not from a package").
+
 **Before the owner submits:**
 
 1. Defender's `Bearfoos.A!ml` detection is resolved, or the built binaries are confirmed not
