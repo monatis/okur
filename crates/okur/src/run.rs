@@ -11,7 +11,6 @@
 use okur_core::{AomNode, Role, VirtualBuffer};
 use okur_runtime::host::{say_to_console, Config, ExitSender, Exits, Platform};
 use okur_runtime::SpeechLog;
-use okur_windows::PlatformBridge;
 use std::path::Path;
 use std::sync::Mutex;
 
@@ -265,26 +264,11 @@ pub async fn run(config: RunConfig) {
             }
             Err(e) => fail(console, &format!("Failed to load fixture: {e}")),
         }
-    } else if cfg!(windows) {
+    } else {
         // Live, the event listener starts with the focus as it is (a page is loaded
         // when that focus is in one), as any later focus change.
         let empty_doc = AomNode::new(0, Role::Document);
         (VirtualBuffer::from_aom(&empty_doc), false)
-    } else {
-        match PlatformBridge::new().get_active_document(None) {
-            Ok(aom) => {
-                say_to_console(
-                    console,
-                    "Attached to live active foreground document via OS accessibility APIs.",
-                );
-                (VirtualBuffer::from_aom(&aom), true)
-            }
-            Err(_) => {
-                say_to_console(console, "Operating in live native navigation mode.");
-                let empty_doc = AomNode::new(0, Role::Document);
-                (VirtualBuffer::from_aom(&empty_doc), false)
-            }
-        }
     };
 
     // Every way out comes here: the runtime takes it from the first.

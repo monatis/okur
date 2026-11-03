@@ -5,12 +5,12 @@
 #![cfg(windows)]
 
 pub mod actions;
-pub mod bridge;
 pub mod clock;
 pub mod com;
 pub mod desktop;
 pub mod ease_of_access;
 pub mod elevation;
+pub mod error;
 pub mod event_capture;
 pub mod events;
 pub mod excel_om;
@@ -38,7 +38,7 @@ pub mod virtual_desktop;
 pub mod window_text;
 pub mod word_om;
 
-pub use bridge::{PlatformBridge, PlatformError};
+pub use error::PlatformError;
 pub use tts::{
     synthesizer_named, NoSpeechEngine, Sapi5Engine, TtsEngine, TtsError, VoiceInfo,
     WindowsSynthesizers,
