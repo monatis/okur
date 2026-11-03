@@ -8,7 +8,7 @@
   "reset": { "keys": ["Escape", "Ctrl+Home"] },
   "steps": [
     { "id": "s1", "type": "key", "command": "Tab" },
-    { "id": "s2", "type": "key", "command": "Enter", "onset_ms": 16000, "quiet_ms": 7000, "settle_max_ms": 30000 },
+    { "id": "s2", "type": "key", "command": "Enter", "onset_ms": 16000, "quiet_ms": 9000, "settle_max_ms": 40000 },
     { "id": "s3", "type": "key", "command": "Down" },
     { "id": "s4", "type": "key", "command": "Down" },
     { "id": "s5", "type": "key", "command": "Down" }

@@ -1,0 +1,611 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Progress Bars Fixture - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.80",
+    "fixture_sha256": "e3014a88a86c2e228a95708a26bc101ae70ada778573da442339a2bec640544a",
+    "captured_at_unix_ms": 1793742395316,
+    "node_count": 17,
+    "capture_ms": 146
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Progress Bars Fixture",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/progress-bars.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "unique_id": -850,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼￼￼￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        6
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "24pt",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "start": 1,
+        "end": 6,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1044,
+        "name": "Progress bars",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -848,
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "group_position": [
+          1,
+          0,
+          0
+        ],
+        "text": "Progress bars",
+        "lines": [
+          [
+            0,
+            13
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 13,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Progress bars",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -858,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Progress bars",
+            "lines": [
+              [
+                0,
+                13
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 13,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -840,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "A button starts both bars below on one schedule.",
+        "lines": [
+          [
+            0,
+            48
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 48,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "A button starts both bars below on one schedule.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -843,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "A button starts both bars below on one schedule.",
+            "lines": [
+              [
+                0,
+                48
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 48,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -852,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "￼",
+        "lines": [
+          [
+            0,
+            1
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(240,240,240)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Arial",
+              "font-size": "10pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 43,
+            "ia2_role": 43,
+            "name": "Start upload",
+            "default_action": "press",
+            "msaa_states": 1048576,
+            "ia2_states": 1024,
+            "unique_id": -846,
+            "attributes": {
+              "display": "inline-block",
+              "id": "start",
+              "name-from": "contents",
+              "tag": "button",
+              "text-align": "center"
+            },
+            "text": "Start upload",
+            "lines": [
+              [
+                0,
+                12
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 12,
+                "attributes": {
+                  "background-color": "rgb(240,240,240)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Arial",
+                  "font-size": "10pt"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -842,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 2,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 42,
+            "ia2_role": 1049,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -853,
+            "attributes": {
+              "display": "inline",
+              "tag": "label",
+              "text-align": "left"
+            },
+            "text": "Upload",
+            "lines": [
+              [
+                0,
+                6
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 6,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "relations": {
+              "labelFor": [
+                -847
+              ]
+            },
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Upload",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -860,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Upload",
+                "lines": [
+                  [
+                    0,
+                    6
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 6,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 48,
+            "ia2_role": 48,
+            "name": "Upload",
+            "value": "0",
+            "value_min": 0.0,
+            "value_max": 100.0,
+            "msaa_states": 64,
+            "ia2_states": 1024,
+            "unique_id": -847,
+            "attributes": {
+              "display": "inline-block",
+              "explicit-name": "true",
+              "id": "upload",
+              "name-from": "related-element",
+              "tag": "progress",
+              "text-align": "left",
+              "valuetext": "0"
+            },
+            "relations": {
+              "labelledBy": [
+                -853
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -835,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 2,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 20,
+            "ia2_role": 1060,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -855,
+            "attributes": {
+              "display": "inline",
+              "id": "sync-label",
+              "tag": "span",
+              "text-align": "left"
+            },
+            "text": "Sync",
+            "lines": [
+              [
+                0,
+                4
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 4,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "relations": {
+              "labelFor": [
+                -837
+              ]
+            },
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Sync",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -857,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Sync",
+                "lines": [
+                  [
+                    0,
+                    4
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 4,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 48,
+            "ia2_role": 48,
+            "name": "Sync",
+            "value": "0",
+            "value_min": 0.0,
+            "value_max": 100.0,
+            "msaa_states": 64,
+            "ia2_states": 1024,
+            "unique_id": -837,
+            "attributes": {
+              "display": "inline-block",
+              "explicit-name": "true",
+              "id": "sync",
+              "name-from": "related-element",
+              "tag": "span",
+              "text-align": "left",
+              "valuetext": "0",
+              "xml-roles": "progressbar"
+            },
+            "relations": {
+              "labelledBy": [
+                -855
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -856,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Text after the bars.",
+        "lines": [
+          [
+            0,
+            20
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 20,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Text after the bars.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -845,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Text after the bars.",
+            "lines": [
+              [
+                0,
+                20
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 20,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
