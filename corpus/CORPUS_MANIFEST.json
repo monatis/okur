@@ -22453,13 +22453,13 @@
       "scenario_id": "3155-desktop-settings-apps-list",
       "fixture": "desktop-settings-apps.ps1",
       "evidence": {
-        "sha256": "74ab95e7a4d79b9c6e227b3e67faa9ee953c4a1bbafac60763e3b2a5cf3adeb8",
+        "sha256": "f5fd321f795a67f08d6f06f8d5c5bdce226e911987d1a197254d7c402c8068a4",
         "capture_script_sha256": "d69800ff332382d97cd717deef8d56c9d6b996cbb5409282f0afc608a2647876",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
         "successful_trials": 3,
-        "deterministic": false,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -29161,6 +29161,6 @@
     "scenarios_with_evidence": 1918,
     "total_trials": 5760,
     "successful_trials": 5743,
-    "deterministic_scenarios": 1599
+    "deterministic_scenarios": 1600
   }
 }
