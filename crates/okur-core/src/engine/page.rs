@@ -1241,16 +1241,8 @@ fn added_lines<'a>(old: &[String], new: &[&'a str]) -> Vec<&'a str> {
     if old.len() <= new.len() && same(old, new.get(..old.len()).unwrap_or_default()) {
         return new.get(old.len()..).unwrap_or_default().to_vec();
     }
-    // The longest end of the old lines that begins the new ones.
-    let kept = (1..old.len().min(new.len()).saturating_add(1))
-        .rev()
-        .find(|&k| {
-            same(
-                old.get(old.len() - k..).unwrap_or_default(),
-                new.get(..k).unwrap_or_default(),
-            )
-        });
-    if let Some(kept) = kept {
+    let kept = overlap(old, new);
+    if kept > 0 {
         return new.get(kept..).unwrap_or_default().to_vec();
     }
     let start = old
@@ -1266,6 +1258,41 @@ fn added_lines<'a>(old: &[String], new: &[&'a str]) -> Vec<&'a str> {
         .take_while(|(o, n)| o.as_str() == **n)
         .count();
     new.get(start..new.len() - end).unwrap_or_default().to_vec()
+}
+
+/// The length of the longest end of `old` that begins `new`, found with the prefix function
+/// of `new` (Knuth, Morris and Pratt) in time linear in their lengths: trying each length in
+/// turn, comparing that many lines, was quadratic for a long log of repeated lines
+/// (performance review 2026-11-03, P12).
+fn overlap<O, N>(old: &[O], new: &[N]) -> usize
+where
+    N: PartialEq + PartialEq<O>,
+{
+    // prefix[i]: the length of the longest proper prefix of new[..=i] that also ends it.
+    let mut prefix = vec![0_usize; new.len()];
+    let mut k = 0;
+    for (i, line) in new.iter().enumerate().skip(1) {
+        while k > 0 && new.get(k) != Some(line) {
+            k = prefix.get(k - 1).copied().unwrap_or(0);
+        }
+        if new.get(k) == Some(line) {
+            k += 1;
+        }
+        if let Some(at) = prefix.get_mut(i) {
+            *at = k;
+        }
+    }
+    // Through the old lines, how much of `new` their end has matched.
+    let mut matched = 0;
+    for line in old {
+        while matched > 0 && new.get(matched).is_none_or(|n| n != line) {
+            matched = prefix.get(matched - 1).copied().unwrap_or(0);
+        }
+        if new.get(matched).is_some_and(|n| n == line) {
+            matched += 1;
+        }
+    }
+    matched
 }
 
 /// Quiet ticks (the live screen reader's are 150 ms apart) before a growing live region's
@@ -1542,7 +1569,8 @@ mod tests {
 
 #[cfg(test)]
 mod live_region_tests {
-    use super::added_lines;
+    use super::{added_lines, overlap};
+    use std::cell::Cell;
 
     fn lines(text: &[&str]) -> Vec<String> {
         text.iter().map(|l| (*l).to_owned()).collect()
@@ -1565,5 +1593,85 @@ mod live_region_tests {
         assert_eq!(added_lines(&old, &["x", "y"]), vec!["x", "y"]);
         assert_eq!(added_lines(&old, &["a", "c"]), Vec::<&str>::new());
         assert_eq!(added_lines(&[], &["a"]), vec!["a"]);
+    }
+
+    /// The longest end of `old` that begins `new`, as its definition says: tried for every
+    /// length.
+    fn overlap_by_definition(old: &[String], new: &[&str]) -> usize {
+        (1..=old.len().min(new.len()))
+            .rev()
+            .find(|&k| {
+                let end = old.get(old.len() - k..).unwrap_or_default();
+                let start = new.get(..k).unwrap_or_default();
+                end.iter().zip(start).all(|(o, n)| o == n)
+            })
+            .unwrap_or(0)
+    }
+
+    /// Every sequence of up to `longest` lines of "a" and "b".
+    fn sequences(longest: usize) -> Vec<Vec<&'static str>> {
+        let mut all = vec![Vec::new()];
+        let mut last: Vec<Vec<&'static str>> = vec![Vec::new()];
+        for _ in 0..longest {
+            last = last
+                .iter()
+                .flat_map(|s| {
+                    ["a", "b"].map(|line| {
+                        let mut s = s.clone();
+                        s.push(line);
+                        s
+                    })
+                })
+                .collect();
+            all.extend(last.iter().cloned());
+        }
+        all
+    }
+
+    /// The end of the old lines kept at the start of the new ones is the one its definition
+    /// gives, for every pair of sequences of up to six lines.
+    #[test]
+    fn the_end_kept_is_found_as_its_definition_finds_it() {
+        let all = sequences(6);
+        for old in &all {
+            let old = lines(old);
+            for new in &all {
+                assert_eq!(
+                    overlap(&old, new),
+                    overlap_by_definition(&old, new),
+                    "{old:?} {new:?}"
+                );
+            }
+        }
+    }
+
+    /// A line that counts the comparisons made of it.
+    struct Counted<'a>(&'static str, &'a Cell<usize>);
+
+    impl PartialEq for Counted<'_> {
+        fn eq(&self, other: &Self) -> bool {
+            self.1.set(self.1.get() + 1);
+            self.0 == other.0
+        }
+    }
+
+    /// A long log of one line repeated, its region changed to end otherwise, is searched in
+    /// a number of comparisons linear in its length: trying each length in turn made about
+    /// two million for these two thousand lines (performance review 2026-11-03, P12).
+    #[test]
+    fn a_long_log_of_repeated_lines_is_searched_in_linear_time() {
+        let count = Cell::new(0);
+        let lines = 2_000;
+        let old: Vec<Counted> = (0..lines)
+            .map(|_| Counted("same", &count))
+            .chain(std::iter::once(Counted("last", &count)))
+            .collect();
+        let new: Vec<Counted> = (0..lines).map(|_| Counted("same", &count)).collect();
+        assert_eq!(overlap(&old, &new), 0);
+        assert!(
+            count.get() <= 4 * (old.len() + new.len()),
+            "{} comparisons",
+            count.get()
+        );
     }
 }
