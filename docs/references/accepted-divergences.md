@@ -1655,6 +1655,18 @@ A step can be in more than one entry; all of its entries apply.
 - Decided under the owner's rules on JAWS's accidents and for the web (AGENTS.md §1.2),
   2026-11-01.
 
+### A list that fills after its window opens
+
+- Step: `3156-desktop-programs-and-features/s1` (whole step).
+- Difference: Insert+Tab right after Programs and Features opens: JAWS reads the list's first
+  program ("FolderView List view | Not Selected 7-Zip 18.05 (x64) | ... | 1 of 119"); Okur
+  says "FolderView List view".
+- Why: Explorer gives the list the focus as the window comes to the front, and fills it a few
+  seconds later, with no focus event. Okur read the focus when it came, the list still empty;
+  JAWS reads the list again when Insert+Tab is pressed. Okur is not slower: the list loads
+  asynchronously.
+- Decided by the owner, 2026-11-03.
+
 ## Considered and not accepted
 
 - From a newer JAWS (2025.2508.120, ARIA-AT's reports), not followed: Insert+Up on a menu

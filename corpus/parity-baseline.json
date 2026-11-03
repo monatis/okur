@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
   "matched_steps": 11458,
-  "total_steps": 12043,
-  "accepted_divergences": 365,
+  "total_steps": 12042,
+  "accepted_divergences": 366,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -5182,7 +5182,7 @@
     "3155-desktop-settings-apps-list/s7": "mismatch",
     "3155-desktop-settings-apps-list/s8": "mismatch",
     "3155-desktop-settings-apps-list/s9": "mismatch",
-    "3156-desktop-programs-and-features/s1": "mismatch",
+    "3156-desktop-programs-and-features/s1": "accepted divergence",
     "3156-desktop-programs-and-features/s10": "match",
     "3156-desktop-programs-and-features/s11": "match",
     "3156-desktop-programs-and-features/s12": "match",

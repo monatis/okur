@@ -1754,6 +1754,15 @@ divergences! {
      context menu first. Okur says the menu as JAWS's trials without them do: \"File menu | New \
      Ctrl+N | To move through items press up or down arrow.\".",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-29";
+
+    Difference::Step => [
+        "3156-desktop-programs-and-features/s1",
+    ],
+    "Insert+Tab right after Programs and Features opens: JAWS reads the list's first program \
+     (\"FolderView List view | Not Selected 7-Zip 18.05 (x64) | ... | 1 of 119\"), Okur says \
+     the list as its focus was when the window came to the front: Explorer fills the list a \
+     few seconds later, without a focus event. The list's loading, not Okur's reading.",
+    "the owner, 2026-11-03";
 }
 
 /// The divergence covering `step`, if any.
