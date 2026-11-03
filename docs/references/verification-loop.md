@@ -406,6 +406,14 @@ the morning. This is how it was done; it needs fresh permission each time.
   Document Recovery's files ("Yes, I want to view these files later"), which are the owner's
   to remove. Before a round of Word or Excel scenarios, check that no `WINWORD` or `EXCEL` is
   left running.
+- **A second voice, with a bookmark between every word.** In some of Okur's live runs on
+  old-pc, the speech recorder hears an announcement Okur has already made said again a few
+  seconds later, split into words with a SAPI bookmark between each, which Okur never sends
+  and Okur's own log does not have (2026-11-03: 3159 and 1113 before that day's changes, 3155
+  after; in 3155 at the same offset, 5.7 s after Tab, at both of its list steps). The step
+  then waits out its 10 s for silence and the trial fails (`settled: false`). Who speaks is
+  not found yet (JAWS is stopped for such runs). Count `bookmark` actions in the run's file
+  before reading a slow or failed live trial as Okur's.
 
 ## 9. Open questions to settle on old-pc
 

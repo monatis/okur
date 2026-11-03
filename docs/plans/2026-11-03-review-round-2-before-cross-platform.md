@@ -13,15 +13,16 @@ other JAWS features. that you can discover from the settings center or help / us
 I'll let you know when the update goes live."
 
 **Status (2026-11-03,
-[`../handoff/2026-11-03-review-round-2-first-fixes.md`](../handoff/2026-11-03-review-round-2-first-fixes.md)):**
+[`../handoff/2026-11-03-step-5a-and-okur-runtime.md`](../handoff/2026-11-03-step-5a-and-okur-runtime.md)):**
 §1 done (the review in
 [`../backlog/performance-review-2026-11-03.md`](../backlog/performance-review-2026-11-03.md), the
 structure's revision in the proposal's §13); §2.1 begun: P1 (in part), P2, P5, P6, P7, P9, P10,
-P11, P14 and T1 to T3 fixed, the macOS stubs deleted. Step 5a's renderers moved into the core
-(`crate::document`, `crate::spreadsheet`: `30725cf6`, `0553d7f8`; engine references to
-application modules 85 -> 24, parity identical). Next: the rest of step 5a (`AppMode`'s shell
-variants, the six window-class literals), the review's open items (P4, P8, P3, P1's pieces,
-P15; Word's and Excel's live checks wait for Office on old-pc), then step 4 as 4.1 to 4.7.
+P11, P14 and T1 to T3 fixed, the macOS stubs deleted. Step 5a done (`30725cf6`, `0553d7f8`, `c2b69712`,
+`93709ed9`: engine references to application modules 85 -> 23, no window class left in the
+engine); step 4 through 4.4 done (`05bc9c0c` to `13a02546`: `okur-runtime` with the ports,
+speech, the settings files and the UI host), parity identical throughout, live checks on
+old-pc. Next: 4.5 (the event loop), 4.6, 4.7, then the review's open items (P4, P8, P3, P1's
+pieces, P15; Word's and Excel's live checks wait for Office on old-pc).
 
 Rules as before: a finding is checked against the code before it is fixed; a fix has a test
 that fails without it; a refactor changes nothing a user hears (the proposal's proofs P1 to P5,

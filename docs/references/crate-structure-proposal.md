@@ -95,8 +95,8 @@ worked inside `okur-core`. It did not touch the crate structure.
 | Step | Then | Now |
 |---|---|---|
 | 1. `Command` values, one key map | done (`0a94da5`) | still holds (`Command::from_name`, `command.rs:467`); not re-audited here |
-| 2. No Win32 class or process name in `okur-core` outside `apps/` | done (`6185a8e`) | three class names are back in general code: `"#32768"` (`engine/focus.rs:14`), `"bosa_sdm_"` (`native_focus.rs:700`), `"ToggleSwitch"` (`native_focus.rs:567`) |
-| 3. `AppModule`; "the engine has no `if app == ...` branches" | done for 7 modules (`2fc61b5`) | 13 modules now. Word and Excel, added from 2026-10-24, are reached directly (section 6). `AppMode` still has `NativeDesktop`, `NativeShell` and `NativeExplorer` (`engine/state.rs:6-13`). Command handling in modules moved to SDK M2 and is not done. |
+| 2. No Win32 class or process name in `okur-core` outside `apps/` | done (`6185a8e`) | three class names were back in general code (`"#32768"`, `"bosa_sdm_"`, `"ToggleSwitch"`); since `c2b69712` the converter supplies them as facts, and R5 blocks at 0 |
+| 3. `AppModule`; "the engine has no `if app == ...` branches" | done for 7 modules (`2fc61b5`) | 13 modules now. Word and Excel, added from 2026-10-24, are reached directly (section 6). `AppMode`'s `NativeDesktop`, `NativeShell` and `NativeExplorer` became `Shell` and `Application`, each named by its module (`93709ed9`). Command handling in modules moved to SDK M2 and is not done. |
 | 4. Announcements as data | partial | role marks are still written by hand in 73 places in 15 production files (`speech.rs` 33, `word.rs` 9, `cursor.rs` 7, …) |
 | 5. Separate fixes | 2 done | not re-checked |
 | macOS backend | "later" | `hook/macos.rs` (44 lines) and `events/macos.rs` (45 lines) are stubs. There is no macOS speech, actions or clock. |
@@ -479,8 +479,11 @@ platform API crate (R2 checks declared dependencies only).
 ### 13.4 Order
 
 1. Done: the quick wins and honest ratchets (`153a5c4d`).
-2. Step 5a.
-3. Step 4 as 4.1 to 4.7.
+2. Step 5a: done (`30725cf6`, `0553d7f8`, `c2b69712`, `93709ed9`).
+3. Step 4 as 4.1 to 4.7: 4.1 done (`05bc9c0c`; `load_aom_from_path` went to `okur-windows-model`'s
+   `uia_snapshot::load_aom`, beside the snapshot format, not to the core), 4.2 done (`47514a2b`),
+   4.3 done (`94439938`), 4.4 done (`36b9d672`, `13a02546`; the `UiSpawner` port came with the
+   UI host, not in 4.3).
 4. The key model, `FocusEvent` and `PlatformIds`, the synthesizer id and locale tokens.
 5. `ApplicationActions` split and request ids, with step 5b (SDK M2) and M3a.
 6. Step 6 (`okur-apps`, the caller choosing modules by the data's platform), then step 7.
