@@ -267,6 +267,18 @@ struct Deferred {
     id_child: i32,
 }
 
+/// How long a focus left out for its window not being in front waits for that window to come
+/// to the front.
+const FOCUS_BEFORE_FRONT: std::time::Duration = std::time::Duration::from_secs(3);
+
+thread_local! {
+    /// The last focus left out for its window not being in front, and when. Explorer focuses
+    /// a window's list before the window comes to the front, then reports only the
+    /// foreground: Programs and Features opened cold was silent (old-pc, 2026-11-03), where
+    /// JAWS reads it. The focus is read when its window comes to the front.
+    static FOCUS_BEHIND: RefCell<Option<(Deferred, std::time::Instant)>> = const { RefCell::new(None) };
+}
+
 /// The most events kept waiting: past it the oldest are dropped, since the newest say where
 /// the focus is now, and their count is logged once the queue drains (performance review
 /// 2026-10-25, 20).
@@ -2152,6 +2164,15 @@ fn record_at(
         // running behind Chrome, reported its search box focused while the page kept the
         // focus, and JAWS said nothing of it (221, old-pc, 2026-10-18).
         if name == "focus" && in_background_process(hwnd) {
+            let behind = Deferred {
+                t_ms,
+                name,
+                win_event,
+                hwnd,
+                id_object,
+                id_child,
+            };
+            FOCUS_BEHIND.with(|f| *f.borrow_mut() = Some((behind, std::time::Instant::now())));
             return;
         }
         // Nor are its changes recorded: nothing replays them, and the taskbar's news and
@@ -2263,6 +2284,11 @@ fn record_at(
             || changes_focus_context
             || name == "uia_selected";
         let asked = match (element, state.uia.as_ref()) {
+            // A WinEvent focus is its window's: UI Automation can still give the last focus as
+            // the window comes to the front, and the focus would be taken for a repeat of it.
+            (None, Some(uia)) if name == "focus" => {
+                xa11y_windows::uia_element::focus_in_window(uia, hwnd)
+            }
             (None, Some(uia)) if reads_focus => focused_element(uia),
             _ => None,
         };
@@ -2710,6 +2736,32 @@ fn record_at(
         (state.sink)(event);
         state.count += 1;
     });
+    // A focus left out while its window was not yet in front is read as the window comes to
+    // the front: Explorer focused Programs and Features' list before showing it, and sent no
+    // focus after (old-pc, 2026-11-03).
+    if name == "foreground" {
+        let behind = FOCUS_BEHIND.with(|f| f.borrow_mut().take());
+        if let Some((focus, at)) = behind.filter(|(_, at)| at.elapsed() < FOCUS_BEFORE_FRONT) {
+            use windows::Win32::UI::WindowsAndMessaging::{GetAncestor, GA_ROOT};
+            // SAFETY: plain Win32 queries on window handles; a window that is gone gives none.
+            let same = unsafe { GetAncestor(focus.hwnd, GA_ROOT) == GetAncestor(hwnd, GA_ROOT) };
+            if same {
+                tracing::debug!(
+                    waited_ms = at.elapsed().as_millis(),
+                    "focus read as its window came to the front"
+                );
+                record_at(
+                    t_ms,
+                    focus.name,
+                    focus.win_event,
+                    focus.hwnd,
+                    focus.id_object,
+                    focus.id_child,
+                    None,
+                );
+            }
+        }
+    }
 }
 
 /// Delivers accessibility events to `sink` until `keep_running` says to stop, as the

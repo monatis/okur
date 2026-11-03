@@ -95,6 +95,35 @@ pub fn nth_list_item(
     }
 }
 
+/// UI Automation's focused element for a focus event in `window`, unless UI Automation still
+/// gives a window outside `window`'s top-level window: then `window`'s own element. Windows
+/// sends an application's focus as its window comes to the front while UI Automation can still
+/// answer with the last focus (the taskbar, as Programs and Features first opened on old-pc,
+/// 2026-11-03).
+pub fn focus_in_window(
+    uia: &IUIAutomation,
+    window: windows::Win32::Foundation::HWND,
+) -> Option<IUIAutomationElement> {
+    use windows::Win32::UI::WindowsAndMessaging::{GetAncestor, GA_ROOT};
+    // SAFETY: UIA client calls on a valid automation object; plain Win32 queries on window
+    // handles, a handle that is gone giving none.
+    unsafe {
+        let focused = uia.GetFocusedElement().ok();
+        let elsewhere = focused.as_ref().is_some_and(|element| {
+            element
+                .CurrentNativeWindowHandle()
+                .ok()
+                .filter(|handle| !handle.is_invalid())
+                .is_some_and(|handle| GetAncestor(handle, GA_ROOT) != GetAncestor(window, GA_ROOT))
+        });
+        if elsewhere && !window.is_invalid() {
+            uia.ElementFromHandle(window).ok().or(focused)
+        } else {
+            focused
+        }
+    }
+}
+
 /// The names of the texts directly in window `hwnd`'s element, in order, in the control view:
 /// a Store app's core window gives its own title and its page's ("Settings", "System"). At
 /// most `max_children` children are looked at.
