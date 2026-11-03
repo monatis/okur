@@ -420,6 +420,14 @@ the morning. This is how it was done; it needs fresh permission each time.
   within its `onset_ms` (800 ms by default), whatever its `quiet_ms`: a progress bar's
   announcements seconds after Space were never waited for (1136's first recording, and
   likely 533/s8). Give such a step an `onset_ms` as long as the wait for its first words.
+- **JAWS's Settings Center, read through its speech.** It runs elevated: our tools cannot
+  read it, and only JAWS's `TypeKey`/`TypeString` reach it, while JAWS says what it shows. Over
+  an application without a configuration of its own, Insert+6 first opens "Add New
+  Configuration"; Escape there opens the Default (All Applications) settings with the focus in
+  the search box; `TypeString("progress")` finds a setting ("Progress Bar Updates Announcement
+  1 of 1 Search Results"), Tab reaches it, and Space steps through its choices ("10 Second
+  Intervals 4 of 7") without saving. Two Escapes then end on "Do you want to save them? Yes":
+  answer `TypeKey("n")`, and check that the user's `DEFAULT.JCF` hash is unchanged (2026-11-04).
 
 ## 9. Open questions to settle on old-pc
 
