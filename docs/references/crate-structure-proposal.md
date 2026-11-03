@@ -483,7 +483,9 @@ platform API crate (R2 checks declared dependencies only).
 3. Step 4 as 4.1 to 4.7: 4.1 done (`05bc9c0c`; `load_aom_from_path` went to `okur-windows-model`'s
    `uia_snapshot::load_aom`, beside the snapshot format, not to the core), 4.2 done (`47514a2b`),
    4.3 done (`94439938`), 4.4 done (`36b9d672`, `13a02546`; the `UiSpawner` port came with the
-   UI host, not in 4.3).
+   UI host, not in 4.3), 4.5 done (`e5b05dbf`; Windows' start stayed in `okur/src/run.rs`), 4.6
+   done (`2eebd1a6`; `okur` and `okur-setup` moved their programs into their libraries, `cli`
+   and `program`), 4.7 done (`573bc638`). Step 4 is done.
 4. The key model, `FocusEvent` and `PlatformIds`, the synthesizer id and locale tokens.
 5. `ApplicationActions` split and request ids, with step 5b (SDK M2) and M3a.
 6. Step 6 (`okur-apps`, the caller choosing modules by the data's platform), then step 7.

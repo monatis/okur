@@ -412,8 +412,11 @@ the morning. This is how it was done; it needs fresh permission each time.
   and Okur's own log does not have (2026-11-03: 3159 and 1113 before that day's changes, 3155
   after; in 3155 at the same offset, 5.7 s after Tab, at both of its list steps). The step
   then waits out its 10 s for silence and the trial fails (`settled: false`). Who speaks is
-  not found yet (JAWS is stopped for such runs). Count `bookmark` actions in the run's file
-  before reading a slow or failed live trial as Okur's.
+  not found yet. The runner stops JAWS for such runs, but JAWS on old-pc speaks through SAPI 5,
+  and a bookmark per word is how a screen reader follows its own speech: whether `jfw` comes
+  back during the run is the first thing to look at (not checked). It was heard again on
+  2026-11-04 in 3155, 3158 and 510. Count `bookmark` actions in the run's file before reading
+  a slow or failed live trial as Okur's.
 
 ## 9. Open questions to settle on old-pc
 

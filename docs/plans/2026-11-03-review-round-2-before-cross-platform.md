@@ -12,17 +12,19 @@ refactored better to support cross-platform functionality. after that work, you 
 other JAWS features. that you can discover from the settings center or help / user manuals.
 I'll let you know when the update goes live."
 
-**Status (2026-11-03,
-[`../handoff/2026-11-03-step-5a-and-okur-runtime.md`](../handoff/2026-11-03-step-5a-and-okur-runtime.md)):**
+**Status (2026-11-04,
+[`../handoff/2026-11-04-step-4-done.md`](../handoff/2026-11-04-step-4-done.md)):**
 §1 done (the review in
 [`../backlog/performance-review-2026-11-03.md`](../backlog/performance-review-2026-11-03.md), the
 structure's revision in the proposal's §13); §2.1 begun: P1 (in part), P2, P5, P6, P7, P9, P10,
 P11, P14 and T1 to T3 fixed, the macOS stubs deleted. Step 5a done (`30725cf6`, `0553d7f8`, `c2b69712`,
 `93709ed9`: engine references to application modules 85 -> 23, no window class left in the
-engine); step 4 through 4.4 done (`05bc9c0c` to `13a02546`: `okur-runtime` with the ports,
-speech, the settings files and the UI host), parity identical throughout, live checks on
-old-pc. Next: 4.5 (the event loop), 4.6, 4.7, then the review's open items (P4, P8, P3, P1's
-pieces, P15; Word's and Excel's live checks wait for Office on old-pc).
+engine); step 4 done (`05bc9c0c` to `573bc638`: `okur-runtime` runs the screen reader through
+the ports a platform gives it; the Windows driver is gated at its root; the workspace checks
+for Linux with no warning), parity identical throughout, live checks on old-pc. Next: the
+review's open items (P4, P8, P3, P1's pieces, P15; Word's and Excel's live checks wait for
+Office on old-pc), then JAWS's features from Settings Center and the help (§3); the rest of
+the proposal's §13.3 before macOS.
 
 Rules as before: a finding is checked against the code before it is fixed; a fix has a test
 that fails without it; a refactor changes nothing a user hears (the proposal's proofs P1 to P5,
