@@ -10,6 +10,14 @@ Store-installed program runs with UI Access (the research's §8). Submission 2 i
 submission of the same product; Partner Center starts it as a copy of submission 1, so only
 the pages below change. Everything else stays as submission 1 has it.
 
+**Where the draft stands (2026-11-03):** filled in as below on old-pc's Chrome and saved;
+nothing has been submitted. Partner Center's own status per page: Pricing and availability,
+Packages (1.1.0.0 validated, with the restricted-capability warning for `runFullTrust` and
+`uiAccess`; 1.0.0.0 removed) and Store listings "Updated"; Properties and Submission options
+"Unchanged"; Age ratings "Complete". Left for the owner: **Submit for certification**, after
+which the product is public for good. The texts went in through old-pc's clipboard: typed
+there, old-pc's Turkish keyboard layout drops spaces, digits and most punctuation.
+
 ### Packages
 
 Remove 1.0.0.0's package and upload
