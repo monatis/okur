@@ -63,6 +63,38 @@ pub fn find_by_runtime_id(
     }
 }
 
+/// The list item at `index` (from 0) among `list`'s children in the control view, stepping
+/// over the others (a details view's header): a Win32 list view's focused item, whose index
+/// the list view gives while UI Automation gives the list as the focus. At most `max_steps`
+/// children are looked at, each a call into the provider; `None` when `list` is not a list,
+/// or its items are not its children (a list in groups).
+pub fn nth_list_item(
+    uia: &IUIAutomation,
+    list: &IUIAutomationElement,
+    index: usize,
+    max_steps: usize,
+) -> Option<IUIAutomationElement> {
+    // SAFETY: UIA client calls on valid automation objects.
+    unsafe {
+        if list.CurrentControlType().ok()? != UIA_ListControlTypeId {
+            return None;
+        }
+        let walker = uia.ControlViewWalker().ok()?;
+        let mut element = walker.GetFirstChildElement(list).ok()?;
+        let mut items = 0;
+        for _ in 0..max_steps {
+            if element.CurrentControlType().ok()? == UIA_ListItemControlTypeId {
+                if items == index {
+                    return Some(element);
+                }
+                items += 1;
+            }
+            element = walker.GetNextSiblingElement(&element).ok()?;
+        }
+        None
+    }
+}
+
 /// The element's default action, by the first pattern it has: Invoke (a link or button),
 /// Toggle (a check box), SelectionItem (a radio button or tab), then MSAA's default action.
 pub fn do_default_action(element: &IUIAutomationElement) -> windows::core::Result<()> {

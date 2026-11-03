@@ -34,7 +34,7 @@ The non-native stubs (`WindowsProvider` off Windows, the macOS and Linux provide
 ## Planned extensions (phase 4)
 
 - Screen-reader properties in `ElementData`, added through the `ElementParts` completeness guard so every backend must map them: heading level, landmark type, PositionInSet/SizeOfSet, table cell row/column/spans, ARIA role and properties, live setting, and link URL.
-- Cached subtree capture as a first-class provider API, replacing `okur-windows::uia_snapshot`'s parallel UIA code. The snapshot format becomes serialized `ElementData` trees, which gives macOS the same harness.
+- Cached subtree capture as a first-class provider API, replacing `okur-windows`' parallel UIA code (`uia_capture.rs`, `event_capture.rs`). The snapshot format becomes serialized `ElementData` trees, which gives macOS the same harness. New UI Automation reads go here first, not into `okur-windows` (the gate's `uia_outside_xa11y` ratchet): `uia_element::nth_list_item` (2026-11-03), a Win32 list view's focused item.
 - The live event pipeline for the screen reader (focus, structure, text, live region and notifications), replacing `okur-windows/src/events/windows.rs`.
 
 ## Open items

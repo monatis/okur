@@ -490,6 +490,18 @@ fn process_image_of(pid: u32) -> Option<String> {
     }
 }
 
+/// The focused item's index of a Win32 list view (`LVM_GETNEXTITEM`), for a focus UI
+/// Automation gives as the list itself: Programs and Features entered with no program
+/// selected, where JAWS says "FolderView List view | Not Selected 7-Zip 18.05 (x64) | Igor
+/// Pavlov | ... | 1 of 119" [obs, 3156/s1].
+fn list_view_focused_index(hwnd: HWND, class: &str) -> Option<usize> {
+    if !class.to_ascii_uppercase().contains("SYSLISTVIEW32") {
+        return None;
+    }
+    let [index, _] = win32_list_position(hwnd, class)?;
+    usize::try_from(index).ok()
+}
+
 /// The selection of a Win32 combo box or list box as `[index, count]`, asked of the
 /// control itself (`CB_GETCURSEL`/`CB_GETCOUNT`, `LB_GETCURSEL`/`LB_GETCOUNT`). A
 /// collapsed WinForms combo box exposes no items through UIA, yet JAWS says "2 of 3".
@@ -2312,6 +2324,26 @@ fn record_at(
         let element = match (state.uia.as_ref(), element) {
             (Some(uia), Some(element)) if reads_focus => with_properties(uia, element),
             _ => None,
+        };
+        // A list view with the focus itself is read at its focused item, as a focus on the
+        // item is [obs, 3156/s1]: counted among the list's items, past a details view's
+        // header, each step a message to the list view.
+        const LIST_VIEW_STEPS: usize = 500;
+        let element = match (state.uia.as_ref(), element) {
+            (Some(uia), Some(list)) if focused && !uia_named && id_child == CHILDID_SELF => {
+                list_view_focused_index(hwnd, &class)
+                    .and_then(|index| {
+                        xa11y_windows::uia_element::nth_list_item(
+                            uia,
+                            &list,
+                            index,
+                            LIST_VIEW_STEPS,
+                        )
+                    })
+                    .and_then(|item| with_properties(uia, &item))
+                    .or(Some(list))
+            }
+            (_, element) => element,
         };
         stages.push(("properties", clock.elapsed().as_millis()));
         let element = element.as_ref();
