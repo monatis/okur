@@ -38,7 +38,6 @@ test = false
 bench = false
 
 [dependencies]
-okur = { path = "../okur" }
 okur-core = { workspace = true }
 okur-runtime = { workspace = true }
 okur-windows = { workspace = true }

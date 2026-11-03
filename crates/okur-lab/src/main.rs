@@ -749,7 +749,7 @@ fn init_logging(cli: &Cli) {
         Some(Commands::Trace { debug_log, .. }) => debug_log.as_deref(),
         _ => None,
     };
-    okur::run::init_logging(debug_log, false);
+    okur_runtime::logging::init_logging(debug_log, None, &["okur_windows", "okur"]);
 }
 
 #[tokio::main]

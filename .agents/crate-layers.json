@@ -70,11 +70,5 @@
     "xa11y-macos": { "kind": "vendored", "allow": ["xa11y-core"] },
     "xa11y-linux": { "kind": "vendored", "allow": ["xa11y-core"] }
   },
-  "known_edges": [
-    {
-      "from": "okur-lab",
-      "to": "okur",
-      "until": "step 4: logging and the AOM loader in okur-runtime"
-    }
-  ]
+  "known_edges": []
 }

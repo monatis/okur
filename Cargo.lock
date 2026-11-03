@@ -962,7 +962,6 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "csv",
- "okur",
  "okur-core",
  "okur-corpus",
  "okur-runtime",
@@ -991,6 +990,7 @@ dependencies = [
  "toml",
  "toml_edit",
  "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]

@@ -6,6 +6,8 @@
 pub mod error;
 pub mod events;
 pub mod hook;
+pub mod host;
+pub mod logging;
 pub mod settings_file;
 pub mod speech;
 pub mod synthesizer;

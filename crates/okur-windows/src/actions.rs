@@ -26,11 +26,11 @@ mod windows_actions {
         focus_has_taken_its_keys, read_focused, read_focused_outside_page, read_place_outside_page,
     };
     use okur_core::{AccessibilityEvent, TextContext};
+    use okur_runtime::EventSink;
     use okur_windows_model::node_ids::{runtime_id, unique_id};
     use std::sync::mpsc::{channel, Receiver, Sender};
     use std::sync::Mutex;
     use std::time::{Duration, Instant};
-    use tokio::sync::mpsc::UnboundedSender;
     use windows::Win32::Foundation::HWND;
     use windows::Win32::UI::Accessibility::IUIAutomation;
     use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
@@ -305,7 +305,7 @@ mod windows_actions {
 
     impl WindowsActions {
         /// `events` receives the text contexts read after edit keys.
-        pub fn start(events: Option<UnboundedSender<AccessibilityEvent>>) -> Self {
+        pub fn start(events: Option<EventSink>) -> Self {
             let (tx, rx) = channel::<Request>();
             let (bulk_tx, bulk_rx) = channel::<Request>();
             let bulk_events = events.clone();
@@ -319,7 +319,7 @@ mod windows_actions {
 
         /// One lane of the worker: its requests in order, each in a panic guard, so one that
         /// panics is logged and the lane goes on (performance review 2026-10-24, 5).
-        fn serve(rx: &Receiver<Request>, events: Option<&UnboundedSender<AccessibilityEvent>>) {
+        fn serve(rx: &Receiver<Request>, events: Option<&EventSink>) {
             crate::com::init_mta();
             // UI Automation's default lets an application take 20 s over an answer, and
             // every read and injected key queued behind it waited (performance review
