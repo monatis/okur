@@ -162,11 +162,20 @@ pub struct SpeechThread {
 }
 
 impl SpeechThread {
-    /// Moves `tts` to a new thread; its speech log stays with the caller.
-    pub fn start(mut tts: TtsManager) -> Self {
-        let log = tts.speech_log.take();
-        let voices = Arc::new(Mutex::new(SpeechOutput::voices(&tts)));
-        let tts = Arc::new(Mutex::new(tts));
+    /// Starts the speech thread, with the synthesizers `build` makes there, and waits until it
+    /// has: a synthesizer is made on the thread that calls it, as its restarts and its
+    /// changes are. The speech `log` stays with the caller.
+    pub fn start(
+        log: Option<SpeechLog>,
+        build: impl FnOnce() -> TtsManager + Send + 'static,
+    ) -> Self {
+        let voices = Arc::new(Mutex::new(Vec::new()));
+        // Silent until the thread has made its synthesizer.
+        let tts = Arc::new(Mutex::new(TtsManager::with_engine(
+            Box::new(super::NoSpeechEngine::new()),
+            okur_core::settings::Synthesizer::NoSpeech,
+        )));
+        let (made_tx, made_rx) = channel::<()>();
         let pending = Arc::new(AtomicUsize::new(0));
         let interruptions = Arc::new(AtomicU64::new(0));
         let worker_interruptions = Arc::clone(&interruptions);
@@ -178,9 +187,19 @@ impl SpeechThread {
         let started = std::thread::Builder::new()
             .name("okur-speech".to_owned())
             .spawn(move || {
-                // This thread calls the synthesizer.
-                #[cfg(windows)]
-                crate::com::init_mta();
+                // A synthesizer whose start panicked leaves speech silent, not Okur gone.
+                match std::panic::catch_unwind(std::panic::AssertUnwindSafe(build)) {
+                    Ok(made) => {
+                        if let Ok(mut known) = worker_voices.lock() {
+                            *known = SpeechOutput::voices(&made);
+                        }
+                        if let Ok(mut tts) = worker_tts.lock() {
+                            *tts = made;
+                        }
+                    }
+                    Err(_) => tracing::error!("the synthesizer's start panicked: no speech"),
+                }
+                let _ = made_tx.send(());
                 // Say All parts whose start the synthesizer reports are out, and the polls
                 // since it last made progress.
                 let mut following = false;
@@ -244,8 +263,11 @@ impl SpeechThread {
                     }
                 }
             });
-        if let Err(e) = started {
-            tracing::error!(error = %e, "the speech thread did not start: no speech");
+        match started {
+            Ok(_) => {
+                let _ = made_rx.recv();
+            }
+            Err(e) => tracing::error!(error = %e, "the speech thread did not start: no speech"),
         }
         Self {
             requests,
@@ -266,6 +288,14 @@ impl SpeechThread {
         if let Ok(mut to) = self.report_to.lock() {
             *to = Some(report);
         }
+    }
+
+    /// The name of the synthesizer speaking.
+    pub fn engine_name(&self) -> String {
+        self.tts
+            .lock()
+            .map(|tts| tts.engine_name().to_owned())
+            .unwrap_or_default()
     }
 
     /// What tells when speech has ended, kept by the host once the engine owns the thread.
@@ -662,7 +692,7 @@ mod tests {
         let (Ok(log), Ok(manager)) = (log, manager) else {
             return;
         };
-        let mut speech = SpeechThread::start(manager.with_speech_log(log));
+        let mut speech = SpeechThread::start(Some(log), move || manager);
         speech.stop();
         speech.speak("Count Button", true);
         let entries = SpeechLog::read(&path).unwrap_or_default();
@@ -819,7 +849,7 @@ mod mark_tests {
         if let Some(engine) = engine {
             manager.engine = engine;
         }
-        let speech = SpeechThread::start(manager);
+        let speech = SpeechThread::start(None, move || manager);
         let (tx, rx) = channel();
         speech.report_marks(Box::new(move |mark| {
             let _ = tx.send(mark);
@@ -864,7 +894,7 @@ mod mark_tests {
         let Ok(manager) = TtsManager::new(Synthesizer::NoSpeech) else {
             return;
         };
-        let speech = SpeechThread::start(manager);
+        let speech = SpeechThread::start(None, move || manager);
         assert!(!speech.reports_marks());
     }
 
@@ -1123,7 +1153,45 @@ mod panic_tests {
             return;
         };
         manager.engine = Box::new(Panicking);
-        let mut speech = SpeechThread::start(manager);
+        let mut speech = SpeechThread::start(None, move || manager);
+        speech.speak("Hello", true);
+        let until = Instant::now() + Duration::from_secs(5);
+        while speech.is_speaking() && Instant::now() < until {
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        assert!(!speech.is_speaking());
+    }
+
+    /// The synthesizer is made on the speech thread, which calls it, and is speaking once the
+    /// thread has started.
+    #[test]
+    fn the_synthesizer_is_made_on_the_speech_thread() {
+        let made_on = Arc::new(Mutex::new(None));
+        let on = Arc::clone(&made_on);
+        let speech = SpeechThread::start(None, move || {
+            if let Ok(mut on) = on.lock() {
+                *on = std::thread::current().name().map(str::to_owned);
+            }
+            let mut manager = TtsManager::with_engine(
+                Box::new(crate::tts::NoSpeechEngine::new()),
+                Synthesizer::NoSpeech,
+            );
+            manager.engine = Box::new(Panicking);
+            manager
+        });
+        let made_on = made_on.lock().ok().and_then(|on| on.clone());
+        assert_eq!(made_on.as_deref(), Some("okur-speech"));
+        assert_eq!(speech.engine_name(), "panicking");
+    }
+
+    /// A synthesizer whose start panics leaves speech silent, its thread still taking
+    /// requests, and Okur running.
+    #[test]
+    fn a_synthesizer_whose_start_panicked_leaves_speech_silent() {
+        let mut speech = SpeechThread::start(None, || {
+            std::panic::resume_unwind(Box::new("a bug in the synthesizer's start"))
+        });
+        assert_eq!(speech.engine_name(), "No Speech");
         speech.speak("Hello", true);
         let until = Instant::now() + Duration::from_secs(5);
         while speech.is_speaking() && Instant::now() < until {

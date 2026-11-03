@@ -664,20 +664,21 @@ pub async fn run(config: RunConfig) {
         &settings,
         None,
     );
-    let mut tts = TtsManager::starting(settings.voice.synthesizer);
-    if let Some(ref path) = speech_log {
-        match SpeechLog::open(path) {
-            Ok(log) => tts = tts.with_speech_log(log),
-            Err(e) => fail(console, &format!("Failed to open speech log {path:?}: {e}")),
-        }
-    }
-
-    okur_core::speech::SpeechOutput::configure(&mut tts, &settings.voice);
+    let log = speech_log.as_ref().map(|path| {
+        SpeechLog::open(path)
+            .unwrap_or_else(|e| fail(console, &format!("Failed to open speech log {path:?}: {e}")))
+    });
+    // Speech on its own thread, which makes the synthesizer it calls: the keyboard hook never
+    // waits for a synthesizer.
+    let synthesizer = settings.voice.synthesizer;
+    let mut speech =
+        okur_windows::tts::SpeechThread::start(log, move || TtsManager::starting(synthesizer));
+    okur_core::speech::SpeechOutput::configure(&mut speech, &settings.voice);
 
     if console {
         println!("============================================================");
         println!("  Okur, an open screen reader");
-        println!("  TTS Driver: {}", tts.engine_name());
+        println!("  TTS Driver: {}", speech.engine_name());
         println!("============================================================");
     }
 
@@ -721,8 +722,6 @@ pub async fn run(config: RunConfig) {
 
     // OS accessibility events and caret text both reach the engine through this channel.
     let (event_tx, mut event_rx) = tokio::sync::mpsc::unbounded_channel();
-    // Speech on its own thread: the keyboard hook never waits for a synthesizer.
-    let speech = okur_windows::tts::SpeechThread::start(tts);
     // What tells the exit path that Okur's last words were said.
     let speech_idle = speech.idle();
     // Say All's progress: the mark of each part the synthesizer starts comes back to

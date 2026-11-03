@@ -134,7 +134,6 @@ pub struct TtsManager {
     /// when none), as the settings last set them.
     kind: Synthesizer,
     voice: Option<String>,
-    speech_log: Option<SpeechLog>,
     /// Which symbols the synthesizer is given by name (the voice settings' punctuation).
     punctuation: okur_core::settings::Punctuation,
     /// Capitals read alone or spelled at a raised pitch (the voice settings' Caps Indicate).
@@ -215,7 +214,6 @@ impl TtsManager {
             engine,
             kind: engine_type,
             voice: None,
-            speech_log: None,
             punctuation: okur_core::settings::Punctuation::default(),
             indicate_caps: true,
             pitch: 0,
@@ -298,16 +296,8 @@ impl TtsManager {
         Ok(engine)
     }
 
-    /// Records every utterance (and stop) to `log`, the screen reader's equivalent of
-    /// JAWS speech history. Off unless explicitly enabled (e.g. `okur run --speech-log`).
-    pub fn with_speech_log(mut self, log: SpeechLog) -> Self {
-        self.speech_log = Some(log);
-        self
-    }
-
-    /// Speaks text using the active synthesizer. The speech log keeps the text as JAWS's
-    /// history would; the synthesizer is given it as JAWS gives its own, at the punctuation
-    /// level ([`okur_core::pronounce::spoken`]).
+    /// Speaks text using the active synthesizer, given it as JAWS gives its own, at the
+    /// punctuation level ([`okur_core::pronounce::spoken`]).
     pub fn speak(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError> {
         let level = self.punctuation;
         self.speak_at(text, level, interrupt)
@@ -315,9 +305,6 @@ impl TtsManager {
 
     /// Speaks text with every symbol named: a selection, a word read on its own.
     pub fn speak_symbols(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError> {
-        if let Some(log) = self.speech_log.as_mut() {
-            log.record(SpeechLogKind::Speak, text, interrupt);
-        }
         self.engine.speak(
             &okur_core::pronounce::spoken_symbols_with(text, self.text),
             interrupt,
@@ -330,9 +317,6 @@ impl TtsManager {
         level: okur_core::settings::Punctuation,
         interrupt: bool,
     ) -> Result<(), TtsError> {
-        if let Some(log) = self.speech_log.as_mut() {
-            log.record(SpeechLogKind::Speak, text, interrupt);
-        }
         self.engine.speak(
             &okur_core::pronounce::spoken_with(text, level, self.text),
             interrupt,
@@ -341,9 +325,6 @@ impl TtsManager {
 
     /// Immediately stops speech.
     pub fn stop(&mut self) -> Result<(), TtsError> {
-        if let Some(log) = self.speech_log.as_mut() {
-            log.record(SpeechLogKind::Stop, "", true);
-        }
         self.engine.stop()
     }
 
@@ -428,12 +409,8 @@ impl okur_core::speech::SpeechOutput for TtsManager {
         let _ = TtsManager::speak_symbols(self, text, interrupt);
     }
 
-    /// The speech log keeps the character as JAWS's history would; the synthesizer says its
-    /// name.
+    /// The synthesizer says the character's name.
     fn speak_character(&mut self, text: &str, interrupt: bool) {
-        if let Some(log) = self.speech_log.as_mut() {
-            log.record(SpeechLogKind::Speak, text, interrupt);
-        }
         let _ = self.engine.speak_pitched(
             &okur_core::pronounce::character(text),
             okur_core::pronounce::character_pitch(text, self.indicate_caps),
@@ -441,16 +418,8 @@ impl okur_core::speech::SpeechOutput for TtsManager {
         );
     }
 
-    /// The speech log keeps the spelled characters; the synthesizer is given them in parts,
-    /// capitals raised.
+    /// The synthesizer is given the spelled characters in parts, capitals raised.
     fn speak_spelled(&mut self, text: &str, interrupt: bool) {
-        if let Some(log) = self.speech_log.as_mut() {
-            log.record(
-                SpeechLogKind::Speak,
-                &okur_core::pronounce::spelled(text),
-                interrupt,
-            );
-        }
         for (i, (part, pitch)) in okur_core::pronounce::spelled_parts(text, self.indicate_caps)
             .into_iter()
             .enumerate()
@@ -459,11 +428,8 @@ impl okur_core::speech::SpeechOutput for TtsManager {
         }
     }
 
-    /// The speech log keeps the selection as it is; the synthesizer spells it.
+    /// The synthesizer spells the selection.
     fn speak_spelled_selection(&mut self, text: &str, interrupt: bool) {
-        if let Some(log) = self.speech_log.as_mut() {
-            log.record(SpeechLogKind::Speak, text, interrupt);
-        }
         for (i, (part, pitch)) in okur_core::pronounce::spelled_parts(text, self.indicate_caps)
             .into_iter()
             .enumerate()
@@ -472,11 +438,8 @@ impl okur_core::speech::SpeechOutput for TtsManager {
         }
     }
 
-    /// The speech log keeps the character; the synthesizer says its phonetic word.
+    /// The synthesizer says the character's phonetic word.
     fn speak_phonetic(&mut self, text: &str, interrupt: bool) {
-        if let Some(log) = self.speech_log.as_mut() {
-            log.record(SpeechLogKind::Speak, text, interrupt);
-        }
         let _ = self.engine.speak_pitched(
             &okur_core::pronounce::phonetic(text),
             okur_core::pronounce::character_pitch(text, self.indicate_caps),
