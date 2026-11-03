@@ -52,7 +52,7 @@ const NETUI_RIBBON_GROUP_CLASS: &str = "NetUIChunk";
 const NETUI_RIBBON_TABS_CLASS: &str = "NetUIPanViewer";
 
 /// Bumped whenever the recorded fields or their meaning change.
-pub const TRACE_FORMAT_VERSION: u32 = 10;
+pub const TRACE_FORMAT_VERSION: u32 = 11;
 
 /// Foreground windows while focus moves only through UIA: no WinEvent reports it. The task
 /// switcher (Alt+Tab) focuses each window's item as Tab is pressed with Alt held (the same
@@ -233,6 +233,11 @@ pub struct TraceEvent {
     /// The class of that window (`XamlExplorerHostIslandWindow` while the task switcher is up).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub top_window_class: Option<String>,
+    /// For a focus in a Store app's frame: the texts directly in its core window, in order.
+    /// Windows Settings gives its own and its page's category ("Settings", "System"), which
+    /// JAWS's Insert+T says [obs, 3158/s14]. Recorded from trace format 11.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub app_window_texts: Vec<String>,
     /// Whether that window's owner is available while it is open: a modal dialog keeps its
     /// owner disabled (false), a modeless one does not (true: Word's Find and Replace, which
     /// Ctrl+Tab leaves for the document [obs, 1065/s6]). None for a window without an owner.

@@ -238,13 +238,22 @@ impl ScreenReaderEngine {
                     self.document_view_title = Some(title);
                     return None;
                 }
+                // An application can call its window otherwise: Windows Settings by its page's
+                // category, "Title is | System" [obs, 3158/s14].
+                let app_title = self
+                    .last_native_focus
+                    .as_ref()
+                    .filter(|_| self.app_mode != AppMode::VirtualBuffer)
+                    .and_then(|focus| self.app_for(focus).and_then(|app| app.title(focus)));
                 // [obs, 306/s12]: "Title is | SR Dialog Fixture". In a browser it is the browser
                 // window's title, not the page's [obs, 209/s1: "... - Google Chrome - <profile>"].
-                let title = self.last_window_title.clone().or_else(|| {
-                    (self.app_mode == AppMode::VirtualBuffer)
-                        .then(|| self.cursor.buffer.document_title().map(str::to_owned))
-                        .flatten()
-                })?;
+                let title = app_title
+                    .or_else(|| self.last_window_title.clone())
+                    .or_else(|| {
+                        (self.app_mode == AppMode::VirtualBuffer)
+                            .then(|| self.cursor.buffer.document_title().map(str::to_owned))
+                            .flatten()
+                    })?;
                 let mut lines = vec![
                     crate::announcement::Line::of(
                         crate::announcement::PartKind::Message,

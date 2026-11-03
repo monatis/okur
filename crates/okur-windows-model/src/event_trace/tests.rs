@@ -794,6 +794,7 @@ fn focus_event(siblings: Vec<UiaNode>) -> TraceEvent {
         page: None,
         top_window_title: None,
         top_window_class: None,
+        app_window_texts: Vec::new(),
         top_window_owner_enabled: None,
         virtual_desktop: None,
         dialog_lines: Vec::new(),
@@ -2101,6 +2102,7 @@ fn window_is_named_by_its_caption() {
     let older = TraceEvent {
         top_window_title: None,
         top_window_class: None,
+        app_window_texts: Vec::new(),
         ..event
     };
     let focus = focus_event_from_trace(&older).and_then(|f| f.window_title);

@@ -1,6 +1,6 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 11405,
+  "matched_steps": 11406,
   "total_steps": 11992,
   "accepted_divergences": 365,
   "errors": [],
@@ -5162,7 +5162,7 @@
     "3154-web-table-click-handlers/s4": "match",
     "3154-web-table-click-handlers/s5": "match",
     "3154-web-table-click-handlers/s6": "match",
-    "3155-desktop-settings-apps-list/s1": "mismatch",
+    "3155-desktop-settings-apps-list/s1": "match",
     "3155-desktop-settings-apps-list/s10": "match",
     "3155-desktop-settings-apps-list/s11": "mismatch",
     "3155-desktop-settings-apps-list/s12": "match",

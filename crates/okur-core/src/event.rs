@@ -811,6 +811,11 @@ pub struct FocusEvent {
     /// The window in front is a dialog box.
     pub in_dialog_box: bool,
     pub window_title: Option<String>,
+    /// The texts directly in the application's own window, in order, where the platform
+    /// reads them (a Store app's core window): Windows Settings' "Settings", "System", whose
+    /// page JAWS's Insert+T names [obs, 3158/s14].
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub app_window_texts: Vec<String>,
     pub folder_name: Option<String>,
     pub help_text: Option<String>,
     /// The container's own description (a page dialog's `aria-describedby`), said after it
@@ -922,6 +927,12 @@ pub struct GroupEntry {
 }
 
 impl GroupEntry {
+    /// A group by its name alone: not a list, dialog, row of tabs, tool bar or pane.
+    pub fn is_plain_group(&self) -> bool {
+        !(self.list || self.dialog || self.tab_list || self.tool_bar || self.pane)
+            && !self.name.trim().is_empty()
+    }
+
     pub fn group(name: impl Into<String>) -> Self {
         Self {
             name: name.into(),
@@ -1049,6 +1060,7 @@ impl FocusEvent {
             file_dialog_address: None,
             in_dialog_box: false,
             window_title: None,
+            app_window_texts: Vec::new(),
             folder_name: None,
             help_text: None,
             container_description: None,

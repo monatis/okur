@@ -1255,6 +1255,7 @@ unsafe fn on_page_change_guarded(
                 page: None,
                 top_window_title: None,
                 top_window_class: None,
+                app_window_texts: Vec::new(),
                 top_window_owner_enabled: None,
                 virtual_desktop: None,
                 dialog_lines: Vec::new(),
@@ -1584,21 +1585,23 @@ fn foreground_processes() -> [u32; 2] {
     processes_of_front(unsafe { GetForegroundWindow() })
 }
 
-/// [`foreground_processes`] of the window `foreground`.
-fn processes_of_front(foreground: HWND) -> [u32; 2] {
+/// The core window of a Store app's frame `frame` (`Windows.UI.Core.CoreWindow`): the app's
+/// own window, in another process than the frame's.
+fn core_window(frame: HWND) -> Option<HWND> {
     use windows::core::w;
     use windows::Win32::UI::WindowsAndMessaging::FindWindowExW;
+    // SAFETY: a plain Win32 query with a static class name.
+    unsafe { FindWindowExW(Some(frame), None, w!("Windows.UI.Core.CoreWindow"), None) }.ok()
+}
+
+/// [`foreground_processes`] of the window `foreground`.
+fn processes_of_front(foreground: HWND) -> [u32; 2] {
     let mut frame = 0u32;
     let mut app = 0u32;
-    // SAFETY: plain Win32 queries with valid out-pointers and a static class name.
+    // SAFETY: plain Win32 queries with valid out-pointers.
     unsafe {
         GetWindowThreadProcessId(foreground, Some(&mut frame));
-        if let Ok(core) = FindWindowExW(
-            Some(foreground),
-            None,
-            w!("Windows.UI.Core.CoreWindow"),
-            None,
-        ) {
+        if let Some(core) = core_window(foreground) {
             GetWindowThreadProcessId(core, Some(&mut app));
         }
     }
@@ -1703,6 +1706,7 @@ fn record_uia_notifications() {
                 page: None,
                 top_window_title: None,
                 top_window_class: None,
+                app_window_texts: Vec::new(),
                 top_window_owner_enabled: None,
                 virtual_desktop: None,
                 dialog_lines: Vec::new(),
@@ -1805,6 +1809,7 @@ fn mouse_event(at: Option<[i32; 2]>) -> TraceEvent {
         page: None,
         top_window_title: None,
         top_window_class: None,
+        app_window_texts: Vec::new(),
         top_window_owner_enabled: None,
         virtual_desktop: None,
         dialog_lines: Vec::new(),
@@ -1929,6 +1934,7 @@ fn record_uia_live_regions() {
                 page: None,
                 top_window_title: None,
                 top_window_class: None,
+                app_window_texts: Vec::new(),
                 top_window_owner_enabled: None,
                 virtual_desktop: None,
                 dialog_lines: Vec::new(),
@@ -2049,6 +2055,7 @@ fn record_uia_windows_opened() {
                 page: None,
                 top_window_title: None,
                 top_window_class: None,
+                app_window_texts: Vec::new(),
                 top_window_owner_enabled: None,
                 virtual_desktop: None,
                 dialog_lines: Vec::new(),
@@ -2435,6 +2442,21 @@ fn record_at(
         } else {
             TopWindow::default()
         };
+        // A Store app's frame: the texts in its core window, the page's title among them
+        // (Windows Settings' "System" [obs, 3158/s14]).
+        const APP_WINDOW_CHILDREN: usize = 32;
+        let app_window_texts = match (state.uia.as_ref(), top_window_class.as_deref()) {
+            (Some(uia), Some("ApplicationFrameWindow")) if focused => {
+                use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+                // SAFETY: plain Win32 call with no preconditions.
+                core_window(unsafe { GetForegroundWindow() })
+                    .map(|core| {
+                        xa11y_windows::uia_element::window_texts(uia, core, APP_WINDOW_CHILDREN)
+                    })
+                    .unwrap_or_default()
+            }
+            _ => Vec::new(),
+        };
         let (dialog, dialog_tree, dialog_page, group_box, default_button) = if (focused || shown)
             && top_window_class.as_deref() == Some("#32770")
         {
@@ -2666,6 +2688,7 @@ fn record_at(
             page,
             top_window_title,
             top_window_class,
+            app_window_texts,
             top_window_owner_enabled,
             virtual_desktop,
             dialog_lines: dialog.rows,

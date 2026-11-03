@@ -1121,6 +1121,13 @@ pub fn say_focus(focus: &FocusEvent) -> String {
     if list_item && focus.container_is_list_view {
         lines.extend(container_entry(focus).map(|line| line.render()));
     }
+    // The group the control is in, by its name, where the platform gives the groups: Windows
+    // Settings' "Scale and layout | Display resolution Combo box | 1920 × 1080 (Recommended)"
+    // [obs, 3158/s8], "Choose where to get apps | ... Combo box" [obs, 3155/s1]. Not a list: an
+    // app in Settings' list is said without it [obs, 3155/s11].
+    if let Some(group) = focus.groups.last().filter(|g| g.is_plain_group()) {
+        lines.push(named(&group.name));
+    }
     lines.extend(
         control_lines(focus, list_item)
             .iter()

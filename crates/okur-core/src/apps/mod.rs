@@ -144,6 +144,11 @@ pub trait AppModule: Send {
         None
     }
 
+    /// What Say Window Title (Insert+T) says after "Title is", instead of the window's title.
+    fn title(&self, _focus: &FocusEvent) -> Option<String> {
+        None
+    }
+
     /// Whether the announcement of a new window says the focused control after its name.
     fn names_control_with_window(&self, _focus: &FocusEvent) -> bool {
         true

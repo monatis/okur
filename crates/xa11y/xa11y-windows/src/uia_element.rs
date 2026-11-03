@@ -95,6 +95,38 @@ pub fn nth_list_item(
     }
 }
 
+/// The names of the texts directly in window `hwnd`'s element, in order, in the control view:
+/// a Store app's core window gives its own title and its page's ("Settings", "System"). At
+/// most `max_children` children are looked at.
+pub fn window_texts(
+    uia: &IUIAutomation,
+    hwnd: windows::Win32::Foundation::HWND,
+    max_children: usize,
+) -> Vec<String> {
+    let mut texts = Vec::new();
+    // SAFETY: UIA client calls on valid automation objects.
+    unsafe {
+        let (Ok(window), Ok(walker)) = (uia.ElementFromHandle(hwnd), uia.ControlViewWalker())
+        else {
+            return texts;
+        };
+        let mut child = walker.GetFirstChildElement(&window).ok();
+        for _ in 0..max_children {
+            let Some(element) = child else { break };
+            if element.CurrentControlType().ok() == Some(UIA_TextControlTypeId) {
+                if let Ok(name) = element.CurrentName() {
+                    let name = name.to_string();
+                    if !name.trim().is_empty() {
+                        texts.push(name);
+                    }
+                }
+            }
+            child = walker.GetNextSiblingElement(&element).ok();
+        }
+    }
+    texts
+}
+
 /// The element's default action, by the first pattern it has: Invoke (a link or button),
 /// Toggle (a check box), SelectionItem (a radio button or tab), then MSAA's default action.
 pub fn do_default_action(element: &IUIAutomationElement) -> windows::core::Result<()> {

@@ -34,6 +34,18 @@ impl AppModule for Settings {
             && matches!(key.key, Key::UpArrow | Key::DownArrow)
             && key.modifiers.is_empty()
     }
+
+    /// Settings' title is its page's category, the last text in its window: "Title is
+    /// System" on Display [obs, 3158/s14], "Title is Apps" [obs, 3155/s20]; on its home, where
+    /// the window's one text is "Settings", "Title is Settings" [obs, 3157/s13].
+    fn title(&self, focus: &FocusEvent) -> Option<String> {
+        focus
+            .app_window_texts
+            .last()
+            .map(|t| t.trim())
+            .filter(|t| !t.is_empty())
+            .map(str::to_owned)
+    }
 }
 
 #[cfg(test)]
@@ -56,5 +68,16 @@ mod tests {
         let mut other_field = search_box.clone();
         other_field.platform.automation_id = Some("PasswordBox".to_owned());
         assert!(!settings.reads_key(&other_field, &down));
+    }
+
+    /// The title is the page's category, the last text of the window [obs, 3158/s14]; none
+    /// without the texts, which leaves the window's own title.
+    #[test]
+    fn the_title_is_the_pages_category() {
+        let mut combo = FocusEvent::new(Role::ComboBox).with_name("Display resolution");
+        combo.app = Some("SystemSettings.exe".to_owned());
+        assert_eq!(Settings.title(&combo), None);
+        combo.app_window_texts = vec!["Settings".to_owned(), "System".to_owned()];
+        assert_eq!(Settings.title(&combo).as_deref(), Some("System"));
     }
 }

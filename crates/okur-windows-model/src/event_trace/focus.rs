@@ -823,6 +823,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     }
     // A modeless dialog in front: its owner stays available [obs, 1065/s6].
     focus.modeless = event.top_window_owner_enabled == Some(true);
+    focus.app_window_texts.clone_from(&event.app_window_texts);
     // The window's kind is its class: the desktop's, the window in front, or (older traces)
     // the UIA window around the focus.
     focus.platform.top_window_class = if event.virtual_desktop.is_some() {
