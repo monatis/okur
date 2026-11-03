@@ -8,7 +8,21 @@ pub use onecore::OneCoreEngine;
 pub use sapi5::Sapi5Engine;
 pub use thread::{SpeechIdle, SpeechThread};
 
+use okur_core::settings::Synthesizer;
 use serde::{Deserialize, Serialize};
+
+/// The synthesizer by the name the command line gives it (`--engine`).
+pub fn synthesizer_named(name: &str) -> Result<Synthesizer, String> {
+    match name.to_lowercase().as_str() {
+        "auto" => Ok(Synthesizer::Auto),
+        "no-speech" | "nospeech" | "silent" | "silence" | "none" => Ok(Synthesizer::NoSpeech),
+        "sapi5" | "sapi" => Ok(Synthesizer::Sapi5),
+        "onecore" | "one-core" => Ok(Synthesizer::OneCore),
+        _ => Err(format!(
+            "Unknown TTS engine '{name}'. Available: auto, onecore, sapi5, no-speech"
+        )),
+    }
+}
 
 #[derive(Debug, thiserror::Error)]
 pub enum TtsError {
@@ -113,50 +127,12 @@ pub trait TtsEngine: Send + Sync {
     fn wait_until_done(&mut self, timeout_ms: u32) -> Result<(), TtsError>;
 }
 
-/// Available TTS engine drivers.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum TtsEngineType {
-    Auto,
-    NoSpeech,
-    Sapi5,
-    OneCore,
-}
-
-impl From<okur_core::settings::Synthesizer> for TtsEngineType {
-    fn from(synthesizer: okur_core::settings::Synthesizer) -> Self {
-        use okur_core::settings::Synthesizer;
-        match synthesizer {
-            Synthesizer::Auto => Self::Auto,
-            Synthesizer::OneCore => Self::OneCore,
-            Synthesizer::Sapi5 => Self::Sapi5,
-            Synthesizer::NoSpeech => Self::NoSpeech,
-        }
-    }
-}
-
-impl std::str::FromStr for TtsEngineType {
-    type Err = String;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s.to_lowercase().as_str() {
-            "auto" => Ok(TtsEngineType::Auto),
-            "no-speech" | "nospeech" | "silent" | "silence" | "none" => Ok(TtsEngineType::NoSpeech),
-            "sapi5" | "sapi" => Ok(TtsEngineType::Sapi5),
-            "onecore" | "one-core" => Ok(TtsEngineType::OneCore),
-            _ => Err(format!(
-                "Unknown TTS engine '{}'. Available: auto, onecore, sapi5, no-speech",
-                s
-            )),
-        }
-    }
-}
-
 /// Synthesizer manager managing the active TTS engine and runtime fallback.
 pub struct TtsManager {
     engine: Box<dyn TtsEngine>,
     /// The synthesizer asked for, and the voice chosen by name (the synthesizer's default
     /// when none), as the settings last set them.
-    kind: TtsEngineType,
+    kind: Synthesizer,
     voice: Option<String>,
     speech_log: Option<SpeechLog>,
     /// Which symbols the synthesizer is given by name (the voice settings' punctuation).
@@ -182,7 +158,7 @@ pub struct TtsManager {
     pub(crate) failed_in_a_row: u32,
     /// The synthesizer chosen that did not start, another speaking instead ([`Self::starting`]):
     /// the settings applied next do not try it again at once.
-    not_started: Option<TtsEngineType>,
+    not_started: Option<Synthesizer>,
 }
 
 /// A synthesizer whose calls failed this many times in a row is started anew: a dead one (a
@@ -192,7 +168,7 @@ pub(crate) const RESTART_AFTER: u32 = 5;
 
 impl TtsManager {
     /// Creates a new TTS manager with the specified engine driver.
-    pub fn new(engine_type: TtsEngineType) -> Result<Self, TtsError> {
+    pub fn new(engine_type: Synthesizer) -> Result<Self, TtsError> {
         Ok(Self::with_engine(
             Self::create_engine(engine_type)?,
             engine_type,
@@ -203,25 +179,25 @@ impl TtsManager {
     /// 5, no speech): Okur started at sign-in with OneCore chosen, whose start can take longer
     /// than its 5 s, ended at once, mute and with no word of why (performance review
     /// 2026-11-02, speech finding 1).
-    pub fn starting(engine_type: TtsEngineType) -> Self {
+    pub fn starting(engine_type: Synthesizer) -> Self {
         Self::starting_with(engine_type, Self::create_engine)
     }
 
     fn starting_with(
-        engine_type: TtsEngineType,
-        create: impl Fn(TtsEngineType) -> Result<Box<dyn TtsEngine>, TtsError>,
+        engine_type: Synthesizer,
+        create: impl Fn(Synthesizer) -> Result<Box<dyn TtsEngine>, TtsError>,
     ) -> Self {
         let error = match create(engine_type) {
             Ok(engine) => return Self::with_engine(engine, engine_type),
             Err(e) => e,
         };
         tracing::warn!(%error, kind = ?engine_type, "the synthesizer chosen did not start");
-        let (engine, kind) = match create(TtsEngineType::Auto) {
-            Ok(engine) => (engine, TtsEngineType::Auto),
+        let (engine, kind) = match create(Synthesizer::Auto) {
+            Ok(engine) => (engine, Synthesizer::Auto),
             Err(error) => {
                 tracing::warn!(%error, "no synthesizer started");
                 let none: Box<dyn TtsEngine> = Box::new(NoSpeechEngine::new());
-                (none, TtsEngineType::NoSpeech)
+                (none, Synthesizer::NoSpeech)
             }
         };
         tracing::warn!(
@@ -234,7 +210,7 @@ impl TtsManager {
         }
     }
 
-    fn with_engine(engine: Box<dyn TtsEngine>, engine_type: TtsEngineType) -> Self {
+    fn with_engine(engine: Box<dyn TtsEngine>, engine_type: Synthesizer) -> Self {
         Self {
             engine,
             kind: engine_type,
@@ -287,15 +263,15 @@ impl TtsManager {
     }
 
     /// A synthesizer of the given type.
-    fn create_engine(engine_type: TtsEngineType) -> Result<Box<dyn TtsEngine>, TtsError> {
+    fn create_engine(engine_type: Synthesizer) -> Result<Box<dyn TtsEngine>, TtsError> {
         let engine: Box<dyn TtsEngine> = match engine_type {
-            TtsEngineType::NoSpeech => Box::new(NoSpeechEngine::new()),
-            TtsEngineType::Sapi5 => {
+            Synthesizer::NoSpeech => Box::new(NoSpeechEngine::new()),
+            Synthesizer::Sapi5 => {
                 let sapi = Sapi5Engine::new()?;
                 Box::new(sapi)
             }
-            TtsEngineType::OneCore => Box::new(OneCoreEngine::new()?),
-            TtsEngineType::Auto => {
+            Synthesizer::OneCore => Box::new(OneCoreEngine::new()?),
+            Synthesizer::Auto => {
                 // OneCore voices respond fastest; SAPI 5 where they are missing.
                 #[cfg(windows)]
                 {
@@ -556,7 +532,7 @@ impl TtsManager {
             }
             return;
         }
-        let kind = TtsEngineType::from(voice.synthesizer);
+        let kind = voice.synthesizer;
         // Back to the synthesizer's own voice: set again by its id, where the synthesizer
         // tells it. Started anew at each such switch, a context's voice (the keyboard's)
         // cost a new synthesizer after every echoed key, and OneCore's old one talked on
@@ -674,23 +650,23 @@ mod tests {
     #[test]
     fn a_synthesizer_that_does_not_start_gives_way() {
         let tries = std::sync::Mutex::new(Vec::new());
-        let create = |kind: TtsEngineType| -> Result<Box<dyn TtsEngine>, TtsError> {
+        let create = |kind: Synthesizer| -> Result<Box<dyn TtsEngine>, TtsError> {
             if let Ok(mut tries) = tries.lock() {
                 tries.push(kind);
             }
             match kind {
-                TtsEngineType::OneCore => Err(TtsError::InitFailed("timed out".into())),
+                Synthesizer::OneCore => Err(TtsError::InitFailed("timed out".into())),
                 _ => Ok(Box::new(NoSpeechEngine::new())),
             }
         };
-        let tts = TtsManager::starting_with(TtsEngineType::OneCore, create);
-        assert_eq!(tts.kind, TtsEngineType::Auto);
-        assert_eq!(tts.not_started, Some(TtsEngineType::OneCore));
+        let tts = TtsManager::starting_with(Synthesizer::OneCore, create);
+        assert_eq!(tts.kind, Synthesizer::Auto);
+        assert_eq!(tts.not_started, Some(Synthesizer::OneCore));
         let tried = tries.lock().map(|t| t.clone()).unwrap_or_default();
-        assert_eq!(tried, vec![TtsEngineType::OneCore, TtsEngineType::Auto]);
+        assert_eq!(tried, vec![Synthesizer::OneCore, Synthesizer::Auto]);
         // One that starts is the one chosen.
-        let tts = TtsManager::starting_with(TtsEngineType::Sapi5, create);
-        assert_eq!(tts.kind, TtsEngineType::Sapi5);
+        let tts = TtsManager::starting_with(Synthesizer::Sapi5, create);
+        assert_eq!(tts.kind, Synthesizer::Sapi5);
         assert_eq!(tts.not_started, None);
     }
 
@@ -731,25 +707,18 @@ mod tests {
     }
 
     #[test]
-    fn test_tts_engine_type_parsing() {
-        use std::str::FromStr;
-
-        assert_eq!(TtsEngineType::from_str("auto"), Ok(TtsEngineType::Auto));
-        assert_eq!(
-            TtsEngineType::from_str("no-speech"),
-            Ok(TtsEngineType::NoSpeech)
-        );
-        assert_eq!(
-            TtsEngineType::from_str("silent"),
-            Ok(TtsEngineType::NoSpeech)
-        );
-        assert_eq!(TtsEngineType::from_str("sapi5"), Ok(TtsEngineType::Sapi5));
-        assert!(TtsEngineType::from_str("nonexistent").is_err());
+    fn a_synthesizer_is_named_on_the_command_line() {
+        assert_eq!(synthesizer_named("auto"), Ok(Synthesizer::Auto));
+        assert_eq!(synthesizer_named("no-speech"), Ok(Synthesizer::NoSpeech));
+        assert_eq!(synthesizer_named("silent"), Ok(Synthesizer::NoSpeech));
+        assert_eq!(synthesizer_named("SAPI5"), Ok(Synthesizer::Sapi5));
+        assert_eq!(synthesizer_named("one-core"), Ok(Synthesizer::OneCore));
+        assert!(synthesizer_named("nonexistent").is_err());
     }
 
     #[test]
     fn test_tts_manager_with_no_speech() {
-        let mgr = TtsManager::new(TtsEngineType::NoSpeech);
+        let mgr = TtsManager::new(Synthesizer::NoSpeech);
         assert!(mgr.is_ok(), "Manager creation should succeed");
         if let Ok(mut mgr) = mgr {
             assert_eq!(mgr.engine_name(), "No Speech");

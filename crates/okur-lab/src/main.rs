@@ -11,10 +11,9 @@ mod aria_at_report;
 use clap::{Parser, Subcommand};
 use okur::run::load_aom_from_path;
 use okur_core::{AomNode, Role, VirtualBuffer, VirtualCursor};
-use okur_windows::{SpeechLog, TtsEngineType, TtsManager};
+use okur_windows::{SpeechLog, TtsManager};
 use std::fs;
 use std::path::Path;
-use std::str::FromStr;
 
 #[derive(Parser, Debug)]
 #[command(
@@ -769,7 +768,7 @@ async fn main() {
             measure_latency,
             after_long_ms,
         }) => {
-            let engine_type = TtsEngineType::from_str(&engine).unwrap_or_else(|e| {
+            let engine_type = okur_windows::synthesizer_named(&engine).unwrap_or_else(|e| {
                 eprintln!("Error: {}", e);
                 std::process::exit(1);
             });
@@ -842,7 +841,7 @@ async fn main() {
                 speech_text
             );
 
-            let engine_type = TtsEngineType::from_str(&engine).unwrap_or_else(|e| {
+            let engine_type = okur_windows::synthesizer_named(&engine).unwrap_or_else(|e| {
                 eprintln!("Error: {}", e);
                 std::process::exit(1);
             });

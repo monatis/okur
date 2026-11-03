@@ -12,12 +12,12 @@
       "why": "a neutral crate is the same on every OS: put platform code in a platform crate"
     },
     "platform_literals_in_core": {
-      "count": 4,
+      "count": 5,
       "mode": "report",
       "why": "the engine knows no window class or process: say it in the platform or an app module"
     },
     "engine_app_references": {
-      "count": 82,
+      "count": 85,
       "mode": "block",
       "why": "the engine reaches application modules through the AppModule contract only"
     },
@@ -32,7 +32,7 @@
       "why": "application state belongs to its module (step 5)"
     },
     "platform_cfg_sites": {
-      "count": 191,
+      "count": 190,
       "mode": "report",
       "why": "the Windows crate is gated once, at its root (step 4)"
     }

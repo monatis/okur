@@ -12,11 +12,10 @@ use okur_core::{
     VirtualCursor,
 };
 use okur_windows::{
-    create_event_listener, create_keyboard_hook, PlatformBridge, SpeechLog, TtsEngineType,
-    TtsManager,
+    create_event_listener, create_keyboard_hook, PlatformBridge, SpeechLog, TtsManager,
 };
 use std::path::Path;
-use std::str::FromStr;
+
 use std::sync::{Arc, Mutex};
 
 use crate::startup::{self, StartFacts, StartKind};
@@ -40,14 +39,9 @@ impl RunOptions {
     /// Changes `settings` as the options ask; an error names an option's bad value.
     pub fn apply(self, settings: &mut okur_core::settings::Settings) -> Result<(), String> {
         use okur_core::settings::registry::set_named;
-        use okur_core::settings::{LiveRegionAppend, Synthesizer};
+        use okur_core::settings::LiveRegionAppend;
         if let Some(engine) = self.engine {
-            settings.voice.synthesizer = match TtsEngineType::from_str(&engine)? {
-                TtsEngineType::Auto => Synthesizer::Auto,
-                TtsEngineType::OneCore => Synthesizer::OneCore,
-                TtsEngineType::Sapi5 => Synthesizer::Sapi5,
-                TtsEngineType::NoSpeech => Synthesizer::NoSpeech,
-            };
+            settings.voice.synthesizer = okur_windows::synthesizer_named(&engine)?;
         }
         if self.voice.is_some() {
             settings.voice.voice = self.voice;
@@ -670,9 +664,7 @@ pub async fn run(config: RunConfig) {
         &settings,
         None,
     );
-    let engine_type = TtsEngineType::from(settings.voice.synthesizer);
-
-    let mut tts = TtsManager::starting(engine_type);
+    let mut tts = TtsManager::starting(settings.voice.synthesizer);
     if let Some(ref path) = speech_log {
         match SpeechLog::open(path) {
             Ok(log) => tts = tts.with_speech_log(log),
@@ -781,10 +773,12 @@ pub async fn run(config: RunConfig) {
         }
         engine.set_settings_store(Box::new(store));
     }
-    // Say System Time (Insert+F12) in the user's locale formats.
+    // Say System Time (Insert+F12) in the user's locale formats; a notification rule's sound.
     #[cfg(windows)]
-    engine.set_clock(Box::new(okur_windows::clock::WindowsClock));
-    engine.set_sounds(Box::new(okur_windows::sound::WindowsSounds));
+    {
+        engine.set_clock(Box::new(okur_windows::clock::WindowsClock));
+        engine.set_sounds(Box::new(okur_windows::sound::WindowsSounds));
+    }
     // Every way out comes here: the exit path below takes it from the first.
     let (exit_tx, mut exit_rx) = tokio::sync::mpsc::unbounded_channel::<ExitReason>();
     // Insert+F4: the engine asks; this host ends Okur.

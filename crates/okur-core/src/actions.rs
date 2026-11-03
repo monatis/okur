@@ -233,11 +233,6 @@ pub trait ApplicationActions: Send {
         false
     }
 
-    /// Asks for the Virtual Viewer's lines for the window in front (`window`) or for the
-    /// focused control, as they are on screen now. They arrive later as
-    /// [`crate::event::AccessibilityEvent::ViewerText`], always: empty when nothing could be
-    /// read. Returns false when unsupported (recorded traces hold no window text, so replay
-    /// keeps the viewer built from the focus).
     /// Asks for the applications' top-level windows; they come back as
     /// [`crate::event::AccessibilityEvent::TopWindows`]. False when unsupported.
     fn list_windows(&self) -> bool {
@@ -306,6 +301,11 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for the Virtual Viewer's lines for the window in front (`window`) or for the
+    /// focused control, as they are on screen now. They arrive later as
+    /// [`crate::event::AccessibilityEvent::ViewerText`], always: empty when nothing could be
+    /// read. Returns false when unsupported (recorded traces hold no window text, so replay
+    /// keeps the viewer built from the focus).
     fn read_window(&self, window: bool) -> bool {
         let _ = window;
         false

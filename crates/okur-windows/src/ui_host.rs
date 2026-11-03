@@ -179,11 +179,7 @@ impl UiHost for ProcessUiHost {
 }
 
 fn program_path() -> Option<PathBuf> {
-    let name = if cfg!(windows) {
-        "okur-ui.exe"
-    } else {
-        "okur-ui"
-    };
+    let name = format!("okur-ui{}", std::env::consts::EXE_SUFFIX);
     Some(std::env::current_exe().ok()?.with_file_name(name))
 }
 

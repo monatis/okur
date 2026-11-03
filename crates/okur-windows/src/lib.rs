@@ -42,8 +42,8 @@ pub use bridge::{PlatformBridge, PlatformError};
 pub use events::{create_event_listener, AccessibilityEventListener};
 pub use hook::{create_keyboard_hook, KeyboardHook};
 pub use tts::{
-    NoSpeechEngine, Sapi5Engine, SpeechLog, SpeechLogEntry, SpeechLogKind, TtsEngine,
-    TtsEngineType, TtsError, TtsManager, VoiceInfo,
+    synthesizer_named, NoSpeechEngine, Sapi5Engine, SpeechLog, SpeechLogEntry, SpeechLogKind,
+    TtsEngine, TtsError, TtsManager, VoiceInfo,
 };
 
 /// Process-wide setup, before any thread reads the screen. On Windows the process is aware of

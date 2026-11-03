@@ -35,7 +35,7 @@ const UIA_HEADER: i32 = 50034;
 pub const WIN32_DIALOG_CLASS: &str = "#32770";
 /// A Win32 popup menu's window.
 const WIN32_MENU_CLASS: &str = "#32768";
-/// The window kind of focus on the desktop ([`okur_core::FocusEvent::window_kind`]).
+/// The top window class of a focus on the desktop (`PlatformIds::top_window_class`).
 pub const DESKTOP_KIND: &str = "Progman";
 /// MSAA `ROLE_SYSTEM_MENUITEM`.
 const MSAA_MENUITEM: i32 = 0x0C;
