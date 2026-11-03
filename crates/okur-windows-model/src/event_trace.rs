@@ -52,7 +52,7 @@ const NETUI_RIBBON_GROUP_CLASS: &str = "NetUIChunk";
 const NETUI_RIBBON_TABS_CLASS: &str = "NetUIPanViewer";
 
 /// Bumped whenever the recorded fields or their meaning change.
-pub const TRACE_FORMAT_VERSION: u32 = 9;
+pub const TRACE_FORMAT_VERSION: u32 = 10;
 
 /// Foreground windows while focus moves only through UIA: no WinEvent reports it. The task
 /// switcher (Alt+Tab) focuses each window's item as Tab is pressed with Alt held (the same
@@ -77,6 +77,21 @@ pub const UIA_SELECTION_PROCESSES: [&str; 2] = ["SearchHost.exe", "ApplicationFr
 /// Whether a recorded event is a focus change, from a WinEvent or from UIA.
 pub fn is_focus(event: &TraceEvent) -> bool {
     matches!(event.event.as_str(), "focus" | "uia_focus")
+}
+
+/// Whether a WinEvent focus had moved on by the time it was read: the keyboard focus was then
+/// outside the event's window (`TraceEvent::focus_elsewhere`), and MSAA no longer says its
+/// object is focused. File Explorer's list as Tab passes it on the way to a link [obs,
+/// 3156/s6]. A window whose child has the focus is not one: Notepad's window coming to the
+/// front with the focus in its edit, a dialog with the focus in its list.
+fn left_before_read(event: &TraceEvent) -> bool {
+    const STATE_FOCUSED: u32 = 0x4;
+    event.event == "focus"
+        && event.focus_elsewhere
+        && event
+            .object
+            .as_ref()
+            .is_some_and(|o| o.states & STATE_FOCUSED == 0)
 }
 
 /// Whether a value change is a choice's, not text's: its object has a value (a select's new
@@ -171,6 +186,11 @@ pub struct TraceEvent {
     pub window_style: Option<u32>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub focus_window_class: Option<String>,
+    /// For a focus: the window with the keyboard focus, once the event was read, was neither
+    /// the event's window nor inside it: the focus had moved on (File Explorer's list as Tab
+    /// passes it, 3156/s6). Recorded from trace format 10.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub focus_elsewhere: bool,
     /// For a focus: the window with the keyboard focus is an up-down control's buddy (an edit
     /// with arrows beside it, a spin box).
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
@@ -2014,6 +2034,12 @@ impl EventConverter {
         {
             return Vec::new();
         }
+        // A focus that had moved on before it was read is not said: the focus after it is.
+        // Tab from File Explorer's search box passes its list for 30 ms on the way to the
+        // first link, and JAWS says only "Control Panel Home Link" [obs, 3156/s6].
+        if left_before_read(event) {
+            return Vec::new();
+        }
         if let Some(window) = menu_bar_return(event) {
             let mut events = vec![okur_core::AccessibilityEvent::Focus(window.clone())];
             if let Some(okur_core::AccessibilityEvent::Focus(next)) = self.convert_one(event) {
@@ -3493,6 +3519,27 @@ mod tests {
         assert!(!names_its_texts("notes.txt", &[]));
     }
 
+    /// A focus read after the keyboard focus had left its window, its object no longer
+    /// focused, is not said; the focus that follows is [obs, 3156/s6]. The same object still
+    /// focused is said.
+    #[test]
+    fn a_focus_that_moved_on_before_its_read_is_not_said() {
+        let mut passed = focus_event(Vec::new());
+        passed.object = Some(TraceObject {
+            role: Some(0x21),
+            name: Some("Folder View".to_owned()),
+            value: None,
+            states: 0x0010_0000,
+            shortcut: None,
+        });
+        passed.focus_elsewhere = true;
+        assert!(EventConverter::default().convert(&passed).is_empty());
+        if let Some(object) = passed.object.as_mut() {
+            object.states |= 0x4;
+        }
+        assert!(!EventConverter::default().convert(&passed).is_empty());
+    }
+
     /// An item with a name of its own and a further text, outside a list view, has the text
     /// as its description: Windows Settings' home [obs, 3157/s4]. In a list view it is a
     /// column.
@@ -3814,6 +3861,7 @@ mod tests {
             window_style: None,
             spin_box: false,
             focus_window_class: None,
+            focus_elsewhere: false,
             menu_bar: Vec::new(),
             status_bar: Vec::new(),
             window_title: None,

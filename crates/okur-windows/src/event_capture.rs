@@ -1225,6 +1225,7 @@ unsafe fn on_page_change_guarded(
                 window_style: None,
                 spin_box: false,
                 focus_window_class: None,
+                focus_elsewhere: false,
                 menu_bar: Vec::new(),
                 status_bar: Vec::new(),
                 window_title: None,
@@ -1672,6 +1673,7 @@ fn record_uia_notifications() {
                 window_style: None,
                 spin_box: false,
                 focus_window_class: None,
+                focus_elsewhere: false,
                 menu_bar: Vec::new(),
                 status_bar: Vec::new(),
                 window_title: None,
@@ -1773,6 +1775,7 @@ fn mouse_event(at: Option<[i32; 2]>) -> TraceEvent {
         window_style: None,
         spin_box: false,
         focus_window_class: None,
+        focus_elsewhere: false,
         menu_bar: Vec::new(),
         status_bar: Vec::new(),
         window_title: None,
@@ -1896,6 +1899,7 @@ fn record_uia_live_regions() {
                 window_style: None,
                 spin_box: false,
                 focus_window_class: None,
+                focus_elsewhere: false,
                 menu_bar: Vec::new(),
                 status_bar: Vec::new(),
                 window_title: None,
@@ -2015,6 +2019,7 @@ fn record_uia_windows_opened() {
                 window_style: None,
                 spin_box: false,
                 focus_window_class: None,
+                focus_elsewhere: false,
                 menu_bar: Vec::new(),
                 status_bar: Vec::new(),
                 window_title: None,
@@ -2568,6 +2573,13 @@ fn record_at(
                 .is_some_and(|c| c.eq_ignore_ascii_case("Edit"))
                 && is_spin_buddy(w)
         });
+        // The keyboard focus outside the event's window once it is read: the focus moved on
+        // while the event was read (File Explorer's list as Tab passes it [obs, 3156/s6]).
+        let focus_elsewhere = focus_window.is_some_and(|w| {
+            use windows::Win32::UI::WindowsAndMessaging::IsChild;
+            // SAFETY: a plain query of two window handles; a window that is gone gives false.
+            w != hwnd && !unsafe { IsChild(hwnd, w) }.as_bool()
+        });
         let (menu_bar, status_bar) = if focused {
             crate::screen_lines::window_bars(hwnd)
         } else {
@@ -2603,6 +2615,7 @@ fn record_at(
             window_class: Some(class).filter(|s| !s.is_empty()),
             window_style,
             focus_window_class,
+            focus_elsewhere,
             spin_box,
             menu_bar,
             status_bar,
