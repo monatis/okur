@@ -1043,8 +1043,12 @@ pub fn say_window(title: &str, items: &[crate::event::WindowItem]) -> Announceme
             // A group box: "Direction group" [obs, 540/s4].
             Role::Group => parts.push(role(msg::role_group().as_str())),
             Role::Text => {
+                // Not a drop-down combo box, which says its name again: "Open: | Open: combo
+                // box collapsed" [obs, 3159/s9].
                 labelled = items.get(i + 1).is_some_and(|next| {
-                    next.role != Role::Text && named(&next.name) == named(&item.name)
+                    next.role != Role::Text
+                        && named(&next.name) == named(&item.name)
+                        && !(next.role == Role::ComboBox && next.place.is_none())
                 });
             }
             Role::ComboBox => {

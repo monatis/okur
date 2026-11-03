@@ -125,6 +125,48 @@ fn say_window_reads_a_font_dialog_as_jaws_does() {
     );
 }
 
+/// Say Window in the Run dialog: its drop-down combo box is the box, collapsed, with its value,
+/// its field and its button, with no place, its label said before it [obs, 3159/s9]. JAWS's
+/// type words there are lowercase ("edit", "button"); that is still to do.
+#[test]
+fn say_window_reads_a_drop_down_combo_box_as_its_parts() {
+    const COMBOBOX: i32 = 50003;
+    const EDIT: i32 = 50004;
+    const LIST: i32 = 50008;
+    const TEXT: i32 = 50020;
+    let valued = |control_type: i32, name: &str, value: &str| UiaNode {
+        value: Some(value.to_owned()),
+        ..node(control_type, name, false)
+    };
+    let combo = UiaNode {
+        position_in_set: Some(1),
+        size_of_set: Some(26),
+        children: vec![
+            valued(EDIT, "Open:", "C:"),
+            node(UIA_BUTTON, "Open", false),
+            node(LIST, "Open:", false),
+        ],
+        ..valued(COMBOBOX, "Open:", "C:")
+    };
+    let tree = UiaNode {
+        children: vec![
+            node(TEXT, "Open:", false),
+            combo,
+            node(UIA_BUTTON, "OK", false),
+        ],
+        ..node(UIA_WINDOW, "Run", false)
+    };
+    let said = okur_core::native_focus::say_window("Run", &window_items(&tree)).render();
+    let words = |s: &str| s.split_whitespace().collect::<Vec<_>>().join(" ");
+    assert_eq!(
+        words(&said),
+        words(
+            "Run dialog\nOpen: \nOpen:  \u{1d} combo box \u{1e}  \u{1d}collapsed\u{1e} C: \n\
+             Open:  \u{1d} Edit \u{1e} C: \nOpen  \u{1d} Button \u{1e} \nOK  \u{1d} Button \u{1e}"
+        )
+    );
+}
+
 /// A dialog's controls read for one focus are used again for the next while only the
 /// focus moves among them; any other change in its process reads them anew.
 #[test]

@@ -71,6 +71,16 @@ pub(super) fn window_items(tree: &UiaNode) -> Vec<okur_core::WindowItem> {
                     .collect()
             })
             .unwrap_or_default();
+        let button = node.children.iter().find(|c| c.control_type == UIA_BUTTON);
+        // A drop-down combo box with a field of its own, its list closed: the box, collapsed,
+        // with its value; its field, an edit; its button; and no place. "Open: combo box
+        // collapsed | C: | Open: edit | C: | Open button" in the Run dialog [obs, 3159/s9].
+        if field.is_some() && shown.is_empty() && button.is_some() {
+            items.extend(item(node));
+            items.extend(field.and_then(item));
+            items.extend(button.and_then(item));
+            return;
+        }
         let Some(mut combo) = item(node) else {
             return;
         };
