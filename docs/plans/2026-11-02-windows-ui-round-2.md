@@ -7,6 +7,13 @@ structure ([`../references/crate-structure-proposal.md`](../references/crate-str
 Round 43's items ([`2026-11-02-everyday-gaps-round-43.md`](2026-11-02-everyday-gaps-round-43.md):
 the Store install on old-pc with the owner, the review's open items) stay open after these.
 
+**Status (2026-11-03, later,
+[`../handoff/2026-11-03-windows-ui-round-2-recordings.md`](../handoff/2026-11-03-windows-ui-round-2-recordings.md)):**
+old-pc back; §1's items 2 (but for the empty list at the window's opening), 3 and 4 done and
+recorded; §2's Settings pages (home, Display, Sound) and the Run dialog recorded; Settings' app
+list made fast. Next: 3159/s9 (Say Window's editable combo box), §1's item 5, then §2's rest
+(the Start menu, Task Manager, Device Manager, Services, File Explorer's ribbon).
+
 **Status (2026-11-03,
 [`../handoff/2026-11-03-crate-structure-steps-0-3.md`](../handoff/2026-11-03-crate-structure-steps-0-3.md)):**
 §3's steps 0 to 3 are built. Of §1, items 2 and 3 are built in the tracer and wait for 3156 to
