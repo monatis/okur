@@ -431,11 +431,15 @@ impl ScreenReaderEngine {
         use crate::settings::SayAllUnit;
         use crate::ui::skim::SpeakUnit;
         let at = self.cursor.offset;
+        let finder = options.finder();
         let units: Vec<(usize, String)> = match options.unit {
+            // Only the lines from the cursor's on are made into text.
             SpeakUnit::Lines => self
                 .cursor
                 .buffer
                 .lines
+                .get(self.cursor.current_line_index()..)
+                .unwrap_or_default()
                 .iter()
                 .filter_map(|line| {
                     Some((line.start_offset, self.cursor.line_text(line.line_index)?))
@@ -457,7 +461,7 @@ impl ScreenReaderEngine {
         units
             .into_iter()
             .skip(from)
-            .filter(|(_, text)| options.finds(&without_role_marks(text)))
+            .filter(|(_, text)| finder.finds(&without_role_marks(text)))
             .collect()
     }
 
@@ -743,6 +747,9 @@ impl ScreenReaderEngine {
     /// Ends a Say All: the cursor stays on the line last started.
     pub(super) fn end_say_all(&mut self) {
         self.say_all = None;
+        // A Say All still waiting for Word's paragraphs ends too: they would start it from a
+        // caret the user has moved since.
+        self.say_all_paragraphs_asked = false;
     }
 
     /// Piece `index` of the Say All: the page's line, sentence or paragraph, or the field's
@@ -1248,6 +1255,18 @@ mod tests {
         );
         let read = marks(&speech).len();
         engine.end_say_all();
+        engine.handle_accessibility_event(&answer);
+        assert_eq!(marks(&speech).len(), read);
+
+        // A key pressed while the paragraphs are still coming withdraws the Say All: they
+        // start nothing when they come (second review, 2026-11-03).
+        assert_eq!(engine.start_field_say_all(), None);
+        let down = crate::input::KeyEvent::new(
+            crate::input::Key::DownArrow,
+            crate::input::Modifiers::none(),
+            true,
+        );
+        engine.handle_key(&down);
         engine.handle_accessibility_event(&answer);
         assert_eq!(marks(&speech).len(), read);
     }

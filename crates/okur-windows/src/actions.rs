@@ -50,6 +50,54 @@ mod windows_actions {
     /// How long Chromium takes to scroll a page object into view and report its new bounds,
     /// before the reading highlight asks where it is.
     const TRACK_SETTLE: Duration = Duration::from_millis(80);
+    /// How often a scrolled object's place is asked for while the page moves.
+    const TRACK_POLL: Duration = Duration::from_millis(10);
+
+    /// Whether `rect` (`[left, top, width, height]` on the screen) is in the page's view: its
+    /// top inside the window where Chromium draws the page shown (each tab has one, the
+    /// others hidden), and as much of it as the view holds. Without that window, nothing is.
+    fn in_page_view(window: HWND, rect: [i32; 4]) -> bool {
+        use windows::core::w;
+        use windows::Win32::Foundation::RECT;
+        use windows::Win32::UI::WindowsAndMessaging::{
+            FindWindowExW, GetWindowRect, IsWindowVisible,
+        };
+        /// Tabs looked at, at most.
+        const PAGES: usize = 64;
+        let [left, top, width, height] = rect;
+        // SAFETY: plain Win32 queries on window handles; a window that is gone gives none.
+        let view = unsafe {
+            let mut page = None;
+            let mut after = None;
+            for _ in 0..PAGES {
+                let Ok(next) =
+                    FindWindowExW(Some(window), after, w!("Chrome_RenderWidgetHostHWND"), None)
+                else {
+                    break;
+                };
+                if IsWindowVisible(next).as_bool() {
+                    page = Some(next);
+                    break;
+                }
+                after = Some(next);
+            }
+            let Some(page) = page else {
+                return false;
+            };
+            let mut view = RECT::default();
+            if GetWindowRect(page, &mut view).is_err() {
+                return false;
+            }
+            view
+        };
+        let shown = height.min(view.bottom - view.top);
+        width > 0
+            && height > 0
+            && left >= view.left
+            && left < view.right
+            && top >= view.top
+            && top + shown <= view.bottom
+    }
 
     /// The window in front, for a page action. An action asked for as one of Okur's own
     /// windows closes (OK in Select a Form Field) finds that window still in front for some
@@ -157,7 +205,9 @@ mod windows_actions {
     }
 
     impl Request {
-        /// Whether the request is a long read for the bulk lane.
+        /// Whether the request is a long read for the bulk lane. A whole document's or sheet's
+        /// read is: Word's paragraphs for Say All took about 13 ms each, and every key's text
+        /// read waited behind them (second review, 2026-11-03).
         fn is_bulk(&self) -> bool {
             matches!(
                 self,
@@ -171,6 +221,12 @@ mod windows_actions {
                     | Request::ListTray
                     | Request::Drag(..)
                     | Request::Track(..)
+                    | Request::DocumentParagraphs
+                    | Request::DocumentHeadings
+                    | Request::DocumentLinks
+                    | Request::DocumentFields
+                    | Request::DocumentNotes(_)
+                    | Request::SheetList(_)
             )
         }
 
@@ -769,15 +825,29 @@ mod windows_actions {
                                 };
                                 let window = page_in_front();
                                 let started = Instant::now();
-                                if let Err(e) =
-                                    xa11y_windows::ia2::chromium_scroll_to_object(window, id)
-                                {
-                                    tracing::debug!("IA2 object {id} not scrolled to: {e}");
+                                let place = xa11y_windows::ia2::chromium_object_location;
+                                let before = place(window, id).ok();
+                                // An object in view is framed at once: the scroll would not
+                                // move it (IA2's "anywhere"), and waiting for the page held
+                                // this lane 80 ms on every move (second review, 2026-11-03).
+                                let in_view = before.is_some_and(|rect| in_page_view(window, rect));
+                                if !in_view {
+                                    if let Err(e) =
+                                        xa11y_windows::ia2::chromium_scroll_to_object(window, id)
+                                    {
+                                        tracing::debug!("IA2 object {id} not scrolled to: {e}");
+                                    }
+                                    // Chromium scrolls in the page's own process: the place
+                                    // is asked for until the page has moved and told its new
+                                    // bounds, at most TRACK_SETTLE.
+                                    while started.elapsed() < TRACK_SETTLE {
+                                        std::thread::sleep(TRACK_POLL);
+                                        if place(window, id).ok() != before {
+                                            break;
+                                        }
+                                    }
                                 }
-                                // Chromium scrolls in the page's own process: the place is
-                                // asked for once the page has moved and told its new bounds.
-                                std::thread::sleep(TRACK_SETTLE);
-                                match xa11y_windows::ia2::chromium_object_location(window, id) {
+                                match place(window, id) {
                                     Ok(rect) => {
                                         tracing::debug!(
                                             node,

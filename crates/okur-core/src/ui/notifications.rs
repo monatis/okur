@@ -342,9 +342,8 @@ impl Rule {
             SpeechAction::Mute | SpeechAction::PlaySound => None,
             SpeechAction::SpeakFull => Some(text.to_owned()),
             SpeechAction::Shorten if self.kind == RuleType::MatchesPattern => {
-                let captures = regex::Regex::new(&self.text)
-                    .ok()
-                    .and_then(|pattern| pattern.captures(text));
+                let pattern = compiled(&self.text);
+                let captures = pattern.as_ref().and_then(|pattern| pattern.captures(text));
                 Some(with_captures(&self.shortened, captures.as_ref()))
             }
             SpeechAction::Shorten => Some(self.shortened.clone()),
@@ -361,11 +360,31 @@ impl Rule {
             RuleType::Contains => text.contains(&self.text),
             RuleType::BeginsWith => text.starts_with(&self.text),
             RuleType::EndsWith => text.ends_with(&self.text),
-            RuleType::MatchesPattern => {
-                regex::Regex::new(&self.text).is_ok_and(|pattern| pattern.is_match(text))
-            }
+            RuleType::MatchesPattern => compiled(&self.text).is_some_and(|p| p.is_match(text)),
         }
     }
+}
+
+/// A rule's pattern compiled once and kept by its text: every notification is matched against
+/// the rules, and Settings' search box sends one per letter typed. `None` for a pattern that
+/// is not a regular expression.
+fn compiled(pattern: &str) -> Option<regex::Regex> {
+    /// Patterns kept at most; a rule edited many times leaves its old ones behind.
+    const KEPT_AT_MOST: usize = 64;
+    static KEPT: std::sync::Mutex<Vec<(String, Option<regex::Regex>)>> =
+        std::sync::Mutex::new(Vec::new());
+    let Ok(mut kept) = KEPT.lock() else {
+        return regex::Regex::new(pattern).ok();
+    };
+    if let Some((_, regex)) = kept.iter().find(|(p, _)| p == pattern) {
+        return regex.clone();
+    }
+    let regex = regex::Regex::new(pattern).ok();
+    if kept.len() >= KEPT_AT_MOST {
+        kept.clear();
+    }
+    kept.push((pattern.to_owned(), regex.clone()));
+    regex
 }
 
 /// What the engine does after Create Rule handled a message.

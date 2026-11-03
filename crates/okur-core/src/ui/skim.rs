@@ -135,20 +135,39 @@ impl SkimOptions {
             && (self.attributes.is_empty() || attributes)
     }
 
-    /// Whether a text rule finds its pattern in `text`, whatever its capitals. A pattern that is
-    /// not a regular expression finds nothing.
-    pub fn finds(&self, text: &str) -> bool {
+    /// The text rule's pattern made ready once, for every unit of the page it is tried on.
+    pub fn finder(&self) -> TextFinder {
         let pattern = self.pattern.trim();
         if pattern.is_empty() {
-            return false;
+            return TextFinder::Nothing;
         }
         if self.regex {
             return regex::RegexBuilder::new(pattern)
                 .case_insensitive(true)
                 .build()
-                .is_ok_and(|r| r.is_match(text));
+                .map_or(TextFinder::Nothing, TextFinder::Regex);
         }
-        text.to_lowercase().contains(&pattern.to_lowercase())
+        TextFinder::Plain(pattern.to_lowercase())
+    }
+}
+
+/// What a text rule finds, whatever the capitals: a pattern that is not a regular expression
+/// finds nothing.
+pub enum TextFinder {
+    Nothing,
+    Regex(regex::Regex),
+    /// The pattern in lower case.
+    Plain(String),
+}
+
+impl TextFinder {
+    /// Whether the rule's pattern is in `text`.
+    pub fn finds(&self, text: &str) -> bool {
+        match self {
+            Self::Nothing => false,
+            Self::Regex(regex) => regex.is_match(text),
+            Self::Plain(pattern) => text.to_lowercase().contains(pattern.as_str()),
+        }
     }
 }
 

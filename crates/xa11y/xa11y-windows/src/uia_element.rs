@@ -76,20 +76,31 @@ pub fn nth_list_item(
 ) -> Option<IUIAutomationElement> {
     // SAFETY: UIA client calls on valid automation objects.
     unsafe {
-        if list.CurrentControlType().ok()? != UIA_ListControlTypeId {
+        // The list read with its properties cached already says its type.
+        let list_type = list
+            .CachedControlType()
+            .or_else(|_| list.CurrentControlType())
+            .ok()?;
+        if list_type != UIA_ListControlTypeId {
             return None;
         }
         let walker = uia.ControlViewWalker().ok()?;
-        let mut element = walker.GetFirstChildElement(list).ok()?;
+        // Each step brings its child's type with it: one call into the list per child, not
+        // two (second review, 2026-11-03).
+        let request = uia.CreateCacheRequest().ok()?;
+        request.AddProperty(UIA_ControlTypePropertyId).ok()?;
+        let mut element = walker.GetFirstChildElementBuildCache(list, &request).ok()?;
         let mut items = 0;
         for _ in 0..max_steps {
-            if element.CurrentControlType().ok()? == UIA_ListItemControlTypeId {
+            if element.CachedControlType().ok()? == UIA_ListItemControlTypeId {
                 if items == index {
                     return Some(element);
                 }
                 items += 1;
             }
-            element = walker.GetNextSiblingElement(&element).ok()?;
+            element = walker
+                .GetNextSiblingElementBuildCache(&element, &request)
+                .ok()?;
         }
         None
     }
@@ -135,22 +146,36 @@ pub fn window_texts(
     let mut texts = Vec::new();
     // SAFETY: UIA client calls on valid automation objects.
     unsafe {
-        let (Ok(window), Ok(walker)) = (uia.ElementFromHandle(hwnd), uia.ControlViewWalker())
-        else {
+        let (Ok(window), Ok(walker), Ok(request)) = (
+            uia.ElementFromHandle(hwnd),
+            uia.ControlViewWalker(),
+            uia.CreateCacheRequest(),
+        ) else {
             return texts;
         };
-        let mut child = walker.GetFirstChildElement(&window).ok();
+        // Each step brings its child's type and name with it: one call into the application
+        // per child, not three (second review, 2026-11-03: 4 to 13 ms of a Settings focus).
+        if request.AddProperty(UIA_ControlTypePropertyId).is_err()
+            || request.AddProperty(UIA_NamePropertyId).is_err()
+        {
+            return texts;
+        }
+        let mut child = walker
+            .GetFirstChildElementBuildCache(&window, &request)
+            .ok();
         for _ in 0..max_children {
             let Some(element) = child else { break };
-            if element.CurrentControlType().ok() == Some(UIA_TextControlTypeId) {
-                if let Ok(name) = element.CurrentName() {
+            if element.CachedControlType().ok() == Some(UIA_TextControlTypeId) {
+                if let Ok(name) = element.CachedName() {
                     let name = name.to_string();
                     if !name.trim().is_empty() {
                         texts.push(name);
                     }
                 }
             }
-            child = walker.GetNextSiblingElement(&element).ok();
+            child = walker
+                .GetNextSiblingElementBuildCache(&element, &request)
+                .ok();
         }
     }
     texts

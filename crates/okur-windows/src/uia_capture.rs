@@ -254,7 +254,17 @@ pub(crate) fn with_properties(
     uia: &IUIAutomation,
     element: &IUIAutomationElement,
 ) -> Option<IUIAutomationElement> {
-    let request = properties_request(uia, AutomationElementMode_Full)?;
+    // The focus's window and rectangle too, which its read asks for next (the PC cursor's
+    // place): two calls into the application fewer per focus (second review, 2026-11-03).
+    let properties = [
+        PROPERTIES,
+        &[
+            UIA_NativeWindowHandlePropertyId,
+            UIA_BoundingRectanglePropertyId,
+        ],
+    ]
+    .concat();
+    let request = request_for(uia, AutomationElementMode_Full, &properties)?;
     // SAFETY: a cache request for a valid element.
     unsafe { element.BuildUpdatedCache(&request) }.ok()
 }

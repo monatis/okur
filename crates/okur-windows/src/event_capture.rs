@@ -1793,8 +1793,16 @@ fn record_mouse_move() {
 /// A `mouse_move` to `at`, with nothing else read.
 fn mouse_event(at: Option<[i32; 2]>) -> TraceEvent {
     TraceEvent {
-        t_ms: now_ms(),
-        event: "mouse_move".to_owned(),
+        mouse: at,
+        ..bare_event(now_ms(), "mouse_move")
+    }
+}
+
+/// An event with nothing read about it but its name and time.
+fn bare_event(t_ms: u128, name: &str) -> TraceEvent {
+    TraceEvent {
+        t_ms,
+        event: name.to_owned(),
         win_event: 0,
         hwnd: 0,
         id_object: 0,
@@ -1831,7 +1839,7 @@ fn mouse_event(at: Option<[i32; 2]>) -> TraceEvent {
         default_button: None,
         dialog_tree: None,
         notification: None,
-        mouse: at,
+        mouse: None,
         point: None,
         msaa_tree: None,
         msaa_siblings: Vec::new(),
@@ -2233,6 +2241,25 @@ fn record_at(
             tracing::debug!(event = name, "event of a hung window not read");
             return;
         }
+        // Live, a window come to the front is its handle to the converter (a renamed window
+        // is matched with it); its focus comes in an event of its own. Its focus read here,
+        // 12 to 15 cross-process calls, held that focus up: 73% of the recorded windows come
+        // to the front have a focus within 200 ms after (second review, 2026-11-03). A trace
+        // keeps the whole read, which parity's setup replays.
+        if state.live && name == "foreground" {
+            let event = TraceEvent {
+                win_event,
+                hwnd: hwnd.0 as isize,
+                id_object,
+                id_child,
+                window_class: Some(class).filter(|s| !s.is_empty()),
+                window_title: Some(title).filter(|s| !s.is_empty()),
+                ..bare_event(t_ms, name)
+            };
+            (state.sink)(event);
+            state.count += 1;
+            return;
+        }
         // A state or selection change of another control than the focused one is not read
         // further live: the converter would drop it, and deciding needs only the event's
         // MSAA object. The focus, its ancestors, siblings and text, read for a change, were
@@ -2390,17 +2417,29 @@ fn record_at(
         // awareness: UI Automation gave a WinForms button's unscaled at 125% (516/s8).
         if let (Some(element), Some(focused)) = (element.filter(|_| focused), focus.last_mut()) {
             // SAFETY: property reads on a valid element, then a Win32 read into a RECT.
-            let window = unsafe { element.CurrentNativeWindowHandle() }
-                .ok()
-                .filter(|h| !h.is_invalid())
-                .and_then(|h| {
-                    let mut rect = windows::Win32::Foundation::RECT::default();
-                    unsafe { windows::Win32::UI::WindowsAndMessaging::GetWindowRect(h, &mut rect) }
-                        .ok()
-                        .map(|()| rect)
-                });
+            // The focus read with its properties brings both (`with_properties`).
+            let window = unsafe {
+                element
+                    .CachedNativeWindowHandle()
+                    .or_else(|_| element.CurrentNativeWindowHandle())
+            }
+            .ok()
+            .filter(|h| !h.is_invalid())
+            .and_then(|h| {
+                let mut rect = windows::Win32::Foundation::RECT::default();
+                unsafe { windows::Win32::UI::WindowsAndMessaging::GetWindowRect(h, &mut rect) }
+                    .ok()
+                    .map(|()| rect)
+            });
             let from_window = window.is_some();
-            let rect = window.or_else(|| unsafe { element.CurrentBoundingRectangle() }.ok());
+            let rect = window.or_else(|| {
+                unsafe {
+                    element
+                        .CachedBoundingRectangle()
+                        .or_else(|_| element.CurrentBoundingRectangle())
+                }
+                .ok()
+            });
             if let Some(r) = rect {
                 focused.bounds = Some([r.left, r.top, r.right, r.bottom]);
                 // SAFETY: reads of this thread's awareness; no preconditions.
