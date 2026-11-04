@@ -48,32 +48,49 @@ its §3 (JAWS's features from Settings Center and the help). Branch `windows-ui-
 | `801cc16a` | This handoff's first version |
 | `397196fe` | A letter spelled phonetically after a pause: `Settings::phonetic_pause_ms` (1500; from the JCF key), the engine's pending letter on the key clock, `on_idle_at(now_ms)` (live `on_idle` gives the key clock's now), replay's idle at each step's recorded end; letters only (a period's case is unrecorded) |
 | `81002c18` | corpus: 1140, 1141 |
+| `7b1973a7` | This handoff's second version |
+
+With old-pc offline (OpenDesk: "target_offline", from shortly after `81002c18` to this
+version), local work:
+
+| Commit | What |
+|---|---|
+| `3affafab` | Indicate Caps During Say All: `VoiceSettings::say_all_caps` (from `SayAllIndicateCaps`), `pronounce::capital_word_parts`, the speech thread handing a Say All part over as runs, each capitalized word raised by 4 alone; replay does the same on the spoken layer; 718/s10 an accepted divergence (JAWS's raise leaks across its own pieces) |
+| `9af1de45`, `56d776ca` | Live: a focus's siblings read only where the conversion uses them (`focus_needs_siblings`; `in_dialog_box` now the conversion's own test, Win32 or UIA dialog); a grid cell's place among its peers no longer counted. Checked over every traced focus (`siblings_are_unused_where_they_are_not_read`): 6,894 of the 18,864 with siblings skip them |
+| `1d16b4f9` | Live: a focus's process opened once (was twice), for its name and its product |
+| `4c16a1d3` | Logs: an event by its kind (`okur_runtime::logging::event_kind`), a text context by its length and caret, not formatted whole |
+| `f04eaec6`, `77a10b3e` | Settings Center: Progress Bar Updates Announcement in User, Indicate Caps During Say All in Say All; a test that every labelled setting is in a group |
+
+Corrections in this stretch, each stated in the commit that made it:
+- `6292eb7a` and this handoff's predecessor said Progress Bar Updates Announcement was in
+  Settings Center's tree and search; no group placed it, so a search for "progress" found
+  nothing until `f04eaec6`.
+- `9af1de45`'s message names a test `in_dialog_counts_a_uia_dialog`; the assertion went into
+  `siblings_are_needed_in_a_dialog_box_or_without_a_reported_position` (`56d776ca`).
 
 ## Figures
 
-`okur-lab parity` at `81002c18`:
+`okur-lab parity` at `77a10b3e`:
 
 ```
-JAWS parity (Ia2): 11486/12068 steps match exactly; 370 accepted divergences not counted (0 scenarios could not run)
+JAWS parity (Ia2): 11485/12067 steps match exactly; 371 accepted divergences not counted (0 scenarios could not run)
 ```
 
-`okur-lab parity --spoken`: `JAWS spoken parity: 11244/12134 steps match exactly`. From
+`okur-lab parity --spoken`: `JAWS spoken parity: 11244/12133 steps match exactly`. From
 11472/12058 at the last handoff: the four Say Window steps turned to matches, and 1138's four
-steps and 1140's and 1141's six were added, all matching in both layers. `okur-lab
-invariants`: `Buffer invariants: 0 violation(s)`. `cargo test --workspace --no-fail-fast` (4
-threads), summed: 1639 passed, 0 failed, 201 ignored.
+steps and 1140's and 1141's six were added, all matching in both layers; 718/s10 became an
+accepted divergence (`3affafab`). `okur-lab invariants`: `Buffer invariants: 0 violation(s)`.
+`cargo test --workspace --no-fail-fast` (4 threads), summed: 1647 passed, 0 failed, 201
+ignored.
 
 ## Judged, not changed
 
 - **P13** (Say All resumed after a page refresh scans the lines once per place it held): the
   places are the few pieces Say All has queued, one pass over the lines each; an index of the
   lines would cost a pass and an allocation per line itself. Left as it is.
-- **Capitals during Say All** (`SayAllIndicateCaps=1`, 718): JAWS raises each capitalized
-  word by +4 inside one utterance, and also some lowercase words at an utterance's start
-  ("four", "spaces", "teh", "quick"), which looks like its own pitch state leaking, an accident
-  not to copy. Okur's speech carries one pitch per utterance; per-word pitch needs markup
-  through the speech thread and both synthesizer drivers. Not built yet; the history layer of
-  718 matches.
+- **Capitals during Say All:** built in `3affafab` (see above), without JAWS's leak.
+- **P10** (a list's column headers found again at each item's focus): a cache per list would
+  save a few calls per focus; left until old-pc can measure what it costs now.
 
 ## Next
 
@@ -81,11 +98,13 @@ threads), summed: 1639 passed, 0 failed, 201 ignored.
    step's keys before playing its events, and the engine keeps one pending edit key, so a
    repeated arrow in a field read only its first line; every desktop repeat step recorded so
    far is a double press, which that order suits), queued on old-pc (round-blank-lines-2).
-   old-pc stopped answering OpenDesk at the end of this stretch (`opendesk exec` timed out,
-   the peer still listed): check it before anything else.
-2. The phonetic spelling's Settings Center choices (its label and values are unobserved: the
+   old-pc has been offline since shortly after `81002c18` (OpenDesk: "target_offline"):
+   check it before anything else.
+2. Measure the live path on old-pc against the review's baseline (`performance-review-2026-11-03.md`)
+   now that siblings, the process and the log changed (`9af1de45` to `4c16a1d3`).
+3. The phonetic spelling's Settings Center choices (its label and values are unobserved: the
    Settings Center route of [`verification-loop.md`](../references/verification-loop.md) §8),
    and what JAWS does after a pause on a digit or a symbol.
-3. The rest of §3 by everyday use: key labels and key echo (row 27), the quick key delay
-   (row 21, Never by default), per-word pitch for capitals during Say All.
-4. The review's open items that need old-pc's live runs (P3, P6, P10) and Office (P4, P8, P15).
+4. The rest of §3 by everyday use: key labels and key echo (row 27), the quick key delay
+   (row 21, Never by default).
+5. The review's open items that need old-pc's live runs (P3, P6, P10) and Office (P4, P8, P15).
