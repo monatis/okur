@@ -183,6 +183,10 @@ enum Commands {
     /// name, control type, class, and whether it is in a document (a web page's). The harness
     /// checks a web trial starts in its page (Windows)
     Focus,
+    /// Print the focused object's text in the Chromium window in front with its IA2 text
+    /// attribute runs as Chromium gives them, one per line: research, to see where a page
+    /// field's spelling marks are (Windows). Never evidence
+    FocusText,
     /// Print the window in front as UI Automation's control view holds it, its on-screen
     /// elements in order, as one JSON tree: what Say Window reads (Windows). Research, never
     /// evidence
@@ -1699,6 +1703,28 @@ async fn main() {
         #[cfg(windows)]
         Some(Commands::Focus) => {
             println!("{}", okur_windows::uia_capture::focused_element_json());
+        }
+        #[cfg(windows)]
+        Some(Commands::FocusText) => {
+            use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+            // SAFETY: plain Win32 call with no preconditions.
+            let window = unsafe { GetForegroundWindow() };
+            match xa11y_windows::ia2::ChromiumTextField::focused(window) {
+                Ok(Some(field)) => {
+                    match field.state() {
+                        Ok(state) => println!(
+                            "text {:?} caret {} misspelled {:?}",
+                            state.text, state.caret, state.misspelled
+                        ),
+                        Err(e) => println!("state: {e}"),
+                    }
+                    for (start, end, attributes) in field.attribute_runs() {
+                        println!("{start}..{end} {attributes}");
+                    }
+                }
+                Ok(None) => println!("the focused object has no text"),
+                Err(e) => println!("not a Chromium window: {e}"),
+            }
         }
         #[cfg(windows)]
         Some(Commands::WindowTree {

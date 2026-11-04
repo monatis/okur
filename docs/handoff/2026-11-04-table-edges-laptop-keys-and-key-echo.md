@@ -73,8 +73,12 @@ compared over all three layers with `parity-snapshot.sh` before and after: no st
 - **Open: "Misspelled" in a page's field.** JAWS says "Misspelled" before Home's character on
   "Izmira" (1148/s7, 1149/s7); Okur says the mark when the field reports the word misspelled,
   but the traced reads of Chrome's field (IA2, `chromium_text_state`) carry no `invalid:spelling`
-  run even three seconds after typing. A live probe on old-pc is next: whether Chrome exposes
-  the marker through IA2's text attributes there, through UIA's annotations, or only later.
+  run even three seconds after typing; 284's "‹Misspelled › ada" steps (s9, s12) differ the
+  same way. The probe `okur-lab focus-text` (the focused Chromium object's raw IA2 attribute
+  runs) was run on old-pc in the sign-up form's Full name field, focused there by Tab
+  (`sr-harness/spell-probe.ps1`): the document's `accFocus` gave it no text object, so the probe
+  read nothing. Next: how Chrome answers `accFocus` there (a child id rather than an object?),
+  then whether the marker is in IA2's attributes or UIA's annotations.
 
 At `73667384`: `JAWS parity (Ia2): 11623/12150 steps match exactly; 382 accepted divergences
 not counted (0 scenarios could not run)` (`okur-lab parity`); `cargo test --workspace`: 1658

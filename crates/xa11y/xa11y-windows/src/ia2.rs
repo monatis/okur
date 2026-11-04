@@ -972,6 +972,35 @@ mod com {
                     .map(Self))
             }
 
+            /// Its text attribute runs as Chromium gives them, `(start, end, attributes)` in
+            /// UTF-16 code units, at most 64: research, to see where a page field's spelling
+            /// marks are (`okur-lab focus-text`).
+            pub fn attribute_runs(&self) -> Vec<(i32, i32, String)> {
+                let mut length = 0i32;
+                // SAFETY: an out-pointer to a local on a valid interface.
+                if unsafe { self.0.get_nCharacters(&mut length) }.is_err() {
+                    return Vec::new();
+                }
+                let mut runs = Vec::new();
+                let mut offset = 0i32;
+                while offset < length && runs.len() < 64 {
+                    let (mut start, mut end) = (0i32, 0i32);
+                    let mut attrs = BSTR::default();
+                    // SAFETY: out-pointers to locals on a valid interface; BSTR ownership
+                    // transfers to `attrs`.
+                    let read = unsafe {
+                        self.0
+                            .get_attributes(offset, &mut start, &mut end, &mut attrs)
+                    };
+                    if read.is_err() || end <= offset {
+                        break;
+                    }
+                    runs.push((start, end, attrs.to_string()));
+                    offset = end;
+                }
+                runs
+            }
+
             /// Its caret, first selection and length, in UTF-16 code units: enough to see
             /// that a key moved the caret or changed the text.
             pub fn position(&self) -> Result<Ia2TextPosition, Ia2CaptureError> {
