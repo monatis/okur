@@ -1731,6 +1731,10 @@ async fn main() {
                     for (start, end, attributes) in field.attribute_runs() {
                         println!("{start}..{end} {attributes}");
                     }
+                    for line in xa11y_windows::ia2::chromium_focus_runs(window).unwrap_or_default()
+                    {
+                        println!("{line}");
+                    }
                 }
                 Ok(None) => println!("the focused object has no text"),
                 Err(e) => println!("not a Chromium window: {e}"),

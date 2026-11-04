@@ -406,6 +406,7 @@ mod windows_actions {
                                     caret = context.as_ref().map(|c| c.caret),
                                     selection = ?context.as_ref().and_then(|c| c.selection),
                                     word = ?context.as_ref().and_then(|c| c.word),
+                                    misspelled = ?context.as_ref().map(|c| &c.misspelled),
                                     ms = started.elapsed().as_millis(),
                                     "text context read"
                                 );

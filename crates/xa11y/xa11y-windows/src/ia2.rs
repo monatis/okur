@@ -249,9 +249,10 @@ pub struct Ia2Probe {
 #[cfg(target_os = "windows")]
 pub use com::capture::{
     capture_chromium_document, capture_chromium_object, chromium_caret_text,
-    chromium_document_busy, chromium_modal_dialog_of, chromium_object_location,
-    chromium_scroll_to_object, chromium_text_state, has_chromium_document, perform_chromium_action,
-    probe_window, ChromiumTextField, Ia2Action, Ia2CaptureError,
+    chromium_document_busy, chromium_focus_runs, chromium_modal_dialog_of,
+    chromium_object_location, chromium_scroll_to_object, chromium_text_state,
+    has_chromium_document, perform_chromium_action, probe_window, ChromiumTextField, Ia2Action,
+    Ia2CaptureError,
 };
 
 #[cfg(target_os = "windows")]
@@ -953,6 +954,54 @@ mod com {
             ChromiumTextField::focused(top_level)?
                 .map(|field| field.state())
                 .transpose()
+        }
+
+        /// The focused object of a Chromium window's page and its descendants to depth 3, each
+        /// with its name and its IA2 text attribute runs, as lines to print: research for
+        /// `okur-lab focus-text`, where a page field's spelling marks are.
+        pub fn chromium_focus_runs(top_level: HWND) -> Result<Vec<String>, Ia2CaptureError> {
+            let document = chromium_document(top_level)?;
+            // SAFETY: MSAA focus query on a valid IAccessible.
+            let focus = unsafe { document.accFocus() }.map_err(|e| err("accFocus", e))?;
+            let focused = dispatch_child(&focus).unwrap_or(document);
+            let mut lines = Vec::new();
+            walk_runs(&focused, 0, &mut lines);
+            Ok(lines)
+        }
+
+        fn walk_runs(acc: &IAccessible, depth: usize, lines: &mut Vec<String>) {
+            const MAX_WALK_CHILDREN: i32 = 16;
+            let indent = "  ".repeat(depth);
+            // SAFETY: a plain MSAA query on a valid IAccessible.
+            let name = unsafe { acc.get_accName(&self_child()) }
+                .map(|n| n.to_string())
+                .unwrap_or_default();
+            lines.push(format!("{indent}object {name:?}"));
+            if let Some(text) = ia2_of(acc).and_then(|ia2| ia2.cast::<IAccessibleText>().ok()) {
+                for (start, end, attributes) in ChromiumTextField(text).attribute_runs() {
+                    lines.push(format!("{indent}  {start}..{end} {attributes}"));
+                }
+            }
+            if depth >= 3 {
+                return;
+            }
+            // SAFETY: valid IAccessible; the count is clamped.
+            let count = unsafe { acc.accChildCount() }
+                .unwrap_or(0)
+                .clamp(0, MAX_WALK_CHILDREN);
+            if count == 0 {
+                return;
+            }
+            let mut children = vec![VARIANT::default(); count as usize];
+            let mut obtained = 0i32;
+            // SAFETY: the slice length is the requested child count.
+            if unsafe { AccessibleChildren(acc, 0, &mut children, &mut obtained) }.is_ok() {
+                for child in children.iter().take(obtained.max(0) as usize) {
+                    if let Some(child) = dispatch_child(child) {
+                        walk_runs(&child, depth + 1, lines);
+                    }
+                }
+            }
         }
 
         /// The focused text object of a Chromium window's page, kept to be read again: while

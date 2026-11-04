@@ -80,9 +80,16 @@ compared over all three layers with `parity-snapshot.sh` before and after: no st
   joined it reads the field as Okur does, `text "ada " caret 4 misspelled []`, and one attribute
   run, `0..4 background-color:...;language:en;writing-mode:lr;`: no `invalid:spelling`. UI
   Automation's annotation types on the field's range and each word are its reserved "not
-  supported" (VT_UNKNOWN), and its range runs on past the field. So JAWS's "Misspelled" comes
-  from somewhere neither read sees (the field's inner text object, or later): next, read the
-  input's IA2 children's attributes.
+  supported" (VT_UNKNOWN), and its range runs on past the field. That was the default Chrome
+  profile; in the lab's own Chrome (`lab-chrome.ps1`, JAWS running) the same read gives
+  `misspelled [(0, 3)]` with `invalid:spelling` on "ada" (the field is a leaf, no children).
+  Yet a live run of 626 with Okur (JAWS stopped) logged `misspelled=Some([])` on every read
+  (`text context read`, which now logs it), Insert+Up long after typing included, where JAWS
+  said "Misspelled abc"; and the traces (JAWS running) lack the ranges in their steps, having
+  them only on a focus read before trial 2 (1149) or 3. Open questions for a fresh session:
+  whether Chrome computes spelling markers only while an assistive technology has asked for
+  inline text boxes (JAWS stopped in Okur's live runs), and whether a word without a following
+  space ("abc") is marked at all. 17 steps hinge on it (284, 626, 632, 640, 641, 1148, 1149).
 
 At `73667384`: `JAWS parity (Ia2): 11623/12150 steps match exactly; 382 accepted divergences
 not counted (0 scenarios could not run)` (`okur-lab parity`); `cargo test --workspace`: 1658
