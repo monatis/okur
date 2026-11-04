@@ -197,6 +197,43 @@ mod tests {
         assert_eq!(prior_char, "D");
     }
 
+    /// Smart Navigation's units: a check box, a label's text and a field are each passed over
+    /// whole and said as their lines say them; plain text goes by character [obs, 955/s2-s6].
+    #[test]
+    fn smart_navigation_moves_over_controls_and_labels_whole() {
+        let mut label =
+            AomNode::new(3, Role::Generic)
+                .with_children(vec![AomNode::new(4, Role::Text).with_text("City")]);
+        label
+            .attributes
+            .insert("tag".to_owned(), "label".to_owned());
+        let page = AomNode::new(0, Role::Document)
+            .with_name("Form")
+            .with_children(vec![
+                AomNode::new(1, Role::CheckBox).with_name("Notify me"),
+                label,
+                AomNode::new(5, Role::Edit)
+                    .with_name("City")
+                    .with_value("Izmir"),
+                AomNode::new(6, Role::Paragraph).with_text("No events."),
+            ]);
+        let mut cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
+        cursor.move_to_start();
+        let said =
+            |s: Option<String>| norm(&s.unwrap_or_default().replace(['\u{1d}', '\u{1e}'], ""));
+        assert_eq!(
+            said(cursor.move_next_unit()),
+            "Notify me check box not checked"
+        );
+        assert_eq!(said(cursor.move_next_unit()), "City");
+        assert_eq!(said(cursor.move_next_unit()), "Edit Izmir");
+        assert_eq!(said(cursor.move_next_unit()), "N");
+        assert_eq!(said(cursor.move_next_unit()), "o");
+        assert_eq!(said(cursor.move_prior_unit()), "N");
+        assert_eq!(said(cursor.move_prior_unit()), "Edit Izmir");
+        assert_eq!(said(cursor.move_prior_unit()), "City");
+    }
+
     /// At the page's top Left says the first character again and Ctrl+Left the first word
     /// [obs, 957/s6-s8, s20].
     #[test]

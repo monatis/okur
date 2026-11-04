@@ -1130,6 +1130,111 @@ impl VirtualCursor {
         )
     }
 
+    /// What is at `offset` as Smart Navigation says it: the unit there whole, or the character.
+    fn unit_or_char_at(&self, offset: usize) -> Option<String> {
+        if let Some((start, end)) = self.buffer.smart_unit_at(offset) {
+            return Some(self.buffer.unit_speech(start, end));
+        }
+        let ch = self.buffer.char_at(offset)?;
+        Some(
+            self.buffer
+                .marked_char(offset, SpeechFormatter::format_char(ch)),
+        )
+    }
+
+    /// Right with Smart Navigation's controls on: past the unit the cursor is in, over the line
+    /// breaks after it, to the next unit, said whole, or to the next character [obs, 955/s4-s8,
+    /// 954/s9-s15].
+    pub fn move_next_unit(&mut self) -> Option<String> {
+        self.selection = None;
+        let max_offset = self
+            .active_modal_range()
+            .map_or(self.buffer.len(), |(_, max)| max);
+        let offset = self.buffer.text.floor_char_boundary(self.offset);
+        let mut at = match self.buffer.smart_unit_at(offset) {
+            Some((_, end)) => end,
+            None => offset + self.buffer.char_at(offset)?.len_utf8(),
+        };
+        while at < max_offset && self.buffer.char_at(at) == Some('\n') {
+            at += 1;
+        }
+        if at >= max_offset || at >= self.buffer.len() {
+            return None;
+        }
+        self.offset = self.buffer.smart_unit_at(at).map_or(at, |(start, _)| start);
+        self.unit_or_char_at(self.offset)
+    }
+
+    /// Left with Smart Navigation's controls on: to the unit or character before the one the
+    /// cursor is on, over line breaks; at the page's top, what is there again ("Virtual Cursor
+    /// Keys - Keys Fixture", the title whole [obs, 954/s6-s8]).
+    pub fn move_prior_unit(&mut self) -> Option<String> {
+        self.selection = None;
+        let modal = self.active_modal_range();
+        let min_offset = modal.map_or(0, |(min, _)| min);
+        let offset = self.buffer.text.floor_char_boundary(self.offset);
+        let start = self
+            .buffer
+            .smart_unit_at(offset)
+            .map_or(offset, |(start, _)| start);
+        let before = |at: usize| -> Option<usize> {
+            (at > min_offset).then(|| self.buffer.text.floor_char_boundary(at - 1))
+        };
+        let Some(mut at) = before(start) else {
+            return modal
+                .is_none()
+                .then(|| self.unit_or_char_at(start))
+                .flatten();
+        };
+        while self.buffer.char_at(at) == Some('\n') {
+            match before(at) {
+                Some(earlier) => at = earlier,
+                None => {
+                    return modal
+                        .is_none()
+                        .then(|| self.unit_or_char_at(start))
+                        .flatten()
+                }
+            }
+        }
+        self.offset = self.buffer.smart_unit_at(at).map_or(at, |(start, _)| start);
+        self.unit_or_char_at(self.offset)
+    }
+
+    /// Ctrl+Right with Smart Navigation's controls on: past the unit the cursor is in, to the
+    /// next word, or the unit it begins in, said whole [obs, 955/s9, 954/s17].
+    pub fn move_next_unit_word(&mut self) -> Option<String> {
+        let from = self
+            .buffer
+            .smart_unit_at(self.offset)
+            .map_or(self.offset, |(_, end)| end.saturating_sub(1));
+        self.offset = from;
+        let said = self.move_next_word()?;
+        match self.buffer.smart_unit_at(self.offset) {
+            Some((start, end)) => {
+                self.offset = start;
+                Some(self.buffer.unit_speech(start, end))
+            }
+            None => Some(said),
+        }
+    }
+
+    /// Ctrl+Left with Smart Navigation's controls on: to the word before, or the unit it lies
+    /// in, said whole.
+    pub fn move_prior_unit_word(&mut self) -> Option<String> {
+        if let Some((start, _)) = self.buffer.smart_unit_at(self.offset) {
+            self.offset = start;
+        }
+        let said = self.move_prior_word()?;
+        match self.buffer.smart_unit_at(self.offset) {
+            Some((start, end)) => {
+                self.offset = start;
+                Some(self.buffer.unit_speech(start, end))
+            }
+            None => Some(said),
+        }
+    }
+
     /// Speaks current character without moving cursor (`SayCharacter`).
     pub fn current_char(&self) -> String {
         let offset = self.buffer.text.floor_char_boundary(self.offset);

@@ -398,6 +398,11 @@ impl SmartNavigation {
         }
         .to_string()
     }
+
+    /// Whether the virtual cursor's character and word keys pass over controls as units.
+    pub fn controls(self) -> bool {
+        matches!(self, Self::Controls | Self::ControlsAndTables)
+    }
 }
 
 /// What typing a character says (Basic Settings: Typing Echo).

@@ -860,6 +860,73 @@ impl VirtualBuffer {
         before.checked_sub(1).and_then(|i| self.lines.get(i))
     }
 
+    /// Smart Navigation's unit at `offset`, with its controls on (`SmartNavigation` 1 or 3):
+    /// the span of a control (a button, a check box, a radio button, a field, a link), of a
+    /// structural line (the page's title, a region's, a list's or a group's start or end) or
+    /// of a label's text, each passed over whole by the virtual cursor's character and word
+    /// keys and said as its line says it: "City", "‹Edit› Izmir", "group start Size" [obs,
+    /// 955/s2, s5, s20], "banner", "list of 3 items" [obs, 954/s9, s11]. `None` in plain text
+    /// and a combo box's value, which go by character ("R", "e" [obs, 955/s7, s8]).
+    pub fn smart_unit_at(&self, offset: usize) -> Option<(usize, usize)> {
+        let first = self.spans.partition_point(|s| s.end_offset <= offset);
+        let span = self
+            .spans
+            .get(first..)
+            .unwrap_or_default()
+            .iter()
+            .take_while(|s| s.start_offset <= offset)
+            .find(|s| s.start_offset <= offset && offset < s.end_offset)?;
+        let unit = match &span.role {
+            Role::Button
+            | Role::CheckBox
+            | Role::RadioButton
+            | Role::Edit
+            | Role::Link { .. }
+            | Role::MenuButton
+            | Role::SplitButton
+            | Role::Slider
+            | Role::Document
+            | Role::Landmark { .. }
+            | Role::List
+            | Role::Group => true,
+            // A label's text: its parent is the page's label element.
+            Role::Text => self
+                .ancestors(span.node_id)
+                .first()
+                .and_then(|parent| parent.attributes.get("tag"))
+                .is_some_and(|tag| tag == "label"),
+            _ => false,
+        };
+        unit.then_some((span.start_offset, span.end_offset))
+    }
+
+    /// What a Smart Navigation unit says: its line's speech where it is the whole line, else
+    /// its text with the marks that stand in it, "‹same page link› Paragraphs" [obs, 954/s15].
+    pub fn unit_speech(&self, start: usize, end: usize) -> String {
+        if let Some(line) = self
+            .line_at_offset(start)
+            .filter(|l| l.start_offset == start && l.end_offset == end)
+        {
+            return line.speech.clone();
+        }
+        let first = self.flow_marks.partition_point(|(at, _)| *at < start);
+        let mut speech = String::new();
+        let mut from = start;
+        for (at, mark) in self
+            .flow_marks
+            .get(first..)
+            .unwrap_or_default()
+            .iter()
+            .take_while(|(at, _)| *at < end)
+        {
+            speech.push_str(self.text.get(from..*at).unwrap_or_default());
+            speech.push_str(mark);
+            from = *at;
+        }
+        speech.push_str(self.text.get(from..end).unwrap_or_default());
+        speech
+    }
+
     /// Returns the word containing or starting at the given offset.
     /// A word as JAWS says it moving by word where marks stand around it: the last mark between
     /// the word before and it, then the word with the marks inside it: "Deletion twelve",

@@ -370,9 +370,13 @@ impl ScreenReaderEngine {
             _ => {}
         }
 
+        // Smart Navigation's controls: the character and word keys pass over units.
+        let units = self.settings.smart_navigation.controls();
         let speech = match &command {
             Command::SayNextLine => self.cursor.move_next_line(),
             Command::SayPriorLine => self.cursor.move_prior_line(),
+            Command::SayNextWord if units => self.cursor.move_next_unit_word(),
+            Command::SayPriorWord if units => self.cursor.move_prior_unit_word(),
             Command::SayNextWord => self.cursor.move_next_word(),
             Command::SayPriorWord => self.cursor.move_prior_word(),
             Command::SayNextCharacter => {
@@ -380,6 +384,7 @@ impl ScreenReaderEngine {
                 match role {
                     Some(Role::TreeItem) => self.cursor.tree_item_expand_or_next(),
                     Some(Role::Slider) => self.cursor.slider_increase(),
+                    _ if units => self.cursor.move_next_unit(),
                     _ => self.cursor.move_next_char(),
                 }
             }
@@ -388,6 +393,7 @@ impl ScreenReaderEngine {
                 match role {
                     Some(Role::TreeItem) => self.cursor.tree_item_collapse_or_parent(),
                     Some(Role::Slider) => self.cursor.slider_decrease(),
+                    _ if units => self.cursor.move_prior_unit(),
                     _ => self.cursor.move_prior_char(),
                 }
             }

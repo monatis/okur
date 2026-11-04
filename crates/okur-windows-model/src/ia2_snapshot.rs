@@ -404,8 +404,9 @@ fn convert(
         set_attr("preformatted", "true".to_owned());
     }
     // Paragraphs and divisions are blocks like any other in the AOM; JAWS lists them apart
-    // (Select a Paragraph, Select a Division) by their tag [obs, 239, 244].
-    if let Some(tag) = attr("tag").filter(|t| matches!(t.as_str(), "p" | "div")) {
+    // (Select a Paragraph, Select a Division) by their tag [obs, 239, 244]. A label's text is
+    // a unit of its own to Smart Navigation ("City" [obs, 955/s2]).
+    if let Some(tag) = attr("tag").filter(|t| matches!(t.as_str(), "p" | "div" | "label")) {
         set_attr("tag", tag);
     }
     // A read-only field (GitHub's code view is a read-only text area).
