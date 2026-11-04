@@ -61,6 +61,25 @@ Buffer invariants: 0 violation(s)
 --no-fail-fast` (4 threads), summed: 1658 passed, 0 failed, 201 ignored. Every change was
 compared over all three layers with `parity-snapshot.sh` before and after: no step got worse.
 
+## Later the same day
+
+- **1148 and 1149** (`c36225a6`): at typing echo Words and Both the same keys are named as at
+  Characters, so the names follow any echo but None. At Both a one-letter word is not said
+  again at Space; that was also 711/s7's accepted divergence ("c", "d", Backspace, Enter says
+  only "Enter"), JAWS's rule rather than an accident: the divergence is removed and Okur matches
+  (`73667384`).
+- **Home in a page's field is said from the key** (`EditKey::LineStart`, `73667384`), as End
+  is: after typing, the caret read at once still stood at the text's end.
+- **Open: "Misspelled" in a page's field.** JAWS says "Misspelled" before Home's character on
+  "Izmira" (1148/s7, 1149/s7); Okur says the mark when the field reports the word misspelled,
+  but the traced reads of Chrome's field (IA2, `chromium_text_state`) carry no `invalid:spelling`
+  run even three seconds after typing. A live probe on old-pc is next: whether Chrome exposes
+  the marker through IA2's text attributes there, through UIA's annotations, or only later.
+
+At `73667384`: `JAWS parity (Ia2): 11623/12150 steps match exactly; 382 accepted divergences
+not counted (0 scenarios could not run)` (`okur-lab parity`); `cargo test --workspace`: 1658
+passed, 0 failed, 201 ignored.
+
 ## Next
 
 1. When old-pc's Security Alert is answered: 1142, then the Scan Cursor in a WPF window (1013
