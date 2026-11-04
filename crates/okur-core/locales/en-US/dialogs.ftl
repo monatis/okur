@@ -497,6 +497,8 @@ settings-tree-mouse-echo-interrupt = Mouse Echo Interrupt
 settings-tree-mouse-echo-interrupt-description = Whether the mouse moving onto text stops what is being said.
 # Settings Center's Progress Bar Updates Announcement (JAWS 2025 on old-pc, 2026-11-04), its seven
 # choices by their names there.
+settings-tree-say-all-caps = Indicate Caps During Say All
+settings-tree-say-all-caps-description = Whether a word that begins with a capital is said at a higher pitch while Say All reads.
 settings-tree-progress-bar-updates = Progress Bar Updates Announcement
 settings-tree-progress-bar-updates-description = How often a progress bar's changes are said while the focus is elsewhere: never, every change, or at most once in each interval.
 settings-progress-bar-updates-off = Off

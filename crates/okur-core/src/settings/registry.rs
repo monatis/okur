@@ -290,12 +290,13 @@ pub static SETTINGS: &[SettingSpec] = &[
             },
         )
     },
-    // Indicate Caps During Say All, in JAWS's Say All group; in no dialog of Okur's yet: the
-    // settings file and --set.
+    // Indicate Caps During Say All, in Settings Center's Say All group as in JAWS's; no
+    // access key is left for the dialog.
     SettingSpec {
         jaws: default_jcf("Options", "SayAllIndicateCaps", |v| {
             Value::Bool(v.trim() == "1")
         }),
+        tree_label: Some(msg::settings_tree_say_all_caps),
         ..spec("voice.say_all_caps", Group::Speech, None, CHECK)
     },
     SettingSpec {

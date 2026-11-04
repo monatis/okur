@@ -194,7 +194,9 @@ impl TreeGroup {
 /// them. `None`: not shown.
 fn center_group(id: &str) -> Option<TreeGroup> {
     Some(match id {
-        "typing_echo" | "viewer_display" | "screen_echo" => TreeGroup::User,
+        "typing_echo" | "viewer_display" | "screen_echo" | "progress_bar_interval_ms" => {
+            TreeGroup::User
+        }
         "smart_navigation" => TreeGroup::WebNavigation,
         "heading_indication" => TreeGroup::WebHeadings,
         "read_page_on_load" => TreeGroup::WebReading,
@@ -206,7 +208,7 @@ fn center_group(id: &str) -> Option<TreeGroup> {
         "voice.text.say_dollars" => TreeGroup::TextNumbers,
         "verbosity.level" => TreeGroup::SpeechVerbosity,
         "speech_mode" | "less_speech" => TreeGroup::SpeechOptions,
-        "say_all_unit" => TreeGroup::SayAll,
+        "say_all_unit" | "voice.say_all_caps" => TreeGroup::SayAll,
         "voice.synthesizer" | "voice.voice" | "voice.rate" | "voice.volume" => {
             TreeGroup::Synthesizer
         }
@@ -2012,6 +2014,28 @@ mod tests {
             .iter()
             .any(|m| matches!(m, ToUi::DialogSwap { show, hide, .. }
             if show == TREE && hide == RESULTS)));
+    }
+
+    /// Progress Bar Updates Announcement is found in User, as JAWS's search finds it
+    /// ("Progress Bar Updates Announcement 1 of 1 Search Results" [old-pc, 2026-11-04]), and
+    /// Indicate Caps During Say All in Say All.
+    #[test]
+    fn progress_bars_and_capitals_during_say_all_are_found() {
+        let mut dialog = tree(Flavor::Center);
+        for (typed, found) in [
+            ("progress", "Progress Bar Updates Announcement"),
+            ("caps during", "Indicate Caps During Say All"),
+        ] {
+            let Outcome::Changed(_, said) = dialog.handle(&FromUi::DialogChanged {
+                id: 7,
+                control: SEARCH.into(),
+                value: Value::Text(typed.into()),
+            }) else {
+                panic_free_fail("nothing said");
+                return;
+            };
+            assert!(said.starts_with(found), "{typed}: {said}");
+        }
     }
 
     /// Screen Echo in User, Smart Navigation Mode and Indicate Headings in their Web groups, each
