@@ -2016,6 +2016,19 @@ mod tests {
             if show == TREE && hide == RESULTS)));
     }
 
+    /// Every setting given a label is in Settings Center's tree: one labelled but placed in no
+    /// group was shown nowhere (Progress Bar Updates Announcement, 6292eb7a to f04eaec6).
+    #[test]
+    fn every_labelled_setting_is_in_a_group() {
+        let unplaced: Vec<&str> = crate::settings::registry::SETTINGS
+            .iter()
+            .filter(|spec| spec.label.is_some() || spec.tree_label.is_some())
+            .filter(|spec| center_group(spec.id).is_none())
+            .map(|spec| spec.id)
+            .collect();
+        assert!(unplaced.is_empty(), "in no group: {unplaced:?}");
+    }
+
     /// Progress Bar Updates Announcement is found in User, as JAWS's search finds it
     /// ("Progress Bar Updates Announcement 1 of 1 Search Results" [old-pc, 2026-11-04]), and
     /// Indicate Caps During Say All in Say All.
