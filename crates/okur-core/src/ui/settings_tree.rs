@@ -94,6 +94,8 @@ pub enum TreeGroup {
     FormsMode,
     TextProcessing,
     TextGeneral,
+    /// Text Processing > General > Phonetic Announcement.
+    TextPhonetic,
     TextNumbers,
     SpeechVerbosity,
     SpeechOptions,
@@ -111,7 +113,7 @@ pub enum TreeGroup {
 
 impl TreeGroup {
     /// Settings Center's, in JAWS's order, each group right before its subgroups.
-    const CENTER: [TreeGroup; 19] = [
+    const CENTER: [TreeGroup; 20] = [
         Self::User,
         Self::Web,
         Self::WebReading,
@@ -121,6 +123,7 @@ impl TreeGroup {
         Self::FormsMode,
         Self::TextProcessing,
         Self::TextGeneral,
+        Self::TextPhonetic,
         Self::TextNumbers,
         Self::SpeechVerbosity,
         Self::SpeechOptions,
@@ -146,6 +149,7 @@ impl TreeGroup {
                 Some(Self::Web)
             }
             Self::TextGeneral | Self::TextNumbers => Some(Self::TextProcessing),
+            Self::TextPhonetic => Some(Self::TextGeneral),
             Self::KeyboardGeneral => Some(Self::Keyboard),
             _ => None,
         }
@@ -170,6 +174,7 @@ impl TreeGroup {
             Self::WebNavigation => msg::settings_tree_navigation(),
             Self::WebHeadings => msg::settings_tree_headings_and_frames(),
             Self::TextNumbers => msg::settings_tree_numbers(),
+            Self::TextPhonetic => msg::settings_tree_phonetic_announcement(),
             Self::SpeechOptions => msg::settings_tree_speech_options(),
             Self::FormsMode => msg::settings_tree_forms_mode(),
             Self::TextProcessing => msg::settings_tree_text_processing(),
@@ -206,6 +211,7 @@ fn center_group(id: &str) -> Option<TreeGroup> {
             TreeGroup::TextGeneral
         }
         "voice.text.say_dollars" => TreeGroup::TextNumbers,
+        "phonetic_pause_ms" => TreeGroup::TextPhonetic,
         "verbosity.level" => TreeGroup::SpeechVerbosity,
         "speech_mode" | "less_speech" => TreeGroup::SpeechOptions,
         "say_all_unit" | "voice.say_all_caps" => TreeGroup::SayAll,
@@ -2038,6 +2044,10 @@ mod tests {
         for (typed, found) in [
             ("progress", "Progress Bar Updates Announcement"),
             ("caps during", "Indicate Caps During Say All"),
+            (
+                "pausing",
+                "When pausing after character navigation, speak character phonetically",
+            ),
         ] {
             let Outcome::Changed(_, said) = dialog.handle(&FromUi::DialogChanged {
                 id: 7,

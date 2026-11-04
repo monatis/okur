@@ -532,9 +532,10 @@ pub static SETTINGS: &[SettingSpec] = &[
         )
     },
     // A character said phonetically after a pause on it, JAWS's tenths of a second in
-    // milliseconds; in no dialog of Okur's until JAWS's own choices for it are observed: the
-    // settings file and --set.
+    // milliseconds: Settings Center's "When pausing after character navigation, speak
+    // character phonetically", in its tree and search; no access key is left for the dialog.
     SettingSpec {
+        tree_label: Some(msg::settings_tree_phonetic_pause),
         jaws: default_jcf("Options", "PhoneticCharAfterPause", |v| {
             v.trim().parse::<u32>().map_or(Value::Null, |tenths| {
                 Value::from(tenths.saturating_mul(100))
@@ -544,10 +545,7 @@ pub static SETTINGS: &[SettingSpec] = &[
             "phonetic_pause_ms",
             Group::Reading,
             None,
-            Kind::Range {
-                min: 0,
-                max: 10_000,
-            },
+            Kind::Choice(phonetic_pauses),
         )
     },
     // JAWS's Mouse Echo group (Settings Center help), in its order.
@@ -1010,6 +1008,23 @@ fn progress_bar_updates() -> Vec<Choice> {
     .collect()
 }
 
+/// When a character the arrows moved onto is said phonetically: JAWS's four choices in
+/// Settings Center (old-pc, 2026-11-04), in milliseconds.
+fn phonetic_pauses() -> Vec<Choice> {
+    [
+        (0_u32, msg::settings_phonetic_pause_never()),
+        (500, msg::settings_phonetic_pause_half_second()),
+        (1_000, msg::settings_phonetic_pause_one_second()),
+        (1_500, msg::settings_phonetic_pause_one_and_a_half_seconds()),
+    ]
+    .into_iter()
+    .map(|(ms, label)| Choice {
+        value: Value::from(ms),
+        label,
+    })
+    .collect()
+}
+
 /// JAWS's user verbosity levels.
 impl Choices for VerbosityLevel {
     const ALL: &'static [Self] = &[Self::Beginner, Self::Intermediate, Self::Advanced];
@@ -1107,7 +1122,19 @@ mod tests {
         assert!(undescribed.is_empty(), "no description: {undescribed:?}");
     }
 
-    /// Every enum setting offers all of its values: typing echo's four, not two.
+    /// The phonetic pause offers Settings Center's four choices, in milliseconds: Never, and
+    /// half a second to one and a half, the default (old-pc, 2026-11-04).
+    #[test]
+    fn the_phonetic_pause_offers_settings_centers_four_choices() {
+        let choices = phonetic_pauses();
+        let values: Vec<Value> = choices.iter().map(|c| c.value.clone()).collect();
+        assert_eq!(values, [0, 500, 1_000, 1_500].map(Value::from));
+        let label = |at: usize| choices.get(at).map(|c| c.label.to_string());
+        assert_eq!(label(0).as_deref(), Some("Never"));
+        assert_eq!(label(3).as_deref(), Some("After one and a half seconds"));
+        assert_eq!(Settings::default().phonetic_pause_ms, 1_500);
+    }
+
     /// Progress Bar Updates Announcement offers Settings Center's seven choices, by the
     /// milliseconds JAWS keeps: Off 0, Announce All 1, and 5 Second Intervals, the default.
     #[test]

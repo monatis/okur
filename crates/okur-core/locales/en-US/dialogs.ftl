@@ -499,6 +499,13 @@ settings-tree-mouse-echo-interrupt-description = Whether the mouse moving onto t
 # choices by their names there.
 settings-tree-say-all-caps = Indicate Caps During Say All
 settings-tree-say-all-caps-description = Whether a word that begins with a capital is said at a higher pitch while Say All reads.
+settings-tree-phonetic-announcement = Phonetic Announcement
+settings-tree-phonetic-pause = When pausing after character navigation, speak character phonetically
+settings-tree-phonetic-pause-description = How long after the arrows move onto a letter, with no other key, it is said again by its phonetic word, "d" then "delta"; or never.
+settings-phonetic-pause-never = Never
+settings-phonetic-pause-half-second = After one half second
+settings-phonetic-pause-one-second = After one second
+settings-phonetic-pause-one-and-a-half-seconds = After one and a half seconds
 settings-tree-progress-bar-updates = Progress Bar Updates Announcement
 settings-tree-progress-bar-updates-description = How often a progress bar's changes are said while the focus is elsewhere: never, every change, or at most once in each interval.
 settings-progress-bar-updates-off = Off
