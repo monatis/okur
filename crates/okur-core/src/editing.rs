@@ -716,8 +716,10 @@ pub fn speech_in(
         EditKey::TableCell(how) => return crate::document::cell_speech(before, after, how),
         EditKey::FormField => return None,
         EditKey::FormFieldState => return crate::document::form_field_state(after),
+        // The text's end is read as a line break, "blank", which JAWS keeps out of its
+        // history: Delete on the empty last line [obs, 1142/s7].
         EditKey::Character | EditKey::DeleteForward => {
-            char_at(after).map_or_else(|| msg::blank().to_string(), |c| c.to_string())
+            char_at(after).map_or_else(|| "\n".to_owned(), |c| c.to_string())
         }
         // A word move that stops at a line's end reads the line break, as a character move onto
         // it does [obs, 320/s7, s11].

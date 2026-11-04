@@ -464,7 +464,17 @@ impl ScreenReaderEngine {
         let after_prefix = speech
             .rsplit_once('\n')
             .filter(|(_, last)| key == EditKey::Character && last.chars().count() == 1);
-        if character {
+        // A space Backspace deleted is said by its name, which JAWS's history keeps ("space"
+        // [obs, 1142/s6]), where a space the arrows reach is a character it keeps out.
+        let deleted_space = key == EditKey::DeleteBackward
+            && !speech.is_empty()
+            && speech
+                .chars()
+                .all(|c| c.is_whitespace() && !crate::editing::is_line_break(c));
+        if deleted_space {
+            self.speech
+                .speak(&crate::pronounce::character(&speech), true);
+        } else if character {
             self.speech.speak_character(&speech, true);
             if key == EditKey::Character {
                 self.schedule_phonetic(&speech);
