@@ -428,6 +428,17 @@ the morning. This is how it was done; it needs fresh permission each time.
   1 of 1 Search Results"), Tab reaches it, and Space steps through its choices ("10 Second
   Intervals 4 of 7") without saving. Two Escapes then end on "Do you want to save them? Yes":
   answer `TypeKey("n")`, and check that the user's `DEFAULT.JCF` hash is unchanged (2026-11-04).
+- **A comparison run with a binary older than the change.** `parity-snapshot.sh` once used
+  `target/agent/release/okur-lab.exe` by default, a build for old-pc made before the change it
+  was to measure: its before and after ran the same program, and "no step changes" went into
+  a commit message uncomputed (c56173d8, corrected in ff02a419); `preview-round.sh` showed an
+  older engine's speech the same way. Both now build the working tree's okur-lab first when
+  none is named; a binary named must be built from the tree being measured (2026-11-04).
+- **A tool tip is two things.** Windows' balloon tips (an edit's "Unacceptable Character", one
+  an application shows with `EM_SHOWBALLOONTIP`) are `tooltips_class32` windows whose MSAA
+  role is a help balloon (31) and whose MSAA name is "Title: text"; UI Automation names them
+  by their text alone. A plain tool tip (role 13) shown without the mouse JAWS does not say
+  (1138, 2026-11-04).
 
 ## 9. Open questions to settle on old-pc
 

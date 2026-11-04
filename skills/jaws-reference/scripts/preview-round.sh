@@ -9,7 +9,14 @@
 # Nothing in corpus/ is touched.
 set -eu
 FETCHED="${1%/}"
-OKUR_LAB="${2:-target/release/okur-lab.exe}"
+# Without an okur-lab.exe, the working tree's is built first (target/debug): a default binary
+# once predated the engine change being previewed (2026-11-04).
+if [ -n "${2:-}" ]; then
+    OKUR_LAB="$2"
+else
+    CARGO_BUILD_JOBS="${CARGO_BUILD_JOBS:-4}" cargo build -q -p okur-lab --bin okur-lab
+    OKUR_LAB=target/debug/okur-lab.exe
+fi
 SCRATCH="$FETCHED-preview"
 rm -rf "$SCRATCH"
 mkdir -p "$SCRATCH/scenarios" "$SCRATCH/evidence" "$SCRATCH/traces"
