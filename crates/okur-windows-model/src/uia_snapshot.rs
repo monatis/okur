@@ -379,7 +379,15 @@ fn convert(node: &UiaNode, next_id: &mut usize) -> okur_core::AomNode {
         focusable: Some(node.is_keyboard_focusable),
         pressed: false,
     };
-    if let Some(aria) = node.aria_role.as_deref() {
+    // Chrome gives a page's plain table UI Automation's Table type with the ARIA role "grid"
+    // (its cells "gridcell"), and an ARIA grid the DataGrid type: the role is a grid's on a
+    // DataGrid alone. JAWS says "table with 4 columns and 4 rows" for the first [obs, 21/s1],
+    // "grid with 5 columns and 7 rows" for the second [obs, 2694/s1].
+    let aria_role = node
+        .aria_role
+        .as_deref()
+        .filter(|aria| !(*aria == "grid" && node.control_type == CT_TABLE));
+    if let Some(aria) = aria_role {
         aom.attributes
             .insert("aria_role".to_owned(), aria.to_owned());
         // The AOM's table model identifies header cells by `tag`/`scope`.
@@ -492,5 +500,24 @@ mod tests {
             super::map_role(&group("radiogroup")),
             okur_core::Role::Group
         );
+    }
+
+    /// Chrome's plain table is UI Automation's Table with the ARIA role "grid": a table, which
+    /// JAWS calls a table [obs, 21/s1]; an ARIA grid is a DataGrid, a grid [obs, 2694/s1].
+    #[test]
+    fn a_plain_table_is_no_grid() {
+        let table = |control_type: i32| super::UiaNode {
+            control_type,
+            aria_role: Some("grid".to_owned()),
+            ..Default::default()
+        };
+        let role = |control_type: i32| {
+            super::to_aom(&table(control_type))
+                .attributes
+                .get("aria_role")
+                .cloned()
+        };
+        assert_eq!(role(super::CT_TABLE), None);
+        assert_eq!(role(super::CT_DATAGRID).as_deref(), Some("grid"));
     }
 }
