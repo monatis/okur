@@ -46,7 +46,7 @@ and cells in the next commit; `focus_needs_siblings`, checked over every traced 
 18,864 with siblings skip them), the live time saved to be measured on old-pc; two
 `OpenProcess` per focus (one since the next commit: its executable read once for its name and
 its product); the debug log formatting each event in full, which inflates the runs
-that measure these fixes.
+that measure these fixes (an event is logged by its kind since the next commit)
 
 Checked and fine (not to redo): the keyboard hook's own work; command lookup; settings resolved
 only when the application or site changes; message rendering; `pronounce::render` (on the speech

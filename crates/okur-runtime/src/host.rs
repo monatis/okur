@@ -312,49 +312,7 @@ fn give_way_to_keys() {
 
 /// A short name for an event, for logs (a page's tree is too big to print).
 fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
-    match event {
-        None => "idle",
-        Some(AccessibilityEvent::Focus(_)) => "focus",
-        Some(AccessibilityEvent::Menu(_)) => "menu",
-        Some(AccessibilityEvent::Change { .. }) => "change",
-        Some(AccessibilityEvent::TextContext(_)) => "text context",
-        Some(AccessibilityEvent::ConsoleText(_)) => "console text",
-        Some(AccessibilityEvent::Selected(_)) => "selected",
-        Some(AccessibilityEvent::LiveRegion(_)) => "live region",
-        Some(AccessibilityEvent::ProgressChanged { .. }) => "progress changed",
-        Some(AccessibilityEvent::ViewerText(_)) => "viewer text",
-        Some(AccessibilityEvent::ScreenText(_)) => "screen text",
-        Some(AccessibilityEvent::WindowControls(_)) => "window controls",
-        Some(AccessibilityEvent::Recognized(_)) => "recognized",
-        Some(AccessibilityEvent::FileRecognized(_)) => "file recognized",
-        Some(AccessibilityEvent::FileRecognitionStarted) => "file recognition started",
-        Some(AccessibilityEvent::TopWindows(_)) => "top windows",
-        Some(AccessibilityEvent::TrayIcons(_)) => "tray icons",
-        Some(AccessibilityEvent::PageElements(_)) => "page elements",
-        Some(AccessibilityEvent::TrackedPlace { .. }) => "tracked place",
-        Some(AccessibilityEvent::DocumentHeadings(_)) => "document headings",
-        Some(AccessibilityEvent::DocumentLinks(_)) => "document links",
-        Some(AccessibilityEvent::LineSpacing(_)) => "line spacing",
-        Some(AccessibilityEvent::WordKeyState(_)) => "word key state",
-        Some(AccessibilityEvent::DocumentFields(_)) => "document fields",
-        Some(AccessibilityEvent::DocumentNotes(..)) => "document notes",
-        Some(AccessibilityEvent::DocumentParagraphs(_)) => "document paragraphs",
-        Some(AccessibilityEvent::DocumentView(_)) => "document view",
-        Some(AccessibilityEvent::StatusBar(_)) => "status bar",
-        Some(AccessibilityEvent::SheetPlace(_)) => "sheet place",
-        Some(AccessibilityEvent::SheetList { .. }) => "sheet list",
-        Some(AccessibilityEvent::DocumentLoaded { .. }) => "document loaded",
-        Some(AccessibilityEvent::Ui(_)) => "okur window",
-        Some(AccessibilityEvent::PageChanged) => "page changed",
-        Some(AccessibilityEvent::PagePartsLoaded(_)) => "page parts loaded",
-        Some(AccessibilityEvent::WindowRenamed(_)) => "window renamed",
-        Some(AccessibilityEvent::WindowShown(_)) => "window shown",
-        Some(AccessibilityEvent::MouseMoved { .. }) => "mouse moved",
-        Some(AccessibilityEvent::Toast { .. }) => "toast",
-        Some(AccessibilityEvent::BalloonTip(_)) => "balloon tip",
-        Some(AccessibilityEvent::AppNotification { .. }) => "application notification",
-        Some(AccessibilityEvent::MousePoint(_)) => "mouse point",
-    }
+    event.map_or("idle", crate::logging::event_kind)
 }
 
 /// Prints utterances from a thread of its own: a console paused in QuickEdit selection

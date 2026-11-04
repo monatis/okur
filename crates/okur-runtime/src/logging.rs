@@ -112,9 +112,68 @@ fn spawn_log_writer(
     tx
 }
 
+/// An event's kind in a few words, for logs: what an event is without formatting what it holds
+/// (a document's whole text, a page's elements; second review, 2026-11-03).
+pub fn event_kind(event: &okur_core::AccessibilityEvent) -> &'static str {
+    use okur_core::AccessibilityEvent;
+    match event {
+        AccessibilityEvent::Focus(_) => "focus",
+        AccessibilityEvent::Menu(_) => "menu",
+        AccessibilityEvent::Change { .. } => "change",
+        AccessibilityEvent::TextContext(_) => "text context",
+        AccessibilityEvent::ConsoleText(_) => "console text",
+        AccessibilityEvent::Selected(_) => "selected",
+        AccessibilityEvent::LiveRegion(_) => "live region",
+        AccessibilityEvent::ProgressChanged { .. } => "progress changed",
+        AccessibilityEvent::ViewerText(_) => "viewer text",
+        AccessibilityEvent::ScreenText(_) => "screen text",
+        AccessibilityEvent::WindowControls(_) => "window controls",
+        AccessibilityEvent::Recognized(_) => "recognized",
+        AccessibilityEvent::FileRecognized(_) => "file recognized",
+        AccessibilityEvent::FileRecognitionStarted => "file recognition started",
+        AccessibilityEvent::TopWindows(_) => "top windows",
+        AccessibilityEvent::TrayIcons(_) => "tray icons",
+        AccessibilityEvent::PageElements(_) => "page elements",
+        AccessibilityEvent::TrackedPlace { .. } => "tracked place",
+        AccessibilityEvent::DocumentHeadings(_) => "document headings",
+        AccessibilityEvent::DocumentLinks(_) => "document links",
+        AccessibilityEvent::LineSpacing(_) => "line spacing",
+        AccessibilityEvent::WordKeyState(_) => "word key state",
+        AccessibilityEvent::DocumentFields(_) => "document fields",
+        AccessibilityEvent::DocumentNotes(..) => "document notes",
+        AccessibilityEvent::DocumentParagraphs(_) => "document paragraphs",
+        AccessibilityEvent::DocumentView(_) => "document view",
+        AccessibilityEvent::StatusBar(_) => "status bar",
+        AccessibilityEvent::SheetPlace(_) => "sheet place",
+        AccessibilityEvent::SheetList { .. } => "sheet list",
+        AccessibilityEvent::DocumentLoaded { .. } => "document loaded",
+        AccessibilityEvent::Ui(_) => "okur window",
+        AccessibilityEvent::PageChanged => "page changed",
+        AccessibilityEvent::PagePartsLoaded(_) => "page parts loaded",
+        AccessibilityEvent::WindowRenamed(_) => "window renamed",
+        AccessibilityEvent::WindowShown(_) => "window shown",
+        AccessibilityEvent::MouseMoved { .. } => "mouse moved",
+        AccessibilityEvent::Toast { .. } => "toast",
+        AccessibilityEvent::BalloonTip(_) => "balloon tip",
+        AccessibilityEvent::AppNotification { .. } => "application notification",
+        AccessibilityEvent::MousePoint(_) => "mouse point",
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// An event is logged by its kind, not by what it holds.
+    #[test]
+    fn an_event_is_logged_by_its_kind() {
+        let text = okur_core::AccessibilityEvent::BalloonTip("Password: Use at least 8".into());
+        assert_eq!(event_kind(&text), "balloon tip");
+        assert_eq!(
+            event_kind(&okur_core::AccessibilityEvent::PageChanged),
+            "page changed"
+        );
+    }
 
     /// The kept log grown past its cap starts again, the one before kept beside it.
     #[test]

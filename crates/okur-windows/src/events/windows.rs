@@ -449,7 +449,14 @@ fn deliver_one(
         }
         // The mouse moves many times a second: its moves stay out of the debug log.
         AccessibilityEvent::MouseMoved { .. } => {}
-        other => tracing::debug!(event = ?other, "event"),
+        // By its kind: formatted whole, a text context held a document's whole text, and the
+        // log of a measured run grew with it (second review, 2026-11-03).
+        AccessibilityEvent::TextContext(context) => tracing::debug!(
+            chars = context.text.chars().count(),
+            caret = context.caret,
+            "event: text context"
+        ),
+        other => tracing::debug!(kind = okur_runtime::logging::event_kind(other), "event"),
     }
     let _ = sender.send(converted);
 }
