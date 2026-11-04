@@ -506,11 +506,17 @@ $okurRun = $null
 if ($Reader -eq 'okur') {
     $jaws = $null
     $OkurSpeechLog = Join-Path $env:TEMP "okur-live-$([guid]::NewGuid().ToString('N')).jsonl"
-    # A settings folder of its own, with the reference machine's settings for all applications,
-    # made anew for every run.
+    # A settings folder of its own, made anew for every run: the settings JAWS runs with here,
+    # its DEFAULT.JCF read as replay reads a recording's, with the scenario's jaws_settings over
+    # it (1144's Navigation Quick Key Delay was off in Okur's live run without them).
     $okurSettings = Join-Path $env:TEMP 'okur-live-settings'
     Remove-Item -Recurse -Force $okurSettings -ErrorAction SilentlyContinue
-    & $OkurLab reference-settings $okurSettings | Out-Null
+    $userJcf = Join-Path $env:APPDATA 'Freedom Scientific\JAWS\2025\Settings\enu\DEFAULT.JCF'
+    & $OkurLab reference-settings $okurSettings --jcf $userJcf --scenario $ScenarioFile | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "JAWS's DEFAULT.JCF could not be read: the reference machine's settings instead"
+        & $OkurLab reference-settings $okurSettings | Out-Null
+    }
     Invoke-JawsProcess -Stop
     $okurArgs = @(
         'run', '--settings', "`"$okurSettings`"", '--speech-log', "`"$OkurSpeechLog`"",

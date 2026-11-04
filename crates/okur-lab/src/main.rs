@@ -478,6 +478,13 @@ enum Commands {
     ReferenceSettings {
         /// The folder to write them in
         path: String,
+        /// JAWS's `DEFAULT.JCF` read through the settings table, as replay reads a recording's
+        /// (old-pc's own, for a live run there)
+        #[arg(long)]
+        jcf: Option<String>,
+        /// A scenario whose `jaws_settings` (its `DEFAULT.JCF` keys) are read over `--jcf`'s
+        #[arg(long, requires = "jcf")]
+        scenario: Option<String>,
     },
     /// Query hardware soundcard / default playback audio meter
     Meter {
@@ -756,6 +763,62 @@ fn converted_line(event: &okur_core::AccessibilityEvent) -> String {
             text.chars().take(160).collect()
         }
     }
+}
+
+/// The keys of JAWS's `DEFAULT.JCF` (an INI file, `;` comments), by section and key.
+fn read_jcf(path: &str) -> Result<std::collections::HashMap<(String, String), String>, String> {
+    let text = std::fs::read_to_string(path).map_err(|e| format!("{path}: {e}"))?;
+    let mut keys = std::collections::HashMap::new();
+    let mut section = String::new();
+    for line in text.trim_start_matches('\u{feff}').lines() {
+        let line = line.trim();
+        if line.starts_with(';') || line.is_empty() {
+            continue;
+        }
+        if let Some(name) = line.strip_prefix('[').and_then(|l| l.strip_suffix(']')) {
+            section = name.trim().to_owned();
+        } else if let Some((key, value)) = line.split_once('=') {
+            keys.insert(
+                (section.clone(), key.trim().to_owned()),
+                value.trim().to_owned(),
+            );
+        }
+    }
+    Ok(keys)
+}
+
+/// The settings JAWS runs with from its `DEFAULT.JCF` at `jcf`, read through the settings table
+/// over the reference machine's configuration as replay reads a recording's, with a scenario's
+/// `jaws_settings` (its `DEFAULT.JCF` keys) over the file's: a live run of Okur on old-pc then
+/// has what JAWS was recorded with (1144's Navigation Quick Key Delay).
+fn jaws_file_settings(
+    jcf: &str,
+    scenario: Option<&str>,
+) -> Result<okur_core::settings::Settings, String> {
+    use okur_core::settings::registry::{import_jaws, JawsFile};
+    let file = read_jcf(jcf)?;
+    let overrides = match scenario {
+        Some(path) => {
+            let text = std::fs::read_to_string(path).map_err(|e| format!("{path}: {e}"))?;
+            let scenario: serde_json::Value =
+                serde_json::from_str(text.trim_start_matches('\u{feff}'))
+                    .map_err(|e| format!("{path}: {e}"))?;
+            scenario
+                .pointer("/jaws_settings/DEFAULT.JCF")
+                .cloned()
+                .unwrap_or_default()
+        }
+        None => serde_json::Value::Null,
+    };
+    let base = okur_core::settings::Settings::reference_machine();
+    Ok(import_jaws(&base, &|kind, section, key| match kind {
+        JawsFile::DefaultJcf => overrides
+            .get(section)
+            .and_then(|s| s.get(key))
+            .and_then(|v| v.as_str())
+            .map(str::to_owned)
+            .or_else(|| file.get(&(section.to_owned(), key.to_owned())).cloned()),
+    }))
 }
 
 /// Logs to stderr at the RUST_LOG level, or, for `run --debug-log <file>` and
@@ -1188,11 +1251,24 @@ async fn main() {
                 }
             }
         }
-        Some(Commands::ReferenceSettings { path }) => {
+        Some(Commands::ReferenceSettings {
+            path,
+            jcf,
+            scenario,
+        }) => {
             use okur_core::settings::SettingsStore;
-            let layers = okur_core::settings_layers::SettingsLayers::with_global(
-                &okur_core::settings::Settings::reference_machine(),
-            );
+            let settings = match jcf
+                .as_deref()
+                .map(|jcf| jaws_file_settings(jcf, scenario.as_deref()))
+            {
+                Some(Ok(settings)) => settings,
+                Some(Err(e)) => {
+                    eprintln!("Error: {e}");
+                    std::process::exit(1);
+                }
+                None => okur_core::settings::Settings::reference_machine(),
+            };
+            let layers = okur_core::settings_layers::SettingsLayers::with_global(&settings);
             let folder = okur_runtime::settings_file::SettingsFolder::at(&path);
             folder.save(&layers);
             if folder.load() != layers {
