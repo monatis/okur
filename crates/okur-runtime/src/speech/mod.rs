@@ -34,6 +34,9 @@ pub struct TtsManager {
     punctuation: okur_core::settings::Punctuation,
     /// Capitals read alone or spelled at a raised pitch (the voice settings' Caps Indicate).
     pub(crate) indicate_caps: bool,
+    /// Capitalized words raised while Say All reads (the voice settings' Indicate Caps During
+    /// Say All).
+    pub(crate) say_all_caps: bool,
     /// The pitch everything is said at (the voice context's), a capital's raise added to it.
     pub(crate) pitch: i32,
     /// How running text is given to the voice (the voice settings' Text Processing).
@@ -120,6 +123,7 @@ impl TtsManager {
             voice: None,
             punctuation: okur_core::settings::Punctuation::default(),
             indicate_caps: true,
+            say_all_caps: false,
             pitch: 0,
             text: okur_core::settings::TextProcessing::default(),
             applied: None,
@@ -350,6 +354,7 @@ impl TtsManager {
         self.pitch = voice.pitch;
         self.punctuation = voice.punctuation;
         self.indicate_caps = voice.indicate_caps;
+        self.say_all_caps = voice.say_all_caps;
         self.text = voice.text;
         let applied = self.applied.replace(voice.clone());
         if let Some(applied) =

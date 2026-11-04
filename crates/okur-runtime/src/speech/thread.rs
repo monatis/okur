@@ -376,11 +376,21 @@ fn carry_out(
         match request {
             Request::Marked(text, mark, interrupt) => {
                 let spoken = okur_core::pronounce::spoken_with(&text, tts.punctuation, tts.text);
-                logged(
-                    &mut tts.failed_in_a_row,
-                    tts.engine.speak_marked(&spoken, mark, pitch, interrupt),
-                    "speak_marked",
-                );
+                // Capitalized words raised, each a part of its own behind the part's mark.
+                let parts = if tts.say_all_caps {
+                    okur_core::pronounce::capital_word_parts(&spoken)
+                } else {
+                    vec![(spoken, 0)]
+                };
+                for (i, (part, raise)) in parts.into_iter().enumerate() {
+                    let at = pitch.saturating_add(raise).clamp(-10, 10);
+                    let said = if i == 0 {
+                        tts.engine.speak_marked(&part, mark, at, interrupt)
+                    } else {
+                        tts.engine.speak_pitched(&part, at, false)
+                    };
+                    logged(&mut tts.failed_in_a_row, said, "speak_marked");
+                }
                 tracing::debug!(
                     mark,
                     follows = tts.engine.follows_marks(),
@@ -1404,5 +1414,127 @@ mod context_tests {
         manager.use_context(VoiceContext::Message);
         let rates = rates.lock().map(|r| r.clone()).unwrap_or_default();
         assert_eq!(rates, [2, 7, 2, -4, 2]);
+    }
+}
+
+#[cfg(test)]
+mod say_all_caps_tests {
+    use super::*;
+    use crate::{TtsEngine, TtsError, VoiceInfo};
+    use okur_core::settings::Synthesizer;
+
+    /// What a synthesizer was handed: each part, its pitch, and whether it carried a mark.
+    type Handed = Arc<Mutex<Vec<(String, i32, bool)>>>;
+
+    struct Recorded(Handed);
+
+    impl Recorded {
+        fn hand(&self, text: &str, pitch: i32, marked: bool) {
+            if let Ok(mut handed) = self.0.lock() {
+                handed.push((text.to_owned(), pitch, marked));
+            }
+        }
+    }
+
+    impl TtsEngine for Recorded {
+        fn name(&self) -> &str {
+            "recorded"
+        }
+        fn speak(&mut self, text: &str, _interrupt: bool) -> Result<(), TtsError> {
+            self.hand(text, 0, false);
+            Ok(())
+        }
+        fn speak_pitched(
+            &mut self,
+            text: &str,
+            pitch: i32,
+            _interrupt: bool,
+        ) -> Result<(), TtsError> {
+            self.hand(text, pitch, false);
+            Ok(())
+        }
+        fn speak_marked(
+            &mut self,
+            text: &str,
+            _mark: u64,
+            pitch: i32,
+            _interrupt: bool,
+        ) -> Result<(), TtsError> {
+            self.hand(text, pitch, true);
+            Ok(())
+        }
+        fn stop(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn pause(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn resume(&mut self) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn set_rate(&mut self, _rate: i32) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn get_rate(&self) -> i32 {
+            0
+        }
+        fn set_volume(&mut self, _volume: u16) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn get_volume(&self) -> u16 {
+            100
+        }
+        fn is_speaking(&self) -> bool {
+            false
+        }
+        fn get_voices(&self) -> Vec<VoiceInfo> {
+            Vec::new()
+        }
+        fn set_voice(&mut self, _voice_id: &str) -> Result<(), TtsError> {
+            Ok(())
+        }
+        fn wait_until_done(&mut self, _timeout_ms: u32) -> Result<(), TtsError> {
+            Ok(())
+        }
+    }
+
+    /// With Indicate Caps During Say All, a Say All part goes to the synthesizer as runs, each
+    /// capitalized word raised alone, the part's mark on its first run [obs, 718/s10]; without
+    /// it, whole.
+    #[test]
+    fn a_say_all_part_raises_its_capitalized_words() {
+        for caps in [true, false] {
+            let handed: Handed = Arc::default();
+            let Ok(mut manager) = TtsManager::new(
+                Arc::new(crate::speech::SilentSynthesizers),
+                Synthesizer::NoSpeech,
+            ) else {
+                return;
+            };
+            manager.engine = Box::new(Recorded(Arc::clone(&handed)));
+            manager.say_all_caps = caps;
+            carry_out(
+                vec![Request::Marked("Ada READ me".to_owned(), 1, true)],
+                &AtomicU64::new(0),
+                &Mutex::new(manager),
+                &Mutex::new(Vec::new()),
+                &Mutex::new(None),
+                &mut false,
+            );
+            let handed = handed.lock().map(|h| h.clone()).unwrap_or_default();
+            let part = |text: &str, pitch, marked| (text.to_owned(), pitch, marked);
+            if caps {
+                assert_eq!(
+                    handed,
+                    [
+                        part("Ada", 4, true),
+                        part("READ", 4, false),
+                        part("me", 0, false)
+                    ]
+                );
+            } else {
+                assert_eq!(handed, [part("Ada READ me", 0, true)]);
+            }
+        }
     }
 }

@@ -636,6 +636,19 @@ A step can be in more than one entry; all of its entries apply.
   and only in this mode.
 - Decided under the owner's rule on JAWS's accidents, 2026-10-21.
 
+### JAWS's raised pitch leaks across its Say All pieces (Indicate Caps During Say All)
+
+- Steps: `718-web-capitals-say-all-indicate-caps/s10`.
+- Difference: the whole step; its history layer matches, its spoken layer differs.
+- Why: with Indicate Caps During Say All (`SayAllIndicateCaps=1`), JAWS gives each capitalized
+  word a raise of 4, as Okur does ("[pitch +4] Ada [pitch +4] READ me [pitch +4] B x"). It also
+  raises every word at the start of each piece it hands its synthesizer, until the first
+  capitalized word has passed: "four spaces one tab", "teh quick brown fxo", and pieces with no
+  capital raised whole. All three trials are the same. JAWS's pieces are its own (it cut the
+  line holding an address in two, before "x equals"), and the raise is not reset between them:
+  a side effect of how JAWS sends its pieces, not the option's meaning.
+- Decided under the owner's rule on JAWS's accidents, 2026-11-04.
+
 ### Closing Skim Reading makes JAWS's summary
 
 - Steps: `763-web-skim-reading-rule-types/s23`, `763-web-skim-reading-rule-types/s24`,

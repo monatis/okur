@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 11486,
-  "total_steps": 12068,
-  "accepted_divergences": 370,
+  "matched_steps": 11485,
+  "total_steps": 12067,
+  "accepted_divergences": 371,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -9093,7 +9093,7 @@
     "717-web-capitals-indicate-caps-off/s8": "match",
     "717-web-capitals-indicate-caps-off/s9": "match",
     "718-web-capitals-say-all-indicate-caps/s1": "match",
-    "718-web-capitals-say-all-indicate-caps/s10": "match",
+    "718-web-capitals-say-all-indicate-caps/s10": "accepted divergence",
     "718-web-capitals-say-all-indicate-caps/s2": "match",
     "718-web-capitals-say-all-indicate-caps/s3": "match",
     "718-web-capitals-say-all-indicate-caps/s4": "match",

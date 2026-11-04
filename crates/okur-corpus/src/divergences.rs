@@ -830,6 +830,15 @@ divergences! {
     "With typing echo set to both characters and words, a word corrected with Backspace is not      said when Enter ends it: \"c d\", Backspace, Enter says only \"Enter\", in every trial,      while the same keys with words alone say \"c\" then \"Enter\" (710/s7), and both says      the word an uncorrected Enter ends (403/s27). Okur says the word as it stands in both      modes.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
+    Difference::Step => ["718-web-capitals-say-all-indicate-caps/s10"],
+    "With Indicate Caps During Say All, JAWS raises each capitalized word, and also every word \
+     at the start of each piece it hands its synthesizer until the first capitalized word has \
+     passed (\"four spaces one tab\", \"teh quick brown fxo\", a whole piece without a \
+     capital), identically in every trial: its raise is not reset between its pieces, which it \
+     cuts where it likes (one line in two, mid-address). Okur raises the capitalized words \
+     only; the history layer is the same.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-04";
+
     Difference::Step => [
         "701-web-placemarker-add-dialog/s15",
         "703-web-placemarker-none/s6",

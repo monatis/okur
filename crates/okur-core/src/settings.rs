@@ -574,6 +574,9 @@ pub struct VoiceSettings {
     /// A capital read alone or spelled is said at a raised pitch: JAWS's Caps Indicate
     /// (`IndicateCaps` in `DEFAULT.JCF`'s Options, on by default) [obs, 408, 717].
     pub indicate_caps: bool,
+    /// Capitalized words are said at a raised pitch while Say All reads: JAWS's Indicate Caps
+    /// During Say All (`[Options] SayAllIndicateCaps`, cleared by default) [obs, 718/s10].
+    pub say_all_caps: bool,
     /// The voice's pitch, -10 to 10 on SAPI's scale around the voice's own (0). Voice
     /// Adjustment sets it per voice context, as JAWS's shows Pitch for a context only [obs, the
     /// walk of Voice Adjustment's contexts].
@@ -597,6 +600,7 @@ impl Default for VoiceSettings {
             volume: 100,
             punctuation: Punctuation::default(),
             indicate_caps: true,
+            say_all_caps: false,
             pitch: 0,
             text: TextProcessing::default(),
             contexts: VoiceContexts::default(),

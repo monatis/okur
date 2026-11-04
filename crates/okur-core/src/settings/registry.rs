@@ -290,6 +290,14 @@ pub static SETTINGS: &[SettingSpec] = &[
             },
         )
     },
+    // Indicate Caps During Say All, in JAWS's Say All group; in no dialog of Okur's yet: the
+    // settings file and --set.
+    SettingSpec {
+        jaws: default_jcf("Options", "SayAllIndicateCaps", |v| {
+            Value::Bool(v.trim() == "1")
+        }),
+        ..spec("voice.say_all_caps", Group::Speech, None, CHECK)
+    },
     SettingSpec {
         jaws: default_jcf("Options", "MixedCase", |v| Value::Bool(v.trim() != "0")),
         tree_label: Some(msg::settings_tree_mixed_case),
@@ -1226,6 +1234,18 @@ mod tests {
         let desktop = import_jaws(&base, &|_, _, _| None);
         assert_eq!(desktop.keyboard, KeyboardSettings::default());
         assert_eq!(desktop.forms_mode, FormsMode::Auto);
+    }
+
+    /// Indicate Caps During Say All, cleared by default (`SayAllIndicateCaps=0`), is read from
+    /// JAWS's file [obs, 718: set to 1].
+    #[test]
+    fn the_jaws_import_reads_indicate_caps_during_say_all() {
+        let base = Settings::reference_machine();
+        assert!(!base.voice.say_all_caps);
+        let on = |_: JawsFile, section: &str, key: &str| {
+            (section == "Options" && key == "SayAllIndicateCaps").then(|| "1".to_owned())
+        };
+        assert!(import_jaws(&base, &on).voice.say_all_caps);
     }
 
     /// JAWS's pause before a character's phonetic spelling, in tenths of a second in its file

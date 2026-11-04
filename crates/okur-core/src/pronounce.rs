@@ -64,6 +64,46 @@ pub fn spelled(text: &str) -> String {
         .join(" ")
 }
 
+/// Spoken running text in parts with their pitch change, for Indicate Caps During Say All
+/// (`[Options] SayAllIndicateCaps`, cleared by default): each word that starts with a capital
+/// alone, raised, the punctuation it ends with after it at the voice's pitch; the words between
+/// together at the voice's pitch. A role's word, between JAWS's marks, is not raised: "[pitch
+/// +4] Ada [pitch +4] READ me [pitch +4] B x", "[pitch +4] P dot [pitch +4] M .", "[pitch +4]
+/// Text Edit [pitch +4] Hello ," [obs, 718/s10].
+pub fn capital_word_parts(spoken: &str) -> Vec<(String, i32)> {
+    let mut parts = Vec::new();
+    let mut run: Vec<&str> = Vec::new();
+    let mut in_role = false;
+    for word in spoken.split_whitespace() {
+        let starts_role = word.contains('\u{1d}');
+        let ends_role = word.contains('\u{1e}');
+        let raised =
+            !in_role && !starts_role && word.chars().next().is_some_and(char::is_uppercase);
+        in_role = (in_role || starts_role) && !ends_role;
+        if !raised {
+            run.push(word);
+            continue;
+        }
+        let end = word
+            .char_indices()
+            .find(|&(_, c)| !c.is_alphanumeric())
+            .map_or(word.len(), |(at, _)| at);
+        let (capital, rest) = word.split_at(end);
+        if !run.is_empty() {
+            parts.push((run.join(" "), 0));
+            run.clear();
+        }
+        parts.push((capital.to_owned(), CAPITAL_PITCH));
+        if !rest.is_empty() {
+            run.push(rest);
+        }
+    }
+    if !run.is_empty() {
+        parts.push((run.join(" "), 0));
+    }
+    parts
+}
+
 /// What the synthesizer is given for a spelled text, in parts with their pitch change: each
 /// capital alone, raised; the characters between capitals together, by name ("space")
 /// [obs, 406/s5, s7: "[pitch +4] A d a space [pitch +4] R [pitch +4] E ...]. Without Caps
@@ -637,6 +677,32 @@ mod tests {
             .map(|(_, pitch)| pitch)
             .collect();
         assert_eq!(plain, [0, 0, 0, 0]);
+    }
+
+    /// Indicate Caps During Say All: each capitalized word raised alone, its punctuation and
+    /// the words between at the voice's pitch, a role's word never [obs, 718/s10].
+    #[test]
+    fn say_all_raises_each_capitalized_word() {
+        let said = |text: &str| -> String {
+            capital_word_parts(text)
+                .iter()
+                .map(|(part, pitch)| pitched(part, *pitch))
+                .collect::<Vec<_>>()
+                .join(" ")
+        };
+        assert_eq!(
+            said("Ada READ me B x"),
+            "[pitch +4] Ada [pitch +4] READ me [pitch +4] B x"
+        );
+        assert_eq!(
+            said("2:00 P dot M."),
+            "2:00 [pitch +4] P dot [pitch +4] M ."
+        );
+        assert_eq!(
+            said("Text \u{1d} Edit \u{1e} Hello, world."),
+            "[pitch +4] Text \u{1d} Edit \u{1e} [pitch +4] Hello , world."
+        );
+        assert_eq!(said("teh quick brown fxo"), "teh quick brown fxo");
     }
 
     #[test]

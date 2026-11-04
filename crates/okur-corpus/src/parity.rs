@@ -824,6 +824,8 @@ struct RecordingSpeech {
     unspoken: std::sync::Arc<std::sync::atomic::AtomicBool>,
     /// Capitals at the voice's pitch: Caps Indicate off in the engine's voice settings.
     plain_capitals: std::sync::Arc<std::sync::atomic::AtomicBool>,
+    /// Capitalized words raised while Say All reads (Indicate Caps During Say All).
+    say_all_caps: std::sync::Arc<std::sync::atomic::AtomicBool>,
     /// The voice settings' Text Processing.
     text: std::sync::Arc<std::sync::Mutex<okur_core::settings::TextProcessing>>,
 }
@@ -907,6 +909,29 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
         self.push(text, false);
     }
 
+    /// A Say All part: its capitalized words raised, as the speech thread gives them, while
+    /// Indicate Caps During Say All is on.
+    fn speak_marked(&mut self, text: &str, _mark: u64, _interrupt: bool) {
+        if !self.say_all_caps.load(std::sync::atomic::Ordering::SeqCst) {
+            self.push(text, false);
+            return;
+        }
+        append(&self.history, text.to_owned());
+        if self.unspoken() {
+            return;
+        }
+        let level = self
+            .punctuation
+            .lock()
+            .map(|level| *level)
+            .unwrap_or_default();
+        let processing = self.text.lock().map(|t| *t).unwrap_or_default();
+        let spoken = okur_core::pronounce::spoken_with(text, level, processing);
+        for (part, pitch) in okur_core::pronounce::capital_word_parts(&spoken) {
+            append(&self.spoken, okur_core::pronounce::pitched(&part, pitch));
+        }
+    }
+
     fn speak_symbols(&mut self, text: &str, _interrupt: bool) {
         self.push(text, true);
     }
@@ -917,6 +942,8 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
         }
         self.plain_capitals
             .store(!voice.indicate_caps, std::sync::atomic::Ordering::SeqCst);
+        self.say_all_caps
+            .store(voice.say_all_caps, std::sync::atomic::Ordering::SeqCst);
         if let Ok(mut text) = self.text.lock() {
             *text = voice.text;
         }
