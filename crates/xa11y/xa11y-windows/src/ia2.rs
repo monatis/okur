@@ -977,6 +977,20 @@ mod com {
                 .map(|n| n.to_string())
                 .unwrap_or_default();
             lines.push(format!("{indent}object {name:?}"));
+            if let Some(attributes) = object_attributes(acc) {
+                lines.push(format!("{indent}  object attributes {attributes:?}"));
+            }
+            // SAFETY: a plain MSAA query on a valid IAccessible.
+            if let Ok(state) = unsafe { acc.get_accState(&self_child()) } {
+                lines.push(format!("{indent}  state {:?}", i32::try_from(&state).ok()));
+            }
+            if let Some(ia2) = ia2_of(acc) {
+                let mut states = 0i32;
+                // SAFETY: an out-pointer to a local on a valid interface.
+                if unsafe { ia2.get_states(&mut states) }.is_ok() {
+                    lines.push(format!("{indent}  ia2 states {states:#x}"));
+                }
+            }
             if let Some(text) = ia2_of(acc).and_then(|ia2| ia2.cast::<IAccessibleText>().ok()) {
                 for (start, end, attributes) in ChromiumTextField(text).attribute_runs() {
                     lines.push(format!("{indent}  {start}..{end} {attributes}"));
