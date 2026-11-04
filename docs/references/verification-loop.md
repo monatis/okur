@@ -444,6 +444,13 @@ the morning. This is how it was done; it needs fresh permission each time.
   its Startup Wizard open. Its hook takes the Okur key's chords from JAWS and its speech
   confuses the silence detection. `run-scenario.ps1` now stops it, elevated (UI Access puts it
   above an ordinary process), before a JAWS recording and warns that it did.
+- **A system prompt open on old-pc.** After the same reboot Windows' firewall asked, in a
+  Security Alert (rundll32), whether to let the lab's `opendesk.exe` through; it took the focus
+  during 1142's trials. Answering it is the owner's. `run-scenario.ps1` sends no key press or
+  character while such a prompt (rundll32, a credential prompt) is in front, JAWS's
+  TypeKey/TypeString included: the step and its trial fail with a warning naming the prompt.
+  A recording with one open is still not evidence (its traces hold the prompt and the lab
+  account's paths): import nothing from it.
 
 ## 9. Open questions to settle on old-pc
 

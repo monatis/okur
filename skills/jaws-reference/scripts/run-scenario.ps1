@@ -201,12 +201,51 @@ public static class SrKeyInput {
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetWindowText(IntPtr hWnd, StringBuilder s, int n);
     const uint KEYEVENTF_EXTENDEDKEY = 0x1, KEYEVENTF_KEYUP = 0x2;
 
+    /// Windows' prompts that decide for the machine, the owner's to answer: its firewall's
+    /// Security Alert (rundll32, open on old-pc after a reboot, which took the focus during
+    /// 1142's trials, 2026-11-04) and a credential prompt. No key press or character is sent
+    /// while one is in front, so no step can answer it; releases still are, so nothing stays
+    /// held. Each process id is looked up once.
+    static readonly string[] Guarded = { "rundll32", "CredentialUIBroker", "consent" };
+    static readonly System.Collections.Generic.Dictionary<uint, string> GuardedByPid =
+        new System.Collections.Generic.Dictionary<uint, string>();
+    /// The prompt's process a press was last refused for (null: none).
+    public static string Refused = null;
+
+    /// The process of the window in front when it is a guarded prompt's, else null.
+    public static string GuardedFront() {
+        uint pid;
+        GetWindowThreadProcessId(GetForegroundWindow(), out pid);
+        string name;
+        if (!GuardedByPid.TryGetValue(pid, out name)) {
+            name = "";
+            try {
+                string process = System.Diagnostics.Process.GetProcessById((int)pid).ProcessName;
+                foreach (string guarded in Guarded) {
+                    if (string.Equals(process, guarded, StringComparison.OrdinalIgnoreCase)) name = process;
+                }
+            } catch (Exception) { }
+            GuardedByPid[pid] = name;
+        }
+        return name.Length > 0 ? name : null;
+    }
+
+    /// Whether a press may be sent now; records the prompt that refused it.
+    static bool MayPress() {
+        string prompt = GuardedFront();
+        if (prompt == null) return true;
+        Refused = prompt;
+        return false;
+    }
+
     public static bool Key(ushort vk, bool extended, bool up) {
         return Key(vk, extended, up, 0);
     }
 
-    /// A key with its scan code given (0: the active layout's for vk).
+    /// A key with its scan code given (0: the active layout's for vk). A press is refused
+    /// while a guarded prompt is in front.
     public static bool Key(ushort vk, bool extended, bool up, ushort scan) {
+        if (!up && !MayPress()) return false;
         INPUT[] input = new INPUT[1];
         input[0].type = 1;
         input[0].u.ki.wVk = vk;
@@ -224,6 +263,7 @@ public static class SrKeyInput {
     /// character in its scan code, which JAWS reads as a key, so "7" (0x37) was the numpad's
     /// star, JAWS's right mouse button (round-1122), and "R" (0x52) would be its Insert key.
     public static bool Char(char c) {
+        if (!MayPress()) return false;
         uint pid;
         IntPtr layout = GetKeyboardLayout(GetWindowThreadProcessId(GetForegroundWindow(), out pid));
         short typed = VkKeyScanEx(c, layout);
@@ -669,6 +709,11 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
         # which refuse ours (741's rule name never arrived). With Okur reading, the key or the
         # text is the user's in Okur's dialog.
         'jaws_function' {
+            # JAWS types the keys and text itself, past SrKeyInput's guard: checked here.
+            if ($command -match '^Type(Key|String)\(' -and [SrKeyInput]::GuardedFront()) {
+                [SrKeyInput]::Refused = [SrKeyInput]::GuardedFront()
+                return $false
+            }
             if ($jaws) { return [bool]$jaws.RunFunction($command) }
             if ($command -match '^TypeKey\("(.+)"\)$') { return Send-Chord $Matches[1] }
             if ($command -match '^TypeString\("(.*)"\)$') { return Send-Text $Matches[1] }
@@ -681,7 +726,10 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
             if ($command -notmatch '^\s*(-?\d+)\s*,\s*(-?\d+)\s*$') { throw "mouse step '$command' is not dx,dy" }
             return [SrKeyInput]::MouseBy([int]$Matches[1], [int]$Matches[2])
         }
-        'keyboard'    { [System.Windows.Forms.SendKeys]::SendWait($command); return $true }
+        'keyboard'    {
+            if ([SrKeyInput]::GuardedFront()) { [SrKeyInput]::Refused = [SrKeyInput]::GuardedFront(); return $false }
+            [System.Windows.Forms.SendKeys]::SendWait($command); return $true
+        }
         default       { throw "Unsupported step type '$type'" }
     }
 }
@@ -1243,11 +1291,16 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     # How long a reset key may keep the reader speaking (reset.settle_max_ms): ARIA-AT's nested
     # dialog setup kept JAWS speaking past the default 10 s in every trial (round-aria23, 2687).
     $resetMaxMs = if ($scenario.reset -and $scenario.reset.settle_max_ms) { [int]$scenario.reset.settle_max_ms } else { 10000 }
+    [SrKeyInput]::Refused = $null
     $resetQuiet = $loadQuiet
     foreach ($rk in $resetKeys) {
         $trialResult.reset_keys += ,([ordered]@{ chord = $rk; t_ms = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds() })
         [void](Send-Chord $rk)
         $resetQuiet = Wait-Silence -OnsetMs 800 -QuietMs 500 -MaxMs $resetMaxMs
+    }
+    if ([SrKeyInput]::Refused) {
+        Write-Warning "reset: keys refused, a system prompt is in front ($([SrKeyInput]::Refused))"
+        $trialResult.trial_success = $false
     }
     # JAWS can be outside the page though Chrome is in front with UI Automation's focus in it:
     # H said nothing and Say Line the window's title, "... - Google Chrome", for every key of
@@ -1313,6 +1366,12 @@ for ($t = 1; $t -le $Repetitions; $t++) {
             if ($null -eq $d) { continue }
             Start-Sleep -Milliseconds ([int]$d.after_ms)
             $dispatchOk = (Send-Chord $d.command) -and $dispatchOk
+        }
+        # A system prompt in front refused the step's keys (SrKeyInput.Guarded): the step fails.
+        if ([SrKeyInput]::Refused) {
+            Write-Warning "$($step.id): keys refused, a system prompt is in front ($([SrKeyInput]::Refused))"
+            [SrKeyInput]::Refused = $null
+            $dispatchOk = $false
         }
         $onsetMs = if ($step.onset_ms) { [int]$step.onset_ms } else { 800 }
         $observed = Wait-Silence -OnsetMs $onsetMs -QuietMs $quietMs -MaxMs $maxMs
