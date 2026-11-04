@@ -694,6 +694,61 @@ mod tests {
         );
     }
 
+    /// Every process a trace names is one reviewed for what it puts in the public corpus: a
+    /// fixture's program, JAWS's, Windows' shell. Another (a Windows Security Alert's
+    /// rundll32 asking about the lab's own tools, which took the focus in 1142's first
+    /// recording, 2026-11-04) fails here until its events are looked at, and the scenario is
+    /// recorded again or the process added.
+    #[test]
+    fn every_traced_process_is_a_reviewed_one() {
+        const REVIEWED: &[&str] = &[
+            "AccEventCacheLoader.exe",
+            "ApplicationFrameHost.exe",
+            // Its tray panel's live region, generic words only (2720, trial 3).
+            "Dropbox.exe",
+            "EXCEL.EXE",
+            "NotificationViewer.exe",
+            "ResultsViewer.exe",
+            "ShellExperienceHost.exe",
+            "SystemSettings.exe",
+            "WINWORD.EXE",
+            "chrome.exe",
+            "explorer.exe",
+            "jfw.exe",
+            "jtl.exe",
+            "msedgewebview2.exe",
+            "notepad.exe",
+            "powershell.exe",
+            "wordpad.exe",
+        ];
+        let entries = std::fs::read_dir(corpus_dir().join("traces"));
+        assert!(entries.is_ok(), "{entries:?}");
+        let Ok(entries) = entries else {
+            return;
+        };
+        let mut unknown = std::collections::BTreeMap::<String, String>::new();
+        for path in entries.flatten().map(|e| e.path()) {
+            let Ok(text) = std::fs::read_to_string(&path) else {
+                continue;
+            };
+            for (at, _) in text.match_indices("\"process\":\"") {
+                let rest = text.get(at + "\"process\":\"".len()..).unwrap_or_default();
+                let name = rest.split('"').next().unwrap_or_default();
+                if !REVIEWED.contains(&name) {
+                    unknown.entry(name.to_owned()).or_insert_with(|| {
+                        path.file_name()
+                            .map(|n| n.to_string_lossy().into_owned())
+                            .unwrap_or_default()
+                    });
+                }
+            }
+        }
+        assert!(
+            unknown.is_empty(),
+            "processes not reviewed (first trace naming each): {unknown:?}"
+        );
+    }
+
     /// A focus whose siblings the capture does not read (`focus_needs_siblings`) converts to
     /// the same events without them: over every traced focus, a converter given each such
     /// focus without its siblings says what one given them says (second review 2026-11-03:
