@@ -242,7 +242,7 @@ with no way to change it), **Missing** (neither). §4.13 and §4.14 list setting
 | 60 | Numeric Date Processing | **No translation**, some, extended | | [R] §6 | Missing | |
 | 61 | Smart Word Reading | **on** | | [R] §4 | Missing | |
 | 62 | Spell Alphanumeric Data | **Off**, spell, spell phonetically | | [R] §4 | Missing | |
-| 63 | When pausing after character navigation, speak character phonetically | **after about 1.5 s**; other delays; Never | | [F7], [S-phonetic]; [R] §4 | Missing | |
+| 63 | When pausing after character navigation, speak character phonetically | **after about 1.5 s**; other delays; Never | | [F7], [S-phonetic]; [R] §4; `[Options] PhoneticCharAfterPause`, tenths of a second, 15 shipped | Built (2026-11-04) | `phonetic_pause_ms` (settings file and --set): a letter the arrows moved onto said phonetically 1.5 s after the key, in a field and in the virtual cursor [obs, 1140, 1141]; letters only; not in a dialog yet |
 | 64 | Spell Phonetically Always (Quick Settings: Text Spell) | **alphabetically** | | [R] §4 | Partial | Spelling and phonetic spelling exist (`pronounce.rs:44`, `speech.rs:953-962`); no setting |
 | 65 | Indentation: Say Indented Characters (`[Options] Indentation`, 0 by default); Quick Settings' Indentation | **Ignore** | | [R] §8.3 | Partial (2026-10-23, `62b3ddb`): the setting `indentation`, imported from JAWS's key; "Left Margin" before a page line at the margin on Say Line and as a Say All starts (729); indented lines not recorded yet | `settings.rs`, `engine/commands.rs` (`with_margin_mark`) |
 | 66 | Indicate New Lines When | | | [R] §8.2 | Missing | |

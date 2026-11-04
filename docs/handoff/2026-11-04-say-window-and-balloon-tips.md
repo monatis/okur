@@ -27,6 +27,11 @@ its §3 (JAWS's features from Settings Center and the help). Branch `windows-ui-
   WinForms text box's blank line is the same as at the default (406/s9), in both layers: the
   blank line passes silently. Arrowing onto it says "blank" in the synthesizer layer only.
   Whether the option acts elsewhere (a page, Word) is open.
+- **Phonetic spelling after a pause** (1140, 1141, recorded today): after Right or Left onto
+  a letter, with no key, JAWS says it again phonetically, "d" then "delta" in the synthesizer
+  layer, the history keeping "d | d", 1584 to 1616 ms after the key in all eighteen steps, in
+  a WinForms text box and in the virtual cursor alike. Its setting is `[Options]
+  PhoneticCharAfterPause`, in tenths of a second, 15 in the shipped `Default.JCF`.
 
 ## Built
 
@@ -40,20 +45,23 @@ its §3 (JAWS's features from Settings Center and the help). Branch `windows-ui-
 | `546bc576` | corpus: 1138 (`desktop-balloon-tips.ps1`) |
 | `ff02a419` | Replay: a reset key that moved nothing in a field settled within the setup; corrects `c56173d8`'s "no step changes", which was computed with an older binary |
 | `a1e8a82d` | Harness: `parity-snapshot.sh` and `preview-round.sh` build the working tree's okur-lab when none is named; two pitfalls in [`verification-loop.md`](../references/verification-loop.md) §8 |
+| `801cc16a` | This handoff's first version |
+| `397196fe` | A letter spelled phonetically after a pause: `Settings::phonetic_pause_ms` (1500; from the JCF key), the engine's pending letter on the key clock, `on_idle_at(now_ms)` (live `on_idle` gives the key clock's now), replay's idle at each step's recorded end; letters only (a period's case is unrecorded) |
+| `81002c18` | corpus: 1140, 1141 |
 
 ## Figures
 
-`okur-lab parity` at `a1e8a82d`:
+`okur-lab parity` at `81002c18`:
 
 ```
-JAWS parity (Ia2): 11480/12062 steps match exactly; 370 accepted divergences not counted (0 scenarios could not run)
+JAWS parity (Ia2): 11486/12068 steps match exactly; 370 accepted divergences not counted (0 scenarios could not run)
 ```
 
-`okur-lab parity --spoken`: `JAWS spoken parity: 11238/12128 steps match exactly`. From
+`okur-lab parity --spoken`: `JAWS spoken parity: 11244/12134 steps match exactly`. From
 11472/12058 at the last handoff: the four Say Window steps turned to matches, and 1138's four
-steps were added, all matching in both layers. `okur-lab invariants`: `Buffer invariants: 0
-violation(s)`. `cargo test --workspace --no-fail-fast` (4 threads), summed: 1637 passed, 0
-failed, 201 ignored.
+steps and 1140's and 1141's six were added, all matching in both layers. `okur-lab
+invariants`: `Buffer invariants: 0 violation(s)`. `cargo test --workspace --no-fail-fast` (4
+threads), summed: 1639 passed, 0 failed, 201 ignored.
 
 ## Judged, not changed
 
@@ -72,12 +80,12 @@ failed, 201 ignored.
 1. Import 1139 recorded again (its four Ups as steps of their own: replay presses a repeated
    step's keys before playing its events, and the engine keeps one pending edit key, so a
    repeated arrow in a field read only its first line; every desktop repeat step recorded so
-   far is a double press, which that order suits), queued behind 1140 and 1141.
-2. Import 1140 and 1141 (JAWS's phonetic spelling after a pause on a character, desktop and
-   virtual cursor, each step followed by 3 s of quiet), queued behind it; if JAWS says the
-   phonetic word, build it with its setting (Settings Center's "When Pausing After Character
-   Navigation, Speak Character Phonetically", 1.5 s by default; the customization map's row
-   63).
+   far is a double press, which that order suits), queued on old-pc (round-blank-lines-2).
+   old-pc stopped answering OpenDesk at the end of this stretch (`opendesk exec` timed out,
+   the peer still listed): check it before anything else.
+2. The phonetic spelling's Settings Center choices (its label and values are unobserved: the
+   Settings Center route of [`verification-loop.md`](../references/verification-loop.md) §8),
+   and what JAWS does after a pause on a digit or a symbol.
 3. The rest of §3 by everyday use: key labels and key echo (row 27), the quick key delay
    (row 21, Never by default), per-word pitch for capitals during Say All.
 4. The review's open items that need old-pc's live runs (P3, P6, P10) and Office (P4, P8, P15).
