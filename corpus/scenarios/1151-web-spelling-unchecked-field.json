@@ -1,0 +1,62 @@
+{
+  "id": "1151-web-spelling-unchecked-field",
+  "name": "Whether JAWS checks spelling itself: abc typed in a page field Chrome spell-checks and in one it does not (spellcheck=\"false\"), each read with Insert+Up at once, then the first again; Chrome marks a last typed word only seconds later, after JAWS already said Misspelled (626/s3)",
+  "category": "web-forms",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/spelling-fields.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "FormsMode": {
+        "AutoFormsMode": "1"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "Tab",
+      "id": "s1"
+    },
+    {
+      "type": "text",
+      "command": "abc",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Tab",
+      "id": "s4"
+    },
+    {
+      "type": "text",
+      "command": "abc",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Shift+Tab",
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s8"
+    }
+  ]
+}

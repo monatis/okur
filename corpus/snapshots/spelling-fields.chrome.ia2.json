@@ -1,0 +1,488 @@
+{
+  "provenance": {
+    "format_version": 1,
+    "tool_version": "0.1.0",
+    "host": "DESKTOP-DCNAKQQ",
+    "os_version": "Microsoft Windows [Version 10.0.19045.6456]",
+    "window_title": "Spelling Fields Fixture - Google Chrome",
+    "window_class": "Chrome_WidgetWin_1",
+    "process_version": "156.0.8078.80",
+    "fixture_sha256": "9c5450b0d7ce5d1e01ed8fde4a3070b89ae7bb8bdae3081b373f89e81383236c",
+    "captured_at_unix_ms": 1793824795301,
+    "node_count": 13,
+    "capture_ms": 123
+  },
+  "root": {
+    "msaa_role": 15,
+    "ia2_role": 15,
+    "name": "Spelling Fields Fixture",
+    "value": "file:///C:/Users/ailabs/corpus/fixtures/spelling-fields.html",
+    "msaa_states": 1048644,
+    "ia2_states": 1024,
+    "unique_id": -798,
+    "attributes": {
+      "explicit-name": "true",
+      "name-from": "related-element",
+      "tag": "#document",
+      "text-align": "left"
+    },
+    "text": "￼￼￼￼",
+    "lines": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "text_runs": [
+      {
+        "start": 0,
+        "end": 1,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "24pt",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "start": 1,
+        "end": 4,
+        "attributes": {
+          "background-color": "rgb(255,255,255)",
+          "color": "rgb(0,0,0)",
+          "font-family": "Times New Roman",
+          "font-size": "12pt"
+        }
+      }
+    ],
+    "children": [
+      {
+        "msaa_role": 20,
+        "ia2_role": 1044,
+        "name": "Spelling fields",
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -786,
+        "attributes": {
+          "display": "block",
+          "level": "1",
+          "name-from": "contents",
+          "tag": "h1",
+          "text-align": "left"
+        },
+        "group_position": [
+          1,
+          0,
+          0
+        ],
+        "text": "Spelling fields",
+        "lines": [
+          [
+            0,
+            15
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 15,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "24pt",
+              "font-weight": "bold"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Spelling fields",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -796,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Spelling fields",
+            "lines": [
+              [
+                0,
+                15
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 15,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "24pt",
+                  "font-weight": "bold"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -790,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          },
+          {
+            "start": 1,
+            "end": 2,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Arial",
+              "font-size": "10pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 42,
+            "ia2_role": 1049,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -803,
+            "attributes": {
+              "display": "inline",
+              "tag": "label",
+              "text-align": "left"
+            },
+            "text": "Checked",
+            "lines": [
+              [
+                0,
+                7
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 7,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "relations": {
+              "labelFor": [
+                -795
+              ]
+            },
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Checked",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -805,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Checked",
+                "lines": [
+                  [
+                    0,
+                    7
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 7,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 42,
+            "ia2_role": 42,
+            "name": "Checked",
+            "default_action": "activate",
+            "msaa_states": 1048576,
+            "ia2_states": 13320,
+            "unique_id": -795,
+            "attributes": {
+              "display": "inline-block",
+              "explicit-name": "true",
+              "id": "checked",
+              "name-from": "related-element",
+              "tag": "input",
+              "text-align": "left",
+              "text-input-type": "text",
+              "text-model": "a1"
+            },
+            "relations": {
+              "labelledBy": [
+                -803
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -788,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "￼￼",
+        "lines": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 1,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          },
+          {
+            "start": 1,
+            "end": 2,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Arial",
+              "font-size": "10pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 42,
+            "ia2_role": 1049,
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -806,
+            "attributes": {
+              "display": "inline",
+              "tag": "label",
+              "text-align": "left"
+            },
+            "text": "Unchecked",
+            "lines": [
+              [
+                0,
+                9
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 9,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ],
+            "relations": {
+              "labelFor": [
+                -791
+              ]
+            },
+            "children": [
+              {
+                "msaa_role": 41,
+                "ia2_role": 41,
+                "name": "Unchecked",
+                "msaa_states": 0,
+                "ia2_states": 1024,
+                "unique_id": -792,
+                "attributes": {
+                  "name-from": "contents"
+                },
+                "text": "Unchecked",
+                "lines": [
+                  [
+                    0,
+                    9
+                  ]
+                ],
+                "text_runs": [
+                  {
+                    "start": 0,
+                    "end": 9,
+                    "attributes": {
+                      "background-color": "rgb(255,255,255)",
+                      "color": "rgb(0,0,0)",
+                      "font-family": "Times New Roman",
+                      "font-size": "12pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "msaa_role": 42,
+            "ia2_role": 42,
+            "name": "Unchecked",
+            "default_action": "activate",
+            "msaa_states": 1048576,
+            "ia2_states": 13320,
+            "unique_id": -791,
+            "attributes": {
+              "display": "inline-block",
+              "explicit-name": "true",
+              "id": "unchecked",
+              "name-from": "related-element",
+              "tag": "input",
+              "text-align": "left",
+              "text-input-type": "text",
+              "text-model": "a1"
+            },
+            "relations": {
+              "labelledBy": [
+                -806
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "msaa_role": 20,
+        "ia2_role": 1054,
+        "msaa_states": 0,
+        "ia2_states": 1024,
+        "unique_id": -801,
+        "attributes": {
+          "display": "block",
+          "tag": "p",
+          "text-align": "left"
+        },
+        "text": "Plain text with teh word.",
+        "lines": [
+          [
+            0,
+            25
+          ]
+        ],
+        "text_runs": [
+          {
+            "start": 0,
+            "end": 25,
+            "attributes": {
+              "background-color": "rgb(255,255,255)",
+              "color": "rgb(0,0,0)",
+              "font-family": "Times New Roman",
+              "font-size": "12pt"
+            }
+          }
+        ],
+        "children": [
+          {
+            "msaa_role": 41,
+            "ia2_role": 41,
+            "name": "Plain text with teh word.",
+            "msaa_states": 0,
+            "ia2_states": 1024,
+            "unique_id": -793,
+            "attributes": {
+              "name-from": "contents"
+            },
+            "text": "Plain text with teh word.",
+            "lines": [
+              [
+                0,
+                25
+              ]
+            ],
+            "text_runs": [
+              {
+                "start": 0,
+                "end": 25,
+                "attributes": {
+                  "background-color": "rgb(255,255,255)",
+                  "color": "rgb(0,0,0)",
+                  "font-family": "Times New Roman",
+                  "font-size": "12pt"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -2277,6 +2277,10 @@
       "sha256": "141f98219e00ce80559e312fdf548a7b3b9f41087250648d09b6040c6433badf",
       "size_bytes": 2134
     },
+    "spelling-fields.html": {
+      "sha256": "9c5450b0d7ce5d1e01ed8fde4a3070b89ae7bb8bdae3081b373f89e81383236c",
+      "size_bytes": 382
+    },
     "structural-navigation.html": {
       "sha256": "dd74a3e0285db898ce8a785a5da59a730a7a0e95bc6e1396d2e21e0c91d9948d",
       "size_bytes": 1314
@@ -4652,6 +4656,20 @@
       "fixture": "desktop-wpf-text.ps1",
       "evidence": {
         "sha256": "d95a9f55a9e0a0b72a8113bec20d0dfd1fb9b3d74444aab9867c7f236c68d046",
+        "capture_script_sha256": "aa0459d1ffd74593283eda0e2ea3571f88ffa31ec0efdc3761533cf21b6ecd1d",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1151-web-spelling-unchecked-field",
+      "fixture": "spelling-fields.html",
+      "evidence": {
+        "sha256": "73961d8e6d63d20461298dd98d78956c06c99f514b273004e6e8106d623600d5",
         "capture_script_sha256": "aa0459d1ffd74593283eda0e2ea3571f88ffa31ec0efdc3761533cf21b6ecd1d",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
@@ -29443,10 +29461,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1937,
-    "scenarios_with_evidence": 1937,
-    "total_trials": 5817,
-    "successful_trials": 5800,
-    "deterministic_scenarios": 1617
+    "scenarios": 1938,
+    "scenarios_with_evidence": 1938,
+    "total_trials": 5820,
+    "successful_trials": 5803,
+    "deterministic_scenarios": 1618
   }
 }
