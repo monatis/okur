@@ -1,0 +1,50 @@
+{
+  "id": "1147-web-home-end-echo-off",
+  "name": "1146's End, Home, F2 and Escape at old-pc's typing echo, None ([Options] TypingEcho=0, as the lab has it), in the same page field in forms mode: whether Home and End read the character they land on, and the keys are named, only with an echo on; then Home in the virtual cursor",
+  "category": "web-forms",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/activation.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "E",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "Enter",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "End",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Home",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "F2",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "Escape",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Home",
+      "id": "s7"
+    }
+  ]
+}
