@@ -456,7 +456,10 @@ pub fn focus_needs_siblings(
     let placeless = msaa_role != Some(MSAA_BUTTONMENU)
         && matches!(
             crate::uia_snapshot::to_aom(&alone).role,
-            okur_core::Role::Button | okur_core::Role::Tab | okur_core::Role::SplitButton
+            okur_core::Role::Button
+                | okur_core::Role::Tab
+                | okur_core::Role::SplitButton
+                | okur_core::Role::TableCell
         );
     in_group_box_or_header || !placeless
 }

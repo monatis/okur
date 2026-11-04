@@ -41,8 +41,11 @@ Statuses: **fixed** with the commit, or **open**.
 | P15 | Office's NetUI focus: its MSAA read took about 450 ms per focus in Excel's message bar (live baseline, 1115) | open (new; seen in the baseline below) |
 
 Earlier findings still open, with new evidence: page controls' siblings read on every focus
-(about 12 per page button, 10.6 per Excel cell, unused); two `OpenProcess` per focus; the debug
-log formatting each event in full, which inflates the runs that measure these fixes.
+(about 12 per page button, 10.6 per Excel cell, unused): fixed in replay's terms (`9af1de45`,
+and cells in the next commit; `focus_needs_siblings`, checked over every traced focus, 6,894 of
+18,864 with siblings skip them), the live time saved to be measured on old-pc; two
+`OpenProcess` per focus; the debug log formatting each event in full, which inflates the runs
+that measure these fixes.
 
 Checked and fine (not to redo): the keyboard hook's own work; command lookup; settings resolved
 only when the application or site changes; message rendering; `pronounce::render` (on the speech

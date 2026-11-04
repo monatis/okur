@@ -1326,12 +1326,15 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     // 2026-10-16). A tab likewise: none for a WinForms tab (303/s12), "1 of 1" for File
     // Explorer's, which reports it (dev box, 2026-10-17). A menu item too: a reported position
     // is what tells a modern menu from a Win32 one (302 says none).
+    // A grid's cell neither: its name says its column and row, and its place among the cells
+    // read beside it was said nowhere (dropping it changed no step of the corpus, 2026-11-04).
     if focus.item_index.is_none()
         && focus.role != okur_core::Role::ComboBox
         && focus.role != okur_core::Role::Button
         && focus.role != okur_core::Role::Tab
         && focus.role != okur_core::Role::SplitButton
         && focus.role != okur_core::Role::MenuItem
+        && focus.role != okur_core::Role::TableCell
         && focus.container_role != Some(okur_core::Role::ComboBox)
     {
         let peers: Vec<&UiaNode> = event
