@@ -930,6 +930,11 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
         }
     }
     focus.spin_box = event.spin_box && focus.role == okur_core::Role::Edit;
+    focus.password = focus.role == okur_core::Role::Edit
+        && event
+            .focus_chain
+            .last()
+            .is_some_and(|node| node.is_password);
     focus.menu_bar = event
         .menu_bar
         .iter()

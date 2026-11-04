@@ -316,6 +316,14 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
                 if !text.trim().is_empty() {
                     lines.push(Line::of(PartKind::Value, msg::field_contains_text()).on_arrival());
                 }
+            } else if focus.password {
+                // Its text never: "Password: | password edit | ‹› | Type in text.", an empty
+                // state where JAWS says one [obs, 1138/s2].
+                lines.push(Line::new(vec![
+                    name_part(name),
+                    role(msg::role_edit_password().as_str()),
+                    state(""),
+                ]));
             } else if focus.spin_box {
                 // An edit with arrows that step its value: "Number of copies: edit spin box |
                 // 1 | To set the value use the Arrow keys." [obs, 546/s8].
@@ -2224,6 +2232,19 @@ Undo  Unavailable"
     }
 
     // Expected strings: 301-desktop-tab-order evidence, all 5 trials identical.
+
+    /// A password edit: its kind, an empty state where JAWS says one, never its text [obs,
+    /// 1138/s2].
+    #[test]
+    fn a_password_edit_is_read_without_its_text() {
+        let mut password = event(Role::Edit, "Password:");
+        password.password = true;
+        password.value = Some("secret".to_owned());
+        assert_eq!(
+            norm(&focus_speech(&password, None).render()),
+            norm("Password:  \u{1d} password edit \u{1e}  \u{1d}\u{1e} \nType in text.")
+        );
+    }
 
     #[test]
     fn edit_with_and_without_value() {

@@ -905,6 +905,10 @@ pub struct FocusEvent {
     /// box" [obs, 546/s8].
     #[serde(default)]
     pub spin_box: bool,
+    /// An edit whose text is hidden as it is typed: "Password: | password edit" [obs,
+    /// 1138/s2].
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub password: bool,
     /// The window's menu bar items ("File", "Edit", ...) and its status bar's parts ("Ln 1,
     /// Col 1", "100%", ...): JAWS's view of the window shows them above and below its text
     /// [obs, 314/s10, s11].
@@ -1115,6 +1119,7 @@ impl FocusEvent {
             read_by_elements: false,
             in_file_view: false,
             spin_box: false,
+            password: false,
             outer_dialogs: Vec::new(),
             outer_windows: Vec::new(),
             menu_bar: Vec::new(),
