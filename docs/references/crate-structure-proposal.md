@@ -334,7 +334,7 @@ One file, `.agents/crate-layers.json`, lists each crate's kind (`neutral`, `plat
 | R4. No `cfg(windows\|unix\|target_os\|target_family)` or `cfg!(…)` in a neutral crate's sources | `check-sources.ps1` | gate, CI `windows` job |
 | R5. `okur-core` never compares a `PlatformIds` field or `app` with a literal (`platform\.\w+.*==\s*Some\("`) | same | same |
 | R6. Ratchets in `.agents/structure-baseline.json`, counts may only go down: files over 1,500 production lines (17 today) may not grow; `ScreenReaderEngine` fields (200); `IUIAutomation` outside `crates/xa11y` (250); engine-to-apps references (84, until step 6 makes them impossible); `cfg` sites in `okur-windows` (218, toward 0 once the crate is gated at its root) | same | same |
-| R7. The portable CI job tests every `neutral` crate, a list printed by `check-crate-layers.ps1 -Neutral`; it becomes blocking for them | `.github/workflows/ci.yml` | CI |
+| R7. The portable CI job tests every portable crate (`neutral`, or marked `"portable"`: okur-corpus), the list printed by `check-crate-layers.ps1 -Portable`, which CI reads (2026-11-04; R4 keeps their dependencies off platform, program and lab crates); it becomes blocking for them | `.github/workflows/ci.yml` | CI |
 | R8. Optional: `[workspace.lints]` with the gate's clippy denials, so plain `cargo clippy` enforces them too | `Cargo.toml` | everywhere |
 
 `cargo-deny`'s `bans` with `wrappers` could express R2 and R3. It would be one more tool to

@@ -6,20 +6,31 @@
 # - R2: a neutral crate declares no platform API crate, for any target;
 # - R3: no program depends, directly or through others, on a lab crate; nothing depends on
 #   okur-lab.
+# - R4: a portable crate (neutral, or marked "portable") depends (normal or build) on no
+#   platform, program or lab crate but a portable one, so that the portable CI job can build
+#   and test it on macOS and Linux (a vendored crate builds there: okur-windows-model takes
+#   xa11y-windows's IA2 data types).
 # Prints each failure and exits 1; prints nothing and exits 0 when the layers hold.
-#   -Report   also print the known edges still to remove
-#   -Neutral  print the neutral crates' names, one per line (the portable CI job tests them)
+#   -Report    also print the known edges still to remove
+#   -Neutral   print the neutral crates' names, one per line
+#   -Portable  print the portable crates' names, one per line: the portable CI job tests them
 param(
-    [string]$WorkspaceRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path,
+    [string]$WorkspaceRoot = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path,
     [switch]$Report,
-    [switch]$Neutral
+    [switch]$Neutral,
+    [switch]$Portable
 )
-$layers = Get-Content -Raw -Path (Join-Path $WorkspaceRoot '.agents\crate-layers.json') | ConvertFrom-Json
+$layers = Get-Content -Raw -Path (Join-Path $WorkspaceRoot '.agents/crate-layers.json') | ConvertFrom-Json
 $crates = @{}
 foreach ($p in $layers.crates.PSObject.Properties) { $crates[$p.Name] = $p.Value }
 
+$portableCrates = @($crates.Keys | Where-Object { $crates[$_].kind -eq 'neutral' -or $crates[$_].portable -eq $true })
 if ($Neutral) {
     $crates.Keys | Where-Object { $crates[$_].kind -eq 'neutral' } | Sort-Object
+    exit 0
+}
+if ($Portable) {
+    $portableCrates | Sort-Object
     exit 0
 }
 
@@ -90,6 +101,14 @@ foreach ($program in ($crates.Keys | Where-Object { $crates[$_].kind -eq 'progra
     foreach ($crate in $lab) {
         if ($seen.ContainsKey($crate)) {
             $failures += "[Crate Layers] R3: the program $program depends on the lab crate $crate (through $($seen[$crate]))"
+        }
+    }
+}
+foreach ($crate in $portableCrates) {
+    foreach ($dep in @($edges[$crate])) {
+        $kind = if ($crates.ContainsKey($dep)) { $crates[$dep].kind } else { '' }
+        if (@('platform', 'program', 'lab') -contains $kind -and -not ($portableCrates -contains $dep)) {
+            $failures += "[Crate Layers] R4: $crate is portable and depends on $dep, which is not"
         }
     }
 }

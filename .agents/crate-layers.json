@@ -8,7 +8,10 @@
     "that removes it; a known edge that is gone must be taken out of the list.",
     "Kinds: neutral (no platform API, no cfg on the platform: tested on every OS), platform (one",
     "OS's driver), program (what users run), lab (the verification harness, never in a",
-    "program's dependencies), vendored (crates/xa11y, VENDORED.md's rules)."
+    "program's dependencies), vendored (crates/xa11y, VENDORED.md's rules).",
+    "A crate marked \"portable\" (a lab crate whose dependencies are all neutral) is tested on",
+    "macOS and Linux beside the neutral crates: check-crate-layers.ps1 -Portable lists them for",
+    "the portable CI job, and its R4 keeps their dependencies portable."
   ],
   "forbidden_in_neutral": [
     "windows",
@@ -35,7 +38,11 @@
         "xa11y-windows"
       ]
     },
-    "okur-corpus": { "kind": "lab", "allow": ["okur-core", "okur-windows-model"] },
+    "okur-corpus": {
+      "kind": "lab",
+      "portable": true,
+      "allow": ["okur-core", "okur-windows-model"]
+    },
     "okur": {
       "kind": "program",
       "allow": [
