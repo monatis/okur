@@ -143,6 +143,7 @@ pub fn event_kind(event: &okur_core::AccessibilityEvent) -> &'static str {
         AccessibilityEvent::DocumentNotes(..) => "document notes",
         AccessibilityEvent::DocumentParagraphs(_) => "document paragraphs",
         AccessibilityEvent::DocumentView(_) => "document view",
+        AccessibilityEvent::AppWindowTexts(_) => "app window texts",
         AccessibilityEvent::StatusBar(_) => "status bar",
         AccessibilityEvent::SheetPlace(_) => "sheet place",
         AccessibilityEvent::SheetList { .. } => "sheet list",

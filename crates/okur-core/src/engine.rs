@@ -393,6 +393,9 @@ pub struct ScreenReaderEngine {
     /// Say Window Title in Word asked for the document's view, said with this title when it
     /// comes.
     document_view_title: Option<String>,
+    /// Say Window Title asked for the texts of the Store app's window in front, its title
+    /// among them, and says it when they come.
+    window_title_asked: bool,
     /// Word's view as its view keys last chose it ("Draft View"), for Say Window Title where
     /// Word's status bar marks no view.
     document_view_by_key: Option<String>,
@@ -708,6 +711,7 @@ impl ScreenReaderEngine {
             sheet_titles: std::collections::HashMap::new(),
             say_all_paragraphs_asked: false,
             document_view_title: None,
+            window_title_asked: false,
             document_view_by_key: None,
             view_asked_by_app: false,
             word_list_from_field: false,
@@ -1881,6 +1885,16 @@ impl ScreenReaderEngine {
                     .find_map(|app| app.document_view(view.as_deref()))?;
                 self.speech.speak(&said, true);
                 Some(said)
+            }
+            AccessibilityEvent::AppWindowTexts(texts) => {
+                if !std::mem::take(&mut self.window_title_asked) {
+                    return None;
+                }
+                let app_title = self.last_native_focus.clone().and_then(|mut focus| {
+                    focus.app_window_texts.clone_from(texts);
+                    self.app_for(&focus).and_then(|app| app.title(&focus))
+                });
+                self.say_window_title(app_title)
             }
             AccessibilityEvent::DocumentView(view) => {
                 let title = self.document_view_title.take()?;

@@ -169,6 +169,13 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for the texts in the core window of the Store app in front, which arrive later as
+    /// [`crate::event::AccessibilityEvent::AppWindowTexts`], always. Returns false when
+    /// unsupported.
+    fn read_app_window_texts(&self) -> bool {
+        false
+    }
+
     /// Asks for the items of the status bar of Word's window in front, which arrive later as
     /// [`crate::event::AccessibilityEvent::StatusBar`], always. Returns false when
     /// unsupported.
@@ -602,6 +609,13 @@ impl ApplicationActions for RecordingActions {
     fn read_document_view(&self) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push(("document view".to_owned(), 0));
+        }
+        true
+    }
+
+    fn read_app_window_texts(&self) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("app window texts".to_owned(), 0));
         }
         true
     }

@@ -147,6 +147,8 @@ mod windows_actions {
         DocumentParagraphs,
         /// The view Word's window in front shows its document in, answered always.
         DocumentView,
+        /// The texts in the core window of the Store app in front, answered always.
+        AppWindowTexts,
         StatusBar,
         SheetPlace(okur_core::actions::SheetCells),
         SheetList(okur_core::SheetListKind),
@@ -248,6 +250,7 @@ mod windows_actions {
                 Request::ActivateDocumentLink(_) => "document link",
                 Request::DocumentParagraphs => "document paragraphs",
                 Request::DocumentView => "document view",
+                Request::AppWindowTexts => "app window texts",
                 Request::StatusBar => "status bar",
                 Request::SheetPlace(_) => "sheet place",
                 Request::SheetList(_) => "sheet list",
@@ -576,6 +579,29 @@ mod windows_actions {
                                     .and_then(|uia| crate::text_context::word_view(uia, None));
                                 tracing::debug!(?view, "document view read");
                                 let _ = events.send(AccessibilityEvent::DocumentView(view));
+                            }
+                            Request::AppWindowTexts => {
+                                use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+                                let Some(events) = events.as_ref() else {
+                                    return;
+                                };
+                                // As a trace reads them with each focus in a Store app.
+                                const APP_WINDOW_CHILDREN: usize = 32;
+                                // SAFETY: plain Win32 call with no preconditions.
+                                let front = unsafe { GetForegroundWindow() };
+                                let texts = uia
+                                    .as_ref()
+                                    .zip(crate::event_capture::core_window(front))
+                                    .map(|(uia, core)| {
+                                        xa11y_windows::uia_element::window_texts(
+                                            uia,
+                                            core,
+                                            APP_WINDOW_CHILDREN,
+                                        )
+                                    })
+                                    .unwrap_or_default();
+                                tracing::debug!(texts = texts.len(), "app window texts read");
+                                let _ = events.send(AccessibilityEvent::AppWindowTexts(texts));
                             }
                             Request::StatusBar => {
                                 let Some(events) = events.as_ref() else {
@@ -1222,6 +1248,10 @@ mod windows_actions {
 
         fn read_document_view(&self) -> bool {
             self.send(Request::DocumentView)
+        }
+
+        fn read_app_window_texts(&self) -> bool {
+            self.send(Request::AppWindowTexts)
         }
 
         fn read_status_bar(&self) -> bool {

@@ -845,7 +845,8 @@ pub struct FocusEvent {
     pub window_title: Option<String>,
     /// The texts directly in the application's own window, in order, where the platform
     /// reads them (a Store app's core window): Windows Settings' "Settings", "System", whose
-    /// page JAWS's Insert+T names [obs, 3158/s14].
+    /// page JAWS's Insert+T names [obs, 3158/s14]. Read with the focus in a trace; live,
+    /// asked for when Insert+T needs them ([`AccessibilityEvent::AppWindowTexts`]).
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub app_window_texts: Vec<String>,
     pub folder_name: Option<String>,
@@ -1362,6 +1363,11 @@ pub enum AccessibilityEvent {
     /// ([`crate::actions::ApplicationActions::read_document_view`]); `None` when it could not
     /// be read.
     DocumentView(Option<String>),
+    /// The texts directly in the core window of the Store app in front, in order, asked for by
+    /// Say Window Title ([`crate::actions::ApplicationActions::read_app_window_texts`]): what
+    /// [`FocusEvent::app_window_texts`] holds where the platform read them with the focus (a
+    /// trace); none where they could not be read.
+    AppWindowTexts(Vec<String>),
     /// The items of the status bar of Word's window in front, as JAWS reads them: each button
     /// by its name, the view's only where it is on, none of the zoom's slider
     /// ([`crate::actions::ApplicationActions::read_status_bar`]); none where it could not be

@@ -46,6 +46,10 @@ impl AppModule for Settings {
             .filter(|t| !t.is_empty())
             .map(str::to_owned)
     }
+
+    fn title_from_window_texts(&self) -> bool {
+        true
+    }
 }
 
 #[cfg(test)]

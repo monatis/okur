@@ -155,6 +155,12 @@ pub trait AppModule: Send {
         None
     }
 
+    /// Whether [`Self::title`] reads the texts of the application's own window
+    /// ([`FocusEvent::app_window_texts`]), which the platform reads when Say Window Title asks.
+    fn title_from_window_texts(&self) -> bool {
+        false
+    }
+
     /// Whether the announcement of a new window says the focused control after its name.
     fn names_control_with_window(&self, _focus: &FocusEvent) -> bool {
         true

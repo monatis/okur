@@ -8808,6 +8808,43 @@ fn words_title_says_the_view() {
     );
 }
 
+/// Say Window Title in Windows Settings names its page's category from its window's texts
+/// [obs, 3158/s14], which a live focus no longer brings: the platform is asked for them and
+/// the title said when they come (performance review 2026-11-03, P6). A focus that brought
+/// them, as a trace's does, says it at once.
+#[test]
+fn settings_title_asks_for_the_window_texts() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut focus = FocusEvent::new(Role::ComboBox).with_name("Display resolution");
+    focus.app = Some("SystemSettings.exe".to_owned());
+    focus.window_title = Some("Settings".to_owned());
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(focus.clone()));
+    assert_eq!(engine.execute_command("SayWindowTitle"), None);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "app window texts"));
+    let texts = vec!["Settings".to_owned(), "System".to_owned()];
+    let answer = AccessibilityEvent::AppWindowTexts(texts.clone());
+    assert_eq!(
+        engine.handle_accessibility_event(&answer).as_deref(),
+        Some("Title is\nSystem")
+    );
+    // An answer nobody waits for says nothing.
+    assert_eq!(engine.handle_accessibility_event(&answer), None);
+    focus.app_window_texts = texts;
+    engine.handle_accessibility_event(&AccessibilityEvent::Focus(focus));
+    let asked = actions.requests().len();
+    assert_eq!(
+        engine.execute_command("SayWindowTitle").as_deref(),
+        Some("Title is\nSystem")
+    );
+    assert_eq!(actions.requests().len(), asked);
+}
+
 /// Quick Settings' lifetimes: a change to last until Okur exits goes to the session's layer
 /// and is not saved; one to last until the focus moves is cleared when another application
 /// takes the focus, not when Okur's own window does.

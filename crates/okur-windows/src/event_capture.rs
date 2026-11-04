@@ -1638,7 +1638,7 @@ fn foreground_processes() -> [u32; 2] {
 
 /// The core window of a Store app's frame `frame` (`Windows.UI.Core.CoreWindow`): the app's
 /// own window, in another process than the frame's.
-fn core_window(frame: HWND) -> Option<HWND> {
+pub(crate) fn core_window(frame: HWND) -> Option<HWND> {
     use windows::core::w;
     use windows::Win32::UI::WindowsAndMessaging::FindWindowExW;
     // SAFETY: a plain Win32 query with a static class name.
@@ -2580,10 +2580,12 @@ fn record_at(
             TopWindow::default()
         };
         // A Store app's frame: the texts in its core window, the page's title among them
-        // (Windows Settings' "System" [obs, 3158/s14]).
+        // (Windows Settings' "System" [obs, 3158/s14]). Live they are read when Insert+T asks
+        // (`Request::AppWindowTexts`), not with every focus, where they cost 4-13 ms of a
+        // Settings focus (performance review 2026-11-03, P6); a trace keeps them for replay.
         const APP_WINDOW_CHILDREN: usize = 32;
         let app_window_texts = match (state.uia.as_ref(), top_window_class.as_deref()) {
-            (Some(uia), Some("ApplicationFrameWindow")) if focused => {
+            (Some(uia), Some("ApplicationFrameWindow")) if focused && !state.live => {
                 use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
                 // SAFETY: plain Win32 call with no preconditions.
                 core_window(unsafe { GetForegroundWindow() })
