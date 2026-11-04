@@ -402,14 +402,17 @@ pub fn event_name(win_event: u32, id_object: i32) -> Option<&'static str> {
 /// Builds the engine's focus event from a focus chain (outermost first), using the same
 /// UIA-to-AOM mapping as document snapshots. Used by trace replay, and by the live listener,
 /// so both exercise one conversion.
-/// Whether the focus is in a dialog box (the innermost window of its chain is a Win32
-/// `#32770`), whose static text and buttons are read from the focus's siblings.
+/// Whether the focus is in a dialog box: the innermost window of its chain is a Win32
+/// `#32770`, or one UI Automation calls a dialog (Word's, WPF's). Its static text and buttons
+/// are read from the focus's siblings.
 pub fn in_dialog_box(chain: &[UiaNode]) -> bool {
     chain
         .iter()
         .rev()
         .find(|w| w.control_type == UIA_WINDOW)
-        .is_some_and(|w| w.class_name.as_deref() == Some(WIN32_DIALOG_CLASS))
+        .is_some_and(|w| {
+            w.class_name.as_deref() == Some(WIN32_DIALOG_CLASS) || w.is_dialog == Some(true)
+        })
 }
 
 /// Whether the focused element reports its own position ("2 of 5"), so that its siblings
@@ -418,6 +421,44 @@ pub fn reports_position(chain: &[UiaNode]) -> bool {
     chain
         .last()
         .is_some_and(|f| f.position_in_set.is_some() && f.size_of_set.is_some())
+}
+
+/// Whether a focus's siblings are read for it, given its chain (outermost first), whether its
+/// Win32 list gave its position, and its MSAA role. The conversion takes from them a dialog box's text and
+/// buttons, a group box's texts, the label before an unnamed field, a header's titles, and a
+/// place among peers where none is reported; a button, a tab or a split button takes no place
+/// from its peers, so outside a dialog box, a group box and a header it needs none of them: a page's button read about
+/// twelve siblings at each focus for nothing (second review, 2026-11-03).
+/// `siblings_are_unused_where_they_are_not_read` checks this against every traced focus.
+pub fn focus_needs_siblings(
+    chain: &[UiaNode],
+    list_position: bool,
+    msaa_role: Option<i32>,
+) -> bool {
+    if in_dialog_box(chain) {
+        return true;
+    }
+    if list_position || reports_position(chain) {
+        return false;
+    }
+    let Some(focused) = chain.last() else {
+        return false;
+    };
+    // A group box's control is named after its texts; a header's title (a split button in
+    // Programs and Features' list) is at its place among the titles [obs, 3156/s2].
+    let in_group_box_or_header = chain.iter().rev().nth(1).is_some_and(|parent| {
+        (parent.control_type == 50026 && parent.class_name.as_deref() == Some("GroupBox"))
+            || parent.control_type == UIA_HEADER
+    });
+    let mut alone = focused.clone();
+    alone.children.clear();
+    // A button MSAA calls a button menu is one, which counts its place.
+    let placeless = msaa_role != Some(MSAA_BUTTONMENU)
+        && matches!(
+            crate::uia_snapshot::to_aom(&alone).role,
+            okur_core::Role::Button | okur_core::Role::Tab | okur_core::Role::SplitButton
+        );
+    in_group_box_or_header || !placeless
 }
 
 /// `OBJID_WINDOW`: an event about the window itself.

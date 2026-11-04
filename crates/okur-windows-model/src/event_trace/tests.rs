@@ -241,6 +241,12 @@ fn siblings_are_needed_in_a_dialog_box_or_without_a_reported_position() {
     let main = [window("WindowsForms10.Window.8.app"), item.clone()];
     assert!(in_dialog_box(&dialog));
     assert!(!in_dialog_box(&main));
+    // A window UI Automation calls a dialog (Word's, WPF's) is one too.
+    let uia_dialog = UiaNode {
+        is_dialog: Some(true),
+        ..window("bosa_sdm_msword")
+    };
+    assert!(in_dialog_box(&[uia_dialog, item.clone()]));
 
     assert!(!reports_position(&main));
     let placed = UiaNode {

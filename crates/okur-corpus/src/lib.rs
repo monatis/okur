@@ -694,6 +694,80 @@ mod tests {
         );
     }
 
+    /// A focus whose siblings the capture does not read (`focus_needs_siblings`) converts to
+    /// the same events without them: over every traced focus, a converter given each such
+    /// focus without its siblings says what one given them says (second review 2026-11-03:
+    /// a page's button read about twelve siblings at each focus for nothing).
+    #[test]
+    fn siblings_are_unused_where_they_are_not_read() {
+        use okur_windows_model::event_trace::{focus_needs_siblings, read_trace, EventConverter};
+        let entries = std::fs::read_dir(corpus_dir().join("traces"));
+        assert!(entries.is_ok(), "{entries:?}");
+        let Ok(entries) = entries else {
+            return;
+        };
+        let (mut unread, mut differ) = (0usize, Vec::new());
+        for path in entries.flatten().map(|e| e.path()) {
+            let Ok((_, events)) = read_trace(&path) else {
+                continue;
+            };
+            let (mut with, mut without) = (EventConverter::default(), EventConverter::default());
+            for event in events {
+                let skipped = !event.focus_siblings.is_empty()
+                    && !focus_needs_siblings(
+                        &event.focus_chain,
+                        event.list_position.is_some(),
+                        event.object.as_ref().and_then(|o| o.role),
+                    );
+                let mut bare = event.clone();
+                if skipped {
+                    unread += 1;
+                    bare.focus_siblings.clear();
+                }
+                let (said, said_bare) = (with.convert(&event), without.convert(&bare));
+                if said != said_bare {
+                    // What differs, for whoever reads a failure: the first fields apart, and
+                    // the focus's kind.
+                    let diff: Vec<String> = format!("{said:?}")
+                        .split(", ")
+                        .zip(format!("{said_bare:?}").split(", ").map(str::to_owned))
+                        .filter(|(a, b)| a != b)
+                        .map(|(a, b)| format!("{a} => {b}"))
+                        .take(3)
+                        .collect();
+                    differ.push(format!(
+                        "{} t={} {} ct={:?} aria={:?} role={:?} {:?}",
+                        path.file_name()
+                            .map(|n| n.to_string_lossy())
+                            .unwrap_or_default(),
+                        event.t_ms,
+                        event.event,
+                        event.focus_chain.last().map(|n| n.control_type),
+                        event.focus_chain.last().and_then(|n| n.aria_role.clone()),
+                        said.iter().find_map(|e| match e {
+                            okur_core::AccessibilityEvent::Focus(f) => Some(f.role.clone()),
+                            _ => None,
+                        }),
+                        diff
+                    ));
+                }
+            }
+        }
+        assert!(
+            differ.is_empty(),
+            "{} differ without siblings:\n{}",
+            differ.len(),
+            differ
+                .iter()
+                .take(20)
+                .cloned()
+                .collect::<Vec<_>>()
+                .join("\n")
+        );
+        // The rule saves reads: many recorded focuses had siblings it does not read.
+        assert!(unread > 1_000, "{unread} focuses read without siblings");
+    }
+
     /// Semantics only IA2 carries without localization: block quotes (UIA gives only a
     /// localized control type), inline versus block elements, and the IA2 form states.
     #[test]

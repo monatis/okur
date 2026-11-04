@@ -9,8 +9,8 @@ use crate::uia_capture::{
     focused_element, window_subtree, window_text, with_properties,
 };
 use okur_windows_model::event_trace::{
-    event_name, in_dialog_box, keeps_dialog_read, reports_position, TraceEvent, TraceObject,
-    TracePoint, UIA_FOCUS_WINDOWS, UIA_SELECTION_PROCESSES,
+    event_name, keeps_dialog_read, TraceEvent, TraceObject, TracePoint, UIA_FOCUS_WINDOWS,
+    UIA_SELECTION_PROCESSES,
 };
 use std::cell::{Cell, RefCell};
 use windows::core::implement;
@@ -2516,8 +2516,19 @@ fn record_at(
         // Siblings give a position when nothing else does, and a dialog box's text and
         // buttons. Reading them in a long list took 2 s per item (dev box, 2026-10-15),
         // where the list already gives the position.
-        let needs_siblings =
-            in_dialog_box(&focus) || (list_position.is_none() && !reports_position(&focus));
+        // A UIA focus has no MSAA object: the focused item is UIA's. Read before the siblings,
+        // whose need its role tells (a button menu counts its place among them).
+        let object = match object_read {
+            Some(object) => object,
+            None => (!uia_named)
+                .then(|| msaa_object(hwnd, id_object, id_child))
+                .flatten(),
+        };
+        let needs_siblings = okur_windows_model::event_trace::focus_needs_siblings(
+            &focus,
+            list_position.is_some(),
+            object.as_ref().and_then(|o| o.role),
+        );
         let (focus_siblings, focus_subtree) = match (name, state.uia.as_ref()) {
             // A focus UIA names (the task switcher's items) is read by name alone: on the
             // switcher's first opening its tree answers slowly, and reading around the item
@@ -2680,13 +2691,6 @@ fn record_at(
             None
         };
         stages.push(("text", clock.elapsed().as_millis()));
-        // A UIA focus has no MSAA object: the focused item is UIA's.
-        let object = match object_read {
-            Some(object) => object,
-            None => (!uia_named)
-                .then(|| msaa_object(hwnd, id_object, id_child))
-                .flatten(),
-        };
         // A list's rows changing as it draws them are not recorded: the reference machine's
         // own lists (its installed programs) stay out of the public corpus.
         if change

@@ -954,9 +954,7 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
     // A dialog box (Win32 #32770, as a message box is) is announced with its static text,
     // which sits beside its buttons [obs, 306/s1]. Other windows are announced by title only
     // (306/s10).
-    if active_window.and_then(|w| w.class_name.as_deref()) == Some(WIN32_DIALOG_CLASS)
-        || dialog.is_some()
-    {
+    if in_dialog_box(&event.focus_chain) {
         // On a property sheet's page, the text beside the focus is the page's labels ("Type:",
         // "Local Disk"): JAWS 2025 opens Local Disk (C:) Properties naming the page instead,
         // "General page" (dev box, 2026-10-15). A wizard shows no tabs and takes its page's
