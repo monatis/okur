@@ -754,7 +754,7 @@ mod tests {
     /// Ctrl+Left within the cell stays on its word [obs, 956].
     #[test]
     fn smart_navigation_tables_move_the_arrows_by_cell() {
-        use crate::cursor::SmartTableKey::{Down, Left, PriorWord, Right};
+        use crate::cursor::SmartTableKey::{Down, Left, PriorWord, Right, Up};
         fn key(cursor: &mut VirtualCursor, key: crate::cursor::SmartTableKey) -> String {
             cursor
                 .smart_table_key(key)
@@ -792,6 +792,22 @@ mod tests {
         assert_eq!(key(&mut cursor, Down), "table end");
         assert_eq!(key(&mut cursor, Left), "$8,800\nColumn 4, Row 4");
         assert_eq!(key(&mut cursor, Left), "$9,200\nColumn 3 of 4");
+        // The other edges [obs, 1143]: Up on the first row to the table's first line, Left on
+        // the first cell a line break alone, Right past a row on to the next row's first cell
+        // with its row, Up from "table end" back to the last cell.
+        let _ = cursor.move_next_table();
+        assert_eq!(key(&mut cursor, Left), "\n");
+        assert_eq!(key(&mut cursor, Up), "table with 4 columns and 4 rows");
+        let _ = cursor.move_next_table();
+        for _ in 0..3 {
+            key(&mut cursor, Right);
+        }
+        assert_eq!(key(&mut cursor, Right), "Row 2\nQ1\nColumn 1 of 4");
+        for _ in 0..2 {
+            key(&mut cursor, Down);
+        }
+        assert_eq!(key(&mut cursor, Down), "table end");
+        assert_eq!(key(&mut cursor, Up), "$8,800\nColumn 4, Row 4");
     }
 
     #[test]
