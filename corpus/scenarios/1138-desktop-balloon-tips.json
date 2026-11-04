@@ -1,0 +1,17 @@
+{
+  "id": "1138-desktop-balloon-tips",
+  "name": "comctl32's own tool tips (tooltips_class32) shown without the mouse, with JAWS's tool tip events on (ProcessToolTipEvent=1): a letter typed in a numbers-only edit, which shows its balloon tip; Tab to a password edit, whose balloon tip the application shows; Tab to Save, whose tool tip shows below it; Shift+Tab back to the password edit",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-balloon-tips.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR Balloon Tip Fixture"
+  },
+  "steps": [
+    { "id": "s1", "type": "key", "command": "A", "quiet_ms": 2000, "settle_max_ms": 10000 },
+    { "id": "s2", "type": "key", "command": "Tab", "quiet_ms": 2000, "settle_max_ms": 10000 },
+    { "id": "s3", "type": "key", "command": "Tab", "quiet_ms": 2000, "settle_max_ms": 10000 },
+    { "id": "s4", "type": "key", "command": "Shift+Tab", "quiet_ms": 2000, "settle_max_ms": 10000 }
+  ]
+}

@@ -2017,6 +2017,10 @@
       "sha256": "3c5e470c48c7391f066604d67a8eace4d7bf49a8249827af7d244432d25940e4",
       "size_bytes": 858
     },
+    "desktop-balloon-tips.ps1": {
+      "sha256": "46575d22c3a2ab5b9b274cc38dd0e79a4f87ef6e9b2984eb59121a3b6bd8e8a6",
+      "size_bytes": 9177
+    },
     "desktop-changing-text.ps1": {
       "sha256": "4460fff976e973072263689fec4c0d92d4a751a362d54678585d95df7e3dc19e",
       "size_bytes": 2876
@@ -4453,6 +4457,20 @@
       "evidence": {
         "sha256": "818d51031c6185c26cdcae0dad37efa8c29ba1546e52481e79d0e3fab8b942d0",
         "capture_script_sha256": "d69800ff332382d97cd717deef8d56c9d6b996cbb5409282f0afc608a2647876",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1138-desktop-balloon-tips",
+      "fixture": "desktop-balloon-tips.ps1",
+      "evidence": {
+        "sha256": "2d4d91e39ff115c912749af80e6bbaeffa80bb3ce8f9606d1e427ac8f032a6b3",
+        "capture_script_sha256": "e701faa3725ba269fc1642a25d813cadeb6b106743e86c3f0983beee592f1fe8",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
         "trials": 3,
@@ -29257,10 +29275,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1924,
-    "scenarios_with_evidence": 1924,
-    "total_trials": 5778,
-    "successful_trials": 5761,
-    "deterministic_scenarios": 1605
+    "scenarios": 1925,
+    "scenarios_with_evidence": 1925,
+    "total_trials": 5781,
+    "successful_trials": 5764,
+    "deterministic_scenarios": 1606
   }
 }
