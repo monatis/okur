@@ -262,6 +262,9 @@ pub struct ScreenReaderEngine {
     page_builds: page::PageBuilds,
     /// Forms mode was just turned on by Enter (not by focus moving into a field).
     forms_mode_by_enter: bool,
+    /// Forms mode was just turned on in this field by Navigation Quick Key Delay: its focus is
+    /// said as the field alone [obs, 1144/s1, s7].
+    forms_mode_by_delay: Option<usize>,
     /// The focused control's access key, whatever the Access Key output: Say Focus says it.
     focus_access_key: Option<String>,
     /// The focused application's product name and version, as the last focus gave them
@@ -564,6 +567,10 @@ pub struct ScreenReaderEngine {
     /// A character moved onto by the arrows, said phonetically once no key came for the
     /// pause JAWS waits for: when, on the key clock, and the character.
     phonetic_due: Option<(u64, String)>,
+    /// A field a quick key moved the virtual cursor to, where forms mode turns on once
+    /// Navigation Quick Key Delay has passed with no key: when, on the key clock, and the
+    /// field's node.
+    forms_delay_due: Option<(u64, usize)>,
     /// The last key's time on the key clock, and when the engine took it: the key clock's
     /// time now, live, for what waits on a pause.
     last_key_at: Option<(u64, std::time::Instant)>,
@@ -656,6 +663,7 @@ impl ScreenReaderEngine {
             pending_edit: None,
             pending_file_edge: None,
             forms_mode_by_enter: false,
+            forms_mode_by_delay: None,
             focus_access_key: None,
             focus_app_version: None,
             focus_bounds: None,
@@ -788,6 +796,7 @@ impl ScreenReaderEngine {
             pending_font: None,
             pending_word_font: false,
             phonetic_due: None,
+            forms_delay_due: None,
             last_key_at: None,
             apps: crate::apps::builtin(),
             last_live_text: std::collections::HashMap::new(),
@@ -1018,6 +1027,8 @@ impl ScreenReaderEngine {
         }
         // Any key ends the wait for a character's phonetic spelling, said only after a pause.
         self.phonetic_due = None;
+        // And the wait for forms mode on a field a quick key moved to.
+        self.forms_delay_due = None;
         self.last_key_at = Some((event.time_ms, std::time::Instant::now()));
         // Which held keys act as the JAWS key depends on the keyboard settings.
         // Pass Key Through: the next key goes to the application as it is, with the modifiers

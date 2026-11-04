@@ -825,6 +825,66 @@ fn a_letter_is_spelled_phonetically_after_a_pause() {
     assert_eq!(engine.on_idle_at(Some(45_000)), None);
 }
 
+/// Navigation Quick Key Delay with Auto Forms Mode: E onto an edit box turns forms mode on
+/// there once the delay passes with no key, focusing the field [obs, 1144/s1, s2]; a key
+/// within it is a quick key again [obs, 1144/s5]; a check box takes no forms mode [obs,
+/// 1144/s11]; at Never (the default) nothing waits.
+#[test]
+fn a_quick_key_onto_a_field_turns_forms_mode_on_after_the_delay() {
+    let page = AomNode::new(0, Role::Document).with_children(vec![
+        AomNode::new(1, Role::CheckBox).with_name("Subscribe"),
+        AomNode::new(2, Role::Edit)
+            .with_name("City")
+            .with_value("Izmir"),
+    ]);
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(MockSpeechOutput::new()),
+    );
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let key = |k: Key, at: u64| KeyEvent {
+        time_ms: at,
+        ..KeyEvent::new(k, Modifiers::none(), true)
+    };
+    let focused = |actions: &crate::actions::RecordingActions| {
+        actions
+            .requests()
+            .iter()
+            .filter(|(a, _)| a == "focus")
+            .count()
+    };
+    // Never, the default: nothing waits.
+    engine.cursor.move_to_start();
+    engine.handle_key_event(&key(Key::Alpha('E'), 1_000));
+    assert_eq!(engine.on_time(10_000), None);
+    assert!(!engine.forms_mode);
+    assert_eq!(focused(&actions), 0);
+
+    let mut settings = engine.settings.clone();
+    settings.forms_mode = crate::settings::FormsMode::Auto;
+    settings.quick_key_delay_ms = 1_000;
+    engine.set_settings(settings);
+    engine.cursor.move_to_start();
+    engine.handle_key_event(&key(Key::Alpha('E'), 20_000));
+    assert_eq!(engine.on_time(20_999), None);
+    assert!(!engine.forms_mode);
+    let _ = engine.on_time(21_000);
+    assert!(engine.forms_mode);
+    assert_eq!(focused(&actions), 1);
+
+    // A key within the delay is a quick key again; nothing is left waiting.
+    engine.handle_key_event(&key(Key::Escape, 30_000));
+    assert!(!engine.forms_mode);
+    engine.cursor.move_to_start();
+    engine.handle_key_event(&key(Key::Alpha('E'), 40_000));
+    engine.handle_key_event(&key(Key::Alpha('X'), 40_300));
+    let _ = engine.on_time(45_000);
+    assert!(!engine.forms_mode);
+    // A check box takes none.
+    assert_eq!(focused(&actions), 1);
+}
+
 /// A balloon tip shown for the window in front is said after what the focus said, not over
 /// it: "Password: | password edit | Type in text. | Password: Use at least 8 characters."
 /// [obs, 1138/s2].

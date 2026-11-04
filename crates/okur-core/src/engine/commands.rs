@@ -663,6 +663,9 @@ impl ScreenReaderEngine {
         } else {
             speech
         };
+        if matches!(command, Command::MoveToNext(_) | Command::MoveToPrior(_)) {
+            self.schedule_forms_delay();
+        }
 
         if let Some(ref text) = speech {
             // Left/Right read a character, which the synthesizer names ("space").

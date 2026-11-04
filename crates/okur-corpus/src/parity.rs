@@ -582,6 +582,17 @@ fn replay_scenario(
                 // Replay the OS events recorded while JAWS handled this step (e.g. the focus
                 // change that follows Tab), exactly as the live listener would deliver them.
                 for event in replay.for_step(&step.id) {
+                    // What waits on time alone and fell due before this event came first
+                    // live (forms mode after Navigation Quick Key Delay, then the browser's
+                    // focus on the field [obs, 1144/s1]).
+                    let due = u64::try_from(event.t_ms)
+                        .ok()
+                        .and_then(|at| engine.on_time(at));
+                    if let Some(speech) = due {
+                        if spoken.is_empty() {
+                            spoken.push(&speech, false);
+                        }
+                    }
                     for mut converted in converter.convert(&event) {
                         // Where JAWS's dialog differs from Okur's window, the focus is Okur's;
                         // JAWS's dialog going away after Okur's closed is not.

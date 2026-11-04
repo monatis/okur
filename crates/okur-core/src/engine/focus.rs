@@ -978,7 +978,14 @@ impl ScreenReaderEngine {
             let editable_combo = target_id
                 .and_then(|id| self.cursor.buffer.node(id))
                 .is_some_and(|n| n.attributes.get("editable").is_some_and(|e| e == "true"));
-            if target_role == Some(Role::ComboBox) && in_forms_mode && !editable_combo {
+            // Forms mode turned on by Navigation Quick Key Delay: the field again, alone, with
+            // neither hint nor the page and its regions [obs, 1144/s1, s7].
+            let by_delay = self
+                .forms_mode_by_delay
+                .take()
+                .is_some_and(|id| Some(id) == target_id);
+            if target_role == Some(Role::ComboBox) && in_forms_mode && !editable_combo && !by_delay
+            {
                 // In forms mode a combo box gets its usage hint [obs, 205/s8].
                 let hint = msg::hint_change_selection_arrows();
                 speech = speech.map(|s| {
@@ -1019,7 +1026,7 @@ impl ScreenReaderEngine {
             let spin_button = target_id
                 .and_then(|id| self.cursor.buffer.node(id))
                 .is_some_and(|n| n.attributes.get("spinbutton").is_some_and(|v| v == "true"));
-            if !spin_button && (by_enter || by_auto_tab) {
+            if !spin_button && !by_delay && (by_enter || by_auto_tab) {
                 speech = speech.map(|s| format!("{s}\n{}", msg::hint_type_in_text()));
             }
             // Forms mode turned on by an element list: the regions as with Enter, no hint, and
@@ -1116,7 +1123,7 @@ impl ScreenReaderEngine {
                     });
                 }
             }
-            if entering_page {
+            if entering_page && !by_delay {
                 let regions = if by_enter || by_list || by_auto_tab || by_click {
                     target_id
                         .map(|id| self.region_markers(id))

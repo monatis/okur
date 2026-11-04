@@ -1000,7 +1000,7 @@ impl ScreenReaderEngine {
     /// [`Self::on_idle`] at `now_ms` on the key clock (the clock of [`crate::input::KeyEvent::time_ms`]),
     /// when it is known: parity replay gives each step's recorded end.
     pub fn on_idle_at(&mut self, now_ms: Option<u64>) -> Option<String> {
-        let phonetic = now_ms.and_then(|now| self.phonetic_after_pause(now));
+        let phonetic = now_ms.and_then(|now| self.on_time(now));
         self.apply_pending_page();
         self.mouse_echo_idle();
         self.background_ocr_idle();
@@ -1035,6 +1035,64 @@ impl ScreenReaderEngine {
         let (_, character) = self.phonetic_due.take_if(|(due, _)| *due <= now_ms)?;
         self.speech.speak_phonetic(&character, false);
         Some(character)
+    }
+
+    /// Navigation Quick Key Delay ([`crate::settings::Settings::quick_key_delay_ms`]), with
+    /// Auto or Semi-Auto Forms Mode: a quick key that moved the virtual cursor onto an edit
+    /// box or a combo box turns forms mode on there once the delay has passed with no other
+    /// key. The quick key still says the field, and a key within the delay is a quick key
+    /// again ("wrapping to top | Subscribe check box", X 300 ms after E [obs, 1144/s5]); a
+    /// check box takes no forms mode [obs, 1144/s11]. A list box, which the help names too, is
+    /// not recorded.
+    pub(super) fn schedule_forms_delay(&mut self) {
+        use crate::settings::FormsMode;
+        let delay = self.settings.quick_key_delay_ms;
+        let auto = matches!(
+            self.settings.forms_mode,
+            FormsMode::Auto | FormsMode::SemiAuto
+        );
+        let field = self.node_under_cursor().filter(|n| {
+            matches!(n.role, Role::Edit | Role::ComboBox)
+                && n.attributes.get("readonly").map(String::as_str) != Some("true")
+        });
+        self.forms_delay_due = match (self.last_key_at, field) {
+            (Some((at, _)), Some(field))
+                if delay > 0
+                    && auto
+                    && !self.forms_mode
+                    && self.app_mode == AppMode::VirtualBuffer =>
+            {
+                Some((at.saturating_add(u64::from(delay)), field.id))
+            }
+            _ => None,
+        };
+    }
+
+    /// The delay over with the virtual cursor still on the field: forms mode on and the
+    /// field focused, as Enter does; the browser's focus then says the field again, "City
+    /// Edit | Izmir" twice [obs, 1144/s1], and the next key is typed in it [obs, 1144/s2].
+    fn forms_mode_after_delay(&mut self, now_ms: u64) -> Option<String> {
+        let (_, id) = self.forms_delay_due.take_if(|(due, _)| *due <= now_ms)?;
+        let node = self.node_under_cursor().filter(|n| n.id == id)?;
+        if self.forms_mode || self.app_mode != AppMode::VirtualBuffer {
+            return None;
+        }
+        if self.actions.as_ref().is_some_and(|a| a.focus(node)) {
+            self.forms_mode = true;
+            self.cursor.forms_mode_active = true;
+            self.forms_mode_by_delay = Some(id);
+        }
+        None
+    }
+
+    /// What waits on time alone, due by `now_ms` on the key clock: a character's phonetic
+    /// spelling after a pause, forms mode after Navigation Quick Key Delay. Live they are
+    /// asked for when the event stream is quiet ([`Self::on_idle`]); replay asks before each
+    /// recorded event too, as one due before it came first.
+    pub fn on_time(&mut self, now_ms: u64) -> Option<String> {
+        let forms = self.forms_mode_after_delay(now_ms);
+        let phonetic = self.phonetic_after_pause(now_ms);
+        forms.or(phonetic)
     }
 
     /// Whether an application's notification is its echo of what was just typed or edited,
