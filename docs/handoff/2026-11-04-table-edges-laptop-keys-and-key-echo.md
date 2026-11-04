@@ -96,7 +96,7 @@ compared over all three layers with `parity-snapshot.sh` before and after: no st
 
 ## After the owner answered old-pc's Security Alert (23:04)
 
-The owner answered it with old-pc's volume raised for him (back at 1% after). Recorded and
+The owner answered it, old-pc's volume raised so the prompt could be heard (back at 1% after). Recorded and
 imported at once:
 
 - **1142** (`02d9e29e`): keys that type nothing in a WinForms text box, 8/8 in both layers.
