@@ -1,0 +1,92 @@
+{
+  "id": "1146-web-key-echo-characters",
+  "name": "1142's keys that type nothing at JAWS's default typing echo, Characters (DEFAULT.JCF [Options] TypingEcho=1; old-pc's is 0), in a page's text field in forms mode (E, Enter, End onto City's Izmir): Shift alone, Control alone, F2, Space, A, Backspace twice, Delete at the end, Page Down, Home, then Escape",
+  "category": "web-forms",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/activation.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "TypingEcho": "1"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "E",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "Enter",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "End",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Shift",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "F2",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Space",
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "A",
+      "id": "s8"
+    },
+    {
+      "type": "key",
+      "command": "Backspace",
+      "id": "s9"
+    },
+    {
+      "type": "key",
+      "command": "Backspace",
+      "id": "s10"
+    },
+    {
+      "type": "key",
+      "command": "Delete",
+      "id": "s11"
+    },
+    {
+      "type": "key",
+      "command": "PageDown",
+      "id": "s12"
+    },
+    {
+      "type": "key",
+      "command": "Home",
+      "id": "s13"
+    },
+    {
+      "type": "key",
+      "command": "Escape",
+      "id": "s14"
+    }
+  ]
+}
