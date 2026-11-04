@@ -32,8 +32,11 @@ comctl32's balloon tips and password edits (`408d2fb4`, `c56173d8`, 1138)
 Phonetic spelling after a pause recorded and built (`397196fe`, 1140, 1141), in Settings Center
 (`b46751a8`); Say Blank Lines During Say All changes nothing in a text box (1139); keys that type
 nothing recorded (1142, to record again) and built (`f6a88fd5`)
-([`../handoff/2026-11-04-after-the-outage.md`](../handoff/2026-11-04-after-the-outage.md)). Next:
-Smart Navigation, key labels, the quick key delay.
+([`../handoff/2026-11-04-after-the-outage.md`](../handoff/2026-11-04-after-the-outage.md)). Smart Navigation's
+controls and tables (`7fd59a0f`, `034c8c16`), P6 (`72267a06`, measured live), Navigation Quick Key Delay
+(`bfada6d3`, `ab467bdd`, 1144), the recorder's prompt guard (`8ddcd6b3`)
+([`../handoff/2026-11-04-smart-navigation-and-quick-key-delay.md`](../handoff/2026-11-04-smart-navigation-and-quick-key-delay.md)).
+Next: 1142 and 1143 once old-pc's Security Alert is answered, the Scan Cursor, key labels.
 
 Rules as before: a finding is checked against the code before it is fixed; a fix has a test
 that fails without it; a refactor changes nothing a user hears (the proposal's proofs P1 to P5,
