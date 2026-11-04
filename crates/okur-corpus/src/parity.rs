@@ -449,9 +449,7 @@ fn replay_scenario(
     // setup's): Excel's cell after the reset's Ctrl+Home, waiting for its titles, said in step 1
     // otherwise (2026-11-01).
     screen_reads.answer_document(&mut engine, &actions, None, &spoken);
-    // So is a field's read after a reset key, with the text the setup's events left: the
-    // reset's Ctrl+Home in an empty edit read "blank" in step 1 otherwise, which JAWS said in
-    // the setup (1138/s1, 2026-11-04).
+    // So are its fresh reads of the focused text, with the text its events left.
     answer_text_reads(
         &mut engine,
         &actions,
@@ -459,6 +457,11 @@ fn replay_scenario(
         last_text.as_ref(),
         &spoken,
     );
+    // And a reset key that moved nothing in a field reports the field unchanged within the
+    // setup, as live and as at each step's end: the reset's Ctrl+Home in an empty edit, which
+    // no caret event follows, read "blank" in step 1 otherwise, which JAWS said in the setup
+    // (1138/s1, 2026-11-04).
+    let _ = engine.settle_pending_edit();
     spoken.take();
     spoken.take_spoken();
 
