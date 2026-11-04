@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 11480,
-  "total_steps": 12062,
+  "matched_steps": 11486,
+  "total_steps": 12068,
   "accepted_divergences": 370,
   "errors": [],
   "steps": {
@@ -1904,6 +1904,12 @@
     "114-article-list-items/s7": "match",
     "114-article-list-items/s8": "match",
     "114-article-list-items/s9": "match",
+    "1140-desktop-phonetic-on-pause/s1": "match",
+    "1140-desktop-phonetic-on-pause/s2": "match",
+    "1140-desktop-phonetic-on-pause/s3": "match",
+    "1141-web-phonetic-on-pause/s1": "match",
+    "1141-web-phonetic-on-pause/s2": "match",
+    "1141-web-phonetic-on-pause/s3": "match",
     "12-struct-heading-level-2/s1": "match",
     "12-struct-heading-level-2/s2": "match",
     "13-struct-next-link/s1": "match",
