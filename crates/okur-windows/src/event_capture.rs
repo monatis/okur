@@ -369,26 +369,31 @@ fn now_ms() -> u128 {
 }
 
 fn process_name(hwnd: HWND) -> Option<String> {
+    process_image(hwnd).as_deref().and_then(image_name)
+}
+
+/// The executable's full path of the process that owns `hwnd`.
+fn process_image(hwnd: HWND) -> Option<String> {
     let mut pid = 0u32;
     // SAFETY: valid out-pointer; a stale hwnd yields pid 0.
     unsafe { GetWindowThreadProcessId(hwnd, Some(&mut pid)) };
-    process_name_of(pid)
+    process_image_of(pid)
 }
 
-/// The product name and version of the executable of the process that owns `hwnd`, from
-/// its version resource (ProductName, ProductVersion), read once per executable.
-fn process_product_of(hwnd: HWND) -> (Option<String>, Option<String>) {
+/// An executable's file name, from its full path.
+fn image_name(path: &str) -> Option<String> {
+    path.rsplit('\\').next().map(str::to_owned)
+}
+
+/// The product name and version of the executable at `path`, from its version resource
+/// (ProductName, ProductVersion), read once per executable.
+fn product_of_image(path: &str) -> (Option<String>, Option<String>) {
     type Product = (Option<String>, Option<String>);
     thread_local! {
         static PRODUCTS: std::cell::RefCell<std::collections::HashMap<String, Product>> =
             std::cell::RefCell::new(std::collections::HashMap::new());
     }
-    let mut pid = 0u32;
-    // SAFETY: valid out-pointer; a stale hwnd yields pid 0.
-    unsafe { GetWindowThreadProcessId(hwnd, Some(&mut pid)) };
-    let Some(path) = process_image_of(pid) else {
-        return (None, None);
-    };
+    let path = path.to_owned();
     PRODUCTS.with(|products| {
         products
             .borrow_mut()
@@ -469,9 +474,20 @@ fn a_system_executable_names_its_product_and_version() {
     assert!(version.is_some_and(|v| v.starts_with("10.")));
 }
 
+/// A process is named by its executable's file name, read from the one path that also gives
+/// its product.
+#[test]
+fn a_process_is_named_by_its_executables_file_name() {
+    assert_eq!(
+        image_name("C:\\Windows\\System32\\notepad.exe").as_deref(),
+        Some("notepad.exe")
+    );
+    assert_eq!(image_name("notepad.exe").as_deref(), Some("notepad.exe"));
+}
+
 /// The executable's file name of process `pid`.
 fn process_name_of(pid: u32) -> Option<String> {
-    process_image_of(pid).and_then(|path| path.rsplit('\\').next().map(str::to_owned))
+    process_image_of(pid).as_deref().and_then(image_name)
 }
 
 /// The executable's full path of process `pid`.
@@ -2767,11 +2783,13 @@ fn record_at(
         } else {
             None
         };
-        // What Ctrl+Insert+V says: the focused application's product and version.
-        let (process_product, process_version) = if focused {
-            process_product_of(hwnd)
-        } else {
-            (None, None)
+        // The event's process, its executable read once (it was opened twice per focus, for
+        // its name and for its product); what Ctrl+Insert+V says, the focused application's
+        // product and version, from the same path.
+        let image = process_image(hwnd);
+        let (process_product, process_version) = match image.as_deref() {
+            Some(path) if focused => product_of_image(path),
+            _ => (None, None),
         };
         let event = TraceEvent {
             t_ms,
@@ -2788,7 +2806,7 @@ fn record_at(
             menu_bar,
             status_bar,
             window_title: Some(title).filter(|s| !s.is_empty()),
-            process: process_name(hwnd),
+            process: image.as_deref().and_then(image_name),
             process_product,
             process_version,
             object,
