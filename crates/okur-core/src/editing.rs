@@ -24,6 +24,10 @@ pub enum EditKey {
     /// history [obs, 1146/s3, 1147/s3]. The field's caret read at once still stood where it
     /// was (1147's traces), so the end is said from the key, not the caret read.
     LineEnd,
+    /// Home in a page's field: the character at the start of the caret's line, "I" [obs, 1147/s4,
+    /// 1149/s7], said from the key as End is: after typing, the caret read at once still
+    /// stood at the text's end (1149's traces).
+    LineStart,
     /// Shift+Left/Right: the character added to the selection, then "selected" (305/s3).
     SelectCharacter,
     /// Ctrl+Shift+Left/Right: the word added to the selection, then "selected"; the word taken
@@ -718,6 +722,23 @@ pub fn speech_in(
     let said = match key {
         EditKey::Silent => return None,
         EditKey::LineEnd => "\n".to_owned(),
+        // In a word the field marks misspelled, the mark first: "‹Misspelled › I" [obs,
+        // 1148/s7, 1149/s7].
+        EditKey::LineStart => {
+            let (start, _) = line_range(after);
+            let misspelled = after
+                .misspelled
+                .iter()
+                .any(|&(s, e)| s <= start && start < e)
+                .then(|| format!("\u{1d}{} \u{1e}\n", msg::misspelled()));
+            let character = after
+                .text
+                .chars()
+                .nth(start)
+                .filter(|c| !is_line_break(*c))
+                .map_or_else(|| "\n".to_owned(), |c| c.to_string());
+            format!("{}{character}", misspelled.unwrap_or_default())
+        }
         EditKey::TableCell(how) => return crate::document::cell_speech(before, after, how),
         EditKey::FormField => return None,
         EditKey::FormFieldState => return crate::document::form_field_state(after),
@@ -1264,6 +1285,19 @@ mod tests {
             Some("\n")
         );
         assert_eq!(speech(EditKey::LineEnd, "Izmir", 0).as_deref(), Some("\n"));
+        // Home: the line's first character, whatever the caret read says [obs, 1149/s7]; the
+        // misspelled mark first where the field marks the word.
+        assert_eq!(
+            speech(EditKey::LineStart, "Izmira ", 7).as_deref(),
+            Some("I")
+        );
+        let mut marked = ctx("Izmira ", 7, None);
+        marked.misspelled = vec![(0, 6)];
+        let said = super::speech(EditKey::LineStart, None, &marked, "");
+        assert_eq!(
+            said.as_deref(),
+            Some(format!("\u{1d}{} \u{1e}\nI", msg::misspelled()).as_str())
+        );
     }
 
     /// RichEdit (Windows 11 Notepad) separates lines with a bare `\r`: Up and Down must read

@@ -848,10 +848,6 @@ divergences! {
     "After Escape on Flexible Web's save page that the question as a page loads opened, the      focus is left in JAWS's own hidden main window: F5 reloads nothing and Ctrl+Home and R      say nothing. Okur's wizard gives the focus back to the page, which F5 reloads and reads.",
     "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
 
-    Difference::Step => ["711-desktop-typing-echo-jcf-3/s7"],
-    "With typing echo set to both characters and words, a word corrected with Backspace is not      said when Enter ends it: \"c d\", Backspace, Enter says only \"Enter\", in every trial,      while the same keys with words alone say \"c\" then \"Enter\" (710/s7), and both says      the word an uncorrected Enter ends (403/s27). Okur says the word as it stands in both      modes.",
-    "the agent under the owner's rule on JAWS's accidents, 2026-10-21";
-
     Difference::Step => ["718-web-capitals-say-all-indicate-caps/s10"],
     "With Indicate Caps During Say All, JAWS raises each capitalized word, and also every word \
      at the start of each piece it hands its synthesizer until the first capitalized word has \
@@ -2035,20 +2031,25 @@ mod tests {
     }
 
     /// A whole step that matches JAWS on the history layer still differs while its spoken layer
-    /// does: a typing echo is spoken, never written to the history.
+    /// does: a raised pitch is spoken, never written to the history.
     #[test]
     fn a_step_that_differs_on_one_layer_is_not_stale() {
-        let blank = vec![String::new()];
-        let enter = vec!["Enter".to_owned()];
-        let key = "711-desktop-typing-echo-jcf-3/s7";
-        let differs: Vec<(&str, &str, &[String])> =
-            vec![(key, "", &blank), (key, "c Enter", &enter)];
+        let line = vec!["four spaces one tab".to_owned()];
+        let raised = vec!["[pitch +4] four spaces one tab".to_owned()];
+        let key = "718-web-capitals-say-all-indicate-caps/s10";
+        let differs: Vec<(&str, &str, &[String])> = vec![
+            (key, "four spaces one tab", &line),
+            (key, "four spaces one tab", &raised),
+        ];
         let result = check(&differs);
         assert!(
             !result.as_ref().is_err_and(|e| e.contains(key)),
             "{result:?}"
         );
-        let matches: Vec<(&str, &str, &[String])> = vec![(key, "", &blank), (key, "Enter", &enter)];
+        let matches: Vec<(&str, &str, &[String])> = vec![
+            (key, "four spaces one tab", &line),
+            (key, "[pitch +4] four spaces one tab", &raised),
+        ];
         let result = check(&matches);
         assert!(
             result

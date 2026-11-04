@@ -125,7 +125,7 @@ impl ScreenReaderEngine {
                     if event.key == crate::Key::End {
                         crate::editing::EditKey::LineEnd
                     } else {
-                        crate::editing::EditKey::Character
+                        crate::editing::EditKey::LineStart
                     }
                 }
                 // Page Down in a page's one-line field moves nothing and says nothing [obs,
@@ -311,10 +311,14 @@ impl ScreenReaderEngine {
         self.speech.speak_key_label(&label);
     }
 
-    /// The word typed so far ends: word echo says it.
+    /// The word typed so far ends: word echo says it; with characters echoed too, not a word of
+    /// one character, said a moment ago ("a" then Space says nothing [obs, 1149/s6]; "ab" then
+    /// Space says "ab" [obs, 403/s24]).
     fn echo_word_end(&mut self) {
         let word = std::mem::take(&mut self.typed_word);
-        if self.settings.typing_echo.says_words() && !word.is_empty() {
+        let echo = self.settings.typing_echo;
+        let just_said = echo.says_characters() && word.chars().count() == 1;
+        if echo.says_words() && !word.is_empty() && !just_said {
             self.speak_echo(&word);
         }
     }
@@ -499,7 +503,10 @@ impl ScreenReaderEngine {
         // "blank" ([`crate::editing::speech`]).
         let character = (matches!(
             key,
-            EditKey::Character | EditKey::DeleteForward | EditKey::DeleteBackward
+            EditKey::Character
+                | EditKey::LineStart
+                | EditKey::DeleteForward
+                | EditKey::DeleteBackward
         ) && speech.chars().count() == 1)
             || (!speech.is_empty() && speech.chars().all(crate::editing::is_line_break));
         // A word and a selection are read with every symbol named [obs, 213/s11, 313/s7].
@@ -509,9 +516,9 @@ impl ScreenReaderEngine {
         );
         // A character after what the move said first, the page it reached, "page 2 | B": the
         // character read as one, its phonetic name after it [obs, 1119/s3].
-        let after_prefix = speech
-            .rsplit_once('\n')
-            .filter(|(_, last)| key == EditKey::Character && last.chars().count() == 1);
+        let after_prefix = speech.rsplit_once('\n').filter(|(_, last)| {
+            matches!(key, EditKey::Character | EditKey::LineStart) && last.chars().count() == 1
+        });
         // A space Backspace deleted is said by its name, which JAWS's history keeps ("space"
         // [obs, 1142/s6]), where a space the arrows reach is a character it keeps out.
         let deleted_space = key == EditKey::DeleteBackward
@@ -524,12 +531,15 @@ impl ScreenReaderEngine {
                 .speak(&crate::pronounce::character(&speech), true);
         } else if character {
             self.speech.speak_character(&speech, true);
-            if key == EditKey::Character {
+            if matches!(key, EditKey::Character | EditKey::LineStart) {
                 self.schedule_phonetic(&speech);
             }
         } else if let Some((prefix, last)) = after_prefix {
             self.speech.speak(prefix, true);
             self.speech.speak_character(last, false);
+            if key == EditKey::LineStart {
+                self.schedule_phonetic(last);
+            }
         } else if symbols {
             self.speech.speak_symbols(&speech, true);
         } else {

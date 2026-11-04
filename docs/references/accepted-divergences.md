@@ -648,17 +648,6 @@ A step can be in more than one entry; all of its entries apply.
   are silent in replay, as the focus events are JAWS's).
 - Decided under the owner's rule on JAWS's accidents, 2026-10-21.
 
-### A corrected word is not said at its end (typing echo both)
-
-- Steps: `711-desktop-typing-echo-jcf-3/s7`.
-- Difference: the whole step. JAWS says "Enter"; Okur says "c Enter".
-- Why: with typing echo set to both characters and words (`TypingEcho=3`), "c", "d",
-  Backspace and Enter said only "Enter" in every trial of round 151 (2026-10-21). The same keys
-  with words alone said the corrected word, "c", then "Enter" (710/s7). With both, the word an
-  uncorrected Enter ends is said ("cd Enter", 403/s27). Only the corrected word goes unsaid,
-  and only in this mode.
-- Decided under the owner's rule on JAWS's accidents, 2026-10-21.
-
 ### JAWS's raised pitch leaks across its Say All pieces (Indicate Caps During Say All)
 
 - Steps: `718-web-capitals-say-all-indicate-caps/s10`.

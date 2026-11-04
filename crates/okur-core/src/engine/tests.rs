@@ -5762,6 +5762,24 @@ fn typing_echo_says_characters_words_or_both() {
         ["a", "b", "ab", "c", "d", "cd", "Enter"]
     );
     assert!(said(TypingEcho::None).is_empty());
+    // A word of one letter is not said again at Space with characters echoed [obs, 1149/s6]:
+    // with words alone it is [obs, 1148/s6].
+    let one_letter = |echo: TypingEcho| {
+        let (mut engine, speech) = engine_with_speech();
+        let mut changed = engine.settings.clone();
+        changed.typing_echo = echo;
+        engine.set_settings(changed);
+        engine.handle_focus_event(&FocusEvent::new(Role::Edit).with_name("Text"));
+        speech.take();
+        for (key, text) in [(Key::Alpha('A'), 'a'), (Key::Space, ' ')] {
+            let mut event = KeyEvent::new(key, Modifiers::none(), true);
+            event.text = Some(text);
+            engine.handle_key_event(&event);
+        }
+        speech.take()
+    };
+    assert_eq!(one_letter(TypingEcho::Both), ["a"]);
+    assert_eq!(one_letter(TypingEcho::Words), ["a"]);
 }
 
 /// Numpad 5 is Say Character in an application's text field too: once the character, twice

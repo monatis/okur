@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 11622,
-  "total_steps": 12149,
-  "accepted_divergences": 383,
+  "matched_steps": 11623,
+  "total_steps": 12150,
+  "accepted_divergences": 382,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -9087,7 +9087,7 @@
     "711-desktop-typing-echo-jcf-3/s4": "match",
     "711-desktop-typing-echo-jcf-3/s5": "match",
     "711-desktop-typing-echo-jcf-3/s6": "match",
-    "711-desktop-typing-echo-jcf-3/s7": "accepted divergence",
+    "711-desktop-typing-echo-jcf-3/s7": "match",
     "712-web-page-load-reading/s1": "match",
     "712-web-page-load-reading/s2": "mismatch",
     "712-web-page-load-reading/s3": "mismatch",
