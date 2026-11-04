@@ -630,8 +630,9 @@ fn replay_scenario(
                         spoken.push(&speech, false);
                     }
                 }
-                // The step's events are over; JAWS then speaks what it deferred.
-                let _ = engine.on_idle();
+                // The step's events are over; JAWS then speaks what it deferred, and what
+                // waits on a pause once the step's quiet is over, at its recorded end.
+                let _ = engine.on_idle_at(replay.ends.get(&step.id).copied());
                 spoken.take().join("\n")
             }
             "keyboard" | "jaws_script" => {
@@ -1246,6 +1247,9 @@ struct StepEvents {
     reset_times: Vec<(String, u128)>,
     /// When each step began (unix ms), for the replay clock and key times.
     starts: std::collections::HashMap<String, u64>,
+    /// When each step ended (unix ms): the time its quiet is over, for what waits on a pause
+    /// (a character's phonetic spelling).
+    ends: std::collections::HashMap<String, u64>,
     /// What the clipboard held after each step that captured it (`capture_clipboard`): the
     /// application's Ctrl+C, which the clipboard keys then read.
     clipboards: std::collections::HashMap<String, String>,
@@ -1749,6 +1753,7 @@ impl StepEvents {
         let (_, events) = okur_windows_model::event_trace::read_trace(&trace_path)?;
         let mut by_step = std::collections::HashMap::new();
         let mut starts = std::collections::HashMap::new();
+        let mut ends = std::collections::HashMap::new();
         let mut clipboards = std::collections::HashMap::new();
         let steps = trial
             .get("step_results")
@@ -1810,6 +1815,7 @@ impl StepEvents {
             previous_end = Some(u128::from(end));
             by_step.insert(id.to_owned(), window);
             starts.insert(id.to_owned(), start);
+            ends.insert(id.to_owned(), end);
             if let Some(text) = step
                 .pointer("/observation/clipboard")
                 .and_then(Value::as_str)
@@ -1852,6 +1858,7 @@ impl StepEvents {
             setup,
             reset_times,
             starts,
+            ends,
             clipboards,
             screens,
         })

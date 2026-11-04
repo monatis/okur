@@ -466,6 +466,9 @@ impl ScreenReaderEngine {
             .filter(|(_, last)| key == EditKey::Character && last.chars().count() == 1);
         if character {
             self.speech.speak_character(&speech, true);
+            if key == EditKey::Character {
+                self.schedule_phonetic(&speech);
+            }
         } else if let Some((prefix, last)) = after_prefix {
             self.speech.speak(prefix, true);
             self.speech.speak_character(last, false);

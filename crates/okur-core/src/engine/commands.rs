@@ -704,6 +704,14 @@ impl ScreenReaderEngine {
                 self.speech.speak_phonetic(text, true);
             } else if character || lone_symbol {
                 self.speech.speak_character(text, true);
+                if character
+                    && matches!(
+                        command,
+                        Command::SayNextCharacter | Command::SayPriorCharacter
+                    )
+                {
+                    self.schedule_phonetic(text);
+                }
             } else if let Some((before, character, after)) = selected_character {
                 self.speech
                     .speak_selected_character(before, &character, after, true);

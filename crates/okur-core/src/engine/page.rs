@@ -988,8 +988,19 @@ impl ScreenReaderEngine {
     }
 
     /// Called when the OS event stream goes quiet: speech JAWS defers until no further
-    /// event supersedes it (a closed popup menu, unless focus moved on).
+    /// event supersedes it (a closed popup menu, unless focus moved on). The time is the key
+    /// clock's now, the last key's time and what has passed since the engine took it.
     pub fn on_idle(&mut self) -> Option<String> {
+        let now_ms = self
+            .last_key_at
+            .map(|(at, taken)| at.saturating_add(taken.elapsed().as_millis() as u64));
+        self.on_idle_at(now_ms)
+    }
+
+    /// [`Self::on_idle`] at `now_ms` on the key clock (the clock of [`crate::input::KeyEvent::time_ms`]),
+    /// when it is known: parity replay gives each step's recorded end.
+    pub fn on_idle_at(&mut self, now_ms: Option<u64>) -> Option<String> {
+        let phonetic = now_ms.and_then(|now| self.phonetic_after_pause(now));
         self.apply_pending_page();
         self.mouse_echo_idle();
         self.background_ocr_idle();
@@ -998,7 +1009,32 @@ impl ScreenReaderEngine {
             self.speech.speak(speech, true);
         }
         let streamed = self.finish_live_streams();
-        menu.or(streamed)
+        phonetic.or(menu).or(streamed)
+    }
+
+    /// The character the arrows moved onto, phonetically, once `pause` has passed with no
+    /// key ([`crate::settings::Settings::phonetic_pause_ms`], JAWS's 1.5 s): "d", then "delta" 1.59 s after
+    /// Right, in a text box and in the virtual cursor alike [obs, 1140, 1141]. The history
+    /// keeps the character, the synthesizer says its word. Only a letter with a phonetic word
+    /// is said again; what JAWS does after a pause on another character is not recorded (a
+    /// period in the Virtual Viewer, 1095/s3, ended its step before JAWS's pause did).
+    pub(super) fn schedule_phonetic(&mut self, character: &str) {
+        let pause = self.settings.phonetic_pause_ms;
+        let mut chars = character.chars();
+        let letter = matches!((chars.next(), chars.next()), (Some(c), None) if c.is_alphabetic())
+            && crate::pronounce::phonetic(character) != character;
+        self.phonetic_due = match (self.last_key_at, pause, letter) {
+            (Some((at, _)), 1.., true) => {
+                Some((at.saturating_add(u64::from(pause)), character.to_owned()))
+            }
+            _ => None,
+        };
+    }
+
+    fn phonetic_after_pause(&mut self, now_ms: u64) -> Option<String> {
+        let (_, character) = self.phonetic_due.take_if(|(due, _)| *due <= now_ms)?;
+        self.speech.speak_phonetic(&character, false);
+        Some(character)
     }
 
     /// Whether an application's notification is its echo of what was just typed or edited,

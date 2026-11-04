@@ -522,6 +522,25 @@ pub static SETTINGS: &[SettingSpec] = &[
             Kind::Choice(progress_bar_updates),
         )
     },
+    // A character said phonetically after a pause on it, JAWS's tenths of a second in
+    // milliseconds; in no dialog of Okur's until JAWS's own choices for it are observed: the
+    // settings file and --set.
+    SettingSpec {
+        jaws: default_jcf("Options", "PhoneticCharAfterPause", |v| {
+            v.trim().parse::<u32>().map_or(Value::Null, |tenths| {
+                Value::from(tenths.saturating_mul(100))
+            })
+        }),
+        ..spec(
+            "phonetic_pause_ms",
+            Group::Reading,
+            None,
+            Kind::Range {
+                min: 0,
+                max: 10_000,
+            },
+        )
+    },
     // JAWS's Mouse Echo group (Settings Center help), in its order.
     SettingSpec {
         jaws: default_jcf("Options", "MouseSpeechEnabled", |v| {
@@ -1207,6 +1226,22 @@ mod tests {
         let desktop = import_jaws(&base, &|_, _, _| None);
         assert_eq!(desktop.keyboard, KeyboardSettings::default());
         assert_eq!(desktop.forms_mode, FormsMode::Auto);
+    }
+
+    /// JAWS's pause before a character's phonetic spelling, in tenths of a second in its file
+    /// (`PhoneticCharAfterPause=15` shipped), is Okur's milliseconds; 0 never.
+    #[test]
+    fn the_jaws_import_reads_the_phonetic_pause() {
+        let pause = |tenths: &'static str| {
+            move |_: JawsFile, section: &str, key: &str| {
+                (section == "Options" && key == "PhoneticCharAfterPause").then(|| tenths.to_owned())
+            }
+        };
+        let base = Settings::reference_machine();
+        assert_eq!(base.phonetic_pause_ms, 1_500);
+        assert_eq!(import_jaws(&base, &pause("15")).phonetic_pause_ms, 1_500);
+        assert_eq!(import_jaws(&base, &pause("30")).phonetic_pause_ms, 3_000);
+        assert_eq!(import_jaws(&base, &pause("0")).phonetic_pause_ms, 0);
     }
 
     /// JAWS's Mouse Echo keys, as its shipped `DEFAULT.JCF` writes them, are Okur's defaults;

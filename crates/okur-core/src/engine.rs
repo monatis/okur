@@ -558,6 +558,12 @@ pub struct ScreenReaderEngine {
     pending_font: Option<bool>,
     /// Say Font in Word's document waiting for the line spacing its object model gives.
     pending_word_font: bool,
+    /// A character moved onto by the arrows, said phonetically once no key came for the
+    /// pause JAWS waits for: when, on the key clock, and the character.
+    phonetic_due: Option<(u64, String)>,
+    /// The last key's time on the key clock, and when the engine took it: the key clock's
+    /// time now, live, for what waits on a pause.
+    last_key_at: Option<(u64, std::time::Instant)>,
     /// Behavior for particular applications, offered every focus first ([`crate::apps`]).
     apps: Vec<Box<dyn crate::apps::AppModule>>,
     /// Each live region's lines when it last changed, by DOM id.
@@ -777,6 +783,8 @@ impl ScreenReaderEngine {
             pending_viewer: None,
             pending_font: None,
             pending_word_font: false,
+            phonetic_due: None,
+            last_key_at: None,
             apps: crate::apps::builtin(),
             last_live_text: std::collections::HashMap::new(),
             progress_said_at: None,
@@ -1004,6 +1012,9 @@ impl ScreenReaderEngine {
         if !event.is_down {
             return KeyAction::PassThrough;
         }
+        // Any key ends the wait for a character's phonetic spelling, said only after a pause.
+        self.phonetic_due = None;
+        self.last_key_at = Some((event.time_ms, std::time::Instant::now()));
         // Which held keys act as the JAWS key depends on the keyboard settings.
         // Pass Key Through: the next key goes to the application as it is, with the modifiers
         // held for it.

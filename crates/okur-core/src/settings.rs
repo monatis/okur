@@ -1087,6 +1087,11 @@ pub struct Settings {
     /// `[Options] ProgressBarUpdateInterval`, 5000 by default; 0 says none, 1 every change). A
     /// change within it is not said, nor later [obs, 793/s2].
     pub progress_bar_interval_ms: u32,
+    /// How long after the arrows moved onto a character it is said phonetically when no key
+    /// came, in milliseconds; 0 never: JAWS's When Pausing After Character Navigation, Speak
+    /// Character Phonetically (Settings Center, Text Processing; `[Options]
+    /// PhoneticCharAfterPause`, in tenths of a second, 15 by default) [obs, 1140, 1141].
+    pub phonetic_pause_ms: u32,
     pub mouse_echo: MouseEcho,
     /// The language Insert+Space, O recognizes the screen in, a BCP 47 tag ("tr-TR"): JAWS's
     /// Microsoft OCR Language (`[OCR] MicrosoftOcrLanguage`, a locale number, 1033 by
@@ -1125,6 +1130,7 @@ impl Default for Settings {
             confirm_exit: true,
             visual_tracking: true,
             progress_bar_interval_ms: 5000,
+            phonetic_pause_ms: 1500,
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),
             voice_profiles: std::collections::BTreeMap::new(),
@@ -1269,6 +1275,8 @@ impl Settings {
             visual_tracking: true,
             // Not in old-pc's user JCF: the shared one's (`ProgressBarUpdateInterval=5000`).
             progress_bar_interval_ms: 5000,
+            // Not in old-pc's user JCF: the shared one's (`PhoneticCharAfterPause=15`).
+            phonetic_pause_ms: 1500,
             // Not in old-pc's user JCF: the shared one's, JAWS's defaults.
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),

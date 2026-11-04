@@ -785,6 +785,46 @@ fn a_dialog_shown_after_its_focus_gives_say_window_its_controls() {
     assert!(said.contains("OK"), "{said:?}");
 }
 
+/// A letter the arrows moved onto is said phonetically once 1.5 s pass with no key: "d", then
+/// "delta" [obs, 1140, 1141]. A key before the pause ends the wait; a period has no word.
+#[test]
+fn a_letter_is_spelled_phonetically_after_a_pause() {
+    let page =
+        AomNode::new(0, Role::Document)
+            .with_children(vec![AomNode::new(1, Role::Paragraph).with_text("Ad. x")]);
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(speech.clone()),
+    );
+    let right = |at: u64| KeyEvent {
+        time_ms: at,
+        ..KeyEvent::new(Key::RightArrow, Modifiers::none(), true)
+    };
+    engine.handle_key_event(&right(10_000));
+    assert_eq!(speech.take(), ["d"]);
+    assert_eq!(engine.on_idle_at(Some(11_499)), None);
+    assert!(speech.take().is_empty());
+    assert_eq!(engine.on_idle_at(Some(11_500)).as_deref(), Some("d"));
+    assert_eq!(speech.take(), ["delta"]);
+    // Said once.
+    assert_eq!(engine.on_idle_at(Some(20_000)), None);
+    // A key within the pause: nothing for the letter left.
+    engine.handle_key_event(&KeyEvent {
+        time_ms: 30_000,
+        ..KeyEvent::new(Key::LeftArrow, Modifiers::none(), true)
+    });
+    assert_eq!(speech.take(), ["A"]);
+    engine.handle_key_event(&right(30_400));
+    speech.take();
+    assert_eq!(engine.on_idle_at(Some(31_600)), None);
+    assert_eq!(engine.on_idle_at(Some(31_900)).as_deref(), Some("d"));
+    // A period has no phonetic word.
+    engine.handle_key_event(&right(40_000));
+    speech.take();
+    assert_eq!(engine.on_idle_at(Some(45_000)), None);
+}
+
 /// A balloon tip shown for the window in front is said after what the focus said, not over
 /// it: "Password: | password edit | Type in text. | Password: Use at least 8 characters."
 /// [obs, 1138/s2].
