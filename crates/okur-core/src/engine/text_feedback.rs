@@ -283,6 +283,34 @@ impl ScreenReaderEngine {
         }
     }
 
+    /// With a typing echo on, some keys that type nothing are named before what they do, to
+    /// the synthesizer alone (JAWS's key labels): "Enter", "End", "F2", "Home", "Escape" [obs,
+    /// 1146/s2, s3, s6, s13, s14]; none with the echo off [obs, 1147]. Shift, Control, Delete,
+    /// Page Down and the arrows are not named (1146/s4, s5, s11, s12). Enter in a text field is
+    /// named by its own echo, after the word it ends ([`Self::echo_typed`]).
+    pub(super) fn echo_key_label(&mut self, event: &crate::input::KeyEvent) {
+        use crate::Key;
+        if self.settings.typing_echo == crate::settings::TypingEcho::None
+            || !event.modifiers.is_empty()
+            || !matches!(
+                event.key,
+                Key::Enter | Key::Escape | Key::Home | Key::End | Key::F(_)
+            )
+            || (event.key == Key::Enter && self.editing_text())
+            // A layer's key is the layer's command, not a key typed (inferred: Escape leaving
+            // the mouse echo layer said nothing at the lab's echo, None [obs, 792/s15]).
+            || self.layer_open
+            || self.table_layer
+            || self.mouse_echo_layer
+            || self.ocr_layer
+        {
+            return;
+        }
+        let label = crate::keyboard_help::key_name(event);
+        tracing::debug!(%label, "key label");
+        self.speech.speak_key_label(&label);
+    }
+
     /// The word typed so far ends: word echo says it.
     fn echo_word_end(&mut self) {
         let word = std::mem::take(&mut self.typed_word);

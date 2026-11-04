@@ -1050,6 +1050,8 @@ impl ScreenReaderEngine {
                 return action;
             }
         }
+        // Typing echo's key names, before what the key does.
+        self.echo_key_label(event);
         // Not in forms mode, where a web application takes these keys for itself (Ctrl+R
         // aligns right in Google Docs, replies in Outlook on the web): no load follows, and the
         // page's next refresh was taken for a reload, forms mode left and the place lost

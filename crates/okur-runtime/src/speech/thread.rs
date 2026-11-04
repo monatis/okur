@@ -138,6 +138,57 @@ impl Request {
     }
 }
 
+/// How long after a key's name the speech that would cut it off follows it instead: the
+/// key's own speech comes within it (Home's character after a read of the field).
+const KEY_LABEL_HOLD: Duration = Duration::from_millis(400);
+
+/// A key's name said by typing echo, and what comes after it: JAWS says "Home", then "I"
+/// [obs, 1146/s13], so the first speech that would cut the name off within
+/// [`KEY_LABEL_HOLD`] follows it instead. Another key's echo, or a stop, ends the wait.
+#[derive(Debug, Default)]
+struct KeyLabelHold {
+    said_at: Option<std::time::Instant>,
+}
+
+impl KeyLabelHold {
+    /// A key's name is being said, at `now`.
+    fn label(&mut self, now: std::time::Instant) {
+        self.said_at = Some(now);
+    }
+
+    /// `request` as it is to be sent at `now`.
+    fn pass(&mut self, request: Request, now: std::time::Instant) -> Request {
+        if matches!(request, Request::Stop | Request::Echo(_)) {
+            self.said_at = None;
+            return request;
+        }
+        let held = self
+            .said_at
+            .is_some_and(|at| now.saturating_duration_since(at) < KEY_LABEL_HOLD);
+        if held && request.interrupts() {
+            self.said_at = None;
+            return request.queued();
+        }
+        request
+    }
+}
+
+impl Request {
+    /// The request without its interruption: it follows what is being said.
+    fn queued(self) -> Self {
+        match self {
+            Request::Speak(text, _) => Request::Speak(text, false),
+            Request::Message(text, _) => Request::Message(text, false),
+            Request::Symbols(text, _) => Request::Symbols(text, false),
+            Request::Character(text, _) => Request::Character(text, false),
+            Request::Phonetic(text, _) => Request::Phonetic(text, false),
+            Request::Spelled(text, _) => Request::Spelled(text, false),
+            Request::Marked(text, mark, _) => Request::Marked(text, mark, false),
+            other => other,
+        }
+    }
+}
+
 /// A [`TtsManager`] driven from its own thread.
 pub struct SpeechThread {
     requests: Sender<Request>,
@@ -159,6 +210,8 @@ pub struct SpeechThread {
     unspoken: bool,
     /// What was said lately, for the Speech History viewer.
     recent: std::collections::VecDeque<String>,
+    /// A key's name just said, which the speech after it follows.
+    key_label: Mutex<KeyLabelHold>,
 }
 
 impl SpeechThread {
@@ -276,6 +329,7 @@ impl SpeechThread {
             report_to,
             unspoken: false,
             recent: std::collections::VecDeque::new(),
+            key_label: Mutex::new(KeyLabelHold::default()),
         }
     }
 
@@ -545,6 +599,10 @@ impl SpeechThread {
         if self.unspoken && request.speaks() {
             return;
         }
+        let request = match self.key_label.lock() {
+            Ok(mut hold) => hold.pass(request, std::time::Instant::now()),
+            Err(_) => request,
+        };
         if request.interrupts() {
             self.interruptions.fetch_add(1, Ordering::SeqCst);
         }
@@ -577,6 +635,13 @@ impl SpeechOutput for SpeechThread {
     /// at a raised pitch [obs, 406/s13].
     fn speak_echo(&mut self, text: &str) {
         self.send(Request::Echo(text.to_owned()));
+    }
+
+    fn speak_key_label(&mut self, text: &str) {
+        self.send(Request::Echo(text.to_owned()));
+        if let Ok(mut hold) = self.key_label.lock() {
+            hold.label(std::time::Instant::now());
+        }
     }
 
     fn set_cursor_voice(&mut self, context: okur_core::settings::VoiceContext) {
@@ -752,6 +817,46 @@ mod tests {
     }
 
     /// Long text is given in parts of whole lines that make the text again; short text whole.
+    /// A key's name is not cut off by the key's own speech: the first speech that would cut it
+    /// within the hold follows it [obs, 1146/s13: "Home", then "I"]; what comes later, another
+    /// key's echo or a stop, cuts as before.
+    #[test]
+    fn speech_after_a_keys_name_follows_it() {
+        let interrupts =
+            |hold: &mut KeyLabelHold, request: Request, at| hold.pass(request, at).interrupts();
+        let start = std::time::Instant::now();
+        let mut hold = KeyLabelHold::default();
+        hold.label(start);
+        let soon = start + Duration::from_millis(50);
+        assert!(!interrupts(
+            &mut hold,
+            Request::Character("I".into(), true),
+            soon
+        ));
+        // Once.
+        assert!(interrupts(
+            &mut hold,
+            Request::Speak("next".into(), true),
+            soon
+        ));
+        hold.label(start);
+        let late = start + KEY_LABEL_HOLD + Duration::from_millis(1);
+        assert!(interrupts(
+            &mut hold,
+            Request::Speak("later".into(), true),
+            late
+        ));
+        hold.label(start);
+        assert!(interrupts(&mut hold, Request::Echo("a".into()), soon));
+        assert!(interrupts(
+            &mut hold,
+            Request::Speak("after a".into(), true),
+            soon
+        ));
+        hold.label(start);
+        assert!(interrupts(&mut hold, Request::Stop, soon));
+    }
+
     #[test]
     fn long_text_is_spoken_in_parts_of_whole_lines() {
         let line = "A line of a page read with Say All, long enough to count.\n";

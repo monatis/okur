@@ -355,6 +355,7 @@ fn leaving_forms_mode_says_the_cursor_at_the_levels_length() {
             VirtualCursor::new(create_test_buffer()),
             Box::new(speech.clone()),
         );
+        echo_off(&mut engine);
         let mut settings = engine.settings.clone();
         settings.verbosity.level = level;
         engine.set_settings(settings);
@@ -885,6 +886,42 @@ fn a_quick_key_onto_a_field_turns_forms_mode_on_after_the_delay() {
     assert_eq!(focused(&actions), 1);
 }
 
+/// With a typing echo on, Enter, Escape, Home, End and the function keys are named before what
+/// they do [obs, 1146]; Shift, Control, Page Down and Delete are not; with the echo off
+/// nothing is [obs, 1147].
+#[test]
+fn typing_echo_names_keys_that_type_nothing() {
+    use crate::settings::TypingEcho;
+    let page =
+        AomNode::new(0, Role::Document)
+            .with_children(vec![AomNode::new(1, Role::Paragraph).with_text("Text")]);
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(speech.clone()),
+    );
+    let press = |engine: &mut ScreenReaderEngine, key| {
+        let event = KeyEvent::new(key, Modifiers::none(), true);
+        engine.handle_key_event(&event);
+        crate::keyboard_help::key_name(&event)
+    };
+    let mut settings = engine.settings.clone();
+    settings.typing_echo = TypingEcho::None;
+    engine.set_settings(settings.clone());
+    press(&mut engine, Key::F(2));
+    assert!(speech.take().is_empty());
+    settings.typing_echo = TypingEcho::Characters;
+    engine.set_settings(settings);
+    press(&mut engine, Key::F(2));
+    assert_eq!(speech.take(), ["F2"]);
+    let escape = press(&mut engine, Key::Escape);
+    assert_eq!(speech.take().first(), Some(&escape));
+    for key in [Key::Shift, Key::Control, Key::PageDown, Key::Delete] {
+        let name = press(&mut engine, key);
+        assert!(!speech.take().contains(&name), "{name}");
+    }
+}
+
 /// A balloon tip shown for the window in front is said after what the focus said, not over
 /// it: "Password: | password edit | Type in text. | Password: Use at least 8 characters."
 /// [obs, 1138/s2].
@@ -1009,6 +1046,7 @@ fn end_goes_past_the_last_letter() {
         VirtualCursor::new(VirtualBuffer::from_aom(&page)),
         Box::new(speech.clone()),
     );
+    echo_off(&mut engine);
     engine.cursor.move_to_line(1);
     speech.take();
     engine.handle_key_event(&key(Key::End));
@@ -2293,6 +2331,14 @@ fn test_okur_key_combinations_are_consumed_in_native_apps() {
     assert_eq!(engine.handle_key_event(&ins_t), KeyAction::Consume);
 }
 
+/// The typing echo off, as old-pc's JAWS has it (`TypingEcho=0`), for an observation made
+/// there: with an echo on, keys that type nothing are named first [obs, 1146].
+pub(super) fn echo_off(engine: &mut ScreenReaderEngine) {
+    let mut settings = engine.settings.clone();
+    settings.typing_echo = crate::settings::TypingEcho::None;
+    engine.set_settings(settings);
+}
+
 /// Speech shared with the test, for commands spoken from key events.
 #[derive(Clone, Default)]
 pub(super) struct SharedSpeech(std::sync::Arc<std::sync::Mutex<Vec<String>>>);
@@ -3158,6 +3204,7 @@ fn a_console_is_virtualized_from_its_text_at_the_prompt() {
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
     let speech = SharedSpeech::default();
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    echo_off(&mut engine);
     let actions = crate::actions::RecordingActions::default();
     engine.set_actions(Box::new(actions.clone()));
     let mut focus = FocusEvent::new(Role::Text)
@@ -4079,6 +4126,7 @@ fn a_plain_multi_line_edit_is_silent_on_home() {
         VirtualCursor::new(create_test_buffer()),
         Box::new(speech.clone()),
     );
+    echo_off(&mut engine);
     engine.set_actions(Box::new(crate::actions::RecordingActions::default()));
     let context = |caret: usize| crate::event::TextContext {
         text: "fn main\r\n    let x".to_owned(),
@@ -4138,6 +4186,7 @@ fn a_pages_multi_line_field_reads_keys_as_a_document() {
     let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page));
     let speech = SharedSpeech::default();
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    echo_off(&mut engine);
     engine.set_actions(Box::new(crate::actions::RecordingActions::default()));
     let context = |caret: usize| crate::event::TextContext {
         text: "First line\nSecond line with a bold word".to_owned(),

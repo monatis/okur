@@ -1400,6 +1400,13 @@ pub trait SpeechOutput: Send + Sync {
         self.speak(text, true);
     }
 
+    /// Speaks a key's name as typing echo gives it ("Escape", "Home"), which JAWS keeps out of
+    /// its speech history like the echo, before what the key does: speech coming at once after
+    /// it follows it rather than cutting it off [obs, 1146/s13: "Home", then "I"].
+    fn speak_key_label(&mut self, text: &str) {
+        self.speak_echo(text);
+    }
+
     /// Speaks one of Okur's own messages, in the Tutor and Message voice context.
     fn speak_message(&mut self, text: &str, interrupt: bool) {
         self.speak(text, interrupt);
