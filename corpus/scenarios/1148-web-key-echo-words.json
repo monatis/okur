@@ -1,0 +1,62 @@
+{
+  "id": "1148-web-key-echo-words",
+  "name": "1146's keys at typing echo Words ([Options] TypingEcho=2), in the same page field in forms mode: whether Enter, End, F2, Home and Escape are named as at Characters, and what A then Space say",
+  "category": "web-forms",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/activation.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "TypingEcho": "2"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "E",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "Enter",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "End",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "F2",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "A",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "Space",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Home",
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "Escape",
+      "id": "s8"
+    }
+  ]
+}
