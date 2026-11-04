@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-forms.ps1",
   "target_app": "desktop",
+  "trace_window": true,
   "launch": { "window_title": "SR Desktop Fixture" },
   "jaws_settings": { "DEFAULT.JCF": { "Options": { "Verbosity": "2" } } },
   "reset": { "keys": [] },
