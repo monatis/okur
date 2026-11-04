@@ -133,3 +133,25 @@ passed, 0 failed, 201 ignored.
    cover; whether a layer's keys are named (inferred not).
 3. Screen Layout's lines (984-993) need element positions in the snapshots.
 4. The review's P3 and P10; the Office items when Office is back.
+
+## 2026-11-05, the next loop
+
+- **1151** (`3cec0505`): "abc" typed in a field Chrome spell-checks and in one it does not
+  (`spellcheck="false"`). JAWS says "Misspelled | Checked Edit | Misspelled | abc" in the
+  first and "Unchecked Edit | abc" in the second, at once, in every trial: the mark is the
+  page's, not a checker of JAWS's own, and JAWS has it within a second of the typing. Two
+  temporary builds (not committed) showed Okur's own reads in a live run of 626 get plain
+  attribute runs throughout, also after asking Chrome for character extents first. JAWS also
+  says "Misspelled" before the field's name, which points at a property of the field object:
+  `okur-lab focus-text` now prints each object's IA2 object attributes, MSAA state and IA2
+  states (`a0fb59c0`), not yet run.
+- **A page's text field typed in is said with its text when focused again** (`a26fdceb`):
+  Shift+Tab back said the "blank" it loaded with; now "Checked Edit | abc" (1151/s7), from the
+  focus event's value, as a check box's state already was.
+- **1150's Alt+Delete place:** the trace has no focus event for the WPF TextBox itself, only the
+  window's, and the screen text's run for it is the text's rectangle (594, 515), while JAWS
+  says "594, 507" (counted from 1). The window tree saved by `window-tree` would need each
+  element's bounding rectangle to tell; then 1150 recorded again.
+- **old-pc stopped answering** (2026-11-05, 00:0x): `opendesk exec` returns nothing and the
+  relay refuses the session ("failed to connect to rendezvous ws://34.136.136.117:80",
+  unreachable host), though `opendesk discover` still lists it. Nothing was running there.
