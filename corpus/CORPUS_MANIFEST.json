@@ -4536,6 +4536,20 @@
       }
     },
     {
+      "scenario_id": "1144-web-quick-key-delay",
+      "fixture": "activation.html",
+      "evidence": {
+        "sha256": "8c06340cfe2f1f45aef50b9b0c80d748dc6eac8b3a7b457bca6d07e7dc055818",
+        "capture_script_sha256": "1f0231e2b180e1fbd6790ad5b55f1bb02469a18d5c90ad2253474ccf14151daa",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "12-struct-heading-level-2",
       "fixture": "structural-navigation.html",
       "evidence": {
@@ -29317,10 +29331,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1928,
-    "scenarios_with_evidence": 1928,
-    "total_trials": 5790,
-    "successful_trials": 5773,
-    "deterministic_scenarios": 1609
+    "scenarios": 1929,
+    "scenarios_with_evidence": 1929,
+    "total_trials": 5793,
+    "successful_trials": 5776,
+    "deterministic_scenarios": 1610
   }
 }

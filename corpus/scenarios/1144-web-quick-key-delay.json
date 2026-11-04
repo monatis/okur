@@ -1,0 +1,95 @@
+{
+  "id": "1144-web-quick-key-delay",
+  "name": "Navigation Quick Key Delay at one second with Auto Forms Mode ([FormsMode] AutoFormsMode=1, AutoFormsModeThreshold=1000, as Settings Center writes 1 Second): E onto the City edit then 3 s of quiet, X (typed in forms mode, else the next check box), Escape; E with X 300 ms after it, within the delay; C onto the combo box then 3 s of quiet, Down (its next value in forms mode, else the next line), Escape; X onto a check box then 3 s of quiet and X again (a check box takes no forms mode, the help says)",
+  "category": "web-forms",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/activation.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "FormsMode": {
+        "AutoFormsMode": "1",
+        "AutoFormsModeThreshold": "1000"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "E",
+      "quiet_ms": 3000,
+      "settle_max_ms": 12000,
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "Escape",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Home",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "E",
+      "during": [
+        {
+          "after_ms": 300,
+          "command": "X"
+        }
+      ],
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Home",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "C",
+      "quiet_ms": 3000,
+      "settle_max_ms": 12000,
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s8"
+    },
+    {
+      "type": "key",
+      "command": "Escape",
+      "id": "s9"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Home",
+      "id": "s10"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "quiet_ms": 3000,
+      "settle_max_ms": 12000,
+      "id": "s11"
+    },
+    {
+      "type": "key",
+      "command": "X",
+      "id": "s12"
+    }
+  ]
+}
