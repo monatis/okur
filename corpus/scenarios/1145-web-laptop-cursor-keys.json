@@ -1,0 +1,65 @@
+{
+  "id": "1145-web-laptop-cursor-keys",
+  "name": "The laptop layout's cursor keys in a page (old-pc runs the laptop layout): CapsLock+P (JAWS Cursor) and Say Line with it, CapsLock+Semicolon (PC Cursor), CapsLock+Left Bracket (Route JAWS Cursor to PC Cursor), Down, CapsLock+Apostrophe (Route PC Cursor to JAWS Cursor), as Freedom Scientific's hotkeys list gives them",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/activation.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "CapsLock+P",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "CapsLock+Semicolon",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "CapsLock+P",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "CapsLock+LeftBracket",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "CapsLock+Semicolon",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "CapsLock+P",
+      "id": "s8"
+    },
+    {
+      "type": "key",
+      "command": "CapsLock+Apostrophe",
+      "id": "s9"
+    },
+    {
+      "type": "key",
+      "command": "CapsLock+Semicolon",
+      "id": "s10"
+    }
+  ]
+}
