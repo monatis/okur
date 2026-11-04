@@ -25,8 +25,12 @@ for Linux with no warning), parity identical throughout, live checks on old-pc. 
 review's open items (P4, P8, P3, P1's pieces, P15; Word's and Excel's live checks wait for
 Office on old-pc), then JAWS's features from Settings Center and the help (§3); the rest of
 the proposal's §13.3 before macOS. §3 begun: JAWS's progress bar announcements recorded (793, 1136)
-and built (`29a4c730`), tool tips recorded (1137); next the setting as Settings Center has it, Say
-Window outside dialog boxes, a comctl32 tool tip.
+and built (`29a4c730`), tool tips recorded (1137); the setting as Settings Center has it
+(`6292eb7a`); Say Window outside dialog boxes (`13d91c1f`, 548/549/554/1136 recorded again);
+comctl32's balloon tips and password edits (`408d2fb4`, `c56173d8`, 1138)
+([`../handoff/2026-11-04-say-window-and-balloon-tips.md`](../handoff/2026-11-04-say-window-and-balloon-tips.md)).
+Next: blank lines and phonetic spelling after a pause (1139-1141 recording), key labels and
+key echo, the quick key delay.
 
 Rules as before: a finding is checked against the code before it is fixed; a fix has a test
 that fails without it; a refactor changes nothing a user hears (the proposal's proofs P1 to P5,
