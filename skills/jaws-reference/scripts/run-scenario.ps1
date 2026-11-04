@@ -85,6 +85,9 @@ Headings: "trace_headings": true saves, with -TraceDir, the headings of Word's d
 fixture's window, the view it shows it in, its paragraphs and its links after each step
 (okur-lab document-headings), to the same file: replay gives them to Okur's Heading List, Say
 Window Title, Say All and Links List in Word.
+Windows: "trace_window": true saves, with -TraceDir, the fixture's window as UI Automation's
+control view holds it after each step (okur-lab window-tree), to the same file: replay gives it
+to Okur's Say Window in a window that is not a dialog box.
 JAWS's own files: "jaws_forget" names files under JAWS's user settings folder (Settings\enu)
 that each trial starts without, and the scenario leaves behind none of: JAWS keeps Excel's
 titles per workbook in its personalized settings for the file, which a trial writes and the
@@ -1186,7 +1189,7 @@ for ($t = 1; $t -le $Repetitions; $t++) {
     # Okur's experimental screen text when it reads the screen; with "trace_ocr", the words
     # Windows' OCR reads in the window too (okur-lab screen-text --append-to).
     $screenPath = $null
-    if ($TraceDir -and ($scenario.trace_screen -or $scenario.trace_file -or $scenario.trace_headings)) {
+    if ($TraceDir -and ($scenario.trace_screen -or $scenario.trace_file -or $scenario.trace_headings -or $scenario.trace_window)) {
         $screenPath = Join-Path $TraceDir "$scenarioId-trial$t.screen.jsonl"
         Remove-Item $screenPath -ErrorAction SilentlyContinue
         $trialResult.screen_file = Split-Path -Leaf $screenPath
@@ -1320,6 +1323,11 @@ for ($t = 1; $t -le $Repetitions; $t++) {
         # replay gives Okur's Heading List (read wherever the focus is: JAWS's list has it).
         if ($screenPath -and $scenario.trace_headings) {
             & $OkurLab @('document-headings', '--append-to', $screenPath, '--step', $step.id, '--window-title', $launch.window_title) 2>&1 | Out-Null
+        }
+        # "trace_window": the fixture's window as UI Automation's control view holds it, which
+        # replay gives Okur's Say Window outside dialog boxes.
+        if ($screenPath -and $scenario.trace_window) {
+            & $OkurLab @('window-tree', '--append-to', $screenPath, '--step', $step.id, '--window-title', $launch.window_title) 2>&1 | Out-Null
         }
         if ($screenPath -and $scenario.trace_screen) {
             $screenArgs = @('screen-text', '--append-to', $screenPath, '--step', $step.id)

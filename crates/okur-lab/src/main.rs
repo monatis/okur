@@ -183,6 +183,24 @@ enum Commands {
     /// name, control type, class, and whether it is in a document (a web page's). The harness
     /// checks a web trial starts in its page (Windows)
     Focus,
+    /// Print the window in front as UI Automation's control view holds it, its on-screen
+    /// elements in order, as one JSON tree: what Say Window reads (Windows). Research, never
+    /// evidence
+    WindowTree {
+        /// Append the tree, as JSON, to this file instead of printing it: the recorder's
+        /// snapshot after a step of a scenario with "trace_window" (replay gives it to Okur's
+        /// Say Window)
+        #[arg(long)]
+        append_to: Option<String>,
+        /// With --append-to, the step the snapshot is taken after
+        #[arg(long, default_value = "")]
+        step: String,
+        /// With --append-to, read only a window whose title starts with this (the scenario's
+        /// fixture): another in front gets no tree, so no other window, which may be private,
+        /// is ever saved
+        #[arg(long)]
+        window_title: Option<String>,
+    },
     /// Watch a window for UI Automation notifications, registered several ways at once, and
     /// print which registration heard what (Windows; research, never evidence)
     ProbeNotifications {
@@ -1605,6 +1623,54 @@ async fn main() {
         #[cfg(windows)]
         Some(Commands::Focus) => {
             println!("{}", okur_windows::uia_capture::focused_element_json());
+        }
+        #[cfg(windows)]
+        Some(Commands::WindowTree {
+            append_to,
+            step,
+            window_title,
+        }) => {
+            let other_window = window_title
+                .as_deref()
+                .is_some_and(|title| !okur_lab::harness::foreground_title().starts_with(title));
+            let tree = if other_window {
+                None
+            } else {
+                match okur_windows::uia_capture::foreground_window_tree() {
+                    Ok(tree) => Some(tree),
+                    Err(e) => {
+                        eprintln!("{e}");
+                        std::process::exit(1);
+                    }
+                }
+            };
+            match append_to {
+                Some(path) => {
+                    let t_ms = std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .map(|d| d.as_millis())
+                        .unwrap_or_default();
+                    let snapshot = serde_json::json!({
+                        "step": step,
+                        "t_ms": t_ms,
+                        "window": tree,
+                        "other_window": other_window,
+                    });
+                    let written = std::fs::OpenOptions::new()
+                        .create(true)
+                        .append(true)
+                        .open(&path)
+                        .and_then(|mut file| {
+                            use std::io::Write as _;
+                            writeln!(file, "{snapshot}")
+                        });
+                    if let Err(e) = written {
+                        eprintln!("{path}: {e}");
+                        std::process::exit(1);
+                    }
+                }
+                None => println!("{}", serde_json::to_string(&tree).unwrap_or_default()),
+            }
         }
         #[cfg(windows)]
         Some(Commands::ProbeNotifications { window, millis }) => {

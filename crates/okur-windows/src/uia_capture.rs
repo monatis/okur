@@ -1325,6 +1325,17 @@ pub fn focused_element_json() -> String {
     .to_string()
 }
 
+/// The window in front as UI Automation's control view holds it, its on-screen elements in
+/// order, as Say Window reads a dialog's: what Okur would read of it, for comparing with JAWS.
+pub fn foreground_window_tree() -> Result<UiaNode, PlatformError> {
+    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+    crate::com::init_mta();
+    let uia = automation()?;
+    // SAFETY: plain Win32 call with no preconditions.
+    let window = unsafe { GetForegroundWindow() };
+    window_subtree(&uia, window).ok_or(PlatformError::NoWindowFound)
+}
+
 /// The element UIA reports as having keyboard focus, as `"name" (control type N)`, for
 /// harness checks.
 pub fn focused_element_summary() -> String {
