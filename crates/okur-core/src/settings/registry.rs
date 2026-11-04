@@ -548,6 +548,23 @@ pub static SETTINGS: &[SettingSpec] = &[
             Kind::Choice(phonetic_pauses),
         )
     },
+    // Navigation Quick Key Delay, in Settings Center's Forms Mode > Auto Forms Mode Settings:
+    // JAWS's milliseconds, -1 for Never (old-pc's Settings Center wrote 1500 for "1.5
+    // Seconds", 2026-11-04).
+    SettingSpec {
+        tree_label: Some(msg::settings_tree_quick_key_delay),
+        jaws: default_jcf("FormsMode", "AutoFormsModeThreshold", |v| {
+            v.trim().parse::<i64>().map_or(Value::Null, |ms| {
+                Value::from(u32::try_from(ms).unwrap_or(0))
+            })
+        }),
+        ..spec(
+            "quick_key_delay_ms",
+            Group::Reading,
+            None,
+            Kind::Choice(quick_key_delays),
+        )
+    },
     // JAWS's Mouse Echo group (Settings Center help), in its order.
     SettingSpec {
         jaws: default_jcf("Options", "MouseSpeechEnabled", |v| {
@@ -1025,6 +1042,30 @@ fn phonetic_pauses() -> Vec<Choice> {
     .collect()
 }
 
+/// Navigation Quick Key Delay's choices in the order Space steps through them in Settings
+/// Center, Never last (".5 Seconds | 1 of 8" to "Never | 8 of 8"; old-pc, 2026-11-04).
+fn quick_key_delays() -> Vec<Choice> {
+    [
+        (500_u32, msg::settings_quick_key_delay_half_second()),
+        (1_000, msg::settings_quick_key_delay_one_second()),
+        (
+            1_500,
+            msg::settings_quick_key_delay_one_and_a_half_seconds(),
+        ),
+        (2_000, msg::settings_quick_key_delay_two_seconds()),
+        (3_000, msg::settings_quick_key_delay_three_seconds()),
+        (4_000, msg::settings_quick_key_delay_four_seconds()),
+        (5_000, msg::settings_quick_key_delay_five_seconds()),
+        (0, msg::settings_quick_key_delay_never()),
+    ]
+    .into_iter()
+    .map(|(ms, label)| Choice {
+        value: Value::from(ms),
+        label,
+    })
+    .collect()
+}
+
 /// JAWS's user verbosity levels.
 impl Choices for VerbosityLevel {
     const ALL: &'static [Self] = &[Self::Beginner, Self::Intermediate, Self::Advanced];
@@ -1290,6 +1331,36 @@ mod tests {
         assert_eq!(import_jaws(&base, &pause("15")).phonetic_pause_ms, 1_500);
         assert_eq!(import_jaws(&base, &pause("30")).phonetic_pause_ms, 3_000);
         assert_eq!(import_jaws(&base, &pause("0")).phonetic_pause_ms, 0);
+    }
+
+    /// Navigation Quick Key Delay as JAWS writes it, milliseconds and -1 for Never (old-pc's
+    /// Settings Center wrote `AutoFormsModeThreshold=1500` for "1.5 Seconds"), is Okur's
+    /// milliseconds, 0 never; Settings Center's eight choices, Never last.
+    #[test]
+    fn the_quick_key_delay_reads_jaws_milliseconds() {
+        let delay = |value: &'static str| {
+            move |_: JawsFile, section: &str, key: &str| {
+                (section == "FormsMode" && key == "AutoFormsModeThreshold")
+                    .then(|| value.to_owned())
+            }
+        };
+        let base = Settings::reference_machine();
+        assert_eq!(base.quick_key_delay_ms, 0);
+        assert_eq!(Settings::default().quick_key_delay_ms, 0);
+        assert_eq!(import_jaws(&base, &delay("1500")).quick_key_delay_ms, 1_500);
+        assert_eq!(import_jaws(&base, &delay("-1")).quick_key_delay_ms, 0);
+        let choices = quick_key_delays();
+        assert_eq!(choices.len(), 8);
+        assert_eq!(
+            choices.first().map(|c| c.label.to_string()).as_deref(),
+            Some(".5 Seconds")
+        );
+        assert_eq!(
+            choices
+                .last()
+                .map(|c| (c.value.clone(), c.label.to_string())),
+            Some((Value::from(0_u32), "Never".to_owned()))
+        );
     }
 
     /// JAWS's Mouse Echo keys, as its shipped `DEFAULT.JCF` writes them, are Okur's defaults;

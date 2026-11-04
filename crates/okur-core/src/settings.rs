@@ -1106,6 +1106,12 @@ pub struct Settings {
     /// Character Phonetically (Settings Center, Text Processing; `[Options]
     /// PhoneticCharAfterPause`, in tenths of a second, 15 by default) [obs, 1140, 1141].
     pub phonetic_pause_ms: u32,
+    /// How long the virtual cursor stays on an edit box, list or combo box a quick key moved
+    /// to before forms mode turns on there, in milliseconds, with Auto or Semi-Auto Forms
+    /// Mode; 0 never: JAWS's Navigation Quick Key Delay (Settings Center, Forms Mode > Auto
+    /// Forms Mode Settings; `[FormsMode] AutoFormsModeThreshold`, milliseconds, -1 for Never,
+    /// the default; .5 to 5 seconds) [Surf's Up, Forms; old-pc's Settings Center, 2026-11-04].
+    pub quick_key_delay_ms: u32,
     pub mouse_echo: MouseEcho,
     /// The language Insert+Space, O recognizes the screen in, a BCP 47 tag ("tr-TR"): JAWS's
     /// Microsoft OCR Language (`[OCR] MicrosoftOcrLanguage`, a locale number, 1033 by
@@ -1145,6 +1151,7 @@ impl Default for Settings {
             visual_tracking: true,
             progress_bar_interval_ms: 5000,
             phonetic_pause_ms: 1500,
+            quick_key_delay_ms: 0,
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),
             voice_profiles: std::collections::BTreeMap::new(),
@@ -1291,6 +1298,7 @@ impl Settings {
             progress_bar_interval_ms: 5000,
             // Not in old-pc's user JCF: the shared one's (`PhoneticCharAfterPause=15`).
             phonetic_pause_ms: 1500,
+            quick_key_delay_ms: 0,
             // Not in old-pc's user JCF: the shared one's, JAWS's defaults.
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),

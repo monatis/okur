@@ -92,6 +92,8 @@ pub enum TreeGroup {
     WebLinks,
     WebHeadings,
     FormsMode,
+    /// Forms Mode > Auto Forms Mode Settings.
+    AutoFormsMode,
     TextProcessing,
     TextGeneral,
     /// Text Processing > General > Phonetic Announcement.
@@ -113,7 +115,7 @@ pub enum TreeGroup {
 
 impl TreeGroup {
     /// Settings Center's, in JAWS's order, each group right before its subgroups.
-    const CENTER: [TreeGroup; 20] = [
+    const CENTER: [TreeGroup; 21] = [
         Self::User,
         Self::Web,
         Self::WebReading,
@@ -121,6 +123,7 @@ impl TreeGroup {
         Self::WebLinks,
         Self::WebHeadings,
         Self::FormsMode,
+        Self::AutoFormsMode,
         Self::TextProcessing,
         Self::TextGeneral,
         Self::TextPhonetic,
@@ -150,6 +153,7 @@ impl TreeGroup {
             }
             Self::TextGeneral | Self::TextNumbers => Some(Self::TextProcessing),
             Self::TextPhonetic => Some(Self::TextGeneral),
+            Self::AutoFormsMode => Some(Self::FormsMode),
             Self::KeyboardGeneral => Some(Self::Keyboard),
             _ => None,
         }
@@ -177,6 +181,7 @@ impl TreeGroup {
             Self::TextPhonetic => msg::settings_tree_phonetic_announcement(),
             Self::SpeechOptions => msg::settings_tree_speech_options(),
             Self::FormsMode => msg::settings_tree_forms_mode(),
+            Self::AutoFormsMode => msg::settings_tree_auto_forms_mode(),
             Self::TextProcessing => msg::settings_tree_text_processing(),
             Self::TextGeneral | Self::KeyboardGeneral => msg::settings_tree_general(),
             Self::SpeechVerbosity => msg::settings_tree_speech_verbosity(),
@@ -212,6 +217,7 @@ fn center_group(id: &str) -> Option<TreeGroup> {
         }
         "voice.text.say_dollars" => TreeGroup::TextNumbers,
         "phonetic_pause_ms" => TreeGroup::TextPhonetic,
+        "quick_key_delay_ms" => TreeGroup::AutoFormsMode,
         "verbosity.level" => TreeGroup::SpeechVerbosity,
         "speech_mode" | "less_speech" => TreeGroup::SpeechOptions,
         "say_all_unit" | "voice.say_all_caps" => TreeGroup::SayAll,
