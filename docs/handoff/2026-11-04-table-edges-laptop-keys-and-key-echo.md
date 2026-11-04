@@ -89,10 +89,15 @@ compared over all three layers with `parity-snapshot.sh` before and after: no st
   them only on a focus read before trial 2 (1149) or 3. Later probes ruled out the two
   suspects: with JAWS stopped (`spell-probe-nojaws.ps1`), "ada " is marked `[(0, 3)]`, and so
   is "abc" with no space after it (`spell-probe-abc.ps1`), seconds after typing. So Chrome
-  marks the word for any reader; why Okur's own live reads (the actions worker's
-  `read_chromium_after_key`, the same `state()` and attribute walk) found none is the open
-  question for a fresh session: next, log the raw attribute runs inside those reads in a live
-  run. 17 steps hinge on it (284, 626, 632, 640, 641, 1148, 1149).
+  marks the word for any reader. A temporary build of Okur logging the raw IA2 attribute runs
+  inside its own reads (not committed) settled the next step: in a live run of 626 every read
+  over twelve seconds got plain runs, `(0, 3, "background-color:...;writing-mode:lr;")`, no
+  `invalid:spelling`. So Chrome itself did not mark the word during that run; Okur's read is
+  not at fault. What differs from the probes is how the field was driven: the recorder's typed
+  text, and Okur's own moves, which put the caret inside the word (`caret=0`, its Up and Down
+  read the field's line). Next: a probe that types as the recorder does and then puts the
+  caret at 0, to see whether Chrome unmarks the word the caret is in. 17 steps hinge on it
+  (284, 626, 632, 640, 641, 1148, 1149).
 
 ## After the owner answered old-pc's Security Alert (23:04)
 
