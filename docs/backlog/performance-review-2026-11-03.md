@@ -29,7 +29,7 @@ Statuses: **fixed** with the commit, or **open**.
 | P3 | A Win32 list view's own focus walks the list to the focused index, two uncached calls per item, up to 500. | Calls halved `8ad52a3e` (each step brings its child's type). Open: O(1) through MSAA (`AccessibleObjectFromWindow` and `ElementFromIAccessible` at the index), checked live against the walk; skip when a newer focus of the window waits |
 | P4 | Excel's row and column readers, totals and lists read cell by cell, each `Cells` plus `Text` with `GetIDsOfNames` per call: about 2,000 calls per reader key, up to 60-80k for a list; `SheetPlace` not coalesced under key repeat. | Lists to the bulk lane `8ad52a3e`. Open: one `Range.Value2` array per row or column, `SpecialCells` for the lists, cached DISPIDs, coalesced `SheetPlace` |
 | P5 | Skim reading by a text rule compiled its regular expression for every line and formatted every line of the page from the first, inside the keyboard hook. | fixed `8ad52a3e` |
-| P6 | Every focus in a Store app read its core window's texts (Insert+T's page title), three uncached calls per child: 4-13 ms of a 35-60 ms Settings focus, once 568 ms as the window opened (live baseline below). | Calls cut to one per child `8ad52a3e`. Open: read on demand for Insert+T |
+| P6 | Every focus in a Store app read its core window's texts (Insert+T's page title), three uncached calls per child: 4-13 ms of a 35-60 ms Settings focus, once 568 ms as the window opened (live baseline below). | Calls cut to one per child `8ad52a3e`; read on demand for Insert+T `72267a06` (live: Insert+T asks the platform; a trace keeps them with the focus) |
 | P7 | The reading highlight slept a fixed 80 ms after each virtual cursor move on the long-read lane, which mouse echo, the Virtual Viewer and the Okur cursor share. | fixed `8ad52a3e` (in view: framed at once; scrolled: asked for every 10 ms, at most 80). Open: clamp its frame to the monitor for an element many screens tall |
 | P8 | Word's whole read after every key asks four `Selection.Information` values that only rare commands use; in a table, every key numbers the document's tables (`FindAll` of the whole document); the window handle asked six times. | open |
 | P9 | Word's Say All waiting for its paragraphs was not withdrawn by a key: it started later from a caret the user had moved. | fixed `8ad52a3e` (with a test that presses a key between the ask and the answer) |
@@ -122,3 +122,22 @@ to 14 ms with the MSAA read), a page's button about 4; Windows Settings and the 
 (siblings still read in a dialog) as before. Explorer's ribbon is slower at the median and faster
 at p90, within its run-to-run spread (its A rounds' medians alone vary more than that); not
 counted as a change.
+
+## Live A/B: P6, a Store app's window texts read on demand (old-pc, 2026-11-04)
+
+Research, never evidence. Okur in JAWS's place in Windows Settings (3158, Insert+T at s14),
+build A `034c8c16` (the window's texts read with every focus) and build B `72267a06` (read when
+Insert+T asks), alternating, three runs each, with the debug log. `node p6-compare.js <logs>`
+(the A/B script's form: each `event read event="focus"` line, its whole read and its "window"
+stage, where the texts were read):
+
+```
+build  focuses  total p50   p90   window stage p50  p90
+a           44       36.0  102.7            6     9
+b           42       30.7   93.2            0     1
+```
+
+A Settings focus read about 5 ms faster at the median, the window stage's 6 ms gone. Insert+T
+live in B: `app window texts read texts=2`, then `spoken for event msg=Title is | System`. No
+key was refused by the recorder's prompt guard (`8ddcd6b3`) while old-pc's Security Alert stayed
+open.
