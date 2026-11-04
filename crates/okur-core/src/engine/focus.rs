@@ -747,11 +747,17 @@ impl ScreenReaderEngine {
                         && focus.states.expanded.is_some()
                         && n.states.expanded != focus.states.expanded
                 };
+                // A text field typed in since the page was read: Shift+Tab back onto it says
+                // its text, "Checked Edit | abc", not the "blank" it loaded with [obs, 1151/s7].
+                let edit_changed = |n: &crate::aom::AomNode| {
+                    n.role == Role::Edit && focus.value.is_some() && n.value != focus.value
+                };
                 let stale = self.cursor.buffer.node(id).is_some_and(|n| {
                     (focus.states.checked.is_some() && n.states.checked != focus.states.checked)
                         || combo_changed(n)
                         || tab_changed(n)
                         || disclosure_changed(n)
+                        || edit_changed(n)
                 });
                 if stale {
                     self.change_page_node(id, |n| {
@@ -763,6 +769,9 @@ impl ScreenReaderEngine {
                         }
                         if disclosure_changed(n) {
                             n.states.expanded = focus.states.expanded;
+                        }
+                        if edit_changed(n) {
+                            n.value = focus.value.clone();
                         }
                         if n.role == Role::ComboBox {
                             n.states.expanded = focus.states.expanded.or(n.states.expanded);

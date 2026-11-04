@@ -340,6 +340,28 @@ fn a_fields_description_is_left_out_at_advanced() {
     }
 }
 
+/// A page's text field typed in since the page was read is said with its text when the focus
+/// comes back to it, "Checked Edit | abc", not the "blank" it loaded with [obs, 1151/s7].
+#[test]
+fn a_field_typed_in_is_said_with_its_text_when_focused_again() {
+    let page = AomNode::new(0, Role::Document)
+        .with_name("Spelling")
+        .with_children(vec![AomNode::new(2, Role::Edit).with_name("Checked")]);
+    let (mut engine, _speech) = engine_with_speech();
+    engine.handle_accessibility_event(&AccessibilityEvent::DocumentLoaded {
+        title: "Spelling".to_owned(),
+        root: page,
+    });
+    let mut focus = FocusEvent::new(Role::Edit)
+        .with_node_id(2)
+        .with_name("Checked")
+        .with_value("abc");
+    focus.in_document = true;
+    let said = engine.handle_focus_event(&focus).unwrap_or_default();
+    assert!(said.contains("abc"), "{said}");
+    assert!(!said.contains(msg::blank().as_str()), "{said}");
+}
+
 /// Escape out of forms mode says "virtual PC Cursor" at Beginner verbosity, and JAWS's short
 /// message, "virtual PC", above it [obs, 555/s10; 552/s10, 553/s10].
 #[test]
