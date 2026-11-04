@@ -76,9 +76,13 @@ compared over all three layers with `parity-snapshot.sh` before and after: no st
   run even three seconds after typing; 284's "‹Misspelled › ada" steps (s9, s12) differ the
   same way. The probe `okur-lab focus-text` (the focused Chromium object's raw IA2 attribute
   runs) was run on old-pc in the sign-up form's Full name field, focused there by Tab
-  (`sr-harness/spell-probe.ps1`): the document's `accFocus` gave it no text object, so the probe
-  read nothing. Next: how Chrome answers `accFocus` there (a child id rather than an object?),
-  then whether the marker is in IA2's attributes or UIA's annotations.
+  (`sr-harness/spell-probe.ps1`, "ada" and Space typed in forms mode, 3 s waited). With COM
+  joined it reads the field as Okur does, `text "ada " caret 4 misspelled []`, and one attribute
+  run, `0..4 background-color:...;language:en;writing-mode:lr;`: no `invalid:spelling`. UI
+  Automation's annotation types on the field's range and each word are its reserved "not
+  supported" (VT_UNKNOWN), and its range runs on past the field. So JAWS's "Misspelled" comes
+  from somewhere neither read sees (the field's inner text object, or later): next, read the
+  input's IA2 children's attributes.
 
 At `73667384`: `JAWS parity (Ia2): 11623/12150 steps match exactly; 382 accepted divergences
 not counted (0 scenarios could not run)` (`okur-lab parity`); `cargo test --workspace`: 1658

@@ -135,6 +135,38 @@ pub fn focus_in_window(
     }
 }
 
+/// UI Automation's annotation types over the focused element's whole text, then over each of
+/// its first `max_words` words, as lines to print: research for `okur-lab focus-text`, where a
+/// page field's spelling marks are (a spelling error is AnnotationType_SpellingError, 60001).
+pub fn focused_annotation_types(
+    uia: &IUIAutomation,
+    max_words: usize,
+) -> windows::core::Result<Vec<String>> {
+    let mut lines = Vec::new();
+    // SAFETY: UIA client calls on valid automation objects.
+    unsafe {
+        let focused = uia.GetFocusedElement()?;
+        let pattern: IUIAutomationTextPattern = focused.GetCurrentPatternAs(UIA_TextPatternId)?;
+        let document = pattern.DocumentRange()?;
+        let value = document.GetAttributeValue(UIA_AnnotationTypesAttributeId)?;
+        lines.push(format!("uia document annotations: {value:?}"));
+        let word = document.Clone()?;
+        for _ in 0..max_words {
+            word.ExpandToEnclosingUnit(TextUnit_Word)?;
+            let text = word.GetText(64)?.to_string();
+            if text.is_empty() {
+                break;
+            }
+            let value = word.GetAttributeValue(UIA_AnnotationTypesAttributeId)?;
+            lines.push(format!("uia word {text:?}: {value:?}"));
+            if word.Move(TextUnit_Word, 1)? == 0 {
+                break;
+            }
+        }
+    }
+    Ok(lines)
+}
+
 /// The names of the texts directly in window `hwnd`'s element, in order, in the control view:
 /// a Store app's core window gives its own title and its page's ("Settings", "System"). At
 /// most `max_children` children are looked at.

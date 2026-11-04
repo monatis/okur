@@ -769,6 +769,14 @@ fn converted_line(event: &okur_core::AccessibilityEvent) -> String {
     }
 }
 
+/// UI Automation's annotation types over the focused element's whole text, then over each of
+/// its first words: research for `focus-text`.
+#[cfg(windows)]
+fn focused_annotations() -> Result<Vec<String>, String> {
+    let uia = okur_windows::uia_capture::automation().map_err(|e| e.to_string())?;
+    xa11y_windows::uia_element::focused_annotation_types(&uia, 8).map_err(|e| e.to_string())
+}
+
 /// The keys of JAWS's `DEFAULT.JCF` (an INI file, `;` comments), by section and key.
 fn read_jcf(path: &str) -> Result<std::collections::HashMap<(String, String), String>, String> {
     let text = std::fs::read_to_string(path).map_err(|e| format!("{path}: {e}"))?;
@@ -1707,6 +1715,8 @@ async fn main() {
         #[cfg(windows)]
         Some(Commands::FocusText) => {
             use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+            // MSAA and IA2 are called in COM's multithreaded apartment, as Okur's threads are.
+            okur_windows::com::init_mta();
             // SAFETY: plain Win32 call with no preconditions.
             let window = unsafe { GetForegroundWindow() };
             match xa11y_windows::ia2::ChromiumTextField::focused(window) {
@@ -1724,6 +1734,12 @@ async fn main() {
                 }
                 Ok(None) => println!("the focused object has no text"),
                 Err(e) => println!("not a Chromium window: {e}"),
+            }
+            // UI Automation's annotation types over the focused element's text, and over each
+            // of its words (a spelling error is AnnotationType_SpellingError, 60001).
+            match focused_annotations() {
+                Ok(lines) => lines.iter().for_each(|line| println!("{line}")),
+                Err(e) => println!("uia: {e}"),
             }
         }
         #[cfg(windows)]
