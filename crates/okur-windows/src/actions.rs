@@ -193,6 +193,9 @@ mod windows_actions {
         /// The text the window in front shows, each piece where it is drawn (the Okur cursor's
         /// model), answered even when nothing could be read.
         Screen,
+        /// The controls of the window in front, in its order, for Say Window in a window that
+        /// is not a dialog box, answered even when nothing could be read.
+        Controls,
         /// The words recognized in an area of the screen, in a language, answered even when
         /// none was.
         Recognize(okur_core::actions::RecognitionArea, String),
@@ -209,6 +212,7 @@ mod windows_actions {
             matches!(
                 self,
                 Request::Screen
+                    | Request::Controls
                     | Request::Recognize(..)
                     | Request::RecognizeFile(_)
                     | Request::Window(_)
@@ -265,6 +269,7 @@ mod windows_actions {
                 Request::Drag(..) => "drag",
                 Request::Track(..) => "reading highlight",
                 Request::Screen => "screen read",
+                Request::Controls => "window controls",
                 Request::Recognize(..) => "recognition",
                 Request::RecognizeFile(_) => "file recognition",
             }
@@ -745,6 +750,29 @@ mod windows_actions {
                                 );
                                 // Answered even when empty: the engine keeps the window's model.
                                 let _ = events.send(AccessibilityEvent::ScreenText(text));
+                            }
+                            Request::Controls => {
+                                let Some(events) = events.as_ref() else {
+                                    tracing::warn!("window read impossible: no event channel");
+                                    return;
+                                };
+                                let started = Instant::now();
+                                // SAFETY: plain Win32 call with no preconditions.
+                                let hwnd = unsafe { GetForegroundWindow() };
+                                let controls = uia
+                                    .as_ref()
+                                    .and_then(|uia| crate::uia_capture::window_subtree(uia, hwnd))
+                                    .map(|tree| {
+                                        okur_windows_model::window_walk::window_controls(&tree)
+                                    })
+                                    .unwrap_or_default();
+                                tracing::debug!(
+                                    controls = controls.len(),
+                                    ms = started.elapsed().as_millis(),
+                                    "window controls read"
+                                );
+                                // Answered even when empty: Say Window then says nothing.
+                                let _ = events.send(AccessibilityEvent::WindowControls(controls));
                             }
                             Request::Recognize(area, language) => {
                                 let Some(events) = events.as_ref() else {
@@ -1270,6 +1298,10 @@ mod windows_actions {
 
         fn read_screen(&self) -> bool {
             self.send(Request::Screen)
+        }
+
+        fn read_window_controls(&self) -> bool {
+            self.send(Request::Controls)
         }
 
         fn recognize(&self, area: okur_core::actions::RecognitionArea, language: &str) -> bool {

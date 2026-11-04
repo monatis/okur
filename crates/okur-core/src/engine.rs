@@ -1808,6 +1808,7 @@ impl ScreenReaderEngine {
             }
             AccessibilityEvent::ViewerText(lines) => self.open_screen_viewer(lines),
             AccessibilityEvent::ScreenText(text) => self.screen_text(text),
+            AccessibilityEvent::WindowControls(controls) => self.say_window_controls(controls),
             AccessibilityEvent::Recognized(words) => self.recognized(words),
             AccessibilityEvent::FileRecognized(recognition) => self.file_recognized(recognition),
             AccessibilityEvent::FileRecognitionStarted => self.file_recognition_started(),

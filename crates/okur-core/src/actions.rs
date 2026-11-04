@@ -273,6 +273,14 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Asks for the controls of the window in front, in its order, for Say Window in a window
+    /// that is not a dialog box. They arrive later as
+    /// [`crate::event::AccessibilityEvent::WindowControls`], always: empty when nothing could
+    /// be read. Returns false when unsupported.
+    fn read_window_controls(&self) -> bool {
+        false
+    }
+
     /// Asks for the words recognized from the screen's pixels in `area`, with the system's
     /// recognizer for `language` (a BCP 47 tag, "en-US"), else for the user's languages. They
     /// arrive later as [`crate::event::AccessibilityEvent::Recognized`], always: empty when
@@ -770,6 +778,13 @@ impl ApplicationActions for RecordingActions {
     fn read_screen(&self) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push(("read screen".to_owned(), 0));
+        }
+        true
+    }
+
+    fn read_window_controls(&self) -> bool {
+        if let Ok(mut log) = self.log.lock() {
+            log.push(("read window controls".to_owned(), 0));
         }
         true
     }

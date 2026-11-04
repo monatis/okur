@@ -13,3 +13,4 @@ pub mod node_ids;
 pub mod privacy;
 pub mod text;
 pub mod uia_snapshot;
+pub mod window_walk;

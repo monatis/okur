@@ -35,6 +35,7 @@ pub mod text_analysis;
 pub mod ui;
 pub mod viewer;
 pub mod viewer_text;
+pub mod window_walk;
 pub mod word_list;
 
 pub use aom::{AomNode, NodeStates, Role};

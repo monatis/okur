@@ -1322,6 +1322,11 @@ struct ScreenSnapshot {
     /// 1080's third recording), for Ctrl+M.
     #[serde(default)]
     left_edge: Option<f32>,
+    /// The fixture's window as UI Automation's control view held it after the step
+    /// (`okur-lab window-tree --append-to`, "trace_window"), for Say Window outside dialog
+    /// boxes; none when another window was in front.
+    #[serde(default)]
+    window: Option<okur_windows_model::uia_snapshot::UiaNode>,
 }
 
 impl ScreenSnapshot {
@@ -1368,6 +1373,9 @@ impl ScreenSnapshot {
         }
         if other.file.is_some() {
             self.file = other.file;
+        }
+        if other.window.is_some() {
+            self.window = other.window;
         }
         if other.headings.is_some() {
             self.headings = other.headings;
@@ -1418,6 +1426,8 @@ struct SnapshotSheetLists {
 #[derive(Default)]
 struct ScreenReads {
     screens: usize,
+    /// Reads of the window's controls (Say Window) asked for and answered.
+    windows: usize,
     recognitions: usize,
     files: usize,
     headings: usize,
@@ -1487,6 +1497,21 @@ impl ScreenReads {
             self.recognitions += 1;
             deliver(okur_core::AccessibilityEvent::Recognized(
                 snapshot.recognized.clone(),
+            ));
+        }
+        // Answered even without the window, as live: Say Window then says nothing.
+        let windows = requests
+            .iter()
+            .filter(|(a, _)| a == "read window controls")
+            .count();
+        while self.windows < windows {
+            self.windows += 1;
+            deliver(okur_core::AccessibilityEvent::WindowControls(
+                snapshot
+                    .window
+                    .as_ref()
+                    .map(okur_windows_model::window_walk::window_controls)
+                    .unwrap_or_default(),
             ));
         }
         if let Some(file) = &snapshot.file {

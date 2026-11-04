@@ -1292,6 +1292,10 @@ pub enum AccessibilityEvent {
     /// it is drawn, read for the Okur cursor's model; empty when nothing could be read
     /// ([`crate::actions::ApplicationActions::read_screen`]).
     ScreenText(crate::screen_model::WindowText),
+    /// The controls of the window in front, in its order, the window first, read for Say Window
+    /// in a window that is not a dialog box; empty when nothing could be read
+    /// ([`crate::actions::ApplicationActions::read_window_controls`]).
+    WindowControls(Vec<crate::window_walk::WindowControl>),
     /// The words recognized from the screen's pixels where they are drawn, asked for by
     /// Insert+Space, O; empty when none was recognized or recognition failed
     /// ([`crate::actions::ApplicationActions::recognize`]).

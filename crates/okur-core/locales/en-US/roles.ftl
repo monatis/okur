@@ -113,3 +113,48 @@ role-tree-level = level { $level }
 role-link-mailto = Send Mail Link
 # A horizontal rule in a page.
 role-separator = separator
+
+## Say Window's words for the controls of a window that is not a dialog box: the names UI
+## Automation gives its control types, which are what JAWS says there ("menu bar", "tab item",
+## "header item" [obs, 548/s14]). Text and list items have none.
+control-app-bar = app bar
+control-button = button
+control-calendar = calendar
+control-check-box = check box
+control-combo-box = combo box
+control-custom = custom
+control-data-grid = data grid
+control-data-item = data item
+control-document = document
+control-edit = edit
+control-group = group
+control-header = header
+control-header-item = header item
+control-image = image
+control-link = link
+control-list = list
+control-menu = menu
+control-menu-bar = menu bar
+control-menu-item = menu item
+control-pane = pane
+control-progress-bar = progress bar
+control-radio-button = radio button
+control-scroll-bar = scroll bar
+control-semantic-zoom = semantic zoom
+control-separator = separator
+control-slider = slider
+control-spinner = spinner
+control-split-button = split button
+control-status-bar = status bar
+# A tab control, the container of its tabs.
+control-tab = tab
+# One of its tabs.
+control-tab-item = tab item
+control-table = table
+control-thumb = thumb
+control-title-bar = title bar
+control-tool-bar = tool bar
+control-tool-tip = tool tip
+control-tree = tree
+control-tree-item = tree item
+control-window = window

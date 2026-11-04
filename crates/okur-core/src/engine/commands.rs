@@ -98,11 +98,17 @@ impl ScreenReaderEngine {
             Command::RateFaster => return self.change_rate(true),
             Command::RateSlower => return self.change_rate(false),
             Command::SayWindow => {
-                // Dialog boxes; other windows are not read this way yet.
-                let focus = self
-                    .last_native_focus
-                    .as_ref()
-                    .filter(|f| !f.window_items.is_empty())?;
+                let focus = self.last_native_focus.as_ref()?;
+                // Another window than a dialog box is walked whole, its controls said as they
+                // arrive ([`Self::say_window_controls`]).
+                if focus.window_items.is_empty() {
+                    if self.app_mode != AppMode::VirtualBuffer {
+                        if let Some(actions) = &self.actions {
+                            actions.read_window_controls();
+                        }
+                    }
+                    return None;
+                }
                 let speech = crate::native_focus::say_window(
                     focus.window_title.as_deref().unwrap_or_default(),
                     &focus.window_items,
@@ -1901,6 +1907,20 @@ impl ScreenReaderEngine {
             .as_ref()
             .is_some_and(|t| t.text.contains(['\r', '\n']));
         focus.role == Role::Document || (lines && !dialog)
+    }
+
+    /// Say Window in a window that is not a dialog box, as its controls arrive: each said as
+    /// JAWS walks the window ([`crate::window_walk::say`]). Nothing read says nothing.
+    pub(super) fn say_window_controls(
+        &mut self,
+        controls: &[crate::window_walk::WindowControl],
+    ) -> Option<String> {
+        let speech = crate::window_walk::say(controls).render();
+        if speech.is_empty() {
+            return None;
+        }
+        self.speech.speak(&speech, true);
+        Some(speech)
     }
 
     /// Opens the Virtual Viewer that waits for the screen's text (`pending_viewer`). With

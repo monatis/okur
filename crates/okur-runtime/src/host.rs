@@ -324,6 +324,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::ProgressChanged { .. }) => "progress changed",
         Some(AccessibilityEvent::ViewerText(_)) => "viewer text",
         Some(AccessibilityEvent::ScreenText(_)) => "screen text",
+        Some(AccessibilityEvent::WindowControls(_)) => "window controls",
         Some(AccessibilityEvent::Recognized(_)) => "recognized",
         Some(AccessibilityEvent::FileRecognized(_)) => "file recognized",
         Some(AccessibilityEvent::FileRecognitionStarted) => "file recognition started",

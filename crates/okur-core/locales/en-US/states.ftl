@@ -32,6 +32,8 @@ state-required = Required
 # field's name and value as the focus lands on it [obs, 284].
 misspelled = Misspelled
 state-selected = selected
+# A tree item with no items of its own, as Say Window reads a window [obs, 548/s14].
+state-leaf-node = leaf node
 # A page's modal dialog (aria-modal) entered with the virtual cursor off: "Add Delivery Address
 # Modal dialog".
 state-modal = Modal

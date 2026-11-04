@@ -785,6 +785,45 @@ fn a_dialog_shown_after_its_focus_gives_say_window_its_controls() {
     assert!(said.contains("OK"), "{said:?}");
 }
 
+/// Say Window in a window that is not a dialog box asks the platform for the window's
+/// controls and says them as they arrive, the window first [obs, 1136/s3].
+#[test]
+fn say_window_outside_a_dialog_reads_the_windows_controls() {
+    use crate::window_walk::{ControlKind, WindowControl};
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(create_test_buffer()),
+        Box::new(speech.clone()),
+    );
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut focus = FocusEvent::new(Role::Button).with_name("Start");
+    focus.window_title = Some("SR Progress Fixture".to_owned());
+    engine.handle_focus_event(&focus);
+    speech.take();
+    assert_eq!(engine.execute_command("SayWindow"), None);
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(a, _)| a == "read window controls"));
+    let mut bar = WindowControl::new(ControlKind::ProgressBar, "Copying files");
+    bar.value = Some("40%".to_owned());
+    let controls = vec![
+        WindowControl::new(ControlKind::Window, "SR Progress Fixture"),
+        WindowControl::new(ControlKind::Button, "Start"),
+        WindowControl::new(ControlKind::Text, "Copying files"),
+        bar,
+    ];
+    let said = engine
+        .handle_accessibility_event(&AccessibilityEvent::WindowControls(controls))
+        .unwrap_or_default();
+    assert_eq!(
+        said.replace('\n', " | "),
+        "SR Progress Fixture | window | Start | button | Copying files | Copying files | \
+         progress bar | 40%"
+    );
+}
+
 /// Say All to a page's end says its last word again, where reading leaves the cursor
 /// [obs, 613/s26, 408/s10]; Say Line twice on that last line spells it without a space at
 /// its end, the page's text ending there without a line break [obs, 613/s24].
