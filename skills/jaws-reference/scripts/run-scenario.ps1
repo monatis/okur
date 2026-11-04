@@ -416,11 +416,12 @@ function Focus-Target([string]$procName) {
 }
 
 # Runs jaws-process.ps1 elevated: JAWS runs elevated, and so must what stops it.
-function Invoke-JawsProcess([switch]$Stop, [switch]$Start) {
+function Invoke-JawsProcess([switch]$Stop, [switch]$Start, [switch]$StopOkur) {
     $helper = Join-Path $PSScriptRoot 'jaws-process.ps1'
     $helperArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$helper`"")
     if ($Stop) { $helperArgs += '-Stop' }
     if ($Start) { $helperArgs += '-Start' }
+    if ($StopOkur) { $helperArgs += '-StopOkur' }
     $p = Start-Process powershell -Verb RunAs -WindowStyle Hidden -PassThru -ArgumentList $helperArgs
     if ($p) { [void]$p.WaitForExit(60000) }
 }
@@ -452,6 +453,14 @@ function Reset-JawsFiles([string[]]$names) {
 }
 $jawsForget = @()
 if ($scenario.PSObject.Properties.Name -contains 'jaws_forget') { $jawsForget = @($scenario.jaws_forget) }
+
+# Okur running beside JAWS spoils a JAWS recording: its hook takes the Okur key's chords and
+# its speech confuses the silence detection. The Store build starts at sign-in (old-pc after a
+# power outage, 2026-11-04); it is stopped first, elevated, and the run says so.
+if ($Reader -eq 'jaws' -and (Get-Process okur, okur-sr, okur-ui -ErrorAction SilentlyContinue)) {
+    Write-Warning 'Okur was running beside JAWS: stopped for the recording'
+    Invoke-JawsProcess -StopOkur
+}
 
 $okurRun = $null
 if ($Reader -eq 'okur') {

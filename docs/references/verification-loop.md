@@ -439,6 +439,11 @@ the morning. This is how it was done; it needs fresh permission each time.
   role is a help balloon (31) and whose MSAA name is "Title: text"; UI Automation names them
   by their text alone. A plain tool tip (role 13) shown without the mouse JAWS does not say
   (1138, 2026-11-04).
+- **Okur running beside JAWS after a reboot.** The Store build on old-pc starts at sign-in
+  (its startup task is enabled), so after a power outage (2026-11-04) it ran beside JAWS with
+  its Startup Wizard open. Its hook takes the Okur key's chords from JAWS and its speech
+  confuses the silence detection. `run-scenario.ps1` now stops it, elevated (UI Access puts it
+  above an ordinary process), before a JAWS recording and warns that it did.
 
 ## 9. Open questions to settle on old-pc
 
