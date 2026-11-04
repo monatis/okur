@@ -748,6 +748,52 @@ mod tests {
             ])
     }
 
+    /// Smart Navigation's tables: T says the first cell's place again; the arrows go by cell,
+    /// past the last column or row to "table end", which Right says again on the page's last
+    /// line; Ctrl+Left and Left from there go back to the last cell with its place, and
+    /// Ctrl+Left within the cell stays on its word [obs, 956].
+    #[test]
+    fn smart_navigation_tables_move_the_arrows_by_cell() {
+        use crate::cursor::SmartTableKey::{Down, Left, PriorWord, Right};
+        fn key(cursor: &mut VirtualCursor, key: crate::cursor::SmartTableKey) -> String {
+            cursor
+                .smart_table_key(key)
+                .and_then(|said| said.speech)
+                .unwrap_or_default()
+        }
+        let mut cursor = VirtualCursor::new(VirtualBuffer::from_aom(&create_table_test_tree()));
+        cursor.move_to_start();
+        assert_eq!(cursor.smart_table_key(Down), None, "off by default");
+        cursor.smart_tables = true;
+        let entry = cursor.move_next_table().unwrap_or_default();
+        assert!(entry.ends_with("Quarter\nColumn 1, Row 1"), "{entry}");
+        assert_eq!(key(&mut cursor, Down), "Q1\nRow 2 of 4");
+        assert_eq!(key(&mut cursor, Down), "Q2\nRow 3 of 4");
+        assert_eq!(key(&mut cursor, Down), "Q3\nRow 4 of 4");
+        assert_eq!(key(&mut cursor, Right), "$18,000\nColumn 2 of 4");
+        assert_eq!(key(&mut cursor, Right), "$9,200\nColumn 3 of 4");
+        assert_eq!(key(&mut cursor, Right), "$8,800\nColumn 4 of 4");
+        assert_eq!(key(&mut cursor, Right), "table end");
+        // On "table end" Right is not the table's: the page's last unit, said again.
+        assert_eq!(cursor.smart_table_key(Right), None);
+        assert_eq!(cursor.move_next_unit().as_deref(), Some("table end"));
+        let back = cursor.smart_table_key(PriorWord);
+        assert_eq!(
+            back.as_ref().and_then(|said| said.speech.as_deref()),
+            Some("$8,800\nColumn 4, Row 4")
+        );
+        assert_eq!(back.map(|said| said.word), Some(false));
+        let word = cursor.smart_table_key(PriorWord);
+        assert_eq!(
+            word.as_ref().and_then(|said| said.speech.as_deref()),
+            Some("$8,800")
+        );
+        assert_eq!(word.map(|said| said.word), Some(true));
+        assert_eq!(key(&mut cursor, Down), "table end");
+        assert_eq!(key(&mut cursor, Left), "$8,800\nColumn 4, Row 4");
+        assert_eq!(key(&mut cursor, Left), "$9,200\nColumn 3 of 4");
+    }
+
     #[test]
     fn test_scenarios_21_through_25_tables() {
         let aom = create_table_test_tree();

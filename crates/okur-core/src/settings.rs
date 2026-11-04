@@ -403,6 +403,11 @@ impl SmartNavigation {
     pub fn controls(self) -> bool {
         matches!(self, Self::Controls | Self::ControlsAndTables)
     }
+
+    /// Whether the arrows move by cell in a table, and its word keys within the cell.
+    pub fn tables(self) -> bool {
+        matches!(self, Self::Tables | Self::ControlsAndTables)
+    }
 }
 
 /// What typing a character says (Basic Settings: Typing Echo).

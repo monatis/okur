@@ -1702,6 +1702,7 @@ impl<'a> Builder<'a> {
             caption,
             start_offset,
             end_offset,
+            end_line,
             cells: grid,
             aria_grid,
         });

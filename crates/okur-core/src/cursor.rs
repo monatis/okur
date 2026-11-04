@@ -117,6 +117,26 @@ enum LinkType {
     Plain,
 }
 
+/// A key Smart Navigation's tables take over in a table: the arrows, which move by cell, and
+/// the word keys, which stay within the cell.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum SmartTableKey {
+    Right,
+    Left,
+    Down,
+    Up,
+    NextWord,
+    PriorWord,
+}
+
+/// What a [`SmartTableKey`] said, and whether it is a word read alone (a word key within a
+/// cell), which is read with its symbols named, or a cell or a line.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SmartTableSaid {
+    pub speech: Option<String>,
+    pub word: bool,
+}
+
 /// The Virtual Cursor providing reading navigation and quick key primitives over a VirtualBuffer.
 #[derive(Debug, Clone)]
 pub struct VirtualCursor {
@@ -134,6 +154,8 @@ pub struct VirtualCursor {
     /// The virtual cursor turned off (Insert+Z), as the engine last set it: a page's button
     /// is then pressed with Space, as a native one.
     pub virtual_off: bool,
+    /// Smart Navigation's tables on (`SmartNavigation` 2 or 3), as the engine last set it.
+    pub smart_tables: bool,
 }
 
 impl VirtualCursor {
@@ -149,6 +171,7 @@ impl VirtualCursor {
             search: SearchState::default(),
             verbosity: crate::settings::Verbosity::default(),
             virtual_off: false,
+            smart_tables: false,
         }
     }
 
@@ -1144,14 +1167,14 @@ impl VirtualCursor {
 
     /// Right with Smart Navigation's controls on: past the unit the cursor is in, over the line
     /// breaks after it, to the next unit, said whole, or to the next character [obs, 955/s4-s8,
-    /// 954/s9-s15].
+    /// 954/s9-s15]; on the page's last unit, that unit again ("table end" [obs, 956/s9, s10]).
     pub fn move_next_unit(&mut self) -> Option<String> {
         self.selection = None;
-        let max_offset = self
-            .active_modal_range()
-            .map_or(self.buffer.len(), |(_, max)| max);
+        let modal = self.active_modal_range();
+        let max_offset = modal.map_or(self.buffer.len(), |(_, max)| max);
         let offset = self.buffer.text.floor_char_boundary(self.offset);
-        let mut at = match self.buffer.smart_unit_at(offset) {
+        let unit = self.buffer.smart_unit_at(offset);
+        let mut at = match unit {
             Some((_, end)) => end,
             None => offset + self.buffer.char_at(offset)?.len_utf8(),
         };
@@ -1159,7 +1182,10 @@ impl VirtualCursor {
             at += 1;
         }
         if at >= max_offset || at >= self.buffer.len() {
-            return None;
+            return match unit {
+                Some((start, end)) if modal.is_none() => Some(self.buffer.unit_speech(start, end)),
+                _ => None,
+            };
         }
         self.offset = self.buffer.smart_unit_at(at).map_or(at, |(start, _)| start);
         self.unit_or_char_at(self.offset)
@@ -1202,14 +1228,19 @@ impl VirtualCursor {
     }
 
     /// Ctrl+Right with Smart Navigation's controls on: past the unit the cursor is in, to the
-    /// next word, or the unit it begins in, said whole [obs, 955/s9, 954/s17].
+    /// next word, or the unit it begins in, said whole [obs, 955/s9, 954/s17]; on the page's
+    /// last unit, that unit again ("table end" [obs, 956/s11, s12]).
     pub fn move_next_unit_word(&mut self) -> Option<String> {
-        let from = self
-            .buffer
-            .smart_unit_at(self.offset)
-            .map_or(self.offset, |(_, end)| end.saturating_sub(1));
+        let unit = self.buffer.smart_unit_at(self.offset);
+        let from = unit.map_or(self.offset, |(_, end)| end.saturating_sub(1));
+        let start = self.offset;
         self.offset = from;
-        let said = self.move_next_word()?;
+        let Some(said) = self.move_next_word() else {
+            self.offset = start;
+            return unit
+                .filter(|_| self.active_modal_range().is_none())
+                .map(|(start, end)| self.buffer.unit_speech(start, end));
+        };
         match self.buffer.smart_unit_at(self.offset) {
             Some((start, end)) => {
                 self.offset = start;
@@ -3262,7 +3293,9 @@ impl VirtualCursor {
     }
 
     /// Moves to table `table_idx` and says it: its size, caption and first cell. The cursor is
-    /// then on that cell: Say Line reads it [obs, 257/s4: "Branch"].
+    /// then on that cell: Say Line reads it [obs, 257/s4: "Branch"]. With Smart Navigation's
+    /// tables the cell's place is said again after it, "Quarter | Column 1, Row 1" [obs,
+    /// 956/s1; without them, 992/s1].
     fn enter_table(&mut self, table_idx: usize) -> Option<String> {
         let table = self.buffer.tables.get(table_idx)?;
         let first_cell = table.cells.first().and_then(|r| r.first());
@@ -3284,7 +3317,119 @@ impl VirtualCursor {
             1,
             first_cell_text,
         );
+        if self.smart_tables {
+            return Some(format!("{speech}\n{}", msg::table_cell(1, 1).render()));
+        }
         Some(speech)
+    }
+
+    /// Smart Navigation's tables: in a table's cell the arrows move by cell, said as the
+    /// Ctrl+Alt+arrows say it, "Revenue | $18,000 | Column 2 of 4", "Q1 | Row 2 of 4" [obs,
+    /// 956/s2-s7]. Past the last column or row the cursor leaves the table for its "table end"
+    /// line [obs, 956/s8, s15], and before the first, for the line before its first cell
+    /// (inferred, not yet recorded). Left and Ctrl+Left on that "table end" line go back to the
+    /// last cell, said with its place, "$8,800 | Column 4, Row 4" [obs, 956/s13, s16]. The
+    /// word keys move within the cell, its edge saying the word there again ("$8,800" [obs,
+    /// 956/s14]). `None` where the key is not the table's: off, or outside a table's cells.
+    pub fn smart_table_key(&mut self, key: SmartTableKey) -> Option<SmartTableSaid> {
+        if !self.smart_tables {
+            return None;
+        }
+        let line = self.buffer.line_at_offset(self.offset)?.start_offset;
+        if let Some(t_idx) = self.buffer.tables.iter().position(|t| t.end_line == line) {
+            return matches!(key, SmartTableKey::Left | SmartTableKey::PriorWord).then(|| {
+                SmartTableSaid {
+                    speech: self.reenter_table(t_idx),
+                    word: false,
+                }
+            });
+        }
+        let offset = self.offset;
+        let in_cells = |t: &crate::buffer::TableGrid| {
+            t.first_cell().is_some_and(|c| c.offset <= offset) && offset < t.end_line
+        };
+        if !self.buffer.tables.iter().any(in_cells) {
+            return None;
+        }
+        let (t_idx, r_idx, c_idx) = self.resolve_table_pos()?;
+        let table = self.buffer.tables.get(t_idx)?;
+        let cell = table.cells.get(r_idx).and_then(|row| row.get(c_idx))?;
+        let past_right = c_idx + cell.col_span.max(1) >= table.cols;
+        let past_bottom = r_idx + cell.row_span.max(1) >= table.rows;
+        // The cell's text runs to the next cell's, or to the table's end.
+        let cell_start = cell.offset;
+        let cell_end = table
+            .cells
+            .iter()
+            .flatten()
+            .map(|c| c.offset)
+            .filter(|&at| at > cell_start)
+            .min()
+            .unwrap_or(table.end_line);
+        let word = matches!(key, SmartTableKey::NextWord | SmartTableKey::PriorWord);
+        let speech = match key {
+            SmartTableKey::Right if past_right => self.leave_table(t_idx, true),
+            SmartTableKey::Right => self.move_table_cell_right(),
+            SmartTableKey::Left if c_idx == 0 => self.leave_table(t_idx, false),
+            SmartTableKey::Left => self.move_table_cell_left(),
+            SmartTableKey::Down if past_bottom => self.leave_table(t_idx, true),
+            SmartTableKey::Down => self.move_table_cell_down(),
+            SmartTableKey::Up if r_idx == 0 => self.leave_table(t_idx, false),
+            SmartTableKey::Up => self.move_table_cell_up(),
+            SmartTableKey::NextWord => self.word_in_cell(true, cell_start..cell_end),
+            SmartTableKey::PriorWord => self.word_in_cell(false, cell_start..cell_end),
+        };
+        Some(SmartTableSaid { speech, word })
+    }
+
+    /// Leaves table `t_idx` past its edge: forward to its "table end" line, said as its line
+    /// says it, or back to the line before its first cell.
+    fn leave_table(&mut self, t_idx: usize, forward: bool) -> Option<String> {
+        let table = self.buffer.tables.get(t_idx)?;
+        self.current_table_pos = None;
+        if forward {
+            self.offset = table.end_line;
+            self.current_node_id = Some(table.table_id);
+            return Some(self.current_line());
+        }
+        self.offset = table.first_cell().map_or(table.start_offset, |c| c.offset);
+        self.move_prior_line()
+    }
+
+    /// Back into table `t_idx` from its "table end" line: its last cell, with its place.
+    fn reenter_table(&mut self, t_idx: usize) -> Option<String> {
+        let table = self.buffer.tables.get(t_idx)?;
+        let (rows, cols) = (table.rows, table.cols);
+        let cell = table.last_cell()?;
+        let speech = [
+            cell.speech.clone(),
+            msg::table_cell(cell.col, cell.row).render(),
+        ]
+        .into_iter()
+        .filter(|part| !part.is_empty())
+        .collect::<Vec<_>>()
+        .join("\n");
+        self.offset = cell.offset;
+        self.current_node_id = Some(cell.node_id);
+        self.current_table_pos = Some((t_idx, rows.saturating_sub(1), cols.saturating_sub(1)));
+        Some(speech)
+    }
+
+    /// A word key within a table's cell (`cell`, its text's offsets): the next or prior word
+    /// there, or at the cell's edge the word the cursor is on again.
+    fn word_in_cell(&mut self, forward: bool, cell: std::ops::Range<usize>) -> Option<String> {
+        let (from, node) = (self.offset, self.current_node_id);
+        let said = if forward {
+            self.move_next_word()
+        } else {
+            self.move_prior_word()
+        };
+        if said.is_some() && cell.contains(&self.offset) {
+            return said;
+        }
+        self.offset = from;
+        self.current_node_id = node;
+        Some(self.current_word())
     }
 
     /// Moves to the prior data table (`Shift+T`).

@@ -4,6 +4,7 @@
 use super::{AppMode, PendingViewer, Press, ScreenReaderEngine, DOUBLE_PRESS_MS};
 use crate::aom::Role;
 use crate::command::{Command, Element};
+use crate::cursor::SmartTableKey;
 use crate::input::{Key, KeyAction, KeyEvent};
 use crate::messages::msg;
 use crate::speech::SpeechFormatter;
@@ -370,9 +371,24 @@ impl ScreenReaderEngine {
             _ => {}
         }
 
-        // Smart Navigation's controls: the character and word keys pass over units.
+        // Smart Navigation's controls: the character and word keys pass over units; its tables:
+        // in a table, the arrows go by cell and the word keys stay in the cell.
         let units = self.settings.smart_navigation.controls();
+        self.cursor.smart_tables = self.settings.smart_navigation.tables();
+        let table_key = match &command {
+            Command::SayNextCharacter => Some(SmartTableKey::Right),
+            Command::SayPriorCharacter => Some(SmartTableKey::Left),
+            Command::SayNextLine => Some(SmartTableKey::Down),
+            Command::SayPriorLine => Some(SmartTableKey::Up),
+            Command::SayNextWord => Some(SmartTableKey::NextWord),
+            Command::SayPriorWord => Some(SmartTableKey::PriorWord),
+            _ => None,
+        };
+        let table_said = table_key.and_then(|key| self.cursor.smart_table_key(key));
+        // A word key's cell or line, leaving or re-entering a table, is not a word read alone.
+        let table_line = table_said.as_ref().is_some_and(|said| !said.word);
         let speech = match &command {
+            _ if table_said.is_some() => table_said.and_then(|said| said.speech),
             Command::SayNextLine => self.cursor.move_next_line(),
             Command::SayPriorLine => self.cursor.move_prior_line(),
             Command::SayNextWord if units => self.cursor.move_next_unit_word(),
@@ -696,16 +712,17 @@ impl ScreenReaderEngine {
                 || matches!(
                     command,
                     Command::SayNextWord | Command::SayPriorWord | Command::SayWord
-                );
+                ) && !table_line;
             // A word that is one symbol is read as that character alone: "em dash —" [obs,
             // 106/s23].
             let lone_symbol = matches!(
                 command,
                 Command::SayNextWord | Command::SayPriorWord | Command::SayWord
-            ) && {
-                let mut chars = text.chars();
-                matches!((chars.next(), chars.next()), (Some(c), None) if !c.is_alphanumeric())
-            };
+            ) && !table_line
+                && {
+                    let mut chars = text.chars();
+                    matches!((chars.next(), chars.next()), (Some(c), None) if !c.is_alphanumeric())
+                };
             if command == Command::SayCharacterPhonetic && text.chars().count() == 1 {
                 self.speech.speak_phonetic(text, true);
             } else if character || lone_symbol {

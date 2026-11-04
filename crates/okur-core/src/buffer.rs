@@ -131,6 +131,8 @@ pub struct TableGrid {
     pub caption: Option<String>,
     pub start_offset: usize,
     pub end_offset: usize,
+    /// Where its "table end" line starts (the page's line after its last cell).
+    pub end_line: usize,
     pub cells: Vec<Vec<TableCellInfo>>,
     /// An ARIA grid (`role="grid"`), which JAWS calls a grid: "grid with 5 columns and 7
     /// rows", "grid end" [obs, round-aria24, 2694/s1, 2699/s1].
@@ -889,6 +891,12 @@ impl VirtualBuffer {
             | Role::Landmark { .. }
             | Role::List
             | Role::Group => true,
+            // A table's first and last lines, "table with 4 columns and 4 rows", "table end"
+            // [obs, 956/s8-s12], not the table whole.
+            Role::Table => self
+                .text
+                .get(span.start_offset..span.end_offset)
+                .is_some_and(|text| !text.contains('\n')),
             // A label's text: its parent is the page's label element.
             Role::Text => self
                 .ancestors(span.node_id)
