@@ -86,10 +86,30 @@ compared over all three layers with `parity-snapshot.sh` before and after: no st
   Yet a live run of 626 with Okur (JAWS stopped) logged `misspelled=Some([])` on every read
   (`text context read`, which now logs it), Insert+Up long after typing included, where JAWS
   said "Misspelled abc"; and the traces (JAWS running) lack the ranges in their steps, having
-  them only on a focus read before trial 2 (1149) or 3. Open questions for a fresh session:
-  whether Chrome computes spelling markers only while an assistive technology has asked for
-  inline text boxes (JAWS stopped in Okur's live runs), and whether a word without a following
-  space ("abc") is marked at all. 17 steps hinge on it (284, 626, 632, 640, 641, 1148, 1149).
+  them only on a focus read before trial 2 (1149) or 3. Later probes ruled out the two
+  suspects: with JAWS stopped (`spell-probe-nojaws.ps1`), "ada " is marked `[(0, 3)]`, and so
+  is "abc" with no space after it (`spell-probe-abc.ps1`), seconds after typing. So Chrome
+  marks the word for any reader; why Okur's own live reads (the actions worker's
+  `read_chromium_after_key`, the same `state()` and attribute walk) found none is the open
+  question for a fresh session: next, log the raw attribute runs inside those reads in a live
+  run. 17 steps hinge on it (284, 626, 632, 640, 641, 1148, 1149).
+
+## After the owner answered old-pc's Security Alert (23:04)
+
+The owner answered it with old-pc's volume raised for him (back at 1% after). Recorded and
+imported at once:
+
+- **1142** (`02d9e29e`): keys that type nothing in a WinForms text box, 8/8 in both layers.
+- **1150** (`2d70d647`): JAWS's Scan Cursor in the WPF window, 1013's keys with the window's tree
+  saved (`"trace_window": true`). With the tree, Okur's scan cursor reads as JAWS does, 19/21
+  (1013, without it, differs in 11). Left: Alt+Delete's place is the TextBox's own top-left
+  in JAWS ("594, 507"), while the traced TextBox focus carries no bounds (only the window's
+  focus does, so Okur takes the window's centre, "960, 515"); and Down past the last element
+  goes on to the program's other window, its console ("Windows PowerShell"), which Okur's
+  model of one window does not hold.
+
+`okur-lab parity` at `2d70d647`: `JAWS parity (Ia2): 11650/12179 steps match exactly; 382
+accepted divergences not counted (0 scenarios could not run)`.
 
 At `73667384`: `JAWS parity (Ia2): 11623/12150 steps match exactly; 382 accepted divergences
 not counted (0 scenarios could not run)` (`okur-lab parity`); `cargo test --workspace`: 1658
@@ -97,8 +117,8 @@ passed, 0 failed, 201 ignored.
 
 ## Next
 
-1. When old-pc's Security Alert is answered: 1142, then the Scan Cursor in a WPF window (1013
-   with `"trace_window": true`).
+1. The Scan Cursor's two steps left in 1150 (the focused WPF element's bounds in the trace;
+   the program's next window), and why Okur's live reads of a page field miss its spelling marks.
 2. Key labels' dialog (Manage Key Labels) and the names at Words and Both, which 1146 did not
    cover; whether a layer's keys are named (inferred not).
 3. Screen Layout's lines (984-993) need element positions in the snapshots.
