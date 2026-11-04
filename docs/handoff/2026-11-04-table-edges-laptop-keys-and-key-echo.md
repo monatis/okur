@@ -95,8 +95,13 @@ compared over all three layers with `parity-snapshot.sh` before and after: no st
   `invalid:spelling`. So Chrome itself did not mark the word during that run; Okur's read is
   not at fault. What differs from the probes is how the field was driven: the recorder's typed
   text, and Okur's own moves, which put the caret inside the word (`caret=0`, its Up and Down
-  read the field's line). Next: a probe that types as the recorder does and then puts the
-  caret at 0, to see whether Chrome unmarks the word the caret is in. 17 steps hinge on it
+  read the field's line). The recordings agree: in 632, 640 and 641 no read the tracer made
+  beside JAWS carries the marks, in any trial, though JAWS said "Misspelled" each time (626's
+  and 284's only marked read is a focus before a later trial). So JAWS learns it at a moment
+  the tracer does not read, likely once Chrome marks the last word after the caret or the
+  virtual cursor leaves it, with no caret event to read on. Next: a recording that traces IA2's
+  text-attribute and object-attribute change events in a page field after typing, and a probe
+  that types as the recorder does and reads after leaving the field. 17 steps hinge on it
   (284, 626, 632, 640, 641, 1148, 1149).
 
 ## After the owner answered old-pc's Security Alert (23:04)
