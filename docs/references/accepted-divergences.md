@@ -418,6 +418,29 @@ A step can be in more than one entry; all of its entries apply.
   JAWS's other lists move to what was chosen (252, 254, 255).
 - Decided under the owner's rule on JAWS's accidents, 2026-10-18.
 
+### Ctrl+Right stops on a fieldset's legend twice
+
+- Steps: `977-web-characters-and-words-over-controls/s13`,
+  `977-web-characters-and-words-over-controls/s14`,
+  `977-web-characters-and-words-over-controls/s15`,
+  `977-web-characters-and-words-over-controls/s16`,
+  `977-web-characters-and-words-over-controls/s17`,
+  `977-web-characters-and-words-over-controls/s18`,
+  `977-web-characters-and-words-over-controls/s19`,
+  `977-web-characters-and-words-over-controls/s20`,
+  `977-web-characters-and-words-over-controls/s21`,
+  `977-web-characters-and-words-over-controls/s22`,
+  `977-web-characters-and-words-over-controls/s23`,
+  `977-web-characters-and-words-over-controls/s24`.
+- Difference: the whole step. JAWS's Ctrl+Right said "group", "start", "Size" on the
+  fieldset's first line, then "Size ‹group›" once more before "Small"; past "group end Size"
+  it said nothing once (s19), and Ctrl+Left back onto the radio buttons said "Size ‹group› |
+  | Medium" (s23). Okur's word keys stop on each word its lines show, the legend's once, so
+  every step after the extra stop is one word apart.
+- Why: Down shows no line of its own for the legend (990/s6, s7): the extra stops are JAWS's
+  own buffer's, which its lines do not have, the same in all three trials.
+- Decided under the owner's rule on JAWS's accidents, 2026-10-18.
+
 ### Down out of a text area jumps to the page's end (Auto Forms Mode)
 
 - Steps: `280-web-forms-arrows-auto-forms/s21`, `280-web-forms-arrows-auto-forms/s22`,

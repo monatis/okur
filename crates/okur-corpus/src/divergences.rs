@@ -427,6 +427,28 @@ divergences! {
     "the owner's rule on JAWS's accidents, 2026-10-18";
 
     Difference::Step => [
+        "977-web-characters-and-words-over-controls/s13",
+        "977-web-characters-and-words-over-controls/s14",
+        "977-web-characters-and-words-over-controls/s15",
+        "977-web-characters-and-words-over-controls/s16",
+        "977-web-characters-and-words-over-controls/s17",
+        "977-web-characters-and-words-over-controls/s18",
+        "977-web-characters-and-words-over-controls/s19",
+        "977-web-characters-and-words-over-controls/s20",
+        "977-web-characters-and-words-over-controls/s21",
+        "977-web-characters-and-words-over-controls/s22",
+        "977-web-characters-and-words-over-controls/s23",
+        "977-web-characters-and-words-over-controls/s24",
+    ],
+    "Ctrl+Right past a fieldset's \"group start Size\" stopped once more on the legend's text, \
+     said \"Size ‹group›\", though Down shows no line of its own for it (990/s6, s7); past \
+     \"group end Size\" it stopped once saying nothing, and Ctrl+Left back onto the radio \
+     buttons said \"Size ‹group› | | Medium\": stops of JAWS's own buffer that its lines do \
+     not have. Okur's word keys go through the words its lines show, the legend's once, in \
+     \"group start Size\". Every step after the extra stop is one word apart.",
+    "the owner's rule on JAWS's accidents, 2026-10-18";
+
+    Difference::Step => [
         "506-web-jaws-find/s8",
         "506-web-jaws-find/s9",
         "506-web-jaws-find/s10",
