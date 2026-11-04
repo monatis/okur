@@ -351,6 +351,7 @@ fn event_kind(event: Option<&AccessibilityEvent>) -> &'static str {
         Some(AccessibilityEvent::WindowShown(_)) => "window shown",
         Some(AccessibilityEvent::MouseMoved { .. }) => "mouse moved",
         Some(AccessibilityEvent::Toast { .. }) => "toast",
+        Some(AccessibilityEvent::BalloonTip(_)) => "balloon tip",
         Some(AccessibilityEvent::AppNotification { .. }) => "application notification",
         Some(AccessibilityEvent::MousePoint(_)) => "mouse point",
     }

@@ -2328,3 +2328,30 @@ fn a_converted_focus_carries_its_class_facts() {
         "{converted:?}"
     );
 }
+
+/// A balloon tip shown for the window in front is said by its MSAA name, its title and its
+/// text; a plain tool tip shown without the mouse is not [obs, 1138/s1, s3].
+#[test]
+fn a_balloon_tip_is_said_by_its_msaa_name_and_a_plain_tool_tip_is_not() {
+    let mut converter = EventConverter::default();
+    let mut shown = focus_event(Vec::new());
+    shown.event = "tool_tip_shown".to_owned();
+    shown.window_class = Some("tooltips_class32".to_owned());
+    shown.object = Some(TraceObject {
+        role: Some(31),
+        name: Some("Unacceptable Character: You can only type a number here.".to_owned()),
+        ..TraceObject::default()
+    });
+    assert_eq!(
+        converter.convert(&shown),
+        vec![okur_core::AccessibilityEvent::BalloonTip(
+            "Unacceptable Character: You can only type a number here.".to_owned()
+        )]
+    );
+    shown.object = Some(TraceObject {
+        role: Some(13),
+        name: Some("Save the order".to_owned()),
+        ..TraceObject::default()
+    });
+    assert_eq!(converter.convert(&shown), Vec::new());
+}

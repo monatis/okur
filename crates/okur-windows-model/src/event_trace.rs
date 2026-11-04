@@ -33,6 +33,9 @@ const UIA_TOOLBAR: i32 = 50021;
 const UIA_HEADER: i32 = 50034;
 /// The window class of Win32 dialog boxes (message boxes, common dialogs).
 pub const WIN32_DIALOG_CLASS: &str = "#32770";
+/// The window class of comctl32's tool tips, balloon tips among them; WinForms' own is named
+/// after it ("WindowsForms10.tooltips_class32...").
+pub const TOOL_TIP_CLASS: &str = "tooltips_class32";
 /// A Win32 popup menu's window.
 const WIN32_MENU_CLASS: &str = crate::classes::MENU;
 /// The top window class of a focus on the desktop (`PlatformIds::top_window_class`).
@@ -44,7 +47,7 @@ const MSAA_BUTTONMENU: i32 = 0x39;
 /// MSAA `ROLE_SYSTEM_PROPERTYPAGE`: a NetUI ribbon itself, or one of its tabs' pages.
 const MSAA_PROPERTYPAGE: i32 = 0x26;
 /// The object id of a window's client area in a WinEvent (`OBJID_CLIENT`).
-const OBJID_CLIENT: i32 = -4;
+pub const OBJID_CLIENT: i32 = -4;
 /// UIA's class of a group of Office's ribbon (its "chunk": Word's Font group).
 const NETUI_RIBBON_GROUP_CLASS: &str = "NetUIChunk";
 /// The class of Office's panes as UI Automation reaches them: the row of ribbon tabs, where its

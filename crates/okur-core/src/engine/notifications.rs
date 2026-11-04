@@ -33,6 +33,18 @@ impl ScreenReaderEngine {
         Some(said)
     }
 
+    /// A balloon tip shown for the window in front, said after what is being said: JAWS says
+    /// a password field's after its hint, "Password: | password edit | Type in text. |
+    /// Password: Use at least 8 characters." [obs, 1138/s2].
+    pub(super) fn balloon_tip(&mut self, text: &str) -> Option<String> {
+        let text = text.trim();
+        if text.is_empty() {
+            return None;
+        }
+        self.speech.speak(text, false);
+        Some(text.to_owned())
+    }
+
     /// An application's own notification (UI Automation's, as Teams sends): kept as a toast
     /// is, under its program's name, "Upload finished: report.pdf powershell 4:53 PM" [obs,
     /// 820/s3], and said as an announcement, interrupting when the application marks it

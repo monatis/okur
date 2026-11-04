@@ -263,6 +263,22 @@ impl EventConverter {
                 .into_iter()
                 .collect();
         }
+        // A tool tip shown for the window in front: a help balloon is said by its MSAA name,
+        // its title and its text, "Unacceptable Character: You can only type a number here."
+        // [obs, 1138/s1, s2]; a plain tool tip shown without the mouse is not [obs, 1138/s3].
+        if event.event == "tool_tip_shown" {
+            const ROLE_SYSTEM_HELPBALLOON: i32 = 31;
+            return event
+                .object
+                .as_ref()
+                .filter(|object| object.role == Some(ROLE_SYSTEM_HELPBALLOON))
+                .and_then(|object| object.name.as_deref())
+                .map(str::trim)
+                .filter(|text| !text.is_empty())
+                .map(|text| okur_core::AccessibilityEvent::BalloonTip(text.to_owned()))
+                .into_iter()
+                .collect();
+        }
         if event.event == "uia_window_opened" {
             let Some((text, sender)) = event.focus_subtree.as_ref().and_then(toast_text) else {
                 return Vec::new();

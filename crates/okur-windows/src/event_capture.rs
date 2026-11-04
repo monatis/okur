@@ -732,9 +732,10 @@ struct TopWindow {
 /// their text the converter makes nothing of them, though reading their MSAA object cost
 /// the WinEvent thread a cross-process call or six for each, 16% of all events (performance
 /// review, 2026-10-20, P5; `caret_events_without_their_text_give_nothing`).
-const LIVE_EVENTS: [&str; 14] = [
+const LIVE_EVENTS: [&str; 15] = [
     "focus",
     "dialog_shown",
+    "tool_tip_shown",
     "uia_focus",
     "uia_selected",
     "foreground",
@@ -1202,6 +1203,29 @@ unsafe fn on_page_change_guarded(
             record_in_turn(Deferred {
                 t_ms: now_ms(),
                 name: "dialog_shown",
+                win_event,
+                hwnd,
+                id_object,
+                id_child,
+            });
+        }
+        // A tool tip shown for the window in front, comctl32's or WinForms' own: JAWS says
+        // an edit's balloon tip as it shows [obs, 1138/s1, s2]. Another window's (the
+        // taskbar's, another program's) is never read.
+        // SAFETY: plain Win32 queries on the event's window, with a valid buffer.
+        let front_tool_tip = unsafe {
+            use windows::Win32::UI::WindowsAndMessaging::{GetWindow, GW_OWNER};
+            let mut class = [0u16; 64];
+            let length = GetClassNameW(hwnd, &mut class);
+            class.get(..length as usize).is_some_and(|c| {
+                String::from_utf16_lossy(c)
+                    .contains(okur_windows_model::event_trace::TOOL_TIP_CLASS)
+            }) && GetWindow(hwnd, GW_OWNER).is_ok_and(|owner| owner == GetForegroundWindow())
+        };
+        if front_tool_tip {
+            record_in_turn(Deferred {
+                t_ms: now_ms(),
+                name: "tool_tip_shown",
                 win_event,
                 hwnd,
                 id_object,
@@ -2238,6 +2262,28 @@ fn record_at(
         // review, 2026-10-20, P4). Its events are dropped until it answers again.
         if state.live && in_hung_window(hwnd) {
             tracing::debug!(event = name, "event of a hung window not read");
+            return;
+        }
+        // A tool tip shown is its MSAA object, read alone: a balloon's name is its title and
+        // its text, "Unacceptable Character: You can only type a number here.", which UI
+        // Automation gives without the title, and its role tells it from a plain tool tip
+        // (research on old-pc, 2026-11-04; [obs, 1138]).
+        if name == "tool_tip_shown" {
+            let event = TraceEvent {
+                win_event,
+                hwnd: hwnd.0 as isize,
+                id_object,
+                id_child,
+                window_class: Some(class).filter(|s| !s.is_empty()),
+                object: msaa_object(
+                    hwnd,
+                    okur_windows_model::event_trace::OBJID_CLIENT,
+                    CHILDID_SELF,
+                ),
+                ..bare_event(t_ms, name)
+            };
+            (state.sink)(event);
+            state.count += 1;
             return;
         }
         // Live, a window come to the front is its handle to the converter (a renamed window

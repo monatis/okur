@@ -1902,6 +1902,7 @@ impl ScreenReaderEngine {
             }
             AccessibilityEvent::MousePoint(point) => self.mouse_point(point),
             AccessibilityEvent::Toast { text, sender } => self.toast_shown(text, sender.as_deref()),
+            AccessibilityEvent::BalloonTip(text) => self.balloon_tip(text),
             AccessibilityEvent::AppNotification {
                 text,
                 politeness,

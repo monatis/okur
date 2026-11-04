@@ -1168,6 +1168,10 @@ fn replayable(event: &TraceEvent) -> bool {
     if event.event == "alert" {
         return event.region.is_some();
     }
+    // A tool tip shown for the window in front, its MSAA object read [obs, 1138].
+    if event.event == "tool_tip_shown" {
+        return event.object.is_some();
+    }
     // A console's screen after it wrote to it, for Screen Echo [obs, 962].
     if event.event == "console_update" {
         return event.text_context.is_some();

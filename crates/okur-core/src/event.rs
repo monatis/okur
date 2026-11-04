@@ -1399,6 +1399,10 @@ pub enum AccessibilityEvent {
         text: String,
         sender: Option<String>,
     },
+    /// A balloon tip shown for the window in front, by its title and its text: "Unacceptable
+    /// Character: You can only type a number here.", an edit's own as a letter is typed in a
+    /// numbers-only field [obs, 1138/s1].
+    BalloonTip(String),
     /// A notification an application raised through UI Automation (`UiaRaiseNotificationEvent`,
     /// as Teams notifies, not a toast): said as it comes, interrupting when the application
     /// marks it important, and kept in the Notification History under its program's name,

@@ -785,6 +785,43 @@ fn a_dialog_shown_after_its_focus_gives_say_window_its_controls() {
     assert!(said.contains("OK"), "{said:?}");
 }
 
+/// A balloon tip shown for the window in front is said after what the focus said, not over
+/// it: "Password: | password edit | Type in text. | Password: Use at least 8 characters."
+/// [obs, 1138/s2].
+#[test]
+fn a_balloon_tip_is_said_after_the_focus() {
+    /// Speech that keeps whether each utterance interrupted.
+    #[derive(Clone, Default)]
+    struct Spoken(std::sync::Arc<std::sync::Mutex<Vec<(String, bool)>>>);
+    impl SpeechOutput for Spoken {
+        fn speak(&mut self, text: &str, interrupt: bool) {
+            if let Ok(mut said) = self.0.lock() {
+                said.push((text.to_owned(), interrupt));
+            }
+        }
+        fn stop(&mut self) {}
+    }
+    let speech = Spoken::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(create_test_buffer()),
+        Box::new(speech.clone()),
+    );
+    let focus = FocusEvent::new(Role::Edit).with_name("Password:");
+    engine.handle_focus_event(&focus);
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::BalloonTip(
+        "Password: Use at least 8 characters.".to_owned(),
+    ));
+    assert_eq!(
+        said.as_deref(),
+        Some("Password: Use at least 8 characters.")
+    );
+    let last = speech.0.lock().ok().and_then(|said| said.last().cloned());
+    assert_eq!(
+        last,
+        Some(("Password: Use at least 8 characters.".to_owned(), false))
+    );
+}
+
 /// Say Window in a window that is not a dialog box asks the platform for the window's
 /// controls and says them as they arrive, the window first [obs, 1136/s3].
 #[test]
