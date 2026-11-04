@@ -70,6 +70,9 @@ key-equals = Equals
 key-slash = Slash
 # The key at the US backslash place.
 key-backslash = Backslash
+# The keys at the US left and right bracket places, as JAWS's key map spells them.
+key-left-bracket = LeftBracket
+key-right-bracket = RightBracket
 # The numeric keypad's 5.
 key-numpad-five = NumPad5
 # The numeric keypad's plus.

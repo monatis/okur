@@ -37,6 +37,11 @@ pub enum Key {
     Equals,
     Slash,
     Backslash,
+    /// The keys at the US left and right bracket places, by their place (Default.JKM:
+    /// LeftBracket, RightBracket): the laptop layout's Route JAWS Cursor to PC Cursor is
+    /// CapsLock+Left Bracket.
+    LeftBracket,
+    RightBracket,
     /// The numeric keypad's 5 with Num Lock off (VK_CLEAR): JAWS's desktop Say Character.
     /// The keypad's other keys arrive as the arrows and Home, End, Page Up and Page Down.
     Numpad5,

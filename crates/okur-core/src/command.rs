@@ -1374,6 +1374,13 @@ static LAPTOP_BINDINGS: &[Binding] = &{
         bind(Alpha('N'), OKUR_SHIFT, SayBottomLineOfWindow),
         bind(Alpha('J'), OKUR_SHIFT, SayToCursor),
         bind(Alpha('L'), OKUR_SHIFT, SayFromCursor),
+        // The cursors (Freedom Scientific's JAWS hotkeys list, laptop column): PC Cursor
+        // CapsLock+Semicolon, JAWS Cursor CapsLock+P, Route PC Cursor to JAWS Cursor
+        // CapsLock+Apostrophe, Route JAWS Cursor to PC Cursor CapsLock+Left Bracket.
+        bind(Key::Semicolon, OKUR, PcCursor),
+        bind(Alpha('P'), OKUR, OkurCursor),
+        bind(Key::Apostrophe, OKUR, RoutePcToOkur),
+        bind(Key::LeftBracket, OKUR, RouteOkurToPc),
     ]
 };
 
@@ -1548,6 +1555,19 @@ mod tests {
             command_for(&key(Key::Numpad5, jaws)),
             Some(Command::SayWord)
         );
+        // The cursors, as Freedom Scientific's hotkeys list gives them for the laptop.
+        for (laptop_key, command) in [
+            (Key::Alpha('p'), Command::OkurCursor),
+            (Key::Semicolon, Command::PcCursor),
+            (Key::Apostrophe, Command::RoutePcToOkur),
+            (Key::LeftBracket, Command::RouteOkurToPc),
+        ] {
+            assert_eq!(
+                layout_command_for(&laptop, &key(laptop_key, jaws)),
+                Some(command),
+                "{laptop_key:?}"
+            );
+        }
     }
 
     #[test]

@@ -41,6 +41,8 @@ fn key_from_name(name: &str) -> Option<Key> {
         "equals" => Key::Equals,
         "slash" => Key::Slash,
         "backslash" => Key::Backslash,
+        "leftbracket" => Key::LeftBracket,
+        "rightbracket" => Key::RightBracket,
         "numpad5" => Key::Numpad5,
         "numpadplus" => Key::NumpadPlus,
         "numpadminus" => Key::NumpadMinus,

@@ -87,6 +87,8 @@ fn main_key_name(event: &KeyEvent) -> String {
         Key::Equals => msg::key_equals(),
         Key::Slash => msg::key_slash(),
         Key::Backslash => msg::key_backslash(),
+        Key::LeftBracket => msg::key_left_bracket(),
+        Key::RightBracket => msg::key_right_bracket(),
         Key::Numpad5 => msg::key_numpad_five(),
         Key::NumpadPlus => msg::key_numpad_plus(),
         Key::NumpadMinus => msg::key_numpad_minus(),

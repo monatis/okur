@@ -133,6 +133,8 @@ impl ScreenReaderEngine {
                     | Key::Equals
                     | Key::Slash
                     | Key::Backslash
+                    | Key::LeftBracket
+                    | Key::RightBracket
                     | Key::Comma
                     | Key::Period
             )
