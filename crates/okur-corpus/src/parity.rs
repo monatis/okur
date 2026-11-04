@@ -26,12 +26,21 @@ pub const BASELINE_FILE: &str = "parity-baseline.json";
 /// newlines) to one space, and trim. The `\u{1d}`/`\u{1e}` role markers are kept, because
 /// they encode JAWS speech structure. Word's list bullet is one character: JAWS reads it from
 /// Word as the Symbol font's private U+F0B7, UI Automation gives it as U+2022 [obs, 518/s10].
+/// Bidirectional marks and isolates are left out: no reader speaks them, and JAWS's history
+/// keeps the ones Windows wraps a date in, "\u{200e}2/\u{200e}14/\u{200e}2026" in Windows
+/// Settings' app list [obs, 3155/s7], where Okur's speech has none.
 pub fn normalize(speech: &str) -> String {
     speech
         .split_whitespace()
         .collect::<Vec<_>>()
         .join(" ")
         .replace(SYMBOL_FONT_BULLET, "\u{2022}")
+        .replace(is_bidi_mark, "")
+}
+
+/// A bidirectional mark or isolate: LRM, RLM, the embeddings and overrides, the isolates.
+fn is_bidi_mark(c: char) -> bool {
+    matches!(c, '\u{200e}' | '\u{200f}' | '\u{202a}'..='\u{202e}' | '\u{2066}'..='\u{2069}')
 }
 
 /// Word's bullet in the Symbol font, as JAWS reads it.
@@ -1942,6 +1951,10 @@ mod tests {
         assert_eq!(
             normalize("\u{f0b7} Weekday hours"),
             normalize("\u{2022} Weekday hours")
+        );
+        assert_eq!(
+            normalize("16.0 KB \u{200e}2/\u{200e}14/\u{200e}2026"),
+            "16.0 KB 2/14/2026"
         );
     }
 
