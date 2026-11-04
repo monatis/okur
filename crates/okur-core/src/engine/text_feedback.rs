@@ -111,11 +111,31 @@ impl ScreenReaderEngine {
                 .is_some_and(|t| t.structure.is_some())
                 .then(|| crate::apps::windows::word::browse_page(event))
                 .flatten();
+            // A page's field reads the character Home and End land on, "I", and End's line
+            // end as the synthesizer's "blank", whatever the typing echo [obs, 1147/s3, s4;
+            // 1146/s3, s13]; a WinForms one-line edit says nothing (305/s1, s5).
+            let page_field = self.app_mode == super::AppMode::VirtualBuffer;
             let key = match key.in_document(event.key, event.modifiers.ctrl) {
                 _ if browse.is_some() && self.editing_document() => {
                     crate::editing::EditKey::BrowsePage {
                         next: browse.unwrap_or(true),
                     }
+                }
+                _ if page_field && key == crate::editing::EditKey::Silent => {
+                    if event.key == crate::Key::End {
+                        crate::editing::EditKey::LineEnd
+                    } else {
+                        crate::editing::EditKey::Character
+                    }
+                }
+                // Page Down in a page's one-line field moves nothing and says nothing [obs,
+                // 1146/s12].
+                crate::editing::EditKey::Line
+                    if page_field
+                        && !self.editing_document()
+                        && matches!(event.key, crate::Key::PageUp | crate::Key::PageDown) =>
+                {
+                    crate::editing::EditKey::Silent
                 }
                 _ if !self.editing_document() => key,
                 crate::editing::EditKey::Character

@@ -20,6 +20,10 @@ pub enum EditKey {
     Line,
     /// Home/End: silent in a single-line edit (305/s1, s5, s7).
     Silent,
+    /// End in a page's field: the line's end, said as its line break, "blank", out of the
+    /// history [obs, 1146/s3, 1147/s3]. The field's caret read at once still stood where it
+    /// was (1147's traces), so the end is said from the key, not the caret read.
+    LineEnd,
     /// Shift+Left/Right: the character added to the selection, then "selected" (305/s3).
     SelectCharacter,
     /// Ctrl+Shift+Left/Right: the word added to the selection, then "selected"; the word taken
@@ -713,11 +717,18 @@ pub fn speech_in(
     }
     let said = match key {
         EditKey::Silent => return None,
+        EditKey::LineEnd => "\n".to_owned(),
         EditKey::TableCell(how) => return crate::document::cell_speech(before, after, how),
         EditKey::FormField => return None,
         EditKey::FormFieldState => return crate::document::form_field_state(after),
+        // Delete at the end of a line with text on it deletes nothing and says nothing [obs,
+        // 1146/s11].
+        EditKey::DeleteForward if char_at(after).is_none() && !line_at(after).trim().is_empty() => {
+            return None
+        }
         // The text's end is read as a line break, "blank", which JAWS keeps out of its
-        // history: Delete on the empty last line [obs, 1142/s7].
+        // history: Delete on the empty last line [obs, 1142/s7]; End in a page's field
+        // [obs, 1147/s3].
         EditKey::Character | EditKey::DeleteForward => {
             char_at(after).map_or_else(|| "\n".to_owned(), |c| c.to_string())
         }
@@ -1239,6 +1250,20 @@ mod tests {
         let at_break = speech(EditKey::Character, None, &ctx(text, 10, None), "");
         assert_eq!(at_break.as_deref(), Some("\r"));
         assert_eq!(crate::pronounce::character("\r"), "blank");
+    }
+
+    /// Delete with nothing after the caret: "blank" on an empty line [obs, 1142/s7], nothing
+    /// at the end of a line with text on it [obs, 1146/s11]. End in a page's field: the line
+    /// break, whatever the caret read says [obs, 1147/s3].
+    #[test]
+    fn the_texts_end_is_said_only_on_an_empty_line() {
+        let speech = |key, text: &str, caret| speech(key, None, &ctx(text, caret, None), "");
+        assert_eq!(speech(EditKey::DeleteForward, "Izmir", 5), None);
+        assert_eq!(
+            speech(EditKey::DeleteForward, "Izmir\n", 6).as_deref(),
+            Some("\n")
+        );
+        assert_eq!(speech(EditKey::LineEnd, "Izmir", 0).as_deref(), Some("\n"));
     }
 
     /// RichEdit (Windows 11 Notepad) separates lines with a bare `\r`: Up and Down must read
