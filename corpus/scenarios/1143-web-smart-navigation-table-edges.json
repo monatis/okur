@@ -1,0 +1,162 @@
+{
+  "id": "1143-web-smart-navigation-table-edges",
+  "name": "956's keys at the table's other edges, Smart Navigation on controls and tables (SmartNavigation=3): Up on the first row, Left on the first column, Right past a row that is not the last, Ctrl+Right to a cell's end in a cell of several words, a link in a cell, Down past the table to the text after it and Up back, and Shift+T",
+  "category": "realistic-pages",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/news-article.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "HTML": {
+        "SmartNavigation": "3"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "T"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "T"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Left"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "T"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "T"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Ctrl+Right"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "Ctrl+Left"
+    },
+    {
+      "id": "s22",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s23",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s24",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s25",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s26",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s27",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s28",
+      "type": "key",
+      "command": "Shift+T"
+    }
+  ]
+}
