@@ -92,3 +92,33 @@ ms):
 "Product Activation Failed" message bar's link, and each of those NetUI focuses spent about 450
 ms in its MSAA read (P15). 201 and 1113 ended with an error of the harness (201's run printed
 nothing; Word's window did not close), after their steps.
+
+## Live A/B: the sibling, cell and process reads (old-pc, 2026-11-04)
+
+Okur reading in JAWS's place (research, never evidence), release builds of `3affafab` (A,
+before `9af1de45`, `56d776ca`, `1d16b4f9` and `4c16a1d3`) and of `582eea85` (B), alternating, three
+rounds of five scenarios each (`live-ab.ps1` in the session's scratchpad; `okur-lab latency`'s
+lines parsed per focus read). Every focus read of all rounds, in ms: the whole read, and its
+context and MSAA stages together (B reads the MSAA object inside the context stage, before the
+siblings):
+
+```
+scenario build  focuses  total p50  p90   context+msaa p50  p90
+229-web-space-activates a              39     37.9    70.5         12     28
+229-web-space-activates b              26     33.7    64.6          8     26
+3158-desktop-settings-display a        43     35.7   113.6         10     28
+3158-desktop-settings-display b        44     38.2   109.9          9     29
+3159-desktop-run-dialog-tab a          24     39.3    94.7         14     22
+3159-desktop-run-dialog-tab b          33     36.2    95.5         11     19
+3161-desktop-explorer-ribbon a         51     88.6   184.8         52    111
+3161-desktop-explorer-ribbon b         43     94.3   126.8         63     91
+545-desktop-data-grid a                39     58.5   105.2         22     28
+545-desktop-data-grid b                39     48.1    88.7         14     16
+```
+
+Left out: two runs that failed (3159 A round 1, exit 1; 229 B round 2, two focuses read).
+What it shows: a grid cell's focus is about 10 ms faster at the median (its siblings, about 22
+to 14 ms with the MSAA read), a page's button about 4; Windows Settings and the Run dialog
+(siblings still read in a dialog) as before. Explorer's ribbon is slower at the median and faster
+at p90, within its run-to-run spread (its A rounds' medians alone vary more than that); not
+counted as a change.
