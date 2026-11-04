@@ -269,6 +269,18 @@ impl BackgroundStore {
         Self { writes, folder }
     }
 
+    /// Waits up to `wait` for everything handed before to be written: whether it was. Okur's
+    /// exit waits [`FLUSH_WAIT`]; a loaded machine can take longer (a test under the whole
+    /// suite's load read the folder before the write, 2026-11-04).
+    pub fn flush_within(&self, wait: std::time::Duration) -> bool {
+        let (done, written) = std::sync::mpsc::channel();
+        match self.writes.send(Write::Flush(done)) {
+            Ok(()) => written.recv_timeout(wait).is_ok(),
+            // No writer thread: everything was written at once.
+            Err(_) => true,
+        }
+    }
+
     /// Hands one of Okur's own files to the writer: `value`, written by `write`; at once
     /// where the writer did not start.
     fn own<T: Send + 'static>(&self, name: &'static str, value: T, write: fn(&SettingsFolder, &T)) {
@@ -327,9 +339,7 @@ impl SettingsStore for BackgroundStore {
     }
 
     fn flush(&self) {
-        let (done, written) = std::sync::mpsc::channel();
-        if self.writes.send(Write::Flush(done)).is_ok() && written.recv_timeout(FLUSH_WAIT).is_err()
-        {
+        if !self.flush_within(FLUSH_WAIT) {
             tracing::warn!("settings not written before exit");
         }
     }
@@ -701,7 +711,9 @@ mod tests {
             store.save(&changed);
             layers = changed;
         }
-        store.flush();
+        // Waited for, however loaded the machine: the exit's two seconds were not always
+        // enough under the whole suite.
+        assert!(store.flush_within(std::time::Duration::from_secs(30)));
         assert_eq!(SettingsFolder::at(&root).load(), layers);
         assert_eq!(
             SettingsFolder::at(&root)
