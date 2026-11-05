@@ -134,8 +134,12 @@ def said_since(log, offset):
     return said, end
 
 
-def settle(log, offset, quiet=1.5, longest=10.0):
-    """Waits until the log has been quiet for `quiet` seconds (at most `longest`)."""
+def settle(log, offset, quiet=1.0, longest=10.0):
+    """Waits until the log has been quiet for `quiet` seconds (at most `longest`). Shorter than
+    the pause after which a character the arrows moved onto is spelled phonetically (1.5 s,
+    JAWS's default, 1140, 1141): the speech log keeps the character again then, and with a 1.5 s
+    quiet the spelling raced the next key ("s s" for "s", 07 and 107, 2026-11-06). JAWS's
+    recordings end a step on audio silence, before it too."""
     started = time.time()
     last_size = -1
     last_change = time.time()

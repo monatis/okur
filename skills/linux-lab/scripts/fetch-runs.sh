@@ -19,6 +19,7 @@ if [ ${#ids[@]} -eq 0 ]; then
     exit 2
 fi
 mkdir -p corpus/live/linux
+failed=
 for id in "${ids[@]}"; do
     scenario=$(ls corpus/scenarios/"$id"*.json 2>/dev/null | head -1)
     if [ -z "$scenario" ]; then
@@ -26,7 +27,12 @@ for id in "${ids[@]}"; do
         continue
     fi
     name=$(basename "$scenario")
-    timeout 120 opendesk pull --peer "$PEER" "D:/okur-linux/runs/$name" "corpus/live/linux/$name" > /dev/null
+    # A pull that fails (the peer briefly unreachable) is said, and the rest still fetched.
+    if ! timeout 120 opendesk pull --peer "$PEER" "D:/okur-linux/runs/$name" "corpus/live/linux/$name" > /dev/null; then
+        echo "$name: NOT fetched" >&2
+        failed=1
+        continue
+    fi
     if ! grep -q '"platform": "linux"' "corpus/live/linux/$name"; then
         echo "$name: not a Linux run, removed" >&2
         rm -f "corpus/live/linux/$name"
@@ -34,3 +40,7 @@ for id in "${ids[@]}"; do
     fi
     echo "fetched $name ($(grep -o '"commit": "[0-9a-f]*"' "corpus/live/linux/$name"))"
 done
+if [ -n "$failed" ]; then
+    echo "fetch-runs: some runs were not fetched" >&2
+    exit 1
+fi
