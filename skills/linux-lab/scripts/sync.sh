@@ -36,7 +36,7 @@ if [ -n "$send" ]; then
     timeout 600 opendesk push --peer "$PEER" "$bundle" D:/okur-linux/okur.bundle > /dev/null
 fi
 # Every lab script but the dev box's own (this one and job.sh).
-for script in skills/linux-lab/scripts/*.sh; do
+for script in skills/linux-lab/scripts/*.sh skills/linux-lab/scripts/*.py; do
     case "$(basename "$script")" in sync.sh|job.sh) continue ;; esac
     timeout 120 opendesk push --peer "$PEER" "$script" "D:/okur-linux/$(basename "$script")" > /dev/null
 done
