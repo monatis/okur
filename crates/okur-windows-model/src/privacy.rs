@@ -66,8 +66,9 @@ pub fn without_shipped_dictionary(event: &mut crate::event_trace::TraceEvent) {
 ///   The items stay, so their number and the focus's place among them are kept.
 pub fn without_jaws_help_text(event: &mut crate::event_trace::TraceEvent) {
     fn address(name: &Option<String>) -> bool {
-        name.as_deref()
-            .is_some_and(|n| n.starts_with("data:") || n.contains("serve.html?"))
+        name.as_deref().is_some_and(|n| {
+            n.starts_with("data:") || n.contains("serve.html?") || n.contains("data:text/html")
+        })
     }
     fn clean(node: &mut crate::uia_snapshot::UiaNode, siblings: bool) {
         if address(&node.name) || (siblings && !node.has_keyboard_focus) {
@@ -75,6 +76,10 @@ pub fn without_jaws_help_text(event: &mut crate::event_trace::TraceEvent) {
             node.value = None;
             node.full_description = None;
             node.help_text = None;
+        }
+        // A page's value is its address.
+        if address(&node.value) {
+            node.value = None;
         }
         for child in &mut node.children {
             clean(child, siblings);
@@ -92,6 +97,16 @@ pub fn without_jaws_help_text(event: &mut crate::event_trace::TraceEvent) {
         if address(&object.name) {
             object.name = None;
         }
+        if address(&object.value) {
+            object.value = None;
+        }
+    }
+    // Say Window's copy of the dialog: its lines and its tree.
+    event
+        .dialog_lines
+        .retain(|line| !line.contains("serve.html?") && !line.contains("data:text"));
+    if let Some(tree) = event.dialog_tree.as_mut() {
+        clean(tree, search);
     }
     for node in &mut event.focus_chain {
         clean(node, false);
