@@ -318,3 +318,19 @@ impl Drop for SsipEngine {
         let _ = self.stream.write_all(b"QUIT\r\n");
     }
 }
+
+/// Linux's synthesizers: speech-dispatcher for every kind but No Speech, whose silence is the
+/// runtime's own.
+#[derive(Debug, Default, Clone, Copy)]
+pub struct LinuxSynthesizers;
+
+impl okur_runtime::synthesizer::SynthesizerFactory for LinuxSynthesizers {
+    fn make(&self, kind: okur_core::settings::Synthesizer) -> Result<Box<dyn TtsEngine>, TtsError> {
+        match kind {
+            okur_core::settings::Synthesizer::NoSpeech => {
+                Ok(Box::new(okur_runtime::synthesizer::NoSpeechEngine::new()))
+            }
+            _ => Ok(Box::new(SsipEngine::new()?)),
+        }
+    }
+}
