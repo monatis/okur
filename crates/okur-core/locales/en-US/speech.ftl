@@ -197,3 +197,20 @@ text-analysis-unclosed-short = Unclosed { $symbol } at { $column }
 # With indentation said (Say Indented Characters): a line at the margin, read as a line or as
 # a Say All starts [obs, 729/s1, s10].
 indentation-left-margin = Left Margin
+
+# Numbers in words, as Number Processing's Controlled by Okur gives them to the synthesizer
+# (JAWS's Controlled by JAWS [obs, 1161]): lists split at their spaces, in order.
+number-words-units = zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen
+number-words-tens = twenty thirty forty fifty sixty seventy eighty ninety
+number-words-hundred = hundred
+number-words-scales = thousand million billion trillion
+number-words-and = and
+number-words-point = point
+number-words-ordinal-units = zeroth first second third fourth fifth sixth seventh eighth ninth tenth eleventh twelfth thirteenth fourteenth fifteenth sixteenth seventeenth eighteenth nineteenth
+number-words-ordinal-tens = twentieth thirtieth fortieth fiftieth sixtieth seventieth eightieth ninetieth
+number-words-ordinal-hundred = hundredth
+number-words-ordinal-scales = thousandth millionth billionth trillionth
+number-words-dollar = U.S. dollar
+number-words-dollars = U.S. dollars
+number-words-cent = cent
+number-words-cents = cents

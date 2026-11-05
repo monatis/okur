@@ -1803,6 +1803,16 @@ divergences! {
      the list as its focus was when the window came to the front: Explorer fills the list a \
      few seconds later, without a focus event. The list's loading, not Okur's reading.",
     "the owner, 2026-11-03";
+
+    Difference::Step => [
+        "1161-web-words-numbers-by-jaws/s23",
+        "1161-web-words-numbers-by-jaws/s26",
+    ],
+    "Number Processing Controlled by JAWS: JAWS says \"$0.02\" as \"zero zero U.S. dollars and \
+     two cents\", the dollars' zero twice, where it says \"$1,250.50\" as \"one thousand two \
+     hundred fifty U.S. dollars and fifty cents\"; Okur says \"zero U.S. dollars and two \
+     cents\". The rest of both steps match.",
+    "the agent under the owner's rule on JAWS's accidents, 2026-11-05";
 }
 
 /// The divergence covering `step`, if any.

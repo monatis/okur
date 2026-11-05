@@ -7,6 +7,7 @@
 //! the synthesizer and for comparison with what JAWS sent its synthesizer (the speech
 //! recorder voice's log, `observation.spoken`).
 
+use crate::messages::msg;
 use crate::settings::{DateProcessing, NumberProcessing, Punctuation, TextProcessing};
 
 /// The name JAWS speaks for a character read on its own, when it names it.
@@ -358,13 +359,24 @@ fn render(
     out.split_whitespace()
         .collect::<Vec<_>>()
         .join(" ")
-        .replace(DATE_COMMA, ",")
+        .replace(SPOKEN_COMMA, ",")
+        .replace(SPOKEN_POINT, ".")
 }
 
-/// The comma a translated date is written with ("March 2, 2002"): kept apart from the text's
-/// own commas, which are named when every symbol is ("2 comma, 2002"), while JAWS gives the
-/// date's as a pause [obs, 1162/s24].
-const DATE_COMMA: char = '';
+/// The comma and the point of words Okur writes itself, a translated date's ("March 2, 2002")
+/// and numbers in words ("one hundred twenty three thousand, four hundred", "U.S. dollars"):
+/// kept apart from the text's own, which are named when every symbol is ("2 comma, 2002"),
+/// while JAWS gives its own as a pause [obs, 1162/s24, 1161/s18, s27].
+const SPOKEN_COMMA: char = '';
+const SPOKEN_POINT: char = '';
+
+/// Words Okur writes itself, their commas and points kept from punctuation's names.
+fn spoken_words(words: &[String]) -> String {
+    words
+        .join(" ")
+        .replace(',', &SPOKEN_COMMA.to_string())
+        .replace('.', &SPOKEN_POINT.to_string())
+}
 
 /// Filter Repeated Characters at JAWS's default, Three: of an unbroken run of one symbol, three
 /// are spoken ("=====" as "equals equals equals" [obs, 285/s12]). Letters, digits and spaces
@@ -491,6 +503,9 @@ fn is_ordinal_ending(chars: &[char], start: usize) -> bool {
 /// - Full Numbers: four digits with their thousands comma ("1,234", "2,002") [obs, 1160];
 /// - otherwise as written, for the synthesizer.
 fn numbers(text: &str, processing: TextProcessing) -> String {
+    if processing.numbers == NumberProcessing::ByJaws {
+        return in_words(text);
+    }
     let all = processing.numbers == NumberProcessing::SingleDigits;
     let chars: Vec<char> = text.chars().collect();
     let mut out = String::with_capacity(text.len() * 2);
@@ -629,7 +644,7 @@ fn dates(text: &str, processing: DateProcessing) -> String {
                 let name = months.get(usize::try_from(month).ok()?.checked_sub(1)?)?;
                 match year {
                     Some((year, _, _)) if fits => {
-                        Some((format!("{name} {day}{DATE_COMMA} {year}"), end))
+                        Some((format!("{name} {day}{SPOKEN_COMMA} {year}"), end))
                     }
                     None if fits && processing == DateProcessing::ExtendedTranslation => {
                         Some((format!("{name} {day}"), end))
@@ -648,6 +663,235 @@ fn dates(text: &str, processing: DateProcessing) -> String {
                 i += 1;
             }
         }
+    }
+    out
+}
+
+/// The catalog's number words, each list split at its spaces.
+struct NumberWords {
+    units: Vec<String>,
+    tens: Vec<String>,
+    hundred: String,
+    scales: Vec<String>,
+    and: String,
+    point: String,
+    ordinal_units: Vec<String>,
+    ordinal_tens: Vec<String>,
+    ordinal_hundred: String,
+    ordinal_scales: Vec<String>,
+}
+
+impl NumberWords {
+    fn load() -> Self {
+        let list = |m: crate::messages::StaticMessage| -> Vec<String> {
+            m.to_string()
+                .split_whitespace()
+                .map(str::to_owned)
+                .collect()
+        };
+        Self {
+            units: list(msg::number_words_units()),
+            tens: list(msg::number_words_tens()),
+            hundred: msg::number_words_hundred().to_string(),
+            scales: list(msg::number_words_scales()),
+            and: msg::number_words_and().to_string(),
+            point: msg::number_words_point().to_string(),
+            ordinal_units: list(msg::number_words_ordinal_units()),
+            ordinal_tens: list(msg::number_words_ordinal_tens()),
+            ordinal_hundred: msg::number_words_ordinal_hundred().to_string(),
+            ordinal_scales: list(msg::number_words_ordinal_scales()),
+        }
+    }
+
+    fn unit(&self, n: u64) -> String {
+        usize::try_from(n)
+            .ok()
+            .and_then(|n| self.units.get(n))
+            .cloned()
+            .unwrap_or_default()
+    }
+
+    /// Below a hundred: "seven", "forty two".
+    fn below_hundred(&self, n: u64, out: &mut Vec<String>) {
+        if n < 20 {
+            out.push(self.unit(n));
+            return;
+        }
+        let ten = usize::try_from(n / 10).ok().and_then(|t| t.checked_sub(2));
+        if let Some(word) = ten.and_then(|t| self.tens.get(t)) {
+            out.push(word.clone());
+        }
+        if !n.is_multiple_of(10) {
+            out.push(self.unit(n % 10));
+        }
+    }
+
+    /// Below a thousand: "eight hundred", "one hundred twenty three".
+    fn below_thousand(&self, n: u64, out: &mut Vec<String>) {
+        if n >= 100 {
+            out.push(self.unit(n / 100));
+            out.push(self.hundred.clone());
+        }
+        if !n.is_multiple_of(100) {
+            self.below_hundred(n % 100, out);
+        }
+    }
+
+    /// A whole number in words, as JAWS says it: "two thousand and two" (a remainder below a
+    /// hundred after the thousands), "one hundred twenty three thousand, four hundred fifty
+    /// six" (a pause after a group of a hundred or more) [obs, 1161/s14, s24].
+    fn cardinal(&self, n: u64) -> Vec<String> {
+        if n == 0 {
+            return vec![self.unit(0)];
+        }
+        let mut groups = Vec::new();
+        let mut rest = n;
+        while rest > 0 {
+            groups.push(rest % 1000);
+            rest /= 1000;
+        }
+        let mut out = Vec::new();
+        for (scale, group) in groups.iter().enumerate().rev() {
+            if *group == 0 {
+                continue;
+            }
+            if scale == 0 && *group < 100 && n >= 1000 {
+                out.push(self.and.clone());
+            }
+            self.below_thousand(*group, &mut out);
+            if let Some(word) = scale.checked_sub(1).and_then(|s| self.scales.get(s)) {
+                let pause = *group >= 100 && !n.is_multiple_of(1000);
+                out.push(if pause {
+                    format!("{word},")
+                } else {
+                    word.clone()
+                });
+            }
+        }
+        out
+    }
+
+    /// The ordinal: the cardinal's last word as an ordinal ("first", "twenty first").
+    fn ordinal(&self, n: u64) -> Vec<String> {
+        let mut words = self.cardinal(n);
+        if let Some(last) = words.last_mut() {
+            let from = |list: &[String], ordinals: &[String]| {
+                list.iter()
+                    .position(|w| w == last.trim_end_matches(','))
+                    .and_then(|i| ordinals.get(i).cloned())
+            };
+            let ordinal = from(&self.units, &self.ordinal_units)
+                .or_else(|| from(&self.tens, &self.ordinal_tens))
+                .or_else(|| from(&self.scales, &self.ordinal_scales))
+                .or_else(|| (*last == self.hundred).then(|| self.ordinal_hundred.clone()));
+            if let Some(ordinal) = ordinal {
+                *last = ordinal;
+            }
+        }
+        words
+    }
+
+    /// Digits one by one: "zero three".
+    fn digits(&self, digits: &str) -> Vec<String> {
+        digits
+            .chars()
+            .filter_map(|d| d.to_digit(10))
+            .map(|d| self.unit(u64::from(d)))
+            .collect()
+    }
+
+    /// A run of digits: in words, or digit by digit when it starts with a zero ("00").
+    fn number(&self, digits: &str) -> Vec<String> {
+        match digits.parse::<u64>() {
+            Ok(n) if !(digits.starts_with('0') && digits.len() > 1) => self.cardinal(n),
+            _ => self.digits(digits),
+        }
+    }
+}
+
+/// Numbers in words, Number Processing's Controlled by Okur (JAWS's Controlled by JAWS
+/// [obs, 1161]): "forty two", "one million" (its group commas read as one number), "two point
+/// five", "first", a dashed number group by group ("one dash eight hundred"), a group starting
+/// with a zero digit by digit ("zero three"); a time as written ("10:30"); money as
+/// "one thousand two hundred fifty U.S. dollars and fifty cents". Speak Single Digits and the
+/// dashes rule do not apply, as JAWS's DEFAULT.JCF says of its own.
+fn in_words(text: &str) -> String {
+    let words = NumberWords::load();
+    let chars: Vec<char> = text.chars().collect();
+    let mut out = String::with_capacity(text.len() * 3);
+    let mut i = 0;
+    while let Some(&c) = chars.get(i) {
+        let money = c == '$' && chars.get(i + 1).is_some_and(char::is_ascii_digit);
+        if !(c.is_ascii_digit() || money) {
+            out.push(c);
+            i += 1;
+            continue;
+        }
+        let start = if money { i + 1 } else { i };
+        // The number: digits, and a comma, colon, point or dash between digits.
+        let mut end = start;
+        while let Some(&d) = chars.get(end) {
+            let between = matches!(d, ',' | ':' | '.' | '-')
+                && chars.get(end + 1).is_some_and(char::is_ascii_digit);
+            if !(d.is_ascii_digit() || (between && end > start)) {
+                break;
+            }
+            end += 1;
+        }
+        let token: String = chars.get(start..end).unwrap_or_default().iter().collect();
+        i = end;
+        if token.contains(':') || token.matches('.').count() > 1 {
+            out.push_str(&token);
+            continue;
+        }
+        let spoken: Vec<String> = if money {
+            let (whole, cents) = token.split_once('.').unwrap_or((&token, ""));
+            let whole: String = whole.chars().filter(char::is_ascii_digit).collect();
+            let dollars = whole.parse::<u64>().unwrap_or(0);
+            let mut spoken = words.cardinal(dollars);
+            spoken.push(if dollars == 1 {
+                msg::number_words_dollar().to_string()
+            } else {
+                msg::number_words_dollars().to_string()
+            });
+            if let Ok(cents) = cents.parse::<u64>() {
+                if cents > 0 {
+                    spoken.push(words.and.clone());
+                    spoken.extend(words.cardinal(cents));
+                    spoken.push(if cents == 1 {
+                        msg::number_words_cent().to_string()
+                    } else {
+                        msg::number_words_cents().to_string()
+                    });
+                }
+            }
+            spoken
+        } else if token.contains('-') {
+            let groups: Vec<String> = token
+                .split('-')
+                .map(|group| words.number(group).join(" "))
+                .collect();
+            vec![groups.join("-")]
+        } else if let Some((whole, fraction)) = token.split_once('.') {
+            let whole: String = whole.chars().filter(char::is_ascii_digit).collect();
+            let mut spoken = words.number(&whole);
+            spoken.push(words.point.clone());
+            spoken.extend(words.digits(fraction));
+            spoken
+        } else {
+            let plain: String = token.chars().filter(char::is_ascii_digit).collect();
+            if is_ordinal_ending(&chars, end) {
+                // Its letters ("st", "nd", "rd", "th") are the ordinal's.
+                i += 2;
+                plain
+                    .parse::<u64>()
+                    .map(|n| words.ordinal(n))
+                    .unwrap_or_else(|_| words.digits(&plain))
+            } else {
+                words.number(&plain)
+            }
+        };
+        out.push_str(&spoken_words(&spoken));
     }
     out
 }
@@ -1139,10 +1383,8 @@ mod tests {
         );
     }
 
-    /// Controlled by JAWS: JAWS says numbers in words itself [obs, 1161/s14-s27]. Okur leaves
-    /// them to the synthesizer as yet.
+    /// Controlled by JAWS: numbers in words [obs, 1161/s7-s27].
     #[test]
-    #[ignore = "known gap: Number Processing Controlled by JAWS (numbers in words) is not built"]
     fn numbers_controlled_by_okur_are_words() {
         let words = spoken_with(
             "42 1234 2.5 1,000,000 1st",
@@ -1156,6 +1398,25 @@ mod tests {
             words,
             "forty two one thousand two hundred thirty four two point five one million first"
         );
+        let jaws = |text: &str| {
+            spoken_with(
+                text,
+                Punctuation::Most,
+                TextProcessing {
+                    numbers: NumberProcessing::ByJaws,
+                    ..TextProcessing::default()
+                },
+            )
+        };
+        assert_eq!(
+            jaws("54321 123456 1-800-444-4443 10:30"),
+            "fifty four thousand three hundred twenty one one hundred twenty three thousand, four hundred fifty six one dash eight hundred dash four hundred forty four dash four thousand four hundred forty three 10:30"
+        );
+        assert_eq!(
+            jaws("03-16-00 3/2/2002 $1,250.50"),
+            "zero three dash sixteen dash zero zero three slash two slash two thousand and two one thousand two hundred fifty U.S. dollars and fifty cents"
+        );
+        assert_eq!(jaws("System32 x86_64 123RON 2nd"), "System thirty two x eighty six underline sixty four one hundred twenty three RON second");
     }
 
     #[test]

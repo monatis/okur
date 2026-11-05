@@ -1703,6 +1703,15 @@ A step can be in more than one entry; all of its entries apply.
   asynchronously.
 - Decided by the owner, 2026-11-03.
 
+### JAWS says a zero dollar amount's zero twice
+
+- Steps: `1161-web-words-numbers-by-jaws/s23`, `1161-web-words-numbers-by-jaws/s26`.
+- Difference: with Number Processing Controlled by JAWS, JAWS gives "$0.02" as "zero zero U.S.
+  dollars and two cents"; Okur, "zero U.S. dollars and two cents".
+- Why: JAWS says "$1,250.50" as "one thousand two hundred fifty U.S. dollars and fifty cents",
+  the dollars once; the second zero is not in the text.
+- Decided by the agent under the owner's rule on JAWS's accidents, 2026-11-05.
+
 ### A dictionary rule's languages are the machine's
 
 - Steps: none differ in replay, which reads JAWS's dialog as traced
