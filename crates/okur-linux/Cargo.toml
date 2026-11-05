@@ -1,0 +1,13 @@
+[package]
+name = "okur-linux"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+# Okur's driver for Linux (Tier 2, AGENTS.md section 1.3): its keyboard (X11, then Wayland's
+# KeyboardMonitor), AT-SPI events and reads through crates/xa11y, and speech through
+# speech-dispatcher. Built on Linux alone; elsewhere the crate is empty.
+
+[dependencies]
+okur-linux-model = { workspace = true }

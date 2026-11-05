@@ -1,0 +1,12 @@
+[package]
+name = "okur-linux-model"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+# Linux's accessibility and speech data as data: what the Linux driver (okur-linux) and replay
+# share, with no call to Linux, so it builds and is tested on every OS
+# (docs/plans/2026-11-05-linux-first.md).
+
+[dependencies]

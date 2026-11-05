@@ -978,6 +978,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "okur-linux"
+version = "0.1.0"
+dependencies = [
+ "okur-linux-model",
+]
+
+[[package]]
+name = "okur-linux-model"
+version = "0.1.0"
+
+[[package]]
 name = "okur-runtime"
 version = "0.1.0"
 dependencies = [

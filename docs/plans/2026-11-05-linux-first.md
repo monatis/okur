@@ -46,6 +46,16 @@ Probes, each with a pass criterion that can fail (proposal §6, W1-1 to W1-6):
 6. The crates: `okur-linux` (platform, `#![cfg(target_os = "linux")]`) and `okur-linux-model`
    (neutral) in `.agents/crate-layers.json`, the gate clean.
 
+### Results (2026-11-05, in the lab; each a script in `skills/linux-lab/scripts/`, run by `job.sh`)
+
+| Probe | Result | What it showed |
+|---|---|---|
+| 1 `probe-chrome.sh` | PASS | Chrome 157's page tree read by xa11y's `tree`: the heading and the first paragraph by role and name. Chrome joins the AT-SPI desktop some seconds after its window: read too early, there is no application. |
+| 2 `probe-events.sh` | PASS | Six Tabs: GTK 4 (`gtk4-widget-factory`) and Chrome sent **no** event to xa11y's match rules alone; with a listener registered with the registry (`RegisterEvent`, as libatspi does), one focus event per Tab, in order (6 and 7; Chrome's 7th is the page again after its toolbar), heard by xa11y too. xa11y-linux now registers (`27af48cc`). |
+| 3 `probe-keys.sh` | PASS | X11: XInput2 raw events saw `a Down Insert Down b`; a passive grab of Insert gave the hook `Insert Down`; the application got `a Down b`. The Okur key as a grabbed key works, with every key still seen. |
+| 4 `probe-speech.sh` | PASS | speech-dispatcher (Ubuntu 26.04's) with espeak-ng over SSIP (SSML): `begin m1 m2 end`, and sound on a PulseAudio null sink's monitor. |
+| 5 `probe-mutter.sh` | PASS | Mutter 50.1 headless: `WatchKeyboard` under `org.okur.Okur.KeyboardMonitor` refused ("Access denied"); allowed with `MUTTER_DEBUG_A11Y_MANAGER_WITHOUT_ACCESS_CONTROL=1`; keys injected through Mutter's RemoteDesktop API **do** arrive as `KeyEvent` (a and Down, pressed and released), so the Wayland key path can be tested headless. |
+
 ## 2. Weeks 2 to 6
 
 1. `okur-linux`: keyboard (X11 first, the declared grab sets the proposal's C1 calls for), events

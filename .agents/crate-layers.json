@@ -38,6 +38,18 @@
         "xa11y-windows"
       ]
     },
+    "okur-linux-model": { "kind": "neutral", "allow": ["okur-core", "xa11y-core"] },
+    "okur-linux": {
+      "kind": "platform",
+      "allow": [
+        "okur-core",
+        "okur-runtime",
+        "okur-ui-model",
+        "okur-linux-model",
+        "xa11y",
+        "xa11y-linux"
+      ]
+    },
     "okur-corpus": {
       "kind": "lab",
       "portable": true,
