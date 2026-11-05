@@ -4778,6 +4778,104 @@
       }
     },
     {
+      "scenario_id": "1159-web-words-numbers-pairs",
+      "fixture": "reading-settings.html",
+      "evidence": {
+        "sha256": "1be5e055367169f55a139f139db138c7ce80d2fd8f116293476997dbbb3b422d",
+        "capture_script_sha256": "51a4022429e05f006976b12cd9069820be6f5f88aa84527b2fb7cdc90d2ff2fd",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1160-web-words-numbers-full",
+      "fixture": "reading-settings.html",
+      "evidence": {
+        "sha256": "7a1a60c2792679738444c9e940c71ee52971b84f4d01203e3fa50a638d187896",
+        "capture_script_sha256": "51a4022429e05f006976b12cd9069820be6f5f88aa84527b2fb7cdc90d2ff2fd",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1161-web-words-numbers-by-jaws",
+      "fixture": "reading-settings.html",
+      "evidence": {
+        "sha256": "8abb6b33b43dfb3c2c23f281989d49e05a9b43ebdef8131c3dbb9cbfb4a4426b",
+        "capture_script_sha256": "51a4022429e05f006976b12cd9069820be6f5f88aa84527b2fb7cdc90d2ff2fd",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1162-web-words-dates-some",
+      "fixture": "reading-settings.html",
+      "evidence": {
+        "sha256": "b7778199dca3e3c89fb87a5e01f748630f540ef5cac92988c4fbb901db71af21",
+        "capture_script_sha256": "51a4022429e05f006976b12cd9069820be6f5f88aa84527b2fb7cdc90d2ff2fd",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1163-web-words-dates-extended",
+      "fixture": "reading-settings.html",
+      "evidence": {
+        "sha256": "d148b74ce6bdac4a645f85ce3dfe09c8db7a7ea26aa025d5bb79fb4a08a2f44c",
+        "capture_script_sha256": "51a4022429e05f006976b12cd9069820be6f5f88aa84527b2fb7cdc90d2ff2fd",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1164-web-words-dashes-not-digits",
+      "fixture": "reading-settings.html",
+      "evidence": {
+        "sha256": "eae3509e1d25dbb9de95633770c044a9be72b97bd3fc8f9dd9b59fe02277ef97",
+        "capture_script_sha256": "51a4022429e05f006976b12cd9069820be6f5f88aa84527b2fb7cdc90d2ff2fd",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1165-web-words-single-digits-eight",
+      "fixture": "reading-settings.html",
+      "evidence": {
+        "sha256": "70de3477f1dfe71a517215f5c5e31845cf9db814823fef20feb94f9473b14378",
+        "capture_script_sha256": "51a4022429e05f006976b12cd9069820be6f5f88aa84527b2fb7cdc90d2ff2fd",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "12-struct-heading-level-2",
       "fixture": "structural-navigation.html",
       "evidence": {
@@ -29559,10 +29657,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1945,
-    "scenarios_with_evidence": 1945,
-    "total_trials": 5841,
-    "successful_trials": 5824,
-    "deterministic_scenarios": 1622
+    "scenarios": 1952,
+    "scenarios_with_evidence": 1952,
+    "total_trials": 5862,
+    "successful_trials": 5845,
+    "deterministic_scenarios": 1629
   }
 }
