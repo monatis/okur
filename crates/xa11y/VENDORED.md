@@ -19,6 +19,10 @@ our cross-platform accessibility API layer. Upstream changes are not tracked aut
 - Unit tests in `xa11y-windows/src/uia.rs` that query the live desktop's UI Automation tree (`try_provider()`) are `#[ignore = "live: ..."]`, to keep `cargo test` hermetic. Run them with `--ignored`.
 - `xa11y-windows/src/screenshot.rs`: `chunks_exact_mut(4)` became `as_chunks_mut::<4>()`, to satisfy a newer clippy lint.
 
+## Changes since
+
+- `xa11y-linux/src/events.rs` (2026-11-05): a subscription registers its event classes with the AT-SPI registry (`RegisterEvent`, and `DeregisterEvent` when it ends). GTK 4 and Chrome send no events until a listener has registered: in Okur's Linux lab (`skills/linux-lab/scripts/probe-events.sh`), match rules alone heard nothing over six Tabs.
+
 ## Hardening
 
 **Production code may not panic.** Every crate's `Cargo.toml` denies `clippy::unwrap_used`, `expect_used`, `panic`, `todo`, `unimplemented` and `unreachable`; `xa11y-core`, `xa11y-windows` and `xa11y` also deny `indexing_slicing`. Tests are exempt: unit tests through [`clippy.toml`](clippy.toml) (`allow-*-in-tests`), integration tests through a crate-level `#![allow]`, and two unit-test modules that use `unreachable!()` through `#[allow(clippy::unreachable)]`. Deliberate exceptions carry an `#[allow(..., reason = "...")]`:

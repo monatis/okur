@@ -49,6 +49,53 @@ pub(crate) const EVENT_INTERFACES: &[&str] = &[
     "org.a11y.atspi.Event.Document",
 ];
 
+/// The event classes a subscription registers with the AT-SPI registry, one per
+/// interface of [`EVENT_INTERFACES`]: a class with an empty name covers every
+/// event of it.
+///
+/// Toolkits send events only while someone has registered for them: in Okur's
+/// Linux lab (probe 2, 2026-11-05), six Tabs through GTK 4 and through Chrome
+/// gave match rules alone no event at all, and one focus event per Tab once a
+/// listener had registered with the registry, as libatspi's listeners do.
+pub(crate) const REGISTERED_EVENTS: &[&str] = &["object:", "window:", "focus:", "document:"];
+
+const REGISTRY: &str = "org.a11y.atspi.Registry";
+const REGISTRY_PATH: &str = "/org/a11y/atspi/registry";
+
+/// Registers [`REGISTERED_EVENTS`] for the application on `app_bus` (signature
+/// `sass`: the event, no properties to cache, the application's bus name).
+fn register_events(conn: &Connection, app_bus: &str) -> Result<()> {
+    for event in REGISTERED_EVENTS {
+        conn.call_method(
+            Some(REGISTRY),
+            REGISTRY_PATH,
+            Some(REGISTRY),
+            "RegisterEvent",
+            &(*event, Vec::<&str>::new(), app_bus),
+        )
+        .map_err(|e| Error::Platform {
+            code: -1,
+            message: format!("RegisterEvent({event}): {e}"),
+        })?;
+    }
+    Ok(())
+}
+
+/// Takes back what [`register_events`] registered (signature `ss`). The
+/// registry also forgets a listener's events when its connection closes; this
+/// says so at once.
+fn deregister_events(conn: &Connection, app_bus: &str) {
+    for event in REGISTERED_EVENTS {
+        let _ = conn.call_method(
+            Some(REGISTRY),
+            REGISTRY_PATH,
+            Some(REGISTRY),
+            "DeregisterEvent",
+            &(*event, app_bus),
+        );
+    }
+}
+
 // ── Entry point ─────────────────────────────────────────────────────────────
 
 /// Subscribe to AT-SPI2 events for the application identified by `pid`.
@@ -134,6 +181,18 @@ pub(crate) fn subscribe_for_pid(
     // returned is guaranteed to land in our queue.
     let iter = MessageIterator::from(conn.clone());
 
+    // Only now ask the toolkits for their events: the match rules and the
+    // iterator are in place, so the first event after registration is heard.
+    for sender_bus in &sender_buses {
+        if let Err(error) = register_events(&conn, sender_bus) {
+            deregister_events(&conn, sender_bus);
+            for rule in &rules {
+                let _ = dbus.remove_match_rule(rule.clone());
+            }
+            return Err(error);
+        }
+    }
+
     let stop = Arc::new(AtomicBool::new(false));
     let stop_for_thread = stop.clone();
     let ctx_for_thread = ctx.clone();
@@ -157,8 +216,12 @@ pub(crate) fn subscribe_for_pid(
     //    thread observe the stop flag.
     // 4. Join the worker thread.
     let cancel_conn = conn.clone();
+    let registered_buses = sender_buses;
     let cancel = CancelHandle::new(move || {
         stop.store(true, Ordering::Relaxed);
+        for sender_bus in &registered_buses {
+            deregister_events(&cancel_conn, sender_bus);
+        }
         if let Ok(dbus) = DBusProxy::new(&cancel_conn) {
             for rule in &rules {
                 let _ = dbus.remove_match_rule(rule.clone());
@@ -774,6 +837,16 @@ fn states_from_bits(bits: u64, role: Role, state_read_ok: bool) -> StateSet {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn every_event_interface_heard_is_registered_with_the_registry() {
+        let classes: Vec<String> = EVENT_INTERFACES
+            .iter()
+            .filter_map(|interface| interface.rsplit('.').next())
+            .map(|class| format!("{}:", class.to_lowercase()))
+            .collect();
+        assert_eq!(classes, REGISTERED_EVENTS);
+    }
 
     #[test]
     fn focus_signal_emits_focus_changed() {
