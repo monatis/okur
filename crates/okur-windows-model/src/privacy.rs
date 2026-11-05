@@ -40,6 +40,23 @@ pub fn unvisited_row_under_mouse(event: &crate::event_trace::TraceEvent) -> bool
         })
 }
 
+/// `event` without the names of the items beside the focus in JAWS's Dictionary Manager
+/// (JDiction.exe): its tree shows the dictionary JAWS ships, which is JAWS's data, not a
+/// fixture's ("paciello=Pah see ello", in the traces of 1154's first run, 2026-11-05). The items
+/// stay, so their number and the focus's place among them are kept, and the focused one keeps
+/// its name: the entry a scenario added.
+pub fn without_shipped_dictionary(event: &mut crate::event_trace::TraceEvent) {
+    const UIA_TREEITEM: i32 = 50024;
+    if event.process.as_deref() != Some("JDiction.exe") {
+        return;
+    }
+    for sibling in &mut event.focus_siblings {
+        if sibling.control_type == UIA_TREEITEM && !sibling.has_keyboard_focus {
+            sibling.name = None;
+        }
+    }
+}
+
 /// What an e-mail address is replaced with.
 pub const ADDRESS_MARK: &str = "<address>";
 
@@ -110,6 +127,51 @@ mod tests {
         );
         let event: Option<crate::event_trace::TraceEvent> = serde_json::from_str(&focused).ok();
         assert_eq!(event.as_ref().map(internet_feed), Some(false));
+    }
+
+    /// In JAWS's Dictionary Manager the tree's items beside the focus lose their names, JAWS's
+    /// own entries; the focused entry, the dialog's other controls and other programs keep
+    /// theirs.
+    #[test]
+    fn jaws_shipped_dictionary_is_left_out() {
+        let node = |control_type: i32, name: &str, focused: bool| {
+            format!(
+                r#"{{"control_type":{control_type},"name":"{name}","is_enabled":true,"is_offscreen":false,"is_password":false,"is_required_for_form":false,"is_keyboard_focusable":true,"has_keyboard_focus":{focused},"is_control_element":true,"is_content_element":true}}"#
+            )
+        };
+        let line = |process: &str| {
+            format!(
+                r#"{{"t_ms":1,"event":"focus","win_event":32773,"hwnd":1,"id_object":-4,"id_child":0,"process":"{process}","focus_siblings":[{},{},{}]}}"#,
+                node(50024, "paciello=Pah see ello", false),
+                node(50024, "total=sum", true),
+                node(50000, "Delete", false)
+            )
+        };
+        let names = |process: &str| {
+            let event: Option<crate::event_trace::TraceEvent> =
+                serde_json::from_str(&line(process)).ok();
+            event
+                .map(|mut event| {
+                    without_shipped_dictionary(&mut event);
+                    event.focus_siblings
+                })
+                .unwrap_or_default()
+                .into_iter()
+                .map(|s| s.name)
+                .collect::<Vec<_>>()
+        };
+        assert_eq!(
+            names("JDiction.exe"),
+            [
+                None,
+                Some("total=sum".to_owned()),
+                Some("Delete".to_owned())
+            ]
+        );
+        assert_eq!(
+            names("notepad.exe").first(),
+            Some(&Some("paciello=Pah see ello".to_owned()))
+        );
     }
 
     /// A list's rows drawn are left out; its focused and selected items stay, as does

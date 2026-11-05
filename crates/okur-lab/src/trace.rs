@@ -32,10 +32,12 @@ pub fn run_trace(
         .map_err(io_err)?;
 
     // A trace goes into the public corpus: no one's e-mail address goes with it.
-    let sink = move |event: TraceEvent| {
+    let sink = move |mut event: TraceEvent| {
         if privacy::internet_feed(&event) || privacy::unvisited_row_under_mouse(&event) {
             return;
         }
+        // Nor JAWS's own dictionary, which its Dictionary Manager shows.
+        privacy::without_shipped_dictionary(&mut event);
         if let Ok(line) = serde_json::to_string(&event) {
             let mut line = privacy::redact_addresses(&line);
             line.push('\n');
