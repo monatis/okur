@@ -68,6 +68,10 @@ pub struct VirtualViewer {
     /// Virtual Viewer: closing it returns to the application's window, which is announced
     /// again [obs, 825/s7].
     own_window: bool,
+    /// In a window of its own, the line the focus comes back to is read first, as it is for
+    /// JAWS's Virtual Viewer, and the window is announced after it: JAWS's layer help ("a
+    /// !... B | SR Editor Fixture | Code edit | ..." [obs, 628/s4]).
+    line_on_close: bool,
 }
 
 /// Word classes: a word is a run of one class.
@@ -112,6 +116,7 @@ impl VirtualViewer {
             on_place: false,
             title: None,
             own_window: false,
+            line_on_close: false,
         };
         viewer.read_line();
         viewer
@@ -151,6 +156,19 @@ impl VirtualViewer {
     pub fn in_own_window(mut self) -> Self {
         self.own_window = true;
         self
+    }
+
+    /// The same viewer, a window of its own that reads the line as it closes (see
+    /// `line_on_close`).
+    pub fn in_own_window_reading_line(mut self) -> Self {
+        self.own_window = true;
+        self.line_on_close = true;
+        self
+    }
+
+    /// Whether closing it reads the line the focus comes back to.
+    pub fn line_on_close(&self) -> bool {
+        self.line_on_close || !self.own_window
     }
 
     /// Whether closing it returns to the application's window, announced again.

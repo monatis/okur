@@ -231,7 +231,9 @@ impl ScreenReaderEngine {
         lines.extend(LAYER_KEYS.iter().map(|words| words().to_string()));
         lines.push(String::new());
         lines.push(msg::viewer_close_hint().to_string());
-        self.viewer = Some(VirtualViewer::new(lines));
+        // JAWS's layer help is a window of its own (its Results Viewer's "Basic Layer Help
+        // Screen") [obs, 628/s2, s4].
+        self.viewer = Some(VirtualViewer::new(lines).in_own_window_reading_line());
         self.show_viewer_window();
     }
 }

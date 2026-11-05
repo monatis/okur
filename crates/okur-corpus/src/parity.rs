@@ -508,6 +508,9 @@ fn replay_scenario(
             None if step.step_type == "key_ui_access" => ("key", step.command.as_str()),
             None => (step.step_type.as_str(), step.command.as_str()),
         };
+        // Okur's viewer open as the step began: the step's key can close it before JAWS's
+        // Results Viewer reports its last focus (Escape [obs, 628/s4]).
+        let viewer_before = engine.viewer_open();
         let engine_speech = match step_type {
             "key" | "key_down" | "key_up" | "text" | "mouse" => {
                 match step_type {
@@ -588,6 +591,13 @@ fn replay_scenario(
                 // Replay the OS events recorded while JAWS handled this step (e.g. the focus
                 // change that follows Tab), exactly as the live listener would deliver them.
                 for event in replay.for_step(&step.id) {
+                    // JAWS's Results Viewer stands for Okur's own viewer while Okur has one
+                    // open, which Okur speaks itself (as the Results Viewer's own events,
+                    // `replayable`); where Okur has none open, its page is the only focus the
+                    // trace has after JAWS's dialog closed into it [obs, 763/s23].
+                    if (viewer_before || engine.viewer_open()) && replay.in_viewer_window(&event) {
+                        continue;
+                    }
                     // What waits on time alone and fell due before this event came first
                     // live (forms mode after Navigation Quick Key Delay, then the browser's
                     // focus on the field [obs, 1144/s1]).
@@ -1211,6 +1221,32 @@ fn hand_back(
 /// Tab that moved it.
 pub const TICK_MS: u128 = 16;
 
+/// The windows of JAWS's Results Viewer in a trace, by UI Automation's runtime ids for them.
+type ViewerWindows = std::collections::HashSet<Vec<i32>>;
+
+/// UI Automation's runtime id for a window's own element: 42, then the window's handle.
+const WINDOW_RUNTIME_ID: i32 = 42;
+
+/// The runtime id of the element an event's focus chain starts at.
+fn top_window(event: &TraceEvent) -> Option<&Vec<i32>> {
+    event.focus_chain.first()?.runtime_id.as_ref()
+}
+
+/// The dialog windows JAWS's Results Viewer reported its own events in ("Basic Layer Help
+/// Screen" [obs, 628/s2]), by their own handles: a focus event of the viewer can carry another
+/// window's chain (Chrome's page, the focus not yet moved [obs, 769/s3]).
+fn viewer_windows(events: &[TraceEvent]) -> ViewerWindows {
+    events
+        .iter()
+        .filter(|e| {
+            e.process.as_deref() == Some("ResultsViewer.exe")
+                && e.window_class.as_deref() == Some("#32770")
+        })
+        .filter_map(|e| i32::try_from(e.hwnd).ok())
+        .map(|hwnd| vec![WINDOW_RUNTIME_ID, hwnd])
+        .collect()
+}
+
 /// Events the engine consumes: focus changes (with a UIA chain or an MSAA object) and menu
 /// mode transitions.
 fn replayable(event: &TraceEvent) -> bool {
@@ -1329,6 +1365,8 @@ struct StepEvents {
     /// The reference machine's screen, its width and height, where the trace's header gives
     /// it: where a mouse Okur sends lands.
     screen: Option<(i32, i32)>,
+    /// The windows of JAWS's Results Viewer the trace saw.
+    viewer_windows: ViewerWindows,
 }
 
 /// Okur settings recorded scenarios name that Okur no longer has: what they turned on is how
@@ -1825,6 +1863,7 @@ impl StepEvents {
         };
         let trace_path = corpus_dir.join("traces").join(trace_file);
         let (header, events) = okur_windows_model::event_trace::read_trace(&trace_path)?;
+        let viewer_windows = viewer_windows(&events);
         let mut by_step = std::collections::HashMap::new();
         let mut starts = std::collections::HashMap::new();
         let mut ends = std::collections::HashMap::new();
@@ -1936,7 +1975,15 @@ impl StepEvents {
             clipboards,
             screens,
             screen: header.screen.map(|[width, height]| (width, height)),
+            viewer_windows,
         })
+    }
+
+    /// Whether `event` is inside one of JAWS's Results Viewer windows: its page, a web view,
+    /// reports from a process of its own (msedgewebview2.exe) there ("Basic Layer Help Screen"
+    /// [obs, 628/s2]).
+    fn in_viewer_window(&self, event: &TraceEvent) -> bool {
+        top_window(event).is_some_and(|id| self.viewer_windows.contains(id))
     }
 
     /// The window's text after step `step_id`, when the scenario traced it.

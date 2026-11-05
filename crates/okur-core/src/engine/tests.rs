@@ -9915,3 +9915,47 @@ fn the_layer_help_opens_silently_at_its_top() {
     press(&mut engine, Key::Escape, Modifiers::none());
     assert!(engine.viewer.is_none());
 }
+
+/// The layer's help is a window of its own, as JAWS's Results Viewer is: Escape reads the line
+/// the focus comes back to, then the window is named as the focus returns to it, "a !... B |
+/// SR Editor Fixture | Code edit | ..." [obs, 628/s4].
+#[test]
+fn closing_the_layer_help_reads_the_line_then_the_window() {
+    let speech = GatedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document))),
+        Box::new(speech.clone()),
+    );
+    echo_off(&mut engine);
+    let mut field = FocusEvent::new(Role::Edit).with_name("Code");
+    field.window_title = Some("SR Editor Fixture".to_owned());
+    field.multi_line = true;
+    field.text = Some(crate::event::TextContext {
+        text: "First line\r\nSecond line".to_owned(),
+        caret: 0,
+        selection: None,
+        font: None,
+        word: None,
+        misspelled: Vec::new(),
+        structure: None,
+    });
+    engine.handle_focus_event(&field);
+    GatedSpeech::take(&speech.history);
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    let shift = Modifiers {
+        shift: true,
+        ..Modifiers::none()
+    };
+    for (key, modifiers) in [(Key::Space, insert), (Key::Slash, shift)] {
+        engine.handle_key_event(&KeyEvent::new(key, modifiers, true));
+    }
+    GatedSpeech::take(&speech.history);
+    engine.handle_key_event(&KeyEvent::new(Key::Escape, Modifiers::none(), true));
+    assert_eq!(GatedSpeech::take(&speech.history).join("\n"), "First line");
+    engine.handle_focus_event(&field);
+    let back = GatedSpeech::take(&speech.history).join("\n");
+    assert!(back.starts_with("SR Editor Fixture"), "{back}");
+}

@@ -31,6 +31,9 @@ fn plain(label: &str) -> String {
     )
 }
 
+/// The program Okur's windows are in, as the platform names it.
+const OKUR_UI: &str = "okur-ui.exe";
+
 #[derive(Debug, Default)]
 pub struct DialogMirror {
     dialog: Option<DialogSpec>,
@@ -218,8 +221,20 @@ impl DialogMirror {
             return;
         };
         let title = focus.window_title.as_deref().unwrap_or_default();
-        if crate::parity::in_okurs_name(title) != title && plain(title) == plain(&dialog.title) {
+        let ours = plain(title) == plain(&dialog.title);
+        if crate::parity::in_okurs_name(title) != title && ours {
             focus.window_title = Some(dialog.title.clone());
+        }
+        // Okur's dialog is a window of okur-ui's, drawn with the system's controls, where JAWS's
+        // can be a page in a web view (Search for JAWS Commands, in msedgewebview2.exe [obs,
+        // 628/s6]): the focus in it is in Okur's own windows, and on no page, so typing goes to
+        // its field rather than to a page's quick keys.
+        if ours {
+            focus.app = Some(OKUR_UI.to_owned());
+            focus.in_document = false;
+            focus.dom_id = None;
+            focus.unique_id = None;
+            focus.web_application = None;
         }
         let unnamed = focus
             .container_name
@@ -695,6 +710,43 @@ fn is_tab_stop(control: &Control) -> bool {
 mod tests {
     use super::*;
     use okur_core::ui::UiHost;
+
+    /// JAWS's Search for JAWS Commands is a page in a web view; Okur's dialog of the same
+    /// title is a window of okur-ui's with the system's controls: its focus is on no page, so
+    /// that a letter typed goes to its field and not to a page's quick keys [obs, 628/s7].
+    #[test]
+    fn a_jaws_dialog_in_a_web_view_stands_for_okurs_native_one() {
+        let host = RecordingUiHost::default();
+        let mut mirror = DialogMirror::default();
+        host.send(ToUi::DialogShow {
+            dialog: DialogSpec {
+                id: 3,
+                title: "Search for Okur Commands".to_owned(),
+                controls: Vec::new(),
+                keys: Vec::new(),
+            },
+        });
+        mirror.sync(&host);
+        let mut focus = FocusEvent::new(Role::Edit).with_name("Search for:");
+        focus.window_title = Some("Search for JAWS Commands".to_owned());
+        focus.app = Some("msedgewebview2.exe".to_owned());
+        focus.in_document = true;
+        focus.dom_id = Some("query".to_owned());
+        mirror.as_okur_window(&mut focus);
+        assert_eq!(
+            focus.window_title.as_deref(),
+            Some("Search for Okur Commands")
+        );
+        assert_eq!(focus.app.as_deref(), Some(OKUR_UI));
+        assert!(!focus.in_document);
+        assert_eq!(focus.dom_id, None);
+        // A page's focus elsewhere is the page's.
+        let mut page = FocusEvent::new(Role::Button).with_name("Home");
+        page.window_title = Some("News - Google Chrome".to_owned());
+        page.in_document = true;
+        mirror.as_okur_window(&mut page);
+        assert!(page.in_document);
+    }
 
     /// JAWS's dialog, traced, stands for Okur's of the same title in Okur's name: "JAWS Find"
     /// taking the focus after Okur's "Okur Find" closed is that dialog going away.

@@ -859,6 +859,11 @@ impl ScreenReaderEngine {
     /// the engine marks them first ([`ReadingMarks::mark`]): a page captured again came
     /// without them, and was copied and built again under the engine for every refresh
     /// (performance review 2026-10-23, C2).
+    /// Whether the Virtual Viewer is open (its own window, or over the application).
+    pub fn viewer_open(&self) -> bool {
+        self.viewer.is_some()
+    }
+
     pub fn reading_marks(&self) -> ReadingMarks {
         use crate::settings::HeadingIndication;
         let on = |on: bool| on.then(|| "true".to_owned());
@@ -1300,17 +1305,21 @@ impl ScreenReaderEngine {
                     return KeyAction::Consume;
                 }
                 ViewerAction::Close => {
-                    let own_window = self.viewer.as_ref().is_some_and(|v| v.own_window());
+                    let (own_window, line) = self
+                        .viewer
+                        .as_ref()
+                        .map_or((false, true), |v| (v.own_window(), v.line_on_close()));
                     self.viewer = None;
                     self.close_viewer_window();
+                    if line {
+                        self.speak_focus_again();
+                    }
                     if own_window {
                         // The application's window, as the focus comes back to it, is
                         // announced again: "sr-notepad-fixture.txt - Notepad | edit | Type in
                         // text." [obs, 825/s7].
                         self.last_window_title = None;
                         self.native_focus.reset();
-                    } else {
-                        self.speak_focus_again();
                     }
                     return KeyAction::Consume;
                 }
