@@ -1793,6 +1793,7 @@ pub(crate) fn format_event_kind(kind: &EventKind) -> &'static str {
         EventKind::MenuClosed => "menu_closed",
         EventKind::TextChanged => "text_changed",
         EventKind::Announcement => "announcement",
+        EventKind::DocumentLoaded => "document_loaded",
         // `EventKind` is `#[non_exhaustive]`. A kind this build predates is
         // still worth printing as a line — the CLI is a debugging tool, and
         // dropping the event entirely would be worse than naming it vaguely.
@@ -1837,6 +1838,7 @@ pub(crate) fn event_kind_names() -> &'static [&'static str] {
         EventKind::MenuClosed,
         EventKind::TextChanged,
         EventKind::Announcement,
+        EventKind::DocumentLoaded,
     ];
     static NAMES: std::sync::LazyLock<Vec<&'static str>> =
         std::sync::LazyLock::new(|| KNOWN.iter().map(format_event_kind).collect());

@@ -111,6 +111,14 @@ pub enum EventKind {
     /// - Linux: Object:Announcement.
     /// - Windows: UIA_NotificationEventId and UIA_LiveRegionChangedEventId.
     Announcement,
+
+    /// A document finished loading: a web page, first or reloaded.
+    /// Target: the document.
+    ///
+    /// - Linux: Document:LoadComplete.
+    /// - macOS and Windows: not mapped yet (AXLoadComplete; IA2's document
+    ///   load complete event).
+    DocumentLoaded,
 }
 
 /// Individual state flags used in [`EventKind::StateChanged`].

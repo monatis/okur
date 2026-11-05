@@ -48,6 +48,20 @@ fn document_of(provider: &LinuxProvider, element: &ElementData) -> Option<Elemen
     }
 }
 
+/// Whether `document` is a page in view: a document shown, not a frame's inside another page
+/// (each frame's document loads too), nor a hidden tab's.
+fn shown_page(provider: &LinuxProvider, document: &ElementData) -> bool {
+    use xa11y_core::Provider;
+    document.role == Role::WebArea
+        && document.states.visible
+        && provider
+            .get_parent(document)
+            .ok()
+            .flatten()
+            .and_then(|parent| provider.atspi_ancestor(&parent, "document web", PAGE_DEPTH))
+            .is_none()
+}
+
 /// The page the focus is in, read whole, as the engine takes a page: when the focus lands on a
 /// page's document (Chrome gives it when a page loads and when Tab comes back to it), and when
 /// it lands inside a page other than the one read last (a link of a page newly in front).
@@ -146,7 +160,18 @@ impl EventSource for AtspiEventSource {
                             let loaded = document
                                 .as_ref()
                                 .and_then(|(e, d)| page(&provider, e, d, &mut last_page));
-                            if let Some(loaded) = loaded {
+                            // A page that finished loading, a reload's too, is read again:
+                            // the engine takes the page it already has as a refresh, and as
+                            // a new load after F5 or Ctrl+R (the lab's live run of 712).
+                            let reloaded = event
+                                .target
+                                .as_ref()
+                                .filter(|d| {
+                                    event.kind == EventKind::DocumentLoaded
+                                        && shown_page(&provider, d)
+                                })
+                                .and_then(|d| page(&provider, d, d, &mut last_page));
+                            for loaded in loaded.into_iter().chain(reloaded) {
                                 if !sink.send(loaded) {
                                     return;
                                 }

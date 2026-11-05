@@ -8,7 +8,7 @@
 //!   Announcement, BoundsChanged, VisibleDataChanged, etc.
 //! - `org.a11y.atspi.Event.Window` — Create/Destroy/Activate/Deactivate/…
 //! - `org.a11y.atspi.Event.Focus` — Focus
-//! - `org.a11y.atspi.Event.Document` — LoadComplete (not currently modelled)
+//! - `org.a11y.atspi.Event.Document` — LoadComplete
 //!
 //! Each signal body follows the AT-SPI2 standard signature `(siiva{sv})`:
 //! `(detail_kind, detail1, detail2, any_data, properties)`. The source
@@ -568,6 +568,9 @@ pub(crate) fn signal_to_kinds(
         }
 
         ("org.a11y.atspi.Event.Object", "Announcement") => vec![EventKind::Announcement],
+
+        // Document.LoadComplete — a page loaded, its reloads too.
+        ("org.a11y.atspi.Event.Document", "LoadComplete") => vec![EventKind::DocumentLoaded],
 
         // BoundsChanged / VisibleDataChanged / AttributesChanged — no cross
         // platform EventKind; skip.
@@ -1245,6 +1248,18 @@ mod tests {
     fn announcement_maps_to_announcement() {
         let kinds = signal_to_kinds("org.a11y.atspi.Event.Object", "Announcement", "", 0, None);
         assert_eq!(kinds, vec![EventKind::Announcement]);
+    }
+
+    #[test]
+    fn a_documents_load_complete_is_document_loaded() {
+        let kinds = signal_to_kinds(
+            "org.a11y.atspi.Event.Document",
+            "LoadComplete",
+            "",
+            0,
+            Some(Role::WebArea),
+        );
+        assert_eq!(kinds, vec![EventKind::DocumentLoaded]);
     }
 
     #[test]
