@@ -287,6 +287,14 @@ mod tests {
                 ]
             ))
         );
+        // A page's value, its address, and Say Window's copy of the dialog go too.
+        let page = r#"{"t_ms":1,"event":"focus","win_event":32773,"hwnd":1,"id_object":-4,"id_child":0,"process":"msedgewebview2.exe","object":{"role":15,"name":"Search for JAWS Commands","value":"file:///C:/Program%20Files/JAWS/serve.html?directoriesJson={}","states":0},"dialog_lines":["Search for:","serve.html?appName=x"]}"#;
+        let event: Option<crate::event_trace::TraceEvent> = serde_json::from_str(page).ok();
+        let cleaned = event.map(|mut event| {
+            without_jaws_help_text(&mut event);
+            (event.object.and_then(|o| o.value), event.dialog_lines)
+        });
+        assert_eq!(cleaned, Some((None, vec!["Search for:".to_owned()])));
     }
 
     /// A list's rows drawn are left out; its focused and selected items stay, as does
