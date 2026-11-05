@@ -1,0 +1,47 @@
+{
+  "id": "1155-desktop-notepad-application-dictionary",
+  "name": "JAWS's Dictionary Manager in Notepad, the application's own dictionary: Insert+D with the caret on \"total\", Enter on New Dictionary (notepad.JDF), Alt+A, the Actual Word replaced by the root \"tot*\" and \"sum\" as its replacement (typed by JAWS's TypeString), OK, Ctrl+S, Alt+F4; the line, the next and back; Insert+D again (the application's dictionary now), T to the rule, Change... opened and cancelled, Delete, Yes, Ctrl+S, Alt+F4, and the line again",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s3", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s4", "type": "key", "command": "Insert+D"},
+    {"id": "s5", "type": "key_ui_access", "command": "Enter"},
+    {"id": "s6", "type": "key_ui_access", "command": "Alt+A"},
+    {"id": "s7", "type": "key_ui_access", "command": "Home"},
+    {"id": "s8", "type": "key_ui_access", "command": "Shift+End"},
+    {"id": "s9", "type": "jaws_function", "command": "TypeString(\"tot*\")"},
+    {"id": "s10", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s11", "type": "jaws_function", "command": "TypeString(\"sum\")"},
+    {"id": "s12", "type": "key_ui_access", "command": "Enter"},
+    {"id": "s13", "type": "key_ui_access", "command": "Ctrl+S"},
+    {"id": "s14", "type": "key_ui_access", "command": "Alt+F4"},
+    {"id": "s15", "type": "key", "command": "Insert+Up"},
+    {"id": "s16", "type": "key", "command": "Down"},
+    {"id": "s17", "type": "key", "command": "Up"},
+    {"id": "s18", "type": "key", "command": "Insert+D"},
+    {"id": "s19", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s20", "type": "key_ui_access", "command": "T"},
+    {"id": "s21", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s22", "type": "key_ui_access", "command": "Space"},
+    {"id": "s23", "type": "key_ui_access", "command": "Escape"},
+    {"id": "s24", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s25", "type": "key_ui_access", "command": "Space"},
+    {"id": "s26", "type": "key_ui_access", "command": "Space"},
+    {"id": "s27", "type": "key_ui_access", "command": "Ctrl+S"},
+    {"id": "s28", "type": "key_ui_access", "command": "Alt+F4"},
+    {"id": "s29", "type": "key", "command": "Insert+Up"}
+  ]
+}
