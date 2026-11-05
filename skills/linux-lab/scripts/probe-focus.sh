@@ -14,9 +14,10 @@ X=./target/debug/examples/atspi_focus
 gtk4-widget-factory > "$out/gtk.log" 2>&1 &
 gtk=$!
 sleep 6
-"$X" 12 > "$out/gtk-focus" 2>&1 &
+"$X" 14 > "$out/gtk-focus" 2>&1 &
 source=$!
-sleep 2
+# The source registers for every application; GTK takes the registration a moment later.
+sleep 4
 for _ in $(seq 6); do xdotool key Tab; sleep 0.8; done
 wait "$source"
 kill "$gtk" 2>/dev/null

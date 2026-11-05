@@ -8,6 +8,10 @@ fn main() {
     use okur_core::input::{Key, KeyAction};
     use okur_runtime::hook::KeyboardHook;
 
+    tracing_subscriber::fmt()
+        .with_env_filter(tracing_subscriber::EnvFilter::new("okur_linux=trace"))
+        .with_writer(std::io::stderr)
+        .init();
     let seconds = std::env::args()
         .nth(1)
         .and_then(|s| s.parse().ok())

@@ -8,6 +8,11 @@
 async fn main() {
     use okur_runtime::host::{self, Config, ExitReason, Exits, Platform};
 
+    // RUST_LOG, as the runtime's programs take it (okur_core=debug for the engine's choices).
+    tracing_subscriber::fmt()
+        .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
+        .with_writer(std::io::stderr)
+        .init();
     let args: Vec<String> = std::env::args().skip(1).collect();
     let seconds = args.iter().find_map(|a| a.parse().ok()).unwrap_or(20u64);
     let mut settings = okur_core::settings::Settings::default();

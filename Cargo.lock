@@ -986,6 +986,7 @@ dependencies = [
  "okur-runtime",
  "tokio",
  "tracing",
+ "tracing-subscriber",
  "x11rb",
  "xa11y-core",
  "xa11y-linux",

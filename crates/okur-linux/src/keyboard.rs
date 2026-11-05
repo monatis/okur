@@ -230,9 +230,17 @@ impl KeyboardHook for X11KeyboardHook {
             .reply()
             .map_err(|e| hook_error("windows", e))?
             .children;
+        let mut grabbed = 0;
         for window in tops.into_iter().filter(|w| *w != wake) {
             grab_window(&conn, &keymap, keyboard, window, &sets);
+            grabbed += 1;
         }
+        tracing::debug!(
+            windows = grabbed,
+            keys = keymap.codes().count(),
+            keyboard,
+            "keyboard: every key grabbed on the top-level windows"
+        );
         conn.flush().map_err(|e| hook_error("flush", e))?;
 
         let stop = Arc::new(AtomicBool::new(false));
@@ -365,7 +373,11 @@ struct Run<'a> {
 impl Run<'_> {
     fn events(&mut self, stop: &AtomicBool) {
         while !stop.load(Ordering::SeqCst) {
-            match self.conn.wait_for_event() {
+            let event = self.conn.wait_for_event();
+            if let Ok(event) = &event {
+                tracing::trace!(?event, "keyboard: X event");
+            }
+            match event {
                 Ok(Event::XinputKeyPress(event)) => self.grabbed(&event),
                 Ok(Event::XinputRawKeyPress(event)) => self.raw(&event, true),
                 Ok(Event::XinputRawKeyRelease(event)) => self.raw(&event, false),
@@ -383,6 +395,9 @@ impl Run<'_> {
                     if let Ok(keymap) = Keymap::read(self.conn) {
                         self.keymap = keymap;
                     }
+                }
+                Ok(Event::Error(error)) => {
+                    tracing::debug!(?error, "keyboard: an X request failed");
                 }
                 Ok(_) => {}
                 Err(error) => {

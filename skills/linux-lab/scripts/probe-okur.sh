@@ -13,7 +13,7 @@ out=$(mktemp -d)
 gtk4-widget-factory > "$out/gtk.log" 2>&1 &
 gtk=$!
 sleep 6
-./target/debug/examples/okur_linux --no-speech 20 > "$out/okur" 2>&1 &
+RUST_LOG=okur_core=debug,okur_linux=debug ./target/debug/examples/okur_linux --no-speech 20 > "$out/okur" 2>&1 &
 okur=$!
 sleep 6
 for _ in $(seq 4); do xdotool key Tab; sleep 1; done
