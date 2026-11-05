@@ -7,6 +7,7 @@ fn main() {
     use x11rb::connection::Connection;
     use x11rb::protocol::ge::ConnectionExt as _;
     use x11rb::protocol::xinput::{self, ConnectionExt as _};
+    use x11rb::protocol::xproto::ConnectionExt as _;
 
     let seconds = std::env::args()
         .nth(1)
@@ -35,6 +36,44 @@ fn main() {
         )
         .map(|c| c.check());
     println!("selected: {selected:?}");
+    // `grab`: every keycode on every top-level window, synchronously, as the hook grabs, each
+    // reply read (`grab-dropped`: the replies dropped, as the hook drops them).
+    let mode = std::env::args().nth(2).unwrap_or_default();
+    if mode.starts_with("grab") {
+        let tops = conn
+            .query_tree(root)
+            .ok()
+            .and_then(|c| c.reply().ok())
+            .map(|r| r.children)
+            .unwrap_or_default();
+        let mut failed = 0;
+        for window in &tops {
+            for code in 8u32..=255 {
+                let cookie = conn.xinput_xi_passive_grab_device(
+                    x11rb::CURRENT_TIME,
+                    *window,
+                    x11rb::NONE,
+                    code,
+                    3u16,
+                    xinput::GrabType::KEYCODE,
+                    xinput::GrabMode22::SYNC,
+                    x11rb::protocol::xproto::GrabMode::ASYNC,
+                    xinput::GrabOwner::NO_OWNER,
+                    &[u32::from(
+                        xinput::XIEventMask::KEY_PRESS | xinput::XIEventMask::KEY_RELEASE,
+                    )],
+                    &[0, 1],
+                );
+                if mode == "grab" {
+                    if let Ok(Err(_)) = cookie.map(|c| c.reply()) {
+                        failed += 1;
+                    }
+                }
+            }
+        }
+        let _ = conn.flush();
+        println!("grabbed {} windows ({mode}), failed {failed}", tops.len());
+    }
     let until = std::time::Instant::now() + std::time::Duration::from_secs(seconds);
     while std::time::Instant::now() < until {
         match conn.poll_for_event() {
