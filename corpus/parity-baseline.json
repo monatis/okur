@@ -1,8 +1,8 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
   "matched_steps": 12019,
-  "total_steps": 12595,
-  "accepted_divergences": 384,
+  "total_steps": 12594,
+  "accepted_divergences": 385,
   "errors": [],
   "steps": {
     "01-doc-say-all/s1": "mismatch",
@@ -8617,7 +8617,7 @@
     "628-desktop-layer-help-and-command-search/s11": "match",
     "628-desktop-layer-help-and-command-search/s12": "match",
     "628-desktop-layer-help-and-command-search/s2": "match",
-    "628-desktop-layer-help-and-command-search/s3": "mismatch",
+    "628-desktop-layer-help-and-command-search/s3": "accepted divergence",
     "628-desktop-layer-help-and-command-search/s4": "mismatch",
     "628-desktop-layer-help-and-command-search/s5": "match",
     "628-desktop-layer-help-and-command-search/s6": "mismatch",

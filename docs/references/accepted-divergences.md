@@ -250,7 +250,8 @@ A step can be in more than one entry; all of its entries apply.
   `642-desktop-keyboard-help-second-press/s2`, `642-desktop-keyboard-help-second-press/s3`,
   `642-desktop-keyboard-help-second-press/s4`, `642-desktop-keyboard-help-second-press/s5`,
   `642-desktop-keyboard-help-second-press/s6`) (steps of JAWS's speech alone: Keyboard Help
-  describes the capture's history scripts instead of running them).
+  describes the capture's history scripts instead of running them); and the Insert+Space layer's
+  help, `628-desktop-layer-help-and-command-search/s3` (its second line, read by Down).
 - Difference: the whole step: the help's words.
 - Why: JAWS's help texts (screen-sensitive help, Insert+F1; hot key help, Insert+H; Windows
   keys help, Insert+W) are Freedom Scientific's writing. Okur's help keys open the Virtual
