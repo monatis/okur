@@ -58,7 +58,7 @@ const NETUI_RIBBON_TABS_CLASS: &str = "NetUIPanViewer";
 const WINDOWS_RIBBON_PANE_CLASS: &str = "UIRibbonWorkPane";
 
 /// Bumped whenever the recorded fields or their meaning change.
-pub const TRACE_FORMAT_VERSION: u32 = 11;
+pub const TRACE_FORMAT_VERSION: u32 = 12;
 
 /// Foreground windows while focus moves only through UIA: no WinEvent reports it. The task
 /// switcher (Alt+Tab) focuses each window's item as Tab is pressed with Alt held (the same
@@ -111,6 +111,11 @@ pub struct TraceObject {
     /// access key here only ("Alt+r" in Notepad's Font dialog) [obs, 541/s8].
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub shortcut: Option<String>,
+    /// For the caret (`OBJID_CARET`): where it is on the screen, left, top, right and bottom
+    /// (`accLocation`), where JAWS's route to the PC cursor may send its mouse in a field
+    /// ("594, 507" in a WPF one, 1152/s3). Recorded from trace format 12.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub location: Option<[i32; 4]>,
 }
 
 /// What Office's own UI Automation element says of a NetUI control beside its MSAA object:
@@ -343,6 +348,10 @@ pub struct TraceHeader {
     pub tool_version: String,
     pub host: String,
     pub started_unix_ms: u128,
+    /// The primary screen's width and height in pixels, over which an absolute mouse move's
+    /// coordinates go (where JAWS's mouse lands, 1152). Traces before format 12 lack it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub screen: Option<[i32; 2]>,
 }
 
 /// Reads a trace file: the header line, then one event per line (malformed lines skipped).

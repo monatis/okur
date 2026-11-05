@@ -122,6 +122,7 @@ mod tests {
             value: None,
             states,
             shortcut: None,
+            location: None,
         };
         // Selectable, focusable, collapsed (Settings' apps as the page opens).
         assert!(unvisited_list_item(&item(0x22, 0x0030_0400)));

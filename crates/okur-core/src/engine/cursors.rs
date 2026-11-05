@@ -495,10 +495,25 @@ impl ScreenReaderEngine {
         let Some(OkurPlace::Text { line, column }) = self.okur_place else {
             return;
         };
-        // On the screen model's character, where it is drawn.
+        // On the screen model's character, where it is drawn; the Scan Cursor's on its
+        // element's middle, where the mouse lands as an absolute move puts it, and stays there
+        // as Right goes along its characters ("781, 534" after two [obs, 1152/s17-s20]).
+        // The JAWS cursor's character places were measured where its mouse landed (752-754).
         if let Some(lines) = self.okur_screen_lines() {
-            let point = lines.get(line).and_then(|l| l.point(column.unwrap_or(0)));
+            let scans = self.okur_scans();
+            let point = lines.get(line).and_then(|l| {
+                if scans {
+                    l.middle()
+                } else {
+                    l.point(column.unwrap_or(0))
+                }
+            });
             if let (Some((x, y)), Some(actions)) = (point, &self.actions) {
+                let (x, y) = if scans {
+                    actions.mouse_landing(x, y)
+                } else {
+                    (x, y)
+                };
                 if actions.move_mouse(x, y) {
                     self.mouse = Some((x, y));
                     self.note_own_mouse_move();
@@ -658,6 +673,18 @@ impl ScreenReaderEngine {
         self.okur_place = Some(OkurPlace::Text { line, column: next });
         if let Some(c) = next.and_then(|c| text.get(c)) {
             self.speech.speak_character(&c.to_string(), true);
+            // The Scan Cursor names the element its character is in, a control's: "o ‹Edit›"
+            // in "Focus here" [obs, 1152/s18, s19]; a text's character is itself ("i" [obs,
+            // 1002/s13]).
+            if self.okur_scans() {
+                let role = self
+                    .okur_screen_lines()
+                    .and_then(|lines| lines.get(line).and_then(|l| l.role));
+                if let Some(role) = role {
+                    self.speech
+                        .speak(crate::linearize::role_marker(role).trim(), false);
+                }
+            }
         }
     }
 

@@ -1394,7 +1394,26 @@ mod windows_actions {
             // SAFETY: plain Win32 call; it only moves the pointer.
             unsafe { SetCursorPos(x, y) }.is_ok()
         }
+
+        fn mouse_landing(&self, x: i32, y: i32) -> (i32, i32) {
+            match crate::actions::primary_screen_size() {
+                Some((width, height)) => (
+                    okur_core::actions::normalized_landing(x, width),
+                    okur_core::actions::normalized_landing(y, height),
+                ),
+                None => (x, y),
+            }
+        }
     }
+}
+
+/// The primary screen's width and height in pixels, over which an absolute mouse move's
+/// coordinates go; `None` when Windows gives none.
+pub fn primary_screen_size() -> Option<(i32, i32)> {
+    use windows::Win32::UI::WindowsAndMessaging::{GetSystemMetrics, SM_CXSCREEN, SM_CYSCREEN};
+    // SAFETY: plain metric queries.
+    let (width, height) = unsafe { (GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)) };
+    (width > 0 && height > 0).then_some((width, height))
 }
 
 /// The active cell of Excel's window in front and `cells` around it, read right away on the

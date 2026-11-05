@@ -865,9 +865,21 @@ fn msaa_object(hwnd: HWND, id_object: i32, id_child: i32) -> Option<TraceObject>
                 .ok()
                 .map(|b| b.to_string())
                 .filter(|s| !s.trim().is_empty()),
+            // The caret's place alone: other objects' places are not traced.
+            location: (id_object == OBJID_CARET_ID)
+                .then(|| {
+                    let (mut x, mut y, mut w, mut h) = (0, 0, 0, 0);
+                    acc.accLocation(&mut x, &mut y, &mut w, &mut h, &child)
+                        .ok()
+                        .map(|()| [x, y, x.saturating_add(w), y.saturating_add(h)])
+                })
+                .flatten(),
         })
     }
 }
+
+/// `OBJID_CARET`, the caret's object in a window.
+const OBJID_CARET_ID: i32 = -8;
 
 /// The window class of NetUI, the ribbon's framework (WordPad's, Paint's, Office's).
 const NETUI_WINDOW: &str = "NetUIHWND";

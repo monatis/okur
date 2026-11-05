@@ -497,6 +497,7 @@ fn an_editable_combo_boxs_focus_given_to_its_edit_is_the_edits() {
         value: Some("C:".to_owned()),
         states: 0x0010_0400,
         shortcut: None,
+        location: None,
     });
     // UI Automation still gives the combo box: its edit's focus follows [obs, 3159/s6].
     event.focus_chain = vec![node(UIA_WINDOW, "Run", false), combo.clone()];
@@ -522,6 +523,7 @@ fn a_focus_that_moved_on_before_its_read_is_not_said() {
         value: None,
         states: 0x0010_0000,
         shortcut: None,
+        location: None,
     });
     passed.focus_elsewhere = true;
     assert!(EventConverter::default().convert(&passed).is_empty());
@@ -790,6 +792,7 @@ fn a_page_menu_item_keeps_its_place() {
         value: None,
         states: 0,
         shortcut: None,
+        location: None,
     });
     event.focus_chain = vec![
         node(UIA_DOCUMENT, "Untitled document - Google Docs", false),
@@ -809,6 +812,7 @@ fn an_access_key_comes_from_msaa_when_uia_has_none() {
         value: None,
         states: 0,
         shortcut: Some("Alt+r".to_owned()),
+        location: None,
     });
     assert_eq!(
         focus_event_from_trace(&event).and_then(|f| f.access_key),
@@ -1052,6 +1056,7 @@ fn a_command_bars_button_is_read_from_msaa() {
             value: None,
             states,
             shortcut: Some("x".to_owned()),
+            location: None,
         })
     };
     let button = TraceEvent {
@@ -1096,6 +1101,7 @@ fn a_lower_ribbon_command_names_its_groups() {
             value: Some("Paste (Ctrl+V)".to_owned()),
             states: 0x10_0004,
             shortcut: None,
+            location: None,
         }),
         focus_chain: vec![
             node(UIA_WINDOW, "WordPad", false),
@@ -1156,6 +1162,7 @@ fn a_word_ribbon_command_has_its_tip_toggle_and_kind() {
             value: None,
             states: 0x10_0004,
             shortcut: None,
+            location: None,
         }),
         focus_chain: vec![node(UIA_WINDOW, "sr-word-fixture.docx - Word", false)],
         netui_control: control,
@@ -1233,6 +1240,7 @@ fn a_ribbon_gallerys_item_is_a_list_item_with_its_place() {
             value: None,
             states: 0x30_0000,
             shortcut: None,
+            location: None,
         }),
         focus_chain: vec![node(UIA_WINDOW, "sr-word-fixture.docx - Word", false)],
         msaa_siblings: vec![
@@ -1335,6 +1343,7 @@ fn the_ribbon_taking_the_focus_back_is_on_its_menus() {
             value: Some("Ribbon".to_owned()),
             states: 0,
             shortcut: None,
+            location: None,
         }),
         focus_chain: vec![
             node(UIA_WINDOW, "sr-word-fixture.docx - Word", false),
@@ -1396,6 +1405,7 @@ fn a_word_ribbon_command_is_one_focus() {
             value: None,
             states: 0x10_0005,
             shortcut: None,
+            location: None,
         }),
         focus_chain: vec![
             node(UIA_WINDOW, "sr-word-fixture.docx - Word", false),
@@ -1472,6 +1482,7 @@ fn alt_on_a_ribbon_focuses_its_selected_tab() {
             value: Some("Ribbon".to_owned()),
             states: 0,
             shortcut: None,
+            location: None,
         }),
         focus_chain: vec![
             node(UIA_WINDOW, "sr-wordpad-fixture.rtf - WordPad", false),
@@ -1791,6 +1802,7 @@ fn a_change_of_the_control_focused_inside_a_window_is_passed_on() {
             value: None,
             states: 0,
             shortcut: None,
+            location: None,
         })
     };
     let solutions = UiaNode {
@@ -1883,6 +1895,7 @@ fn a_change_read_after_the_focus_moved_on_is_the_focused_controls() {
             value: Some("Northside".to_owned()),
             states,
             shortcut: None,
+            location: None,
         })
     };
     let focus = TraceEvent {
@@ -1947,6 +1960,7 @@ fn a_toolbar_button_focused_through_msaa_is_the_focus() {
             value: None,
             states: 0,
             shortcut: None,
+            location: None,
         }),
         focus_chain: vec![node(UIA_WINDOW, "Save As", false), node(50021, "", true)],
         ..focus_event(Vec::new())
@@ -2035,6 +2049,7 @@ fn an_edit_combos_list_item_is_a_selection() {
             value: None,
             states: 0,
             shortcut: None,
+            location: None,
         }),
         focus_chain: field.focus_chain.clone(),
         ..focus_event(Vec::new())
@@ -2066,6 +2081,7 @@ fn a_selects_value_change_is_a_change_not_text() {
             value: Some(value.to_owned()),
             states: 0,
             shortcut: None,
+            location: None,
         })
     };
     let focus = TraceEvent {
@@ -2127,6 +2143,7 @@ fn another_objects_value_change_is_not_the_fields_text() {
             value: None,
             states: 0,
             shortcut: None,
+            location: None,
         }),
         focus_chain: vec![node(UIA_DOCUMENT, "sr-word-fixture.docx", true)],
         text_context: text(),
@@ -2142,6 +2159,7 @@ fn another_objects_value_change_is_not_the_fields_text() {
             value: Some("Calibri Light".to_owned()),
             states: 0,
             shortcut: None,
+            location: None,
         }),
         text_context: text(),
         ..focus_event(Vec::new())
@@ -2242,6 +2260,7 @@ fn an_office_dialog_field_is_its_label_as_msaa_has_it() {
                 value: (!text.is_empty()).then(|| text.to_owned()),
                 states: 0,
                 shortcut: Some("Alt+R".to_owned()),
+                location: None,
             }),
             focus_chain: chain.clone(),
             ..focus_event(Vec::new())
@@ -2254,6 +2273,7 @@ fn an_office_dialog_field_is_its_label_as_msaa_has_it() {
                 value: None,
                 states: 0,
                 shortcut: None,
+                location: None,
             }),
             focus_chain: chain,
             ..focus_event(Vec::new())

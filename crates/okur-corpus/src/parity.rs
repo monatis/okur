@@ -384,8 +384,15 @@ fn replay_scenario(
         }
     }
     let mut engine = ScreenReaderEngine::new(cursor, Box::new(spoken.clone()));
-    // Actions succeed as they did live; their effects arrive as the recorded events.
-    let actions = okur_core::actions::RecordingActions::default();
+    let replay = StepEvents::load(corpus_dir, &scenario.id, &evidence)?;
+    // Actions succeed as they did live; their effects arrive as the recorded events. A mouse
+    // sent somewhere lands as on the reference machine's screen.
+    let actions = match replay.screen {
+        Some((width, height)) => {
+            okur_core::actions::RecordingActions::default().on_screen(width, height)
+        }
+        None => okur_core::actions::RecordingActions::default(),
+    };
     engine.set_actions(Box::new(actions.clone()));
     // JAWS's settings when the evidence was recorded, and what Okur saved in the scenario
     // this one continues.
@@ -413,7 +420,6 @@ fn replay_scenario(
     let ui = okur_core::ui::RecordingUiHost::default();
     engine.set_ui(Box::new(ui.clone()));
     let mut mirror = crate::dialog_mirror::DialogMirror::default();
-    let replay = StepEvents::load(corpus_dir, &scenario.id, &evidence)?;
     // One converter for the whole run, as live: it tracks the focused object.
     let mut converter = EventConverter::default();
     // The reset keys and the focus events recorded before step 1, in the order they came: a
@@ -1302,6 +1308,9 @@ struct StepEvents {
     clipboards: std::collections::HashMap<String, String>,
     /// The window's text after each step, when the scenario traced it (`trace_screen`).
     screens: std::collections::HashMap<String, ScreenSnapshot>,
+    /// The reference machine's screen, its width and height, where the trace's header gives
+    /// it: where a mouse Okur sends lands.
+    screen: Option<(i32, i32)>,
 }
 
 /// Okur settings recorded scenarios name that Okur no longer has: what they turned on is how
@@ -1797,7 +1806,7 @@ impl StepEvents {
             return Ok(Self::default());
         };
         let trace_path = corpus_dir.join("traces").join(trace_file);
-        let (_, events) = okur_windows_model::event_trace::read_trace(&trace_path)?;
+        let (header, events) = okur_windows_model::event_trace::read_trace(&trace_path)?;
         let mut by_step = std::collections::HashMap::new();
         let mut starts = std::collections::HashMap::new();
         let mut ends = std::collections::HashMap::new();
@@ -1908,6 +1917,7 @@ impl StepEvents {
             ends,
             clipboards,
             screens,
+            screen: header.screen.map(|[width, height]| (width, height)),
         })
     }
 

@@ -350,6 +350,14 @@ pub trait ApplicationActions: Send {
         false
     }
 
+    /// Where a pointer sent to `x`, `y` lands, as a mouse's absolute move puts it: on Windows
+    /// its coordinates go over the screen as 0 to 65536 and come back cut down, a pixel left
+    /// of and above most points ([`normalized_landing`]). Where the platform puts the pointer
+    /// on the pixel itself, `x`, `y`.
+    fn mouse_landing(&self, x: i32, y: i32) -> (i32, i32) {
+        (x, y)
+    }
+
     /// The clipboard's text, read now (the clipboard keys). `None` when it holds none or
     /// when unsupported.
     fn clipboard_text(&self) -> Option<String> {
@@ -423,9 +431,28 @@ pub trait ApplicationActions: Send {
     }
 }
 
+/// Where an absolute pointer move to `at` lands on a screen `extent` pixels wide or high, one
+/// axis: the move's coordinate is `at` over the screen as 0 to 65536, cut down to a whole
+/// number, and the pointer's comes back from it cut down again. JAWS's Scan Cursor sent the
+/// mouse to the middle of "System", 455 to 597 wide (526), and it landed at 525; to the middle
+/// of a text 594 to 1326 wide (960, exactly 32768 of 65536 on a screen 1920 wide), and it
+/// landed there [obs, 1152 traces]. A point off the screen, or a screen of no size, is kept.
+pub fn normalized_landing(at: i32, extent: i32) -> i32 {
+    const SPAN: i64 = 65536;
+    if extent <= 0 || !(0..extent).contains(&at) {
+        return at;
+    }
+    let (at, extent) = (i64::from(at), i64::from(extent));
+    let normalized = at * SPAN / extent;
+    i32::try_from(normalized * extent / SPAN).unwrap_or(0)
+}
+
 /// Records requested actions; for tests and headless runs.
 #[derive(Debug, Default, Clone)]
 pub struct RecordingActions {
+    /// The screen's size, where a recording gives it: a mouse sent somewhere lands as an
+    /// absolute pointer move there does ([`normalized_landing`]).
+    screen: Option<(i32, i32)>,
     log: std::sync::Arc<std::sync::Mutex<Vec<(String, usize)>>>,
     /// Chords sent to the application, until taken: a replay hands them back to the engine
     /// as the keyboard hook does live.
@@ -444,6 +471,13 @@ pub struct RecordingActions {
 }
 
 impl RecordingActions {
+    /// These actions on a screen `width` by `height` pixels: a mouse sent to a point lands as
+    /// on that screen.
+    pub fn on_screen(mut self, width: i32, height: i32) -> Self {
+        self.screen = Some((width, height));
+        self
+    }
+
     /// Records actions and takes `read_window` requests; the test delivers the text.
     pub fn reading_windows() -> Self {
         Self {
@@ -789,6 +823,13 @@ impl ApplicationActions for RecordingActions {
         true
     }
 
+    fn mouse_landing(&self, x: i32, y: i32) -> (i32, i32) {
+        match self.screen {
+            Some((width, height)) => (normalized_landing(x, width), normalized_landing(y, height)),
+            None => (x, y),
+        }
+    }
+
     fn read_screen(&self) -> bool {
         if let Ok(mut log) = self.log.lock() {
             log.push(("read screen".to_owned(), 0));
@@ -854,5 +895,27 @@ impl RecordingActions {
             }
         }
         self.pages
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::normalized_landing;
+
+    /// The mouse JAWS's Scan Cursor sent to elements' middles, where it landed on a screen
+    /// 1920 by 1080 [obs, 1152 traces]: a pixel short of each, but 960, which is 32768 of 65536.
+    #[test]
+    fn a_pointer_sent_to_a_point_lands_where_its_normalized_move_does() {
+        let sent_and_landed = [(526, 525), (960, 960), (654, 653), (833, 832), (679, 678)];
+        for (sent, landed) in sent_and_landed {
+            assert_eq!(normalized_landing(sent, 1920), landed, "x {sent}");
+        }
+        for (sent, landed) in [(283, 282), (370, 369), (420, 419), (476, 475), (534, 533)] {
+            assert_eq!(normalized_landing(sent, 1080), landed, "y {sent}");
+        }
+        // Off the screen, or no screen: the point itself.
+        assert_eq!(normalized_landing(-5, 1920), -5);
+        assert_eq!(normalized_landing(2000, 1920), 2000);
+        assert_eq!(normalized_landing(526, 0), 526);
     }
 }

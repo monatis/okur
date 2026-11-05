@@ -25,6 +25,7 @@ pub fn run_trace(
             .duration_since(std::time::UNIX_EPOCH)
             .map(|d| d.as_millis())
             .unwrap_or(0),
+        screen: okur_windows::actions::primary_screen_size().map(|(w, h)| [w, h]),
     };
     let header = serde_json::to_string(&header).map_err(|e| e.to_string())?;
     file.write_all(format!("{header}\n").as_bytes())

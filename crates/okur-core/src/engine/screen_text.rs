@@ -623,6 +623,79 @@ mod tests {
         );
     }
 
+    /// The Scan Cursor, in a window read element by element on a screen 1920 by 1080: each
+    /// line sends the mouse to its element's middle, where an absolute move lands it, and Right
+    /// along a field keeps it there and names the field: "o ‹Edit›" [obs, 1152/s9-s20].
+    #[test]
+    fn the_scan_cursor_puts_the_mouse_on_each_elements_middle() {
+        let speech = SharedSpeech::default();
+        let mut engine = ScreenReaderEngine::new(
+            VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document))),
+            Box::new(speech.clone()),
+        );
+        engine.set_settings(crate::settings::Settings::reference_machine());
+        let actions = RecordingActions::default().on_screen(1920, 1080);
+        engine.set_actions(Box::new(actions.clone()));
+        let mut edit = FocusEvent::new(Role::Edit)
+            .with_name("")
+            .with_window_title(TITLE);
+        edit.read_by_elements = true;
+        engine.handle_accessibility_event(&AccessibilityEvent::Focus(edit));
+        press(&mut engine, &speech, Key::NumpadMinus, insert());
+        press(&mut engine, &speech, Key::NumpadMinus, plain());
+        let mut field = ScreenRun::new("Focus here", (594, 515, 969, 553), Source::Accessible)
+            .with_role(Role::Edit);
+        field.focused = true;
+        engine.handle_accessibility_event(&AccessibilityEvent::ScreenText(WindowText::elements(
+            vec![
+                ScreenRun::new("WPF text block", (594, 353, 1326, 388), Source::Accessible)
+                    .with_role(Role::Text),
+                field,
+            ],
+        )));
+        press(&mut engine, &speech, Key::PageUp, plain());
+        let before = actions.requests().len();
+        assert_eq!(
+            press(&mut engine, &speech, Key::DownArrow, plain()),
+            "WPF text block"
+        );
+        assert_eq!(
+            press(&mut engine, &speech, Key::DownArrow, plain()),
+            "Focus here \u{1d} Edit \u{1e}"
+        );
+        assert_eq!(
+            press(&mut engine, &speech, Key::RightArrow, plain()),
+            "o\n\u{1d} Edit \u{1e}"
+        );
+        let moved: Vec<String> = actions
+            .requests()
+            .into_iter()
+            .skip(before)
+            .map(|(a, _)| a)
+            .filter(|a| a.starts_with("mouse to "))
+            .collect();
+        // The text block's middle, 960, 370, lands at 960 (32768 of 65536) and 369.
+        assert_eq!(
+            moved,
+            [
+                "mouse to 960, 369",
+                "mouse to 780, 533",
+                "mouse to 780, 533"
+            ]
+        );
+        assert_eq!(
+            press(&mut engine, &speech, Key::Delete, alt()),
+            "Okur scan cursor\n781, 534\nApplication window restriction"
+        );
+    }
+
+    fn alt() -> Modifiers {
+        Modifiers {
+            alt: true,
+            ..Modifiers::none()
+        }
+    }
+
     /// Insert+Space, O, W: "OCR", "OCR started using Microsoft OCR.", then with the words
     /// "finished." and "Okur Cursor"; the Okur cursor, unrestricted, reads the recognized words
     /// among the window's lines, none said twice, and they go when the PC cursor returns

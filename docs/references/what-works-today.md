@@ -151,7 +151,8 @@ purpose, the reason is in [accepted divergences](accepted-divergences.md).
   any other window by its screen rows, where UI Automation places its text. In WPF, UWP and
   WinUI windows it is the Okur scan cursor, one element a line with its role and state, as
   JAWS's Scan Cursor reads them. It moves by line, word and character, with Page Up and Page
-  Down to the window's top and bottom, and the mouse goes with it.
+  Down to the window's top and bottom. The mouse goes to the middle of each element it reads,
+  and a character in a control is said with the control's role ("o, Edit").
 - **The screen's pictures, recognized** (Convenient OCR): Insert+Space, O, then W, S or C
   recognizes the window, the screen or the focused control with Windows' own OCR. Okur says
   "OCR started using Microsoft OCR.", "finished." and "Okur Cursor". The recognized words then

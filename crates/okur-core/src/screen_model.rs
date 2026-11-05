@@ -163,6 +163,17 @@ impl ScreenLine {
         ))
     }
 
+    /// The middle of the line's first piece, an element's line its element: where JAWS's Scan
+    /// Cursor sends the mouse, (526, 283) for "System" from 455, 239 to 597, 327 [obs, 1152
+    /// traces].
+    pub fn middle(&self) -> Option<(i32, i32)> {
+        let piece = self.pieces.first()?;
+        Some((
+            middle(piece.left, piece.right),
+            middle(piece.top, piece.bottom),
+        ))
+    }
+
     /// Whether character `column` was recognized from the screen's pixels.
     pub fn recognized_at(&self, column: usize) -> bool {
         self.piece_at(column)
