@@ -7,7 +7,7 @@
 //! the synthesizer and for comparison with what JAWS sent its synthesizer (the speech
 //! recorder voice's log, `observation.spoken`).
 
-use crate::settings::{NumberProcessing, Punctuation, TextProcessing};
+use crate::settings::{DateProcessing, NumberProcessing, Punctuation, TextProcessing};
 
 /// The name JAWS speaks for a character read on its own, when it names it.
 pub fn character_name(c: char) -> Option<&'static str> {
@@ -269,7 +269,10 @@ fn render(
     } else {
         text
     };
-    let text = numbers(&split_words(&text, processing.mixed_case), processing);
+    let text = numbers(
+        &dates(&split_words(&text, processing.mixed_case), processing.dates),
+        processing,
+    );
     let chars: Vec<char> = text.chars().collect();
     let mut out = String::with_capacity(text.len() * 2);
     let word = |out: &mut String, name: &str| {
@@ -352,8 +355,16 @@ fn render(
             _ => out.push(' '),
         }
     }
-    out.split_whitespace().collect::<Vec<_>>().join(" ")
+    out.split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
+        .replace(DATE_COMMA, ",")
 }
+
+/// The comma a translated date is written with ("March 2, 2002"): kept apart from the text's
+/// own commas, which are named when every symbol is ("2 comma, 2002"), while JAWS gives the
+/// date's as a pause [obs, 1162/s24].
+const DATE_COMMA: char = '';
 
 /// Filter Repeated Characters at JAWS's default, Three: of an unbroken run of one symbol, three
 /// are spoken ("=====" as "equals equals equals" [obs, 285/s12]). Letters, digits and spaces
@@ -559,6 +570,80 @@ fn numbers(text: &str, processing: TextProcessing) -> String {
                 out.push_str(rest);
             }
             _ => out.push_str(&token),
+        }
+    }
+    out
+}
+
+/// Dates in digits as Numeric Date Processing gives them: with Some Translation, a month, day and
+/// year with slashes as words ("March 2, 2002" for "3/2/2002" [obs, 1162/s24]); with Extended,
+/// a month and day without a year too ("January 3" for "1/3" [obs, 1163/s25]). Dates with
+/// dashes stay numbers, read digit by digit first ("0 3 dash 1 6 dash 0 0" [obs, 1162/s23]).
+/// The month comes first and its names are English, the reference machine's culture (en-US):
+/// the user's own locale is the platform clock's ([`crate::clock::LocaleFormats`]), not yet
+/// given to speech.
+fn dates(text: &str, processing: DateProcessing) -> String {
+    if processing == DateProcessing::NoTranslation {
+        return text.to_owned();
+    }
+    let months = crate::clock::LocaleFormats::en_us().months;
+    let chars: Vec<char> = text.chars().collect();
+    // A run of digits from `at`: its value and where it ends.
+    let run = |at: usize| -> Option<(u32, usize, usize)> {
+        let mut end = at;
+        let mut value = 0u32;
+        while let Some(d) = chars.get(end).and_then(|c| c.to_digit(10)) {
+            value = value.saturating_mul(10).saturating_add(d);
+            end += 1;
+        }
+        (end > at).then_some((value, end - at, end))
+    };
+    let mut out = String::with_capacity(text.len() + 16);
+    let mut i = 0;
+    while let Some(&c) = chars.get(i) {
+        let after_number = i
+            .checked_sub(1)
+            .and_then(|p| chars.get(p))
+            .is_some_and(|p| p.is_ascii_digit() || *p == '/');
+        let date = (!after_number && c.is_ascii_digit())
+            .then(|| {
+                let (month, month_len, end) = run(i)?;
+                (chars.get(end) == Some(&'/')).then_some(())?;
+                let (day, day_len, end) = run(end + 1)?;
+                let year = (chars.get(end) == Some(&'/'))
+                    .then(|| run(end + 1))
+                    .flatten()
+                    .filter(|(_, len, _)| *len == 4);
+                let end = year.map_or(end, |(_, _, e)| e);
+                let free = !chars
+                    .get(end)
+                    .is_some_and(|n| n.is_ascii_digit() || *n == '/');
+                let fits = (1..=12).contains(&month)
+                    && (1..=31).contains(&day)
+                    && month_len <= 2
+                    && day_len <= 2
+                    && free;
+                let name = months.get(usize::try_from(month).ok()?.checked_sub(1)?)?;
+                match year {
+                    Some((year, _, _)) if fits => {
+                        Some((format!("{name} {day}{DATE_COMMA} {year}"), end))
+                    }
+                    None if fits && processing == DateProcessing::ExtendedTranslation => {
+                        Some((format!("{name} {day}"), end))
+                    }
+                    _ => None,
+                }
+            })
+            .flatten();
+        match date {
+            Some((words, end)) => {
+                out.push_str(&words);
+                i = end;
+            }
+            None => {
+                out.push(c);
+                i += 1;
+            }
         }
     }
     out
@@ -990,6 +1075,40 @@ mod tests {
             "7 42 1,234 2.5 1,000,000 10:30"
         );
         assert_eq!(with("3/2/2002", full), "3 slash 2 slash 2,002");
+    }
+
+    /// Numeric Date Processing: a month, day and year with slashes in words with Some, a month
+    /// and day too with Extended; dashed dates stay digits [obs, 1162/s23-s25, 1163/s23-s25].
+    #[test]
+    fn dates_in_words() {
+        let with = |text: &str, dates: DateProcessing| {
+            spoken_with(
+                text,
+                Punctuation::Most,
+                TextProcessing {
+                    dates,
+                    ..TextProcessing::default()
+                },
+            )
+        };
+        let line = "03-16-00 3/2/2002 1/3 $0.02";
+        assert_eq!(
+            with(line, DateProcessing::NoTranslation),
+            "0 3 dash 1 6 dash 0 0 3 slash 2 slash 2002 1 slash 3 dollar 0.02"
+        );
+        assert_eq!(
+            with(line, DateProcessing::SomeTranslation),
+            "0 3 dash 1 6 dash 0 0 March 2, 2002 1 slash 3 dollar 0.02"
+        );
+        assert_eq!(
+            with(line, DateProcessing::ExtendedTranslation),
+            "0 3 dash 1 6 dash 0 0 March 2, 2002 January 3 dollar 0.02"
+        );
+        // Not a date: a month past 12, or more numbers around it.
+        assert_eq!(
+            with("13/2/2002 1/2/3/4", DateProcessing::ExtendedTranslation),
+            "13 slash 2 slash 2002 1 slash 2 slash 3 slash 4"
+        );
     }
 
     /// Controlled by JAWS: JAWS says numbers in words itself [obs, 1161/s14-s27]. Okur leaves

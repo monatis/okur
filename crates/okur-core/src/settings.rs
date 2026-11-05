@@ -578,6 +578,30 @@ impl NumberProcessing {
     }
 }
 
+/// JAWS's Numeric Date Processing (`DEFAULT.JCF` Options `SayNumericDates`: 0, 1, 2).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DateProcessing {
+    /// Dates as written ("3 slash 2 slash 2002").
+    #[default]
+    NoTranslation,
+    /// A month, day and year with slashes as words: "March 2, 2002" [obs, 1162].
+    SomeTranslation,
+    /// And a month and day without a year: "January 3" for "1/3" [obs, 1163].
+    ExtendedTranslation,
+}
+
+impl DateProcessing {
+    /// The processing a `DEFAULT.JCF` `SayNumericDates` value sets; any other value, none.
+    pub fn from_jcf(value: &str) -> Self {
+        match value.trim() {
+            "1" => Self::SomeTranslation,
+            "2" => Self::ExtendedTranslation,
+            _ => Self::NoTranslation,
+        }
+    }
+}
+
 /// How running text is given to the synthesizer: JAWS's Text Processing, `DEFAULT.JCF`'s
 /// Options `MixedCase`, `Numbers` and `SayDollars` [obs, 721-723 against 407].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -595,6 +619,9 @@ pub struct TextProcessing {
     /// A number with dashes in it is read digit by digit ("1 dash 8 0 0"): JAWS's If Number
     /// Contains Dashes (`SpeakNumbersSepByDashesAsDigits`, on by default).
     pub dashes_as_digits: bool,
+    /// How a date written in digits is given to the synthesizer: JAWS's Numeric Date
+    /// Processing (`SayNumericDates`).
+    pub dates: DateProcessing,
     /// Dollar and euro amounts go to the synthesizer as written ("$0.02", "€"), for it to say
     /// [obs, 723].
     pub say_dollars: bool,
@@ -610,6 +637,7 @@ impl Default for TextProcessing {
             numbers: NumberProcessing::Synthesizer,
             single_digit_threshold: Some(5),
             dashes_as_digits: true,
+            dates: DateProcessing::NoTranslation,
             say_dollars: false,
             use_dictionary: true,
         }

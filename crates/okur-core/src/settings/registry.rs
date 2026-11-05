@@ -11,9 +11,9 @@ use serde::Serialize;
 use serde_json::{Map, Value};
 
 use super::{
-    FormsMode, HeadingIndication, KeyboardLayout, KeyboardSettings, LessSpeech, MouseEchoUnit,
-    NumberProcessing, OkurKey, OutputType, Punctuation, SayAllUnit, ScreenEcho, Settings,
-    SmartNavigation, SpeechMode, Synthesizer, TypingEcho, Verbosity, VerbosityLevel,
+    DateProcessing, FormsMode, HeadingIndication, KeyboardLayout, KeyboardSettings, LessSpeech,
+    MouseEchoUnit, NumberProcessing, OkurKey, OutputType, Punctuation, SayAllUnit, ScreenEcho,
+    Settings, SmartNavigation, SpeechMode, Synthesizer, TypingEcho, Verbosity, VerbosityLevel,
 };
 use crate::messages::{msg, StaticMessage};
 use crate::settings_layers::Scope;
@@ -336,6 +336,18 @@ pub static SETTINGS: &[SettingSpec] = &[
         }),
         tree_label: Some(msg::settings_tree_dashes_as_digits),
         ..spec("voice.text.dashes_as_digits", Group::Speech, None, CHECK)
+    },
+    SettingSpec {
+        jaws: default_jcf("Options", "SayNumericDates", |v| {
+            json(DateProcessing::from_jcf(v))
+        }),
+        tree_label: Some(msg::settings_tree_date_processing),
+        ..spec(
+            "voice.text.dates",
+            Group::Speech,
+            None,
+            Kind::Choice(choices::<DateProcessing>),
+        )
     },
     SettingSpec {
         jaws: default_jcf("Options", "SayDollars", |v| Value::Bool(v.trim() == "1")),
@@ -959,6 +971,21 @@ impl Choices for SpeechMode {
         match self {
             Self::Full => msg::settings_speech_mode_full(),
             Self::Less => msg::settings_speech_mode_less(),
+        }
+    }
+}
+
+impl Choices for DateProcessing {
+    const ALL: &'static [Self] = &[
+        Self::NoTranslation,
+        Self::SomeTranslation,
+        Self::ExtendedTranslation,
+    ];
+    fn label(self) -> StaticMessage {
+        match self {
+            Self::NoTranslation => msg::settings_dates_none(),
+            Self::SomeTranslation => msg::settings_dates_some(),
+            Self::ExtendedTranslation => msg::settings_dates_extended(),
         }
     }
 }

@@ -220,6 +220,7 @@ fn center_group(id: &str) -> Option<TreeGroup> {
         "voice.text.numbers"
         | "voice.text.single_digit_threshold"
         | "voice.text.dashes_as_digits"
+        | "voice.text.dates"
         | "voice.text.say_dollars" => TreeGroup::TextNumbers,
         "phonetic_pause_ms" => TreeGroup::TextPhonetic,
         "quick_key_delay_ms" => TreeGroup::AutoFormsMode,
