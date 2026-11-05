@@ -99,6 +99,8 @@ with no change to the `KeyboardHook` port:
 
 ## 2. Weeks 2 to 6
 
+**Done the same day** ([`../handoff/2026-11-05-okur-on-linux-and-number-processing.md`](../handoff/2026-11-05-okur-on-linux-and-number-processing.md)): §2.1's keyboard, events and speech in `okur-linux`, each passing live in the lab, and Okur run whole (the runtime's event loop with Linux's platform) speaking GTK 4's focus. The keyboard grabs each key under any modifier (64 combinations apart overwhelmed the X server). Next: §2.2.
+
 1. `okur-linux`: keyboard (X11 first, the declared grab sets the proposal's C1 calls for), events
    (xa11y-linux extended in place: desktop-wide, registered), speech (SSIP), enough for the virtual
    cursor on a web page.
