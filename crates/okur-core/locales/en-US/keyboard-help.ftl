@@ -468,6 +468,8 @@ command-jump-to-line = Asks for a line number and moves to that line.
 command-define-temp-placemarker = Marks the cursor's place in the page for this session, to come back to with K.
 # SelectAPlaceMarker (Control+Shift+K in a page).
 command-select-a-placemarker = Lists the page's PlaceMarkers, to move to one, or to add, rename or remove them.
+# DictionaryManager (Insert+D).
+command-dictionary-manager = Opens the Dictionary Manager, to change how words are spoken in this application or in all applications.
 # WordList (Control+Insert+W in a page).
 command-word-list = Lists the page's words, most used first, to move to one.
 # MoveToNextWordFromList (W in a page).

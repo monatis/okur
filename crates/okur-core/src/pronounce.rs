@@ -260,12 +260,12 @@ fn render(
     dictionary: &[crate::dictionary::DictionaryEntry],
 ) -> String {
     let digits = processing.numbers_as_digits;
-    let text = respelled(&repeats_filtered(
-        &without_direction_marks(text).replace(['\u{1d}', '\u{1e}'], " "),
-    ));
-    // The user's rules, before a word is split at its capitals and digits.
-    let text = if processing.use_dictionary && !dictionary.is_empty() {
-        crate::dictionary::apply(dictionary, &text)
+    let text = repeats_filtered(&without_direction_marks(text).replace(['\u{1d}', '\u{1e}'], " "));
+    // The dictionary, JAWS's respellings and the user's rules, before a word is split at its
+    // capitals and digits; without Use Dictionary, neither: JAWS's own Dictionary Manager
+    // says "spacebar" [obs, 1154/s7].
+    let text = if processing.use_dictionary {
+        crate::dictionary::apply(dictionary, &respelled(&text))
     } else {
         text
     };

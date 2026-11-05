@@ -220,6 +220,15 @@ purpose, the reason is in [accepted divergences](accepted-divergences.md).
   them, as JAWS has them: Caps Indicate, mixed case, numbers read as digits, dollar amounts
   left to the voice, same page links, graphics shown or not, how a heading is said, and which
   parts of a control verbosity says (its type, its state, its position, its hints).
+- **The speech dictionary**: words spoken otherwise than they are written, as JAWS's
+  Dictionary Manager keeps them. A rule matches its whole word whatever its case (or only
+  with the same capitals), and a word ending in `*` is a root that matches longer words. The
+  voice is given the replacement while the Speech History keeps the text, as JAWS does. Use
+  Dictionary turns it off. Insert+D opens the Dictionary Manager, as JAWS's: an application
+  without a dictionary of its own is asked about first (Escape opens the default one, for
+  all applications); Add... proposes the word at the cursor; Change... and Delete act on the
+  rule chosen. An application's rules go before the default ones. Each change is kept at
+  once. A rule cannot play a sound or switch the language yet.
 - **Flexible Web** (Insert+Space, then X): JAWS's wizard, page for page, hides an element of a
   page (a region, a heading, a list) found by its kind, its text, its id or its place; Undo
   takes it back. Customizations are saved as named rules for the page, its site or every

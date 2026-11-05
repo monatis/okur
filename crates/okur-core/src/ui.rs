@@ -7,6 +7,7 @@ use std::sync::{Arc, Mutex};
 pub mod applications;
 pub mod basics;
 pub mod clipboard;
+pub mod dictionary;
 pub mod find;
 pub mod flexible_web;
 pub mod jump;
@@ -27,7 +28,7 @@ pub mod windows;
 
 pub use okur_ui_model::{
     Control, ControlKind, DialogKey, DialogSpec, FromUi, MainWindowSpec, MenuItemSpec, MenuSpec,
-    TextSpan, ToUi, Value, WizardButtons, WizardSpec, MAIN_WINDOW_EXIT,
+    TextSpan, ToUi, TreeItem, Value, WizardButtons, WizardSpec, MAIN_WINDOW_EXIT,
 };
 
 /// Where the engine sends what its windows show. Sending never waits for the window.

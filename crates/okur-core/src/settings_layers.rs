@@ -18,6 +18,9 @@ use crate::settings::Settings;
 /// Setting values by name, nested as [`Settings`] is: `{"voice": {"punctuation": "all"}}`.
 pub type Values = Map<String, Value>;
 
+/// The speech dictionary's rules' key: an application's go with the default ones.
+pub(crate) const DICTIONARY: &str = "dictionary";
+
 /// Where a change is kept.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Scope {
@@ -70,7 +73,16 @@ impl SettingsLayers {
             .filter(|a| !disabled(a))
             .and_then(|a| self.applications.get(a))
         {
+            // An application's dictionary goes before the default one, not in its place: both
+            // apply, the application's rule first (JAWS 2025 help, Dictionary Manager Basics).
+            let default_rules = merged.get(DICTIONARY).cloned();
             merge_readable(&mut merged, values);
+            if let (Some(Value::Array(own)), Some(Value::Array(default_rules))) =
+                (values.get(DICTIONARY), default_rules)
+            {
+                let both = own.iter().cloned().chain(default_rules).collect();
+                merged.insert(DICTIONARY.to_owned(), Value::Array(both));
+            }
         }
         if let Some(values) = site.and_then(|s| self.sites.get(s)) {
             merge_readable(&mut merged, values);
@@ -395,6 +407,32 @@ mod tests {
             Value::Object(values) => values,
             _ => Values::new(),
         }
+    }
+
+    /// An application's dictionary goes before the default one, both applying; elsewhere the
+    /// default one alone (JAWS 2025 help, Dictionary Manager Basics).
+    #[test]
+    fn an_applications_rules_go_before_the_default_ones() {
+        use crate::dictionary::DictionaryEntry;
+        let mut layers = SettingsLayers {
+            global: values(json!({"dictionary": [{"actual": "total", "replacement": "sum"}]})),
+            ..SettingsLayers::default()
+        };
+        layers.applications.insert(
+            "notepad".into(),
+            values(json!({"dictionary": [{"actual": "total", "replacement": "amount"}]})),
+        );
+        assert_eq!(
+            layers.resolve(Some("notepad"), None).dictionary,
+            [
+                DictionaryEntry::new("total", "amount"),
+                DictionaryEntry::new("total", "sum")
+            ]
+        );
+        assert_eq!(
+            layers.resolve(Some("wordpad"), None).dictionary,
+            [DictionaryEntry::new("total", "sum")]
+        );
     }
 
     /// A setting is looked up from the most specific layer down: the session, the site, the

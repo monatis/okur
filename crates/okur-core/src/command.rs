@@ -282,6 +282,9 @@ pub enum Command {
     /// Ctrl+Shift+K in a page (SelectAPlaceMarker): the PlaceMarker List, to add, move to,
     /// rename or remove the page's PlaceMarkers.
     SelectAPlaceMarker,
+    /// Insert+D (DictionaryManager): the speech dictionary's rules, for the application in
+    /// front or all applications (JAWS 2025 help, Dictionary Manager Basics).
+    DictionaryManager,
     /// 7, 8, 9, 0 in a page (SpeakPlaceMarkerN): says the page's PlaceMarker 1 to 4 without
     /// moving to it.
     SpeakPlaceMarker(u8),
@@ -655,6 +658,7 @@ impl Command {
             "JumpToLine" => JumpToLine,
             "DefineATempPlaceMarker" => DefineTempPlaceMarker,
             "SelectAPlaceMarker" => SelectAPlaceMarker,
+            "DictionaryManager" => DictionaryManager,
             "WordList" => WordList,
             "StartSkimRead" => SkimRead,
             "SkimReadDialog" => SkimReadDialog,
@@ -1097,6 +1101,7 @@ static BINDINGS: &[Binding] = &{
         bind(Digit(6), OKUR, SettingsCenter),
         // The dialog box's default button, and the settings in use (JAWS 2025 help) [obs, 513].
         bind(Alpha('E'), OKUR, SayDefaultButton),
+        bind(Alpha('D'), OKUR, DictionaryManager),
         // The clipboard keys (Default.JKM: Windows+JAWSKey+X=SayClipboard,
         // Insert+Windows+C=AppendSelectedTextToClipboard) [obs, 825].
         bind(Alpha('X'), OKUR.win(Yes), SayClipboard),

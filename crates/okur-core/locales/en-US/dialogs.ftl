@@ -290,6 +290,34 @@ placemarker-remove-all-question = Are you sure you want to remove all PlaceMarke
 placemarker-remove-all-yes = &Yes
 placemarker-remove-all-no = &No
 
+## The Dictionary Manager (Insert+D): the speech dictionary's rules, as JAWS's names its
+## controls [obs, 1154; the JAWS 2025 help, Dictionary Manager Basics]. $name is the
+## dictionary's: "default" for all applications, or an application's.
+# Insert+D in an application without a dictionary of its own: Escape is the default one.
+dictionary-new-title = New Dictionary
+dictionary-new-name = File &Name:
+dictionary-new-ok = OK
+dictionary-new-cancel = Cancel
+dictionary-default-name = default
+dictionary-manager-title = { $name } - Okur Dictionary Manager
+dictionary-manager-entries = Dictionary Entries
+dictionary-manager-change = &Change...
+dictionary-manager-delete = &Delete
+dictionary-manager-add = &Add...
+dictionary-add-title = Add Dictionary Definition
+dictionary-change-title = Change Dictionary Definition
+dictionary-actual = &Actual Word:
+dictionary-replacement = &Replacement Word:
+dictionary-case-sensitive = Case &Sensitive
+dictionary-ok = OK
+dictionary-cancel = Cancel
+# A rule as the list shows it: its word, an equals sign, its replacement ("total=sum").
+dictionary-entry = { $actual }={ $replacement }
+dictionary-delete-title = Confirm Dictionary Entries Delete
+dictionary-delete-question = Are you sure you want to delete the dictionary entry { $entry }?
+dictionary-delete-yes = &Yes
+dictionary-delete-no = &No
+
 ## Flexible Web (Insert+Space, then X): its customizations, as JAWS's wizard names them
 ## [obs, 705, 708, 716, 720; the guide, Surf's Up chapter 16]. $kind is an element's kind as
 ## the wizard names it ("MainRegion", "heading level 1"), $kinds its plural.

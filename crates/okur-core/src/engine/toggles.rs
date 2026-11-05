@@ -107,10 +107,15 @@ impl ScreenReaderEngine {
         self.say_message(word.to_string())
     }
 
-    /// The synthesizer set to the settings' voice with the rate changed for now.
+    /// The synthesizer set to the settings' voice with the rate changed for now. While the
+    /// Dictionary Manager is open words are spoken as written, its rules included: JAWS's says
+    /// "total equals sum" for the rule "total=sum" [obs, 1154/s27].
     pub(super) fn configure_voice(&mut self) {
         let mut voice = self.settings.voice.clone();
         voice.rate = voice.rate.saturating_add(self.rate_change).clamp(-10, 10);
+        if self.dictionary_manager.is_some() {
+            voice.text.use_dictionary = false;
+        }
         self.speech.configure(&voice);
     }
 

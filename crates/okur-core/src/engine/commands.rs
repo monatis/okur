@@ -84,6 +84,7 @@ impl ScreenReaderEngine {
             Command::JumpToLine => return self.open_jump(),
             Command::DefineTempPlaceMarker => return self.define_temp_placemarker(),
             Command::SelectAPlaceMarker => return self.open_placemarker_list(),
+            Command::DictionaryManager => return self.open_dictionary_manager(),
             Command::WordList => return self.open_list(crate::ui::lists::ListKind::Words),
             Command::NextWordFromList => return self.move_to_word_from_list(true),
             Command::PriorWordFromList => return self.move_to_word_from_list(false),

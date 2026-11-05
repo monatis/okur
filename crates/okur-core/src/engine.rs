@@ -24,6 +24,7 @@ mod clipboard;
 mod commands;
 mod console;
 mod cursors;
+mod dictionary;
 mod find;
 mod flexible_web;
 mod focus;
@@ -230,6 +231,8 @@ pub struct ScreenReaderEngine {
     placemarker_store: Option<Box<dyn crate::placemarkers::PlaceMarkerStore>>,
     /// The PlaceMarker List while it is open, and the dialog it opened.
     placemarker_list: Option<placemarkers::ListState>,
+    /// The Dictionary Manager while it is open.
+    dictionary_manager: Option<dictionary::DictionaryState>,
     /// The page whose PlaceMarker List was opened since it loaded: K without PlaceMarkers
     /// opens the list there [obs, 703/s4].
     placemarker_list_seen: Option<String>,
@@ -647,6 +650,7 @@ impl ScreenReaderEngine {
             placemarkers: crate::placemarkers::PlaceMarkers::default(),
             placemarker_store: None,
             placemarker_list: None,
+            dictionary_manager: None,
             placemarker_list_seen: None,
             flexible_web: None,
             page_customizations: flexible_web::PageCustomizations::default(),
@@ -2070,10 +2074,13 @@ impl ScreenReaderEngine {
     /// The focus is in `application` (as the platform names it), on a page of `site`: its
     /// settings are looked up anew when either changed.
     pub(crate) fn settings_place(&mut self, application: Option<&str>, site: Option<String>) {
-        let place = (
-            application.map(crate::settings_layers::application_id),
-            site,
-        );
+        // A focus whose program the platform could not name leaves the application as it was:
+        // a window not in front can report the focus without it, Notepad's 22 times after
+        // Alt+F4 closed JAWS's Dictionary Manager (1154/s16).
+        let application = application
+            .map(crate::settings_layers::application_id)
+            .or_else(|| self.settings_place.0.clone());
+        let place = (application, site);
         if place != self.settings_place {
             tracing::debug!(?place, "settings looked up for another place");
             // Another application than the one the until-the-focus-moves settings were changed
@@ -2898,6 +2905,7 @@ impl ScreenReaderEngine {
             _ if self.is_jump_event(message) => self.handle_jump_event(message),
             _ if self.is_label_event(message) => self.handle_label_event(message),
             _ if self.is_placemarker_event(message) => self.handle_placemarker_event(message),
+            _ if self.is_dictionary_event(message) => self.handle_dictionary_event(message),
             _ if self.is_flexible_web_event(message) => self.handle_flexible_web_event(message),
             _ if self.is_startup_wizard_event(message) => self.handle_startup_wizard_event(message),
             _ if self.is_quit_event(message) => self.handle_quit_event(message),

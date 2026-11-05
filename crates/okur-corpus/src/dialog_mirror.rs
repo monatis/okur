@@ -513,6 +513,16 @@ impl DialogMirror {
         ) {
             return self.access_key(letter);
         }
+        // Alt+F4 closes the window, as its close box does: JAWS's Dictionary Manager, closed
+        // so after Ctrl+S [obs, 1154/s16, s33].
+        let alt_only = event.modifiers.alt
+            && !event.modifiers.ctrl
+            && !event.modifiers.shift
+            && !event.modifiers.insert
+            && !event.modifiers.win;
+        if event.key == Key::F(4) && alt_only {
+            return vec![FromUi::DialogClosed { id: dialog.id }];
+        }
         if !event.modifiers.is_empty() {
             return Vec::new();
         }
