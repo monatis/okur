@@ -16,8 +16,9 @@
 //! - Delete asks first, "Confirm Dictionary Entries Delete dialog | Are you sure you want to
 //!   delete the dictionary entry total=sum? | Yes Button" [obs, 1154/s30, s31].
 //!
-//! A rule's sound is chosen and played from its dialog; JAWS's Language offers 9 choices
-//! [obs, 1158/s12], Okur's only "All Languages" until they are recorded, and its rules apply to
+//! A rule's sound is chosen and played from its dialog. JAWS's Language offers the machine's
+//! installed languages [obs, 1156/s12-s21], Okur's "All Languages" alone (an accepted divergence,
+//! the owner 2026-11-05: docs/references/accepted-divergences.md), and its rules apply to
 //! every language and speak in the voice's own.
 
 use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, TreeItem, Value};

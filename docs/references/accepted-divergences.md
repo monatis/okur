@@ -1703,6 +1703,18 @@ A step can be in more than one entry; all of its entries apply.
   asynchronously.
 - Decided by the owner, 2026-11-03.
 
+### A dictionary rule's languages are the machine's
+
+- Steps: none differ in replay, which reads JAWS's dialog as traced
+  (`1156-desktop-notepad-dictionary-case-sensitive/s12` to `s21`).
+- Difference: JAWS's Add Dictionary Definition offers, in "Applies to: Language", the languages
+  installed on the machine: on old-pc "All Languages", English, Finnish, French, German, Italian,
+  Portuguese, Spanish, Turkish, "1 of 9" (1156/s12-s21). Okur's offers "All Languages" alone,
+  and "Speak replacement word using Language" "Default" alone, so its rules apply to every
+  language and speak in the voice's own.
+- Why: the list is what a machine has installed, not a behavior of JAWS's to copy.
+- Decided by the owner, 2026-11-05.
+
 ## Considered and not accepted
 
 - From a newer JAWS (2025.2508.120, ARIA-AT's reports), not followed: Insert+Up on a menu
