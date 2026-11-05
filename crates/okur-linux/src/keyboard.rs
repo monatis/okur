@@ -23,6 +23,7 @@ use okur_linux_model::keys::{self, Held};
 use okur_runtime::hook::{HookCallback, KeyboardHook};
 use okur_runtime::RuntimeError;
 use x11rb::connection::Connection;
+use x11rb::protocol::ge::ConnectionExt as _;
 use x11rb::protocol::xinput::{self, ConnectionExt as _};
 use x11rb::protocol::xproto::{self, ConnectionExt as _};
 use x11rb::protocol::Event;
@@ -174,6 +175,13 @@ impl KeyboardHook for X11KeyboardHook {
             .get(screen)
             .map(|s| s.root)
             .ok_or_else(|| hook_error("screen", "none"))?;
+        // XInput 2's events are X's generic events, which the server sends only to a client
+        // that has asked for the Generic Event extension's version: Xlib asks by itself, x11rb
+        // does not (the lab's first run of this hook heard no key).
+        conn.ge_query_version(1, 0)
+            .map_err(|e| hook_error("Generic Event extension", e))?
+            .reply()
+            .map_err(|e| hook_error("Generic Event extension", e))?;
         conn.xinput_xi_query_version(2, 2)
             .map_err(|e| hook_error("XInput 2", e))?
             .reply()
