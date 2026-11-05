@@ -79,7 +79,8 @@ PROBE 2 PASS: the registered listener heard one focus event per Tab in GTK 4 and
    ```
    So the port can stay "the engine decides each key". Which keys to grab: see the plan's
    section "The keyboard on X11": every key but the modifiers grabbed through XInput2, with a
-   watchdog, probed and passing (`probe-grab-all.sh`: 233 keycodes x 64 modifier sets, the
+   watchdog, on the application windows rather than the root (there the newest grab wins and would
+   take a window manager's shortcuts), probed and passing (`probe-grab-all.sh`: 233 keycodes x 64 modifier sets, the
    application got `a w C Down x b` in order, 0.34 ms median per replayed key); a set of bound
    chords was set aside.
 2. `okur-linux`'s events: an `EventSource` over xa11y-linux, for every application (xa11y

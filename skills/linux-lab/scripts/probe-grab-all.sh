@@ -2,12 +2,14 @@
 # The X11 keyboard design's probe (docs/plans/2026-11-05-linux-first.md, "The keyboard on X11"):
 # every key but the modifiers grabbed synchronously through XInput2 (XIPassiveGrabDevice), under
 # 64 modifier combinations (Shift, Control, Alt, Super, and Caps Lock and Num Lock on or off), on
-# the root window, after fluxbox has taken its own shortcuts. The hook keeps h (a quick key),
-# holds w unanswered until a watchdog replays it 200 ms later, and replays every other key at
-# once. Keys sent by XTest: a, h, w, Shift+c, Down, Control+x, b. Passes when the application
-# got a w C Down x b in order (h never), every key reached the hook, and the grabs another
-# client already held were reported rather than failing the rest. It reports those, the cost
-# per replayed key, and how late the watchdog let w go. Run in the lab:
+# the focused application window (not the root: there the newest grab wins, and Okur would
+# take a window manager's shortcuts). The hook keeps h (a quick key), holds w unanswered until a watchdog replays it
+# 200 ms later, and replays every other key at once. Another client grabs Super+E before the hook
+# and one Super+R after it, as a window manager grabs its shortcuts. Keys sent by XTest: a, h, w,
+# Shift+c, Down, Control+x, Super+E, Super+R, b. Passes when the application got a w C Down x b
+# in order (h never), the hook got all but the two shortcuts, and each shortcut went to the
+# client that grabbed it. It reports the cost per replayed key, and how late the watchdog let w
+# go. Run in the lab:
 #   bash /mnt/d/okur-linux/a11y-stack.sh bash /mnt/d/okur-linux/probe-grab-all.sh
 set -uo pipefail
 out=$(mktemp -d)
@@ -66,6 +68,13 @@ def allow(deviceid, at, mode):
     XIAllowEvents(display=d.display, opcode=major, time=at, deviceid=deviceid, event_mode=mode)
     d.flush()
 
+# The grabs go on the focused application window, not the root: X looks for a passive grab from
+# the root down, so a shortcut another client grabbed on the root (a window manager's) is found
+# first, whenever it was grabbed; on the root, the newest grab wins and Okur's would take it.
+focused = d.get_input_focus().focus
+while not hasattr(focused, "id") or focused.id == root.id:
+    time.sleep(0.1)
+    focused = d.get_input_focus().focus
 keyboard = next(dev.deviceid for dev in d.xinput_query_device(xinput.AllDevices).devices
                 if dev.use == xinput.MasterKeyboard)
 modifier_codes = {code for codes in d.get_modifier_mapping() for code in codes if code}
@@ -77,7 +86,7 @@ grabbed = 0
 for code in range(8, 256):
     if code in modifier_codes:
         continue
-    reply = root.xinput_grab_keycode(keyboard, X.CurrentTime, code, xinput.GrabModeSync,
+    reply = focused.xinput_grab_keycode(keyboard, X.CurrentTime, code, xinput.GrabModeSync,
                                      xinput.GrabModeAsync, False,
                                      xinput.KeyPressMask | xinput.KeyReleaseMask, masks)
     failed = list(reply.modifiers or [])
@@ -113,31 +122,65 @@ while True:
     print(name, time.monotonic() * 1000, flush=True)
 PY
 
+# Another client's shortcut, Super and the key given, grabbed as a window manager grabs its
+# own (fluxbox here holds Alt+Tab already: a client's grab of it gets BadAccess).
+cat > "$out/other.py" <<'PY'
+import sys
+from Xlib import X, XK, display
+d = display.Display()
+root = d.screen().root
+code = d.keysym_to_keycode(XK.string_to_keysym(sys.argv[1]))
+for lock in (0, X.LockMask, X.Mod2Mask, X.LockMask | X.Mod2Mask):
+    root.grab_key(code, X.Mod4Mask | lock, False, X.GrabModeAsync, X.GrabModeAsync)
+d.sync()
+print("grabbed Super+" + sys.argv[1], flush=True)
+while True:
+    event = d.next_event()
+    if event.type == X.KeyPress:
+        print("Super+" + sys.argv[1] if event.detail == code else event.detail, flush=True)
+PY
+
+# Super+E grabbed before the hook, Super+R after it.
+python3 "$out/other.py" e > "$out/before" 2>&1 &
+before=$!
+sleep 1
 python3 "$out/target.py" > "$out/target" 2>&1 &
 target=$!
+# The hook grabs on the window with the focus: the target's, once it has taken it.
+for _ in $(seq 40); do grep -q '^ready' "$out/target" 2>/dev/null && break; sleep 0.25; done
 python3 "$out/hook.py" > "$out/hook" 2>&1 &
 hook=$!
-sleep 4
-for key in a h w shift+c Down ctrl+x b; do xdotool key "$key"; sleep 0.4; done
+for _ in $(seq 40); do grep -q '^grabbed' "$out/hook" 2>/dev/null && break; sleep 0.25; done
+python3 "$out/other.py" r > "$out/after" 2>&1 &
+after=$!
+sleep 2
+for key in a h w shift+c Down ctrl+x super+e super+r b; do xdotool key "$key"; sleep 0.4; done
 sleep 1
-kill "$target" "$hook" 2>/dev/null
+kill "$target" "$hook" "$before" "$after" 2>/dev/null
 wait 2>/dev/null
 
 echo "--- hook"; cat "$out/hook"
 echo "--- target"; cat "$out/target"
+echo "--- grabbed before the hook"; cat "$out/before"
+echo "--- grabbed after the hook"; cat "$out/after"
 target_keys=$(grep -v '^ready' "$out/target" | awk '{ print $1 }' | paste -sd' ')
 hook_keys=$(grep -v '^grabbed\|^watchdog' "$out/hook" | awk '{ print $1 }' | paste -sd' ')
+before_keys=$(grep -v '^grabbed' "$out/before" | paste -sd' ')
+after_keys=$(grep -v '^grabbed' "$out/after" | paste -sd' ')
 echo "hook:   $hook_keys"
 echo "target: $target_keys"
+echo "Super+E, grabbed before the hook, went to: the other client [$before_keys], the hook [$(echo "$hook_keys" | grep -o '\be\b' | head -1)]"
+echo "Super+R, grabbed after the hook, went to: the other client [$after_keys], the hook [$(echo "$hook_keys" | grep -o '\br\b' | head -1)]"
 # Replayed keys: the hook's decision to the application's receipt, matched in order.
-paste <(grep -v '^grabbed\|^watchdog\|^h \|^w ' "$out/hook" | awk '{ print $2 }') \
-      <(grep -v '^ready\|^w ' "$out/target" | awk '{ print $2 }') \
+paste <(grep -v '^grabbed\|^watchdog\|^h \|^w \|^e \|^r ' "$out/hook" | awk '{ print $2 }') \
+      <(grep -v '^ready\|^w \|^e \|^r ' "$out/target" | awk '{ print $2 }') \
     | awk '{ printf "%.2f\n", $2 - $1 }' | sort -n \
     | awk '{ v[NR] = $1 } END { if (NR) print "replayed keys, ms from the decision to the application: median " v[int((NR + 1) / 2)] ", max " v[NR] }'
 grep '^grabbed' "$out/hook" | grep -q 'keycodes' || echo "the grabs failed"
 rm -rf "$out"
-if [ "$target_keys" = "a w C Down x b" ] && [ "$hook_keys" = "a h w c Down x b" ]; then
-    echo "GRAB ALL PASS: every key through the hook, h kept, w let go by the watchdog, the rest replayed in order"
+if [ "$target_keys" = "a w C Down x b" ] && [ "$hook_keys" = "a h w c Down x b" ] \
+    && [ "$before_keys" = "Super+e" ] && [ "$after_keys" = "Super+r" ]; then
+    echo "GRAB ALL PASS: every key through the hook, h kept, w let go by the watchdog, the rest replayed in order; the shortcuts other clients grabbed on the root, before or after, stay theirs"
 else
     echo "GRAB ALL FAIL"
     exit 1

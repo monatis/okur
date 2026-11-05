@@ -82,11 +82,20 @@ with no change to the `KeyboardHook` port:
   modifier sets; a, h, w, Shift+c, Down, Control+x, b sent by XTest; the hook got all seven, kept
   h, held w until a 200 ms watchdog replayed it ("watchdog w 200.6"), and replayed the rest;
   the application got `a w C Down x b`, in order; 0.34 ms median (0.51 max) from the decision to
-  the application. No grab was reported taken by another client, but whether fluxbox holds any
-  in the lab was not checked, so the conflict case is still to be shown (a client grabbing a
-  shortcut first). A run whose hook crashed on its first key left the keyboard frozen and the
+  the application. A run whose hook crashed on its first key left the keyboard frozen and the
   application got nothing: the watchdog is required, and must not live in the thread that can
   fail.
+- **Where the grabs go: the application windows, not the root (probed the same day).** XInput2's
+  reply reports no conflict with another client's core grab (fluxbox holds Alt+Tab: a client's
+  `XGrabKey` of it got `BadAccess`, while the hook's grab of every key "succeeded"). On the root,
+  the newest grab wins: Super+E, grabbed by another client before the hook, went to the hook and
+  was replayed past that client to the application; Super+R, grabbed after it, went to the other
+  client. X looks for a passive grab from the root down, so with the hook's grabs on the focused
+  application window, a shortcut another client grabbed on the root comes first whenever it was
+  grabbed: Super+E and Super+R both reached their client, every other key the hook
+  (`hook: a h w c Down x b`, `target: a w C Down x b`, 0.30 ms median per replayed key).
+  `okur-linux`'s hook therefore grabs on every top-level window (the root's children, as they
+  are created), the window manager's root shortcuts staying its own.
 
 ## 2. Weeks 2 to 6
 
