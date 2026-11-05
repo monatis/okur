@@ -13,8 +13,11 @@ Linux is Okur's first cross-platform target (the owner, 2026-11-05;
 - old-pc, WSL distribution **`okur`** (Ubuntu 26.04) at `D:\okur-linux\wsl`. The owner's own
   `Ubuntu-22.04` there is not ours: leave it.
 - `C:\Users\ailabs\.wslconfig`: `guiApplications=false` (WSLg's window must never take the focus
-  from a JAWS recording), 6 GB, 4 processors, swap on D:. The agent may change it (the owner,
-  2026-11-05), keeping WSLg off and the swap off C:.
+  from a JAWS recording), 6 GB, 4 processors, swap on D:, and `localhostForwarding=false`: a
+  Linux port forwarded to Windows made Windows Defender Firewall ask about COM Surrogate
+  (`dllhost.exe`) on 2026-11-05, a prompt that sat on old-pc's screen through three JAWS rounds
+  and that only the owner answers. The agent may change the file (the owner, 2026-11-05),
+  keeping WSLg off and the swap off C:.
 - The repository inside: `~/okur` (root's home in the distribution).
 
 ## Rules
