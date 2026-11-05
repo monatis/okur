@@ -741,3 +741,9 @@ restore-factory-title = Restore to Factory Settings
 restore-factory-question = This option will delete all your current settings. Are you sure you want to continue?
 restore-factory-yes = &Yes
 restore-factory-no = &No
+
+## Command Search (Insert+Space, then J): Okur's commands found by name [obs, 628/s6-s10].
+command-search-title = Search for Okur Commands
+command-search-for = Search &for:
+command-search-results = Results
+command-search-entry = { $name }. { $keys }

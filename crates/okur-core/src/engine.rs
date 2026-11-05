@@ -21,6 +21,7 @@ use crate::speech::SpeechOutput;
 const DOUBLE_PRESS_MS: u64 = 350;
 
 mod clipboard;
+mod command_search;
 mod commands;
 mod console;
 mod cursors;
@@ -233,6 +234,8 @@ pub struct ScreenReaderEngine {
     placemarker_list: Option<placemarkers::ListState>,
     /// The Dictionary Manager while it is open.
     dictionary_manager: Option<dictionary::DictionaryState>,
+    /// Command Search (Insert+Space, J), while it is open.
+    command_search: Option<crate::ui::command_search::CommandSearch>,
     /// The page whose PlaceMarker List was opened since it loaded: K without PlaceMarkers
     /// opens the list there [obs, 703/s4].
     placemarker_list_seen: Option<String>,
@@ -651,6 +654,7 @@ impl ScreenReaderEngine {
             placemarker_store: None,
             placemarker_list: None,
             dictionary_manager: None,
+            command_search: None,
             placemarker_list_seen: None,
             flexible_web: None,
             page_customizations: flexible_web::PageCustomizations::default(),
@@ -2906,6 +2910,7 @@ impl ScreenReaderEngine {
             _ if self.is_label_event(message) => self.handle_label_event(message),
             _ if self.is_placemarker_event(message) => self.handle_placemarker_event(message),
             _ if self.is_dictionary_event(message) => self.handle_dictionary_event(message),
+            _ if self.is_command_search_event(message) => self.handle_command_search_event(message),
             _ if self.is_flexible_web_event(message) => self.handle_flexible_web_event(message),
             _ if self.is_startup_wizard_event(message) => self.handle_startup_wizard_event(message),
             _ if self.is_quit_event(message) => self.handle_quit_event(message),

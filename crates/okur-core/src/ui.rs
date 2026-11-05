@@ -7,6 +7,7 @@ use std::sync::{Arc, Mutex};
 pub mod applications;
 pub mod basics;
 pub mod clipboard;
+pub mod command_search;
 pub mod dictionary;
 pub mod find;
 pub mod flexible_web;

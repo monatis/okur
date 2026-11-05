@@ -196,7 +196,7 @@ impl ScreenReaderEngine {
 }
 
 /// The Insert+Space layer's keys, as its help lists them (the layer module's keys).
-const LAYER_KEYS: [fn() -> StaticMessage; 14] = [
+const LAYER_KEYS: [fn() -> StaticMessage; 15] = [
     msg::layer_help_speech_history,
     msg::layer_help_clear_history,
     msg::layer_help_copy_history,
@@ -210,6 +210,7 @@ const LAYER_KEYS: [fn() -> StaticMessage; 14] = [
     msg::layer_help_last_notification,
     msg::layer_help_toasts,
     msg::layer_help_flexible_web,
+    msg::layer_help_command_search,
     msg::layer_help_this,
 ];
 

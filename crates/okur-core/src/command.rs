@@ -1437,6 +1437,32 @@ pub fn layout_command_for(keyboard: &KeyboardSettings, event: &KeyEvent) -> Opti
     }
 }
 
+/// Every command the desktop key map binds, once, each with the keys of its first binding: the
+/// modifiers it needs held, and its key ([`crate::keyboard_help::key_name`] names them). Command
+/// Search lists them.
+pub fn bound_commands() -> Vec<(Command, KeyEvent)> {
+    let mut out: Vec<(Command, KeyEvent)> = Vec::new();
+    for binding in BINDINGS {
+        if out.iter().any(|(command, _)| *command == binding.command) {
+            continue;
+        }
+        let held = |h: Held| h == Held::Yes;
+        let modifiers = crate::input::Modifiers {
+            ctrl: held(binding.chord.ctrl),
+            alt: held(binding.chord.alt),
+            shift: held(binding.chord.shift),
+            win: held(binding.chord.win),
+            insert: held(binding.chord.insert),
+            ..crate::input::Modifiers::default()
+        };
+        out.push((
+            binding.command.clone(),
+            KeyEvent::new(binding.key, modifiers, true),
+        ));
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -60,6 +60,8 @@ impl ScreenReaderEngine {
             Key::Alpha('N') if shift_only => self.repeat_last_notification(),
             Key::Alpha('N') if ctrl_only => self.toggle_toast_announcements(),
             // Flexible Web's wizard (DoFlexibleWebDialog) [obs, 705/s3].
+            // Command Search [obs, 628/s6].
+            Key::Alpha('J') if plain => self.open_command_search(),
             // The layer's help: a question mark, Shift+Slash at its US place [obs, 628/s2].
             Key::Slash if shift_only => self.layer_help(),
             Key::Alpha('X') if plain => {

@@ -78,4 +78,5 @@ layer-help-notifications = Notification history = N.
 layer-help-last-notification = The last notification again = Shift + N.
 layer-help-toasts = Toast notifications spoken or not = Control + N.
 layer-help-flexible-web = Flexible Web = X.
+layer-help-command-search = Command Search, Okur's commands found by name = J.
 layer-help-this = This help = Question mark.
