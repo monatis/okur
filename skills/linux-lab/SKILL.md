@@ -27,8 +27,9 @@ Linux is Okur's first cross-platform target (the owner, 2026-11-05;
 ## How
 
 ```bash
-# once, after the distribution is installed
+# once, after the distribution is installed (dns.sh: WSL's NAT fails on old-pc, its fallback needs public DNS)
 bash skills/linux-lab/scripts/sync.sh
+opendesk exec --peer old-pc --timeout 120 "wsl.exe -d okur -u root -- bash /mnt/d/okur-linux/dns.sh"
 opendesk exec --peer old-pc --timeout 1800 "wsl.exe -d okur -u root -- bash /mnt/d/okur-linux/setup.sh"
 # each time: send the committed branch, then build or test in the lab
 bash skills/linux-lab/scripts/sync.sh
