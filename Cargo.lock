@@ -984,8 +984,11 @@ dependencies = [
  "okur-core",
  "okur-linux-model",
  "okur-runtime",
+ "tokio",
  "tracing",
  "x11rb",
+ "xa11y-core",
+ "xa11y-linux",
 ]
 
 [[package]]

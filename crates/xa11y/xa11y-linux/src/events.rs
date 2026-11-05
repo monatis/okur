@@ -120,6 +120,29 @@ pub(crate) fn subscribe_for_pid(
             message: format!("No application found with PID {pid}"),
         });
     }
+    subscribe(Sources::App {
+        buses: sender_buses,
+        name: app_name,
+        pid,
+    })
+}
+
+/// Subscribe to every application's AT-SPI2 events: the whole desktop, as a
+/// screen reader hears it. Each event names its application and process,
+/// looked up when the application is first heard. The registration is for
+/// every application, so toolkits started later send their events too.
+pub(crate) fn subscribe_desktop() -> Result<Subscription> {
+    subscribe(Sources::Desktop(Mutex::new(HashMap::new())))
+}
+
+fn subscribe(sources: Sources) -> Result<Subscription> {
+    // The senders the match rules and the registration name: an
+    // application's bus names, or none for the desktop (every sender; the
+    // registry takes an empty application name as every application).
+    let senders: Vec<Option<String>> = match &sources {
+        Sources::App { buses, .. } => buses.iter().cloned().map(Some).collect(),
+        Sources::Desktop(_) => vec![None],
+    };
 
     // Dedicated Connection per subscription. Dropping it (after we've
     // removed every match rule) cleanly tears the subscription down and
@@ -134,18 +157,20 @@ pub(crate) fn subscribe_for_pid(
     })?;
 
     let mut rules: Vec<MatchRule<'static>> =
-        Vec::with_capacity(EVENT_INTERFACES.len() * sender_buses.len());
-    for sender_bus in &sender_buses {
+        Vec::with_capacity(EVENT_INTERFACES.len() * senders.len());
+    for sender in &senders {
         for iface in EVENT_INTERFACES {
             // Pass owned Strings so the produced MatchRule is `'static` and
             // can be moved into the cancel closure alongside other owned state.
-            let rule = MatchRule::builder()
-                .msg_type(MessageType::Signal)
-                .sender(sender_bus.clone())
-                .map_err(|e| Error::Platform {
+            let builder = MatchRule::builder().msg_type(MessageType::Signal);
+            let builder = match sender {
+                Some(bus) => builder.sender(bus.clone()).map_err(|e| Error::Platform {
                     code: -1,
                     message: format!("sender match rule: {e}"),
-                })?
+                })?,
+                None => builder,
+            };
+            let rule = builder
                 .interface((*iface).to_string())
                 .map_err(|e| Error::Platform {
                     code: -1,
@@ -162,10 +187,12 @@ pub(crate) fn subscribe_for_pid(
     }
 
     let (tx, rx) = std::sync::mpsc::channel::<Event>();
+    let registered: Vec<String> = senders
+        .iter()
+        .map(|sender| sender.clone().unwrap_or_default())
+        .collect();
     let ctx = Arc::new(EventContext {
-        sender_buses: sender_buses.clone(),
-        app_name,
-        app_pid: pid,
+        sources,
         tx: Mutex::new(tx),
         conn: conn.clone(),
     });
@@ -183,7 +210,7 @@ pub(crate) fn subscribe_for_pid(
 
     // Only now ask the toolkits for their events: the match rules and the
     // iterator are in place, so the first event after registration is heard.
-    for sender_bus in &sender_buses {
+    for sender_bus in &registered {
         if let Err(error) = register_events(&conn, sender_bus) {
             deregister_events(&conn, sender_bus);
             for rule in &rules {
@@ -216,7 +243,7 @@ pub(crate) fn subscribe_for_pid(
     //    thread observe the stop flag.
     // 4. Join the worker thread.
     let cancel_conn = conn.clone();
-    let registered_buses = sender_buses;
+    let registered_buses = registered;
     let cancel = CancelHandle::new(move || {
         stop.store(true, Ordering::Relaxed);
         for sender_bus in &registered_buses {
@@ -251,9 +278,7 @@ pub(crate) fn subscribe_for_pid(
 /// `tx` is wrapped in `Mutex` because `std::sync::mpsc::Sender` is `!Sync`;
 /// contention is trivial (one lock per emitted event).
 struct EventContext {
-    sender_buses: Vec<String>,
-    app_name: String,
-    app_pid: u32,
+    sources: Sources,
     tx: Mutex<std::sync::mpsc::Sender<Event>>,
     /// Used for D-Bus property/method calls to build target snapshots.
     /// Cloned from the subscription's owning Connection, so it stays alive
@@ -262,13 +287,54 @@ struct EventContext {
     conn: Connection,
 }
 
+/// Whose events a subscription hears.
+enum Sources {
+    /// One application: its bus names, its name and its process.
+    App {
+        buses: Vec<String>,
+        name: String,
+        pid: u32,
+    },
+    /// Every application, each sender's name and process kept once looked up.
+    Desktop(Mutex<HashMap<String, (String, u32)>>),
+}
+
 impl EventContext {
-    fn emit(&self, kind: EventKind, target: Option<ElementData>) {
+    /// The application a sender is, with its process: the subscription's own
+    /// for one application (none for another sender), or looked up once for
+    /// the desktop (its root's name, and its connection's process).
+    fn app_of(&self, sender: &str) -> Option<(String, u32)> {
+        match &self.sources {
+            Sources::App { buses, name, pid } => buses
+                .iter()
+                .any(|bus| bus == sender)
+                .then(|| (name.clone(), *pid)),
+            Sources::Desktop(known) => {
+                if let Some(app) = known.lock().ok().and_then(|k| k.get(sender).cloned()) {
+                    return Some(app);
+                }
+                let root = AccessibleRef {
+                    bus_name: sender.to_string(),
+                    path: "/org/a11y/atspi/accessible/root".to_string(),
+                };
+                let app = (
+                    get_name(&self.conn, &root).unwrap_or_default(),
+                    connection_pid(&self.conn, sender).unwrap_or(0),
+                );
+                if let Ok(mut known) = known.lock() {
+                    known.insert(sender.to_string(), app.clone());
+                }
+                Some(app)
+            }
+        }
+    }
+
+    fn emit(&self, kind: EventKind, target: Option<ElementData>, app: &(String, u32)) {
         let event: Event = EventParts {
             kind,
             target,
-            app_name: self.app_name.clone(),
-            app_pid: self.app_pid,
+            app_name: app.0.clone(),
+            app_pid: app.1,
             timestamp: std::time::Instant::now(),
         }
         .into();
@@ -286,17 +352,21 @@ impl EventContext {
         let Some(sender) = header.sender() else {
             return;
         };
-        if !self.sender_buses.iter().any(|bus| bus == sender.as_str()) {
-            return;
-        }
-
+        // Only the event interfaces' signals: the Ping reply has none, and
+        // the desktop's match rules name no sender to filter by.
         let Some(iface) = header.interface() else {
             return;
         };
+        if !EVENT_INTERFACES.contains(&iface.as_str()) {
+            return;
+        }
         let Some(member) = header.member() else {
             return;
         };
         let Some(path) = header.path() else {
+            return;
+        };
+        let Some(app) = self.app_of(sender.as_str()) else {
             return;
         };
 
@@ -320,7 +390,7 @@ impl EventContext {
         // Snapshot the source element synchronously so consumers receive a
         // durable `ElementData` even if the element is destroyed before
         // they read the event.
-        let target = build_event_snapshot(&self.conn, &target_ref, Some(self.app_pid));
+        let target = build_event_snapshot(&self.conn, &target_ref, Some(app.1));
         let target_role = target.as_ref().map(|t| t.role);
 
         let kinds = signal_to_kinds(
@@ -332,7 +402,7 @@ impl EventContext {
         );
 
         for kind in kinds {
-            self.emit(kind, target.clone());
+            self.emit(kind, target.clone(), &app);
         }
     }
 }
@@ -659,6 +729,32 @@ fn get_role_number(conn: &Connection, aref: &AccessibleRef) -> Option<u32> {
     )?;
     let reply = proxy.call_method("GetRole", &()).ok()?;
     reply.body().deserialize::<u32>().ok()
+}
+
+/// The process owning a connection on the bus.
+fn connection_pid(conn: &Connection, bus_name: &str) -> Option<u32> {
+    let reply = conn
+        .call_method(
+            Some("org.freedesktop.DBus"),
+            "/org/freedesktop/DBus",
+            Some("org.freedesktop.DBus"),
+            "GetConnectionUnixProcessID",
+            &(bus_name,),
+        )
+        .ok()?;
+    reply
+        .body()
+        .deserialize::<u32>()
+        .ok()
+        .filter(|pid| *pid > 0)
+}
+
+impl LinuxProvider {
+    /// Every application's accessibility events: the whole desktop, as a
+    /// screen reader hears it ([`subscribe_desktop`]).
+    pub fn subscribe_desktop(&self) -> Result<Subscription> {
+        subscribe_desktop()
+    }
 }
 
 fn get_name(conn: &Connection, aref: &AccessibleRef) -> Option<String> {
