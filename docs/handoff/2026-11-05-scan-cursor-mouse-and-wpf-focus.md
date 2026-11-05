@@ -132,3 +132,20 @@ Buffer invariants: 0 violation(s)
    Dictionary key in JAWS's files (change it in Settings Center on old-pc and compare the files).
 2. 1154's dialog phrasing (above), shared with other JAWS dialogs.
 3. Then the Next list above.
+
+### Then: an application's dictionary, a root, and the Linux decision
+
+- **1155** (`b559f208`): Enter on New Dictionary makes Notepad's own dictionary
+  ("notepad.jdf - JAWS Dictionary Manager"); a root "tot*" as "sum" (typed by JAWS's TypeString)
+  is spoken "let sumal equals price": **a root replaces its own letters and keeps the rest of the
+  word**. Insert+D then opens the application's dictionary at once; Change... opens "Change
+  Dictionary Definition | Actual Word Edit" (no colon). old-pc holds no user dictionary afterwards.
+- `d71f9cb9`: a root replaces its own letters; the manager's tree has a rule selected from the
+  start, so Change... works (it did nothing, and the Escape after it closed the manager).
+  `okur-lab parity --spoken --only 1155`: 25/29 (17 before); only 1155 changed over all scenarios.
+- The left differences in 1154 and 1155 are JAWS's own dialog phrasing (above). A rule that a
+  colon-ended text is a label, not a prompt, fixed "File Name:" said twice but broke JAWS's Jump
+  To Line ("Enter Line Number (1 to 73):" is said twice by JAWS); reverted.
+- **Linux first** (the owner): the research [`../references/linux-lab-proposal.md`](../references/linux-lab-proposal.md)
+  and the plan [`../plans/2026-11-05-linux-first.md`](../plans/2026-11-05-linux-first.md), in a
+  headless WSL distribution on the dev box; the owner frees ≈20 GB there first.
