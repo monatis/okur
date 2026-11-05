@@ -47,6 +47,22 @@ pub enum SheetCells {
     Format,
     /// The first SUM formulas of the active cell's column and row (the totals readers).
     Sums,
+    /// One cell's text, by its column and row from 1, wherever the active cell is: a monitor
+    /// cell's (Alt+Shift+1 to 0) [obs, 1135/s5].
+    Cell { column: u32, row: u32 },
+}
+
+/// A cell read alone ([`SheetCells::Cell`]) as the recording actions note it: its column and
+/// row in one number, the row in the low 24 bits (Excel's last is 1,048,576).
+pub fn sheet_cell_key(column: u32, row: u32) -> usize {
+    (usize::try_from(column).unwrap_or(0) << 24) | usize::try_from(row).unwrap_or(0)
+}
+
+/// The column and row a [`sheet_cell_key`] holds.
+pub fn sheet_cell_of(key: usize) -> (u32, u32) {
+    let column = u32::try_from(key >> 24).unwrap_or(0);
+    let row = u32::try_from(key & 0x00FF_FFFF).unwrap_or(0);
+    (column, row)
 }
 
 /// Platform actions on the live element a buffer node was captured from.
@@ -662,12 +678,13 @@ impl ApplicationActions for RecordingActions {
     }
 
     fn read_sheet_place(&self, cells: SheetCells) -> bool {
-        let read = match cells {
-            SheetCells::Format | SheetCells::Sums => "sheet details",
-            SheetCells::Around(_) | SheetCells::Lines => "sheet place",
+        let (read, key) = match cells {
+            SheetCells::Format | SheetCells::Sums => ("sheet details", 0),
+            SheetCells::Around(_) | SheetCells::Lines => ("sheet place", 0),
+            SheetCells::Cell { column, row } => ("sheet cell", sheet_cell_key(column, row)),
         };
         if let Ok(mut log) = self.log.lock() {
-            log.push((read.to_owned(), 0));
+            log.push((read.to_owned(), key));
         }
         true
     }

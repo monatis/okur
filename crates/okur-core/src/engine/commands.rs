@@ -1288,11 +1288,17 @@ impl ScreenReaderEngine {
 
     /// An Okur key command (Insert+…). In a text field the reading commands read the field;
     /// elsewhere they run as virtual cursor or application commands.
+    /// The focus, where it is in one of Excel's sheets (a cell, or the grid of an empty one).
+    fn sheet_focus(&self) -> Option<crate::event::FocusEvent> {
+        self.last_native_focus
+            .clone()
+            .filter(crate::apps::windows::excel::in_sheet)
+    }
+
     /// One of Excel's title keys in a sheet; false elsewhere, the key left to the rest.
     fn sheet_title_key(&mut self, key: crate::spreadsheet::TitleKey) -> bool {
-        use crate::apps::windows::excel;
         use crate::spreadsheet::{SheetReading, TitleKey};
-        let Some(focus) = self.last_native_focus.clone().filter(excel::in_sheet) else {
+        let Some(focus) = self.sheet_focus() else {
             return false;
         };
         let Some(window) = focus.window_title.clone() else {
@@ -1304,7 +1310,8 @@ impl ScreenReaderEngine {
             TitleKey::SayRowTitle => titles.column.map(SheetReading::RowTitle),
             TitleKey::SetColumnTitles | TitleKey::SetRowTitles => {
                 // Set from a cell; an empty one, the grid's focus, sets nothing [hyp].
-                let said = excel::cell_at(&focus).and_then(|at| key.set(titles, at));
+                let said =
+                    crate::apps::windows::excel::cell_at(&focus).and_then(|at| key.set(titles, at));
                 if let Some(said) = said {
                     self.speech.speak(&said, true);
                 }
@@ -1319,6 +1326,55 @@ impl ScreenReaderEngine {
             ) {
                 self.key_since_focus = false;
             }
+        }
+        true
+    }
+
+    /// Excel's monitor cell `digit` (1 to 9, 0 the tenth) set to the active cell, in a sheet;
+    /// false elsewhere, the key left to the rest.
+    fn set_monitor_cell(&mut self, digit: u8) -> bool {
+        let Some(focus) = self.sheet_focus() else {
+            return false;
+        };
+        let Some(sheet) = crate::spreadsheet::monitor_sheet(&focus, &self.sheet_name) else {
+            return false;
+        };
+        // From a cell; the grid's focus, an empty cell, sets nothing yet [hyp: not recorded].
+        let Some((column, row)) = crate::apps::windows::excel::cell_at(&focus) else {
+            return true;
+        };
+        let cells = self.monitor_cells.entry(sheet).or_default();
+        if let Some(slot) = cells.get_mut(crate::spreadsheet::monitor_index(digit)) {
+            *slot = Some((column, row));
+        }
+        let said = msg::excel_monitor_cell_set(
+            crate::spreadsheet::monitor_number(digit).to_string(),
+            crate::spreadsheet::reference(column, row),
+        )
+        .render();
+        self.speech.speak(&said, true);
+        true
+    }
+
+    /// Excel's monitor cell `digit` read, asked of Excel: its text, then its reference [obs,
+    /// 1135/s5]. False outside a sheet and where the cell is not set [hyp: what JAWS says then
+    /// is not recorded], the key left to the rest.
+    pub(super) fn read_monitor_cell(&mut self, digit: u8) -> bool {
+        use crate::spreadsheet::{SheetAsk, SheetReading};
+        let Some(focus) = self.sheet_focus() else {
+            return false;
+        };
+        let cell = crate::spreadsheet::monitor_sheet(&focus, &self.sheet_name)
+            .and_then(|sheet| self.monitor_cells.get(&sheet))
+            .and_then(|cells| cells.get(crate::spreadsheet::monitor_index(digit)))
+            .copied()
+            .flatten();
+        let Some((column, row)) = cell else {
+            return false;
+        };
+        let reading = SheetReading::Monitor { column, row };
+        if self.ask_sheet(reading.cells(), SheetAsk::Reading(reading)) {
+            self.key_since_focus = false;
         }
         true
     }
@@ -1358,16 +1414,19 @@ impl ScreenReaderEngine {
             && !m.ctrl
             && !m.alt
             && !m.win
-            && self
-                .last_native_focus
-                .as_ref()
-                .is_some_and(crate::apps::windows::excel::in_sheet)
+            && self.sheet_focus().is_some()
             && self
                 .actions
                 .as_ref()
                 .is_some_and(|actions| actions.open_sheet_tabs_menu())
         {
             return;
+        }
+        // Excel's monitor cells: Insert+Shift+1 to 0 sets one to the active cell [obs, 1135/s3].
+        if let Key::Digit(digit) = event.key {
+            if m.shift && !m.ctrl && !m.alt && !m.win && self.set_monitor_cell(digit) {
+                return;
+            }
         }
         // Excel's titles: Insert+Ctrl+Alt+C and R set them, the Okur key with Alt+Shift and C or
         // R says them [obs, 1132/s1, s2, s7, s8].
@@ -1378,11 +1437,7 @@ impl ScreenReaderEngine {
         }
         // Excel's row and column readers, the active cell's row and column asked for first.
         if let Some(reading) = crate::spreadsheet::SheetReading::of(event) {
-            let in_sheet = self
-                .last_native_focus
-                .as_ref()
-                .is_some_and(crate::apps::windows::excel::in_sheet);
-            if in_sheet
+            if self.sheet_focus().is_some()
                 && self.ask_sheet(
                     reading.cells(),
                     crate::spreadsheet::SheetAsk::Reading(reading),
@@ -1402,11 +1457,7 @@ impl ScreenReaderEngine {
             Key::Delete => Some(crate::spreadsheet::SheetReading::RowTotal),
             _ => None,
         };
-        if let Some(reading) = details.filter(|_| {
-            self.last_native_focus
-                .as_ref()
-                .is_some_and(crate::apps::windows::excel::in_sheet)
-        }) {
+        if let Some(reading) = details.filter(|_| self.sheet_focus().is_some()) {
             if self.ask_sheet(
                 reading.cells(),
                 crate::spreadsheet::SheetAsk::Reading(reading),
@@ -1424,7 +1475,7 @@ impl ScreenReaderEngine {
                 return;
             }
             let cell = crate::spreadsheet::SheetReading::Cell;
-            if focus.is_some_and(crate::apps::windows::excel::in_sheet)
+            if self.sheet_focus().is_some()
                 && self.ask_sheet(cell.cells(), crate::spreadsheet::SheetAsk::Reading(cell))
             {
                 self.key_since_focus = false;

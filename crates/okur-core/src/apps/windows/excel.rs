@@ -347,6 +347,7 @@ mod tests {
     fn an_empty_cell_names_the_active_cell_unless_deleted() {
         let place = crate::event::SheetPlace {
             address: "D1".into(),
+            sheet: String::new(),
             selection: "D1".into(),
             selection_first: String::new(),
             selection_last: String::new(),
@@ -433,6 +434,7 @@ mod tests {
         assert_eq!(step(&mut excel, &cell("B2", "12")), (String::new(), true));
         let place = crate::event::SheetPlace {
             address: "B2".into(),
+            sheet: String::new(),
             selection: "B2".into(),
             selection_first: String::new(),
             selection_last: String::new(),
@@ -509,6 +511,7 @@ A 1"
         assert_eq!(step("B2", "12"), (String::new(), true));
         let place = crate::event::SheetPlace {
             address: "B2".into(),
+            sheet: String::new(),
             row_at: 1,
             column_at: 1,
             row: vec!["Central".into(), "12".into(), "8".into()],

@@ -1568,6 +1568,8 @@ struct ScreenReads {
     status_bars: usize,
     sheet_places: usize,
     sheet_details: usize,
+    /// Single cells read (a monitor cell's) asked for and answered.
+    sheet_cells: usize,
     /// Excel's lists asked for and answered, by kind.
     sheet_lists: [usize; 5],
     paragraphs: usize,
@@ -1824,6 +1826,31 @@ impl ScreenReads {
             deliver(okur_core::AccessibilityEvent::SheetPlace(
                 snapshot.and_then(|s| s.sheet_place.clone()),
             ));
+        }
+        // A single cell read (a monitor cell's), answered with its text as the window showed it
+        // after the step: the step's visible cells with data ("B2: 12"), blank where it is not
+        // among them [1135/s5].
+        let cells: Vec<usize> = requests
+            .iter()
+            .filter(|(read, _)| read == "sheet cell")
+            .map(|(_, key)| *key)
+            .collect();
+        while let Some(&key) = cells.get(self.sheet_cells) {
+            self.sheet_cells += 1;
+            let (column, row) = okur_core::actions::sheet_cell_of(key);
+            let reference = okur_core::spreadsheet::reference(column, row);
+            let text = snapshot
+                .and_then(|s| s.sheet_lists.as_ref())
+                .and_then(|lists| lists.visible.as_ref())
+                .and_then(|visible| visible.entries.iter().find(|e| e.target == reference))
+                .and_then(|entry| entry.label.strip_prefix(&format!("{reference}: ")))
+                .unwrap_or_default()
+                .to_owned();
+            let mut place = snapshot
+                .and_then(|s| s.sheet_place.clone())
+                .unwrap_or_default();
+            place.cells = vec![okur_core::SheetCell { column, row, text }];
+            deliver(okur_core::AccessibilityEvent::SheetPlace(Some(place)));
         }
         let Some(snapshot) = snapshot else {
             return;

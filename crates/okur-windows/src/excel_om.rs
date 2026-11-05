@@ -109,6 +109,7 @@ pub fn sheet_place(
     };
     let mut place = okur_core::SheetPlace {
         address: address(&cell).unwrap_or_default(),
+        sheet: text(&sheet, "Name"),
         selection: selected.as_ref().and_then(address).unwrap_or_default(),
         selection_first: corner(false),
         selection_last: corner(true),
@@ -183,6 +184,16 @@ pub fn sheet_place(
                     })
                 })
                 .collect();
+        }
+        // One cell's text wherever the active cell is: a monitor cell's.
+        SheetCells::Cell { column: c, row: r } => {
+            if let (Ok(ci), Ok(ri)) = (i32::try_from(c), i32::try_from(r)) {
+                place.cells = vec![okur_core::SheetCell {
+                    column: c,
+                    row: r,
+                    text: shown(ri, ci),
+                }];
+            }
         }
         SheetCells::Lines => {}
     }

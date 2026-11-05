@@ -195,6 +195,9 @@ pub struct SheetPlace {
     /// The active cell's reference, "D1".
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub address: String,
+    /// The worksheet's name, "Hours": monitor cells are kept per worksheet.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub sheet: String,
     /// The selection's reference, "A1:B2", the active cell's alone where nothing more is
     /// selected.
     #[serde(default, skip_serializing_if = "String::is_empty")]

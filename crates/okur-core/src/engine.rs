@@ -399,6 +399,11 @@ pub struct ScreenReaderEngine {
     /// Each workbook's row and column titles, by its window's title, for the session (Excel's
     /// Insert+Ctrl+Alt+C and R).
     sheet_titles: std::collections::HashMap<String, crate::spreadsheet::SheetTitles>,
+    /// Excel's monitor cells, ten per worksheet ([`crate::spreadsheet::monitor_sheet`]), each a
+    /// cell's column and row, for the session (Insert+Shift+1 to 0).
+    monitor_cells: std::collections::HashMap<String, [Option<(u32, u32)>; 10]>,
+    /// The worksheet Excel last named with a place it read: monitor cells are its.
+    sheet_name: String,
     /// One of Excel's lists was asked for, and is awaited.
     sheet_list_asked: Option<crate::event::SheetListKind>,
     /// A key for Word's revisions asked whether the document tracks its changes, which it
@@ -734,6 +739,8 @@ impl ScreenReaderEngine {
             sheet_asks: std::collections::VecDeque::new(),
             sheet_selection: None,
             sheet_titles: std::collections::HashMap::new(),
+            monitor_cells: std::collections::HashMap::new(),
+            sheet_name: String::new(),
             say_all_paragraphs_asked: false,
             document_view_title: None,
             window_title_asked: false,
@@ -1505,6 +1512,19 @@ impl ScreenReaderEngine {
             {
                 return KeyAction::Consume;
             }
+            // Excel's Alt+Shift+1 to 0: a monitor cell read, its text and reference [obs,
+            // 1135/s5]; the key is the application's elsewhere, and with no cell set there.
+            if let Key::Digit(digit) = event.key {
+                if m.alt
+                    && m.shift
+                    && !m.ctrl
+                    && !m.insert
+                    && !m.win
+                    && self.read_monitor_cell(digit)
+                {
+                    return KeyAction::Consume;
+                }
+            }
             // Excel's Ctrl+Shift+D: the window's visible cells with data listed, JAWS's Cells with
             // Data [obs, round-1133c's trace].
             if event.key == Key::Alpha('D')
@@ -1915,6 +1935,9 @@ impl ScreenReaderEngine {
             } => self.sheet_list(*kind, column, entries),
             AccessibilityEvent::SheetPlace(place) => {
                 use crate::spreadsheet::SheetAsk;
+                if let Some(sheet) = place.as_ref().map(|p| &p.sheet).filter(|s| !s.is_empty()) {
+                    self.sheet_name.clone_from(sheet);
+                }
                 match self.sheet_asks.pop_front()? {
                     SheetAsk::Reading(reading) => {
                         let said = reading.said(place.as_ref()?)?;

@@ -86,6 +86,12 @@ pub(crate) enum SheetReading {
     /// formula's value, "column total=14" [obs, 1132/s11, s12].
     ColumnTotal,
     RowTotal,
+    /// A monitor cell read (Alt+Shift+1 to 0): its text, then its reference, "12 | B2" [obs,
+    /// 1135/s5].
+    Monitor {
+        column: u32,
+        row: u32,
+    },
 }
 
 /// What one of Excel's places was asked for: a cell to say (its grid focused without a cell, a
@@ -116,6 +122,7 @@ impl SheetReading {
             Self::RowTitle(column) => SheetCells::Around(Some((None, Some(column)))),
             Self::Format => SheetCells::Format,
             Self::ColumnTotal | Self::RowTotal => SheetCells::Sums,
+            Self::Monitor { column, row } => SheetCells::Cell { column, row },
         }
     }
 
@@ -165,6 +172,20 @@ impl SheetReading {
                     None => msg::excel_no_row_total().to_string(),
                 });
             }
+            Self::Monitor { column, row } => {
+                let text = place
+                    .cells
+                    .iter()
+                    .find(|c| (c.column, c.row) == (column, row))
+                    .map(|c| c.text.trim())
+                    .filter(|t| !t.is_empty())
+                    .map_or_else(|| msg::blank().to_string(), str::to_owned);
+                return Some(format!(
+                    "{text}
+{}",
+                    reference(column, row)
+                ));
+            }
             _ => {}
         }
         let (cells, at, row) = match self {
@@ -181,7 +202,8 @@ impl SheetReading {
             | Self::RowTitle(_)
             | Self::Format
             | Self::ColumnTotal
-            | Self::RowTotal => return None,
+            | Self::RowTotal
+            | Self::Monitor { .. } => return None,
         };
         let read: Vec<&str> = part
             .iter()
@@ -286,6 +308,32 @@ fn column_number(letters: &str) -> Option<u32> {
 }
 
 /// A column's letters from its number (16384 "XFD").
+/// The worksheet in front as its monitor cells are kept: the workbook's window, and the sheet
+/// Excel last named with a place it read (JAWS keeps ten per worksheet, popapps.chm, Monitor
+/// Cells in Excel).
+pub(crate) fn monitor_sheet(focus: &crate::event::FocusEvent, sheet: &str) -> Option<String> {
+    Some(format!("{}\u{1f}{sheet}", focus.window_title.as_deref()?))
+}
+
+/// A monitor cell's place among a worksheet's ten: Insert+Shift+1 sets the first, 0 the tenth.
+pub(crate) fn monitor_index(digit: u8) -> usize {
+    usize::from(digit).checked_sub(1).unwrap_or(9)
+}
+
+/// A monitor cell's number as JAWS says it, 1 to 10.
+pub(crate) fn monitor_number(digit: u8) -> u8 {
+    if digit == 0 {
+        10
+    } else {
+        digit
+    }
+}
+
+/// A cell's reference as Excel writes it, "B2".
+pub fn reference(column: u32, row: u32) -> String {
+    format!("{}{row}", column_letters(column))
+}
+
 fn column_letters(mut number: u32) -> String {
     let mut letters = Vec::new();
     while number > 0 {
@@ -569,6 +617,7 @@ mod tests {
     fn rows_and_columns_are_read_whole_or_from_the_cell() {
         let place = crate::event::SheetPlace {
             address: "B3".into(),
+            sheet: String::new(),
             selection: "B3".into(),
             selection_first: "10".into(),
             selection_last: "10".into(),
@@ -613,6 +662,7 @@ mod tests {
     fn selections_are_said_by_what_changed() {
         let place = |selection: &str, first: &str, last: &str| crate::event::SheetPlace {
             address: "B2".into(),
+            sheet: String::new(),
             selection: selection.into(),
             selection_first: first.into(),
             selection_last: last.into(),
@@ -717,6 +767,7 @@ Cell dimensions are 48 points wide by 14 points high."
     fn the_totals_come_from_sum_formulas() {
         let place = crate::event::SheetPlace {
             address: "C3".into(),
+            sheet: String::new(),
             column_sum: Some("14".into()),
             ..Default::default()
         };

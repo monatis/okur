@@ -9979,6 +9979,78 @@ fn excel_a_selection_grows_a_cell_at_a_time_with_shift_pressed_again() {
     );
 }
 
+/// Excel's monitor cells: Insert+Shift+1 sets the first to the active cell, "Setting monitor
+/// cell 1 to B2"; Alt+Shift+1 from another cell asks Excel for that cell and says its text,
+/// then its reference, "12 | B2" [obs, 1135/s3, s5]. Not set, Alt+Shift+2 is Excel's.
+#[test]
+fn excel_monitor_cells_are_set_and_read() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    echo_off(&mut engine);
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let cell = |name: &str, value: &str| {
+        let mut cell = FocusEvent::new(Role::TableCell)
+            .with_name(name)
+            .with_window_title("Hours.xlsx - Excel");
+        cell.value = Some(value.into());
+        cell.app = Some("EXCEL.EXE".into());
+        cell.platform.window_class = Some("EXCEL7".into());
+        cell
+    };
+    engine.handle_focus_event(&cell("B2", "12"));
+    speech.take();
+    let insert_shift = Modifiers {
+        insert: true,
+        shift: true,
+        ..Modifiers::none()
+    };
+    engine.handle_key_event(&KeyEvent::new(Key::Digit(1), insert_shift, true));
+    assert_eq!(speech.take(), ["Setting monitor cell 1 to B2"]);
+    engine.handle_focus_event(&cell("C4", "14"));
+    // The places the focus asked for first, answered in turn.
+    let asked = actions
+        .requests()
+        .iter()
+        .filter(|(read, _)| read == "sheet place")
+        .count();
+    for _ in 0..asked {
+        engine.handle_accessibility_event(&AccessibilityEvent::SheetPlace(Some(
+            crate::event::SheetPlace {
+                address: "C4".into(),
+                row: vec!["14".into()],
+                column: vec!["14".into()],
+                ..crate::event::SheetPlace::default()
+            },
+        )));
+    }
+    speech.take();
+    let alt_shift = Modifiers {
+        alt: true,
+        shift: true,
+        ..Modifiers::none()
+    };
+    let read = engine.handle_key_event(&KeyEvent::new(Key::Digit(1), alt_shift, true));
+    assert_eq!(read, KeyAction::Consume);
+    let key = crate::actions::sheet_cell_key(2, 2);
+    assert!(actions.requests().contains(&("sheet cell".to_owned(), key)));
+    let said = engine.handle_accessibility_event(&AccessibilityEvent::SheetPlace(Some(
+        crate::event::SheetPlace {
+            address: "C4".into(),
+            cells: vec![crate::event::SheetCell {
+                column: 2,
+                row: 2,
+                text: "12".into(),
+            }],
+            ..crate::event::SheetPlace::default()
+        },
+    )));
+    assert_eq!(said.as_deref(), Some("12\nB2"));
+    let unset = engine.handle_key_event(&KeyEvent::new(Key::Digit(2), alt_shift, true));
+    assert_eq!(unset, KeyAction::PassThrough);
+}
+
 /// Insert+Space, then a question mark (Shift+Slash): the layer's help in the Virtual Viewer,
 /// nothing said as it opens, Down reading its second line; Escape closes it [obs, 628/s1-s4].
 #[test]

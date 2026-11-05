@@ -203,6 +203,8 @@ excel-active-cell = Active Cell: { $cell }
 # Insert+Ctrl+Alt+C and R: the active cell's row set as the column titles, its column as the row
 # titles [obs, 1132/s1, s2].
 excel-column-titles-set = Setting column titles row range to { $row }
+# Insert+Shift+1 to 0: a monitor cell set to the active cell [obs, 1135/s3].
+excel-monitor-cell-set = Setting monitor cell { $number } to { $cell }
 # The totals readers: Insert+NumPad Enter the column's, from its SUM formula, "column total=14"
 # [obs, 1132/s11]; Insert+Delete the row's, none found [obs, 1132/s12]; the others [hyp].
 excel-column-total = column total={ $total }
