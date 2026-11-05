@@ -5,7 +5,7 @@ as `run-scenario.ps1 -Reader okur` writes on Windows. Never evidence.
 
 Okur runs (the example okur_linux, its silent synthesizer, its speech log kept) beside Chrome on
 the scenario's fixture page; the scenario's reset keys and then each step's keys are sent by
-XTest (xdotool), and each step's speech is what Okur's log says between its key and the quiet
+XTest (python-xlib, by keycode), and each step's speech is what Okur's log says between its key and the quiet
 after it. Key steps only: a step of another type is skipped, and the trial marked unsuccessful.
 
     python3 run-scenario-linux.py <scenario.json> <run.json>
@@ -26,7 +26,7 @@ OKUR = "./target/debug/examples/okur_linux"
 XA11Y = "./target/debug/xa11y"
 FIXTURES = os.path.expanduser("~/okur/corpus/fixtures/")
 
-# The scenarios' key names as xdotool's.
+# The scenarios' key names as X's keysym names.
 NAMES = {
     "down": "Down", "up": "Up", "left": "Left", "right": "Right", "home": "Home", "end": "End",
     "pageup": "Prior", "pagedown": "Next", "pgup": "Prior", "pgdn": "Next", "tab": "Tab",
@@ -38,25 +38,24 @@ NAMES = {
     "minus": "minus", "equals": "equal", "leftbracket": "bracketleft",
     "rightbracket": "bracketright", "backslash": "backslash",
 }
-MODIFIERS = {"ctrl": "ctrl", "control": "ctrl", "alt": "alt", "shift": "shift", "win": "super",
-             "windows": "super"}
+# The modifiers by the keysym of the key that holds each.
+MODIFIERS = {"ctrl": "Control_L", "control": "Control_L", "alt": "Alt_L", "shift": "Shift_L",
+             "win": "Super_L", "windows": "Super_L", "insert": "Insert"}
 
 
 def chord(name):
-    """A key name with its modifiers ("Insert+Down", "Shift+H", "Ctrl+Home") as xdotool keys:
-    the modifiers xdotool holds, and Insert held around the key, Okur's key not being one."""
+    """A key name with its modifiers ("Insert+Down", "Shift+H", "Ctrl+Home") as the keysym names
+    of the keys pressed, the modifiers first: Insert is held as one, though X has it as none."""
     parts = name.split("+")
     key = parts[-1].strip()
-    mods = [m.strip().lower() for m in parts[:-1]]
-    insert = "insert" in mods
-    held = [MODIFIERS[m] for m in mods if m in MODIFIERS]
+    mods = [MODIFIERS[m.strip().lower()] for m in parts[:-1] if m.strip().lower() in MODIFIERS]
     if re.fullmatch(r"[A-Za-z]", key):
         key = key.lower()
     elif re.fullmatch(r"[Ff]([1-9]|1[0-2])", key):
         key = key.upper()
     else:
         key = NAMES.get(key.lower(), key)
-    return insert, "+".join(held + [key])
+    return mods + [key]
 
 
 def sendkeys(text):
@@ -70,12 +69,31 @@ def sendkeys(text):
     return keys
 
 
+_DISPLAY = None
+
+
 def press(name):
-    insert, keys = chord(name)
-    if insert:
-        subprocess.run(["xdotool", "keydown", "Insert", "key", keys, "keyup", "Insert"])
-    else:
-        subprocess.run(["xdotool", "key", keys])
+    """Presses the chord's keys in order and lets them go in reverse, by their keycodes through
+    XTest. xdotool (3.20160805) pressed and let go Alt before each function key, whose press the
+    window manager's Alt grabs then took: F5 never reached Okur (712's live run, 2026-11-05)."""
+    from Xlib import X, XK, display
+    from Xlib.ext import xtest
+    global _DISPLAY
+    if _DISPLAY is None:
+        _DISPLAY = display.Display()
+    codes = []
+    for keysym_name in chord(name):
+        code = _DISPLAY.keysym_to_keycode(XK.string_to_keysym(keysym_name))
+        if not code:
+            print(f"no keycode for {keysym_name} in {name}", file=sys.stderr)
+            return
+        codes.append(code)
+    for code in codes:
+        xtest.fake_input(_DISPLAY, X.KeyPress, code)
+        _DISPLAY.sync()
+    for code in reversed(codes):
+        xtest.fake_input(_DISPLAY, X.KeyRelease, code)
+        _DISPLAY.sync()
 
 
 def said_since(log, offset):
