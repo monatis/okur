@@ -993,6 +993,7 @@ name = "okur-linux-model"
 version = "0.1.0"
 dependencies = [
  "okur-core",
+ "xa11y-core",
 ]
 
 [[package]]
