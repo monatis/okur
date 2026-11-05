@@ -1350,8 +1350,19 @@ impl ScreenReaderEngine {
             );
         }
 
+        // A control focused inside the window whose own focus was said just before, no key
+        // between, is said after the window's name, not over it: Okur's Command Search opened
+        // with "Search for Okur Commands dialog", cut off 24 ms later by "Search for: Edit"
+        // (live on old-pc, 628/s6, the speech recorder's record), where JAWS says both.
+        let inside_said_window = self
+            .window_focus_said
+            .take()
+            .is_some_and(|window| focus.window_title.as_ref() == Some(&window));
+        if matches!(focus.role, Role::Window | Role::Dialog) && !speech.is_empty() {
+            self.window_focus_said.clone_from(&focus.window_title);
+        }
         if !speech.is_empty() {
-            self.speech.speak(&speech, true);
+            self.speech.speak(&speech, !inside_said_window);
             Some(speech)
         } else {
             None

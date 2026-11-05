@@ -981,6 +981,49 @@ fn a_balloon_tip_is_said_after_the_focus() {
     );
 }
 
+/// A dialog whose window takes the focus before its field (Okur's Command Search, live): the
+/// field is said after the dialog's name, not over it; after a key, a focus interrupts again.
+#[test]
+fn a_field_focused_inside_a_dialog_just_named_does_not_cut_it_off() {
+    #[derive(Clone, Default)]
+    struct Spoken(std::sync::Arc<std::sync::Mutex<Vec<(String, bool)>>>);
+    impl SpeechOutput for Spoken {
+        fn speak(&mut self, text: &str, interrupt: bool) {
+            if let Ok(mut said) = self.0.lock() {
+                said.push((text.to_owned(), interrupt));
+            }
+        }
+        fn stop(&mut self) {}
+    }
+    let speech = Spoken::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(create_test_buffer()),
+        Box::new(speech.clone()),
+    );
+    echo_off(&mut engine);
+    let title = "Search for Okur Commands";
+    let mut window = FocusEvent::new(Role::Window).with_name(title);
+    window.window_title = Some(title.to_owned());
+    let mut field = FocusEvent::new(Role::Edit).with_name("Search for:");
+    field.window_title = Some(title.to_owned());
+    engine.handle_focus_event(&window);
+    engine.handle_focus_event(&field);
+    let interrupts = |speech: &Spoken| -> Vec<bool> {
+        speech
+            .0
+            .lock()
+            .map(|said| said.iter().map(|(_, interrupt)| *interrupt).collect())
+            .unwrap_or_default()
+    };
+    assert_eq!(interrupts(&speech), vec![true, false]);
+    // A key, then another focus in the same window: it interrupts, as every focus does.
+    engine.handle_key_event(&KeyEvent::new(Key::Tab, Modifiers::none(), true));
+    let mut button = FocusEvent::new(Role::Button).with_name("Close");
+    button.window_title = Some(title.to_owned());
+    engine.handle_focus_event(&button);
+    assert_eq!(interrupts(&speech).last(), Some(&true));
+}
+
 /// Say Window in a window that is not a dialog box asks the platform for the window's
 /// controls and says them as they arrive, the window first [obs, 1136/s3].
 #[test]
