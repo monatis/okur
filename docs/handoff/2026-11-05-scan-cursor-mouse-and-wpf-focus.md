@@ -80,3 +80,55 @@ Buffer invariants: 0 violation(s)
 3. Key labels' dialog (Manage Key Labels); Screen Layout's lines (984-993); the review's P3 and
    P10; the Office items when Office is back.
 4. The misspelling gap (17 steps), parked with its findings in the handoff before this one.
+
+## Later the same day: the speech dictionary
+
+The next stretch took backlog row 43's dictionary (JAWS 2025 help: Dictionary Manager Basics,
+read from the installed `jdiction.chm` on old-pc).
+
+- **Found first-hand (research, then 1154, 3 trials):** with a default rule "total" as "sum",
+  JAWS's speech history keeps "let total = price" and Say Word "total", while its synthesizer is
+  given "let sum equals price" and "sum"; a character read alone stays itself. Insert+D in Notepad
+  asks "New Dictionary | File Name: notepad.JDF"; Escape opens the default dictionary on Add...;
+  Add... proposes the word at the cursor; Delete asks "Are you sure you want to delete the
+  dictionary entry total=sum?". Inside its own Dictionary Manager JAWS uses no dictionary: "total
+  equals sum", and "spacebar" where its shipped dictionary elsewhere says "space Bar".
+- **Lab pitfalls:** the lab keyboard is Turkish Q, so a scan-coded I typed into JAWS's dialog
+  gives "ı" ("prıce=cost" matched nothing): the scenario's words have no i. JAWS's Dictionary
+  Manager runs elevated (JDiction.exe): run-scenario's UI Access keys now may reach it (every key
+  was refused in the first run). The tracer kept the tree's other items, JAWS's own dictionary;
+  it now leaves them out (`privacy::without_shipped_dictionary`), and that first recording was not
+  imported. Each trial saves a user `DEFAULT.JDF` (Ctrl+S); old-pc had none, and it was removed
+  after the batch.
+
+| Commit | What |
+|---|---|
+| `962e4b13` | The speech dictionary: rules applied where the history's text becomes the synthesizer's, whole words, a root by `*`, Case Sensitive; Use Dictionary (Text Processing) |
+| `096cdff1` | Tracer: JAWS's own dictionary stays out of the traces |
+| `c9fca233`, `4249d26b` | corpus: JDiction.exe reviewed; 1154 |
+| `b54c1775` | The Dictionary Manager (Insert+D) in Okur's dialogs; no dictionary while it is open; an application's rules before the default ones; replay: Alt+F4 closes Okur's dialog, and a focus without its program's name keeps the application in front |
+
+`okur-lab parity --spoken --only 1154`: 28/34 (history 28/34). Over all scenarios
+(`parity-snapshot.sh` before and after `b54c1775`) only 1154's steps changed. Left in 1154:
+JAWS's own dialog phrasing (s4 "File Name:" said once where Okur says it twice; s5, s25 the
+Notepad focus JAWS shows for a moment as Escape opens the manager; s6, s26 the window's title
+JAWS says on the first Tab into the tree).
+
+At `b54c1775`:
+
+```
+JAWS parity (Ia2): 11710/12262 steps match exactly; 382 accepted divergences not counted (0 scenarios could not run)
+JAWS spoken parity: 11456/12328 steps match exactly (evidence recorded through the speech recorder voice)
+JAWS parity (Uia): 10531/12148 steps match exactly; 382 accepted divergences not counted (16 scenarios could not run)
+Buffer invariants: 0 violation(s)
+```
+
+(`okur-lab parity`, `parity --spoken`, `parity --api uia`, `invariants`.)
+
+### Next, after this
+
+1. The dictionary's rest: an application's own dictionary recorded (OK on New Dictionary), the
+   Change dialog, a root word and Case Sensitive in JAWS's speech, a rule in a page; the Use
+   Dictionary key in JAWS's files (change it in Settings Center on old-pc and compare the files).
+2. 1154's dialog phrasing (above), shared with other JAWS dialogs.
+3. Then the Next list above.
