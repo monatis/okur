@@ -1,0 +1,40 @@
+{
+  "id": "1157-web-dictionary-rule-in-a-page",
+  "name": "JAWS's dictionary in a web page (Chrome's own dictionary): Down twice to the paragraph (the page title, then the heading, come first) that ends \"virtual buffer.\", Insert+D, Enter on New Dictionary (chrome.JDF), Alt+A, the Actual Word replaced by \"buffer\" and \"memory\" as its replacement (typed by JAWS's TypeString), OK, Ctrl+S, Alt+F4; the line in the virtual cursor, Up and Down; then Insert+D (the application's dictionary now), Tab to the rule, Change... and Delete by Tab, Yes, Ctrl+S, Alt+F4, and the line again",
+  "category": "web-reading",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/doc-reading.html",
+  "target_app": "chrome",
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "Down"},
+    {"id": "s3", "type": "key", "command": "Insert+D"},
+    {"id": "s4", "type": "key_ui_access", "command": "Enter"},
+    {"id": "s5", "type": "key_ui_access", "command": "Alt+A"},
+    {"id": "s6", "type": "key_ui_access", "command": "Home"},
+    {"id": "s7", "type": "key_ui_access", "command": "Shift+End"},
+    {"id": "s8", "type": "jaws_function", "command": "TypeString(\"buffer\")"},
+    {"id": "s9", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s10", "type": "jaws_function", "command": "TypeString(\"memory\")"},
+    {"id": "s11", "type": "key_ui_access", "command": "Enter"},
+    {"id": "s12", "type": "key_ui_access", "command": "Ctrl+S"},
+    {"id": "s13", "type": "key_ui_access", "command": "Alt+F4"},
+    {"id": "s14", "type": "key", "command": "Insert+Up"},
+    {"id": "s15", "type": "key", "command": "Up"},
+    {"id": "s16", "type": "key", "command": "Down"},
+    {"id": "s17", "type": "key", "command": "Insert+D"},
+    {"id": "s18", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s19", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s20", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s21", "type": "key_ui_access", "command": "Space"},
+    {"id": "s22", "type": "key_ui_access", "command": "Space"},
+    {"id": "s23", "type": "key_ui_access", "command": "Ctrl+S"},
+    {"id": "s24", "type": "key_ui_access", "command": "Alt+F4"},
+    {"id": "s25", "type": "key", "command": "Insert+Up"}
+  ]
+}

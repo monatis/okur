@@ -1,0 +1,61 @@
+{
+  "id": "1156-desktop-notepad-dictionary-case-sensitive",
+  "name": "JAWS's Dictionary Manager in Notepad, Case Sensitive and the rule's languages: Insert+D with the caret on \"total\", Enter on New Dictionary (notepad.JDF), Alt+A, the Actual Word replaced by \"TOTAL\" and \"sum\" as its replacement (typed by JAWS's TypeString), Alt+L and Down eight times through Applies to: Language's nine choices, Home back to All Languages, Alt+N (Case Sensitive, its access key in 1158's trace; Alt+S is Sound), OK, Ctrl+S, Alt+F4; the line (its lower-case \"total\" not matched); Insert+D, Change..., Alt+N (Case Sensitive off), OK, Ctrl+S, Alt+F4; the line again (now matched); then the rule deleted, Ctrl+S, Alt+F4",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s3", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s4", "type": "key", "command": "Insert+D"},
+    {"id": "s5", "type": "key_ui_access", "command": "Enter"},
+    {"id": "s6", "type": "key_ui_access", "command": "Alt+A"},
+    {"id": "s7", "type": "key_ui_access", "command": "Home"},
+    {"id": "s8", "type": "key_ui_access", "command": "Shift+End"},
+    {"id": "s9", "type": "jaws_function", "command": "TypeString(\"TOTAL\")"},
+    {"id": "s10", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s11", "type": "jaws_function", "command": "TypeString(\"sum\")"},
+    {"id": "s12", "type": "key_ui_access", "command": "Alt+L"},
+    {"id": "s13", "type": "key_ui_access", "command": "Down"},
+    {"id": "s14", "type": "key_ui_access", "command": "Down"},
+    {"id": "s15", "type": "key_ui_access", "command": "Down"},
+    {"id": "s16", "type": "key_ui_access", "command": "Down"},
+    {"id": "s17", "type": "key_ui_access", "command": "Down"},
+    {"id": "s18", "type": "key_ui_access", "command": "Down"},
+    {"id": "s19", "type": "key_ui_access", "command": "Down"},
+    {"id": "s20", "type": "key_ui_access", "command": "Down"},
+    {"id": "s21", "type": "key_ui_access", "command": "Home"},
+    {"id": "s22", "type": "key_ui_access", "command": "Alt+N"},
+    {"id": "s23", "type": "key_ui_access", "command": "Enter"},
+    {"id": "s24", "type": "key_ui_access", "command": "Ctrl+S"},
+    {"id": "s25", "type": "key_ui_access", "command": "Alt+F4"},
+    {"id": "s26", "type": "key", "command": "Insert+Up"},
+    {"id": "s27", "type": "key", "command": "Insert+D"},
+    {"id": "s28", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s29", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s30", "type": "key_ui_access", "command": "Space"},
+    {"id": "s31", "type": "key_ui_access", "command": "Alt+N"},
+    {"id": "s32", "type": "key_ui_access", "command": "Enter"},
+    {"id": "s33", "type": "key_ui_access", "command": "Ctrl+S"},
+    {"id": "s34", "type": "key_ui_access", "command": "Alt+F4"},
+    {"id": "s35", "type": "key", "command": "Insert+Up"},
+    {"id": "s36", "type": "key", "command": "Insert+D"},
+    {"id": "s37", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s38", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s39", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s40", "type": "key_ui_access", "command": "Space"},
+    {"id": "s41", "type": "key_ui_access", "command": "Space"},
+    {"id": "s42", "type": "key_ui_access", "command": "Ctrl+S"},
+    {"id": "s43", "type": "key_ui_access", "command": "Alt+F4"}
+  ]
+}
