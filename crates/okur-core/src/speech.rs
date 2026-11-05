@@ -1502,6 +1502,12 @@ pub trait SpeechOutput: Send + Sync {
         let _ = voice;
     }
 
+    /// Gives the synthesizer from now on a rule's replacement for its word, while the voice's
+    /// Use Dictionary is on; the speech history keeps the text ([`crate::dictionary`]).
+    fn set_dictionary(&mut self, entries: &[crate::dictionary::DictionaryEntry]) {
+        let _ = entries;
+    }
+
     /// Less speech (Speech On Demand between its commands, or muted): what is said from now on
     /// is kept in the speech history but not given to the synthesizer, until it is spoken
     /// again [obs, 700/s1, s3: Down and H silent, "banner" and the heading in the history;

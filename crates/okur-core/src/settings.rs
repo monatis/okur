@@ -555,6 +555,9 @@ pub struct TextProcessing {
     /// Dollar and euro amounts go to the synthesizer as written ("$0.02", "€"), for it to say
     /// [obs, 723].
     pub say_dollars: bool,
+    /// Words pass through the speech dictionary: JAWS's Use Dictionary (Settings Center, Text
+    /// Processing, General), checked by default (JAWS 2025 help, Turn Off Dictionary).
+    pub use_dictionary: bool,
 }
 
 impl Default for TextProcessing {
@@ -563,6 +566,7 @@ impl Default for TextProcessing {
             mixed_case: true,
             numbers_as_digits: false,
             say_dollars: false,
+            use_dictionary: true,
         }
     }
 }
@@ -1112,6 +1116,10 @@ pub struct Settings {
     /// Forms Mode Settings; `[FormsMode] AutoFormsModeThreshold`, milliseconds, -1 for Never,
     /// the default; .5 to 5 seconds) [Surf's Up, Forms; old-pc's Settings Center, 2026-11-04].
     pub quick_key_delay_ms: u32,
+    /// The speech dictionary's rules (JAWS's Dictionary Manager, Insert+D): words the
+    /// synthesizer is given otherwise than they are written, while Text Processing's Use
+    /// Dictionary is on ([`crate::dictionary`]).
+    pub dictionary: Vec<crate::dictionary::DictionaryEntry>,
     pub mouse_echo: MouseEcho,
     /// The language Insert+Space, O recognizes the screen in, a BCP 47 tag ("tr-TR"): JAWS's
     /// Microsoft OCR Language (`[OCR] MicrosoftOcrLanguage`, a locale number, 1033 by
@@ -1152,6 +1160,7 @@ impl Default for Settings {
             progress_bar_interval_ms: 5000,
             phonetic_pause_ms: 1500,
             quick_key_delay_ms: 0,
+            dictionary: Vec::new(),
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),
             voice_profiles: std::collections::BTreeMap::new(),
@@ -1299,6 +1308,8 @@ impl Settings {
             // Not in old-pc's user JCF: the shared one's (`PhoneticCharAfterPause=15`).
             phonetic_pause_ms: 1500,
             quick_key_delay_ms: 0,
+            // old-pc has no dictionary of its own (no user DEFAULT.JDF, 2026-11-05).
+            dictionary: Vec::new(),
             // Not in old-pc's user JCF: the shared one's, JAWS's defaults.
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),

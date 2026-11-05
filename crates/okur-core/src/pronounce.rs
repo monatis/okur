@@ -183,11 +183,24 @@ pub fn spoken(text: &str, level: Punctuation) -> String {
 /// [`spoken`] with Text Processing set otherwise than JAWS's defaults: mixed case left whole,
 /// numbers digit by digit, dollars and euros left to the synthesizer [obs, 721-723].
 pub fn spoken_with(text: &str, level: Punctuation, processing: TextProcessing) -> String {
+    spoken_in(text, level, processing, &[])
+}
+
+/// [`spoken_with`] with the speech dictionary's rules: the synthesizer is given a rule's
+/// replacement where the text has its word, while Use Dictionary is on ("let sum equals price"
+/// for "let total = price" [obs, 1154]).
+pub fn spoken_in(
+    text: &str,
+    level: Punctuation,
+    processing: TextProcessing,
+    dictionary: &[crate::dictionary::DictionaryEntry],
+) -> String {
     render(
         text,
         level,
         level == Punctuation::All || processing.numbers_as_digits,
         processing,
+        dictionary,
     )
 }
 
@@ -203,12 +216,23 @@ pub fn spoken_symbols(text: &str) -> String {
 /// dollar amounts as the settings have them, as for any text [obs, 721, 722, 723: words read
 /// by Ctrl+Right].
 pub fn spoken_symbols_with(text: &str, processing: TextProcessing) -> String {
+    spoken_symbols_in(text, processing, &[])
+}
+
+/// [`spoken_symbols_with`] with the speech dictionary's rules: Say Word "total" is given to
+/// the synthesizer as "sum" [obs, 1154].
+pub fn spoken_symbols_in(
+    text: &str,
+    processing: TextProcessing,
+    dictionary: &[crate::dictionary::DictionaryEntry],
+) -> String {
     // Numbers digit by digit say a decimal point as "point": "2 point 5" [obs, 722/s20].
     render(
         text,
         Punctuation::All,
         processing.numbers_as_digits,
         processing,
+        dictionary,
     )
 }
 
@@ -233,17 +257,19 @@ fn render(
     level: Punctuation,
     point_digits: bool,
     processing: TextProcessing,
+    dictionary: &[crate::dictionary::DictionaryEntry],
 ) -> String {
     let digits = processing.numbers_as_digits;
-    let text = single_digits(
-        &split_words(
-            &respelled(&repeats_filtered(
-                &without_direction_marks(text).replace(['\u{1d}', '\u{1e}'], " "),
-            )),
-            processing.mixed_case,
-        ),
-        digits,
-    );
+    let text = respelled(&repeats_filtered(
+        &without_direction_marks(text).replace(['\u{1d}', '\u{1e}'], " "),
+    ));
+    // The user's rules, before a word is split at its capitals and digits.
+    let text = if processing.use_dictionary && !dictionary.is_empty() {
+        crate::dictionary::apply(dictionary, &text)
+    } else {
+        text
+    };
+    let text = single_digits(&split_words(&text, processing.mixed_case), digits);
     let chars: Vec<char> = text.chars().collect();
     let mut out = String::with_capacity(text.len() * 2);
     let word = |out: &mut String, name: &str| {
@@ -877,5 +903,36 @@ mod tests {
             "1 slash 2 slash 2026 3:04 AM"
         );
         assert_eq!(spoken_symbols("\u{2067}a\u{2069}"), spoken_symbols("a"));
+    }
+
+    /// The speech dictionary's rule is given to the synthesizer in the line and in a word read
+    /// alone: "let sum equals price", "sum" for "total" [obs, 1154]; Use Dictionary off, the text
+    /// as written. A rule applies before a word is split at its capitals: "SayAll" is its own.
+    #[test]
+    fn the_dictionary_changes_what_the_synthesizer_is_given() {
+        let rules = [
+            crate::dictionary::DictionaryEntry::new("total", "sum"),
+            crate::dictionary::DictionaryEntry::new("SayAll", "say everything"),
+        ];
+        let on = TextProcessing::default();
+        assert_eq!(
+            spoken_in(
+                "    let total = price * 1.5; // tax",
+                Punctuation::Most,
+                on,
+                &rules
+            ),
+            spoken("    let sum = price * 1.5; // tax", Punctuation::Most)
+        );
+        assert_eq!(spoken_symbols_in("total", on, &rules), "sum");
+        assert_eq!(
+            spoken_in("SayAll", Punctuation::Most, on, &rules),
+            "say everything"
+        );
+        let off = TextProcessing {
+            use_dictionary: false,
+            ..on
+        };
+        assert_eq!(spoken_symbols_in("total", off, &rules), "total");
     }
 }

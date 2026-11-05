@@ -33,6 +33,8 @@ enum Request {
     Marked(String, u64, bool),
     Stop,
     Configure(Box<okur_core::settings::VoiceSettings>),
+    /// The speech dictionary's rules from now on.
+    Dictionary(std::sync::Arc<[okur_core::dictionary::DictionaryEntry]>),
 }
 
 /// How many utterances the Speech History keeps (JAWS's help gives 50 and 500 [S3, H14]).
@@ -90,7 +92,7 @@ impl Request {
     fn speaks(&self) -> bool {
         !matches!(
             self,
-            Request::Stop | Request::Configure(_) | Request::Cursor(_)
+            Request::Stop | Request::Configure(_) | Request::Dictionary(_) | Request::Cursor(_)
         )
     }
 
@@ -104,7 +106,7 @@ impl Request {
             | Request::Phonetic(_, interrupt)
             | Request::Spelled(_, interrupt)
             | Request::Marked(_, _, interrupt) => *interrupt,
-            Request::Configure(_) | Request::Cursor(_) => false,
+            Request::Configure(_) | Request::Dictionary(_) | Request::Cursor(_) => false,
         }
     }
 
@@ -132,7 +134,11 @@ impl Request {
             .into_iter()
             .enumerate()
             .filter(move |(i, request)| {
-                *i >= cut || matches!(request, Request::Configure(_) | Request::Cursor(_))
+                *i >= cut
+                    || matches!(
+                        request,
+                        Request::Configure(_) | Request::Dictionary(_) | Request::Cursor(_)
+                    )
             })
             .map(|(_, request)| request)
     }
@@ -429,7 +435,12 @@ fn carry_out(
         };
         match request {
             Request::Marked(text, mark, interrupt) => {
-                let spoken = okur_core::pronounce::spoken_with(&text, tts.punctuation, tts.text);
+                let spoken = okur_core::pronounce::spoken_in(
+                    &text,
+                    tts.punctuation,
+                    tts.text,
+                    &tts.dictionary,
+                );
                 // Capitalized words raised, each a part of its own behind the part's mark.
                 let parts = if tts.say_all_caps {
                     okur_core::pronounce::capital_word_parts(&spoken)
@@ -467,7 +478,12 @@ fn carry_out(
                         tracing::debug!(part = i, "long speech cut off between its parts");
                         break;
                     }
-                    let spoken = okur_core::pronounce::spoken_with(part, tts.punctuation, tts.text);
+                    let spoken = okur_core::pronounce::spoken_in(
+                        part,
+                        tts.punctuation,
+                        tts.text,
+                        &tts.dictionary,
+                    );
                     logged(
                         &mut tts.failed_in_a_row,
                         tts.engine
@@ -477,7 +493,8 @@ fn carry_out(
                 }
             }
             Request::Symbols(text, interrupt) => {
-                let spoken = okur_core::pronounce::spoken_symbols_with(&text, tts.text);
+                let spoken =
+                    okur_core::pronounce::spoken_symbols_in(&text, tts.text, &tts.dictionary);
                 logged(
                     &mut tts.failed_in_a_row,
                     tts.engine.speak_pitched(&spoken, pitch, interrupt),
@@ -546,6 +563,7 @@ fn carry_out(
             Request::Stop => {
                 logged(&mut tts.failed_in_a_row, tts.engine.stop(), "stop");
             }
+            Request::Dictionary(entries) => tts.dictionary = entries,
             Request::Configure(voice) => {
                 let kind = tts.kind;
                 tts.configure(&voice);
@@ -744,6 +762,10 @@ impl SpeechOutput for SpeechThread {
 
     fn configure(&mut self, voice: &okur_core::settings::VoiceSettings) {
         self.send(Request::Configure(Box::new(voice.clone())));
+    }
+
+    fn set_dictionary(&mut self, entries: &[okur_core::dictionary::DictionaryEntry]) {
+        self.send(Request::Dictionary(entries.into()));
     }
 }
 

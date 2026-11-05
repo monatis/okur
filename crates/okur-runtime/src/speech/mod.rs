@@ -41,6 +41,8 @@ pub struct TtsManager {
     pub(crate) pitch: i32,
     /// How running text is given to the voice (the voice settings' Text Processing).
     pub(crate) text: okur_core::settings::TextProcessing,
+    /// The speech dictionary's rules ([`okur_core::dictionary`]).
+    pub(crate) dictionary: std::sync::Arc<[okur_core::dictionary::DictionaryEntry]>,
     /// The voice settings last applied, so that a change applies only what differs.
     applied: Option<okur_core::settings::VoiceSettings>,
     /// The voice settings as configured, every voice context's.
@@ -126,6 +128,7 @@ impl TtsManager {
             say_all_caps: false,
             pitch: 0,
             text: okur_core::settings::TextProcessing::default(),
+            dictionary: std::sync::Arc::new([]),
             applied: None,
             settings: None,
             context: okur_core::settings::VoiceContext::PcCursor,
@@ -178,7 +181,7 @@ impl TtsManager {
     /// Speaks text with every symbol named: a selection, a word read on its own.
     pub fn speak_symbols(&mut self, text: &str, interrupt: bool) -> Result<(), TtsError> {
         self.engine.speak(
-            &okur_core::pronounce::spoken_symbols_with(text, self.text),
+            &okur_core::pronounce::spoken_symbols_in(text, self.text, &self.dictionary),
             interrupt,
         )
     }
@@ -190,7 +193,7 @@ impl TtsManager {
         interrupt: bool,
     ) -> Result<(), TtsError> {
         self.engine.speak(
-            &okur_core::pronounce::spoken_with(text, level, self.text),
+            &okur_core::pronounce::spoken_in(text, level, self.text, &self.dictionary),
             interrupt,
         )
     }
@@ -263,6 +266,10 @@ impl TtsManager {
 }
 
 impl okur_core::speech::SpeechOutput for TtsManager {
+    fn set_dictionary(&mut self, entries: &[okur_core::dictionary::DictionaryEntry]) {
+        self.dictionary = entries.into();
+    }
+
     /// Typing echo: kept out of the speech log, as JAWS keeps it out of its history; a capital
     /// at a raised pitch [obs, 406/s13].
     fn speak_echo(&mut self, text: &str) {

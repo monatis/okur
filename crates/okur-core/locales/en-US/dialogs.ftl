@@ -463,6 +463,8 @@ settings-tree-mixed-case = Mixed case processing
 settings-tree-mixed-case-description = Whether a word written in mixed case is spoken in its parts, "get Element By Id", or whole.
 settings-tree-say-dollars = Speak Dollars
 settings-tree-say-dollars-description = Whether amounts of money are left to the synthesizer as written, rather than read by Okur.
+settings-tree-use-dictionary = Use Dictionary
+settings-tree-use-dictionary-description = Whether words are spoken as the speech dictionary's rules say, rather than as written.
 settings-tree-speech-mode = Speech Mode
 # Screen Echo, in User, and Smart Navigation Mode, in Web / HTML / PDFs > Navigation, with their
 # values as Settings Center names them [obs, the walk of Settings Center's search].

@@ -212,9 +212,11 @@ fn center_group(id: &str) -> Option<TreeGroup> {
         "read_page_on_load" => TreeGroup::WebReading,
         "forms_mode" => TreeGroup::FormsMode,
         "identify_same_page_links" => TreeGroup::WebLinks,
-        "voice.indicate_caps" | "live_region_append" | "voice.text.mixed_case" | "indentation" => {
-            TreeGroup::TextGeneral
-        }
+        "voice.indicate_caps"
+        | "live_region_append"
+        | "voice.text.mixed_case"
+        | "voice.text.use_dictionary"
+        | "indentation" => TreeGroup::TextGeneral,
         "voice.text.say_dollars" => TreeGroup::TextNumbers,
         "phonetic_pause_ms" => TreeGroup::TextPhonetic,
         "quick_key_delay_ms" => TreeGroup::AutoFormsMode,

@@ -854,6 +854,8 @@ struct RecordingSpeech {
     say_all_caps: std::sync::Arc<std::sync::atomic::AtomicBool>,
     /// The voice settings' Text Processing.
     text: std::sync::Arc<std::sync::Mutex<okur_core::settings::TextProcessing>>,
+    /// The speech dictionary's rules: the synthesizer is given their replacements.
+    dictionary: std::sync::Arc<std::sync::Mutex<Vec<okur_core::dictionary::DictionaryEntry>>>,
 }
 
 fn append(log: &Log, text: String) {
@@ -892,16 +894,25 @@ impl RecordingSpeech {
             return;
         }
         let processing = self.text.lock().map(|t| *t).unwrap_or_default();
+        let dictionary = self.dictionary();
         let spoken = if symbols {
-            okur_core::pronounce::spoken_symbols_with(text, processing)
+            okur_core::pronounce::spoken_symbols_in(text, processing, &dictionary)
         } else {
-            okur_core::pronounce::spoken_with(text, level, processing)
+            okur_core::pronounce::spoken_in(text, level, processing, &dictionary)
         };
         append(&self.spoken, spoken);
     }
 
     fn take(&self) -> Vec<String> {
         drain(&self.history)
+    }
+
+    /// The speech dictionary's rules now.
+    fn dictionary(&self) -> Vec<okur_core::dictionary::DictionaryEntry> {
+        self.dictionary
+            .lock()
+            .map(|d| d.clone())
+            .unwrap_or_default()
     }
 
     fn take_spoken(&self) -> Vec<String> {
@@ -952,9 +963,15 @@ impl okur_core::speech::SpeechOutput for RecordingSpeech {
             .map(|level| *level)
             .unwrap_or_default();
         let processing = self.text.lock().map(|t| *t).unwrap_or_default();
-        let spoken = okur_core::pronounce::spoken_with(text, level, processing);
+        let spoken = okur_core::pronounce::spoken_in(text, level, processing, &self.dictionary());
         for (part, pitch) in okur_core::pronounce::capital_word_parts(&spoken) {
             append(&self.spoken, okur_core::pronounce::pitched(&part, pitch));
+        }
+    }
+
+    fn set_dictionary(&mut self, entries: &[okur_core::dictionary::DictionaryEntry]) {
+        if let Ok(mut dictionary) = self.dictionary.lock() {
+            *dictionary = entries.to_vec();
         }
     }
 

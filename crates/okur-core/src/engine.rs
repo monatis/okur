@@ -2047,6 +2047,7 @@ impl ScreenReaderEngine {
             .settings_layers
             .resolve(application.as_deref(), site.as_deref());
         let voice_changed = settings.voice != self.settings.voice;
+        let dictionary_changed = settings.dictionary != self.settings.dictionary;
         let choices_changed = settings.identify_same_page_links
             != self.settings.identify_same_page_links
             || settings.show_graphics != self.settings.show_graphics
@@ -2056,6 +2057,9 @@ impl ScreenReaderEngine {
         self.settings = settings;
         if voice_changed {
             self.configure_voice();
+        }
+        if dictionary_changed {
+            self.speech.set_dictionary(&self.settings.dictionary);
         }
         if choices_changed {
             self.reread_with_choices();

@@ -7,6 +7,7 @@ pub mod clock;
 pub mod color;
 pub mod command;
 pub mod cursor;
+pub mod dictionary;
 pub mod document;
 pub mod editing;
 pub mod element_lists;
