@@ -74,6 +74,23 @@ fn main() {
         let _ = conn.flush();
         println!("grabbed {} windows ({mode}), failed {failed}", tops.len());
     }
+    // `thread`: the events read as the hook reads them, `wait_for_event` in a thread of its own
+    // over a shared connection.
+    if std::env::args().nth(3).as_deref() == Some("thread") {
+        let conn = std::sync::Arc::new(conn);
+        let reader = std::sync::Arc::clone(&conn);
+        std::thread::spawn(move || loop {
+            match reader.wait_for_event() {
+                Ok(event) => println!("thread event: {event:?}"),
+                Err(error) => {
+                    println!("thread error: {error}");
+                    return;
+                }
+            }
+        });
+        std::thread::sleep(std::time::Duration::from_secs(seconds));
+        return;
+    }
     let until = std::time::Instant::now() + std::time::Duration::from_secs(seconds);
     while std::time::Instant::now() < until {
         match conn.poll_for_event() {
