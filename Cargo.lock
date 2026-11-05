@@ -998,6 +998,7 @@ version = "0.1.0"
 dependencies = [
  "okur-core",
  "serde",
+ "serde_json",
  "xa11y-core",
 ]
 

@@ -83,6 +83,7 @@ fn role(node: &AtspiNode) -> Role {
         "static" | "text" if !node.has(state::EDITABLE) => Role::Text,
         "link" => Role::Link { href: None },
         "push button" | "button" | "toggle button" => Role::Button,
+        "switch" => Role::CheckBox,
         "check box" | "check menu item" => Role::CheckBox,
         "radio button" | "radio menu item" => Role::RadioButton,
         "entry" | "password text" | "text" | "spin button" => Role::Edit,
@@ -136,8 +137,14 @@ fn convert(node: &AtspiNode, next_id: &mut usize) -> AomNode {
         _ => {}
     }
     aom.states = NodeStates {
-        checked: (node.has(state::CHECKABLE) || node.has(state::CHECKED))
-            .then(|| node.has(state::CHECKED)),
+        // A toggle button is checked when pressed, as Windows' pages give it ("Toggle button
+        // Pressed").
+        checked: if node.role == "toggle button" {
+            Some(node.has(state::PRESSED) || node.has(state::CHECKED))
+        } else {
+            (node.has(state::CHECKABLE) || node.has(state::CHECKED))
+                .then(|| node.has(state::CHECKED))
+        },
         mixed: node.has(state::INDETERMINATE),
         selected: node.has(state::SELECTED).then_some(true),
         expanded: node

@@ -73,7 +73,15 @@ pub fn states(element: &ElementData) -> NodeStates {
 
 /// The focus event for the element that took the keyboard focus.
 pub fn focus_event(element: &ElementData) -> FocusEvent {
-    let mut event = FocusEvent::new(role(element.role, None));
+    // xa11y gives a toggle button (GTK's GtkToggleButton) the Switch role, a switch's too:
+    // AT-SPI's own role name tells them apart. A toggle button is Okur's button whose
+    // checked state is its pressed one, "Toggle button Pressed", as Windows' pages give it.
+    let toggle = element.raw.get("atspi_role").and_then(|r| r.as_str()) == Some("toggle button");
+    let mut event = FocusEvent::new(if toggle {
+        Role::Button
+    } else {
+        role(element.role, None)
+    });
     event.name = element.name.clone().filter(|n| !n.is_empty());
     // A container's value is its text with U+FFFC where each child sits (a page's document):
     // not a value to say (the lab's first page read said them after the page's name).
@@ -82,6 +90,9 @@ pub fn focus_event(element: &ElementData) -> FocusEvent {
         .clone()
         .filter(|v| !v.is_empty() && !v.contains('\u{fffc}'));
     event.states = states(element);
+    if toggle {
+        event.states.checked = Some(event.states.checked == Some(true));
+    }
     event
 }
 
@@ -96,6 +107,20 @@ mod tests {
         assert_eq!(role(AtRole::WebArea, None), Role::Document);
         assert_eq!(role(AtRole::Heading, Some(2)), Role::Heading { level: 2 });
         assert_eq!(role(AtRole::Unknown, None), Role::Generic);
+    }
+
+    #[test]
+    fn a_toggle_button_is_a_button_pressed_or_not() {
+        let mut toggle = ElementData::for_role(AtRole::Switch);
+        toggle.raw.insert(
+            "atspi_role".to_owned(),
+            serde_json::Value::String("toggle button".to_owned()),
+        );
+        let event = focus_event(&toggle);
+        assert_eq!(event.role, Role::Button);
+        assert_eq!(event.states.checked, Some(false));
+        let switch = ElementData::for_role(AtRole::Switch);
+        assert_eq!(focus_event(&switch).role, Role::CheckBox);
     }
 
     #[test]
