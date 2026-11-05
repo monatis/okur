@@ -8,16 +8,19 @@
 //!   an item "total=sum" found by its first letter, then Change... (with a rule chosen), Delete
 //!   and Add..., the focus on Add... as it opens [obs, 1154/s5-s8, s27-s29];
 //! - Add... with the word at the cursor as the Actual Word, "Add Dictionary Definition dialog |
-//!   Actual Word: Edit | total", then Replacement Word, and Case Sensitive; OK keeps the rule
-//!   and the manager is in front again on Add... [obs, 1154/s9-s14];
+//!   Actual Word: Edit | total", then by Tab Replacement Word, "Sound: read only edit | <None>",
+//!   Select Sound..., Play Sound, "Applies to: Language: Combo box | All Languages", "Speak
+//!   replacement word using Language: Combo box | Default", Case Sensitive, OK and Cancel, by
+//!   Alt+A, R, S, T, P, L, U and N; OK keeps the rule and the manager is in front again on
+//!   Add... [obs, 1154/s9-s14, 1158/s6-s20 and its trace's access keys];
 //! - Delete asks first, "Confirm Dictionary Entries Delete dialog | Are you sure you want to
 //!   delete the dictionary entry total=sum? | Yes Button" [obs, 1154/s30, s31].
 //!
-//! JAWS's rules may also play a sound or speak in another language, and a rule may be limited
-//! to a language, a synthesizer or a voice; Okur's rules do not do that yet, and the add dialog
-//! leaves those controls out.
+//! A rule's sound is chosen and played from its dialog; JAWS's Language offers 9 choices
+//! [obs, 1158/s12], Okur's only "All Languages" until they are recorded, and its rules apply to
+//! every language and speak in the voice's own.
 
-use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, TreeItem, Value};
+use okur_ui_model::{Control, ControlKind, DialogSpec, FromUi, ToUi, TreeItem, Value};
 
 use crate::dictionary::DictionaryEntry;
 use crate::messages::msg;
@@ -216,11 +219,15 @@ pub enum RuleOutcome {
     Nothing,
     /// OK, with the rule as the dialog leaves it.
     Done(DictionaryEntry),
+    /// Messages for the dialog: Select Sound...'s Open dialog, the Sound field's new text.
+    Send(Vec<ToUi>),
+    /// Play Sound: the sound file chosen.
+    Play(String),
     Closed,
 }
 
-/// Add Dictionary Definition, or Change Dictionary Definition for a rule already kept: the
-/// Actual Word, the Replacement Word, Case Sensitive, OK and Cancel.
+/// Add Dictionary Definition, or Change Dictionary Definition for a rule already kept, with
+/// JAWS's controls in its order [obs, 1158/s6-s20].
 #[derive(Debug, Clone)]
 pub struct RuleDialog {
     pub id: u32,
@@ -274,6 +281,50 @@ impl RuleDialog {
                     true,
                 ),
                 control(
+                    "sound",
+                    msg::dictionary_sound().to_string(),
+                    ControlKind::Note {
+                        text: self.sound_text(),
+                    },
+                    true,
+                ),
+                button(
+                    "select_sound",
+                    msg::dictionary_select_sound().to_string(),
+                    false,
+                    true,
+                ),
+                button(
+                    "play_sound",
+                    msg::dictionary_play_sound().to_string(),
+                    false,
+                    true,
+                ),
+                control(
+                    "applies_to",
+                    msg::dictionary_applies_to().to_string(),
+                    ControlKind::Group,
+                    true,
+                ),
+                control(
+                    "language",
+                    msg::dictionary_language().to_string(),
+                    ControlKind::Choice {
+                        options: vec![msg::dictionary_all_languages().to_string()],
+                        selected: 0,
+                    },
+                    true,
+                ),
+                control(
+                    "speak_language",
+                    msg::dictionary_speak_language().to_string(),
+                    ControlKind::Choice {
+                        options: vec![msg::dictionary_default_language().to_string()],
+                        selected: 0,
+                    },
+                    true,
+                ),
+                control(
                     "case",
                     msg::dictionary_case_sensitive().to_string(),
                     ControlKind::CheckBox {
@@ -295,6 +346,15 @@ impl RuleDialog {
                     ("actual", Value::Text(text)) => self.entry.actual.clone_from(text),
                     ("replacement", Value::Text(text)) => self.entry.replacement.clone_from(text),
                     ("case", Value::Checked(checked)) => self.entry.case_sensitive = *checked,
+                    // The file Select Sound...'s Open dialog chose, shown in the Sound field.
+                    ("sound", Value::Text(path)) if path != &self.sound_text() => {
+                        self.entry.sound.clone_from(path);
+                        return RuleOutcome::Send(vec![ToUi::DialogSet {
+                            id: self.id,
+                            control: "sound".to_owned(),
+                            value: Value::Text(self.sound_text()),
+                        }]);
+                    }
                     _ => {}
                 }
                 RuleOutcome::Nothing
@@ -309,11 +369,41 @@ impl RuleDialog {
                         ..self.entry.clone()
                     })
                 }
+                // Select Sound...: the system's Open dialog, for the Sound field, as the
+                // notification rules' Select Sound... opens it.
+                "select_sound" => RuleOutcome::Send(vec![ToUi::FileOpen {
+                    id: self.id,
+                    control: "sound".to_owned(),
+                    filter: vec![
+                        (
+                            msg::notification_rule_sound_files().to_string(),
+                            "*.wav".to_owned(),
+                        ),
+                        (
+                            msg::notification_rule_all_files().to_string(),
+                            "*.*".to_owned(),
+                        ),
+                    ],
+                    folder: None,
+                }]),
+                // Play Sound: the file chosen, played now; with none, nothing.
+                "play_sound" if !self.entry.sound.trim().is_empty() => {
+                    RuleOutcome::Play(self.entry.sound.clone())
+                }
                 "cancel" => RuleOutcome::Closed,
                 _ => RuleOutcome::Nothing,
             },
             FromUi::DialogClosed { id } if *id == self.id => RuleOutcome::Closed,
             _ => RuleOutcome::Nothing,
+        }
+    }
+
+    /// The Sound field: the file chosen, or "<None>".
+    fn sound_text(&self) -> String {
+        if self.entry.sound.trim().is_empty() {
+            msg::dictionary_no_sound().to_string()
+        } else {
+            self.entry.sound.clone()
         }
     }
 }
@@ -458,7 +548,9 @@ mod tests {
         );
     }
 
-    /// Add proposes the word at the cursor; OK keeps the rule as typed, and needs a word.
+    /// Add proposes the word at the cursor, with JAWS's controls in its Tab order and their
+    /// access keys [obs, 1158/s6-s20 and its trace]; OK keeps the rule as typed, and needs a
+    /// word.
     #[test]
     fn add_keeps_the_rule_as_typed() {
         let mut dialog = RuleDialog::add(5, "total");
@@ -469,7 +561,17 @@ mod tests {
             [
                 ("actual", "&Actual Word:", true),
                 ("replacement", "&Replacement Word:", true),
-                ("case", "Case &Sensitive", true),
+                ("sound", "&Sound:", true),
+                ("select_sound", "Selec&t Sound...", true),
+                ("play_sound", "&Play Sound", true),
+                ("applies_to", "Applies to:", true),
+                ("language", "&Language:", true),
+                (
+                    "speak_language",
+                    "Speak replacement word &using Language:",
+                    true
+                ),
+                ("case", "Case Se&nsitive", true),
                 ("ok", "OK", true),
                 ("cancel", "Cancel", true),
             ]
@@ -487,6 +589,56 @@ mod tests {
         let mut empty = RuleDialog::add(6, " ");
         assert_eq!(empty.handle(&pressed(6, "ok")), RuleOutcome::Nothing);
         assert_eq!(empty.handle(&pressed(6, "cancel")), RuleOutcome::Closed);
+    }
+
+    /// Sound shows "<None>" [obs, 1158/s9]; Select Sound... asks for a file, the file chosen is
+    /// shown and kept with the rule, and Play Sound plays it; with none, Play Sound does nothing.
+    #[test]
+    fn a_rule_keeps_the_sound_chosen() {
+        let mut dialog = RuleDialog::add(8, "total");
+        let sound = |spec: &DialogSpec| {
+            spec.controls
+                .iter()
+                .find(|c| c.id == "sound")
+                .map(|c| c.kind.clone())
+        };
+        assert_eq!(
+            sound(&dialog.spec()),
+            Some(ControlKind::Note {
+                text: "<None>".to_owned()
+            })
+        );
+        assert_eq!(
+            dialog.handle(&pressed(8, "play_sound")),
+            RuleOutcome::Nothing
+        );
+        assert!(matches!(
+            dialog.handle(&pressed(8, "select_sound")),
+            RuleOutcome::Send(messages)
+                if matches!(messages.as_slice(), [ToUi::FileOpen { id: 8, control, .. }] if control == "sound")
+        ));
+        let chosen = FromUi::DialogChanged {
+            id: 8,
+            control: "sound".to_owned(),
+            value: Value::Text("C:\\Sounds\\ding.wav".to_owned()),
+        };
+        assert_eq!(
+            dialog.handle(&chosen),
+            RuleOutcome::Send(vec![ToUi::DialogSet {
+                id: 8,
+                control: "sound".to_owned(),
+                value: Value::Text("C:\\Sounds\\ding.wav".to_owned()),
+            }])
+        );
+        assert_eq!(
+            dialog.handle(&pressed(8, "play_sound")),
+            RuleOutcome::Play("C:\\Sounds\\ding.wav".to_owned())
+        );
+        let kept = match dialog.handle(&pressed(8, "ok")) {
+            RuleOutcome::Done(rule) => rule.sound,
+            _ => String::new(),
+        };
+        assert_eq!(kept, "C:\\Sounds\\ding.wav");
     }
 
     /// Delete asks with the rule's text [obs, 1154/s30]; Escape answers no.

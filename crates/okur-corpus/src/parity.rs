@@ -625,9 +625,10 @@ fn replay_scenario(
                             | okur_core::AccessibilityEvent::Change { control: focus, .. } => {
                                 mirror.focus(focus)
                             }
-                            okur_core::AccessibilityEvent::TextContext(context) => {
-                                mirror.typed(&context.text)
-                            }
+                            okur_core::AccessibilityEvent::TextContext(context) => mirror.typed(
+                                event.object.as_ref().and_then(|o| o.name.as_deref()),
+                                &context.text,
+                            ),
                             _ => Vec::new(),
                         };
                         for report in reports {

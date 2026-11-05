@@ -417,6 +417,14 @@ impl DialogMirror {
                         _ => (true, None),
                     }
                 }
+                // A read-only text reached by Tab ("Sound: read only edit | <None>" in Add
+                // Dictionary Definition [obs, 1158/s9]): the focus only, its text not Okur's to
+                // change, so what the trace reports of it is typed nowhere.
+                (ControlKind::Note { .. }, Role::Edit | Role::Document)
+                    if plain(&control.label) == name =>
+                {
+                    (true, None)
+                }
                 // A combo box's choice, as its window reports the arrows choosing it (Create
                 // Rule's Speech Action going to "Shorten" [obs, 798/s8]), by the traced value.
                 (ControlKind::Choice { options, selected }, Role::ComboBox)
@@ -465,15 +473,29 @@ impl DialogMirror {
 
     /// The focused field's text, as the traced dialog's edit reports it after a key: what
     /// Okur's window reports of the text typed into its focused edit combo ("b", "bo", …
-    /// "board" in JAWS Find's Find what [obs, 633/s2-s6]).
-    pub fn typed(&mut self, typed: &str) -> Vec<FromUi> {
+    /// "board" in JAWS Find's Find what [obs, 633/s2-s6]). `field` is the name the trace gives
+    /// the text's field: the text of another of the dialog's fields is not the focused one's,
+    /// though its window reports it a moment before the focus moves there (Add Dictionary
+    /// Definition's "Sound:" and its "<None>", 2 ms before Tab's focus on it [obs, 1156/s12]).
+    pub fn typed(&mut self, field: Option<&str>, typed: &str) -> Vec<FromUi> {
         if self.file_open.is_some() {
             return Vec::new();
         }
         let Some(dialog) = &mut self.dialog else {
             return Vec::new();
         };
-        let Some(control) = self.focused.and_then(|i| dialog.controls.get_mut(i)) else {
+        let focused = self.focused;
+        let elsewhere = field.filter(|name| !name.is_empty()).is_some_and(|name| {
+            dialog
+                .controls
+                .iter()
+                .enumerate()
+                .any(|(i, c)| Some(i) != focused && plain(&c.label) == name)
+        });
+        if elsewhere {
+            return Vec::new();
+        }
+        let Some(control) = focused.and_then(|i| dialog.controls.get_mut(i)) else {
             return Vec::new();
         };
         match &mut control.kind {
@@ -748,14 +770,63 @@ mod tests {
         });
         mirror.sync(&host);
         assert_eq!(
-            mirror.typed("b"),
+            mirror.typed(None, "b"),
             vec![FromUi::DialogChanged {
                 id: 4,
                 control: "what".to_owned(),
                 value: Value::Text("b".to_owned()),
             }]
         );
-        assert_eq!(mirror.typed("b"), Vec::new());
+        assert_eq!(mirror.typed(None, "b"), Vec::new());
+    }
+
+    /// The text of another field, reported a moment before Tab's focus reaches it, is not
+    /// typed into the field still focused: Sound's "<None>" while Replacement Word has the
+    /// focus [obs, 1156/s12].
+    #[test]
+    fn another_fields_text_is_not_typed_into_the_focused_one() {
+        let field = |id: &str, label: &str, kind: ControlKind| Control {
+            id: id.to_owned(),
+            label: label.to_owned(),
+            kind,
+            enabled: true,
+            hidden: false,
+        };
+        let host = RecordingUiHost::default();
+        let mut mirror = DialogMirror::default();
+        host.send(ToUi::DialogShow {
+            dialog: DialogSpec {
+                id: 7,
+                title: "Add Dictionary Definition".to_owned(),
+                controls: vec![
+                    field(
+                        "replacement",
+                        "&Replacement Word:",
+                        ControlKind::Edit {
+                            text: String::new(),
+                        },
+                    ),
+                    field(
+                        "sound",
+                        "&Sound:",
+                        ControlKind::Note {
+                            text: "<None>".to_owned(),
+                        },
+                    ),
+                ],
+                keys: Vec::new(),
+            },
+        });
+        mirror.sync(&host);
+        assert_eq!(mirror.typed(Some("Sound:"), "<None>"), Vec::new());
+        assert_eq!(
+            mirror.typed(Some("Replacement Word:"), "sum"),
+            vec![FromUi::DialogChanged {
+                id: 7,
+                control: "replacement".to_owned(),
+                value: Value::Text("sum".to_owned()),
+            }]
+        );
     }
 
     /// A dialog Okur opens over another (Remove All's question over the PlaceMarker List):

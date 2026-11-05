@@ -14,8 +14,9 @@
 //! - "reposition*" is a root: it changes "reposition", "repositioning" and "repositions", its
 //!   own letters replaced and the rest of the word kept ("tot*" as "sum" says "sumal" for
 //!   "total" [obs, 1155/s15]);
-//! - a rule may be limited to a language, a synthesizer or a voice, or play a sound, which
-//!   Okur's rules do not do yet.
+//! - a rule may be limited to a language, a synthesizer or a voice, or play a sound: Okur's
+//!   dialog has JAWS's fields for them [obs, 1158], and its rules keep a sound, but reading
+//!   does not use them yet.
 
 use serde::{Deserialize, Serialize};
 
@@ -30,6 +31,10 @@ pub struct DictionaryEntry {
     pub replacement: String,
     /// Only the word written with the same capitals matches.
     pub case_sensitive: bool,
+    /// The sound file the rule's Sound field names (Select Sound... in its dialog); empty, none
+    /// ("<None>" [obs, 1158/s9]). Kept and played from the dialog; what JAWS does with it when
+    /// the word is read is not recorded yet, so reading does not use it.
+    pub sound: String,
 }
 
 impl DictionaryEntry {
@@ -38,7 +43,7 @@ impl DictionaryEntry {
         Self {
             actual: actual.into(),
             replacement: replacement.into(),
-            case_sensitive: false,
+            ..Self::default()
         }
     }
 

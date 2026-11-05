@@ -271,6 +271,20 @@ impl ScreenReaderEngine {
                     state.child = Some(child);
                     true
                 }
+                RuleOutcome::Send(messages) => {
+                    if let Some(ui) = &self.ui {
+                        messages.into_iter().for_each(|m| ui.send(m));
+                    }
+                    state.child = Some(child);
+                    true
+                }
+                RuleOutcome::Play(path) => {
+                    if let Some(sounds) = self.sounds.as_mut() {
+                        sounds.play_file(&path);
+                    }
+                    state.child = Some(child);
+                    true
+                }
                 RuleOutcome::Closed => {
                     self.close_dictionary_dialog(dialog.id);
                     true
