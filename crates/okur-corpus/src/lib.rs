@@ -707,6 +707,9 @@ mod tests {
             // Its tray panel's live region, generic words only (2720, trial 3).
             "Dropbox.exe",
             "EXCEL.EXE",
+            // JAWS's Dictionary Manager; its tree's other items, JAWS's own dictionary, are left
+            // out by the tracer (`privacy::without_shipped_dictionary`, 1154).
+            "JDiction.exe",
             "NotificationViewer.exe",
             "ResultsViewer.exe",
             "ShellExperienceHost.exe",
