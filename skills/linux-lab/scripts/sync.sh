@@ -21,7 +21,7 @@ bundle=$(mktemp -u).bundle
 git bundle create -q "$bundle" "$branch"
 trap 'rm -f "$bundle"' EXIT
 timeout 600 opendesk push --peer "$PEER" "$bundle" D:/okur-linux/okur.bundle > /dev/null
-for script in setup.sh a11y-stack.sh dns.sh; do
+for script in setup.sh a11y-stack.sh dns.sh probe-chrome.sh; do
     timeout 120 opendesk push --peer "$PEER" "skills/linux-lab/scripts/$script" "D:/okur-linux/$script" > /dev/null
 done
 # Clone once, then fetch: the lab's tree lives in the distribution's own disk, where builds are fast.
