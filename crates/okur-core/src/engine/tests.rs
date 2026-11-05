@@ -981,6 +981,63 @@ fn a_balloon_tip_is_said_after_the_focus() {
     );
 }
 
+/// Escape from the layer's help reads the line, then names the window after it without
+/// cutting it off, as JAWS's synthesizer was given both [obs, 628/s4, the spoken layer].
+#[test]
+fn the_window_named_after_a_viewer_follows_its_line() {
+    #[derive(Clone, Default)]
+    struct Spoken(std::sync::Arc<std::sync::Mutex<Vec<(String, bool)>>>);
+    impl SpeechOutput for Spoken {
+        fn speak(&mut self, text: &str, interrupt: bool) {
+            if let Ok(mut said) = self.0.lock() {
+                said.push((text.to_owned(), interrupt));
+            }
+        }
+        fn stop(&mut self) {}
+    }
+    let speech = Spoken::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document))),
+        Box::new(speech.clone()),
+    );
+    echo_off(&mut engine);
+    let mut field = FocusEvent::new(Role::Edit).with_name("Code");
+    field.window_title = Some("SR Editor Fixture".to_owned());
+    field.multi_line = true;
+    field.text = Some(crate::event::TextContext {
+        text: "First line\r\nSecond line".to_owned(),
+        caret: 0,
+        selection: None,
+        font: None,
+        word: None,
+        misspelled: Vec::new(),
+        structure: None,
+    });
+    engine.handle_focus_event(&field);
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    let shift = Modifiers {
+        shift: true,
+        ..Modifiers::none()
+    };
+    for (key, modifiers) in [(Key::Space, insert), (Key::Slash, shift)] {
+        engine.handle_key_event(&KeyEvent::new(key, modifiers, true));
+    }
+    if let Ok(mut said) = speech.0.lock() {
+        said.clear();
+    }
+    engine.handle_key_event(&KeyEvent::new(Key::Escape, Modifiers::none(), true));
+    let said = speech.0.lock().map(|s| s.clone()).unwrap_or_default();
+    let interrupts: Vec<bool> = said.iter().map(|(_, interrupt)| *interrupt).collect();
+    assert_eq!(
+        said.first().map(|(text, _)| text.as_str()),
+        Some("First line")
+    );
+    assert_eq!(interrupts, vec![true, false]);
+}
+
 /// A dialog whose window takes the focus before its field (Okur's Command Search, live): the
 /// field is said after the dialog's name, not over it; after a key, a focus interrupts again.
 #[test]

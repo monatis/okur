@@ -229,6 +229,9 @@ pub struct ScreenReaderEngine {
     /// itself), no key and no other focus since: a focus inside it follows it, rather than
     /// cutting it off.
     window_focus_said: Option<String>,
+    /// The next focus said follows what was just said instead of cutting it off: the line a
+    /// closing viewer read before the window it returns to is named [obs, 628/s4].
+    focus_follows_speech: bool,
     /// Each page's temporary PlaceMarker (Ctrl+Windows+K), by its address, for the session.
     temp_placemarkers: std::collections::HashMap<String, usize>,
     /// The PlaceMarkers saved (Ctrl+Shift+K), and where they are kept.
@@ -654,6 +657,7 @@ impl ScreenReaderEngine {
             last_key: None,
             key_since_focus: false,
             window_focus_said: None,
+            focus_follows_speech: false,
             temp_placemarkers: std::collections::HashMap::new(),
             placemarkers: crate::placemarkers::PlaceMarkers::default(),
             placemarker_store: None,
@@ -1091,6 +1095,7 @@ impl ScreenReaderEngine {
         self.last_key = Some((event.key, event.modifiers));
         self.key_since_focus = true;
         self.window_focus_said = None;
+        self.focus_follows_speech = false;
         // Excel's selection is the active cell's alone again after any other key; not after
         // a modifier pressed alone, which comes before each chord: Shift pressed for the
         // second Shift+Right had cleared it, and one cell more was said as a new selection,
@@ -1341,7 +1346,9 @@ impl ScreenReaderEngine {
                         self.last_window_title = None;
                         self.native_focus.reset();
                         if let Some(focus) = self.last_native_focus.clone() {
+                            self.focus_follows_speech = line;
                             let _ = self.handle_focus_event(&focus);
+                            self.focus_follows_speech = false;
                             self.key_since_focus = false;
                         }
                     }

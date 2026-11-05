@@ -1357,7 +1357,8 @@ impl ScreenReaderEngine {
         let inside_said_window = self
             .window_focus_said
             .take()
-            .is_some_and(|window| focus.window_title.as_ref() == Some(&window));
+            .is_some_and(|window| focus.window_title.as_ref() == Some(&window))
+            || std::mem::take(&mut self.focus_follows_speech);
         if matches!(focus.role, Role::Window | Role::Dialog) && !speech.is_empty() {
             self.window_focus_said.clone_from(&focus.window_title);
         }
