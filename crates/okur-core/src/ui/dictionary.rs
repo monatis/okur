@@ -134,7 +134,10 @@ impl ManagerDialog {
             id,
             name: name.to_owned(),
             rows: entries.iter().map(entry_text).collect(),
-            chosen: None,
+            // The tree's selection is a rule from the start, where JAWS's is a language's
+            // group until a rule is chosen: Change... is there with a rule selected [obs,
+            // 1155/s19, s21].
+            chosen: (!entries.is_empty()).then_some(0),
         }
     }
 
@@ -185,7 +188,7 @@ impl ManagerDialog {
                 control,
                 value: Value::Selected(row),
             } if *id == self.id && control == "entries" && *row < self.rows.len() => {
-                let first = self.chosen.is_none();
+                let first = self.chosen != Some(*row);
                 self.chosen = Some(*row);
                 if first {
                     ManagerOutcome::Chosen(*row)
@@ -194,11 +197,9 @@ impl ManagerDialog {
                 }
             }
             FromUi::DialogPressed { id, control } if *id == self.id => {
-                // Without a rule chosen, Delete acts on the first, the tree's selection.
-                let row = self.chosen.or((!self.rows.is_empty()).then_some(0));
-                match (control.as_str(), row) {
+                match (control.as_str(), self.chosen) {
                     ("add", _) => ManagerOutcome::Add,
-                    ("change", Some(row)) if self.chosen.is_some() => ManagerOutcome::Change(row),
+                    ("change", Some(row)) => ManagerOutcome::Change(row),
                     ("delete", Some(row)) => ManagerOutcome::Delete(row),
                     _ => ManagerOutcome::Nothing,
                 }
@@ -397,11 +398,25 @@ mod tests {
         }
     }
 
-    /// JAWS's manager: the tree, then Change... (once a rule is chosen), Delete and Add...
-    /// [obs, 1154/s6-s8, s28, s29]; a rule is "total=sum" [obs, 1154/s27].
+    /// JAWS's manager: the tree, then Change... (with a rule selected), Delete and Add...
+    /// [obs, 1154/s6-s8, s28, s29; 1155/s19-s24]; a rule is "total=sum" [obs, 1154/s27].
+    /// Without a rule there is nothing to change or delete.
     #[test]
     fn the_manager_is_jaws_dictionary_manager() {
-        let rules = [DictionaryEntry::new("total", "sum")];
+        let empty = ManagerDialog::new(2, "default", &[]).spec();
+        assert_eq!(
+            labels(&empty),
+            [
+                ("entries", "Dictionary Entries", true),
+                ("change", "&Change...", false),
+                ("delete", "&Delete", false),
+                ("add", "&Add...", true),
+            ]
+        );
+        let rules = [
+            DictionaryEntry::new("total", "sum"),
+            DictionaryEntry::new("tax", "duty"),
+        ];
         let mut dialog = ManagerDialog::new(3, "default", &rules);
         let spec = dialog.spec();
         assert_eq!(spec.title, "default - Okur Dictionary Manager");
@@ -409,31 +424,32 @@ mod tests {
             labels(&spec),
             [
                 ("entries", "Dictionary Entries", true),
-                ("change", "&Change...", false),
+                ("change", "&Change...", true),
                 ("delete", "&Delete", true),
                 ("add", "&Add...", true),
             ]
         );
         let items = spec.controls.first().map(|c| c.kind.clone());
         assert!(matches!(items, Some(ControlKind::Tree { items, .. })
-            if items.iter().map(|i| i.text.as_str()).eq(["total=sum"])));
-        assert_eq!(
-            dialog.handle(&pressed(3, "change")),
-            ManagerOutcome::Nothing
-        );
-        let chosen = FromUi::DialogChanged {
-            id: 3,
-            control: "entries".to_owned(),
-            value: Value::Selected(0),
-        };
-        assert_eq!(dialog.handle(&chosen), ManagerOutcome::Chosen(0));
+            if items.iter().map(|i| i.text.as_str()).eq(["total=sum", "tax=duty"])));
+        // The first rule is the tree's selection as it opens.
         assert_eq!(
             dialog.handle(&pressed(3, "change")),
             ManagerOutcome::Change(0)
         );
+        let chosen = FromUi::DialogChanged {
+            id: 3,
+            control: "entries".to_owned(),
+            value: Value::Selected(1),
+        };
+        assert_eq!(dialog.handle(&chosen), ManagerOutcome::Chosen(1));
+        assert_eq!(
+            dialog.handle(&pressed(3, "change")),
+            ManagerOutcome::Change(1)
+        );
         assert_eq!(
             dialog.handle(&pressed(3, "delete")),
-            ManagerOutcome::Delete(0)
+            ManagerOutcome::Delete(1)
         );
         assert_eq!(dialog.handle(&pressed(3, "add")), ManagerOutcome::Add);
         assert_eq!(

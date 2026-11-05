@@ -11,7 +11,9 @@
 //!
 //! From the help (Dictionary Manager Basics):
 //! - a rule's word is matched whatever its case, unless it is Case Sensitive;
-//! - "reposition*" is a root: it changes "reposition", "repositioning" and "repositions";
+//! - "reposition*" is a root: it changes "reposition", "repositioning" and "repositions", its
+//!   own letters replaced and the rest of the word kept ("tot*" as "sum" says "sumal" for
+//!   "total" [obs, 1155/s15]);
 //! - a rule may be limited to a language, a synthesizer or a voice, or play a sound, which
 //!   Okur's rules do not do yet.
 
@@ -111,7 +113,15 @@ pub fn apply(entries: &[DictionaryEntry], text: &str) -> String {
         }
         let word = rest.get(..word_len).unwrap_or(rest);
         match entries.iter().find(|e| e.matches(word)) {
-            Some(entry) => out.push_str(&entry.replacement),
+            // A root gives its own letters' replacement and leaves the rest of the word:
+            // "tot*" as "sum" says "total" "sumal" [obs, 1155/s15].
+            Some(entry) => {
+                out.push_str(&entry.replacement);
+                let (pattern, root) = entry.pattern();
+                if root {
+                    out.extend(word.chars().skip(pattern.chars().count()));
+                }
+            }
             None => out.push_str(word),
         }
         rest = rest.get(word_len..).unwrap_or("");
@@ -170,14 +180,17 @@ mod tests {
     }
 
     /// "reposition*" changes "reposition", "repositioning" and "repositions" (Dictionary
-    /// Manager Basics, Root Word Pronunciation Changes).
+    /// Manager Basics, Root Word Pronunciation Changes): the root alone is replaced, the rest
+    /// of the word kept, as JAWS said "sumal" for "total" with "tot*" as "sum" [obs, 1155/s15].
     #[test]
-    fn a_root_matches_the_words_it_starts() {
+    fn a_root_replaces_its_own_letters() {
         let rules = [DictionaryEntry::new("reposition*", "re position")];
         assert_eq!(
             apply(&rules, "reposition, repositioning and repositions; posit"),
-            "re position, re position and re position; posit"
+            "re position, re positioning and re positions; posit"
         );
+        let tot = [DictionaryEntry::new("tot*", "sum")];
+        assert_eq!(apply(&tot, "let total = {total}"), "let sumal = {sumal}");
     }
 
     /// A rule of other characters than letters: "w/" as "with" (the help's Outlook example).

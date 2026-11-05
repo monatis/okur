@@ -340,7 +340,7 @@ impl ScreenReaderEngine {
             ui.send(ToUi::DialogEnable {
                 id,
                 control: "change".to_owned(),
-                enabled: false,
+                enabled: !state.entries.is_empty(),
             });
             ui.send(ToUi::DialogEnable {
                 id,
