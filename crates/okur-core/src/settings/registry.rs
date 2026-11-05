@@ -314,8 +314,10 @@ pub static SETTINGS: &[SettingSpec] = &[
         ..spec("voice.text.say_dollars", Group::Speech, None, CHECK)
     },
     // Use Dictionary (Text Processing, General), checked by default (JAWS 2025 help, Turn Off
-    // Dictionary); its key in JAWS's files is not learned yet.
+    // Dictionary): `DEFAULT.JCF`'s Options `Dictionary`, "process text through the dictionary"
+    // (JAWS's shared DEFAULT.JCF, read on old-pc 2026-11-05).
     SettingSpec {
+        jaws: default_jcf("Options", "Dictionary", |v| Value::Bool(v.trim() != "0")),
         tree_label: Some(msg::settings_tree_use_dictionary),
         ..spec("voice.text.use_dictionary", Group::Speech, None, CHECK)
     },
