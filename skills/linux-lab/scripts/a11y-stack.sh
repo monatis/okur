@@ -7,15 +7,17 @@
 set -euo pipefail
 if [ "${1:-}" = "--inner" ]; then
     shift
+    # The daemons started here end with the command, not after it.
+    trap 'kill $(jobs -p) 2>/dev/null' EXIT
     # The AT-SPI bus, and the switches toolkits read before they expose their trees.
     /usr/libexec/at-spi-bus-launcher --launch-immediately &
     sleep 0.5
-    busctl --user call org.a11y.Bus /org/a11y/bus org.freedesktop.DBus.Properties Set ssv \
-        org.a11y.Status IsEnabled b true 2>/dev/null || \
-        dbus-send --session --dest=org.a11y.Bus /org/a11y/bus org.freedesktop.DBus.Properties.Set \
-            string:org.a11y.Status string:IsEnabled variant:boolean:true
-    dbus-send --session --dest=org.a11y.Bus /org/a11y/bus org.freedesktop.DBus.Properties.Set \
-        string:org.a11y.Status string:ScreenReaderEnabled variant:boolean:true
+    for switch in IsEnabled ScreenReaderEnabled; do
+        busctl --user call org.a11y.Bus /org/a11y/bus org.freedesktop.DBus.Properties Set ssv \
+            org.a11y.Status "$switch" b true 2>/dev/null || \
+            dbus-send --session --dest=org.a11y.Bus /org/a11y/bus org.freedesktop.DBus.Properties.Set \
+                string:org.a11y.Status "string:$switch" variant:boolean:true
+    done
     /usr/libexec/at-spi2-registryd &
     fluxbox >/dev/null 2>&1 &
     sleep 1

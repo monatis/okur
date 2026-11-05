@@ -3,7 +3,7 @@
 # distribution "okur" on D:), as a git bundle, and checks it out at ~/okur there. Run from the
 # repository root:
 #   bash skills/linux-lab/scripts/sync.sh [--peer old-pc] [--distro okur]
-# The lab's scripts (setup.sh, a11y-stack.sh, dns.sh) go along to D:\okur-linux. Uncommitted changes do
+# The lab's scripts (setup.sh, a11y-stack.sh, dns.sh, the probes) go along to D:\okur-linux. Uncommitted changes do
 # not travel: commit first (the lab builds what the branch holds).
 set -euo pipefail
 PEER=old-pc
@@ -21,8 +21,10 @@ bundle=$(mktemp -u).bundle
 git bundle create -q "$bundle" "$branch"
 trap 'rm -f "$bundle"' EXIT
 timeout 600 opendesk push --peer "$PEER" "$bundle" D:/okur-linux/okur.bundle > /dev/null
-for script in setup.sh a11y-stack.sh dns.sh probe-chrome.sh; do
-    timeout 120 opendesk push --peer "$PEER" "skills/linux-lab/scripts/$script" "D:/okur-linux/$script" > /dev/null
+# Every lab script but the dev box's own (this one and job.sh).
+for script in skills/linux-lab/scripts/*.sh; do
+    case "$(basename "$script")" in sync.sh|job.sh) continue ;; esac
+    timeout 120 opendesk push --peer "$PEER" "$script" "D:/okur-linux/$(basename "$script")" > /dev/null
 done
 # Clone once, then fetch: the lab's tree lives in the distribution's own disk, where builds are fast.
 inner="set -e; if [ ! -d ~/okur/.git ]; then git clone -q -b $branch /mnt/d/okur-linux/okur.bundle ~/okur; fi; cd ~/okur; git fetch -q /mnt/d/okur-linux/okur.bundle $branch:refs/remotes/bundle/$branch; git checkout -q -B $branch refs/remotes/bundle/$branch; git log --oneline -1"

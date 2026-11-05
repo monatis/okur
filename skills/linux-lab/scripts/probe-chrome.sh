@@ -13,11 +13,16 @@ profile=$(mktemp -d)
 google-chrome --no-sandbox --no-first-run --disable-gpu --user-data-dir="$profile" \
     --force-renderer-accessibility "file://$HOME/okur/corpus/fixtures/$fixture" > /tmp/chrome.log 2>&1 &
 chrome=$!
-sleep 10
+# Chrome joins the AT-SPI desktop some seconds after its window, and its page's tree after that.
+tree=
+for _ in $(seq 30); do
+    sleep 2
+    tree=$(./target/debug/xa11y tree --app "Google Chrome" 2>&1)
+    if echo "$tree" | grep -q "virtual buffer"; then break; fi
+done
 echo "--- xa11y apps"
 ./target/debug/xa11y apps
 echo "--- xa11y tree (Chrome)"
-tree=$(./target/debug/xa11y tree --app "Google Chrome" 2>&1 || ./target/debug/xa11y tree --app chrome 2>&1)
 echo "$tree" | head -60
 kill "$chrome" 2>/dev/null
 wait "$chrome" 2>/dev/null
