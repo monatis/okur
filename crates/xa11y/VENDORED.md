@@ -22,6 +22,7 @@ our cross-platform accessibility API layer. Upstream changes are not tracked aut
 ## Changes since
 
 - `xa11y-linux/src/events.rs` (2026-11-05): a subscription registers its event classes with the AT-SPI registry (`RegisterEvent`, and `DeregisterEvent` when it ends). GTK 4 and Chrome send no events until a listener has registered: in Okur's Linux lab (`skills/linux-lab/scripts/probe-events.sh`), match rules alone heard nothing over six Tabs.
+- `xa11y-linux/src/events.rs` (2026-11-05): a subscription reads its events' elements on a connection of its own. On the signals' connection, every reply also queued in the iterator's stream behind the signals, drained only by the thread waiting for the reply; when a burst filled its 64 places (Chrome loading a page), zbus stopped reading the socket and the subscription deadlocked. In the lab (`probe-second-run.sh`), the second Okur of a session heard no event though Chrome sent the same signals as for the first.
 
 ## Hardening
 

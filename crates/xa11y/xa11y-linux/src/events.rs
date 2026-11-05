@@ -148,6 +148,12 @@ fn subscribe(sources: Sources) -> Result<Subscription> {
     // removed every match rule) cleanly tears the subscription down and
     // forbids any stale signal from arriving at the previous owner.
     let conn = LinuxProvider::connect_a11y_bus()?;
+    // The snapshots' calls (each event's element read) go on a connection of their own. On
+    // `conn` each reply also queues in the iterator's stream behind the signals, and the thread
+    // waiting for it is the one that drains that stream: once a burst filled its 64 places
+    // (Chrome's signals as a page loads), zbus stopped reading the socket and the reply never
+    // came. The Linux lab's second live run in a session heard nothing (2026-11-05).
+    let calls = LinuxProvider::connect_a11y_bus()?;
 
     // Match-rule management goes through the DBusProxy — the blocking
     // Connection itself doesn't expose AddMatch/RemoveMatch.
@@ -194,7 +200,7 @@ fn subscribe(sources: Sources) -> Result<Subscription> {
     let ctx = Arc::new(EventContext {
         sources,
         tx: Mutex::new(tx),
-        conn: conn.clone(),
+        conn: calls,
     });
 
     // Activate the broadcast receiver *before* spawning the worker. If we
@@ -280,10 +286,10 @@ fn subscribe(sources: Sources) -> Result<Subscription> {
 struct EventContext {
     sources: Sources,
     tx: Mutex<std::sync::mpsc::Sender<Event>>,
-    /// Used for D-Bus property/method calls to build target snapshots.
-    /// Cloned from the subscription's owning Connection, so it stays alive
-    /// until every `Arc<EventContext>` (including the one held by the
-    /// spawned thread) is dropped.
+    /// Used for D-Bus property/method calls to build target snapshots: a
+    /// connection of its own, not the one whose signals the thread reads
+    /// (see `subscribe`). It stays alive until every `Arc<EventContext>`
+    /// (including the one held by the spawned thread) is dropped.
     conn: Connection,
 }
 
