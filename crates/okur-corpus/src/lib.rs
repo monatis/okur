@@ -704,6 +704,9 @@ mod tests {
         const REVIEWED: &[&str] = &[
             "AccEventCacheLoader.exe",
             "ApplicationFrameHost.exe",
+            // JAWS's Command Search; its list of commands, JAWS's data, and its page's address
+            // are left out by the tracer (`privacy::without_jaws_help_text`, 628).
+            "CommandsSearchViewer.exe",
             // Its tray panel's live region, generic words only (2720, trial 3).
             "Dropbox.exe",
             "EXCEL.EXE",

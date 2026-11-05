@@ -38,6 +38,8 @@ pub fn run_trace(
         }
         // Nor JAWS's own dictionary, which its Dictionary Manager shows.
         privacy::without_shipped_dictionary(&mut event);
+        // Nor JAWS's help text and command descriptions, nor its viewers' page addresses.
+        privacy::without_jaws_help_text(&mut event);
         if let Ok(line) = serde_json::to_string(&event) {
             let mut line = privacy::redact_addresses(&line);
             line.push('\n');

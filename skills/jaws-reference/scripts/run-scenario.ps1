@@ -706,7 +706,7 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
         # its Dictionary Manager (Insert+D) JDiction.exe's, Okur's okur-ui.exe's.
         'key_ui_access' {
             if (-not (Test-Path -LiteralPath $LabKeys)) { return $false }
-            $sent = Start-Process -FilePath $LabKeys -ArgumentList @('--allow', 'jfw,ResultsViewer,JDiction,okur-ui', "`"$command`"") -WindowStyle Hidden -Wait -PassThru
+            $sent = Start-Process -FilePath $LabKeys -ArgumentList @('--allow', 'jfw,ResultsViewer,JDiction,CommandsSearchViewer,okur-ui', "`"$command`"") -WindowStyle Hidden -Wait -PassThru
             return $sent.ExitCode -eq 0
         }
         'jaws_script' { if (-not $jaws) { return $false }; return [bool]$jaws.RunScript($command) }

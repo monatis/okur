@@ -57,6 +57,53 @@ pub fn without_shipped_dictionary(event: &mut crate::event_trace::TraceEvent) {
     }
 }
 
+/// `event` without JAWS's own help text and the lab machine's paths that its viewers carry:
+/// - a name that is a page address JAWS's viewers show their text through: the Results
+///   Viewer's `data:` page holds a whole help screen (the Insert+Space layer's, 628's first
+///   runs), Command Search's `serve.html?` page the machine's folders;
+/// - in Command Search (CommandsSearchViewer.exe, its window "Search for JAWS Commands"), the
+///   names beside the focus: its list of JAWS's commands and their descriptions, JAWS's data.
+///   The items stay, so their number and the focus's place among them are kept.
+pub fn without_jaws_help_text(event: &mut crate::event_trace::TraceEvent) {
+    fn address(name: &Option<String>) -> bool {
+        name.as_deref()
+            .is_some_and(|n| n.starts_with("data:") || n.contains("serve.html?"))
+    }
+    fn clean(node: &mut crate::uia_snapshot::UiaNode, siblings: bool) {
+        if address(&node.name) || (siblings && !node.has_keyboard_focus) {
+            node.name = None;
+            node.value = None;
+            node.full_description = None;
+            node.help_text = None;
+        }
+        for child in &mut node.children {
+            clean(child, siblings);
+        }
+    }
+    let search = event.process.as_deref() == Some("CommandsSearchViewer.exe")
+        || event
+            .window_title
+            .as_deref()
+            .is_some_and(|t| t.starts_with("Search for JAWS Commands"));
+    if address(&event.window_title) {
+        event.window_title = None;
+    }
+    if let Some(object) = event.object.as_mut() {
+        if address(&object.name) {
+            object.name = None;
+        }
+    }
+    for node in &mut event.focus_chain {
+        clean(node, false);
+    }
+    for node in &mut event.focus_siblings {
+        clean(node, search);
+    }
+    if let Some(subtree) = event.focus_subtree.as_mut() {
+        clean(subtree, search);
+    }
+}
+
 /// What an e-mail address is replaced with.
 pub const ADDRESS_MARK: &str = "<address>";
 
@@ -171,6 +218,59 @@ mod tests {
         assert_eq!(
             names("notepad.exe").first(),
             Some(&Some("paciello=Pah see ello".to_owned()))
+        );
+    }
+
+    /// JAWS's help text and Command Search's list leave the trace: a viewer's page address (a
+    /// help screen in a `data:` page, the machine's folders in `serve.html?`), and in Command
+    /// Search the names beside the focus; the focused result and other programs keep theirs.
+    #[test]
+    fn jaws_help_text_is_left_out() {
+        let node = |name: &str, focused: bool| {
+            format!(
+                r#"{{"control_type":50007,"name":"{name}","is_enabled":true,"is_offscreen":false,"is_password":false,"is_required_for_form":false,"is_keyboard_focusable":true,"has_keyboard_focus":{focused},"is_control_element":true,"is_content_element":true}}"#
+            )
+        };
+        let line = |process: &str| {
+            format!(
+                r#"{{"t_ms":1,"event":"focus","win_event":32773,"hwnd":1,"id_object":-4,"id_child":0,"process":"{process}","focus_chain":[{}],"focus_siblings":[{},{}]}}"#,
+                node("data:text/html;base64,PGgyPkdlbmVyYWw=", false),
+                node("Says the time.", false),
+                node("Say Font", true)
+            )
+        };
+        let read = |process: &str| {
+            let event: Option<crate::event_trace::TraceEvent> =
+                serde_json::from_str(&line(process)).ok();
+            event.map(|mut event| {
+                without_jaws_help_text(&mut event);
+                (
+                    event
+                        .focus_chain
+                        .into_iter()
+                        .map(|n| n.name)
+                        .collect::<Vec<_>>(),
+                    event
+                        .focus_siblings
+                        .into_iter()
+                        .map(|n| n.name)
+                        .collect::<Vec<_>>(),
+                )
+            })
+        };
+        assert_eq!(
+            read("CommandsSearchViewer.exe"),
+            Some((vec![None], vec![None, Some("Say Font".to_owned())]))
+        );
+        assert_eq!(
+            read("notepad.exe"),
+            Some((
+                vec![None],
+                vec![
+                    Some("Says the time.".to_owned()),
+                    Some("Say Font".to_owned())
+                ]
+            ))
         );
     }
 
