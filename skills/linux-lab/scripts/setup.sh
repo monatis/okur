@@ -13,10 +13,11 @@ apt-get update -q
 apt-get install -y -q --no-install-recommends \
     build-essential pkg-config git curl ca-certificates wget gnupg \
     libdbus-1-dev libxcb1-dev libxkbcommon-dev libx11-dev libxtst-dev libxi-dev \
-    xvfb x11-utils xauth dbus dbus-x11 \
+    xvfb x11-utils x11-xserver-utils xauth dbus dbus-x11 xdotool xinput python3-xlib \
     at-spi2-core libatk-adaptor libatk-bridge2.0-0 python3-gi gir1.2-atspi-2.0 \
     fluxbox gtk-4-examples gtk-3-examples gstreamer1.0-plugins-base \
-    speech-dispatcher speech-dispatcher-espeak-ng espeak-ng pulseaudio-utils \
+    speech-dispatcher speech-dispatcher-espeak-ng espeak-ng pulseaudio pulseaudio-utils python3-speechd \
+    mutter libglib2.0-bin \
     fonts-dejavu-core
 
 # Chrome from Google's own repository: Ubuntu's chromium is a snap, and snaps need systemd.
