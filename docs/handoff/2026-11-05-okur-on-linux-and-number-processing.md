@@ -181,3 +181,51 @@ handoff before this one has them.
     records every utterance, cut off or not); the next live run checks it.
   - `--debug-log` into the Dropbox folder left no file; into `C:\Users\ailabs\sr-harness` it
     did. Keep live debug logs out of Dropbox.
+  - Checked live (`628-okur3`): `Okur live: 8/8 steps match JAWS exactly; 4 accepted
+    divergences not counted`, the dialog's name heard with its field. The recorder still had
+    s4's line cut off by the window named after it; the window now follows the line
+    (`d0b524a6`).
+
+## Night: more of the web on Linux
+
+- **JAWS scripts on Linux** (`62e61298`): `KeyEvent::chord` writes a key in the scenarios'
+  notation and okur-core's example `script_key` prints the key Okur binds to a JAWS script, so
+  `run-scenario-linux.py` plays a `jaws_script` step as the user presses it (MoveToNextHeading
+  H, FocusToNextField F, SayLine Insert+Up). A test reads every bound key's chord back.
+- **Twenty more runs kept** (`ca06bc68`): `Okur live on linux: 201/379 steps match JAWS exactly;
+  0 accepted divergences not counted (28 runs, 0 could not be compared)`; whole matches 07, 103,
+  104, 106, 107, 110, 113, 19, 30.
+- **The Linux page through the IA2 conversion** (`16673ca9`): links said "Link" for JAWS's "same
+  page link", the article line was missing, no table read. Chrome builds its AT-SPI and IA2
+  objects from the same node; news-article.html over both pairs element for element. A page's
+  AT-SPI tree now goes, as the IA2 objects Chrome gives on Windows, through `ia2_to_aom`, which
+  Windows replay checks; xa11y-linux reads a link's and the document's address. A reversible
+  decision: okur-linux-model depends on okur-windows-model (both neutral); the conversion moves to
+  a shared crate before macOS.
+- **Steps end before a character's spelling** (`995f4d27`): some characters came twice, 1.5 s
+  apart ("s s"): JAWS's default spells a character phonetically after a 1.5 s pause, and the
+  runner's 1.5 s quiet raced it; steps now end after 1.0 s of quiet. A failed fetch is said.
+- **Linux, all 28 runs again** (`6e084e4a`): `Okur live on linux: 368/379 steps match JAWS
+  exactly; 0 accepted divergences not counted (28 runs, 0 could not be compared)`. Left: table
+  cell keys (109, Ctrl+Alt+arrows) and Space on a check box or a tab (20/s2, 29/s4), whose state
+  changes the Linux event source does not yet take.
+
+## Excel's monitor cells (plan §3.1)
+
+- **Round 1135 imported** (`b99739d8`): recorded 2026-11-01 by run-scenario.ps1 at `a78afe39`
+  (its hash matched), three successful trials, Excel's and JAWS's processes alone in the traces.
+- **Set and read** (`b273f0c8`): Insert+Shift+1 to 0, "Setting monitor cell 1 to B2"; Alt+Shift+1
+  to 0, "12 | B2", the cell read of Excel's object model (SheetCells::Cell) and answered in replay
+  from the step's visible cells. Ten per worksheet (SheetPlace's new `sheet`). The engine's
+  in-sheet checks go through one helper: its references to app modules fell from 23 to 19.
+- **Move to Monitor Cell** (`41854a11`): Ctrl+Shift+M, "B2: 12 | 1 of 1", OK goes to the cell.
+  Replay of s6 still speaks twice (JAWS's dialog reports its list box before the item); a live run
+  of 1135 with Okur judges it.
+- `okur-lab parity --only 1135`: `JAWS parity (Ia2): 6/7 steps match exactly`. Full:
+  `JAWS parity (Ia2): 12027/12598 steps match exactly; 388 accepted divergences not counted (0
+  scenarios could not run)`.
+- A letter-digit rule tried and reverted: JAWS sends "B2" whole in "12 B2" and "B2: 12", but
+  splits "Active Cell: D1" and "Setting monitor cell 1 to B2", and "x86" under number Pairs only;
+  no rule on the text alone fits, so 1135/s5's spoken "B 2" stays a difference.
+- **Round 1166 written** (`corpus/pending/`): none set, the overwrite question, a range, an empty
+  cell, a title, and the list of several.
