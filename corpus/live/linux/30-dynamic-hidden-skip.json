@@ -1,0 +1,73 @@
+{
+ "scenario_id": "30-dynamic-hidden-skip",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "chrome": "google-chrome",
+  "commit": "b9567c2a6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1793910699016,
+     "t_end_ms": 1793910700521,
+     "action": {
+      "type": "keyboard",
+      "command": "{DOWN}"
+     },
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e First Boundary Heading",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1793910700521,
+     "t_end_ms": 1793910702026,
+     "action": {
+      "type": "keyboard",
+      "command": "{DOWN}"
+     },
+     "observation": {
+      "speech_raw": "First paragraph content.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1793910702026,
+     "t_end_ms": 1793910703531,
+     "action": {
+      "type": "keyboard",
+      "command": "{DOWN}"
+     },
+     "observation": {
+      "speech_raw": " \u001d heading level 2 \u001e Second Boundary Heading",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1793910703531,
+     "t_end_ms": 1793910705037,
+     "action": {
+      "type": "keyboard",
+      "command": "{DOWN}"
+     },
+     "observation": {
+      "speech_raw": "Final content paragraph on this page.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

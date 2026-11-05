@@ -1,0 +1,199 @@
+{
+ "scenario_id": "108-article-lists",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "chrome": "google-chrome",
+  "commit": "b9567c2a6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1793910292361,
+     "t_end_ms": 1793910293867,
+     "action": {
+      "type": "key",
+      "command": "L"
+     },
+     "observation": {
+      "speech_raw": "list of 4 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1793910293867,
+     "t_end_ms": 1793910295373,
+     "action": {
+      "type": "key",
+      "command": "L"
+     },
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1793910295373,
+     "t_end_ms": 1793910296879,
+     "action": {
+      "type": "key",
+      "command": "L"
+     },
+     "observation": {
+      "speech_raw": "list of 2 items nesting level 1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1793910296879,
+     "t_end_ms": 1793910298385,
+     "action": {
+      "type": "key",
+      "command": "L"
+     },
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1793910298385,
+     "t_end_ms": 1793910299890,
+     "action": {
+      "type": "key",
+      "command": "L"
+     },
+     "observation": {
+      "speech_raw": "list of 2 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1793910299890,
+     "t_end_ms": 1793910301397,
+     "action": {
+      "type": "key",
+      "command": "Shift+L"
+     },
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1793910301397,
+     "t_end_ms": 1793910302903,
+     "action": {
+      "type": "key",
+      "command": "Shift+L"
+     },
+     "observation": {
+      "speech_raw": "list of 2 items nesting level 1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1793910302903,
+     "t_end_ms": 1793910304409,
+     "action": {
+      "type": "key",
+      "command": "I"
+     },
+     "observation": {
+      "speech_raw": "\u2022 New ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1793910304409,
+     "t_end_ms": 1793910305915,
+     "action": {
+      "type": "key",
+      "command": "I"
+     },
+     "observation": {
+      "speech_raw": "1. Board vote in March",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1793910305915,
+     "t_end_ms": 1793910307422,
+     "action": {
+      "type": "key",
+      "command": "I"
+     },
+     "observation": {
+      "speech_raw": "2. Hiring in April",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1793910307422,
+     "t_end_ms": 1793910308928,
+     "action": {
+      "type": "key",
+      "command": "I"
+     },
+     "observation": {
+      "speech_raw": "3. Review in October",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1793910308928,
+     "t_end_ms": 1793910310433,
+     "action": {
+      "type": "key",
+      "command": "I"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Council approves library budget",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1793910310433,
+     "t_end_ms": 1793910311940,
+     "action": {
+      "type": "key",
+      "command": "I"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Spring book fair returns",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

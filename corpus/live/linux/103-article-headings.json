@@ -1,0 +1,129 @@
+{
+ "scenario_id": "103-article-headings",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "chrome": "google-chrome",
+  "commit": "b9567c2a6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1793910012795,
+     "t_end_ms": 1793910014299,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "observation": {
+      "speech_raw": "City Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1793910014299,
+     "t_end_ms": 1793910015805,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "observation": {
+      "speech_raw": "What changes\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1793910015805,
+     "t_end_ms": 1793910017312,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "observation": {
+      "speech_raw": "Opening schedule\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1793910017312,
+     "t_end_ms": 1793910018818,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "observation": {
+      "speech_raw": "What readers said\n \u001d heading level 3 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1793910018818,
+     "t_end_ms": 1793910020323,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "observation": {
+      "speech_raw": "Related stories\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1793910020323,
+     "t_end_ms": 1793910021829,
+     "action": {
+      "type": "key",
+      "command": "H"
+     },
+     "observation": {
+      "speech_raw": "wrapping to top\nCity Library Expands Evening Hours\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1793910021829,
+     "t_end_ms": 1793910023335,
+     "action": {
+      "type": "key",
+      "command": "Shift+H"
+     },
+     "observation": {
+      "speech_raw": "wrapping to bottom\nRelated stories\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1793910023335,
+     "t_end_ms": 1793910024842,
+     "action": {
+      "type": "key",
+      "command": "Shift+H"
+     },
+     "observation": {
+      "speech_raw": "What readers said\n \u001d heading level 3 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

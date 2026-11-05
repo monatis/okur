@@ -1,0 +1,199 @@
+{
+ "scenario_id": "105-article-links",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "chrome": "google-chrome",
+  "commit": "b9567c2a6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1793910084975,
+     "t_end_ms": 1793910086480,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "observation": {
+      "speech_raw": " \u001d Link \u001e Riverside Gazette",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1793910086480,
+     "t_end_ms": 1793910087986,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e News",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1793910087986,
+     "t_end_ms": 1793910089492,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Sports",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1793910089492,
+     "t_end_ms": 1793910090999,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Culture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1793910090999,
+     "t_end_ms": 1793910092505,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Opinion",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1793910092505,
+     "t_end_ms": 1793910094011,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "observation": {
+      "speech_raw": " \u001d Link \u001e Maria Lopez,",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1793910094011,
+     "t_end_ms": 1793910095517,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "observation": {
+      "speech_raw": " \u001d Link \u001e study rooms",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1793910095517,
+     "t_end_ms": 1793910097023,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "observation": {
+      "speech_raw": " \u001d Link \u001e Directions",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1793910097023,
+     "t_end_ms": 1793910098529,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "observation": {
+      "speech_raw": " \u001d Link \u001e Directions",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1793910098529,
+     "t_end_ms": 1793910100034,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Council approves library budget",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1793910100034,
+     "t_end_ms": 1793910101540,
+     "action": {
+      "type": "key",
+      "command": "U"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Spring book fair returns",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1793910101540,
+     "t_end_ms": 1793910103047,
+     "action": {
+      "type": "key",
+      "command": "Shift+U"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Council approves library budget",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1793910103048,
+     "t_end_ms": 1793910104554,
+     "action": {
+      "type": "key",
+      "command": "Shift+U"
+     },
+     "observation": {
+      "speech_raw": " \u001d Link \u001e Directions",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

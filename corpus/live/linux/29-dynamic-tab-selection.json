@@ -1,0 +1,73 @@
+{
+ "scenario_id": "29-dynamic-tab-selection",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "chrome": "google-chrome",
+  "commit": "b9567c2a6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1793910668661,
+     "t_end_ms": 1793910670267,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "Boundaries and Dynamic Updates Fixture\nSystem Details  \u001d Button \u001e  \u001dcollapsed\u001e \nTo activate press Enter.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1793910670267,
+     "t_end_ms": 1793910671874,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "Settings \u001d group \u001e \n\nGeneral  \u001d Tab \u001e \n1 of 1\n \u001dselected\u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1793910671874,
+     "t_end_ms": 1793910673480,
+     "action": {
+      "type": "key",
+      "command": "Tab"
+     },
+     "observation": {
+      "speech_raw": "Advanced  \u001d Tab \u001e \n2 of 2",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1793910673480,
+     "t_end_ms": 1793910674986,
+     "action": {
+      "type": "key",
+      "command": "Space"
+     },
+     "observation": {
+      "speech_raw": "",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

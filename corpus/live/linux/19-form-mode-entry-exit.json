@@ -1,0 +1,59 @@
+{
+ "scenario_id": "19-form-mode-entry-exit",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "chrome": "google-chrome",
+  "commit": "b9567c2a6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1793910585761,
+     "t_end_ms": 1793910587267,
+     "action": {
+      "type": "key",
+      "command": "E"
+     },
+     "observation": {
+      "speech_raw": "Full Name: \u001d Edit \u001e \nJane Doe",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1793910587267,
+     "t_end_ms": 1793910588773,
+     "action": {
+      "type": "key",
+      "command": "Enter"
+     },
+     "observation": {
+      "speech_raw": "Forms and Interaction Reference Fixture \n \u001d FormRegion \u001e \nFull Name:  \u001d Edit \u001e   \nJane Doe\nType in text.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1793910588773,
+     "t_end_ms": 1793910590278,
+     "action": {
+      "type": "key",
+      "command": "Escape"
+     },
+     "observation": {
+      "speech_raw": "virtual PC Cursor",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

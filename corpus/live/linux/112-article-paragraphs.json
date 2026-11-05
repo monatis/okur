@@ -1,0 +1,339 @@
+{
+ "scenario_id": "112-article-paragraphs",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "chrome": "google-chrome",
+  "commit": "b9567c2a6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1793910445884,
+     "t_end_ms": 1793910447391,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "banner",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1793910447391,
+     "t_end_ms": 1793910448897,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": " \u001d Link \u001e Riverside Gazette Primary navigation region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1793910448897,
+     "t_end_ms": 1793910450402,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "list of 4 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1793910450402,
+     "t_end_ms": 1793910451910,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e News",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1793910451910,
+     "t_end_ms": 1793910453417,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Sports",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1793910453417,
+     "t_end_ms": 1793910454923,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Culture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1793910454923,
+     "t_end_ms": 1793910456430,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "\u2022 \u001d Link \u001e Opinion",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1793910456430,
+     "t_end_ms": 1793910457937,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "list end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1793910457937,
+     "t_end_ms": 1793910459443,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "Primary navigation region end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1793910459443,
+     "t_end_ms": 1793910460949,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "banner end",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1793910460949,
+     "t_end_ms": 1793910462456,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "main region",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1793910462456,
+     "t_end_ms": 1793910463962,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e City Library Expands Evening Hours",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1793910463962,
+     "t_end_ms": 1793910465468,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "By   \u001d Link \u001e Maria Lopez, published March 14, 2026March 14, 2026",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1793910465468,
+     "t_end_ms": 1793910466975,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "The Riverside City Library will stay open until 9 p.m.9 p.m. on weekdays starting in April, the board announced on Tuesday. The change follows a survey in which mostmost respondents asked for later hours.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1793910466975,
+     "t_end_ms": 1793910468482,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e   \u001d heading level 2 \u001e What changes",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s16",
+     "t_start_ms": 1793910468482,
+     "t_end_ms": 1793910469989,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "Membership costs $5.99 a month, e.g. for adults; children join free. Questions go to help@riverside-library.org \u2014 or call 555-0142. Attendance rose 3.5% last year, and staff say they can't wait.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s17",
+     "t_start_ms": 1793910469989,
+     "t_end_ms": 1793910471496,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s18",
+     "t_start_ms": 1793910471496,
+     "t_end_ms": 1793910473003,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s19",
+     "t_start_ms": 1793910473003,
+     "t_end_ms": 1793910474510,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "\u2022 Weekend hours, which do not change: list of 2 items nesting level 1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s20",
+     "t_start_ms": 1793910474510,
+     "t_end_ms": 1793910476017,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Down"
+     },
+     "observation": {
+      "speech_raw": "\u25e6 Saturday: 10 a.m. to 6 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s21",
+     "t_start_ms": 1793910476017,
+     "t_end_ms": 1793910477523,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Up"
+     },
+     "observation": {
+      "speech_raw": "\u2022 Weekend hours, which do not change: list of 2 items nesting level 1",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s22",
+     "t_start_ms": 1793910477523,
+     "t_end_ms": 1793910479030,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Up"
+     },
+     "observation": {
+      "speech_raw": "\u2022 Weekday hours: 9 a.m. to 9 p.m.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s23",
+     "t_start_ms": 1793910479030,
+     "t_end_ms": 1793910480536,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Up"
+     },
+     "observation": {
+      "speech_raw": "list of 3 items",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

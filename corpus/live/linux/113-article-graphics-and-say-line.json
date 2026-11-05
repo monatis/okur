@@ -1,0 +1,59 @@
+{
+ "scenario_id": "113-article-graphics-and-say-line",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "chrome": "google-chrome",
+  "commit": "b9567c2a6"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1793910504557,
+     "t_end_ms": 1793910506062,
+     "action": {
+      "type": "key",
+      "command": "G"
+     },
+     "observation": {
+      "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1793910506062,
+     "t_end_ms": 1793910507567,
+     "action": {
+      "type": "key",
+      "command": "G"
+     },
+     "observation": {
+      "speech_raw": "wrapping to top\nFront entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1793910507567,
+     "t_end_ms": 1793910509074,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "observation": {
+      "speech_raw": "Front entrance of the Riverside City Library at dusk\n \u001d Graphic \u001e ",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}
