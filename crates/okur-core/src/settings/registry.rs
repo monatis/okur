@@ -12,8 +12,8 @@ use serde_json::{Map, Value};
 
 use super::{
     FormsMode, HeadingIndication, KeyboardLayout, KeyboardSettings, LessSpeech, MouseEchoUnit,
-    OkurKey, OutputType, Punctuation, SayAllUnit, ScreenEcho, Settings, SmartNavigation,
-    SpeechMode, Synthesizer, TypingEcho, Verbosity, VerbosityLevel,
+    NumberProcessing, OkurKey, OutputType, Punctuation, SayAllUnit, ScreenEcho, Settings,
+    SmartNavigation, SpeechMode, Synthesizer, TypingEcho, Verbosity, VerbosityLevel,
 };
 use crate::messages::{msg, StaticMessage};
 use crate::settings_layers::Scope;
@@ -305,8 +305,37 @@ pub static SETTINGS: &[SettingSpec] = &[
         ..spec("voice.text.mixed_case", Group::Speech, None, CHECK)
     },
     SettingSpec {
-        jaws: default_jcf("Options", "Numbers", |v| Value::Bool(v.trim() == "1")),
-        ..spec("voice.text.numbers_as_digits", Group::Speech, None, CHECK)
+        jaws: default_jcf("Options", "Numbers", |v| {
+            json(NumberProcessing::from_jcf(v))
+        }),
+        tree_label: Some(msg::settings_tree_number_processing),
+        ..spec(
+            "voice.text.numbers",
+            Group::Speech,
+            None,
+            Kind::Choice(choices::<NumberProcessing>),
+        )
+    },
+    // Speak Single Digits if Number Contains: `SingleDigitThreshold`, 5 by default; 0 is taken
+    // as Controlled by Synthesizer (its value in the file is not recorded).
+    SettingSpec {
+        jaws: default_jcf("Options", "SingleDigitThreshold", |v| {
+            json(v.trim().parse::<u8>().ok().filter(|n| *n > 0))
+        }),
+        tree_label: Some(msg::settings_tree_single_digits),
+        ..spec(
+            "voice.text.single_digit_threshold",
+            Group::Speech,
+            None,
+            Kind::Choice(choices::<Option<u8>>),
+        )
+    },
+    SettingSpec {
+        jaws: default_jcf("Options", "SpeakNumbersSepByDashesAsDigits", |v| {
+            Value::Bool(v.trim() != "0")
+        }),
+        tree_label: Some(msg::settings_tree_dashes_as_digits),
+        ..spec("voice.text.dashes_as_digits", Group::Speech, None, CHECK)
     },
     SettingSpec {
         jaws: default_jcf("Options", "SayDollars", |v| Value::Bool(v.trim() == "1")),
@@ -930,6 +959,39 @@ impl Choices for SpeechMode {
         match self {
             Self::Full => msg::settings_speech_mode_full(),
             Self::Less => msg::settings_speech_mode_less(),
+        }
+    }
+}
+
+impl Choices for NumberProcessing {
+    const ALL: &'static [Self] = &[
+        Self::Synthesizer,
+        Self::SingleDigits,
+        Self::Pairs,
+        Self::FullNumbers,
+        Self::ByJaws,
+    ];
+    fn label(self) -> StaticMessage {
+        match self {
+            Self::Synthesizer => msg::settings_numbers_synthesizer(),
+            Self::SingleDigits => msg::settings_numbers_single_digits(),
+            Self::Pairs => msg::settings_numbers_pairs(),
+            Self::FullNumbers => msg::settings_numbers_full(),
+            Self::ByJaws => msg::settings_numbers_by_okur(),
+        }
+    }
+}
+
+/// Speak Single Digits if Number Contains: five to eight digits, or none (the synthesizer's).
+impl Choices for Option<u8> {
+    const ALL: &'static [Self] = &[Some(5), Some(6), Some(7), Some(8), None];
+    fn label(self) -> StaticMessage {
+        match self {
+            Some(6) => msg::settings_single_digits_six(),
+            Some(7) => msg::settings_single_digits_seven(),
+            Some(8) => msg::settings_single_digits_eight(),
+            None => msg::settings_numbers_synthesizer(),
+            Some(_) => msg::settings_single_digits_five(),
         }
     }
 }

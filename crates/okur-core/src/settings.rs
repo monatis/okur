@@ -541,6 +541,43 @@ impl Punctuation {
     }
 }
 
+/// JAWS's Number Processing (`DEFAULT.JCF` Options `Numbers`: "0 = off (Controlled By
+/// Synthesizer), 1 = Single Digits, 2 = Pairs, 3 = Full Numbers, 4 = Controlled by JAWS", the
+/// shared DEFAULT.JCF's own words).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum NumberProcessing {
+    /// Numbers left to the synthesizer as written ("1234").
+    #[default]
+    Synthesizer,
+    /// Every number digit by digit ("4 2"), its point, comma and colon by name ("2 point 5",
+    /// "1 Comma 0 0 0", "1 0 Colon 3 0"), an ordinal whole ("1st") [obs, 722].
+    SingleDigits,
+    /// A number in twos from its right ("1 23", "12 34"), its group commas and a time's colon
+    /// dropped ("1 00 00 00", "10 30"); decimals and money as written [obs, 1159].
+    Pairs,
+    /// A number of four digits with its thousands comma ("1,234", "2,002"); others as written
+    /// [obs, 1160].
+    FullNumbers,
+    /// Numbers in words by JAWS itself ("one hundred twenty three", "first", "one million",
+    /// "U.S. dollars and two cents" [obs, 1161]); Okur leaves them to the synthesizer as yet
+    /// (a known gap).
+    ByJaws,
+}
+
+impl NumberProcessing {
+    /// The processing a `DEFAULT.JCF` `Numbers` value sets; any other value, the synthesizer's.
+    pub fn from_jcf(value: &str) -> Self {
+        match value.trim() {
+            "1" => Self::SingleDigits,
+            "2" => Self::Pairs,
+            "3" => Self::FullNumbers,
+            "4" => Self::ByJaws,
+            _ => Self::Synthesizer,
+        }
+    }
+}
+
 /// How running text is given to the synthesizer: JAWS's Text Processing, `DEFAULT.JCF`'s
 /// Options `MixedCase`, `Numbers` and `SayDollars` [obs, 721-723 against 407].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -549,9 +586,15 @@ pub struct TextProcessing {
     /// A word is split where a capital follows a small letter ("get Element By Id"); off, it
     /// is given whole, while letters and digits are still split ("System 32") [obs, 721].
     pub mixed_case: bool,
-    /// Every number digit by digit ("4 2"), its point, comma and colon by name ("2 point 5",
-    /// "1 Comma 0 0 0", "1 0 Colon 3 0"), an ordinal whole ("1st") [obs, 722].
-    pub numbers_as_digits: bool,
+    /// How numbers are given to the synthesizer: JAWS's Number Processing (`Numbers`).
+    pub numbers: NumberProcessing,
+    /// A run of this many digits or more is read digit by digit ("5 4 3 2 1"), whatever
+    /// [`TextProcessing::numbers`] says but Single Digits: JAWS's Speak Single Digits if Number
+    /// Contains (`SingleDigitThreshold`, 5 by default); none, left to the synthesizer.
+    pub single_digit_threshold: Option<u8>,
+    /// A number with dashes in it is read digit by digit ("1 dash 8 0 0"): JAWS's If Number
+    /// Contains Dashes (`SpeakNumbersSepByDashesAsDigits`, on by default).
+    pub dashes_as_digits: bool,
     /// Dollar and euro amounts go to the synthesizer as written ("$0.02", "€"), for it to say
     /// [obs, 723].
     pub say_dollars: bool,
@@ -564,7 +607,9 @@ impl Default for TextProcessing {
     fn default() -> Self {
         Self {
             mixed_case: true,
-            numbers_as_digits: false,
+            numbers: NumberProcessing::Synthesizer,
+            single_digit_threshold: Some(5),
+            dashes_as_digits: true,
             say_dollars: false,
             use_dictionary: true,
         }

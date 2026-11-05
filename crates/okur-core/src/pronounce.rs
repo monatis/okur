@@ -7,7 +7,7 @@
 //! the synthesizer and for comparison with what JAWS sent its synthesizer (the speech
 //! recorder voice's log, `observation.spoken`).
 
-use crate::settings::{Punctuation, TextProcessing};
+use crate::settings::{NumberProcessing, Punctuation, TextProcessing};
 
 /// The name JAWS speaks for a character read on its own, when it names it.
 pub fn character_name(c: char) -> Option<&'static str> {
@@ -198,7 +198,7 @@ pub fn spoken_in(
     render(
         text,
         level,
-        level == Punctuation::All || processing.numbers_as_digits,
+        level == Punctuation::All || processing.numbers == NumberProcessing::SingleDigits,
         processing,
         dictionary,
     )
@@ -230,7 +230,7 @@ pub fn spoken_symbols_in(
     render(
         text,
         Punctuation::All,
-        processing.numbers_as_digits,
+        processing.numbers == NumberProcessing::SingleDigits,
         processing,
         dictionary,
     )
@@ -259,7 +259,7 @@ fn render(
     processing: TextProcessing,
     dictionary: &[crate::dictionary::DictionaryEntry],
 ) -> String {
-    let digits = processing.numbers_as_digits;
+    let digits = processing.numbers == NumberProcessing::SingleDigits;
     let text = repeats_filtered(&without_direction_marks(text).replace(['\u{1d}', '\u{1e}'], " "));
     // The dictionary, JAWS's respellings and the user's rules, before a word is split at its
     // capitals and digits; without Use Dictionary, neither: JAWS's own Dictionary Manager
@@ -269,7 +269,7 @@ fn render(
     } else {
         text
     };
-    let text = single_digits(&split_words(&text, processing.mixed_case), digits);
+    let text = numbers(&split_words(&text, processing.mixed_case), processing);
     let chars: Vec<char> = text.chars().collect();
     let mut out = String::with_capacity(text.len() * 2);
     let word = |out: &mut String, name: &str| {
@@ -470,9 +470,17 @@ fn is_ordinal_ending(chars: &[char], start: usize) -> bool {
     matches!(ending.as_str(), "st" | "nd" | "rd" | "th")
 }
 
-/// Numbers of five or more digits, and numbers with dashes, digit by digit; with `all`,
-/// every number but an ordinal ("1st" [obs, 722/s11]).
-fn single_digits(text: &str, all: bool) -> String {
+/// Numbers as Number Processing gives them to the synthesizer:
+/// - a run of digits as long as Speak Single Digits' threshold, or with dashes in it (If Number
+///   Contains Dashes), digit by digit ("5 4 3 2 1", "1 dash 8 0 0"), and every number with
+///   Single Digits but an ordinal ("1st");
+/// - Pairs: a number in twos from its right, its group commas and a time's colon dropped ("1 23",
+///   "1 00 00 00", "10 30"); one with a decimal point or after a currency sign as written
+///   ("2.5", "$1,250.50") [obs, 1159];
+/// - Full Numbers: four digits with their thousands comma ("1,234", "2,002") [obs, 1160];
+/// - otherwise as written, for the synthesizer.
+fn numbers(text: &str, processing: TextProcessing) -> String {
+    let all = processing.numbers == NumberProcessing::SingleDigits;
     let chars: Vec<char> = text.chars().collect();
     let mut out = String::with_capacity(text.len() * 2);
     let mut i = 0;
@@ -482,6 +490,7 @@ fn single_digits(text: &str, all: bool) -> String {
             i += 1;
             continue;
         }
+        let start = i;
         let mut number = String::new();
         while let Some(&d) = chars.get(i) {
             let dash_between = d == '-' && is_digit(chars.get(i + 1).copied());
@@ -493,14 +502,85 @@ fn single_digits(text: &str, all: bool) -> String {
         }
         let digits = number.chars().filter(char::is_ascii_digit).count();
         let ordinal = is_ordinal_ending(&chars, i);
-        if number.contains('-') || digits >= 5 || (all && !ordinal) {
+        let dashed = number.contains('-');
+        let long = processing
+            .single_digit_threshold
+            .is_some_and(|threshold| digits >= usize::from(threshold));
+        if (dashed && processing.dashes_as_digits) || long || (all && !ordinal) {
             let spaced: Vec<String> = number.chars().map(|d| d.to_string()).collect();
             out.push_str(&spaced.join(" "));
-        } else {
+            continue;
+        }
+        let whole = matches!(
+            processing.numbers,
+            NumberProcessing::Pairs | NumberProcessing::FullNumbers
+        );
+        // A run after a comma, colon or point between digits belongs to the number before it,
+        // which was given whole or as written.
+        let continued = start
+            .checked_sub(2)
+            .and_then(|p| chars.get(p))
+            .is_some_and(char::is_ascii_digit)
+            && start
+                .checked_sub(1)
+                .and_then(|p| chars.get(p))
+                .is_some_and(|s| matches!(s, ',' | ':' | '.'));
+        if !whole || dashed || ordinal || continued {
             out.push_str(&number);
+            continue;
+        }
+        // The whole number: runs joined by a comma, a colon or a point between digits.
+        let mut end = i;
+        while chars.get(end).is_some_and(|s| matches!(s, ',' | ':' | '.'))
+            && chars.get(end + 1).is_some_and(char::is_ascii_digit)
+        {
+            end += 1;
+            while chars.get(end).is_some_and(char::is_ascii_digit) {
+                end += 1;
+            }
+        }
+        let token: String = chars.get(start..end).unwrap_or_default().iter().collect();
+        i = end;
+        let money = start
+            .checked_sub(1)
+            .and_then(|p| chars.get(p))
+            .is_some_and(|c| matches!(c, '$' | '\u{20ac}' | '\u{a3}'));
+        if money || token.contains('.') || is_ordinal_ending(&chars, end) {
+            out.push_str(&token);
+            continue;
+        }
+        let plain: String = token.chars().filter(char::is_ascii_digit).collect();
+        match processing.numbers {
+            NumberProcessing::Pairs => out.push_str(&in_pairs(&plain)),
+            NumberProcessing::FullNumbers if token == plain && plain.len() == 4 => {
+                let (first, rest) = plain.split_at(1);
+                out.push_str(first);
+                out.push(',');
+                out.push_str(rest);
+            }
+            _ => out.push_str(&token),
         }
     }
     out
+}
+
+/// Digits in twos from the right: "1 23", "12 34", "1 00 00 00".
+fn in_pairs(digits: &str) -> String {
+    let chars: Vec<char> = digits.chars().collect();
+    let mut groups: Vec<String> = Vec::new();
+    let first = chars.len() % 2;
+    if first == 1 {
+        groups.push(chars.iter().take(1).collect());
+    }
+    groups.extend(
+        chars
+            .iter()
+            .skip(first)
+            .collect::<Vec<_>>()
+            .chunks(2)
+            .map(|pair| pair.iter().copied().collect::<String>()),
+    );
+    groups.join(" ")
 }
 
 /// Symbols and their names in running text, with the level each is named from: JAWS 2025's
@@ -837,7 +917,7 @@ mod tests {
     #[test]
     fn a_word_keeps_the_text_processing() {
         let digits = TextProcessing {
-            numbers_as_digits: true,
+            numbers: NumberProcessing::SingleDigits,
             ..TextProcessing::default()
         };
         assert_eq!(spoken_symbols_with("2.5", digits), "2 point 5");
@@ -863,7 +943,7 @@ mod tests {
             "getElementById System 32"
         );
         let digits = TextProcessing {
-            numbers_as_digits: true,
+            numbers: NumberProcessing::SingleDigits,
             ..plain
         };
         assert_eq!(with("42 2.5 1st", digits), "4 2 2 point 5 1st");
@@ -878,6 +958,57 @@ mod tests {
         };
         assert_eq!(with("$0.02 €", dollars), "$0.02 €");
         assert_eq!(with("$0.02 €", plain), "dollar 0.02 euro sign");
+    }
+
+    /// Number Processing's Pairs and Full Numbers, with Speak Single Digits and the dashes rule
+    /// still first [obs, 1159, 1160].
+    #[test]
+    fn numbers_in_pairs_and_in_full() {
+        let with = |text: &str, numbers: NumberProcessing| {
+            spoken_with(
+                text,
+                Punctuation::Most,
+                TextProcessing {
+                    numbers,
+                    ..TextProcessing::default()
+                },
+            )
+        };
+        let pairs = NumberProcessing::Pairs;
+        assert_eq!(
+            with("7 42 1234 54321 1-800-444 2.5 1,000,000 10:30", pairs),
+            "7 42 12 34 5 4 3 2 1 1 dash 8 0 0 dash 4 4 4 2.5 1 00 00 00 10 30"
+        );
+        assert_eq!(with("123RON 1st 2:00", pairs), "1 23 RON 1st 2 00");
+        assert_eq!(
+            with("3/2/2002 $0.02 $1,250.50", pairs),
+            "3 slash 2 slash 20 02 dollar 0.02 dollar 1,250.50"
+        );
+        let full = NumberProcessing::FullNumbers;
+        assert_eq!(
+            with("7 42 1234 2.5 1,000,000 10:30", full),
+            "7 42 1,234 2.5 1,000,000 10:30"
+        );
+        assert_eq!(with("3/2/2002", full), "3 slash 2 slash 2,002");
+    }
+
+    /// Controlled by JAWS: JAWS says numbers in words itself [obs, 1161/s14-s27]. Okur leaves
+    /// them to the synthesizer as yet.
+    #[test]
+    #[ignore = "known gap: Number Processing Controlled by JAWS (numbers in words) is not built"]
+    fn numbers_controlled_by_okur_are_words() {
+        let words = spoken_with(
+            "42 1234 2.5 1,000,000 1st",
+            Punctuation::Most,
+            TextProcessing {
+                numbers: NumberProcessing::ByJaws,
+                ..TextProcessing::default()
+            },
+        );
+        assert_eq!(
+            words,
+            "forty two one thousand two hundred thirty four two point five one million first"
+        );
     }
 
     #[test]
