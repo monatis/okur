@@ -72,6 +72,13 @@ if (Test-Path (Join-Path $env:USERPROFILE 'sr-harness\settings-backup\manifest.j
 
 $files = @(Get-ChildItem ($ScenarioGlob -split ',') | Sort-Object Name -Unique)
 "=== batch started $(Get-Date -Format o): $($files.Count) scenario(s), $Repetitions trial(s) each" | Out-File $log -Encoding utf8
+# Okur's Linux work runs in WSL on this machine (docs/plans/2026-11-05-linux-first.md): never during
+# a JAWS round, which it would slow and could take the focus from. A Linux build still running is
+# cut off, and goes on after the batch.
+if (Get-Process vmmemWSL, vmmem -ErrorAction SilentlyContinue) {
+    & wsl.exe --shutdown 2>$null
+    "WSL shut down for the batch" | Out-File $log -Append -Encoding utf8
+}
 $i = 0
 $applied = ''
 foreach ($f in $files) {
