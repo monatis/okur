@@ -194,3 +194,43 @@ impl ScreenReaderEngine {
         }
     }
 }
+
+/// The Insert+Space layer's keys, as its help lists them (the layer module's keys).
+const LAYER_KEYS: [fn() -> StaticMessage; 14] = [
+    msg::layer_help_speech_history,
+    msg::layer_help_clear_history,
+    msg::layer_help_copy_history,
+    msg::layer_help_speech,
+    msg::layer_help_speech_on_demand,
+    msg::layer_help_table,
+    msg::layer_help_clipboard,
+    msg::layer_help_mouse_echo,
+    msg::layer_help_ocr,
+    msg::layer_help_notifications,
+    msg::layer_help_last_notification,
+    msg::layer_help_toasts,
+    msg::layer_help_flexible_web,
+    msg::layer_help_this,
+];
+
+impl ScreenReaderEngine {
+    /// Insert+Space, then a question mark (Shift+Slash): the layer's keys in the Virtual
+    /// Viewer, its cursor at the top, nothing said until the user reads: JAWS's Basic Layer
+    /// Help Screen opens silently, and Down reads its second line [obs, 628/s2, s3]. Escape
+    /// closes it and reads the focus [obs, 628/s4].
+    pub(super) fn layer_help(&mut self) {
+        let mut lines = vec![
+            format!(
+                "\u{1d} {} \u{1e} {}",
+                msg::role_heading_level(2),
+                msg::layer_help_heading()
+            ),
+            msg::layer_help_intro().to_string(),
+        ];
+        lines.extend(LAYER_KEYS.iter().map(|words| words().to_string()));
+        lines.push(String::new());
+        lines.push(msg::viewer_close_hint().to_string());
+        self.viewer = Some(VirtualViewer::new(lines));
+        self.show_viewer_window();
+    }
+}

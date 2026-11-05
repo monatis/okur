@@ -59,3 +59,23 @@ help-windows-help = F1 opens the application's own help.
 
 # Screen-sensitive help on a page's heading, by its level.
 help-heading = A heading at level { $level }. H and Shift+H move between headings, and the numbers 1 to 6 by level; Insert+F6 lists them.
+
+## The Insert+Space layer's help (Insert+Space, then a question mark): the layer's keys, in
+## Okur's own words, in the Virtual Viewer; JAWS's Basic Layer Help Screen opens the same way,
+## silently, its cursor at the top [obs, 628/s2, s3].
+layer-help-heading = General Commands
+layer-help-intro = These keys work after Insert+Space, each pressed on its own.
+layer-help-speech-history = Speech History = H.
+layer-help-clear-history = Clear the Speech History = Shift + H.
+layer-help-copy-history = Copy the Speech History to the clipboard = Control + H.
+layer-help-speech = Speech on or off = S.
+layer-help-speech-on-demand = Less speech: speech on demand or speech muted = Shift + S.
+layer-help-table = Table layer, in a table = T.
+layer-help-clipboard = The clipboard's text in the Virtual Viewer = C.
+layer-help-mouse-echo = Mouse echo layer = E.
+layer-help-ocr = Convenient OCR layer = O.
+layer-help-notifications = Notification history = N.
+layer-help-last-notification = The last notification again = Shift + N.
+layer-help-toasts = Toast notifications spoken or not = Control + N.
+layer-help-flexible-web = Flexible Web = X.
+layer-help-this = This help = Question mark.

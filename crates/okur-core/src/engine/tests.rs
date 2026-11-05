@@ -9878,3 +9878,40 @@ fn excel_a_selection_grows_a_cell_at_a_time_with_shift_pressed_again() {
         Some("select\nWeekends\nC 1")
     );
 }
+
+/// Insert+Space, then a question mark (Shift+Slash): the layer's help in the Virtual Viewer,
+/// nothing said as it opens, Down reading its second line; Escape closes it [obs, 628/s1-s4].
+#[test]
+fn the_layer_help_opens_silently_at_its_top() {
+    let page =
+        AomNode::new(0, Role::Document).with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("First line.")
+        ]);
+    let speech = GatedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(speech.clone()),
+    );
+    let press = |engine: &mut ScreenReaderEngine, key: Key, modifiers: Modifiers| {
+        engine.handle_key_event(&KeyEvent::new(key, modifiers, true));
+        GatedSpeech::take(&speech.history).join("\n")
+    };
+    let insert = Modifiers {
+        insert: true,
+        ..Modifiers::none()
+    };
+    let shift = Modifiers {
+        shift: true,
+        ..Modifiers::none()
+    };
+    press(&mut engine, Key::Space, insert);
+    assert_eq!(press(&mut engine, Key::Slash, shift), "");
+    assert!(engine.viewer.is_some());
+    let second = press(&mut engine, Key::DownArrow, Modifiers::none());
+    assert_eq!(
+        second,
+        "These keys work after Insert+Space, each pressed on its own."
+    );
+    press(&mut engine, Key::Escape, Modifiers::none());
+    assert!(engine.viewer.is_none());
+}
