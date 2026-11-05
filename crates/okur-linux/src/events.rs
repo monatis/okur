@@ -12,8 +12,40 @@ use std::time::Duration;
 use okur_core::event::AccessibilityEvent;
 use okur_runtime::events::{EventSink, EventSource};
 use okur_runtime::RuntimeError;
-use xa11y_core::{Event, EventKind, RecvStatus};
-use xa11y_linux::LinuxProvider;
+use xa11y_core::{ElementData, Event, EventKind, RecvStatus, Role};
+use xa11y_linux::{AtspiTree, LinuxProvider};
+
+/// The most objects a page's capture reads: a large page is cut there, its first part read.
+const PAGE_LIMIT: usize = 20_000;
+
+/// xa11y-linux's capture as the model's snapshot node.
+fn snapshot(tree: AtspiTree) -> okur_linux_model::page::AtspiNode {
+    okur_linux_model::page::AtspiNode {
+        role: tree.role,
+        name: tree.name,
+        attributes: tree.attributes.into_iter().collect(),
+        states: tree.states,
+        text: tree.text,
+        children: tree.children.into_iter().map(snapshot).collect(),
+    }
+}
+
+/// The page the focus landed on, read whole, as the engine takes a page: when the focus lands
+/// on a page's document, as Chrome gives it when a page loads and when Tab comes back to it.
+fn page(provider: &LinuxProvider, element: &ElementData) -> Option<AccessibilityEvent> {
+    if element.role != Role::WebArea {
+        return None;
+    }
+    let started = std::time::Instant::now();
+    let tree = provider
+        .atspi_tree(element, PAGE_LIMIT)
+        .map_err(|e| tracing::debug!("the page was not read: {e}"))
+        .ok()?;
+    let root = okur_linux_model::page::to_aom(&snapshot(tree));
+    tracing::debug!(ms = started.elapsed().as_millis(), "page read");
+    let title = root.name.clone().unwrap_or_default();
+    Some(AccessibilityEvent::DocumentLoaded { title, root })
+}
 
 fn source_error(what: &str, error: impl std::fmt::Display) -> RuntimeError {
     RuntimeError::EventSource(format!("AT-SPI: {what}: {error}"))
@@ -64,6 +96,14 @@ impl EventSource for AtspiEventSource {
                 while !stop.load(Ordering::SeqCst) {
                     match subscription.recv_status(Duration::from_millis(100)) {
                         RecvStatus::Event(event) => {
+                            if event.kind == EventKind::FocusChanged {
+                                let loaded = event.target.as_ref().and_then(|e| page(&provider, e));
+                                if let Some(loaded) = loaded {
+                                    if !sink.send(loaded) {
+                                        return;
+                                    }
+                                }
+                            }
                             if let Some(event) = convert(&event) {
                                 if !sink.send(event) {
                                     return;

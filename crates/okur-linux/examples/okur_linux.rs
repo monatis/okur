@@ -34,7 +34,12 @@ async fn main() {
         layers: Default::default(),
         settings_folder: None,
         first_start: false,
-        speech_log: None,
+        // --speech-log <path>: every utterance as JSON lines, keys' speech too.
+        speech_log: args
+            .iter()
+            .position(|a| a == "--speech-log")
+            .and_then(|i| args.get(i + 1))
+            .and_then(|path| okur_runtime::SpeechLog::open(path).ok()),
         buffer: Default::default(),
         is_fixture: false,
         console: true,

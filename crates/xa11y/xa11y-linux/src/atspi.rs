@@ -3981,3 +3981,65 @@ mod tests {
         assert!(msg.contains("/org/a11y/atspi/accessible/3"), "{msg}");
     }
 }
+
+/// An AT-SPI object and its descendants as read for a page's snapshot: its role's name, its
+/// name, its object attributes (a heading's `level`, the `tag`, `xml-roles`), its state bits
+/// (AT-SPI's `StateType` numbering), and its text with U+FFFC where a child sits.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct AtspiTree {
+    pub role: String,
+    pub name: String,
+    pub attributes: HashMap<String, String>,
+    pub states: u64,
+    pub text: Option<String>,
+    pub children: Vec<AtspiTree>,
+}
+
+impl LinuxProvider {
+    /// The AT-SPI subtree of `element`, an element this provider or its events read (its raw
+    /// `bus_name` and `object_path`): at most `limit` objects, depth first, the rest left out.
+    /// Each object is a few calls on the bus; the Cache interface would read a tree at once.
+    pub fn atspi_tree(&self, element: &ElementData, limit: usize) -> Result<AtspiTree> {
+        let raw = |key: &str| {
+            element
+                .raw
+                .get(key)
+                .and_then(|v| v.as_str())
+                .map(str::to_owned)
+                .ok_or_else(|| Error::Platform {
+                    code: -1,
+                    message: format!("the element has no {key}"),
+                })
+        };
+        let aref = AccessibleRef {
+            bus_name: raw("bus_name")?,
+            path: raw("object_path")?,
+        };
+        let mut left = limit;
+        Ok(self.read_tree(&aref, &mut left))
+    }
+
+    fn read_tree(&self, aref: &AccessibleRef, left: &mut usize) -> AtspiTree {
+        *left = left.saturating_sub(1);
+        let mut node = AtspiTree {
+            role: self.get_role_name(aref).unwrap_or_default(),
+            name: self.get_name(aref).unwrap_or_default(),
+            attributes: self
+                .scan_attributes(aref)
+                .ok()
+                .flatten()
+                .flatten()
+                .unwrap_or_default(),
+            states: self.state_bits(aref).0,
+            text: self.get_text_content(aref),
+            children: Vec::new(),
+        };
+        for child in self.get_atspi_children(aref).unwrap_or_default() {
+            if *left == 0 {
+                break;
+            }
+            node.children.push(self.read_tree(&child, left));
+        }
+        node
+    }
+}

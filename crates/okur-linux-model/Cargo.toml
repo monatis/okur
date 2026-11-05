@@ -11,4 +11,5 @@ license.workspace = true
 
 [dependencies]
 okur-core = { workspace = true }
+serde = { workspace = true }
 xa11y-core = { workspace = true }
