@@ -1,0 +1,123 @@
+{
+  "id": "1152-desktop-scan-cursor-positions",
+  "name": "Where JAWS's Scan Cursor is in the WPF window, by Alt+Delete on each of its lines: the field it is routed to, the title, System, the text blocks, the button and the field again, and two characters into the field; the window's tree and text saved after each step for the elements' rectangles",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-wpf-text.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR WPF Text Fixture"
+  },
+  "trace_screen": true,
+  "trace_window": true,
+  "okur_settings": {
+    "experimental.screen_text": true
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "Insert+NumpadMinus",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "NumpadMinus",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "PageUp",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "Insert+Up",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s8"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s9"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s10"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s11"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s12"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s13"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s14"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s15"
+    },
+    {
+      "type": "key",
+      "command": "Down",
+      "id": "s16"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s17"
+    },
+    {
+      "type": "key",
+      "command": "Right",
+      "id": "s18"
+    },
+    {
+      "type": "key",
+      "command": "Right",
+      "id": "s19"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s20"
+    },
+    {
+      "type": "key",
+      "command": "NumpadPlus",
+      "id": "s21"
+    }
+  ]
+}

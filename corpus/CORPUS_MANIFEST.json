@@ -4680,6 +4680,20 @@
       }
     },
     {
+      "scenario_id": "1152-desktop-scan-cursor-positions",
+      "fixture": "desktop-wpf-text.ps1",
+      "evidence": {
+        "sha256": "95e038148023aaa17894a19627359ee782ee8657b3764160c5745ca7aea2050e",
+        "capture_script_sha256": "aa0459d1ffd74593283eda0e2ea3571f88ffa31ec0efdc3761533cf21b6ecd1d",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "12-struct-heading-level-2",
       "fixture": "structural-navigation.html",
       "evidence": {
@@ -29461,10 +29475,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1938,
-    "scenarios_with_evidence": 1938,
-    "total_trials": 5820,
-    "successful_trials": 5803,
-    "deterministic_scenarios": 1618
+    "scenarios": 1939,
+    "scenarios_with_evidence": 1939,
+    "total_trials": 5823,
+    "successful_trials": 5806,
+    "deterministic_scenarios": 1619
   }
 }
