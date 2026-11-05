@@ -3,7 +3,7 @@
 # distribution "okur" on D:), as a git bundle, and checks it out at ~/okur there. Run from the
 # repository root:
 #   bash skills/linux-lab/scripts/sync.sh [--peer old-pc] [--distro okur]
-# The lab's scripts (setup.sh, a11y-stack.sh) go along to D:\okur-linux. Uncommitted changes do
+# The lab's scripts (setup.sh, a11y-stack.sh, dns.sh) go along to D:\okur-linux. Uncommitted changes do
 # not travel: commit first (the lab builds what the branch holds).
 set -euo pipefail
 PEER=old-pc
