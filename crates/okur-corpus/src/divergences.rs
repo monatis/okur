@@ -1814,6 +1814,16 @@ divergences! {
      hundred fifty U.S. dollars and fifty cents\"; Okur says \"zero U.S. dollars and two \
      cents\". The rest of both steps match.",
     "the agent under the owner's rule on JAWS's accidents, 2026-11-05";
+
+    Difference::Step => [
+        "628-desktop-layer-help-and-command-search/s7",
+        "628-desktop-layer-help-and-command-search/s8",
+    ],
+    "Command Search (Insert+Space, then J) finds Okur's own commands, in Okur's order: the first \
+     found for \"s\" is Okur's \"Select Next Character\", for \"sa\" \"Say All\"; JAWS's are its \
+     own, \"Toggle Video in Tandem Session\" and \"Say Font\". The search says the first command \
+     found as it changes, as JAWS's does.",
+    "the agent under the clean-room rule (AGENTS.md section 1.4), 2026-11-05";
 }
 
 /// The divergence covering `step`, if any.

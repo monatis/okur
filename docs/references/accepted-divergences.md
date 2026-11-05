@@ -1725,6 +1725,17 @@ A step can be in more than one entry; all of its entries apply.
 - Why: the list is what a machine has installed, not a behavior of JAWS's to copy.
 - Decided by the owner, 2026-11-05.
 
+### Command Search finds Okur's commands
+
+- Steps: `628-desktop-layer-help-and-command-search/s7`,
+  `628-desktop-layer-help-and-command-search/s8`.
+- Difference: typing in Command Search (Insert+Space, then J) says the first command found, as
+  JAWS's does, but the commands are Okur's, in Okur's order: "Select Next Character" for "s",
+  "Say All" for "sa", where JAWS says its own "Toggle Video in Tandem Session" and "Say Font".
+- Why: Okur searches its own commands; JAWS's command list and its order are JAWS's (AGENTS.md
+  §1.4).
+- Decided by the agent under the clean-room rule, 2026-11-05.
+
 ## Considered and not accepted
 
 - From a newer JAWS (2025.2508.120, ARIA-AT's reports), not followed: Insert+Up on a menu
