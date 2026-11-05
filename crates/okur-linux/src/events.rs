@@ -30,15 +30,37 @@ fn snapshot(tree: AtspiTree) -> okur_linux_model::page::AtspiNode {
     }
 }
 
-/// The page the focus landed on, read whole, as the engine takes a page: when the focus lands
-/// on a page's document, as Chrome gives it when a page loads and when Tab comes back to it.
-fn page(provider: &LinuxProvider, element: &ElementData) -> Option<AccessibilityEvent> {
-    if element.role != Role::WebArea {
+/// How far up from a focused element a page's document is looked for.
+const PAGE_DEPTH: usize = 40;
+
+/// An element's AT-SPI object, by its bus name and path.
+fn object_of(element: &ElementData) -> Option<String> {
+    let raw = |key: &str| element.raw.get(key).and_then(|v| v.as_str());
+    Some(format!("{}{}", raw("bus_name")?, raw("object_path")?))
+}
+
+/// The page the focus is in, read whole, as the engine takes a page: when the focus lands on a
+/// page's document (Chrome gives it when a page loads and when Tab comes back to it), and when
+/// it lands inside a page other than the one read last (a link of a page newly in front).
+fn page(
+    provider: &LinuxProvider,
+    element: &ElementData,
+    last: &mut Option<String>,
+) -> Option<AccessibilityEvent> {
+    let on_document = element.role == Role::WebArea;
+    let document = if on_document {
+        element.clone()
+    } else {
+        provider.atspi_ancestor(element, "document web", PAGE_DEPTH)?
+    };
+    let object = object_of(&document)?;
+    if !on_document && last.as_deref() == Some(object.as_str()) {
         return None;
     }
+    *last = Some(object);
     let started = std::time::Instant::now();
     let tree = provider
-        .atspi_tree(element, PAGE_LIMIT)
+        .atspi_tree(&document, PAGE_LIMIT)
         .map_err(|e| tracing::debug!("the page was not read: {e}"))
         .ok()?;
     let root = okur_linux_model::page::to_aom(&snapshot(tree));
@@ -93,11 +115,15 @@ impl EventSource for AtspiEventSource {
             std::thread::spawn(move || {
                 // The subscription lives in this thread: dropped here, it deregisters its
                 // events and ends its own reader.
+                let mut last_page = None;
                 while !stop.load(Ordering::SeqCst) {
                     match subscription.recv_status(Duration::from_millis(100)) {
                         RecvStatus::Event(event) => {
                             if event.kind == EventKind::FocusChanged {
-                                let loaded = event.target.as_ref().and_then(|e| page(&provider, e));
+                                let loaded = event
+                                    .target
+                                    .as_ref()
+                                    .and_then(|e| page(&provider, e, &mut last_page));
                                 if let Some(loaded) = loaded {
                                     if !sink.send(loaded) {
                                         return;

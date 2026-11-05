@@ -4019,6 +4019,35 @@ impl LinuxProvider {
         Ok(self.read_tree(&aref, &mut left))
     }
 
+    /// The nearest of `element` and its ancestors, at most `max` levels up, whose AT-SPI role's
+    /// name is `role` (a page's "document web" above a focused link), as an element whose raw
+    /// data names its object, for [`LinuxProvider::atspi_tree`].
+    pub fn atspi_ancestor(
+        &self,
+        element: &ElementData,
+        role: &str,
+        max: usize,
+    ) -> Option<ElementData> {
+        let raw = |key: &str| {
+            element
+                .raw
+                .get(key)
+                .and_then(|v| v.as_str())
+                .map(str::to_owned)
+        };
+        let mut aref = AccessibleRef {
+            bus_name: raw("bus_name")?,
+            path: raw("object_path")?,
+        };
+        for _ in 0..=max {
+            if self.get_role_name(&aref).ok().as_deref() == Some(role) {
+                return Some(self.build_element_data(&aref, element.pid));
+            }
+            aref = self.get_atspi_parent(&aref).ok().flatten()?;
+        }
+        None
+    }
+
     fn read_tree(&self, aref: &AccessibleRef, left: &mut usize) -> AtspiTree {
         *left = left.saturating_sub(1);
         let mut node = AtspiTree {
