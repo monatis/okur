@@ -4442,6 +4442,20 @@
       }
     },
     {
+      "scenario_id": "1135-desktop-excel-monitor-cells",
+      "fixture": "desktop-excel.ps1",
+      "evidence": {
+        "sha256": "6dabfc45a175e8a8d0a3e3a6cadd6ecb45b3090162c4c32f12fbcd0b8023d9b7",
+        "capture_script_sha256": "6210bbf9cf344ee3ab20d1965fa820ad4889ebefd2c754e3d9627ff0d9401809",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "1136-desktop-progress-bar",
       "fixture": "desktop-progress.ps1",
       "evidence": {
@@ -29671,10 +29685,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1953,
-    "scenarios_with_evidence": 1953,
-    "total_trials": 5865,
-    "successful_trials": 5848,
-    "deterministic_scenarios": 1629
+    "scenarios": 1954,
+    "scenarios_with_evidence": 1954,
+    "total_trials": 5868,
+    "successful_trials": 5851,
+    "deterministic_scenarios": 1630
   }
 }

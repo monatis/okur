@@ -1,0 +1,32 @@
+{
+  "id": "1135-desktop-excel-monitor-cells",
+  "name": "Excel's monitor cells (popapps.chm, JAWS commands for Excel; Excel.jkm): Down to A2, Right to B2, B2 set as monitor cell 1 (Insert+Shift+1), Ctrl+End to C4, monitor cell 1 read (Alt+Shift+1), the monitor cells listed (Ctrl+Shift+M) and Escape. JAWS keeps monitor cells in its settings for the workbook, which each trial starts without (jaws_forget)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-fixture.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "Right"},
+    {"id": "s3", "type": "key", "command": "Insert+Shift+1"},
+    {"id": "s4", "type": "key", "command": "Ctrl+End"},
+    {"id": "s5", "type": "key", "command": "Alt+Shift+1"},
+    {"id": "s6", "type": "key", "command": "Ctrl+Shift+M", "onset_ms": 2500, "settle_max_ms": 15000},
+    {"id": "s7", "type": "key_ui_access", "command": "Escape"}
+  ]
+}

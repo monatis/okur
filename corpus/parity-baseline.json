@@ -1,7 +1,7 @@
 {
   "notice": "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- parity --write-baseline",
-  "matched_steps": 12021,
-  "total_steps": 12591,
+  "matched_steps": 12025,
+  "total_steps": 12598,
   "accepted_divergences": 388,
   "errors": [],
   "steps": {
@@ -1876,6 +1876,13 @@
     "1134-desktop-excel-named-titles/s5": "match",
     "1134-desktop-excel-named-titles/s6": "match",
     "1134-desktop-excel-named-titles/s7": "match",
+    "1135-desktop-excel-monitor-cells/s1": "match",
+    "1135-desktop-excel-monitor-cells/s2": "match",
+    "1135-desktop-excel-monitor-cells/s3": "mismatch",
+    "1135-desktop-excel-monitor-cells/s4": "match",
+    "1135-desktop-excel-monitor-cells/s5": "mismatch",
+    "1135-desktop-excel-monitor-cells/s6": "mismatch",
+    "1135-desktop-excel-monitor-cells/s7": "match",
     "1136-desktop-progress-bar/s1": "match",
     "1136-desktop-progress-bar/s2": "match",
     "1136-desktop-progress-bar/s3": "match",
