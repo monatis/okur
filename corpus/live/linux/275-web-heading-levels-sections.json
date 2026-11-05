@@ -1,0 +1,227 @@
+{
+ "scenario_id": "275-web-heading-levels-sections",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "chrome": "google-chrome",
+  "commit": "38f579710"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1793905493258,
+     "t_end_ms": 1793905494763,
+     "action": {
+      "type": "key",
+      "command": "2"
+     },
+     "observation": {
+      "speech_raw": "User guide \u001d heading level 1 \u001e \nInstall\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1793905494763,
+     "t_end_ms": 1793905496268,
+     "action": {
+      "type": "key",
+      "command": "2"
+     },
+     "observation": {
+      "speech_raw": "Configure\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1793905496268,
+     "t_end_ms": 1793905497773,
+     "action": {
+      "type": "key",
+      "command": "2"
+     },
+     "observation": {
+      "speech_raw": "Reference \u001d heading level 1 \u001e \nCommands\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s4",
+     "t_start_ms": 1793905497773,
+     "t_end_ms": 1793905499278,
+     "action": {
+      "type": "key",
+      "command": "2"
+     },
+     "observation": {
+      "speech_raw": "Settings\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s5",
+     "t_start_ms": 1793905499278,
+     "t_end_ms": 1793905500784,
+     "action": {
+      "type": "key",
+      "command": "2"
+     },
+     "observation": {
+      "speech_raw": "No more headings at level2 in this section.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s6",
+     "t_start_ms": 1793905500784,
+     "t_end_ms": 1793905502290,
+     "action": {
+      "type": "key",
+      "command": "Ctrl+Home"
+     },
+     "observation": {
+      "speech_raw": "Headings in Sections - Headings Fixture",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s7",
+     "t_start_ms": 1793905502290,
+     "t_end_ms": 1793905503796,
+     "action": {
+      "type": "key",
+      "command": "3"
+     },
+     "observation": {
+      "speech_raw": "User guide \u001d heading level 1 \u001e \nInstall \u001d heading level 2 \u001e \nWindows\n \u001d heading level 3 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s8",
+     "t_start_ms": 1793905503796,
+     "t_end_ms": 1793905505301,
+     "action": {
+      "type": "key",
+      "command": "3"
+     },
+     "observation": {
+      "speech_raw": "macOS\n \u001d heading level 3 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s9",
+     "t_start_ms": 1793905505301,
+     "t_end_ms": 1793905506807,
+     "action": {
+      "type": "key",
+      "command": "3"
+     },
+     "observation": {
+      "speech_raw": "Configure \u001d heading level 2 \u001e \nVoices\n \u001d heading level 3 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s10",
+     "t_start_ms": 1793905506807,
+     "t_end_ms": 1793905508312,
+     "action": {
+      "type": "key",
+      "command": "3"
+     },
+     "observation": {
+      "speech_raw": "Reference \u001d heading level 1 \u001e \nCommands \u001d heading level 2 \u001e \nReading\n \u001d heading level 3 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s11",
+     "t_start_ms": 1793905508312,
+     "t_end_ms": 1793905509818,
+     "action": {
+      "type": "key",
+      "command": "Shift+3"
+     },
+     "observation": {
+      "speech_raw": "Reference \u001d heading level 1 \u001e \nVoices\n \u001d heading level 3 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s12",
+     "t_start_ms": 1793905509818,
+     "t_end_ms": 1793905511324,
+     "action": {
+      "type": "key",
+      "command": "Shift+2"
+     },
+     "observation": {
+      "speech_raw": "Configure\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s13",
+     "t_start_ms": 1793905511324,
+     "t_end_ms": 1793905512831,
+     "action": {
+      "type": "key",
+      "command": "Shift+2"
+     },
+     "observation": {
+      "speech_raw": "Install\n \u001d heading level 2 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s14",
+     "t_start_ms": 1793905512831,
+     "t_end_ms": 1793905514336,
+     "action": {
+      "type": "key",
+      "command": "1"
+     },
+     "observation": {
+      "speech_raw": "Reference\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s15",
+     "t_start_ms": 1793905514336,
+     "t_end_ms": 1793905515842,
+     "action": {
+      "type": "key",
+      "command": "Shift+1"
+     },
+     "observation": {
+      "speech_raw": "User guide\n \u001d heading level 1 \u001e",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

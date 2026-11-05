@@ -1,0 +1,45 @@
+{
+ "scenario_id": "07-doc-prior-char",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "chrome": "google-chrome",
+  "commit": "38f579710"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1793905410508,
+     "t_end_ms": 1793905412012,
+     "action": {
+      "type": "keyboard",
+      "command": "{RIGHT}"
+     },
+     "observation": {
+      "speech_raw": "o",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1793905412012,
+     "t_end_ms": 1793905415021,
+     "action": {
+      "type": "keyboard",
+      "command": "{LEFT}"
+     },
+     "observation": {
+      "speech_raw": "D\nD",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

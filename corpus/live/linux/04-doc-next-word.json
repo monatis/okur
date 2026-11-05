@@ -1,0 +1,31 @@
+{
+ "scenario_id": "04-doc-next-word",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "chrome": "google-chrome",
+  "commit": "38f579710"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1793905332369,
+     "t_end_ms": 1793905333875,
+     "action": {
+      "type": "keyboard",
+      "command": "^{RIGHT}"
+     },
+     "observation": {
+      "speech_raw": "Reading",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

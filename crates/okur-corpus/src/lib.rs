@@ -53,6 +53,21 @@ mod tests {
         assert!(shared.is_empty(), "scenarios sharing a number: {shared:?}");
     }
 
+    /// Okur's live runs on Linux (the lab's, kept in `corpus/live/linux/`) against JAWS's
+    /// evidence of the same scenarios: fails when a step that matched no longer does, and
+    /// whenever the generated baseline is stale (`okur-lab live-baseline linux`).
+    #[test]
+    fn linux_live_runs_match_their_baseline() {
+        let dir = corpus_dir();
+        let report = live::run_platform(&dir, "linux");
+        assert!(
+            report.errors.is_empty(),
+            "runs could not be compared: {:?}",
+            report.errors
+        );
+        assert_eq!(live::check_baseline(&dir, "linux", &report), Ok(()));
+    }
+
     /// Engine speech vs. recorded JAWS speech, over UIA snapshots captured from Chrome on
     /// the reference machine. Fails on any regression and whenever the generated baseline
     /// is stale; run `cargo run --bin okur-lab -- parity` for the per-step diff.

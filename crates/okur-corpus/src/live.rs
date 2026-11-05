@@ -123,6 +123,185 @@ pub fn compare(run: &Value, evidence: &Value) -> Result<Vec<LiveStep>, String> {
         .collect()
 }
 
+/// Where a platform's live runs are kept: `corpus/live/<platform>/<scenario_id>.json`, each as
+/// the platform's runner wrote it (the Linux lab's `run-scenario-linux.py`), never edited.
+pub const LIVE_DIR: &str = "live";
+
+/// A platform's live runs compared with JAWS's evidence: the conformance a port shows live
+/// (docs/plans/2026-11-05-linux-first.md §2.2).
+#[derive(Debug, Default)]
+pub struct LiveReport {
+    pub runs: usize,
+    pub steps: Vec<LiveStep>,
+    pub errors: Vec<String>,
+}
+
+impl LiveReport {
+    pub fn matched(&self) -> usize {
+        self.steps.iter().filter(|s| s.matched).count()
+    }
+
+    pub fn accepted(&self) -> usize {
+        self.steps.iter().filter(|s| s.accepted).count()
+    }
+
+    /// The steps compared: every step but the accepted divergences.
+    pub fn compared(&self) -> usize {
+        self.steps.len() - self.accepted()
+    }
+}
+
+fn read_json(path: &std::path::Path) -> Result<Value, String> {
+    let text = std::fs::read_to_string(path).map_err(|e| format!("{path:?}: {e}"))?;
+    serde_json::from_str(text.trim_start_matches('\u{feff}')).map_err(|e| format!("{path:?}: {e}"))
+}
+
+/// Compares every live run of `platform` kept in the corpus with JAWS's evidence of its
+/// scenario, in the runs' order by name.
+pub fn run_platform(corpus_dir: &std::path::Path, platform: &str) -> LiveReport {
+    let mut report = LiveReport::default();
+    let dir = corpus_dir.join(LIVE_DIR).join(platform);
+    let mut paths: Vec<_> = match std::fs::read_dir(&dir) {
+        Ok(entries) => entries
+            .filter_map(Result::ok)
+            .map(|e| e.path())
+            .filter(|p| p.extension().is_some_and(|x| x == "json"))
+            .collect(),
+        Err(e) => {
+            report.errors.push(format!("{dir:?}: {e}"));
+            return report;
+        }
+    };
+    paths.sort();
+    for path in paths {
+        let compared = read_json(&path).and_then(|run| {
+            let scenario = run
+                .get("scenario_id")
+                .and_then(Value::as_str)
+                .ok_or_else(|| format!("{path:?}: no scenario_id"))?
+                .to_owned();
+            let evidence = read_json(
+                &corpus_dir
+                    .join("evidence")
+                    .join(format!("{scenario}-evidence.json")),
+            )?;
+            compare(&run, &evidence).map_err(|e| format!("{scenario}: {e}"))
+        });
+        match compared {
+            Ok(steps) => {
+                report.runs += 1;
+                report.steps.extend(steps);
+            }
+            Err(e) => report.errors.push(e),
+        }
+    }
+    report
+}
+
+/// The baseline of `platform`'s live runs: `corpus/live/<platform>-baseline.json`.
+fn baseline_path(corpus_dir: &std::path::Path, platform: &str) -> std::path::PathBuf {
+    corpus_dir
+        .join(LIVE_DIR)
+        .join(format!("{platform}-baseline.json"))
+}
+
+/// Renders the baseline exactly as stored on disk.
+pub fn render_baseline(platform: &str, report: &LiveReport) -> Result<String, String> {
+    let steps: std::collections::BTreeMap<&str, &str> = report
+        .steps
+        .iter()
+        .map(|s| {
+            let status = match (s.matched, s.accepted) {
+                (true, _) => "match",
+                (false, true) => "accepted divergence",
+                (false, false) => "mismatch",
+            };
+            (s.key.as_str(), status)
+        })
+        .collect();
+    let baseline = serde_json::json!({
+        "notice": format!(
+            "GENERATED FILE - do not edit. Regenerate: cargo run --bin okur-lab -- live-baseline \
+             {platform} --write"
+        ),
+        "platform": platform,
+        "runs": report.runs,
+        "matched_steps": report.matched(),
+        "total_steps": report.compared(),
+        "accepted_divergences": report.accepted(),
+        "errors": report.errors,
+        "steps": steps,
+    });
+    serde_json::to_string_pretty(&baseline)
+        .map(|s| s + "\n")
+        .map_err(|e| e.to_string())
+}
+
+/// The steps that matched JAWS in the committed baseline and no longer do, or are gone.
+fn regressions(corpus_dir: &std::path::Path, platform: &str, report: &LiveReport) -> Vec<String> {
+    let committed = std::fs::read_to_string(baseline_path(corpus_dir, platform))
+        .ok()
+        .and_then(|text| serde_json::from_str::<Value>(&text).ok())
+        .unwrap_or(Value::Null);
+    let Some(steps) = committed.get("steps").and_then(Value::as_object) else {
+        return Vec::new();
+    };
+    steps
+        .iter()
+        .filter(|(_, status)| status.as_str() == Some("match"))
+        .filter(|(key, _)| !report.steps.iter().any(|s| &s.key == *key && s.matched))
+        .map(|(key, _)| key.clone())
+        .collect()
+}
+
+/// Compares `report` with the committed baseline: a step that matched JAWS and no longer does
+/// is a regression; any other difference means the baseline is stale.
+pub fn check_baseline(
+    corpus_dir: &std::path::Path,
+    platform: &str,
+    report: &LiveReport,
+) -> Result<(), String> {
+    let regressed = regressions(corpus_dir, platform, report);
+    if !regressed.is_empty() {
+        return Err(format!(
+            "Okur live on {platform} regressed for: {}",
+            regressed.join(", ")
+        ));
+    }
+    let committed = std::fs::read_to_string(baseline_path(corpus_dir, platform))
+        .unwrap_or_default()
+        .replace("\r\n", "\n");
+    if committed != render_baseline(platform, report)? {
+        return Err(format!(
+            "corpus/live/{platform}-baseline.json is stale: review `cargo run --bin okur-lab -- \
+             live-baseline {platform}`, then regenerate with --write"
+        ));
+    }
+    Ok(())
+}
+
+/// Writes the baseline. It may only improve: a regression is refused unless `allow_regression`
+/// (a step that matched by chance, recorded so in the commit that lets it go).
+pub fn write_baseline(
+    corpus_dir: &std::path::Path,
+    platform: &str,
+    report: &LiveReport,
+    allow_regression: bool,
+) -> Result<(), String> {
+    let regressed = regressions(corpus_dir, platform, report);
+    if !regressed.is_empty() && !allow_regression {
+        return Err(format!(
+            "not written: Okur live on {platform} regressed for {}",
+            regressed.join(", ")
+        ));
+    }
+    std::fs::write(
+        baseline_path(corpus_dir, platform),
+        render_baseline(platform, report)?,
+    )
+    .map_err(|e| e.to_string())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -220,5 +399,46 @@ mod tests {
         assert!(compare(&evidence, &evidence).is_err());
         let run = file(Some("okur"), &[("s1", "x")]);
         assert!(compare(&run, &run).is_err());
+    }
+
+    fn step(key: &str, matched: bool) -> LiveStep {
+        LiveStep {
+            key: key.to_owned(),
+            command: "Down".to_owned(),
+            okur: String::new(),
+            jaws_variants: Vec::new(),
+            matched,
+            accepted: false,
+            settled: true,
+            spoken: None,
+        }
+    }
+
+    /// A platform's live baseline may only improve: a step that matched and no longer does is
+    /// a regression, which the check reports and the write refuses unless allowed.
+    #[test]
+    fn a_live_baseline_may_only_improve() {
+        let dir = std::env::temp_dir().join(format!("okur-live-baseline-{}", std::process::id()));
+        let _ = std::fs::create_dir_all(dir.join(LIVE_DIR));
+        let report = |first: bool| LiveReport {
+            runs: 1,
+            steps: vec![step("02-doc/s1", first), step("02-doc/s2", false)],
+            errors: Vec::new(),
+        };
+        assert_eq!(write_baseline(&dir, "linux", &report(true), false), Ok(()));
+        assert_eq!(check_baseline(&dir, "linux", &report(true)), Ok(()));
+        let worse = report(false);
+        assert!(check_baseline(&dir, "linux", &worse).is_err_and(|e| e.contains("02-doc/s1")));
+        assert!(write_baseline(&dir, "linux", &worse, false).is_err());
+        assert_eq!(write_baseline(&dir, "linux", &worse, true), Ok(()));
+        let better = LiveReport {
+            runs: 1,
+            steps: vec![step("02-doc/s1", false), step("02-doc/s2", true)],
+            errors: Vec::new(),
+        };
+        // An improvement is not a regression, but leaves the baseline stale until written.
+        assert!(check_baseline(&dir, "linux", &better).is_err_and(|e| e.contains("stale")));
+        assert_eq!(write_baseline(&dir, "linux", &better, false), Ok(()));
+        let _ = std::fs::remove_dir_all(&dir);
     }
 }

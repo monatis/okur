@@ -1,0 +1,59 @@
+{
+ "scenario_id": "712-web-page-load-reading",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "chrome": "google-chrome",
+  "commit": "38f579710"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1793905464600,
+     "t_end_ms": 1793905466205,
+     "action": {
+      "type": "key",
+      "command": "F5"
+     },
+     "observation": {
+      "speech_raw": "Document Reading Reference Fixture  \u001d document \u001e\nPage has 1heading and no links\nDocument Reading Reference Fixture\n \u001d heading level 1 \u001e The Accessibility Engine Specification\nThe screen reader engine parses the document object model into a clean virtual buffer.\nEngine components operate deterministically across synthetic speech pipelines. Speed and accuracy remain paramount.\nRust provides memory safety without garbage collection latency. This ensures predictable audio delivery.\ndelivery",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s2",
+     "t_start_ms": 1793905466205,
+     "t_end_ms": 1793905467711,
+     "action": {
+      "type": "key",
+      "command": "Insert+Up"
+     },
+     "observation": {
+      "speech_raw": "Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
+      "settled": true
+     },
+     "step_success": true
+    },
+    {
+     "step_id": "s3",
+     "t_start_ms": 1793905467711,
+     "t_end_ms": 1793905469217,
+     "action": {
+      "type": "key",
+      "command": "Down"
+     },
+     "observation": {
+      "speech_raw": "Rust provides memory safety without garbage collection latency. This ensures predictable audio delivery.",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}

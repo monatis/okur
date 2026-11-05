@@ -477,6 +477,24 @@ enum Commands {
         #[arg(long)]
         all: bool,
     },
+    /// A platform's live runs kept in the corpus (`corpus/live/<platform>/`, as the platform's
+    /// runner wrote them) compared with JAWS's evidence, and checked against their baseline,
+    /// which may only improve
+    LiveBaseline {
+        /// The platform: its runs' folder under corpus/live ("linux")
+        platform: String,
+        #[arg(short, long, default_value = "corpus")]
+        corpus_dir: String,
+        /// Write corpus/live/<platform>-baseline.json from the runs
+        #[arg(long)]
+        write: bool,
+        /// With --write: let steps that matched go (a regression, said so in the commit)
+        #[arg(long, requires = "write")]
+        allow_regression: bool,
+        /// Print every step, not only mismatches
+        #[arg(long)]
+        all: bool,
+    },
     /// Write the reference machine's settings (old-pc's JAWS configuration) as a settings
     /// folder, for `run --settings` in a live run there
     ReferenceSettings {
@@ -1261,6 +1279,56 @@ async fn main() {
                     eprintln!("Error: {e}");
                     std::process::exit(1);
                 }
+            }
+        }
+        Some(Commands::LiveBaseline {
+            platform,
+            corpus_dir,
+            write,
+            allow_regression,
+            all,
+        }) => {
+            let dir = Path::new(&corpus_dir);
+            let report = okur_corpus::live::run_platform(dir, &platform);
+            for error in &report.errors {
+                eprintln!("Error: {error}");
+            }
+            for step in report
+                .steps
+                .iter()
+                .filter(|s| all || !(s.matched || s.accepted))
+            {
+                let tag = match (step.matched, step.accepted) {
+                    (true, _) => "MATCH",
+                    (false, true) => "ACCEPTED",
+                    (false, false) => "DIFF ",
+                };
+                println!("[{tag}] {}  ({})", step.key, step.command);
+                println!("    okur: {:?}", okur_corpus::parity::normalize(&step.okur));
+                if !step.matched {
+                    for v in &step.jaws_variants {
+                        println!("    jaws: {:?}", okur_corpus::parity::normalize(v));
+                    }
+                }
+            }
+            println!(
+                "Okur live on {platform}: {}/{} steps match JAWS exactly; {} accepted divergences \
+                 not counted ({} runs, {} could not be compared)",
+                report.matched(),
+                report.compared(),
+                report.accepted(),
+                report.runs,
+                report.errors.len()
+            );
+            let result = if write {
+                okur_corpus::live::write_baseline(dir, &platform, &report, allow_regression)
+                    .map(|()| println!("Wrote corpus/live/{platform}-baseline.json"))
+            } else {
+                okur_corpus::live::check_baseline(dir, &platform, &report)
+            };
+            if let Err(e) = result {
+                eprintln!("Error: {e}");
+                std::process::exit(1);
             }
         }
         Some(Commands::ReferenceSettings {

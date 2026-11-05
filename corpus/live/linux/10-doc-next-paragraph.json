@@ -1,0 +1,31 @@
+{
+ "scenario_id": "10-doc-next-paragraph",
+ "provenance": {
+  "reader": "okur",
+  "platform": "linux",
+  "chrome": "google-chrome",
+  "commit": "38f579710"
+ },
+ "trials": [
+  {
+   "trial_index": 1,
+   "trial_success": true,
+   "step_results": [
+    {
+     "step_id": "s1",
+     "t_start_ms": 1793905439039,
+     "t_end_ms": 1793905440545,
+     "action": {
+      "type": "keyboard",
+      "command": "^{DOWN}"
+     },
+     "observation": {
+      "speech_raw": " \u001d heading level 1 \u001e The Accessibility Engine Specification",
+      "settled": true
+     },
+     "step_success": true
+    }
+   ]
+  }
+ ]
+}
