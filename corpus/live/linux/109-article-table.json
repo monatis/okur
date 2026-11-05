@@ -4,7 +4,7 @@
   "reader": "okur",
   "platform": "linux",
   "chrome": "google-chrome",
-  "commit": "b9567c2a6"
+  "commit": "995f4d274"
  },
  "trials": [
   {
@@ -13,22 +13,22 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1793910335982,
-     "t_end_ms": 1793910337487,
+     "t_start_ms": 1793918473073,
+     "t_end_ms": 1793918474077,
      "action": {
       "type": "key",
       "command": "T"
      },
      "observation": {
-      "speech_raw": "table with 2 columns and 3 rows\nColumn 1, Row 1",
+      "speech_raw": "table with 3 columns and 3 rows\nBranch hours after the change\nColumn 1, Row 1\nBranch",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1793910337487,
-     "t_end_ms": 1793910338995,
+     "t_start_ms": 1793918474077,
+     "t_end_ms": 1793918475084,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Right"
@@ -41,8 +41,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1793910338995,
-     "t_end_ms": 1793910340502,
+     "t_start_ms": 1793918475084,
+     "t_end_ms": 1793918476090,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Right"
@@ -55,8 +55,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1793910340502,
-     "t_end_ms": 1793910342010,
+     "t_start_ms": 1793918476090,
+     "t_end_ms": 1793918477096,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Right"
@@ -69,8 +69,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1793910342010,
-     "t_end_ms": 1793910343518,
+     "t_start_ms": 1793918477096,
+     "t_end_ms": 1793918478101,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Down"
@@ -83,8 +83,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1793910343518,
-     "t_end_ms": 1793910345026,
+     "t_start_ms": 1793918478101,
+     "t_end_ms": 1793918479108,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Down"
@@ -97,8 +97,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1793910345026,
-     "t_end_ms": 1793910346535,
+     "t_start_ms": 1793918479108,
+     "t_end_ms": 1793918480114,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Down"
@@ -111,8 +111,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1793910346535,
-     "t_end_ms": 1793910348042,
+     "t_start_ms": 1793918480114,
+     "t_end_ms": 1793918481120,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Left"
@@ -125,8 +125,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1793910348042,
-     "t_end_ms": 1793910349549,
+     "t_start_ms": 1793918481120,
+     "t_end_ms": 1793918482126,
      "action": {
       "type": "key",
       "command": "Ctrl+Alt+Up"
@@ -139,8 +139,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1793910349549,
-     "t_end_ms": 1793910351056,
+     "t_start_ms": 1793918482126,
+     "t_end_ms": 1793918483131,
      "action": {
       "type": "key",
       "command": "Shift+T"

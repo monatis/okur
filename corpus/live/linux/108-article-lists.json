@@ -4,7 +4,7 @@
   "reader": "okur",
   "platform": "linux",
   "chrome": "google-chrome",
-  "commit": "b9567c2a6"
+  "commit": "995f4d274"
  },
  "trials": [
   {
@@ -13,8 +13,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1793910292361,
-     "t_end_ms": 1793910293867,
+     "t_start_ms": 1793918436484,
+     "t_end_ms": 1793918437488,
      "action": {
       "type": "key",
       "command": "L"
@@ -27,8 +27,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1793910293867,
-     "t_end_ms": 1793910295373,
+     "t_start_ms": 1793918437488,
+     "t_end_ms": 1793918438492,
      "action": {
       "type": "key",
       "command": "L"
@@ -41,8 +41,8 @@
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1793910295373,
-     "t_end_ms": 1793910296879,
+     "t_start_ms": 1793918438492,
+     "t_end_ms": 1793918439496,
      "action": {
       "type": "key",
       "command": "L"
@@ -55,8 +55,8 @@
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1793910296879,
-     "t_end_ms": 1793910298385,
+     "t_start_ms": 1793918439496,
+     "t_end_ms": 1793918440500,
      "action": {
       "type": "key",
       "command": "L"
@@ -69,8 +69,8 @@
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1793910298385,
-     "t_end_ms": 1793910299890,
+     "t_start_ms": 1793918440500,
+     "t_end_ms": 1793918441505,
      "action": {
       "type": "key",
       "command": "L"
@@ -83,8 +83,8 @@
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1793910299890,
-     "t_end_ms": 1793910301397,
+     "t_start_ms": 1793918441505,
+     "t_end_ms": 1793918442509,
      "action": {
       "type": "key",
       "command": "Shift+L"
@@ -97,8 +97,8 @@
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1793910301397,
-     "t_end_ms": 1793910302903,
+     "t_start_ms": 1793918442509,
+     "t_end_ms": 1793918443514,
      "action": {
       "type": "key",
       "command": "Shift+L"
@@ -111,8 +111,8 @@
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1793910302903,
-     "t_end_ms": 1793910304409,
+     "t_start_ms": 1793918443514,
+     "t_end_ms": 1793918444518,
      "action": {
       "type": "key",
       "command": "I"
@@ -125,8 +125,8 @@
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1793910304409,
-     "t_end_ms": 1793910305915,
+     "t_start_ms": 1793918444518,
+     "t_end_ms": 1793918445523,
      "action": {
       "type": "key",
       "command": "I"
@@ -139,8 +139,8 @@
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1793910305915,
-     "t_end_ms": 1793910307422,
+     "t_start_ms": 1793918445523,
+     "t_end_ms": 1793918446527,
      "action": {
       "type": "key",
       "command": "I"
@@ -153,8 +153,8 @@
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1793910307422,
-     "t_end_ms": 1793910308928,
+     "t_start_ms": 1793918446527,
+     "t_end_ms": 1793918447532,
      "action": {
       "type": "key",
       "command": "I"
@@ -167,28 +167,28 @@
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1793910308928,
-     "t_end_ms": 1793910310433,
+     "t_start_ms": 1793918447532,
+     "t_end_ms": 1793918448537,
      "action": {
       "type": "key",
       "command": "I"
      },
      "observation": {
-      "speech_raw": "\u2022 \u001d Link \u001e Council approves library budget",
+      "speech_raw": "\u2022 \u001d same page link \u001e Council approves library budget",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1793910310433,
-     "t_end_ms": 1793910311940,
+     "t_start_ms": 1793918448537,
+     "t_end_ms": 1793918449541,
      "action": {
       "type": "key",
       "command": "I"
      },
      "observation": {
-      "speech_raw": "\u2022 \u001d Link \u001e Spring book fair returns",
+      "speech_raw": "\u2022 \u001d same page link \u001e Spring book fair returns",
       "settled": true
      },
      "step_success": true

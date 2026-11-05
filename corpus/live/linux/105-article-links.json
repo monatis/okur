@@ -4,7 +4,7 @@
   "reader": "okur",
   "platform": "linux",
   "chrome": "google-chrome",
-  "commit": "b9567c2a6"
+  "commit": "995f4d274"
  },
  "trials": [
   {
@@ -13,182 +13,182 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1793910084975,
-     "t_end_ms": 1793910086480,
+     "t_start_ms": 1793918274490,
+     "t_end_ms": 1793918275494,
      "action": {
       "type": "key",
       "command": "U"
      },
      "observation": {
-      "speech_raw": " \u001d Link \u001e Riverside Gazette",
+      "speech_raw": " \u001d same page link \u001e Riverside Gazette",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1793910086480,
-     "t_end_ms": 1793910087986,
+     "t_start_ms": 1793918275494,
+     "t_end_ms": 1793918276498,
      "action": {
       "type": "key",
       "command": "U"
      },
      "observation": {
-      "speech_raw": "\u2022 \u001d Link \u001e News",
+      "speech_raw": "\u2022 \u001d same page link \u001e News",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s3",
-     "t_start_ms": 1793910087986,
-     "t_end_ms": 1793910089492,
+     "t_start_ms": 1793918276498,
+     "t_end_ms": 1793918277501,
      "action": {
       "type": "key",
       "command": "U"
      },
      "observation": {
-      "speech_raw": "\u2022 \u001d Link \u001e Sports",
+      "speech_raw": "\u2022 \u001d same page link \u001e Sports",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s4",
-     "t_start_ms": 1793910089492,
-     "t_end_ms": 1793910090999,
+     "t_start_ms": 1793918277502,
+     "t_end_ms": 1793918278505,
      "action": {
       "type": "key",
       "command": "U"
      },
      "observation": {
-      "speech_raw": "\u2022 \u001d Link \u001e Culture",
+      "speech_raw": "\u2022 \u001d same page link \u001e Culture",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s5",
-     "t_start_ms": 1793910090999,
-     "t_end_ms": 1793910092505,
+     "t_start_ms": 1793918278505,
+     "t_end_ms": 1793918279510,
      "action": {
       "type": "key",
       "command": "U"
      },
      "observation": {
-      "speech_raw": "\u2022 \u001d Link \u001e Opinion",
+      "speech_raw": "\u2022 \u001d same page link \u001e Opinion",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s6",
-     "t_start_ms": 1793910092505,
-     "t_end_ms": 1793910094011,
+     "t_start_ms": 1793918279510,
+     "t_end_ms": 1793918280514,
      "action": {
       "type": "key",
       "command": "U"
      },
      "observation": {
-      "speech_raw": " \u001d Link \u001e Maria Lopez,",
+      "speech_raw": " \u001d same page link \u001e Maria Lopez,",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s7",
-     "t_start_ms": 1793910094011,
-     "t_end_ms": 1793910095517,
+     "t_start_ms": 1793918280514,
+     "t_end_ms": 1793918281519,
      "action": {
       "type": "key",
       "command": "U"
      },
      "observation": {
-      "speech_raw": " \u001d Link \u001e study rooms",
+      "speech_raw": " \u001d same page link \u001e study rooms",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s8",
-     "t_start_ms": 1793910095517,
-     "t_end_ms": 1793910097023,
+     "t_start_ms": 1793918281519,
+     "t_end_ms": 1793918282523,
      "action": {
       "type": "key",
       "command": "U"
      },
      "observation": {
-      "speech_raw": " \u001d Link \u001e Directions",
+      "speech_raw": " \u001d same page link \u001e Directions",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s9",
-     "t_start_ms": 1793910097023,
-     "t_end_ms": 1793910098529,
+     "t_start_ms": 1793918282523,
+     "t_end_ms": 1793918283528,
      "action": {
       "type": "key",
       "command": "U"
      },
      "observation": {
-      "speech_raw": " \u001d Link \u001e Directions",
+      "speech_raw": " \u001d same page link \u001e Directions",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s10",
-     "t_start_ms": 1793910098529,
-     "t_end_ms": 1793910100034,
+     "t_start_ms": 1793918283528,
+     "t_end_ms": 1793918284532,
      "action": {
       "type": "key",
       "command": "U"
      },
      "observation": {
-      "speech_raw": "\u2022 \u001d Link \u001e Council approves library budget",
+      "speech_raw": "\u2022 \u001d same page link \u001e Council approves library budget",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s11",
-     "t_start_ms": 1793910100034,
-     "t_end_ms": 1793910101540,
+     "t_start_ms": 1793918284532,
+     "t_end_ms": 1793918285537,
      "action": {
       "type": "key",
       "command": "U"
      },
      "observation": {
-      "speech_raw": "\u2022 \u001d Link \u001e Spring book fair returns",
+      "speech_raw": "\u2022 \u001d same page link \u001e Spring book fair returns",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s12",
-     "t_start_ms": 1793910101540,
-     "t_end_ms": 1793910103047,
+     "t_start_ms": 1793918285537,
+     "t_end_ms": 1793918286542,
      "action": {
       "type": "key",
       "command": "Shift+U"
      },
      "observation": {
-      "speech_raw": "\u2022 \u001d Link \u001e Council approves library budget",
+      "speech_raw": "\u2022 \u001d same page link \u001e Council approves library budget",
       "settled": true
      },
      "step_success": true
     },
     {
      "step_id": "s13",
-     "t_start_ms": 1793910103048,
-     "t_end_ms": 1793910104554,
+     "t_start_ms": 1793918286542,
+     "t_end_ms": 1793918287548,
      "action": {
       "type": "key",
       "command": "Shift+U"
      },
      "observation": {
-      "speech_raw": " \u001d Link \u001e Directions",
+      "speech_raw": " \u001d same page link \u001e Directions",
       "settled": true
      },
      "step_success": true

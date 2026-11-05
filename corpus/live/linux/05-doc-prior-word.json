@@ -4,7 +4,7 @@
   "reader": "okur",
   "platform": "linux",
   "chrome": "google-chrome",
-  "commit": "38f579710"
+  "commit": "995f4d274"
  },
  "trials": [
   {
@@ -13,8 +13,8 @@
    "step_results": [
     {
      "step_id": "s1",
-     "t_start_ms": 1793905357938,
-     "t_end_ms": 1793905359444,
+     "t_start_ms": 1793917915026,
+     "t_end_ms": 1793917916030,
      "action": {
       "type": "keyboard",
       "command": "^{RIGHT}"
@@ -27,8 +27,8 @@
     },
     {
      "step_id": "s2",
-     "t_start_ms": 1793905359444,
-     "t_end_ms": 1793905360950,
+     "t_start_ms": 1793917916030,
+     "t_end_ms": 1793917917035,
      "action": {
       "type": "keyboard",
       "command": "^{LEFT}"
