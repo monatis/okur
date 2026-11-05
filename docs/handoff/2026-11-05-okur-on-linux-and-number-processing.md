@@ -164,5 +164,20 @@ handoff before this one has them.
   Okur's Virtual Viewer never takes the focus, so the UI Access guard refused s3 and s4 (meant
   for JAWS's elevated Results Viewer); the help stayed open and took Command Search's keys.
   Fixed (`28277acf`): Okur's dialog over the viewer takes its own keys, and with Okur reading a
-  refused `key_ui_access` step goes to the window in front. The rerun is next. `--debug-log`
-  wrote no file in that run: to check.
+  refused `key_ui_access` step goes to the window in front. The rerun (`okur-lab live-parity`):
+  s1 to s5, s9, s11 and s12 as JAWS, or accepted. It showed three more things:
+  - Escape from the help said the line but not the window JAWS names after it: Okur's viewer
+    never had the focus, so no focus event comes back live; only replay's trace named the
+    window. The engine now names it itself as such a viewer closes (`fe490407`).
+  - Command Search's results are a list in Okur's window ("Results List view | Say All. Insert
+    + DownArrow | 1 of 40"), and JAWS reads its web dialog's label twice: both accepted
+    divergences (`f270b521`; a divergence's phrase now also matches across the recorder's uneven
+    spaces). Replay of 628: `8/8 steps match exactly; 4 accepted divergences not counted`, spoken
+    8/8; full `JAWS parity (Ia2): 12021/12591 steps match exactly; 388 accepted divergences not
+    counted (0 scenarios could not run)`.
+  - The speech recorder's record held "Search for: Edit" alone: the dialog's name, said for the
+    window's own focus, was cut off 24 ms later by the field's focus. A focus inside the window
+    just named, no key between, is now queued after it (`b9567c2a`). Replay cannot see this (it
+    records every utterance, cut off or not); the next live run checks it.
+  - `--debug-log` into the Dropbox folder left no file; into `C:\Users\ailabs\sr-harness` it
+    did. Keep live debug logs out of Dropbox.
