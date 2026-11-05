@@ -75,7 +75,12 @@ pub fn states(element: &ElementData) -> NodeStates {
 pub fn focus_event(element: &ElementData) -> FocusEvent {
     let mut event = FocusEvent::new(role(element.role, None));
     event.name = element.name.clone().filter(|n| !n.is_empty());
-    event.value = element.value.clone().filter(|v| !v.is_empty());
+    // A container's value is its text with U+FFFC where each child sits (a page's document):
+    // not a value to say (the lab's first page read said them after the page's name).
+    event.value = element
+        .value
+        .clone()
+        .filter(|v| !v.is_empty() && !v.contains('\u{fffc}'));
     event.states = states(element);
     event
 }
@@ -91,5 +96,15 @@ mod tests {
         assert_eq!(role(AtRole::WebArea, None), Role::Document);
         assert_eq!(role(AtRole::Heading, Some(2)), Role::Heading { level: 2 });
         assert_eq!(role(AtRole::Unknown, None), Role::Generic);
+    }
+
+    #[test]
+    fn a_containers_text_is_not_its_value() {
+        let mut page = ElementData::for_role(AtRole::WebArea);
+        page.value = Some("\u{fffc}\u{fffc}".to_owned());
+        assert_eq!(focus_event(&page).value, None);
+        let mut field = ElementData::for_role(AtRole::TextField);
+        field.value = Some("hello".to_owned());
+        assert_eq!(focus_event(&field).value.as_deref(), Some("hello"));
     }
 }
