@@ -1728,13 +1728,26 @@ A step can be in more than one entry; all of its entries apply.
 ### Command Search finds Okur's commands
 
 - Steps: `628-desktop-layer-help-and-command-search/s7`,
-  `628-desktop-layer-help-and-command-search/s8`.
+  `628-desktop-layer-help-and-command-search/s8`, `628-desktop-layer-help-and-command-search/s10`.
 - Difference: typing in Command Search (Insert+Space, then J) says the first command found, as
   JAWS's does, but the commands are Okur's, in Okur's order: "Select Next Character" for "s",
   "Say All" for "sa", where JAWS says its own "Toggle Video in Tandem Session" and "Say Font".
+  Its results are a list in Okur's window: Down from the field says "Results List view | Say
+  All. Insert + DownArrow | 1 of 40" (Okur live on old-pc), where JAWS's are a page's headings
+  and links, "heading level 3 | Link | Say Font. Insert + F". Replay cannot draw Okur's window
+  and reads the field's line there.
 - Why: Okur searches its own commands; JAWS's command list and its order are JAWS's (AGENTS.md
   §1.4).
 - Decided by the agent under the clean-room rule, 2026-11-05.
+
+### JAWS reads Command Search's label twice
+
+- Steps: `628-desktop-layer-help-and-command-search/s6`.
+- Difference: JAWS says "Search for JAWS Commands dialog | Search for: | Search for: Edit"; Okur
+  "Search for Okur Commands dialog | Search for: Edit".
+- Why: JAWS's Command Search is a page in a web view, whose label it reads as the dialog's text
+  and again as the field's name; Okur's dialog names its field once.
+- Decided by the agent, 2026-11-05.
 
 ## Considered and not accepted
 

@@ -1818,12 +1818,44 @@ divergences! {
     Difference::Step => [
         "628-desktop-layer-help-and-command-search/s7",
         "628-desktop-layer-help-and-command-search/s8",
+        "628-desktop-layer-help-and-command-search/s10",
     ],
     "Command Search (Insert+Space, then J) finds Okur's own commands, in Okur's order: the first \
      found for \"s\" is Okur's \"Select Next Character\", for \"sa\" \"Say All\"; JAWS's are its \
      own, \"Toggle Video in Tandem Session\" and \"Say Font\". The search says the first command \
-     found as it changes, as JAWS's does.",
+     found as it changes, as JAWS's does. Its results are a list in Okur's window, where JAWS's \
+     are a page's headings and links: Down from the field says \"Results List view | Say All. \
+     Insert + DownArrow | 1 of 40\" (Okur live on old-pc), JAWS \"heading level 3 | Link | Say \
+     Font. Insert + F\"; replay, which cannot draw Okur's window, reads the field's line.",
     "the agent under the clean-room rule (AGENTS.md section 1.4), 2026-11-05";
+
+    Difference::JawsAlsoSays("\nSearch for: \n") => [
+        "628-desktop-layer-help-and-command-search/s6",
+    ],
+    "JAWS's Command Search is a page in a web view: it reads the page's label as the dialog's \
+     text, then again as the field's name (\"Search for JAWS Commands dialog | Search for: | \
+     Search for: Edit\"); Okur's dialog names its field once.",
+    "the agent, 2026-11-05";
+
+    Difference::JawsAlsoSays("colon Search for") => [
+        "628-desktop-layer-help-and-command-search/s6",
+    ],
+    "The same label read twice, as JAWS sent it to its synthesizer (\"Search for colon Search \
+     for colon Edit\"): see the entry before.",
+    "the agent, 2026-11-05";
+}
+
+/// `text` without `phrase`, each place it is said, or `None` where it is not said: as written,
+/// else with each run of whitespace in both as one space. The spoken layer joins a recorder's
+/// records with uneven spaces ("Search for colon   Search for colon  Edit" [628/s6]), which are
+/// the recorder's, not the reader's.
+fn remove_phrase(text: &str, phrase: &str) -> Option<String> {
+    if text.contains(phrase) {
+        return Some(text.replace(phrase, " "));
+    }
+    let squeeze = |s: &str| s.split_whitespace().collect::<Vec<_>>().join(" ");
+    let (text, phrase) = (squeeze(text), squeeze(phrase));
+    (!phrase.is_empty() && text.contains(&phrase)).then(|| text.replace(&phrase, " "))
 }
 
 /// The divergence covering `step`, if any.
@@ -1857,7 +1889,9 @@ pub fn compare(step: &str, okur: &str, jaws: &[String]) -> Comparison {
             .fold(text.to_owned(), |text, difference| {
                 match (difference, okur_side) {
                     (Difference::JawsAlsoSays(phrase), false)
-                    | (Difference::OkurAlsoSays(phrase), true) => text.replace(phrase, " "),
+                    | (Difference::OkurAlsoSays(phrase), true) => {
+                        remove_phrase(&text, phrase).unwrap_or(text)
+                    }
                     (Difference::JawsSaysBeforeItsDialog, false) => {
                         from_its_dialog_after(&text, okur_before)
                             .or_else(|| spoken_from_its_dialog(&text, ours))
@@ -1899,11 +1933,13 @@ pub fn check(steps: &[(&str, &str, &[String])]) -> Result<(), String> {
             };
             match divergence.difference {
                 Difference::JawsAlsoSays(phrase)
-                    if !any(&|_, jaws| jaws.iter().any(|v| v.contains(phrase))) =>
+                    if !any(&|_, jaws| jaws.iter().any(|v| remove_phrase(v, phrase).is_some())) =>
                 {
                     stale.push(format!("{key}: JAWS no longer says {phrase:?}"));
                 }
-                Difference::OkurAlsoSays(phrase) if !any(&|okur, _| okur.contains(phrase)) => {
+                Difference::OkurAlsoSays(phrase)
+                    if !any(&|okur, _| remove_phrase(okur, phrase).is_some()) =>
+                {
                     stale.push(format!("{key}: Okur no longer says {phrase:?}"));
                 }
                 // On the spoken layer the dialog line has no role marks: "Overwrite Clipboard
@@ -1943,6 +1979,25 @@ pub fn check(steps: &[(&str, &str, &[String])]) -> Result<(), String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// A phrase is taken out as written, or across the recorder's uneven spaces; a phrase not
+    /// said is `None`.
+    #[test]
+    fn a_phrase_is_found_across_uneven_spaces() {
+        assert_eq!(
+            remove_phrase("a\nSearch for: \nSearch for: Edit", "\nSearch for: \n").as_deref(),
+            Some("a Search for: Edit")
+        );
+        assert_eq!(
+            remove_phrase(
+                "dialog   Search for colon   Search for colon  Edit",
+                "colon Search for"
+            )
+            .as_deref(),
+            Some("dialog Search for   colon Edit")
+        );
+        assert_eq!(remove_phrase("Edit", "colon Search for"), None);
+    }
 
     fn jaws(texts: &[&str]) -> Vec<String> {
         texts.iter().map(|t| (*t).to_owned()).collect()
