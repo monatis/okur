@@ -1327,9 +1327,17 @@ impl ScreenReaderEngine {
                     if own_window {
                         // The application's window, as the focus comes back to it, is
                         // announced again: "sr-notepad-fixture.txt - Notepad | edit | Type in
-                        // text." [obs, 825/s7].
+                        // text." [obs, 825/s7]. Okur's viewer window never had the focus
+                        // (helper-ui-architecture.md), so no focus event brings it back live:
+                        // the window is named here, from the focus the viewer opened over
+                        // (628/s4, live on old-pc), and a focus event for it after this is a
+                        // repeat.
                         self.last_window_title = None;
                         self.native_focus.reset();
+                        if let Some(focus) = self.last_native_focus.clone() {
+                            let _ = self.handle_focus_event(&focus);
+                            self.key_since_focus = false;
+                        }
                     }
                     return KeyAction::Consume;
                 }

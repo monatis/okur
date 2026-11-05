@@ -9989,8 +9989,12 @@ fn closing_the_layer_help_reads_the_line_then_the_window() {
     }
     GatedSpeech::take(&speech.history);
     engine.handle_key_event(&KeyEvent::new(Key::Escape, Modifiers::none(), true));
-    assert_eq!(GatedSpeech::take(&speech.history).join("\n"), "First line");
+    // Live, no focus event comes back: Okur's viewer window never had the focus.
+    let closed = GatedSpeech::take(&speech.history);
+    assert_eq!(closed.first().map(String::as_str), Some("First line"));
+    let window = closed.get(1..).unwrap_or_default().join("\n");
+    assert!(window.starts_with("SR Editor Fixture"), "{window}");
+    // In replay the platform's focus event for it follows: a repeat, not said again.
     engine.handle_focus_event(&field);
-    let back = GatedSpeech::take(&speech.history).join("\n");
-    assert!(back.starts_with("SR Editor Fixture"), "{back}");
+    assert!(GatedSpeech::take(&speech.history).is_empty());
 }

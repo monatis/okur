@@ -106,7 +106,12 @@ with no change to the `KeyboardHook` port:
    cursor on a web page.
 2. A live run in WSL of the first web scenarios (document reading, quick navigation) by
    `okur-linux` on Chrome under Xvfb, its results written by a tool into a Linux conformance
-   baseline that may only improve.
+   baseline that may only improve. **Done 2026-11-05** (`13e232c0`): nine scenarios run by
+   `run-scenario-linux.py`, kept in `corpus/live/linux/`, `okur-lab live-baseline linux`: 27/28
+   steps match JAWS's Windows evidence. On the way: the focus in a page marked as in its document,
+   a deadlock in xa11y-linux's subscription, a reload read on `Document:LoadComplete`, keys sent by
+   keycode. Next: more scenarios (quick navigation, links, forms, tables), each added run kept
+   and the baseline written.
 3. `okur-linux-model` and Linux snapshots of the HTML fixtures, replayed on every OS.
 4. Invariants for GTK and Qt controls (a check box, a combo box, a dialog said as on Windows).
 

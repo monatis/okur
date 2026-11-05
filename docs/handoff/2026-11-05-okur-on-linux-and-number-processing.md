@@ -101,3 +101,68 @@ handoff before this one has them.
   paragraphs (the page read on load), and `WEB PASS: Okur on Linux read the page's heading and a
   paragraph`. Still to do for §2.2: a page the focus enters below its document (a link), the
   keys' speech checked one by one, and the result written by a tool into a Linux baseline.
+
+## Evening: the layer's help, Command Search, and the Linux live path
+
+- **628 recorded and imported** (`57d10ed5`, `e8362a16`), after the tracer learned to keep JAWS's
+  help text, Command Search's list and its viewers' addresses out of traces (`c2df3f56`,
+  `e194e93f`, `efe10b59`; `privacy::without_jaws_help_text`). JAWS's Results Viewer and its
+  Command Search window are elevated: the scenario's keys there are `key_ui_access` steps, and the
+  UI Access allow list holds `CommandsSearchViewer`.
+- **The Insert+Space layer's help** (Shift+Slash after Insert+Space, `d12f4548`) and **Command
+  Search** (J after Insert+Space, `354045d9`): Okur's commands found by name as the user types,
+  the first found said as it changes, Down to the results, Enter runs one. The help's words are
+  Okur's (628/s3, `c3112234`), and so are the commands found (628/s7, s8, `2cad8397`).
+- **Replay of Okur's own windows** (`61b756a5`): JAWS's Command Search is a page in a web view
+  (msedgewebview2.exe); the dialog mirror now reports the focus in it as okur-ui's native window
+  would (in okur-ui, on no page), so typed letters reach the field, not a page's quick keys, and
+  the title is said. Events inside JAWS's Results Viewer window (its web view reports from
+  another process) are the viewer's while Okur's own viewer is open or was as the step began;
+  where Okur has none open, the page stays the focus left (763/s23). The layer's help is a
+  window of its own, as JAWS's: Escape reads the line, then the window is named (628/s4).
+  `parity-snapshot.sh` before and after, diffed: only 628 changed. `okur-lab parity --only 628`:
+  `JAWS parity (Ia2): 7/9 steps match exactly; 3 accepted divergences not counted`. Full:
+  `JAWS parity (Ia2): 12020/12594 steps match exactly; 385 accepted divergences not counted (0
+  scenarios could not run)`.
+- **628's two open steps** need Okur's real window, which replay cannot draw: s6 (JAWS says "Search
+  for:" twice, its page's label read as the dialog's text and again as the field's name) and s10
+  (Down from the field to the results: JAWS's results are page headings with links, Okur's a
+  list). Next: `run-scenario.ps1 -Reader okur` of 628 on old-pc, then `okur-lab live-parity`.
+- **Linux live runs** (`bc9b91f8`): the first run files had no speech at all. The runner now keeps
+  Okur's log and fails a trial in which Okur said nothing (`ab20f8ae`). With the engine's debug
+  log, every key went `mode=NativeControl` after the page was read: the Linux focus event never
+  said it was in a page, which on Windows its focus chain's document says, so the virtual cursor
+  never took the keys. Fixed in the event source (`ab20f8ae`): the focus's page is looked up once,
+  read when new, and marks the focus `in_document`. `probe-okur-web.sh`'s earlier pass rested on
+  the page read at load alone, which holds the heading and paragraphs it checks: it proved the
+  page read, not the keys.
+- **check-linux.sh** (`cc992f10`): in the lab, clippy with the gate's lints and the Linux crates'
+  tests, which the Windows gate cannot build: `LINUX CHECK PASS`.
+- **A deadlock in xa11y-linux's subscription** (`69c7fdea`): in a job of several scenarios the
+  first run spoke and the later ones heard no AT-SPI event at all, though `xa11y apps` listed
+  Chrome, focused. `probe-second-run.sh` (Okur and Chrome twice in one session): the registry
+  held Okur's four event classes both times, and `dbus-monitor` showed Chrome sending the same
+  signals both times, a focused state change among them; the second Okur heard no focus. The
+  subscription read each event's element with calls on the connection whose signals its thread
+  reads: zbus's socket reader awaits room in a full stream (64 places), the replies queued
+  behind the signals, and the thread waiting for a reply was the one draining them. The calls
+  now go on a connection of their own: `run 2, focus events heard: 1`, `utterances: 8`, as run 1.
+- **A reload read again** (`9b96af9d`): on Linux, F5 brings no focus event, only
+  `Document:LoadComplete`; xa11y-core gains `EventKind::DocumentLoaded` (Linux mapped; macOS and
+  Windows not yet), and the event source reads a page shown at a window's top when it finishes
+  loading. The engine takes it as a refresh, or as a new load after F5 or Ctrl+R, as on Windows.
+- **Keys by keycode** (`38f57971`): xdotool 3.20160805 pressed and let go Alt before each
+  function key, whose press fluxbox's Alt grabs took; the runner now presses keycodes through
+  XTest (python-xlib). `probe-fkeys.sh`: FKEYS PASS. 712 live: `3/3 steps match JAWS exactly`.
+- **The Linux conformance baseline** (`13e232c0`, plan §2.2): the lab's runs kept in
+  `corpus/live/linux/` (Okur's speech, never evidence; `fetch-runs.sh`), `okur-lab live-baseline
+  linux [--write]`, a test keeping `corpus/live/linux-baseline.json` current, and a write that
+  refuses a regression. `Okur live on linux: 27/28 steps match JAWS exactly; 0 accepted
+  divergences not counted (9 runs, 0 could not be compared)`. Open: 07-doc-prior-char/s2 said
+  "D" twice, 1.5 s apart, in one run of two.
+- **628 live on old-pc** (`run-scenario.ps1 -Reader okur`, then `okur-lab live-parity`): 4/9.
+  Okur's Virtual Viewer never takes the focus, so the UI Access guard refused s3 and s4 (meant
+  for JAWS's elevated Results Viewer); the help stayed open and took Command Search's keys.
+  Fixed (`28277acf`): Okur's dialog over the viewer takes its own keys, and with Okur reading a
+  refused `key_ui_access` step goes to the window in front. The rerun is next. `--debug-log`
+  wrote no file in that run: to check.
