@@ -78,8 +78,10 @@ PROBE 2 PASS: the registered listener heard one focus event per Tab in GTK 4 and
    SYNC GRAB PASS: h kept, Down replayed, a untouched, in order, ten times
    ```
    So the port can stay "the engine decides each key". Which keys to grab: see the plan's
-   section "The keyboard on X11" (every key but the modifiers, through XInput2, with a
-   watchdog; a set of bound chords was set aside), the next probe.
+   section "The keyboard on X11": every key but the modifiers grabbed through XInput2, with a
+   watchdog, probed and passing (`probe-grab-all.sh`: 233 keycodes x 64 modifier sets, the
+   application got `a w C Down x b` in order, 0.34 ms median per replayed key); a set of bound
+   chords was set aside.
 2. `okur-linux`'s events: an `EventSource` over xa11y-linux, for every application (xa11y
    subscribes per process; Okur needs the desktop: subscribe as applications appear, or a
    desktop-wide subscription in xa11y-linux).
@@ -122,5 +124,20 @@ these networks", `dllhost.exe`) has been on old-pc's screen since 11:43, most li
 port WSL forwarded to Windows during the Linux probes. Its window is in every trace of the three
 rounds (`rundll32.exe`, not a reviewed process), and it may have taken keys. Only the owner
 answers it. `localhostForwarding=false` is now in old-pc's `.wslconfig` so WSL does not raise it
-again. Once it is gone: record 1156 (Alt+N, and the Language combo's nine choices by Down), 1157
-and 1158 again, then import them.
+again.
+
+**Afterwards (the owner allowed the prompt; volume back to 1%):** 1156 (Alt+N, and the Language
+combo walked), 1157 and 1158 were recorded again in one batch, no alert and no leftover window in
+their traces, and imported (`48572983`):
+- 1156: Case Sensitive checked, "TOTAL" leaves "total" as it is; cleared, "let sum equals".
+  Language's nine: All Languages, English, Finnish, French, German, Italian, Portuguese, Spanish,
+  Turkish (old-pc's voices' languages, it seems; Okur offers "All Languages" only).
+- 1157: Chrome's own dictionary (Chrome.JDF); the rule is applied in the virtual cursor's line.
+- 1158: the walk again, all three trials agreeing.
+
+`okur-lab parity` after the import: `11812/12382 steps match exactly` (77/91 of the three, the
+same in the spoken layer). Left in them, open: when the manager opens JAWS says only the focused
+button and its title only on the first Tab ("Tree view notepad.jdf - JAWS Dictionary Manager |
+Dictionary Entries Tree view"), in every recording so far; "File Name:" said once in these nine
+trials and twice in 1154's and 1155's (Okur says it twice: left as it is); Chrome's return after
+Alt+F4 ("<title> | <title> page | <the line>", Okur "<title> document <title>").

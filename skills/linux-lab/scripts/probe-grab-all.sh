@@ -59,7 +59,7 @@ class XIAllowEvents(rq.Request):
     )
 
 d = display.Display()
-major = d.get_extension_major("XInputExtension")
+major = d.query_extension("XInputExtension").major_opcode
 root = d.screen().root
 
 def allow(deviceid, at, mode):
@@ -100,7 +100,7 @@ while True:
             held = None
             continue
     event = d.next_event()
-    if event.type != X.GenericEvent or event.evtype != xinput.KeyPress:
+    if getattr(event, "evtype", None) != xinput.KeyPress:
         continue
     data = event.data
     name = NAMES.get(d.keycode_to_keysym(data.detail, 0), data.detail)

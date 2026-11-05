@@ -78,8 +78,15 @@ with no change to the `KeyboardHook` port:
 - **A watchdog:** a key the engine has not answered in a set time is replayed. X11 has no
   hook timeout; Windows removes a hook slower than `LowLevelHooksTimeout`, while a hung Okur on
   X11 would freeze the keyboard.
-- To probe: every keycode grabbed under fluxbox (which keeps its own shortcuts), typing replayed
-  in order, what the grabs reported as taken, the cost per key, and the watchdog.
+- **Probed (`probe-grab-all.sh`, 2026-11-05): it works.** 233 keycodes grabbed under 64
+  modifier sets; a, h, w, Shift+c, Down, Control+x, b sent by XTest; the hook got all seven, kept
+  h, held w until a 200 ms watchdog replayed it ("watchdog w 200.6"), and replayed the rest;
+  the application got `a w C Down x b`, in order; 0.34 ms median (0.51 max) from the decision to
+  the application. No grab was reported taken by another client, but whether fluxbox holds any
+  in the lab was not checked, so the conflict case is still to be shown (a client grabbing a
+  shortcut first). A run whose hook crashed on its first key left the keyboard frozen and the
+  application got nothing: the watchdog is required, and must not live in the thread that can
+  fail.
 
 ## 2. Weeks 2 to 6
 
