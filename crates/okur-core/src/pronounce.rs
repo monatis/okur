@@ -514,9 +514,12 @@ fn numbers(text: &str, processing: TextProcessing) -> String {
         let digits = number.chars().filter(char::is_ascii_digit).count();
         let ordinal = is_ordinal_ending(&chars, i);
         let dashed = number.contains('-');
+        // The threshold counts a group between dashes: with If Number Contains Dashes cleared,
+        // "1-800-444-4443" is "1 dash 800 dash 444 dash 4443" [obs, 1164/s19].
+        let group = number.split('-').map(str::len).max().unwrap_or(digits);
         let long = processing
             .single_digit_threshold
-            .is_some_and(|threshold| digits >= usize::from(threshold));
+            .is_some_and(|threshold| group >= usize::from(threshold));
         if (dashed && processing.dashes_as_digits) || long || (all && !ordinal) {
             let spaced: Vec<String> = number.chars().map(|d| d.to_string()).collect();
             out.push_str(&spaced.join(" "));
@@ -1075,6 +1078,31 @@ mod tests {
             "7 42 1,234 2.5 1,000,000 10:30"
         );
         assert_eq!(with("3/2/2002", full), "3 slash 2 slash 2,002");
+    }
+
+    /// If Number Contains Dashes cleared: each group of a dashed number as written; Speak Single
+    /// Digits at eight: shorter numbers as written [obs, 1164/s19, s23, 1165/s14].
+    #[test]
+    fn dashes_and_the_single_digits_threshold() {
+        let with = |text: &str, processing: TextProcessing| {
+            spoken_with(text, Punctuation::Most, processing)
+        };
+        let undashed = TextProcessing {
+            dashes_as_digits: false,
+            ..TextProcessing::default()
+        };
+        assert_eq!(
+            with("1-800-444-4443 03-16-00 54321", undashed),
+            "1 dash 800 dash 444 dash 4443 03 dash 16 dash 00 5 4 3 2 1"
+        );
+        let eight = TextProcessing {
+            single_digit_threshold: Some(8),
+            ..TextProcessing::default()
+        };
+        assert_eq!(
+            with("54321 123456 12345678", eight),
+            "54321 123456 1 2 3 4 5 6 7 8"
+        );
     }
 
     /// Numeric Date Processing: a month, day and year with slashes in words with Some, a month
