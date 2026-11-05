@@ -77,12 +77,9 @@ PROBE 2 PASS: the registered listener heard one focus event per Tab in GTK 4 and
    replayed Down, ms from the decision to the application: median 0.30, max 0.34
    SYNC GRAB PASS: h kept, Down replayed, a untouched, in order, ten times
    ```
-   So the port can stay "the engine decides each key" for every key in a grab set, with keys
-   outside it seen through XInput2 raw events and passed. What is left to design: which keys
-   are grabbed. Every key (as Windows' hook sees them) takes keys other X clients' shortcuts
-   grab, so the set should be what the keymap binds in the current mode plus the Okur key,
-   changed with the mode: the "declared grab set", an addition to the key model of
-   `crate-structure-proposal.md` §13.3.
+   So the port can stay "the engine decides each key". Which keys to grab: see the plan's
+   section "The keyboard on X11" (every key but the modifiers, through XInput2, with a
+   watchdog; a set of bound chords was set aside), the next probe.
 2. `okur-linux`'s events: an `EventSource` over xa11y-linux, for every application (xa11y
    subscribes per process; Okur needs the desktop: subscribe as applications appear, or a
    desktop-wide subscription in xa11y-linux).

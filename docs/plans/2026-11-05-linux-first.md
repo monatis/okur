@@ -60,24 +60,26 @@ Probe 6, the crates: `okur-linux` and `okur-linux-model` are in the workspace an
 `crate-layers.json` (`2f432d52`). Week 2 starts with the keyboard port's design (the handoff
 [`../handoff/2026-11-05-linux-lab-week-1.md`](../handoff/2026-11-05-linux-lab-week-1.md), Next 1).
 
-### The keyboard on X11: decided (2026-11-05, reversible)
+### The keyboard on X11: the design to probe next (2026-11-05, reversible)
 
 Probe 3 and the synchronous grab probe (`probe-sync-grab.sh`: a key kept or replayed, 0.30 ms
-median from the decision to the application) settle how `okur-linux`'s hook keeps the engine's
-per-key decision, which the `KeyboardHook` port and the engine's routing rest on:
-- **A static grab set, grabbed synchronously:** every chord the keymap binds in any mode, and
-  the Okur key. While the Okur key is held, X's passive grab hands Okur every key (probe 3).
-  The engine decides each grabbed key as on Windows: kept (`AsyncKeyboard`) or replayed to the
-  application (`ReplayKeyboard`).
-- **Everything else is watched, not grabbed:** XInput2 raw events report it (typing echo, key
-  labels), and it reaches the application untouched, so other clients' shortcuts (a window
-  manager's) keep working.
-- **The whole keyboard grabbed only while a state takes keys nothing binds** (Keyboard Help).
-- The port gains one call, a grab set from the engine (`KeyboardHook::set_grabs`, the union and
-  the "everything" switch); Windows' hook, which sees every key anyway, ignores it. Rejected: a
-  grab set per mode computed from the engine's state (forms mode, Say All, layers, quick keys:
-  fragile), and grabbing every key always (takes other clients' shortcuts; one conflict fails the
-  whole grab with `BadAccess`).
+median from the decision to the application) show a synchronous grab keeps the engine's per-key
+decision: kept (`AsyncKeyboard`) or replayed to the application (`ReplayKeyboard`).
+
+Which keys to grab. A set of the chords the keymap binds was considered first and set aside: the
+bindings take "any" for modifiers (`command.rs`), and many keys are consumed outside the binding
+table (Say All's keys, layers, the virtual cursor, Keyboard Help, which takes every key), so the
+set would be large and still miss keys. The design to probe instead keeps Windows' model whole,
+with no change to the `KeyboardHook` port:
+- **Every key but the modifiers grabbed synchronously** through XInput2 (`XIGrabKeycode`, which
+  answers per modifier set): a combination another client already grabbed (a window manager's
+  shortcut) is reported back and stays that client's. The modifiers themselves are watched
+  through raw events, as the Okur key is held (probe 3).
+- **A watchdog:** a key the engine has not answered in a set time is replayed. X11 has no
+  hook timeout; Windows removes a hook slower than `LowLevelHooksTimeout`, while a hung Okur on
+  X11 would freeze the keyboard.
+- To probe: every keycode grabbed under fluxbox (which keeps its own shortcuts), typing replayed
+  in order, what the grabs reported as taken, the cost per key, and the watchdog.
 
 ## 2. Weeks 2 to 6
 
