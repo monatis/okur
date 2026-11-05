@@ -1,0 +1,115 @@
+{
+  "id": "1153-desktop-scan-cursor-route-and-words",
+  "name": "JAWS's Scan Cursor in the WPF window, its place by Alt+Delete: routed to the focused field (the caret's place traced), Up to the button and Ctrl+Right along it, Up to the right text and Ctrl+Left, End; then routed to the button, focused by Shift+Tab, and Up from it",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-wpf-text.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "SR WPF Text Fixture"
+  },
+  "trace_screen": true,
+  "trace_window": true,
+  "steps": [
+    {
+      "type": "key",
+      "command": "Insert+NumpadMinus",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "NumpadMinus",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "Up",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Right",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Up",
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "Ctrl+Left",
+      "id": "s8"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s9"
+    },
+    {
+      "type": "key",
+      "command": "End",
+      "id": "s10"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s11"
+    },
+    {
+      "type": "key",
+      "command": "NumpadPlus",
+      "id": "s12"
+    },
+    {
+      "type": "key",
+      "command": "Shift+Tab",
+      "id": "s13"
+    },
+    {
+      "type": "key",
+      "command": "Insert+NumpadMinus",
+      "id": "s14"
+    },
+    {
+      "type": "key",
+      "command": "NumpadMinus",
+      "id": "s15"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s16"
+    },
+    {
+      "type": "key",
+      "command": "Up",
+      "id": "s17"
+    },
+    {
+      "type": "key",
+      "command": "Alt+Delete",
+      "id": "s18"
+    },
+    {
+      "type": "key",
+      "command": "NumpadPlus",
+      "id": "s19"
+    },
+    {
+      "type": "key",
+      "command": "Tab",
+      "id": "s20"
+    }
+  ]
+}
