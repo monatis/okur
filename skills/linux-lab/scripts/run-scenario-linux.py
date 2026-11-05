@@ -6,7 +6,8 @@ as `run-scenario.ps1 -Reader okur` writes on Windows. Never evidence.
 Okur runs (the example okur_linux, its silent synthesizer, its speech log kept) beside Chrome on
 the scenario's fixture page; the scenario's reset keys and then each step's keys are sent by
 XTest (python-xlib, by keycode), and each step's speech is what Okur's log says between its key and the quiet
-after it. Key steps only: a step of another type is skipped, and the trial marked unsuccessful.
+after it. Key steps, and JAWS scripts by the key Okur binds to them (okur-core's example
+script_key); a step of another type is skipped, and the trial marked unsuccessful.
 
     python3 run-scenario-linux.py <scenario.json> <run.json>
 
@@ -24,6 +25,23 @@ import time
 
 OKUR = "./target/debug/examples/okur_linux"
 XA11Y = "./target/debug/xa11y"
+SCRIPT_KEY = "./target/debug/examples/script_key"
+
+
+def keys_for_scripts(scenario):
+    """The key Okur binds to each JAWS script the scenario's steps run (okur-core's example
+    script_key, from Okur's own key map): a script Okur binds no key to is left out."""
+    names = sorted({s.get("command", "") for s in scenario.get("steps", [])
+                    if s.get("type") == "jaws_script"})
+    if not names or not os.path.exists(SCRIPT_KEY):
+        return {}
+    out = subprocess.run([SCRIPT_KEY, *names], capture_output=True, text=True).stdout
+    keys = {}
+    for line in out.splitlines():
+        name, _, chord = line.partition("\t")
+        if chord:
+            keys[name] = chord
+    return keys
 FIXTURES = os.path.expanduser("~/okur/corpus/fixtures/")
 
 # The scenarios' key names as X's keysym names.
@@ -163,6 +181,7 @@ def main():
         time.sleep(0.3)
     settle(log, 0)
     _, offset = said_since(log, 0)
+    script_keys = keys_for_scripts(scenario)
     results = []
     success = True
     for step in scenario.get("steps", []):
@@ -172,6 +191,9 @@ def main():
             keys = [command]
         elif kind == "keyboard":
             keys = sendkeys(command)
+        elif kind == "jaws_script" and command in script_keys:
+            # JAWS ran its script itself; Okur's user presses the key Okur binds to it.
+            keys = [script_keys[command]]
         else:
             success = False
             results.append({"step_id": step["id"], "action": {"type": kind, "command": command},

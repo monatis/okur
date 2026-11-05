@@ -104,6 +104,39 @@ pub struct KeyEvent {
 }
 
 impl KeyEvent {
+    /// The chord as the corpus's scenarios write it ("Down", "Shift+H", "Ctrl+Insert+F"), the
+    /// modifiers in that order before the key: what a runner presses for it (the Linux lab
+    /// plays a JAWS script's step by the key Okur binds to the command).
+    pub fn chord(&self) -> String {
+        let m = &self.modifiers;
+        let held = [
+            (m.ctrl, "Ctrl"),
+            (m.alt, "Alt"),
+            (m.shift, "Shift"),
+            (m.insert, "Insert"),
+            (m.caps_lock, "CapsLock"),
+            (m.scroll_lock, "ScrollLock"),
+            (m.win, "Win"),
+        ];
+        let key = match self.key {
+            Key::UpArrow => "Up".to_owned(),
+            Key::DownArrow => "Down".to_owned(),
+            Key::LeftArrow => "Left".to_owned(),
+            Key::RightArrow => "Right".to_owned(),
+            Key::Alpha(c) => c.to_ascii_uppercase().to_string(),
+            Key::Digit(d) => d.to_string(),
+            Key::F(n) => format!("F{n}"),
+            Key::Other(code) => format!("0x{code:x}"),
+            other => format!("{other:?}"),
+        };
+        held.iter()
+            .filter(|(on, _)| *on)
+            .map(|(_, name)| *name)
+            .chain(std::iter::once(key.as_str()))
+            .collect::<Vec<_>>()
+            .join("+")
+    }
+
     pub fn new(key: Key, modifiers: Modifiers, is_down: bool) -> Self {
         Self {
             key,

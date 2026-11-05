@@ -7,6 +7,7 @@ set -uo pipefail
 cd ~/okur
 cargo build -q -p okur-linux --example okur_linux || exit 1
 cargo build -q -p xa11y --features cli --bin xa11y || exit 1
+cargo build -q -p okur-core --example script_key || exit 1
 runs=/mnt/d/okur-linux/runs
 mkdir -p "$runs"
 for id in "$@"; do

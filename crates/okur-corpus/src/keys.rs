@@ -140,4 +140,19 @@ mod tests {
         assert!(parse_chord("Hyper+X").is_err());
         assert!(parse_chord("Ctrl+").is_err());
     }
+
+    /// Every key Okur binds a command to, written as a chord (`KeyEvent::chord`, what the Linux
+    /// runner presses for a JAWS script's step), reads back as the same key and modifiers.
+    #[test]
+    fn every_bound_key_is_written_as_a_chord_that_reads_back() {
+        let mut wrong = Vec::new();
+        for (command, key) in okur_core::command::bound_commands() {
+            let chord = key.chord();
+            match parse_chord(&chord) {
+                Ok(read) if read.key == key.key && read.modifiers == key.modifiers => {}
+                other => wrong.push(format!("{command:?}: {chord} -> {other:?}")),
+            }
+        }
+        assert!(wrong.is_empty(), "{wrong:#?}");
+    }
 }

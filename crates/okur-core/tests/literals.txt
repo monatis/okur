@@ -11,6 +11,18 @@
 # processes, control ids of Okur's dialogs, fonts, test doubles' logs, names matched against
 # what an application reports.
 # Command names: JAWS's script names and key notation, as a key map file would hold them.
+# KeyEvent::chord: a key in the corpus scenarios' notation, for the lab's runners.
+okur-core/src/input.rs: "Ctrl"
+okur-core/src/input.rs: "Alt"
+okur-core/src/input.rs: "Shift"
+okur-core/src/input.rs: "Insert"
+okur-core/src/input.rs: "CapsLock"
+okur-core/src/input.rs: "ScrollLock"
+okur-core/src/input.rs: "Win"
+okur-core/src/input.rs: "Up"
+okur-core/src/input.rs: "Down"
+okur-core/src/input.rs: "Left"
+okur-core/src/input.rs: "Right"
 okur-core/src/cursor.rs: "mailto:"
 okur-core/src/linearize.rs: "mailto:"
 okur-core/src/linearize.rs: "flows-to"
