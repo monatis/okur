@@ -1,9 +1,9 @@
 //! Okur's keyboard on X11: the engine sees every key and decides each one, as Windows' low-level
 //! hook lets it (docs/plans/2026-11-05-linux-first.md, "The keyboard on X11"; each point below
 //! proved in the Linux lab by `skills/linux-lab/scripts/probe-grab-all.sh`):
-//! - every key but the modifiers is grabbed synchronously through XInput 2 on every top-level
-//!   window, not the root: X looks for a passive grab from the root down, so a window manager's
-//!   shortcuts on the root stay its own whenever they were grabbed;
+//! - every key but the modifiers is grabbed synchronously through XInput 2, under any modifiers,
+//!   on every top-level window, not the root: X looks for a passive grab from the root down, so
+//!   a window manager's shortcuts on the root stay its own whenever they were grabbed;
 //! - a key the engine keeps is let go asynchronously, one it passes is replayed to the
 //!   application (0.3 ms median from the decision to the application in the lab);
 //! - a watchdog in its own thread replays a key the engine has not answered in
@@ -32,22 +32,14 @@ use x11rb::rust_connection::RustConnection;
 /// How long a key waits for the engine before the watchdog replays it to the application.
 pub const WATCHDOG: Duration = Duration::from_millis(200);
 
-/// The core modifier combinations each key is grabbed under: Shift, Control, Alt and Super in
-/// every combination, each with Caps Lock and Num Lock on or off.
+/// The modifiers each key is grabbed under: XInput 2's "any modifier", one grab per key and
+/// window. Each combination apart (Shift, Control, Alt and Super, with Caps Lock and Num Lock
+/// on or off: 64) made 626,000 grabs over the lab's 42 top-level windows, and the X server, which
+/// checks each new grab against a window's others, delivered no key for longer than the test
+/// ran. On application windows the grab meets no window manager's shortcut: X finds those on
+/// the root first, whatever the modifiers.
 fn modifier_sets() -> Vec<u32> {
-    use okur_linux_model::keys::state::{CONTROL, LOCK, MOD1, MOD2, MOD4, SHIFT};
-    let mut sets = Vec::with_capacity(64);
-    for chord in 0u32..16 {
-        let mods = [SHIFT, CONTROL, MOD1, MOD4]
-            .iter()
-            .enumerate()
-            .filter(|(bit, _)| chord & (1 << bit) != 0)
-            .fold(0, |all, (_, m)| all | m);
-        for lock in [0, LOCK, MOD2, LOCK | MOD2] {
-            sets.push(mods | lock);
-        }
-    }
-    sets
+    vec![1 << 31]
 }
 
 fn hook_error(what: &str, error: impl std::fmt::Display) -> RuntimeError {
