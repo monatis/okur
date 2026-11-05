@@ -67,12 +67,22 @@ PROBE 2 PASS: the registered listener heard one focus event per Tab in GTK 4 and
 ## Next (Linux, week 2; the plan's §2)
 
 1. **The keyboard port (the proposal's C1).** `KeyboardHook` asks the engine, key by key, whether
-   to consume it, as Windows' low-level hook allows. X11 decides in advance: a key reaches Okur
-   instead of the application only if it is grabbed. libatspi's X11 device grabs keys
-   synchronously (`XIGrabKeycode`) and then lets each one go or keeps it, which keeps the
-   engine's per-key decision at one round trip per grabbed key. Probe both: (a) a sync grab of the
-   Okur key and of the keys the current mode takes (the declared grab set), and (b) the latency of
-   a synchronous decision. Then design the port change before writing `okur-linux`'s hook.
+   to consume it, as Windows' low-level hook allows. X11 gives Okur only the keys it grabbed.
+   **Measured (`probe-sync-grab.sh`, `77b69d78`):** a synchronous grab keeps the per-key
+   decision. The hook grabbed h and Down with the keyboard frozen until it answered, kept h
+   (`AsyncKeyboard`) and replayed Down (`ReplayKeyboard`):
+   ```
+   hook:   h Down h Down h Down h Down h Down h Down h Down h Down h Down h Down
+   target: Down a Down a Down a Down a Down a Down a Down a Down a Down a Down a
+   replayed Down, ms from the decision to the application: median 0.30, max 0.34
+   SYNC GRAB PASS: h kept, Down replayed, a untouched, in order, ten times
+   ```
+   So the port can stay "the engine decides each key" for every key in a grab set, with keys
+   outside it seen through XInput2 raw events and passed. What is left to design: which keys
+   are grabbed. Every key (as Windows' hook sees them) takes keys other X clients' shortcuts
+   grab, so the set should be what the keymap binds in the current mode plus the Okur key,
+   changed with the mode: the "declared grab set", an addition to the key model of
+   `crate-structure-proposal.md` §13.3.
 2. `okur-linux`'s events: an `EventSource` over xa11y-linux, for every application (xa11y
    subscribes per process; Okur needs the desktop: subscribe as applications appear, or a
    desktop-wide subscription in xa11y-linux).
@@ -80,5 +90,40 @@ PROBE 2 PASS: the registered listener heard one focus event per Tab in GTK 4 and
    our own or `ssip-client-async`), with `ssip_scale` for rate and pitch.
 4. Then the plan's §2.2: a first web scenario run live by `okur-linux` on Chrome in the lab.
 
-The Windows work goes on beside it: round 1156 (the dictionary's Case Sensitive) was started on
-old-pc after the probes.
+## The Windows work beside it: the dictionary's rest
+
+Three rounds were recorded on old-pc after the probes; none is imported yet (below).
+- **1156** (Case Sensitive): Alt+S is not Case Sensitive but **Sound**, so the rule "TOTAL" was
+  never case sensitive, and JAWS said "let sum equals" for "total": a rule matches whatever the
+  case unless the box is checked. The scenario is to be recorded again with Alt+N.
+- **1158** (the Add dialog walked by Tab; trials 1 and 2 agree, trial 3's Tabs never left
+  Actual Word): Actual Word, Replacement Word, "Sound: read only edit | <None>", Select Sound...,
+  Play Sound, "Applies to: Language: Combo box | All Languages | 1 of 9", "Speak replacement word
+  using Language: Combo box | Default | 1 of 1", "Case Sensitive check box not checked", OK,
+  Cancel; access keys from its trace: A, R, S, T, P, L, U, N.
+- **1157** (a rule in a page, Chrome's own dictionary): its first recording read the heading,
+  not the paragraph (the page's first line is its title); the second's trials 1 and 2 met the
+  manager 1158's broken trial had left open ("The Dictionary Manager is already running"); its
+  trial 3 is clean. To be recorded again.
+
+`e3d18779` gives Okur's Add and Change dialog JAWS's controls, order and access keys (a rule
+keeps the sound chosen; Play Sound plays it; the languages have Okur's one choice until JAWS's
+nine are recorded), and fixes replay: Sound's "<None>", reported 2 ms before Tab's focus on it,
+had become the replacement. Previews (`preview-round.sh`, then `okur-lab parity -c ... --spoken`):
+1156 29/34 spoken (27 before), 1158 22/23 spoken. All scenarios after it (no other step moved;
+the totals rose by 1155's 29 steps, 25 matched, since the last handoff's figures):
+
+```
+JAWS parity (Ia2): 11735/12291 steps match exactly; 382 accepted divergences not counted (0 scenarios could not run)
+JAWS spoken parity: 11481/12357 steps match exactly (evidence recorded through the speech recorder voice)
+JAWS parity (Uia): 10556/12177 steps match exactly; 382 accepted divergences not counted (16 scenarios could not run)
+Buffer invariants: 0 violation(s)
+```
+
+**Why nothing was imported: a Windows Security Alert** ("Allow COM Surrogate to communicate on
+these networks", `dllhost.exe`) has been on old-pc's screen since 11:43, most likely raised by a
+port WSL forwarded to Windows during the Linux probes. Its window is in every trace of the three
+rounds (`rundll32.exe`, not a reviewed process), and it may have taken keys. Only the owner
+answers it. `localhostForwarding=false` is now in old-pc's `.wslconfig` so WSL does not raise it
+again. Once it is gone: record 1156 (Alt+N, and the Language combo's nine choices by Down), 1157
+and 1158 again, then import them.
