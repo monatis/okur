@@ -3,7 +3,8 @@
 # AT-SPI tree of a fixture page, as libatspi reads it, each element with its role, name, states
 # that matter to reading, its object attributes (a heading's level, the tag, a link's place), and
 # its text with U+FFFC where a child sits (the hypertext model IAccessible2 also has). The page's
-# document subtree is printed indented. Run in the lab:
+# document subtree is printed indented, each link with its address (its Hyperlink's URI); with
+# FULL=1, every attribute. Run in the lab:
 #   bash /mnt/d/okur-linux/a11y-stack.sh bash /mnt/d/okur-linux/probe-atspi-tree.sh [fixture.html]
 set -uo pipefail
 fixture="${1:-doc-reading.html}"
@@ -12,7 +13,9 @@ profile=$(mktemp -d)
 google-chrome --no-sandbox --no-first-run --disable-gpu --user-data-dir="$profile" \
     --force-renderer-accessibility "file://$HOME/okur/corpus/fixtures/$fixture" > "$out/chrome.log" 2>&1 &
 sleep 15
-python3 - <<'PY'
+FULL="${FULL:-}" python3 - <<'PY'
+import os
+FULL = bool(os.environ.get("FULL"))
 import gi
 gi.require_version("Atspi", "2.0")
 from gi.repository import Atspi
@@ -51,10 +54,40 @@ def dump(node, depth=0):
         marks = [s for s in ("focusable", "focused", "visited", "checked", "expanded", "required")
                  if states.contains(getattr(Atspi.StateType, s.upper()))]
         keep = {k: v for k, v in attrs.items() if k in ("level", "tag", "xml-roles", "display", "id", "href", "src")}
+        if FULL:
+            keep = dict(attrs)
         text = text_of(node)
         line = "  " * depth + f"{role} name={name!r}"
         if keep:
             line += f" attrs={keep}"
+        # A document's own attributes (its Document interface: its address among them).
+        if role == "document web":
+            try:
+                line += f" document={Atspi.Document.get_document_attributes(node.get_document_iface())!r}"
+            except Exception as error:
+                line += f" document=(error: {error})"
+        # A link's address: its own Hyperlink interface, else its parent's Hypertext, whose
+        # links are its embedded children.
+        if role == "link":
+            uri = None
+            try:
+                link = node.get_hyperlink()
+                if link is not None:
+                    uri = ("own", Atspi.Hyperlink.get_uri(link, 0))
+            except Exception as error:
+                uri = ("own error", str(error))
+            if uri is None:
+                try:
+                    parent = node.get_parent()
+                    hypertext = parent.get_hypertext_iface()
+                    for i in range(Atspi.Hypertext.get_n_links(hypertext)):
+                        link = Atspi.Hypertext.get_link(hypertext, i)
+                        if Atspi.Hyperlink.get_object(link, 0) == node:
+                            uri = ("parent", Atspi.Hyperlink.get_uri(link, 0))
+                            break
+                except Exception as error:
+                    uri = ("parent error", str(error))
+            line += f" uri={uri!r}"
         if marks:
             line += f" states={marks}"
         if text is not None:

@@ -27,7 +27,7 @@ impl Ia2Snapshot {
 }
 
 /// MSAA roles (`ROLE_SYSTEM_*` in `oleacc.h`) that Chromium reports for web content.
-mod msaa_role {
+pub mod msaa_role {
     pub const MENUBAR: i32 = 0x02;
     pub const MENUITEM: i32 = 0x0C;
     pub const DOCUMENT: i32 = 0x0F;
@@ -61,7 +61,7 @@ mod msaa_role {
 }
 
 /// IA2 state bits (`AccessibleStates.idl`).
-mod ia2_state {
+pub mod ia2_state {
     pub const EDITABLE: i32 = 0x8;
     pub const HORIZONTAL: i32 = 0x10;
     pub const INVALID_ENTRY: i32 = 0x40;

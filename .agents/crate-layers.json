@@ -38,7 +38,10 @@
         "xa11y-windows"
       ]
     },
-    "okur-linux-model": { "kind": "neutral", "allow": ["okur-core", "xa11y-core"] },
+    "okur-linux-model": {
+      "kind": "neutral",
+      "allow": ["okur-core", "okur-windows-model", "xa11y-core", "xa11y-windows"]
+    },
     "okur-linux": {
       "kind": "platform",
       "allow": [

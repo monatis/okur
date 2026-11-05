@@ -3992,6 +3992,9 @@ pub struct AtspiTree {
     pub attributes: HashMap<String, String>,
     pub states: u64,
     pub text: Option<String>,
+    /// An address: a link's (its Hyperlink interface's URI), or a document's (its Document
+    /// interface's `URI` attribute), as Chrome gives them.
+    pub uri: Option<String>,
     pub children: Vec<AtspiTree>,
 }
 
@@ -4048,10 +4051,36 @@ impl LinuxProvider {
         None
     }
 
+    /// A link's address, through its own Hyperlink interface.
+    fn get_link_uri(&self, aref: &AccessibleRef) -> Option<String> {
+        let proxy = self
+            .make_proxy(&aref.bus_name, &aref.path, "org.a11y.atspi.Hyperlink")
+            .ok()?;
+        let reply = proxy.call_method("GetURI", &(0i32,)).ok()?;
+        let uri: String = reply.body().deserialize().ok()?;
+        Some(uri).filter(|u| !u.is_empty())
+    }
+
+    /// A document's address, its Document interface's `URI` attribute.
+    fn get_document_uri(&self, aref: &AccessibleRef) -> Option<String> {
+        let proxy = self
+            .make_proxy(&aref.bus_name, &aref.path, "org.a11y.atspi.Document")
+            .ok()?;
+        let reply = proxy.call_method("GetAttributeValue", &("URI",)).ok()?;
+        let uri: String = reply.body().deserialize().ok()?;
+        Some(uri).filter(|u| !u.is_empty())
+    }
+
     fn read_tree(&self, aref: &AccessibleRef, left: &mut usize) -> AtspiTree {
         *left = left.saturating_sub(1);
+        let role = self.get_role_name(aref).unwrap_or_default();
+        let uri = match role.as_str() {
+            "link" => self.get_link_uri(aref),
+            "document web" | "document frame" => self.get_document_uri(aref),
+            _ => None,
+        };
         let mut node = AtspiTree {
-            role: self.get_role_name(aref).unwrap_or_default(),
+            role,
             name: self.get_name(aref).unwrap_or_default(),
             attributes: self
                 .scan_attributes(aref)
@@ -4061,6 +4090,7 @@ impl LinuxProvider {
                 .unwrap_or_default(),
             states: self.state_bits(aref).0,
             text: self.get_text_content(aref),
+            uri,
             children: Vec::new(),
         };
         for child in self.get_atspi_children(aref).unwrap_or_default() {

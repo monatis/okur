@@ -997,9 +997,11 @@ name = "okur-linux-model"
 version = "0.1.0"
 dependencies = [
  "okur-core",
+ "okur-windows-model",
  "serde",
  "serde_json",
  "xa11y-core",
+ "xa11y-windows",
 ]
 
 [[package]]
