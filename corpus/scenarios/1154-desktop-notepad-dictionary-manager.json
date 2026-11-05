@@ -1,0 +1,52 @@
+{
+  "id": "1154-desktop-notepad-dictionary-manager",
+  "name": "JAWS's Dictionary Manager in Notepad: Ctrl+Right twice to \"total\" and Insert+D, Escape for the default dictionary, Add... with the word filled in, \"sum\" as its replacement, OK, Ctrl+S, Alt+F4; the line, the word, Ctrl+Right and Left, Up and Down and Right read with the entry; then Insert+D, the entry found by T, Delete, Yes, Ctrl+S, Alt+F4, and the line read without it. The speech history keeps the text, the synthesizer is given the replacement",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Down"},
+    {"id": "s2", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s3", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s4", "type": "key", "command": "Insert+D"},
+    {"id": "s5", "type": "key_ui_access", "command": "Escape"},
+    {"id": "s6", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s7", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s8", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s9", "type": "key_ui_access", "command": "Space"},
+    {"id": "s10", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s11", "type": "key_ui_access", "command": "S"},
+    {"id": "s12", "type": "key_ui_access", "command": "U"},
+    {"id": "s13", "type": "key_ui_access", "command": "M"},
+    {"id": "s14", "type": "key_ui_access", "command": "Enter"},
+    {"id": "s15", "type": "key_ui_access", "command": "Ctrl+S"},
+    {"id": "s16", "type": "key_ui_access", "command": "Alt+F4"},
+    {"id": "s17", "type": "key", "command": "Insert+Up"},
+    {"id": "s18", "type": "key", "command": "Insert+Numpad5"},
+    {"id": "s19", "type": "key", "command": "Ctrl+Right"},
+    {"id": "s20", "type": "key", "command": "Ctrl+Left"},
+    {"id": "s21", "type": "key", "command": "Up"},
+    {"id": "s22", "type": "key", "command": "Down"},
+    {"id": "s23", "type": "key", "command": "Right"},
+    {"id": "s24", "type": "key", "command": "Insert+D"},
+    {"id": "s25", "type": "key_ui_access", "command": "Escape"},
+    {"id": "s26", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s27", "type": "key_ui_access", "command": "T"},
+    {"id": "s28", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s29", "type": "key_ui_access", "command": "Tab"},
+    {"id": "s30", "type": "key_ui_access", "command": "Space"},
+    {"id": "s31", "type": "key_ui_access", "command": "Space"},
+    {"id": "s32", "type": "key_ui_access", "command": "Ctrl+S"},
+    {"id": "s33", "type": "key_ui_access", "command": "Alt+F4"},
+    {"id": "s34", "type": "key", "command": "Insert+Up"}
+  ]
+}

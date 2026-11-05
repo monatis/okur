@@ -4708,6 +4708,20 @@
       }
     },
     {
+      "scenario_id": "1154-desktop-notepad-dictionary-manager",
+      "fixture": "desktop-notepad.ps1",
+      "evidence": {
+        "sha256": "c41c7e3bb7ee9e0dcb95239822f40ebb18aa60eb433447f51db52b5b8439f61d",
+        "capture_script_sha256": "51a4022429e05f006976b12cd9069820be6f5f88aa84527b2fb7cdc90d2ff2fd",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "12-struct-heading-level-2",
       "fixture": "structural-navigation.html",
       "evidence": {
@@ -29489,10 +29503,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1940,
-    "scenarios_with_evidence": 1940,
-    "total_trials": 5826,
-    "successful_trials": 5809,
+    "scenarios": 1941,
+    "scenarios_with_evidence": 1941,
+    "total_trials": 5829,
+    "successful_trials": 5812,
     "deterministic_scenarios": 1620
   }
 }
