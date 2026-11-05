@@ -23,6 +23,7 @@ import tempfile
 import time
 
 OKUR = "./target/debug/examples/okur_linux"
+XA11Y = "./target/debug/xa11y"
 FIXTURES = os.path.expanduser("~/okur/corpus/fixtures/")
 
 # The scenarios' key names as xdotool's.
@@ -133,6 +134,11 @@ def main():
                                page], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     time.sleep(15)
     settle(log, 0, quiet=2.0, longest=30.0)
+    # The desktop's applications as AT-SPI lists them, for a run in which Okur said nothing:
+    # whether Chrome was on the bus at all.
+    apps = ""
+    if os.path.exists(XA11Y):
+        apps = subprocess.run([XA11Y, "apps"], capture_output=True, text=True, timeout=30).stdout
     reset = scenario.get("reset", {})
     for key in reset.get("keys", []) + [k for s in reset.get("keystrokes", []) for k in sendkeys(s)]:
         press(key)
@@ -184,10 +190,15 @@ def main():
     if not everything:
         success = False
         with open(os.path.join(work, "okur.log"), encoding="utf-8", errors="replace") as f:
-            tail = f.read().splitlines()[-25:]
+            # Without the grabs refused on windows already gone, which bury the rest.
+            tail = [line for line in f.read().splitlines()
+                    if "request failed" not in line and not line.startswith("  - ")][-25:]
         print(f"{scenario['id']}: Okur said nothing; its last lines ({work}):", file=sys.stderr)
         for line in tail:
             print("  " + re.sub(r"\x1b\[[0-9;]*m", "", line), file=sys.stderr)
+        print(f"{scenario['id']}: AT-SPI's applications after the page loaded:", file=sys.stderr)
+        for line in apps.splitlines():
+            print("  " + line, file=sys.stderr)
     run = {
         "scenario_id": scenario["id"],
         "provenance": {"reader": "okur", "platform": "linux", "chrome": "google-chrome",

@@ -118,6 +118,7 @@ impl EventSource for AtspiEventSource {
         let subscription = provider
             .subscribe_desktop()
             .map_err(|e| source_error("the desktop's events", e))?;
+        tracing::debug!("AT-SPI: the desktop's events subscribed");
         let stop = Arc::new(AtomicBool::new(false));
         let thread = {
             let stop = Arc::clone(&stop);
@@ -128,6 +129,13 @@ impl EventSource for AtspiEventSource {
                 while !stop.load(Ordering::SeqCst) {
                     match subscription.recv_status(Duration::from_millis(100)) {
                         RecvStatus::Event(event) => {
+                            if event.kind == EventKind::FocusChanged {
+                                tracing::debug!(
+                                    app = %event.app_name,
+                                    role = ?event.target.as_ref().map(|e| e.role),
+                                    "AT-SPI focus"
+                                );
+                            }
                             // The focus's page, looked up once: read when it is new, and
                             // telling the engine the focus is in it.
                             let document = event
