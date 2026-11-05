@@ -1,5 +1,6 @@
 # Linux Lab: Research and Proposal (2026-11-05)
 
+**Decided (the owner, 2026-11-05)**: Linux first; tested in a headless WSL distribution on the dev box instead of GitHub Actions (Actions has limits and wants a push per test run; it may serve the first Mac work later); yes to O2 (a mini PC later), O3, O5 and O6. The plan: [`../plans/2026-11-05-linux-first.md`](../plans/2026-11-05-linux-first.md).
 **Status**: proposal for the owner. Research only: nothing was built, no cargo run, nothing run on
 old-pc. Facts about old-pc come from the lead agent's read-only check of 2026-11-05. Facts about
 the dev box come from reading its files and registry on 2026-11-05.
