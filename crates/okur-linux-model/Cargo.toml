@@ -10,3 +10,4 @@ license.workspace = true
 # (docs/plans/2026-11-05-linux-first.md).
 
 [dependencies]
+okur-core = { workspace = true }

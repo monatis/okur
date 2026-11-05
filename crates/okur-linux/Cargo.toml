@@ -11,3 +11,9 @@ license.workspace = true
 
 [dependencies]
 okur-linux-model = { workspace = true }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+okur-core = { workspace = true }
+okur-runtime = { workspace = true }
+tracing = { workspace = true }
+x11rb = { version = "0.14", default-features = false, features = ["xinput"] }
