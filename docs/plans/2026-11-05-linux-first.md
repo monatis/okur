@@ -60,6 +60,25 @@ Probe 6, the crates: `okur-linux` and `okur-linux-model` are in the workspace an
 `crate-layers.json` (`2f432d52`). Week 2 starts with the keyboard port's design (the handoff
 [`../handoff/2026-11-05-linux-lab-week-1.md`](../handoff/2026-11-05-linux-lab-week-1.md), Next 1).
 
+### The keyboard on X11: decided (2026-11-05, reversible)
+
+Probe 3 and the synchronous grab probe (`probe-sync-grab.sh`: a key kept or replayed, 0.30 ms
+median from the decision to the application) settle how `okur-linux`'s hook keeps the engine's
+per-key decision, which the `KeyboardHook` port and the engine's routing rest on:
+- **A static grab set, grabbed synchronously:** every chord the keymap binds in any mode, and
+  the Okur key. While the Okur key is held, X's passive grab hands Okur every key (probe 3).
+  The engine decides each grabbed key as on Windows: kept (`AsyncKeyboard`) or replayed to the
+  application (`ReplayKeyboard`).
+- **Everything else is watched, not grabbed:** XInput2 raw events report it (typing echo, key
+  labels), and it reaches the application untouched, so other clients' shortcuts (a window
+  manager's) keep working.
+- **The whole keyboard grabbed only while a state takes keys nothing binds** (Keyboard Help).
+- The port gains one call, a grab set from the engine (`KeyboardHook::set_grabs`, the union and
+  the "everything" switch); Windows' hook, which sees every key anyway, ignores it. Rejected: a
+  grab set per mode computed from the engine's state (forms mode, Say All, layers, quick keys:
+  fragile), and grabbing every key always (takes other clients' shortcuts; one conflict fails the
+  whole grab with `BadAccess`).
+
 ## 2. Weeks 2 to 6
 
 1. `okur-linux`: keyboard (X11 first, the declared grab sets the proposal's C1 calls for), events
