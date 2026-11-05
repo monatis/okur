@@ -9916,6 +9916,41 @@ fn the_layer_help_opens_silently_at_its_top() {
     assert!(engine.viewer.is_none());
 }
 
+/// A dialog of Okur's opened over the viewer (Command Search from the layer's help) takes its
+/// own keys, as JAWS's Command Search does over its Results Viewer [obs, 628/s6-s10]; the
+/// viewer takes them again once the focus is back in the application.
+#[test]
+fn a_dialog_over_the_viewer_takes_its_own_keys() {
+    let speech = GatedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document))),
+        Box::new(speech.clone()),
+    );
+    echo_off(&mut engine);
+    let mut field = FocusEvent::new(Role::Edit).with_name("Code");
+    field.app = Some("powershell.exe".to_owned());
+    engine.handle_focus_event(&field);
+    engine.viewer = Some(crate::viewer::VirtualViewer::new(vec![
+        "First".to_owned(),
+        "Second".to_owned(),
+    ]));
+    GatedSpeech::take(&speech.history);
+    let down = KeyEvent::new(Key::DownArrow, Modifiers::none(), true);
+    let mut query = FocusEvent::new(Role::Edit).with_name("Search for:");
+    query.app = Some("okur-ui.exe".to_owned());
+    query.window_title = Some("Search for Okur Commands".to_owned());
+    engine.handle_focus_event(&query);
+    GatedSpeech::take(&speech.history);
+    engine.handle_key_event(&down);
+    let in_dialog = GatedSpeech::take(&speech.history).join("\n");
+    assert!(!in_dialog.contains("Second"), "{in_dialog}");
+    assert!(engine.viewer.is_some());
+    engine.handle_focus_event(&field);
+    GatedSpeech::take(&speech.history);
+    engine.handle_key_event(&down);
+    assert_eq!(GatedSpeech::take(&speech.history).join("\n"), "Second");
+}
+
 /// The layer's help is a window of its own, as JAWS's Results Viewer is: Escape reads the line
 /// the focus comes back to, then the window is named as the focus returns to it, "a !... B |
 /// SR Editor Fixture | Code edit | ..." [obs, 628/s4].

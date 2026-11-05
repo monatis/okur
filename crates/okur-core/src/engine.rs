@@ -1261,8 +1261,18 @@ impl ScreenReaderEngine {
             }
             return KeyAction::Consume;
         }
-        // The Virtual Viewer takes the keys while it is open.
-        if let Some(action) = self.viewer.as_mut().map(|v| v.key(event)) {
+        // The Virtual Viewer takes the keys while it is open, unless one of Okur's dialogs has
+        // the focus: the viewer's window never takes it, so a focus in Okur's windows is a
+        // dialog opened over the viewer (Command Search from the layer's help), whose keys are
+        // its own, as JAWS's Command Search takes them over its Results Viewer [obs, 628/s6-s10];
+        // the viewer is back when the dialog closes.
+        let viewer_keys = self.settings_place.0.as_deref() != Some(OKUR_WINDOWS);
+        if let Some(action) = self
+            .viewer
+            .as_mut()
+            .filter(|_| viewer_keys)
+            .map(|v| v.key(event))
+        {
             use crate::viewer::ViewerAction;
             match action {
                 ViewerAction::Speak(speech) => {

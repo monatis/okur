@@ -707,7 +707,13 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
         'key_ui_access' {
             if (-not (Test-Path -LiteralPath $LabKeys)) { return $false }
             $sent = Start-Process -FilePath $LabKeys -ArgumentList @('--allow', 'jfw,ResultsViewer,JDiction,CommandsSearchViewer,okur-ui', "`"$command`"") -WindowStyle Hidden -Wait -PassThru
-            return $sent.ExitCode -eq 0
+            if ($sent.ExitCode -eq 0) { return $true }
+            # With Okur reading, the window JAWS's elevated Results Viewer was is Okur's Virtual
+            # Viewer, which never takes the focus (helper-ui-architecture.md): the application
+            # stays in front, and the key is the user's there (628/s3, s4, refused by the lab
+            # keys' guard, 2026-11-05). A refusal sent nothing, so the key goes once.
+            if ($Reader -eq 'okur') { return Send-Chord $command }
+            return $false
         }
         'jaws_script' { if (-not $jaws) { return $false }; return [bool]$jaws.RunScript($command) }
         # A JAWS function call through FSAPI RunFunction, e.g. TypeKey("Down") or
