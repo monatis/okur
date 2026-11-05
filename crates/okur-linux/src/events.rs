@@ -39,28 +39,33 @@ fn object_of(element: &ElementData) -> Option<String> {
     Some(format!("{}{}", raw("bus_name")?, raw("object_path")?))
 }
 
+/// The page's document the focused element is in, or is.
+fn document_of(provider: &LinuxProvider, element: &ElementData) -> Option<ElementData> {
+    if element.role == Role::WebArea {
+        Some(element.clone())
+    } else {
+        provider.atspi_ancestor(element, "document web", PAGE_DEPTH)
+    }
+}
+
 /// The page the focus is in, read whole, as the engine takes a page: when the focus lands on a
 /// page's document (Chrome gives it when a page loads and when Tab comes back to it), and when
 /// it lands inside a page other than the one read last (a link of a page newly in front).
 fn page(
     provider: &LinuxProvider,
     element: &ElementData,
+    document: &ElementData,
     last: &mut Option<String>,
 ) -> Option<AccessibilityEvent> {
     let on_document = element.role == Role::WebArea;
-    let document = if on_document {
-        element.clone()
-    } else {
-        provider.atspi_ancestor(element, "document web", PAGE_DEPTH)?
-    };
-    let object = object_of(&document)?;
+    let object = object_of(document)?;
     if !on_document && last.as_deref() == Some(object.as_str()) {
         return None;
     }
     *last = Some(object);
     let started = std::time::Instant::now();
     let tree = provider
-        .atspi_tree(&document, PAGE_LIMIT)
+        .atspi_tree(document, PAGE_LIMIT)
         .map_err(|e| tracing::debug!("the page was not read: {e}"))
         .ok()?;
     let root = okur_linux_model::page::to_aom(&snapshot(tree));
@@ -73,11 +78,15 @@ fn source_error(what: &str, error: impl std::fmt::Display) -> RuntimeError {
     RuntimeError::EventSource(format!("AT-SPI: {what}: {error}"))
 }
 
-/// The engine's event for an AT-SPI event, when it takes one.
-pub fn convert(event: &Event) -> Option<AccessibilityEvent> {
+/// The engine's event for an AT-SPI event, when it takes one. `in_page`: the focus is in a page's
+/// document, or on it, where the virtual cursor reads and takes the keys, as the focus chain
+/// that holds a document tells it on Windows.
+pub fn convert(event: &Event, in_page: bool) -> Option<AccessibilityEvent> {
     match event.kind {
         EventKind::FocusChanged => event.target.as_ref().map(|element| {
-            AccessibilityEvent::Focus(okur_linux_model::focus::focus_event(element))
+            let mut focus = okur_linux_model::focus::focus_event(element);
+            focus.in_document = in_page;
+            AccessibilityEvent::Focus(focus)
         }),
         _ => None,
     }
@@ -119,18 +128,22 @@ impl EventSource for AtspiEventSource {
                 while !stop.load(Ordering::SeqCst) {
                     match subscription.recv_status(Duration::from_millis(100)) {
                         RecvStatus::Event(event) => {
-                            if event.kind == EventKind::FocusChanged {
-                                let loaded = event
-                                    .target
-                                    .as_ref()
-                                    .and_then(|e| page(&provider, e, &mut last_page));
-                                if let Some(loaded) = loaded {
-                                    if !sink.send(loaded) {
-                                        return;
-                                    }
+                            // The focus's page, looked up once: read when it is new, and
+                            // telling the engine the focus is in it.
+                            let document = event
+                                .target
+                                .as_ref()
+                                .filter(|_| event.kind == EventKind::FocusChanged)
+                                .and_then(|e| Some((e, document_of(&provider, e)?)));
+                            let loaded = document
+                                .as_ref()
+                                .and_then(|(e, d)| page(&provider, e, d, &mut last_page));
+                            if let Some(loaded) = loaded {
+                                if !sink.send(loaded) {
+                                    return;
                                 }
                             }
-                            if let Some(event) = convert(&event) {
+                            if let Some(event) = convert(&event, document.is_some()) {
                                 if !sink.send(event) {
                                     return;
                                 }
@@ -162,5 +175,29 @@ impl EventSource for AtspiEventSource {
 impl Drop for AtspiEventSource {
     fn drop(&mut self) {
         let _ = self.stop();
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn focus_on(role: Role) -> Event {
+        let mut event = Event::new(EventKind::FocusChanged, "chrome", 1);
+        event.target = Some(ElementData::for_role(role));
+        event
+    }
+
+    /// The focus in a page is in its document, and the engine's virtual cursor takes the keys
+    /// there: without it Down went to Chrome, and nothing was said (the lab's live run of
+    /// 02-doc-next-line, 2026-11-05).
+    #[test]
+    fn a_focus_in_a_page_is_in_its_document() {
+        let in_page = convert(&focus_on(Role::Link), true);
+        assert!(matches!(in_page, Some(AccessibilityEvent::Focus(f)) if f.in_document));
+        let outside = convert(&focus_on(Role::Button), false);
+        assert!(matches!(outside, Some(AccessibilityEvent::Focus(f)) if !f.in_document));
+        let other = Event::new(EventKind::Announcement, "chrome", 1);
+        assert!(convert(&other, true).is_none());
     }
 }

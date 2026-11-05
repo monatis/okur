@@ -122,8 +122,11 @@ def main():
     work = tempfile.mkdtemp()
     log = os.path.join(work, "speech.jsonl")
     profile = os.path.join(work, "chrome")
+    # Okur's own output is kept: a run in which it said nothing shows why.
+    okur_out = open(os.path.join(work, "okur.log"), "w", encoding="utf-8")
     okur = subprocess.Popen([OKUR, "--no-speech", "3600", "--speech-log", log],
-                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                            stdin=subprocess.DEVNULL, stdout=okur_out, stderr=subprocess.STDOUT,
+                            env={**os.environ, "RUST_LOG": os.environ.get("RUST_LOG", "okur_linux=debug")})
     time.sleep(4)
     chrome = subprocess.Popen(["google-chrome", "--no-sandbox", "--no-first-run", "--disable-gpu",
                                f"--user-data-dir={profile}", "--force-renderer-accessibility",
@@ -167,6 +170,24 @@ def main():
     okur.terminate()
     chrome.terminate()
     okur.wait(timeout=10)
+    okur_out.close()
+    # Silence from the first key to the last is Okur not running or not hearing, never a result.
+    everything, _ = said_since(log, 0)
+    if os.environ.get("OKUR_RUN_VERBOSE"):
+        print(f"{scenario['id']}: Okur's speech log ({work}):", file=sys.stderr)
+        with open(log, encoding="utf-8") as f:
+            for line in f:
+                print("  " + line.rstrip()[:300], file=sys.stderr)
+        for step in results:
+            print(f"  step {step['step_id']} {step.get('t_start_ms')}..{step.get('t_end_ms')}",
+                  file=sys.stderr)
+    if not everything:
+        success = False
+        with open(os.path.join(work, "okur.log"), encoding="utf-8", errors="replace") as f:
+            tail = f.read().splitlines()[-25:]
+        print(f"{scenario['id']}: Okur said nothing; its last lines ({work}):", file=sys.stderr)
+        for line in tail:
+            print("  " + re.sub(r"\x1b\[[0-9;]*m", "", line), file=sys.stderr)
     run = {
         "scenario_id": scenario["id"],
         "provenance": {"reader": "okur", "platform": "linux", "chrome": "google-chrome",
