@@ -56,6 +56,10 @@ Probes, each with a pass criterion that can fail (proposal §6, W1-1 to W1-6):
 | 4 `probe-speech.sh` | PASS | speech-dispatcher (Ubuntu 26.04's) with espeak-ng over SSIP (SSML): `begin m1 m2 end`, and sound on a PulseAudio null sink's monitor. |
 | 5 `probe-mutter.sh` | PASS | Mutter 50.1 headless: `WatchKeyboard` under `org.okur.Okur.KeyboardMonitor` refused ("Access denied"); allowed with `MUTTER_DEBUG_A11Y_MANAGER_WITHOUT_ACCESS_CONTROL=1`; keys injected through Mutter's RemoteDesktop API **do** arrive as `KeyEvent` (a and Down, pressed and released), so the Wayland key path can be tested headless. |
 
+Probe 6, the crates: `okur-linux` and `okur-linux-model` are in the workspace and
+`crate-layers.json` (`2f432d52`). Week 2 starts with the keyboard port's design (the handoff
+[`../handoff/2026-11-05-linux-lab-week-1.md`](../handoff/2026-11-05-linux-lab-week-1.md), Next 1).
+
 ## 2. Weeks 2 to 6
 
 1. `okur-linux`: keyboard (X11 first, the declared grab sets the proposal's C1 calls for), events
