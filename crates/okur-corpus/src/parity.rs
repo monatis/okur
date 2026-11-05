@@ -1805,6 +1805,8 @@ impl ScreenReads {
                         SheetListKind::Worksheets => lists.worksheets.clone(),
                         SheetListKind::Row => lists.row.clone(),
                         SheetListKind::Visible => lists.visible.clone(),
+                        // Never asked of Excel: the engine reads each monitor cell.
+                        SheetListKind::Monitor => None,
                     })
                     .unwrap_or_default();
                 deliver(okur_core::AccessibilityEvent::SheetList {

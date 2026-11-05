@@ -103,6 +103,12 @@ pub(crate) enum SheetReading {
 pub(crate) enum SheetAsk {
     Cell,
     Reading(SheetReading),
+    /// A monitor cell's text for the Move to Monitor Cell list; the list opens with the last.
+    MonitorEntry {
+        column: u32,
+        row: u32,
+        last: bool,
+    },
 }
 
 impl SheetReading {

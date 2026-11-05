@@ -395,6 +395,8 @@ pub fn sheet_list(
             }
             found
         }
+        // The monitor cells are the engine's: it reads each cell itself.
+        okur_core::SheetListKind::Monitor => Vec::new(),
         okur_core::SheetListKind::Column
         | okur_core::SheetListKind::Row
         | okur_core::SheetListKind::Formulas => {

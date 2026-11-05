@@ -404,6 +404,8 @@ pub struct ScreenReaderEngine {
     monitor_cells: std::collections::HashMap<String, [Option<(u32, u32)>; 10]>,
     /// The worksheet Excel last named with a place it read: monitor cells are its.
     sheet_name: String,
+    /// The Move to Monitor Cell list's entries read so far, as each cell's text comes.
+    monitor_entries: Vec<crate::event::SheetEntry>,
     /// One of Excel's lists was asked for, and is awaited.
     sheet_list_asked: Option<crate::event::SheetListKind>,
     /// A key for Word's revisions asked whether the document tracks its changes, which it
@@ -741,6 +743,7 @@ impl ScreenReaderEngine {
             sheet_titles: std::collections::HashMap::new(),
             monitor_cells: std::collections::HashMap::new(),
             sheet_name: String::new(),
+            monitor_entries: Vec::new(),
             say_all_paragraphs_asked: false,
             document_view_title: None,
             window_title_asked: false,
@@ -1525,6 +1528,18 @@ impl ScreenReaderEngine {
                     return KeyAction::Consume;
                 }
             }
+            // Excel's Ctrl+Shift+M: the worksheet's monitor cells listed, JAWS's Move to Monitor
+            // Cell [obs, 1135/s6]; the key is the application's elsewhere, and with none set.
+            if event.key == Key::Alpha('M')
+                && m.ctrl
+                && m.shift
+                && !m.alt
+                && !m.insert
+                && !m.win
+                && self.open_monitor_list()
+            {
+                return KeyAction::Consume;
+            }
             // Excel's Ctrl+Shift+D: the window's visible cells with data listed, JAWS's Cells with
             // Data [obs, round-1133c's trace].
             if event.key == Key::Alpha('D')
@@ -1947,6 +1962,9 @@ impl ScreenReaderEngine {
                     // A newer cell asked for behind this one: this place has gone by.
                     SheetAsk::Cell if self.sheet_asks.contains(&SheetAsk::Cell) => None,
                     SheetAsk::Cell => self.sheet_cell_said(place.as_ref()),
+                    SheetAsk::MonitorEntry { column, row, last } => {
+                        self.monitor_entry(place.as_ref(), column, row, last)
+                    }
                 }
             }
             AccessibilityEvent::DocumentNotes(kind, notes)
@@ -3500,6 +3518,8 @@ impl ScreenReaderEngine {
                 // [hyp: not recorded]
                 crate::event::SheetListKind::Visible => msg::excel_no_visible_cells(),
                 crate::event::SheetListKind::Worksheets => msg::excel_no_worksheets(),
+                // Never asked of Excel: the engine opens the list itself.
+                crate::event::SheetListKind::Monitor => return None,
             }
             .to_string();
             self.speech.speak(&none, true);

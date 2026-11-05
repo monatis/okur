@@ -862,6 +862,7 @@ impl ListDialog {
                     crate::event::SheetListKind::Row => msg::list_dialog_row_cells(),
                     crate::event::SheetListKind::Visible => msg::list_dialog_cells_with_data(),
                     crate::event::SheetListKind::Worksheets => msg::list_dialog_move_to_worksheet(),
+                    crate::event::SheetListKind::Monitor => msg::list_dialog_move_to_monitor_cell(),
                 },
                 vec![
                     list(msg::list_dialog_form_fields_list()),

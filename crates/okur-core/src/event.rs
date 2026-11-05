@@ -163,6 +163,9 @@ pub enum SheetListKind {
     Row,
     Visible,
     Worksheets,
+    /// The worksheet's monitor cells, "B2: 12" (Ctrl+Shift+M) [obs, 1135/s6]: the engine knows
+    /// them and reads each cell; Excel is not asked for this list.
+    Monitor,
 }
 
 impl SheetListKind {
@@ -174,6 +177,7 @@ impl SheetListKind {
             Self::Row => "sheet row",
             Self::Visible => "sheet visible",
             Self::Worksheets => "worksheets",
+            Self::Monitor => "sheet monitor cells",
         }
     }
 }

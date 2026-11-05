@@ -9653,6 +9653,83 @@ fn excel_cells_and_the_formula_list() {
         .any(|(action, _)| action == "Formulas B4"));
 }
 
+/// Excel's Ctrl+Shift+M lists the worksheet's monitor cells, each read of Excel, "Move to
+/// Monitor Cell | B2: 12 | 1 of 1"; OK goes to the cell [obs, 1135/s6].
+#[test]
+fn excel_the_monitor_cell_list() {
+    use crate::ui::{ControlKind, FromUi, ToUi};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    let mut cell = FocusEvent::new(Role::TableCell)
+        .with_name("B2")
+        .with_window_title("sr-excel-fixture.xlsx - Excel");
+    cell.value = Some("12".into());
+    cell.app = Some("EXCEL.EXE".into());
+    cell.platform.window_class = Some("EXCEL7".into());
+    engine.handle_focus_event(&cell);
+    let insert_shift = Modifiers {
+        insert: true,
+        shift: true,
+        ..Modifiers::none()
+    };
+    engine.handle_key_event(&KeyEvent::new(Key::Digit(1), insert_shift, true));
+    // The places the focus asked for, answered first.
+    for _ in actions
+        .requests()
+        .iter()
+        .filter(|(read, _)| read == "sheet place")
+    {
+        engine.handle_accessibility_event(&AccessibilityEvent::SheetPlace(None));
+    }
+    let ctrl_shift = Modifiers {
+        ctrl: true,
+        shift: true,
+        ..Modifiers::none()
+    };
+    let listed = engine.handle_key_event(&KeyEvent::new(Key::Alpha('M'), ctrl_shift, true));
+    assert_eq!(listed, KeyAction::Consume);
+    assert!(actions.requests().contains(&(
+        "sheet cell".to_owned(),
+        crate::actions::sheet_cell_key(2, 2)
+    )));
+    engine.handle_accessibility_event(&AccessibilityEvent::SheetPlace(Some(
+        crate::event::SheetPlace {
+            address: "B2".into(),
+            cells: vec![crate::event::SheetCell {
+                column: 2,
+                row: 2,
+                text: "12".into(),
+            }],
+            ..crate::event::SheetPlace::default()
+        },
+    )));
+    let Some(dialog) = ui.take().into_iter().find_map(|m| match m {
+        ToUi::DialogShow { dialog } => Some(dialog),
+        _ => None,
+    }) else {
+        panic_free_fail("no list shown");
+        return;
+    };
+    assert_eq!(dialog.title, "Move to Monitor Cell");
+    assert!(dialog.controls.iter().any(|c| matches!(
+        &c.kind,
+        ControlKind::List { items, .. } if items.first().map(String::as_str) == Some("B2: 12")
+    )));
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: dialog.id,
+        control: "ok".into(),
+    }));
+    assert!(actions
+        .requests()
+        .iter()
+        .any(|(action, _)| action == "Monitor B2"));
+}
+
 /// Excel's Insert+Shift+R lists the active cell's row's cells with data, titled by the row,
 /// "Row 1 dialog | List1 List view | Branch: A1 | 1 of 3" [obs, round-1133b].
 #[test]

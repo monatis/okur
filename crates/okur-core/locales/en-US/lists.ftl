@@ -32,6 +32,8 @@ list-dialog-row-cells = Row
 # trace of JAWS's dialog].
 list-dialog-cells-with-data = Cells with Data
 list-dialog-move-to-worksheet = Move to Worksheet
+# Excel's monitor cells, Ctrl+Shift+M: "B2: 12 | 1 of 1" [obs, 1135/s6].
+list-dialog-move-to-monitor-cell = Move to Monitor Cell
 # Word's revisions, Insert+Shift+R in a document [hyp: 1107 records JAWS's title].
 list-dialog-revisions = Revisions
 # Windows+Semicolon in a document of Word's: the notes the Virtual Viewer shows, JAWS's items in

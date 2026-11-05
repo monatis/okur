@@ -1379,6 +1379,66 @@ impl ScreenReaderEngine {
         true
     }
 
+    /// Excel's Move to Monitor Cell (Ctrl+Shift+M): each of the worksheet's monitor cells asked
+    /// of Excel, the list opening with the last one's text, "B2: 12 | 1 of 1" [obs, 1135/s6].
+    /// False outside a sheet and with none set [hyp: what JAWS says then is not recorded].
+    pub(super) fn open_monitor_list(&mut self) -> bool {
+        use crate::spreadsheet::SheetAsk;
+        let Some(focus) = self.sheet_focus() else {
+            return false;
+        };
+        let cells: Vec<(u32, u32)> = crate::spreadsheet::monitor_sheet(&focus, &self.sheet_name)
+            .and_then(|sheet| self.monitor_cells.get(&sheet))
+            .map(|cells| cells.iter().flatten().copied().collect())
+            .unwrap_or_default();
+        if cells.is_empty() {
+            return false;
+        }
+        self.monitor_entries.clear();
+        let count = cells.len();
+        for (index, (column, row)) in cells.into_iter().enumerate() {
+            let last = index + 1 == count;
+            let ask = SheetAsk::MonitorEntry { column, row, last };
+            if !self.ask_sheet(crate::actions::SheetCells::Cell { column, row }, ask) {
+                return false;
+            }
+        }
+        self.key_since_focus = false;
+        true
+    }
+
+    /// A monitor cell's text come for the Move to Monitor Cell list, "B2: 12"; with the last,
+    /// the list opens.
+    pub(super) fn monitor_entry(
+        &mut self,
+        place: Option<&crate::event::SheetPlace>,
+        column: u32,
+        row: u32,
+        last: bool,
+    ) -> Option<String> {
+        let reference = crate::spreadsheet::reference(column, row);
+        let text = place
+            .and_then(|p| p.cells.iter().find(|c| (c.column, c.row) == (column, row)))
+            .map(|c| c.text.trim().to_owned())
+            .unwrap_or_default();
+        self.monitor_entries.push(crate::event::SheetEntry {
+            label: format!("{reference}: {text}"),
+            target: reference,
+        });
+        if !last {
+            return None;
+        }
+        let entries = std::mem::take(&mut self.monitor_entries);
+        let dialog = crate::ui::lists::ListDialog::sheet_list(
+            self.dialog_count + 1,
+            crate::event::SheetListKind::Monitor,
+            "",
+            &entries,
+        );
+        let mode = self.app_mode;
+        self.show_list(dialog, mode)
+    }
+
     pub(super) fn okur_key_command(&mut self, event: &KeyEvent) {
         // Word's Insert+Shift+F, Insert+Shift+E and Insert+Alt+B: its footnotes, endnotes and
         // bookmarks listed [obs, 1083/s1, 1090/s1, 1091/s1].
