@@ -73,3 +73,22 @@ handoff before this one has them.
 2. JAWS: numbers in words (Controlled by JAWS); the Dictionary Manager's opening phrasing (open
    in every dictionary scenario); the help layer's 628, pending since 2026-10-19 (its
    Shift+Slash is another key on old-pc's Turkish layout); Window List's Delete (row 29).
+
+## Later the same day
+
+- **Numbers in words** (Controlled by JAWS, Okur's "Controlled by Okur") built from 1161
+  (`f1ca436b`): `okur-lab parity --spoken --only 1161`: `27/27 steps match exactly`; its "$0.02"
+  ("zero zero U.S. dollars", JAWS's zero twice) an accepted divergence. After it, `okur-lab
+  parity`: `JAWS parity (Ia2): 12013/12583 steps match exactly; 384 accepted divergences not
+  counted (0 scenarios could not run)`.
+- **628 again inconclusive** (round-628, not imported): Shift+Slash after Insert+Space (":" on
+  old-pc's Turkish layout) gave, in trial 1 only, "heading level 2 General Commands" at the next
+  step's Escape; after that every step of every trial was silent, Insert+Up included. A live look
+  at old-pc (`okur-lab keys` and `jaws-history`, skill Workflow H) is needed before another round.
+- **Chrome's AT-SPI tree of a page** (`probe-atspi-tree.sh`): "document web" (named by the title,
+  its text U+FFFC per child), "heading" with `tag=h1` and `level=1`, "paragraph", and "static"
+  text leaves holding the text, as Chrome's UI Automation tree has them. The Linux virtual
+  buffer (the plan's §2.3) can follow `okur-windows-model::uia_snapshot`'s conversion: an AT-SPI
+  snapshot format in `okur-linux-model` (role name, name, attributes, states, text), captured
+  live (xa11y-linux extended with attributes and text), its `to_aom` tested on snapshots of the
+  HTML fixtures, then `DocumentLoaded` from the event source when the focus enters a page.
