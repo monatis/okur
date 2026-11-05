@@ -92,3 +92,12 @@ handoff before this one has them.
   snapshot format in `okur-linux-model` (role name, name, attributes, states, text), captured
   live (xa11y-linux extended with attributes and text), its `to_aom` tested on snapshots of the
   HTML fixtures, then `DocumentLoaded` from the event source when the focus enters a page.
+- **Okur on Linux reads a page** (`c4360c7b`, `646923d3`): xa11y-linux reads an element's AT-SPI
+  subtree (`AtspiTree`), `okur-linux-model::page` keeps it as a snapshot format and converts it
+  to the AOM, and the event source sends `DocumentLoaded` when the focus lands on a page.
+  `probe-okur-web.sh` (Chrome on doc-reading.html, Okur's silent synthesizer and speech log):
+  `page read ms=26`, then the speech log `Document Reading Reference Fixture document`, `Page has
+  1heading and no links`, `heading level 1 The Accessibility Engine Specification`, the three
+  paragraphs (the page read on load), and `WEB PASS: Okur on Linux read the page's heading and a
+  paragraph`. Still to do for §2.2: a page the focus enters below its document (a link), the
+  keys' speech checked one by one, and the result written by a tool into a Linux baseline.
