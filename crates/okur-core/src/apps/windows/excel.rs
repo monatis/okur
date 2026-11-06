@@ -37,6 +37,8 @@ pub struct Excel {
 /// holds the column titles, the column that holds the row titles.
 #[derive(Debug)]
 struct PendingTitles {
+    /// What the key says before the titles: "Last Cell | Weekends | 14 | C 4" [obs, 1166/s18].
+    first: Vec<String>,
     lines: Vec<String>,
     /// The cell, and the one before it.
     at: (u32, u32),
@@ -69,13 +71,15 @@ impl AppModule for Excel {
     /// place.
     fn sheet_place(&mut self, place: Option<&crate::event::SheetPlace>) -> Option<String> {
         let pending = self.pending.take()?;
-        let mut lines: Vec<String> = place
+        let mut lines = pending.first;
+        let titles: Vec<String> = place
             .map(|place| {
                 let titles = pending.titles.unwrap_or_else(|| named_titles(place));
                 let (row, column) = titles_entered(titles, pending.at, pending.before);
                 titles_of(place, row, column)
             })
             .unwrap_or_default();
+        lines.extend(titles);
         lines.extend(pending.lines);
         Some(lines.join("\n"))
     }
@@ -158,6 +162,8 @@ impl AppModule for Excel {
             None => true,
         });
         let value = focus.value.as_deref().map(str::trim).unwrap_or_default();
+        // The key's own word, before the titles where they are said.
+        let mut first = Vec::new();
         let mut lines = Vec::new();
         let ctrl = cx
             .key
@@ -165,10 +171,10 @@ impl AppModule for Excel {
             .unwrap_or(false);
         let key = cx.key.map(|(k, _)| k).filter(|_| ctrl);
         match key {
-            Some(Key::End) => lines.push(msg::excel_last_cell().to_string()),
-            Some(Key::Home) => lines.push(msg::excel_first_cell().to_string()),
+            Some(Key::End) => first.push(msg::excel_last_cell().to_string()),
+            Some(Key::Home) => first.push(msg::excel_first_cell().to_string()),
             // Undo said before the cell it gives back, "Undo | 7 | D 1" [obs, 1123/s8].
-            Some(Key::Alpha('Z')) => lines.push(msg::edit_undo().to_string()),
+            Some(Key::Alpha('Z')) => first.push(msg::edit_undo().to_string()),
             _ => {}
         }
         // An empty cell by its coordinates alone [hyp: no empty cell recorded yet].
@@ -194,6 +200,7 @@ impl AppModule for Excel {
         self.from_blank = value.is_empty();
         if let Some((at, before)) = moved.filter(|_| waits) {
             self.pending = Some(PendingTitles {
+                first,
                 lines,
                 at,
                 before,
@@ -202,8 +209,9 @@ impl AppModule for Excel {
             cx.ask_sheet = true;
             return FocusResponse::Silent;
         }
+        first.extend(lines);
         FocusResponse::Speak(crate::announcement::Announcement::from_text(
-            &lines.join("\n"),
+            &first.join("\n"),
         ))
     }
 }
@@ -464,6 +472,61 @@ mod tests {
         // Without the place, the cell alone.
         assert_eq!(step(&mut excel, &cell("B3", "10")), (String::new(), true));
         assert_eq!(excel.sheet_place(None).as_deref(), Some("10\nB 3"));
+    }
+
+    /// Ctrl+End with the column titles set: "Last Cell" before the title, "Last Cell | Weekends |
+    /// 14 | C 4" [obs, 1166/s18].
+    #[test]
+    fn the_last_cell_is_said_before_its_title() {
+        let mut titles = SheetTitles::default();
+        let _ = TitleKey::SetColumnTitles.set(&mut titles, (1, 1));
+        let cell = |name: &str, value: &str| {
+            let mut focus = FocusEvent::new(Role::TableCell);
+            focus.name = Some(name.into());
+            focus.value = Some(value.into());
+            focus.platform.window_class = Some(GRID_WINDOW.into());
+            focus
+        };
+        let ctrl = crate::input::Modifiers {
+            ctrl: true,
+            ..crate::input::Modifiers::none()
+        };
+        let mut excel = Excel::default();
+        let mut step = |focus: &FocusEvent, key: Option<(Key, crate::input::Modifiers)>| {
+            let mut mode = crate::engine::AppMode::NativeControl;
+            let (mut title, mut kind) = (None, None);
+            let mut cx = AppContext {
+                app_mode: &mut mode,
+                window_title: &mut title,
+                window_kind: &mut kind,
+                selecting: false,
+                alt_held: false,
+                letter_key: false,
+                escape_key: false,
+                key,
+                ask_view: false,
+                ask_sheet: false,
+                repeat: false,
+                office_menu_closed: false,
+                sheet_titles: Some(titles),
+            };
+            let _ = excel.focus(focus, &mut cx);
+            cx.ask_sheet
+        };
+        step(&cell("A1", "Branch"), None);
+        assert!(step(&cell("C4", "14"), Some((Key::End, ctrl))));
+        let place = crate::event::SheetPlace {
+            address: "C4".into(),
+            column: vec!["Weekends".into(), "8".into(), "6".into(), "14".into()],
+            column_at: 3,
+            row: vec!["Total".into(), "22".into(), "14".into()],
+            row_at: 2,
+            ..crate::event::SheetPlace::default()
+        };
+        assert_eq!(
+            excel.sheet_place(Some(&place)).as_deref(),
+            Some("Last Cell\nWeekends\n14\nC 4")
+        );
     }
 
     /// A workbook whose name "Title" sits on A1: its titles, not known before, come with the
