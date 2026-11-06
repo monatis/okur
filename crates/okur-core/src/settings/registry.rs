@@ -565,6 +565,8 @@ pub static SETTINGS: &[SettingSpec] = &[
             Kind::Choice(choices::<WebVerbosity>),
         )
     },
+    // Configure Web Verbosity Levels' choices, read with the level above.
+    spec("web_structures", Group::Reading, None, Kind::Structured),
     SettingSpec {
         jaws: default_jcf("HTML", "SayAllOnDocumentLoad", |v| {
             Value::Bool(v.trim() != "0")
@@ -905,10 +907,15 @@ fn import_output_modes(lookup: JawsLookup<'_>, settings: &mut Settings) {
 fn import_web_verbosity(lookup: JawsLookup<'_>, settings: &mut Settings) {
     const SECTION: &str = "VirtualCursorVerbosity";
     const KEY: &str = "VirtualCursorVerbosityLevel";
-    settings.web_verbosity = lookup(JawsFile::Application, SECTION, KEY)
-        .or_else(|| lookup(JawsFile::DefaultJcf, SECTION, KEY))
+    let read = |key: &str| {
+        lookup(JawsFile::Application, SECTION, key)
+            .or_else(|| lookup(JawsFile::DefaultJcf, SECTION, key))
+    };
+    settings.web_verbosity = read(KEY)
         .map(|v| WebVerbosity::from_jcf(&v))
         .unwrap_or_default();
+    // Configure Web Verbosity Levels' choices, "BannerRegion=1|0|0".
+    settings.web_structures = super::WebStructureChange::from_jaws(&read);
 }
 
 /// The key labels `DEFAULT.JCF`'s `[KeyLabels]` changes: each key the table lists, its value

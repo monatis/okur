@@ -914,7 +914,9 @@ impl ScreenReaderEngine {
             ),
             (
                 crate::linearize::WEB_VERBOSITY,
-                self.settings.web_verbosity.mark().map(str::to_owned),
+                self.settings
+                    .web_verbosity
+                    .mark(&self.settings.web_structures),
             ),
         ])
     }

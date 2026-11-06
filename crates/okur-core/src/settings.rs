@@ -361,23 +361,152 @@ impl WebVerbosity {
         }
     }
 
-    /// The level's name in a page's reading mark, none for High: every page built before the
-    /// setting was read at High, as the corpus was recorded.
-    pub fn mark(self) -> Option<&'static str> {
-        match self {
-            Self::High => None,
-            Self::Medium => Some("medium"),
-            Self::Low => Some("low"),
-        }
+    /// The structures whose start and end this level leaves out, with the user's `changes`
+    /// (Configure Web Verbosity Levels) over its defaults.
+    pub fn left_out(self, changes: &[WebStructureChange]) -> Vec<WebStructure> {
+        WebStructure::ALL
+            .into_iter()
+            .filter(|&structure| {
+                let changed = changes.iter().find(|c| c.key == structure.key());
+                let on = match (self, changed) {
+                    (Self::High, Some(c)) => c.high,
+                    (Self::Medium, Some(c)) => c.medium,
+                    (Self::Low, Some(c)) => c.low,
+                    (_, None) => self.announces(structure),
+                };
+                !on
+            })
+            .collect()
     }
 
-    /// The level a page's reading mark names.
-    pub fn from_mark(mark: Option<&str>) -> Self {
+    /// A page's reading mark for this level and `changes`: the keys of the structures left
+    /// out, none where they are High's own (every page built before the setting was read at
+    /// High, as the corpus was recorded).
+    pub fn mark(self, changes: &[WebStructureChange]) -> Option<String> {
+        let left_out = self.left_out(changes);
+        (left_out != Self::High.left_out(&[])).then(|| {
+            left_out
+                .iter()
+                .map(|s| s.key())
+                .collect::<Vec<_>>()
+                .join(",")
+        })
+    }
+
+    /// The structures a page's reading mark leaves out.
+    pub fn left_out_by_mark(mark: Option<&str>) -> Vec<WebStructure> {
         match mark {
-            Some("medium") => Self::Medium,
-            Some("low") => Self::Low,
-            _ => Self::High,
+            None => Self::High.left_out(&[]),
+            Some(keys) => keys
+                .split(',')
+                .filter_map(|key| WebStructure::ALL.into_iter().find(|s| s.key() == key))
+                .collect(),
         }
+    }
+}
+
+impl WebStructure {
+    /// Every structure, in Configure Web Verbosity Levels' order.
+    pub const ALL: [WebStructure; 27] = [
+        Self::BlockQuotation,
+        Self::ClickableElements,
+        Self::DescribedBy,
+        Self::Description,
+        Self::EditableSection,
+        Self::Feed,
+        Self::Figure,
+        Self::FlashObject,
+        Self::Frame,
+        Self::GroupBox,
+        Self::List,
+        Self::Log,
+        Self::Note,
+        Self::ApplicationRegion,
+        Self::Article,
+        Self::Banner,
+        Self::Complementary,
+        Self::ContentInformation,
+        Self::Document,
+        Self::Form,
+        Self::Main,
+        Self::Navigation,
+        Self::Region,
+        Self::Search,
+        Self::TabPanel,
+        Self::TableOrGrid,
+        Self::Toolbar,
+    ];
+
+    /// Its key in a settings file's `[VirtualCursorVerbosity]` section, "BannerRegion=1|0|0"
+    /// (High|Medium|Low).
+    pub fn key(self) -> &'static str {
+        match self {
+            Self::BlockQuotation => "BlockQuotation",
+            Self::ClickableElements => "ClickableElements",
+            Self::DescribedBy => "DescribedBy",
+            Self::Description => "ElementDescription",
+            Self::EditableSection => "EditableSection",
+            Self::Feed => "Feed",
+            Self::Figure => "Figure",
+            Self::FlashObject => "FlashObject",
+            Self::Frame => "Frame",
+            Self::GroupBox => "GroupBox",
+            Self::List => "List",
+            Self::Log => "Log",
+            Self::Note => "Note",
+            Self::ApplicationRegion => "ApplicationRegion",
+            Self::Article => "ArticleRegion",
+            Self::Banner => "BannerRegion",
+            Self::Complementary => "ComplementaryRegion",
+            Self::ContentInformation => "ContentInfoRegion",
+            Self::Document => "DocumentRegion",
+            Self::Form => "FormRegion",
+            Self::Main => "MainRegion",
+            Self::Navigation => "NavigationRegion",
+            Self::Region => "Region",
+            Self::Search => "SearchRegion",
+            Self::TabPanel => "TabPanel",
+            Self::TableOrGrid => "TableOrGrid",
+            Self::Toolbar => "Toolbar",
+        }
+    }
+}
+
+/// A structure whose start and end a level says otherwise than JAWS's default: Configure Web
+/// Verbosity Levels' choice, kept as JAWS keeps it, `[VirtualCursorVerbosity]
+/// ApplicationRegion=0|1|0` (High|Medium|Low) [obs, web-verbosity-store-probe.ps1].
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct WebStructureChange {
+    /// The structure's key ([`WebStructure::key`]).
+    pub key: String,
+    pub high: bool,
+    pub medium: bool,
+    pub low: bool,
+}
+
+impl WebStructureChange {
+    /// The changes a settings file's values give, "1|0|0" for each structure's key, where
+    /// they differ from the defaults; `lookup` gives a key's value.
+    pub fn from_jaws(lookup: &dyn Fn(&str) -> Option<String>) -> Vec<Self> {
+        WebStructure::ALL
+            .into_iter()
+            .filter_map(|structure| {
+                let value = lookup(structure.key())?;
+                let mut on = value.split('|').map(|v| v.trim() != "0");
+                let (high, medium, low) = (on.next()?, on.next()?, on.next()?);
+                let default = (
+                    WebVerbosity::High.announces(structure),
+                    WebVerbosity::Medium.announces(structure),
+                    WebVerbosity::Low.announces(structure),
+                );
+                ((high, medium, low) != default).then(|| Self {
+                    key: structure.key().to_owned(),
+                    high,
+                    medium,
+                    low,
+                })
+            })
+            .collect()
     }
 }
 
@@ -1254,6 +1383,9 @@ pub struct Settings {
     pub heading_indication: HeadingIndication,
     /// How much of a page's structure the virtual cursor says: JAWS's Web Verbosity Level.
     pub web_verbosity: WebVerbosity,
+    /// The structures a level says otherwise than its default (Configure Web Verbosity
+    /// Levels).
+    pub web_structures: Vec<WebStructureChange>,
     /// A page is read from its top once it loads, after its title and summary: JAWS's
     /// "Document and Web Pages Automatically Read When Loaded" (Settings Center, Web/HTML/PDFs,
     /// Reading; `[HTML] SayAllOnDocumentLoad`), on in JAWS 2025. Off, the title and the
@@ -1334,6 +1466,7 @@ impl Default for Settings {
             show_graphics: true,
             heading_indication: HeadingIndication::Level,
             web_verbosity: WebVerbosity::default(),
+            web_structures: Vec::new(),
             read_page_on_load: true,
             indentation: false,
             screen_echo: ScreenEcho::default(),
@@ -1483,6 +1616,7 @@ impl Settings {
             heading_indication: HeadingIndication::Level,
             // Old-pc's Chrome reads at High (its Chrome.JCF), as the web corpus was recorded.
             web_verbosity: WebVerbosity::High,
+            web_structures: Vec::new(),
             read_page_on_load: true,
             indentation: false,
             screen_echo: ScreenEcho::default(),

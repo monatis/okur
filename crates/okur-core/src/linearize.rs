@@ -379,8 +379,8 @@ struct Builder<'a> {
     /// Graphics are read; off, left out of the page ([`NO_GRAPHICS`]).
     graphics: bool,
     headings: crate::settings::HeadingIndication,
-    /// Which structures' starts and ends are said ([`WEB_VERBOSITY`]).
-    web_verbosity: crate::settings::WebVerbosity,
+    /// The structures whose starts and ends are left out ([`WEB_VERBOSITY`]).
+    web_left_out: Vec<WebStructure>,
     /// Marks said at the start of the next line: the "end Deletion" of deleted text that
     /// ended its line.
     pending_marks: Vec<String>,
@@ -399,8 +399,9 @@ pub const NO_GRAPHICS: &str = "okur_no_graphics";
 /// ("text" or "heading", [`crate::settings::HeadingIndication`]'s names) [obs, 730, 731].
 pub const HEADING_INDICATION: &str = "okur_heading_indication";
 
-/// The page's attribute that says how much of its structure is said, when not High's:
-/// "medium" or "low" ([`crate::settings::WebVerbosity`]; JAWS's Web Verbosity Level). Set as
+/// The page's attribute that says which structures' starts and ends are left out, when not
+/// High's own: their keys, "BannerRegion,FormRegion", from the level and its choices
+/// ([`crate::settings::WebVerbosity::mark`]; JAWS's Web Verbosity Level). Set as
 /// [`PLAIN_SAME_PAGE_LINKS`] is.
 pub const WEB_VERBOSITY: &str = "okur_web_verbosity";
 
@@ -431,7 +432,7 @@ impl<'a> Builder<'a> {
             same_page_links: true,
             graphics: true,
             headings: crate::settings::HeadingIndication::Level,
-            web_verbosity: crate::settings::WebVerbosity::High,
+            web_left_out: crate::settings::WebVerbosity::left_out_by_mark(None),
             pending_marks: Vec::new(),
         }
     }
@@ -621,7 +622,7 @@ impl<'a> Builder<'a> {
 
     /// Whether the start and end of `structure` are said at the page's Web Verbosity Level.
     fn announces(&self, structure: WebStructure) -> bool {
-        self.web_verbosity.announces(structure)
+        !self.web_left_out.contains(&structure)
     }
 
     fn classify(&self, node: &AomNode, parent: Option<&AomNode>) -> Class {
@@ -1938,7 +1939,8 @@ fn visit_page(root: &AomNode) -> (VirtualBuffer, Vec<(usize, &'static str, Strin
     builder.same_page_links = attr(root, PLAIN_SAME_PAGE_LINKS).is_none();
     builder.graphics = attr(root, NO_GRAPHICS).is_none();
     builder.headings = heading_indication_of(root);
-    builder.web_verbosity = crate::settings::WebVerbosity::from_mark(attr(root, WEB_VERBOSITY));
+    builder.web_left_out =
+        crate::settings::WebVerbosity::left_out_by_mark(attr(root, WEB_VERBOSITY));
     builder.buffer.root_id = Some(root.id);
     builder.buffer.mark_readable(root.id);
 
@@ -2503,7 +2505,8 @@ mod tests {
         let high = page(None);
         assert!(high.iter().any(|l| l == "banner"), "{high:?}");
         assert!(high.iter().any(|l| l == "block quote"), "{high:?}");
-        let medium = page(Some("medium"));
+        let mark = |level: crate::settings::WebVerbosity| level.mark(&[]);
+        let medium = page(mark(crate::settings::WebVerbosity::Medium).as_deref());
         assert!(!medium.iter().any(|l| l.contains("banner")), "{medium:?}");
         assert!(
             medium.iter().any(|l| l.contains("navigation region")),
@@ -2515,7 +2518,30 @@ mod tests {
             "{medium:?}"
         );
         assert!(medium.iter().any(|l| l == "Masthead"), "{medium:?}");
-        let low = page(Some("low"));
+        // Configure Web Verbosity Levels: the banner turned on at Medium, as JAWS keeps it
+        // ("BannerRegion=1|1|0").
+        let changes = crate::settings::WebStructureChange::from_jaws(&|key: &str| {
+            (key == "BannerRegion").then(|| "1|1|0".to_owned())
+        });
+        assert_eq!(changes.len(), 1);
+        let banner = page(
+            crate::settings::WebVerbosity::Medium
+                .mark(&changes)
+                .as_deref(),
+        );
+        assert!(banner.iter().any(|l| l == "banner"), "{banner:?}");
+        assert!(
+            !banner.iter().any(|l| l.contains("complementary")),
+            "{banner:?}"
+        );
+        // As the default, no change is kept.
+        assert!(
+            crate::settings::WebStructureChange::from_jaws(&|key: &str| {
+                (key == "BannerRegion").then(|| "1|0|0".to_owned())
+            })
+            .is_empty()
+        );
+        let low = page(mark(crate::settings::WebVerbosity::Low).as_deref());
         assert!(
             !low.iter()
                 .any(|l| l.contains("region") || l.contains("quote")),
