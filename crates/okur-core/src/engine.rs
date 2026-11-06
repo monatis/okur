@@ -1066,9 +1066,9 @@ impl ScreenReaderEngine {
             self.speech.speak(&said, true);
             return Some(said);
         }
-        // Delete's emptied cell is not named the active cell [obs, 1123/s7].
-        let deleted = self.last_key == Some((Key::Delete, crate::input::Modifiers::none()));
-        let said = crate::apps::windows::excel::blank_or_cell(place, !deleted)?;
+        // Delete's emptied cell is not named the active cell [obs, 1123/s7]; a screen's move
+        // says so first [obs, 1185/s14].
+        let said = crate::apps::windows::excel::blank_or_cell(place, self.last_key)?;
         self.speech.speak(&said, true);
         Some(said)
     }
@@ -1638,6 +1638,14 @@ impl ScreenReaderEngine {
             {
                 return KeyAction::Consume;
             }
+            // Excel's entry keys in a sheet say what they do as they go on to Excel: AutoSum's
+            // prompt, "Inserted date", "Inserted time" [obs, 1185/s6, s10, s12].
+            if let Some(said) =
+                crate::spreadsheet::entry_key_said(event).filter(|_| self.sheet_focus().is_some())
+            {
+                self.speech.speak(&said, true);
+                return KeyAction::PassThrough;
+            }
             // Windows+Semicolon in Word's document: Items to Display in Virtual Viewer [obs,
             // 1094/s1]; elsewhere the key is Windows'.
             if event.key == Key::Semicolon
@@ -2080,6 +2088,24 @@ impl ScreenReaderEngine {
                             self.region_edge = Some((target, words.to_string()));
                         }
                         None
+                    }
+                    // A cell's appearance in detail, in the Virtual Viewer [obs, 1186/s2].
+                    SheetAsk::Reading(crate::spreadsheet::SheetReading::Appearance)
+                        if self.viewer.is_none()
+                            && place
+                                .as_ref()
+                                .and_then(crate::spreadsheet::appearance_lines)
+                                .is_some() =>
+                    {
+                        let lines = place
+                            .as_ref()
+                            .and_then(crate::spreadsheet::appearance_lines)?;
+                        let viewer = crate::viewer::VirtualViewer::message(lines);
+                        let said = viewer.message_speech();
+                        self.viewer = Some(viewer);
+                        self.show_viewer_window();
+                        self.speech.speak(&said, true);
+                        Some(said)
                     }
                     SheetAsk::Reading(reading) => {
                         let said = reading.said(place.as_ref()?)?;

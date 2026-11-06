@@ -571,6 +571,7 @@ command-pass-key-through = The next key you press goes to the application instea
 command-say-window = Reads the dialog box in front.
 # SayCurrentFocus (Insert+Tab).
 command-say-current-focus = Says what has the focus.
+command-say-current-focus-in-detail = In a spreadsheet, shows the cell's appearance in detail in the Virtual Viewer.
 # SayWindowTitle (Insert+T).
 command-say-window-title = Says the title of the window in front.
 # SaySystemTime (Insert+F12).

@@ -64,6 +64,26 @@ fn details_said(reading: SheetReading, details: &crate::event::SheetDetails) -> 
     })
 }
 
+/// What JAWS says of Excel's entry keys as they go on to Excel: AutoSum's prompt (Alt+Equals),
+/// "Inserted date" (Ctrl+Semicolon), "Inserted time" (Ctrl+Shift+Semicolon) [obs, 1185/s6, s10,
+/// s12]; `None` for any other key.
+pub(crate) fn entry_key_said(event: &crate::input::KeyEvent) -> Option<String> {
+    let m = &event.modifiers;
+    if m.insert || m.win {
+        return None;
+    }
+    Some(match (event.key, m.ctrl, m.alt, m.shift) {
+        (Key::Equals, false, true, false) => format!(
+            "{}\n{}",
+            msg::excel_autosum_range(),
+            msg::excel_autosum_default()
+        ),
+        (Key::Semicolon, true, false, false) => msg::excel_inserted_date().to_string(),
+        (Key::Semicolon, true, false, true) => msg::excel_inserted_time().to_string(),
+        _ => return None,
+    })
+}
+
 /// A workbook's titles, as Insert+Ctrl+Alt+C and R set them: the row holding the column titles
 /// and the column holding the row titles, each from 1 [obs, 1132/s1, s2].
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
@@ -173,6 +193,13 @@ pub(crate) enum SheetReading {
     /// Insert+C where the grid has the focus, an empty cell: the active cell's coordinates,
     /// "D 1" [obs, 1123/s3].
     Cell,
+    /// Say Current Focus (Insert+Tab) in a sheet: the worksheet's name, the active cell's text
+    /// or "blank", then its coordinates, "Hours | blank | C 5" [obs, 1185/s16].
+    Focus,
+    /// Say Current Focus twice quickly in a sheet: the cell's appearance in detail in the
+    /// Virtual Viewer ([`appearance_lines`]), an empty cell's "blank" alone [obs, 1185/s16,
+    /// 1186/s2].
+    Appearance,
     /// Say Column Title and Say Row Title: the active cell's column's title, in the row given,
     /// "Weekends"; its row's, in the column given, "Northside" [obs, 1132/s7, s8].
     ColumnTitle(u32),
@@ -220,10 +247,10 @@ impl SheetReading {
             | Self::Column
             | Self::ColumnFromTop
             | Self::ColumnToBottom => SheetCells::Lines,
-            Self::Cell => SheetCells::Around(Some((None, None))),
+            Self::Cell | Self::Focus => SheetCells::Around(Some((None, None))),
             Self::ColumnTitle(row) => SheetCells::Around(Some((Some(row), None))),
             Self::RowTitle(column) => SheetCells::Around(Some((None, Some(column)))),
-            Self::Format => SheetCells::Format,
+            Self::Format | Self::Appearance => SheetCells::Format,
             Self::ColumnTotal | Self::RowTotal => SheetCells::Sums,
             Self::Monitor(range) => SheetCells::Range(range),
             Self::VisibleRange
@@ -287,9 +314,26 @@ impl SheetReading {
     pub(crate) fn said(self, place: &crate::event::SheetPlace) -> Option<String> {
         match self {
             Self::Cell => return coordinates(&place.address),
+            Self::Focus => {
+                let text = place
+                    .row
+                    .get(place.row_at)
+                    .map(|text| text.trim())
+                    .filter(|text| !text.is_empty())
+                    .map_or_else(|| msg::blank().to_string(), str::to_owned);
+                let at = coordinates(&place.address)?;
+                return Some(format!("{}\n{text}\n{at}", place.sheet.trim()));
+            }
             Self::ColumnTitle(row) => return titles_of(place, Some(row), None).pop(),
             Self::RowTitle(column) => return titles_of(place, None, Some(column)).pop(),
             Self::Format => return place.format.as_ref().map(format_said),
+            // A cell with text shows its appearance in the Virtual Viewer, which the engine
+            // opens; an empty one is "blank" [obs, 1185/s16].
+            Self::Appearance => {
+                return appearance_lines(place)
+                    .is_none()
+                    .then(|| msg::blank().to_string())
+            }
             Self::ColumnTotal => {
                 return Some(match place.column_sum.as_deref() {
                     Some(total) => msg::excel_column_total(total).render(),
@@ -323,6 +367,8 @@ impl SheetReading {
             Self::RowFromStart | Self::ColumnFromTop => cells.get(..=at).unwrap_or(cells),
             Self::RowToEnd | Self::ColumnToBottom => cells.get(at..).unwrap_or_default(),
             Self::Cell
+            | Self::Focus
+            | Self::Appearance
             | Self::ColumnTitle(_)
             | Self::RowTitle(_)
             | Self::Format
@@ -369,6 +415,8 @@ impl SelectionKey {
             // The data region selected, said as a range, "select | A 1 | Branch | C 4 | 14"
             // [obs, 1184/s12].
             (Key::Space, true, true) => Some(Self::Extend),
+            // Select All, the data region first, said the same way [obs, 1186/s18].
+            (Key::Alpha('A'), false, true) => Some(Self::Extend),
             (Key::Backspace, true, false) => Some(Self::Collapse),
             (
                 Key::LeftArrow
@@ -568,28 +616,10 @@ pub(crate) fn reference_end(end: &str) -> Option<(Option<u32>, Option<u32>)> {
 /// format is general. | Normal | Cell dimensions are 48 points wide by 14 points high." [obs,
 /// 1133/s4]. A cell without fill is white, as Excel shows it.
 pub(crate) fn format_said(format: &crate::event::SheetFormat) -> String {
-    use crate::color::{name_of, Rgb};
-    // The color table's name, capitalized as JAWS says it here, "Black" [obs, 1133/s4].
-    let color = |rgb: Rgb| {
-        let name = name_of(rgb).unwrap_or_default();
-        let mut chars = name.chars();
-        chars
-            .next()
-            .map(|first| first.to_uppercase().chain(chars).collect::<String>())
-            .unwrap_or_default()
-    };
-    // A size in points: whole, or with its fraction ("10.5").
-    let points = |hundredths: u32| {
-        if hundredths.is_multiple_of(100) {
-            (hundredths / 100).to_string()
-        } else {
-            (f64::from(hundredths) / 100.0).to_string()
-        }
-    };
     let mut lines = vec![
         msg::excel_cell_format().to_string(),
-        msg::excel_text_color(color(format.color.unwrap_or(Rgb::new(0, 0, 0)))).render(),
-        msg::excel_background_color(color(format.fill.unwrap_or(Rgb::new(255, 255, 255)))).render(),
+        msg::excel_text_color(text_color(format)).render(),
+        msg::excel_background_color(fill_color(format)).render(),
     ];
     lines.extend(
         [&format.font, &format.style]
@@ -619,6 +649,77 @@ pub(crate) fn format_said(format: &crate::event::SheetFormat) -> String {
         .render(),
     );
     lines.join("\n")
+}
+
+/// The cell's appearance in detail, which Say Current Focus pressed twice quickly shows in the
+/// Virtual Viewer: "Description of cell: | Cell Font and Formatting: | Calibri | Regular | 11
+/// point | cell font text color Black | cell font background color White | vertical alignment
+/// | horizontal alignment | format general | Normal style | Press ESCAPE to close this
+/// message." [obs, 1186/s2, s7, s11]. Excel's own alignments, General across and Bottom down,
+/// are left unnamed as there; another is named as Insert+F names it [hyp: none recorded].
+/// `None` for an empty cell, which JAWS says "blank" of instead [obs, 1185/s16], or without
+/// the format read.
+pub(crate) fn appearance_lines(place: &crate::event::SheetPlace) -> Option<Vec<String>> {
+    let text = place.row.get(place.row_at).map(|t| t.trim());
+    if text.is_none_or(str::is_empty) {
+        return None;
+    }
+    let format = place.format.as_ref()?;
+    let mut lines = vec![
+        msg::excel_cell_description().to_string(),
+        msg::excel_cell_format().to_string(),
+    ];
+    lines.extend(
+        [&format.font, &format.style]
+            .into_iter()
+            .filter(|text| !text.is_empty())
+            .cloned(),
+    );
+    lines.push(msg::font_size(points(format.size)).render());
+    lines.push(msg::excel_cell_font_color(text_color(format)).render());
+    lines.push(msg::excel_cell_font_background(fill_color(format)).render());
+    let vertical = vertical_alignment(format.vertical).filter(|_| format.vertical != -4107);
+    let horizontal = horizontal_alignment(format.horizontal).filter(|_| format.horizontal != 1);
+    lines.push(msg::excel_cell_vertical_alignment(vertical.unwrap_or_default()).render());
+    lines.push(msg::excel_cell_horizontal_alignment(horizontal.unwrap_or_default()).render());
+    if !format.number_format.is_empty() {
+        lines.push(msg::excel_cell_number_format(format.number_format.to_lowercase()).render());
+    }
+    if !format.cell_style.is_empty() {
+        lines.push(msg::excel_cell_style(format.cell_style.as_str()).render());
+    }
+    lines.push(msg::viewer_close_hint().to_string());
+    Some(lines)
+}
+
+/// A color by the color table's name, capitalized as JAWS says it in Excel, "Black" [obs,
+/// 1133/s4].
+fn color_name(rgb: crate::color::Rgb) -> String {
+    let name = crate::color::name_of(rgb).unwrap_or_default();
+    let mut chars = name.chars();
+    chars
+        .next()
+        .map(|first| first.to_uppercase().chain(chars).collect::<String>())
+        .unwrap_or_default()
+}
+
+/// The cell's text color, black where Excel gives none.
+fn text_color(format: &crate::event::SheetFormat) -> String {
+    color_name(format.color.unwrap_or(crate::color::Rgb::new(0, 0, 0)))
+}
+
+/// The cell's fill, white where it has none, as Excel shows it.
+fn fill_color(format: &crate::event::SheetFormat) -> String {
+    color_name(format.fill.unwrap_or(crate::color::Rgb::new(255, 255, 255)))
+}
+
+/// A font size in hundredths of a point said in points: whole, or with its fraction ("10.5").
+fn points(hundredths: u32) -> String {
+    if hundredths.is_multiple_of(100) {
+        (hundredths / 100).to_string()
+    } else {
+        (f64::from(hundredths) / 100.0).to_string()
+    }
 }
 
 /// Excel's horizontal alignment (`XlHAlign`) by its name.
@@ -827,6 +928,101 @@ pub(crate) fn coordinates(reference: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// Insert+Tab in a sheet: the worksheet, the cell's text or "blank", its coordinates [obs,
+    /// 1185/s16]; Excel's entry keys say what they do [obs, 1185/s6, s10, s12].
+    #[test]
+    fn a_sheets_focus_and_its_entry_keys() {
+        use crate::input::{KeyEvent, Modifiers};
+        let mut place = crate::event::SheetPlace {
+            address: "C5".into(),
+            sheet: "Hours".into(),
+            selection: "C5".into(),
+            row: vec![String::new()],
+            column: vec![String::new()],
+            ..crate::event::SheetPlace::default()
+        };
+        assert_eq!(
+            SheetReading::Focus.said(&place).as_deref(),
+            Some("Hours\nblank\nC 5")
+        );
+        place.address = "B2".into();
+        place.row = vec!["12".into()];
+        assert_eq!(
+            SheetReading::Focus.said(&place).as_deref(),
+            Some("Hours\n12\nB 2")
+        );
+        let key =
+            |key: Key, modifiers: Modifiers| entry_key_said(&KeyEvent::new(key, modifiers, true));
+        let (alt, ctrl) = (
+            Modifiers {
+                alt: true,
+                ..Modifiers::none()
+            },
+            Modifiers {
+                ctrl: true,
+                ..Modifiers::none()
+            },
+        );
+        assert_eq!(
+            key(Key::Equals, alt).as_deref(),
+            Some("Type in the range to Sum using colon to separate or\nPress enter to accept default range")
+        );
+        assert_eq!(key(Key::Semicolon, ctrl).as_deref(), Some("Inserted date"));
+        let ctrl_shift = Modifiers {
+            shift: true,
+            ..ctrl
+        };
+        assert_eq!(
+            key(Key::Semicolon, ctrl_shift).as_deref(),
+            Some("Inserted time")
+        );
+        assert_eq!(key(Key::Equals, Modifiers::none()), None);
+        assert_eq!(key(Key::Semicolon, Modifiers::none()), None);
+    }
+
+    /// Insert+Tab twice quickly: a cell with text shows its appearance, Excel's own alignments
+    /// unnamed [obs, 1186/s2]; an empty cell is "blank" [obs, 1185/s16].
+    #[test]
+    fn a_cells_appearance_in_detail() {
+        let format = crate::event::SheetFormat {
+            font: "Calibri".into(),
+            style: "Regular".into(),
+            size: 1100,
+            color: None,
+            fill: None,
+            horizontal: 1,
+            vertical: -4107,
+            number_format: "General".into(),
+            cell_style: "Normal".into(),
+            width: 4800,
+            height: 1440,
+        };
+        let mut place = crate::event::SheetPlace {
+            address: "A1".into(),
+            row: vec!["Branch".into()],
+            format: Some(format),
+            ..crate::event::SheetPlace::default()
+        };
+        assert_eq!(
+            appearance_lines(&place)
+                .map(|lines| lines.join("\n"))
+                .as_deref(),
+            Some(
+                "Description of cell:\nCell Font and Formatting:\nCalibri\nRegular\n11 point\n\
+                 cell font text color Black\ncell font background color White\nvertical \
+                 alignment \nhorizontal alignment \nformat general\nNormal style\nPress ESCAPE \
+                 to close this message."
+            )
+        );
+        assert_eq!(SheetReading::Appearance.said(&place), None);
+        place.row = vec![String::new()];
+        assert_eq!(appearance_lines(&place), None);
+        assert_eq!(
+            SheetReading::Appearance.said(&place).as_deref(),
+            Some("blank")
+        );
+    }
 
     /// The row and column readers from B3 of 1114's sheet [obs, 1114/s4-s9].
     #[test]

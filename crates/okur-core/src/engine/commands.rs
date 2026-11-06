@@ -125,6 +125,21 @@ impl ScreenReaderEngine {
             // In a menu, its item (JAWS in Google Docs' menu: "menu | Accessibility | 10 of 10";
             // the position is not known here).
             // A page's menu item is said as the page's focus, its menu named (below).
+            // In Excel's sheet, the worksheet, the cell's text and its coordinates, "Hours |
+            // blank | C 5" [obs, 1185/s16], once Excel tells them.
+            Command::SayCurrentFocus
+                if self.sheet_information(crate::spreadsheet::SheetReading::Focus) =>
+            {
+                return None
+            }
+            // Twice quickly, the cell's appearance in detail [obs, 1186/s2]; elsewhere, the
+            // focus as once.
+            Command::SayCurrentFocusInDetail => {
+                if self.sheet_information(crate::spreadsheet::SheetReading::Appearance) {
+                    return None;
+                }
+                return self.execute(Command::SayCurrentFocus);
+            }
             Command::SayCurrentFocus
                 if self.menus.current().is_some()
                     && !(self.menus.on_page() && self.app_mode == AppMode::VirtualBuffer) =>
@@ -1289,7 +1304,7 @@ impl ScreenReaderEngine {
     /// An Okur key command (Insert+…). In a text field the reading commands read the field;
     /// elsewhere they run as virtual cursor or application commands.
     /// The focus, where it is in one of Excel's sheets (a cell, or the grid of an empty one).
-    fn sheet_focus(&self) -> Option<crate::event::FocusEvent> {
+    pub(super) fn sheet_focus(&self) -> Option<crate::event::FocusEvent> {
         self.last_native_focus.clone().filter(Self::is_sheet)
     }
 
@@ -2386,9 +2401,13 @@ impl ScreenReaderEngine {
             // In a page, the virtual cursor's line [obs, 209/s11].
             Some(self.cursor.current_line())
         } else {
-            self.last_native_focus
-                .as_ref()
-                .map(crate::native_focus::after_viewer_line)
+            // An application's focus as it says it again: Excel's cell, "Branch | A 1" [obs,
+            // 1186/s3].
+            self.last_native_focus.as_ref().map(|focus| {
+                self.app_for(focus)
+                    .and_then(|app| app.focus_again(focus))
+                    .unwrap_or_else(|| crate::native_focus::after_viewer_line(focus))
+            })
         };
         if let Some(speech) = speech.filter(|s| !s.is_empty()) {
             self.speech.speak(&speech, true);

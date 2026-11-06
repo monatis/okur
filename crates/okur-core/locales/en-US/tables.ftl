@@ -195,6 +195,15 @@ word-no-note-at-cursor = No footnote or EndNote reference at cursor.
 # [obs, 1115/s1-s6].
 excel-last-cell = Last Cell
 excel-first-cell = First cell
+# Alt+PageDown and Alt+PageUp, before the cell they reach [obs, 1185/s14, s15].
+excel-moved-right-screen = Moved right one screen
+excel-moved-left-screen = Moved left one screen
+# Excel's entry keys as they go to Excel: AutoSum (Alt+Equals), its prompt in two lines; the date
+# stamp (Ctrl+Semicolon) and the time stamp (Ctrl+Shift+Semicolon) [obs, 1185/s6, s10, s12].
+excel-autosum-range = Type in the range to Sum using colon to separate or
+excel-autosum-default = Press enter to accept default range
+excel-inserted-date = Inserted date
+excel-inserted-time = Inserted time
 excel-data-region-edge = edge of current data region
 # A Ctrl arrow from an empty cell into data [obs, 1118/s5].
 excel-data-region-start = start of new Data Region
@@ -226,6 +235,15 @@ excel-horizontal-alignment = Horizontal alignment is { $alignment }.
 excel-vertical-alignment = Vertical alignment is { $alignment }.
 excel-number-format = Number format is { $format }.
 excel-cell-dimensions = Cell dimensions are { $width } points wide by { $height } points high.
+# Insert+Tab twice quickly in a sheet: the cell's appearance in the Virtual Viewer, after
+# "Cell Font and Formatting:" and the font; Excel's own alignments are left empty [obs, 1186/s2].
+excel-cell-description = Description of cell:
+excel-cell-font-color = cell font text color { $color }
+excel-cell-font-background = cell font background color { $color }
+excel-cell-vertical-alignment = vertical alignment { $alignment }
+excel-cell-horizontal-alignment = horizontal alignment { $alignment }
+excel-cell-number-format = format { $format }
+excel-cell-style = { $style } style
 # Excel's alignments by their names in its Format Cells dialog; General and Bottom [obs,
 # 1133/s4], the others [hyp: not recorded].
 excel-align-general = General

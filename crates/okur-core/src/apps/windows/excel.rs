@@ -170,13 +170,7 @@ impl AppModule for Excel {
             .map(|(_, m)| m.ctrl && !m.shift && !m.alt && !m.insert && !m.win)
             .unwrap_or(false);
         let key = cx.key.map(|(k, _)| k).filter(|_| ctrl);
-        match key {
-            Some(Key::End) => first.push(msg::excel_last_cell().to_string()),
-            Some(Key::Home) => first.push(msg::excel_first_cell().to_string()),
-            // Undo said before the cell it gives back, "Undo | 7 | D 1" [obs, 1123/s8].
-            Some(Key::Alpha('Z')) => first.push(msg::edit_undo().to_string()),
-            _ => {}
-        }
+        first.extend(key_words(cx.key));
         // An empty cell by its coordinates alone [hyp: no empty cell recorded yet].
         if !value.is_empty() {
             lines.push(value.to_owned());
@@ -216,6 +210,25 @@ impl AppModule for Excel {
     }
 }
 
+/// What a key says before the cell it reaches: Ctrl+End's "Last Cell" and Ctrl+Home's "First
+/// cell" [obs, 1115/s1-s6], Ctrl+Z's "Undo", before the cell it gives back [obs, 1123/s8],
+/// Alt+PageDown's "Moved right one screen" and Alt+PageUp's "Moved left one screen" [obs,
+/// 1185/s14, s15].
+fn key_words(key: Option<(Key, crate::input::Modifiers)>) -> Option<String> {
+    let (key, m) = key?;
+    if m.shift || m.insert || m.win || m.ctrl == m.alt {
+        return None;
+    }
+    Some(match (key, m.ctrl) {
+        (Key::End, true) => msg::excel_last_cell().to_string(),
+        (Key::Home, true) => msg::excel_first_cell().to_string(),
+        (Key::Alpha('Z'), true) => msg::edit_undo().to_string(),
+        (Key::PageDown, false) => msg::excel_moved_right_screen().to_string(),
+        (Key::PageUp, false) => msg::excel_moved_left_screen().to_string(),
+        _ => return None,
+    })
+}
+
 /// The cell `focus` is, as (column, row) from 1.
 pub(crate) fn cell_at(focus: &FocusEvent) -> Option<(u32, u32)> {
     cell(focus)?;
@@ -241,18 +254,21 @@ fn editor(focus: &FocusEvent) -> bool {
 /// The active cell read from Excel's object model, where the grid had no cell to focus: an
 /// empty one as JAWS says it, "blank | D 1 | Active Cell: D1" [obs, 1118/s3, s4], or without
 /// naming the active cell where Delete emptied it, "blank | D 1" [obs, 1123/s7]; one with a
-/// value as any cell. `None` without its reference.
+/// value as any cell; the words of the `key` that moved there first ([`key_words`]), "Moved
+/// right one screen | blank | Z 5 | Active Cell: Z5" [obs, 1185/s14]. `None` without its
+/// reference.
 pub(crate) fn blank_or_cell(
     place: &crate::event::SheetPlace,
-    names_active_cell: bool,
+    key: Option<(Key, crate::input::Modifiers)>,
 ) -> Option<String> {
     let at = coordinates(&place.address)?;
+    let names_active_cell = key != Some((Key::Delete, crate::input::Modifiers::none()));
     let value = place
         .row
         .get(place.row_at)
         .map(|v| v.trim())
         .unwrap_or_default();
-    Some(if value.is_empty() && names_active_cell {
+    let cell = if value.is_empty() && names_active_cell {
         format!(
             "{}\n{at}\n{}",
             msg::blank(),
@@ -262,6 +278,10 @@ pub(crate) fn blank_or_cell(
         format!("{}\n{at}", msg::blank())
     } else {
         format!("{value}\n{at}")
+    };
+    Some(match key_words(key) {
+        Some(words) => format!("{words}\n{cell}"),
+        None => cell,
     })
 }
 
@@ -278,6 +298,7 @@ pub(crate) fn cell(focus: &FocusEvent) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::input::Modifiers;
     use crate::spreadsheet::{SheetReading, TitleKey};
 
     /// "12 | B 2" for the cell B2 holding 12 [obs, 521/s3]; nothing of another window's.
@@ -377,10 +398,26 @@ mod tests {
             details: None,
         };
         assert_eq!(
-            blank_or_cell(&place, true).as_deref(),
+            blank_or_cell(&place, Some((Key::RightArrow, Modifiers::none()))).as_deref(),
             Some("blank\nD 1\nActive Cell: D1")
         );
-        assert_eq!(blank_or_cell(&place, false).as_deref(), Some("blank\nD 1"));
+        assert_eq!(
+            blank_or_cell(&place, Some((Key::Delete, Modifiers::none()))).as_deref(),
+            Some("blank\nD 1")
+        );
+        // A screen's move says so first [obs, 1185/s14, s15].
+        let alt = Modifiers {
+            alt: true,
+            ..Modifiers::none()
+        };
+        assert_eq!(
+            blank_or_cell(&place, Some((Key::PageDown, alt))).as_deref(),
+            Some("Moved right one screen\nblank\nD 1\nActive Cell: D1")
+        );
+        assert_eq!(
+            blank_or_cell(&place, Some((Key::PageUp, alt))).as_deref(),
+            Some("Moved left one screen\nblank\nD 1\nActive Cell: D1")
+        );
         assert_eq!(SheetReading::Cell.said(&place).as_deref(), Some("D 1"));
     }
 

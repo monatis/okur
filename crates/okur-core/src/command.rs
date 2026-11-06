@@ -344,6 +344,9 @@ pub enum Command {
     PassKeyThrough,
     SayWindow,
     SayCurrentFocus,
+    /// Say Current Focus pressed twice quickly: in Excel's sheet, the cell's appearance in detail
+    /// in the Virtual Viewer [obs, 1186/s2]; elsewhere, the focus as once.
+    SayCurrentFocusInDetail,
     SayWindowTitle,
     SaySystemTime,
     SaySystemTimeWithSeconds,
@@ -426,6 +429,7 @@ impl Command {
                 | SpellFromCursor
                 | SayCurrentCell
                 | SayCurrentFocus
+                | SayCurrentFocusInDetail
                 | SayWindowTitle
                 | SayTopLineOfWindow
                 | SayBottomLineOfWindow
@@ -719,6 +723,7 @@ impl Command {
             "PassKeyThrough" | "Insert+3" | "JAWSKey+3" => PassKeyThrough,
             "SayWindow" => SayWindow,
             "SayCurrentFocus" => SayCurrentFocus,
+            "SayCurrentFocusInDetail" => SayCurrentFocusInDetail,
             "SayWindowTitle" => SayWindowTitle,
             "SaySystemTime" => SaySystemTime,
             "SaySystemTimeWithSeconds" => SaySystemTimeWithSeconds,
@@ -750,6 +755,7 @@ impl Command {
             Command::SaySystemTime => Command::SaySystemDate,
             Command::SaySystemTimeWithSeconds => Command::SayWeekNumber,
             Command::SayFont => Command::SayFontInViewer,
+            Command::SayCurrentFocus => Command::SayCurrentFocusInDetail,
             Command::SayCharacter => Command::SayCharacterPhonetic,
             Command::SayWord => Command::SpellWord,
             Command::SayLine => Command::SpellLine,

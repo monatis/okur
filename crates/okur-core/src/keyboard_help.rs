@@ -402,6 +402,7 @@ fn descriptions(command: &Command) -> Descriptions {
         VirtualizeControl => one(msg::command_virtualize_control()),
         SayFont => two(msg::command_say_font(), msg::command_say_font_long()),
         SayFontInViewer => one(msg::command_say_font_in_viewer()),
+        SayCurrentFocusInDetail => one(msg::command_say_current_focus_in_detail()),
         SayColor => one(msg::command_say_color()),
         KeyboardHelp => one(msg::command_keyboard_help()),
 
@@ -767,6 +768,7 @@ mod tests {
             PassKeyThrough,
             SayWindow,
             SayCurrentFocus,
+            SayCurrentFocusInDetail,
             SayWindowTitle,
             SaySystemTime,
             SaySystemTimeWithSeconds,
