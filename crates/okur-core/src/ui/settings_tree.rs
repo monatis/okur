@@ -2717,6 +2717,54 @@ mod tests {
         assert_eq!(quick.pane_update(), None);
     }
 
+    /// Manage Key Labels... is Keyboard, General's last item, its pane's last control a button
+    /// that F6 reaches and Space presses, as Space on the item does [obs, 1169/s16-s18].
+    #[test]
+    fn manage_key_labels_is_general_s_last_item_and_its_pane_s_button() {
+        let mut dialog = tree(Flavor::Center);
+        let at = dialog
+            .rows
+            .iter()
+            .position(|r| matches!(r, Row::Opens(Opens::KeyLabels)))
+            .unwrap_or_default();
+        assert!(
+            matches!(dialog.rows.get(at.saturating_sub(1)), Some(Row::Setting(spec))
+            if dialog.group_of(spec) == Some(TreeGroup::KeyboardGeneral))
+        );
+        let Outcome::Send(sent) = dialog.handle(&FromUi::DialogChanged {
+            id: 7,
+            control: TREE.into(),
+            value: Value::Selected(at),
+        }) else {
+            panic_free_fail("nothing sent");
+            return;
+        };
+        assert!(
+            sent.iter()
+                .any(|m| matches!(m, ToUi::DialogPane { page, .. }
+            if page.controls.last().is_some_and(|c| c.id == "opens:key_labels"
+                && c.label == "Manage Key Labels..."))),
+            "{sent:?}"
+        );
+        assert_eq!(
+            dialog.handle(&FromUi::DialogPressed {
+                id: 7,
+                control: PANE_KEY.into(),
+            }),
+            Outcome::Send(vec![ToUi::DialogFocus {
+                id: 7,
+                control: "opens:key_labels".into(),
+            }])
+        );
+        assert_eq!(
+            dialog.handle(&FromUi::DialogPressed {
+                id: 7,
+                control: "opens:key_labels".into(),
+            }),
+            Outcome::OpenKeyLabels
+        );
+    }
+
     /// Last Changed Settings kept between runs: each change's place, never the session's, and
     /// back without settings Okur no longer has.
     #[test]

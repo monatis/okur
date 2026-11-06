@@ -384,7 +384,9 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
         match &control.kind {
             // A table shows its columns' headers: JAWS's PlaceMarker List, "PlaceMarker" and
             // "Generalized to Domain".
-            ControlKind::Table { .. } => items.push(Item {
+            // One with an editable column edits labels, which the screen reader's hint tells
+            // ("To edit the selected item press f2." [obs, 1169/s18]); okur-ui edits the cell.
+            ControlKind::Table { edit_column, .. } => items.push(Item {
                 class: Class::Named("SysListView32"),
                 style: WS_CHILD
                     | WS_VISIBLE
@@ -393,7 +395,12 @@ fn list_layout(dialog: &DialogSpec) -> Layout {
                     | WS_GROUP
                     | LVS_REPORT
                     | LVS_SINGLESEL
-                    | LVS_SHOWSELALWAYS,
+                    | LVS_SHOWSELALWAYS
+                    | if edit_column.is_some() {
+                        LVS_EDITLABELS
+                    } else {
+                        0
+                    },
                 x: MARGIN,
                 y: list_y,
                 cx: list_width,
@@ -1006,6 +1013,12 @@ pub fn page_layout(page: &DialogSpec) -> Layout {
                     text: control.label.clone(),
                 });
                 y += 40 + ROW_GAP;
+            }
+            // A push button under the page's settings: Settings Center's "Manage Key
+            // Labels...", which F6 reaches and Space presses [obs, 1169/s17, s18].
+            ControlKind::Button { default } => {
+                items.push(button(id, &control.label, *default, true, (left, y)));
+                y += BUTTON_HEIGHT + ROW_GAP;
             }
             _ => {}
         }

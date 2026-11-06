@@ -15,9 +15,9 @@ use windows::Win32::UI::Controls::{
     LVIF_TEXT, LVIS_FOCUSED, LVIS_SELECTED, LVIS_STATEIMAGEMASK, LVITEMW, LVM_DELETEALLITEMS,
     LVM_EDITLABELW, LVM_ENSUREVISIBLE, LVM_GETNEXTITEM, LVM_INSERTCOLUMNW, LVM_INSERTITEMW,
     LVM_SETEXTENDEDLISTVIEWSTYLE, LVM_SETITEMCOUNT, LVM_SETITEMSTATE, LVM_SETITEMTEXTW,
-    LVNI_SELECTED, LVN_DELETEALLITEMS, LVN_ENDLABELEDITW, LVN_ITEMCHANGED, LVN_KEYDOWN,
-    LVS_EX_CHECKBOXES, LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NMLVDISPINFOW, NMLVKEYDOWN,
-    NMTREEVIEWW, NMTVKEYDOWN, NM_DBLCLK, TBM_SETPAGESIZE, TBM_SETPOS, TBM_SETRANGEMAX,
+    LVNI_SELECTED, LVN_BEGINLABELEDITW, LVN_DELETEALLITEMS, LVN_ENDLABELEDITW, LVN_ITEMCHANGED,
+    LVN_KEYDOWN, LVS_EX_CHECKBOXES, LVS_EX_FULLROWSELECT, NMHDR, NMLISTVIEW, NMLVDISPINFOW,
+    NMLVKEYDOWN, NMTREEVIEWW, NMTVKEYDOWN, NM_DBLCLK, TBM_SETPAGESIZE, TBM_SETPOS, TBM_SETRANGEMAX,
     TBM_SETRANGEMIN, TBM_SETTICFREQ, TREE_VIEW_ITEM_STATE_FLAGS, TVE_EXPAND, TVGN_CARET,
     TVGN_CHILD, TVGN_NEXT, TVGN_ROOT, TVIF_STATE, TVIF_TEXT, TVINSERTSTRUCTW, TVINSERTSTRUCTW_0,
     TVIS_EXPANDED, TVIS_STATEIMAGEMASK, TVITEMW, TVI_LAST, TVI_ROOT, TVM_DELETEITEM, TVM_EXPAND,
@@ -1725,11 +1725,14 @@ pub(crate) fn forget_page(window: HWND) {
     });
 }
 
-/// The window id of a table cell's editor, beyond any template's ids.
+/// The window id of a table cell's editor.
 const CELL_EDIT_ID: u16 = 0x7F00;
+/// Posted to the dialog when the cell's editor lost the focus (Tab, a click elsewhere): the
+/// edit ends, its text kept.
+const WM_CELL_EDIT_LEFT: u32 = windows::Win32::UI::WindowsAndMessaging::WM_APP + 0x40;
 
 /// A table's cell being edited in place: the dialog, the table's window id and name, the row,
-/// and the editor's windows.
+/// the editor, and the editor's own window procedure.
 struct CellEdit {
     window: HWND,
     dialog: u32,
@@ -1737,6 +1740,7 @@ struct CellEdit {
     list_id: u16,
     row: usize,
     edit: HWND,
+    proc: isize,
 }
 
 thread_local! {
@@ -1760,17 +1764,49 @@ pub fn edit_cell(id: u32, control: &str) {
     start_cell_edit(window, &hit);
 }
 
+/// The cell editor's window procedure: the edit's own, and its losing the focus told to its
+/// dialog.
+unsafe extern "system" fn cell_edit_proc(
+    edit: HWND,
+    msg: u32,
+    wparam: WPARAM,
+    lparam: LPARAM,
+) -> windows::Win32::Foundation::LRESULT {
+    use windows::Win32::UI::WindowsAndMessaging::{CallWindowProcW, PostMessageW, WM_KILLFOCUS};
+    let edited = CELL_EDIT.with(|c| {
+        c.try_borrow().ok().and_then(|c| {
+            c.as_ref()
+                .filter(|e| e.edit == edit)
+                .map(|e| (e.window, e.proc))
+        })
+    });
+    let Some((window, proc)) = edited else {
+        // SAFETY: an edit not ours any more is left to the system's edit procedure.
+        return unsafe {
+            windows::Win32::UI::WindowsAndMessaging::DefWindowProcW(edit, msg, wparam, lparam)
+        };
+    };
+    if msg == WM_KILLFOCUS {
+        // SAFETY: a message posted to our own dialog.
+        let _ = unsafe { PostMessageW(Some(window), WM_CELL_EDIT_LEFT, WPARAM(0), LPARAM(0)) };
+    }
+    // SAFETY: the edit's own procedure, as it was before this one, with its message.
+    unsafe {
+        let original: windows::Win32::UI::WindowsAndMessaging::WNDPROC = std::mem::transmute(proc);
+        CallWindowProcW(original, edit, msg, wparam, lparam)
+    }
+}
+
 /// An edit over the selected row's editable cell of table `hit`, holding its text, the focus
-/// in it. It has no name, as JAWS's: " Edit | Tab | Type in text." [obs, 1169/s31, s35]; first
-/// among the dialog's windows, no label before it gives it one.
+/// in it: a child of the list view, as the list view's own label edit is, without a name, as
+/// JAWS's: " Edit | Tab | Type in text." [obs, 1169/s31, s35].
 fn start_cell_edit(window: HWND, hit: &Hit) {
-    use windows::Win32::Foundation::{POINT, RECT};
-    use windows::Win32::Graphics::Gdi::MapWindowPoints;
+    use windows::Win32::Foundation::RECT;
     use windows::Win32::UI::Controls::{LVM_GETITEMTEXTW, LVM_GETSUBITEMRECT};
     use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
     use windows::Win32::UI::WindowsAndMessaging::{
-        CreateWindowExW, SetWindowPos, ES_AUTOHSCROLL, HMENU, HWND_TOP, SWP_NOACTIVATE,
-        WINDOW_EX_STYLE, WM_GETFONT, WM_SETFONT, WS_BORDER, WS_CHILD, WS_TABSTOP, WS_VISIBLE,
+        CreateWindowExW, SetWindowLongPtrW, ES_AUTOHSCROLL, GWLP_WNDPROC, HMENU, WINDOW_EX_STYLE,
+        WINDOW_STYLE, WM_GETFONT, WM_SETFONT, WS_BORDER, WS_CHILD, WS_VISIBLE,
     };
     let ControlKind::Table {
         edit_column: Some(column),
@@ -1780,8 +1816,8 @@ fn start_cell_edit(window: HWND, hit: &Hit) {
         return;
     };
     end_cell_edit(false);
-    // SAFETY: a child of our own dialog, messages to it whose buffers outlive each call, and
-    // windows made as its children.
+    // SAFETY: a child of our own dialog, messages to it whose buffers outlive each call, and a
+    // window made as its child, whose procedure is ours until it is destroyed.
     unsafe {
         let Ok(list) = GetDlgItem(Some(window), i32::from(hit.window_id)) else {
             return;
@@ -1795,7 +1831,7 @@ fn start_cell_edit(window: HWND, hit: &Hit) {
         let (Ok(row), Ok(sub)) = (usize::try_from(row.0), i32::try_from(column)) else {
             return;
         };
-        // The cell's place, in the dialog's coordinates.
+        // The cell's place in the list.
         let mut cell = RECT {
             top: sub,
             left: 2, // LVIR_LABEL
@@ -1807,18 +1843,6 @@ fn start_cell_edit(window: HWND, hit: &Hit) {
             Some(WPARAM(row)),
             Some(LPARAM(&mut cell as *mut RECT as isize)),
         );
-        let mut corners = [
-            POINT {
-                x: cell.left,
-                y: cell.top,
-            },
-            POINT {
-                x: cell.right,
-                y: cell.bottom,
-            },
-        ];
-        MapWindowPoints(Some(list), Some(window), &mut corners);
-        let [top_left, bottom_right] = corners;
         // Its text.
         let mut text = [0u16; 512];
         let mut item = LVITEMW {
@@ -1834,39 +1858,25 @@ fn start_cell_edit(window: HWND, hit: &Hit) {
             Some(LPARAM(&mut item as *mut LVITEMW as isize)),
         );
         let instance = GetModuleHandleW(None).ok().map(|m| m.into());
-        let edit = CreateWindowExW(
+        let Ok(edit) = CreateWindowExW(
             WINDOW_EX_STYLE(0),
             windows::core::w!("EDIT"),
             windows::core::PCWSTR(text.as_ptr()),
-            WS_CHILD
-                | WS_VISIBLE
-                | WS_BORDER
-                | WS_TABSTOP
-                | windows::Win32::UI::WindowsAndMessaging::WINDOW_STYLE(ES_AUTOHSCROLL as u32),
-            top_left.x,
-            top_left.y,
-            bottom_right.x - top_left.x,
-            bottom_right.y - top_left.y,
-            Some(window),
+            WS_CHILD | WS_VISIBLE | WS_BORDER | WINDOW_STYLE(ES_AUTOHSCROLL as u32),
+            cell.left,
+            cell.top,
+            cell.right - cell.left,
+            cell.bottom - cell.top,
+            Some(list),
             Some(HMENU(usize::from(CELL_EDIT_ID) as *mut _)),
             instance,
             None,
-        );
-        let Ok(edit) = edit else {
+        ) else {
             return;
         };
-        // Over the table, first among the dialog's windows.
-        let _ = SetWindowPos(
-            edit,
-            Some(HWND_TOP),
-            top_left.x,
-            top_left.y,
-            bottom_right.x - top_left.x,
-            bottom_right.y - top_left.y,
-            SWP_NOACTIVATE,
-        );
         let font = SendMessageW(list, WM_GETFONT, None, None);
         SendMessageW(edit, WM_SETFONT, Some(WPARAM(font.0 as usize)), None);
+        let proc = SetWindowLongPtrW(edit, GWLP_WNDPROC, cell_edit_proc as *const () as isize);
         CELL_EDIT.with(|c| {
             if let Ok(mut c) = c.try_borrow_mut() {
                 *c = Some(CellEdit {
@@ -1876,6 +1886,7 @@ fn start_cell_edit(window: HWND, hit: &Hit) {
                     list_id: hit.window_id,
                     row,
                     edit,
+                    proc,
                 });
             }
         });
@@ -1885,18 +1896,23 @@ fn start_cell_edit(window: HWND, hit: &Hit) {
 }
 
 /// Ends the cell's edit: its text told as the row's (`keep`), or dropped; the focus back in
-/// the table.
+/// the table unless it went elsewhere.
 fn end_cell_edit(keep: bool) {
-    use windows::Win32::UI::Input::KeyboardAndMouse::SetFocus;
+    use windows::Win32::UI::Input::KeyboardAndMouse::{GetFocus, SetFocus};
+    use windows::Win32::UI::WindowsAndMessaging::{SetWindowLongPtrW, GWLP_WNDPROC};
     let Some(edit) = CELL_EDIT.with(|c| c.try_borrow_mut().ok().and_then(|mut c| c.take())) else {
         return;
     };
     let text = window_text(edit.edit);
-    // SAFETY: our own windows, made for the edit.
+    // SAFETY: our own windows: the edit given its own procedure back, then destroyed.
     unsafe {
+        let had_focus = GetFocus() == edit.edit;
+        SetWindowLongPtrW(edit.edit, GWLP_WNDPROC, edit.proc);
         let _ = DestroyWindow(edit.edit);
-        if let Ok(list) = GetDlgItem(Some(edit.window), i32::from(edit.list_id)) {
-            let _ = SetFocus(Some(list));
+        if had_focus {
+            if let Ok(list) = GetDlgItem(Some(edit.window), i32::from(edit.list_id)) {
+                let _ = SetFocus(Some(list));
+            }
         }
     }
     if keep {
@@ -1908,27 +1924,27 @@ fn end_cell_edit(keep: bool) {
     }
 }
 
-/// A command while a cell is edited: Enter keeps the text, Escape drops it, and the edit
-/// losing the focus (Tab) keeps it. `None` for the dialog's own commands.
-fn cell_edit_command(window: HWND, control_id: u16, code: u32) -> Option<isize> {
+/// A command while a cell is edited: Enter keeps the text, Escape drops it. `None` for the
+/// dialog's own commands.
+fn cell_edit_command(window: HWND, control_id: u16) -> Option<isize> {
     use windows::Win32::UI::Input::KeyboardAndMouse::GetFocus;
-    const EN_KILLFOCUS: u32 = 0x0200;
     let editing = CELL_EDIT.with(|c| {
         c.try_borrow()
             .ok()
             .and_then(|c| c.as_ref().map(|e| (e.window, e.edit)))
     });
     let (owner, edit) = editing?;
-    if owner != window {
+    // SAFETY: a focus query.
+    if owner != window || unsafe { GetFocus() } != edit {
         return None;
     }
-    // SAFETY: a focus query.
-    let in_edit = unsafe { GetFocus() } == edit;
+    // Enter is the dialog's default button's command, or IDOK without one.
+    const DM_GETDEFID: u32 = 0x0400;
+    // SAFETY: a query of our own dialog.
+    let default = unsafe { SendMessageW(window, DM_GETDEFID, None, None) }.0 & 0xFFFF;
     match control_id {
-        template::IDOK if in_edit => end_cell_edit(true),
-        IDCANCEL if in_edit => end_cell_edit(false),
-        CELL_EDIT_ID if code == EN_KILLFOCUS => end_cell_edit(true),
-        CELL_EDIT_ID => {}
+        id if id == template::IDOK || i32::from(id) as isize == default => end_cell_edit(true),
+        IDCANCEL => end_cell_edit(false),
         _ => return None,
     }
     Some(1)
@@ -1944,11 +1960,16 @@ pub(crate) unsafe extern "system" fn dialog_proc(
         // The dialog manager puts the focus on the first control.
         // A pane takes no focus as it is made: the focus stays where it is.
         WM_INITDIALOG => isize::from(lparam.0 != PANE),
+        // The cell's editor lost the focus: its text is kept.
+        WM_CELL_EDIT_LEFT => {
+            end_cell_edit(true);
+            1
+        }
         WM_COMMAND => {
             let control_id = (wparam.0 & 0xFFFF) as u16;
             let code = ((wparam.0 >> 16) & 0xFFFF) as u32;
             let item = HWND(lparam.0 as *mut _);
-            if let Some(handled) = cell_edit_command(window, control_id, code) {
+            if let Some(handled) = cell_edit_command(window, control_id) {
                 return handled;
             }
             if control_id == IDCANCEL {
@@ -2052,6 +2073,7 @@ pub(crate) unsafe extern "system" fn dialog_proc(
                     | TVN_ITEMEXPANDEDW
                     | LVN_ITEMCHANGED
                     | LVN_KEYDOWN
+                    | LVN_BEGINLABELEDITW
                     | LVN_ENDLABELEDITW
             ) {
                 return 0;
@@ -2076,22 +2098,6 @@ pub(crate) unsafe extern "system" fn dialog_proc(
                         }
                     }
                     NM_DBLCLK => press_default(window),
-                    // F2 on a table's row: its editable cell edited in place (Manage Key Labels).
-                    LVN_KEYDOWN
-                        if matches!(
-                            hit.kind,
-                            ControlKind::Table {
-                                edit_column: Some(_),
-                                ..
-                            }
-                        ) =>
-                    {
-                        // SAFETY: a list view's key notification sends an NMLVKEYDOWN.
-                        let pressed = unsafe { &*(lparam.0 as *const NMLVKEYDOWN) };
-                        if VIRTUAL_KEY(pressed.wVKey) == VK_F2 {
-                            start_cell_edit(window, &hit);
-                        }
-                    }
                     // Space changes the selected item's value, Shift+Space back (JAWS's
                     // Settings Center): Okur changes it, and the tree view's own check box turn
                     // and incremental search are kept out.
@@ -2158,6 +2164,28 @@ pub(crate) unsafe extern "system" fn dialog_proc(
                     }
                 }
                 NM_DBLCLK => press_default(window),
+                // The list view's own label edit (a click on the selected row) on a table: its
+                // first column is not edited, its editable cell is.
+                LVN_BEGINLABELEDITW if matches!(hit.kind, ControlKind::Table { .. }) => {
+                    start_cell_edit(window, &hit);
+                    return answer(window, 1);
+                }
+                // F2 on a table's row: its editable cell edited in place (Manage Key Labels).
+                LVN_KEYDOWN
+                    if matches!(
+                        hit.kind,
+                        ControlKind::Table {
+                            edit_column: Some(_),
+                            ..
+                        }
+                    ) =>
+                {
+                    // SAFETY: a list view's key notification sends an NMLVKEYDOWN.
+                    let pressed = unsafe { &*(lparam.0 as *const NMLVKEYDOWN) };
+                    if VIRTUAL_KEY(pressed.wVKey) == VK_F2 {
+                        start_cell_edit(window, &hit);
+                    }
+                }
                 // Delete and F2 on a check list's item: JAWS's rules list deletes or renames
                 // the rule [obs, 748/s20; "To edit the selected item press f2.", 748/s7].
                 LVN_KEYDOWN if matches!(hit.kind, ControlKind::CheckList { .. }) => {
