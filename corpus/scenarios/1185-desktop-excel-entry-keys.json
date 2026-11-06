@@ -1,0 +1,111 @@
+{
+  "id": "1185-desktop-excel-entry-keys",
+  "name": "Excel's keys for entering data and moving by screen (popapps.chm, JAWS commands for Excel): Down four times to A5, Right to B5, AutoSum (Alt+Equals) and Enter, Up back to B5; Right to C5, the date stamp (Ctrl+Semicolon) and Escape, the time stamp (Ctrl+Shift+Semicolon) and Escape; the next and prior screen (Alt+PageDown, Alt+PageUp); the cell's appearance in detail (Insert+Tab twice quickly) and Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-fixture.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Alt+Equals"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Enter"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Up"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Ctrl+Semicolon"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+Shift+Semicolon"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Alt+PageDown"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Alt+PageUp"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Insert+Tab",
+      "repeat": 2
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Escape"
+    }
+  ]
+}

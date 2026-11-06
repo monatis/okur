@@ -1,0 +1,123 @@
+{
+  "id": "1186-desktop-excel-cell-focus-and-screens",
+  "name": "Excel's Say Current Focus on cells with text, a number and a formula, once and twice quickly (the cell's appearance in detail, JAWS commands for Excel), Escape after each double press; Ctrl+End; PageDown and PageUp; Ctrl+Home; Ctrl+Shift+End and Ctrl+A, then Ctrl+Home",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-fixture.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Tab"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Tab",
+      "repeat": 2
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Insert+Tab"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+Tab",
+      "repeat": 2
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Ctrl+End"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Insert+Tab"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Insert+Tab",
+      "repeat": 2
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "PageDown"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "PageUp"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Ctrl+Shift+End"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Ctrl+A"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Ctrl+Home"
+    }
+  ]
+}

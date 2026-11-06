@@ -5158,6 +5158,34 @@
       }
     },
     {
+      "scenario_id": "1185-desktop-excel-entry-keys",
+      "fixture": "desktop-excel.ps1",
+      "evidence": {
+        "sha256": "bdb9c61aa95dbd25f6120c49e6ed7fa58bba01aafd03691586ed7ad09a7a68d2",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1186-desktop-excel-cell-focus-and-screens",
+      "fixture": "desktop-excel.ps1",
+      "evidence": {
+        "sha256": "d6b48f04e3595c75e415427f67754633281f3ff231c63658b9a959c2f23eb4c3",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "12-struct-heading-level-2",
       "fixture": "structural-navigation.html",
       "evidence": {
@@ -29953,10 +29981,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1972,
-    "scenarios_with_evidence": 1972,
-    "total_trials": 5922,
-    "successful_trials": 5905,
-    "deterministic_scenarios": 1642
+    "scenarios": 1974,
+    "scenarios_with_evidence": 1974,
+    "total_trials": 5928,
+    "successful_trials": 5911,
+    "deterministic_scenarios": 1644
   }
 }
