@@ -4946,6 +4946,34 @@
       }
     },
     {
+      "scenario_id": "1170-web-verbosity-level-1-read-down",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "caf7472e94e68378c56c6e9f83aba8cda6f48446b6e4d81f5a7e761f4aff369b",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1171-web-verbosity-level-0-read-down",
+      "fixture": "news-article.html",
+      "evidence": {
+        "sha256": "d5c10318e9559283ae3d09189cc02550a1eedca03725358751ad377d0f244728",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
       "scenario_id": "12-struct-heading-level-2",
       "fixture": "structural-navigation.html",
       "evidence": {
@@ -29741,10 +29769,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1958,
-    "scenarios_with_evidence": 1958,
-    "total_trials": 5880,
-    "successful_trials": 5863,
-    "deterministic_scenarios": 1633
+    "scenarios": 1960,
+    "scenarios_with_evidence": 1960,
+    "total_trials": 5886,
+    "successful_trials": 5869,
+    "deterministic_scenarios": 1634
   }
 }
