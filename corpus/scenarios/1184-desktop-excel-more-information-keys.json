@@ -1,0 +1,136 @@
+{
+  "id": "1184-desktop-excel-more-information-keys",
+  "name": "Excel, JAWS's information keys not recorded before (popapps.chm, JAWS commands for Excel): from B2, the column's first, second and fourth cells (Alt+1, Alt+2, Alt+4), the visible range (Alt+Shift+V), gridlines (Alt+Shift+G), Excel's version (Ctrl+Insert+V), the hyperlink (Alt+Shift+H), the validation message (Ctrl+Shift+V), the border (Alt+Shift+B), the region selected and said (Ctrl+Shift+Space), the selection collapsed (Shift+Backspace), the region's last and first cells (Alt+Shift+End, Alt+Shift+Home), then on B4's formula Say Formula (Insert+Ctrl+F2) and the formula bar's last number (Ctrl+NumPad5), and the row's second cell (Ctrl+2) with Escape after it",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-fixture.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Alt+1"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Alt+2"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Alt+4"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Alt+Shift+V"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Alt+Shift+G"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Ctrl+Insert+V"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Alt+Shift+H"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Ctrl+Shift+V"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Alt+Shift+B"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Ctrl+Shift+Space"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Shift+Backspace"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Alt+Shift+End"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Alt+Shift+Home"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s18",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s19",
+      "type": "key",
+      "command": "Insert+Ctrl+F2"
+    },
+    {
+      "id": "s20",
+      "type": "key",
+      "command": "Ctrl+Numpad5"
+    },
+    {
+      "id": "s21",
+      "type": "key",
+      "command": "Ctrl+2",
+      "onset_ms": 1500
+    },
+    {
+      "id": "s22",
+      "type": "key",
+      "command": "Escape"
+    }
+  ]
+}
