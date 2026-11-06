@@ -1,0 +1,81 @@
+{
+  "id": "1167-web-key-labels-changed",
+  "name": "Manage Key Labels' changes at the Characters typing echo (DEFAULT.JCF [Options] TypingEcho=1), in a page's text field in forms mode (E, Enter onto City's Izmir): [KeyLabels] Return relabelled 'Return key', End muted, F2 relabelled 'Edit key', Space muted, Home relabelled 'Start', Tab spoken (muted by default), Escape relabelled 'Leave'; then End, F2, Space, A, Home, Tab to the color list, Shift+Tab back, Escape",
+  "category": "web-forms",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/activation.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "TypingEcho": "1"
+      },
+      "KeyLabels": {
+        "Return": "1|Return key",
+        "End": "0|End",
+        "F2": "1|Edit key",
+        "Space": "0|Space",
+        "Home": "1|Start",
+        "Tab": "1|Tab",
+        "Escape": "1|Leave"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "E",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "Enter",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "End",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "F2",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "Space",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "A",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Home",
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "Tab",
+      "id": "s8"
+    },
+    {
+      "type": "key",
+      "command": "Shift+Tab",
+      "id": "s9"
+    },
+    {
+      "type": "key",
+      "command": "Escape",
+      "id": "s10"
+    }
+  ]
+}

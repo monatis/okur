@@ -1,0 +1,87 @@
+{
+  "id": "1168-web-key-labels-letters-muted",
+  "name": "Manage Key Labels' Letters, Numbers and Symbols muted at the Characters typing echo (DEFAULT.JCF [Options] TypingEcho=1, [KeyLabels] Letters=0|Letters, Numbers=0|Numbers, Symbols=0|Symbols), in a page's text field in forms mode (E, Enter, End onto City's Izmir): A, 1, Comma, Space, Shift+B, Backspace, Left, Home, then Escape",
+  "category": "web-forms",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/activation.html",
+  "target_app": "chrome",
+  "jaws_settings": {
+    "DEFAULT.JCF": {
+      "Options": {
+        "TypingEcho": "1"
+      },
+      "KeyLabels": {
+        "Letters": "0|Letters",
+        "Numbers": "0|Numbers",
+        "Symbols": "0|Symbols"
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "type": "key",
+      "command": "E",
+      "id": "s1"
+    },
+    {
+      "type": "key",
+      "command": "Enter",
+      "id": "s2"
+    },
+    {
+      "type": "key",
+      "command": "End",
+      "id": "s3"
+    },
+    {
+      "type": "key",
+      "command": "A",
+      "id": "s4"
+    },
+    {
+      "type": "key",
+      "command": "1",
+      "id": "s5"
+    },
+    {
+      "type": "key",
+      "command": "Comma",
+      "id": "s6"
+    },
+    {
+      "type": "key",
+      "command": "Space",
+      "id": "s7"
+    },
+    {
+      "type": "key",
+      "command": "Shift+B",
+      "id": "s8"
+    },
+    {
+      "type": "key",
+      "command": "Backspace",
+      "id": "s9"
+    },
+    {
+      "type": "key",
+      "command": "Left",
+      "id": "s10"
+    },
+    {
+      "type": "key",
+      "command": "Home",
+      "id": "s11"
+    },
+    {
+      "type": "key",
+      "command": "Escape",
+      "id": "s12"
+    }
+  ]
+}
