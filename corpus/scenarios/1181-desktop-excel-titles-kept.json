@@ -1,0 +1,90 @@
+{
+  "id": "1181-desktop-excel-titles-kept",
+  "name": "Excel: row 1 set as the column titles and column A as the row titles (Insert+Ctrl+Alt+C, R), Down, then Excel closed (Alt+F4, and N for Don't Save at its question) and the workbook opened again (Windows+R, its path, Enter): whether the titles are kept from one session to the next, as JAWS's help says they are kept in the workbook's settings file (popapps.chm, Excel Row and Column Title Reading). Right and Down cross a column and a row, CapsLock+Alt+Shift+C says the column title. Each trial starts without JAWS's settings for the workbook (jaws_forget)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-fixture.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+Ctrl+Alt+C"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Insert+Ctrl+Alt+R"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Alt+F4",
+      "onset_ms": 2000
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "N",
+      "onset_ms": 3000
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Win+R",
+      "onset_ms": 2000
+    },
+    {
+      "id": "s7",
+      "type": "text",
+      "command": "%TEMP%\\sr-excel-fixture.xlsx"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Enter",
+      "onset_ms": 10000,
+      "settle_max_ms": 25000
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "CapsLock+Alt+Shift+C"
+    }
+  ]
+}

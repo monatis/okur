@@ -2329,6 +2329,10 @@
       "sha256": "ac1b4cdc175797af8ac3af19ece116233ae6fd004e9d877e2853dafddff5da8f",
       "size_bytes": 721
     },
+    "web-structures-3.html": {
+      "sha256": "b3a306636c844d69086810641bae278871fa57fbecca652935248c7201d07093",
+      "size_bytes": 533
+    },
     "web-structures.html": {
       "sha256": "d0c074772e3aa267b6679197051e1ef859606783970820af562211904fb1009e",
       "size_bytes": 1356
@@ -5062,6 +5066,62 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1178-web-structures-3-high-read-down",
+      "fixture": "web-structures-3.html",
+      "evidence": {
+        "sha256": "526ee6353544f2fcd667c3dab55cd8a09c8a06200142f6eb52a2e71ab478a84b",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1179-web-structures-3-medium-read-down",
+      "fixture": "web-structures-3.html",
+      "evidence": {
+        "sha256": "0a6e5f8c59758f31712701e415c69d2669e9492a73753671cc5a7fa607a58028",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1180-web-structures-3-low-read-down",
+      "fixture": "web-structures-3.html",
+      "evidence": {
+        "sha256": "0dbfbfac6d1db7df8b2747b55f5f12c474df48ccd48457c0aba0339748cc4a2c",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1181-desktop-excel-titles-kept",
+      "fixture": "desktop-excel.ps1",
+      "evidence": {
+        "sha256": "becbf947ce0ee19cb648553f2b6566d27af47a4a2dee7667a54b82b2e78baec1",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
         "summary_consistent": true
       }
     },
@@ -29861,10 +29921,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1966,
-    "scenarios_with_evidence": 1966,
-    "total_trials": 5904,
-    "successful_trials": 5887,
-    "deterministic_scenarios": 1639
+    "scenarios": 1970,
+    "scenarios_with_evidence": 1970,
+    "total_trials": 5916,
+    "successful_trials": 5899,
+    "deterministic_scenarios": 1641
   }
 }
