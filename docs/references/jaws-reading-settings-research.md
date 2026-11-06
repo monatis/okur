@@ -1369,6 +1369,56 @@ Each recording leaves old-pc's settings as they were. Each is followed by `okur-
 --write` and `okur-lab parity --spoken`, in commits without engine code
 ([`verification-loop.md`](verification-loop.md); AGENTS.md §3).
 
+## 14. Web Verbosity Level and its levels (old-pc, 2026-11-06)
+
+Settings Center, Web / HTML / PDFs, Reading: "Web Verbosity Level Medium" over Notepad (the
+default; `DEFAULT.JCF` sets no key), then Configure Web Verbosity Levels, High..., Medium...,
+Low..., each a button opening "<Level> Virtual Cursor Verbosity Preferences dialog | Announce Start
+and End For: Tree view", a tree of check items and a read-only description under it, then OK and
+Cancel (`skills/jaws-reference/scripts/web-verbosity-walk.ps1`, research; nothing turned).
+JAWS 2025's help: "Medium ... is the default verbosity level"; Low "only the start and end of
+tables and grids", where the dialog's Low also keeps Editable Section; the region names and
+types are still said by R, Shift+R, O and Shift+O at every level.
+
+The items, in the tree's order (Regions is a group of the ten under it, "partially checked" at
+High and Medium), and what each level announces the start and end of by default:
+
+| Item | High | Medium | Low |
+|---|---|---|---|
+| Block Quotation | yes | yes | no |
+| DescribedBy Announcement | yes | no | no |
+| Description | no | no | no |
+| Editable Section | yes | yes | yes |
+| Feed | yes | yes | no |
+| Figure | yes | yes | no |
+| Flash Object | yes | no | no |
+| Frame | yes | no | no |
+| Group Box | yes | yes | no |
+| List | yes | yes | no |
+| Log | yes | yes | no |
+| Note | yes | yes | no |
+| Regions: Article | yes | yes | no |
+| Regions: Banner | yes | no | no |
+| Regions: Complementary Information | yes | no | no |
+| Regions: Content Information | yes | no | no |
+| Regions: Document | no | no | no |
+| Regions: Form | yes | no | no |
+| Regions: Main Region | yes | yes | no |
+| Regions: Navigation Region | yes | yes | no |
+| Regions: Region | yes | no | no |
+| Regions: Search Region | yes | no | no |
+| Table Or Grid | yes | yes | yes |
+| Toolbar | yes | yes | no |
+
+Over Chrome, Settings Center says "Web Verbosity Level High": old-pc's `Chrome.JCF` holds
+`[VirtualCursorVerbosity] VirtualCursorVerbosityLevel=2`, so 2 is High (inferred: 1 Medium, 0
+Low, to confirm by recording). **The web corpus was recorded at High**, not at JAWS's default:
+Okur's region and structure announcements were fitted to High's set. Built as JAWS has it, Okur's
+default is Medium, and replay takes High from each recording's `Chrome.JCF` (its provenance
+holds it), so parity keeps measuring what was recorded while a user hears Medium's fewer
+announcements (no Banner, Complementary Information, Content Information, Form, Region, Search
+Region, Frame, Flash Object or DescribedBy starts and ends).
+
 ## Sources
 
 JAWS 2025 help (dev box, build 2025.2505.43.400, `C:\ProgramData\Freedom Scientific\JAWS\2025\Locale\enu\Help\`):
