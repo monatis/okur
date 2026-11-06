@@ -590,7 +590,27 @@ fn replay_scenario(
                 );
                 // Replay the OS events recorded while JAWS handled this step (e.g. the focus
                 // change that follows Tab), exactly as the live listener would deliver them.
-                for event in replay.for_step(&step.id) {
+                let mut events: std::collections::VecDeque<TraceEvent> =
+                    replay.for_step(&step.id).into();
+                // JAWS's dialog come to the front, Okur's open with no focus traced in it yet:
+                // its foreground, which keeps the focus read with it, is the dialog's first
+                // focus where none of its own came by the step's end (1183/s6).
+                let mut first_focus: Option<TraceEvent> = None;
+                loop {
+                    let event = match events.pop_front() {
+                        Some(event) => event,
+                        None => match first_focus.take().filter(|_| mirror.awaits_first_focus()) {
+                            Some(mut focus) => {
+                                "focus".clone_into(&mut focus.event);
+                                focus
+                            }
+                            None => break,
+                        },
+                    };
+                    mirror.sync(&ui);
+                    if mirror.first_focus_by_foreground(&event) {
+                        first_focus = Some(event.clone());
+                    }
                     // JAWS's Results Viewer stands for Okur's own viewer while Okur has one
                     // open, which Okur speaks itself (as the Results Viewer's own events,
                     // `replayable`); where Okur has none open, its page is the only focus the

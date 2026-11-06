@@ -3551,6 +3551,7 @@ impl ScreenReaderEngine {
         {
             return false;
         }
+        tracing::debug!(?kind, "sheet list asked");
         self.sheet_list_asked = Some(kind);
         true
     }
@@ -3564,6 +3565,7 @@ impl ScreenReaderEngine {
         column: &str,
         entries: &[crate::event::SheetEntry],
     ) -> Option<String> {
+        tracing::debug!(?kind, asked = ?self.sheet_list_asked, entries = entries.len(), "sheet list answered");
         if self.sheet_list_asked != Some(kind) {
             return None;
         }

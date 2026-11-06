@@ -39,6 +39,8 @@ pub struct DialogMirror {
     dialog: Option<DialogSpec>,
     /// The control the focus is on, by its index in the dialog's controls.
     focused: Option<usize>,
+    /// The trace has given the dialog shown last a focus of its own.
+    focus_traced: bool,
     /// The title of the dialog last closed: JAWS's dialog, standing for it, can still report
     /// a focus of its own as it goes, which Okur's window would not.
     closed: Option<String>,
@@ -108,6 +110,7 @@ impl DialogMirror {
             match message {
                 ToUi::DialogShow { dialog } => {
                     self.closed = None;
+                    self.focus_traced = false;
                     let focused = dialog.controls.iter().position(is_tab_stop);
                     let over = self.dialog.replace(dialog);
                     if let Some(over) =
@@ -201,6 +204,31 @@ impl DialogMirror {
         self.dialog.is_some()
     }
 
+    /// Whether `event`, JAWS's dialog coming to the front, can stand for its first focus:
+    /// Okur's dialog of that title is open and the trace has given it no focus yet. JAWS's main
+    /// window can come back to the front between the dialog's first focus and its list's
+    /// selection, and the trace's converter then drops both (1183/s6: Cells with Notes); the
+    /// foreground keeps the focus read with it, which Okur's own window would report. Replay
+    /// takes it only where the step ends with still no focus traced in the dialog
+    /// ([`Self::awaits_first_focus`]): a focus event of its own reports more (a list item's
+    /// position).
+    /// Whether Okur's dialog is open and the trace has given it no focus yet.
+    pub fn awaits_first_focus(&self) -> bool {
+        self.dialog.is_some() && !self.focus_traced
+    }
+
+    pub fn first_focus_by_foreground(
+        &self,
+        event: &okur_windows_model::event_trace::TraceEvent,
+    ) -> bool {
+        event.event == "foreground"
+            && !self.focus_traced
+            && !event.focus_chain.is_empty()
+            && self.dialog.as_ref().is_some_and(|dialog| {
+                event.window_title.as_deref().map(plain) == Some(plain(&dialog.title))
+            })
+    }
+
     /// Whether `focus` is in the dialog just closed: JAWS's dialog taking the focus as it
     /// goes ("Select a Form Field" dialog, after Enter [obs, 228/s9]), which Okur's window,
     /// already closed, does not report. Delivered, it was a window of its own, which took
@@ -269,6 +297,22 @@ impl DialogMirror {
             if own.is_some() {
                 focus.name = own;
             }
+            // Its place in the list, which Okur's list reports, where the trace read none (a
+            // focus read with the dialog's coming to the front, 1183/s6).
+            if focus.item_index.is_none() && focus.item_count.is_none() {
+                let name = focus.name.as_deref().map(plain).unwrap_or_default();
+                let place = dialog.controls.iter().find_map(|c| match &c.kind {
+                    ControlKind::List { items, .. } | ControlKind::ListBox { items, .. } => items
+                        .iter()
+                        .position(|item| plain(item) == name)
+                        .map(|at| (at + 1, items.len())),
+                    _ => None,
+                });
+                if let Some((index, count)) = place {
+                    focus.item_index = Some(index);
+                    focus.item_count = Some(count);
+                }
+            }
         }
     }
 
@@ -278,6 +322,9 @@ impl DialogMirror {
     pub fn focus(&mut self, focus: &FocusEvent) -> Vec<FromUi> {
         if self.file_open.is_some() {
             return Vec::new();
+        }
+        if self.dialog.is_some() {
+            self.focus_traced = true;
         }
         let Some(dialog) = &mut self.dialog else {
             return Vec::new();
