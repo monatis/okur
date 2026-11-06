@@ -1,0 +1,235 @@
+{
+  "id": "1169-desktop-notepad-manage-key-labels",
+  "name": "JAWS's Manage Key Labels over Notepad: Insert+6, the tree to Keyboard, General, and down to Manage Key Labels..., F6 to its button, Space; in the list Down twice, End, Up five times to Tab, Insert+Up; Tab to Toggle Mute and Space (Tab spoken), Shift+Tab back, F2 and Escape; Tab twice to Change Label, Space and Escape; Tab four times to Cancel and Space, then Escape out of Settings Center: nothing kept",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-notepad.ps1",
+  "target_app": "desktop",
+  "launch": {
+    "window_title": "sr-notepad-fixture.txt - Notepad"
+  },
+  "jaws_settings": {
+    "NotePad.JCF": {
+      "KeyLabels": {
+        "Tab": null
+      }
+    }
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Insert+6"
+    },
+    {
+      "id": "s2",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s3",
+      "type": "key_ui_access",
+      "command": "K"
+    },
+    {
+      "id": "s4",
+      "type": "key_ui_access",
+      "command": "Right"
+    },
+    {
+      "id": "s5",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s6",
+      "type": "key_ui_access",
+      "command": "Right"
+    },
+    {
+      "id": "s7",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s8",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s9",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s10",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s11",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s12",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s13",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s14",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s15",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s16",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s17",
+      "type": "key_ui_access",
+      "command": "F6"
+    },
+    {
+      "id": "s18",
+      "type": "key_ui_access",
+      "command": "Space"
+    },
+    {
+      "id": "s19",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s20",
+      "type": "key_ui_access",
+      "command": "Down"
+    },
+    {
+      "id": "s21",
+      "type": "key_ui_access",
+      "command": "End"
+    },
+    {
+      "id": "s22",
+      "type": "key_ui_access",
+      "command": "Up"
+    },
+    {
+      "id": "s23",
+      "type": "key_ui_access",
+      "command": "Up"
+    },
+    {
+      "id": "s24",
+      "type": "key_ui_access",
+      "command": "Up"
+    },
+    {
+      "id": "s25",
+      "type": "key_ui_access",
+      "command": "Up"
+    },
+    {
+      "id": "s26",
+      "type": "key_ui_access",
+      "command": "Up"
+    },
+    {
+      "id": "s27",
+      "type": "key_ui_access",
+      "command": "Insert+Up"
+    },
+    {
+      "id": "s28",
+      "type": "key_ui_access",
+      "command": "Tab"
+    },
+    {
+      "id": "s29",
+      "type": "key_ui_access",
+      "command": "Space"
+    },
+    {
+      "id": "s30",
+      "type": "key_ui_access",
+      "command": "Shift+Tab"
+    },
+    {
+      "id": "s31",
+      "type": "key_ui_access",
+      "command": "F2"
+    },
+    {
+      "id": "s32",
+      "type": "key_ui_access",
+      "command": "Escape"
+    },
+    {
+      "id": "s33",
+      "type": "key_ui_access",
+      "command": "Tab"
+    },
+    {
+      "id": "s34",
+      "type": "key_ui_access",
+      "command": "Tab"
+    },
+    {
+      "id": "s35",
+      "type": "key_ui_access",
+      "command": "Space"
+    },
+    {
+      "id": "s36",
+      "type": "key_ui_access",
+      "command": "Escape"
+    },
+    {
+      "id": "s37",
+      "type": "key_ui_access",
+      "command": "Tab"
+    },
+    {
+      "id": "s38",
+      "type": "key_ui_access",
+      "command": "Tab"
+    },
+    {
+      "id": "s39",
+      "type": "key_ui_access",
+      "command": "Tab"
+    },
+    {
+      "id": "s40",
+      "type": "key_ui_access",
+      "command": "Tab"
+    },
+    {
+      "id": "s41",
+      "type": "key_ui_access",
+      "command": "Space"
+    },
+    {
+      "id": "s42",
+      "type": "key_ui_access",
+      "command": "Escape"
+    }
+  ]
+}
