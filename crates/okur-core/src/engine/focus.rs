@@ -130,7 +130,7 @@ impl ScreenReaderEngine {
         let titles = focus
             .window_title
             .as_ref()
-            .and_then(|window| self.sheet_titles.get(window))
+            .and_then(|window| self.sheet_titles.get(crate::spreadsheet::workbook(window)))
             .map(|titles| (titles.row, titles.column));
         if self.ask_sheet(
             crate::actions::SheetCells::Around(titles),
@@ -374,7 +374,7 @@ impl ScreenReaderEngine {
         let sheet_titles = focus
             .window_title
             .as_ref()
-            .and_then(|window| self.sheet_titles.get(window))
+            .and_then(|window| self.sheet_titles.get(crate::spreadsheet::workbook(window)))
             .copied();
         let mut cx = AppContext {
             app_mode: &mut self.app_mode,

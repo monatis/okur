@@ -1295,6 +1295,30 @@ impl ScreenReaderEngine {
             .filter(crate::apps::windows::excel::in_sheet)
     }
 
+    /// The workbooks' titles Okur has kept, and where it keeps them: each workbook reads with
+    /// its titles from the start.
+    pub fn set_kept_titles(
+        &mut self,
+        kept: crate::spreadsheet::WorkbookTitles,
+        store: Option<Box<dyn crate::spreadsheet::TitleStore>>,
+    ) {
+        self.sheet_titles.extend(
+            kept.workbooks
+                .iter()
+                .map(|(book, titles)| (book.clone(), *titles)),
+        );
+        self.kept_titles = kept;
+        self.title_store = store;
+    }
+
+    /// Keeps the titles set in `workbook` for the next session.
+    fn keep_titles(&mut self, workbook: String, titles: crate::spreadsheet::SheetTitles) {
+        self.kept_titles.workbooks.insert(workbook, titles);
+        if let Some(store) = &self.title_store {
+            store.save(&self.kept_titles);
+        }
+    }
+
     /// One of Excel's title keys in a sheet; false elsewhere, the key left to the rest.
     fn sheet_title_key(&mut self, key: crate::spreadsheet::TitleKey) -> bool {
         use crate::spreadsheet::{SheetReading, TitleKey};
@@ -1304,7 +1328,8 @@ impl ScreenReaderEngine {
         let Some(window) = focus.window_title.clone() else {
             return false;
         };
-        let titles = self.sheet_titles.entry(window).or_default();
+        let book = crate::spreadsheet::workbook(&window).to_owned();
+        let titles = self.sheet_titles.entry(book.clone()).or_default();
         let reading = match key {
             TitleKey::SayColumnTitle => titles.row.map(SheetReading::ColumnTitle),
             TitleKey::SayRowTitle => titles.column.map(SheetReading::RowTitle),
@@ -1312,7 +1337,9 @@ impl ScreenReaderEngine {
                 // Set from a cell; an empty one, the grid's focus, sets nothing [hyp].
                 let said =
                     crate::apps::windows::excel::cell_at(&focus).and_then(|at| key.set(titles, at));
+                let set = *titles;
                 if let Some(said) = said {
+                    self.keep_titles(book, set);
                     self.speech.speak(&said, true);
                 }
                 return true;
@@ -1388,7 +1415,11 @@ impl ScreenReaderEngine {
         let titles = self
             .sheet_focus()
             .and_then(|f| f.window_title)
-            .and_then(|window| self.sheet_titles.get(&window).cloned())
+            .and_then(|window| {
+                self.sheet_titles
+                    .get(crate::spreadsheet::workbook(&window))
+                    .cloned()
+            })
             .unwrap_or_default();
         let Some(slots) = self.monitor_slots() else {
             return false;

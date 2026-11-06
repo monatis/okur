@@ -10032,6 +10032,87 @@ fn a_reload_key_that_reloads_nothing_is_forgotten() {
     assert!(engine.reload_asked.is_none());
 }
 
+/// Excel's titles set in a workbook are kept for the next session, as JAWS keeps them in the
+/// workbook's settings (JAWS 2025 help, popapps.chm, Excel Row and Column Title Reading): set
+/// in one engine, saved, and a new engine given them reads the workbook with its titles.
+#[test]
+fn excel_titles_are_kept_for_the_next_session() {
+    #[derive(Clone, Default)]
+    struct Kept(std::sync::Arc<std::sync::Mutex<Option<crate::spreadsheet::WorkbookTitles>>>);
+    impl crate::spreadsheet::TitleStore for Kept {
+        fn save(&self, titles: &crate::spreadsheet::WorkbookTitles) {
+            if let Ok(mut kept) = self.0.lock() {
+                *kept = Some(titles.clone());
+            }
+        }
+    }
+    let window = "Hours.xlsx - Excel";
+    let cell = |name: &str, value: &str| {
+        let mut cell = FocusEvent::new(Role::TableCell)
+            .with_name(name)
+            .with_window_title(window);
+        cell.value = Some(value.into());
+        cell.app = Some("EXCEL.EXE".into());
+        cell.platform.window_class = Some("EXCEL7".into());
+        cell
+    };
+    let engine = || {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+        let speech = SharedSpeech::default();
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+        engine.set_actions(Box::new(crate::actions::RecordingActions::default()));
+        (engine, speech)
+    };
+    // B2's place, row 1's title read above it.
+    let place = AccessibilityEvent::SheetPlace(Some(crate::event::SheetPlace {
+        address: "B2".into(),
+        selection: "B2".into(),
+        row: vec![String::new()],
+        column: vec![String::new()],
+        cells: vec![crate::event::SheetCell {
+            column: 2,
+            row: 1,
+            text: "Weekdays".into(),
+        }],
+        ..crate::event::SheetPlace::default()
+    }));
+    let store = Kept::default();
+    let (mut first, _) = engine();
+    first.set_kept_titles(Default::default(), Some(Box::new(store.clone())));
+    first.handle_focus_event(&cell("A1", "Region"));
+    let mut set_columns = KeyEvent::new(Key::Alpha('C'), Modifiers::none(), true);
+    set_columns.modifiers.insert = true;
+    set_columns.modifiers.ctrl = true;
+    set_columns.modifiers.alt = true;
+    first.handle_key_event(&set_columns);
+    let kept = store.0.lock().ok().and_then(|kept| kept.clone());
+    assert_eq!(
+        kept.as_ref()
+            .and_then(|kept| kept.workbooks.get("Hours.xlsx"))
+            .copied(),
+        Some(crate::spreadsheet::SheetTitles {
+            row: Some(1),
+            column: None
+        })
+    );
+    // The next session, with the titles kept, and one without.
+    let (mut next, _) = engine();
+    next.set_kept_titles(kept.unwrap_or_default(), None);
+    next.handle_focus_event(&cell("A2", "Central"));
+    next.handle_focus_event(&cell("B2", "12"));
+    assert_eq!(
+        next.handle_accessibility_event(&place).as_deref(),
+        Some("Weekdays\n12\nB 2")
+    );
+    let (mut fresh, _) = engine();
+    fresh.handle_focus_event(&cell("A2", "Central"));
+    fresh.handle_focus_event(&cell("B2", "12"));
+    assert_eq!(
+        fresh.handle_accessibility_event(&place).as_deref(),
+        Some("12\nB 2")
+    );
+}
+
 /// Excel's places are answered in the order asked: two quick moves into titled columns say the
 /// newer cell with its own place and titles, the older answer passed over; a reader asked
 /// before a move is answered as the reader (performance review 2026-11-02, engine finding 5).
@@ -10044,7 +10125,7 @@ fn excel_answers_go_to_their_asks_in_turn() {
     engine.set_actions(Box::new(actions.clone()));
     let window = "Hours.xlsx - Excel";
     engine.sheet_titles.insert(
-        window.to_owned(),
+        "Hours.xlsx".to_owned(),
         crate::spreadsheet::SheetTitles {
             row: Some(1),
             column: None,

@@ -402,9 +402,13 @@ pub struct ScreenReaderEngine {
     /// Excel's selection as last read, before the next selecting key; none after any other key
     /// (the selection is then the active cell alone).
     sheet_selection: Option<String>,
-    /// Each workbook's row and column titles, by its window's title, for the session (Excel's
-    /// Insert+Ctrl+Alt+C and R).
+    /// Each workbook's row and column titles, by its name (`excel::workbook`): those set with
+    /// Excel's Insert+Ctrl+Alt+C and R, kept from one session to the next, and those its names
+    /// give.
     sheet_titles: std::collections::HashMap<String, crate::spreadsheet::SheetTitles>,
+    /// The titles set, kept, and where they are kept.
+    kept_titles: crate::spreadsheet::WorkbookTitles,
+    title_store: Option<Box<dyn crate::spreadsheet::TitleStore>>,
     /// Excel's monitor cells, ten per worksheet ([`crate::spreadsheet::monitor_sheet`]), each a
     /// cell's column and row, for the session (Insert+Shift+1 to 0).
     monitor_cells: std::collections::HashMap<String, [Option<crate::actions::CellRange>; 10]>,
@@ -752,6 +756,8 @@ impl ScreenReaderEngine {
             sheet_asks: std::collections::VecDeque::new(),
             sheet_selection: None,
             sheet_titles: std::collections::HashMap::new(),
+            kept_titles: crate::spreadsheet::WorkbookTitles::default(),
+            title_store: None,
             monitor_cells: std::collections::HashMap::new(),
             sheet_last: None,
             sheet_name: String::new(),
@@ -998,7 +1004,7 @@ impl ScreenReaderEngine {
             .and_then(|focus| focus.window_title.clone());
         if let (Some(place), Some(window)) = (place, window) {
             self.sheet_titles
-                .entry(window)
+                .entry(crate::spreadsheet::workbook(&window).to_owned())
                 .or_insert_with(|| crate::spreadsheet::named_titles(place));
         }
         // A cell its application waited to say with the place (its titles).

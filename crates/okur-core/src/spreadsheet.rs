@@ -4,15 +4,42 @@
 //! functions of the neutral sheet types, for any application with a sheet
 //! (crate-structure-proposal.md §13.2, step 5a).
 
+use serde::{Deserialize, Serialize};
+
 use crate::input::Key;
 use crate::messages::msg;
 
 /// A workbook's titles, as Insert+Ctrl+Alt+C and R set them: the row holding the column titles
 /// and the column holding the row titles, each from 1 [obs, 1132/s1, s2].
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SheetTitles {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub row: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub column: Option<u32>,
+}
+
+/// The titles set in each workbook, by its name ("Hours.xlsx"), kept from one session to the
+/// next as JAWS keeps them in the workbook's own settings (JAWS 2025 help, popapps.chm, Excel
+/// Row and Column Title Reading). Titles the workbook's names give are its own, not kept.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(transparent)]
+pub struct WorkbookTitles {
+    pub workbooks: std::collections::BTreeMap<String, SheetTitles>,
+}
+
+/// The workbook a sheet's window shows, by its name: "Hours.xlsx" of "Hours.xlsx - Excel", the
+/// title before its application's own name, as JAWS names a workbook's settings after its file.
+pub(crate) fn workbook(window_title: &str) -> &str {
+    window_title
+        .rsplit_once(" - ")
+        .map_or(window_title, |(name, _)| name)
+        .trim()
+}
+
+/// Where the titles set are kept, so that they hold the next time Okur starts.
+pub trait TitleStore: Send {
+    fn save(&self, titles: &WorkbookTitles);
 }
 
 /// Excel's title keys (Excel.jkm): Insert+Ctrl+Alt+C and R set the titles

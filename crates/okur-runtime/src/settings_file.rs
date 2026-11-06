@@ -301,6 +301,14 @@ impl okur_core::labels::LabelStore for BackgroundStore {
     }
 }
 
+impl okur_core::spreadsheet::TitleStore for BackgroundStore {
+    fn save(&self, titles: &okur_core::spreadsheet::WorkbookTitles) {
+        self.own(EXCEL_TITLES, titles.clone(), |folder, titles| {
+            okur_core::spreadsheet::TitleStore::save(folder, titles)
+        });
+    }
+}
+
 impl okur_core::placemarkers::PlaceMarkerStore for BackgroundStore {
     fn save(&self, markers: &okur_core::placemarkers::PlaceMarkers) {
         self.own(PLACEMARKERS, markers.clone(), |folder, markers| {
@@ -349,6 +357,8 @@ impl SettingsStore for BackgroundStore {
 const LABELS: &str = "labels.toml";
 /// The saved PlaceMarkers' file: a list per page address.
 const PLACEMARKERS: &str = "placemarkers.toml";
+/// Excel's titles set, per workbook.
+const EXCEL_TITLES: &str = "excel-titles.toml";
 /// The saved Flexible Web rules' file: each with its name, where it applies and its
 /// customizations.
 const FLEXIBLE_WEB: &str = "flexible-web.toml";
@@ -367,6 +377,11 @@ impl SettingsFolder {
     /// The PlaceMarkers saved (Ctrl+Shift+K), as [`Self::load_labels`].
     pub fn load_placemarkers(&self) -> okur_core::placemarkers::PlaceMarkers {
         self.load_own(PLACEMARKERS)
+    }
+
+    /// Excel's titles set (Insert+Ctrl+Alt+C and R), as [`Self::load_labels`].
+    pub fn load_excel_titles(&self) -> okur_core::spreadsheet::WorkbookTitles {
+        self.load_own(EXCEL_TITLES)
     }
 
     /// The Flexible Web rules saved (Insert+Space, then X), as [`Self::load_labels`].
@@ -419,6 +434,16 @@ impl okur_core::labels::LabelStore for SettingsFolder {
             LABELS,
             "Okur's custom labels (Insert+Ctrl+Tab), by site, then by element.",
             labels,
+        );
+    }
+}
+
+impl okur_core::spreadsheet::TitleStore for SettingsFolder {
+    fn save(&self, titles: &okur_core::spreadsheet::WorkbookTitles) {
+        self.save_own(
+            EXCEL_TITLES,
+            "Okur's Excel titles (Insert+Ctrl+Alt+C and R), by workbook: the row of column titles and the column of row titles.",
+            titles,
         );
     }
 }
@@ -820,6 +845,34 @@ mod tests {
             .insert("id pickup-branch".into(), "lamp".into());
         LabelStore::save(&files, &labels);
         assert_eq!(files.load_labels(), labels);
+        let _ = std::fs::remove_dir_all(&root);
+    }
+
+    /// Excel's titles are kept in excel-titles.toml and read back the same.
+    #[test]
+    fn excel_titles_survive_a_save() {
+        use okur_core::spreadsheet::{SheetTitles, TitleStore, WorkbookTitles};
+        let root = folder("excel-titles");
+        let files = SettingsFolder::at(&root);
+        assert_eq!(files.load_excel_titles(), WorkbookTitles::default());
+        let mut titles = WorkbookTitles::default();
+        titles.workbooks.insert(
+            "Hours.xlsx".into(),
+            SheetTitles {
+                row: Some(1),
+                column: Some(1),
+            },
+        );
+        titles.workbooks.insert(
+            "Totals.xlsx".into(),
+            SheetTitles {
+                row: None,
+                column: Some(2),
+            },
+        );
+        TitleStore::save(&files, &titles);
+        assert!(root.join("excel-titles.toml").exists());
+        assert_eq!(files.load_excel_titles(), titles);
         let _ = std::fs::remove_dir_all(&root);
     }
 

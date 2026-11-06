@@ -422,6 +422,7 @@ pub async fn run(
         let store = BackgroundStore::new(folder.clone());
         engine.set_custom_labels(folder.load_labels(), Some(Box::new(store.clone())));
         engine.set_placemarkers(folder.load_placemarkers(), Some(Box::new(store.clone())));
+        engine.set_kept_titles(folder.load_excel_titles(), Some(Box::new(store.clone())));
         engine.set_flexible_web_rules(
             folder.load_flexible_web_rules(),
             Some(Box::new(store.clone())),
