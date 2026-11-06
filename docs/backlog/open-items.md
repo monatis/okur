@@ -101,6 +101,11 @@ Order of work, most used first:
 
 ## Native desktop
 
+- **Excel's window as it opens or comes back**: JAWS said "Please wait | sr-excel-fixture.xlsx
+  | - Excel (Product Activation Failed) | Hours | Branch | A 1" as the workbook opened
+  [1181/s8]; Okur says "Branch | A 1". Round 1182's attempt (Windows+R, then Escape back to
+  Excel) went to the desktop instead and left Excel no longer opening files: not imported. A
+  recording needs a way back to Excel the lab controls (another of Excel's own windows).
 - **A window back in front with no focus event** (1179's first recording, round 1178, trial 1's
   trace): the batch's console took the front for a second, and Chrome came back with a
   foreground event alone; JAWS read on, Okur's replay stayed in the console. Live, Okur reads
