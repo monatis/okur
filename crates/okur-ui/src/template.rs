@@ -1297,6 +1297,7 @@ mod tests {
                         columns: vec!["PlaceMarker".into(), "Generalized to Domain".into()],
                         rows: Vec::new(),
                         selected: None,
+                        edit_column: None,
                     },
                 ),
                 control("cancel", "&Cancel", ControlKind::Button { default: false }),

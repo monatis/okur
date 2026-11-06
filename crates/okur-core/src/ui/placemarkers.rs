@@ -103,6 +103,7 @@ impl ListDialog {
                         ],
                         rows,
                         selected: None,
+                        edit_column: None,
                     },
                     true,
                 ),
@@ -442,6 +443,7 @@ mod tests {
                     "Document".to_owned()
                 ]],
                 selected: None,
+                edit_column: None,
             })
         );
         // Without PlaceMarkers there is nothing to remove [obs, 699/s3-s5].

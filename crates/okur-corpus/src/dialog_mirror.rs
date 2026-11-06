@@ -909,6 +909,7 @@ mod tests {
                             columns: vec!["PlaceMarker".to_owned()],
                             rows: vec![vec!["Water".to_owned()]],
                             selected: None,
+                            edit_column: None,
                         },
                         enabled: true,
                         hidden: false,

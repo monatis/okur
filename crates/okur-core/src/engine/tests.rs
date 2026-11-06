@@ -10316,3 +10316,90 @@ fn closing_the_layer_help_reads_the_line_then_the_window() {
     engine.handle_focus_event(&field);
     assert!(GatedSpeech::take(&speech.history).is_empty());
 }
+
+/// Manage Key Labels from Settings Center: Space on its item opens it on the draft's labels;
+/// Toggle Mute on Space and OK give the draft the change, which Settings Center's OK keeps, as
+/// JAWS keeps it [JAWS 2025 help, Manage Key Labels; obs, key-labels-store-probe.ps1].
+#[test]
+fn manage_key_labels_changes_settings_center() {
+    use crate::ui::{DialogKey, FromUi, ToUi, Value};
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+    let ui = crate::ui::RecordingUiHost::default();
+    engine.set_ui(Box::new(ui.clone()));
+    engine.set_settings_store(Box::new(crate::settings::RecordingSettingsStore::default()));
+    engine.execute_command("SettingsCenter");
+    let shown = |sent: &[ToUi]| {
+        sent.iter().find_map(|m| match m {
+            ToUi::DialogShow { dialog } => Some(dialog.clone()),
+            _ => None,
+        })
+    };
+    let Some(center) = shown(&ui.take()) else {
+        panic_free_fail("Settings Center not shown");
+        return;
+    };
+    let item = tree_item_index(&center, "Manage Key Labels...");
+    assert!(item.is_some(), "no Manage Key Labels... in the tree");
+    for message in [
+        FromUi::DialogChanged {
+            id: center.id,
+            control: "tree".into(),
+            value: Value::Selected(item.unwrap_or_default()),
+        },
+        FromUi::DialogKey {
+            id: center.id,
+            control: "tree".into(),
+            key: DialogKey::Change,
+        },
+    ] {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(message));
+    }
+    let Some(labels) = shown(&ui.take()) else {
+        panic_free_fail("Manage Key Labels not shown");
+        return;
+    };
+    assert_eq!(labels.title, "Manage Key Labels");
+    let space = crate::key_labels::defaults()
+        .iter()
+        .position(|r| r.name == "Space")
+        .unwrap_or_default();
+    for message in [
+        FromUi::DialogChanged {
+            id: labels.id,
+            control: "keys".into(),
+            value: Value::Selected(space),
+        },
+        FromUi::DialogPressed {
+            id: labels.id,
+            control: "toggle".into(),
+        },
+        FromUi::DialogPressed {
+            id: labels.id,
+            control: "ok".into(),
+        },
+    ] {
+        engine.handle_accessibility_event(&AccessibilityEvent::Ui(message));
+    }
+    let sent = ui.take();
+    assert!(sent.contains(&ToUi::DialogClose { id: labels.id }));
+    assert!(sent.contains(&ToUi::DialogEnable {
+        id: center.id,
+        control: "apply".into(),
+        enabled: true,
+    }));
+    // Not kept until Settings Center's OK.
+    assert!(engine.settings.key_labels.is_empty());
+    engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
+        id: center.id,
+        control: "ok".into(),
+    }));
+    assert_eq!(
+        engine.settings.key_labels,
+        [crate::key_labels::KeyLabelChange {
+            key: "Space".into(),
+            label: "Space".into(),
+            muted: true,
+        }]
+    );
+}

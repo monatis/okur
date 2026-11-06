@@ -495,6 +495,8 @@ settings-tree-mouse-echo = Mouse Echo
 settings-tree-miscellaneous = Miscellaneous
 # Speech Verbosity's item that opens the verbosity levels' own dialog, as JAWS's.
 settings-tree-configure-verbosity = Configure Verbosity Levels
+settings-tree-manage-key-labels = Manage Key Labels...
+settings-tree-manage-key-labels-description = Opens a dialog to choose what is said when each key is echoed, and which keys are not echoed at all.
 settings-tree-configure-verbosity-description = Space opens a dialog to choose, for each verbosity level, what is spoken and whether messages are long or short.
 settings-tree-general-options = General Options
 settings-tree-say-all-options = Say All Options
@@ -747,3 +749,22 @@ command-search-title = Search for Okur Commands
 command-search-for = Search &for:
 command-search-results = Results
 command-search-entry = { $name }. { $keys }
+
+## Manage Key Labels (Settings Center, Keyboard, General), as JAWS's [obs, the walk of Manage Key
+## Labels, old-pc 2026-11-06]: its list, three columns, and its buttons.
+key-labels-title = Manage Key Labels
+# The list's name. JAWS's is the control's leftover "List1".
+key-labels-list = Keys
+key-labels-column-name = Key Name
+key-labels-column-label = Key Label
+key-labels-column-status = Mute Status
+# A key's mute status: said when the key is echoed, never, or always (it cannot be muted).
+key-labels-speak = Speak
+key-labels-mute = Mute
+key-labels-always-speak = Always Speak
+# The label of a group of keys that has none of its own (Letters, Numbers, Symbols).
+key-labels-no-label = No Label
+key-labels-toggle-mute = &Toggle Mute
+key-labels-change-label = &Change Label
+key-labels-ok = OK
+key-labels-cancel = Cancel

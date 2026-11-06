@@ -53,6 +53,8 @@ const RESULT_ESCAPE: &str = "result_escape";
 const RESULT_CHANGE: &str = "result_change";
 /// A pane control's id: this, then its setting's.
 const PANE_PREFIX: &str = "pane:";
+/// A pane button's id that opens a dialog: this, then the dialog's.
+const PANE_OPENS: &str = "opens:";
 /// The lifetimes, as the menu lists them.
 const LIFETIMES: [Lifetime; 3] = [
     Lifetime::UntilExit,
@@ -317,14 +319,70 @@ impl SavedHistory {
     }
 }
 
+/// An item of Settings Center's tree that opens a dialog of its own: Space on it, or its
+/// button in the pane (F6, then Space) [obs, the walk of Manage Key Labels].
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum Opens {
+    /// Speech Verbosity's "Configure Verbosity Levels".
+    VerbosityLevels,
+    /// Keyboard, General's "Manage Key Labels...", the group's last item [obs, the walk of
+    /// Settings Center: "Manage Key Labels... | 10 of 10"].
+    KeyLabels,
+}
+
+impl Opens {
+    const ALL: [Opens; 2] = [Opens::VerbosityLevels, Opens::KeyLabels];
+
+    /// The group it is the last item of.
+    fn group(self) -> TreeGroup {
+        match self {
+            Self::VerbosityLevels => TreeGroup::SpeechVerbosity,
+            Self::KeyLabels => TreeGroup::KeyboardGeneral,
+        }
+    }
+
+    fn label(self) -> String {
+        match self {
+            Self::VerbosityLevels => msg::settings_tree_configure_verbosity().to_string(),
+            Self::KeyLabels => msg::settings_tree_manage_key_labels().to_string(),
+        }
+    }
+
+    fn description(self) -> String {
+        match self {
+            Self::VerbosityLevels => {
+                msg::settings_tree_configure_verbosity_description().to_string()
+            }
+            Self::KeyLabels => msg::settings_tree_manage_key_labels_description().to_string(),
+        }
+    }
+
+    /// What opening it asks of the engine.
+    fn outcome(self) -> Outcome {
+        match self {
+            Self::VerbosityLevels => Outcome::OpenVerbosityLevels,
+            Self::KeyLabels => Outcome::OpenKeyLabels,
+        }
+    }
+
+    /// Its button's id in the pane.
+    fn pane_id(self) -> String {
+        let name = match self {
+            Self::VerbosityLevels => "verbosity_levels",
+            Self::KeyLabels => "key_labels",
+        };
+        format!("{PANE_OPENS}{name}")
+    }
+}
+
 /// A row of the tree: a group, a setting in the group above it, or an item that opens a
 /// dialog of its own.
 #[derive(Debug, Clone, Copy)]
 enum Row {
     Group(TreeGroup),
     Setting(&'static SettingSpec),
-    /// Speech Verbosity's "Configure Verbosity Levels": Space opens its dialog.
-    VerbosityLevels,
+    /// An item that opens a dialog of its own.
+    Opens(Opens),
     /// The last group, Last Changed Settings.
     LastChanged,
     /// A setting changed lately, in Last Changed Settings, named with its place in the tree.
@@ -336,7 +394,7 @@ impl PartialEq for Row {
         match (self, other) {
             (Self::Group(a), Self::Group(b)) => a == b,
             (Self::Setting(a), Self::Setting(b)) => a.id == b.id,
-            (Self::VerbosityLevels, Self::VerbosityLevels) => true,
+            (Self::Opens(a), Self::Opens(b)) => a == b,
             (Self::LastChanged, Self::LastChanged) => true,
             (Self::Recent(a), Self::Recent(b)) => a.id == b.id,
             _ => false,
@@ -599,7 +657,7 @@ impl SettingsTree {
     fn row_group(&self, row: &Row) -> Option<TreeGroup> {
         match row {
             Row::Setting(spec) | Row::Recent(spec) => self.group_of(spec),
-            Row::VerbosityLevels => Some(TreeGroup::SpeechVerbosity),
+            Row::Opens(opens) => Some(opens.group()),
             Row::Group(group) => group.parent(),
             Row::LastChanged => None,
         }
@@ -710,6 +768,20 @@ impl SettingsTree {
     }
 
     /// The settings as the dialog shows them now.
+    /// Manage Key Labels' OK: the draft's key labels are `changes`, and Apply is available.
+    pub fn set_key_labels(&mut self, changes: Vec<crate::key_labels::KeyLabelChange>) -> Vec<ToUi> {
+        if self.draft.key_labels == changes {
+            return Vec::new();
+        }
+        self.draft.key_labels = changes;
+        self.changed = true;
+        vec![ToUi::DialogEnable {
+            id: self.id,
+            control: "apply".to_owned(),
+            enabled: true,
+        }]
+    }
+
     pub fn draft(&self) -> &Settings {
         &self.draft
     }
@@ -790,27 +862,32 @@ impl SettingsTree {
             let text = format!("{label} {description}").to_lowercase();
             words.iter().all(|w| text.contains(w))
         };
-        let levels = self.flavor == Flavor::Center
-            && words.iter().all(|w| {
-                msg::settings_tree_configure_verbosity()
-                    .as_str()
-                    .to_lowercase()
-                    .contains(w)
-            });
+        // The items that open dialogs, in Settings Center alone, found by their names.
+        let opens: Vec<Opens> = Opens::ALL
+            .into_iter()
+            .filter(|_| self.flavor == Flavor::Center)
+            .filter(|o| {
+                let label = o.label().to_lowercase();
+                words.iter().all(|w| label.contains(w))
+            })
+            .collect();
         let order: &[TreeGroup] = match self.flavor {
             Flavor::Center => &TreeGroup::CENTER,
             Flavor::Quick => &TreeGroup::QUICK,
         };
-        // Each group's own rows: its settings found, and Configure Verbosity Levels.
+        // Each group's own rows: its settings found, then the items that open dialogs.
         let own = |group: TreeGroup| -> Vec<Row> {
             let mut rows: Vec<Row> = self
                 .shown()
                 .filter(|(g, spec)| *g == group && matches(spec))
                 .map(|(_, spec)| Row::Setting(spec))
                 .collect();
-            if levels && group == TreeGroup::SpeechVerbosity {
-                rows.push(Row::VerbosityLevels);
-            }
+            rows.extend(
+                opens
+                    .iter()
+                    .filter(|o| o.group() == group)
+                    .map(|&o| Row::Opens(o)),
+            );
             rows
         };
         // A group is shown when it or one of its subgroups has something to show.
@@ -931,9 +1008,9 @@ impl SettingsTree {
                 item.level = 1;
                 item
             }
-            Row::VerbosityLevels => TreeItem {
-                text: msg::settings_tree_configure_verbosity().to_string(),
-                level: TreeGroup::SpeechVerbosity.depth() + 1,
+            Row::Opens(opens) => TreeItem {
+                text: opens.label(),
+                level: opens.group().depth() + 1,
                 open: true,
                 checked: None,
             },
@@ -989,9 +1066,7 @@ impl SettingsTree {
                 .and_then(|l| l().description())
                 .map(|d| d.to_string())
                 .unwrap_or_default(),
-            Some(Row::VerbosityLevels) => {
-                msg::settings_tree_configure_verbosity_description().to_string()
-            }
+            Some(Row::Opens(opens)) => opens.description(),
             Some(Row::Group(_)) | None => msg::settings_tree_group_description().to_string(),
         }
     }
@@ -1188,7 +1263,7 @@ impl SettingsTree {
     fn change(&mut self) -> Outcome {
         let spec = match self.rows.get(self.selected).copied() {
             Some(Row::Setting(spec) | Row::Recent(spec)) => spec,
-            Some(Row::VerbosityLevels) => return Outcome::OpenVerbosityLevels,
+            Some(Row::Opens(opens)) => return opens.outcome(),
             Some(Row::Group(_) | Row::LastChanged) | None => return Outcome::Nothing,
         };
         self.change_setting(spec)
@@ -1200,7 +1275,7 @@ impl SettingsTree {
     fn change_result(&mut self) -> Outcome {
         let spec = match self.results.get(self.result).copied() {
             Some(Row::Setting(spec) | Row::Recent(spec)) => spec,
-            Some(Row::VerbosityLevels) => return Outcome::OpenVerbosityLevels,
+            Some(Row::Opens(opens)) => return opens.outcome(),
             Some(Row::Group(_) | Row::LastChanged) | None => return Outcome::Nothing,
         };
         let before = self.result_texts();
@@ -1343,7 +1418,7 @@ impl SettingsTree {
                 .filter(|(g, _)| g.within(group))
                 .map(|(_, spec)| spec)
                 .collect(),
-            Row::VerbosityLevels | Row::LastChanged => Vec::new(),
+            Row::Opens(_) | Row::LastChanged => Vec::new(),
         }
     }
 
@@ -1491,7 +1566,8 @@ impl SettingsTree {
         match self.rows.get(self.selected).copied()? {
             Row::Setting(spec) | Row::Recent(spec) => self.group_of(spec),
             Row::Group(group) => Some(group),
-            Row::VerbosityLevels | Row::LastChanged => None,
+            Row::Opens(opens) => Some(opens.group()),
+            Row::LastChanged => None,
         }
     }
 
@@ -1504,6 +1580,18 @@ impl SettingsTree {
                 .shown()
                 .filter(|(g, _)| *g == group)
                 .filter_map(|(_, spec)| self.pane_control(spec))
+                .chain(
+                    Opens::ALL
+                        .into_iter()
+                        .filter(|o| self.flavor == Flavor::Center && o.group() == group)
+                        .map(|o| Control {
+                            id: o.pane_id(),
+                            label: o.label(),
+                            kind: ControlKind::Button { default: false },
+                            enabled: true,
+                            hidden: false,
+                        }),
+                )
                 .collect(),
             keys: Vec::new(),
         }
@@ -1618,6 +1706,7 @@ impl SettingsTree {
             Some(Row::Setting(spec) | Row::Recent(spec)) => {
                 Some(format!("{PANE_PREFIX}{}", spec.id))
             }
+            Some(Row::Opens(opens)) => Some(opens.pane_id()),
             _ => None,
         };
         let control = selected
@@ -1784,6 +1873,11 @@ impl SettingsTree {
                 }]),
                 LIFETIME => self.context_menu(),
                 PANE_KEY => self.to_pane(),
+                // A pane button that opens a dialog.
+                pressed if pressed.starts_with(PANE_OPENS) => Opens::ALL
+                    .into_iter()
+                    .find(|o| o.pane_id() == pressed)
+                    .map_or(Outcome::Nothing, Opens::outcome),
                 DEFAULT_PLACE if self.flavor == Flavor::Center => {
                     self.change_place(0);
                     let mut sent = self.refill();

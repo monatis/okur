@@ -463,6 +463,7 @@ fn handle(message: ToUi) {
         ToUi::DialogSwap { id, show, hide } => crate::dialog::swap(id, &show, &hide),
         ToUi::DialogLabel { id, control, label } => crate::dialog::set_label(id, &control, &label),
         ToUi::DialogFocus { id, control } => crate::dialog::focus(id, &control),
+        ToUi::DialogEditCell { id, control } => crate::dialog::edit_cell(id, &control),
         ToUi::FileOpen {
             id,
             control,

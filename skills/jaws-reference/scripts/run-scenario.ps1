@@ -703,10 +703,11 @@ function Invoke-Step($type, [string]$command, [int]$repeat = 1) {
         # Started through ShellExecute (Start-Process), as Windows requires to grant UI Access;
         # JAWS's dialogs are jfw.exe's, its Results Viewer windows (View Clipboard Text's
         # "Clipboard Text", which Escape from a plain program leaves open, 561) ResultsViewer's,
-        # its Dictionary Manager (Insert+D) JDiction.exe's, Okur's okur-ui.exe's.
+        # its Dictionary Manager (Insert+D) JDiction.exe's, Settings Center (Insert+6) and Quick
+        # Settings (Insert+V) their own processes', Okur's okur-ui.exe's.
         'key_ui_access' {
             if (-not (Test-Path -LiteralPath $LabKeys)) { return $false }
-            $sent = Start-Process -FilePath $LabKeys -ArgumentList @('--allow', 'jfw,ResultsViewer,JDiction,CommandsSearchViewer,okur-ui', "`"$command`"") -WindowStyle Hidden -Wait -PassThru
+            $sent = Start-Process -FilePath $LabKeys -ArgumentList @('--allow', 'jfw,ResultsViewer,JDiction,CommandsSearchViewer,SettingsCenter,QuickSettings,okur-ui', "`"$command`"") -WindowStyle Hidden -Wait -PassThru
             if ($sent.ExitCode -eq 0) { return $true }
             # With Okur reading, the window JAWS's elevated Results Viewer was is Okur's Virtual
             # Viewer, which never takes the focus (helper-ui-architecture.md): the application

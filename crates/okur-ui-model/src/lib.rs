@@ -129,6 +129,12 @@ pub enum ControlKind {
         columns: Vec<String>,
         rows: Vec<Vec<String>>,
         selected: Option<usize>,
+        /// The column whose cell F2 (or [`ToUi::DialogEditCell`]) edits in place for the
+        /// selected row, in an edit without a name: JAWS's Manage Key Labels, " Edit | Tab | Type
+        /// in text." [obs, 1169/s31, s35]. The text comes back as [`Value::ItemRenamed`];
+        /// Escape keeps the cell as it was.
+        #[serde(default)]
+        edit_column: Option<usize>,
     },
     /// A list box of items, one selected, named by its label shown above it: JAWS's Window
     /// List, "Running Applications List box" [obs, 511/s1].
@@ -201,7 +207,8 @@ pub enum Value {
     Selected(usize),
     /// A check list's item checked or not, by its index.
     ItemChecked(usize, bool),
-    /// A check list's item renamed in place (F2), by its index.
+    /// A check list's item renamed in place (F2), or a table's editable cell edited, by the
+    /// row's index.
     ItemRenamed(usize, String),
     /// A tree's item opened (`true`) or closed, by its index; and from Okur, a tree item's
     /// text and check box changed in place, by its index, the tree otherwise as it is.
@@ -302,6 +309,9 @@ pub enum ToUi {
     /// Move the dialog's focus to a control: the rules' list after Disable, as JAWS's
     /// Manage Notification Rules gives it back the focus.
     DialogFocus { id: u32, control: String },
+    /// Edit the selected row's editable cell of table `control` in place, as F2 there does:
+    /// Manage Key Labels' Change Label.
+    DialogEditCell { id: u32, control: String },
     /// Show the system's Open dialog over dialog `id` for a file, as JAWS's Select Sound...
     /// opens Windows' (802/s12): the file types offered as (name, pattern) pairs, and the
     /// folder it opens in (none: the system's sounds). The path chosen is put in the edit

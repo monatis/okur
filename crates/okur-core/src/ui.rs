@@ -12,6 +12,7 @@ pub mod dictionary;
 pub mod find;
 pub mod flexible_web;
 pub mod jump;
+pub mod key_labels;
 pub mod label;
 pub mod lists;
 pub mod message_box;

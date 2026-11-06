@@ -34,6 +34,7 @@ mod highlight;
 mod information;
 mod jump;
 mod key_help;
+mod key_labels;
 mod labels;
 mod layer;
 mod mouse_echo;
@@ -328,6 +329,8 @@ pub struct ScreenReaderEngine {
     settings_dialog: Option<crate::ui::settings::SettingsDialog>,
     /// Settings Center or Quick Settings, while it is open.
     settings_tree: Option<crate::ui::settings_tree::SettingsTree>,
+    /// Manage Key Labels, open over Settings Center.
+    key_labels_dialog: Option<crate::ui::key_labels::KeyLabelsDialog>,
     /// Said before the next focus spoken: what one of Okur's dialogs did as it moved the focus
     /// ("Search edit box cleared.").
     said_before_focus: Option<String>,
@@ -713,6 +716,7 @@ impl ScreenReaderEngine {
             settings_dialog_application: None,
             settings_dialog: None,
             settings_tree: None,
+            key_labels_dialog: None,
             said_before_focus: None,
             basics_dialog: None,
             startup_wizard: None,
@@ -2925,6 +2929,7 @@ impl ScreenReaderEngine {
                 self.returning_from_dialog();
             }
             Outcome::OpenVerbosityLevels => self.open_verbosity_levels(),
+            Outcome::OpenKeyLabels => self.open_key_labels(),
             Outcome::Forget {
                 scope,
                 setting,
@@ -2999,6 +3004,7 @@ impl ScreenReaderEngine {
             _ if self.is_label_event(message) => self.handle_label_event(message),
             _ if self.is_placemarker_event(message) => self.handle_placemarker_event(message),
             _ if self.is_dictionary_event(message) => self.handle_dictionary_event(message),
+            _ if self.is_key_labels_event(message) => self.handle_key_labels_event(message),
             _ if self.is_command_search_event(message) => self.handle_command_search_event(message),
             _ if self.is_flexible_web_event(message) => self.handle_flexible_web_event(message),
             _ if self.is_startup_wizard_event(message) => self.handle_startup_wizard_event(message),
