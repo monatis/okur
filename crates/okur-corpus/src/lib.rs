@@ -730,6 +730,9 @@ mod tests {
             "JDiction.exe",
             "NotificationViewer.exe",
             "ResultsViewer.exe",
+            // JAWS's Settings Center: its tree's settings and their values, Manage Key Labels'
+            // keys, JAWS's own data (1169).
+            "SettingsCenter.exe",
             "ShellExperienceHost.exe",
             "SystemSettings.exe",
             "WINWORD.EXE",
