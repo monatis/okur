@@ -97,10 +97,32 @@ JAWS's features from Settings Center and the help) and
   Shift+Tab returns to a field.
 - Chords beside Shift+Tab are not named by the key echo (none recorded): Ctrl, Alt chords.
 
+## Later: Settings Center's opening, and the Web Verbosity Level
+
+- **"0 Search Results" gone** (`04b6852e`): `okur-dialog-probe.ps1` (research: Okur's dialog as
+  Windows holds it) showed UI Automation's "0 Search Results" to be the visible, empty label above
+  the description, named after the hidden results label before it. okur-ui makes no empty labels
+  now. Live: "Notepad - Okur Settings Center dialog | SearchBox | SearchBox Edit | Type in text."
+  "SearchBox" stays (the prompt rule); a hidden label would still name the edit and leave the
+  control view, but marking one touches every `Control` literal (47) or `Edit` (24): later.
+- **Right's "open"** is JAWS's own rule for a Win32 tree (" ‹open› ‹›", 748/s10); JAWS's Settings
+  Center tree is WinForms, read "Keyboard open 2 items" (303/s7's rule). Not a reading bug.
+- **Web Verbosity Level researched** (`2db7afa3`): `web-verbosity-walk.ps1` read the three levels'
+  "Announce Start and End For:" trees (`jaws-reading-settings-research.md` §14, 24 items each).
+  Over Chrome old-pc reads at **High** (`Chrome.JCF [VirtualCursorVerbosity]
+  VirtualCursorVerbosityLevel=2`): the web corpus was recorded at High, where JAWS's default is
+  Medium; Okur announces High's set today, for everyone.
+
 ## Next
 
-1. A probe of Okur's Settings Center as it opens (the open item above), then Right's "open" and
-   count, from 1169/s4, s6.
-2. The plan's §3.2 in its order: the rest of Settings Center's groups beside JAWS's (every JAWS
-   option, its default and place), ranked by everyday use.
+1. **Web Verbosity Level, built** (the customization map's rank 4): a setting with High, Medium
+   (the default) and Low, per application, read from the application's JCF; replay merges the
+   recording's application JCF (Chrome.JCF, in its provenance) over DEFAULT.JCF as JAWS does, and
+   the reference machine is High, so parity keeps measuring what was recorded. The level reaches
+   the linearizer as a reading mark (`ReadingMarks`, as Identify Same Page Links does); a
+   structure off has no start and end lines, its spans kept for R, Shift+R, O and the Regions list
+   (cursor.rs reads landmarks from spans). Record first: one page with every landmark, an
+   article, a figure, a block quote, a list and a table read with Down at Medium and at Low
+   (`jaws_settings` Chrome.JCF VirtualCursorVerbosityLevel 1 and 0, to confirm those values).
+2. Then the plan's §3.2 in its order: Settings Center's other groups beside JAWS's.
 3. Linux: more of the web corpus in the lab (379/379 now), GTK's controls.
