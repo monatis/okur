@@ -146,7 +146,10 @@ purpose, the reason is in [accepted divergences](accepted-divergences.md).
   gridlines, Alt+Shift+H the hyperlink, Ctrl+Shift+V the input message, Insert+Ctrl+F2 the
   formula and Ctrl+NumPad 5 the formula bar's last number or word; Alt+Shift+Home and End move
   to the data region's first and last cells, Ctrl+Shift+Space selects the region and
-  Shift+Backspace collapses the selection.
+  Shift+Backspace collapses the selection. Insert+Tab says the worksheet, the cell and its
+  coordinates, and twice quickly shows the cell's appearance in the Virtual Viewer; AutoSum
+  (Alt+Equals), the date and time stamps (Ctrl+Semicolon, Ctrl+Shift+Semicolon) say what they
+  do, and Alt+PageDown and Alt+PageUp say the screen moved before the cell.
   Selecting with Shift and the arrows says the cells added, Shift+Space and Ctrl+Space the
   whole row or column. An empty cell is "blank" with its coordinates; typing in a cell, Delete
   and Ctrl+Z ("Undo") say the cell as it is after them. Shift+F10 opens the cell's menu and

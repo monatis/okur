@@ -301,6 +301,30 @@ and on the dev box alike. At the owner's request the question went to Microsoft 
 - Old-pc's Excel: kept running by `sr-excel-comments.xlsx` (a fresh Excel shows Office's
   Activation Wizard; the fixture's own workbook as the keeper made Excel ask to reopen it).
 
+## Excel's entry keys and Say Current Focus (rounds 1185, 1186)
+
+- **Recorded** (`7cc5adb1`): AutoSum (Alt+Equals), "Type in the range to Sum using colon to
+  separate or | Press enter to accept default range"; Ctrl+Semicolon, "Inserted date";
+  Ctrl+Shift+Semicolon, "Inserted time"; Alt+PageDown, "Moved right one screen | blank | Z 5 |
+  Active Cell: Z5", Alt+PageUp likewise left. Insert+Tab, "Hours | Branch | A 1"; twice quickly
+  on a cell with text, the Virtual Viewer's "Description of cell: | Cell Font and Formatting: |
+  Calibri | Regular | 11 point | cell font text color Black | cell font background color White |
+  vertical alignment | horizontal alignment | format general | Normal style | Press ESCAPE to
+  close this message." (Excel's own alignments left empty), on an empty cell "blank" alone;
+  Escape from the viewer says the cell again. PageDown and PageUp say the cell alone; Ctrl+A says
+  the region selected as Ctrl+Shift+End does.
+- **Built** (`0d29ecc5`): `spreadsheet::entry_key_said` (the key goes on to Excel), the screen
+  move's words before the cell (`excel::key_words`, also for an empty cell's place), the
+  `SheetReading::Focus` and `Appearance` readings, `Command::SayCurrentFocusInDetail` (Say
+  Current Focus pressed twice; elsewhere the focus as once), the application's `focus_again`
+  after the viewer closes, Ctrl+A a selecting key. `okur-lab parity`: `JAWS parity (Ia2):
+  12611/13209 steps match exactly` (1185: 17/17, 1186: 19/19).
+- **Queued on old-pc**: 1187 (select region Ctrl+Shift+8, page breaks Ctrl+Shift+B, worksheet
+  objects Ctrl+Shift+O, Insert+Ctrl+C, Insert+Alt+C, spelling Insert+F7, the totals' row and
+  column setters Ctrl+Insert+Delete and Enter, formula mode Equals) and 1188 (Alt+Shift+B on a
+  new fixture, `corpus/pending/desktop-excel-borders.ps1`, with borders of several styles; its
+  trace has no border data yet, so a re-recording follows once okur-lab reads borders).
+
 ## Also
 
 - README: the demo video's badge (`fd540b71`, the owner's YouTube video); "Trying it" built
