@@ -115,20 +115,43 @@ pub fn focus_in_window(
     uia: &IUIAutomation,
     window: windows::Win32::Foundation::HWND,
 ) -> Option<IUIAutomationElement> {
-    use windows::Win32::UI::WindowsAndMessaging::{GetAncestor, GA_ROOT};
+    use windows::Win32::UI::WindowsAndMessaging::{GetAncestor, GetWindowThreadProcessId, GA_ROOT};
     // SAFETY: UIA client calls on a valid automation object; plain Win32 queries on window
     // handles, a handle that is gone giving none.
     unsafe {
         let focused = uia.GetFocusedElement().ok();
+        let mut window_process = 0u32;
+        GetWindowThreadProcessId(window, Some(&mut window_process));
         let elsewhere = focused.as_ref().is_some_and(|element| {
-            element
+            match element
                 .CurrentNativeWindowHandle()
                 .ok()
                 .filter(|handle| !handle.is_invalid())
-                .is_some_and(|handle| GetAncestor(handle, GA_ROOT) != GetAncestor(window, GA_ROOT))
+            {
+                Some(handle) => GetAncestor(handle, GA_ROOT) != GetAncestor(window, GA_ROOT),
+                // An element without a window of its own (a cell of Excel's grid) is
+                // elsewhere when its process is not the window's: UI Automation still named
+                // Excel's cell as Okur's dialog came to the front, and the dialog's title was
+                // said over the cell (Okur live, 1135/s6, 2026-11-06).
+                None => element.CurrentProcessId().ok().is_some_and(|process| {
+                    window_process != 0 && u32::try_from(process).ok() != Some(window_process)
+                }),
+            }
         });
         if elsewhere && !window.is_invalid() {
-            uia.ElementFromHandle(window).ok().or(focused)
+            // A list's window stands for its selected item, which its own focus event names a
+            // moment later: the list and then its item were said, the dialog's name twice
+            // (Okur's Move to Monitor Cell, live 1135/s6).
+            let own = uia.ElementFromHandle(window).ok();
+            let selected = own.as_ref().and_then(|list| {
+                let pattern: IUIAutomationSelectionPattern =
+                    list.GetCurrentPatternAs(UIA_SelectionPatternId).ok()?;
+                let items = pattern.GetCurrentSelection().ok()?;
+                (items.Length().ok()? > 0)
+                    .then(|| items.GetElement(0).ok())
+                    .flatten()
+            });
+            selected.or(own).or(focused)
         } else {
             focused
         }

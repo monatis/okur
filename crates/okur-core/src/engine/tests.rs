@@ -9716,10 +9716,26 @@ fn excel_the_monitor_cell_list() {
         return;
     };
     assert_eq!(dialog.title, "Move to Monitor Cell");
-    assert!(dialog.controls.iter().any(|c| matches!(
-        &c.kind,
-        ControlKind::List { items, .. } if items.first().map(String::as_str) == Some("B2: 12")
-    )));
+    // A list box without a name, as JAWS's: "dialog | List box | B2: 12".
+    assert!(dialog.controls.iter().any(|c| c.label.is_empty()
+        && matches!(
+            &c.kind,
+            ControlKind::ListBox { items, .. } if items.first().map(String::as_str) == Some("B2: 12")
+        )));
+    // Windows names it after the dialog; the focus in it says no such name (live, 1135/s6).
+    speech.take();
+    let mut item = FocusEvent::new(Role::ListItem)
+        .with_name("B2: 12")
+        .with_window_title("Move to Monitor Cell");
+    item.app = Some("okur-ui.exe".into());
+    item.container_role = Some(Role::List);
+    item.container_name = Some("Move to Monitor Cell".into());
+    item.item_index = Some(1);
+    item.item_count = Some(1);
+    engine.handle_focus_event(&item);
+    let said = speech.take().join("\n");
+    assert!(said.starts_with("Move to Monitor Cell"), "{said}");
+    assert_eq!(said.matches("Move to Monitor Cell").count(), 1, "{said}");
     engine.handle_accessibility_event(&AccessibilityEvent::Ui(FromUi::DialogPressed {
         id: dialog.id,
         control: "ok".into(),

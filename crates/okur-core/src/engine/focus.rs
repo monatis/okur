@@ -238,6 +238,7 @@ impl ScreenReaderEngine {
             keyed.text = Some(shown);
         }
         self.as_find_dialog_focus(&mut keyed);
+        self.as_list_dialog_focus(&mut keyed);
         let focus = &keyed;
         self.last_selected = None;
         if focus.role != Role::MenuItem {

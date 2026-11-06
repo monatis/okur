@@ -116,6 +116,27 @@ impl ScreenReaderEngine {
         }
     }
 
+    /// The focus in Move to Monitor Cell's list as Okur drew it: a list box without a name,
+    /// which Windows names after the dialog ("Move to Monitor Cell List box"), where JAWS's is
+    /// "dialog | List box | B2: 12" [obs, 1135/s6; Okur live on old-pc].
+    pub(super) fn as_list_dialog_focus(&self, focus: &mut crate::event::FocusEvent) {
+        use crate::ui::lists::ListKind;
+        let monitor = self
+            .list_dialog
+            .as_ref()
+            .is_some_and(|d| d.kind() == ListKind::SheetList(crate::event::SheetListKind::Monitor));
+        let title = crate::messages::msg::list_dialog_move_to_monitor_cell().to_string();
+        if monitor
+            && focus.role == crate::aom::Role::ListItem
+            && focus.window_title.as_deref() == Some(title.as_str())
+        {
+            if focus.container_name.as_deref() == Some(title.as_str()) {
+                focus.container_name = None;
+            }
+            focus.groups.retain(|group| group.name != title);
+        }
+    }
+
     /// Keeps the dialog's options and history for its next opening.
     fn keep_find(&mut self, dialog: &FindDialog) {
         self.find_options = dialog.options();

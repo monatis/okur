@@ -865,7 +865,21 @@ impl ListDialog {
                     crate::event::SheetListKind::Monitor => msg::list_dialog_move_to_monitor_cell(),
                 },
                 vec![
-                    list(msg::list_dialog_form_fields_list()),
+                    // Move to Monitor Cell's is a list box without a name, "dialog | List box |
+                    // B2: 12 | 1 of 1 | To move to an item press the Arrow keys." [obs,
+                    // 1135/s6]; the others' a list view, "List1 List view" [obs, 521/s13].
+                    if kind == crate::event::SheetListKind::Monitor {
+                        control(
+                            self.list_id(),
+                            "",
+                            ControlKind::ListBox {
+                                items: self.texts(),
+                                selected: self.selected,
+                            },
+                        )
+                    } else {
+                        list(msg::list_dialog_form_fields_list())
+                    },
                     button("ok", msg::form_field_list_ok(), true),
                     button("cancel", msg::form_field_list_cancel(), false),
                 ],
