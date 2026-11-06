@@ -237,6 +237,7 @@ impl WebLevelDialog {
         let Some(row) = rows().get(self.selected).copied() else {
             return WebLevelOutcome::Nothing;
         };
+        let before: Vec<TreeItem> = rows().into_iter().map(|r| self.item(r)).collect();
         match row {
             Row::Structure(structure) => {
                 let on = !self.announced(structure);
@@ -253,13 +254,22 @@ impl WebLevelDialog {
                 }
             }
         }
-        let items = rows().into_iter().map(|r| self.item(r)).collect();
-        WebLevelOutcome::Send(vec![ToUi::DialogTree {
-            id: self.id,
-            control: TREE.to_owned(),
-            items,
-            selected: self.selected,
-        }])
+        // Each row's item set again where it changed (the tree filled again would move its
+        // selection to the top as it fills).
+        let sent = rows()
+            .into_iter()
+            .enumerate()
+            .zip(before)
+            .filter_map(|((index, row), was)| {
+                let item = self.item(row);
+                (item != was).then(|| ToUi::DialogSet {
+                    id: self.id,
+                    control: TREE.to_owned(),
+                    value: Value::TreeItem(index, item),
+                })
+            })
+            .collect();
+        WebLevelOutcome::Send(sent)
     }
 
     pub fn handle(&mut self, message: &FromUi) -> WebLevelOutcome {

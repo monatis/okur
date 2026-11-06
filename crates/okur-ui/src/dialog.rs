@@ -1009,7 +1009,9 @@ fn set(window: HWND, index: usize, item: HWND, kind: &ControlKind, value: &Value
                     }
                 }
             }
-            (ControlKind::Text { .. }, Value::Text(text)) => {
+            // A read-only text's too: Settings Center's description of the item selected never
+            // followed the tree (Okur's live runs on old-pc, 2026-11-06).
+            (ControlKind::Text { .. } | ControlKind::Note { .. }, Value::Text(text)) => {
                 let text = wide(text);
                 let _ = SetWindowTextW(item, windows::core::PCWSTR(text.as_ptr()));
             }

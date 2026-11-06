@@ -156,13 +156,17 @@ pub fn layout(dialog: &DialogSpec) -> Layout {
     without_empty_labels(laid_out(dialog))
 }
 
-/// A label with no text is not made: it shows nothing, and Windows names an empty static after
-/// the static before it, so it read as the hidden results list's "0 Search Results" under
-/// Settings Center's description (Okur's dialog probe on old-pc, 2026-11-06).
+/// A label with no text is a space: Windows names an empty static after the nearest static
+/// before it, hidden or not, and so a field after it. Settings Center's description read as the
+/// hidden results list's "0 Search Results", first as the empty label's name, then, that label
+/// left out, as the description's own (Okur's dialog probe and live runs on old-pc,
+/// 2026-11-06). A space names nothing, and shows nothing.
 fn without_empty_labels(mut layout: Layout) -> Layout {
-    layout
-        .items
-        .retain(|i| !(i.class == Class::Static && i.id == LABEL_ID && i.text.is_empty()));
+    for item in &mut layout.items {
+        if item.class == Class::Static && item.id == LABEL_ID && item.text.is_empty() {
+            item.text = " ".to_owned();
+        }
+    }
     layout
 }
 
@@ -1399,12 +1403,17 @@ mod tests {
             .iter()
             .find(|i| i.class == Class::Static && i.text == "0 Search Results");
         assert!(label.is_some_and(|l| l.style & WS_VISIBLE == 0));
-        // The tree's label has no text: no window is made for it, which Windows would name
-        // after the static before it (Okur's dialog probe on old-pc, 2026-11-06).
+        // The tree's label has no text: it is a space, which names nothing, where Windows
+        // would name an empty static after the static before it (Okur's dialog probe on
+        // old-pc, 2026-11-06).
         assert!(!layout
             .items
             .iter()
             .any(|i| i.class == Class::Static && i.text.is_empty()));
+        assert!(layout
+            .items
+            .iter()
+            .any(|i| i.class == Class::Static && i.text == " "));
     }
 
     #[test]

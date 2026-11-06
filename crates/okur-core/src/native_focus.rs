@@ -498,6 +498,12 @@ fn control_lines_named(focus: &FocusEvent, entering: bool, name: String) -> Vec<
             // [obs, 303/s4]. Moving up to an already visited parent drops the position
             // (303/s6); that rule is not known yet.
             let mut parts = vec![name_part(name)];
+            // An item with a check box says it after its name: "Block Quotation checked | 1 of
+            // 17" [obs, 1169's walk of Configure Web Verbosity Levels, the store probe's
+            // "Application | checked | 1 of 11"].
+            if focus.states.checked.is_some() {
+                parts.push(checked(focus));
+            }
             let open = focus.states.expanded == Some(true);
             match focus.states.expanded {
                 // Said as a word, not a state mark: "Banner Opened" [obs, 274/s1].
@@ -1242,6 +1248,19 @@ pub fn change_speech(before: &FocusEvent, after: &FocusEvent) -> Option<Announce
                 && after.states.checked == Some(true) =>
         {
             Some(Announcement::from_text(checked(after).render().trim()))
+        }
+        // An item's check box turned (Space): its name, its state, its place, "Application |
+        // checked | 1 of 11" [obs, web-verbosity-store-probe.ps1 in Configure Web Verbosity
+        // Levels].
+        Role::TreeItem
+            if before.states.checked != after.states.checked && after.states.checked.is_some() =>
+        {
+            let mut lines = vec![
+                Line::of(PartKind::Name, name),
+                Line::new(vec![checked(after)]),
+            ];
+            lines.extend(position(after));
+            Some(Announcement::new(lines))
         }
         // Opened outside a WinForms tree, only the state and an empty one: " ‹open› ‹›" [obs,
         // 748/s10, 751/s11].
