@@ -1751,7 +1751,8 @@ A step can be in more than one entry; all of its entries apply.
 
 ### Manage Key Labels' list and page names
 
-- Steps: Okur's live runs of Manage Key Labels beside   (s18, s30, s32, s36, s40; replay reads JAWS's own dialog there, so these are live only).
+- Steps: Okur's live runs of Manage Key Labels beside `1169-desktop-notepad-manage-key-labels`
+  (s18, s30, s32, s36, s40; replay reads JAWS's own dialog there, so these are live only).
 - Difference: JAWS says "Manage Key Labels dialog | Key Labels Page | Key Labels Page | List1 List
   view | ..."; Okur "Manage Key Labels dialog | Keys List view | ...".
 - Why: "List1" is the name Windows gives JAWS's list control, which no one chose, and "Key Labels
