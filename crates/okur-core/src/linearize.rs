@@ -674,6 +674,21 @@ impl<'a> Builder<'a> {
             Role::Link { .. } => Class::Link,
             Role::Image => Class::Graphic,
             Role::Separator => Class::Separator,
+            // A frame (an iframe), its name and "frame" at both ends where the level says them:
+            // "Weather frame frame", "Weather frame frame end" at High [obs, 1175/s3, s5]; at
+            // Medium and Low its content alone (1176, 1177).
+            Role::IFrame if self.announces(WebStructure::Frame) => {
+                let name = node.name.as_deref().map(squash).unwrap_or_default();
+                Class::Container {
+                    start: crate::speech::SpeechFormatter::format_frame(&name),
+                    end: if name.is_empty() {
+                        msg::frame_end().to_string()
+                    } else {
+                        msg::frame_named_end(name).render()
+                    },
+                }
+            }
+            Role::IFrame => Class::Block,
             Role::Edit if attr(node, "editing_host") == Some("true") => {
                 if self.announces(WebStructure::EditableSection) {
                     Class::EditableSection
@@ -2552,6 +2567,68 @@ mod tests {
         assert_eq!(
             speech.get(1).copied(),
             Some(format!("{}Skip", role_marker("Link")).as_str())
+        );
+    }
+
+    /// A page with a frame between two paragraphs, read at the level `mark` says.
+    fn frame_page(mark: Option<String>) -> Vec<String> {
+        let mut root = AomNode::new(0, Role::Document).with_children(vec![
+            AomNode::new(1, Role::Paragraph).with_text("Before the frame."),
+            AomNode::new(2, Role::IFrame)
+                .with_name("Weather frame")
+                .with_children(vec![AomNode::new(3, Role::Document).with_children(vec![
+                    AomNode::new(4, Role::Paragraph).with_text("Frame text"),
+                ])]),
+            AomNode::new(5, Role::Paragraph).with_text("After the frame."),
+        ]);
+        if let Some(mark) = mark {
+            root.attributes.insert(WEB_VERBOSITY.to_owned(), mark);
+        }
+        crate::buffer::VirtualBuffer::from_aom(&root)
+            .lines
+            .iter()
+            .map(|l| l.text.clone())
+            .collect()
+    }
+
+    /// A frame says its name and "frame" at both ends at High, and its content alone at Medium
+    /// and Low [obs, 1175/s3-s5, 1176/s3, 1177/s3].
+    #[test]
+    fn a_frame_says_its_ends_at_high_alone() {
+        use crate::settings::WebVerbosity;
+        let high = frame_page(None);
+        let at = high.iter().position(|l| l == "Weather frame frame");
+        assert_eq!(
+            at.and_then(|at| high.get(at..at + 3)),
+            Some(
+                &[
+                    "Weather frame frame".to_owned(),
+                    "Frame text".to_owned(),
+                    "Weather frame frame end".to_owned()
+                ][..]
+            ),
+            "{high:?}"
+        );
+        for level in [WebVerbosity::Medium, WebVerbosity::Low] {
+            let lines = frame_page(level.mark(&[]));
+            assert!(
+                !lines.iter().any(|l| l.contains("Weather frame")),
+                "{lines:?}"
+            );
+            assert!(lines.iter().any(|l| l == "Frame text"), "{lines:?}");
+        }
+    }
+
+    /// At High and Medium JAWS says the frame's name after its text, "Frame text Weather
+    /// frame", and at Low not [obs, 1175/s4, 1176/s3, 1177/s3]: whether after its first line or
+    /// its last, and what Low turns off, one line of one frame does not tell.
+    #[test]
+    #[ignore = "known gap: the frame's name after its text at High and Medium (1175/s4, 1176/s3)"]
+    fn a_frames_name_follows_its_text_at_high_and_medium() {
+        let medium = frame_page(crate::settings::WebVerbosity::Medium.mark(&[]));
+        assert!(
+            medium.iter().any(|l| l == "Frame text Weather frame"),
+            "{medium:?}"
         );
     }
 

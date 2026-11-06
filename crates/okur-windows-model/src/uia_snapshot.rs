@@ -274,6 +274,9 @@ fn map_role(node: &UiaNode) -> okur_core::Role {
         };
     }
     match node.control_type {
+        // An iframe: Chrome gives a document holding its page's own document [obs, 1175's
+        // snapshot].
+        CT_DOCUMENT if node.children.iter().any(|c| c.control_type == CT_DOCUMENT) => Role::IFrame,
         CT_DOCUMENT => Role::Document,
         CT_BUTTON => Role::Button,
         CT_SPLITBUTTON => Role::SplitButton,
@@ -504,6 +507,25 @@ mod tests {
         assert_eq!(
             super::map_role(&group("radiogroup")),
             okur_core::Role::Group
+        );
+    }
+
+    /// Chrome gives an iframe as a document holding its page's own document: a frame, where the
+    /// page's documents stay documents [obs, 1175's snapshot].
+    #[test]
+    fn a_document_holding_a_document_is_a_frame() {
+        let document = |children: Vec<super::UiaNode>| super::UiaNode {
+            control_type: super::CT_DOCUMENT,
+            children,
+            ..Default::default()
+        };
+        assert_eq!(
+            super::map_role(&document(vec![document(Vec::new())])),
+            okur_core::Role::IFrame
+        );
+        assert_eq!(
+            super::map_role(&document(Vec::new())),
+            okur_core::Role::Document
         );
     }
 

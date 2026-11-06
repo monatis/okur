@@ -19,6 +19,7 @@ page-loaded = Page has loaded: { $title }
 frame = frame
 frame-named = { $name } frame
 frame-end = frame end
+frame-named-end = { $name } frame end
 
 # Said when forms mode ends and the virtual cursor reads the page again. JAWS's capitals.
 cursor-virtual-pc = virtual PC Cursor

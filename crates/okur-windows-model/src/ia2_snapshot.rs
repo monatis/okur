@@ -190,6 +190,8 @@ fn map_role(node: &Ia2Node) -> okur_core::Role {
     let editable = node.ia2_states & ia2_state::EDITABLE != 0;
     match node.msaa_role.unwrap_or_default() {
         msaa_role::DOCUMENT if attr("tag") == Some("article") => Role::Group,
+        // An iframe, which holds its page's own document [obs, 1175's snapshot].
+        msaa_role::DOCUMENT if matches!(attr("tag"), Some("iframe" | "frame")) => Role::IFrame,
         msaa_role::DOCUMENT => Role::Document,
         msaa_role::DIALOG => Role::Dialog,
         msaa_role::MENUBAR => Role::MenuBar,
