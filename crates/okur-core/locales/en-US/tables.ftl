@@ -255,6 +255,16 @@ excel-no-worksheets = No worksheets.
 # Alt+Shift+Apostrophe on a cell without a note [obs, 1183/s5]; Ctrl+Shift+Apostrophe with none in
 # the window [hyp: not recorded].
 excel-no-note = No note or comment visible for this cell.
+# JAWS's Excel information keys [obs, 1184]: Alt+Shift+V, the window's visible range and how many
+# of its cells hold data; Alt+Shift+G, its gridlines; Alt+Shift+H, Ctrl+Shift+V and
+# Insert+Ctrl+F2 on a cell without a hyperlink, an input message or a formula.
+excel-visible-range = visible range is { $from } through { $to }
+excel-visible-data = { $data } of the { $cells } visible cells contain data.
+excel-gridlines-on = Gridlines are on
+excel-gridlines-off = Gridlines are off
+excel-no-hyperlink = no hyperlink associated with this cell.
+excel-no-input-message = This cell has no input message.
+excel-no-formula = No formula in current cell.
 excel-no-notes = No cells with notes or comments.
 # Say Window Title in Web Layout and Read Mode: JAWS's lower case "reading layout" [obs,
 # 1042/s5, s9].

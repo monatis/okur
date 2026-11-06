@@ -243,6 +243,32 @@ pub struct SheetPlace {
     /// those at the selection's edges.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub cells: Vec<SheetCell>,
+    /// The active cell's details for JAWS's Excel information keys, where they were asked for
+    /// ([`crate::actions::SheetCells::Details`]).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub details: Option<SheetDetails>,
+}
+
+/// The window's and the active cell's details JAWS's Excel information keys read [obs, 1184].
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct SheetDetails {
+    /// The window's visible range, "A1:X30", its cells, and how many of them hold data.
+    pub visible_range: String,
+    pub visible_cells: u32,
+    pub visible_with_data: u32,
+    /// Whether the window shows its gridlines.
+    pub gridlines: bool,
+    /// The cell's hyperlink's address, its validation's input message and its formula, where
+    /// it has them.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub hyperlink: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub input_message: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub formula: Option<String>,
+    /// What the formula bar shows: the cell's formula, else its value.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub formula_bar: String,
 }
 
 /// One of a sheet's cells, by its column and row from 1, and the text it shows.

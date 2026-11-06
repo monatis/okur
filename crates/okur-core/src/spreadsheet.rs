@@ -9,6 +9,50 @@ use serde::{Deserialize, Serialize};
 use crate::input::Key;
 use crate::messages::msg;
 
+/// What an information key says of the details read: "visible range is A1 through X30 | 12 of
+/// the 720 visible cells contain data.", "Gridlines are on", "no hyperlink associated with this
+/// cell.", "This cell has no input message.", "No formula in current cell.", "10" [obs,
+/// 1184/s6-s10, s19, s20]. A hyperlink's, an input message's and a formula's text are said as
+/// they are [hyp: not recorded].
+fn details_said(reading: SheetReading, details: &crate::event::SheetDetails) -> Option<String> {
+    let said = |text: Option<&String>, none: String| {
+        text.map(|t| t.trim().to_owned())
+            .filter(|t| !t.is_empty())
+            .unwrap_or(none)
+    };
+    Some(match reading {
+        SheetReading::VisibleRange => {
+            let range = details.visible_range.as_str();
+            let (from, to) = range.split_once(':').unwrap_or((range, range));
+            format!(
+                "{}\n{}",
+                msg::excel_visible_range(from, to).render(),
+                msg::excel_visible_data(
+                    details.visible_with_data.to_string(),
+                    details.visible_cells.to_string()
+                )
+                .render()
+            )
+        }
+        SheetReading::Gridlines if details.gridlines => msg::excel_gridlines_on().to_string(),
+        SheetReading::Gridlines => msg::excel_gridlines_off().to_string(),
+        SheetReading::Hyperlink => said(
+            details.hyperlink.as_ref(),
+            msg::excel_no_hyperlink().to_string(),
+        ),
+        SheetReading::InputMessage => said(
+            details.input_message.as_ref(),
+            msg::excel_no_input_message().to_string(),
+        ),
+        SheetReading::Formula => said(
+            details.formula.as_ref(),
+            msg::excel_no_formula().to_string(),
+        ),
+        SheetReading::FormulaBarWord => details.formula_bar.split_whitespace().last()?.to_owned(),
+        _ => return None,
+    })
+}
+
 /// A workbook's titles, as Insert+Ctrl+Alt+C and R set them: the row holding the column titles
 /// and the column holding the row titles, each from 1 [obs, 1132/s1, s2].
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
@@ -94,6 +138,16 @@ pub(crate) enum SheetReading {
     /// Say Line (Insert+Up): the row, cell after cell, "Branch | Weekdays | Weekends" [obs,
     /// 521/s1].
     Line,
+    /// JAWS's information keys [obs, 1184]: the window's visible range and its cells with data
+    /// (Alt+Shift+V), its gridlines (Alt+Shift+G), the cell's hyperlink (Alt+Shift+H), its
+    /// validation's input message (Ctrl+Shift+V), its formula (Insert+Ctrl+F2), and the formula
+    /// bar's last number or word (Ctrl+NumPad5).
+    VisibleRange,
+    Gridlines,
+    Hyperlink,
+    InputMessage,
+    Formula,
+    FormulaBarWord,
     Row,
     RowFromStart,
     RowToEnd,
@@ -156,7 +210,30 @@ impl SheetReading {
             Self::Format => SheetCells::Format,
             Self::ColumnTotal | Self::RowTotal => SheetCells::Sums,
             Self::Monitor(range) => SheetCells::Range(range),
+            Self::VisibleRange
+            | Self::Gridlines
+            | Self::Hyperlink
+            | Self::InputMessage
+            | Self::Formula
+            | Self::FormulaBarWord => SheetCells::Details,
         }
+    }
+
+    /// One of JAWS's information keys in Excel without the Okur key, if `event` is one:
+    /// Alt+Shift+V, G and H, Ctrl+Shift+V, Ctrl+NumPad5 [obs, 1184/s6-s10, s20].
+    pub(crate) fn information(event: &crate::input::KeyEvent) -> Option<Self> {
+        let m = &event.modifiers;
+        if m.insert || m.win {
+            return None;
+        }
+        Some(match (event.key, m.ctrl, m.alt, m.shift) {
+            (Key::Alpha('V'), false, true, true) => Self::VisibleRange,
+            (Key::Alpha('G'), false, true, true) => Self::Gridlines,
+            (Key::Alpha('H'), false, true, true) => Self::Hyperlink,
+            (Key::Alpha('V'), true, false, true) => Self::InputMessage,
+            (Key::Numpad5, true, false, false) => Self::FormulaBarWord,
+            _ => return None,
+        })
     }
 
     /// The reader an Okur-key chord is, if any.
@@ -206,6 +283,12 @@ impl SheetReading {
                 });
             }
             Self::Monitor(range) => return Some(monitor_said(place, range)),
+            Self::VisibleRange
+            | Self::Gridlines
+            | Self::Hyperlink
+            | Self::InputMessage
+            | Self::Formula
+            | Self::FormulaBarWord => return details_said(self, place.details.as_ref()?),
             _ => {}
         }
         let (cells, at, row) = match self {
@@ -223,7 +306,13 @@ impl SheetReading {
             | Self::Format
             | Self::ColumnTotal
             | Self::RowTotal
-            | Self::Monitor(_) => return None,
+            | Self::Monitor(_)
+            | Self::VisibleRange
+            | Self::Gridlines
+            | Self::Hyperlink
+            | Self::InputMessage
+            | Self::Formula
+            | Self::FormulaBarWord => return None,
         };
         let read: Vec<&str> = part
             .iter()
@@ -718,6 +807,7 @@ mod tests {
             row_sum: None,
             format: None,
             cells: Vec::new(),
+            details: None,
         };
         let said = |reading: SheetReading| reading.said(&place);
         assert_eq!(
@@ -763,6 +853,7 @@ mod tests {
             row_sum: None,
             format: None,
             cells: Vec::new(),
+            details: None,
         };
         let said = |before: Option<&str>, now: crate::event::SheetPlace, key| {
             selection_said(before, &now, key)

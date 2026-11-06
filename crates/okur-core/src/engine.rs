@@ -1236,6 +1236,14 @@ impl ScreenReaderEngine {
         }
         // The sentence and paragraph keys and the hot key in an application or a page's field,
         // where the keys would otherwise go to it [obs, 504/s14, s15; 537/s1].
+        // Excel's information keys: the visible range, gridlines, the hyperlink, the input message,
+        // the formula bar's last word [obs, 1184/s6-s10, s20]; before the reading keys, which take
+        // Ctrl+NumPad5 for Say Paragraph elsewhere.
+        if let Some(reading) = crate::spreadsheet::SheetReading::information(event) {
+            if self.sheet_information(reading) {
+                return KeyAction::Consume;
+            }
+        }
         if self.app_mode != AppMode::VirtualBuffer || self.forms_mode {
             use crate::command::Command;
             if let Some(

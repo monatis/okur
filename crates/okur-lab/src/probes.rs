@@ -178,6 +178,8 @@ pub fn sheet_place_complete_now(window_title: Option<&str>) -> Option<okur_core:
     }
     place.format = okur_windows::excel_om::cell_format(grid);
     (place.column_sum, place.row_sum) = okur_windows::excel_om::cell_sums(grid);
+    place.details = okur_windows::excel_om::sheet_place(grid, SheetCells::Details)
+        .and_then(|details| details.details);
     Some(place)
 }
 

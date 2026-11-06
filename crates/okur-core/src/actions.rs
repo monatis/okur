@@ -50,6 +50,9 @@ pub enum SheetCells {
     /// A range's cells' texts, wherever the active cell is, with its title cells: a monitor
     /// cell's (Alt+Shift+1 to 0) [obs, 1135/s5, 1166].
     Range(CellRange),
+    /// The window's and the active cell's details for JAWS's information keys
+    /// ([`crate::event::SheetDetails`]).
+    Details,
 }
 
 /// A rectangle of a sheet's cells, columns and rows from 1, and the titles read with it: the row
@@ -749,7 +752,7 @@ impl ApplicationActions for RecordingActions {
 
     fn read_sheet_place(&self, cells: SheetCells) -> bool {
         let (read, key) = match cells {
-            SheetCells::Format | SheetCells::Sums => ("sheet details", 0),
+            SheetCells::Format | SheetCells::Sums | SheetCells::Details => ("sheet details", 0),
             SheetCells::Around(_) | SheetCells::Lines => ("sheet place", 0),
             SheetCells::Range(range) => {
                 if let Ok(mut log) = self.log.lock() {

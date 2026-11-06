@@ -10041,6 +10041,81 @@ fn excel_notes_said_and_listed() {
     assert_eq!(title.as_deref(), Some("Cells with Notes"));
 }
 
+/// JAWS's Excel information keys, each asked of Excel and said as JAWS says it [obs,
+/// 1184/s6-s10, s19, s20].
+#[test]
+fn excel_information_keys() {
+    let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&AomNode::new(0, Role::Document)));
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(cursor, Box::new(speech.clone()));
+    let actions = crate::actions::RecordingActions::default();
+    engine.set_actions(Box::new(actions.clone()));
+    let mut cell = FocusEvent::new(Role::TableCell)
+        .with_name("B3")
+        .with_window_title("sr-excel-fixture.xlsx - Excel");
+    cell.value = Some("10".into());
+    cell.app = Some("EXCEL.EXE".into());
+    cell.platform.window_class = Some("EXCEL7".into());
+    engine.handle_focus_event(&cell);
+    let details = crate::event::SheetDetails {
+        visible_range: "A1:X30".into(),
+        visible_cells: 720,
+        visible_with_data: 12,
+        gridlines: true,
+        formula_bar: "10".into(),
+        ..crate::event::SheetDetails::default()
+    };
+    let place = AccessibilityEvent::SheetPlace(Some(crate::event::SheetPlace {
+        address: "B3".into(),
+        selection: "B3".into(),
+        row: vec!["10".into()],
+        column: vec!["10".into()],
+        details: Some(details),
+        ..crate::event::SheetPlace::default()
+    }));
+    let key = |key: Key, ctrl: bool, alt: bool, shift: bool, insert: bool| {
+        let mut event = KeyEvent::new(key, Modifiers::none(), true);
+        event.modifiers.ctrl = ctrl;
+        event.modifiers.alt = alt;
+        event.modifiers.shift = shift;
+        event.modifiers.insert = insert;
+        event
+    };
+    for (event, said) in [
+        (
+            key(Key::Alpha('V'), false, true, true, false),
+            "visible range is A1 through X30\n12 of the 720 visible cells contain data.",
+        ),
+        (
+            key(Key::Alpha('G'), false, true, true, false),
+            "Gridlines are on",
+        ),
+        (
+            key(Key::Alpha('H'), false, true, true, false),
+            "no hyperlink associated with this cell.",
+        ),
+        (
+            key(Key::Alpha('V'), true, false, true, false),
+            "This cell has no input message.",
+        ),
+        (
+            key(Key::F(2), true, false, false, true),
+            "No formula in current cell.",
+        ),
+        (key(Key::Numpad5, true, false, false, false), "10"),
+    ] {
+        assert_eq!(
+            engine.handle_key_event(&event),
+            KeyAction::Consume,
+            "{said}"
+        );
+        assert_eq!(
+            engine.handle_accessibility_event(&place).as_deref(),
+            Some(said)
+        );
+    }
+}
+
 /// A panic while speech is set aside (a focus taken in quietly, a report during Say All) gives
 /// the real speech back: it had stayed dropped, and Okur mute for the session (performance
 /// review 2026-11-02, engine finding 7).

@@ -137,6 +137,7 @@ pub fn sheet_place(
     place.column = vec![active];
     match cells {
         SheetCells::Format => place.format = cell_format(grid),
+        SheetCells::Details => place.details = sheet_details(&window, &cell),
         SheetCells::Sums => (place.column_sum, place.row_sum) = cell_sums(grid),
         SheetCells::Around(titles) => {
             let (title_row, title_column) = titles.unwrap_or_else(|| {
@@ -503,6 +504,64 @@ pub fn sheet_list(
         _ => letters,
     };
     Some((place, entries))
+}
+
+/// The window's and the active cell's details JAWS's information keys read [obs, 1184]: the
+/// visible range and how many of its cells hold data (`WorksheetFunction.CountA`), the
+/// window's gridlines, the cell's first hyperlink, its validation's input message (Excel
+/// answers none where the cell has no validation), its formula, and the formula bar's text.
+fn sheet_details(window: &IDispatch, cell: &IDispatch) -> Option<okur_core::SheetDetails> {
+    use windows::Win32::System::Com::{DISPATCH_FLAGS, DISPATCH_METHOD};
+    let visible = object(&property(window, "VisibleRange")?)?;
+    let rows = number(&object(&property(&visible, "Rows")?)?, "Count")?;
+    let columns = number(&object(&property(&visible, "Columns")?)?, "Count")?;
+    let with_data = property(window, "Application")
+        .as_ref()
+        .and_then(object)
+        .and_then(|app| {
+            property(&app, "WorksheetFunction")
+                .as_ref()
+                .and_then(object)
+        })
+        .and_then(|functions| {
+            let flags = DISPATCH_FLAGS(DISPATCH_METHOD.0 | DISPATCH_PROPERTYGET.0);
+            invoke(
+                &functions,
+                "CountA",
+                flags,
+                &mut [VARIANT::from(visible.clone())],
+            )
+        })
+        .and_then(|count| f64::try_from(&count).ok())
+        .unwrap_or(0.0);
+    let hyperlink = property(cell, "Hyperlinks")
+        .as_ref()
+        .and_then(object)
+        .filter(|links| number(links, "Count").unwrap_or(0) > 0)
+        .and_then(|links| crate::word_om::item(&links, 1))
+        .map(|link| text(&link, "Address").trim().to_owned())
+        .filter(|address| !address.is_empty());
+    let input_message = property(cell, "Validation")
+        .as_ref()
+        .and_then(object)
+        .map(|validation| text(&validation, "InputMessage").trim().to_owned())
+        .filter(|message| !message.is_empty());
+    let has_formula = property(cell, "HasFormula")
+        .and_then(|v| bool::try_from(&v).ok())
+        .unwrap_or(false);
+    let formula_bar = text(cell, "Formula").trim().to_owned();
+    Some(okur_core::SheetDetails {
+        visible_range: address(&visible).unwrap_or_default(),
+        visible_cells: u32::try_from(rows.saturating_mul(columns)).unwrap_or(0),
+        visible_with_data: with_data.max(0.0) as u32,
+        gridlines: property(window, "DisplayGridlines")
+            .and_then(|v| bool::try_from(&v).ok())
+            .unwrap_or(true),
+        hyperlink,
+        input_message,
+        formula: has_formula.then(|| formula_bar.clone()),
+        formula_bar,
+    })
 }
 
 /// A note's text (`Comment.Text`, a method), its spaces and line breaks squashed.

@@ -1319,6 +1319,21 @@ impl ScreenReaderEngine {
         }
     }
 
+    /// One of Excel's information readings asked of it where a sheet has the focus; false
+    /// elsewhere, the key left to the rest.
+    pub(super) fn sheet_information(&mut self, reading: crate::spreadsheet::SheetReading) -> bool {
+        if self.sheet_focus().is_none()
+            || !self.ask_sheet(
+                reading.cells(),
+                crate::spreadsheet::SheetAsk::Reading(reading),
+            )
+        {
+            return false;
+        }
+        self.key_since_focus = false;
+        true
+    }
+
     /// One of Excel's title keys in a sheet; false elsewhere, the key left to the rest.
     fn sheet_title_key(&mut self, key: crate::spreadsheet::TitleKey) -> bool {
         use crate::spreadsheet::{SheetReading, TitleKey};
@@ -1594,6 +1609,16 @@ impl ScreenReaderEngine {
         // Excel's Insert+F, the active cell's font and formatting [obs, 1133/s4]; Insert+NumPad
         // Enter and Insert+Delete, the column's and the row's total [obs, 1132/s11, s12]; asked
         // of Excel. Insert+Delete is Word's line and column elsewhere.
+        // Excel's Say Formula, Insert+Ctrl+F2 [obs, 1184/s19].
+        if event.key == Key::F(2)
+            && m.ctrl
+            && !m.shift
+            && !m.alt
+            && !m.win
+            && self.sheet_information(crate::spreadsheet::SheetReading::Formula)
+        {
+            return;
+        }
         let details = match event.key {
             _ if m.ctrl || m.shift || m.alt || m.win => None,
             Key::Alpha('F') => Some(crate::spreadsheet::SheetReading::Format),

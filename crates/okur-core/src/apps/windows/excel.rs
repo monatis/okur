@@ -374,6 +374,7 @@ mod tests {
             row_sum: None,
             format: None,
             cells: Vec::new(),
+            details: None,
         };
         assert_eq!(
             blank_or_cell(&place, true).as_deref(),
@@ -456,6 +457,7 @@ mod tests {
             row_sum: None,
             format: None,
             cells: Vec::new(),
+            details: None,
         };
         assert_eq!(
             excel.sheet_place(Some(&place)).as_deref(),
