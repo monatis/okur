@@ -1641,9 +1641,10 @@ A step can be in more than one entry; all of its entries apply.
 - Steps: `2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s1`,
   `2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s2`,
   `2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s3`,
-  `1129-web-described-elements/s15`.
+  `1129-web-described-elements/s15`, `1175-web-structures-2-high-read-down/s11`.
 - Difference: JAWS also says "Use JawsKey+Alt+R to read descriptive text" on a described
-  dialog's first line.
+  dialog's first line, and at the High Web Verbosity Level on a paragraph whose description it
+  does not read with it (DescribedBy Announcement, 1175/s11; not at Medium or Low, 1176, 1177).
 - Why: Insert+Alt+R said nothing in every trial of a probe of described elements (1129), and no
   key map of JAWS 2025 on old-pc binds it. Okur does not name a key that does nothing.
 - Decided under the owner's rule on JAWS's accidents, 2026-11-01.

@@ -1636,9 +1636,11 @@ divergences! {
         "2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s2",
         "2692-aria-modal-dialog-bump-top-edge-of-nested-modal-up-up-ins-up-vc/s3",
         "1129-web-described-elements/s15",
+        "1175-web-structures-2-high-read-down/s11",
     ],
-    "The first line of a dialog that has a description: JAWS adds \"Use JawsKey+Alt+R to read \
-     descriptive text\" [obs, round-aria23b; 1129/s11], where Insert+Alt+R says nothing in every \
+    "The first line of a dialog that has a description, and at the High Web Verbosity Level a \
+     paragraph whose description is not read with it (1175/s11): JAWS adds \"Use JawsKey+Alt+R \
+     to read descriptive text\" [obs, round-aria23b; 1129/s11], where Insert+Alt+R says nothing in every \
      trial (1129/s4, s6, s9, s12, s14, s16) and no key map of JAWS 2025 binds it. Okur does not \
      name a key that does nothing; the dialog's description is said as the focus enters it.",
     "the agent under the owner's rule on JAWS's accidents, 2026-11-01";
