@@ -6025,6 +6025,45 @@ fn settings_follow_the_application_and_site_in_front() {
     assert_eq!(engine.settings.voice.punctuation, Punctuation::Most);
 }
 
+/// A site's own Web Verbosity Level reads its pages with that level's structures, as JAWS's
+/// HTML Options apply to one site (JAWS 2025 help, HTML Options): High says the banner that
+/// Medium, all applications' level, leaves out [obs, 1170, 1172].
+#[test]
+fn a_sites_web_verbosity_level_reads_its_pages() {
+    use serde_json::json;
+    let page = |url: &str| {
+        let mut page = AomNode::new(0, Role::Document).with_name("News");
+        page.attributes.insert("url".into(), url.into());
+        page.with_children(vec![AomNode::new(
+            1,
+            Role::Landmark {
+                landmark_type: "banner".to_owned(),
+            },
+        )
+        .with_children(vec![AomNode::new(2, Role::Paragraph).with_text("Masthead")])])
+    };
+    let says_banner = |url: &str, layers: &crate::settings_layers::SettingsLayers| {
+        let cursor = VirtualCursor::new(VirtualBuffer::from_aom(&page(url)));
+        let mut engine = ScreenReaderEngine::new(cursor, Box::new(MockSpeechOutput::new()));
+        engine.set_settings_layers(layers.clone());
+        let mut document = page_document();
+        document.app = Some("chrome.exe".into());
+        engine.handle_focus_event(&document);
+        engine
+            .cursor
+            .buffer
+            .lines
+            .iter()
+            .any(|line| line.text == "banner")
+    };
+    let mut layers = crate::settings_layers::SettingsLayers::default();
+    if let serde_json::Value::Object(high) = json!({"web_verbosity": "high"}) {
+        layers.sites.insert("news.example.org".into(), high);
+    }
+    assert!(says_banner("https://news.example.org/today", &layers));
+    assert!(!says_banner("https://other.example.org/today", &layers));
+}
+
 /// Numpad Plus leaves forms mode as Escape does, and never types "+" into the field (JAWS 2025
 /// Settings Center help, Forms Mode Options; Surf's Up, Forms).
 #[test]

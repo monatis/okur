@@ -167,7 +167,12 @@ JAWS's features from Settings Center and the help) and
   text" never spoken in the UIA snapshot: the UIA mapping lacked the mark).
 - README figures rerun at `358257ff`; `cargo test --workspace`: 1,727 passed, 0 failed, 201
   ignored.
-- Still not marked: the figure, the log, frames, DescribedBy, clickable elements.
+- The figure and the log need nothing: at every level JAWS says no figure start or end, and reads
+  the log as a group ("group start Messages"), as Okur does (1172 to 1174 all match). Still not
+  marked: frames, DescribedBy, clickable elements.
+- **Per site levels** work already: every setting goes through the site layer (`sites/<host>.toml`,
+  Settings Center's "Settings for" a site), and the page is reread when the level in force
+  changes. `a_sites_web_verbosity_level_reads_its_pages` pins it.
 
 ## The Store's certification: no support ticket possible
 
@@ -177,8 +182,10 @@ for the owner). A support ticket could not be opened (2026-11-06): the account i
 Microsoft account, Partner Center's ticket routes go to `login.microsoftonline.com/organizations`
 (work accounts) or to Engage Center, and Engage Center answers the account 403 ("Unable to build
 navigation using spaceId from sfb", its gateway `gateway.engagehub.azure.com/sp/space`) on old-pc
-and on the dev box alike. Left to the owner: a Microsoft Q&A post (public), or, as the subagent's
-plan said, cancel and submit 1.2.0.0 if nothing moves by the end of 2026-11-11.
+and on the dev box alike. At the owner's request the question went to Microsoft Q&A instead
+(2026-11-06, tag "Microsoft Partner Center | Other"):
+<https://learn.microsoft.com/en-us/answers/questions/6063178>. If nothing moves by the end of
+2026-11-11, the subagent's plan stands: cancel and submit 1.2.0.0.
 
 ## Next
 
@@ -191,7 +198,7 @@ plan said, cancel and submit 1.2.0.0 if nothing moves by the end of 2026-11-11.
    (cursor.rs reads landmarks from spans). Record first: one page with every landmark, an
    article, a figure, a block quote, a list and a table read with Down at Medium and at Low
    (`jaws_settings` Chrome.JCF VirtualCursorVerbosityLevel 1 and 0, to confirm those values).
-2. ~~Round 1172's structures~~ (done above). Left of the levels: per site levels, and the figure, the log, frames, DescribedBy and clickable
-   elements.
+2. ~~Round 1172's structures~~ and per site levels (done above). Left of the levels: frames,
+   DescribedBy and clickable elements.
 3. Then the plan's §3.2 in its order: Settings Center's other groups beside JAWS's.
 4. Linux: more of the web corpus in the lab (379/379 now), GTK's controls.
