@@ -131,7 +131,7 @@ will come through the Microsoft Store.
 2. In a command prompt in this folder, build it:
 
    ```
-   cargo build --release --bin okur-lab --bin okur-ui
+   cargo build --release --bin okur --bin okur-ui
    ```
 
    `okur-ui` draws Okur's dialogs, such as the Links List and the settings. Okur starts it
@@ -203,7 +203,7 @@ installs it on the first build. The screen reader runs on Windows 10 and 11; the
 (`okur-core`) builds and tests on any platform.
 
 ```
-cargo build --release --bin okur-lab --bin okur-ui
+cargo build --release --bin okur --bin okur-ui
 cargo fmt --all --check
 cargo clippy --workspace --all-targets --all-features -- -D warnings -D clippy::indexing_slicing -D clippy::string_slice
 cargo test --workspace
