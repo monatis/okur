@@ -1,0 +1,110 @@
+{
+  "id": "1187-desktop-excel-objects-and-totals",
+  "name": "JAWS commands for Excel (popapps.chm): Select region (Ctrl+Shift+8), Ctrl+Home; List cells at page break (Ctrl+Shift+B), Escape; Select worksheet objects (Ctrl+Shift+O), Escape; Read the current worksheet object (Insert+Ctrl+C); Select the first worksheet object (Insert+Alt+C); Insert+F7 (the hyperlinks), Escape; Right and Down to B2; Read row total (Insert+Delete); Down; Read column total (Insert+NumPad Enter); Formula input mode (Equals), Escape",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-fixture.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Ctrl+Shift+8"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Ctrl+Home"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Ctrl+Shift+B"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Ctrl+Shift+O"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s7",
+      "type": "key",
+      "command": "Insert+Ctrl+C"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Insert+Alt+C"
+    },
+    {
+      "id": "s9",
+      "type": "key",
+      "command": "Insert+F7"
+    },
+    {
+      "id": "s10",
+      "type": "key",
+      "command": "Escape"
+    },
+    {
+      "id": "s11",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s12",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s13",
+      "type": "key",
+      "command": "Insert+Delete"
+    },
+    {
+      "id": "s14",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s15",
+      "type": "key",
+      "command": "Insert+NumpadEnter"
+    },
+    {
+      "id": "s16",
+      "type": "key",
+      "command": "Equals"
+    },
+    {
+      "id": "s17",
+      "type": "key",
+      "command": "Escape"
+    }
+  ]
+}
