@@ -1193,6 +1193,9 @@ pub struct Settings {
     /// synthesizer is given otherwise than they are written, while Text Processing's Use
     /// Dictionary is on ([`crate::dictionary`]).
     pub dictionary: Vec<crate::dictionary::DictionaryEntry>,
+    /// The key labels the user changed (Manage Key Labels): what the typing echo says for a key,
+    /// or that it says nothing ([`crate::key_labels`]).
+    pub key_labels: Vec<crate::key_labels::KeyLabelChange>,
     pub mouse_echo: MouseEcho,
     /// The language Insert+Space, O recognizes the screen in, a BCP 47 tag ("tr-TR"): JAWS's
     /// Microsoft OCR Language (`[OCR] MicrosoftOcrLanguage`, a locale number, 1033 by
@@ -1234,6 +1237,7 @@ impl Default for Settings {
             phonetic_pause_ms: 1500,
             quick_key_delay_ms: 0,
             dictionary: Vec::new(),
+            key_labels: Vec::new(),
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),
             voice_profiles: std::collections::BTreeMap::new(),
@@ -1383,6 +1387,7 @@ impl Settings {
             quick_key_delay_ms: 0,
             // old-pc has no dictionary of its own (no user DEFAULT.JDF, 2026-11-05).
             dictionary: Vec::new(),
+            key_labels: Vec::new(),
             // Not in old-pc's user JCF: the shared one's, JAWS's defaults.
             mouse_echo: MouseEcho::default(),
             ocr_language: String::new(),

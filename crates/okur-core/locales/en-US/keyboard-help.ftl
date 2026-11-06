@@ -8,6 +8,8 @@
 # A chord: a modifier held, then the rest of the keys, "Insert+UpArrow", "Control+Insert+F".
 # Modifiers come in this order: Control, Alt, Shift, Windows, then the Okur key.
 key-chord = { $modifier }+{ $key }
+# The typing echo's label of a chord: the modifier's label, then the key's, "Shift Tab" [obs, 1167/s9].
+key-label-chord = { $modifier } { $key }
 # The Control key.
 key-control = Control
 # The Alt key.

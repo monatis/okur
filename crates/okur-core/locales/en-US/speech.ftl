@@ -95,9 +95,6 @@ typing-echo-none = None
 typing-echo-characters = Characters
 typing-echo-words = Words
 typing-echo-both = Both characters and words
-# The keys typing echo names.
-typing-echo-space = Space
-typing-echo-enter = Enter
 
 ## Screen Echo (Insert+S)
 

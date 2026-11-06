@@ -11,6 +11,12 @@
 # processes, control ids of Okur's dialogs, fonts, test doubles' logs, names matched against
 # what an application reports.
 # Command names: JAWS's script names and key notation, as a key map file would hold them.
+# Key labels: the keys' names in the table and a settings file's [KeyLabels] section
+# ("Space=0|Space"); what is said comes from locales/en-US/key-labels.txt.
+okur-core/src/key_labels.rs: *
+okur-core/src/engine/text_feedback.rs: "Space"
+okur-core/src/engine/text_feedback.rs: "Return"
+okur-core/src/engine/text_feedback.rs: "Shift"
 # KeyEvent::chord: a key in the corpus scenarios' notation, for the lab's runners.
 okur-core/src/input.rs: "Ctrl"
 okur-core/src/input.rs: "Alt"

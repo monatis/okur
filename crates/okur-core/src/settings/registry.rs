@@ -365,6 +365,12 @@ pub static SETTINGS: &[SettingSpec] = &[
     // The speech dictionary's rules, set in the settings file until Okur's Dictionary Manager
     // comes (Insert+D).
     spec("dictionary", Group::Speech, None, Kind::Structured),
+    // Manage Key Labels' changes (Keyboard, General): each key's `[KeyLabels]` value in an
+    // application's settings file, "Space=0|Space" [obs, key-labels-store-probe.ps1].
+    SettingSpec {
+        jaws: Jaws::Import(import_key_labels),
+        ..spec("key_labels", Group::Keyboard, None, Kind::Structured)
+    },
     // Full Speech or less speech, and less speech's kind (`SpeechMode`, `LessSpeechMode`;
     // 700 and 707 record them); Insert+Space, S and Shift+S change them for the session.
     SettingSpec {
@@ -876,6 +882,13 @@ fn import_output_modes(lookup: JawsLookup<'_>, settings: &mut Settings) {
             .unwrap_or(output.default_modes());
         settings.verbosity.set_modes(output, modes);
     }
+}
+
+/// The key labels `DEFAULT.JCF`'s `[KeyLabels]` changes: each key the table lists, its value
+/// "0|Space" where it differs from the default.
+fn import_key_labels(lookup: JawsLookup<'_>, settings: &mut Settings) {
+    settings.key_labels =
+        crate::key_labels::from_jaws(&|name| lookup(JawsFile::DefaultJcf, "KeyLabels", name));
 }
 
 /// The ids of the settings `values` holds that `scope` may not hold, which a layer drops.

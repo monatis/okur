@@ -1,0 +1,113 @@
+# Okur's English key labels, for Manage Key Labels (Settings Center, Keyboard, General): one
+# `name<TAB>label<TAB>status` line per key. The name is the key's in a settings file's
+# [KeyLabels] section (`Space=0|Space`); the label what the typing echo says for it; the status
+# `speak`, `mute`, or `always` (Always Speak, which cannot be muted). An empty label is a group
+# of keys that has none of its own (Letters, Numbers, Symbols): muting it silences the
+# characters echo of the keys in it.
+#
+# The keys, labels and statuses are JAWS 2025's defaults as its Manage Key Labels lists them,
+# each row read whole (old-pc, 2026-11-06, skills/jaws-reference/scripts/key-labels-walk.ps1):
+# Tab and F18 to F24 muted, Control, Shift, Alt (Menu) and Windows always spoken.
+Add	+	speak
+Apps	Applications	speak
+Attn	Attention	speak
+Back	Backspace	speak
+Browser_Back	BrowserBack	speak
+Browser_Favorites	BrowserFavorites	speak
+Browser_Forward	BrowserForward	speak
+Browser_Home	BrowserHome	speak
+Browser_Refresh	BrowserRefresh	speak
+Browser_Search	BrowserSearch	speak
+Browser_Stop	BrowserStop	speak
+Cancel	break	speak
+Capital	Caps lock	speak
+Clear	Clear	speak
+Control	Control	always
+CrSel	Crsel	speak
+Decimal	Delete	speak
+Delete	Delete	speak
+Divide	/	speak
+Down	Down arrow	speak
+End	End	speak
+ErEOF	applications	speak
+Escape	Escape	speak
+Execute	Execute	speak
+ExSel	Exsel	speak
+F1	F1	speak
+F10	F10	speak
+F11	F11	speak
+F12	F12	speak
+F13	F13	speak
+F14	F14	speak
+F15	F15	speak
+F16	F16	speak
+F17	F17	speak
+F18	F18	mute
+F19	F19	mute
+F2	F2	speak
+F20	F20	mute
+F21	F21	mute
+F22	F22	mute
+F23	F23	mute
+F24	F24	mute
+F3	F3	speak
+F4	F4	speak
+F5	F5	speak
+F6	F6	speak
+F7	F7	speak
+F8	F8	speak
+F9	F9	speak
+FN	FN lock	speak
+Help	Help	speak
+Home	Home	speak
+Insert	Insert	speak
+Launch_App1	LaunchApp1	speak
+Launch_App2	LaunchApp2	speak
+Launch_Mail	LaunchMail	speak
+Launch_Media_Select	SelectMedia	speak
+Left	Left arrow	speak
+Letters		speak
+LWin	windows	always
+Media_Next_Track	MediaNextTrack	speak
+Media_Play_Pause	MediaPlayPause	speak
+Media_Prev_Track	MediaPreviousTrack	speak
+Media_Stop	MediaStop	speak
+Menu	Alt	always
+ModifiedPrintable		speak
+Multiply	*	speak
+Next	Page down	speak
+Numbers		speak
+NumLock	Num lock	speak
+NumPad0	insert	speak
+NumPad1	end	speak
+NumPad2	Down arrow	speak
+NumPad3	Page down	speak
+NumPad4	Left arrow	speak
+NumPad5	5	speak
+NumPad6	Right arrow	speak
+NumPad7	home	speak
+NumPad8	Up arrow	speak
+NumPad9	Page up	speak
+OEM_clear	Clear	speak
+PA1	Pa1	speak
+Pause	Pause	speak
+Play	Play	speak
+Print	Print Screen	speak
+Prior	Page up	speak
+Return	Enter	speak
+Right	Right arrow	speak
+RWin	windows	always
+Scroll	Scroll lock	speak
+Select	Select	speak
+Separator	Separator	speak
+Shift	Shift	always
+SnapShot	Print screen	speak
+Space	Space	speak
+Subtract	-	speak
+Symbols		speak
+Tab	Tab	mute
+Up	Up arrow	speak
+Volume_Down	VolumeDown	speak
+Volume_Mute	VolumeMute	speak
+Volume_Up	VolumeUp	speak
+Zoom	Zoom	speak

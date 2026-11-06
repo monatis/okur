@@ -263,13 +263,19 @@ impl ScreenReaderEngine {
         let echo = self.settings.typing_echo;
         if c == ' ' {
             self.echo_word_end();
+            // Space's label, unless it is muted (Manage Key Labels).
             if echo == TypingEcho::Characters {
-                self.speak_echo(msg::typing_echo_space().as_str());
+                if let Some(label) = crate::key_labels::spoken(&self.settings.key_labels, "Space") {
+                    self.speak_echo(&label);
+                }
             }
             return;
         }
         self.typed_word.push(c);
-        if echo.says_characters() {
+        // A character whose group (Letters, Numbers, Symbols) is muted is not echoed.
+        if echo.says_characters()
+            && crate::key_labels::character_spoken(&self.settings.key_labels, c)
+        {
             self.speak_echo(&SpeechFormatter::format_char(c));
         }
     }
@@ -279,22 +285,32 @@ impl ScreenReaderEngine {
     fn echo_enter(&mut self) {
         self.echo_word_end();
         if self.settings.typing_echo != crate::settings::TypingEcho::None {
-            self.speak_echo(msg::typing_echo_enter().as_str());
+            if let Some(label) = crate::key_labels::spoken(&self.settings.key_labels, "Return") {
+                self.speak_echo(&label);
+            }
         }
     }
 
     /// With a typing echo on, some keys that type nothing are named before what they do, to
-    /// the synthesizer alone (JAWS's key labels): "Enter", "End", "F2", "Home", "Escape" [obs,
-    /// 1146/s2, s3, s6, s13, s14]; none with the echo off [obs, 1147]. Shift, Control, Delete,
-    /// Page Down and the arrows are not named (1146/s4, s5, s11, s12). Enter in a text field is
-    /// named by its own echo, after the word it ends ([`Self::echo_typed`]).
+    /// the synthesizer alone, by their labels (Manage Key Labels, [`crate::key_labels`]):
+    /// "Enter", "End", "F2", "Home", "Escape" [obs, 1146/s2, s3, s6, s13, s14]; none with the
+    /// echo off [obs, 1147]. Shift, Control, Delete, Page Down and the arrows are not named
+    /// (1146/s4, s5, s11, s12). A label changed is said as changed ("Return key", "Edit key",
+    /// "Start", "Leave"), a muted key not at all, and Tab, muted by default, is named once it is
+    /// spoken; Shift with it, "Shift Tab" [obs, 1167]. Enter in a text field is named by its own
+    /// echo, after the word it ends ([`Self::echo_typed`]).
     pub(super) fn echo_key_label(&mut self, event: &crate::input::KeyEvent) {
         use crate::Key;
+        let m = &event.modifiers;
+        // Shift with Tab is named with it, "Shift Tab" [obs, 1167/s9]; no other chord was
+        // recorded, and none is named.
+        let shift_only =
+            m.shift && !m.ctrl && !m.alt && !m.win && !m.insert && event.key == Key::Tab;
         if self.settings.typing_echo == crate::settings::TypingEcho::None
-            || !event.modifiers.is_empty()
+            || !(m.is_empty() || shift_only)
             || !matches!(
                 event.key,
-                Key::Enter | Key::Escape | Key::Home | Key::End | Key::F(_)
+                Key::Enter | Key::Escape | Key::Home | Key::End | Key::F(_) | Key::Tab
             )
             || (event.key == Key::Enter && self.editing_text())
             // A layer's key is the layer's command, not a key typed (inferred: Escape leaving
@@ -306,7 +322,18 @@ impl ScreenReaderEngine {
         {
             return;
         }
-        let label = crate::keyboard_help::key_name(event);
+        // The key's label, unless it is muted (Manage Key Labels).
+        let labels = &self.settings.key_labels;
+        let Some(mut label) = crate::key_labels::key_name(event)
+            .and_then(|name| crate::key_labels::spoken(labels, &name))
+        else {
+            return;
+        };
+        if shift_only {
+            if let Some(shift) = crate::key_labels::spoken(labels, "Shift") {
+                label = msg::key_label_chord(shift.as_str(), label.as_str()).to_string();
+            }
+        }
         tracing::debug!(%label, "key label");
         self.speech.speak_key_label(&label);
     }

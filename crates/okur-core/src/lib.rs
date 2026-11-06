@@ -15,6 +15,7 @@ pub mod engine;
 pub mod event;
 pub mod flexible_web;
 pub mod input;
+pub mod key_labels;
 pub mod keyboard_help;
 pub mod labels;
 pub mod linearize;

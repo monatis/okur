@@ -944,6 +944,57 @@ fn typing_echo_names_keys_that_type_nothing() {
     }
 }
 
+/// Manage Key Labels' changes: a relabelled key is said by its new label, a muted one not at
+/// all, Tab once spoken is named and Shift+Tab "Shift Tab" [obs, 1167/s2, s3, s4, s8, s9, s10].
+#[test]
+fn typing_echo_says_the_labels_the_user_set() {
+    use crate::key_labels::KeyLabelChange;
+    use crate::settings::TypingEcho;
+    let page =
+        AomNode::new(0, Role::Document)
+            .with_children(vec![AomNode::new(1, Role::Paragraph).with_text("Text")]);
+    let speech = SharedSpeech::default();
+    let mut engine = ScreenReaderEngine::new(
+        VirtualCursor::new(VirtualBuffer::from_aom(&page)),
+        Box::new(speech.clone()),
+    );
+    let change = |key: &str, label: &str, muted| KeyLabelChange {
+        key: key.to_owned(),
+        label: label.to_owned(),
+        muted,
+    };
+    let mut settings = engine.settings.clone();
+    settings.typing_echo = TypingEcho::Characters;
+    settings.key_labels = vec![
+        change("F2", "Edit key", false),
+        change("End", "End", true),
+        change("Escape", "Leave", false),
+    ];
+    engine.set_settings(settings.clone());
+    let press = |engine: &mut ScreenReaderEngine, key, modifiers| {
+        engine.handle_key_event(&KeyEvent::new(key, modifiers, true));
+    };
+    press(&mut engine, Key::F(2), Modifiers::none());
+    assert_eq!(speech.take(), ["Edit key"]);
+    press(&mut engine, Key::End, Modifiers::none());
+    assert!(!speech.take().iter().any(|s| s == "End"));
+    press(&mut engine, Key::Escape, Modifiers::none());
+    assert_eq!(speech.take().first().map(String::as_str), Some("Leave"));
+    // Tab is muted by default; spoken, it is named, and with Shift.
+    let shift = Modifiers {
+        shift: true,
+        ..Modifiers::none()
+    };
+    press(&mut engine, Key::Tab, Modifiers::none());
+    assert!(!speech.take().iter().any(|s| s == "Tab"));
+    settings.key_labels.push(change("Tab", "Tab", false));
+    engine.set_settings(settings);
+    press(&mut engine, Key::Tab, Modifiers::none());
+    assert_eq!(speech.take().first().map(String::as_str), Some("Tab"));
+    press(&mut engine, Key::Tab, shift);
+    assert_eq!(speech.take().first().map(String::as_str), Some("Shift Tab"));
+}
+
 /// A balloon tip shown for the window in front is said after what the focus said, not over
 /// it: "Password: | password edit | Type in text. | Password: Use at least 8 characters."
 /// [obs, 1138/s2].
