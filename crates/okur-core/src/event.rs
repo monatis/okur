@@ -171,6 +171,18 @@ pub enum SheetListKind {
     Notes,
     /// The active cell's note alone, its text (Alt+Shift+Apostrophe) [obs, 1183/s3, s5].
     Note,
+    /// The worksheet's cells at page breaks (Ctrl+Shift+B, JAWS's List cells at page break):
+    /// none, "no horizontal or vertical page breaks." [obs, 1187/s3].
+    PageBreaks,
+    /// The worksheet's objects, its shapes (Ctrl+Shift+O, Select worksheet objects): none,
+    /// "Worksheet contains no objects." [obs, 1187/s5].
+    Objects,
+    /// The worksheet's charts (Insert+Alt+C, Select the first worksheet object): none, "There are
+    /// no charts on this worksheet." [obs, 1187/s8].
+    Charts,
+    /// The worksheet's hyperlinks (Insert+F7, Select hyperlink): none, "No hyperlinks on
+    /// worksheet." [obs, 1187/s9].
+    Hyperlinks,
 }
 
 impl SheetListKind {
@@ -185,6 +197,10 @@ impl SheetListKind {
             Self::Monitor => "sheet monitor cells",
             Self::Notes => "sheet notes",
             Self::Note => "sheet note",
+            Self::PageBreaks => "sheet page breaks",
+            Self::Objects => "sheet objects",
+            Self::Charts => "sheet charts",
+            Self::Hyperlinks => "sheet hyperlinks",
         }
     }
 }
@@ -272,6 +288,26 @@ pub struct SheetDetails {
     /// The active cell's data region, "A1:C4" (`Range.CurrentRegion`).
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub region: String,
+    /// The active cell's border's edges that have a line, for Alt+Shift+B.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub borders: Vec<SheetBorder>,
+    /// The window's gridlines' color (`Window.GridlineColor`).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gridline_color: Option<crate::color::Rgb>,
+}
+
+/// One edge of a cell's border with a line (Excel's `Border`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct SheetBorder {
+    /// The edge, Excel's `XlBordersIndex`: 7 left, 8 top, 9 bottom, 10 right.
+    pub edge: i32,
+    /// `XlLineStyle`: 1 continuous, -4115 dash, -4118 dot, -4119 double, 4 dash dot, 5 dash dot
+    /// dot, 13 slanted dash dot.
+    pub line_style: i32,
+    /// `XlBorderWeight`: 1 hairline, 2 thin, -4138 medium, 4 thick.
+    pub weight: i32,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<crate::color::Rgb>,
 }
 
 /// One of a sheet's cells, by its column and row from 1, and the text it shows.
@@ -302,6 +338,14 @@ pub struct SheetFormat {
     /// The cell's width and height in hundredths of a point.
     pub width: u32,
     pub height: u32,
+    /// The fill's pattern (`XlPattern`, `Interior.Pattern`): 1 solid; 0 where not read.
+    #[serde(default, skip_serializing_if = "is_zero")]
+    pub pattern: i32,
+}
+
+/// Whether a number is zero, for fields left out of a trace when unset.
+fn is_zero(value: &i32) -> bool {
+    *value == 0
 }
 
 /// The caret's place on a word processor's pages (Word's `Selection.Information`): its page and

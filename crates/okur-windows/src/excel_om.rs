@@ -293,6 +293,7 @@ pub fn cell_format(grid: HWND) -> Option<okur_core::SheetFormat> {
             .unwrap_or_default(),
         width: hundredths(&cell, "Width").unwrap_or_default(),
         height: hundredths(&cell, "Height").unwrap_or_default(),
+        pattern: number(&interior, "Pattern").unwrap_or_default(),
     })
 }
 
@@ -444,6 +445,69 @@ pub fn sheet_list(
             }
             found
         }
+        // The cells where the worksheet's pages break, across then down (`HPageBreaks`,
+        // `VPageBreaks`, each break's `Location`), by their references [hyp: no page break
+        // recorded yet].
+        okur_core::SheetListKind::PageBreaks => {
+            let mut found = Vec::new();
+            for breaks in ["HPageBreaks", "VPageBreaks"] {
+                let Some(breaks) = property(&sheet, breaks).as_ref().and_then(object) else {
+                    continue;
+                };
+                let count = number(&breaks, "Count").unwrap_or(0).clamp(0, MAX_LISTED);
+                for index in 1..=count {
+                    let at = crate::word_om::item(&breaks, index)
+                        .and_then(|b| property(&b, "Location").as_ref().and_then(object))
+                        .and_then(|location| address(&location));
+                    if let Some(at) = at {
+                        found.push(entry(at.clone(), at));
+                    }
+                }
+            }
+            found
+        }
+        // The worksheet's shapes, or its charts alone, by name, each going to the cell under
+        // its top left corner [hyp: none recorded yet].
+        okur_core::SheetListKind::Objects | okur_core::SheetListKind::Charts => {
+            let collection = if kind == okur_core::SheetListKind::Charts {
+                "ChartObjects"
+            } else {
+                "Shapes"
+            };
+            let shapes = property(&sheet, collection).as_ref().and_then(object)?;
+            let count = number(&shapes, "Count").unwrap_or(0).clamp(0, MAX_LISTED);
+            (1..=count)
+                .filter_map(|index| crate::word_om::item(&shapes, index))
+                .filter_map(|shape| {
+                    let name = text(&shape, "Name").trim().to_owned();
+                    let at = property(&shape, "TopLeftCell")
+                        .as_ref()
+                        .and_then(object)
+                        .and_then(|cell| address(&cell))
+                        .unwrap_or_default();
+                    (!name.is_empty()).then(|| entry(name, at))
+                })
+                .collect()
+        }
+        // The worksheet's hyperlinks, what each shows and its cell [hyp: none recorded yet].
+        okur_core::SheetListKind::Hyperlinks => {
+            let links = property(&sheet, "Hyperlinks").as_ref().and_then(object)?;
+            let count = number(&links, "Count").unwrap_or(0).clamp(0, MAX_LISTED);
+            (1..=count)
+                .filter_map(|index| crate::word_om::item(&links, index))
+                .filter_map(|link| {
+                    let at = property(&link, "Range")
+                        .as_ref()
+                        .and_then(object)
+                        .and_then(|cell| address(&cell))?;
+                    let mut shown = text(&link, "TextToDisplay").trim().to_owned();
+                    if shown.is_empty() {
+                        shown = text(&link, "Address").trim().to_owned();
+                    }
+                    Some(entry(shown, at))
+                })
+                .collect()
+        }
         okur_core::SheetListKind::Column
         | okur_core::SheetListKind::Row
         | okur_core::SheetListKind::Formulas => {
@@ -557,6 +621,11 @@ fn sheet_details(window: &IDispatch, cell: &IDispatch) -> Option<okur_core::Shee
         .unwrap_or_default();
     Some(okur_core::SheetDetails {
         region,
+        borders: cell_borders(cell),
+        // Excel's own gridline color (`xlColorIndexAutomatic`) is left unread.
+        gridline_color: (whole(window, "GridlineColorIndex") != Some(-4105))
+            .then(|| whole(window, "GridlineColor").map(bgr))
+            .flatten(),
         visible_range: address(&visible).unwrap_or_default(),
         visible_cells: u32::try_from(rows.saturating_mul(columns)).unwrap_or(0),
         visible_with_data: with_data.max(0.0) as u32,
@@ -568,6 +637,29 @@ fn sheet_details(window: &IDispatch, cell: &IDispatch) -> Option<okur_core::Shee
         formula: has_formula.then(|| formula_bar.clone()),
         formula_bar,
     })
+}
+
+/// The edges of `cell`'s border that have a line, left, top, bottom and right
+/// (`Borders.Item(xlEdgeLeft)` and so on), each with its line style, weight and color.
+fn cell_borders(cell: &IDispatch) -> Vec<okur_core::SheetBorder> {
+    /// `Border.LineStyle` of an edge without a line (`xlLineStyleNone`).
+    const NO_LINE: i32 = -4142;
+    let Some(borders) = property(cell, "Borders").as_ref().and_then(object) else {
+        return Vec::new();
+    };
+    [7, 8, 9, 10]
+        .into_iter()
+        .filter_map(|edge| {
+            let border = crate::word_om::item(&borders, edge)?;
+            let line_style = number(&border, "LineStyle")?;
+            (line_style != NO_LINE).then(|| okur_core::SheetBorder {
+                edge,
+                line_style,
+                weight: number(&border, "Weight").unwrap_or_default(),
+                color: whole(&border, "Color").map(bgr),
+            })
+        })
+        .collect()
 }
 
 /// A note's text (`Comment.Text`, a method), its spaces and line breaks squashed.

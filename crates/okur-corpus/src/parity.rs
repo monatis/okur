@@ -1590,6 +1590,15 @@ struct SnapshotSheetLists {
     notes: Option<SnapshotSheetList>,
     #[serde(default)]
     note: Option<SnapshotSheetList>,
+    /// The worksheet's page breaks, objects, charts and hyperlinks (none before 1190).
+    #[serde(default)]
+    page_breaks: Option<SnapshotSheetList>,
+    #[serde(default)]
+    objects: Option<SnapshotSheetList>,
+    #[serde(default)]
+    charts: Option<SnapshotSheetList>,
+    #[serde(default)]
+    hyperlinks: Option<SnapshotSheetList>,
 }
 
 /// The screen reads and recognitions the engine asked for, counted as answered.
@@ -1608,7 +1617,7 @@ struct ScreenReads {
     /// Single cells read (a monitor cell's) asked for and answered.
     sheet_cells: usize,
     /// Excel's lists asked for and answered, by kind.
-    sheet_lists: [usize; 7],
+    sheet_lists: [usize; 11],
     paragraphs: usize,
     links: usize,
     spacings: usize,
@@ -1833,6 +1842,10 @@ impl ScreenReads {
             SheetListKind::Visible,
             SheetListKind::Notes,
             SheetListKind::Note,
+            SheetListKind::PageBreaks,
+            SheetListKind::Objects,
+            SheetListKind::Charts,
+            SheetListKind::Hyperlinks,
         ]) {
             while *answered < count(kind.read_name()) {
                 *answered += 1;
@@ -1846,6 +1859,10 @@ impl ScreenReads {
                         SheetListKind::Visible => lists.visible.clone(),
                         SheetListKind::Notes => lists.notes.clone(),
                         SheetListKind::Note => lists.note.clone(),
+                        SheetListKind::PageBreaks => lists.page_breaks.clone(),
+                        SheetListKind::Objects => lists.objects.clone(),
+                        SheetListKind::Charts => lists.charts.clone(),
+                        SheetListKind::Hyperlinks => lists.hyperlinks.clone(),
                         // Never asked of Excel: the engine reads each monitor cell.
                         SheetListKind::Monitor => None,
                     })

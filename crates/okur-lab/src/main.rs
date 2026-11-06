@@ -1530,6 +1530,10 @@ async fn main() {
                     "worksheets": sheet_list(okur_core::SheetListKind::Worksheets),
                     "notes": sheet_list(okur_core::SheetListKind::Notes),
                     "note": sheet_list(okur_core::SheetListKind::Note),
+                    "page_breaks": sheet_list(okur_core::SheetListKind::PageBreaks),
+                    "objects": sheet_list(okur_core::SheetListKind::Objects),
+                    "charts": sheet_list(okur_core::SheetListKind::Charts),
+                    "hyperlinks": sheet_list(okur_core::SheetListKind::Hyperlinks),
                 })
             });
             let paragraphs = okur_lab::probes::document_paragraphs_now(window_title.as_deref());

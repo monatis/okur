@@ -289,6 +289,20 @@ excel-no-formula = No formula in current cell.
 excel-region-first = First cell in current data region
 excel-region-last = Last cell in current data region
 excel-no-notes = No cells with notes or comments.
+# Excel's lists of the worksheet: what is said as each is gathered, then with none, that there
+# is none: page breaks (Ctrl+Shift+B), objects (Ctrl+Shift+O), charts (Insert+Alt+C) and
+# hyperlinks (Insert+F7) [obs, 1187/s3, s5, s8, s9].
+excel-collecting-page-breaks = Collecting cells at PageBreaks.
+excel-no-page-breaks = no horizontal or vertical page breaks.
+excel-collecting-objects = Please wait, collecting objects.
+excel-no-objects = Worksheet contains no objects.
+excel-no-charts = There are no charts on this worksheet.
+excel-collecting-hyperlinks = Please wait, collecting hyperlinks.
+excel-no-hyperlinks = No hyperlinks on worksheet.
+# Insert+Ctrl+C with no chart selected (Read the current worksheet object) [obs, 1187/s7].
+excel-chart-not-active = The chart is not active. You must first press Insert+ALT+c to select it.
+# Equals in a cell (Formula input mode), as the key goes on to Excel [obs, 1187/s18].
+excel-formula-mode = type in the formula and press enter
 # Say Window Title in Web Layout and Read Mode: JAWS's lower case "reading layout" [obs,
 # 1042/s5, s9].
 word-view-web = Web Layout View

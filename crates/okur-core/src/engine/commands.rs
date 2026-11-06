@@ -1573,16 +1573,31 @@ impl ScreenReaderEngine {
         }
         // Excel's Insert+Shift+F and Insert+Shift+C: its cells with formulas, the column's
         // cells [obs, 1116/s1, 521/s9]; before Word's lists, whose keys they share.
+        // Insert+Alt+C its charts and Insert+F7 its hyperlinks [obs, 1187/s8, s9].
         let sheet_list = match (event.key, m.shift, m.ctrl, m.alt) {
             (Key::Alpha('F'), true, false, false) => Some(crate::event::SheetListKind::Formulas),
             (Key::Alpha('C'), true, false, false) => Some(crate::event::SheetListKind::Column),
             (Key::Alpha('R'), true, false, false) => Some(crate::event::SheetListKind::Row),
+            (Key::Alpha('C'), false, false, true) => Some(crate::event::SheetListKind::Charts),
+            (Key::F(7), false, false, false) => Some(crate::event::SheetListKind::Hyperlinks),
             _ => None,
         };
         if let Some(kind) = sheet_list.filter(|_| !m.win) {
             if self.open_sheet_list(kind) {
                 return;
             }
+        }
+        // Excel's Insert+Ctrl+C reads the chart selected; in a cell none is [obs, 1187/s7].
+        if event.key == Key::Alpha('C')
+            && m.ctrl
+            && !m.shift
+            && !m.alt
+            && !m.win
+            && self.sheet_focus().is_some()
+        {
+            let said = msg::excel_chart_not_active().to_string();
+            self.speech.speak(&said, true);
+            return;
         }
         // Excel's Insert+Shift+S: the sheet tabs' menu, which says itself as it opens [obs,
         // 1116/s5].

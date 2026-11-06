@@ -52,8 +52,9 @@ pub use event::{
     DocumentFormField, DocumentHeading, DocumentLink, DocumentNote, DocumentParagraph,
     DocumentRevision, FocusEvent, FontInfo, FormFieldKind, GroupEntry, LineSpacing, LineStructure,
     LiveRegionEvent, MenuEvent, MousePoint, NoteKind, PagePlace, PlatformIds, Politeness,
-    PopupKind, RevisionKind, SheetCell, SheetDetails, SheetEntry, SheetFormat, SheetListKind,
-    SheetPlace, TableCell, TextContext, UnitTexts, WindowItem, WordKey, WordKeyState,
+    PopupKind, RevisionKind, SheetBorder, SheetCell, SheetDetails, SheetEntry, SheetFormat,
+    SheetListKind, SheetPlace, TableCell, TextContext, UnitTexts, WindowItem, WordKey,
+    WordKeyState,
 };
 pub use input::{Key, KeyAction, KeyEvent, Modifiers};
 pub use speech::{MockSpeechOutput, SpeechFormatter, SpeechOutput};

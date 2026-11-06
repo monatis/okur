@@ -31,6 +31,9 @@ pub struct Excel {
     last_cell: Option<(u32, u32)>,
     /// A cell said once its titles come with the sheet's place.
     pending: Option<PendingTitles>,
+    /// A selecting key's change was said since the last cell: the cell is said again even
+    /// where it has not moved [obs, 1186/s17].
+    selection_said: bool,
 }
 
 /// A cell's speech waiting for the titles of the column or the row it entered: the row that
@@ -144,8 +147,10 @@ impl AppModule for Excel {
             cx.note_window(focus);
             *cx.app_mode = crate::engine::AppMode::NativeControl;
             cx.ask_sheet = true;
+            self.selection_said = true;
             return FocusResponse::Silent;
         }
+        let after_selection = std::mem::take(&mut self.selection_said);
         cx.note_window(focus);
         // A native control's keys are the application's, as for any cell the engine reads.
         *cx.app_mode = crate::engine::AppMode::NativeControl;
@@ -171,6 +176,18 @@ impl AppModule for Excel {
             .unwrap_or(false);
         let key = cx.key.map(|(k, _)| k).filter(|_| ctrl);
         first.extend(key_words(cx.key));
+        // Ctrl+Home or Ctrl+End on the cell already active (a selection collapsed onto it): the
+        // key's word alone, "First cell" [obs, 1187/s2]; after a selection said, the cell too,
+        // "First cell | Branch | A 1" [obs, 1186/s17].
+        if matches!(key, Some(Key::Home | Key::End))
+            && at.is_some()
+            && at == before
+            && !after_selection
+        {
+            return FocusResponse::Speak(crate::announcement::Announcement::from_text(
+                &first.join("\n"),
+            ));
+        }
         // An empty cell by its coordinates alone [hyp: no empty cell recorded yet].
         if !value.is_empty() {
             lines.push(value.to_owned());

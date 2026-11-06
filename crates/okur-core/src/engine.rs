@@ -1638,6 +1638,20 @@ impl ScreenReaderEngine {
             {
                 return KeyAction::Consume;
             }
+            // Excel's Ctrl+Shift+B and Ctrl+Shift+O: the worksheet's cells at page breaks and its
+            // objects [obs, 1187/s3, s5].
+            let worksheet_list = match event.key {
+                Key::Alpha('B') => Some(crate::event::SheetListKind::PageBreaks),
+                Key::Alpha('O') => Some(crate::event::SheetListKind::Objects),
+                _ => None,
+            };
+            if let Some(kind) =
+                worksheet_list.filter(|_| m.ctrl && m.shift && !m.alt && !m.insert && !m.win)
+            {
+                if self.open_sheet_list(kind) {
+                    return KeyAction::Consume;
+                }
+            }
             // Excel's entry keys in a sheet say what they do as they go on to Excel: AutoSum's
             // prompt, "Inserted date", "Inserted time" [obs, 1185/s6, s10, s12].
             if let Some(said) =
@@ -3664,6 +3678,16 @@ impl ScreenReaderEngine {
         }
         tracing::debug!(?kind, "sheet list asked");
         self.sheet_list_asked = Some(kind);
+        // What JAWS says as it gathers a list of the worksheet [obs, 1187/s3, s5, s9].
+        let gathering = match kind {
+            crate::event::SheetListKind::PageBreaks => Some(msg::excel_collecting_page_breaks()),
+            crate::event::SheetListKind::Objects => Some(msg::excel_collecting_objects()),
+            crate::event::SheetListKind::Hyperlinks => Some(msg::excel_collecting_hyperlinks()),
+            _ => None,
+        };
+        if let Some(gathering) = gathering {
+            self.speech.speak(gathering.as_ref(), true);
+        }
         true
     }
 
@@ -3702,13 +3726,24 @@ impl ScreenReaderEngine {
                 crate::event::SheetListKind::Worksheets => msg::excel_no_worksheets(),
                 // [hyp: not recorded]
                 crate::event::SheetListKind::Notes => msg::excel_no_notes(),
+                crate::event::SheetListKind::PageBreaks => msg::excel_no_page_breaks(),
+                crate::event::SheetListKind::Objects => msg::excel_no_objects(),
+                crate::event::SheetListKind::Charts => msg::excel_no_charts(),
+                crate::event::SheetListKind::Hyperlinks => msg::excel_no_hyperlinks(),
                 // Never asked of Excel: the engine opens the list itself; the note is said above.
                 crate::event::SheetListKind::Monitor | crate::event::SheetListKind::Note => {
                     return None
                 }
             }
             .to_string();
-            self.speech.speak(&none, true);
+            // After what was said as the list was gathered, not over it.
+            let gathered = matches!(
+                kind,
+                crate::event::SheetListKind::PageBreaks
+                    | crate::event::SheetListKind::Objects
+                    | crate::event::SheetListKind::Hyperlinks
+            );
+            self.speech.speak(&none, !gathered);
             return Some(none);
         }
         let dialog =

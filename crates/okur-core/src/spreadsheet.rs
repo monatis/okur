@@ -78,6 +78,8 @@ pub(crate) fn entry_key_said(event: &crate::input::KeyEvent) -> Option<String> {
             msg::excel_autosum_range(),
             msg::excel_autosum_default()
         ),
+        // Formula input mode [obs, 1187/s18].
+        (Key::Equals, false, false, false) => msg::excel_formula_mode().to_string(),
         (Key::Semicolon, true, false, false) => msg::excel_inserted_date().to_string(),
         (Key::Semicolon, true, false, true) => msg::excel_inserted_time().to_string(),
         _ => return None,
@@ -977,7 +979,10 @@ mod tests {
             key(Key::Semicolon, ctrl_shift).as_deref(),
             Some("Inserted time")
         );
-        assert_eq!(key(Key::Equals, Modifiers::none()), None);
+        assert_eq!(
+            key(Key::Equals, Modifiers::none()).as_deref(),
+            Some("type in the formula and press enter")
+        );
         assert_eq!(key(Key::Semicolon, Modifiers::none()), None);
     }
 
@@ -997,6 +1002,7 @@ mod tests {
             cell_style: "Normal".into(),
             width: 4800,
             height: 1440,
+            pattern: 0,
         };
         let mut place = crate::event::SheetPlace {
             address: "A1".into(),
@@ -1157,6 +1163,7 @@ mod tests {
             cell_style: "Normal".into(),
             width: 4800,
             height: 1440,
+            pattern: 0,
         };
         assert_eq!(
             format_said(&format),
