@@ -231,6 +231,31 @@ and on the dev box alike. At the owner's request the question went to Microsoft 
 - A round's page waits in `corpus/pending/` with its scenarios (`2ac0d6c7`,
   verification-loop.md): in `corpus/fixtures/` it made every commit before the import fail.
 
+## Round 1178: a frame's name is its title; Excel's titles kept (1181)
+
+- **The title after the first line** (`460864a4`): round 1178 (a titled frame of two lines, an
+  untitled frame, a division with a title attribute) shows the trailing name is the element's
+  title: "First frame line News frame" then "Second frame line", "Titled text Tooltip title",
+  at High and Medium; at Low not; an untitled frame "frame" and "frame end" at High. The IA2
+  mapping marks the title (a description from the tooltip, a frame's name from it), a fifth
+  reading mark turns titles off at Low. The invariant that no word glues two elements counts an
+  element's title as its own words (`f0c1efeb`).
+- **1179 recorded again**: its first recording's trial 1 trace lost the page's focus to the
+  batch's console (a foreground event back to Chrome with no focus event): an open item in
+  `docs/backlog/open-items.md`, "A window back in front with no focus event".
+- **Excel's titles kept** (`4a31073e`): per workbook name (`spreadsheet::workbook`, the window
+  title before the application's name), in `excel-titles.toml` (a `TitleStore` written by the
+  settings folder's background store). Round 1181 (titles set, Excel closed with Alt+F4 and N,
+  the workbook opened again through Windows+R): JAWS reads "Weekdays | 12 | B 2" and
+  CapsLock+Alt+Shift+C says "Weekdays" [1181/s10-s12]; replay 9/12, the rest the desktop's
+  "Not Selected", the Run dialog's tail and Excel's "Please wait | ... | Hours" on opening.
+- Imported (`1fac9b4a`): `okur-lab parity`: `JAWS parity (Ia2): 12547/13143 steps match
+  exactly; 388 accepted divergences not counted` (12478/13071 before). README figures rerun at
+  `4d6d7222`.
+- **Queued on old-pc**: round 1182 (Excel's window as the focus comes back to it, on each sheet)
+  and round 1183 (Excel's notes: Alt+Shift+Apostrophe, Ctrl+Shift+Apostrophe, a new fixture
+  `desktop-excel-comments.ps1` in `corpus/pending/`).
+
 ## Also
 
 - README: the demo video's badge (`fd540b71`, the owner's YouTube video); "Trying it" built
@@ -248,6 +273,8 @@ and on the dev box alike. At the owner's request the question went to Microsoft 
    article, a figure, a block quote, a list and a table read with Down at Medium and at Low
    (`jaws_settings` Chrome.JCF VirtualCursorVerbosityLevel 1 and 0, to confirm those values).
 2. ~~Round 1172's structures~~, per site levels, ~~frames' ends, DescribedBy, clickable
-   elements~~ (done above). Left of the levels: round 1178, the frame's name after its text.
-3. Then the plan's §3.2 in its order: Settings Center's other groups beside JAWS's.
-4. Linux: more of the web corpus in the lab (379/379 now), GTK's controls.
+   elements, titles~~ (done above).
+3. Excel: rounds 1182 (the window as the focus returns) and 1183 (notes) to import and build;
+   then the rest of JAWS's Excel keys (the README's "Not yet").
+4. Then the plan's §3.2 in its order: Settings Center's other groups beside JAWS's.
+5. Linux: more of the web corpus in the lab (379/379 now), GTK's controls.
