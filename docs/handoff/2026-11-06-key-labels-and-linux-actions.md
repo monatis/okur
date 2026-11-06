@@ -127,6 +127,10 @@ JAWS's features from Settings Center and the help) and
 - `okur-lab parity --write-baseline`: `JAWS parity (Ia2): 12238/12831 steps match exactly; 388
   accepted divergences not counted` (12090/12683 before, unchanged by the code; 1170 and 1171's
   148 steps all match).
+- **Live on old-pc**: `run-scenario.ps1 -Reader okur` of 1170 (Okur's settings from DEFAULT.JCF and
+  Chrome.JCF beside it, with the scenario's level 1), `okur-lab live-parity`: `Okur live: 74/74
+  steps match JAWS exactly`; `Okur live, spoken: 74/74 steps send the synthesizer what JAWS sent
+  its own`.
 - Not yet: Configure Web Verbosity Levels' own choices per level (a dialog of 24 check items),
   per site levels, and the structures Okur's buffer does not mark yet (figure, feed, log, note,
   toolbar, frame, editable section, DescribedBy).
