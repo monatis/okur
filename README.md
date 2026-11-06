@@ -8,6 +8,7 @@
 [![Platforms: Windows; macOS in progress](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%28in%20progress%29-lightgrey.svg)](#platforms)
 [![JAWS parity: 12,388 of 12,981 recorded steps](https://img.shields.io/badge/JAWS%20parity-12%2C388%2F12%2C981%20steps-brightgreen.svg)](#where-it-stands)
 [![Privacy: no data collected](https://img.shields.io/badge/privacy-no%20data%20collected-brightgreen.svg)](PRIVACY.md)
+[![Demo video on YouTube](https://img.shields.io/badge/demo-YouTube-red.svg?logo=youtube)](https://youtu.be/YaNNi3eHO6c)
 
 **An open screen reader that keeps your JAWS muscle memory.**
 
