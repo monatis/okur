@@ -1,0 +1,46 @@
+{
+  "id": "1166-desktop-excel-monitor-cells-more",
+  "name": "Excel's monitor cells beyond 1135 (popapps.chm, Monitor Cells in Excel): a monitor cell read and the list asked for with none set (Alt+Shift+2, Ctrl+Shift+M), B2 set as monitor cell 1 and set again (JAWS says it is defined already), B2:B3 selected and set as monitor cell 2 and read (a range), the empty D1 set as monitor cell 3 and read, column titles set on row 1 (Insert+Ctrl+Alt+C) and monitor cell 1 read again (its title), the monitor cells listed (Ctrl+Shift+M) and Escape. Each trial starts without JAWS's settings for the workbook (jaws_forget)",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-fixture.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-fixture.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {"id": "s1", "type": "key", "command": "Alt+Shift+2"},
+    {"id": "s2", "type": "key", "command": "Ctrl+Shift+M"},
+    {"id": "s3", "type": "key", "command": "Down"},
+    {"id": "s4", "type": "key", "command": "Right"},
+    {"id": "s5", "type": "key", "command": "Insert+Shift+1"},
+    {"id": "s6", "type": "key", "command": "Insert+Shift+1"},
+    {"id": "s7", "type": "key", "command": "Shift+Down"},
+    {"id": "s8", "type": "key", "command": "Insert+Shift+2"},
+    {"id": "s9", "type": "key", "command": "Ctrl+Home"},
+    {"id": "s10", "type": "key", "command": "Alt+Shift+2"},
+    {"id": "s11", "type": "key", "command": "Right"},
+    {"id": "s12", "type": "key", "command": "Right"},
+    {"id": "s13", "type": "key", "command": "Right"},
+    {"id": "s14", "type": "key", "command": "Insert+Shift+3"},
+    {"id": "s15", "type": "key", "command": "Ctrl+Home"},
+    {"id": "s16", "type": "key", "command": "Alt+Shift+3"},
+    {"id": "s17", "type": "key", "command": "Insert+Ctrl+Alt+C"},
+    {"id": "s18", "type": "key", "command": "Ctrl+End"},
+    {"id": "s19", "type": "key", "command": "Alt+Shift+1"},
+    {"id": "s20", "type": "key", "command": "Ctrl+Shift+M", "onset_ms": 2500, "settle_max_ms": 15000},
+    {"id": "s21", "type": "key_ui_access", "command": "Escape"}
+  ]
+}
