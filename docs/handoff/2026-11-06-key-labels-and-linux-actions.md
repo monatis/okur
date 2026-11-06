@@ -148,6 +148,38 @@ JAWS's features from Settings Center and the help) and
 - Not yet: per site levels, and structures Okur's buffer does not mark yet (figure, feed, log,
   note, toolbar, frame, editable section, DescribedBy, clickable elements).
 
+## Round 1172: the rest of the structures
+
+- **Recorded** (`358257ff`): `web-structures.html` (a figure, a feed of two named articles, a log,
+  a note, a toolbar, a contenteditable, a fieldset, a named form, a region, a search region) read
+  down at High, Medium and Low (1172 to 1174), three trials each, with its UIA and IA2 snapshots.
+  JAWS says "Updates feed", "First update article" and "First update article end", "note" and
+  "note end", "Formatting toolbar with 2 controls" and "toolbar end", and an editing host as
+  "Notes field | Editable Section Start | Editable text | Editable Section End"; at Low a fieldset
+  loses its legend with its start and end ("Express check box not checked").
+- **Built** (`98f8d397`): those structures in the linearizer, each only where the level announces
+  it; both snapshot mappings mark the editing host (`editing_host`, IA2's section role, UIA's
+  writable focusable group). The first cut marked every IA2 edit not a text field, spin buttons
+  included: 6 regressions in 2718 to 2727, fixed by IA2's section role.
+- `okur-lab parity --write-baseline`: `JAWS parity (Ia2): 12388/12981 steps match exactly; 388
+  accepted divergences not counted` (12238/12831 before; the round's 150 steps all match).
+  `okur-lab invariants`: `Buffer invariants: 0 violation(s)` (the gate first caught "Editable
+  text" never spoken in the UIA snapshot: the UIA mapping lacked the mark).
+- README figures rerun at `358257ff`; `cargo test --workspace`: 1,727 passed, 0 failed, 201
+  ignored.
+- Still not marked: the figure, the log, frames, DescribedBy, clickable elements.
+
+## The Store's certification: no support ticket possible
+
+Submission 2 (1.1.0.0, public) has been "Update in certification" since 2026-11-03; the Action
+Center has no items and says "Your contact email address: not provided" (an account setting, left
+for the owner). A support ticket could not be opened (2026-11-06): the account is a personal
+Microsoft account, Partner Center's ticket routes go to `login.microsoftonline.com/organizations`
+(work accounts) or to Engage Center, and Engage Center answers the account 403 ("Unable to build
+navigation using spaceId from sfb", its gateway `gateway.engagehub.azure.com/sp/space`) on old-pc
+and on the dev box alike. Left to the owner: a Microsoft Q&A post (public), or, as the subagent's
+plan said, cancel and submit 1.2.0.0 if nothing moves by the end of 2026-11-11.
+
 ## Next
 
 1. ~~**Web Verbosity Level, built**~~ (done above; the plan as written): a setting with High, Medium
@@ -159,5 +191,7 @@ JAWS's features from Settings Center and the help) and
    (cursor.rs reads landmarks from spans). Record first: one page with every landmark, an
    article, a figure, a block quote, a list and a table read with Down at Medium and at Low
    (`jaws_settings` Chrome.JCF VirtualCursorVerbosityLevel 1 and 0, to confirm those values).
-2. Then the plan's §3.2 in its order: Settings Center's other groups beside JAWS's.
-3. Linux: more of the web corpus in the lab (379/379 now), GTK's controls.
+2. ~~Round 1172's structures~~ (done above). Left of the levels: per site levels, and the figure, the log, frames, DescribedBy and clickable
+   elements.
+3. Then the plan's §3.2 in its order: Settings Center's other groups beside JAWS's.
+4. Linux: more of the web corpus in the lab (379/379 now), GTK's controls.

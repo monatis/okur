@@ -137,7 +137,9 @@ purpose, the reason is in [accepted divergences](accepted-divergences.md).
   a row as the column titles and a column as the row titles, or the workbook's names give them
   ("Title", "ColumnTitle", "RowTitle"), and they are said on entering another column or row;
   Insert+NumPad Enter and Insert+Delete read the column's and the row's total, and Insert+F the
-  cell's font and formatting.
+  cell's font and formatting. Ten monitor cells per worksheet: Insert+Shift+1 to 0 set one to the
+  cell or the range selected, Alt+Shift+1 to 0 read it with its titles, and Ctrl+Shift+M lists
+  them to move to one.
   Selecting with Shift and the arrows says the cells added, Shift+Space and Ctrl+Space the
   whole row or column. An empty cell is "blank" with its coordinates; typing in a cell, Delete
   and Ctrl+Z ("Undo") say the cell as it is after them. Shift+F10 opens the cell's menu and
@@ -244,6 +246,15 @@ purpose, the reason is in [accepted divergences](accepted-divergences.md).
   the Okur cursor, in Notepad and in the Notification History. Each level's spoken items and
   message length are chosen in Okur Settings' Verbosity Levels, as JAWS's Settings Center
   customizes a level.
+- **Web Verbosity Level:** High, Medium (the default, as JAWS's) or Low, for all applications
+  or one: how many of a page's structures say where they start and end, as JAWS's levels do
+  (Medium leaves out the banner, complementary, content information, form, region and search
+  regions; Low keeps tables alone). Configure Web Verbosity Levels turns each structure on or
+  off for a level, as JAWS's does.
+- **Key labels:** with a typing echo on, Enter, Escape, Home, End and the function keys are
+  named, as JAWS names them; Manage Key Labels (Settings Center, Keyboard, General) changes a
+  key's label or mutes it, Tab and Shift+Tab included, and muting Letters, Numbers or Symbols
+  silences their characters' echo.
 - **Quitting with Insert+F4,** after asking first, as JAWS does (Enter quits, Escape stays).
 - **Both keyboard layouts,** desktop and laptop, with Insert or CapsLock as the Okur key
   (JAWS's JAWS key).

@@ -6,7 +6,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Rust 1.99.0](https://img.shields.io/badge/rust-1.99.0-orange.svg?logo=rust)](rust-toolchain.toml)
 [![Platforms: Windows; macOS in progress](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%28in%20progress%29-lightgrey.svg)](#platforms)
-[![JAWS parity: 11,377 of 11,949 recorded steps](https://img.shields.io/badge/JAWS%20parity-11%2C377%2F11%2C949%20steps-brightgreen.svg)](#where-it-stands)
+[![JAWS parity: 12,388 of 12,981 recorded steps](https://img.shields.io/badge/JAWS%20parity-12%2C388%2F12%2C981%20steps-brightgreen.svg)](#where-it-stands)
 [![Privacy: no data collected](https://img.shields.io/badge/privacy-no%20data%20collected-brightgreen.svg)](PRIVACY.md)
 
 **An open screen reader that keeps your JAWS muscle memory.**
@@ -53,7 +53,7 @@ Where to go from here:
 > macOS comes after it.
 
 - **Parity with JAWS, measured.** Every behavior is recorded from JAWS on a lab machine and
-  replayed through Okur step by step: 11,377 of 11,949 recorded steps match JAWS's speech word
+  replayed through Okur step by step: 12,388 of 12,981 recorded steps match JAWS's speech word
   for word.
 - **Beyond JAWS on the web.** W3C's [ARIA-AT](https://aria-at.w3.org/) test plans say what a
   screen reader must convey for each ARIA pattern. Where JAWS falls short of a plan, Okur
@@ -64,22 +64,23 @@ Where to go from here:
   difference is written down with its reason in
   [accepted divergences](docs/references/accepted-divergences.md).
 - **Yours to set.** Settings Center and Quick Settings with JAWS's groups, for all
-  applications or for one application or web site; verbosity levels, punctuation, typing
-  echo and voice profiles; PlaceMarkers, custom labels and Flexible Web.
+  applications or for one application or web site; verbosity levels, the web verbosity
+  levels, punctuation, typing echo, key labels and voice profiles; PlaceMarkers, custom labels
+  and Flexible Web.
 - **Okur speaks in its own name.** Where JAWS names itself, Okur says Okur: the Okur key
   (JAWS's JAWS key), the Okur cursor, Okur Find. The words around the name stay the ones you
   know.
 
-Every figure is tool output, rerun for this README at commit `6996c926` (2026-11-02).
+Every figure is tool output, rerun for this README at commit `358257ff` (2026-11-06).
 
 | Measure | Result | Command |
 |---|---|---|
-| Steps matching JAWS's speech history, word for word | **11,377 of 11,949** | `okur-lab parity` |
-| Steps matching what JAWS sent its synthesizer, pitch included | **11,119 of 12,015** | `okur-lab parity` |
-| Steps left out on purpose (accepted divergences, each a written decision) | **365** | `okur-lab parity` |
+| Steps matching JAWS's speech history, word for word | **12,388 of 12,981** | `okur-lab parity` |
+| Steps matching what JAWS sent its synthesizer, pitch included | **12,115 of 13,047** | `okur-lab parity` |
+| Steps left out on purpose (accepted divergences, each a written decision) | **388** | `okur-lab parity` |
 | ARIA-AT's required (MUST) assertions conveyed, in 39 test plans | **Okur 2,934 of 3,110**, JAWS 2,858 | `okur-lab aria-at-report` |
-| Recorded JAWS scenarios and trials | **1,913 scenarios, 5,745 trials** (5,728 succeeded) | `corpus/CORPUS_MANIFEST.json` |
-| Tests | **1,608 passed, 0 failed** (200 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
+| Recorded JAWS scenarios and trials | **1,963 scenarios, 5,895 trials** (5,878 succeeded) | `corpus/CORPUS_MANIFEST.json` |
+| Tests | **1,727 passed, 0 failed** (201 ignored: they need a live desktop, or assert a known gap) | `cargo test --workspace` |
 | Virtual buffer invariant violations | **0** | `okur-lab invariants` |
 | `unwrap`, `expect`, `panic!` in the screen reader's own crates | **0**, tests included | the commit gate and CI |
 
@@ -111,8 +112,8 @@ documentation describes and Okur lacks, most important first. Among them:
   Windows applications through UI Automation, so Outlook is expected to work, but JAWS's own
   Outlook keys (a message's header fields on Alt+1 to Alt+9, its attachments on Insert+A) are
   not built yet.
-- In Excel: titles kept from one session to the next, monitor cells, comments and the rest of
-  JAWS's Excel keys.
+- In Excel: titles kept from one session to the next, comments and the rest of JAWS's Excel
+  keys.
 - Windows' sign-in and lock screens and User Account Control prompts: a Microsoft Store app
   cannot run there. Okur's own installer can, and waits for a code-signing certificate.
 - On macOS, the keyboard and speech.
