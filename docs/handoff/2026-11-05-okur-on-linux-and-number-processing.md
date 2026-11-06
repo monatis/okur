@@ -291,3 +291,15 @@ handoff before this one has them.
   Okur's general reading: a list row whose column repeats its name loses it ("Zoom Speak" for
   "Zoom Zoom Speak"), the focus back from an in-place edit is not said (s32), and an edit's focus
   said twice (s35).
+- **Live on old-pc** (`d9723bef`, `44444b93`): Okur's tree differs from JAWS's (Keyboard, General
+  holds 3 items, the tree 13 groups to JAWS's 28), so `run-scenario.ps1 -Reader okur` of 1169
+  itself went astray at s7 (`okur-lab live-parity`: `Okur live: 0/42 steps match JAWS exactly`).
+  A research scenario on Okur's own path to the dialog, then 1169's s19 to s40, found and fixed:
+  a list row's column equal to its name dropped (all list views; replay `Ia2 12085 -> 12090`,
+  only 1169 moved), pane pages without buttons (F6 said nothing), F2's arm in the wrong
+  notification block, the cell's edit named after the dialog, the F2 hint. The last run's steps
+  12 to 33 against 1169's s19 to s40: 19 of 22 identical (normalized history); the other 3 differ
+  only by the list's name, "Keys" against JAWS's "List1" (an accepted divergence now). Left:
+  Okur's dialog opens naming Settings Center's first; Settings Center's own live speech ("0
+  Search Results" at its opening, Right's "open" without the item's name and count, "Closed" as
+  text) and its tree's size against JAWS's.

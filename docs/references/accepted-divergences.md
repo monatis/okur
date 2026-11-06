@@ -1749,6 +1749,16 @@ A step can be in more than one entry; all of its entries apply.
   and again as the field's name; Okur's dialog names its field once.
 - Decided by the agent, 2026-11-05.
 
+### Manage Key Labels' list and page names
+
+- Steps: Okur's live runs of Manage Key Labels beside   (s18, s30, s32, s36, s40; replay reads JAWS's own dialog there, so these are live only).
+- Difference: JAWS says "Manage Key Labels dialog | Key Labels Page | Key Labels Page | List1 List
+  view | ..."; Okur "Manage Key Labels dialog | Keys List view | ...".
+- Why: "List1" is the name Windows gives JAWS's list control, which no one chose, and "Key Labels
+  Page" is the property sheet page JAWS's dialog is built in, said twice; Okur's dialog is one
+  page whose list is named for what it holds. The rows, buttons and hints are JAWS's.
+- Decided by the agent, 2026-11-06.
+
 ## Considered and not accepted
 
 - From a newer JAWS (2025.2508.120, ARIA-AT's reports), not followed: Insert+Up on a menu
