@@ -2325,6 +2325,10 @@
       "sha256": "e142e5ba076ebe9ea2a177900f98de0d8d7e62135005e4bd10bad01f92eac4da",
       "size_bytes": 4888
     },
+    "web-structures-2.html": {
+      "sha256": "ac1b4cdc175797af8ac3af19ece116233ae6fd004e9d877e2853dafddff5da8f",
+      "size_bytes": 721
+    },
     "web-structures.html": {
       "sha256": "d0c074772e3aa267b6679197051e1ef859606783970820af562211904fb1009e",
       "size_bytes": 1356
@@ -5010,6 +5014,48 @@
       "fixture": "web-structures.html",
       "evidence": {
         "sha256": "8374e6eb9d0610512557698b25c7c2dba4c509fea211d98f1cee692eefd82a7a",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1175-web-structures-2-high-read-down",
+      "fixture": "web-structures-2.html",
+      "evidence": {
+        "sha256": "e970cb449b8da2659804d6521ed792c35b3c4e8047e93e32121a95dc78123528",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1176-web-structures-2-medium-read-down",
+      "fixture": "web-structures-2.html",
+      "evidence": {
+        "sha256": "0e64daaf2d690f0350881b9e122ad5c705ec5b4aca2ab591c6b773ad11ab345b",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1177-web-structures-2-low-read-down",
+      "fixture": "web-structures-2.html",
+      "evidence": {
+        "sha256": "50c047dc10762de4fca1fddb316321c7ecf25ac19ca02a4f1088309e92284c42",
         "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
         "os_version": "Microsoft Windows NT 10.0.19045.0",
         "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
@@ -29815,10 +29861,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1963,
-    "scenarios_with_evidence": 1963,
-    "total_trials": 5895,
-    "successful_trials": 5878,
-    "deterministic_scenarios": 1637
+    "scenarios": 1966,
+    "scenarios_with_evidence": 1966,
+    "total_trials": 5904,
+    "successful_trials": 5887,
+    "deterministic_scenarios": 1639
   }
 }

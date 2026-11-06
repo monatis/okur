@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Structures Fixture Two</title>
+</head>
+<body>
+<h1>Structures Fixture Two</h1>
+<p>Each structure below has one line of its own text.</p>
+<iframe title="Weather frame" srcdoc="<p>Frame text</p>" width="300" height="60"></iframe>
+<p>Between the frame and the clickable text.</p>
+<div onclick="this.dataset.clicked = 'yes'">Clickable text</div>
+<p>Between the clickable text and the described button.</p>
+<button type="button" aria-describedby="hint">Save</button>
+<p id="hint">Saves the form for later</p>
+<p aria-describedby="aside">Described paragraph</p>
+<p id="aside">The paragraph's description</p>
+<p>The end of the structures.</p>
+</body>
+</html>
