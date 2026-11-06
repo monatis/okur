@@ -2324,6 +2324,10 @@
     "web-menus.html": {
       "sha256": "e142e5ba076ebe9ea2a177900f98de0d8d7e62135005e4bd10bad01f92eac4da",
       "size_bytes": 4888
+    },
+    "web-structures.html": {
+      "sha256": "d0c074772e3aa267b6679197051e1ef859606783970820af562211904fb1009e",
+      "size_bytes": 1356
     }
   },
   "scenarios": [
@@ -4970,6 +4974,48 @@
         "trials": 3,
         "successful_trials": 3,
         "deterministic": false,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1172-web-structures-high-read-down",
+      "fixture": "web-structures.html",
+      "evidence": {
+        "sha256": "670e4038ed2aa1937af8229563d59f8db0092622d62d233ac92d9ccae5652a3f",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1173-web-structures-medium-read-down",
+      "fixture": "web-structures.html",
+      "evidence": {
+        "sha256": "2f37c54f5628e0eba69f01c699318debab7af603cf9e469abb986498d4a64ec1",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
+        "summary_consistent": true
+      }
+    },
+    {
+      "scenario_id": "1174-web-structures-low-read-down",
+      "fixture": "web-structures.html",
+      "evidence": {
+        "sha256": "8374e6eb9d0610512557698b25c7c2dba4c509fea211d98f1cee692eefd82a7a",
+        "capture_script_sha256": "60f87ebf646ac08ab9f6ab2694c35d49ed9377ad656e2cf1bf5f3702426698a1",
+        "os_version": "Microsoft Windows NT 10.0.19045.0",
+        "jaws_version": "2025.2505.43.400 (File: 26.4.10.0)",
+        "trials": 3,
+        "successful_trials": 3,
+        "deterministic": true,
         "summary_consistent": true
       }
     },
@@ -29769,10 +29815,10 @@
     }
   ],
   "statistics": {
-    "scenarios": 1960,
-    "scenarios_with_evidence": 1960,
-    "total_trials": 5886,
-    "successful_trials": 5869,
-    "deterministic_scenarios": 1634
+    "scenarios": 1963,
+    "scenarios_with_evidence": 1963,
+    "total_trials": 5895,
+    "successful_trials": 5878,
+    "deterministic_scenarios": 1637
   }
 }
