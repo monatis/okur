@@ -1375,17 +1375,21 @@ Settings Center, Web / HTML / PDFs, Reading: "Web Verbosity Level Medium" over N
 default; `DEFAULT.JCF` sets no key), then Configure Web Verbosity Levels, High..., Medium...,
 Low..., each a button opening "<Level> Virtual Cursor Verbosity Preferences dialog | Announce Start
 and End For: Tree view", a tree of check items and a read-only description under it, then OK and
-Cancel (`skills/jaws-reference/scripts/web-verbosity-walk.ps1`, research; nothing turned).
+Cancel (`skills/jaws-reference/scripts/web-verbosity-walk.ps1`, research; nothing turned): 17 items, one of them the Regions
+group, which holds 11 more. A change is kept in the application's JCF, one key per item with a
+value per level, `[VirtualCursorVerbosity] ApplicationRegion=0|1|0` with Application turned on at
+Medium (`web-verbosity-store-probe.ps1`); turned back, `0|0|0` is written.
 JAWS 2025's help: "Medium ... is the default verbosity level"; Low "only the start and end of
 tables and grids", where the dialog's Low also keeps Editable Section; the region names and
 types are still said by R, Shift+R, O and Shift+O at every level.
 
-The items, in the tree's order (Regions is a group of the ten under it, "partially checked" at
+The items, in the tree's order (Regions is a group of the eleven under it, "partially checked" at
 High and Medium), and what each level announces the start and end of by default:
 
 | Item | High | Medium | Low |
 |---|---|---|---|
 | Block Quotation | yes | yes | no |
+| Clickable Elements | yes | no | no |
 | DescribedBy Announcement | yes | no | no |
 | Description | no | no | no |
 | Editable Section | yes | yes | yes |
@@ -1397,6 +1401,7 @@ High and Medium), and what each level announces the start and end of by default:
 | List | yes | yes | no |
 | Log | yes | yes | no |
 | Note | yes | yes | no |
+| Regions: Application | no | no | no |
 | Regions: Article | yes | yes | no |
 | Regions: Banner | yes | no | no |
 | Regions: Complementary Information | yes | no | no |
@@ -1407,6 +1412,7 @@ High and Medium), and what each level announces the start and end of by default:
 | Regions: Navigation Region | yes | yes | no |
 | Regions: Region | yes | no | no |
 | Regions: Search Region | yes | no | no |
+| Tab Panel | yes | yes | no |
 | Table Or Grid | yes | yes | yes |
 | Toolbar | yes | yes | no |
 

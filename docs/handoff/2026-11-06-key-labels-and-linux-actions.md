@@ -108,7 +108,7 @@ JAWS's features from Settings Center and the help) and
 - **Right's "open"** is JAWS's own rule for a Win32 tree (" ‹open› ‹›", 748/s10); JAWS's Settings
   Center tree is WinForms, read "Keyboard open 2 items" (303/s7's rule). Not a reading bug.
 - **Web Verbosity Level researched** (`2db7afa3`): `web-verbosity-walk.ps1` read the three levels'
-  "Announce Start and End For:" trees (`jaws-reading-settings-research.md` §14, 24 items each).
+  "Announce Start and End For:" trees (`jaws-reading-settings-research.md` §14, 27 items each).
   Over Chrome old-pc reads at **High** (`Chrome.JCF [VirtualCursorVerbosity]
   VirtualCursorVerbosityLevel=2`): the web corpus was recorded at High, where JAWS's default is
   Medium; Okur announces High's set today, for everyone.
@@ -131,7 +131,7 @@ JAWS's features from Settings Center and the help) and
   Chrome.JCF beside it, with the scenario's level 1), `okur-lab live-parity`: `Okur live: 74/74
   steps match JAWS exactly`; `Okur live, spoken: 74/74 steps send the synthesizer what JAWS sent
   its own`.
-- Not yet: Configure Web Verbosity Levels' own choices per level (a dialog of 24 check items),
+- Not yet: Configure Web Verbosity Levels' own choices per level (a dialog of 27 check items; JAWS keeps a change as `[VirtualCursorVerbosity] ApplicationRegion=0|1|0`, one value per level),
   per site levels, and the structures Okur's buffer does not mark yet (figure, feed, log, note,
   toolbar, frame, editable section, DescribedBy).
 
