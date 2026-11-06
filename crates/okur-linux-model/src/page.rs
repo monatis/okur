@@ -187,8 +187,17 @@ fn ia2_states(node: &AtspiNode) -> (u32, i32) {
     (m, i)
 }
 
-/// `node` and its subtree as the IA2 objects Chrome gives on Windows for the same elements.
+/// `node` and its subtree as the IA2 objects Chrome gives on Windows for the same elements, each
+/// with its place in the tree, depth first from 1, as its unique id: what acting on a page's node
+/// finds its object by (the Linux driver numbers the objects it read the same way).
 pub fn to_ia2(node: &AtspiNode) -> Ia2Node {
+    let mut next = 0;
+    numbered(node, &mut next)
+}
+
+fn numbered(node: &AtspiNode, next: &mut i32) -> Ia2Node {
+    *next += 1;
+    let unique_id = *next;
     let (msaa_role, ia2_role) = ia2_roles(node);
     let (msaa_states, ia2_states) = ia2_states(node);
     // A field's value is its text; a link's and the document's, their address.
@@ -215,7 +224,12 @@ pub fn to_ia2(node: &AtspiNode) -> Ia2Node {
         attributes: node.attributes.clone(),
         group_position,
         text: node.text.clone(),
-        children: node.children.iter().map(to_ia2).collect(),
+        unique_id: Some(unique_id),
+        children: node
+            .children
+            .iter()
+            .map(|child| numbered(child, next))
+            .collect(),
         ..Ia2Node::default()
     }
 }

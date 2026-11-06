@@ -5,6 +5,7 @@
 //! (`skills/linux-lab/`). It is built on Linux alone; elsewhere the crate is empty.
 #![cfg(target_os = "linux")]
 
+pub mod actions;
 pub mod events;
 pub mod keyboard;
 pub mod speech;

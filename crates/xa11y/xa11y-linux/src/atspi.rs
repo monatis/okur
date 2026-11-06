@@ -3995,6 +3995,10 @@ pub struct AtspiTree {
     /// An address: a link's (its Hyperlink interface's URI), or a document's (its Document
     /// interface's `URI` attribute), as Chrome gives them.
     pub uri: Option<String>,
+    /// The object: its application's bus name and its path, for acting on it later
+    /// ([`LinuxProvider::atspi_do_action`], [`LinuxProvider::atspi_grab_focus`]).
+    pub bus_name: String,
+    pub path: String,
     pub children: Vec<AtspiTree>,
 }
 
@@ -4051,6 +4055,33 @@ impl LinuxProvider {
         None
     }
 
+    /// Runs action `index` of the object at `bus_name` and `path` (a page's element read with
+    /// [`Self::atspi_tree`]): its Action interface's DoAction, Chrome's "click" for a link, a
+    /// button, a check box. Whether it ran.
+    pub fn atspi_do_action(&self, bus_name: &str, path: &str, index: i32) -> Result<()> {
+        let target = AccessibleRef {
+            bus_name: bus_name.to_owned(),
+            path: path.to_owned(),
+        };
+        self.do_atspi_action_by_index(&target, index)
+    }
+
+    /// Gives the object at `bus_name` and `path` the keyboard focus: its Component interface's
+    /// GrabFocus. Whether it took it.
+    pub fn atspi_grab_focus(&self, bus_name: &str, path: &str) -> Result<bool> {
+        let proxy = self.make_proxy(bus_name, path, "org.a11y.atspi.Component")?;
+        let reply = proxy
+            .call_method("GrabFocus", &())
+            .map_err(|e| Error::Platform {
+                code: -1,
+                message: format!("GrabFocus failed: {e}"),
+            })?;
+        reply.body().deserialize().map_err(|e| Error::Platform {
+            code: -1,
+            message: format!("GrabFocus reply decode failed: {e}"),
+        })
+    }
+
     /// A link's address, through its own Hyperlink interface.
     fn get_link_uri(&self, aref: &AccessibleRef) -> Option<String> {
         let proxy = self
@@ -4091,6 +4122,8 @@ impl LinuxProvider {
             states: self.state_bits(aref).0,
             text: self.get_text_content(aref),
             uri,
+            bus_name: aref.bus_name.clone(),
+            path: aref.path.clone(),
             children: Vec::new(),
         };
         for child in self.get_atspi_children(aref).unwrap_or_default() {

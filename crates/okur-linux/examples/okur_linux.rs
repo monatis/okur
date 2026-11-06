@@ -19,12 +19,18 @@ async fn main() {
     if args.iter().any(|a| a == "--no-speech") {
         settings.voice.synthesizer = okur_core::settings::Synthesizer::NoSpeech;
     }
+    let event_source = okur_linux::events::AtspiEventSource::new();
+    let objects = event_source.objects();
     let platform = Platform {
         keyboard_hook: Box::new(okur_linux::keyboard::X11KeyboardHook::new()),
-        event_source: Box::new(okur_linux::events::AtspiEventSource::new()),
+        event_source: Box::new(event_source),
         synthesizers: std::sync::Arc::new(okur_linux::speech::LinuxSynthesizers),
         ui_spawner: Box::new(okur_runtime::ui_host::PlainSpawner),
-        actions: None,
+        // Enter and Space on a page's elements, and the focus given to them.
+        actions: Some(Box::new(move |_sink| {
+            Box::new(okur_linux::actions::LinuxActions::new(objects))
+                as Box<dyn okur_core::actions::ApplicationActions>
+        })),
         clock: None,
         sounds: None,
         start_options: None,

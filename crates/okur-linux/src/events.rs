@@ -5,15 +5,28 @@
 //! (`okur_linux_model::focus`); the other kinds follow as the engine's Linux path grows.
 
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 use std::thread::JoinHandle;
 use std::time::Duration;
 
 use okur_core::event::AccessibilityEvent;
 use okur_runtime::events::{EventSink, EventSource};
 use okur_runtime::RuntimeError;
-use xa11y_core::{ElementData, Event, EventKind, RecvStatus, Role};
+use xa11y_core::{ElementData, Event, EventKind, RecvStatus, Role, StateFlag};
 use xa11y_linux::{AtspiTree, LinuxProvider};
+
+/// The objects of the page read last, its application's bus name and each object's path, in the
+/// order the page's nodes are numbered ([`okur_linux_model::page::to_ia2`], depth first from 1):
+/// what acting on a page's node finds its object by ([`crate::actions::LinuxActions`]).
+pub type PageObjects = Arc<Mutex<Vec<(String, String)>>>;
+
+/// `tree`'s objects, depth first, as the page's nodes are numbered.
+fn objects_of(tree: &AtspiTree, out: &mut Vec<(String, String)>) {
+    out.push((tree.bus_name.clone(), tree.path.clone()));
+    for child in &tree.children {
+        objects_of(child, out);
+    }
+}
 
 /// The most objects a page's capture reads: a large page is cut there, its first part read.
 const PAGE_LIMIT: usize = 20_000;
@@ -71,6 +84,7 @@ fn page(
     element: &ElementData,
     document: &ElementData,
     last: &mut Option<String>,
+    objects: &PageObjects,
 ) -> Option<AccessibilityEvent> {
     let on_document = element.role == Role::WebArea;
     let object = object_of(document)?;
@@ -83,6 +97,11 @@ fn page(
         .atspi_tree(document, PAGE_LIMIT)
         .map_err(|e| tracing::debug!("the page was not read: {e}"))
         .ok()?;
+    let mut read = Vec::new();
+    objects_of(&tree, &mut read);
+    if let Ok(mut objects) = objects.lock() {
+        *objects = read;
+    }
     let root = okur_linux_model::page::to_aom(&snapshot(tree));
     tracing::debug!(ms = started.elapsed().as_millis(), "page read");
     let title = root.name.clone().unwrap_or_default();
@@ -96,6 +115,18 @@ fn source_error(what: &str, error: impl std::fmt::Display) -> RuntimeError {
 /// The engine's event for an AT-SPI event, when it takes one. `in_page`: the focus is in a page's
 /// document, or on it, where the virtual cursor reads and takes the keys, as the focus chain
 /// that holds a document tells it on Windows.
+/// Whether `event` is a change the engine is told of: the focused control's state (a check box
+/// checked, a tab selected, a button expanded), as Windows' state change gives it.
+fn control_change(event: &Event) -> bool {
+    matches!(
+        event.kind,
+        EventKind::StateChanged {
+            flag: StateFlag::Checked | StateFlag::Selected | StateFlag::Expanded,
+            ..
+        }
+    ) && event.target.as_ref().is_some_and(|e| e.states.focused)
+}
+
 pub fn convert(event: &Event, in_page: bool) -> Option<AccessibilityEvent> {
     match event.kind {
         EventKind::FocusChanged => event.target.as_ref().map(|element| {
@@ -103,6 +134,16 @@ pub fn convert(event: &Event, in_page: bool) -> Option<AccessibilityEvent> {
             focus.in_document = in_page;
             AccessibilityEvent::Focus(focus)
         }),
+        EventKind::StateChanged { .. } if control_change(event) => {
+            event.target.as_ref().map(|element| {
+                let mut control = okur_linux_model::focus::focus_event(element);
+                control.in_document = in_page;
+                AccessibilityEvent::Change {
+                    kind: okur_core::event::ChangeKind::State,
+                    control,
+                }
+            })
+        }
         _ => None,
     }
 }
@@ -111,6 +152,7 @@ pub fn convert(event: &Event, in_page: bool) -> Option<AccessibilityEvent> {
 #[derive(Default)]
 pub struct AtspiEventSource {
     running: Option<Running>,
+    objects: PageObjects,
 }
 
 struct Running {
@@ -121,6 +163,11 @@ struct Running {
 impl AtspiEventSource {
     pub fn new() -> Self {
         Self::default()
+    }
+
+    /// The objects of the page it read last, for acting on the page's nodes.
+    pub fn objects(&self) -> PageObjects {
+        Arc::clone(&self.objects)
     }
 }
 
@@ -137,10 +184,12 @@ impl EventSource for AtspiEventSource {
         let stop = Arc::new(AtomicBool::new(false));
         let thread = {
             let stop = Arc::clone(&stop);
+            let objects = Arc::clone(&self.objects);
             std::thread::spawn(move || {
                 // The subscription lives in this thread: dropped here, it deregisters its
                 // events and ends its own reader.
                 let mut last_page = None;
+                let objects = objects;
                 while !stop.load(Ordering::SeqCst) {
                     match subscription.recv_status(Duration::from_millis(100)) {
                         RecvStatus::Event(event) => {
@@ -152,15 +201,18 @@ impl EventSource for AtspiEventSource {
                                 );
                             }
                             // The focus's page, looked up once: read when it is new, and
-                            // telling the engine the focus is in it.
+                            // telling the engine the focus is in it; a focused control's
+                            // change is told the same way, whether it is on a page.
+                            let focus = event.kind == EventKind::FocusChanged;
                             let document = event
                                 .target
                                 .as_ref()
-                                .filter(|_| event.kind == EventKind::FocusChanged)
+                                .filter(|_| focus || control_change(&event))
                                 .and_then(|e| Some((e, document_of(&provider, e)?)));
                             let loaded = document
                                 .as_ref()
-                                .and_then(|(e, d)| page(&provider, e, d, &mut last_page));
+                                .filter(|_| focus)
+                                .and_then(|(e, d)| page(&provider, e, d, &mut last_page, &objects));
                             // A page that finished loading, a reload's too, is read again:
                             // the engine takes the page it already has as a refresh, and as
                             // a new load after F5 or Ctrl+R (the lab's live run of 712).
@@ -171,7 +223,7 @@ impl EventSource for AtspiEventSource {
                                     event.kind == EventKind::DocumentLoaded
                                         && shown_page(&provider, d)
                                 })
-                                .and_then(|d| page(&provider, d, d, &mut last_page));
+                                .and_then(|d| page(&provider, d, d, &mut last_page, &objects));
                             for loaded in loaded.into_iter().chain(reloaded) {
                                 if !sink.send(loaded) {
                                     return;
