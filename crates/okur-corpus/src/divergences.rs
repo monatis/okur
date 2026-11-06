@@ -1706,9 +1706,11 @@ divergences! {
     Difference::JawsSaysBeforeItsDialog => [
         "1133-desktop-excel-information-keys/s2",
         "1133-desktop-excel-information-keys/s7",
+        "1183-desktop-excel-comments/s6",
     ],
-    "Before its lists of the row's cells (Insert+Shift+R) and of the visible cells with data \
-     (Ctrl+Shift+D) in Excel, JAWS says its main window's version and the workbook's window, \
+    "Before its lists of the row's cells (Insert+Shift+R), of the visible cells with data \
+     (Ctrl+Shift+D) and of the cells with notes (Ctrl+Shift+Apostrophe, 1183/s6) in Excel, \
+     JAWS says its main window's name or version and the workbook's window, \
      \"JAWS Version 2025.2505.43 | sr-excel-fixture.xlsx - Excel\", or the cell with a list's \
      hint, \"Weekdays | B 1 | To move to an item press the Arrow keys.\", by the trial (rounds \
      1133b to 1133f), as before its lists in Word. Okur's lists open without them.",
