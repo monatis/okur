@@ -1,0 +1,66 @@
+{
+  "id": "1183-desktop-excel-comments",
+  "name": "Excel's notes (legacy comments, JAWS 2025 help: Read Cell Comment Alt+Shift+Apostrophe, List Cells With Comments Ctrl+Shift+Apostrophe): Down and Right onto B2, which has a note, Alt+Shift+Apostrophe on it, Right off it and Alt+Shift+Apostrophe on a cell without one, Ctrl+Shift+Apostrophe and Escape out of JAWS's list (its own dialog, keys with UI Access), Left back onto B2",
+  "category": "desktop",
+  "version": "1.0.0",
+  "fixture": "file:///C:/Users/ailabs/corpus/fixtures/desktop-excel-comments.ps1",
+  "target_app": "desktop",
+  "trace_headings": true,
+  "jaws_forget": [
+    "PersonalizedSettings\\excel_sr-excel-comments.xlsx.JSI",
+    "excel.JCF"
+  ],
+  "launch": {
+    "window_title": "sr-excel-comments.xlsx - Excel (Product Activation Failed)",
+    "close_window": true,
+    "hide_console": true
+  },
+  "reset": {
+    "keys": [
+      "Ctrl+Home"
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "type": "key",
+      "command": "Down"
+    },
+    {
+      "id": "s2",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s3",
+      "type": "key",
+      "command": "Alt+Shift+Apostrophe"
+    },
+    {
+      "id": "s4",
+      "type": "key",
+      "command": "Right"
+    },
+    {
+      "id": "s5",
+      "type": "key",
+      "command": "Alt+Shift+Apostrophe"
+    },
+    {
+      "id": "s6",
+      "type": "key",
+      "command": "Ctrl+Shift+Apostrophe",
+      "settle_max_ms": 20000
+    },
+    {
+      "id": "s7",
+      "type": "key_ui_access",
+      "command": "Escape"
+    },
+    {
+      "id": "s8",
+      "type": "key",
+      "command": "Left"
+    }
+  ]
+}
