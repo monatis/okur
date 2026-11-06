@@ -384,6 +384,10 @@ struct Builder<'a> {
     headings: crate::settings::HeadingIndication,
     /// The structures whose starts and ends are left out ([`WEB_VERBOSITY`]).
     web_left_out: Vec<WebStructure>,
+    /// Elements' titles are read; off at the Low level ([`NO_TITLE_ATTRIBUTES`]).
+    titles: bool,
+    /// The title of the element being read, said after its first line of text.
+    pending_title: Option<String>,
     /// Marks said at the start of the next line: the "end Deletion" of deleted text that
     /// ended its line.
     pending_marks: Vec<String>,
@@ -407,6 +411,16 @@ pub const HEADING_INDICATION: &str = "okur_heading_indication";
 /// ([`crate::settings::WebVerbosity::mark`]; JAWS's Web Verbosity Level). Set as
 /// [`PLAIN_SAME_PAGE_LINKS`] is.
 pub const WEB_VERBOSITY: &str = "okur_web_verbosity";
+
+/// The page's attribute that says its elements' titles are not read: the Low Web Verbosity
+/// Level's "Titled text", where High and Medium say "Titled text Tooltip title" [obs, 1178/s12,
+/// 1179/s8, 1180/s8]. Set as [`PLAIN_SAME_PAGE_LINKS`] is.
+pub const NO_TITLE_ATTRIBUTES: &str = "okur_no_title_attributes";
+
+/// An element's attribute holding its title (HTML's `title`), which JAWS says after the
+/// element's first line of text: "Titled text Tooltip title", a frame's "First frame line News
+/// frame" [obs, 1178/s4, s12].
+pub const TITLE_ATTRIBUTE: &str = "title_attribute";
 
 /// Whether `child` is a fieldset's legend, its `legend` text, which is not read again: the
 /// element that names an ARIA group is read where it is, a heading as a heading, a line of text
@@ -475,6 +489,8 @@ impl<'a> Builder<'a> {
             graphics: true,
             headings: crate::settings::HeadingIndication::Level,
             web_left_out: crate::settings::WebVerbosity::left_out_by_mark(None),
+            titles: true,
+            pending_title: None,
             pending_marks: Vec::new(),
         }
     }
@@ -597,6 +613,12 @@ impl<'a> Builder<'a> {
         }
         if run.text.ends_with(char::is_whitespace) {
             text.push(' ');
+        }
+        if let Some(title) = self.pending_title.take() {
+            if !text.ends_with(' ') {
+                text.push(' ');
+            }
+            text.push_str(&title);
         }
         let node_id = run.node_id.unwrap_or_default();
         let role = run.role.unwrap_or(Role::Text);
@@ -863,7 +885,22 @@ impl<'a> Builder<'a> {
             self.flush();
             self.preformatted += 1;
         }
+        // An element's title, said after its first line of text, unless the level leaves it
+        // out [obs, 1178/s4, s12; 1180/s3, s8].
+        let title = attr(node, TITLE_ATTRIBUTE)
+            .filter(|_| self.titles)
+            .map(squash)
+            .filter(|t| !t.is_empty());
+        let titled = title.is_some();
+        if titled {
+            self.flush();
+            self.pending_title = title;
+        }
         self.visit_node(node, parent);
+        if titled {
+            self.flush();
+            self.pending_title = None;
+        }
         if preformatted {
             self.flush();
             self.preformatted -= 1;
@@ -2047,6 +2084,7 @@ fn visit_page(root: &AomNode) -> (VirtualBuffer, Vec<(usize, &'static str, Strin
     builder.headings = heading_indication_of(root);
     builder.web_left_out =
         crate::settings::WebVerbosity::left_out_by_mark(attr(root, WEB_VERBOSITY));
+    builder.titles = attr(root, NO_TITLE_ATTRIBUTES).is_none();
     builder.buffer.root_id = Some(root.id);
     builder.buffer.mark_readable(root.id);
 
@@ -2619,17 +2657,59 @@ mod tests {
         }
     }
 
-    /// At High and Medium JAWS says the frame's name after its text, "Frame text Weather
-    /// frame", and at Low not [obs, 1175/s4, 1176/s3, 1177/s3]: whether after its first line or
-    /// its last, and what Low turns off, one line of one frame does not tell.
+    /// An element's title (HTML's `title`) after its first line of text, at High and Medium,
+    /// not at Low: a frame's, "First frame line News frame" then "Second frame line", and a
+    /// division's, "Titled text Tooltip title" [obs, 1178/s4-s5, s12; 1180/s3, s8].
     #[test]
-    #[ignore = "known gap: the frame's name after its text at High and Medium (1175/s4, 1176/s3)"]
-    fn a_frames_name_follows_its_text_at_high_and_medium() {
-        let medium = frame_page(crate::settings::WebVerbosity::Medium.mark(&[]));
-        assert!(
-            medium.iter().any(|l| l == "Frame text Weather frame"),
-            "{medium:?}"
+    fn an_elements_title_follows_its_first_line_but_at_low() {
+        let titled = |mut node: AomNode, title: &str| {
+            node.attributes
+                .insert(TITLE_ATTRIBUTE.to_owned(), title.to_owned());
+            node
+        };
+        let page = |marks: &[(&str, String)]| {
+            let mut root = AomNode::new(0, Role::Document).with_children(vec![
+                titled(
+                    AomNode::new(1, Role::IFrame)
+                        .with_name("News frame")
+                        .with_children(vec![AomNode::new(2, Role::Document).with_children(vec![
+                            AomNode::new(3, Role::Paragraph).with_text("First frame line"),
+                            AomNode::new(4, Role::Paragraph).with_text("Second frame line"),
+                        ])]),
+                    "News frame",
+                ),
+                titled(
+                    AomNode::new(5, Role::Group)
+                        .with_children(vec![AomNode::new(6, Role::Text).with_text("Titled text")]),
+                    "Tooltip title",
+                ),
+            ]);
+            for (mark, value) in marks {
+                root.attributes.insert((*mark).to_owned(), value.clone());
+            }
+            crate::buffer::VirtualBuffer::from_aom(&root)
+                .lines
+                .iter()
+                .map(|l| l.text.clone())
+                .collect::<Vec<_>>()
+        };
+        let medium = page(
+            &crate::settings::WebVerbosity::Medium
+                .mark(&[])
+                .map(|m| vec![(WEB_VERBOSITY, m)])
+                .unwrap_or_default(),
         );
+        for line in [
+            "First frame line News frame",
+            "Second frame line",
+            "Titled text Tooltip title",
+        ] {
+            assert!(medium.iter().any(|l| l == line), "{line}: {medium:?}");
+        }
+        let low = page(&[(NO_TITLE_ATTRIBUTES, "true".to_owned())]);
+        assert!(low.iter().any(|l| l == "First frame line"), "{low:?}");
+        assert!(low.iter().any(|l| l == "Titled text"), "{low:?}");
+        assert!(!low.iter().any(|l| l.contains("Tooltip")), "{low:?}");
     }
 
     /// Web Verbosity Level: High says every region's start and end, Medium leaves out the

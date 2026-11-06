@@ -470,6 +470,18 @@ fn convert(
     // aria-describedby text, spoken after the value in focus phrasing.
     if let Some(d) = node.description.as_deref().filter(|d| !d.is_empty()) {
         set_attr("description", d.to_owned());
+        // A description from the element's title (HTML's `title`), read in the page after its
+        // first line: "Titled text Tooltip title" [obs, 1178/s12].
+        if attr("description-from").as_deref() == Some("tooltip") {
+            set_attr(okur_core::linearize::TITLE_ATTRIBUTE, d.to_owned());
+        }
+    }
+    // A frame named by its title says it after its first line too: "First frame line News
+    // frame" [obs, 1178/s4].
+    if role == Role::IFrame && attr("name-from").as_deref() == Some("tooltip") {
+        if let Some(name) = aom.name.clone().filter(|n| !n.is_empty()) {
+            set_attr(okur_core::linearize::TITLE_ATTRIBUTE, name);
+        }
     }
     if let Some(dom_id) = attr("id") {
         set_attr("id", dom_id);

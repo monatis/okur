@@ -89,7 +89,7 @@ enum PendingViewer {
 /// The marks the reading choices put on a page's root ([`ScreenReaderEngine::reading_marks`]):
 /// each mark with its value, `None` where the mark is left off.
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ReadingMarks([(&'static str, Option<String>); 4]);
+pub struct ReadingMarks([(&'static str, Option<String>); 5]);
 
 impl ReadingMarks {
     /// Whether `page` carries these marks already.
@@ -921,6 +921,10 @@ impl ScreenReaderEngine {
                 self.settings
                     .web_verbosity
                     .mark(&self.settings.web_structures),
+            ),
+            (
+                crate::linearize::NO_TITLE_ATTRIBUTES,
+                on(self.settings.web_verbosity == crate::settings::WebVerbosity::Low),
             ),
         ])
     }
