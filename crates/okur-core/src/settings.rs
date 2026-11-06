@@ -296,6 +296,7 @@ pub enum WebVerbosity {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum WebStructure {
     BlockQuotation,
+    ClickableElements,
     DescribedBy,
     Description,
     EditableSection,
@@ -307,6 +308,7 @@ pub enum WebStructure {
     List,
     Log,
     Note,
+    ApplicationRegion,
     Article,
     Banner,
     Complementary,
@@ -317,6 +319,7 @@ pub enum WebStructure {
     Navigation,
     Region,
     Search,
+    TabPanel,
     TableOrGrid,
     Toolbar,
 }
@@ -337,13 +340,15 @@ impl WebVerbosity {
     pub fn announces(self, structure: WebStructure) -> bool {
         use WebStructure::*;
         match self {
-            Self::High => !matches!(structure, Description | Document),
+            Self::High => !matches!(structure, Description | ApplicationRegion | Document),
             Self::Medium => !matches!(
                 structure,
-                DescribedBy
+                ClickableElements
+                    | DescribedBy
                     | Description
                     | FlashObject
                     | Frame
+                    | ApplicationRegion
                     | Banner
                     | Complementary
                     | ContentInformation

@@ -652,6 +652,8 @@ impl<'a> Builder<'a> {
                     "complementary" => WebStructure::Complementary,
                     "search" => WebStructure::Search,
                     "form" => WebStructure::Form,
+                    "application" => WebStructure::ApplicationRegion,
+                    "document" => WebStructure::Document,
                     _ => WebStructure::Region,
                 }) =>
             {
@@ -729,6 +731,7 @@ impl<'a> Builder<'a> {
                     end: msg::group_end(name).render(),
                 }
             }
+            Role::TabPanel if !self.announces(WebStructure::TabPanel) => Class::Block,
             // A named tab panel has lines at both ends: "tab panel start Peter Müller", "tab
             // panel end" [obs, round-aria18, 2506/s1, 2533/s1].
             Role::TabPanel if node.name.as_deref().is_some_and(|n| !n.trim().is_empty()) => {
