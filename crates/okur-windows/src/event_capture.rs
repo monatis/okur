@@ -2630,6 +2630,7 @@ fn record_at(
                 }
                 None => {
                     let layout = crate::screen_lines::dialog_layout(window);
+                    tracing::debug!(text = ?layout.text, "dialog read");
                     let tree = state.uia.as_ref().and_then(|uia| {
                         window_subtree(uia, root)
                             .map(okur_windows_model::event_trace::without_nested_tree_items)
