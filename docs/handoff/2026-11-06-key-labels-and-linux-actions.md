@@ -256,6 +256,27 @@ and on the dev box alike. At the owner's request the question went to Microsoft 
   and round 1183 (Excel's notes: Alt+Shift+Apostrophe, Ctrl+Shift+Apostrophe, a new fixture
   `desktop-excel-comments.ps1` in `corpus/pending/`).
 
+## Excel's notes (round 1183)
+
+- **Recorded** (`5c139fb0`): a new fixture, `desktop-excel-comments.ps1` (the workbook with a note
+  on B2). JAWS moves onto the cell without a word of it ("12 | B 2"), Alt+Shift+Apostrophe says
+  "Includes Saturday mornings." or "No note or comment visible for this cell.", and
+  Ctrl+Shift+Apostrophe opens "Cells with Notes | List1 List view | B2: Includes Saturday
+  mornings. | 1 of 1".
+- **Built** (`e586b63e`): two of Excel's lists, `SheetListKind::Notes` and `Note`, read through
+  Excel's object model (the sheet's Comments within the window's visible range) and traced by
+  okur-lab at each step; 1183 was recorded a third time with that okur-lab (its first run met an
+  Excel that no longer opened files, left by round 1182, restarted on old-pc with its Activation
+  Wizard and Document Recovery closed; its second traced no notes).
+- **Replay** (`9e365b5e`): JAWS's main window came back to the front between its dialog's first
+  focus and its list's selection, and the converter dropped both; a JAWS dialog's foreground now
+  stands for its first focus where the step ends with none traced in Okur's dialog, the item's
+  place given from Okur's list. The words JAWS says before its list are the accepted divergence
+  of its other Excel lists (`deda80ca`). `okur-lab parity`: `JAWS parity (Ia2): 12555/13151 steps
+  match exactly` (1183: 8/8).
+- Round 1182 (Excel's window as the focus returns) is not imported: Escape from the Run dialog
+  went to the desktop. The opening's "Please wait | ... | Hours" is an open item.
+
 ## Also
 
 - README: the demo video's badge (`fd540b71`, the owner's YouTube video); "Trying it" built
@@ -274,7 +295,7 @@ and on the dev box alike. At the owner's request the question went to Microsoft 
    (`jaws_settings` Chrome.JCF VirtualCursorVerbosityLevel 1 and 0, to confirm those values).
 2. ~~Round 1172's structures~~, per site levels, ~~frames' ends, DescribedBy, clickable
    elements, titles~~ (done above).
-3. Excel: rounds 1182 (the window as the focus returns) and 1183 (notes) to import and build;
-   then the rest of JAWS's Excel keys (the README's "Not yet").
+3. Excel: ~~notes~~ (done above); the rest of JAWS's Excel keys (the README's "Not yet"), and
+   the window as it opens (an open item).
 4. Then the plan's §3.2 in its order: Settings Center's other groups beside JAWS's.
 5. Linux: more of the web corpus in the lab (379/379 now), GTK's controls.
