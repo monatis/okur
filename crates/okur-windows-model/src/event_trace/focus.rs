@@ -1251,12 +1251,21 @@ pub fn focus_event_from_trace(event: &TraceEvent) -> Option<okur_core::FocusEven
             // "Igor Pavlov | 11/7/2020" [obs, 3156/s11]. Its texts only: the buttons an opened
             // item shows (Settings' "Advanced options", "Uninstall") are controls of their own
             // [obs, 3155/s11].
+            // The item's own text, its first column, is its name; a later column with the same
+            // text is said: Manage Key Labels' "Zoom | Zoom | Speak" [obs, 1169/s21].
+            let mut own_text = focused.name.as_ref();
             focus.columns = subtree
                 .children
                 .iter()
                 .filter(|c| matches!(c.control_type, UIA_TEXT | UIA_EDIT))
                 .filter_map(|c| c.name.clone())
-                .filter(|n| !n.trim().is_empty() && Some(n) != focused.name.as_ref())
+                .filter(|n| {
+                    if own_text == Some(n) {
+                        own_text = None;
+                        return false;
+                    }
+                    !n.trim().is_empty()
+                })
                 .map(|n| okur_core::viewer_text::without_marks(&n))
                 .collect();
             // A XAML list item is named after its texts, joined: Windows Settings' "7-Zip 18.05
